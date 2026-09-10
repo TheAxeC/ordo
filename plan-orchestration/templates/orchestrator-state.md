@@ -14,7 +14,6 @@ model: opus        # for executor agent: opus or lower, never fable.
 ## The standing demands (from <the user>, in force)
 
 - <the repository's instruction file>, the sections <...>. The ones that bite here: <the two or three rules this plan keeps hitting>.
-- Every file change the orchestrator makes goes through the Write and Edit tools, the ones the harness rewind command restores. The shell never creates, moves or deletes a file.
 - Agents: <model> or lower, never fable, one at a time, in a worktree at main's head. The agent never runs a git command and never edits a file under `.scratch/`.
 - Commits: <the user's message shape>. No attribution of any kind. Never push.
 - <the artefact every package is measured against>, and what happens when it and the code disagree.

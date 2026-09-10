@@ -60,9 +60,9 @@ A package may name its own executor in its brief; the block gives the default.
 13. Remove the worktree and the branch.
 14. The state file is rewritten last, so the next session resumes cold from it.
 
-## Rewind
+## Undoing a package
 
-The orchestrator's own file changes go through the Write and Edit tools only, so the harness rewind command can undo them; the shell never creates, moves or deletes a file, which rules out a heredoc, `sed -i`, `mv` and any script that opens a file for output. An agent's file changes and any commit are outside rewind entirely. The worktree and the cherry-pick are the substitute: one package is one commit, so undoing a package is `git revert` of that one commit.
+An agent's file changes and any commit are outside the harness rewind command. The worktree and the cherry-pick are what make a package undoable: one package is one commit, so undoing a package is `git revert` of that one commit.
 
 ## Stops
 
