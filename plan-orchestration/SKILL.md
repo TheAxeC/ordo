@@ -39,7 +39,7 @@ model: opus        # for executor agent: opus or lower, never fable.
 
 - `agent`: a general-purpose agent on the configured model, in a worktree, landed by cherry-pick. This is the executor for a code tool, a research project, and any package whose deliverable is source or data.
 - `academic-paper`: the package's brief is a dispatch of the `academic-paper` skill in the mode the brief names. This is the executor for a manuscript, a response to reviewers, grant text, and anything else under the rule that manuscript content is never produced by a raw agent and a `.tex` is never hand-edited. Verification is the PDF build plus whatever else the brief names; landing is the same cherry-pick.
-- `inline`: bookkeeping the orchestrator does itself with the Write and Edit tools, no agent.
+- `inline`: bookkeeping the orchestrator does itself, no agent.
 
 A package may name its own executor in its brief; the block gives the default.
 
@@ -53,7 +53,7 @@ A package may name its own executor in its brief; the block gives the default.
 6. While it runs, do ledger work only: the next brief, the bookings, the usage table.
 7. On the report: read the whole diff. The report is a lead, not a fact.
 8. Run the `verify` commands in the worktree.
-9. Land it: in the worktree `git add -A && git commit -q -m wip`; on main `git cherry-pick -n <package>`. A conflict is resolved on main by the orchestrator with the Edit tool, never by an agent on main.
+9. Land it: in the worktree `git add -A && git commit -q -m wip`; on main `git cherry-pick -n <package>`. A conflict is resolved on main by the orchestrator, never by an agent on main.
 10. Run the `verify` commands again on main.
 11. Book the package in `plan.md`.
 12. Commit by explicit path, from `git diff --cached --name-only`, in the user's message shape: a capitalised imperative subject, a blank line, `- Verb ...` bullets, the last bullet the plan booking. No attribution of any kind, and never push. `git status --short` is empty after it.
@@ -62,7 +62,7 @@ A package may name its own executor in its brief; the block gives the default.
 
 ## Undoing a package
 
-An agent's file changes and any commit are outside the harness rewind command. The worktree and the cherry-pick are what make a package undoable: one package is one commit, so undoing a package is `git revert` of that one commit.
+The worktree and the cherry-pick are what make a package undoable: one package is one commit, so undoing a package is `git revert` of that one commit.
 
 ## Stops
 
