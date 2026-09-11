@@ -81,14 +81,14 @@ Both harnesses take the same prompt. What differs is the launch, the sandbox, an
 **Codex worker (`codex:<model>`).** Dispatch with `codex exec`, from a shell, detached from the runner's command timeout:
 
 ```sh
-nohup sh -c 'codex exec --ephemeral -C <worktree>/<tool dir> -s workspace-write \
+nohup sh -c 'codex exec -C <worktree>/<tool dir> -s workspace-write \
     -c "sandbox_workspace_write.network_access=true" -m <model> \
     -o <report file> --json - < <prompt file> > <event log> 2> <stderr file>; echo "exit $?" > <exit file>' &
 ```
 
 - `-C` is the working root; `-s workspace-write` confines writes to it and the system temp directory. The sandbox with the network off also refuses to open a local port, which a test suite with a server, a socket or a watcher needs, so `sandbox_workspace_write.network_access=true` is passed whenever the `verify` commands bind a port; without it `npm test` fails with `listen EPERM` and the failure is the harness's, not the model's.
 - The worker's patch tool refuses a path outside the working root; a file that must be written elsewhere (a temporary config file) is written with a shell command, and the prompt says so.
-- `-o` writes the worker's final message (the report) to a file; `--json` streams the event log, whose last `turn.completed` event carries the token usage for the usage table; `--ephemeral` persists no session.
+- `-o` writes the worker's final message (the report) to a file; `--json` streams the event log, whose last `turn.completed` event carries the token usage for the usage table. The session is not run with `--ephemeral`: the rollout Codex then writes under `~/.codex/sessions/` is the worker's transcript, kept the way a Claude sub-agent's is, and a sessions tool that reads rollouts can list the worker while it runs. A worker on the other harness is not linked to the orchestrating session in any file, so it appears as a session of its own.
 - A runner's shell tool caps a command at ten minutes and a package takes fifteen to forty; the launch is detached with `nohup` and `&`, and a monitor watches the exit file, so nothing is killed mid-package.
 - Codex loads `AGENTS.md` from the git root down to the working root, plus the user's `~/.codex/AGENTS.md`; with the working root at the tool's own folder, only the user-level file reaches it. The spec's reading order still holds and the prompt says which files to read.
 - Codex project settings live in `<repo>/.codex/config.toml` and its command rules in `<repo>/.codex/rules/*.rules`, read only for a project the user has marked trusted in their own `~/.codex/config.toml`; the orchestrator never edits a user-level file.
