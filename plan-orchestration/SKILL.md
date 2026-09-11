@@ -17,7 +17,7 @@ Two tiers of model take part, and neither tier is tied to one vendor:
 - The orchestrator runs on a top-tier model: Claude Fable 5.1 under Claude Code, or GPT 6 Astra under Codex. It reads, decides, authors, lands and books. It never writes package code itself beyond a fix at landing.
 - The worker runs on the working tier: Claude Opus 5 under Claude Code, or GPT 5.6 Sol under Codex. One worker per package, in a worktree, under the spec and one brief.
 
-Any combination is allowed: a Fable orchestrator with a Sol worker, an Astra orchestrator with an Opus worker, or both tiers from one vendor. The configuration block names the worker as `harness:model`; the orchestrator is whatever runner this skill is loaded in. A trial of a new combination is booked in the ledger's Rulings list with what decides it, and its usage row names the harness.
+Any combination is allowed: a Fable orchestrator with a Sol worker, an Astra orchestrator with an Opus worker, or both tiers from one vendor. The choice is made per package, not once for the plan: one orchestrator may send one package to Opus and the next to Sol, and a plan may alternate or mix them freely, since every package has the same brief shape, the same worktree, the same checks and the same landing whichever worker built it. The configuration block names the default worker as `harness:model` and a brief may name another for its package; the orchestrator is whatever runner this skill is loaded in. A trial of a new combination is booked in the ledger's Rulings list with what decides it, and its usage row names the harness, so the rows of both workers sit in one table and can be compared.
 
 ## The ledger folder
 
