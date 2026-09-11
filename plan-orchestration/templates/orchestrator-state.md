@@ -15,7 +15,7 @@ reviewer: none               # none, or harness:model of the optional reviewer s
 ```
 
 ```yaml
-dispatch: none               # or the block: package, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing.
+dispatch: none               # or the block: package, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round (with the repair_ entries while a repair round is in flight).
 ```
 
 ## The standing demands (from <the user>, in force)
