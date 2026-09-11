@@ -19,7 +19,12 @@ Every agent dispatched on a <feature> package runs under this file plus one brie
 
 ## What every package obeys
 
+Every convention a package is judged on is written in this section. A convention that lives only in the tree's existing files is not a rule: a worker told to read little will not meet it, and a miss against it is the spec's fault, not the worker's.
+
 - <the size limit per source file, and what happens to a file that approaches it>.
+- <the shape every new file opens with: a head comment naming its layer, what it is and why it is shaped as it is>.
+- <the shared primitives every control is built from, and the markup style the tree is written in>.
+- <where a configured value is read from, and that no default is hardcoded beside its key>.
 - ASCII only in every file you author. <where glyphs, user-facing strings and colours come from instead>.
 - <the layer or module boundaries>, and the test that enforces them, which must pass.
 - One line per paragraph or bullet in any Markdown or YAML you edit. No hard wrapping.
