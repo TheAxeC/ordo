@@ -1,6 +1,6 @@
 # Brief: <package>, <what it delivers in one line>
 
-Read `../spec.md` first; it governs this package unchanged<, with one difference: <the difference, when the deliverable needs another toolchain or another executor>>.
+Read `../spec.md` first; it governs this package unchanged. <When the deliverable needs another toolchain or another executor, that is not a difference this brief declares: it is an amendment to the spec, dated and made by the orchestrator before dispatch, and this line then reads "it governs this package unchanged" again.>
 
 ## What to build
 
