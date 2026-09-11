@@ -15,7 +15,7 @@ reviewer: none               # none, or harness:model of the optional reviewer s
 ```
 
 ```yaml
-dispatch: none               # or the block: package, worker, worktree, base, launched, prompt, events, report, exit.
+dispatch: none               # or the block: package, worker, worktree, base, launched, prompt, events, report, exit, worker_id, landing.
 ```
 
 ## The standing demands (from <the user>, in force)
@@ -45,4 +45,4 @@ dispatch: none               # or the block: package, worker, worktree, base, la
 
 ## Usage
 
-- <package>, <harness:model>, <tokens: input, cached, output>, <tool uses or completed items>, <seconds>, <lines added and removed>, <first report passed its bar: yes or no>, <repair rounds>, <fixes at landing, and their kind>.
+- <package>, <harness:model at effort>, <tokens: input, cached, output>, <tool uses or completed items>, <seconds>, <lines added and removed>, <first report passed its bar: yes or no>, <repair rounds>, <fixes at landing, and their kind>, <orchestrator minutes on the read, the repairs and the landing>.
