@@ -18,6 +18,10 @@ reviewer: none               # none, or harness:model of the optional reviewer s
 dispatch: none               # or the block: package, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round (with the repair_ entries while a repair round is in flight).
 ```
 
+## Open items (repeated verbatim at the top of every report until closed)
+
+- <a stop awaiting the user's ruling, a fix owed, or nothing: "none">. A reported item is booked here the moment it is raised; it leaves only when it is done or the user has ruled.
+
 ## The standing demands (from <the user>, in force)
 
 - <the repository's instruction file>, the sections <...>. The ones that bite here: <the two or three rules this plan keeps hitting>.

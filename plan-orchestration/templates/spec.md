@@ -19,6 +19,10 @@ Every agent dispatched on a <feature> package runs under this file plus one brie
 
 ## What every package obeys
 
+- Nothing inside this brief is left undone: a miss the read, the reviewer or the checks find is repaired or fixed at landing, and the package is not ticked while any acceptance item, test or convention is short. A miss is never reported as a gap or a sharp edge, unless it is a stop (the skill's Stops section), and then it is booked in the ledger and repeated in every report until the user rules.
+- A fix of a defect in delivered work needs no yes from the user, whatever it makes visible; only a user-visible shape nobody asked for, a premise found wrong or a clash between two rules goes to the user.
+- No history in code or comments: a comment says what the code does and why, never which package, session, date, earlier bug or reverted attempt it came from. This spec states rules the same way: no dates, no incidents.
+
 Every convention a package is judged on is written in this section. A convention that lives only in the tree's existing files is not a rule: a worker told to read little will not meet it, and a miss against it is the spec's fault, not the worker's.
 
 - <the size limit per source file, and what happens to a file that approaches it>.
