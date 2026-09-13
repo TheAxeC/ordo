@@ -1,15 +1,27 @@
 # Brief: <package>, <what it delivers in one line>
 
-Read `../spec.md` first; it governs this package unchanged. <When the deliverable needs another toolchain or another executor, that is not a difference this brief declares: it is an amendment to the spec, dated and made by the orchestrator before dispatch, and this line then reads "it governs this package unchanged" again.>
+Read `../spec.md` first; it governs this package unchanged. <When the deliverable needs another toolchain or another executor, that is not a difference this brief declares: it is an amendment to the spec, made by the orchestrator before dispatch, and this line then reads "it governs this package unchanged" again.>
+
+## What is on the tree (read on main at <commit>)
+
+- <the files, counts, names and line numbers the package rests on, each checked with a grep or a probe when this brief was written; the line numbers are what "Facts to check" below re-checks at dispatch>.
 
 ## What to build
 
-<the deliverable, file by file, each with the constraint it is under: path, purpose, size limit, the shape it must have>
+<the deliverable, file by file, each with the constraint it is under: path, purpose, size limit, the shape it must have; for a tool with layers, how each thing lives in every layer>
 
-## Read first, in full
+## Decisions taken in this brief (each reversible, none silent)
 
-1. <path>: <what the agent takes from it>.
-2. <path>: <what the agent takes from it, and what it must not take>.
+1. <a choice the plan and the spec left open, taken here so the worker does not take it; a user-visible one went to the user before this brief was written>.
+
+## Read, with line ranges
+
+1. <path> <lines>: <what the agent takes from it>.
+2. <path> whole: <what the agent takes from it, and what it must not take>.
+
+## Facts to check on the tree before dispatch
+
+<written on main at <commit>; at dispatch the orchestrator re-checks every count, path, name and line number above with a grep or a probe and corrects the brief, never the worker>
 
 ## What it must do
 

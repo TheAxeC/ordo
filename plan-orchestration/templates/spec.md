@@ -9,6 +9,11 @@ Every agent dispatched on a <feature> package runs under this file plus one brie
 3. <the repository's instruction file>, the sections <...>.
 4. Every file the brief lists, in full.
 
+## Token discipline
+
+- Read the files the brief lists in one turn; batch independent reads; run the one test file that covers what you change while working, and the full suite once at the end.
+- <the sandbox's known limits, such as a file-handle limit that fails watcher tests, and how the report counts those failures apart from real ones; the orchestrator's own run at landing is the gate>.
+
 ## Where you work
 
 - In the git worktree the brief names, never in the main checkout. The worktree was created at main's head by the orchestrator. Every path in the brief is relative to that worktree.
