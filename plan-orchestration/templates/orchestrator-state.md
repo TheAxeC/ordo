@@ -31,6 +31,7 @@ dispatch: none               # or the block: package, worker, worktree, base, la
 
 ## Verification, every package
 
+- <when the ledger holds a landing script: its invocation from the repository root, what it does, its exit codes, and the test that proves it>.
 - <the commands, and the directory each runs from>.
 - Every package: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the package's.
 
