@@ -187,6 +187,11 @@ fi
 
 wait_for_index "$landing_root"
 run_step "main git cherry-pick" git cherry-pick -n "main..$landing_pkg-land"
+# A package that changed the lockfile brings a dependency main does not hold yet, so the checks
+# would fail on a missing package rather than on the package's own work.
+if git diff --cached --name-only | grep -qx "tools/oculus/package-lock.json"; then
+    run_step "main npm ci" sh -c 'cd "$1" && npm ci --silent' sh "$landing_tool"
+fi
 
 # ADAPT: the verify commands from here to the browser check, in the ledger's order, with each pass rule.
 (cd "$landing_tool" && npm test -- --reporter=dot) >"$landing_output" 2>&1
