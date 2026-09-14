@@ -12,6 +12,7 @@ executor: agent              # agent | academic-paper | inline.
 worker: <harness:model>      # the default worker: claude:opus, codex:gpt-5.6-sol, or another working-tier model.
 worker_effort: high          # the reasoning effort passed to a worker whose harness takes one.
 reviewer: none               # none, or harness:model of the optional reviewer stage.
+review: always               # always, or earned: the reviewer runs unless the worker's record earns the skip.
 workers_at_once: 1           # 1, or 2 when two packages with disjoint paths may run side by side.
 ```
 
