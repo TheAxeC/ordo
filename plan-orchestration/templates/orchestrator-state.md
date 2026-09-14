@@ -12,10 +12,11 @@ executor: agent              # agent | academic-paper | inline.
 worker: <harness:model>      # the default worker: claude:opus, codex:gpt-5.6-sol, or another working-tier model.
 worker_effort: high          # the reasoning effort passed to a worker whose harness takes one.
 reviewer: none               # none, or harness:model of the optional reviewer stage.
+workers_at_once: 1           # 1, or 2 when two packages with disjoint paths may run side by side.
 ```
 
 ```yaml
-dispatch: none               # or the block: package, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round, wip, review_report, and the repair_prompt, repair_events, repair_report, repair_exit entries while a repair round is in flight.
+dispatch: none               # or the block (a list of two with workers_at_once 2): package, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round, wip, review_report, and the repair_prompt, repair_events, repair_report, repair_exit entries while a repair round is in flight.
 ```
 
 ## Open items (repeated verbatim at the top of every report until closed)
@@ -25,7 +26,7 @@ dispatch: none               # or the block: package, worker, worktree, base, la
 ## The standing demands (from <the user>, in force)
 
 - <the repository's instruction file>, the sections <...>. The ones that bite here: <the two or three rules this plan keeps hitting>.
-- Agents: the worker the block names, on the working tier (Claude Opus 5 or GPT 5.6 Sol), one at a time, in a worktree at main's head; the orchestrator on the top tier (Claude Fable 5.1 or GPT 6 Astra); the worker is chosen per package. The agent never runs a git command and never edits a file under `.scratch/`.
+- Agents: the worker the block names, on the working tier (Claude Opus 5 or GPT 5.6 Sol), as many at a time as `workers_at_once` allows, each in a worktree at main's head; the orchestrator on the top tier (Claude Fable 5.1 or GPT 6 Astra); the worker is chosen per package. The agent never runs a git command and never edits a file under `.scratch/`.
 - Commits: <the user's message shape>. No attribution of any kind. Never push. A worktree's branch is deleted with the worktree; a diff kept for the record is a patch file under `agents/reviews/`.
 - <the artefact every package is measured against>, and what happens when it and the code disagree.
 
