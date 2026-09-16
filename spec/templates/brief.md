@@ -33,6 +33,7 @@ Run from <directory>, each must hold, each output piped through the filter the r
 
 1. `<command>` prints <expected output>.
 2. `<command>`: <the threshold or the shape the output must have>.
+3. Each new or changed test names the revert that turns it red. A test that no revert turns red is an audit, not a proof, and this brief says which it is.
 
 ## Report
 

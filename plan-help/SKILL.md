@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Plan help
@@ -25,9 +25,16 @@ then, for every step:
 /refute <entry> <step>        again, on the fixed code; repeat "close them" and /refute until it finds nothing
 /land <entry> <step>          onto main, checks on main, the A/B, the booking, the commit
 
+when a command stops:
+
+/spec stops                   a premise of the step is wrong on the tree, or a choice is yours: it wrote an open item and no brief
+"Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger and commits
+/spec <entry> <step>          again; it now writes the brief
+/land refuses or stops        it names the open finding or the red line: "close them", /refute, then /land again
+
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, an agent at "build it" and "close them"
 ```
 
 ## The position, for `<entry>`
 
-From the state file: the position line, the open items verbatim, the dispatch block (a step in flight, its worktree, its base, its round). From the ledger folder: for the step in flight, which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings. From that, one line: the command that comes next, in the sequence above.
+From the state file: the position line, the open items verbatim, the dispatch block (a step in flight, its worktree, its base, its round). From the ledger folder: for the step in flight, which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings. From that, one line: the command that comes next, in the sequence above. An open item that waits on a ruling is printed with it, and the next line is `Ruled: ...`.

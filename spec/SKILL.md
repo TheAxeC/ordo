@@ -1,8 +1,8 @@
 ---
 name: spec
-description: "Prepare one step of an open plan: check every premise the step's text makes against the tree, write the brief (the checked premises, the fix text, the verification list, the report shape, the pointer to the repository's change standard), create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief."
+description: "Prepare one step of an open plan: check every premise the step's text makes against the tree, write the brief (the checked premises, the fix text, the verification list, the report shape, the pointer to the repository's change standard), create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Prepare a step
@@ -27,6 +27,24 @@ metadata:
 ## Preflight, before any write
 
 On `main`, nothing staged, no git operation in progress, and any unrelated change of the user's listed by path and left alone. A preflight that fails stops the skill with what it saw.
+
+## When it stopped
+
+A stop leaves three things and nothing else: the open item in the state file (the step, what the tree shows against the step's text, the choice the user owns, one recommendation with its reasons), the same text under the step's Step 0 in `plan.md` or the part file it names, and the ledger committed by path so the stop survives the session. No brief, no worktree, no dispatch block exists for the step.
+
+The user closes it by typing the ruling as plain text, in any session on the repository:
+
+```
+Ruled: <the choice, one clause per question the open item asked>
+```
+
+On that message the session books the ruling and nothing else: the open item is closed with the ruling's text and its date; the step's text in `plan.md` is rewritten to what was ruled, and a step the ruling splits gets its own line in the step list and its own Step 0, its carried premises with it; a ruling that sets a public shape, a vocabulary or a rule is also written where the plan keeps its rulings, so later premise checks read it; the ledger files are committed by path. Then:
+
+```
+/spec <entry> <step>
+```
+
+again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
 
 ## Rules
 
