@@ -1,6 +1,6 @@
 ---
 name: land
-description: "Bring a refuted step from its worktree onto main and book it: a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the interleaved A/B against the staged base binaries, the booking in the plan, the commit by explicit path list, the worktree and branch removed, the state file rewritten. Refuses without a clean refutation or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
+description: "Bring a refuted step from its worktree onto main and book it: a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views on the TEST page, the interleaved A/B against the staged base binaries, the orchestrator's usage row, the booking in the plan, the commit by explicit path list, the worktree and branch removed, the state file rewritten. Refuses while a finding is left neither closed nor booked, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
   version: "1.1.0"
 ---
