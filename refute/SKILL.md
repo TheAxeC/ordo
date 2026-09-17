@@ -1,6 +1,6 @@
 ---
 name: refute
-description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run it until it finds nothing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step, before its one repair round. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
   version: "1.0.0"
 ---
@@ -36,5 +36,5 @@ Every command in the brief's verification list, from the directory each names, p
 ## Rules
 
 - The reviewer is a fresh session or agent every time, never the builder, and never the session that wrote the brief when another is available.
-- A finding is closed by the builder, not by the reviewer: `/refute` is run again after the fix, and `/land` refuses while the last refuter report has an open finding that is neither closed nor booked as a stop.
+- A finding is closed by the builder in the step's one repair round, or at landing, or booked in the state file's open items; after the round the orchestrator's read of the delta is appended to the report under a Closed heading, and `/land` refuses while a finding is left neither closed nor booked.
 - A time box, when the invocation names one, is respected by reporting what was checked and naming what was not; an unchecked point is not a finding and not a pass.

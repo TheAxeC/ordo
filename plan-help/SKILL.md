@@ -21,16 +21,16 @@ then, for every step:
 /spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries
 "build it"                    the session writes the code in the worktree, runs the checks, writes the report
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
-"close them"                  the session fixes the findings, reruns, rewrites the report
-/refute <entry> <step>        again, on the fixed code; repeat "close them" and /refute until it finds nothing
-/land <entry> <step>          onto main, checks on main, the A/B, the booking, the commit
+"close them"                  one repair round: the session fixes the findings, reruns, rewrites the report
+read the delta                the orchestrator reads the round and appends what it closed to the refuter report; what is left goes to the open items
+/land <entry> <step>          onto main, checks on main, small fixes, the look on the TEST page, the A/B, the usage rows, the booking, the commit
 
 when a command stops:
 
 /spec stops                   a premise of the step is wrong on the tree, or a choice is yours: it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger and commits
 /spec <entry> <step>          again; it now writes the brief
-/land refuses or stops        it names the open finding or the red line: "close them", /refute, then /land again
+/land refuses or stops        it names the finding left unbooked or the red line: fix it at landing or book it, then /land again
 
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, an agent at "build it" and "close them"
 ```

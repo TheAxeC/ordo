@@ -197,4 +197,28 @@ if [ "$conflict_branch" != "conflict-land" ]; then
     fail "conflict worktree is on $conflict_branch, expected conflict-land"
 fi
 printf 'conflict: exit 2, conflicting path and retained landing branch verified\n'
-printf 'PASS: land.sh scratch repository tests\n'
+usage_script=$script_dir/usage.py
+usage_root=$test_root/usage
+mkdir -p "$usage_root"
+cat >"$usage_root/claude.jsonl" <<'JSONL'
+{"type":"user","timestamp":"2026-09-16T10:01:00.000Z","message":{"role":"user","content":"go"}}
+{"type":"assistant","timestamp":"2026-09-16T09:59:00.000Z","message":{"id":"msg_before","usage":{"output_tokens":999,"cache_creation_input_tokens":999,"cache_read_input_tokens":999,"input_tokens":999}}}
+{"type":"assistant","timestamp":"2026-09-16T10:05:00.000Z","message":{"id":"msg_a","usage":{"output_tokens":10,"cache_creation_input_tokens":100,"cache_read_input_tokens":1000,"input_tokens":5}}}
+{"type":"assistant","timestamp":"2026-09-16T10:05:01.000Z","message":{"id":"msg_a","usage":{"output_tokens":10,"cache_creation_input_tokens":100,"cache_read_input_tokens":1000,"input_tokens":5}}}
+{"type":"assistant","timestamp":"2026-09-16T10:30:00.000Z","message":{"id":"msg_b","usage":{"output_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":2000,"input_tokens":3}}}
+{"type":"assistant","timestamp":"2026-09-16T11:01:00.000Z","message":{"id":"msg_after","usage":{"output_tokens":999,"cache_creation_input_tokens":999,"cache_read_input_tokens":999,"input_tokens":999}}}
+JSONL
+cat >"$usage_root/codex.jsonl" <<'JSONL'
+{"timestamp":"2026-09-16T09:00:00.000Z","type":"session_meta","payload":{"id":"fixture"}}
+{"timestamp":"2026-09-16T09:59:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":100,"cached_input_tokens":50,"cache_write_input_tokens":0,"output_tokens":10}}}}
+{"timestamp":"2026-09-16T10:10:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":300,"cached_input_tokens":150,"cache_write_input_tokens":20,"output_tokens":40}}}}
+{"timestamp":"2026-09-16T10:50:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":600,"cached_input_tokens":300,"cache_write_input_tokens":20,"output_tokens":70}}}}
+{"timestamp":"2026-09-16T11:30:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":9000,"cached_input_tokens":9000,"cache_write_input_tokens":9000,"output_tokens":9000}}}}
+JSONL
+# The window is given with an offset, as git's %cI gives it, while the logs carry Z times.
+claude_row=$(python3 "$usage_script" "$usage_root/claude.jsonl" 2026-09-16T12:00:00+02:00 2026-09-16T13:00:00+02:00) || fail "usage.py failed on the Claude Code log"
+[ "$claude_row" = "2 messages, 30 output tokens, 100 cache-write tokens, 3000 cache-read tokens, 8 fresh input tokens, 60 minutes" ] || fail "Claude Code usage row differs: [$claude_row]"
+codex_row=$(python3 "$usage_script" "$usage_root/codex.jsonl" 2026-09-16T12:00:00+02:00 2026-09-16T13:00:00+02:00) || fail "usage.py failed on the Codex rollout"
+[ "$codex_row" = "2 messages, 60 output tokens, 20 cache-write tokens, 250 cache-read tokens, 230 fresh input tokens, 60 minutes" ] || fail "Codex usage row differs: [$codex_row]"
+printf 'usage: Claude Code and Codex rows verified, one message per id, the window across offsets\n'
+printf 'PASS: land.sh and usage.py scratch tests\n'
