@@ -12,7 +12,7 @@ metadata:
 ## What it requires
 
 1. `.agents/plan.yaml`, the ledger folder, the dispatch block naming this step with its worktree and base. `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
-2. `agents/reviews/<step>-report.md`, and either `agents/reviews/<step>-refuter.md` newer than the report or, after the step's one repair round, the orchestrator's read of that round appended to the refuter report under a Closed heading, each finding closed there or booked in the state file's open items. Neither present, or a finding left open and unbooked, is a refusal that says which.
+2. `agents/reviews/<step>-report.md`, and either `agents/reviews/<step>-refuter.md` newer than the report or, after the step's repair round (one, or two under plan-orchestration's exception), the orchestrator's read of the last round appended to the refuter report under a Closed heading, each finding closed there or booked in the state file's open items. Neither present, or a finding left open and unbooked, is a refusal that says which.
 3. On main: nothing staged, no git operation in progress, and none of the step's paths carrying an unrelated change of the user's (listed by path and left alone).
 
 ## What it does, in order
