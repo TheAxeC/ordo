@@ -25,7 +25,13 @@ workers_at_once: 1           # 1, or 2 when two steps with disjoint paths may ru
 dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round, reviewer_report, and the repair_ entries while a fix round is in flight.
 ```
 
-## Open items (repeated verbatim at the top of every report until closed)
+## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
+
+Nothing here needs a command or a fix: a finding that needs no ruling is a step in the plan and belongs in the booked list below, and what is settled belongs in the closed list.
+
+## Booked, no ruling needed (what a review, a look or the closure audit found; each is a step in plan.md and is worked in queue order, and a report names this list's count and its steps)
+
+## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - <a stop awaiting the user's ruling, a fix owed, or nothing: "none">. A reported item is booked here the moment it is raised; it leaves only when it is done or the user has ruled.
 

@@ -24,7 +24,7 @@ then, for every step:
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
                               repeat these two up to repair_rounds times (plan.yaml); a refutation that finds nothing ends them; what the last one finds is fixed at landing or booked, never sent back
-read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left goes to the open items
+read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is booked as its own step and goes to the booked items
 /land <entry> <step>          onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the usage rows, the booking, the commit
 
 when a command stops:

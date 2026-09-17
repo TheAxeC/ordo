@@ -41,4 +41,4 @@ Reviewer usage: <tokens>, <tool uses>, <minutes>.
 
 ## Closed (the orchestrator's disposition of every finding above, appended before /land)
 
-- <finding>: closed in the round, <file:line and the check that shows it>; or fixed at landing, <what and where>; or booked in the state file's open items, <the item>.
+- <finding>: closed in the round, <file:line and the check that shows it>; or fixed at landing, <what and where>; or booked as its own step, <the step and where it is booked>.
