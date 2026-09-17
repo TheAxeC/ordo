@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the orchestrator's usage row, the booking in the plan, the commit by explicit path list, the worktree and branch removed, the state file rewritten. Refuses while a finding is left neither closed nor booked, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # Land a step
@@ -26,9 +26,9 @@ metadata:
 6. The A/B: the benchmark commands the configuration block's `bench:` line names, the staged base binary and the new one run alternately after warm-ups, at least ten runs each, mean and standard deviation and the standard error of the difference, written to the scratchpad and quoted in the booking. A change past the noise band is a finding fixed before the booking.
 7. The booking appended to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the step it is booked at, the verification lines, the A/B, the usage row; the step ticked.
 8. The state file rewritten: the dispatch block cleared, the position line, the usage rows, the orchestrator's row produced first by `templates/usage.py <session log> <from> <to>` (the session log the running session's own, `<from>` the previous landing commit's `git log -1 --format=%cI`, `<to>` `date -Iseconds`; the Usage section of `plan-orchestration` says where each harness keeps the log), the open items as they stand.
-9. The commit by explicit path: every path from `git diff --cached --name-only` plus the ledger files, written out in the `git add -- <path> ...` command (never through a shell variable), with deleted paths already staged by the cherry-pick and not re-added; the message in the repository's shape, the last bullet the booking; no attribution; never push. Afterwards `git status --short` shows nothing of the step's and nothing of the ledger's; a ledger file left modified means the commit missed the booking, and the head is amended with the ledger paths.
+9. The commit by explicit path: every path from `git diff --cached --name-only` plus the ledger files (the landing report of step 11 among them, written before this commit), written out in the `git add -- <path> ...` command (never through a shell variable), with deleted paths already staged by the cherry-pick and not re-added; the message in the repository's shape, the last bullet the booking; no attribution; never push. Afterwards `git status --short` shows nothing of the step's and nothing of the ledger's; a ledger file left modified means the commit missed the booking, and the head is amended with the ledger paths.
 10. `git worktree remove <worktree_root>/<step>` and `git branch -D <step>` (`-D`, since the cherry-pick made a new commit and the branch is never an ancestor of main).
-11. The landing report, written to stand alone: the open items first, verbatim; anything NOT DONE; what landed; what was found; what is next.
+11. The landing report, `agents/reviews/<step>-landing.md`, written before the commit of step 9 so it lands with the step and stands alone on disk: the open items first, verbatim; anything NOT DONE; what landed, with the commit; what was found; what is next. Under the loop it is also the report the orchestrator prints; run by hand it is the message that ends the turn.
 
 ## The landing script
 

@@ -18,7 +18,6 @@ refute_after_repair: yes     # yes: /refute runs again over each repair round, i
 repair_rounds: 1             # the most repair rounds a step gets; a refutation that finds nothing ends them early; the exception in plan-orchestration allows one beyond it.
 review_minutes: 0            # the reviewer's time box in minutes; 0 is none.
 look:                        # where a changed view is opened at landing (a page, a command); empty means no look step.
-report_each_step: yes        # yes: the loop ends its turn with a landing report after every step; no: it continues to the next step.
 workers_at_once: 1           # 1, or 2 when two steps with disjoint paths may run side by side.
 ```
 

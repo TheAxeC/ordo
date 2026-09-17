@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # Open a plan
@@ -11,7 +11,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml` at the repository root: the only place a project specific lives (the roadmap, the verification page, the rules file, the standards, the ledger root, the archive root, the worktree root, the review cadence, the repair-round cap, whether each repair round is refuted, the review time box, where a changed view is looked at, whether a report ends every step). A repository that holds several projects lists them under `projects:`, and `<entry>` is then `<project>/<entry>`. No file, no run: the skill stops and says the file is missing.
+1. `.agents/plan.yaml` at the repository root: the only place a project specific lives (the roadmap, the verification page, the rules file, the standards, the ledger root, the archive root, the worktree root, the review cadence, the repair-round cap, whether each repair round is refuted, the review time box, where a changed view is looked at). A repository that holds several projects lists them under `projects:`, and `<entry>` is then `<project>/<entry>`. No file, no run: the skill stops and says the file is missing.
 2. The roadmap the configuration names. `<entry>` is matched against the entries by number or title; no match, and the skill stops and prints the open entries.
 3. The verification page the configuration names, for the commands every step runs.
 
@@ -20,7 +20,7 @@ metadata:
 The ledger folder `<ledger_root>/<slug>/`, the slug derived from the entry (its `plan.md` opens with `# Plan: <entry>`, which is how every other skill finds it) (`38.3 One object per file` gives `38-3-one-object-per-file`; a project prefix is dropped, since the ledger root is already the project's). A folder that already exists is a refusal: a plan is opened once.
 
 - `plan.md` from `templates/plan.md`: the entry's goal and its gate copied in, and the step list, drafted from the gate as one step per verifiable piece of it, each with the check that proves it. The draft is shown to the user and the file is written only after the user has approved or corrected it.
-- `orchestrator-state.md` from `templates/orchestrator-state.md`: the configuration block filled in from `plan.yaml` (the verification commands copied from the page, the rules file, the standards, the worktree root, the worker, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `report_each_step`), the dispatch block empty, the open items empty, the position naming the first step. The block's `executor:` is not a project specific and is not in `plan.yaml`: it is written as `agent` unless the user says otherwise when the plan is opened, and the orchestrator chooses per step over it.
+- `orchestrator-state.md` from `templates/orchestrator-state.md`: the configuration block filled in from `plan.yaml` (the verification commands copied from the page, the rules file, the standards, the worktree root, the worker, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`), the dispatch block empty, the open items empty, the position naming the first step. The block's `executor:` is not a project specific and is not in `plan.yaml`: it is written as `agent` unless the user says otherwise when the plan is opened, and the orchestrator chooses per step over it.
 - `agents/briefs/` and `agents/reviews/`, empty.
 
 Both files are committed by path as the plan's opening commit, with the roadmap entry's number in the subject.

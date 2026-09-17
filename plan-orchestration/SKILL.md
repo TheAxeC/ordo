@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, invoke /spec, dispatch one builder agent in the step's worktree, invoke /refute, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, invoke /land with the small fixes made there, book the step, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript on either harness (Claude Code or Codex) with either as the worker, and one orchestrator can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
 metadata:
-  version: "2.5.0"
+  version: "2.6.0"
 ---
 
 # Plan orchestration
@@ -34,7 +34,7 @@ Reading order after any compaction or by a new orchestrator: the state file, the
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by the section below). Read the diff yourself while it runs. Save its report and record its usage.
 8. Send the findings back to the same builder (a native Claude agent by the runner's message tool on its id; a Codex worker by `codex exec resume <session_id>` with the flags of its launch, from inside the worktree, detached the same way; a `claude -p` worker by `claude -p --resume <session_id>`), as a numbered list with a ruling per finding that stays inside the brief and the written rules. Before the resume, write `round: n` and the round's paths into the dispatch block and commit. A finding that would change the scope, a requirement, a public shape or an established decision is not sent back: it is a stop. The block's `repair_rounds` caps the rounds per step. After each reply the orchestrator reads the whole delta and, when the block says `refute_after_repair: yes`, invokes `/refute <entry> <step>` again over the round (a fresh reviewer, its usage recorded beside the first); a refutation that finds nothing, or the cap, ends the rounds, and it goes to step 9: it fixes the small things at landing, the last run's findings included, and anything the round left undone or that lies beyond the brief is booked in the state file's open items for the user, never sent back to the builder. One exception allows one round beyond the cap: the delta leaves a verification command red or an acceptance item of the brief unbuilt, and the fix is too large to make at landing. Both are inside the brief. A new finding of a review never earns that round; it goes to the open items.
 9. Invoke `/land <entry> <step>`. Its refusals are its own; a red line the orchestrator cannot fix at landing takes the step back out of main and is booked in the open items with the failure.
-10. End the turn with the landing report when the block says `report_each_step: yes`, or continue with step 2; either way the report stands alone, since the next step starts from the state file.
+10. Continue with step 2. The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report; it ends only at a stop, at a pause, or when nothing unblocked is left, and that final message lists every step landed since the loop began with the path of each report and the open items verbatim.
 
 ## The review, earned
 
