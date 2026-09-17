@@ -32,7 +32,7 @@ metadata:
 
 ## The landing script
 
-A ledger may hold `land.sh`, copied from `templates/land.sh` with its `ADAPT` edits made, which does steps 2, 3 and 5 as one command and prints the diff stat, the usage rows and the staged paths; `templates/land.test.sh` proves it on scratch repositories, and proves `templates/usage.py` on a Claude Code log and a Codex rollout. When the ledger holds it, its zero exit is step 5's pass.
+A ledger may hold `land.sh`, copied from `templates/land.sh` with its `ADAPT` edits made, which does steps 2, 3 and 5 as one command and prints the diff stat, the usage rows (with `--session <session log> --since <previous landing commit time>`, the orchestrator's row through `usage.py`, found beside it or in this skill's templates) and the staged paths; `templates/land.test.sh` proves it on scratch repositories, and proves `templates/usage.py` on a Claude Code log and a Codex rollout. When the ledger holds it, its zero exit is step 5's pass.
 
 ## Rules
 

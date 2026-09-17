@@ -51,5 +51,5 @@ dispatch: none               # or the block /spec writes (a list with workers_at
 
 ## Usage
 
-| step | worker (tokens / tool uses / wall) | reviewer | fix rounds | findings sent back | lines +/- | first report passed | fixes at landing | orchestrator |
-|---|---|---|---|---|---|---|---|---|
+| step | worker (tokens / tool uses / wall) | reviewer (one review) | repair rounds (one, or two under the exception) | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look (views, themes, what was seen) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

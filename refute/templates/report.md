@@ -28,3 +28,7 @@
 - <a point the time box left, named>. Or: nothing.
 
 Reviewer usage: <tokens>, <tool uses>, <minutes>.
+
+## Closed (the orchestrator's read of the repair round, appended after it)
+
+- <finding>: closed in the round, <file:line and the check that shows it>; or fixed at landing, <what and where>; or booked in the state file's open items, <the item>.
