@@ -9,16 +9,21 @@ rules: <path>                # the repository's change standard: the rules every
 standards: []                # files every brief tells the builder to read in full.
 worktree_root: <path>        # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
-executor: agent              # agent | academic-paper | inline.
+executor: agent              # the plan's default for who builds a step: agent (a builder dispatched in the worktree), inline (the orchestrating session writes the step itself), academic-paper (the step is built through that skill). Chosen per step by the orchestrator and recorded in the dispatch block; a step of manuscript content is always academic-paper.
 worker: <harness:model>      # the default worker: claude:opus, codex:gpt-5.6-sol, or another working-tier model.
 worker_effort: high          # the reasoning effort passed to a worker whose harness takes one.
 reviewer: <harness:model>    # the model /refute runs on.
 review: every                # every, or earned: under the loop, the reviewer runs unless the worker's record earns the skip (plan-orchestration, "The review, earned").
+refute_after_repair: yes     # yes: /refute runs again over each repair round, its findings fixed at landing or booked, never sent back; no: the orchestrator's read of the round stands in.
+repair_rounds: 1             # the most repair rounds a step gets; a refutation that finds nothing ends them early; the exception in plan-orchestration allows one beyond it.
+review_minutes: 0            # the reviewer's time box in minutes; 0 is none.
+look:                        # where a changed view is opened at landing (a page, a command); empty means no look step.
+report_each_step: yes        # yes: the loop ends its turn with a landing report after every step; no: it continues to the next step.
 workers_at_once: 1           # 1, or 2 when two steps with disjoint paths may run side by side.
 ```
 
 ```yaml
-dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round, reviewer_report, and the repair_ entries while a fix round is in flight.
+dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round, reviewer_report, and the repair_ entries while a fix round is in flight.
 ```
 
 ## Open items (repeated verbatim at the top of every report until closed)
@@ -51,5 +56,5 @@ dispatch: none               # or the block /spec writes (a list with workers_at
 
 ## Usage
 
-| step | worker (tokens / tool uses / wall) | reviewer (one review) | repair rounds (one, or two under the exception) | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look (views, themes, what was seen) |
+| step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds (up to repair_rounds, or one more under the exception) | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look (views, themes, what was seen) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

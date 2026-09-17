@@ -29,6 +29,16 @@
 
 Reviewer usage: <tokens>, <tool uses>, <minutes>.
 
-## Closed (the orchestrator's read of the repair round, appended after it)
+## Repair round <n>, refuted (one section per run after a round, when the configuration block says refute_after_repair: yes)
+
+```
+<each verification command rerun over the repaired tree, and its summary line, verbatim>
+```
+
+- <file:line>: <the closure claimed>, <what the rerun or the read showed>; under the heading it belongs to (spec, proof, standards, behaviour). Or: none.
+
+Reviewer usage: <tokens>, <tool uses>, <minutes>.
+
+## Closed (the orchestrator's disposition of every finding above, appended before /land)
 
 - <finding>: closed in the round, <file:line and the check that shows it>; or fixed at landing, <what and where>; or booked in the state file's open items, <the item>.

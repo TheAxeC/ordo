@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: check every premise the step's text makes against the tree, write the brief (the checked premises, the fix text, the verification list, the report shape, the pointer to the repository's change standard), create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Prepare a step
@@ -22,7 +22,7 @@ metadata:
 - The preparation commit: the brief, and any amendment to `plan.md` the premise checks forced, committed by path. Its hash is the base.
 - The worktree, from the base: `git worktree add -b <step> <worktree_root>/<step> <base>`, then from inside it `git sparse-checkout set <worktree_paths>` when the block names any, and the dependency install the project needs. Every git command on a worktree runs from inside it, never as `git -C`.
 - The base binaries for the landing's A/B, copied aside from the current build (the configuration block's `bench:` line names them; none named, none staged).
-- The dispatch block in the state file: step, worker, worktree, base, launched, report path, `landing: not-started`, `round: 0`; committed by path as a second small commit. The worker's identity goes into the block the moment it is known.
+- The dispatch block in the state file: step, executor (the configuration block's default, until the orchestrator chooses for the step), worker, worktree, base, launched, report path, `landing: not-started`, `round: 0`; committed by path as a second small commit. The worker's identity goes into the block the moment it is known.
 
 ## Preflight, before any write
 

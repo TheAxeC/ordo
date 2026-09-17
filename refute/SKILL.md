@@ -1,8 +1,8 @@
 ---
 name: refute
-description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step, before its one repair round. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round, and again over each round when the configuration block says refute_after_repair: yes, up to repair_rounds. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.0.0"
+  version: "1.2.0"
 ---
 
 # Refute a step
@@ -29,12 +29,16 @@ No report on disk is a refusal that names the report path the builder was told t
 
 Every command in the brief's verification list, from the directory each names, piped through the filter the rules file names; then every command the report quotes as evidence, in the same form, and the output compared with what the report claims. Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so and reproduces what it can from the one build. No background shells, no polling, no benchmark suites, no sanitizer runs unless the brief lists them; no edit to any file, anywhere.
 
+## The runs over the repair rounds
+
+When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds (at most `repair_rounds` of them), on a fresh reviewer each time; a run that finds nothing ends the rounds. It reads the same files, plus the first refuter report and the dispatch block's round entries, and its diff is the delta of the round (from the commit or tree state recorded when the round was sent) read against the whole diff since the base. It looks for the same four things over that delta, and for every closure the builder claims: a finding closed by removing a check rather than fixing what the check guarded, a fix that reaches beyond the finding, a claim of closure the reviewer's own rerun does not reproduce. It reruns every verification command again. The findings of the run over the last round are never sent to the builder: each is fixed at landing when it is small and inside the brief, or booked in the state file's open items. With `refute_after_repair: no` these runs do not happen and the orchestrator's read of the delta stands in for it.
+
 ## What it writes
 
-`agents/reviews/<step>-refuter.md` from `templates/report.md`: the verification lines first, verbatim; then the four headings, each with findings (file, line, the quoted hunk, what is wrong) or "none"; then what was not checked within the time box, named; then the reviewer's usage. The orchestrator or the session saves it there (the reviewer never writes into the ledger itself), records its usage in the state file's table and the reviewer line in the dispatch block, and commits both by path.
+`agents/reviews/<step>-refuter.md` from `templates/report.md`: the verification lines first, verbatim; then the four headings, each with findings (file, line, the quoted hunk, what is wrong) or "none"; then what was not checked within the time box, named; then the reviewer's usage. Each run over a repair round appends its own findings to the same file under "Repair round <n>, refuted", in the same shape. The orchestrator or the session saves it there (the reviewer never writes into the ledger itself), records its usage in the state file's table and the reviewer line in the dispatch block, and commits both by path.
 
 ## Rules
 
 - The reviewer is a fresh session or agent every time, never the builder, and never the session that wrote the brief when another is available.
-- A finding is closed by the builder in the step's one repair round, or at landing, or booked in the state file's open items; after the round the orchestrator's read of the delta is appended to the report under a Closed heading, and `/land` refuses while a finding is left neither closed nor booked.
-- A time box, when the invocation names one, is respected by reporting what was checked and naming what was not; an unchecked point is not a finding and not a pass.
+- A finding is closed by the builder in a repair round (at most `repair_rounds` of them), or at landing, or booked in the state file's open items; after the last round the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading, and `/land` refuses while a finding is left neither closed nor booked.
+- A time box, the configuration block's `review_minutes` when above 0 or one the invocation names, is respected by reporting what was checked and naming what was not; an unchecked point is not a finding and not a pass.

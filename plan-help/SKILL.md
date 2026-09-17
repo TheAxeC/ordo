@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.1.0"
+  version: "1.3.0"
 ---
 
 # Plan help
@@ -21,9 +21,11 @@ then, for every step:
 /spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries
 "build it"                    the session writes the code in the worktree, runs the checks, writes the report
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
-"close them"                  one repair round: the session fixes the findings, reruns, rewrites the report
-read the delta                the orchestrator reads the round and appends what it closed to the refuter report; what is left goes to the open items
-/land <entry> <step>          onto main, checks on main, small fixes, the look on the TEST page, the A/B, the usage rows, the booking, the commit
+"close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
+/refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
+                              repeat these two up to repair_rounds times (plan.yaml); a refutation that finds nothing ends them; what the last one finds is fixed at landing or booked, never sent back
+read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left goes to the open items
+/land <entry> <step>          onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the usage rows, the booking, the commit
 
 when a command stops:
 
