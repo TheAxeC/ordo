@@ -5,9 +5,6 @@
 
 set -u
 
-PATH=$HOME/.nvm/versions/node/v24.21.0/bin:$PATH
-export PATH
-
 usage() {
     printf 'Usage: %s <pkg> <base> <runs dir> [--no-browser] [--session <session log> --since <ISO time>]\n' "$0" >&2
     exit 64
@@ -75,13 +72,17 @@ fi
 
 landing_root=$(pwd -P)
 landing_worktree=$landing_root/.agents/worktrees/$landing_pkg
-landing_tool=$landing_root/tools/oculus # ADAPT: the tool directory the package's paths are scoped to
+landing_tool_path=tools/oculus # ADAPT: the tool directory the package's paths are scoped to, relative to the repository root
+landing_tool=$landing_root/$landing_tool_path
 
 if [ ! -d "$landing_root/.git" ]; then
     fail "preflight failed: run this script from the repository root"
 fi
 if [ ! -d "$landing_worktree" ]; then
     fail "preflight failed: worktree not found: $landing_worktree"
+fi
+if ! command -v node >/dev/null 2>&1; then
+    fail "preflight failed: node is not on PATH; the lock wait and the usage rows run on it"
 fi
 if [ ! -d "$landing_tool" ]; then
     fail "preflight failed: tool directory not found: $landing_tool"
@@ -90,7 +91,7 @@ if [ ! -d "$landing_runs" ]; then
     fail "preflight failed: runs directory not found: $landing_runs"
 fi
 
-landing_tmp=$(mktemp -d "${TMPDIR:-/tmp}/oculus-land.XXXXXX") || fail "preflight failed: could not create a temporary directory"
+landing_tmp=$(mktemp -d "${TMPDIR:-/tmp}/land.XXXXXX") || fail "preflight failed: could not create a temporary directory"
 trap 'rm -rf "$landing_tmp"' 0 1 2 3 15
 landing_output=$landing_tmp/output.txt
 
@@ -184,7 +185,7 @@ if [ "$landing_worktree_branch" != "$landing_pkg" ]; then
 fi
 
 wait_for_index "$landing_worktree"
-run_step "worktree git add" sh -c 'cd "$1" && git add -A tools/oculus' land "$landing_worktree"
+run_step "worktree git add" sh -c 'cd "$1" && git add -A "$2"' land "$landing_worktree" "$landing_tool_path"
 
 wait_for_index "$landing_worktree"
 run_step "worktree git commit" sh -c 'cd "$1" && git commit -q -m wip' land "$landing_worktree"
@@ -214,13 +215,15 @@ fi
 
 wait_for_index "$landing_root"
 run_step "main git cherry-pick" git cherry-pick -n "main..$landing_pkg-land"
+
+# ADAPT: the dependency install and the verify commands from here to the browser check, in the
+# ledger's order, with each pass rule.
 # A package that changed the lockfile brings a dependency main does not hold yet, so the checks
 # would fail on a missing package rather than on the package's own work.
-if git diff --cached --name-only | grep -qx "tools/oculus/package-lock.json"; then
+if git diff --cached --name-only | grep -qx "$landing_tool_path/package-lock.json"; then
     run_step "main npm ci" sh -c 'cd "$1" && npm ci --silent' sh "$landing_tool"
 fi
 
-# ADAPT: the verify commands from here to the browser check, in the ledger's order, with each pass rule.
 (cd "$landing_tool" && npm test -- --reporter=dot) >"$landing_output" 2>&1
 landing_status=$?
 if [ -s "$landing_output" ]; then
@@ -433,18 +436,21 @@ printf '%s\n' 'Usage rows:'
 cat "$landing_tmp/usage.txt"
 if [ -n "$landing_session" ]; then
     # The orchestrator's row, from its own session log between the previous landing and now. The
-    # script is looked for beside this one, then in the land skill's templates of this repository.
+    # script is looked for beside this one, then in the land skill's templates wherever the skill
+    # is installed: the repository, the user's agent skills, the user's Claude Code skills.
     landing_usage_script=''
     landing_script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
-    if [ -f "$landing_script_dir/usage.py" ]; then
-        landing_usage_script=$landing_script_dir/usage.py
-    else
-        landing_script_repo=$(cd "$landing_script_dir" && git rev-parse --show-toplevel 2>/dev/null)
-        if [ -n "$landing_script_repo" ] && [ -f "$landing_script_repo/.agents/skills/land/templates/usage.py" ]; then
-            landing_usage_script=$landing_script_repo/.agents/skills/land/templates/usage.py
+    for landing_usage_dir in \
+        "$landing_script_dir" \
+        "$landing_root/.agents/skills/land/templates" \
+        "$HOME/.agents/skills/land/templates" \
+        "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/land/templates"; do
+        if [ -f "$landing_usage_dir/usage.py" ]; then
+            landing_usage_script=$landing_usage_dir/usage.py
+            break
         fi
-    fi
-    [ -n "$landing_usage_script" ] || fail "booking usage failed: usage.py not found beside this script or in .agents/skills/land/templates"
+    done
+    [ -n "$landing_usage_script" ] || fail "booking usage failed: usage.py not found beside this script or in the land skill's templates"
     landing_now=$(date -Iseconds)
     landing_row=$(python3 "$landing_usage_script" "$landing_session" "$landing_since" "$landing_now") || fail "booking usage failed: usage.py on $landing_session"
     printf 'Orchestrator row (%s to %s): %s\n' "$landing_since" "$landing_now" "$landing_row"

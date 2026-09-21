@@ -5,9 +5,6 @@
 
 set -u
 
-PATH=$HOME/.nvm/versions/node/v24.21.0/bin:$PATH
-export PATH
-
 fail() {
     printf 'FAIL: %s\n' "$1" >&2
     exit 1
@@ -26,19 +23,22 @@ assert_contains() {
     esac
 }
 
-test_root=$(mktemp -d "${TMPDIR:-/tmp}/oculus-land-test.XXXXXX") || fail "could not create scratch directory"
+test_root=$(mktemp -d "${TMPDIR:-/tmp}/land-test.XXXXXX") || fail "could not create scratch directory"
 trap 'rm -rf "$test_root"' 0 1 2 3 15
 script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
 land_script=$script_dir/land.sh
+# The fixtures follow the tool directory land.sh names on its ADAPT line.
+tool_path=$(sed -n 's/^landing_tool_path=\([^ ]*\).*/\1/p' "$land_script")
+[ -n "$tool_path" ] || fail "could not read landing_tool_path from $land_script"
 
 write_tool_stub() {
     stub_root=$1
-    mkdir -p "$stub_root/tools/oculus/src" "$stub_root/tools/oculus/tests" "$stub_root/tools/oculus/bin" "$stub_root/tools/oculus/config"
-    printf 'source\n' >"$stub_root/tools/oculus/src/source.txt"
-    printf 'test\n' >"$stub_root/tools/oculus/tests/test.txt"
-    printf 'bin\n' >"$stub_root/tools/oculus/bin/bin.txt"
-    printf 'config\n' >"$stub_root/tools/oculus/config/config.txt"
-    cat >"$stub_root/tools/oculus/package.json" <<'JSON'
+    mkdir -p "$stub_root/$tool_path/src" "$stub_root/$tool_path/tests" "$stub_root/$tool_path/bin" "$stub_root/$tool_path/config"
+    printf 'source\n' >"$stub_root/$tool_path/src/source.txt"
+    printf 'test\n' >"$stub_root/$tool_path/tests/test.txt"
+    printf 'bin\n' >"$stub_root/$tool_path/bin/bin.txt"
+    printf 'config\n' >"$stub_root/$tool_path/config/config.txt"
+    cat >"$stub_root/$tool_path/package.json" <<'JSON'
 {
     "name": "landing-test",
     "private": true,
@@ -63,7 +63,7 @@ initialise_repo() {
         git init -q -b main
         git config user.name "Landing Test"
         git config user.email "landing-test@example.invalid"
-        git add tools/oculus
+        git add "$tool_path"
         git commit -q -m "Initial fixture"
         mkdir -p .agents/worktrees
     ) || fail "could not initialise scratch repository"
@@ -114,13 +114,13 @@ clean_base=$(cd "$clean_repo" && git rev-parse HEAD) || fail "could not read cle
     cd "$clean_repo" || exit 1
     git worktree add -q -b clean .agents/worktrees/clean "$clean_base"
 ) || fail "could not create clean worktree"
-printf 'committed\n' >"$clean_repo/.agents/worktrees/clean/tools/oculus/committed.txt"
+printf 'committed\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/committed.txt"
 (
     cd "$clean_repo/.agents/worktrees/clean" || exit 1
-    git add tools/oculus/committed.txt
+    git add "$tool_path/committed.txt"
     git commit -q -m wip
 ) || fail "could not create clean package commit"
-printf 'pending\n' >"$clean_repo/.agents/worktrees/clean/tools/oculus/pending.txt"
+printf 'pending\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/pending.txt"
 clean_runs=$test_root/clean-runs
 write_events "$clean_runs"
 
@@ -136,7 +136,7 @@ if [ "$clean_status" -ne 0 ]; then
 fi
 
 clean_staged=$(cd "$clean_repo" && git diff --cached --name-only) || fail "could not read clean staged paths"
-clean_expected=$(printf '%s\n%s' 'tools/oculus/committed.txt' 'tools/oculus/pending.txt')
+clean_expected=$(printf '%s\n%s' "$tool_path/committed.txt" "$tool_path/pending.txt")
 if [ "$clean_staged" != "$clean_expected" ]; then
     fail "clean staged paths differ: [$clean_staged]"
 fi
@@ -149,16 +149,16 @@ case "$clean_output" in
 esac
 assert_contains "$clean_output" "Orchestrator row (2026-09-16T12:00:00+02:00 to " "orchestrator row window"
 assert_contains "$clean_output" "): 2 messages, 30 output tokens, 100 cache-write tokens, 3000 cache-read tokens, 8 fresh input tokens, " "orchestrator row"
-assert_contains "$clean_output" "tools/oculus/committed.txt" "booking paths"
-assert_contains "$clean_output" "tools/oculus/pending.txt" "booking paths"
+assert_contains "$clean_output" "$tool_path/committed.txt" "booking paths"
+assert_contains "$clean_output" "$tool_path/pending.txt" "booking paths"
 printf 'clean: exit 0, staged paths, usage rows and the orchestrator row verified\n'
 
 conflict_repo=$test_root/conflict
 initialise_repo "$conflict_repo"
-printf 'base\n' >"$conflict_repo/tools/oculus/conflict.txt"
+printf 'base\n' >"$conflict_repo/$tool_path/conflict.txt"
 (
     cd "$conflict_repo" || exit 1
-    git add tools/oculus/conflict.txt
+    git add "$tool_path/conflict.txt"
     git commit -q -m "Add conflict fixture"
 ) || fail "could not add conflict fixture"
 conflict_base=$(cd "$conflict_repo" && git rev-parse HEAD) || fail "could not read conflict base"
@@ -166,17 +166,17 @@ conflict_base=$(cd "$conflict_repo" && git rev-parse HEAD) || fail "could not re
     cd "$conflict_repo" || exit 1
     git worktree add -q -b conflict .agents/worktrees/conflict "$conflict_base"
 ) || fail "could not create conflict worktree"
-printf 'package\n' >"$conflict_repo/.agents/worktrees/conflict/tools/oculus/conflict.txt"
+printf 'package\n' >"$conflict_repo/.agents/worktrees/conflict/$tool_path/conflict.txt"
 (
     cd "$conflict_repo/.agents/worktrees/conflict" || exit 1
-    git add tools/oculus/conflict.txt
+    git add "$tool_path/conflict.txt"
     git commit -q -m wip
 ) || fail "could not create conflicting package commit"
-printf 'pending\n' >"$conflict_repo/.agents/worktrees/conflict/tools/oculus/pending.txt"
-printf 'main\n' >"$conflict_repo/tools/oculus/conflict.txt"
+printf 'pending\n' >"$conflict_repo/.agents/worktrees/conflict/$tool_path/pending.txt"
+printf 'main\n' >"$conflict_repo/$tool_path/conflict.txt"
 (
     cd "$conflict_repo" || exit 1
-    git add tools/oculus/conflict.txt
+    git add "$tool_path/conflict.txt"
     git commit -q -m "Change main fixture"
 ) || fail "could not create conflicting main commit"
 conflict_runs=$test_root/conflict-runs
@@ -194,12 +194,43 @@ if [ "$conflict_status" -ne 2 ]; then
 fi
 assert_contains "$conflict_output" "worktree git cherry-pick failed" "conflict step"
 assert_contains "$conflict_output" "Conflicting paths:" "conflict heading"
-assert_contains "$conflict_output" "tools/oculus/conflict.txt" "conflict path"
+assert_contains "$conflict_output" "$tool_path/conflict.txt" "conflict path"
 conflict_branch=$(cd "$conflict_repo/.agents/worktrees/conflict" && git branch --show-current) || fail "could not read conflict branch"
 if [ "$conflict_branch" != "conflict-land" ]; then
     fail "conflict worktree is on $conflict_branch, expected conflict-land"
 fi
 printf 'conflict: exit 2, conflicting path and retained landing branch verified\n'
+
+# A plan that points the ADAPT line at another tool directory stages that directory and nothing else.
+adapted_dir=$test_root/adapted-script
+mkdir -p "$adapted_dir"
+sed 's#^landing_tool_path=[^ ]*#landing_tool_path=tools/demo#' "$land_script" >"$adapted_dir/land.sh"
+tool_path=tools/demo
+adapted_repo=$test_root/adapted
+initialise_repo "$adapted_repo"
+adapted_base=$(cd "$adapted_repo" && git rev-parse HEAD) || fail "could not read adapted base"
+(
+    cd "$adapted_repo" || exit 1
+    git worktree add -q -b adapted .agents/worktrees/adapted "$adapted_base"
+) || fail "could not create adapted worktree"
+printf 'pending\n' >"$adapted_repo/.agents/worktrees/adapted/$tool_path/pending.txt"
+printf 'outside\n' >"$adapted_repo/.agents/worktrees/adapted/outside.txt"
+adapted_runs=$test_root/adapted-runs
+write_events "$adapted_runs"
+(
+    cd "$adapted_repo" || exit 1
+    sh "$adapted_dir/land.sh" adapted "$adapted_base" "$adapted_runs" --no-browser
+) >"$test_root/adapted.out" 2>&1
+adapted_status=$?
+if [ "$adapted_status" -ne 0 ]; then
+    cat "$test_root/adapted.out" >&2
+    fail "adapted landing exited $adapted_status, expected 0"
+fi
+adapted_staged=$(cd "$adapted_repo" && git diff --cached --name-only) || fail "could not read adapted staged paths"
+if [ "$adapted_staged" != "tools/demo/pending.txt" ]; then
+    fail "adapted staged paths differ: [$adapted_staged]"
+fi
+printf 'adapted: tools/demo landed, the file outside it left unstaged\n'
 usage_script=$script_dir/usage.py
 usage_root=$test_root/usage
 mkdir -p "$usage_root"
