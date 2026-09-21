@@ -35,7 +35,7 @@ The sequence for one step, as `/plan-help` prints it:
 Clone the repository and link each skill into the user-level skill folders, so every repository on the machine sees one copy. Claude Code reads `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account); Codex reads `~/.agents/skills`.
 
 ```sh
-git clone <this repository> ~/workspace/ordo
+git clone https://github.com/TheAxeC/ordo.git ~/workspace/ordo
 for dir in ~/.claude/skills ~/.agents/skills; do
     mkdir -p "$dir"
     for skill in land plan plan-help plan-orchestration refute spec; do
