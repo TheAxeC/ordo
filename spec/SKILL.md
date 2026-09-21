@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: check every premise the step's text makes against the tree, write the brief (the checked premises, the fix text, the verification list, the report shape, the pointer to the repository's change standard), create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # Prepare a step
@@ -11,7 +11,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, then the ledger folder: `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
+1. `.agents/plan.yaml` (its required keys and defaults as `/plan` states them: a required key missing is a refusal that names it), then the ledger folder: `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
 2. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block (a step already in flight is a refusal that names it, unless the block allows more than one).
 3. `plan.md`: the step's line, the rulings that touch it, and everything the plan carries to it. A step not in the list is a refusal that prints the list.
 4. The tree, on main at its head, for every count, path, name, line number and claim the step's text makes: each checked with a grep or a probe, never taken from the plan's text.

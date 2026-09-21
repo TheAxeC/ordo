@@ -48,33 +48,18 @@ For a second Claude Code account, repeat the inner loop with that account's `$CL
 
 ## Configuring a repository
 
-A repository opts in with `.agents/plan.yaml` at its root. Paths are relative to the repository root.
+A repository opts in with `.agents/plan.yaml` at its root. Start from one of the two example files here:
 
-```yaml
-roadmap: docs/roadmap.md                  # the source of truth for what is open; a plan is one entry of it
-verification: docs/dev/building.md        # the page that defines the green check; /plan copies its commands into the ledger
-rules: docs/dev/change-standard.md        # how a change is made; every brief points here first
-standards:                                # further standards the reviewer holds a diff to
-  - docs/dev/coding-standards.md
-ledger_root: .scratch                     # a plan lives in <ledger_root>/<slug>/
-archive_root: .scratch/archive            # where a closed plan's folder moves
-worktree_root: .agents/worktrees          # gitignored; one worktree per step
-worktree_paths: []                        # sparse-checkout paths for a step's worktree; empty means the whole tree
-worker: claude:opus                       # harness:model of the builder, e.g. codex:gpt-5.6-sol
-worker_effort: high
-reviewer: claude:opus                     # harness:model of the refuter
-review: every                             # every, or earned (plan-orchestration, "The review, earned")
-refute_after_repair: yes                  # yes: /refute runs again over each repair round
-repair_rounds: 1                          # the most repair rounds a step gets
-review_minutes: 0                         # the reviewer's time box in minutes; 0 is none
-look: ""                                  # where a changed view is opened at landing; empty means no look step
-workers_at_once: 1                        # steps built at once (plan-orchestration, "Two steps in flight")
-bench: []                                 # binaries /spec stages and /land runs interleaved, base against new
+```sh
+cp ~/workspace/ordo/plan.yaml .agents/plan.yaml            # one project
+cp ~/workspace/ordo/plan.projects.yaml .agents/plan.yaml   # several projects; a plan is then named <project>/<entry>
 ```
 
-A repository that holds several projects lists each under `projects:` with the same keys, and a plan is then named `<project>/<entry>`.
+`plan.yaml` describes every key. Eight are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worker` and `reviewer`. A skill that needs a missing required key stops and names it. Every other key is optional, and when it is left out it takes the default written beside it in `plan.yaml`; for example, a missing `worktree_paths` means the whole tree and a missing `look` means no look step.
 
-Add `.agents/worktrees/` (or whatever `worktree_root` names) to `.gitignore`.
+Add `worktree_root` to `.gitignore`.
+
+`land/templates/land.test.sh` checks that both example files carry exactly the keys the state template's configuration block needs, and that each optional key's value equals its stated default.
 
 ## The landing script
 

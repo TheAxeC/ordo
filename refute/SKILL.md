@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round, and again over each round when the configuration block says refute_after_repair: yes, up to repair_rounds. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # Refute a step
@@ -11,7 +11,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, the ledger folder, `orchestrator-state.md` (the dispatch block names the worktree, the base and the report path). `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
+1. `.agents/plan.yaml` (its required keys and defaults as `/plan` states them: a required key missing is a refusal that names it), the ledger folder, `orchestrator-state.md` (the dispatch block names the worktree, the base and the report path). `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
 2. The brief `agents/briefs/<step>.md`, the rules file and the standards it points at, and the plan's text for the step.
 3. The diff since the base, from inside the worktree (`git diff <base>` and `git status --short`, the only git it runs, read-only), the new files whole, a sample of a mechanical sweep with the sample named.
 4. The builder's report, last.

@@ -1,0 +1,22 @@
+# Example .agents/plan.yaml for a repository with one project. Copy it to .agents/plan.yaml and replace the paths.
+# Every path is relative to the repository root. A required key that is missing stops the skill that needs it, and the refusal names the key.
+# An optional key that is missing takes the value written here.
+
+roadmap: docs/roadmap.md                  # required. The source of truth for what is open; a plan is one entry of it.
+verification: docs/dev/building.md        # required. The page that defines the green check; /plan copies its commands into the ledger.
+rules: docs/dev/change-standard.md        # required. How a change is made; every brief points here first.
+ledger_root: .scratch                     # required. A plan lives in <ledger_root>/<slug>/.
+archive_root: .scratch/archive            # required. Where a closed plan's folder moves.
+worktree_root: .agents/worktrees          # required. Where a step's worktree is created; add it to .gitignore.
+worker: claude:opus                       # required. harness:model of the builder, for example codex:gpt-5.6-sol.
+reviewer: claude:opus                     # required. harness:model /refute runs on.
+standards: []                             # optional, default []. Files every brief tells the builder to read in full, and the reviewer holds a diff to.
+worktree_paths: []                        # optional, default []. Sparse-checkout paths for a step's worktree; [] means the whole tree.
+worker_effort: high                       # optional, default high. The reasoning effort passed to a worker whose harness takes one.
+review: every                             # optional, default every. every, or earned (plan-orchestration, "The review, earned").
+refute_after_repair: yes                  # optional, default yes. yes: /refute runs again over each repair round; no: the orchestrator's read of the round stands in.
+repair_rounds: 1                          # optional, default 1. The most repair rounds a step gets; a refutation that finds nothing ends them early.
+review_minutes: 0                         # optional, default 0. The reviewer's time box in minutes; 0 is none.
+look: ""                                  # optional, default "". Where a changed view is opened at landing (a page, a command); "" means no look step.
+workers_at_once: 1                        # optional, default 1. Steps in flight at once; above 1 only for steps with disjoint paths (plan-orchestration, "Two steps in flight").
+bench: []                                 # optional, default []. Binaries /spec stages and /land runs interleaved, base against new; [] means no A/B.

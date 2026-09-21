@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the orchestrator's usage row, the booking in the plan, the commit by explicit path list, the worktree and branch removed, the state file rewritten. Refuses while a finding is left neither closed nor booked, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Land a step
@@ -11,7 +11,7 @@ metadata:
 
 ## What it requires
 
-1. `.agents/plan.yaml`, the ledger folder, the dispatch block naming this step with its worktree and base. `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
+1. `.agents/plan.yaml` (its required keys and defaults as `/plan` states them: a required key missing is a refusal that names it), the ledger folder, the dispatch block naming this step with its worktree and base. `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
 2. `agents/reviews/<step>-report.md`, and either `agents/reviews/<step>-refuter.md` newer than the report or, after the step's repair rounds (up to `repair_rounds`, or one more under plan-orchestration's exception), the refuter report carrying a run over the last round when the configuration block says `refute_after_repair: yes` (the orchestrator's read of the round when it says `no`), with every finding, the last run's included, closed under its Closed heading or booked in the state file's open items. Neither present, a run over the last round owed and missing, or a finding left open and unbooked, is a refusal that says which.
 3. On main: nothing staged, no git operation in progress, and none of the step's paths carrying an unrelated change of the user's (listed by path and left alone).
 

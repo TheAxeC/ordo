@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, invoke /spec, dispatch one builder agent in the step's worktree, invoke /refute, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, invoke /land with the small fixes made there, book the step, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript on either harness (Claude Code or Codex) with either as the worker, and one orchestrator can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
 metadata:
-  version: "2.6.0"
+  version: "2.6.1"
 ---
 
 # Plan orchestration

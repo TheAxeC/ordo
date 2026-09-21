@@ -2,12 +2,12 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.3.0"
+  version: "1.4.0"
 ---
 
 # Plan help
 
-`/plan-help` prints the sequence. `/plan-help <entry>` prints the sequence and then the named plan's position. It reads `.agents/plan.yaml`, the ledger folder and its state file, and writes nothing.
+`/plan-help` prints the sequence. `/plan-help <entry>` prints the sequence and then the named plan's position. It reads `.agents/plan.yaml` (its required keys and defaults as `/plan` states them: a required key missing is a refusal that names it), the ledger folder and its state file, and writes nothing.
 
 `<entry>` resolves to the ledger folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title); `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has. No such folder is a refusal that names `/plan`.
 
