@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Plan help
@@ -14,6 +14,9 @@ metadata:
 ## The sequence, printed verbatim
 
 ```
+/repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
+/ordo-init                    once per repository: writes .agents/plan.yaml, or checks the one there
+/roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
 /plan <entry>                 once: opens the plan, shows the step list for approval
 
 then, for every step:
@@ -35,6 +38,8 @@ when a command stops:
 /land refuses or stops        it names the finding left unbooked or the red line: fix it at landing or book it, then /land again
 
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, an agent at "build it" and "close them"
+
+/plan-retro                   after plans have run: the findings the reviews keep making, and the rule, page or check that stops each
 ```
 
 ## The position, for `<entry>`

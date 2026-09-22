@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # Open a plan
@@ -11,7 +11,7 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml` at the repository root: the only place a project specific lives. Its keys, which of them are required and the default of each optional one are in Ordo's `plan.yaml` (one project) and `plan.projects.yaml` (several, listed under `projects:`, with `<entry>` then `<project>/<entry>`). No file, no run: the skill stops and says the file is missing. A required key missing is a refusal that names the key; an optional key missing takes the default the example file gives it.
+1. `.agents/plan.yaml` at the repository root: the only place a project specific lives. Its keys, which of them are required and the default of each optional one are in `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several, listed under `projects:`, with `<entry>` then `<project>/<entry>`). No file, no run: the skill stops, says the file is missing and names `/ordo-init`, which writes it. A required key missing is a refusal that names the key; an optional key missing takes the default the example file gives it.
 2. The roadmap the configuration names. `<entry>` is matched against the entries by number or title; no match, and the skill stops and prints the open entries.
 3. The verification page the configuration names, for the commands every step runs.
 
@@ -30,4 +30,4 @@ Both files are committed by path as the plan's opening commit, with the roadmap 
 - A step is one deliverable and one agent dispatch, with the command that proves it. A step that cannot name its proof is not a step yet and is booked under "Blocked, and by what".
 - Every path in the ledger is relative to the repository root, and every command names the directory it runs from.
 - No history: the ledger records decisions with their dates in `plan.md`'s rulings list; the templates and this file carry none.
-- The last step of every plan is the closing: the roadmap entry ticked with the gate's output, and the ledger folder moved to `<archive_root>/`. `/plan` writes that step itself at the end of the drafted list.
+- The last step of every plan is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`. `/plan` writes that step itself at the end of the drafted list.

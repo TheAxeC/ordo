@@ -1,0 +1,35 @@
+# Build output
+bin/
+build/
+build-*/
+out/
+_deps/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+Testing/
+CMakeUserPresets.json
+CMakeLists.txt.user
+Makefile
+*.make
+compile_commands.json
+.cache/
+
+# Compiled objects
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Profiling
+default.profraw
+*.profdata

@@ -258,7 +258,7 @@ printf 'usage: Claude Code and Codex rows verified, one message per id, the wind
 # The example plan.yaml files carry every key of the state template's configuration block that plan.yaml sets,
 # plus the keys only the skills read, each marked required or optional with a default equal to its value.
 ordo_root=$(CDPATH= cd "$script_dir/../.." && pwd -P)
-if [ -f "$ordo_root/plan.yaml" ] && [ -f "$ordo_root/plan/templates/orchestrator-state.md" ]; then
+if [ -f "$ordo_root/plan/templates/plan.yaml" ] && [ -f "$ordo_root/plan/templates/orchestrator-state.md" ]; then
     python3 - "$ordo_root" <<'PY' || fail "example plan.yaml files differ from the state template"
 import re, sys, yaml
 root = sys.argv[1]
@@ -266,17 +266,17 @@ template = open(f"{root}/plan/templates/orchestrator-state.md").read()
 block = re.search(r"```yaml\n(.*?)```", template, re.S).group(1)
 expected = {k for k in re.findall(r"^([a-z_]+):", block, re.M)} - {"verify", "executor"}
 expected |= {"roadmap", "verification", "ledger_root", "archive_root"}
-single = yaml.safe_load(open(f"{root}/plan.yaml"))
+single = yaml.safe_load(open(f"{root}/plan/templates/plan.yaml"))
 errors = []
 if set(single) != expected:
     errors.append(f"plan.yaml keys: missing {sorted(expected - set(single))}, extra {sorted(set(single) - expected)}")
-for line in open(f"{root}/plan.yaml"):
+for line in open(f"{root}/plan/templates/plan.yaml"):
     m = re.match(r"^([a-z_]+):\s*(.*?)\s+#\s*(required\.|optional, default (.*?)\.\s)", line)
     if re.match(r"^[a-z_]+:", line) and not m:
         errors.append(f"plan.yaml line not marked required or optional with a default: {line.strip()}")
     elif m and m.group(4) is not None and yaml.safe_load(m.group(2)) != yaml.safe_load(m.group(4)):
         errors.append(f"plan.yaml {m.group(1)}: value {m.group(2)} differs from its default {m.group(4)}")
-for name, keys in yaml.safe_load(open(f"{root}/plan.projects.yaml"))["projects"].items():
+for name, keys in yaml.safe_load(open(f"{root}/plan/templates/plan.projects.yaml"))["projects"].items():
     if set(keys) != expected:
         errors.append(f"plan.projects.yaml {name}: missing {sorted(expected - set(keys))}, extra {sorted(set(keys) - expected)}")
 if errors:

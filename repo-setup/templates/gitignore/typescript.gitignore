@@ -1,0 +1,10 @@
+# Dependencies and output
+node_modules/
+dist/
+build/
+coverage/
+.svelte-kit/
+*.tsbuildinfo
+
+# Logs
+npm-debug.log*
