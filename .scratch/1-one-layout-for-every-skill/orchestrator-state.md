@@ -68,7 +68,7 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 10 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65; step 9 in the commit that carries this line, aa7cfe2. The tree is clean after it.
+- 2026-09-23. Steps 1 to 10 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65, aa7cfe2, e6300be). The tree is clean after it.
 - Verified: the verify list on main, seven `PASS:` lines and a clean ASCII check.
 - Next step: 11, roadmap restyled with its inventory.
 - Open on Axel's side: none until step 1 is written.
