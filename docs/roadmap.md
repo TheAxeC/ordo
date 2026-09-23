@@ -114,12 +114,19 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on a grant portal up to its last page, with the record written.
 - Waits on: 14, for the portal notes; 8, for the documents.
 
+## 15.A Rebuild-later rows
+
+- Status: [ ]
+- Goal: Every row of `docs/academic-coverage.md` marked `rebuild later: <skill>` is built into its skill while the installed academic skills are still there to read: 11 for paper, 6 for literature, 3 for paper-review, 1 for researcher.
+- Gate: no row of `docs/academic-coverage.md` is still marked `rebuild later` (`grep -c 'rebuild later:' docs/academic-coverage.md` prints 0); each built row is re-marked `rebuild: <skill>` and its reason names the file of the skill that now holds it; the coverage check passes over the four skills.
+- Waits on: 5, 6, 9 and 13, the skills the rows go to.
+
 ## 16. Switch over
 
 - Status: [ ]
 - Goal: The new writing skills replace the installed academic skills.
 - Gate: with the user's explicit permission, asked for before any of it: your global `CLAUDE.md` and research-hub's `CLAUDE.md` name the new skills; the installed academic skills are removed from research-hub; `tools/manuscript` points at `paper`. Nothing of it is done without that permission.
-- Waits on: 5 to 10, each with its side-by-side run passed.
+- Waits on: 5 to 10, each with its side-by-side run passed; 15.A, so every later row is built before the academic skills are removed.
 
 # Done
 
