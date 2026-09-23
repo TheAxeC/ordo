@@ -9,6 +9,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
+- sh utils/check_skill_layout.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -29,16 +30,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/1-2
-  base: 82763c1
-  launched: 2026-09-23
-  report: .scratch/1-one-layout-for-every-skill/agents/reviews/2-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -74,12 +66,13 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Step 1 landed at 971121b. Step 2 briefed at 82763c1, in flight in .agents/worktrees/1-2.
-- Verified: `python3 skills/ordo-init/templates/check_config.py .` exits 0.
-- Next step: 2, the layout check, which every restyle step runs.
+- 2026-09-23. Steps 1 and 2 landed (971121b; step 2 in the commit that carries this line). The tree is clean after it.
+- Verified: the verify list on main, six `PASS:` lines and a clean ASCII check.
+- Next step: 3, the rule inventory check, which every restyle step runs.
 - Open on Axel's side: none until step 1 is written.
 
 ## Usage
 
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2 | inline (the orchestrating session) | 14 tool uses, about 15 minutes; round 1: 17 tool uses, about 20 minutes | 1 | 27 (worked inline) | +559 | no | 9 | 0 | 33 | 40797 | 69233 | 13667350 | 70 | 18 | none |

@@ -107,6 +107,7 @@ sh skills/ordo-init/templates/check_config.test.sh
 sh skills/plan-retro/templates/collect_findings.test.sh
 sh skills/repo-setup/templates/sync_rules.test.sh
 sh utils/pin.test.sh
+sh utils/check_skill_layout.test.sh
 ```
 
 - `land.test.sh` proves the landing on scratch repositories, and checks that both example `plan.yaml` files carry exactly the keys the state template's configuration block needs, each optional key's value equal to its stated default.
@@ -114,6 +115,7 @@ sh utils/pin.test.sh
 - `collect_findings.test.sh` checks that the collector reads both heading styles of a refuter report and its repair rounds, skips closures and "none", reads a report once when the archive sits inside the ledger root, and starts after a previous retro.
 - `sync_rules.test.sh` checks that a block equal to the template passes, a drifted block fails with its diff and is repaired by `--write`, and a missing block or a missing `AGENTS.md` symlink is refused.
 - `pin.test.sh` checks that `pin.sh` links every skill of a tag from the pinned worktree, drops a skill the next tag removes, repairs a link into the live clone, and refuses, changing nothing, a worktree with local changes, a real directory or a foreign link in a skill folder, and an unknown tag.
+- `check_skill_layout.test.sh` checks that `check_skill_layout.py` passes a complete `SKILL.md`, and fails one per rule of `docs/dev/skill-layout.md` it enforces: the frontmatter, the title, the section order, what each section holds, the table headers, bold outside a label, a version tag in a heading; and that headings and bold inside fenced code of any form are not read.
 
 ## The landing script
 

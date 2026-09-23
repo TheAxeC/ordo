@@ -8,6 +8,7 @@ sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on comp
 sh skills/plan-retro/templates/collect_findings.test.sh
 sh skills/repo-setup/templates/sync_rules.test.sh
 sh utils/pin.test.sh
+sh utils/check_skill_layout.test.sh             # the layout check on complete and broken SKILL.md files
 git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 ```
 
