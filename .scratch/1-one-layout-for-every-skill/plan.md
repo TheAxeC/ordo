@@ -24,7 +24,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 6 spec restyled, with its inventory; same proof (1 commit)
 - ✅ 7 refute restyled, with its inventory; same proof (1 commit)
 - ✅ 8 land restyled, with its inventory; same proof (1 commit)
-- 9 plan-help restyled, with its inventory; same proof (1 commit)
+- ✅ 9 plan-help restyled, with its inventory; same proof (1 commit)
 - 10 ordo-init restyled, with its inventory; same proof (1 commit)
 - 11 roadmap restyled, with its inventory; same proof (1 commit)
 - 12 plan-retro restyled, with its inventory; same proof (1 commit)
@@ -51,6 +51,7 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - The tables the layout requires restate nothing: a Do instead cell that would repeat a step's rule names the step; a refusal is stated once, as a row of Stops, and the item where it arises points there. The columns the layout requires (What it shows, What resumes it, Why it fails) may hold text the old file does not, provided it contradicts nothing there (orchestrator, in step 5's repair round).
 - The findings of the run over the last repair round that are not fixed at landing are booked as their own step in the state file's booked list, never in the open items, which hold only what the user must rule on; refute's old sentence that said "open items" is corrected in step 7 (the user, 2026-09-23).
 - Nothing is installed into the user's skill folders (`~/.claude/skills`, `~/.claude-work/skills`, `~/.agents/skills`), no `utils/pin.sh <tag>` is run, and no installed skill, the academic skills included, is removed or replaced without the user's explicit permission, asked for each time (the user, 2026-09-23).
+- A row of a rule inventory may name one heading line alone, for a rule the heading carries; a range that holds a heading and any other line is still an error. This amends the one-block ruling above: it adds coverage and makes no failing inventory pass (orchestrator, in step 9's repair round).
 
 ## Blocked, and by what
 
@@ -115,3 +116,11 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/8-refuter.md`; the first run's findings closed in repair round 1, among them refusals weakened (a dirty step path, an old refuter report, a missing dispatch block) and every red line called a stop; the run over the round's closed at landing. Nothing booked.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
 - Usage, orchestrator e643b34 to landing: 11 messages, 27065 output tokens, 41660 cache-write tokens, 8629012 cache-read tokens, 26 fresh input tokens, 11 minutes.
+
+### Step 9, plan-help restyled (landed 2026-09-23)
+
+- Landed: `skills/plan-help/SKILL.md` in the layout, 47 lines to 91, version 1.6.0, the printed sequence byte for byte unchanged; the inventory, 42 rows; `utils/check_rule_inventory.py` accepts a row naming one heading line, with two new test cases.
+- Ruling: a row may name one heading line alone (rulings list).
+- Reviews: `agents/reviews/9-refuter.md`; the first run's findings closed in repair round 1, among them the next-command line printed without an entry; the run over the round's closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check ok, every inventory landed so far ok.
+- Usage, orchestrator 0fa6d65 to landing: 14 messages, 22128 output tokens, 33413 cache-write tokens, 11517208 cache-read tokens, 32 fresh input tokens, 12 minutes.

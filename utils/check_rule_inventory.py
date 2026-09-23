@@ -22,6 +22,7 @@ An inventory is a Markdown file:
   holds no blank line and no heading, crosses no frontmatter delimiter and no fence boundary (a fenced
   block, its fence lines included, is a block of its own), and opens at most one item: a list item at
   any depth (- * + 1. 1)), a table row other than a separator, or a frontmatter key or comment line.
+  A row may also name one heading line alone, for a rule the heading carries.
 - Rule: not empty. A pipe inside it is written \\|.
 - New place: a "## " section of the new file, optionally followed by " / " and a "### " subsection
   under it, then optionally by an item number n >= 1: the n-th top-level list item (- * + 1. 1))
@@ -260,6 +261,8 @@ def blocks(lines, flags, end):
 def check_range_block(old_lines, flags, end, first, last):
     """Return an error message when a range spans more than one block or item, or None."""
     info = blocks(old_lines, flags, end)
+    if first == last and first - 1 > end and not flags[first - 1][0] and HEADING.match(old_lines[first - 1]):
+        return None
     ids = {info[i][0] for i in range(first - 1, last)}
     for index in range(first - 1, last):
         if not old_lines[index].strip():

@@ -291,9 +291,18 @@ expect_error two-rows "old lines 23-24 open 2 list items, table rows or frontmat
 write_inventory with-blank
 edit with-blank "| 9 |" "| 9-10 |"
 expect_error with-blank "old lines 9-10 hold a blank line at 10"
+# A heading line needs no row, and may have one of its own for a rule it carries; a range that runs from a
+# heading into the text below it is still two blocks.
+write_inventory heading-row
+edit heading-row "| 9 | What the skill does | Steps / Mode A 1 |" "| 9 | What the skill does | Steps / Mode A 1 |
+| 11 | The heading's rule | Steps |"
+expect_pass heading-row
 write_inventory with-heading
-edit with-heading "| 9 |" "| 11 |"
-expect_error with-heading "old lines 11-11 hold a heading at 11"
+edit with-heading "| 9 |" "| 11-13 |"
+expect_error with-heading "old lines 11-13 hold a heading at 11"
+write_inventory heading-blank
+edit heading-blank "| 9 |" "| 11-12 |"
+expect_error heading-blank "old lines 11-12 hold a heading at 11"
 write_inventory empty-rule
 edit empty-rule "| What the skill does |" "|  |"
 expect_error empty-rule "the rule is empty"
