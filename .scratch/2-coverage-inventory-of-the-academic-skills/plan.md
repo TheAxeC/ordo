@@ -18,7 +18,7 @@ A list of every file of the four installed academic skills (academic-paper, acad
 - ✅ 2 the check's test joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
 - ✅ 3 academic-paper, 61 files, each read in full and marked with its reason; the check passes for its section (1 commit)
 - ✅ 4 academic-paper-reviewer, 26 files, the same; the check passes for its section (1 commit)
-- 5 academic-pipeline, 30 files, the same; the check passes for its section (1 commit)
+- ✅ 5 academic-pipeline, 30 files, the same; the check passes for its section (1 commit)
 - 6 deep-research, 52 files, the same; the check passes over the whole list (1 commit)
 - 7 the user approves the list (orchestrator, a stop for approval)
 - 8 the closing: `/roadmap done 2` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
@@ -80,3 +80,14 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
 - Usage, orchestrator b6fadc8 to landing: 95 messages, 84572 output tokens, 318887 cache-write tokens, 48322651 cache-read tokens, 192 fresh input tokens, 22 minutes.
 - Reviewer usage: first run 207,415 tokens, 34 tool uses, 275 seconds; run over the round 153,996 tokens, 57 tool uses, 409 seconds.
+
+### Step 5, academic-pipeline marked (landed 2026-09-23)
+
+- Landed: the `## academic-pipeline` section of `docs/academic-coverage.md`, 30 rows, and the check command naming three skills; `check_coverage.py` over the three prints `ok`. The file is 174 lines.
+- Marks in the section: 6 `rebuild: paper`, 1 `rebuild later: paper`, 5 `rebuild: researcher`, 1 `rebuild: literature`, 1 `rebuild: paper-review`, 1 `rebuild: rebuttal`, 15 `drop`.
+- The integrity check, its lookup rules and the originality screen go to the paper skill; the orchestration goes to the researcher, with Ordo's plan ledger standing in for the state record.
+- Earlier rows reworded to the prose standard (full sentences, no recurring endings); no earlier mark changed.
+- Reviews: `agents/reviews/5-refuter.md`; 12 spec and 5 standards findings in the first run, closed in repair round 1; the run over the round's findings fixed at landing. Nothing booked.
+- Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
+- Usage, orchestrator ed16ff2 to landing: 30 messages, 40013 output tokens, 65747 cache-write tokens, 20828687 cache-read tokens, 64 fresh input tokens, 20 minutes.
+- Reviewer usage: first run 305,282 tokens, 50 tool uses, 393 seconds; run over the round 149,888 tokens, 38 tool uses, 341 seconds.
