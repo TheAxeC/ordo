@@ -11,6 +11,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_skill_layout.test.sh 2>&1 | tail -1
 - sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
+- python3 utils/check_skill_layout.py
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -31,16 +32,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 14
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/1-14
-  base: 47a7abc
-  launched: 2026-09-23
-  report: .scratch/1-one-layout-for-every-skill/agents/reviews/14-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -77,10 +69,10 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 13 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65, aa7cfe2, e6300be, 9eda91c, 709fcf6, and step 13 in the commit that carries this line). The tree is clean after it.
-- Verified: the verify list on main, seven `PASS:` lines and a clean ASCII check.
-- Next step: 14, the layout check itself wired in as a check of docs/dev/building.md, docs/dev/change-standard.md and the verify list, run over every skills/*/SKILL.md.
-- Open on Axel's side: none until step 1 is written.
+- 2026-09-23. Steps 1 to 14 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65, aa7cfe2, e6300be, 9eda91c, 709fcf6, fe1f5e7, and step 14 in the commit that carries this line). The tree is clean after it.
+- Verified: the verify list on main, seven `PASS:` lines, ten `ok:` lines from the layout check and a clean ASCII check.
+- Next step: 15, the closing: `/roadmap done 1` with the gate's output, this folder moved to `.scratch/archive/`.
+- Open on Axel's side: none.
 
 ## Usage
 
@@ -98,3 +90,4 @@ dispatch:
 | 11 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 2 files changed, 176 insertions(+), 31 deletions(-) | no | the run over the round's findings | 0 | 11 | 23328 | 41676 | 9899462 | 26 | 8 | none |
 | 12 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 2 files changed, 133 insertions(+), 20 deletions(-) | no | the run over the round's findings | 0 | 10 | 17957 | 32447 | 9374598 | 24 | 10 | none |
 | 13 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 1 file changed, 95 insertions(+), 42 deletions(-) | no | the run over the round's findings | 0 | 25 | 31020 | 100856 | 4783481 | 54 | 14 | none |
+| 14 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 3 files changed, 14 insertions(+), 4 deletions(-) | no | 0 | 0 | 24 | 20314 | 45537 | 3386091 | 52 | 10 | none |

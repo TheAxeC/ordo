@@ -119,6 +119,12 @@ sh utils/check_rule_inventory.test.sh
 - `check_skill_layout.test.sh` checks that `check_skill_layout.py` passes a complete `SKILL.md`, and fails one per rule of `docs/dev/skill-layout.md` it enforces: the frontmatter, the title, the section order, what each section holds, the table headers, bold outside a label, a version tag in a heading; and that headings and bold inside fenced code of any form are not read.
 - `check_rule_inventory.test.sh` checks that `check_rule_inventory.py` passes a complete inventory and fails each error it exists to catch: a header line missing or given twice, a commit that is not a hexadecimal id or not in the repository, an old or new path outside the repository, a missing new file, an old or new file that is not UTF-8, a table header or cell count that is wrong, a row after the table, an old line with text in no row, a range that is malformed, out of bounds or backwards, a range that crosses a blank line, a heading, a frontmatter delimiter or a fence boundary, or opens more than one list item (at any depth, with any marker), table row or frontmatter key, an empty rule, an unknown section or subsection, and an item number of 0 or past the end. It also checks what is not an error: a YAML comment and a fenced `~~~` line needing a row, a row of dashes that is not a separator, an inventory table without a separator row, a row naming one heading line alone, fenced rows in the inventory, an escaped pipe in a rule, section names holding ` / ` or ending in a digit, and fenced lines, nested bullets, indented tables and table headers not counted as items.
 
+The skills themselves are checked against `docs/dev/skill-layout.md`, from the repository root; the check prints `ok: <path>` for each skill that follows the layout and each error with its file and line, and exits 0 when every skill passes:
+
+```sh
+python3 utils/check_skill_layout.py
+```
+
 ## The landing script
 
 `skills/land/templates/land.sh` does the cherry-pick, the checks on `main` and the booking data as one command. A plan copies it into its ledger folder and makes the three `ADAPT` edits: `landing_tool_path` (the directory a step's changes are scoped to), the dependency install and verify commands with their pass rules, and the harness and model names in the usage rows. Copy `land.test.sh` beside it; it reads `landing_tool_path` from `land.sh` and proves the landing on scratch repositories.
