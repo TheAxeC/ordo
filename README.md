@@ -41,7 +41,7 @@ for every step:
 ## Requirements
 
 - git, POSIX `sh`, and `python3` with PyYAML.
-- `node` and `npx` on `PATH`, for `land/templates/land.sh` (its index-lock wait and the usage rows) and for the skills CLI, which the CLI install and `repo-setup`'s project skills use.
+- `node` and `npx` on `PATH`, for `skills/land/templates/land.sh` (its index-lock wait and the usage rows) and for the skills CLI, which the CLI install and `repo-setup`'s project skills use.
 - Claude Code, Codex, or both.
 
 ## Install
@@ -63,7 +63,7 @@ rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp
 for dir in ~/.claude/skills ~/.agents/skills; do
     mkdir -p "$dir"
     for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
-        rm -rf "$dir/$skill" && cp -R /tmp/ordo/$skill "$dir/"
+        rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
 done
 ```
@@ -74,7 +74,7 @@ For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills`
 
 A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the coding standard and the project skills; shows the whole tree and every file; and after approval writes `CLAUDE.md` (with `AGENTS.md` as a symlink to it), the change and prose standards, a roadmap, an ADR folder, `.gitignore`, `LICENSE` and `README.md`, installs the project skills (writing `skills-lock.json`), and runs `/ordo-init`.
 
-The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->` and are a copy of `repo-setup/templates/shared-rules.md`. `/repo-setup sync` compares a repository's block with the template, shows the diff and rewrites it after approval; on a repository with no block yet it drafts where the block goes and which existing rules it replaces. The same comparison runs on its own:
+The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->` and are a copy of `skills/repo-setup/templates/shared-rules.md`. `/repo-setup sync` compares a repository's block with the template, shows the diff and rewrites it after approval; on a repository with no block yet it drafts where the block goes and which existing rules it replaces. The same comparison runs on its own (`<skills>` is `~/.agents/skills`, or `skills/` in a clone):
 
 ```sh
 python3 <skills>/repo-setup/templates/sync_rules.py <repository>
@@ -86,7 +86,7 @@ An existing repository opts in with `.agents/plan.yaml` at its root. Run `/ordo-
 python3 <skills>/ordo-init/templates/check_config.py <repository>
 ```
 
-To write the file by hand, start from one of the two example files in the plan skill's `templates/` folder (`<skills>` is `~/.agents/skills` or `~/workspace/ordo`):
+To write the file by hand, start from one of the two example files in the plan skill's `templates/` folder:
 
 ```sh
 cp <skills>/plan/templates/plan.yaml .agents/plan.yaml            # one project
@@ -99,13 +99,13 @@ Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
 
 ## Tests
 
-Each script under a skill's `templates/` has a test beside it that runs on scratch repositories:
+Each script under a skill's `templates/` or under `utils/` has a test beside it that runs on scratch repositories:
 
 ```sh
-sh land/templates/land.test.sh
-sh ordo-init/templates/check_config.test.sh
-sh plan-retro/templates/collect_findings.test.sh
-sh repo-setup/templates/sync_rules.test.sh
+sh skills/land/templates/land.test.sh
+sh skills/ordo-init/templates/check_config.test.sh
+sh skills/plan-retro/templates/collect_findings.test.sh
+sh skills/repo-setup/templates/sync_rules.test.sh
 sh utils/pin.test.sh
 ```
 
@@ -117,7 +117,7 @@ sh utils/pin.test.sh
 
 ## The landing script
 
-`land/templates/land.sh` does the cherry-pick, the checks on `main` and the booking data as one command. A plan copies it into its ledger folder and makes the three `ADAPT` edits: `landing_tool_path` (the directory a step's changes are scoped to), the dependency install and verify commands with their pass rules, and the harness and model names in the usage rows. Copy `land.test.sh` beside it; it reads `landing_tool_path` from `land.sh` and proves the landing on scratch repositories.
+`skills/land/templates/land.sh` does the cherry-pick, the checks on `main` and the booking data as one command. A plan copies it into its ledger folder and makes the three `ADAPT` edits: `landing_tool_path` (the directory a step's changes are scoped to), the dependency install and verify commands with their pass rules, and the harness and model names in the usage rows. Copy `land.test.sh` beside it; it reads `landing_tool_path` from `land.sh` and proves the landing on scratch repositories.
 
 `land.sh` finds `usage.py` beside itself, then in the land skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`).
 

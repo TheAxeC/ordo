@@ -257,9 +257,9 @@ codex_row=$(python3 "$usage_script" "$usage_root/codex.jsonl" 2026-09-16T12:00:0
 printf 'usage: Claude Code and Codex rows verified, one message per id, the window across offsets\n'
 # The example plan.yaml files carry every key of the state template's configuration block that plan.yaml sets,
 # plus the keys only the skills read, each marked required or optional with a default equal to its value.
-ordo_root=$(CDPATH= cd "$script_dir/../.." && pwd -P)
-if [ -f "$ordo_root/plan/templates/plan.yaml" ] && [ -f "$ordo_root/plan/templates/orchestrator-state.md" ]; then
-    python3 - "$ordo_root" <<'PY' || fail "example plan.yaml files differ from the state template"
+skills_root=$(CDPATH= cd "$script_dir/../.." && pwd -P)
+if [ -f "$skills_root/plan/templates/plan.yaml" ] && [ -f "$skills_root/plan/templates/orchestrator-state.md" ]; then
+    python3 - "$skills_root" <<'PY' || fail "example plan.yaml files differ from the state template"
 import re, sys, yaml
 root = sys.argv[1]
 template = open(f"{root}/plan/templates/orchestrator-state.md").read()
