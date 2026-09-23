@@ -16,13 +16,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
-## 2.A Launch notes for builders run as their own process
-
-- Status: [ ]
-- Goal: An optional `launch_note:` key in the plan configuration, default "" (nothing recorded), holding one absolute path to a command that must return at once. When it is set, plan-orchestration's two shell launch recipes (`claude -p` and `codex exec`) run it around the builder: `start` before, `end` after (skipped when `start` wrote no id), and `transcript` as a numbered orchestration step once the transcript or rollout path is known; the builder's exit code still reaches the exit file. The three calls and their arguments are written down in Ordo as its interface. The key appears in every place that lists the optional keys: the plan skill's key list, both example `plan.yaml` files, the state template, the ordo-init skill and the README. The native Claude-agent recipe is unchanged.
-- Gate: a test with a stub launch-note command shows the recipes unchanged with the key empty, `start`, `transcript` and `end` run with it set, `end` skipped after a failed `start`, and the builder's exit code in the exit file in every case; `land.test.sh` and `check_config.test.sh` pass with the key; the layout check passes.
-- Waits on: 1, for the layout of the skills it changes.
-
 ## 3. The writing base
 
 - Status: [ ]
@@ -134,6 +127,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - [x] 1. One layout for every skill: `docs/dev/skill-layout.md` approved (plan 1's rulings); `python3 utils/check_skill_layout.py` printed ten `ok:` lines, exit 0, and `sh utils/check_skill_layout.test.sh` printed `PASS: check_skill_layout.py scratch tests`; `python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md` printed ten `ok:` lines, exit 0, and `sh utils/check_rule_inventory.test.sh` printed `PASS: check_rule_inventory.py scratch tests`; `/refute` ran on steps 2 to 14, every landing report `Open items: none. Booked list: empty`; every command in `docs/dev/building.md` passed on main (seven `PASS:` lines, ten `ok:` lines, a clean ASCII check); `npx skills add . --list` printed `Found 10 skills`.
 - [x] 2. Coverage inventory of the academic skills: `docs/academic-coverage.md` names each of the 169 files once with its mark and reason; `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`, exit 0, and `sh utils/check_coverage.test.sh` printed `PASS: check_coverage.py scratch tests`; the user approved the list (plan 2's rulings).
+- [x] 2.A. Launch notes for builders run as their own process: an optional `launch_note:` key and `skills/plan-orchestration/templates/launch.sh`, which runs the `claude -p` and `codex exec` recipes (and a repair round's resume) around the note's `start` and `end`; `sh skills/plan-orchestration/templates/launch.test.sh` printed `PASS: launch.sh scratch tests`, `sh skills/land/templates/land.test.sh` printed `PASS: land.sh and usage.py scratch tests`, `sh skills/ordo-init/templates/check_config.test.sh` printed `PASS: check_config.py scratch tests`, and `python3 utils/check_skill_layout.py` printed ten `ok:` lines, exit 0.
 
 # Dropped
 

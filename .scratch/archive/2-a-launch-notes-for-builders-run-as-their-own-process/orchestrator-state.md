@@ -71,8 +71,8 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-24. Steps 1 to 4 landed (5e9ec86, c8d673a, 916a144; step 4 in the commit that carries this line). The tree is clean after it.
-- Next step: 5, the closing: `/roadmap done 2.A` with the gate's output, this folder moved to `.scratch/archive/`.
+- 2026-09-24. Steps 1 to 5 done (5e9ec86, c8d673a, 916a144, e94ba04; step 5 in the commit that carries this line). The tree is clean after it.
+- Next step: none; plan 2.A is closed and archived. The next roadmap entry is 3, the writing base.
 - Open on Axel's side: none.
 
 ## Usage

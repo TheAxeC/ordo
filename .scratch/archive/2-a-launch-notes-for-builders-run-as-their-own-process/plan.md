@@ -16,7 +16,7 @@ a test with a stub launch-note command shows the recipes unchanged with the key 
 - ✅ 2 the `launch_note` key in every place that lists the optional keys: `skills/plan/SKILL.md`'s key list, `skills/plan/templates/plan.yaml`, both projects of `plan.projects.yaml`, the `orchestrator-state.md` template, `skills/ordo-init/SKILL.md` and the README; `check_config.py` accepts it, with a test case; `land.test.sh` and `check_config.test.sh` pass with the key set (1 commit)
 - ✅ 3 `skills/plan-orchestration/SKILL.md`, "Launching a builder": the two shell recipes call `launch.sh`, the `transcript` call is a numbered orchestration step, and the native Agent-tool recipe stays the default for Claude builders under Claude Code, unchanged; a repair round's resume of a shell builder (Steps, item 8) also runs through `launch.sh`, which gains a `--resume <session id>` option for both harnesses, with `launch.test.sh` cases and the page `templates/launch-note.md` saying a round is a record of its own; the layout check passes and `launch.test.sh` passes (1 commit)
 - ✅ 4 `launch.test.sh` joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
-- 5 the closing: `/roadmap done 2.A` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
+- ✅ 5 the closing: `/roadmap done 2.A` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
 
 ## Could run in parallel
 
@@ -82,3 +82,9 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - The scratchpad's verify script now fails on a test whose last line does not start with `PASS:`, rather than on the filter's exit status.
 - Usage, orchestrator 916a144 to landing: 31 messages, 24601 output tokens, 46090 cache-write tokens, 7536057 cache-read tokens, 68 fresh input tokens, 35 minutes.
 - Reviewer usage: first run 91,433 tokens, 17 tool uses, 230 seconds; run over the round 95,754 tokens, 25 tool uses, 808 seconds.
+
+### Step 5, the closing (2026-09-24)
+
+- `docs/roadmap.md`: entry 2.A moved to Done with the gate's output: `launch.test.sh`, `land.test.sh` and `check_config.test.sh` each printed their `PASS:` line, and the layout check printed ten `ok:` lines, exit 0.
+- This folder moved to `.scratch/archive/2-a-launch-notes-for-builders-run-as-their-own-process/`.
+- Not done by this plan: the pinned copy `~/.local/share/ordo-stable` does not carry 2.A until the user allows a pin.
