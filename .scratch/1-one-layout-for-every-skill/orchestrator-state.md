@@ -31,16 +31,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 8
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/1-8
-  base: 8a72df7
-  launched: 2026-09-23
-  report: .scratch/1-one-layout-for-every-skill/agents/reviews/8-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -77,9 +68,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 7 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0; step 7 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 8 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34; step 8 in the commit that carries this line). The tree is clean after it.
 - Verified: the verify list on main, seven `PASS:` lines and a clean ASCII check.
-- Next step: 8, land restyled with its inventory.
+- Next step: 9, plan-help restyled with its inventory.
 - Open on Axel's side: none until step 1 is written.
 
 ## Usage
@@ -92,3 +83,4 @@ dispatch:
 | 5 | inline (the orchestrating session) | 11 tool uses, about 12 minutes; round 1: 14 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +110 -13 | no | 2 | 0 | 10 | 20095 | 32627 | 6379102 | 24 | 11 | none |
 | 6 | inline (the orchestrating session) | 11 tool uses, about 12 minutes; round 1: 14 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +167 -36 | no | 5 | 0 | 15 | 29490 | 47377 | 10216027 | 34 | 13 | none |
 | 7 | inline (the orchestrating session) | 11 tool uses, about 15 minutes; round 1: 16 tool uses, about 12 minutes | 1 | the first run's findings (worked inline) | +195 -24 | no | 3 | 0 | 22 | 32213 | 55635 | 16227400 | 48 | 14 | none |
+| 8 | inline (the orchestrating session) | 13 tool uses, about 12 minutes; round 1: 18 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +169 -22 | no | 5 | 0 | 11 | 27065 | 41660 | 8629012 | 26 | 11 | none |

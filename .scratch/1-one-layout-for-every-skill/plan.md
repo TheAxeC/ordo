@@ -23,7 +23,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 5 plan restyled, with its inventory; same proof as 4 (1 commit)
 - ✅ 6 spec restyled, with its inventory; same proof (1 commit)
 - ✅ 7 refute restyled, with its inventory; same proof (1 commit)
-- 8 land restyled, with its inventory; same proof (1 commit)
+- ✅ 8 land restyled, with its inventory; same proof (1 commit)
 - 9 plan-help restyled, with its inventory; same proof (1 commit)
 - 10 ordo-init restyled, with its inventory; same proof (1 commit)
 - 11 roadmap restyled, with its inventory; same proof (1 commit)
@@ -108,3 +108,10 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/7-refuter.md`; the first run's findings closed in repair round 1, among them the reviewer appending to the ledger and the fresh-reviewer rule narrowed to the first run; the run over the round's closed at landing. Nothing booked.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
 - Usage, orchestrator e4950d0 to landing: 22 messages, 32213 output tokens, 55635 cache-write tokens, 16227400 cache-read tokens, 48 fresh input tokens, 14 minutes.
+
+### Step 8, land restyled (landed 2026-09-23)
+
+- Landed: `skills/land/SKILL.md` in the layout, 41 lines to 114, version 1.6.0, steps numbered 1 to 11 as before, the look as its own section; the inventory, 67 rows, `check_rule_inventory.py` ok.
+- Reviews: `agents/reviews/8-refuter.md`; the first run's findings closed in repair round 1, among them refusals weakened (a dirty step path, an old refuter report, a missing dispatch block) and every red line called a stop; the run over the round's closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
+- Usage, orchestrator e643b34 to landing: 11 messages, 27065 output tokens, 41660 cache-write tokens, 8629012 cache-read tokens, 26 fresh input tokens, 11 minutes.
