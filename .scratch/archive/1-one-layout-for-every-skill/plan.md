@@ -30,7 +30,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 12 plan-retro restyled, with its inventory; same proof (1 commit)
 - ✅ 13 repo-setup restyled, with its inventory; same proof (1 commit)
 - ✅ 14 the layout check itself wired in as a check of `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list, run over every `skills/*/SKILL.md`; every check passes and `npx skills add . --list` lists ten skills (1 commit)
-- 15 the closing: `/roadmap done 1` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
+- ✅ 15 the closing: `/roadmap done 1` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
 
 ## Could run in parallel
 
@@ -159,3 +159,9 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/14-refuter.md`; 6 findings in the first run, closed in repair round 1; none in the run over the round. Nothing booked.
 - Verification on main: seven `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check, every inventory ok, `npx skills add . --list` prints `Found 10 skills` and its ten names equal `ls skills`.
 - Usage, orchestrator fe1f5e7 to landing: 24 messages, 20314 output tokens, 45537 cache-write tokens, 3386091 cache-read tokens, 52 fresh input tokens, 10 minutes.
+
+### Step 15, the closing (2026-09-23)
+
+- `docs/roadmap.md`: entry 1 moved to Done as `[x]`, with the gate's output beside it.
+- This folder moved to `.scratch/archive/1-one-layout-for-every-skill/`; the inventory check passes on the moved inventories.
+- The plan is closed. Next on the roadmap: entry 2, the coverage inventory of the academic skills.

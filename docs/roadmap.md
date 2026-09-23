@@ -16,13 +16,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
-## 1. One layout for every skill
-
-- Status: [ ]
-- Goal: A written skill layout standard, `docs/dev/skill-layout.md` (the section order Quick start, Use instead, What it reads, Steps, Stops, Anti-patterns, Rules; a table where the content is a table; one rule per bullet), and all ten skills under `skills/` rewritten to it with no rule lost or changed in meaning.
-- Gate: you approve `docs/dev/skill-layout.md`; a layout check over every `skills/*/SKILL.md` exits 0, and its test fails on a skill with a section missing or out of order; each skill's rule inventory (one line per rule of the old file) maps every rule to its place in the new file, the inventory check exits 0, and its test fails on a rule with no place; `/refute` on each step finds no rule dropped or changed in meaning; every command in `docs/dev/building.md` passes and `npx skills add . --list` lists the ten skills.
-- Waits on: nothing.
-
 ## 2. Coverage inventory of the academic skills
 
 - Status: [ ]
@@ -131,6 +124,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
+
+- [x] 1. One layout for every skill: `docs/dev/skill-layout.md` approved (plan 1's rulings); `python3 utils/check_skill_layout.py` printed ten `ok:` lines, exit 0, and `sh utils/check_skill_layout.test.sh` printed `PASS: check_skill_layout.py scratch tests`; `python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md` printed ten `ok:` lines, exit 0, and `sh utils/check_rule_inventory.test.sh` printed `PASS: check_rule_inventory.py scratch tests`; `/refute` ran on steps 2 to 14, every landing report `Open items: none. Booked list: empty`; every command in `docs/dev/building.md` passed on main (seven `PASS:` lines, ten `ok:` lines, a clean ASCII check); `npx skills add . --list` printed `Found 10 skills`.
 
 # Dropped
 

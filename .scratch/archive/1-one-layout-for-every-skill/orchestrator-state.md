@@ -69,9 +69,9 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 14 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65, aa7cfe2, e6300be, 9eda91c, 709fcf6, fe1f5e7, and step 14 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 14 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65, aa7cfe2, e6300be, 9eda91c, 709fcf6, fe1f5e7, bd51f8b); step 15, the closing, is the commit that carries this line. The plan is closed and this folder archived.
 - Verified: the verify list on main, seven `PASS:` lines, ten `ok:` lines from the layout check and a clean ASCII check.
-- Next step: 15, the closing: `/roadmap done 1` with the gate's output, this folder moved to `.scratch/archive/`.
+- Next step: none; the plan is closed. Next on the roadmap: entry 2.
 - Open on Axel's side: none.
 
 ## Usage
