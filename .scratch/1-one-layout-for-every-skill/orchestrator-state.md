@@ -31,7 +31,16 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 10
+  executor: inline
+  worker: claude:opus (the orchestrating session)
+  worktree: .agents/worktrees/1-10
+  base: 8ecfb4a
+  launched: 2026-09-23
+  report: .scratch/1-one-layout-for-every-skill/agents/reviews/10-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
