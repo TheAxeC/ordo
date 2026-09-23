@@ -17,7 +17,7 @@ A list of every file of the four installed academic skills (academic-paper, acad
 - ✅ 1 `utils/check_coverage.py` and its test: given the four skill folders and `docs/academic-coverage.md`, exit 0 only when every file `find` lists appears exactly once with a mark whose new skill is a roadmap entry's skill and a reason that is not empty; the test fails on a missing file, a file listed twice, an unknown mark or new skill, an empty reason, and a listed file that does not exist (1 commit)
 - ✅ 2 the check's test joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
 - ✅ 3 academic-paper, 61 files, each read in full and marked with its reason; the check passes for its section (1 commit)
-- 4 academic-paper-reviewer, 26 files, the same; the check passes for its section (1 commit)
+- ✅ 4 academic-paper-reviewer, 26 files, the same; the check passes for its section (1 commit)
 - 5 academic-pipeline, 30 files, the same; the check passes for its section (1 commit)
 - 6 deep-research, 52 files, the same; the check passes over the whole list (1 commit)
 - 7 the user approves the list (orchestrator, a stop for approval)
@@ -69,3 +69,14 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
 - Usage, orchestrator 64e50ce to landing: 137 messages, 110118 output tokens, 949568 cache-write tokens, 54128563 cache-read tokens, 272 fresh input tokens, 23 minutes.
 - Reviewer usage: first run 270,436 tokens, 47 tool uses, 321 seconds; run over the round 124,139 tokens, 30 tool uses, 250 seconds.
+
+### Step 4, academic-paper-reviewer marked (landed 2026-09-23)
+
+- Landed: the `## academic-paper-reviewer` section of `docs/academic-coverage.md`, 26 rows, and the introduction's check command naming both skills; `check_coverage.py` over `academic-paper academic-paper-reviewer` prints `ok`. The file is 139 lines.
+- Marks in the section: 18 `rebuild: paper-review`, 3 `rebuild later: paper-review`, 1 `rebuild: rebuttal`, 4 `drop`.
+- The review skill keeps the 0-to-100 scale of `references/quality_rubrics.md`; the reviewer asks the user for the target venue.
+- The `academic-paper` section's reasons were rewritten to the prose standard (no label-and-colon openers, varied endings); no mark changed.
+- Reviews: `agents/reviews/4-refuter.md`; 11 spec findings and 2 standards findings in the first run, closed in repair round 1; the run over the round's findings fixed at landing. Nothing booked.
+- Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
+- Usage, orchestrator b6fadc8 to landing: 95 messages, 84572 output tokens, 318887 cache-write tokens, 48322651 cache-read tokens, 192 fresh input tokens, 22 minutes.
+- Reviewer usage: first run 207,415 tokens, 34 tool uses, 275 seconds; run over the round 153,996 tokens, 57 tool uses, 409 seconds.
