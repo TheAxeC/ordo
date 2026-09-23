@@ -21,7 +21,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 3 `utils/check_rule_inventory.py` and its test: every non-empty line of the old file belongs to an inventory row, every row's new heading exists in the new file; the test fails on an uncovered line and on a missing heading (1 commit)
 - ✅ 4 plan-orchestration restyled, with its inventory; the layout and inventory checks exit 0 for it, the building checks pass, `/refute` finds no rule dropped (1 commit)
 - ✅ 5 plan restyled, with its inventory; same proof as 4 (1 commit)
-- 6 spec restyled, with its inventory; same proof (1 commit)
+- ✅ 6 spec restyled, with its inventory; same proof (1 commit)
 - 7 refute restyled, with its inventory; same proof (1 commit)
 - 8 land restyled, with its inventory; same proof (1 commit)
 - 9 plan-help restyled, with its inventory; same proof (1 commit)
@@ -91,3 +91,10 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/5-refuter.md`; the first run's findings closed in repair round 1, the run over the round's two closed at landing. Nothing booked.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
 - Usage, orchestrator ea8d02d to landing: 10 messages, 20095 output tokens, 32627 cache-write tokens, 6379102 cache-read tokens, 24 fresh input tokens, 11 minutes.
+
+### Step 6, spec restyled (landed 2026-09-23)
+
+- Landed: `skills/spec/SKILL.md` in the layout, 54 lines to 114, version 1.4.0; the inventory, 64 rows, `check_rule_inventory.py` ok.
+- Reviews: `agents/reviews/6-refuter.md`; the first run's findings closed in repair round 1, among them every refusal called a stop (which would have made a refusal write an open item) and the same-step refusal dropped; the run over the round's closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
+- Usage, orchestrator a682c14 to landing: 15 messages, 29490 output tokens, 47377 cache-write tokens, 10216027 cache-read tokens, 34 fresh input tokens, 13 minutes.
