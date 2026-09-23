@@ -20,7 +20,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 2 `utils/check_skill_layout.py` and its test: required sections in order, frontmatter present; the test fails on a missing section and on one out of order (1 commit)
 - ✅ 3 `utils/check_rule_inventory.py` and its test: every non-empty line of the old file belongs to an inventory row, every row's new heading exists in the new file; the test fails on an uncovered line and on a missing heading (1 commit)
 - ✅ 4 plan-orchestration restyled, with its inventory; the layout and inventory checks exit 0 for it, the building checks pass, `/refute` finds no rule dropped (1 commit)
-- 5 plan restyled, with its inventory; same proof as 4 (1 commit)
+- ✅ 5 plan restyled, with its inventory; same proof as 4 (1 commit)
 - 6 spec restyled, with its inventory; same proof (1 commit)
 - 7 refute restyled, with its inventory; same proof (1 commit)
 - 8 land restyled, with its inventory; same proof (1 commit)
@@ -48,6 +48,7 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - A new script's test joins `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list in the step that adds the script; step 14 wires in the layout check itself (orchestrator, at step 2's landing).
 - A row of a rule inventory covers one rule: its range stays inside one block (no blank line, no heading, at most one line opening a list item or table row), so one row cannot cover a whole file; a paragraph that holds several rules gets one row per rule on the same lines. The old commit is a hexadecimal id, never a branch, tag or HEAD (orchestrator, in step 3's repair round).
 - An old frontmatter line whose content lives only in the frontmatter (the name, the metadata key, the version, the trigger phrases) maps to Quick start in a rule inventory, since an inventory's places are sections and the layout keeps the version out of the text; this corrects step 4's brief, whose decision 1 named Rules for the version (orchestrator, in step 4's repair round).
+- The tables the layout requires restate nothing: a Do instead cell that would repeat a step's rule names the step; a refusal is stated once, as a row of Stops, and the item where it arises points there. The columns the layout requires (What it shows, What resumes it, Why it fails) may hold text the old file does not, provided it contradicts nothing there (orchestrator, in step 5's repair round).
 
 ## Blocked, and by what
 
@@ -82,3 +83,11 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check and the inventory check ok for plan-orchestration.
 - A/B: none. Look: none.
 - Usage, orchestrator 836f5c5 to landing: 23 messages, 46479 output tokens, 71639 cache-write tokens, 13495331 cache-read tokens, 50 fresh input tokens, 16 minutes.
+
+### Step 5, plan restyled (landed 2026-09-23)
+
+- Landed: `skills/plan/SKILL.md` in the layout, 33 lines to 82, version 1.7.0; the inventory, 41 rows, `check_rule_inventory.py` ok.
+- Ruling: the tables the layout requires restate nothing (rulings list).
+- Reviews: `agents/reviews/5-refuter.md`; the first run's findings closed in repair round 1, the run over the round's two closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
+- Usage, orchestrator ea8d02d to landing: 10 messages, 20095 output tokens, 32627 cache-write tokens, 6379102 cache-read tokens, 24 fresh input tokens, 11 minutes.

@@ -31,16 +31,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 5
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/1-5
-  base: 4661d85
-  launched: 2026-09-23
-  report: .scratch/1-one-layout-for-every-skill/agents/reviews/5-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -76,9 +67,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 4 landed (971121b, 84ce1f7, 836f5c5; step 4 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 5 landed (971121b, 84ce1f7, 836f5c5, ea8d02d; step 5 in the commit that carries this line). The tree is clean after it.
 - Verified: the verify list on main, seven `PASS:` lines and a clean ASCII check.
-- Next step: 5, plan restyled with its inventory.
+- Next step: 6, spec restyled with its inventory.
 - Open on Axel's side: none until step 1 is written.
 
 ## Usage
@@ -88,3 +79,4 @@ dispatch:
 | 2 | inline (the orchestrating session) | 14 tool uses, about 15 minutes; round 1: 17 tool uses, about 20 minutes | 1 | 27 (worked inline) | +559 | no | 9 | 0 | 33 | 40797 | 69233 | 13667350 | 70 | 18 | none |
 | 3 | inline (the orchestrating session) | 17 tool uses, about 25 minutes; round 1: 14 tool uses, about 20 minutes | 1 |  all first-run findings (worked inline) | +864 | no | the run over the round's findings | 0 | 36 | 69387 | 96719 | 18024585 | 76 | 26 | none |
 | 4 | inline (the orchestrating session) | 12 tool uses, about 15 minutes; round 1: 13 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +313 -35 | no | the run over the round's findings | 0 | 23 | 46479 | 71639 | 13495331 | 50 | 16 | none |
+| 5 | inline (the orchestrating session) | 11 tool uses, about 12 minutes; round 1: 14 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +110 -13 | no | 2 | 0 | 10 | 20095 | 32627 | 6379102 | 24 | 11 | none |
