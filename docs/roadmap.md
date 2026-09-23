@@ -19,9 +19,16 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 2. Coverage inventory of the academic skills
 
 - Status: [ ]
-- Goal: A list of every file of the four installed academic skills (academic-paper, academic-paper-reviewer, academic-pipeline, deep-research), each marked rebuild, rebuild later or drop, with its reason.
+- Goal: A list of every file of the four installed academic skills (academic-paper, academic-paper-reviewer, academic-pipeline, deep-research), each marked `rebuild: <new skill>`, `rebuild later: <new skill>` or `drop`, with its reason; the new skill is the roadmap entry's skill that takes the file.
 - Gate: `docs/academic-coverage.md` names each of the 169 files once with its mark and reason; a check that every file `find` lists under the four skill folders appears exactly once exits 0; you approve the list.
 - Waits on: nothing.
+
+## 2.A Launch notes for builders run as their own process
+
+- Status: [ ]
+- Goal: An optional `launch_note:` key in the plan configuration, default "" (nothing recorded), holding one absolute path to a command that must return at once. When it is set, plan-orchestration's two shell launch recipes (`claude -p` and `codex exec`) run it around the builder: `start` before, `end` after (skipped when `start` wrote no id), and `transcript` as a numbered orchestration step once the transcript or rollout path is known; the builder's exit code still reaches the exit file. The three calls and their arguments are written down in Ordo as its interface. The key appears in every place that lists the optional keys: the plan skill's key list, both example `plan.yaml` files, the state template, the ordo-init skill and the README. The native Claude-agent recipe is unchanged.
+- Gate: a test with a stub launch-note command shows the recipes unchanged with the key empty, `start`, `transcript` and `end` run with it set, `end` skipped after a failed `start`, and the builder's exit code in the exit file in every case; `land.test.sh` and `check_config.test.sh` pass with the key; the layout check passes.
+- Waits on: 1, for the layout of the skills it changes.
 
 ## 3. The writing base
 
@@ -89,15 +96,15 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 12. project-docs
 
 - Status: [ ]
-- Goal: A skill that writes and keeps the main README and `code/README.md` of a project.
-- Gate: one real run on a research project that you review.
+- Goal: A skill that writes and keeps the main README and `code/README.md` of a project, readable by someone new to it: each page opens with an introduction (what the project or folder is, who it is for, what to read first), explains each idea before using it, defines each term where it first appears, shows how to run things with a worked example, and follows the writing base's prose standard.
+- Gate: a check that every page opens with an introduction paragraph before its first heading and has a section on how to run it; a fresh reader with no context answers a fixed set of questions from the pages alone (what the project does, how to run the main experiment, where results go, what each folder holds), and each question it cannot answer is a finding; one real run on a research project that you review.
 - Waits on: 11, for the profiles.
 
 ## 13. researcher
 
 - Status: [ ]
-- Goal: The researcher skill: the new-project and revise roadmap templates, venue files in `venues/`, and plan-orchestration's support for SLURM jobs.
-- Gate: a test that every template entry has a gate and that its dependencies exist; the SLURM support has a test on a stub scheduler.
+- Goal: The researcher skill: the new-project and revise roadmap templates, an adopt mode for a project already underway (it reads the code, configs, results, logs and draft, writes the roadmap with the finished stages marked done with their evidence, and continues after your approval from the first stage not done), a run over a named range of stages, venue files in `venues/`, and plan-orchestration's support for SLURM jobs. Each stage's input and output files have a written format, so any stage can start from files that exist. When experiments do not beat the baseline, the loop proposes a new method and runs the next experiments; it never writes up a negative result.
+- Gate: a test that every template entry has a gate and that its dependencies exist; a test that each stage's input format is written down; the SLURM support has a test on a stub scheduler; one adopt run on one of your research-hub projects that is mid-experiments, whose roadmap you check; one run over part of the stages on a test project.
 - Waits on: 5 to 12, for the skills its entries call.
 
 ## 14. submit-manuscript
