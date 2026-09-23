@@ -32,16 +32,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/2-1
-  base: 2983860
-  launched: 2026-09-23
-  report: .scratch/2-coverage-inventory-of-the-academic-skills/agents/reviews/1-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -79,12 +70,13 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. The plan is opened; nothing of it has landed. The tree is clean after the opening commit.
-- Verified: plan 1's closing ran the verify list on main: seven `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
-- Next step: 1, the coverage check and its test, since every later step is proved by it.
+- 2026-09-23. Step 1 landed in the commit that carries this line. The tree is clean after it.
+- Verified: the verify list on main: seven `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check; `PASS: check_coverage.py scratch tests`.
+- Next step: 2, the coverage check's test joined to the README, `building.md`, `change-standard.md` and the verify list.
 - Open on Axel's side: none until step 7.
 
 ## Usage
 
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | inline (the orchestrating session) | 80,660 tokens, 13 tool uses, 240 s; round 1: 93,021 tokens, 21 tool uses, 445 s | 1 | 14 (worked inline) | 2 files changed, 674 insertions(+) | no | 6 | 0 | 46 | 65884 | 270920 | 10403186 | 96 | 150 | none |
