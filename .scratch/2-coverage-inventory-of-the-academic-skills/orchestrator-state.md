@@ -11,6 +11,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_skill_layout.test.sh 2>&1 | tail -1
 - sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
+- sh utils/check_coverage.test.sh 2>&1 | tail -1
 - python3 utils/check_skill_layout.py
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
@@ -32,16 +33,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/2-2
-  base: d49684c
-  launched: 2026-09-23
-  report: .scratch/2-coverage-inventory-of-the-academic-skills/agents/reviews/2-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -79,9 +71,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Step 1 landed in the commit that carries this line. The tree is clean after it.
-- Verified: the verify list on main: seven `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check; `PASS: check_coverage.py scratch tests`.
-- Next step: 2, the coverage check's test joined to the README, `building.md`, `change-standard.md` and the verify list.
+- 2026-09-23. Steps 1 and 2 landed (d44092c, and step 2 in the commit that carries this line). The tree is clean after it.
+- Verified: the verify list on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
+- Next step: 3, academic-paper's 61 files read in full and marked in `docs/academic-coverage.md`.
 - Open on Axel's side: none until step 7.
 
 ## Usage
@@ -89,3 +81,4 @@ dispatch:
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | inline (the orchestrating session) | 80,660 tokens, 13 tool uses, 240 s; round 1: 93,021 tokens, 21 tool uses, 445 s | 1 | 14 (worked inline) | 2 files changed, 674 insertions(+) | no | 6 | 0 | 46 | 65884 | 270920 | 10403186 | 96 | 150 | none |
+| 2 | inline (the orchestrating session) | 77,262 tokens, 18 tool uses, 167 s; round 1: 63,707 tokens, 12 tool uses, 169 s | 1 | 3 (worked inline) | 3 files changed, 4 insertions(+) | no | 3 | 0 | 14 | 12803 | 26079 | 4156461 | 32 | 9 | none |

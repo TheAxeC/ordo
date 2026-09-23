@@ -15,7 +15,7 @@ A list of every file of the four installed academic skills (academic-paper, acad
 ## Steps, in execution order
 
 - ✅ 1 `utils/check_coverage.py` and its test: given the four skill folders and `docs/academic-coverage.md`, exit 0 only when every file `find` lists appears exactly once with a mark whose new skill is a roadmap entry's skill and a reason that is not empty; the test fails on a missing file, a file listed twice, an unknown mark or new skill, an empty reason, and a listed file that does not exist (1 commit)
-- 2 the check's test joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
+- ✅ 2 the check's test joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
 - 3 academic-paper, 61 files, each read in full and marked with its reason; the check passes for its section (1 commit)
 - 4 academic-paper-reviewer, 26 files, the same; the check passes for its section (1 commit)
 - 5 academic-pipeline, 30 files, the same; the check passes for its section (1 commit)
@@ -51,3 +51,11 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Verification on main: seven `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check, and `PASS: check_coverage.py scratch tests`.
 - Usage, orchestrator a866716 to landing: 46 messages, 65884 output tokens, 270920 cache-write tokens, 10403186 cache-read tokens, 96 fresh input tokens, 150 minutes. The window also holds the discussion with the user, the roadmap changes and the plan's opening, and the wait for the user's answers.
 - Reviewer usage: first run 80,660 tokens, 13 tool uses, 240 seconds; run over the round 93,021 tokens, 21 tool uses, 445 seconds.
+
+### Step 2, the coverage test joined to the checks (landed 2026-09-23)
+
+- Landed: `sh utils/check_coverage.test.sh` in `README.md` (the Tests block and a bullet saying what it passes and fails), `docs/dev/building.md`, `docs/dev/change-standard.md` and this plan's `verify` list.
+- Reviews: `agents/reviews/2-refuter.md`; 3 findings in the first run, closed in repair round 1; 3 in the run over the round, fixed at landing, all in the README bullet's wording. Nothing booked.
+- Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
+- Usage, orchestrator d44092c to landing: 14 messages, 12803 output tokens, 26079 cache-write tokens, 4156461 cache-read tokens, 32 fresh input tokens, 9 minutes.
+- Reviewer usage: first run 77,262 tokens, 18 tool uses, 167 seconds; run over the round 63,707 tokens, 12 tool uses, 169 seconds.
