@@ -19,7 +19,7 @@ A list of every file of the four installed academic skills (academic-paper, acad
 - ✅ 3 academic-paper, 61 files, each read in full and marked with its reason; the check passes for its section (1 commit)
 - ✅ 4 academic-paper-reviewer, 26 files, the same; the check passes for its section (1 commit)
 - ✅ 5 academic-pipeline, 30 files, the same; the check passes for its section (1 commit)
-- 6 deep-research, 52 files, the same; the check passes over the whole list (1 commit)
+- ✅ 6 deep-research, 52 files, the same; the check passes over the whole list (1 commit)
 - 7 the user approves the list (orchestrator, a stop for approval)
 - 8 the closing: `/roadmap done 2` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
 
@@ -91,3 +91,14 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
 - Usage, orchestrator ed16ff2 to landing: 30 messages, 40013 output tokens, 65747 cache-write tokens, 20828687 cache-read tokens, 64 fresh input tokens, 20 minutes.
 - Reviewer usage: first run 305,282 tokens, 50 tool uses, 393 seconds; run over the round 149,888 tokens, 38 tool uses, 341 seconds.
+
+### Step 6, deep-research marked; the check over the whole list (landed 2026-09-23)
+
+- Landed: the `## deep-research` section of `docs/academic-coverage.md`, 52 rows; the introduction covers all four skills and its command names them; `check_coverage.py` over the four prints `ok`. The file is 231 lines, 169 rows.
+- Marks in the section: 16 `rebuild: literature`, 4 `rebuild later: literature`, 3 `rebuild: idea`, 1 `rebuild: paper-review`, 2 `rebuild later: paper`, 1 `rebuild: researcher`, 1 `rebuild later: researcher`, 24 `drop`.
+- Marks over the whole list: 30 `rebuild: paper`, 11 `rebuild later: paper`, 21 `rebuild: paper-review`, 3 `rebuild later: paper-review`, 19 `rebuild: literature`, 6 `rebuild later: literature`, 7 `rebuild: rebuttal`, 6 `rebuild: researcher`, 1 `rebuild later: researcher`, 3 `rebuild: writing`, 3 `rebuild: idea`, 1 `rebuild: submit-manuscript`, 58 `drop`.
+- Earlier rows reworded to the prose standard; no earlier mark changed.
+- Reviews: `agents/reviews/6-refuter.md`; the first run's findings closed in repair round 1; the run over the round's findings fixed at landing. Nothing booked.
+- Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
+- Usage, orchestrator 7752a76 to landing: 28 messages, 40613 output tokens, 76631 cache-write tokens, 21610160 cache-read tokens, 60 fresh input tokens, 23 minutes.
+- Reviewer usage: first run 256,733 tokens, 62 tool uses, 455 seconds; run over the round 166,848 tokens, 52 tool uses, 419 seconds.

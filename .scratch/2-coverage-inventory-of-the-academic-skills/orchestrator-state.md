@@ -33,16 +33,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 6
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/2-6
-  base: 97ea646
-  launched: 2026-09-23
-  report: .scratch/2-coverage-inventory-of-the-academic-skills/agents/reviews/6-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -80,9 +71,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 5 landed (d44092c, 64e50ce, b6fadc8, ed16ff2, and step 5 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 6 landed (d44092c, 64e50ce, b6fadc8, ed16ff2, 7752a76, and step 6 in the commit that carries this line). The tree is clean after it.
 - Verified: the verify list on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
-- Next step: 6, deep-research's 52 files read in full and marked in `docs/academic-coverage.md`; the check passes over the whole list.
+- Next step: 7, the user approves `docs/academic-coverage.md` (a stop for approval).
 - Open on Axel's side: none until step 7.
 
 ## Usage
@@ -94,3 +85,4 @@ dispatch:
 | 3 | inline (the orchestrating session) | 270,436 tokens, 47 tool uses, 321 s; round 1: 124,139 tokens, 30 tool uses, 250 s | 1 | 8 (worked inline) | 1 file changed, 108 insertions(+) | no | 8 | 0 | 137 | 110118 | 949568 | 54128563 | 272 | 23 | none |
 | 4 | inline (the orchestrating session) | 207,415 tokens, 34 tool uses, 275 s; round 1: 153,996 tokens, 57 tool uses, 409 s | 1 | 13 (worked inline) | 1 file changed, 59 insertions(+), 28 deletions(-) | no | 12 | 0 | 95 | 84572 | 318887 | 48322651 | 192 | 22 | none |
 | 5 | inline (the orchestrating session) | 305,282 tokens, 50 tool uses, 393 s; round 1: 149,888 tokens, 38 tool uses, 341 s | 1 | 17 (worked inline) | 1 file changed, 53 insertions(+), 18 deletions(-) | no | 13 | 0 | 30 | 40013 | 65747 | 20828687 | 64 | 20 | none |
+| 6 | inline (the orchestrating session) | 256,733 tokens, 62 tool uses, 455 s; round 1: 166,848 tokens, 52 tool uses, 419 s | 1 | 23 (worked inline) | 1 file changed, 83 insertions(+), 26 deletions(-) | no | 18 | 0 | 28 | 40613 | 76631 | 21610160 | 60 | 23 | none |
