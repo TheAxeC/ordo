@@ -22,7 +22,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 4 plan-orchestration restyled, with its inventory; the layout and inventory checks exit 0 for it, the building checks pass, `/refute` finds no rule dropped (1 commit)
 - ✅ 5 plan restyled, with its inventory; same proof as 4 (1 commit)
 - ✅ 6 spec restyled, with its inventory; same proof (1 commit)
-- 7 refute restyled, with its inventory; same proof (1 commit)
+- ✅ 7 refute restyled, with its inventory; same proof (1 commit)
 - 8 land restyled, with its inventory; same proof (1 commit)
 - 9 plan-help restyled, with its inventory; same proof (1 commit)
 - 10 ordo-init restyled, with its inventory; same proof (1 commit)
@@ -100,3 +100,11 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/6-refuter.md`; the first run's findings closed in repair round 1, among them every refusal called a stop (which would have made a refusal write an open item) and the same-step refusal dropped; the run over the round's closed at landing. Nothing booked.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
 - Usage, orchestrator a682c14 to landing: 15 messages, 29490 output tokens, 47377 cache-write tokens, 10216027 cache-read tokens, 34 fresh input tokens, 13 minutes.
+
+### Step 7, refute restyled (landed 2026-09-23)
+
+- Landed: `skills/refute/SKILL.md` in the layout, 44 lines to 129, version 1.4.0; the inventory, 79 rows, `check_rule_inventory.py` ok; three sentences of `skills/land/SKILL.md` carried to the user's ruling on the booked list.
+- Rulings applied: the last round's unfixed findings go to the booked list, never the open items (the user); nothing installed, pinned or removed without the user's permission (the user).
+- Reviews: `agents/reviews/7-refuter.md`; the first run's findings closed in repair round 1, among them the reviewer appending to the ledger and the fresh-reviewer rule narrowed to the first run; the run over the round's closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout and inventory checks ok.
+- Usage, orchestrator e4950d0 to landing: 22 messages, 32213 output tokens, 55635 cache-write tokens, 16227400 cache-read tokens, 48 fresh input tokens, 14 minutes.
