@@ -12,7 +12,7 @@ a test with a stub launch-note command shows the recipes unchanged with the key 
 
 ## Steps, in execution order
 
-- 1 `skills/plan-orchestration/templates/launch.sh` and `launch.test.sh`: the script runs the `claude -p` and `codex exec` recipes detached, with the pid and exit files; with `launch_note` empty it runs today's command unchanged; with it set it calls `start` before the builder and `end` after it (skipped when `start` wrote no id), and its `transcript` subcommand passes the transcript or rollout path on; the test, with stub `claude`, `codex` and launch-note commands on `PATH`, shows the command unchanged with the key empty, `start`, `transcript` and `end` run with it set, `end` skipped after a failed `start`, and the builder's exit code in the exit file in every case; the three calls and their arguments written down as Ordo's interface in `docs/launch-note.md` (1 commit)
+- ✅ 1 `skills/plan-orchestration/templates/launch.sh` and `launch.test.sh`: the script runs the `claude -p` and `codex exec` recipes detached, with the pid and exit files; with `launch_note` empty it runs today's command unchanged; with it set it calls `start` before the builder and `end` after it (skipped when `start` wrote no id), and its `transcript` subcommand passes the transcript or rollout path on; the test, with stub `claude`, `codex` and launch-note commands on `PATH`, shows the command unchanged with the key empty, `start`, `transcript` and `end` run with it set, `end` skipped after a failed `start`, and the builder's exit code in the exit file in every case; the three calls and their arguments written down as Ordo's interface in `docs/launch-note.md` (1 commit)
 - 2 the `launch_note` key in every place that lists the optional keys: `skills/plan/SKILL.md`'s key list, `skills/plan/templates/plan.yaml`, both projects of `plan.projects.yaml`, the `orchestrator-state.md` template, `skills/ordo-init/SKILL.md` and the README; `check_config.py` accepts it, with a test case; `land.test.sh` and `check_config.test.sh` pass with the key set (1 commit)
 - 3 `skills/plan-orchestration/SKILL.md`, "Launching a builder": the two shell recipes call `launch.sh`, the `transcript` call is a numbered orchestration step, and the native Agent-tool recipe stays the default for Claude builders under Claude Code, unchanged; the layout check passes (1 commit)
 - 4 `launch.test.sh` joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
@@ -35,3 +35,12 @@ Independent of each other; `workers_at_once: 1` serialises them.
 ## Blocked, and by what
 
 - none.
+
+### Step 1, the launch script (landed 2026-09-23)
+
+- Landed: `skills/plan-orchestration/templates/launch.sh` (184 lines), `launch.test.sh` (256 lines) and `docs/launch-note.md` (26 lines); `sh skills/plan-orchestration/templates/launch.test.sh` prints `PASS: launch.sh scratch tests`; 29 planted faults each turn it red (`agents/reviews/1-plants.md`).
+- `launch.sh` refuses a relative launch-note command and makes a relative id file absolute, since the claude recipe changes directory in the detached shell.
+- Reviews: `agents/reviews/1-refuter.md`; the first run's findings closed in repair round 1; the run over the round's findings fixed at landing. Nothing booked.
+- Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check; the launch test passes (it joins the verify list in step 4).
+- Usage, orchestrator f11e113 to landing: 40 messages, 56606 output tokens, 903380 cache-write tokens, 34143192 cache-read tokens, 84 fresh input tokens, 111 minutes.
+- Reviewer usage: first run 85,757 tokens, 20 tool uses, 295 seconds; run over the round 89,827 tokens, 20 tool uses, 503 seconds.

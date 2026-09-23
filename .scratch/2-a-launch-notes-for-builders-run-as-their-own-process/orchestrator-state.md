@@ -33,16 +33,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/2a-1
-  base: b04cb18
-  launched: 2026-09-23
-  report: .scratch/2-a-launch-notes-for-builders-run-as-their-own-process/agents/reviews/1-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -79,11 +70,12 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Plan opened; no step dispatched.
-- Next step: 1, `launch.sh` and its test, and `docs/launch-note.md`.
+- 2026-09-23. Step 1 landed in the commit that carries this line. The tree is clean after it.
+- Next step: 2, the `launch_note` key in every place that lists the optional keys, with `check_config.py` accepting it.
 - Open on Axel's side: none.
 
 ## Usage
 
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | inline (the orchestrating session) | 85,757 tokens, 20 tool uses, 295 s; round 1: 89,827 tokens, 20 tool uses, 503 s | 1 | 18 (worked inline) | 3 files changed, 466 insertions(+) | no | 9 | 0 | 40 | 56606 | 903380 | 34143192 | 84 | 111 | none |
