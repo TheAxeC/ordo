@@ -33,16 +33,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 3
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/2-3
-  base: a1b2330
-  launched: 2026-09-23
-  report: .scratch/2-coverage-inventory-of-the-academic-skills/agents/reviews/3-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -80,9 +71,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 and 2 landed (d44092c, and step 2 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 3 landed (d44092c, 64e50ce, and step 3 in the commit that carries this line). The tree is clean after it.
 - Verified: the verify list on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
-- Next step: 3, academic-paper's 61 files read in full and marked in `docs/academic-coverage.md`.
+- Next step: 4, academic-paper-reviewer's 26 files read in full and marked in `docs/academic-coverage.md`.
 - Open on Axel's side: none until step 7.
 
 ## Usage
@@ -91,3 +82,4 @@ dispatch:
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | inline (the orchestrating session) | 80,660 tokens, 13 tool uses, 240 s; round 1: 93,021 tokens, 21 tool uses, 445 s | 1 | 14 (worked inline) | 2 files changed, 674 insertions(+) | no | 6 | 0 | 46 | 65884 | 270920 | 10403186 | 96 | 150 | none |
 | 2 | inline (the orchestrating session) | 77,262 tokens, 18 tool uses, 167 s; round 1: 63,707 tokens, 12 tool uses, 169 s | 1 | 3 (worked inline) | 3 files changed, 4 insertions(+) | no | 3 | 0 | 14 | 12803 | 26079 | 4156461 | 32 | 9 | none |
+| 3 | inline (the orchestrating session) | 270,436 tokens, 47 tool uses, 321 s; round 1: 124,139 tokens, 30 tool uses, 250 s | 1 | 8 (worked inline) | 1 file changed, 108 insertions(+) | no | 8 | 0 | 137 | 110118 | 949568 | 54128563 | 272 | 23 | none |

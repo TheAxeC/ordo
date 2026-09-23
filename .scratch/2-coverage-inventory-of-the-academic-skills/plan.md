@@ -16,7 +16,7 @@ A list of every file of the four installed academic skills (academic-paper, acad
 
 - ✅ 1 `utils/check_coverage.py` and its test: given the four skill folders and `docs/academic-coverage.md`, exit 0 only when every file `find` lists appears exactly once with a mark whose new skill is a roadmap entry's skill and a reason that is not empty; the test fails on a missing file, a file listed twice, an unknown mark or new skill, an empty reason, and a listed file that does not exist (1 commit)
 - ✅ 2 the check's test joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
-- 3 academic-paper, 61 files, each read in full and marked with its reason; the check passes for its section (1 commit)
+- ✅ 3 academic-paper, 61 files, each read in full and marked with its reason; the check passes for its section (1 commit)
 - 4 academic-paper-reviewer, 26 files, the same; the check passes for its section (1 commit)
 - 5 academic-pipeline, 30 files, the same; the check passes for its section (1 commit)
 - 6 deep-research, 52 files, the same; the check passes over the whole list (1 commit)
@@ -59,3 +59,13 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
 - Usage, orchestrator d44092c to landing: 14 messages, 12803 output tokens, 26079 cache-write tokens, 4156461 cache-read tokens, 32 fresh input tokens, 9 minutes.
 - Reviewer usage: first run 77,262 tokens, 18 tool uses, 167 seconds; run over the round 63,707 tokens, 12 tool uses, 169 seconds.
+
+### Step 3, academic-paper marked (landed 2026-09-23)
+
+- Landed: `docs/academic-coverage.md`, 108 lines: the introduction, the New skills table and the `## academic-paper` section, 61 rows; `check_coverage.py` over `academic-paper` prints `ok`.
+- Marks: 24 `rebuild: paper`, 8 `rebuild later: paper`, 5 `rebuild: rebuttal`, 3 `rebuild: writing`, 2 `rebuild: literature`, 2 `rebuild later: literature`, 1 `rebuild: paper-review`, 1 `rebuild: submit-manuscript`, 15 `drop`.
+- The paper skill holds the venue AI-use policies and venue limits until roadmap entry 13 writes the researcher's `venues/` files; the introduction's check command names the skills that have a section, and steps 4 to 6 add theirs.
+- Reviews: `agents/reviews/3-refuter.md`; 8 findings in the first run, closed in repair round 1; the run over the round's findings fixed at landing (sentence length, the policy-anchor rules and table, the CRediT row, the clauses saying where the rest of a file goes, the gap rule, the introduction's first sentence). Nothing booked.
+- Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
+- Usage, orchestrator 64e50ce to landing: 137 messages, 110118 output tokens, 949568 cache-write tokens, 54128563 cache-read tokens, 272 fresh input tokens, 23 minutes.
+- Reviewer usage: first run 270,436 tokens, 47 tool uses, 321 seconds; run over the round 124,139 tokens, 30 tool uses, 250 seconds.
