@@ -16,10 +16,10 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 
 ## Steps, in execution order
 
-- 1 `docs/dev/skill-layout.md`: the section order, when a table is used, one rule per bullet, the anti-pattern table, the Quick start and Use instead forms; the user approves it (1 commit; orchestrator, a stop for approval)
+- ✅ 1 `docs/dev/skill-layout.md`: the section order, when a table is used, one rule per bullet, the anti-pattern table, the Quick start and Use instead forms; the user approves it (1 commit; orchestrator, a stop for approval)
 - 2 `utils/check_skill_layout.py` and its test: required sections in order, frontmatter present; the test fails on a missing section and on one out of order (1 commit)
 - 3 `utils/check_rule_inventory.py` and its test: every non-empty line of the old file belongs to an inventory row, every row's new heading exists in the new file; the test fails on an uncovered line and on a missing heading (1 commit)
-- 4 plan-orchestration restyled, with its inventory; the layout and inventory checks exit 0 for it, the building checks pass, `/refute` finds no rule dropped (1 commit; a stop for the user to see the layout in practice)
+- 4 plan-orchestration restyled, with its inventory; the layout and inventory checks exit 0 for it, the building checks pass, `/refute` finds no rule dropped (1 commit)
 - 5 plan restyled, with its inventory; same proof as 4 (1 commit)
 - 6 spec restyled, with its inventory; same proof (1 commit)
 - 7 refute restyled, with its inventory; same proof (1 commit)
@@ -43,7 +43,8 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - The executor is inline for every step: the orchestrating session writes each step in its worktree, per the user's rule against sub-agents for work that writes files.
 - `/refute` runs as a fresh read-only reviewer agent on every step; the user approved this exception to the sub-agent rule.
 - The step list above is approved as drafted.
+- `docs/dev/skill-layout.md` is approved as written. The ASCII check allows the green checkmark in Markdown files only. No further approval stops in this plan: step 4 lands like the others, and the user reads the restyled skills in the report.
 
 ## Blocked, and by what
 
-- 2 onward: step 1's approval of the layout standard, a decision the user owes once it is written.
+- none.

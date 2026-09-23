@@ -9,9 +9,10 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
-- "! LC_ALL=C grep -rnI --exclude-dir=.git --exclude-dir=.agents '[^ -~]' ."
+- >-
+  git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
-standards: []                # files every brief tells the builder to read in full; docs/dev/skill-layout.md joins once step 1 is approved.
+standards: [docs/dev/skill-layout.md] # files every brief tells the builder to read in full.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: inline             # ruled: the orchestrating session writes every step itself in the step's worktree.
@@ -33,7 +34,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Step 1: the user approves `docs/dev/skill-layout.md` once it is written.
+- none.
 
 ## Booked, no ruling needed
 
