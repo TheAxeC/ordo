@@ -27,7 +27,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 9 plan-help restyled, with its inventory; same proof (1 commit)
 - ✅ 10 ordo-init restyled, with its inventory; same proof (1 commit)
 - ✅ 11 roadmap restyled, with its inventory; same proof (1 commit)
-- 12 plan-retro restyled, with its inventory; same proof (1 commit)
+- ✅ 12 plan-retro restyled, with its inventory; same proof (1 commit)
 - 13 repo-setup restyled, with its inventory; same proof (1 commit)
 - 14 the layout check itself wired in as a check of `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list, run over every `skills/*/SKILL.md`; every check passes and `npx skills add . --list` lists ten skills (1 commit)
 - 15 the closing: `/roadmap done 1` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
@@ -138,3 +138,10 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/11-refuter.md`; done and drop editing before the approval, rules widened, narrowed and strengthened, duplicates; the first run's findings closed in repair round 1, the run over the round's closed at landing. Nothing booked.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check ok, every inventory ok.
 - Usage, orchestrator e6300be to landing: 11 messages, 23328 output tokens, 41676 cache-write tokens, 9899462 cache-read tokens, 26 fresh input tokens, 8 minutes.
+
+### Step 12, plan-retro restyled (landed 2026-09-23)
+
+- Landed: `skills/plan-retro/SKILL.md` in the layout, 103 lines; the inventory, 56 rows, `check_rule_inventory.py` ok.
+- Reviews: `agents/reviews/12-refuter.md`; multi-action steps, the check commands narrowed to approved proposals, inventory rows with several rules; the first run's findings closed in repair round 1, the run over the round's closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check ok, every inventory ok.
+- Usage, orchestrator 9eda91c to landing: 10 messages, 17957 output tokens, 32447 cache-write tokens, 9374598 cache-read tokens, 24 fresh input tokens, 10 minutes.

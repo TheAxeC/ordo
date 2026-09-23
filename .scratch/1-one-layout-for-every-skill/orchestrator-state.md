@@ -31,16 +31,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 12
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/1-12
-  base: 071041f
-  launched: 2026-09-23
-  report: .scratch/1-one-layout-for-every-skill/agents/reviews/12-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -77,9 +68,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 11 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65, aa7cfe2, e6300be, and step 11 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 12 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65, aa7cfe2, e6300be, 9eda91c, and step 12 in the commit that carries this line). The tree is clean after it.
 - Verified: the verify list on main, seven `PASS:` lines and a clean ASCII check.
-- Next step: 12, plan-retro restyled with its inventory.
+- Next step: 13, repo-setup restyled with its inventory.
 - Open on Axel's side: none until step 1 is written.
 
 ## Usage
@@ -96,3 +87,4 @@ dispatch:
 | 9 | inline (the orchestrating session) | 14 tool uses, about 10 minutes; round 1: 23 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +125 -7 | no | 3 | 0 | 14 | 22128 | 33413 | 11517208 | 32 | 12 | none |
 | 10 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 2 files changed, 166 insertions(+), 38 deletions(-) | no | the run over the round's findings | 0 | 11 | 24522 | 40770 | 9450742 | 26 | 9 | none |
 | 11 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 2 files changed, 176 insertions(+), 31 deletions(-) | no | the run over the round's findings | 0 | 11 | 23328 | 41676 | 9899462 | 26 | 8 | none |
+| 12 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 2 files changed, 133 insertions(+), 20 deletions(-) | no | the run over the round's findings | 0 | 10 | 17957 | 32447 | 9374598 | 24 | 10 | none |
