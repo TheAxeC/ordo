@@ -93,7 +93,7 @@ cp <skills>/plan/templates/plan.yaml .agents/plan.yaml            # one project
 cp <skills>/plan/templates/plan.projects.yaml .agents/plan.yaml   # several projects; a plan is then named <project>/<entry>
 ```
 
-`plan.yaml` describes every key. Eight are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worker` and `reviewer`. A skill that needs a missing required key stops and names it. Every other key is optional, and when it is left out it takes the default written beside it in `plan.yaml`; for example, a missing `worktree_paths` means the whole tree and a missing `look` means no look step.
+`plan.yaml` describes every key. Eight are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worker` and `reviewer`. A skill that needs a missing required key stops and names it. Every other key is optional, and when it is left out it takes the default written beside it in `plan.yaml`; for example, a missing `worktree_paths` means the whole tree and a missing `look` means no look step. `launch_note` holds the absolute path of a command that records each builder the orchestrator starts as its own process, following the interface in the plan-orchestration skill's `templates/launch-note.md`; left empty, nothing is recorded.
 
 Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
 

@@ -49,7 +49,7 @@ metadata:
    - `/plan` writes the closing step itself, at the end of the drafted list.
 3. Show the draft to the user, and write `plan.md` once the user has approved or corrected it.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
-   - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker and its effort, the reviewer, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`.
+   - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker and its effort, the reviewer, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `launch_note`.
    - The block's `executor:` is not a project specific and is not in `plan.yaml`.
    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
    - The orchestrator chooses the executor per step over that default.

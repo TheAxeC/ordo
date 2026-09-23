@@ -20,3 +20,4 @@ review_minutes: 0                         # optional, default 0. The reviewer's 
 look: ""                                  # optional, default "". Where a changed view is opened at landing (a page, a command); "" means no look step.
 workers_at_once: 1                        # optional, default 1. Steps in flight at once; above 1 only for steps with disjoint paths (plan-orchestration, "Two steps in flight").
 bench: []                                 # optional, default []. Binaries /spec stages and /land runs interleaved, base against new; [] means no A/B.
+launch_note: ""                           # optional, default "". The absolute path of the command that records a builder started as its own process (the plan-orchestration skill's templates/launch-note.md); "" means none is recorded.

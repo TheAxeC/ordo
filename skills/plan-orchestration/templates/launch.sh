@@ -6,8 +6,9 @@
 # matching internal mode (_body_claude, _body_codex), which runs in that detached process: the
 # launch note's start, the builder, the note's end, then the exit file. With no launch-note command,
 # or an empty one, the detached process runs the recipe's command alone. The transcript mode passes
-# a transcript or rollout path to the note. The note command's interface is in docs/launch-note.md;
-# every call to it is a record only, so its failure never stops the builder or this script.
+# a transcript or rollout path to the note. The note command's interface is in launch-note.md
+# beside this script; every call to it is a record only, so its failure never stops the builder or
+# this script.
 
 set -u
 

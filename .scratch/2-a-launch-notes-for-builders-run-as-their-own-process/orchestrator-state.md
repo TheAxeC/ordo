@@ -33,16 +33,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/2a-2
-  base: b6e4ba5
-  launched: 2026-09-23
-  report: .scratch/2-a-launch-notes-for-builders-run-as-their-own-process/agents/reviews/2-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -79,8 +70,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Step 1 landed in the commit that carries this line. The tree is clean after it.
-- Next step: 2, the `launch_note` key in every place that lists the optional keys, with `check_config.py` accepting it.
+- 2026-09-24. Steps 1 and 2 landed (5e9ec86; step 2 in the commit that carries this line). The tree is clean after it.
+- Next step: 3, the shell launch recipes in `skills/plan-orchestration/SKILL.md` call `launch.sh`.
 - Open on Axel's side: none.
 
 ## Usage
@@ -88,3 +79,4 @@ dispatch:
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | inline (the orchestrating session) | 85,757 tokens, 20 tool uses, 295 s; round 1: 89,827 tokens, 20 tool uses, 503 s | 1 | 18 (worked inline) | 3 files changed, 466 insertions(+) | no | 9 | 0 | 40 | 56606 | 903380 | 34143192 | 84 | 111 | none |
+| 2 | inline (the orchestrating session) | 81,975 tokens, 16 tool uses, 222 s; round 1: 96,421 tokens, 27 tool uses, 266 s | 1 | 12 (worked inline) | 10 files changed, 80 insertions(+), 9 deletions(-) | no | 7 | 0 | 30 | 26910 | 87743 | 20447140 | 64 | 18 | none |

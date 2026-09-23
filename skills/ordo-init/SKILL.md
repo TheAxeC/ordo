@@ -60,6 +60,7 @@ Run from the repository root.
    - `standards` lists the coding, layout or prose standard pages the repository has.
    - `worktree_paths` is the project's directory in the `projects:` form.
    - `bench` and `look` are left out unless the user names binaries or a view.
+   - `launch_note` is left out unless the user names a command that records launched builders.
 8. Give every key written the example's comment for it, without the required/optional marker, in the example's order.
 9. Draft the ignore rules.
    - The worktree root must be ignored: `git check-ignore -q --no-index <worktree_root>/probe` exits 0.
@@ -76,7 +77,7 @@ Run from the repository root.
 ### Checking an existing file
 
 1. With `.agents/plan.yaml` present, write nothing and run `templates/check_config.py`.
-2. It reports: a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>` or `codex:<model>`, `review` neither `every` nor `earned`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
+2. It reports: a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>` or `codex:<model>`, `review` neither `every` nor `earned`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a `launch_note` that is not an absolute path to an executable file (relative, missing, a directory, or not executable); a worktree root git does not ignore; a configuration file git ignores.
 3. Optional keys left out are listed as notes, with the default that applies.
 4. For each error, propose the fix ("Stops").
 5. Make each fix the user approved.

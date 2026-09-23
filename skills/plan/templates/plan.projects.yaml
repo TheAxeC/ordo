@@ -22,6 +22,7 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
+    launch_note: ""
   tool-b:
     roadmap: tools/tool-b/ROADMAP.md
     verification: tools/tool-b/docs/building.md
@@ -41,3 +42,4 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
+    launch_note: ""

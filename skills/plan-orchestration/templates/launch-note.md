@@ -1,8 +1,8 @@
 # The launch-note command
 
-A launch note records a builder that plan-orchestration starts as a process of its own, so that a tool watching the sessions can show that builder under the session that launched it. The plan skills name no such tool and no path to one. A repository that wants the record sets `launch_note:` in its `.agents/plan.yaml` to the absolute path of a command (`launch.sh` refuses a relative one) that follows the interface below. When the key is empty, the default, nothing is recorded and the launch recipes run exactly as they do without it.
+A launch note records a builder that plan-orchestration starts as a process of its own, so that a tool watching the sessions can show that builder under the session that launched it. The plan skills name no such tool and no path to one. A repository that wants the record sets `launch_note:` in its `.agents/plan.yaml` to the absolute path of an executable command that follows the interface below. The ordo-init skill's `templates/check_config.py` reports a relative path, a missing file, a directory or a file that is not executable, and `launch.sh` refuses a relative path. When the key is empty, the default, nothing is recorded and the launch recipes run exactly as they do without it.
 
-The note applies to the two shell launch recipes, `claude -p` and `codex exec`, which `skills/plan-orchestration/templates/launch.sh` runs. A builder started through the runner's native agent tool is already visible as a subagent of its session, so it is not recorded.
+The note applies to the two shell launch recipes, `claude -p` and `codex exec`, which `launch.sh` beside this page runs. A builder started through the runner's native agent tool is already visible as a subagent of its session, so it is not recorded.
 
 ## The three calls
 
