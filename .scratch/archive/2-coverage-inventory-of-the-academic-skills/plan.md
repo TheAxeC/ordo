@@ -20,8 +20,8 @@ A list of every file of the four installed academic skills (academic-paper, acad
 - ✅ 4 academic-paper-reviewer, 26 files, the same; the check passes for its section (1 commit)
 - ✅ 5 academic-pipeline, 30 files, the same; the check passes for its section (1 commit)
 - ✅ 6 deep-research, 52 files, the same; the check passes over the whole list (1 commit)
-- 7 the user approves the list (orchestrator, a stop for approval)
-- 8 the closing: `/roadmap done 2` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
+- ✅ 7 the user approves the list (orchestrator, a stop for approval)
+- ✅ 8 the closing: `/roadmap done 2` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
 
 ## Could run in parallel
 
@@ -36,6 +36,7 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - `/refute` runs as a fresh read-only reviewer agent on every step, as in plan 1; the user approved it with the step list.
 - A new script's test joins `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list in its own step, step 2 here.
 - Nothing is installed into the user's skill folders, no `utils/pin.sh <tag>` is run, and no installed skill, the academic skills included, is removed or replaced without the user's explicit permission, asked for each time (the user). The academic skills are read in `research-hub/.agents/skills/` and never changed.
+- 2026-09-23: the user approves `docs/academic-coverage.md` as landed at c1ff193, and asks that it be kept for later work, the `rebuild later` rows in particular.
 
 ## Blocked, and by what
 
@@ -102,3 +103,12 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Verification on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
 - Usage, orchestrator 7752a76 to landing: 28 messages, 40613 output tokens, 76631 cache-write tokens, 21610160 cache-read tokens, 60 fresh input tokens, 23 minutes.
 - Reviewer usage: first run 256,733 tokens, 62 tool uses, 455 seconds; run over the round 166,848 tokens, 52 tool uses, 419 seconds.
+
+### Step 7, the user's approval (2026-09-23)
+
+- The user approved `docs/academic-coverage.md` as landed at c1ff193 and asked that it stay available for later work, the `rebuild later` rows in particular. The file stays at `docs/academic-coverage.md`.
+
+### Step 8, the closing (2026-09-23)
+
+- Gate on main: `python3 -B utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`, exit 0; 169 rows against 169 files from `find`; `sh utils/check_coverage.test.sh` printed `PASS: check_coverage.py scratch tests`; every command in `docs/dev/building.md` passed (eight `PASS:` lines, ten `ok:` lines, a clean ASCII check).
+- Roadmap entry 2 ticked done with that output; this folder moved to `.scratch/archive/`.

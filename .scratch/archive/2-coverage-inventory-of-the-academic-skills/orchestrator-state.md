@@ -71,9 +71,9 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 6 landed (d44092c, 64e50ce, b6fadc8, ed16ff2, 7752a76, and step 6 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 8 done (d44092c, 64e50ce, b6fadc8, ed16ff2, 7752a76, c1ff193; steps 7 and 8 in the commit that carries this line). The tree is clean after it.
 - Verified: the verify list on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
-- Next step: 7, the user approves `docs/academic-coverage.md` (a stop for approval).
+- Next step: none; plan 2 is closed and archived. The next roadmap entry is 2.A.
 - Open on Axel's side: none until step 7.
 
 ## Usage

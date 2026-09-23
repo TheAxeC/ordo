@@ -16,13 +16,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
-## 2. Coverage inventory of the academic skills
-
-- Status: [ ]
-- Goal: A list of every file of the four installed academic skills (academic-paper, academic-paper-reviewer, academic-pipeline, deep-research), each marked `rebuild: <new skill>`, `rebuild later: <new skill>` or `drop`, with its reason; the new skill is the roadmap entry's skill that takes the file.
-- Gate: `docs/academic-coverage.md` names each of the 169 files once with its mark and reason; a check that every file `find` lists under the four skill folders appears exactly once exits 0; you approve the list.
-- Waits on: nothing.
-
 ## 2.A Launch notes for builders run as their own process
 
 - Status: [ ]
@@ -133,6 +126,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
 
 - [x] 1. One layout for every skill: `docs/dev/skill-layout.md` approved (plan 1's rulings); `python3 utils/check_skill_layout.py` printed ten `ok:` lines, exit 0, and `sh utils/check_skill_layout.test.sh` printed `PASS: check_skill_layout.py scratch tests`; `python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md` printed ten `ok:` lines, exit 0, and `sh utils/check_rule_inventory.test.sh` printed `PASS: check_rule_inventory.py scratch tests`; `/refute` ran on steps 2 to 14, every landing report `Open items: none. Booked list: empty`; every command in `docs/dev/building.md` passed on main (seven `PASS:` lines, ten `ok:` lines, a clean ASCII check); `npx skills add . --list` printed `Found 10 skills`.
+- [x] 2. Coverage inventory of the academic skills: `docs/academic-coverage.md` names each of the 169 files once with its mark and reason; `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`, exit 0, and `sh utils/check_coverage.test.sh` printed `PASS: check_coverage.py scratch tests`; the user approved the list (plan 2's rulings).
 
 # Dropped
 
