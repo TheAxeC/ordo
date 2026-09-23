@@ -24,7 +24,7 @@ launch_note:                 # the command that records a builder started as its
 ```
 
 ```yaml
-dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, prompt, events, report, exit, pid, session_id, landing, round, reviewer_report, and the repair_ entries while a fix round is in flight.
+dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report, landing, round. The orchestrator adds prompt, events, stderr, exit, pid, note_id_file and session_id at the launch, reviewer_report at the review, and the repair_ entries while a fix round is in flight.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)

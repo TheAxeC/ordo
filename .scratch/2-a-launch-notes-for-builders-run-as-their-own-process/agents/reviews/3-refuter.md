@@ -42,3 +42,57 @@ Rerun by the reviewer from the worktree root: eight `PASS:` lines of the verify 
 ## Usage
 
 124,900 tokens, 31 tool uses, 431 s.
+
+## Repair round 1, refuted
+
+### Verification lines
+
+Eight `PASS:` lines of the verify list, ten `ok:` lines of the layout check (exit 0), the ASCII check empty (exit 0), `PASS: launch.sh scratch tests`; `git diff 28959e9 --stat`: 5 files changed, 169 insertions(+), 35 deletions(-); the semicolon count over the added `SKILL.md` lines prints 0. Builder plants 2, 11, 13, 14 and 17 reproduce. Reviewer plants: the first-run report made absolute when relative, red on `a relative first codex run`; the codex stale-exit arm removed, red; the codex relative stale exit file removed from `--cwd`, green (Proof 2). `launch.sh codex ... --resume --last` and `launch.sh claude ... --resume --model` exit 0 (Proof 3).
+
+### Spec
+
+1. `SKILL.md:66`: the round keeps "the note options" (which include `--id`) and also takes "id files" of its own.
+2. `SKILL.md:164, 67` against `skills/plan/templates/orchestrator-state.md:27`: a round's paths would overwrite the first run's fields; the template names "the repair_ entries" and no `repair_` field is named anywhere.
+3. `SKILL.md:169, 172`: the `claude -p` transcript is "named by its session id", taken from the JSON report, which exists only at exit; item 3 then runs after item 4 and after `end` closed the record.
+
+### Proof
+
+1. `3-plants.md:71-75`, plant 14: after the `<scratch>` substitution the got and expected lines read the same (the got line holds a doubled path), and the plant fails on `codex without a note`, not on the case the report cites.
+2. `launch.sh:187-190`: the codex arm for a relative exit file is covered by no case.
+3. `launch.sh:70-73`: `--resume` accepts a value that is an option name (`--resume --last` resumes the most recent session; `--resume --model` consumes `--model`).
+
+### Standards
+
+1. `SKILL.md:164`: a 40-word sentence.
+2. `SKILL.md:169-170, 172-173`: four bullets of one shape.
+3. `skills/plan/templates/orchestrator-state.md:27`: the comment attributes `stderr` and `note_id` to `/spec`, whose `SKILL.md:63` does not write them.
+4. `note_id` holds a path while `session_id` beside it holds an id.
+
+### Behaviour
+
+1. A first `claude -p` builder's transcript reaches the note only after `end` (Spec 3); not stated.
+2. `--resume` with a value starting with `--` is passed on as a flag; not stated.
+
+### Not checked
+
+- A real resume run, the sandbox override, and codex's resolution of a relative `-o` under `-C`.
+- Builder plants 1, 3 to 10, 12, 15 and 16 were not rerun.
+
+### Usage
+
+118,199 tokens, 24 tool uses, 380 s.
+
+## Closed
+
+- First run, every finding: closed in repair round 1 (see `3-report.md`, "Repair round 1").
+- Run over the round, fixed at landing:
+  - Spec 1: the resume keeps `--cwd`, `--model`, `--effort`, `--network`, `--note`, `--label` and `--parent`; its prompt, report, stderr, events, exit, pid and id files are the round's own.
+  - Spec 2: a round's paths go under the same fields with the `repair_` prefix (`repair_prompt`, `repair_report` and so on), in "Before the resume" and in item 1 of the shell launch.
+  - Spec 3 and Behaviour 1: a `claude -p` builder's transcript is `<session id>.jsonl` under the runner's projects folder, written from the moment it starts, so the orchestrator reads the session id from its file name before the builder exits; the JSON report's `session_id` confirms it at the end.
+  - Proof 1: plant 14 now makes a first run's relative report absolute and turns `a relative first codex run` red; the plants file keeps the doubled path visible.
+  - Proof 2: a test case covers a codex relative exit file left by an earlier run, removed from the caller's directory and not from `--cwd`; plant 18 turns it red.
+  - Proof 3 and Behaviour 2: `--resume` refuses a value starting with `-` (`--resume needs a session id, not --last`, exit 64); plant 19 turns the test red.
+  - Standards 1: the sentence is split in two.
+  - Standards 2: the four bullets use different constructions.
+  - Standards 3: the plan skill's `templates/orchestrator-state.md` comment lists what `/spec` writes and what the orchestrator adds at the launch, the review and a repair round.
+  - Standards 4: the field is `note_id_file`.

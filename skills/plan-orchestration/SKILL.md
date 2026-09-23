@@ -62,8 +62,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Read the diff yourself while it runs.
    - Save its report and record its usage.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
-   - **How.** A native Claude agent by the runner's message tool on its id; a Codex worker by `codex exec resume <session_id>` with the flags of its launch, from inside the worktree, detached the same way; a `claude -p` worker by `claude -p --resume <session_id>`.
-   - **Before the resume.** Write `round: n` and the round's paths into the dispatch block and commit.
+   - **How.** A native Claude agent is resumed by the runner's message tool on its id. A `claude -p` or Codex worker is resumed by `templates/launch.sh` with `--resume <session_id>`, by the numbered list under "Launching a builder".
+   - **The resume's options.** It keeps the launch's `--cwd`, `--model`, `--effort`, `--network`, `--note`, `--label` and `--parent`. Its prompt (the findings), report, stderr, events, exit, pid and id files are the round's own.
+   - **Before the resume.** Write `round: n` and the round's paths into the dispatch block, each under its field with the `repair_` prefix (`repair_prompt`, `repair_report` and so on), and commit.
    - **Not sent back.** The finding the second row of "Anti-patterns" names; it is raised as a stop.
    - **The cap.** The block's `repair_rounds` caps the rounds per step.
    - **After each reply.** Read the whole delta and, when the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its usage recorded beside the first.
@@ -140,28 +141,46 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 Both harnesses take the same prompt. What differs is the launch, the sandbox and where the report comes back. Either orchestrator can launch either builder.
 
 - **Claude Code builder (`claude:<model>`), from inside Claude Code.** The runner's Agent tool with `subagent_type: general-purpose` and the model named, run in the background; its completion notification carries the report. It works under the runner's own permission settings.
-- **Claude Code builder, from any shell.** The same prompt through the CLI's print mode, detached:
+- **Claude Code builder, from any shell.** The same prompt through the CLI's print mode, run by this skill's `templates/launch.sh`:
 
 ```sh
-nohup sh -c 'cd <worktree>/<tool dir> && claude -p --model <model> --permission-mode acceptEdits \
-    --output-format json < <prompt file> > <report file> 2> <stderr file>; echo "exit $?" > <exit file>' &
-echo $! > <pid file>
+sh <this skill's folder>/templates/launch.sh claude --cwd <worktree>/<tool dir> --model <model> \
+    --prompt <prompt file> --report <report file> --stderr <stderr file> --exit <exit file> --pid <pid file> \
+    [--resume <session id>] [--note <launch_note> --id <id file> --label <step> --parent <session id>]
 ```
 
-- **Codex builder (`codex:<model>`).** With `codex exec`, from a shell, detached from the runner's command timeout:
+- **Codex builder (`codex:<model>`).** With `codex exec`, from a shell, run by `templates/launch.sh`:
 
 ```sh
-nohup sh -c 'codex exec -C <worktree>/<tool dir> -s workspace-write \
-    -c "sandbox_workspace_write.network_access=true" -c "model_reasoning_effort=\"<worker_effort>\"" -m <model> \
-    -o <report file> --json - < <prompt file> > <event log> 2> <stderr file>; echo "exit $?" > <exit file>' &
-echo $! > <pid file>
+sh <this skill's folder>/templates/launch.sh codex --cwd <worktree>/<tool dir> --model <model> \
+    --prompt <prompt file> --report <report file> --stderr <stderr file> --exit <exit file> --pid <pid file> \
+    --events <event log> --effort <worker_effort> [--network] [--resume <session id>] \
+    [--note <launch_note> --id <id file> --label <step> --parent <session id>]
 ```
 
-- `-C` is the working root and `-s workspace-write` confines writes to it.
-- The network setting is passed whenever the verification commands bind a port.
+A shell launch runs in this order:
+
+1. Run `templates/launch.sh` from the orchestrator's shell. It removes an exit file an earlier run left, starts the builder as a detached process, writes the pid file and returns at once.
+   - Every path the launch takes goes into the dispatch block under its field: `prompt`, `report`, `stderr`, `events`, `exit`, `pid` and `note_id_file`, with the `repair_` prefix for a repair round.
+   - None of these paths lies in a scratch folder or a machine-local temp directory, since "Resuming, and handing the plan over" needs them to continue.
+   - With the configuration block's `launch_note` set, pass the note options: `--id` names the file that receives the note's id, `--label` the step, and `--parent` the orchestrating session's id.
+   - Under Claude Code the orchestrating session's id is its session log's file name without `.jsonl`, and under Codex it is the rollout's session id. "Usage" says where each log is.
+   - Without a `launch_note`, the note options are left out.
+2. Write the builder's identity into the dispatch block and commit it, as item 4 of "Steps" says. A shell builder's identity is its pid file and, once it is known, its session id in `session_id`.
+   - For a `claude -p` builder, the orchestrator reads it from the file name of the builder's transcript (item 3), or from the `session_id` field of the JSON report once the builder exits.
+   - The event log of a Codex builder carries it as the `thread_id` of its `thread.started` event.
+3. Once the builder's transcript path is known, pass it to the note with `sh <this skill's folder>/templates/launch.sh transcript --note <launch_note> --id <id file> <path>`. A plan whose `launch_note` is empty skips this item.
+   - Under the runner's projects folder, in the folder named after the worktree's directory, a `claude -p` builder writes its transcript as `<session id>.jsonl` from the moment it starts. A resumed run writes to the same file.
+   - The rollout under `~/.codex/sessions/` whose name ends with the session id is the transcript of a Codex builder.
+4. Watch the exit file with a monitor. `templates/launch.sh` writes the builder's exit code to it as `exit <code>`.
+
+- A first Codex run is `codex exec -C <cwd> -s workspace-write`: `-C` is the working root and `-s workspace-write` confines writes to it.
+- `codex exec resume` takes neither flag, so `templates/launch.sh` runs a resumed Codex builder inside `--cwd` and sets its sandbox with `-c sandbox_mode="workspace-write"`.
+- `--network` is passed whenever the verification commands bind a port.
 - `-o` writes the final message, and `--json` streams the event log whose last `turn.completed` event carries the usage.
 - The session is not run with `--ephemeral`, so the rollout under `~/.codex/sessions/` is the builder's transcript.
-- A runner's shell tool caps a command at ten minutes and a step takes longer, so the launch is detached and a monitor watches the exit file.
+- A runner's shell tool caps a command at ten minutes and a step takes longer, so `templates/launch.sh` detaches the builder and a monitor watches the exit file.
+- The launch note is a record only. `templates/launch.sh` ignores a note call that fails, and `templates/launch-note.md` gives the note command's interface.
 - Codex project settings live in `<repo>/.codex/config.toml` and its command rules in `<repo>/.codex/rules/`; the orchestrator never edits a user-level file.
 
 ## What earns a step of its own
