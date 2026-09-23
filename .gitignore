@@ -1,0 +1,3 @@
+# The plan skills: the step worktrees under .agents/worktrees/ and any locally installed skill. The plan configuration stays tracked.
+.agents/*
+!.agents/plan.yaml

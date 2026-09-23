@@ -1,0 +1,10 @@
+# The project specifics the plan skills read (/plan, /spec, /refute, /land, /plan-help, plan-orchestration).
+# Every path is relative to the repository root. One project: the skills, their templates and utils/ are one tree with one set of checks.
+roadmap: docs/roadmap.md                  # The source of truth for what is open; a plan is one entry of it.
+verification: docs/dev/building.md        # The page that defines the green check; /plan copies its commands into the ledger.
+rules: docs/dev/change-standard.md        # How a change is made; every brief points here first.
+ledger_root: .scratch                     # A plan lives in <ledger_root>/<slug>/.
+archive_root: .scratch/archive            # Where a closed plan's folder moves.
+worktree_root: .agents/worktrees          # Where a step's worktree is created; ignored by .gitignore's .agents/* line.
+worker: claude:opus                       # harness:model of the builder, for example codex:gpt-5.6-sol.
+reviewer: claude:opus                     # harness:model /refute runs on.
