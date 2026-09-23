@@ -8,6 +8,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+- sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_skill_layout.test.sh 2>&1 | tail -1
 - sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
@@ -33,16 +34,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 4
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/2a-4
-  base: 2764bb9
-  launched: 2026-09-24
-  report: .scratch/2-a-launch-notes-for-builders-run-as-their-own-process/agents/reviews/4-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -79,8 +71,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-24. Steps 1 to 3 landed (5e9ec86, c8d673a; step 3 in the commit that carries this line). The tree is clean after it.
-- Next step: 4, `launch.test.sh` joins the README, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list.
+- 2026-09-24. Steps 1 to 4 landed (5e9ec86, c8d673a, 916a144; step 4 in the commit that carries this line). The tree is clean after it.
+- Next step: 5, the closing: `/roadmap done 2.A` with the gate's output, this folder moved to `.scratch/archive/`.
 - Open on Axel's side: none.
 
 ## Usage
@@ -90,3 +82,4 @@ dispatch:
 | 1 | inline (the orchestrating session) | 85,757 tokens, 20 tool uses, 295 s; round 1: 89,827 tokens, 20 tool uses, 503 s | 1 | 18 (worked inline) | 3 files changed, 466 insertions(+) | no | 9 | 0 | 40 | 56606 | 903380 | 34143192 | 84 | 111 | none |
 | 2 | inline (the orchestrating session) | 81,975 tokens, 16 tool uses, 222 s; round 1: 96,421 tokens, 27 tool uses, 266 s | 1 | 12 (worked inline) | 10 files changed, 80 insertions(+), 9 deletions(-) | no | 7 | 0 | 30 | 26910 | 87743 | 20447140 | 64 | 18 | none |
 | 3 | inline (the orchestrating session) | 124,900 tokens, 31 tool uses, 431 s; round 1: 118,199 tokens, 24 tool uses, 380 s | 1 | 17 (worked inline) | 5 files changed, 188 insertions(+), 39 deletions(-) | no | 12 | 0 | 75 | 70812 | 135046 | 11540204 | 158 | 42 | none |
+| 4 | inline (the orchestrating session) | 91,433 tokens, 17 tool uses, 230 s; round 1: 95,754 tokens, 25 tool uses, 808 s | 1 | 5 (worked inline) | 4 files changed, 61 insertions(+), 25 deletions(-) | no | 4 | 0 | 31 | 24601 | 46090 | 7536057 | 68 | 35 | none |

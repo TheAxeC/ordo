@@ -6,7 +6,7 @@
 # the ways start can fail to give an id, a launch that returns before its builder ends and survives
 # a hangup, an exit file left by an earlier run removed at the launch (absolute, relative to the
 # claude recipe's directory, and relative to the caller's directory for codex), a relative exit
-# file, and the usage errors, with the message of each resume error.
+# file, and every usage error with its message.
 
 set -u
 
@@ -235,10 +235,16 @@ expect_file "$test_root/rel-cs-exit" "exit 0" "a codex resume over an earlier ru
 settings 0 0 note-7 '' 0 0
 run a1 claude --note '' --id "$test_root/a1 out/id" --label 2 --parent sess-0
 expect_calls "$claude_call" "claude with an empty note"
+expect_file "$d/exit" "exit 0" "claude with an empty note"
 [ ! -e "$d/id" ] || fail "claude with an empty note: an id file was written"
 : >"$CALLS"
 sh "$launch" transcript --note '' --id "$d/id" /t || fail "transcript with an empty note failed"
 expect_calls "" "transcript with an empty note"
+settings 8 0 note-7 '' 0 0
+run c5 codex --note '' --id "$test_root/c5 out/id" --label 2 --parent sess-0
+expect_calls "$(codex_call '')" "codex with an empty note"
+expect_file "$d/exit" "exit 8" "codex with an empty note"
+[ ! -e "$d/id" ] || fail "codex with an empty note: an id file was written"
 
 # A note: start with the launch's details and the detached pid, the builder, end with the id.
 settings 4 0 note-7 '' 0 0
@@ -324,35 +330,61 @@ wait_file "$work/rel-exit"
 [ ! -e "$test_root/rel-exit" ] || fail "a relative exit file landed in the caller's directory"
 expect_file "$work/rel-report" "the prompt" "a relative report"
 
-# Usage errors exit 64.
-full="--cwd x --model m --prompt p --report r --stderr s --exit e --pid p"
-for args in "" "bogus" "claude --cwd x" "claude --bogus x" "claude $full stray" "claude $full --network" \
-    "claude $full --effort high" "codex $full" "claude $full --note /n" "claude $full --note /n --id i --label l" \
-    "claude $full --note /n --id i --parent p" "claude $full --note n --id i --label l --parent p" \
-    "transcript --note /n --id x" "transcript --note /n --id x /a /b" "transcript --note /n /t" \
-    "transcript --note n --id x /t" "transcript --cwd x /t" "transcript --resume r --note /n --id x /t" \
-    "claude $full --resume"; do
-    # shellcheck disable=SC2086
-    sh "$launch" $args >/dev/null 2>&1
-    status=$?
-    [ "$status" -eq 64 ] || fail "usage error '$args' exited $status, expected 64"
-done
-
-# The resume errors name what is wrong: an empty session id, an option given as the session id,
-# and --resume with no value.
-resume_error() {
+# Each usage error exits 64 and names what is wrong. usage_error <message> <arguments>: the
+# arguments are split on spaces. A launch with no arguments prints the usage text alone, so its
+# output starts with it.
+usage_error() {
     want=$1
-    shift
-    out=$(sh "$launch" claude --cwd x --model m --prompt p --report r --stderr s --exit e --pid p "$@" 2>&1)
+    # shellcheck disable=SC2086
+    out=$(sh "$launch" $2 2>&1)
     status=$?
-    [ "$status" -eq 64 ] || fail "'$want': exited $status, expected 64"
+    [ "$status" -eq 64 ] || fail "usage error '$2' exited $status, expected 64"
     case "$out" in
         *"$want"*) ;;
-        *) fail "'$want': the message was $out" ;;
+        *) fail "usage error '$2' printed $out, expected $want" ;;
     esac
 }
-resume_error "--resume needs a session id, not an empty value" --resume ''
-resume_error "--resume needs a session id, not --last" --resume --last
-resume_error "--resume needs a value" --resume
+full="--cwd x --model m --prompt p --report r --stderr s --exit e --pid p"
+out=$(sh "$launch" 2>&1)
+status=$?
+[ "$status" -eq 64 ] || fail "a launch with no arguments exited $status, expected 64"
+case "$out" in
+    Usage:*) ;;
+    *) fail "a launch with no arguments printed $out, expected the usage text alone" ;;
+esac
+usage_error "unknown mode bogus" "bogus"
+usage_error "--cwd needs a value" "claude --cwd"
+usage_error "unknown option --bogus" "claude --bogus x"
+usage_error "unexpected argument stray" "claude $full stray"
+usage_error "unexpected argument /b" "transcript --note /n --id x /a /b"
+usage_error "--note must be an absolute path" "claude $full --note n --id i --label l --parent p"
+usage_error "--note must be an absolute path" "transcript --note n --id x /t"
+for name in cwd model prompt report stderr exit pid; do
+    args=$(printf '%s\n' "$full" | sed "s/--$name [^ ]*//")
+    usage_error "--$name is required" "claude $args"
+done
+usage_error "--events is required for codex" "codex $full --effort high"
+usage_error "--effort is required for codex" "codex $full --events v"
+usage_error "--events is for codex only" "claude $full --events v"
+usage_error "--effort is for codex only" "claude $full --effort high"
+usage_error "--network is for codex only" "claude $full --network"
+usage_error "--id is required with --note" "claude $full --note /n --label l --parent p"
+usage_error "--label is required with --note" "claude $full --note /n --id i --parent p"
+usage_error "--parent is required with --note" "claude $full --note /n --id i --label l"
+for name in cwd model prompt report stderr exit pid events effort label parent resume; do
+    usage_error "--$name is not a transcript option" "transcript --$name v /t"
+done
+usage_error "--network is not a transcript option" "transcript --network /t"
+usage_error "--id is required with --note" "transcript --note /n /t"
+usage_error "the transcript path is required" "transcript --note /n --id x"
+usage_error "--resume needs a value" "claude $full --resume"
+usage_error "--resume needs a session id, not --last" "claude $full --resume --last"
+out=$(sh "$launch" claude --cwd x --model m --prompt p --report r --stderr s --exit e --pid p --resume '' 2>&1)
+status=$?
+[ "$status" -eq 64 ] || fail "an empty --resume exited $status, expected 64"
+case "$out" in
+    *"--resume needs a session id, not an empty value"*) ;;
+    *) fail "an empty --resume printed $out" ;;
+esac
 
 printf 'PASS: launch.sh scratch tests\n'

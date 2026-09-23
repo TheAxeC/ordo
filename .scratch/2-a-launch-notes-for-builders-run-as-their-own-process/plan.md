@@ -15,7 +15,7 @@ a test with a stub launch-note command shows the recipes unchanged with the key 
 - ✅ 1 `skills/plan-orchestration/templates/launch.sh` and `launch.test.sh`: the script runs the `claude -p` and `codex exec` recipes detached, with the pid and exit files; with `launch_note` empty it runs today's command unchanged; with it set it calls `start` before the builder and `end` after it (skipped when `start` wrote no id), and its `transcript` subcommand passes the transcript or rollout path on; the test, with stub `claude`, `codex` and launch-note commands on `PATH`, shows the command unchanged with the key empty, `start`, `transcript` and `end` run with it set, `end` skipped after a failed `start`, and the builder's exit code in the exit file in every case; the three calls and their arguments written down as Ordo's interface in `skills/plan-orchestration/templates/launch-note.md` (1 commit; the page was written at `docs/launch-note.md` and moved beside the script in step 2)
 - ✅ 2 the `launch_note` key in every place that lists the optional keys: `skills/plan/SKILL.md`'s key list, `skills/plan/templates/plan.yaml`, both projects of `plan.projects.yaml`, the `orchestrator-state.md` template, `skills/ordo-init/SKILL.md` and the README; `check_config.py` accepts it, with a test case; `land.test.sh` and `check_config.test.sh` pass with the key set (1 commit)
 - ✅ 3 `skills/plan-orchestration/SKILL.md`, "Launching a builder": the two shell recipes call `launch.sh`, the `transcript` call is a numbered orchestration step, and the native Agent-tool recipe stays the default for Claude builders under Claude Code, unchanged; a repair round's resume of a shell builder (Steps, item 8) also runs through `launch.sh`, which gains a `--resume <session id>` option for both harnesses, with `launch.test.sh` cases and the page `templates/launch-note.md` saying a round is a record of its own; the layout check passes and `launch.test.sh` passes (1 commit)
-- 4 `launch.test.sh` joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
+- ✅ 4 `launch.test.sh` joined to `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list; every check passes (1 commit)
 - 5 the closing: `/roadmap done 2.A` with the gate's output, this folder moved to `.scratch/archive/` (orchestrator, no agent)
 
 ## Could run in parallel
@@ -72,3 +72,13 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Not verified: a real `claude -p --resume` or `codex exec resume` run; the tests use stubs.
 - Usage, orchestrator c8d673a to landing: 75 messages, 70812 output tokens, 135046 cache-write tokens, 11540204 cache-read tokens, 158 fresh input tokens, 42 minutes.
 - Reviewer usage: first run 124,900 tokens, 31 tool uses, 431 seconds; run over the round 118,199 tokens, 24 tool uses, 380 seconds.
+
+### Step 4, launch.test.sh in the documented checks (landed 2026-09-24)
+
+- Landed: `sh skills/plan-orchestration/templates/launch.test.sh` in `README.md` (with a bullet on what it checks), `docs/dev/building.md` and `docs/dev/change-standard.md`, after `sync_rules.test.sh`, and in this plan's `verify:` block. The three lists name the same nine tests in the same order.
+- The step's paths widened to `launch.test.sh`, so that the README's description holds: it checks every usage error of `launch.sh` with its exit code and message, and the empty note for both harnesses.
+- Reviews: `agents/reviews/4-refuter.md`; the first run's 5 findings closed in repair round 1; the run over the round's 4 findings fixed at landing. Nothing booked.
+- Verification on main: nine `PASS:` lines (the verify list now with `launch.test.sh`), ten `ok:` lines from the layout check, a clean ASCII check; 15 planted faults in `launch.sh` each turn `launch.test.sh` red (`agents/reviews/4-plants.md`).
+- The scratchpad's verify script now fails on a test whose last line does not start with `PASS:`, rather than on the filter's exit status.
+- Usage, orchestrator 916a144 to landing: 31 messages, 24601 output tokens, 46090 cache-write tokens, 7536057 cache-read tokens, 68 fresh input tokens, 35 minutes.
+- Reviewer usage: first run 91,433 tokens, 17 tool uses, 230 seconds; run over the round 95,754 tokens, 25 tool uses, 808 seconds.
