@@ -30,7 +30,16 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 3
+  executor: inline
+  worker: claude:opus (the orchestrating session)
+  worktree: .agents/worktrees/1-3
+  base: f157b94
+  launched: 2026-09-23
+  report: .scratch/1-one-layout-for-every-skill/agents/reviews/3-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -68,6 +77,7 @@ dispatch: none
 
 - 2026-09-23. Steps 1 and 2 landed (971121b; step 2 in the commit that carries this line). The tree is clean after it.
 - Verified: the verify list on main, six `PASS:` lines and a clean ASCII check.
+- Step 3 briefed at f157b94, in flight in .agents/worktrees/1-3.
 - Next step: 3, the rule inventory check, which every restyle step runs.
 - Open on Axel's side: none until step 1 is written.
 
