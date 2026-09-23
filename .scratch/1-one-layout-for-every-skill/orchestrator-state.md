@@ -60,6 +60,7 @@ dispatch:
 - `~/.claude/CLAUDE.md` and the rules under `~/.claude/rules/`. The ones that bite here: a named thing is its whole (a skill is its folder, templates included); never take the lazy option (no rule dropped to make a layout fit); no claim about state without a command in the same turn; plain prose, ASCII, no history in a rule file.
 - `docs/dev/change-standard.md`, in full.
 - The installed skills are pinned at v1.0.0 in `~/.local/share/ordo-stable`; nothing in this plan edits the pinned worktree, and the skills that run this plan are the pinned ones.
+- Nothing is installed into the user's skill folders, no `utils/pin.sh <tag>` is run, and no installed skill is removed or replaced without the user's explicit permission, asked for each time.
 - Commits: a capitalised imperative subject, a blank line, `- Verb ...` bullets. No attribution of any kind. Never push. A worktree's branch is deleted with the worktree.
 
 ## Verification, every step

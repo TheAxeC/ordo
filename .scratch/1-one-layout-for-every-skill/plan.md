@@ -50,6 +50,7 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - An old frontmatter line whose content lives only in the frontmatter (the name, the metadata key, the version, the trigger phrases) maps to Quick start in a rule inventory, since an inventory's places are sections and the layout keeps the version out of the text; this corrects step 4's brief, whose decision 1 named Rules for the version (orchestrator, in step 4's repair round).
 - The tables the layout requires restate nothing: a Do instead cell that would repeat a step's rule names the step; a refusal is stated once, as a row of Stops, and the item where it arises points there. The columns the layout requires (What it shows, What resumes it, Why it fails) may hold text the old file does not, provided it contradicts nothing there (orchestrator, in step 5's repair round).
 - The findings of the run over the last repair round that are not fixed at landing are booked as their own step in the state file's booked list, never in the open items, which hold only what the user must rule on; refute's old sentence that said "open items" is corrected in step 7 (the user, 2026-09-23).
+- Nothing is installed into the user's skill folders (`~/.claude/skills`, `~/.claude-work/skills`, `~/.agents/skills`), no `utils/pin.sh <tag>` is run, and no installed skill, the academic skills included, is removed or replaced without the user's explicit permission, asked for each time (the user, 2026-09-23).
 
 ## Blocked, and by what
 
