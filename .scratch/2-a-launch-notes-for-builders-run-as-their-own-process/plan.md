@@ -32,6 +32,10 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - The launch-note interface is the one in the oculus session's note: `start --launcher --label --harness --model --parent --cwd --pid` printing an id, `transcript <id> <path>`, `end <id>`; a failed `start` never stops the builder; the skills name no project and no vendor path.
 - Nothing is installed into the user's skill folders, no `utils/pin.sh <tag>` is run, and no installed skill is removed or replaced without the user's explicit permission, asked for each time (the user). The pinned copy `~/.local/share/ordo-stable` does not get this change until the user allows a pin.
 
+## Rulings (2026-09-24)
+
+- Step 3's widening to the `--resume` option of `launch.sh`, so that a repair round's resumed builder is recorded by the launch note, is approved (the user).
+
 ## Premise corrections
 
 - Step 3 (2026-09-24): a repair round resumes a shell builder as a new detached process (`claude -p --resume`, `codex exec resume`), so without a resume mode that process would run outside `launch.sh` and go unrecorded, against the entry's goal of recording every builder the orchestrator starts as its own process. The step's path list is widened to `launch.sh`, `launch.test.sh` and `launch-note.md`; the interface's three calls do not change, and each round is a record of its own under the same `--label`.

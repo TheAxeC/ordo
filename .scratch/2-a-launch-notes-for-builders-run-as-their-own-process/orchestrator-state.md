@@ -42,7 +42,7 @@ dispatch:
   launched: 2026-09-24
   report: .scratch/2-a-launch-notes-for-builders-run-as-their-own-process/agents/reviews/3-report.md
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-24: the findings of 3-refuter.md, worked inline; the worktree diff at the start of the round saved in the scratchpad as r3start/round1-start.diff)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
