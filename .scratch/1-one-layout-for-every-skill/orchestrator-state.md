@@ -29,7 +29,16 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 2
+  executor: inline
+  worker: claude:opus (the orchestrating session)
+  worktree: .agents/worktrees/1-2
+  base: 82763c1
+  launched: 2026-09-23
+  report: .scratch/1-one-layout-for-every-skill/agents/reviews/2-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -65,9 +74,9 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. The plan is opened on main after 24f8864. Nothing is built yet.
+- 2026-09-23. Step 1 landed at 971121b. Step 2 briefed at 82763c1, in flight in .agents/worktrees/1-2.
 - Verified: `python3 skills/ordo-init/templates/check_config.py .` exits 0.
-- Next step: 1, because every other step reads the layout standard.
+- Next step: 2, the layout check, which every restyle step runs.
 - Open on Axel's side: none until step 1 is written.
 
 ## Usage
