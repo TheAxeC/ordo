@@ -56,19 +56,19 @@ npx skills add TheAxeC/ordo --skill '*' -g -a claude-code -a codex
 
 This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`.
 
-### From a clone
+### By copying the folders
 
 ```sh
-git clone https://github.com/TheAxeC/ordo.git ~/workspace/ordo
+rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills ~/.agents/skills; do
     mkdir -p "$dir"
     for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
-        ln -sfn ~/workspace/ordo/$skill "$dir/$skill"
+        rm -rf "$dir/$skill" && cp -R /tmp/ordo/$skill "$dir/"
     done
 done
 ```
 
-For a second Claude Code account, repeat the inner loop with that account's `$CLAUDE_CONFIG_DIR/skills`. Updating is `git pull` in `~/workspace/ordo`; the links need no change.
+For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders. Updating is the same commands again: each skill folder is replaced whole, so a file a newer version removes does not linger.
 
 ## Configuring a repository
 
@@ -106,18 +106,35 @@ sh land/templates/land.test.sh
 sh ordo-init/templates/check_config.test.sh
 sh plan-retro/templates/collect_findings.test.sh
 sh repo-setup/templates/sync_rules.test.sh
+sh utils/pin.test.sh
 ```
 
 - `land.test.sh` proves the landing on scratch repositories, and checks that both example `plan.yaml` files carry exactly the keys the state template's configuration block needs, each optional key's value equal to its stated default.
 - `check_config.test.sh` checks that `check_config.py` passes a complete configuration, in both forms, and names each kind of error.
 - `collect_findings.test.sh` checks that the collector reads both heading styles of a refuter report and its repair rounds, skips closures and "none", reads a report once when the archive sits inside the ledger root, and starts after a previous retro.
 - `sync_rules.test.sh` checks that a block equal to the template passes, a drifted block fails with its diff and is repaired by `--write`, and a missing block or a missing `AGENTS.md` symlink is refused.
+- `pin.test.sh` checks that `pin.sh` links every skill of a tag from the pinned worktree, drops a skill the next tag removes, repairs a link into the live clone, and refuses, changing nothing, a worktree with local changes, a real directory or a foreign link in a skill folder, and an unknown tag.
 
 ## The landing script
 
 `land/templates/land.sh` does the cherry-pick, the checks on `main` and the booking data as one command. A plan copies it into its ledger folder and makes the three `ADAPT` edits: `landing_tool_path` (the directory a step's changes are scoped to), the dependency install and verify commands with their pass rules, and the harness and model names in the usage rows. Copy `land.test.sh` beside it; it reads `landing_tool_path` from `land.sh` and proves the landing on scratch repositories.
 
 `land.sh` finds `usage.py` beside itself, then in the land skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`).
+
+## Working on Ordo
+
+This section is for changing Ordo itself. To use the skills, install them as above.
+
+While Ordo is being changed, the installed skills must not change with it: the plan skills run the change, so they stay at a fixed version until the change is done. The installed skills are links into a pinned checkout, a detached git worktree of the clone at a tag, and the clone's `main` is where the work happens.
+
+```sh
+git clone https://github.com/TheAxeC/ordo.git ~/workspace/ordo
+cd ~/workspace/ordo
+utils/pin.sh v1.0.0      # the worktree ~/.local/share/ordo-stable at v1.0.0, every skill linked from it
+utils/pin.sh             # checks that every link points into the pinned worktree; changes nothing
+```
+
+`pin.sh` links into `~/.claude/skills`, `~/.agents/skills` and, when it is set, `$CLAUDE_CONFIG_DIR/skills`; `ORDO_SKILL_DIRS` (space-separated) replaces that list and `ORDO_STABLE` moves the worktree. Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back is `utils/pin.sh <older tag>`. The pinned worktree is never edited, and `pin.sh` refuses to move one that has local changes.
 
 ## License
 
