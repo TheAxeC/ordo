@@ -10,6 +10,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_skill_layout.test.sh 2>&1 | tail -1
+- sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -30,16 +31,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 3
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/1-3
-  base: f157b94
-  launched: 2026-09-23
-  report: .scratch/1-one-layout-for-every-skill/agents/reviews/3-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -75,10 +67,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 and 2 landed (971121b; step 2 in the commit that carries this line). The tree is clean after it.
-- Verified: the verify list on main, six `PASS:` lines and a clean ASCII check.
-- Step 3 briefed at f157b94, in flight in .agents/worktrees/1-3.
-- Next step: 3, the rule inventory check, which every restyle step runs.
+- 2026-09-23. Steps 1 to 3 landed (971121b, 84ce1f7; step 3 in the commit that carries this line). The tree is clean after it.
+- Verified: the verify list on main, seven `PASS:` lines and a clean ASCII check.
+- Next step: 4, plan-orchestration restyled with its inventory.
 - Open on Axel's side: none until step 1 is written.
 
 ## Usage
@@ -86,3 +77,4 @@ dispatch:
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 2 | inline (the orchestrating session) | 14 tool uses, about 15 minutes; round 1: 17 tool uses, about 20 minutes | 1 | 27 (worked inline) | +559 | no | 9 | 0 | 33 | 40797 | 69233 | 13667350 | 70 | 18 | none |
+| 3 | inline (the orchestrating session) | 17 tool uses, about 25 minutes; round 1: 14 tool uses, about 20 minutes | 1 |  all first-run findings (worked inline) | +864 | no | the run over the round's findings | 0 | 36 | 69387 | 96719 | 18024585 | 76 | 26 | none |

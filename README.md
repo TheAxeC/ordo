@@ -108,6 +108,7 @@ sh skills/plan-retro/templates/collect_findings.test.sh
 sh skills/repo-setup/templates/sync_rules.test.sh
 sh utils/pin.test.sh
 sh utils/check_skill_layout.test.sh
+sh utils/check_rule_inventory.test.sh
 ```
 
 - `land.test.sh` proves the landing on scratch repositories, and checks that both example `plan.yaml` files carry exactly the keys the state template's configuration block needs, each optional key's value equal to its stated default.
@@ -116,6 +117,7 @@ sh utils/check_skill_layout.test.sh
 - `sync_rules.test.sh` checks that a block equal to the template passes, a drifted block fails with its diff and is repaired by `--write`, and a missing block or a missing `AGENTS.md` symlink is refused.
 - `pin.test.sh` checks that `pin.sh` links every skill of a tag from the pinned worktree, drops a skill the next tag removes, repairs a link into the live clone, and refuses, changing nothing, a worktree with local changes, a real directory or a foreign link in a skill folder, and an unknown tag.
 - `check_skill_layout.test.sh` checks that `check_skill_layout.py` passes a complete `SKILL.md`, and fails one per rule of `docs/dev/skill-layout.md` it enforces: the frontmatter, the title, the section order, what each section holds, the table headers, bold outside a label, a version tag in a heading; and that headings and bold inside fenced code of any form are not read.
+- `check_rule_inventory.test.sh` checks that `check_rule_inventory.py` passes a complete inventory and fails each error it exists to catch: a header line missing or given twice, a commit that is not a hexadecimal id or not in the repository, an old or new path outside the repository, a missing new file, an old or new file that is not UTF-8, a table header or cell count that is wrong, a row after the table, an old line with text in no row, a range that is malformed, out of bounds or backwards, a range that crosses a blank line, a heading, a frontmatter delimiter or a fence boundary, or opens more than one list item (at any depth, with any marker), table row or frontmatter key, an empty rule, an unknown section or subsection, and an item number of 0 or past the end. It also checks what is not an error: a YAML comment and a fenced `~~~` line needing a row, a row of dashes that is not a separator, an inventory table without a separator row, fenced rows in the inventory, an escaped pipe in a rule, section names holding ` / ` or ending in a digit, and fenced lines, nested bullets, indented tables and table headers not counted as items.
 
 ## The landing script
 
