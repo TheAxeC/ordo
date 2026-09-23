@@ -26,7 +26,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 8 land restyled, with its inventory; same proof (1 commit)
 - ✅ 9 plan-help restyled, with its inventory; same proof (1 commit)
 - ✅ 10 ordo-init restyled, with its inventory; same proof (1 commit)
-- 11 roadmap restyled, with its inventory; same proof (1 commit)
+- ✅ 11 roadmap restyled, with its inventory; same proof (1 commit)
 - 12 plan-retro restyled, with its inventory; same proof (1 commit)
 - 13 repo-setup restyled, with its inventory; same proof (1 commit)
 - 14 the layout check itself wired in as a check of `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list, run over every `skills/*/SKILL.md`; every check passes and `npx skills add . --list` lists ten skills (1 commit)
@@ -131,3 +131,10 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/10-refuter.md`; a write before the approval, rules narrowed to pages, duplicates and multi-rule bullets; the first run's findings closed in repair round 1, the run over the round's closed at landing. Nothing booked.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check ok, every inventory ok.
 - Usage, orchestrator aa7cfe2 to landing: 11 messages, 24522 output tokens, 40770 cache-write tokens, 9450742 cache-read tokens, 26 fresh input tokens, 9 minutes.
+
+### Step 11, roadmap restyled (landed 2026-09-23)
+
+- Landed: `skills/roadmap/SKILL.md` in the layout, 136 lines; the inventory, 73 rows, `check_rule_inventory.py` ok.
+- Reviews: `agents/reviews/11-refuter.md`; done and drop editing before the approval, rules widened, narrowed and strengthened, duplicates; the first run's findings closed in repair round 1, the run over the round's closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check ok, every inventory ok.
+- Usage, orchestrator e6300be to landing: 11 messages, 23328 output tokens, 41676 cache-write tokens, 9899462 cache-read tokens, 26 fresh input tokens, 8 minutes.
