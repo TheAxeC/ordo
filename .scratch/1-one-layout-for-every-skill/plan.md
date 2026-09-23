@@ -25,7 +25,7 @@ A written skill layout standard, `docs/dev/skill-layout.md` (the section order Q
 - ✅ 7 refute restyled, with its inventory; same proof (1 commit)
 - ✅ 8 land restyled, with its inventory; same proof (1 commit)
 - ✅ 9 plan-help restyled, with its inventory; same proof (1 commit)
-- 10 ordo-init restyled, with its inventory; same proof (1 commit)
+- ✅ 10 ordo-init restyled, with its inventory; same proof (1 commit)
 - 11 roadmap restyled, with its inventory; same proof (1 commit)
 - 12 plan-retro restyled, with its inventory; same proof (1 commit)
 - 13 repo-setup restyled, with its inventory; same proof (1 commit)
@@ -124,3 +124,10 @@ Independent of each other; `workers_at_once: 1` serialises them.
 - Reviews: `agents/reviews/9-refuter.md`; the first run's findings closed in repair round 1, among them the next-command line printed without an entry; the run over the round's closed at landing. Nothing booked.
 - Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check ok, every inventory landed so far ok.
 - Usage, orchestrator 0fa6d65 to landing: 14 messages, 22128 output tokens, 33413 cache-write tokens, 11517208 cache-read tokens, 32 fresh input tokens, 12 minutes.
+
+### Step 10, ordo-init restyled (landed 2026-09-23)
+
+- Landed: `skills/ordo-init/SKILL.md` in the layout, 108 lines; the inventory, 70 rows, `check_rule_inventory.py` ok.
+- Reviews: `agents/reviews/10-refuter.md`; a write before the approval, rules narrowed to pages, duplicates and multi-rule bullets; the first run's findings closed in repair round 1, the run over the round's closed at landing. Nothing booked.
+- Verification on main: seven `PASS:` lines, a clean ASCII check, the layout check ok, every inventory ok.
+- Usage, orchestrator aa7cfe2 to landing: 11 messages, 24522 output tokens, 40770 cache-write tokens, 9450742 cache-read tokens, 26 fresh input tokens, 9 minutes.

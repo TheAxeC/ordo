@@ -31,16 +31,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 10
-  executor: inline
-  worker: claude:opus (the orchestrating session)
-  worktree: .agents/worktrees/1-10
-  base: 8ecfb4a
-  launched: 2026-09-23
-  report: .scratch/1-one-layout-for-every-skill/agents/reviews/10-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -77,9 +68,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-23. Steps 1 to 9 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65; step 9 in the commit that carries this line). The tree is clean after it.
+- 2026-09-23. Steps 1 to 10 landed (971121b, 84ce1f7, 836f5c5, ea8d02d, a682c14, e4950d0, e643b34, 0fa6d65; step 9 in the commit that carries this line, aa7cfe2. The tree is clean after it.
 - Verified: the verify list on main, seven `PASS:` lines and a clean ASCII check.
-- Next step: 10, ordo-init restyled with its inventory.
+- Next step: 11, roadmap restyled with its inventory.
 - Open on Axel's side: none until step 1 is written.
 
 ## Usage
@@ -94,3 +85,4 @@ dispatch:
 | 7 | inline (the orchestrating session) | 11 tool uses, about 15 minutes; round 1: 16 tool uses, about 12 minutes | 1 | the first run's findings (worked inline) | +195 -24 | no | 3 | 0 | 22 | 32213 | 55635 | 16227400 | 48 | 14 | none |
 | 8 | inline (the orchestrating session) | 13 tool uses, about 12 minutes; round 1: 18 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +169 -22 | no | 5 | 0 | 11 | 27065 | 41660 | 8629012 | 26 | 11 | none |
 | 9 | inline (the orchestrating session) | 14 tool uses, about 10 minutes; round 1: 23 tool uses, about 15 minutes | 1 | the first run's findings (worked inline) | +125 -7 | no | 3 | 0 | 14 | 22128 | 33413 | 11517208 | 32 | 12 | none |
+| 10 | inline (the orchestrating session) | first run and round 1, see the refuter report | 1 | the first run's findings (worked inline) | 2 files changed, 166 insertions(+), 38 deletions(-) | no | the run over the round's findings | 0 | 11 | 24522 | 40770 | 9450742 | 26 | 9 | none |
