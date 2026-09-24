@@ -10,7 +10,7 @@ Every finding of the five reports in `.scratch/reviews/2026-09-24-audit/` is fix
 
 ## Gate
 
-the plan's closure table lists every numbered finding of the five reports with the commit that closes it or the user's ruling; the committed verify runner exits 0 on main, and its test shows it failing on a planted red test; each fault the checkers review planted in a tool now turns that tool's test red; each of the 169 coverage rows carries a recorded check against its research-hub file, and the coverage check passes; `/plan-retro` has run over the three archived plans and each of its proposals is ruled; the layout check and the rule-inventory check pass.
+the plan's closure table lists every numbered finding of the six reports in `.scratch/reviews/2026-09-24-audit/` with the commit that closes it or the user's ruling; the committed verify runner exits 0 on main, and its test shows it failing on a planted red test; each fault the checkers review planted in a tool now turns that tool's test red; each of the 169 coverage rows carries a recorded check against its research-hub file, and the coverage check passes; `/plan-retro` has run over the three archived plans and each of its proposals is ruled; the layout check and the rule-inventory check pass.
 
 ## Steps, in execution order
 
