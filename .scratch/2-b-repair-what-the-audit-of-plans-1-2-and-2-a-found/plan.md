@@ -31,7 +31,7 @@ the plan's closure table lists every numbered finding of the five reports with t
 - 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from the audit's re-run; the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, shown to the user; a grep shows no booking that claims a count without the lines it quotes (1 commit)
 - 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit)
-- 18 The closure table `agents/reviews/closure.md`: every numbered finding of the five reports with the commit that closed it or the user's ruling; its row count equals the count of findings in the reports (1 commit)
+- 18 The closure table `agents/reviews/closure.md`: every numbered finding of the six reports (the five of the audit and `6-oculus-changes.md`) with the commit that closed it or the user's ruling; its row count equals the count of findings in the reports (1 commit)
 - 19 the closing: `/roadmap done 2.B` with the gate's output, the diff shown to the user; the release tagged and the user's permission asked to pin it with `utils/pin.sh <tag>`, pinned only on that yes; this folder moved to `.scratch/archive/` (orchestrator, no agent)
 
 ## Could run in parallel
@@ -61,6 +61,7 @@ the plan's closure table lists every numbered finding of the five reports with t
 - `workers_at_once: 3` (the user).
 - The step list above is approved (the user). The steps start only on the user's greenlight.
 - From the review of the oculus session's changes (`.scratch/reviews/2026-09-24-audit/6-oculus-changes.md`): A (a), steps 2, 3 and 4 widened with its findings for Ordo; B (a), a landed step is finished forward by a new step, a landed commit reverted only on the user's ruling; C (b), a note call bounded at about 3 s, the oculus session cutting its lock wait to about 2 s; D (a), the closing tags the release and asks the user's permission to pin it (the user).
+- `start` gets no `--transcript` flag: the transcript reaches the note only through the separate `transcript` call, and the interface between Ordo and oculus keeps its three calls as they are (the user).
 
 ## Blocked, and by what
 
