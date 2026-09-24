@@ -20,7 +20,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 4 `skills/plan-orchestration/templates/launch.sh` and its test: every note call bounded at about 3 s; the pid file names the process that owns the builder, that pid is alive before `start` and is the one passed to it, and a kill still writes the exit file and calls `end`; a second live launch of a step refused; every path made absolute and the script's own errors sent to the stderr file; a Claude session id known before the builder starts; the exit file written in one move; the note label `<entry>/<step>`; "Launching a builder" says to commit the dispatch block before the launch and to watch the pid as well as the exit file; `launch.test.sh` covers each case, and each fault the plan 2.A review planted turns it red (1 commit)
 - 5 `utils/pin.sh` and its test: check mode flags links into the live clone; pin mode removes only links into the pinned worktree and reports the others; a home folder holding a space; a stale worktree pruned before re-pinning; `pin.test.sh` covers each case, and each fault the checkers review planted turns it red (1 commit)
 - 6 `skills/plan-retro/templates/collect_findings.py` and its test: numbered findings and the subheadings inside a repair round read; Verification, Not checked, Closed and Usage skipped; `--exclude-listed` compared by real path; its test runs on fixtures shaped like the archived reports, and its count over the three archived plans matches a hand count written in the report (1 commit)
-- 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red (1 commit)
+- 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
 - 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode; entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note (1 commit; orchestrator, no agent)
@@ -40,7 +40,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 - 1 runs alone (it edits `docs/dev/building.md` and `docs/dev/change-standard.md`), before every other step, so every later landing uses the runner.
 - 2, 3, 5 with each other after 1.
-- 6, 7, 8, 9 with each other and with 2, 3, 5 after 1.
+- 6, 8, 9 with each other and with 2, 3, 5 after 1.
+- 7 after 4 and after the oculus session's fixes to its launch-note setup (it is the step launched from a shell).
 - 4 after 2 (both edit `skills/plan-orchestration/SKILL.md`).
 - 10 after 8 (it uses step 8's mode).
 - 11, 12, 13, 14 one after another after 8 (they all edit `docs/academic-coverage.md`).
@@ -61,9 +62,11 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - `workers_at_once: 3` (the user).
 - The step list above is approved (the user). The steps start only on the user's greenlight.
 - From the review of the oculus session's changes (`.scratch/reviews/2026-09-24-audit/6-oculus-changes.md`): A (a), steps 2, 3 and 4 widened with its findings for Ordo; B (a), a landed step is finished forward by a new step, a landed commit reverted only on the user's ruling; C (b), a note call bounded at about 3 s, the oculus session cutting its lock wait to about 2 s; D (a), the closing tags the release and asks the user's permission to pin it (the user).
+- Open item E: (b), step 7's builder is launched from a shell through `launch.sh` with the hub's note command, as the one end-to-end run of the launch note (the user).
 - `start` gets no `--transcript` flag: the transcript reaches the note only through the separate `transcript` call, and the interface between Ordo and oculus keeps its three calls as they are (the user).
 
 ## Blocked, and by what
 
 - Every step: the user's greenlight to start, which has not been given.
 - 16: the user's ruling on each retro proposal, raised when the step runs.
+- 7: step 4 landed, and the oculus session's fixes to its launch-note setup (the execute bit, the absolute `launch_note` path, the lock wait of about 2 s), which the user passes on.

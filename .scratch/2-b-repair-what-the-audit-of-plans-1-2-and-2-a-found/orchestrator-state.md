@@ -51,6 +51,7 @@ dispatch: none
 - 2026-09-24: how to get back on track after the audit: ruled option C, this plan (see `plan.md`, Rulings).
 - 2026-09-24: the audit's recommendations 2a to 2h, and contradictions 3a, 3b, 3c: ruled as recommended (see `plan.md`, Rulings).
 - 2026-09-24: the step list of this plan: approved, with `workers_at_once: 3`.
+- 2026-09-24: open item E, one end-to-end run of the launch note: ruled (b), step 7 launched from a shell after step 4 and the oculus fixes.
 - 2026-09-24: open items A to D from the review of the oculus changes: ruled A (a), B (a), C (b), D (a); written into steps 2, 3, 4 and 19 (see `plan.md`, Rulings).
 
 ## The standing demands (from Axel, in force)
