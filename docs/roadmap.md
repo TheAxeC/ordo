@@ -16,12 +16,19 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
+## 2.B Repair what the audit of plans 1, 2 and 2.A found
+
+- Status: [ ]
+- Goal: Every finding of the five reports in `.scratch/reviews/2026-09-24-audit/` is fixed in the tree or ruled out by the user. That covers the skill texts (the restyle and 2.A defects, the contradictions between skills as ruled, Opus as the default model for the orchestrator and the agents, with Fable, Astra and Sol as options for the orchestrator and Sol for the agents, `inline` kept as an optional executor, stops raised as plain-text open items), `launch.sh`, `pin.sh`, `collect_findings.py` and the other tools, the roadmap's gates and order, every row of `docs/academic-coverage.md` checked against its file, a committed verify runner, and the three archived ledgers corrected to what was observed.
+- Gate: the plan's closure table lists every numbered finding of the five reports with the commit that closes it or the user's ruling; the committed verify runner exits 0 on main, and its test shows it failing on a planted red test; each fault the checkers review planted in a tool now turns that tool's test red; each of the 169 coverage rows carries a recorded check against its research-hub file, and the coverage check passes; `/plan-retro` has run over the three archived plans and each of its proposals is ruled; the layout check and the rule-inventory check pass.
+- Waits on: 1, 2 and 2.A, the work it repairs.
+
 ## 3. The writing base
 
 - Status: [ ]
 - Goal: A `writing` skill folder the writing skills share: the prose standard, the anti-pattern table, and the checks for non-ASCII, dash asides, history words and word counts per section.
 - Gate: each check has a test that fails on a planted violation and passes on a clean file; the skill follows `docs/dev/skill-layout.md` and the layout check passes on it.
-- Waits on: 1, for the layout; 2, for what the base covers.
+- Waits on: 1, for the layout; 2, for what the base covers; 2.B, for the repaired skills and tools it is built with.
 
 ## 4. code-comments
 
