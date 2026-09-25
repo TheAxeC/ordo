@@ -1,5 +1,5 @@
 # Example .agents/plan.yaml for a repository with one project. Copy it to .agents/plan.yaml and replace the paths.
-# Every path is relative to the repository root. A required key that is missing stops the skill that needs it, and the refusal names the key.
+# Every path is relative to the repository root, except launch_note, which is absolute. A required key that is missing stops the skill that needs it, and the refusal names the key.
 # An optional key that is missing takes the value written here.
 
 roadmap: docs/roadmap.md                  # required. The source of truth for what is open; a plan is one entry of it.

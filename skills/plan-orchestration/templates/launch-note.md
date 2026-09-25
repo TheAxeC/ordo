@@ -8,10 +8,12 @@ The note applies to the two shell launch recipes, `claude -p` and `codex exec`, 
 
 Every call must return at once. `launch.sh` ignores a call that fails, because the note is only a record: the builder runs, and the launch finishes, whatever the note command does.
 
-`<launch_note> start --launcher plan-orchestration --label <step> --harness <claude|codex> --model <model> --parent <session id> --cwd <dir> --pid <pid>`
+`<launch_note> start --launcher plan-orchestration --label <entry>/<step> --harness <claude|codex> --model <model> --parent <session id> --cwd <dir> --pid <pid>`
 
 - Before the builder starts, the detached process runs this call.
-- `--label` is the plan step, `--parent` the orchestrating session's id, `--cwd` the builder's working directory, and `--pid` the pid of the detached process, the same pid the launch writes to the step's pid file.
+- `--label` is `<entry>/<step>`, `--parent` the orchestrating session's id, and `--cwd` the builder's working directory.
+- `--pid` is the pid of the process that owns the builder, the one the launch writes to the step's pid file, and that process stays alive until `end`.
+- A field added to `start` later is optional, and this page names it before `launch.sh` sends it, since a note command may refuse a flag it does not know.
 - Its standard output goes to the file `launch.sh` was given as `--id`, and the first line of that file is the record's id.
 - A non-zero exit or an empty first line means no record was made, and `end` and `transcript` are then not called.
 

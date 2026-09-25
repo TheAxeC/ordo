@@ -235,3 +235,14 @@ none
 - The sentence length of changed sentences outside the round's delta. I read them in the whole diff but did not count words, except for the five round-cap bullets.
 
 Reviewer usage: 155,407 tokens, 26 tool uses, 341 s (the runner's completion notification).
+
+## Closed
+
+- First review: every finding closed in repair round 1 (see `2-report.md`, "Repair round 1"), with rulings 1 to 12.
+- Review over round 1, fixed at landing:
+  - Spec 1, Standards 1 and 2: the round cap is one bullet of `plan-orchestration`'s Rules again, holding the cap, the one exception ("one more only when ...") and its two limits; the landing and the booking are the two bullets after it, the booked list named as the state file's; the Anti-patterns row points at "the round cap and the two bullets after it"; the inventory rows for the cap renumbered.
+  - Spec 2: the skills-invoked rule names `academic-paper` for manuscript content beside `/spec`, `/refute`, `/land` and `/roadmap`.
+  - Proof 1: `2-report.md` carries a note that its sections before "Repair round 1" describe the first build.
+  - Proof 2: the state file's booked item says a builder's report keeps the change standard's shape, so `skills/spec/templates/brief.md:40` is set back to that shape at step 3's landing.
+- Review over round 1, not a finding: Standards 3 (vendor names in the dispatch and worker text); no written rule forbids them, and the models section names the models.
+- The landing fixes were read by a fresh reviewer (`2-landing-review.md`); its findings fixed at landing: the note in `2-report.md` placed after the report's first line and stating that the fixes made at landing are in the booking and here; the booked item on report openings says step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, and that `land`'s fix lands with step 3; the round-cap bullet split into two sentences without the semicolon. Its finding 4 (the dispatch block's `landing: cherry-picking`) is `/land`'s own state step.

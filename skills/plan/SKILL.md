@@ -7,7 +7,7 @@ metadata:
 
 # Open a plan
 
-`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md` and `orchestrator-state.md`, committed, and the empty `agents/briefs/` and `agents/reviews/`.
+`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md` and `orchestrator-state.md`, committed, and `agents/briefs/` and `agents/reviews/`, each holding an empty `.gitkeep`.
 
 ## Quick start
 
@@ -54,8 +54,8 @@ metadata:
    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
    - The orchestrator chooses the executor per step over that default.
    - The dispatch block is empty, the open items are empty, and the position names the first step.
-5. Create `agents/briefs/` and `agents/reviews/`, empty.
-6. Commit both files by path as the plan's opening commit, with the roadmap entry's number in the subject.
+5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
+6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files by path as the plan's opening commit, with the roadmap entry's number in the subject.
 
 ## Stops
 
@@ -76,7 +76,7 @@ metadata:
 
 ## Rules
 
-- A step is one deliverable and one agent dispatch, with the command that proves it.
-- Every path in the ledger is relative to the repository root.
+- A step is one deliverable and one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), with the command that proves it, except the bookkeeping steps the orchestrator does itself.
+- Every path in the ledger is relative to the repository root, except a path given to the plan-orchestration skill's `templates/launch.sh` and the `launch_note` command, which are absolute.
 - Every command in the ledger names the directory it runs from.
 - No history: the ledger records decisions with their dates in `plan.md`'s rulings list; the templates and this file carry none.

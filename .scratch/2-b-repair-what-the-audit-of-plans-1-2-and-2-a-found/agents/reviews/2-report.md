@@ -1,6 +1,8 @@
 # Report: step 2, skill texts part 1
 
-Everything in the brief is done. Three sentences outside this step's paths that the change makes stale or leaves contradicting it are given under "Doc text" for the orchestrator to apply or carry into step 3. A defect in the ASCII check of the verify list, found while running it, is under "Found outside the brief".
+Everything in the brief and in repair round 1 is done. Four "Doc text" items, covering six file locations, name sentences outside the brief's paths that the change made stale; repair round 1 applied items 1 and 2 (three files of the plan skill), and items 3 and 4 stay for step 3 and step 4. A defect in the ASCII check of the verify list, found while running it, is under "Found outside the brief".
+
+The sections before "Repair round 1" describe the first build, and "Repair round 1" the step at the end of its rounds. The fixes made at landing are in `plan.md` (the booking of step 2) and in `2-refuter.md` (Closed).
 
 ## Open items of the state file, verbatim
 
@@ -311,3 +313,161 @@ Found by `grep -rn "one agent dispatch\|open items first\|Every path is relative
 ## Wrong or impossible in the brief
 
 Nothing. Every line number in "What is on the tree" matched the file at base 17cf7ca (`cat -n` of each file before editing).
+
+## Repair round 1
+
+Rulings from `agents/reviews/2-refuter.md`, each with what closes it. The work of the first report is commit a7c5cff on the step's branch; this round's changes are on top of it in the worktree.
+
+| # | Finding and ruling | Closed by |
+|---|---|---|
+| 1 | Spec 1: line 10 said the loop runs "until a decision is the user's" | `SKILL.md:10` now reads "until a pause or until nothing unblocked is left; a stop blocks only its own step" |
+| 2 | Spec 2: `plan.md:3`, `plan.yaml:2`, `plan.projects.yaml:3`; the path list widens to them | The "Doc text" replacements applied to the three files; `land.test.sh` passes |
+| 3 | Proof 1: changed rules without their row note | Rows 30, 34, both 45 rows, 82 (the stop message) and 37 (the final message) of `plan-orchestration.md` and row 26 of `plan.md` annotated. Every other row whose rule this step changed was checked the same way, and rows 31 (the prompt), 35 (the round's paths), 60-62 and 68-71 (the launch commands), 78 (What earns a step 2) and 82 (the miss inside a brief) are annotated too. Row 10's note now matches the new Rules 1 wording. The round-cap rows moved to Rules 3 to 7, and the Reports rows to Reports 3 to 7, because of rulings 8 and 12 |
+| 4 | Proof 2: the count of "Doc text" items | Report line 3 now says four items covering six file locations, and which of them this round applied |
+| 5 | Standards 1: project names in the examples | The position line example is the template "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>."; the `2.B/4` examples are gone from `SKILL.md:169` and `launch-note.md:14` |
+| 6 | Standards 2: Rules records who decided | `SKILL.md:261`: "the models it names are those in "The two tiers, and the harnesses"" |
+| 7 | Standards 3: Steps 6 repeats Steps 4 | `SKILL.md:59`: "The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it." |
+| 8 | Standards 4: "Every report" against the change standard | `SKILL.md:198-199`: the position line applies to the orchestrator's reports and the landing report; a builder's report keeps the change standard's shape. The state template's Open items heading says the same. The change-standard pages are not edited |
+| 9 | Standards 5: the open-item placeholder | `orchestrator-state.md:34` asks for the options, the pros and cons of each and one recommendation, naming plan-orchestration's Stops section |
+| 10 | Standards 6: the `reviewer:` line | `orchestrator-state.md:15` carries the same limit as the worker line |
+| 11 | Standards 7: the skills-invoked rule | `SKILL.md:268` covers `/spec`, `/refute`, `/land`, and `/roadmap` at the closing |
+| 12 | Standards 8: the round-cap bullet | Split into five bullets under Rules (`SKILL.md:263-267`) with the same rule. The Anti-patterns row that named "the round cap in Rules" now names "the round cap and the bullets after it". Word counts (`wc -w` per line): 17, 30, 20, 20 and 27. The exception's bullet stays at 30 words, since its two conditions and the size test are one rule |
+
+### Checks after the round
+
+`sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"`:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit 0
+```
+
+`python3 utils/check_skill_layout.py; echo "exit $?"` printed the same ten `ok:` lines and `exit 0`. `sh skills/land/templates/land.test.sh 2>&1 | tail -1` printed `PASS: land.sh and usage.py scratch tests`.
+
+`LC_ALL=C grep -n '[^ -~]'` over the nine changed files printed nothing (exit 1). `git diff 17cf7ca -U0 -- <the nine files> | grep '^+[^+]' | grep -n '[^ ] - \| -- \|->'` printed nothing (exit 1).
+
+The inventory check and the grep for each ruling:
+
+```text
+$ python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md; echo "exit $?"
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/land.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/ordo-init.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-help.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-retro.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/refute.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/repo-setup.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/roadmap.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/spec.md
+exit 0
+(1) grep -n 'until a pause' skills/plan-orchestration/SKILL.md
+10:The unattended loop that runs an open plan's steps, one after another, until a pause or until nothing unblocked is left; a stop blocks only its own step. It leaves behind each landed step on main, its landing report in the ledger, and a state file that says where the plan stands.
+15:/plan-orchestration <entry>          run the plan's steps unattended until a pause, or until nothing unblocked is left
+(2) grep -n 'dispatch of its executor\|except launch_note' skills/plan/templates/plan.md skills/plan/templates/plan.yaml skills/plan/templates/plan.projects.yaml
+skills/plan/templates/plan.md:3:Execution ledger for <the roadmap entry, linked>. One bullet is one step of work and one dispatch of its executor (a builder agent by default), except the bookkeeping steps the orchestrator does itself (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+skills/plan/templates/plan.yaml:2:# Every path is relative to the repository root, except launch_note, which is absolute. A required key that is missing stops the skill that needs it, and the refusal names the key.
+skills/plan/templates/plan.projects.yaml:3:# Every path is relative to the repository root, except launch_note, which is absolute.
+(5) grep -rn '2\.B\|pin\.sh\|collect_findings\|for example `2' skills/plan-orchestration/SKILL.md skills/plan-orchestration/templates/launch-note.md; grep -n 'in the form\|--label` is' skills/plan-orchestration/SKILL.md skills/plan-orchestration/templates/launch-note.md
+exit 1
+skills/plan-orchestration/SKILL.md:169:   - With the configuration block's `launch_note` set, pass the note options: `--id` names the file that receives the note's id, `--label` is `<entry>/<step>`, and `--parent` is the orchestrating session's id.
+skills/plan-orchestration/SKILL.md:198:- The orchestrator's reports and the landing report open with a position line: the roadmap entry with its title, the plan step being worked as "step n of m" with its name, and the next step, in the form "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>."
+skills/plan-orchestration/templates/launch-note.md:14:- `--label` is `<entry>/<step>`, `--parent` the orchestrating session's id, and `--cwd` the builder's working directory.
+(6) grep -n 'user ruled\|models it names' skills/plan-orchestration/SKILL.md
+261:- The skill carries no project name, since that is in `.agents/plan.yaml` and the ledger, and the models it names are those in "The two tiers, and the harnesses".
+(7) grep -n 'copies the report' skills/plan-orchestration/SKILL.md
+59:   - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
+(8) grep -n 'position line\|keeps the shape' skills/plan-orchestration/SKILL.md skills/plan/templates/orchestrator-state.md
+skills/plan-orchestration/SKILL.md:198:- The orchestrator's reports and the landing report open with a position line: the roadmap entry with its title, the plan step being worked as "step n of m" with its name, and the next step, in the form "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>."
+skills/plan-orchestration/SKILL.md:199:- A builder's report keeps the shape of the repository's change standard.
+skills/plan-orchestration/SKILL.md:200:- The state file's open items follow the position line, verbatim.
+skills/plan/templates/orchestrator-state.md:30:## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
+(9)(10) grep -n '^reviewer:\|^worker:\|pros and cons' skills/plan/templates/orchestrator-state.md
+13:worker: <harness:model>      # the default worker is claude:opus, and codex:gpt-5.6-sol is the other option; a builder never runs on Fable or Astra.
+15:reviewer: <harness:model>    # the model /refute runs on: claude:opus by default, and codex:gpt-5.6-sol is the other option; a reviewer never runs on Fable or Astra.
+34:- <a stop awaiting the user's ruling, or a proposal of the recurring-findings pass, with its options, the pros and cons of each, and one recommendation, as plan-orchestration's Stops section says; or "none">. An item is booked here the moment it is raised; it leaves only when the user has ruled, and then goes to the closed list.
+(11)(12) sed -n '263,268p' skills/plan-orchestration/SKILL.md
+- The round cap: a step gets at most `repair_rounds` repair rounds, plus the one exception below.
+- The exception: one more round when the delta leaves a verification command red or an acceptance item of the brief unbuilt, and the fix is too large for landing.
+- A new finding of a review never earns the exception's round, and the user's yes never extends the cap.
+- After its last round a step lands, and its small findings, the last review's included, are fixed at landing.
+- Everything else the rounds left undone or beyond the brief is booked as its own step in the plan and the booked list, never sent back.
+- Every skill the loop invokes (`/spec`, `/refute`, `/land`, and `/roadmap` at the closing) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.
+```
+
+Every row of `plan-orchestration.md` was printed again beside the text at its place, by the scratch script the first report describes, and read. The Rules, Reports and launch-command rows, the ones this round moved or annotated, resolve to:
+
+```text
+inv:20: It carries no project name and no vendor name; those are in .agents/plan.yaml and the ledger; the vendor part replaced by the models ruling of plan 2.B: the models it names are those in The two tiers, and the harnesses  =>  [Rules 1]
+   new:261: - The skill carries no project name, since that is in `.agents/plan.yaml` and the ledger, and the models it names are those in "The two tiers, and the harnesses".
+inv:63: repair_rounds caps the rounds  =>  [Rules 3]
+   new:263: - The round cap: a step gets at most `repair_rounds` repair rounds, plus the one exception below.
+inv:66: Small things are fixed at landing, the last run's findings included  =>  [Rules 6]
+   new:266: - After its last round a step lands, and its small findings, the last review's included, are fixed at landing.
+inv:67: The rest is booked as its own step, never sent back  =>  [Rules 7]
+   new:267: - Everything else the rounds left undone or beyond the brief is booked as its own step in the plan and the booked list, never sent back.
+inv:68: The one exception: one round beyond the cap for a red verification command or an unbuilt acceptance item too large for landing  =>  [Rules 4]
+   new:264: - The exception: one more round when the delta leaves a verification command red or an acceptance item of the brief unbuilt, and the fix is too large for landing.
+inv:69: A new finding never earns that round; plan 2.B adds that the user's yes never extends the cap  =>  [Rules 5]
+   new:265: - A new finding of a review never earns the exception's round, and the user's yes never extends the cap.
+inv:74: The final message lists every landed step, the open items and the booked count; plan 2.B: it opens as Reports says, which carries the position line and the open items  =>  [Steps 10]
+   new:75: 10. Continue with step 2.
+inv:96: Claude Code builder from any shell: print mode, detached  =>  [Launching a builder 2]
+   new:146: - **Claude Code builder, from any shell.** The same prompt through the CLI's print mode, run by this skill's `templates/launch.sh`:
+inv:97: The claude -p launch command; plan 2.B: --report takes the output file and --label is <entry>/<step>  =>  [Launching a builder 2]
+   new:146: - **Claude Code builder, from any shell.** The same prompt through the CLI's print mode, run by this skill's `templates/launch.sh`:
+inv:98: Codex builder: codex exec from a shell, detached from the command timeout  =>  [Launching a builder 3]
+   new:154: - **Codex builder (`codex:<model>`).** With `codex exec`, from a shell, run by `templates/launch.sh`:
+inv:99: The codex exec launch command; plan 2.B: --report takes the output file and --label is <entry>/<step>  =>  [Launching a builder 3]
+   new:154: - **Codex builder (`codex:<model>`).** With `codex exec`, from a shell, run by `templates/launch.sh`:
+inv:114: A fix of a defect in delivered work needs no yes  =>  [Rules 2]
+   new:262: - A fix of a defect in delivered work needs no yes.
+inv:121: Every report opens with the open items; plan 2.B: they follow the position line of the orchestrator's reports and the landing report  =>  [Reports 3]
+   new:200: - The state file's open items follow the position line, verbatim.
+inv:122: The open items hold only stops and recurring-findings proposals  =>  [Reports 4]
+   new:201: - The open items hold only what the user must rule on: a stop, and a proposal of the recurring-findings pass.
+inv:123: A finding that needs no ruling is a step in the booked list; a report names its count and steps  =>  [Reports 5]
+   new:202: - A finding that needs no ruling is not an open item; it is a step in the plan, carried in the state file's booked list, and a report names that list's count and the steps on it rather than its lines.
+inv:124: The closed list is a log that no report carries  =>  [Reports 6]
+   new:203: - A third list, the closed one, is the log of what was raised and how it ended, and no report carries it.
+inv:125: NOT DONE first, then the DONE / NOT DONE ledger naming the command per row  =>  [Reports 7]
+   new:204: - Then anything NOT DONE first, then the DONE / NOT DONE ledger naming the command that proves each row.
+```
+
+### Files after the round
+
+`git diff 17cf7ca -U0 -- <inventory> | grep -c '^+|'` counts 44 changed rows in `plan-orchestration.md` and 4 in `plan.md`. `wc -l`:
+
+| File | Lines |
+|---|---|
+| `skills/plan-orchestration/SKILL.md` | 268 |
+| `skills/plan-orchestration/templates/launch-note.md` | 28 |
+| `skills/plan/SKILL.md` | 82 |
+| `skills/plan/templates/orchestrator-state.md` | 69 |
+| `skills/plan/templates/plan.md` | 31 |
+| `skills/plan/templates/plan.yaml` | 23 |
+| `skills/plan/templates/plan.projects.yaml` | 45 |
+| `.scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md` | 139 |
+| `.scratch/archive/1-one-layout-for-every-skill/inventories/plan.md` | 48 |
+
+`git status --short` before this section was appended showed eight files modified against a7c5cff, the files of the table other than `skills/plan/SKILL.md`, which this round did not change, and nothing untracked.

@@ -37,11 +37,11 @@
 | 23 | executor: is written as agent unless the user says otherwise | Steps 4 |
 | 23 | The orchestrator chooses the executor per step | Steps 4 |
 | 23 | The dispatch block empty, the open items empty, the position naming the first step | Steps 4 |
-| 24 | agents/briefs/ and agents/reviews/, empty | Steps 5 |
-| 26 | Both files committed by path as the opening commit, the entry's number in the subject | Steps 6 |
-| 30 | A step is one deliverable and one agent dispatch, with the command that proves it | Rules 1 |
+| 24 | agents/briefs/ and agents/reviews/, empty; corrected in plan 2.B: each holds an empty .gitkeep, committed in Steps 6 | Steps 5 |
+| 26 | Both files committed by path as the opening commit, the entry's number in the subject; corrected in plan 2.B: with the two .gitkeep files | Steps 6 |
+| 30 | A step is one deliverable and one agent dispatch, with the command that proves it; corrected in plan 2.B: one dispatch of its executor, the orchestrator's bookkeeping steps excepted | Rules 1 |
 | 30 | A step that cannot name its proof is booked under Blocked, and by what | Anti-patterns 2 |
-| 31 | Every path in the ledger is relative to the repository root | Rules 2 |
+| 31 | Every path in the ledger is relative to the repository root; corrected in plan 2.B: a path given to launch.sh and launch_note are absolute | Rules 2 |
 | 31 | Every command names the directory it runs from | Rules 3 |
 | 32 | No history: decisions with dates in the rulings list; the templates and this file carry none | Rules 4 |
 | 33 | The last step is the closing: the entry ticked with the gate's output, the folder moved to the archive | Steps 2 |

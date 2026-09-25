@@ -1,6 +1,6 @@
 # Example .agents/plan.yaml for a repository with several projects. Copy it to .agents/plan.yaml and replace the names and paths.
 # Each project takes the keys of plan.yaml, with the same required keys and the same defaults. A plan is then named <project>/<entry>.
-# Every path is relative to the repository root.
+# Every path is relative to the repository root, except launch_note, which is absolute.
 
 projects:
   tool-a:
