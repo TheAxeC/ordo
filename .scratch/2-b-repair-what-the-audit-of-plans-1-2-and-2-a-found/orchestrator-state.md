@@ -59,6 +59,16 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/8-report.md
   landing: not-started
   round: 1 (sent 2026-09-25: the findings of 8-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 879a4f0 on branch 2b-8)
+- step: 9
+  executor: agent
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: (written when the builder starts)
+  worktree: .agents/worktrees/2b-9
+  base: 163e9c2
+  launched: 2026-09-25
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/9-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -113,7 +123,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-25. Steps 1, 2, 3, 5 and 6 landed (5fdaa98, 6458d52, fafda10, e69b588; step 6 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Steps 4 and 8 are with their builders (8 in repair round 1; its README line comes as "Doc text" and is applied at its landing); 9 and 6a follow as slots free; 1a runs alone after 4 and 8 land.
+- Roadmap entry 2.B. Steps 4 and 8 are with their builders (8 in repair round 1; its README line comes as "Doc text" and is applied at its landing); 9 is with its builder; 6a follows as a slot frees; 1a runs alone after 4 and 8 land.
 - Open on Axel's side: none.
 
 ## Usage
