@@ -38,7 +38,8 @@ launch_note:                 # none recorded.
 dispatch:
   step: 1
   executor: agent
-  worker: claude:opus (a builder agent, identity written at launch)
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: afbadfe4ba23d1a3d (the runner's agent id)
   worktree: .agents/worktrees/2b-1
   base: 2ce1804
   launched: 2026-09-25
@@ -88,7 +89,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its builder is being dispatched.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its builder is running.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 
