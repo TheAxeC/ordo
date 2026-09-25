@@ -49,7 +49,8 @@ dispatch:
   round: 0
 - step: 6
   executor: agent
-  worker: claude:opus (a builder agent, identity written at launch)
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: af0886ca919e9c3db (the runner's agent id)
   worktree: .agents/worktrees/2b-6
   base: f7dd354
   launched: 2026-09-25
@@ -109,7 +110,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-25. Steps 1, 2, 3 and 5 landed (5fdaa98, 6458d52, fafda10; step 5 in the commit that carries this line). The tree is clean after it.
-- Next steps: 4, 6 and 8, three at a time, then 9; 1a waits on open item H.
+- Steps 4 and 6 are with their builders; 8 is next (its README lines go to the orchestrator as "Doc text", since step 6 holds README.md), then 9; 1a waits on open item H.
 - Open on Axel's side: none.
 
 ## Usage
