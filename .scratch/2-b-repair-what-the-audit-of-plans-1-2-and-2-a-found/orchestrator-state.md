@@ -53,7 +53,7 @@ dispatch:
 - step: 6a
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
-  session_id: not yet launched
+  session_id: a3038fb5ca53bb282 (the runner's agent id)
   worktree: .agents/worktrees/2b-6a
   base: 819b391 (the brief rewritten to the cut; the worktree of the word-list build removed)
   launched: 2026-09-25
