@@ -122,3 +122,109 @@ ps -ax after my runs: no process of mine left (grep refute9|land-test prints not
 - The builder's reverts L3, L4, L5, L6, L8, U2, U4-U7, E2, and the sync_rules reverts end-count, keep-after, template-crlf-normalise, block-crlf-normalise, no-write-catch and diff-on-stderr. I reran equivalents for items 1, 2, 3, 4, 5, 6, 7, 8 and 9 only.
 
 Reviewer usage: not known.
+
+## Repair round 1, refuted
+
+### Verification
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE HOME=<scratch>/home PYTHONUSERBASE=/Users/axelfaes/Library/Python/3.13 sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit 0
+
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+
+$ sh skills/land/templates/land.test.sh   (exit 0, whole output)
+clean: exit 0, staged paths, usage rows and the orchestrator row verified
+conflict: exit 2, conflicting path and retained landing branch verified, landing again refused
+committed: nothing pending, no wip commit made, exit 0
+locked: a lock held while git runs stops the landing at the bound, exit 1, main untouched
+stale: a stale lock with no git process running removed, exit 0
+released: a lock gone before the bound waited for, exit 0
+resumed: a lock stop after the checkout, then landing again lands, exit 0
+handmade: a change made by hand on the landing branch refused, the branch kept
+bad bound: LANDING_LOCK_WAIT=2s refused with exit 64
+adapted: tools/demo landed, the file outside it left unstaged
+usage: Claude Code and Codex rows verified, one message per id, the window across offsets
+usage: a window time without an offset or unreadable refused, exit 64, both arguments
+examples: skipped outside an Ordo checkout, a missing example fails inside one
+examples: plan.yaml and plan.projects.yaml match the state template, every key marked
+PASS: land.sh and usage.py scratch tests
+
+$ python3 -B utils/check_skill_layout.py
+(the ten ok: lines above, skills/land/SKILL.md and skills/repo-setup/SKILL.md among them), exit 0
+
+Reverts of this round, each on a copy of skills/{land,repo-setup,plan} under $TMPDIR, the copied test run (python3 -B mut.py):
+RED   S1-first-line (line_ending: majority branch disabled) | FAIL: mixed: --write left 30 CRLF lines of 54
+RED   S2-tie-lf (a tie always LF)   | FAIL: tie-crlf: a tie wrote the block in lf, expected crlf as the first line
+RED   S3-tie-crlf (a tie always CRLF) | FAIL: tie-lf: a tie wrote the block in crlf, expected lf as the first line
+RED   R1-refuse-land (the <pkg>-land branch of the preflight removed) | FAIL: conflict landing again: missing [preflight failed: a cherry-pick is in progress on conflict-land; resolve or abort it by hand]
+RED   R2-no-cherry-pick-check | FAIL: conflict landing again: missing [preflight failed: a cherry-pick is in progress on conflict-land; resolve or abort it by hand]
+RED   R3-no-dirty-check  | FAIL: handmade: dirty rerun exit 0, expected 1: resume: the worktree is back on handmade, handmade-land removed
+RED   R4-no-foreign-check | FAIL: handmade: rerun exit 0, expected 1: resume: the worktree is back on handmade, handmade-land removed
+RED   R5-left-not-updated (landing_left not set after the checkout) | FAIL: resumed state: missing [main is untouched; the worktree is on resumed-land]
+
+wc -l on the final files: sync_rules.py 127, sync_rules.test.sh 282, land.sh 537, usage.py 170, land.test.sh 599, skills/land/SKILL.md 130, skills/repo-setup/SKILL.md 152, README.md 175; all equal the report's round-1 table (ruling 2).
+git diff 27aef76 --stat: README.md, skills/land/SKILL.md, land.sh, land.test.sh, skills/repo-setup/SKILL.md, sync_rules.py, sync_rules.test.sh, 9-report.md; usage.py unchanged. git diff -U0 27aef76 -- README.md: hunks @@ -117 and @@ -120 only.
+Ruling 3: every error line that skills/repo-setup/SKILL.md sync 4 and 7 name matches a print in sync_rules.py (lines 47, 49, 78, 81, 88, 105, 111); Stops rows keep the four columns; "The first seven rows are stops" counts 7 rows before "Tracked files".
+LC_ALL=C grep -n '[^ -~]' over the six changed skill/code files: exit 1, nothing. Added lines grepped for previous|no longer|used to|round|revert|audit|step N|formerly: no comment hits.
+grep of sync_rules / exit 2 / -land / LANDING_LOCK_WAIT / preflight across README.md, docs/, skills/: no other sentence made false (README:80, docs/roadmap.md:86, change-standard.md:45, building.md:9, spec/SKILL.md:43-99, plan-orchestration/SKILL.md:105 read).
+Deleting <pkg>-land, judged: the three checks (CHERRY_PICK_HEAD, tracked changes, git cherry "+") leave only commits patch-equal to <pkg>'s; untracked files survive the checkout. No case found where the deletion loses work.
+ps after my runs: no process of mine left (grep refute9r1|land-test|sync-rules prints nothing); 72228 untouched.
+```
+
+### Spec
+
+none
+
+### Proof
+
+none
+
+### Standards
+
+1. skills/land/SKILL.md:105, `| A lock held | ... | The lock's path, and what the stop leaves: main untouched, the worktree on `<step>` or, after its checkout, on `<step>-land`; ... | The lock removed once no git command uses it, then `/land` again, which returns the worktree to `<step>`, deletes `<step>-land` and lands from the start |`. The skill's own Steps never create `<step>-land`: Steps 3 commits in the worktree and Steps 4 runs `git cherry-pick -n <base>..<step>` on main directly. Only the ledger's landing script (`templates/land.sh`) checks out `<pkg>-land`, and only it removes that branch on a rerun. The row says `/land` does both, which is false for a landing run by the Steps without the script (change-standard: a sentence the diff makes false). The row should say which of these belongs to the ledger's landing script.
+2. skills/land/templates/land.sh:243-244, `fail "preflight failed: package worktree is on $landing_worktree_branch, expected $landing_pkg"` followed by `landing_left=$landing_pkg`. `fail` exits, so line 244 never runs. It is dead code that the round added.
+
+### Behaviour
+
+1. skills/land/templates/land.sh:212-241 (the new `<pkg>-land` branch of the preflight) and its head comment at lines 15-21, `Every stop at a lock leaves main untouched. A stop after the worktree's checkout leaves the worktree on <pkg>-land, and landing again resumes`. The resume is not limited to lock stops, and it does not check main. Any earlier run that left `<pkg>-land` clean passes the three checks, including a stop at a failed check (land.sh:308 and the run_step checks after it) and a finished landing (exit 0) before its booking commit. In both cases main still holds the first run's staged `cherry-pick -n`. The rerun deletes `<pkg>-land`, rebuilds it and cherry-picks onto that main again. Before this round the preflight refused both. Reproduced on a scratch repository under $TMPDIR. The copied land.sh's `npm test` fails while a flag file exists. The first run exits 1, `npm test -- --reporter=dot failed`, with the worktree on fc-land and main staged `tools/oculus/committed.txt`. With the flag removed:
+   ```
+   27aef76 land.sh:  RERUN exit 1  preflight failed: package worktree is on fc-land, expected fc
+   this round:       RERUN exit 0  resume: the worktree is back on fc, fc-land removed ... (landed onto the already-staged main)
+   same, with a landing fix staged on main (committed.txt rewritten and git add-ed) before the rerun:
+                     RERUN exit 1  resume: the worktree is back on fc, fc-land removed
+                                   CONFLICT (add/add): Merge conflict in tools/oculus/committed.txt
+                                   main git cherry-pick failed
+                     git status --short on main: AA tools/oculus/committed.txt (conflict markers in the working file; the fix kept only as index stage 2)
+   ```
+   The worktree side loses nothing. On main, a rerun after a non-lock stop now writes a conflict into a main the orchestrator had fixed, where the old preflight refused before touching anything. None of this is stated. The head comment, the Stops row and the report's user-visible change describe the resume as the answer to a lock stop, with "main untouched". Before resuming, the preflight should refuse when main holds staged or unmerged changes (`git diff --cached --quiet` on the root). The alternative is to state and test the rerun after a failed check.
+
+### Not checked
+
+- The resume after a stop at the worktree's own `index.lock` after the checkout (the wait at land.sh:271). This is the case the head comment gives as the reason for resuming on the next run. The "resumed" case stops at main's lock (land.sh:291). I reasoned through the worktree-lock path but did not run it.
+- The builder's "Red on the tree as it was at the round's start" runs. The R1 revert above covers the same ground.
+- The default 60 s bound end to end. It is unchanged in this round.
+
+Reviewer usage: 130,235 tokens, 28 tool uses, 540 s (the runner's completion notification).

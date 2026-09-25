@@ -42,7 +42,7 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: ad3f887161cb31e53 (the runner's agent id)
   reviewer_report: agents/reviews/4-refuter.md (through /refute; reviewer claude:opus, agent ab1c552b7ec007bd0; 155,977 tokens, 43 tool uses, 898 s)
-  builder_usage: 310,799 tokens, 80 tool uses, 4,353 s (the runner's completion notification)
+  builder_usage: 310,799 tokens, 80 tool uses, 4,353 s; after round 1 the notification reads 408,123 tokens, 55 tool uses, 2,934 s (the runner's completion notifications); round 1 reported done, not yet reviewed
   worktree: .agents/worktrees/2b-4
   base: ec6586e
   launched: 2026-09-25
@@ -54,7 +54,7 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a32b0f2dd6149a962 (the runner's agent id)
   builder_usage: 238,605 tokens, 70 tool uses, 2,222 s; after round 1 the notification reads 294,367 tokens, 92 tool uses, 3,581 s (the runner's completion notifications)
-  round_reviewer: claude:opus, agent afda72a615cfbb41d, through /refute over round 1 (running)
+  round_reviewer: claude:opus, agent afda72a615cfbb41d, through /refute over round 1: 130,235 tokens, 28 tool uses, 540 s
   reviewer_report: agents/reviews/9-refuter.md (through /refute; reviewer claude:opus, agent adcf50ffc75f42ffb; 152,366 tokens, 29 tool uses, 664 s)
   worktree: .agents/worktrees/2b-9
   base: 163e9c2
@@ -114,6 +114,7 @@ dispatch:
 - Nothing is installed into the user's skill folders, no `utils/pin.sh <tag>` is run, and no installed skill is removed or replaced without the user's explicit permission, asked for each time.
 - research-hub is read only.
 - Commits: a capitalised imperative subject, a blank line, `- Verb ...` bullets. No attribution of any kind. Never push. A worktree's branch is deleted with the worktree.
+- The cuts ruled 2026-09-25: (1) the findings collector skips nothing and its no-finding and closure word lists go; `plan-retro` sets aside, by reading, a finding that reports no defect; step 6a is re-scoped to that. (2) A README bullet for a test is one sentence saying what the test covers. (3) No extra review of the orchestrator's landing fixes. (4) A builder's report is the result table and a short list of the planted faults with their red line; no pasted output beyond that. (5) Ledger bookkeeping batched: one commit per event, not one per field.
 
 ## Verification, every step
 
