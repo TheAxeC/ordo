@@ -66,7 +66,7 @@ dispatch:
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a384a8a4cf13de1b7 (the runner's agent id)
-  builder_usage: 265,430 tokens, 49 tool uses, 1,032 s (the runner's completion notification); the builder ran read-only git commands in its worktree against the brief's working rules (its report says so)
+  builder_usage: 265,430 tokens, 49 tool uses, 1,032 s; after round 1 the notification reads 325,256 tokens, 30 tool uses, 657 s (the runner's completion notifications); the builder ran read-only git commands in its worktree against the brief's working rules (its report says so)
   reviewer_report: agents/reviews/6a-refuter.md (through /refute; reviewer claude:opus, agent a081e76ee932098aa; 146,359 tokens, 30 tool uses, 412 s)
   worktree: .agents/worktrees/2b-6a
   base: f9b0856
