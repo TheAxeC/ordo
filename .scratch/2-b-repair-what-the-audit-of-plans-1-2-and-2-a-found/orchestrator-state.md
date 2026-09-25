@@ -59,7 +59,8 @@ dispatch:
   round: 0
 - step: 5
   executor: agent
-  worker: claude:opus (a builder agent, identity written at launch)
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: a660463bbd3208eb9 (the runner's agent id)
   worktree: .agents/worktrees/2b-5
   base: 25d99c9
   launched: 2026-09-25
@@ -114,7 +115,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-25. Step 1 landed in the commit that carries this line. The tree is clean after it.
-- Steps 2 and 3 are with their builders; step 5 is next, then 6, 8, 9 (1a waits on open item H).
+- Steps 2, 3 and 5 are with their builders (three at a time); 6, 8, 9 follow as slots free, and 1a waits on open item H.
 - Open on Axel's side: none.
 
 ## Usage
