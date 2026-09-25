@@ -50,8 +50,8 @@ R2a (roadmap splitlines)             FAIL: roadmap-separators: expected exit 1, 
 R2b (list splitlines)                FAIL: separator-names: expected exit 0, got 1: ...:0: 'sep/a
 b.md' is not listed ...
 R2c (find without -print0, split \n) FAIL: newline-name: missing [:0: 'nl/a\nb.md' is not listed] ...
-R3a (find names not NFC)             FAIL: nfc-names: ...:0: 'nfd/café.md' is not listed / :41: 'caf\xe9.md' is not a file of nfd
-R3b (file cell not NFC)              FAIL: nfc-names: ...:0: 'nfd/th\xe9.md' is not listed / :42: 'thé.md' is not a file of nfd
+R3a (find names not NFC)             FAIL: nfc-names: ...:0: 'nfd/cafe (combining acute).md' is not listed / :41: 'caf\xe9.md' is not a file of nfd
+R3b (file cell not NFC)              FAIL: nfc-names: ...:0: 'nfd/th\xe9.md' is not listed / :42: 'the (combining acute).md' is not a file of nfd
 R4a (no --built check, elif False)   FAIL: built-none: expected exit 1, got 0
 R4b (span not required plain)        FAIL: built-not-plain: expected exit 1, got 0
 R4c ("." counted)                    FAIL: built-not-plain: expected exit 1, got 0
