@@ -48,7 +48,7 @@ dispatch:
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/2-report.md
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-25: the findings of 2-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit a7c5cff on branch 2b-2)
 - step: 3
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
