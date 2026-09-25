@@ -466,3 +466,15 @@ comment stripped before detection  -> PASS: verify.sh scratch tests             
 - Why the suite takes about 24 s through `| tail -1` against about 16 s without it.
 
 Reviewer usage: 144,379 tokens, 34 tool uses, 1,123 s (the runner's completion notification).
+
+## Closed
+
+- First review: every finding closed in repair round 1 (see `1-report.md`, "Repair round 1"); Spec 3 (the state file's verify list) closed at landing, the list gaining `sh utils/verify.test.sh 2>&1 | tail -1`; Standards 1 and 2 (the skill texts that still pipe through the filter, and no skill that books the runner's lines) booked for step 3.
+- Review over round 1: the runner's mechanism raised as open item F, ruled (a); every finding closed in repair round 2, the exception round (see `1-report.md`, "Repair round 2").
+- Review over round 2, fixed at landing:
+  - Standards 1 and Behaviour 2: `utils/verify.sh` exits 69 with `verify: ps is not on PATH` when `ps` is missing; the head comment, `README.md` and `docs/dev/building.md` name `ps` beside `python3`, PyYAML and `bash`; a test case turns red with the check removed.
+  - Standards 2 and Proof 6: each per-shell run of `utils/verify.test.sh` ends with `PASS: verify.sh scratch tests (runner under <shell>)`, which the outer run checks; the outer `PASS:` line, the one a filtered run books, names the shells the runner ran under and any that is not installed (`PASS: verify.sh scratch tests (runner under sh; not installed: nosuchdash)` with `dash` renamed). Removing the per-shell line turns the test red (`FAIL: the run under sh ended without its PASS line`).
+  - Standards 3: the head comment, `README.md` and `docs/dev/building.md` say a test that exits non-zero in a pipeline into `tail` makes the pipeline fail however the pipe is spelled, and that the runner judges the status the whole command returns, so a command that consumes a pipeline's status itself (`!`, `if`, `while`, `||`, `&`) passes or fails on what it returns.
+  - Proof 5: a test case checks that a command killed by `kill -9` reports exit status 137; it turns red with `status = code`.
+- Review over round 2, booked as step 1a: Spec 1, Proof 1, Proof 2 and Behaviour 1 (which commands the runner takes as a summary test: a `;` or a comment after `tail`, a quoted `| tail` at the end; tests that check the `PASS:` condition per spelling); Proof 3 (TERM before KILL, and the grace, untested); Proof 4 (the signal block around starting a command, untested).
+- The landing fixes were read by a fresh reviewer (`1-landing-review.md`); its five findings were fixed at landing: the Standards 3 sentence rewritten as above; the outer `PASS:` line naming the shells; `README.md`'s Requirements naming `bash` and `ps`, the `verify.test.sh` bullet and the test's head comment naming the `ps`, killed-command and per-shell cases; `utils/verify.sh`'s head comment rewrapped under 100 characters; the per-shell `PASS:` line checked by the outer run.

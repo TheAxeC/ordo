@@ -10,6 +10,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
+- sh utils/verify.test.sh 2>&1 | tail -1
 - sh utils/check_skill_layout.test.sh 2>&1 | tail -1
 - sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
@@ -35,21 +36,7 @@ launch_note:                 # none recorded.
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: afbadfe4ba23d1a3d (the runner's agent id)
-  worktree: .agents/worktrees/2b-1
-  base: 2ce1804
-  launched: 2026-09-25
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1-report.md
-  landing: not-started
-  round: 1 (sent 2026-09-25: the findings of 1-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 00e8f8b on branch 2b-1)
-  round_2: sent 2026-09-25 under plan-orchestration's exception (ruling F (a)), to the same builder; the worktree at its start is commit 80ab53a on branch 2b-1
-  builder_usage: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s; round 2: 352,270 tokens, 52 tool uses, 4,615 s (the runner's completion notifications)
-  round_reviewer: agent a500487f692781184, claude:opus, through /refute over round 1: 124,041 tokens, 29 tool uses, 778 s
-  reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039; 111,656 tokens, 24 tool uses, 421 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -58,6 +45,7 @@ dispatch:
 
 ## Booked, no ruling needed
 
+- Step 1a: the runner's summary-test detection and the untested parts of its signal handling (`plan.md`, step 1a; from `agents/reviews/1-refuter.md`, Closed).
 - Step 3: the `land`, `plan-orchestration`, `refute` and `spec` texts (`land/SKILL.md` step 5, `refute/SKILL.md` "What the reviewer runs", `spec/templates/brief.md` "Verify before you report") name `utils/verify.sh` as how a step's verify list is run and booked, since step 1's pages say so (`docs/dev/building.md`, `docs/dev/change-standard.md`; found by step 1's builder and its review, Standards 1 and 2). Carried into step 3's brief.
 
 ## Closed items
@@ -95,11 +83,12 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 2 is done; /refute runs over it.
-- Next step: 1, the verify runner.
+- 2026-09-25. Step 1 landed in the commit that carries this line. The tree is clean after it.
+- Next steps: 2, 3, 5 and 1a, three at a time (then 6, 8, 9), each through /spec.
 - Open on Axel's side: none.
 
 ## Usage
 
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | claude:opus agent, effort high: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s; round 2: 352,270 tokens, 52 tool uses, 4,615 s | 111,656 tokens, 24 tool uses, 421 s; round 1: 124,041 tokens, 29 tool uses, 778 s; round 2: 144,379 tokens, 34 tool uses, 1,123 s; landing fixes: 91,589 tokens, 19 tool uses, 314 s | 2 (one under the exception, ruling F) | 17, then 12 | 5 files changed, 781 insertions(+), 1 deletion(-) | no | 10 | 1 (open item F) | 61 | 51853 | 121761 | 33845304 | 136 | 172 | none |

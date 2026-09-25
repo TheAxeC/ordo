@@ -14,7 +14,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 ## Steps, in execution order
 
-- 1 `utils/verify.sh <state file>`: runs a plan's verify list, fails on a test's exit status or on a last line that does not start with `PASS:`, and prints every line it saw; its test plants a red test and expects the runner to fail; `docs/dev/building.md` and `docs/dev/change-standard.md` name it, and every later landing uses it (1 commit)
+- ✅ 1 `utils/verify.sh <state file>`: runs a plan's verify list, fails on a test's exit status or on a last line that does not start with `PASS:`, and prints every line it saw; its test plants a red test and expects the runner to fail; `docs/dev/building.md` and `docs/dev/change-standard.md` name it, and every later landing uses it (1 commit)
+- 1a `utils/verify.sh`'s summary-test detection and the untested parts of its signal handling, booked at step 1's landing from the review over round 2 (`agents/reviews/1-refuter.md`, Closed): a `;` or a comment after `tail`, and a quoted `| tail` at the end of a command, read the way the shell reads them; a test per spelling that checks the `PASS:` condition, not only the exit status; tests that TERM goes before KILL with its grace, and that signals are blocked while a command starts; `sh utils/verify.test.sh` red under each revert (1 commit)
 - 2 Skill texts, part 1: `skills/plan-orchestration/SKILL.md` and `templates/launch-note.md` text, and the `plan` skill's `SKILL.md` and templates: a stop does not end the loop; one meaning for the dispatch block's `report` field; launch paths absolute; the transcript folder named after `--cwd`; the builder writes only its report into the ledger; the stop kinds for a scope-changing finding and for the closing step's roadmap diff (ruling 3a); the sharper-sentence rule (ruling 3b); the exception round beyond `repair_rounds`; the round cap as a rule of its own (at most `repair_rounds` rounds plus the one exception, which the user's yes does not extend; after the last round a step lands with its small fixes and books the rest as steps) and an Anti-patterns row for offering the user another round; Opus as the default model for the orchestrator and every agent, Fable, Astra and Sol allowed for the orchestrator, Sol for the agents, never Fable or Astra for an agent; `inline` kept as an optional executor; stops raised as plain-text open items, never a question-box tool; every report opens with the position line (the roadmap entry, the plan step n of m, the next step), then the open items; the state template's closed list and the `reviewer_report` field; each skill invoked through the runner every time, after a compaction too, never followed from remembered text; `launch-note.md` says the `--pid` process owns the builder and lives until `end`, and that a new `start` field is optional and written on the page before `launch.sh` sends it; the rule inventories of the skills it changes updated; the layout check, the inventory check and a grep per changed rule pass (1 commit)
 - 3 Skill texts, part 2: `spec` (a false premise stops only when the plan cannot absorb it, ruling 3c; what clears a step-in-flight block), `refute` (the exception round; the "unless the brief lists them" qualifier; `reviewer_report`; the grammar of its opening line), `land` (a first step, before the wip commit, that stops the step's builder and every reviewer through the runner's stop tool and checks the runner's agent listing, and a shell builder's pid and exit file, naming no vendor; the look as its own step; its steps in execution order; the state a backed-out landing leaves; a landed step found short or wrong finished by a new step on top, a landed commit reverted only on the user's ruling), `plan-help` (its printed sequence), `plan-retro` (ruling 3b), `roadmap` (its steps apply to add, move, done and drop), `ordo-init` (the path exception; "never overwrites"; the build-command exception), `repo-setup` (the commit rule); the rule inventories updated; the same checks as step 2 pass (1 commit)
 - 4 `skills/plan-orchestration/templates/launch.sh` and its test: every note call bounded at about 3 s; the pid file names the process that owns the builder, that pid is alive before `start` and is the one passed to it, and a kill still writes the exit file and calls `end`; a second live launch of a step refused; every path made absolute and the script's own errors sent to the stderr file; a Claude session id known before the builder starts; the exit file written in one move; the note label `<entry>/<step>`; "Launching a builder" says to commit the dispatch block before the launch and to watch the pid as well as the exit file; `launch.test.sh` covers each case, and each fault the plan 2.A review planted turns it red (1 commit)
@@ -47,6 +48,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 11, 12, 13, 14 one after another after 8 (they all edit `docs/academic-coverage.md`).
 - 15 with anything after 1 that does not touch the archived ledgers or the roadmap.
 - 16 after 6 (it needs the fixed collector); 17 after 16.
+- 1a after 1, with 2, 3, 5 to 9 (it edits only `utils/verify.sh`, `utils/verify.test.sh` and the runner's lines in `README.md` and `docs/dev/building.md`, which no other step edits).
 - 18 after every step from 1 to 17.
 
 ## Rulings (2026-09-24)
@@ -71,3 +73,37 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 - 16: the user's ruling on each retro proposal, raised when the step runs.
 - 7: step 4 landed. The oculus session's fixes to its launch-note setup are in research-hub's commit 409de414 (the execute bit, `git ls-files -s` shows 100755; the absolute `launch_note` path; `LOCK_WAIT_MS = 2000`).
+
+### Step 1, the verify runner (landed 2026-09-25)
+
+- Landed: `utils/verify.sh` (244 lines) runs a plan's verify list from its state file: each command as written through `bash -o pipefail -c`, started from Python in a session of its own with standard input closed; a command ending in a pipe into `tail` passes only on exit 0 and a `PASS:` last line; the first red command stops the run; INT, HUP, QUIT and TERM end the command's session and exit 128 plus the number; exits 64 on a state file it cannot use and 69 when `python3`, PyYAML, `bash` or `ps` is missing. `utils/verify.test.sh` (510 lines) covers each case and runs the runner under `sh` and `dash`. `README.md`, `docs/dev/building.md` and `docs/dev/change-standard.md` name the runner and its test; this plan's verify list gained the test.
+- Rounds: the first review, repair round 1, the review over it, open item F ruled (a), repair round 2 under plan-orchestration's exception, the review over it; its findings fixed at landing or booked as step 1a. The landing fixes were read by a fresh reviewer (`agents/reviews/1-landing-review.md`) and its findings fixed at landing.
+- Verified on main with `sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+  and exited 0; the ASCII check over the tree exited 0 with no output.
+- Booked: step 1a (above); the skill texts that name the runner, carried into step 3.
+- Usage, orchestrator from the loop's start (73c188a, the greenlight; no step of this plan had landed before) to this booking: 61 messages, 51853 output tokens, 121761 cache-write tokens, 33845304 cache-read tokens, 136 fresh input tokens, 172 minutes.

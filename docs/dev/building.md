@@ -9,6 +9,7 @@ sh skills/plan-retro/templates/collect_findings.test.sh
 sh skills/repo-setup/templates/sync_rules.test.sh
 sh skills/plan-orchestration/templates/launch.test.sh  # launch.sh with stub builders and a stub launch-note command
 sh utils/pin.test.sh
+sh utils/verify.test.sh                         # verify.sh on green, red and unusable verify lists
 sh utils/check_skill_layout.test.sh             # the layout check on complete and broken SKILL.md files
 sh utils/check_rule_inventory.test.sh           # the rule inventory check on complete and broken inventories
 sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists
@@ -17,6 +18,14 @@ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $A
 ```
 
 A test passes when it exits 0 and its last line starts with `PASS:`; a failure prints a line starting with `FAIL:` and exits 1. The filter that keeps the summary line is `2>&1 | tail -1`.
+
+`sh utils/verify.sh <state file>` runs a plan's verify list and needs `python3` with PyYAML, `bash` and `ps`. It runs each command as written through `bash -o pipefail -c`, so a test that exits non-zero in a pipeline into `tail` makes the pipeline fail, and the runner judges the status the whole command returns (a command that consumes a pipeline's status with `!`, `if`, `while`, `||` or `&` passes or fails on what it returns). A command whose text after its last single pipe is `tail` and its options passes only when it also prints a last line starting with `PASS:`. A landing books the lines the runner prints. The runner's exit status:
+
+- `0`: every command passed.
+- `1`: a command is red, or the scratch folder cannot be created under `$TMPDIR` (default `/tmp`).
+- `64`: no single argument; a state file that cannot be read or is not UTF-8; no `yaml` block, or a first one that is never closed or is not valid YAML; no `verify:` key, a `verify:` key that is not a list, or an empty list; a command that is not a string, is empty or holds a NUL character.
+- `69`: `python3`, PyYAML, `bash` or `ps` is missing.
+- `128` plus the signal number: INT, HUP, QUIT or TERM stopped the run.
 
 The layout check runs over every `skills/*/SKILL.md` and takes no filter: it prints one `ok: <path>` line per skill that follows `docs/dev/skill-layout.md`, and `<path>:<line>: <what is wrong>` for each error, and passes when it exits 0.
 
