@@ -42,13 +42,13 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a9e4683b644be6bc1 (the runner's agent id)
   builder_usage: 133,171 tokens, 44 tool uses, 697 s (the runner's completion notification); after round 1 the notification reads 223,764 tokens, 42 tool uses, 931 s; round 1 reported done
-  round_reviewer: claude:opus, agent acd04c243d444d8b3, through /refute over round 1, running
+  round_reviewer: claude:opus, agent acd04c243d444d8b3, through /refute over round 1; its findings are fixed at landing
   reviewer_report: agents/reviews/1a-refuter.md (through /refute; reviewer claude:opus, agent aa22f1e348d4449da; 100,494 tokens, 20 tool uses, 490 s)
   worktree: .agents/worktrees/2b-1a
   base: 9dee31d
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1a-report.md
-  landing: not-started
+  landing: cherry-picking
   round: 1 (sent 2026-09-26: the rulings in agents/briefs/1a-round-1.md; the worktree at the round's start is commit 6a85413 on branch 2b-1a; the path list widened to skills/land/templates/land.sh, land.test.sh and README.md 146-150)
 ```
 

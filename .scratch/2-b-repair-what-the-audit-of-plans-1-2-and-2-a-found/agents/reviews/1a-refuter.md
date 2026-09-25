@@ -59,3 +59,65 @@ ls /Users/axelfaes/.claude-work/skills/land/templates/: land.sh land.test.sh usa
 - Whether the ledger's verify list should also take the new position after `land.test.sh` (the Doc text replaces line 13 in place, so the ledger's order differs from building.md's; the ledger is the orchestrator's).
 
 Reviewer usage: 100,494 tokens, 20 tool uses, 490 s (the runner's completion notification; reviewer claude:opus, agent aa22f1e348d4449da).
+
+## Repair round 1, refuted
+
+```
+cp <main ledger>/orchestrator-state.md $TMPDIR/state-1a.md; line 13 -> "- sh skills/land/templates/verify.test.sh 2>&1 | tail -1" ($TMPDIR/state-1a2.md)
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh "$TMPDIR/state-1a2.md"
+  exit=0; grep -c '^PASS:' = 10; grep -c '^ok:' = 10; no "Can't open" lines
+  verify: 12 commands passed
+sh skills/land/templates/land.test.sh 2>&1 | tail -1
+  PASS: land.sh and usage.py scratch tests   (exit 0; the new lines: red list, lookup, not found, no state file, all printed)
+sh skills/land/templates/verify.test.sh 2>&1 | tail -1
+  PASS: verify.sh scratch tests (runner under sh dash)
+python3 utils/check_skill_layout.py
+  ten ok: lines, exit 0
+sh skills/land/templates/verify.sh            -> verify: usage: sh <skills>/land/templates/verify.sh <state file>, exit=64
+grep -rn 'utils/verify' README.md docs skills utils   -> no output, exit 1
+ls utils/verify.sh utils/verify.test.sh       -> No such file or directory (both)
+sh -n land.sh && sh -n land.test.sh            -> syntax-ok
+wc -l: land.sh 549 (549 at 6a85413), land.test.sh 749 (632), land/SKILL.md 135, README.md 175
+ls ~/.claude-work/skills/land/templates ~/.claude/skills/land/templates ~/.agents/skills/land/templates
+  each: land.sh land.test.sh usage.py
+The seven reverts, each on a copy of skills/land/templates under $TMPDIR/rv/<n>, land.test.sh run from there:
+  1 verify list not run:            exit=1 FAIL: the verify list on main: missing [PASS: green list
+  2 run before main's cherry-pick:  exit=1 FAIL: clean landing exited 1, expected 0
+  3 exit ignored (sh -c '... || true'): exit=1 FAIL: red list: exit 0, expected 1: worktree git commit: nothing staged, no wip commit made
+  4 find_template beside script only: exit=1 FAIL: lookup: exit 1, expected 0: preflight failed: verify.sh not found beside this script or in the land skill's templates: <scratch>/lookup-ledger
+  5 no verify.sh refusal:           exit=1 FAIL: not found: exit 127, expected 1: worktree git commit: nothing staged, no wip commit made
+  6 refusal without the places:     exit=1 FAIL: not found message: missing [preflight failed: verify.sh not found beside this script or in the land skill's templates: <scratch>/nofind-ledger, ...
+  7 no state-file check:            exit=1 FAIL: no state file: exit 64, expected 1: worktree git commit: nothing staged, no wip commit made
+Probe (copy, nostate case writing a state file with no yaml block instead of removing it):
+  exit=1 FAIL: no state file: exit 64, expected 1 ... then main's cherry-pick ran, source line counts printed,
+  "verify: <scratch>/nostate-ledger/orchestrator-state.md has no yaml block", "verify list failed"
+awk 'length > 100' on lines the round added to the scripts: land.test.sh:160, 142 characters (140 at 6a85413)
+LC_ALL=C grep '[^ -~]' over every added line of git diff 9dee31d: no output, exit 1
+ls research-hub/package.json: No such file; research-hub/tools/oculus/package.json exists
+```
+
+### Spec
+- skills/land/templates/land.sh:151-154: the preflight refusal of a missing state file is not in ruling 5, which asks only that `land.sh` run `sh <verify.sh> <the ledger's orchestrator-state.md>` and fail on a nonzero exit. The report states it as a judgment call and it carries a test with its revert (revert 7 reproduces). It is a small addition in the ruling's direction, but only a partial one (see Behaviour 2).
+- On the three questions in the brief for this review: (a) the old template's `npm test -- --reporter=dot`, `npm run check`, `build`, `format:check`, `lint` and the ASCII check over `src tests bin config` (excluding `glyphs.yml`) are not named anywhere now. The ADAPT block at land.sh:348-349 gives only the generic place ("any check beyond the verify list with its pass rule"), which is the wording ruling 5 asked for, so this is not a spec defect. What a ledger loses is under Behaviour 1. (b) Reading `orchestrator-state.md` from the script's own folder holds for every placement the texts give: land/SKILL.md:96 ("A ledger may hold `land.sh`") and README.md:148 ("A plan copies it into its ledger folder"). A grep of `land.sh` and "landing script" across skills and docs finds no other placement, and plan-orchestration names none. (c) All other rulings (2, 3, 4, 5, 6) do what they say. The brief template's expected output at brief.md:34 matches README.md:136 and the head comment of verify.sh.
+
+### Proof
+- The report's "Repair round 1", ASCII/syntax row: "which was 142 characters before and 144 after" is wrong. `awk '{print length}'` gives 140 at 6a85413 and 142 now for land.test.sh:160.
+- Otherwise none. All seven reverts turn `land.test.sh` red with the quoted first `FAIL:` line (the table above). The npm stub scripts removed from `write_tool_stub` were never asserted at 6a85413 (`grep stub` over the old test), so no check was loosened.
+
+### Standards
+- skills/land/templates/land.sh:9 ("fails the landing with the runner's output printed") uses "the runner" for `verify.sh`, while land.sh:493-494, :508 and :517 use "the runner" for the agent harness ("the runner's Agent tool", "the runner's result"). That breaks prose-standard D ("No synonym cycling. One term per concept"), the same collision ruling 2 removed from land/SKILL.md. land.test.sh:9, :492, :494 and :555 also call `verify.sh` "the runner".
+- skills/land/templates/land.test.sh:160: a line the round changed is 142 characters. The brief's conventions say "lines of about 100 characters at most in scripts".
+- skills/land/templates/land.test.sh:15-16 ("the stub package.json scripts and the expected rows follow the ADAPT edits made there"): after the round the stub holds only `test:browser`, which runs outside the ADAPT region (land.sh:379). No ADAPT edit names a package.json script any more, so the half of the sentence about the stub scripts no longer describes anything (change-standard rule 14). Low weight.
+- No non-ASCII, no em dash and no history in comments in the added lines. The layout check is ok on all ten SKILL.md files. The other sentences in the grep of `land.sh`, `verify.sh`, `ADAPT`, `find_template`, `npm` and the lookup places across skills, utils, docs and README.md stay true: README.md:44, :117, :148, :150; land/SKILL.md:55, :96-104; land.sh:1-13; building.md:6.
+
+### Behaviour
+- A ledger that copies the new land.sh changes where its checks run. Before: they ran in the tool directory (`cd "$landing_tool" && npm test ...`, `npm run check/build/format:check/lint`, the ASCII check over `src tests bin config`). After: the ledger's verify list runs from the repository root (land.sh:359). The only existing copy, the research-hub ledger `tools/oculus/.scratch/migration` (read only), has a verify list commented "from tools/oculus", beginning `npm test`. The repository root has no package.json (`ls research-hub/package.json`: No such file), so that ledger, on the new template, would fail its landing at the first command. Its list also holds `npm run test:browser`, which would run inside the list and again at land.sh:379, before the port check. Its ASCII line covers only `src tests`, so the old check over `bin` and `config` is lost. The report names the removed commands but not this before and after (change-standard rule 7).
+- The preflight refuses a missing state file but not an unusable one. The probe above, with a state file that has no yaml block, passed the preflight, ran main's cherry-pick, then failed with `verify.sh`'s exit 64 and main staged. So the report's reason, "so that a ledger without its state file never leaves main staged", holds only for an absent file. Exit 64 after main is touched also collides with land.sh's own 64, which its head comment (land.sh:22) and its argument checks use for refusals made before anything is touched. The same applies, by reading, to `verify.sh`'s exit 69 (python3, PyYAML, bash or ps missing), which the preflight does not check (not run).
+- What `repo-setup` writes into another repository (change-standard.md:45) and what `/spec` writes (brief.md:34) are stated with before and after in the report and match the diff. The installed skills' before (`land.sh land.test.sh usage.py` in all three skill folders) is confirmed by the `ls` above.
+
+### Not checked
+- land.test.sh under `dash`, and the landing with the browser check on (every case runs `--no-browser`).
+- Whether main's cherry-pick can overwrite the ledger's `orchestrator-state.md` before land.sh reads it. That would need a step range that touches the state file, which the briefs forbid.
+- The exit-69 path of `verify.sh` under land.sh (argued by reading, not run).
+
+Reviewer usage: not known (reviewer claude:opus, agent acd04c243d444d8b3; no completion notification yet).
