@@ -131,4 +131,4 @@ none.
 
 - Reverts 4, 5, 8, 10, 11, 14 to 22, 24 and 26 of the report. Ten of its 26 were reproduced.
 - The verify list on main, since the step is not landed.
-- Reviewer usage: not measured by the reviewer (no token or time counter available in this session).
+- Reviewer usage: 151,111 tokens, 47 tool uses, 513 s (the runner's completion notification).
