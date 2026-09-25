@@ -41,7 +41,8 @@ dispatch:
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: ab8951c4d56c145ef (the runner's agent id)
-  builder_usage: 226,019 tokens, 98 tool uses, 875 s (the runner's completion notification); ruling L (a) sent to it mid-build and applied
+  builder_usage: 226,019 tokens, 98 tool uses, 875 s (the runner's completion notification); ruling L (a) sent to it mid-build and applied; after round 1 the notification reads 355,519 tokens, 35 tool uses, 863 s; round 1 reported done except two reason cells over about 35 words
+  round_reviewer: claude:opus, through /refute over round 1, running
   reviewer_report: agents/reviews/11-refuter.md (through /refute; reviewer claude:opus, agent a59542d649739794e; 270,192 tokens, 46 tool uses, 470 s)
   worktree: .agents/worktrees/2b-11
   base: ebf3c8c
