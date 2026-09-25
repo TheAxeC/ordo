@@ -73,12 +73,12 @@ dispatch:
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6a-report.md
   landing: not-started
-  round: 1 (sent 2026-09-25: the findings of 6a-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit eabefc7 on branch 2b-6a; the round's rules were run over their 48 cases first, agents/runs/6a/round1-cases.py)
+  round: 1 (sent 2026-09-25: the findings of 6a-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit eabefc7 on branch 2b-6a)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- K (raised 2026-09-25 from the user's question whether the case scripts are useful): the check of ruling J is made today by a throwaway Python prototype per brief (`agents/runs/6a/cases.py`, 32 lines, and `round1-cases.py`, 31 lines), which duplicates the rule the builder then writes. Of its two runs, the first found no contradiction and the second found two in the orchestrator's own round rules before they were sent. Options for step 1c: (a) the cases are a table in the brief (input, expected) and the builder's first act is to turn them into the step's tests and run them against the unchanged code, reporting which fail and why before it changes anything; the orchestrator writes a prototype only when the rule is new code with no existing behaviour to run, and never keeps it past the step. Pros: no duplicate code; the cases become the tests; the builder finds a contradiction at the start of its work and reports it instead of building on it. Cons: a contradiction is found after dispatch, one builder turn later than a prototype would find it. (b) as now: a prototype per brief, kept in the step's run files. Pros: contradictions found before dispatch. Cons: one throwaway script per brief and per round, which duplicates the rule. (c) the case table only, with no run. The lazy option: nothing checks the decisions against the cases, which is the gap ruling J closes. Recommendation: (a).
+- none.
 
 ## Booked, no ruling needed
 
@@ -93,6 +93,7 @@ dispatch:
 
 ## Closed items
 
+- 2026-09-25: open item K, how a brief's cases are checked: ruled, no prototype scripts; the scripts of step 6a removed; the builder runs the brief's cases as tests first and reports any case the brief's rules get wrong before it changes code (step 1c).
 - 2026-09-25: open item J, a brief's decisions checked against its own cases: ruled (a); new step 1c after 1a, which also takes the checked path list from 1a.
 - 2026-09-24: how to get back on track after the audit: ruled option C, this plan (see `plan.md`, Rulings).
 - 2026-09-24: the audit's recommendations 2a to 2h, and contradictions 3a, 3b, 3c: ruled as recommended (see `plan.md`, Rulings).
