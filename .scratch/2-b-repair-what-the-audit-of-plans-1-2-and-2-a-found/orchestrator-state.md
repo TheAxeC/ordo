@@ -37,7 +37,17 @@ launch_note:                 # none recorded.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: '12'
+  executor: agent
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: a4606a26402cb2393 (the runner's agent id)
+  worktree: .agents/worktrees/2b-12
+  base: fc12778
+  launched: 2026-09-26
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/12-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -110,7 +120,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 1a, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 at 5fdaa98, 76a2b10, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7 and 617f8f3; step 1c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Next: 10, 12 and 15; 13 and 14 after 12; 7 after the oculus launch-note fixes; then 16 to 19.
+- Roadmap entry 2.B. Step 10 stopped on open item M; step 12 is dispatched; 15 next; 13 and 14 after 12; 7 after the oculus launch-note fixes; then 16 to 19.
 - Open on Axel's side: none.
 
 ## Usage
