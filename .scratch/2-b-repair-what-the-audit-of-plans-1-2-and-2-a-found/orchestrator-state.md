@@ -45,9 +45,9 @@ dispatch:
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1-report.md
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-25: the findings of 1-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 00e8f8b on branch 2b-1)
   builder_usage: 129,970 tokens, 36 tool uses, 979 s (the runner's completion notification)
-  reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039)
+  reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039; 111,656 tokens, 24 tool uses, 421 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -56,7 +56,7 @@ dispatch:
 
 ## Booked, no ruling needed
 
-- Step 3: the `land` and `plan-orchestration` texts name `utils/verify.sh` as how a landing runs and books the verify list, since step 1's pages already say a landing books its lines (`docs/dev/building.md`, found by step 1's builder). Carried into step 3's brief.
+- Step 3: the `land`, `plan-orchestration`, `refute` and `spec` texts (`land/SKILL.md` step 5, `refute/SKILL.md` "What the reviewer runs", `spec/templates/brief.md` "Verify before you report") name `utils/verify.sh` as how a step's verify list is run and booked, since step 1's pages say so (`docs/dev/building.md`, `docs/dev/change-standard.md`; found by step 1's builder and its review, Standards 1 and 2). Carried into step 3's brief.
 
 ## Closed items
 
@@ -91,7 +91,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its builder reported; /refute is running.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 1 is with the same builder.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 
