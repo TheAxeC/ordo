@@ -48,7 +48,7 @@ dispatch:
   base: ec6586e
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/4-report.md
-  landing: not-started
+  landing: cherry-picking
   round: 1 (sent 2026-09-25: the findings of 4-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 1aa7a17 on branch 2b-4; the path list widened to skills/plan/templates/orchestrator-state.md, and README.md:121 comes as Doc text)
 - step: 6a
   executor: agent
@@ -76,7 +76,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- L (step 11, raised 2026-09-25): the coverage row of `academic-paper/agents/intake_agent.md` drops style calibration with no reason (audit `4-coverage-and-roadmap.md`, finding 11). Intake Step 10 learns the author's voice from three or more of the author's past papers, as a soft guide under the discipline's conventions. Whether the paper skill does this is a capability of the skill you will use, which no rule of the coverage list decides. Options: (a) the paper skill (entry 5) learns the voice from past papers, subordinate to the prose standard; the row names it. Pro: nothing of the source is lost, and a series of ML papers keeps one voice. Con: entry 5 grows, and a voice learned from older papers can carry what the prose standard forbids. (b) drop, with the reason that the writing skill's prose standard sets the voice. Pro: one source of style, the written standard. Con: the voice of your past papers is not learned; this is also the option that costs least. (c) `rebuild later: paper`, built after entry 5's gate. Pro: nothing lost, entry 5 unchanged. Con: the row's other content is `rebuild: paper`, so the clause needs its own row or a split mark the list does not have. Recommendation: (a), because the prose standard stays the rule and past papers only tune what it leaves open (terms, section habits), so nothing is lost and nothing the standard forbids comes in.
+- none.
 
 ## Booked, no ruling needed
 
@@ -90,6 +90,7 @@ dispatch:
 
 ## Closed items
 
+- 2026-09-25: open item L, style calibration in the `intake_agent.md` coverage row: ruled (a); the paper skill (entry 5) learns the author's voice from past papers, subordinate to the prose standard, and the row names it; carried into step 11.
 - 2026-09-25: the plan cut to its goal: step 1b removed, step 1a cut to the runner's move, step 6a replaced by the collector keeping every finding; step 1c stays.
 - 2026-09-25: open item K, how a brief's cases are checked: ruled, no prototype scripts; the scripts of step 6a removed; the builder runs the brief's cases as tests first and reports any case the brief's rules get wrong before it changes code (step 1c).
 - 2026-09-25: open item J, a brief's decisions checked against its own cases: ruled (a); new step 1c after 1a, which also takes the checked path list from 1a.

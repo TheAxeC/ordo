@@ -76,11 +76,11 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - `start` gets no `--transcript` flag: the transcript reaches the note only through the separate `transcript` call, and the interface between Ordo and oculus keeps its three calls as they are (the user).
 - Open item J (2026-09-25): (a), a new step 1c after 1a checks a brief against its own cases and its path list against the steps in flight, in `spec`, its brief template, `refute` and `plan-orchestration`; the checked path list moves from 1a into 1c. The lazy option was (c), cathedra's practice only (the user).
 - Open item K (2026-09-25): no prototype scripts; the builder runs the brief's cases as its tests first (the user).
+- Open item L (2026-09-25): (a), the paper skill (entry 5) learns the author's voice from three or more past papers, as a guide subordinate to the prose standard; the `intake_agent.md` coverage row names it (the user). The lazy option was (b), the drop.
 - The plan cut to its goal (2026-09-25): a finding of this plan's own reviews that roadmap entry 2.B's goal and gate do not need is not a step. Removed: step 1b (the ASCII check's non-UTF-8 pass and `__pycache__` in `.gitignore`), the runner's edge-case and signal tests and the `refute` list-item wording from step 1a, and step 6a's word-list tuning, replaced by the collector keeping every finding. Step 1c stays (ruling J). (The user.)
 
 ## Blocked, and by what
 
-- 11: the clause on style calibration in the `intake_agent.md` row waits on open item L; the rest of step 11 runs.
 - 16: the user's ruling on each retro proposal, raised when the step runs.
 - 7: step 4 landed. The oculus session's fixes to its launch-note setup are in research-hub's commit 409de414 (the execute bit, `git ls-files -s` shows 100755; the absolute `launch_note` path; `LOCK_WAIT_MS = 2000`).
 
