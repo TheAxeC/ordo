@@ -46,6 +46,7 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1-report.md
   landing: not-started
   round: 1 (sent 2026-09-25: the findings of 1-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 00e8f8b on branch 2b-1)
+  round_2: sent 2026-09-25 under plan-orchestration's exception (ruling F (a)), to the same builder; the worktree at its start is commit 80ab53a on branch 2b-1
   builder_usage: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s (the runner's completion notifications)
   round_reviewer: agent a500487f692781184, claude:opus, through /refute over round 1: 124,041 tokens, 29 tool uses, 778 s
   reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039; 111,656 tokens, 24 tool uses, 421 s)
@@ -53,7 +54,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- F (raised 2026-09-25 by the review over step 1's repair round, `agents/reviews/1-refuter.md`, "Repair round 1, refuted"): the runner finds a test's filter by reading the command's text with a regular expression, and the review found red tests that still pass (a redirection or a trailing `;` on `tail`, a comment holding a pipe, a backslash-newline, `| grep ... | tail -1`) and a false red on a quoted pipe; and under dash, where `set -m` has no terminal, a signal does not stop the running command. Mending the expression spelling by spelling cannot end this, so the fix is a change of mechanism, beyond a fix at landing. Options: (a) one repair round beyond the cap, which plan-orchestration allows when an acceptance item of the brief is unbuilt and the fix is too large for landing: the runner stops reading the command's text and lets the shell judge it, running each command as written through `bash -o pipefail -c` (so any stage's failure, the test's included, fails the pipeline, whatever the spelling), started from the embedded Python in a new session with standard input closed, and killing that session on INT, HUP, QUIT or TERM; the `PASS:` last-line rule stays for commands that end in a pipe into `tail`; `bash` becomes a stated requirement (dash has no `pipefail`: `dash -c 'set -o pipefail'` prints `Illegal option -o pipefail`); tests for every spelling the review found and for each of the four signals; (b) land as it is, with the pages narrowed to the spellings it handles, and book the mechanism change as its own step; (c) land as it is and book the gaps. Recommended (a): it ends the class of defect instead of listing it, and it is the step's own acceptance item. (b) and (c) land a runner that can still pass a red test, the defect the step exists to end; (c) is the lazy option.
+- none.
 
 ## Booked, no ruling needed
 
@@ -64,6 +65,7 @@ dispatch:
 - 2026-09-24: how to get back on track after the audit: ruled option C, this plan (see `plan.md`, Rulings).
 - 2026-09-24: the audit's recommendations 2a to 2h, and contradictions 3a, 3b, 3c: ruled as recommended (see `plan.md`, Rulings).
 - 2026-09-24: the step list of this plan: approved, with `workers_at_once: 3`.
+- 2026-09-25: open item F, how the runner recognises a test's filter: ruled (a), one repair round beyond the cap under plan-orchestration's exception; the runner runs each command through `bash -o pipefail -c` from its Python in a new session and kills that session on INT, HUP, QUIT or TERM; `bash` a stated requirement.
 - 2026-09-25: the greenlight to start: given by the user; the loop runs from step 1.
 - 2026-09-24: open item E, one end-to-end run of the launch note: ruled (b), step 7 launched from a shell after step 4 and the oculus fixes.
 - 2026-09-24: open items A to D from the review of the oculus changes: ruled A (a), B (a), C (b), D (a); written into steps 2, 3, 4 and 19 (see `plan.md`, Rulings).
@@ -92,7 +94,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; the review over round 1 is in; the stop F is with the user.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 2, the exception round ruled in F, is with the same builder.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 

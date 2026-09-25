@@ -63,6 +63,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - The step list above is approved (the user). The steps start only on the user's greenlight.
 - From the review of the oculus session's changes (`.scratch/reviews/2026-09-24-audit/6-oculus-changes.md`): A (a), steps 2, 3 and 4 widened with its findings for Ordo; B (a), a landed step is finished forward by a new step, a landed commit reverted only on the user's ruling; C (b), a note call bounded at about 3 s, the oculus session cutting its lock wait to about 2 s; D (a), the closing tags the release and asks the user's permission to pin it (the user).
 - Open item E: (b), step 7's builder is launched from a shell through `launch.sh` with the hub's note command, as the one end-to-end run of the launch note (the user).
+- Open item F (2026-09-25): (a), step 1 gets one repair round beyond the cap: the verify runner runs each command through `bash -o pipefail -c` from its Python in a new session, kills that session on INT, HUP, QUIT or TERM, and states `bash` as a requirement (the user).
 - `start` gets no `--transcript` flag: the transcript reaches the note only through the separate `transcript` call, and the interface between Ordo and oculus keeps its three calls as they are (the user).
 
 ## Blocked, and by what
