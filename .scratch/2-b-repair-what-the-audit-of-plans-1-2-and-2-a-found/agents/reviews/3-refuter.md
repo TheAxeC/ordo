@@ -245,3 +245,18 @@ Rules checked against `git show 93a4f39:<path>` and `git show 5eaec19:<path>`: n
 - The `launch.sh` stop was reproduced with a stand-in `claude` that runs `sleep 47`, not with a real builder. The Codex path of `launch.sh` was not run.
 
 Reviewer usage: 143,412 tokens, 35 tool uses, 402 s (the runner's completion notification).
+
+## Closed
+
+- First review: every finding closed in repair round 1 (see `3-report.md`, "Repair round 1"), with rulings 1 to 8.
+- Review over round 1, fixed at landing:
+  - Spec 1: `skills/spec/templates/brief.md:40` keeps the change standard's report shape (the NOT DONE line, then the open items), since `plan-orchestration`'s Reports gives the position line to the orchestrator's reports and the landing report only.
+  - Proof 1: `3-report.md` carries a note after its first line that its sections before "Repair round 1" describe the first build.
+  - Standards 1 and 2: `ordo-init`'s opening says one commit when the commit rule allows it; "What it reads" 3 names the commit rule (repo-setup's question 5, or the user's answer at Steps 10); Steps 10 shows the commit question when the skill runs alone; Steps 14 points at "What it reads" 3; the inventory row renumbered.
+  - Standards 3: `ordo-init`'s "No commit allowed" stop applies only when the skill runs alone; under `/repo-setup` the setup goes on and its Steps 13 raises the one stop.
+  - Standards 4: `land` sends KILL two seconds after TERM.
+  - Standards 5: `refute`'s description gives the round rule in three sentences.
+  - Standards 6: `plan-help`'s red-line line is three short sentences and names no loop.
+  - Behaviour 2: the before and after of each user-visible change is in step 3's booking in `plan.md`.
+- Review over round 1, booked: Behaviour 1 (`launch.sh`'s pid file names the wrapper shell, so `land`'s Steps 1 cannot stop a shell builder until the pid owns the builder's session) for step 4, in the state file's booked list.
+- The landing fixes were read by a fresh reviewer (`3-landing-review.md`); its findings fixed at landing: the report's note names what its round section still describes; `ordo-init` names the Steps 11 stop as where the commit answer comes, and that stop's row says it collects it; `repo-setup`'s Steps 13 named with its skill; `refute`'s extra-round sentence shortened and named "acceptance item" as `plan-orchestration` does; `plan-help`'s line in the block's own clause style, naming `/spec` for the next step.

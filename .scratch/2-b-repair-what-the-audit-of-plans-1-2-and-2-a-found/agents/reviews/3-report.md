@@ -2,6 +2,8 @@
 
 Everything in the brief is done. Three sentences outside this step's paths are now out of step with it and are named under "Outside this step's paths" for the orchestrator to carry.
 
+The sections before "Repair round 1" describe the first build, and "Repair round 1" the step at the end of its rounds. The fixes made at landing are in `plan.md` (the booking of step 3) and in `3-refuter.md` (Closed). At landing `skills/spec/templates/brief.md:40` was set back to the change standard's shape, so the step makes no change to that file; item 8 and the file list of "Repair round 1" describe the worktree before landing, as do judgment calls 3 and 8, the second bullet of "Outside this step's paths" and the `/repo-setup` bullet of the user-visible changes.
+
 ## Open items (the state file's, verbatim)
 
 - H (raised 2026-09-25 by `/spec 2.B 2`): where the verify runner lives. Step 1 put it at `utils/verify.sh`, a path of the Ordo repository. The skills run in other repositories (cathedra, research-hub) from the installed copy, where no `utils/verify.sh` exists, so a skill that names `utils/verify.sh` names a file those repositories do not have; the booked step 3 item asks the `land`, `plan-orchestration`, `refute` and `spec` texts to name it. Options: (a) move the runner and its test into the `land` skill's `templates/` (`skills/land/templates/verify.sh`, `verify.test.sh`), where a skill can name it as "the land skill's `templates/verify.sh`" and every repository has it through the installed skills; Ordo's pages name that path; step 1a's paths follow; (b) keep it in `utils/`, and let the skills say "the repository's verify runner, when it has one", so other repositories run their lists as before. Recommended (a): the runner exists so that no landing can book a red test as green, in every repository the skills run in; (b) leaves every other repository with the defect the runner ends. (b) is the lazy option.
@@ -191,3 +193,217 @@ These sentences are now out of step with this change and sit in files other step
 
 - The brief places refute's second "at most `repair_rounds`" in "Rules (line 100)". `cat -n skills/refute/SKILL.md` on the base shows line 100 in "Finding dispositions" (`100\t- A finding is closed by the builder in a repair round (at most `repair_rounds` of them), ...`); refute's Rules hold no cap. The exception was written at line 100, in Finding dispositions.
 - The state file's booked list carries "Step 3: the `land`, `plan-orchestration`, `refute` and `spec` texts ... name `utils/verify.sh`". The brief's decision 2 leaves those texts as they are until open item H is ruled, and this step followed the brief: `grep -n 'verify.sh' skills/{land,refute,spec}/SKILL.md` prints nothing.
+
+## Repair round 1
+
+Every ruling of the round is done. The round's diff is taken against 93a4f39, the step's work as first reported. Every command's output below is quoted whole.
+
+### Each ruling and what closes it
+
+1. **Spec 1, land's first step.** `skills/land/SKILL.md` Steps 1 now ends a shell builder with TERM, then KILL after a short grace. A failed check is a refusal before main is touched, and a new Stops row "Agents still running" covers it. It is appended as the last row, so the Stops row numbers the inventory names stay the same. `grep -n 'Stop the step.s builder\|stop tool\|TERM\|agent listing must\|pid must\|A check that fails\|Agents still running' skills/land/SKILL.md`:
+
+   ```
+   39:1. Stop the step's builder and every reviewer of the step, before anything in the worktree is committed.
+   40:   - An agent is stopped through the runner's stop tool.
+   41:   - A shell builder is sent TERM at the pid in its pid file, and KILL after a short grace.
+   42:   - Then the runner's agent listing must show none of them left.
+   43:   - A shell builder's pid must then be gone, and its exit file present.
+   44:   - A check that fails is a refusal before main is touched ("Stops").
+   107:| Agents still running | The check of Steps 1 fails: an agent still listed, a shell builder's pid alive, or no exit file | Each one left | Each one stopped, then `/land` again |
+   ```
+
+2. **Spec 2, the plan-retro row.** The Anti-patterns row is removed. Item 14's rule stays in "The proposal for a recurring kind" 4. `grep -n 'sharper sentence' skills/plan-retro/SKILL.md`:
+
+   ```
+   77:4. **The same, and no command can check the rule.** Only then is the proposal a sharper sentence for the existing rule. It says why no command can check the rule, and quotes the findings that show how builders read the current one.
+   ```
+
+3. **Spec 3, the setup's commits.** ordo-init's Steps 14 commits only when the repository's commit rule allows it. That rule is the one `repo-setup`'s question 5 recorded, or the user's word, asked at the approval of Steps 11 when `/ordo-init` runs alone. Otherwise ordo-init stops at a new Stops row, "No commit allowed", appended as the last row. `repo-setup`'s Steps 9 passes the answer to question 5 to it. Steps 13 commits only the files `/ordo-init` did not commit, and only when question 5 allows it. The opening paragraph says the tree is "committed when the repository's commit rule allows it". `grep -n 'commit rule\|question 5\|No commit allowed' skills/ordo-init/SKILL.md skills/repo-setup/SKILL.md`:
+
+   ```
+   skills/ordo-init/SKILL.md:76:    - The commit is made only when the repository's commit rule allows it: the rule `repo-setup`'s question 5 recorded, or the user's word.
+   skills/ordo-init/SKILL.md:98:| No commit allowed | The repository's commit rule does not allow the commit, at Steps 14 | The files written, and the command that shows them (`git status --short`) | The user's commit; under `/repo-setup`, the setup goes on at its Steps 10 |
+   skills/repo-setup/SKILL.md:10:`/repo-setup` sets up a new repository in the shape the plan skills expect, or keeps an existing repository's shared-rules block equal to the template. It leaves behind the approved tree, committed when the repository's commit rule allows it, or the synced block.
+   skills/repo-setup/SKILL.md:48:   - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
+   skills/repo-setup/SKILL.md:63:    - The commit is made only when the answer to question 5 allows it.
+   skills/repo-setup/SKILL.md:82:8. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
+   skills/repo-setup/SKILL.md:90:5. The commit rule for this repository [commit only when told].
+   skills/repo-setup/SKILL.md:125:| No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 13 or Steps / sync 8 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
+   ```
+
+   `grep -n 'runs alone' skills/ordo-init/SKILL.md`:
+
+   ```
+   77:    - When `/ordo-init` runs alone, the user is asked at the approval of Steps 11 whether the commit is allowed.
+   ```
+
+   The ordo-init inventory row for old line 47 (Steps 14) and the repo-setup row for old line 70 (Steps 13) now carry the condition in their notes.
+
+4. **Proof 1, the incomplete grep quote.** Every command in this section is quoted whole. The first report's grep, rerun, prints:
+
+   ```
+   $ grep -rn -- 'Every path is relative' skills utils docs README.md
+   skills/roadmap/SKILL.md:137:- Every path is relative to the repository root.
+   skills/plan/templates/plan.yaml:2:# Every path is relative to the repository root. A required key that is missing stops the skill that needs it, and the refusal names the key.
+   skills/plan/templates/plan.projects.yaml:3:# Every path is relative to the repository root.
+   skills/ordo-init/SKILL.md:113:- Every path is relative to the repository root, except `launch_note`, which is an absolute path.
+   utils/check_skill_layout.test.sh:71:- **Paths.** Every path is relative to the repository root.
+   utils/check_skill_layout.test.sh:189:edit no-bullets "- **Paths.** Every path is relative to the repository root.\n- A \`**literal**\` in a code span is not bold." "Every path is relative to the repository root."
+   ```
+
+   The roadmap skill names no `launch_note`, so its line is true as written. The two `check_skill_layout.test.sh` lines are fixture text for the layout checker's test. The two `skills/plan/templates` lines are the ones reported under "Outside this step's paths".
+
+5. **Standards 1 and 2, the red-line line.** plan-help's printed line and land's opening paragraph now say "a red line no fix inside the brief closes". The printed line says the loop goes on with the next unblocked step, and the booked step is worked in its queue order. `grep -n 'no fix inside the brief closes' skills/plan-help/SKILL.md skills/land/SKILL.md`:
+
+   ```
+   skills/plan-help/SKILL.md:69:/land meets a red line        a red line no fix inside the brief closes takes the step back out of main and books the failure; the loop goes on with the next unblocked step, and the booked step is worked in its queue order (an open item waits on your ruling)
+   skills/land/SKILL.md:10:`/land <entry> <step>` brings a refuted step from its worktree onto main. It leaves behind the step on main in one commit with its booking and its landing report, the state file rewritten, and the step's worktree and branch removed. After a red line no fix inside the brief closes, it leaves the step out of main instead, with its worktree and branch kept and the failure booked.
+   skills/land/SKILL.md:101:| A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and only the user can decide what to do | The failure, booked in the open items as Steps 6 says | The user's ruling |
+   ```
+
+6. **Standards 3, sentence length, semicolons and one rule per bullet.**
+   - spec:47 is split into three bullets, one rule each.
+   - ordo-init Rules 1 and 4, and land's "The landing script" 4, are now two sentences of about 20 words or fewer each.
+   - repo-setup Steps 13 is split into an item and three bullets.
+   - The semicolons added at spec:47, plan-retro:77 and land:120 are gone.
+
+   `sed -n 46,51p skills/spec/SKILL.md`:
+
+   ```
+   2. Check every premise the step's text makes against the tree.
+      - A premise found false that the plan can absorb is corrected in `plan.md` before the brief exists, never left for the builder to hit.
+      - That correction goes into the preparation commit (Steps 4).
+      - The brief records the correction beside the premise.
+      - A premise found false that the plan cannot absorb is a stop ("Stops"): its correction would change the step's scope, or make a choice the user would see.
+   3. Write `agents/briefs/<step>.md` from `templates/brief.md`.
+   ```
+
+   `grep -n 'The skill writes nothing until\|never overwrites' skills/ordo-init/SKILL.md`:
+
+   ```
+   109:- The skill writes nothing until the user approves or corrects the draft. The one exception is Steps 3, where each verification command runs once before the draft is shown.
+   112:- The skill never overwrites an existing page or `.agents/plan.yaml`. A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
+   ```
+
+   `grep -n 'zero exit\|reverted only' skills/land/SKILL.md`:
+
+   ```
+   95:- When the ledger holds it, its zero exit passes the checks on main (Steps 6). It never passes the look (Steps 7), which it does not do.
+   124:- A landed commit is reverted only on the user's ruling. Its preparation commit stays, and only a step so reverted is booked as reverted.
+   ```
+
+   `grep -n 'Only then is the proposal' skills/plan-retro/SKILL.md`:
+
+   ```
+   77:4. **The same, and no command can check the rule.** Only then is the proposal a sharper sentence for the existing rule. It says why no command can check the rule, and quotes the findings that show how builders read the current one.
+   ```
+
+   repo-setup's new Steps 13 is shown under ruling 3 and in the dash scan below.
+
+7. **Standards 4, refute's description.** The description now states the exception's condition itself. `grep -n '^description' skills/refute/SKILL.md`:
+
+   ```
+   3:description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round, and again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds, and one round more when a verification command is left red or an item of the brief unbuilt and the fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+   ```
+
+8. **The two stale lines booked for this step.** `skills/repo-setup/templates/shared-rules.md:19` now stops only on a premise the plan cannot absorb. `skills/spec/templates/brief.md:40` opens the report with the position line, then the open items. `grep -n 'premise found wrong' skills/repo-setup/templates/shared-rules.md; grep -n 'position line' skills/spec/templates/brief.md`:
+
+   ```
+   19:- **No question boxes.** Recommend and proceed. Stop only where the decision belongs to the user: a user-visible shape nothing names, a premise found wrong that the plan cannot absorb (one it can absorb is corrected in the plan), a red check no fix within the task covers, a rule clash.
+   40:Write it to `<ledger>/agents/reviews/<step>-report.md`. First line: anything NOT done, or "Everything in the brief is done". Then the position line: the roadmap entry with its title, the plan step as "step n of m" with its name, and the next step. Then the open items of the state file, verbatim, which hold only what the user must rule on. Then the DONE / NOT DONE table with the checks above and their output verbatim. Then files with line counts, every judgment call the brief left open, every host- or user-visible change with its before and after, and anything in the brief that was wrong or impossible, with the evidence. When the brief keeps a shared document out of the step's paths because other steps run beside it, a section "Doc text" gives the exact lines for that document (the current line as `grep -n` prints it and its replacement, or the line a new one follows), which the orchestrator applies at landing.
+   ```
+
+   A repository whose `CLAUDE.md` carries the shared-rules block now differs from the template at this line until `/repo-setup sync` is run there. Ordo itself has no `CLAUDE.md` (`ls -la CLAUDE.md AGENTS.md` printed "No such file or directory" for both).
+
+### Checks after the round
+
+`sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"`:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit 0
+```
+
+`python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md; echo "exit $?"`, run after the two inventory notes:
+
+```
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/land.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/ordo-init.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-help.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-retro.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/refute.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/repo-setup.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/roadmap.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/spec.md
+exit 0
+```
+
+No inventory place moved in this round. The two new Stops rows are appended at the end of their tables, and the removed plan-retro row was the last one, so no row's place moved.
+
+`LC_ALL=C grep -n '[^ -~]'` over the eight skill files, `shared-rules.md`, `brief.md` and the ten inventories printed nothing, with `exit 1`.
+
+`git diff -U0 93a4f39 | grep '^+[^+]' | grep -n ' - \| -- \|->'` matched only list markers:
+
+```
+5:+   - An agent is stopped through the runner's stop tool.
+6:+   - A shell builder is sent TERM at the pid in its pid file, and KILL after a short grace.
+7:+   - Then the runner's agent listing must show none of them left.
+8:+   - A shell builder's pid must then be gone, and its exit file present.
+9:+   - A check that fails is a refusal before main is touched ("Stops").
+13:+    - The commit is made only when the repository's commit rule allows it: the rule `repo-setup`'s question 5 recorded, or the user's word.
+14:+    - When `/ordo-init` runs alone, the user is asked at the approval of Steps 11 whether the commit is allowed.
+15:+    - Otherwise the skill stops ("Stops").
+23:+   - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
+25:+    - Every file written is named, except those `/ordo-init` committed at Steps 9.
+26:+    - The commit is made only when the answer to question 5 allows it.
+27:+    - Otherwise the skill stops ("Stops").
+29:+   - A premise found false that the plan can absorb is corrected in `plan.md` before the brief exists, never left for the builder to hit.
+30:+   - That correction goes into the preparation commit (Steps 4).
+31:+   - The brief records the correction beside the premise.
+```
+
+### Files changed in the round
+
+`git diff --numstat 93a4f39`:
+
+```
+1  1  .scratch/archive/1-one-layout-for-every-skill/inventories/ordo-init.md
+1  1  .scratch/archive/1-one-layout-for-every-skill/inventories/repo-setup.md
+10  6  skills/land/SKILL.md
+6  2  skills/ordo-init/SKILL.md
+1  1  skills/plan-help/SKILL.md
+1  2  skills/plan-retro/SKILL.md
+1  1  skills/refute/SKILL.md
+6  2  skills/repo-setup/SKILL.md
+1  1  skills/repo-setup/templates/shared-rules.md
+3  1  skills/spec/SKILL.md
+1  1  skills/spec/templates/brief.md
+```
+
+New line counts (`wc -l`): spec 115, refute 129, land 125, plan-help 92, plan-retro 103, roadmap 137, ordo-init 113, repo-setup 149, `skills/repo-setup/templates/shared-rules.md` 23, `skills/spec/templates/brief.md` 40. Inventories: ordo-init 77 and repo-setup 78. The other inventories are unchanged in this round. This report is the only other file written.
+
+### Outside this step's paths, still open
+
+`skills/plan-orchestration/SKILL.md:206` still says "its step 8", where it is now `land`'s Steps 9. `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` still carry no `launch_note` exception. Both files are held by step 2.

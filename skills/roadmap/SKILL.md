@@ -39,7 +39,8 @@ metadata:
 ## Steps
 
 1. Read the file's format, as "The format is the file's" says, and whether a capability map sits beside it ("A capability map beside the ordered file").
-2. Draft the change, by the command's subsection below; nothing is written yet.
+   - The plain `/roadmap` then runs "Steps / Show" and ends there: it changes nothing and shows nothing for approval.
+2. For `add`, `move`, `done` and `drop` only, draft the change by the command's subsection below; nothing is written yet.
 3. Show each change as a diff of the roadmap file, and of the system file for a map.
 4. Write the change once the user approves or corrects it ("Stops").
 5. Commit the files by explicit path list, one commit per change, the subject naming the entry and what changed.
@@ -105,7 +106,7 @@ When the roadmap's introduction links an index as the map of what the product is
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The change | Every change, at Steps 3 | The diff | The user's approval or correction |
+| The change | Every change of `add`, `move`, `done` or `drop`, at Steps 3 | The diff | The user's approval or correction |
 | No gate | The goal's gate cannot be named | What is missing | The user's answer |
 | The level | Entries exist at two levels and the goal does not settle which | The two levels | The user's choice |
 | The insertion form | The file has no insertion form yet | The question, once | The user's answer, used from then on |

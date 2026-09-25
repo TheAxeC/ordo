@@ -73,8 +73,8 @@ The skill checks where the rule should have come from, in this order, and propos
 
 1. **The rule is not written anywhere.** Grep the rules page and the standards pages for it. When it is absent, the proposal is the rule's text, in the voice and numbering of the page it goes into (the rules page for how a change is made and reported, a standards page for what the code or prose looks like), with the findings it would have prevented cited.
 2. **The rule is written on a page the briefs do not point at.** When the rule is on a page that is neither the rules page nor listed in `standards`, the proposal adds the page to `standards` in `.agents/plan.yaml`.
-3. **The rule is written where the briefs point, and the defect still recurs, and a command can check it.** A grep over the diff, a lint rule or a script over the tree: the proposal is that check, with its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
-4. **The same, and no command can check it.** The proposal is a sharper sentence for the existing rule, quoting the findings that show how builders read the current one.
+3. **The rule is written where the briefs point, the defect still recurs, and a command can check the rule.** The proposal is that check: a grep over the diff, a lint rule or a script over the tree, with its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
+4. **The same, and no command can check the rule.** Only then is the proposal a sharper sentence for the existing rule. It says why no command can check the rule, and quotes the findings that show how builders read the current one.
 
 ## Stops
 

@@ -7,7 +7,7 @@ metadata:
 
 # Set up a repository
 
-`/repo-setup` sets up a new repository in the shape the plan skills expect, or keeps an existing repository's shared-rules block equal to the template. It leaves behind the approved tree in one commit, or the synced block.
+`/repo-setup` sets up a new repository in the shape the plan skills expect, or keeps an existing repository's shared-rules block equal to the template. It leaves behind the approved tree, committed when the repository's commit rule allows it, or the synced block.
 
 ## Quick start
 
@@ -45,6 +45,7 @@ metadata:
    - The CLI copies them into `.agents/skills/`, links them under `.claude/skills/`, and writes `skills-lock.json`.
 8. List each installed skill with its description in the Skills section of `CLAUDE.md`.
 9. Run `/ordo-init`, with its own draft and approval: it writes `.agents/plan.yaml` and `docs/dev/building.md`, and its check passes.
+   - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
 10. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
 11. Run the checks:
 
@@ -57,7 +58,10 @@ metadata:
 
     - The setup is done when the first two exit 0, the scan prints nothing, and the last line exits 0.
 12. Show each check's output.
-13. Commit the setup in one commit, by explicit path list, every file written named, the subject naming the repository's setup.
+13. Commit the setup's other files in one commit by explicit path list, the subject naming the repository's setup.
+    - Every file written is named, except those `/ordo-init` committed at Steps 9.
+    - The commit is made only when the answer to question 5 allows it.
+    - Otherwise the skill stops ("Stops").
     - `.agents/skills/` and `.claude/` are ignored and not committed; `skills-lock.json` is.
 
 ### sync
@@ -118,7 +122,7 @@ utils/                           scripts the build and the checks run
 | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
 | The drafted sync change | `sync` exits 2 | The change Steps / sync 4 drafts | The user's approval |
 | An `AGENTS.md` difference | `AGENTS.md` is a file whose text differs from `CLAUDE.md` | The difference | The user's ruling |
-| No commit allowed | The repository's commit rule does not allow the commit | The files changed, and the command that shows them (`git status --short`) | The user's commit |
+| No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 13 or Steps / sync 8 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
 | Tracked files | The folder for a new repository holds tracked files | A refusal that names `/repo-setup sync` and `/ordo-init` | One of those, or a folder with no tracked file |
 
 - The first six rows are stops: each waits on the user.

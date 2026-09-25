@@ -10,7 +10,7 @@
 | 3 | An unreproduced claim is a finding | Rules 3 |
 | 3 | The report's four headings | The four headings |
 | 3 | Run once per step before its first repair round | Steps 1 |
-| 3 | Again over each round when refute_after_repair says yes, up to repair_rounds | Steps / Over a repair round 1 |
+| 3 | Again over each round when refute_after_repair says yes, up to repair_rounds (or one more under plan-orchestration's exception, by plan 2.B) | Steps / Over a repair round 1 |
 | 3 | The trigger phrases | Quick start |
 | 4 | The metadata key | Quick start |
 | 5 | The version, 1.3.0, now 1.4.0 in metadata.version | Quick start |
@@ -55,10 +55,10 @@
 | 30 | Every command in the verification list, from its directory, through the rules file's filter | Steps 3 |
 | 30 | Every command the report quotes, in the same form, its output compared with the claim | Steps 4 |
 | 30 | A claim needing a second build: say so, reproduce what the one build allows | Steps 4 |
-| 30 | No background shells, no polling | Anti-patterns 3 |
+| 30 | No background shells, no polling, unless the brief lists them | Anti-patterns 3 |
 | 30 | No benchmark suites, no sanitizer runs unless the brief lists them | Anti-patterns 4 |
 | 30 | No edit to any file, anywhere | Anti-patterns 2 |
-| 34 | With refute_after_repair: yes, /refute runs again after each round, at most repair_rounds, a fresh reviewer each time | Steps / Over a repair round 1 |
+| 34 | With refute_after_repair: yes, /refute runs again after each round, at most repair_rounds (or one more under plan-orchestration's exception, by plan 2.B), a fresh reviewer each time | Steps / Over a repair round 1 |
 | 34 | A run that finds nothing ends the rounds | Steps / Over a repair round 1 |
 | 34 | It reads the same files plus the first refuter report and the round entries | Steps / Over a repair round 2 |
 | 34 | Its diff is the round's delta, read against the whole diff since the base | Steps / Over a repair round 3 |
@@ -76,9 +76,9 @@
 | 38 | Each run over a round's findings are appended under Repair round <n>, refuted | Steps / Over a repair round 6 |
 | 38 | The orchestrator or the session saves it | Steps 7 |
 | 38 | The reviewer never writes into the ledger itself | Rules 2 |
-| 38 | Its usage in the state file's table and the reviewer line in the dispatch block, both committed by path | Steps 7 |
+| 38 | Its usage in the state file's table and the reviewer line in the dispatch block (named as its reviewer_report field by plan 2.B), both committed by path | Steps 7 |
 | 42 | The reviewer is fresh every time, never the builder, never the brief's writer when another is available | Rules 1 |
-| 43 | A finding is closed in a repair round, at landing, or booked as its own step in the booked list | Finding dispositions 1 |
+| 43 | A finding is closed in a repair round (at most repair_rounds, or one more under plan-orchestration's exception, by plan 2.B), at landing, or booked as its own step in the booked list | Finding dispositions 1 |
 | 43 | The open items hold only what the user must rule on | Finding dispositions 2 |
 | 43 | After the last round the findings are appended, each disposition under Closed | Finding dispositions 3 |
 | 43 | /land refuses while a finding is neither closed nor booked | Finding dispositions 4 |

@@ -1,13 +1,13 @@
 ---
 name: refute
-description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round, and again over each round when the configuration block says refute_after_repair: yes, up to repair_rounds. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
   version: "1.4.0"
 ---
 
 # Refute a step
 
-`/refute <entry> <step>` has one reviewer, who changes nothing, do what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with a file and a line, or "none" under a heading, saved and committed by the orchestrator or the session.
+`/refute <entry> <step>` dispatches one reviewer, who changes nothing and does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with a file and a line, or "none" under a heading, saved and committed by the orchestrator or the session.
 
 ## Quick start
 
@@ -50,12 +50,12 @@ metadata:
    - Then the four headings, each with findings (the file, the line, the quoted hunk, what is wrong) or "none".
    - Then what was not checked within the time box, named.
    - Then the reviewer's usage.
-7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`, records its usage in the state file's table and the reviewer line in the dispatch block, and commits both by path.
+7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`, records its usage in the state file's table and its path under the dispatch block's `reviewer_report` field, and commits both by path.
 8. Each finding is then closed or booked, as "Finding dispositions" says.
 
 ### Over a repair round
 
-1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds` of them, on a fresh reviewer each time, as Rules 1 says.
+1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says.
    - A run that finds nothing ends the rounds.
 2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
 3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
@@ -97,7 +97,7 @@ metadata:
 
 ## Finding dispositions
 
-- A finding is closed by the builder in a repair round (at most `repair_rounds` of them), or at landing, or booked as its own step in the plan and carried in the state file's booked list.
+- A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or booked as its own step in the plan and carried in the state file's booked list.
 - The open items hold only what the user must rule on.
 - After the last round, the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading.
 - `/land` refuses while a finding is left neither closed nor booked.
@@ -117,7 +117,7 @@ metadata:
 |---|---|---|
 | Praise, or a summary of what the step did | The report is read for what is wrong, and anything else hides it | Steps 6 |
 | An edit to any file, anywhere, by the reviewer | The step under review is no longer the step that was built | Report the finding; the builder or the landing fixes it |
-| A background shell, or polling | It outlasts the review | Run each command in the foreground and wait for it |
+| A background shell, or polling, the brief does not list | It outlasts the review | Run each command in the foreground and wait for it |
 | A benchmark suite or a sanitizer run the brief does not list | It measures what the brief did not ask about | Steps 3 and 4 |
 | An unchecked point reported as a finding or as a pass | The report then claims what nobody checked | Steps 6 |
 

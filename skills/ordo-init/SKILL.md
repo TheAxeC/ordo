@@ -7,7 +7,7 @@ metadata:
 
 # Set a repository up for the plan skills
 
-`/ordo-init` writes the one file the plan skills (`plan`, `spec`, `refute`, `land`, `plan-help`, `plan-orchestration`) need in a repository, `.agents/plan.yaml`, and the pages that file names when the repository lacks them. It leaves behind that file, the pages the user approved, the `.gitignore` lines it needed, and one commit.
+`/ordo-init` writes the one file the plan skills (`plan`, `spec`, `refute`, `land`, `plan-help`, `plan-orchestration`) need in a repository, `.agents/plan.yaml`, and the pages that file names when the repository lacks them. It leaves behind that file, the pages the user approved, the `.gitignore` lines it needed, and one commit when the repository's commit rule allows it.
 
 ## Quick start
 
@@ -27,7 +27,8 @@ metadata:
 
 1. The plan skill's `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several), in the `plan` folder beside this skill's folder: the keys, which are required, each optional key's default, and the comment that says what the key is.
 2. `.agents/plan.yaml`, when it exists; then the skill checks instead of drafting ("Steps / Checking an existing file").
-3. The repository: `git ls-files`, the CI configuration (`.github/workflows/`, `.gitlab-ci.yml` and the like), the build and package files (`package.json` scripts, `Makefile`, `CMakeLists.txt` and `CMakePresets.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`), the documentation folders, `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, and `.gitignore`.
+3. The repository's commit rule: the answer to `repo-setup`'s question 5 when `/repo-setup` runs this skill, or, when it runs alone, the user's answer at the approval stop of Steps 11.
+4. The repository: `git ls-files`, the CI configuration (`.github/workflows/`, `.gitlab-ci.yml` and the like), the build and package files (`package.json` scripts, `Makefile`, `CMakeLists.txt` and `CMakePresets.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`), the documentation folders, `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, and `.gitignore`.
 
 ## Steps
 
@@ -67,12 +68,14 @@ Run from the repository root.
    - When it does not, the draft adds `/<worktree_root>/` to `.gitignore`.
    - `.agents/plan.yaml` must not be ignored: `git check-ignore -q --no-index .agents/plan.yaml` exits 1.
    - A rule that ignores the whole `.agents/` folder is drafted as `.agents/*` with `!.agents/plan.yaml` after it, since git cannot re-include a file whose parent folder is excluded.
-10. Show, in this order: the form and why; the draft `.agents/plan.yaml` in full; each page it would create, in full, with the commands' results for a verification page; the `.gitignore` changes, as Rules 4 says.
+10. Show, in this order: the form and why; the draft `.agents/plan.yaml` in full; each page it would create, in full, with the commands' results for a verification page; the `.gitignore` changes, as Rules 4 says; and, when the skill runs alone, the question whether it may commit.
 11. Stop for the approval ("Stops").
 12. Write what was approved.
 13. Run `python3 <this skill's folder>/templates/check_config.py .` and show its output.
     - The setup is done only when that exits 0.
 14. Commit the files written by explicit path list, in one commit whose subject names the plan configuration.
+    - The commit is made only when the repository's commit rule ("What it reads" 3) allows it.
+    - Otherwise the skill stops ("Stops"), except under `/repo-setup`, where the setup goes on and `repo-setup`'s Steps 13 raises the one stop.
 
 ### Checking an existing file
 
@@ -87,11 +90,12 @@ Run from the repository root.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The draft | Every setup, at Steps 11 | What Steps 10 lists | The user's approval or correction |
+| The draft | Every setup, at Steps 11 | What Steps 10 lists | The user's approval or correction, and, when the skill runs alone, the answer to the commit question |
 | Several roadmaps | More than one roadmap candidate | The candidates | The user's pick |
 | Worker and reviewer | Every setup, at Steps 6 | The offered answer Steps 6 names | The user's answer |
 | A failing command | A command meant for the verification page fails its one run | What Steps 3 shows beside it | The user's decision |
 | A fix in the check | The check reports an error in an existing file | The error and the proposed fix | The user's approval |
+| No commit allowed | The repository's commit rule does not allow the commit, at Steps 14, when the skill runs alone | The files written, and the command that shows them (`git status --short`) | The user's commit |
 
 ## Anti-patterns
 
@@ -102,8 +106,8 @@ Run from the repository root.
 
 ## Rules
 
-- The skill writes nothing until the user approves or corrects the draft.
+- The skill writes nothing until the user approves or corrects the draft. The one exception is Steps 3, where each verification command runs once before the draft is shown.
 - The skill draws only from the repository and the user, for the file it drafts and for every page.
 - A page the skill writes states what the repository already does or says, and cites where.
-- A change to an existing file, `.gitignore` included, is shown as a diff and approved like the draft.
-- Every path is relative to the repository root.
+- The skill never overwrites an existing page or `.agents/plan.yaml`. A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
+- Every path is relative to the repository root, except `launch_note`, which is an absolute path.

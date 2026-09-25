@@ -56,18 +56,19 @@ then, for every step:
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
-                              repeat these two up to repair_rounds times (plan.yaml); a refutation that finds nothing ends them; what the last one finds is fixed at landing or booked, never sent back
-read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is booked as its own step and goes to the booked items
-/land <entry> <step>          onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the usage rows, the booking, the commit
+                              repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or booked, never sent back
+read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is booked as its own step and goes to the booked list
+/land <entry> <step>          stops the step's agents, then onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the usage rows, the booking, the commit
 
 when a command stops:
 
-/spec stops                   a premise of the step is wrong on the tree, or a choice is yours: it wrote an open item and no brief
+/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, or a choice is yours: it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger and commits
 /spec <entry> <step>          again; it now writes the brief
-/land refuses or stops        it names the finding left unbooked or the red line: fix it at landing or book it, then /land again
+/land refuses                 it names what is missing, such as a finding neither closed nor booked: fix or book it, then /land again
+/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main and its failure is booked; then /spec the next unblocked step, the booked step in its queue order, an open item after your ruling
 
-/plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, an agent at "build it" and "close them"
+/plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
 
 /plan-retro                   after plans have run: the findings the reviews keep making, and the rule, page or check that stops each
 ```

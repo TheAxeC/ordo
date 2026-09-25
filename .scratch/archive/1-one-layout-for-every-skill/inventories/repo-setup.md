@@ -52,7 +52,7 @@
 | 60 | Each check's output is shown | Steps 12 |
 | 62-67 | The four check commands | Steps 11 |
 | 69 | The setup is done when the first two exit 0, the scan prints nothing, the last exits 0 | Steps 11 |
-| 70 | One commit by explicit path list, every file named, the subject naming the setup | Steps 13 |
+| 70 | One commit by explicit path list, every file named, the subject naming the setup (by plan 2.B, only when the answer to question 5 allows it, and without the files /ordo-init committed at Steps 9) | Steps 13 |
 | 70 | .agents/skills and .claude are not committed; skills-lock.json is | Steps 13 |
 | 72 | sync, as its own part | Steps / sync |
 | 74 | sync runs the check on the path | Steps / sync 1 |

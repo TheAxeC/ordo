@@ -22,7 +22,7 @@
 | 10 | Run from the repository root | Steps |
 | 14 | The plan skill's example files: the keys, the required ones, the defaults and the comments | What it reads 1 |
 | 15 | .agents/plan.yaml when it exists; then the skill checks instead of drafting | What it reads 2 |
-| 16 | The repository's files listed | What it reads 3 |
+| 16 | The repository's files listed | What it reads 4 |
 | 20 | Separate tools with their own build and docs are drafted in the projects: form, one per directory, worktree_paths set | Steps 1 |
 | 20 | Otherwise the one-project form | Steps 1 |
 | 20 | The draft says which form and why | Steps 1 |
@@ -59,11 +59,11 @@
 | 37 | .agents/plan.yaml must not be ignored, checked by check-ignore | Steps 9 |
 | 37 | A rule ignoring all of .agents/ is rewritten as .agents/* with the exception, since git cannot re-include under an excluded folder | Steps 9 |
 | 41 | What is shown, in order: the form, the draft, each page with the commands' results, the .gitignore lines | Steps 10 |
-| 41 | Nothing is written until the user approves or corrects the draft | Rules 1 |
+| 41 | Nothing is written until the user approves or corrects the draft (by plan 2.B, except the one run of each verification command before the draft is shown) | Rules 1 |
 | 41 | After writing it runs check_config.py | Steps 13 |
 | 44 | The check command | Steps 13 |
 | 47 | It shows the output; the setup is done only when that exits 0 | Steps 13 |
-| 47 | The files written are committed by explicit path list, one commit naming the plan configuration | Steps 14 |
+| 47 | The files written are committed by explicit path list, one commit naming the plan configuration (by plan 2.B, only when the repository's commit rule allows it) | Steps 14 |
 | 51 | With plan.yaml present, the skill writes nothing and runs check_config.py | Steps / Checking an existing file 1 |
 | 51 | What the check reports | Steps / Checking an existing file 2 |
 | 51 | Optional keys left out are listed as notes with their default | Steps / Checking an existing file 3 |
@@ -72,6 +72,6 @@
 | 51 | After the fixes, runs the check again | Steps / Checking an existing file 6 |
 | 55 | The skill draws only from the repository and the user | Rules 2 |
 | 55 | A page it writes states what the repository does or says, and cites where | Rules 3 |
-| 56 | It never overwrites an existing page or .agents/plan.yaml | Anti-patterns 2 |
+| 56 | It never overwrites an existing page or .agents/plan.yaml | Rules 4 |
 | 56 | Changes to an existing file are shown as a diff and approved like the draft | Rules 4 |
-| 57 | Every path is relative to the repository root | Rules 5 |
+| 57 | Every path is relative to the repository root (by plan 2.B, except launch_note, an absolute path) | Rules 5 |

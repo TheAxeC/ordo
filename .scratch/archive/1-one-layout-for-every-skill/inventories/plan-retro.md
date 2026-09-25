@@ -46,7 +46,7 @@
 | 37 | The rule not written anywhere: grep, then propose its text in the page's voice with the findings cited | The proposal for a recurring kind 1 |
 | 38 | The rule on a page the briefs do not point at: add the page to standards | The proposal for a recurring kind 2 |
 | 39 | The rule written where the briefs point and checkable by a command: propose the check, its output, and the verification line | The proposal for a recurring kind 3 |
-| 39 | Not checkable by a command: a sharper sentence, quoting the findings | The proposal for a recurring kind 4 |
+| 39 | Not checkable by a command: a sharper sentence, quoting the findings (by plan 2.B's ruling 3b, saying why no command can check the rule) | The proposal for a recurring kind 4 |
 | 41 | A proposal never loosens a rule and never adds an exemption | Anti-patterns 2 |
 | 45 | The retro file from the template, with the reports read, the counts, the recurring kinds and the others | Steps 8 |
 | 45 | The retro is shown to the user | Steps 9 |

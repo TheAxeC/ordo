@@ -38,7 +38,7 @@
 | 35 | The spec stops line | The sequence, printed verbatim |
 | 36 | The Ruled line | The sequence, printed verbatim |
 | 37 | The spec again line | The sequence, printed verbatim |
-| 38 | The land refuses or stops line | The sequence, printed verbatim |
+| 38 | The land refuses or stops line (split by plan 2.B into the land refuses line and the land meets a red line line) | The sequence, printed verbatim |
 | 40 | The plan-orchestration line | The sequence, printed verbatim |
 | 42 | The plan-retro line | The sequence, printed verbatim |
 | 45 | The position is printed for /plan-help <entry> only | Steps 2 |

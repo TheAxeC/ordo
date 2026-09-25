@@ -44,8 +44,10 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - Any unrelated change of the user's is listed by path and left alone.
    - A preflight that fails is a refusal ("Stops").
 2. Check every premise the step's text makes against the tree.
-   - A premise found false is a stop ("Stops"): the plan's text is corrected before the brief exists, never left for the builder to hit.
-   - A correction that changes the step's scope is a stop for the user ("Stops").
+   - A premise found false that the plan can absorb is corrected in `plan.md` before the brief exists, never left for the builder to hit.
+   - That correction goes into the preparation commit (Steps 4).
+   - The brief records the correction beside the premise.
+   - A premise found false that the plan cannot absorb is a stop ("Stops"): its correction would change the step's scope, or make a choice the user would see.
 3. Write `agents/briefs/<step>.md` from `templates/brief.md`.
    - The first line points at the rules file the configuration names, and at the standards it lists.
    - The premises as checked, with the command that checked each.
@@ -88,17 +90,16 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
 
 ## Stops
 
-The first three rows are stops, which leave an open item as "Steps / A stop" says; the rest are refusals, which name their cause and leave nothing.
+The first two rows are stops, which leave an open item as "Steps / A stop" says; the rest are refusals, which name their cause and leave nothing.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A false premise | A premise the step's text makes is false on the tree; the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
-| A scope change | A premise correction would change the step's scope | The open item, booked in the open items | A ruling |
+| A false premise the plan cannot absorb | A premise the step's text makes is false on the tree, and its correction would change the step's scope or make a choice the user would see (Steps 2); the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
 | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary | The open item, booked in the open items | A ruling |
 | A failed preflight | Not on `main`, something staged, or a git operation in progress | What it saw | The tree put right, then `/spec` again |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/spec` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/spec` |
-| A step in flight | A step is already in flight, and the configuration block does not allow more than one | The step in flight, named | That step landed |
+| A step in flight | A step is already in flight, and the configuration block does not allow more than one | The step in flight, named | That step landed, or a red line took its landing back out of main and its dispatch block reads `landing: backed-out` (the `land` skill's Steps 6) |
 | No such step | The step is not in `plan.md`'s list | The list | `/spec` with a step in the list |
 
 ## Anti-patterns
