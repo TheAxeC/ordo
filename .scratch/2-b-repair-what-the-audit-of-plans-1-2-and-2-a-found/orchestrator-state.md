@@ -39,7 +39,8 @@ launch_note:                 # none recorded.
 dispatch:
 - step: 2
   executor: agent
-  worker: claude:opus (a builder agent, identity written at launch)
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: abb4bfa4b4e0b08fc (the runner's agent id)
   worktree: .agents/worktrees/2b-2
   base: 17cf7ca
   launched: 2026-09-25
