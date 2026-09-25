@@ -47,7 +47,7 @@ dispatch:
   landing: not-started
   round: 1 (sent 2026-09-25: the findings of 1-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 00e8f8b on branch 2b-1)
   round_2: sent 2026-09-25 under plan-orchestration's exception (ruling F (a)), to the same builder; the worktree at its start is commit 80ab53a on branch 2b-1
-  builder_usage: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s (the runner's completion notifications)
+  builder_usage: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s; round 2: 352,270 tokens, 52 tool uses, 4,615 s (the runner's completion notifications)
   round_reviewer: agent a500487f692781184, claude:opus, through /refute over round 1: 124,041 tokens, 29 tool uses, 778 s
   reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039; 111,656 tokens, 24 tool uses, 421 s)
 ```
@@ -95,7 +95,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 2, the exception round ruled in F, is with the same builder.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 2 is done; /refute runs over it.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 
