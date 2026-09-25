@@ -43,7 +43,10 @@ metadata:
    - A shell builder's pid must then be gone, and its exit file present.
    - A check that fails is a refusal before main is touched ("Stops").
 2. Set `landing: cherry-picking` in the dispatch block.
-3. In the worktree, from inside it, after waiting for `.git/index.lock` to go: `git add -A` scoped to the step's tree, and `git commit -q -m wip`.
+3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` scoped to the step's tree, and `git commit -q -m wip` when something is staged.
+   - A builder that committed everything leaves nothing staged, and the landing makes no wip commit.
+   - The landing removes a lock older than 60 s while no `git` process runs, as stale.
+   - Each wait for a lock, here and on main before Steps 4, is bounded at 60 s of waiting; at the bound the landing stops ("Stops").
 4. On main: `git cherry-pick -n <base>..<step>`, the whole range from the recorded base, so the landing applies the complete reviewed change and never only the last fix.
    - A conflict is resolved by the orchestrator or the session, never by an agent.
    - The ledger's landing script, when there is one, prints the conflicting paths and exits instead.
@@ -99,6 +102,7 @@ metadata:
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and only the user can decide what to do | The failure, booked in the open items as Steps 6 says | The user's ruling |
+| A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves: main untouched; under the ledger's landing script, the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1 | The lock removed once no git command uses it, then `/land` again; the ledger's landing script, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
 | No dispatch block | The state file holds no dispatch block naming this step | That the block is missing | `/spec` for the step |
@@ -107,7 +111,8 @@ metadata:
 | Agents still running | The check of Steps 1 fails: an agent still listed, a shell builder's pid alive, or no exit file | Each one left | Each one stopped, then `/land` again |
 
 - The first row is a stop: it leaves an open item.
-- The rows after it are refusals: they come before main is touched.
+- The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.
+- The rows after those two are refusals: they come before main is touched.
 - A refusal names its cause and leaves nothing.
 - A red line booked in the booked list is not a stop: the step is out of main, and the booked step is worked in queue order.
 

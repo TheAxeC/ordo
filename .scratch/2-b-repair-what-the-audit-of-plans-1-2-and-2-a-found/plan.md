@@ -25,7 +25,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 6a `skills/plan-retro/templates/collect_findings.py` keeps every item under the four headings as a finding: the no-finding and closure word lists (`NOTHING_FOUND`, `OTHERS_REPRODUCE`, `CLOSURE`) and their tests go; `skills/plan-retro/SKILL.md` Grouping sets aside, by reading, a finding that reports no defect or a closure that holds (the cut ruled 2026-09-25); `collect_findings.test.sh` passes (1 commit)
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
-- 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
+- ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
 - 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note (1 commit; orchestrator, no agent)
 - 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
 - 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
@@ -303,3 +303,46 @@ verify: 12 commands passed
   and exited 0; `python3 -B utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`.
 - Usage, orchestrator from step 6's landing (e9633bd) to this booking: 57 messages, 49938 output tokens, 105681 cache-write tokens, 11615352 cache-read tokens, 122 fresh input tokens, 27 minutes. The window also holds step 4's review and round, step 9's brief and dispatch, and ruling J.
 
+### Step 9, sync_rules.py, land.sh and usage.py (landed 2026-09-25)
+
+- Landed: `skills/repo-setup/templates/sync_rules.py` exits 2 with one `error:` line on stderr for a `CLAUDE.md` or `shared-rules.md` that is missing or not UTF-8, a `CLAUDE.md` `--write` cannot write, and a write that does not read back as written; `--write` keeps every byte outside the block and writes the block in the ending most of the file's lines use, the first line's on a tie. `skills/repo-setup/SKILL.md` sync steps and Stops tell the exit-2 causes to draft (no block, no symlink) from the files to fix, by the `error:` line. `skills/land/templates/land.sh` makes the worktree's wip commit only when something is staged; each wait for an `index.lock` is bounded at 60 s (`LANDING_LOCK_WAIT` for the test) and stops with exit 1, naming the lock and the state it leaves; run again after a stop past the worktree's checkout, it returns the worktree to `<pkg>` and removes `<pkg>-land`, and refuses while main holds staged or unmerged changes or `<pkg>-land` holds a cherry-pick in progress, uncommitted changes or a commit of its own. `usage.py` counts a Codex rollout's assistant messages and refuses a window time without an offset or unreadable with exit 64. `land.test.sh` fails a missing example inside an Ordo checkout and skips only outside one. `skills/land/SKILL.md` Steps 3 and the Stops row "A lock held"; `README.md` lines 117 and 120 say what the tests cover.
+- User-visible changes, before and after:
+  - `sync_rules.py` on a non-UTF-8 `CLAUDE.md`: before, a traceback and exit 1 ("block differs"); after, `error: <path> is not UTF-8 (byte <n>)` on stderr and exit 2.
+  - `sync_rules.py --write` on a CRLF file: before, every line became LF; after, every byte outside the block kept and the block in CRLF; in a mixed file, the ending most lines use.
+  - `sync_rules.py` error lines: before, on stdout; after, on stderr.
+  - `land.sh` when the builder committed everything: before, `worktree git commit failed`, exit 1; after, no wip commit and the landing goes on.
+  - `land.sh` with a lock held while any `git` process runs: before, an unbounded wait; after, a stop at 60 s with exit 1.
+  - `land.sh` run again after a stop past the worktree's checkout: before, refused (`package worktree is on <pkg>-land`); after, resumed from `<pkg>`, or refused with the cause while main holds staged changes or `<pkg>-land` holds work of its own.
+  - `usage.py` on a Codex rollout: before, `<n> messages` counted `token_count` events; after, assistant messages.
+  - `usage.py` with a window time without an offset: before, a traceback and exit 1; after, a message naming the time and exit 64.
+  - `land.test.sh` inside an Ordo checkout missing an example: before, skipped and passed; after, fails naming the file.
+- Rounds: the first review (6 findings), repair round 1 (6 rulings; the path list widened to `skills/repo-setup/SKILL.md`), the review over it (3 findings), fixed at landing (3): the Stops row names the ledger's landing script as the one that makes and removes `<step>-land`; a dead assignment after `fail` removed; the resume refused while main holds staged or unmerged changes, with the case "staged main" in `land.test.sh`, red with the check replaced by `if false` (`agents/reviews/9-refuter.md`, Closed).
+- Verified on main with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+  and exited 0; `python3 -B utils/check_rule_inventory.py` over the archived inventories of `land` and `repo-setup` printed `ok:` for each.
+- Booked: nothing new.
+- Usage, orchestrator from step 8's landing (3867456) to this booking, over two session logs (the session that ran the rounds, and the session that resumed the plan): 117 messages, 83680 output tokens, 363787 cache-write tokens, 31728288 cache-read tokens, 252 fresh input tokens, 184 minutes. The window also holds the cuts of the plan, rulings J and K, step 6a's round and the dispatch of step 4's round review.

@@ -2,6 +2,25 @@
 # Run a reviewed package through a plan's landing checks and print its booking data.
 # A plan copies this file into its ledger folder and makes the three ADAPT edits: the tool
 # directory, the check commands and their pass rules, and the harness and model names in the rows.
+#
+# In the package's worktree it stages the tool directory and makes a wip commit when something is
+# staged; a builder that committed everything lands with no wip commit.
+#
+# Before each git step it waits for the repository's index.lock to go, and removes a lock older
+# than 60 s while no process named git runs, as stale. The wait is bounded: after 60 s of waiting
+# the landing stops with a message naming the lock and exit 1, whatever processes run. The
+# environment variable LANDING_LOCK_WAIT, when set and not empty, gives the bound in whole seconds
+# instead (its test shortens it); a value that is not a whole number is refused with exit 64.
+#
+# Every stop at a lock leaves main untouched. A stop after the worktree's checkout leaves the
+# worktree on <pkg>-land, and landing again resumes: the preflight sees <pkg>-land, returns the
+# worktree to <pkg>, deletes <pkg>-land and lands from the start. This is done on the next run
+# and not at the stop, because the held lock may be the worktree's own, which blocks the checkout
+# that would undo the branch. The preflight refuses instead, keeping <pkg>-land, when main holds
+# staged or unmerged changes (a run that reached main's cherry-pick, stopped at a failed check or
+# ended, leaves them for the orchestrator), and when <pkg>-land holds a cherry-pick in progress (a
+# conflict left for the orchestrator), changes not committed, or a commit that is not a
+# cherry-pick of the package's own commits (git cherry marks it +).
 
 set -u
 
@@ -69,6 +88,13 @@ fi
 if [ -n "$landing_session" ] && [ ! -f "$landing_session" ]; then
     fail "arguments failed: session log not found: $landing_session" 64
 fi
+landing_lock_bound=${LANDING_LOCK_WAIT:-60}
+case "$landing_lock_bound" in
+    *[!0-9]*)
+        fail "arguments failed: LANDING_LOCK_WAIT must be a whole number of seconds: \
+$landing_lock_bound" 64
+        ;;
+esac
 
 landing_root=$(pwd -P)
 landing_worktree=$landing_root/.agents/worktrees/$landing_pkg
@@ -135,18 +161,23 @@ wait_for_index() {
     landing_wait_root=$1
     landing_git_dir=$(resolve_git_dir "$landing_wait_root") || fail "index lock failed: cannot resolve .git for $landing_wait_root"
     landing_lock=$landing_git_dir/index.lock
-    landing_announced=0
+    landing_waited=0
     while [ -e "$landing_lock" ]; do
         landing_age=$(node -e 'const fs = require("fs"); const age = Math.floor((Date.now() - fs.statSync(process.argv[1]).mtimeMs) / 1000); process.stdout.write(String(age));' "$landing_lock" 2>/dev/null || printf '0')
         if [ "$landing_age" -gt 60 ] && ! git_process_alive; then
             rm -f "$landing_lock" || fail "index lock failed: cannot remove stale lock: $landing_lock"
             continue
         fi
-        if [ "$landing_announced" -eq 0 ]; then
+        if [ "$landing_waited" -ge "$landing_lock_bound" ]; then
+            fail "index lock failed: $landing_lock still held after $landing_waited s of waiting; \
+main is untouched; the worktree is on $landing_left. Remove the lock once no git command uses it, \
+then land again to resume."
+        fi
+        if [ "$landing_waited" -eq 0 ]; then
             printf 'index lock: waiting for %s\n' "$landing_lock"
-            landing_announced=1
         fi
         sleep 1
+        landing_waited=$((landing_waited + 1))
     done
 }
 
@@ -180,7 +211,48 @@ if [ "$landing_status" -ne 0 ]; then
     cat "$landing_output" >&2
     fail "preflight failed: cannot read the package worktree branch"
 fi
-if [ "$landing_worktree_branch" != "$landing_pkg" ]; then
+landing_left_land="$landing_pkg-land, which landing again removes before it starts over"
+landing_left=$landing_pkg
+if [ "$landing_worktree_branch" = "$landing_pkg-land" ]; then
+    landing_left=$landing_left_land
+    # A landing stopped after its checkout: <pkg>-land holds at most the cherry-picks of the
+    # package's commits, so it is removed and the landing starts over from <pkg>, onto a main with
+    # nothing staged.
+    wait_for_index "$landing_root"
+    git diff --cached --quiet >"$landing_output" 2>&1
+    landing_status=$?
+    if [ "$landing_status" -eq 1 ]; then
+        fail "preflight failed: main holds staged or unmerged changes, so \
+$landing_pkg-land is kept; land again once main has nothing staged"
+    elif [ "$landing_status" -ne 0 ]; then
+        cat "$landing_output" >&2
+        fail "preflight failed: cannot read what main has staged"
+    fi
+    wait_for_index "$landing_worktree"
+    if (cd "$landing_worktree" && git rev-parse -q --verify CHERRY_PICK_HEAD) >/dev/null 2>&1; then
+        fail "preflight failed: a cherry-pick is in progress on $landing_pkg-land; \
+resolve or abort it by hand"
+    fi
+    landing_dirty=$(cd "$landing_worktree" && git status --porcelain --untracked-files=no) ||
+        fail "preflight failed: cannot read the status of $landing_pkg-land"
+    if [ -n "$landing_dirty" ]; then
+        fail "preflight failed: $landing_pkg-land has changes not committed; \
+commit or discard them by hand"
+    fi
+    landing_foreign=$(cd "$landing_worktree" && git cherry "$landing_pkg" "$landing_pkg-land" main) ||
+        fail "preflight failed: cannot compare $landing_pkg-land with $landing_pkg"
+    landing_foreign=$(printf '%s\n' "$landing_foreign" | sed -n 's/^+ //p' | tr '\n' ' ' | sed 's/ $//')
+    if [ -n "$landing_foreign" ]; then
+        fail "preflight failed: $landing_pkg-land holds commits that are not cherry-picks of \
+$landing_pkg: $landing_foreign"
+    fi
+    run_step "worktree git checkout $landing_pkg" sh -c 'cd "$1" && git checkout -q "$2"' land \
+        "$landing_worktree" "$landing_pkg"
+    wait_for_index "$landing_worktree"
+    run_step "worktree git branch -D" sh -c 'cd "$1" && git branch -q -D "$2-land"' land \
+        "$landing_worktree" "$landing_pkg"
+    printf 'resume: the worktree is back on %s, %s-land removed\n' "$landing_pkg" "$landing_pkg"
+elif [ "$landing_worktree_branch" != "$landing_pkg" ]; then
     fail "preflight failed: package worktree is on $landing_worktree_branch, expected $landing_pkg"
 fi
 
@@ -188,10 +260,25 @@ wait_for_index "$landing_worktree"
 run_step "worktree git add" sh -c 'cd "$1" && git add -A "$2"' land "$landing_worktree" "$landing_tool_path"
 
 wait_for_index "$landing_worktree"
-run_step "worktree git commit" sh -c 'cd "$1" && git commit -q -m wip' land "$landing_worktree"
+(cd "$landing_worktree" && git diff --cached --quiet) >"$landing_output" 2>&1
+landing_status=$?
+case "$landing_status" in
+    0)
+        printf 'worktree git commit: nothing staged, no wip commit made\n'
+        ;;
+    1)
+        wait_for_index "$landing_worktree"
+        run_step "worktree git commit" sh -c 'cd "$1" && git commit -q -m wip' land "$landing_worktree"
+        ;;
+    *)
+        cat "$landing_output" >&2
+        fail "worktree git diff --cached failed" "$landing_status"
+        ;;
+esac
 
 wait_for_index "$landing_worktree"
 run_step "worktree git checkout" sh -c 'cd "$1" && git checkout -b "$2-land" main' land "$landing_worktree" "$landing_pkg"
+landing_left=$landing_left_land
 
 wait_for_index "$landing_worktree"
 (cd "$landing_worktree" && git cherry-pick "$landing_base..$landing_pkg") >"$landing_output" 2>&1

@@ -50,19 +50,6 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/4-report.md
   landing: not-started
   round: 1 (sent 2026-09-25: the findings of 4-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 1aa7a17 on branch 2b-4; the path list widened to skills/plan/templates/orchestrator-state.md, and README.md:121 comes as Doc text)
-- step: 9
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: a32b0f2dd6149a962 (the runner's agent id)
-  builder_usage: 238,605 tokens, 70 tool uses, 2,222 s; after round 1 the notification reads 294,367 tokens, 92 tool uses, 3,581 s (the runner's completion notifications)
-  round_reviewer: claude:opus, agent afda72a615cfbb41d, through /refute over round 1: 130,235 tokens, 28 tool uses, 540 s
-  reviewer_report: agents/reviews/9-refuter.md (through /refute; reviewer claude:opus, agent adcf50ffc75f42ffb; 152,366 tokens, 29 tool uses, 664 s)
-  worktree: .agents/worktrees/2b-9
-  base: 163e9c2
-  launched: 2026-09-25
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/9-report.md
-  landing: not-started
-  round: 1 (sent 2026-09-25: the findings of 9-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 27aef76 on branch 2b-9; the path list widened to skills/repo-setup/SKILL.md)
 - step: 6a
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
@@ -132,8 +119,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Steps 1, 2, 3, 5, 6 and 8 landed (5fdaa98, 6458d52, fafda10, e69b588, e9633bd; step 8 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 4 is in repair round 1; step 9 is with its builder; 6a is with its builder; 1a runs alone after 4 lands, then 1c; 10 can follow now that 8 has landed.
+- 2026-09-25. Steps 1, 2, 3, 5, 6, 8 and 9 landed (5fdaa98, 6458d52, fafda10, e69b588, e9633bd, 3867456; step 9 in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 4's repair round 1 is under its review; 6a is rebriefed to the cut (the collector keeps every finding) and built again in its worktree; 1a runs alone after 4 lands, then 1c; 10 can follow now that 8 has landed.
 - Open on Axel's side: none.
 
 ## Usage
@@ -146,3 +133,4 @@ dispatch:
 | 5 | claude:opus agent, effort high: 133,678 tokens, 31 tool uses, 606 s; round 1: 203,386 tokens, 22 tool uses, 559 s | 126,518 tokens, 28 tool uses, 433 s; round 1: 135,722 tokens, 31 tool uses, 484 s; landing fixes: 72,526 tokens, 15 tool uses, 342 s | 1 | 12 (7 rulings) | 3 files changed, 513 insertions(+), 86 deletions(-) | no | 13 | 1 (open item I) | 23 | 16145 | 30037 | 19419115 | 50 | 13 | none |
 | 6 | claude:opus agent, effort high: 214,647 tokens, 61 tool uses, 922 s; round 1: 313,152 tokens, 38 tool uses, 781 s | 151,111 tokens, 47 tool uses, 513 s; round 1: 167,715 tokens, 46 tool uses, 480 s; landing fixes: 105,908 tokens, 26 tool uses, 375 s | 1 | 10 (7 rulings) | 5 files changed, 628 insertions(+), 99 deletions(-) | no | 14 | 0 | 83 | 75259 | 217318 | 49232763 | 184 | 63 | none |
 | 8 | claude:opus agent, effort high: 183,627 tokens, 37 tool uses, 1,479 s; round 1: 233,528 tokens, 23 tool uses, 2,257 s | 136,212 tokens, 34 tool uses, 539 s; round 1: 115,791 tokens, 24 tool uses, 431 s; landing fixes: 113,847 tokens, 15 tool uses, 299 s | 1 | 7 (5 rulings) | 4 files changed, 334 insertions(+), 31 deletions(-) | no | 10 | 0 | 57 | 49938 | 105681 | 11615352 | 122 | 27 | none |
+| 9 | claude:opus agent, effort high: 238,605 tokens, 70 tool uses, 2,222 s; round 1: 294,367 tokens, 92 tool uses, 3,581 s | 152,366 tokens, 29 tool uses, 664 s; round 1: 130,235 tokens, 28 tool uses, 540 s | 1 | 6 (6 rulings) | 8 files changed, 843 insertions(+), 81 deletions(-) | no | 3 | 0 | 117 | 83680 | 363787 | 31728288 | 252 | 184 | none |

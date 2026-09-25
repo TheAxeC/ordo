@@ -66,20 +66,22 @@ metadata:
 
 ### sync
 
-1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`; steps 2 to 8 follow its exit status.
+1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`; steps 2 to 9 follow its exit status and, on exit 2, its `error:` line.
 2. Exit 0: the block equals the template; nothing to do.
 3. Exit 1: the block differs; show the diff, for the user's ruling per hunk ("Stops").
    - The template's text goes into the repository: `--write`, after the approval.
    - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` in this skill's folder, after which every repository set up from it differs until it is synced.
-4. Exit 2 (no block, or `AGENTS.md` not a symlink to `CLAUDE.md`): draft the change.
+4. Exit 2 with `error: CLAUDE.md has no single shared-rules block` or `error: AGENTS.md is not a symlink to CLAUDE.md`: draft the change.
    - The block inserted after the opening paragraph.
    - Each rule of the existing `CLAUDE.md` that the block now states, listed for removal with the block rule that replaces it.
    - A rule that differs in substance, kept in Project rules and named.
    - `AGENTS.md` replaced by the symlink, after its text is compared with `CLAUDE.md`; a difference is shown and ruled on first ("Stops").
-5. Exit 2: show the drafted change ("Stops").
-6. Exit 2: write it once the user approves.
-7. Exit 2: run the check again, until it exits 0.
-8. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
+5. Show the drafted change ("Stops").
+6. Write it once the user approves.
+7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing, and show the line with the file it names ("Stops").
+   - The file named in the line is fixed first, by the user or with the user's approval.
+8. After a written draft or a fixed file: run the check again, until it exits 0.
+9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
 
 ## The questions
 
@@ -120,12 +122,13 @@ utils/                           scripts the build and the checks run
 | The questions | Every setup, at Steps 2 | The eight questions, each with its default | The user's answers |
 | The draft | Every setup, at Steps 4 | The tree and every file's text | The user's approval or correction |
 | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
-| The drafted sync change | `sync` exits 2 | The change Steps / sync 4 drafts | The user's approval |
+| The drafted sync change | `sync` exits 2 with one of the two `error:` lines of Steps / sync 4 | The change Steps / sync 4 drafts | The user's approval |
+| A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
 | An `AGENTS.md` difference | `AGENTS.md` is a file whose text differs from `CLAUDE.md` | The difference | The user's ruling |
-| No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 13 or Steps / sync 8 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
+| No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 13 or Steps / sync 9 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
 | Tracked files | The folder for a new repository holds tracked files | A refusal that names `/repo-setup sync` and `/ordo-init` | One of those, or a folder with no tracked file |
 
-- The first six rows are stops: each waits on the user.
+- The first seven rows are stops: each waits on the user.
 - The last row is a refusal: it names its cause and changes nothing.
 
 ## Anti-patterns

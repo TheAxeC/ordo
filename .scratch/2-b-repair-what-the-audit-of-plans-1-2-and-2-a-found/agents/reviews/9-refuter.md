@@ -228,3 +228,15 @@ none
 - The default 60 s bound end to end. It is unchanged in this round.
 
 Reviewer usage: 130,235 tokens, 28 tool uses, 540 s (the runner's completion notification).
+
+## Closed
+
+- Spec 1 (the block took the first line's ending in a mixed file): closed in the round, `line_ending()` in `skills/repo-setup/templates/sync_rules.py` takes the ending most lines use, the first line's on a tie; the cases "mixed", "tie-crlf" and "tie-lf" of `sync_rules.test.sh`, red under the reverts S1, S2 and S3 of the round's review.
+- Proof 1 (line counts of `land.sh` and `land.test.sh`): closed in the round, the report's round table equals `wc -l` on the final files (the round's review, Verification).
+- Standards 1 (`skills/repo-setup/SKILL.md` sync steps and Stops false for the new exit-2 causes): closed in the round, sync 4 and 7 split the drafted causes from the files to fix by the `error:` line, the Stops rows "The drafted sync change" and "A file sync cannot use"; the round's review matched each named line to a print in `sync_rules.py`.
+- Standards 2 (no Stops row for the lock bound): closed in the round, the Stops row "A lock held" in `skills/land/SKILL.md`, and Steps 3 names "Stops".
+- Behaviour 1 (the lock-stop message told the user to land again, which failed): closed in the round, the preflight of `land.sh` resumes from `<pkg>-land`; the cases "resumed" and "handmade" of `land.test.sh`, red under the reverts R1 to R5 of the round's review.
+- Behaviour 2 (the mixed-file `--write` not stated with before and after): closed in the round, the report's "User-visible changes".
+- Round 1, Standards 1 (the Stops row said `/land` creates and removes `<step>-land`, which only the ledger's landing script does): fixed at landing, `skills/land/SKILL.md` Stops row "A lock held" names the ledger's landing script for the branch, its exit, and the resume on a main with nothing staged.
+- Round 1, Standards 2 (dead `landing_left=$landing_pkg` after `fail`): fixed at landing, the line removed from `skills/land/templates/land.sh`.
+- Round 1, Behaviour 1 (the resume ran onto a main holding a failed or finished run's staged cherry-pick): fixed at landing, the preflight of `land.sh` refuses the resume while `git diff --cached --quiet` on main exits 1, keeping `<pkg>-land`, and the head comment says so; the new case "staged main" of `land.test.sh` (a lock stop after the checkout, a file staged on main, a rerun refused with both trees kept) prints `FAIL: staged-main refusal: missing [preflight failed: main holds staged or unmerged changes, so staged-main-land is kept]` with the check replaced by `if false`; `README.md` and the test's head comment name the case.
