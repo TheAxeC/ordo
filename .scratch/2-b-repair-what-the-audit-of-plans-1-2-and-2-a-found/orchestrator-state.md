@@ -60,6 +60,16 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6a-report.md
   landing: not-started
   round: 0
+- step: 11
+  executor: agent
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: not yet launched
+  worktree: .agents/worktrees/2b-11
+  base: ebf3c8c
+  launched: 2026-09-25
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/11-report.md (records in 11-rows.md)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
