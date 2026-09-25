@@ -167,3 +167,13 @@ grep -c '^FAIL:' $TMPDIR/1c-first/first-run.txt
 - The report's reverts 1-42 and its rows 47 and 49 were not planted again.
 
 Reviewer usage: 100,387 tokens, 21 tool uses, 384 s.
+
+## Closed
+
+- First review, 8 findings: each ruled in `agents/briefs/1c-round-1.md` and closed in repair round 1, as the review over the round confirms ruling by ruling (Closures above), with the reverts of rulings 1, 2, 3 and 6 planted by that reviewer and red.
+- Review over round 1, 4 findings, fixed at landing on main:
+  1. Standards 1: `skills/refute/SKILL.md` "What it reads" item 4 names the cases ruling `agents/briefs/<step>-cases.md`, read with the brief, the diff judged against the ruling where it rules a case. Check: `grep -n 'cases.md' skills/refute/SKILL.md` prints the line; before the fix it printed nothing.
+  2. Behaviour 2: `skills/spec/SKILL.md` Steps 1 refuses an uncommitted change on the ledger's `plan.md` or at the brief's path, so the restore at Steps 4 can only undo spec's own writes; the "A failed preflight" row of Stops names the cause. Check: `grep -n "uncommitted change on the ledger" skills/spec/SKILL.md` prints Steps 1 and the Stops row; before the fix it printed nothing.
+  3. Behaviour 3: `skills/plan-orchestration/SKILL.md` Steps 6 resumes on a cases ruling by the whole of Steps 8's resume ("How", "The resume's options", "Before the resume"), with `round: 0` and the `cases_` prefix; "Launching a builder" item 1 and the state template's dispatch comment (`skills/plan/templates/orchestrator-state.md:27`) name the `cases_` entries. Check: `grep -rn 'cases_' skills` prints the three lines; before the fix it printed nothing.
+  4. Behaviour 4: the dispatch entry's `round:` line of this ledger's state file rewritten without an unquoted `: ` inside the value. Check: `python3 skills/spec/templates/check_paths.py .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md 1c` printed `ok: 1c shares no path with no step in flight` and exit 0 at commit e18937f; before the rewrite it exited 64 with the reviewer's `error:` line.
+- Premise correction of the brief: the dispatch block is in the second `yaml` block of the state file, not the first (both reviews reproduced it); `check_paths.py` reads the first yaml block that has a `dispatch:` key, covered by the case "the dispatch block in the second yaml block". Booked in `plan.md`, step 1c.

@@ -32,6 +32,7 @@ metadata:
    - No such folder is a refusal ("Stops").
 3. `orchestrator-state.md`: the dispatch block names the worktree, the base and the report path.
 4. The brief `agents/briefs/<step>.md`, the rules file and the standards it points at, and the plan's text for the step.
+   - The cases ruling `agents/briefs/<step>-cases.md` when one exists, read with the brief: where it rules a case, the diff is judged against the ruling.
 5. The diff since the base, from inside the worktree, the new files whole, and a sample of a mechanical sweep with the sample named.
    - `git diff <base>` and `git status --short`, read-only, are the only git the reviewer runs.
 6. The builder's report, last.
@@ -76,7 +77,9 @@ metadata:
   - a change no item asks for (name the item you would expect, or say "no item");
   - a substitute mechanism where the brief named a shape;
   - a decision the brief reserved for the user, taken;
-  - a premise in the brief's "What is on the tree" section that the reviewer's own grep does not reproduce.
+  - a premise in the brief's "What is on the tree" section that the reviewer's own grep does not reproduce;
+  - a case of the brief's "Cases" that no test of the step checks;
+  - a case whose first run on the unchanged tree the report does not give.
 - **Proof.** A finding is:
   - a "seen failing first" claim with no quoted failing check;
   - a test that asserts a known defect as the expected result;

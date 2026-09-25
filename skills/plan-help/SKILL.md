@@ -65,6 +65,7 @@ when a command stops:
 /spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, or a choice is yours: it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger and commits
 /spec <entry> <step>          again; it now writes the brief
+/spec refuses                 the brief's "Paths this step writes" shares a path with a step in flight, or a state file or brief it reads is unusable: it names the cause and leaves nothing; land the other step or change the paths, then /spec again
 /land refuses                 it names what is missing, such as a finding neither closed nor booked: fix or book it, then /land again
 /land meets a red line        a red line no fix inside the brief closes: the step goes back out of main and its failure is booked; then /spec the next unblocked step, the booked step in its queue order, an open item after your ruling
 

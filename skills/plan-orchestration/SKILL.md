@@ -60,6 +60,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - A shell builder's `output` file (the `claude -p` JSON or the `codex -o` final message) holds its final message, and when the builder wrote no report file the orchestrator takes the report from it into the `report` path.
    - A native Claude agent's final message is in the runner's transcript store under the agent id in `session_id`.
    - The report is a lead, not a fact.
+   - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result; read that hand-back the same way as a report.
+   - Rule on such a case when the fix stays inside the step's scope, write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`, commit it by path, and resume the same builder with it, by the whole of Steps 8's resume ("How", "The resume's options" and "Before the resume") with `round: 0` and the `cases_` prefix in place of `repair_`; the builder's final report carries the ruling.
+   - Such a case whose fix changes the step's scope is a stop of the kind "A finding that is the user's", by "Stops".
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
    - Read the diff yourself while it runs.
    - Save its report, and write its path and its usage into the dispatch block under `reviewer_report`.
@@ -132,8 +135,9 @@ On every resumption, with a dispatch block or without one:
 
 With `workers_at_once` above 1 the orchestrator, still one, may have that many steps running at once, each through steps 3 to 9 on its own, under these rules:
 
-- Each brief lists the paths its step writes, and the lists share no file.
-- A step that touches shared files, a configuration file or a rule file runs alone.
+- Each brief lists the paths its step writes under "Paths this step writes", and no two steps in flight share a path: the same file, named whole in one of them, or line ranges of one file that overlap.
+- Before the dispatch, `spec` checks the list against the brief of every step in the dispatch block with the `spec` skill's `templates/check_paths.py`, and refuses a shared path, naming both steps.
+- A shared document is split between steps in flight only by line ranges that do not overlap; a step that touches a configuration file or a rule file runs alone.
 - Each step has its own worktree, base, builder, reviewer, rounds and dispatch entry.
 - A later step is dispatched only after the earlier one's dispatch commit, so its base holds the earlier brief and block.
 - Landings are one at a time, in the order the steps are verified, and a later one lands on the head the earlier left, its whole diff read again there.
@@ -164,7 +168,7 @@ sh <this skill's folder>/templates/launch.sh codex --cwd <worktree>/<tool dir> -
 
 A shell launch runs in this order:
 
-1. Write every path the launch will take into the dispatch block under its field, and commit the block by path before the launch: `prompt`, `output` (the `--report` path), `stderr`, `events`, `exit`, `pid`, `session_file` (the `--session-file` path of a `claude -p` builder) and `note_id_file`, with the `repair_` prefix for a repair round.
+1. Write every path the launch will take into the dispatch block under its field, and commit the block by path before the launch: `prompt`, `output` (the `--report` path), `stderr`, `events`, `exit`, `pid`, `session_file` (the `--session-file` path of a `claude -p` builder) and `note_id_file`, with the `repair_` prefix for a repair round and the `cases_` prefix for the resume on a cases ruling (Steps 6).
    - Every path given to `templates/launch.sh` is absolute, so it names the same file from the orchestrator's shell, from the builder's `--cwd` and from a later resumption.
    - None of these paths lies in a scratch folder or a machine-local temp directory, since "Resuming, and handing the plan over" needs them to continue.
    - With the configuration block's `launch_note` set, pass the note options: `--id` names the file that receives the note's id, `--label` is `<entry>/<step>`, and `--parent` is the orchestrating session's id.

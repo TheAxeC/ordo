@@ -9,6 +9,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1
+- sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh skills/land/templates/verify.test.sh 2>&1 | tail -1
 - sh utils/check_skill_layout.test.sh 2>&1 | tail -1
@@ -36,20 +37,7 @@ launch_note:                 # none recorded.
 ```
 
 ```yaml
-dispatch:
-- step: 1c
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: a226760096804c8a0 (the runner's agent id)
-  builder_usage: 199,787 tokens, 61 tool uses, 1,692 s
-  reviewer: claude:opus, through /refute, agent acdc1cc1a7421ba3f, done; 130,251 tokens, 35 tool uses, 572 s; 8 findings, each ruled in agents/briefs/1c-round-1.md
-  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1c-refuter.md
-  worktree: .agents/worktrees/2b-1c
-  base: 7ccbe7b
-  launched: 2026-09-26
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1c-report.md
-  landing: cherry-picking
-  round: 1, sent to the builder with agents/briefs/1c-round-1.md (8 rulings), round start worktree commit 1c09e70, paths the brief's list plus skills/plan-help/SKILL.md; builder 257,183 tokens, 38 tool uses, 833 s; reviewer over the round claude:opus through /refute, agent abf2fdcc9648dc245, 100,387 tokens, 21 tool uses, 384 s, 4 findings, fixed at landing
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -62,7 +50,6 @@ dispatch:
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 - Step 10: roadmap entry 14 (`docs/roadmap.md:106-108`) names portal filling and a submission record but not the cover letter and blind-review removal that the coverage rows at `docs/academic-coverage.md:59` and `:90` send to `submit-manuscript`; step 10 names them in entry 14's goal or moves them to entry 5, through `/roadmap` with the diff shown (found by step 11's review over round 2).
 - Step 14: the two ethics rows of the audit's finding 13 (`ethics_checklist`, `ethics_review_agent`) are deep-research rows, `docs/academic-coverage.md` lines 190 and 218 at base ebf3c8c; step 14's brief checks them against finding 13 (found by step 11's review, Behaviour).
-- Step 1c (rulings J (a) and K): the brief template's "Cases" and "Paths this step writes" sections, the builder's first task of running the cases as tests before changing code, the checks in `spec` and `refute`, and the path check script with its test (`plan.md`, step 1c).
 
 ## Closed items
 
@@ -106,8 +93,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Steps 1, 1a, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 at 5fdaa98, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7 and 617f8f3; step 1a in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 1c is dispatched and runs alone; then 10, 12 and 15.
+- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 1a, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 at 5fdaa98, 76a2b10, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7 and 617f8f3; step 1c in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Next: 10, 12 and 15; 13 and 14 after 12; 7 after the oculus launch-note fixes; then 16 to 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -125,3 +112,4 @@ dispatch:
 | 6a | claude:opus agent, effort high: 95,179 tokens, 18 tool uses, 339 s; round 1: 118,218 tokens, 12 tool uses, 529 s | 98,347 tokens, 23 tool uses, 329 s; round 1: 95,799 tokens, 26 tool uses, 325 s | 1 | 7 (6 rulings) | 5 files changed, 106 insertions(+), 106 deletions(-) | no | 3 | 0 | 11 | 7751 | 10221 | 1963904 | 22 | 4 | none |
 | 11 | claude:opus agent, effort high: 226,019 tokens, 98 tool uses, 875 s; round 1: 355,519 tokens, 35 tool uses, 863 s; round 2: 124,171 tokens, 26 tool uses, 637 s | 270,192 tokens, 46 tool uses, 470 s; round 1: 247,793 tokens, 54 tool uses, 648 s; round 2: 277,802 tokens, 40 tool uses, 533 s | 2 (one under the exception) | 10 (12 rulings), then 13 (12 rulings) | 2 files changed, 51 insertions(+), 51 deletions(-) | no | 14 | 0 | 35 | 33466 | 61996 | 7840516 | 76 | 38 | none |
 | 1a | claude:opus agent, effort high: 133,171 tokens, 44 tool uses, 697 s; round 1: 223,764 tokens, 42 tool uses, 931 s | 100,494 tokens, 20 tool uses, 490 s; round 1: 134,695 tokens, 34 tool uses, 833 s | 1 | 7 (8 rulings) | 13 files changed, 234 insertions(+), 90 deletions(-) | no | 6 | 0 | 38 | 34463 | 76696 | 11356769 | 82 | 58 | none |
+| 1c | claude:opus agent, effort high: 199,787 tokens, 61 tool uses, 1,692 s; round 1: 257,183 tokens, 38 tool uses, 833 s | 130,251 tokens, 35 tool uses, 572 s; round 1: 100,387 tokens, 21 tool uses, 384 s | 1 | 8 (8 rulings) | 11 files changed, 674 insertions(+), 15 deletions(-) | no | 4 | 0 | 47 | 41917 | 134263 | 7721087 | 102 | 66 | none |
