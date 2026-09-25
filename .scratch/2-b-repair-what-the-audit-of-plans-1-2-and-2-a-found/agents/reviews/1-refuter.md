@@ -303,3 +303,166 @@ $ command -v dash  ->  /bin/dash   (/bin/sh here is GNU bash 3.2.57)
 - A raw carriage return in a command was probed. YAML itself reads it as a line break (`yaml.safe_load('x: "a\rb"')` gives `'a b'`), so it is not a runner finding.
 
 Reviewer usage: 124,041 tokens, 29 tool uses, 778 s (the runner's completion notification).
+
+## Repair round 2, refuted
+
+Reviewed worktree `/Users/axelfaes/workspace/ordo/.agents/worktrees/2b-1`. The round's delta is `git diff 80ab53a`, read against `git diff 2ce1804`. `git status --short` shows ` M` on the report, `README.md`, `docs/dev/building.md`, `utils/verify.sh` and `utils/verify.test.sh`. Every probe ran on copies in the reviewer's scratchpad (`.../scratchpad/r2`). The worktree was not changed.
+
+```
+$ sh utils/verify.test.sh 2>&1 | tail -1          (timed: 25.6 s; again 24.2 s)
+PASS: verify.sh scratch tests
+$ sh utils/verify.test.sh; echo "exit $?"         (timed: 16.4 s)
+PASS: verify.sh scratch tests
+exit 0
+$ VERIFY_TEST_SHELL=dash sh utils/verify.test.sh; echo "exit $?"   (timed: 8.5 s)
+exit 0
+$ dash utils/verify.test.sh; echo "exit $?"       (16.4 s)
+PASS: verify.sh scratch tests
+exit 0
+$ for i in 1 2 3 4 5; do sh utils/verify.test.sh 2>&1 | tail -1; done
+PASS: verify.sh scratch tests   (x5)
+
+$ sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 11 commands passed
+exit 0
+$ dash utils/verify.sh <same state file>; echo "exit $?"
+(the same 19 lines)
+verify: 11 commands passed
+exit 0
+$ sh utils/verify.sh /Users/axelfaes/workspace/ordo/<same path>   (main's state file; the verify lists are identical by diff)
+verify: 11 commands passed
+exit 0
+
+The state file's verify list by hand, through its filters, with sh utils/verify.test.sh as a tenth test:
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1                     PASS: land.sh and usage.py scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1        PASS: check_config.py scratch tests
+$ sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1   PASS: collect_findings.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1         PASS: sync_rules.py scratch tests
+$ sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1     PASS: launch.sh scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1                                      PASS: pin.sh scratch tests
+$ sh utils/verify.test.sh 2>&1 | tail -1                                   PASS: verify.sh scratch tests
+$ sh utils/check_skill_layout.test.sh 2>&1 | tail -1                       PASS: check_skill_layout.py scratch tests
+$ sh utils/check_rule_inventory.test.sh 2>&1 | tail -1                     PASS: check_rule_inventory.py scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1                           PASS: check_coverage.py scratch tests
+$ python3 utils/check_skill_layout.py      (ten ok: lines)  layout exit 0
+$ <the ASCII check>                        ascii exit 0
+
+$ grep -n 'verify.test.sh' README.md docs/dev/building.md docs/dev/change-standard.md   (cut to 120 columns)
+README.md:111:sh utils/verify.test.sh
+README.md:123:- `verify.test.sh` checks that `verify.sh` passes a list holding a summary test, a plain command and a com
+docs/dev/building.md:12:sh utils/verify.test.sh                         # verify.sh on green, red and unusable verify li
+docs/dev/change-standard.md:48:sh utils/verify.test.sh 2>&1 | tail -1
+Four lists (README code block, README bullets, building.md, change-standard.md): equal, the same ten tests in the same order.
+$ awk 'length>100' utils/verify.sh utils/verify.test.sh; LC_ALL=C grep -n '[^ -~]' <those files, README.md, building.md>
+(no output; grep exit 1)
+$ wc -l utils/verify.sh utils/verify.test.sh   ->  237, 471
+$ git diff --numstat 2ce1804 -- README.md docs utils  ->  14 0 / 9 0 / 3 0 / 237 0 / 471 0   (matches the report)
+$ git diff --numstat 80ab53a -- README.md docs utils  ->  11 3 / 7 1 / 156 113 / 188 89     (matches the report)
+
+The report's reproductions, rerun (scratch folder; red.test.sh = printf 'FAIL: x\n'; exit 1):
+| tail -1 2>/dev/null, | tail -1 >&2, | tail -1;, | tail -1 # keep | last, backslash-newline, | grep PASS | tail -1: each RED, exit 1 (matches)
+echo 'PASS: a | tail -1': PASS: a | tail -1 / verify: 1 commands passed / exit 0 (matches)
+
+Signals (Python driver: the runner under sh and dash; the command is "sleep 30 & echo $! >grand.pid; <python that calls setsid and sleeps 8> & echo $$ >cmd.pid; sleep 4; touch after"; then "- touch second"; a sleep in the driver's own group and one in another session run outside):
+sh INT:   rc 130 after 0.09s; cmd alive=False grandchild alive=False escaped(setsid) alive=True after=False second=False scratch_left=0 outside_same_group alive=True outside_other_session alive=True out=b''
+sh HUP:   rc 129 after 0.07s; (same)
+sh QUIT:  rc 131 after 0.07s; (same)
+sh TERM:  rc 143 after 0.06s; (same)
+dash INT: rc 130 after 0.08s; (same)
+dash HUP: rc 129 after 0.06s; (same)
+dash QUIT: rc 131 after 0.06s; (same)
+dash TERM: rc 143 after 0.06s; (same)
+
+Reverts on copies of verify.sh (sh verify.test.sh; exit status of the test):
+no pipefail                        -> FAIL: a summary test that exits 1: exit 0, expected 1 ...            test exit 1
+PASS: check removed                -> FAIL: a summary test without a PASS last line: exit 0, expected 1    test exit 1
+signal only the leader group       -> FAIL: the second process group of the session still runs            test exit 1
+start_new_session=False            -> FAIL: INT: the runner did not stop within 10 seconds                test exit 1
+stdin=DEVNULL removed              -> FAIL: a command reading standard input: output differs; got: read from stdin   test exit 1
+handlers for TERM only             -> FAIL: INT: the runner did not stop within 10 seconds                test exit 1
+rstrip removed                     -> red                                                                 test exit 1
+';' allowed in the tail stage      -> FAIL: x (the "; true" control)                                      test exit 1
+KILL at once, no TERM and no grace -> PASS: verify.sh scratch tests                                       test exit 0
+no signal blocking around Popen    -> PASS: verify.sh scratch tests                                       test exit 0
+status = code (negative kept)      -> PASS: verify.sh scratch tests                                       test exit 0
+comment stripped before detection  -> PASS: verify.sh scratch tests                                       test exit 0 (a change of detection the tests allow)
+```
+
+### Spec
+
+1. `utils/verify.sh:181-186`:
+   ```
+   tail_stage = re.compile(r"(?:\S*/)?tail(?:[ \t][^;|\n]*)?\Z")
+   def prints_summary(command):
+       head, pipe, rest = command.rpartition("|")
+   ```
+   Ruling item 2 keeps the `PASS:` rule for any command that ends in a pipe into tail. `sh t 2>&1 | tail -1;`, `sh t 2>&1 | tail -1 ;` and `sh t 2>&1 | tail -1 # keep | last` all end in a pipe into tail, but the runner takes them as plain commands and drops the `PASS:` condition. A test that exits 0 with a last line that is not `PASS:` counts as red under `docs/dev/building.md:20`. Under these spellings it passes. With `nopass.test.sh` (last line `done`, exit 0): `| tail -1;`, `| tail -1 ;` and `| tail -1 # keep | last` each exit 0 with `verify: 1 commands passed`. `| tail -1 2>/dev/null`, `>&2`, two spaces, no spaces and the backslash-newline each exit 1. The head comment states the narrower rule ("options with no ";""). The ruling asked for the wider one.
+
+### Proof
+
+1. `utils/verify.test.sh:188-198`: every spelling runs only with `passexit1.test.sh`, a test that exits 1. The red therefore comes from pipefail alone, and no spelling checks that the `PASS:` condition applies. The cases in Spec 1 show that it does not apply for two of the listed spellings (`tail -1;` and `# keep | last`), and the test stays green.
+2. `utils/verify.test.sh:119-128`: the quoted-pipe case `echo 'PASS: a | tail -1'` is itself read as a summary test (the text after its last pipe is `tail -1'`). It passes only because the echoed text starts with `PASS:`. The case cannot show the misreading that Behaviour 1 below produces. With the same shape, `echo 'done | tail -1'` goes red.
+3. `utils/verify.sh:92-94` (`signal_session(sid, signal.SIGTERM)` and the two-second grace): the head comment, `README.md:138` and the report ("TERM ... then KILL two seconds later") state TERM first. With the TERM call and the grace removed, so that KILL goes at once, the suite prints `PASS: verify.sh scratch tests`. No case shows that a command gets TERM and can clean up.
+4. `utils/verify.sh:203` (`signal.pthread_sigmask(signal.SIG_BLOCK, stopping)`): the report's claim "so the runner always knows the pid of a command a signal can reach" has no test. With the block removed, the suite stays green.
+5. `utils/verify.sh:212` (`status = 128 - code if code < 0 else code`): no case covers a command killed by a signal. With `status = code`, the suite stays green, and `- kill -9 $$` then prints `exit status: -9` instead of `exit status: 137`.
+6. `utils/verify.test.sh:22-29`: when dash is not installed, the dash pass is skipped with `continue`, and the file prints the same `PASS: verify.sh scratch tests`. Change standard rule 9 requires a green result to say what it does not cover.
+
+### Standards
+
+1. `utils/verify.sh:4-5` ("Needs python3 with PyYAML ... and bash"), `README.md:134` ("The runner needs `python3` with PyYAML and `bash`"), `docs/dev/building.md:22` ("needs `python3` with PyYAML and `bash`"), and the exit-69 lines (`verify.sh:31`, `README.md` and `building.md` lists): the runner also needs `ps` (`verify.sh:69`), and the builder's report says so (judgment call 3). No check exits 69 without `ps`, and no page names the requirement. Ruling item 4 says every exit status is named. The status shown in Behaviour 2 is named nowhere. Change standard rule 5.
+2. `utils/verify.test.sh:22-29`: `VERIFY_TEST_SHELL=dash sh utils/verify.test.sh` exits 0 and prints nothing. `docs/dev/building.md:20` says "A test passes when it exits 0 and its last line starts with `PASS:`", and the brief's conventions put `PASS: <script> scratch tests` last. Through the runner itself, `- VERIFY_TEST_SHELL=dash sh utils/verify.test.sh 2>&1 | tail -1` gives `RED: ... / exit status: 0 / last line does not start with PASS:`. Ruling item 5 names this invocation as a pass.
+3. `utils/verify.sh:7-8` ("a red test piped into tail is red however the pipe is spelled") and `README.md:134` ("a red test piped into `tail` is red however the pipe is spelled") are false in two cases:
+   - `sh passexit1.test.sh 2>&1 | tail -1 & wait` and `... | tail -1 & sleep 1` each print `PASS: x` / `verify: 1 commands passed` / exit 0. The pipeline runs in the background, so pipefail never reaches the status.
+   - The Spec 1 spellings with a test that is red by its last line.
+
+   Change standard rule 14.
+
+### Behaviour
+
+1. `utils/verify.sh:181-186`: a `| tail` inside quotes at the end of a command still makes it a summary test, so a green command goes red. `- echo 'done | tail -1'` gives `RED: echo 'done | tail -1'` / `exit status: 0` / `last line does not start with PASS:` / `done | tail -1`, exit 1. This is the false red of round 1's Behaviour 3 in a new form (a `PASS:` failure instead of a syntax error). The report does not state it.
+2. `utils/verify.sh:69`, `:84`: without `ps` on `PATH`, a signal to the runner ends in `FileNotFoundError: [Errno 2] No such file or directory: 'ps'` and exit 1, which is also the status of a red command. The command is not stopped (alive after the signal, and it wrote `after` 5 s later), and the scratch folder is left behind (`scratch_left=['verify.i08o8jvr']`). This was reproduced with PATH holding only python3, bash, sleep and touch. The report states "the runner needs bash and ps" only as a judgment call, not as a user-visible change with its before and after (its item 4 names only `bash`).
+3. The builder's two stated changes, checked against the pages:
+   - A red summary test now shows only what its pipeline printed. `README.md:136` says the runner prints "its output". `docs/dev/change-standard.md:55` already says to rerun a red test without its filter. The pages state this change.
+   - The runner needs `ps`. The pages do not state it (Standards 1).
+4. `utils/verify.sh:183-186`: other probe results.
+   - These are misread as summary tests. Each result is still red or correct:
+     - `| tail -1 &` gives an empty output, exit status 0 and a red.
+     - `| tail -1 &&true` with a red test gives exit 1.
+     - `echo $(sh red.test.sh 2>&1 | tail -1)` gives exit status 0 and is red only on its `FAIL: x` last line.
+     - `| tail -1 # summary` is red for a test without a `PASS:` last line.
+   - These are plain commands with `FAIL: x` printed, in the `; true` class that ruling 2 accepts:
+     - `x=$(sh red.test.sh 2>&1 | tail -1); echo "$x"`: green.
+     - `| tail -1 || true`: green.
+   - Heredocs:
+     - `cat <<'EOF' | tail -1` with a heredoc is a plain command and passes on its output.
+     - A heredoc fed to `tail` is red (status 141).
+   - The kill does not reach processes outside the command's session. A sleep in the driver's own process group and one in another session both stayed alive under all eight signal runs. A process the command moves out with `setsid` also stays alive (judgment call 3). The pages say "every process group of that session", which is accurate.
+
+### Not checked
+
+- 32 of the report's 44 reverts were not rerun. Twelve reverts were run: the report's pipefail, `PASS:` check, leader group, new session, stdin and rstrip reverts, plus six of the reviewer's own.
+- The report's "30 of 30 sh passes" and "25 dash passes" were not rerun at that count. Seven full runs over sh and dash, one dash-only run and one run of the file under dash were green.
+- Linux, where `getsid` on a zombie may succeed and change the grace loop's exit, and busybox `sh`.
+- A second signal arriving while the handler is in its two-second grace.
+- Why the suite takes about 24 s through `| tail -1` against about 16 s without it.
+
+Reviewer usage: 144,379 tokens, 34 tool uses, 1,123 s (the runner's completion notification).
