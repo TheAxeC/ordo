@@ -55,13 +55,13 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a3038fb5ca53bb282 (the runner's agent id)
   builder_usage: 95,179 tokens, 18 tool uses, 339 s (the runner's completion notification)
-  reviewer: claude:opus, agent a6915e3a72a17cbc5, through /refute, running
+  reviewer_report: agents/reviews/6a-refuter.md (through /refute; reviewer claude:opus, agent a6915e3a72a17cbc5; 98,347 tokens, 23 tool uses, 329 s)
   worktree: .agents/worktrees/2b-6a
   base: 819b391 (the brief rewritten to the cut; the worktree of the word-list build removed)
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6a-report.md
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-25: the findings of 6a-refuter.md with a ruling each, to the same builder; the worktree at the round's start is uncommitted on base 819b391; the path list keeps skills/plan-retro/templates/retro.md)
 - step: 11
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
