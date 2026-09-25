@@ -65,6 +65,8 @@ dispatch:
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a384a8a4cf13de1b7 (the runner's agent id)
+  builder_usage: 265,430 tokens, 49 tool uses, 1,032 s (the runner's completion notification); the builder ran read-only git commands in its worktree against the brief's working rules (its report says so)
+  reviewer: claude:opus, agent a081e76ee932098aa, through /refute (running)
   worktree: .agents/worktrees/2b-6a
   base: f9b0856
   launched: 2026-09-25
