@@ -35,7 +35,16 @@ launch_note:                 # none recorded.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 1
+  executor: agent
+  worker: claude:opus (a builder agent, identity written at launch)
+  worktree: .agents/worktrees/2b-1
+  base: 2ce1804
+  launched: 2026-09-25
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -79,7 +88,7 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Greenlight given; step 1 is being prepared by /spec.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its builder is being dispatched.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 
