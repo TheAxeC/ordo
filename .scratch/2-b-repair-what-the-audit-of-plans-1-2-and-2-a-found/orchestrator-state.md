@@ -48,7 +48,7 @@ dispatch:
   base: 819b391 (the brief rewritten to the cut; the worktree of the word-list build removed)
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6a-report.md
-  landing: not-started
+  landing: cherry-picking
   round: 1 (sent 2026-09-25: the findings of 6a-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit aea1d8d on branch 2b-6a; the path list keeps skills/plan-retro/templates/retro.md)
 - step: 11
   executor: agent

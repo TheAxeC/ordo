@@ -52,3 +52,59 @@ ASCII grep (LC_ALL=C grep -n '[^ -~]') over the three changed files and README.m
 - Whether NOT_READ's entries are each still held by a remaining fixture under a revert; NOT_READ is unchanged by this step.
 
 Reviewer usage: 98,347 tokens, 23 tool uses, 329 s (the runner's completion notification).
+
+## Repair round 1, refuted
+
+```
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md
+  exit=0; grep -c '^PASS:' 10; grep -c '^ok:' 10; last line "verify: 12 commands passed"
+sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
+  PASS: collect_findings.py scratch tests
+grep -n 'NOTHING_FOUND\|OTHERS_REPRODUCE\|CLOSURE\|reports_nothing' skills/plan-retro/templates/collect_findings.py
+  (no output), exit 1
+python3 utils/check_skill_layout.py
+  ok: skills/plan-retro/SKILL.md (exit 0)
+Collector over the worktree's .scratch .scratch/archive:
+  base (git show 819b391) "687 findings"; new "705 findings"; new by heading spec 266, proof 147,
+  standards 165, behaviour 126, unclassified 1; 0 rows only in base, 18 only in new
+  (proof 12, spec 2, standards 2, behaviour 1, unclassified 1): the report's figures reproduce
+wc -l after/before: collect_findings.py 270/293, collect_findings.test.sh 474/459, SKILL.md 111/110,
+  retro.md 42/40, README.md 175/175; git diff 819b391 -U0 -- README.md: one hunk, @@ -119 +119 @@
+Reverts planted on copies under $TMPDIR (ref6a.*, nr6a.*), each copied test run:
+  ITEM one digit r"(- |\d[.)] )": FAIL: rows differ ... / - three-plan 6 first spec src/h.py:8
+  Proof out of TRAILING: FAIL: rows differ ... / - one-plan 1 round 1 proof src/a.cpp:40 / + ... unclassified src/a.cpp:40
+  Standards out of TRAILING: FAIL: rows differ ... / - one-plan 1 round 1 standards src/a.cpp:50 / + ... unclassified src/a.cpp:50
+  NOTHING_FOUND drop put back: FAIL: "- None." under "## 1. Spec" is not a finding with heading spec
+  OTHERS_REPRODUCE drop put back: FAIL: "- The other figures reproduce." under "## 2. Proof" is not a proof finding
+  CLOSURE drop put back (fixed is None): FAIL: "- Spec 1: closed." in a round with no subheadings is not an unclassified finding
+  NOT_READ without verification / not checked / closures / usage: each FAIL: rows differ (+ two-plan 3 round 1 unclassified ...)
+  NOT_READ without closed: PASS: collect_findings.py scratch tests
+Rule 14 grep quoted in the report, rerun: the same 27 file:line hits the report lists.
+LC_ALL=C grep '[^ -~]' over the four changed skill files and README.md:119: nothing; no line over 100 characters in the .py or .test.sh.
+git status --short at the end: the same six modified paths as at the start.
+```
+
+### Spec
+
+- None found. Each of the six closures in 6a-report.md's "Repair round 1" table matches the round's delta (`git diff aea1d8d`). The one gap is that the rulings' own text is not in the ledger (see "Not checked"), so each closure was compared only with the first review's finding it names.
+
+### Proof
+
+- 6a-report.md:33 says the silent cases (Verification, Not checked, Usage and Closed lists) are held by the cases file's exact comparison. A silent "Closed" list is not held by `NOT_READ`: with `closed` removed from `NOT_READ` (collect_findings.py:45) on a copy, the test stayed `PASS: collect_findings.py scratch tests`. A level-two `## Closed` is never read in any case, because `parts` returns for any section name outside the four headings and the round pattern (collect_findings.py:151-157). No fixture has a `### Closed` subsection, the only place where `closed` in `NOT_READ` makes a difference, so the case at collect_findings.test.sh:342-344 proves nothing about the `closed` entry (change-standard rule 13).
+- 6a-report.md:55 says the README bullet before the change was "seven sentences". The base line (`git show 819b391:README.md | sed -n 119p`) has 13 sentences.
+
+### Standards
+
+- skills/plan-retro/SKILL.md:74 and README.md:119 name "a subheaded round's list before its subheadings" as a part the collector does not read. The collector skips that list only when a subheading is Spec, Proof, Standards or Behaviour (collect_findings.py:159; the docstring at :12-13 says so correctly). A round whose only subheadings are unread ones keeps its list before them: a scratch report with `## Repair round 1, refuted`, then `- src/x.py:1: a list before the subheadings.`, then only `### Closures` and `### Not checked` gave `1 findings`, heading `unclassified`, location `src/x.py:1`. Both sentences are false for that shape (change-standard rule 14).
+
+### Behaviour
+
+- None found. The report states before and after for the collector's output, the counts (687 before, 705 after, with the split by heading, both reproduced), SKILL.md Steps 1, Steps 8 and Grouping, the new line in retro.md's "Counts by heading", and README.md:119.
+
+### Not checked
+
+- The text of the round's rulings as sent to the builder: 6a-refuter.md holds only the first review, and no ledger file holds the rulings. Each closure was checked against the first review's finding.
+- The line numbers in the brief's "What is on the tree" section, checked at main 129a3f7.
+- A revert of the fence handling, unchanged by the step.
+
+Reviewer usage: 95,799 tokens, 26 tool uses, 325 s (the runner's completion notification; reviewer claude:opus, agent a877a74343597cb07).
