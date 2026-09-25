@@ -54,13 +54,13 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a32b0f2dd6149a962 (the runner's agent id)
   builder_usage: 238,605 tokens, 70 tool uses, 2,222 s (the runner's completion notification)
-  reviewer: claude:opus, agent adcf50ffc75f42ffb, through /refute (running)
+  reviewer_report: agents/reviews/9-refuter.md (through /refute; reviewer claude:opus, agent adcf50ffc75f42ffb; usage from its completion notification when it arrives)
   worktree: .agents/worktrees/2b-9
   base: 163e9c2
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/9-report.md
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-25: the findings of 9-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 27aef76 on branch 2b-9; the path list widened to skills/repo-setup/SKILL.md)
 - step: 6a
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
