@@ -56,6 +56,7 @@ dispatch:
 ## Booked, no ruling needed
 
 - Step 1a: the runner's summary-test detection and the untested parts of its signal handling (`plan.md`, step 1a; from `agents/reviews/1-refuter.md`, Closed).
+- Step 4: `plan-orchestration`'s resumption list gains the case of a dispatch block at `landing: backed-out` (the step taken back out of main by a red line: its worktree and branch kept, the step unticked, the failure booked), which step 3 defines in `land` (brief 3, decision 1).
 - Step 3: the `land`, `plan-orchestration`, `refute` and `spec` texts (`land/SKILL.md` step 5, `refute/SKILL.md` "What the reviewer runs", `spec/templates/brief.md` "Verify before you report") name `utils/verify.sh` as how a step's verify list is run and booked, since step 1's pages say so (`docs/dev/building.md`, `docs/dev/change-standard.md`; found by step 1's builder and its review, Standards 1 and 2). Carried into step 3's brief.
 
 ## Closed items
