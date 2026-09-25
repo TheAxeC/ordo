@@ -42,7 +42,7 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: ab8951c4d56c145ef (the runner's agent id)
   builder_usage: 226,019 tokens, 98 tool uses, 875 s (the runner's completion notification); ruling L (a) sent to it mid-build and applied; after round 1 the notification reads 355,519 tokens, 35 tool uses, 863 s; round 1 reported done except two reason cells over about 35 words; after round 2 the notification reads 124,171 tokens, 26 tool uses, 637 s; round 2 reported done, every sentence of the section at 35 words or fewer (ruling 2e's allowance is per sentence, as plan 2's brief 4 set it)
-  round2_reviewer: claude:opus, through /refute over round 2, running
+  round2_reviewer: claude:opus, agent a98eb3004ccd75ea7, through /refute over round 2, running
   round_reviewer: claude:opus, agent ac24d4cbbea7ffc4f, through /refute over round 1: 247,793 tokens, 54 tool uses, 648 s
   reviewer_report: agents/reviews/11-refuter.md (through /refute; reviewer claude:opus, agent a59542d649739794e; 270,192 tokens, 46 tool uses, 470 s)
   worktree: .agents/worktrees/2b-11
