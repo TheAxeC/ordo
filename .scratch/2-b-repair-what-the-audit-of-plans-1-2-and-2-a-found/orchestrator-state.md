@@ -53,15 +53,13 @@ dispatch:
 - step: 6a
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
-  session_id: a384a8a4cf13de1b7 (the runner's agent id)
-  builder_usage: 265,430 tokens, 49 tool uses, 1,032 s; after round 1 the notification reads 325,256 tokens, 30 tool uses, 657 s (the runner's completion notifications); the builder ran read-only git commands in its worktree against the brief's working rules (its report says so)
-  reviewer_report: agents/reviews/6a-refuter.md (through /refute; reviewer claude:opus, agent a081e76ee932098aa; 146,359 tokens, 30 tool uses, 412 s)
+  session_id: not yet launched
   worktree: .agents/worktrees/2b-6a
-  base: f9b0856
+  base: 819b391 (the brief rewritten to the cut; the worktree of the word-list build removed)
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6a-report.md
   landing: not-started
-  round: 1 (sent 2026-09-25: the findings of 6a-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit eabefc7 on branch 2b-6a)
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -75,7 +73,7 @@ dispatch:
 - Step 1a (ruling H): the move of `utils/verify.sh` and its test into `skills/land/templates/`, and the pages, the verify list and the `land`, `refute`, `spec` and `plan-orchestration` texts naming the new path (`plan.md`, step 1a).
 - Step 4: the process in `launch.sh`'s pid file owns the builder's whole session (the builder started in a session or process group of its own), so the TERM, grace, KILL that `land`'s Steps 1 sends ends the builder and the exit file is still written; `launch.test.sh` runs that sequence (found by step 3's last review, Behaviour 1: today TERM ends only the wrapper shell and the builder keeps running).
 - Step 4: `plan-orchestration`'s resumption list gains the case of a dispatch block at `landing: backed-out` (the step taken back out of main by a red line: its worktree and branch kept, the step unticked, the failure booked), which step 3 defines in `land` (brief 3, decision 1).
-- Step 6a: `collect_findings.py` keeps every finding; its word lists and their tests go; `plan-retro` sets aside, by reading, what reports no defect (`plan.md`, step 6a). The worktree `.agents/worktrees/2b-6a` holds the word-list version from its first build and round 1; it is rebriefed to the cut before it lands.
+- Step 6a: `collect_findings.py` keeps every finding; its word lists and their tests go; `plan-retro` sets aside, by reading, what reports no defect (`plan.md`, step 6a; brief `agents/briefs/6a.md` at 819b391).
 - Step 1c (rulings J (a) and K): the brief template's "Cases" and "Paths this step writes" sections, the builder's first task of running the cases as tests before changing code, the checks in `spec` and `refute`, and the path check script with its test (`plan.md`, step 1c).
 
 ## Closed items
