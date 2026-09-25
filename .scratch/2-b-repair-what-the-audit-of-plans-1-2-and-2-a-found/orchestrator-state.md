@@ -51,6 +51,8 @@ dispatch:
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a2e27ba08742bba92 (the runner's agent id)
+  builder_usage: 208,057 tokens, 60 tool uses, 623 s (the runner's completion notification)
+  reviewer_report: agents/reviews/3-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent a8bb8a1458c376edb)
   worktree: .agents/worktrees/2b-3
   base: 5eaec19
   launched: 2026-09-25
