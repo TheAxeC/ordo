@@ -41,26 +41,26 @@ dispatch:
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: ad3f887161cb31e53 (the runner's agent id)
-  reviewer: claude:opus, agent ab1c552b7ec007bd0, through /refute (running)
+  reviewer_report: agents/reviews/4-refuter.md (through /refute; reviewer claude:opus, agent ab1c552b7ec007bd0; 155,977 tokens, 43 tool uses, 898 s)
   builder_usage: 310,799 tokens, 80 tool uses, 4,353 s (the runner's completion notification)
   worktree: .agents/worktrees/2b-4
   base: ec6586e
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/4-report.md
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-25: the findings of 4-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 1aa7a17 on branch 2b-4; the path list widened to skills/plan/templates/orchestrator-state.md, and README.md:121 comes as Doc text)
 - step: 8
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: adadaa3f3a92b7215 (the runner's agent id)
   builder_usage: 183,627 tokens, 37 tool uses, 1,479 s; round 1: 233,528 tokens, 23 tool uses, 2,257 s (the runner's completion notifications)
-  round_reviewer: claude:opus, agent aac5c586f02ad9552, through /refute over round 1 (running)
+  round_reviewer: claude:opus, agent aac5c586f02ad9552, through /refute over round 1: 115,791 tokens, 24 tool uses, 431 s
   reviewer_report: agents/reviews/8-refuter.md (through /refute; reviewer claude:opus, agent af8956bef9b90c472; 136,212 tokens, 34 tool uses, 539 s)
   worktree: .agents/worktrees/2b-8
   base: f052f57
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/8-report.md
-  landing: not-started
+  landing: cherry-picking
   round: 1 (sent 2026-09-25: the findings of 8-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 879a4f0 on branch 2b-8)
 - step: 9
   executor: agent
