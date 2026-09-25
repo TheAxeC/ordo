@@ -67,13 +67,13 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: ab8951c4d56c145ef (the runner's agent id)
   builder_usage: 226,019 tokens, 98 tool uses, 875 s (the runner's completion notification); ruling L (a) sent to it mid-build and applied
-  reviewer: claude:opus, through /refute, running
+  reviewer_report: agents/reviews/11-refuter.md (through /refute; reviewer claude:opus, agent a59542d649739794e; 270,192 tokens, 46 tool uses, 470 s)
   worktree: .agents/worktrees/2b-11
   base: ebf3c8c
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/11-report.md (records in 11-rows.md)
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-25: the findings of 11-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit cee396b on branch 2b-11; the path list widened to docs/roadmap.md line 120; the prose standard's named exception of ruling 2e is written at this step's landing)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -88,6 +88,7 @@ dispatch:
 - Step 4: the process in `launch.sh`'s pid file owns the builder's whole session (the builder started in a session or process group of its own), so the TERM, grace, KILL that `land`'s Steps 1 sends ends the builder and the exit file is still written; `launch.test.sh` runs that sequence (found by step 3's last review, Behaviour 1: today TERM ends only the wrapper shell and the builder keeps running).
 - Step 4: `plan-orchestration`'s resumption list gains the case of a dispatch block at `landing: backed-out` (the step taken back out of main by a red line: its worktree and branch kept, the step unticked, the failure booked), which step 3 defines in `land` (brief 3, decision 1).
 - Step 6a: `collect_findings.py` keeps every finding; its word lists and their tests go; `plan-retro` sets aside, by reading, what reports no defect (`plan.md`, step 6a; brief `agents/briefs/6a.md` at 819b391).
+- Step 14: the two ethics rows of the audit's finding 13 (`ethics_checklist`, `ethics_review_agent`) are deep-research rows, `docs/academic-coverage.md` lines 190 and 218 at base ebf3c8c; step 14's brief checks them against finding 13 (found by step 11's review, Behaviour).
 - Step 1c (rulings J (a) and K): the brief template's "Cases" and "Paths this step writes" sections, the builder's first task of running the cases as tests before changing code, the checks in `spec` and `refute`, and the path check script with its test (`plan.md`, step 1c).
 
 ## Closed items

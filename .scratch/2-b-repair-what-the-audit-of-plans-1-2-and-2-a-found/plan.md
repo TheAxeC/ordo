@@ -30,7 +30,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
 - 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
 - 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
-- 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md` (1 commit)
+- 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
 - 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from the audit's re-run; the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, shown to the user; a grep shows no booking that claims a count without the lines it quotes (1 commit)
 - 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit)
