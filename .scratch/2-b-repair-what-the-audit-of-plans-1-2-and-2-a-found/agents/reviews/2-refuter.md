@@ -93,4 +93,4 @@ none
 - Whether `launch.sh` can be run with every path absolute as `SKILL.md:166` now requires. The script belongs to step 4 and was not exercised beyond `launch.test.sh`.
 - The oculus hub's `dispatch-note.mjs` against the new `--label <entry>/<step>` and `--pid` wording (research-hub is read only; F6, F7 and F9 were read in the review file only).
 
-Reviewer usage: not measured by the reviewer; the runner's completion notification carries it.
+Reviewer usage: 174,608 tokens, 36 tool uses, 433 s (the runner's completion notification).
