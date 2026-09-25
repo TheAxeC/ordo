@@ -26,8 +26,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
-- 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note (1 commit; orchestrator, no agent)
-- 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
+- 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review) (1 commit; orchestrator, no agent)
+- ✅ 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
 - 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
 - 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
 - 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
@@ -427,3 +427,39 @@ verify: 12 commands passed
   and exited 0; `grep -n 'NOTHING_FOUND\|OTHERS_REPRODUCE\|CLOSURE\|reports_nothing' skills/plan-retro/templates/collect_findings.py` printed nothing.
 - Booked: nothing new.
 - Usage, orchestrator from step 4's landing (3fbc652) to this booking: 11 messages, 7751 output tokens, 10221 cache-write tokens, 1963904 cache-read tokens, 22 fresh input tokens, 4 minutes.
+
+### Step 11, the coverage rows of academic-paper (landed 2026-09-25)
+
+- Landed: every file of `research-hub/.agents/skills/academic-paper` read whole and its row in `docs/academic-coverage.md` checked; 50 of the 61 rows corrected in place, each with a record in `agents/reviews/11-rows.md` (61 records, 50 `fixed`, 11 `holds`). Three marks changed: `agents/abstract_bilingual_agent.md` and `references/abstract_writing_guide.md` to `rebuild: paper`, `templates/imrad_template.md` to `drop`. The intake row names style calibration at entry 5 under the prose standard (ruling L (a)). Parts that had no destination now have one (plan mode, the stress test, scoring, chapter plan and plan-to-draft gate at entry 15.A; the pre-output checklist, the vision check and the figure trace at entry 5). `docs/roadmap.md:120` gives 8 `rebuild later: paper` rows. The prose standard (`skills/repo-setup/templates/docs/dev/prose-standard.md`, Sentence length) carries ruling 2e's named exception: a sentence of a coverage table's reason cell may run to about 35 words.
+- What a reader of the coverage doc sees change, before and after, per row: `agents/reviews/11-report.md`, "Rows that change what entry 5 or entry 15.A must build".
+- Rounds: the first review (5 Spec, 3 Standards, 2 Behaviour findings), repair round 1 (12 rulings; the path list widened to `docs/roadmap.md:120`), the review over it (6 Spec, 2 Proof, 4 Standards, 1 Behaviour findings), repair round 2, the exception round, since brief item 1 (no part of a file left with no row and no reason) was unbuilt after round 1's shortening and too large to fix at landing (12 rulings), the review over it (5 Spec, 3 Proof, 4 Standards, 2 Behaviour findings), fixed at landing (14): rows 54, 57, 59, 60, 64, 66, 68, 77, 81 and 96 of the coverage doc; records 4, 7, 13, 15 and 28 and the word counts of `11-rows.md`; `11-report.md` brought to the end state; the prose standard's exception; the brief's reading of ruling 2e as a sentence limit (`agents/reviews/11-refuter.md`, Closed).
+- Premise correction: the brief read ruling 2e as a limit of about 35 words per reason cell; plan 2's brief (`.scratch/archive/2-coverage-inventory-of-the-academic-skills/agents/briefs/4.md:38`) set it as a sentence length, and `agents/briefs/11.md` is corrected.
+- Verified on main with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+  and exited 0; `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`; `11-rows.md` holds 61 records, and the 50 rows that differ from ebf3c8c are exactly the 50 `fixed` records; no sentence of a reason cell in lines 50-115 is over 35 words.
+- Booked: the ethics rows of the audit's finding 13 at step 14; the cover letter and blind-review removal against roadmap entry 14 at step 10.
+- Usage, orchestrator from step 6a's landing (1e09d35) to this booking: 35 messages, 33466 output tokens, 61996 cache-write tokens, 7840516 cache-read tokens, 76 fresh input tokens, 38 minutes.

@@ -1,4 +1,4 @@
-NOT done: 14 of the 61 reason cells in `docs/academic-coverage.md` lines 50-115 are over 35 words. Two of them are permitted by the rulings: line 60 (61 words, ruling 5 of repair round 2) and line 64 (39 words, ruling 6). The other twelve run from 36 to 51 words: lines 68, 77 and 95 (36), 66 (37), 61 and 96 (38), 87 (39), 59, 81 and 91 (42 to 45), 90 (43) and 54 (51). Each of them carries destinations and drops that rulings 1 to 4, 7, 9 and 10 of repair round 2 require stated, and they do not fit in 35 words. The orchestrator decides whether these lengths meet "about 35". Everything else in the brief and in repair rounds 1 and 2 is done.
+Everything in the brief is done. Every sentence of the reason cells in `docs/academic-coverage.md` lines 50-115 is at most 35 words, as ruling 2e allows; the rows the landing corrected are in `11-landing.md`.
 
 ## Open items of the state file, verbatim (worktree copy)
 
@@ -18,7 +18,7 @@ The orchestrator relayed the user's ruling (a). The intake row (`docs/academic-c
 | Case: changed rows equal fixed records | DONE | the 50 changed rows are exactly the 50 `fixed` records; the 3 mark changes are among them |
 | ASCII, one line per cell | DONE | 0 non-ASCII characters in `docs/academic-coverage.md`, `docs/roadmap.md` and `11-rows.md`; the section has 66 lines |
 | Roadmap entry 15.A count | DONE | `docs/roadmap.md:120` reads "8 for paper, 6 for literature, 3 for paper-review, 1 for researcher", matching the per-skill `rebuild later` counts |
-| Reason length | NOT DONE | 14 cells over 35 words, listed in the first line |
+| Sentence length (ruling 2e) | DONE | no sentence of a reason cell in lines 50-115 is over 35 words (a split of each cell on `.`, `?` or `!` before a capital or a backtick, counting whitespace-separated words, prints `sentences over 35: 0`) |
 | Verify runner | DONE | 10 `PASS:`, 10 `ok:`, `verify: 12 commands passed`, exit 0 |
 
 ## Rows that change what entry 5 or entry 15.A must build
@@ -31,11 +31,12 @@ Main is ebf3c8c. Line numbers are those of `docs/academic-coverage.md`.
 | 55 | `agents/abstract_bilingual_agent.md` | `rebuild later: paper`, not needed at entry 5 | `rebuild: paper`: entry 5 drafts every abstract with the language-neutral rules |
 | 56 | `agents/argument_builder_agent.md` | the plan-mode stress test, scoring and chapter plan have no destination | entry 15.A builds them through `agents/socratic_mentor_agent.md` |
 | 59 | `agents/formatter_agent.md` | conversion and format profiles wait, with no entry named; the pre-output checklist has no destination | entry 15.A builds conversion, format profiles and journal-over-user precedence; entry 5 takes the pre-output checklist on the `SKILL.md` row |
-| 60 | `agents/intake_agent.md` | entry 5 has no use for style calibration; strict or mark-only checking, the plan intake and the format-profile follow-up have no destination | entry 5 adds style calibration under the prose standard and strict or mark-only DOI checking; entry 15.A takes plan-mode questions and format profiles |
+| 60 | `agents/intake_agent.md` | intake fixes type, venue, citation format, length, materials and funding; entry 5 has no use for style calibration; strict or mark-only checking, the plan intake and the format-profile follow-up have no destination | entry 5 adds style calibration under the prose standard and strict or mark-only DOI checking; entry 15.A takes plan-mode questions and format profiles; intake still fixes the materials in hand and the co-authors, and the project holds the venue profile, with only the limits the scholar states, until entry 13's `venues/` does |
 | 64 | `agents/socratic_mentor_agent.md` | the planning dialogue comes after entry 5's gate; the parts it takes from other files are not named | entry 15.A builds the dialogue with plan mode, the three-question intake, stress test, scoring, chapter plan and plan-to-draft gate |
 | 66 | `agents/visualization_agent.md` | figure checks and trace, "as roadmap entry 5's figures require" | entry 5's figures page takes the ten checks and the trace; the row no longer says entry 5 requires value fidelity |
 | 77 | `references/abstract_writing_guide.md` | `rebuild later: paper` | `rebuild: paper`: entry 5 merges it with the bilingual agent's rules into one abstract page |
-| 81 | `references/apa7_extended_guide.md` | the venue template sets bias-free language and the reference forms | entry 5's drafting page takes bias-free language; venue bibliography styles render the citation and reference forms |
+| 81 | `references/apa7_extended_guide.md` | the venue template sets bias-free language and the reference forms | entry 5's drafting page takes bias-free language; venue bibliography styles render the citation and reference forms; venue templates replace the title page, running head, abstract page, headings and table and figure format |
+| 90 | `references/journal_submission_guide.md` | the paper skill's statements take the data templates | the paper skill's statements take the data, CRediT (144-161) and AI (186-203) templates |
 | 91 | `references/latex_template_reference.md` | conversion can wait, with no entry named | entry 15.A takes conversion |
 | 92 | `references/mode_selection_guide.md` | the plan-to-draft gate has no entry named | entry 15.A takes the gate |
 | 94 | `references/plan_mode_protocol.md` | the unique signal joins "the later planning dialogue" | entry 15.A builds it with that dialogue |

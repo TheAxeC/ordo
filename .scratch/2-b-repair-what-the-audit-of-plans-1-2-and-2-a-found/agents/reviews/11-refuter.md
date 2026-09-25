@@ -177,3 +177,34 @@ grep -rn "35 words" skills docs README.md -> no output, exit 1
 - The `shared/` files the source skill references.
 
 Reviewer usage: not known (reviewer claude:opus, agent a98eb3004ccd75ea7; no completion notification received).
+
+## Closed
+
+- First review, Spec 1 (rows 54, 56, 92 deferring to "the later planning dialogue"): closed in round 1; each names entry 15.A through the `socratic_mentor_agent.md` row, which names every part it receives.
+- First review, Spec 2 and 3 (row 59: the checklist on a `rebuild later` row; precedence and format profile with no destination): closed in round 1; the checklist is on the `SKILL.md` row, and entry 15.A builds conversion, profiles and precedence.
+- First review, Spec 4 (row 60: Step 5, Step 13 and the plan intake with no row): closed in round 1.
+- First review, Spec 5 (row 60 against row 86 on evidence profiles): closed in round 1; `literature` sets `cs_ml`.
+- First review, Proof 1 (a comparison script not rerunnable): closed in round 1; the report gives the command.
+- First review, Proof 2 (a git command run): closed; none reported in either round.
+- First review, Standards 1 and 2 (cell lengths): closed; ruling 2e limits sentences, and no sentence of the section is over 35 words (fixed at landing: the brief's reading corrected, the prose standard's exception written).
+- First review, Standards 3 (verbless cells, repeated endings): closed in round 1.
+- First review, Standards 4 and 5 (row 54's modes and statement count, row 78's "among them"): closed in round 1.
+- First review, Behaviour 1 (`docs/roadmap.md:120` "11 for paper"): closed in round 1; it says 8.
+- First review, Behaviour, finding 13's ethics half: booked at step 14 (`plan.md`, step 14; the state file's booked list).
+- Round 1, Spec (rows 54, 59, 81, 60, 90, 66): closed in round 2.
+- Round 1, Proof (stale first-round statements): closed in round 2.
+- Round 1, Standards ("It" openings, rows 87, 91, 59's checklist): closed in round 2.
+- Round 1, Behaviour (the removed drops unstated): closed in round 2.
+- Round 2, Spec, row 60 (materials, co-authors and declared-values-only venue limits): fixed at landing; the row names them, record 7 corrected.
+- Round 2, Spec, row 81 (title page, running head, abstract page, headings, table and figure format): fixed at landing; the row says venue templates replace them, record 28 corrected.
+- Round 2, Spec, row 66 (LaTeX templates removed; the decision tree given dpi and palettes): fixed at landing; the row names the tree, the figure standards, the pitfalls and the LaTeX figure templates apart, record 13 corrected.
+- Round 2, Spec, row 57 (automatic format correction): fixed at landing; the row says the paper skill corrects a format error itself, record 4 corrected.
+- Round 2, Spec, rows 59 and 90 (the cover letter and blind-review removal against roadmap entry 14): booked at step 10, which edits roadmap entries through `/roadmap` with the diff shown (`plan.md`, step 10; the state file's booked list).
+- Round 2, Proof 1 (the report's cell-length NOT DONE): fixed at landing; the report's first line and its Result row state the sentence rule and its check.
+- Round 2, Proof 2 (record 15's safety note at 82): fixed at landing; 87-88.
+- Round 2, Proof 3 (records 4, 7, 13, 28 claiming parts kept): fixed at landing with the rows above.
+- Round 2, Standards 1 (rows 54, 59, 64 ending "have no use."): fixed at landing; each ends in its own construction.
+- Round 2, Standards 2 (row 77's "Its"): fixed at landing; "The guide's checklist".
+- Round 2, Standards 3 (row 68's subject): fixed at landing; the draft is the subject of the population, metric and limitation checks.
+- Round 2, Standards 4 (row 96's access date): fixed at landing; "from each policy's own page with its access date".
+- Round 2, Behaviour (the report's table without rows 60, 81, 90): fixed at landing; the table carries them.

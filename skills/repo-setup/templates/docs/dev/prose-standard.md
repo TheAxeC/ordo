@@ -61,7 +61,7 @@ Never open a paragraph by recapping the prior one ("With this setup complete", "
 - **Personified artifacts** for colour are banned; personification that is the project's defined vocabulary is not.
 - **Rhetorical questions**: avoided, except a question a section answers as its subject.
 - **Passive voice**: rewrite unless the actor is irrelevant.
-- **Sentence length**: under roughly 20 words unless the mechanism needs more; five or more consecutive sentences of the same length are rewritten.
+- **Sentence length**: under roughly 20 words unless the mechanism needs more; five or more consecutive sentences of the same length are rewritten. One named exception: a sentence in the reason cell of a coverage table, which lists what a file holds, may run to about 35 words.
 
 ## F. Emphasis and formatting
 

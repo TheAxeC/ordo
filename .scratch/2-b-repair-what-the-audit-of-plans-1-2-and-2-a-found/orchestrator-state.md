@@ -36,22 +36,7 @@ launch_note:                 # none recorded.
 ```
 
 ```yaml
-dispatch:
-- step: 11
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: ab8951c4d56c145ef (the runner's agent id)
-  builder_usage: 226,019 tokens, 98 tool uses, 875 s (the runner's completion notification); ruling L (a) sent to it mid-build and applied; after round 1 the notification reads 355,519 tokens, 35 tool uses, 863 s; round 1 reported done except two reason cells over about 35 words; after round 2 the notification reads 124,171 tokens, 26 tool uses, 637 s; round 2 reported done, every sentence of the section at 35 words or fewer (ruling 2e's allowance is per sentence, as plan 2's brief 4 set it)
-  round2_reviewer: claude:opus, agent a98eb3004ccd75ea7, through /refute over round 2: usage not known (no completion notification yet); its findings are fixed at landing or booked
-  round_reviewer: claude:opus, agent ac24d4cbbea7ffc4f, through /refute over round 1: 247,793 tokens, 54 tool uses, 648 s
-  reviewer_report: agents/reviews/11-refuter.md (through /refute; reviewer claude:opus, agent a59542d649739794e; 270,192 tokens, 46 tool uses, 470 s)
-  worktree: .agents/worktrees/2b-11
-  base: ebf3c8c
-  launched: 2026-09-25
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/11-report.md (records in 11-rows.md)
-  landing: cherry-picking
-  round: 1 (sent 2026-09-25: the findings of 11-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit cee396b on branch 2b-11; the path list widened to docs/roadmap.md line 120; the prose standard's named exception of ruling 2e is written at this step's landing)
-  round: 2 (the exception round, sent 2026-09-25: brief item 1, no part of a source file left with no row and no reason, is unbuilt after round 1's shortening, which removed destinations from rows 54, 59, 60 and 81 and left 26 shortened rows unchecked against their files; too large to fix at landing; the worktree at the round's start is commit 1f823e7 on branch 2b-11)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -63,6 +48,7 @@ dispatch:
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 - Step 1a (ruling H): the move of `utils/verify.sh` and its test into `skills/land/templates/`, and the pages, the verify list and the `land`, `refute`, `spec` and `plan-orchestration` texts naming the new path (`plan.md`, step 1a).
+- Step 10: roadmap entry 14 (`docs/roadmap.md:106-108`) names portal filling and a submission record but not the cover letter and blind-review removal that the coverage rows at `docs/academic-coverage.md:59` and `:90` send to `submit-manuscript`; step 10 names them in entry 14's goal or moves them to entry 5, through `/roadmap` with the diff shown (found by step 11's review over round 2).
 - Step 14: the two ethics rows of the audit's finding 13 (`ethics_checklist`, `ethics_review_agent`) are deep-research rows, `docs/academic-coverage.md` lines 190 and 218 at base ebf3c8c; step 14's brief checks them against finding 13 (found by step 11's review, Behaviour).
 - Step 1c (rulings J (a) and K): the brief template's "Cases" and "Paths this step writes" sections, the builder's first task of running the cases as tests before changing code, the checks in `spec` and `refute`, and the path check script with its test (`plan.md`, step 1c).
 
@@ -108,8 +94,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Steps 1, 2, 3, 4, 5, 6, 6a, 8 and 9 landed (steps 1, 2, 3, 4, 5, 6, 8 and 9 at 5fdaa98, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 3867456 and 129a3f7; step 6a in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 11's repair round 1 is reported and goes to its review; 1a runs alone next, then 1c; 10 can follow now that 8 has landed.
+- 2026-09-25. Steps 1, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 2, 3, 4, 5, 6, 6a, 8 and 9 at 5fdaa98, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456 and 129a3f7; step 11 in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. 1a runs alone next, then 1c; 10, 12 and 15 follow.
 - Open on Axel's side: none.
 
 ## Usage
@@ -125,3 +111,4 @@ dispatch:
 | 9 | claude:opus agent, effort high: 238,605 tokens, 70 tool uses, 2,222 s; round 1: 294,367 tokens, 92 tool uses, 3,581 s | 152,366 tokens, 29 tool uses, 664 s; round 1: 130,235 tokens, 28 tool uses, 540 s | 1 | 6 (6 rulings) | 8 files changed, 843 insertions(+), 81 deletions(-) | no | 3 | 0 | 117 | 83680 | 363787 | 31728288 | 252 | 184 | none |
 | 4 | claude:opus agent, effort high: 310,799 tokens, 80 tool uses, 4,353 s; round 1: 408,123 tokens, 55 tool uses, 2,934 s | 155,977 tokens, 43 tool uses, 898 s; round 1: 166,201 tokens, 29 tool uses, 1,060 s | 1 | 10 (10 rulings) | 7 files changed, 1248 insertions(+), 198 deletions(-) | no | 10 | 0 | 111 | 107879 | 312647 | 22253056 | 226 | 38 | none |
 | 6a | claude:opus agent, effort high: 95,179 tokens, 18 tool uses, 339 s; round 1: 118,218 tokens, 12 tool uses, 529 s | 98,347 tokens, 23 tool uses, 329 s; round 1: 95,799 tokens, 26 tool uses, 325 s | 1 | 7 (6 rulings) | 5 files changed, 106 insertions(+), 106 deletions(-) | no | 3 | 0 | 11 | 7751 | 10221 | 1963904 | 22 | 4 | none |
+| 11 | claude:opus agent, effort high: 226,019 tokens, 98 tool uses, 875 s; round 1: 355,519 tokens, 35 tool uses, 863 s; round 2: 124,171 tokens, 26 tool uses, 637 s | 270,192 tokens, 46 tool uses, 470 s; round 1: 247,793 tokens, 54 tool uses, 648 s; round 2: 277,802 tokens, 40 tool uses, 533 s | 2 (one under the exception) | 10 (12 rulings), then 13 (12 rulings) | 2 files changed, 51 insertions(+), 51 deletions(-) | no | 14 | 0 | 35 | 33466 | 61996 | 7840516 | 76 | 38 | none |
