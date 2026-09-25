@@ -42,13 +42,14 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a226760096804c8a0 (the runner's agent id)
   builder_usage: 199,787 tokens, 61 tool uses, 1692 s
-  reviewer: claude:opus, through /refute, agent acdc1cc1a7421ba3f, running
+  reviewer: claude:opus, through /refute, agent acdc1cc1a7421ba3f, done; 130,251 tokens, 35 tool uses, 572 s; 8 findings, each ruled in agents/briefs/1c-round-1.md
+  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1c-refuter.md
   worktree: .agents/worktrees/2b-1c
   base: 7ccbe7b
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1c-report.md
   landing: not-started
-  round: 0
+  round: 1, sent to the builder with agents/briefs/1c-round-1.md (8 rulings); round start: worktree commit 1c09e70; paths: the brief's list plus skills/plan-help/SKILL.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
