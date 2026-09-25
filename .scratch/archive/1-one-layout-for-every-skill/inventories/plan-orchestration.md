@@ -33,10 +33,10 @@
 | 24 | A running builder is waited for | Resuming, and handing the plan over 5 |
 | 24 | A finished builder resumes at the read of its report | Resuming, and handing the plan over 6 |
 | 24 | A step at landing: cherry-picking is checked on main before anything is applied again | Resuming, and handing the plan over 7 |
-| 24 | A dead builder is reported with its transcript | Resuming, and handing the plan over 8 |
-| 24 | A continuation builder takes over the worktree when the user says so | Resuming, and handing the plan over 9 |
+| 24 | A dead builder is reported with its transcript | Resuming, and handing the plan over 9 |
+| 24 | A continuation builder takes over the worktree when the user says so | Resuming, and handing the plan over 10 |
 | 24 | Never a silent relaunch | Anti-patterns 1 |
-| 24 | An uncommitted booking with the step's files staged is an interrupted landing, finished first | Resuming, and handing the plan over 10 |
+| 24 | An uncommitted booking with the step's files staged is an interrupted landing, finished first | Resuming, and handing the plan over 11 |
 | 28 | Read the state file, plan.md, the transcript's tail; resolve a dispatch block first | Steps 1 |
 | 29 | Pick the next unblocked step, one at a time unless workers_at_once allows more | Steps 2 |
 | 30 | Invoke /spec; it checks premises, writes the brief, the worktree and the dispatch block | Steps 3 |
@@ -97,12 +97,12 @@
 | 60-62 | The claude -p launch command; plan 2.B: --report takes the output file and --label is <entry>/<step> | Launching a builder 2 |
 | 65 | Codex builder: codex exec from a shell, detached from the command timeout | Launching a builder 3 |
 | 68-71 | The codex exec launch command; plan 2.B: --report takes the output file and --label is <entry>/<step> | Launching a builder 3 |
-| 74 | -C is the working root and -s workspace-write confines writes | Launching a builder 8 |
-| 74 | The network setting is passed when the verification commands bind a port | Launching a builder 10 |
-| 74 | -o writes the final message; --json streams the event log with the usage | Launching a builder 11 |
-| 74 | Not --ephemeral, so the rollout is the builder's transcript | Launching a builder 12 |
-| 74 | The shell tool caps a command at ten minutes, so the launch is detached and a monitor watches the exit file | Launching a builder 13 |
-| 74 | Codex settings in the repository's .codex/; the orchestrator never edits a user-level file | Launching a builder 15 |
+| 74 | -C is the working root and -s workspace-write confines writes | Launching a builder 9 |
+| 74 | The network setting is passed when the verification commands bind a port | Launching a builder 11 |
+| 74 | -o writes the final message; --json streams the event log with the usage | Launching a builder 12 |
+| 74 | Not --ephemeral, so the rollout is the builder's transcript | Launching a builder 13 |
+| 74 | The shell tool caps a command at ten minutes, so the launch is detached and a monitor watches the exit file; plan 2.B: the monitor watches the pid too | Launching a builder 14 |
+| 74 | Codex settings in the repository's .codex/; the orchestrator never edits a user-level file | Launching a builder 16 |
 | 78 | A step is a large thing: a new capability, or a defect too nasty or too wide to close where found | What earns a step of its own 1 |
 | 78 | Everything else is closed in the open step, the repair round or the landing; plan 2.B: the repair rounds | What earns a step of its own 2 |
 | 78 | A step's path list is a choice: widen it rather than mint a step | What earns a step of its own 3 |

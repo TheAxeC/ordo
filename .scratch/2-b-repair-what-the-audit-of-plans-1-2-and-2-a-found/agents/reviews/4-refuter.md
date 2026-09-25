@@ -198,3 +198,26 @@ Race reproduction (scratch copy of launch.sh with "Time::HiRes::sleep(1) if $lim
 - The prose standard, sentence by sentence, on the four changed SKILL.md lines and the one launch-note.md line, beyond a read and the layout check.
 
 Reviewer usage: 166,201 tokens, 29 tool uses, 1,060 s (the runner's completion notification).
+
+## Closed
+
+- Spec 1 (the session sweep): closed in the round; `session_members` in `launch.sh`, red under the round reviewer's no-session-sweep revert.
+- Spec 2 (a codex resume with a note, transcript on a codex record): closed in the round; red under harness-always-claude and transcript-noop.
+- Proof 1 (the longest-line figure): closed in the round; the round reviewer's awk reproduced the report.
+- Proof 2 (TERM to a descendant outside the group): closed in the round; red under term-only-group.
+- Proof 3 (the land sequence with the leader alive at two seconds): closed in the round; red under no-kill-after-grace and exit-after-end-on-signal.
+- Standards 1 (`README.md:121`, `orchestrator-state.md:27`): the template closed in the round; `README.md:121` fixed at landing as one sentence naming what `launch.test.sh` covers.
+- Standards 2 (the test head comment claiming codex transcript): closed in the round.
+- Behaviour 1 (a signal between `&` and `running=$!`): closed in the round for the builder's window; the note's start window and the runner's window fixed at landing (below).
+- Behaviour 2 (KILL to the leader leaves the builder running): closed in the round; red under no-watchdog.
+- Behaviour 3 (a stale lock directory): closed in the round; the lock is a `flock` file released by the system.
+- Round, Spec, and Standards 1 (`LAUNCH_TEST_SPAWN_DELAY`, a parameter whose only user is the test): fixed at landing; the variable is gone from `launch.sh`, and the spawn-window case runs on a copy of `launch.sh` patched by the test's `patched` helper. `grep -n LAUNCH_TEST_SPAWN_DELAY skills/plan-orchestration/templates/launch.sh` prints nothing.
+- Round, Proof 1 (the launcher's pid in the lock file untested): fixed at landing; the case "the lock file after a launch" checks that a real launch writes its own pid. With `print $fh "$$\n";` removed: `FAIL: the lock file after a launch: .../lockpid out/pid.lock holds , expected 77888`.
+- Round, Proof 2 (`spawning=1` before the note's start untested): fixed at landing; the case "TERM while start is being started" (a note stub that ignores TERM). With the line removed: `FAIL: TERM while start is being started: note process 76621 ran on after the exit file was written`.
+- Round, Proof 3 (the reverts script and its output named in the report do not exist): fixed at landing; `4-report.md` no longer names them, and the landing reran four reverts (above and below).
+- Round, Standards 2 (the Doc text for `README.md:121` runs to about ten sentences): fixed at landing; `README.md:121` is one sentence.
+- Round, Standards 3 (the report keeps facts the round changed): fixed at landing; `4-report.md` line 3, the Files table and judgment call 1 state the tree as landed.
+- Round, Standards 4 (perl on no requirement line): fixed at landing; `README.md:43` names `perl`, and that `launch.sh` uses `perl` and `python3`.
+- Round, Behaviour 1 (a window between `fork` and the runner's handlers): fixed at landing; the handlers are set before the fork, and the case "TERM while the runner starts the builder" runs on a copy with a 3 s sleep after `setpgrp`. With the handlers moved after the fork: `FAIL: TERM while the runner starts the builder: the builder ran on after the exit file was written`.
+- Round, Behaviour 2 (`<pid file>.lock` stays after a launch, unstated): fixed at landing; `SKILL.md:174` says the lock file stays beside the pid file and is removed with the step's other launch files once the builder has ended.
+- Landing red line ("land sequence with KILL: no exit file" under three test runs at once; the runner's stop started python3 more than once and took over the leader's two seconds): fixed at landing; the runner starts one python3 session scanner with the builder and asks it over a pipe, and the grace loop no longer rescans. The scanner is given the runner's pid as a copied string, so the runner leaves itself out of its own sweep; the signal cases check that the leader's shell reports no killed `run_` job, and with the pid passed as `$$` (read in the forked child as its own pid): `FAIL: TERM to the session leader: the runner stopped itself`. Three runs at once: three `PASS: launch.sh scratch tests`.

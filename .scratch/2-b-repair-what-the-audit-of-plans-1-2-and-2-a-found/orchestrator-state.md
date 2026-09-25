@@ -37,25 +37,12 @@ launch_note:                 # none recorded.
 
 ```yaml
 dispatch:
-- step: 4
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: ad3f887161cb31e53 (the runner's agent id)
-  reviewer_report: agents/reviews/4-refuter.md (through /refute; reviewer claude:opus, agent ab1c552b7ec007bd0; 155,977 tokens, 43 tool uses, 898 s)
-  builder_usage: 310,799 tokens, 80 tool uses, 4,353 s; after round 1 the notification reads 408,123 tokens, 55 tool uses, 2,934 s (the runner's completion notifications); round 1 reported done
-  round_reviewer: claude:opus, agent aa1d052d49d51d309, through /refute over round 1: 166,201 tokens, 29 tool uses, 1,060 s
-  worktree: .agents/worktrees/2b-4
-  base: ec6586e
-  launched: 2026-09-25
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/4-report.md
-  landing: cherry-picking
-  round: 1 (sent 2026-09-25: the findings of 4-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 1aa7a17 on branch 2b-4; the path list widened to skills/plan/templates/orchestrator-state.md, and README.md:121 comes as Doc text)
 - step: 6a
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a3038fb5ca53bb282 (the runner's agent id)
   builder_usage: 95,179 tokens, 18 tool uses, 339 s (the runner's completion notification); after round 1 the notification reads 118,218 tokens, 12 tool uses, 529 s; round 1 reported done
-  round_reviewer: claude:opus, through /refute over round 1, running
+  round_reviewer: claude:opus, agent a877a74343597cb07, through /refute over round 1: 95,799 tokens, 26 tool uses, 325 s; its findings are fixed at landing
   reviewer_report: agents/reviews/6a-refuter.md (through /refute; reviewer claude:opus, agent a6915e3a72a17cbc5; 98,347 tokens, 23 tool uses, 329 s)
   worktree: .agents/worktrees/2b-6a
   base: 819b391 (the brief rewritten to the cut; the worktree of the word-list build removed)
@@ -83,11 +70,9 @@ dispatch:
 
 ## Booked, no ruling needed
 
-- Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added; `skills/plan-orchestration/templates/launch.sh:20-21` usage says `--label <step>` (step 4).
-- Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/plan-orchestration/SKILL.md:206` says `/land` makes the usage row "at its step 8" (now Steps 9, for step 4, the next step to edit that file); `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
+- Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
+- Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 - Step 1a (ruling H): the move of `utils/verify.sh` and its test into `skills/land/templates/`, and the pages, the verify list and the `land`, `refute`, `spec` and `plan-orchestration` texts naming the new path (`plan.md`, step 1a).
-- Step 4: the process in `launch.sh`'s pid file owns the builder's whole session (the builder started in a session or process group of its own), so the TERM, grace, KILL that `land`'s Steps 1 sends ends the builder and the exit file is still written; `launch.test.sh` runs that sequence (found by step 3's last review, Behaviour 1: today TERM ends only the wrapper shell and the builder keeps running).
-- Step 4: `plan-orchestration`'s resumption list gains the case of a dispatch block at `landing: backed-out` (the step taken back out of main by a red line: its worktree and branch kept, the step unticked, the failure booked), which step 3 defines in `land` (brief 3, decision 1).
 - Step 6a: `collect_findings.py` keeps every finding; its word lists and their tests go; `plan-retro` sets aside, by reading, what reports no defect (`plan.md`, step 6a; brief `agents/briefs/6a.md` at 819b391).
 - Step 14: the two ethics rows of the audit's finding 13 (`ethics_checklist`, `ethics_review_agent`) are deep-research rows, `docs/academic-coverage.md` lines 190 and 218 at base ebf3c8c; step 14's brief checks them against finding 13 (found by step 11's review, Behaviour).
 - Step 1c (rulings J (a) and K): the brief template's "Cases" and "Paths this step writes" sections, the builder's first task of running the cases as tests before changing code, the checks in `spec` and `refute`, and the path check script with its test (`plan.md`, step 1c).
@@ -134,8 +119,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Steps 1, 2, 3, 5, 6, 8 and 9 landed (5fdaa98, 6458d52, fafda10, e69b588, e9633bd, 3867456; step 9 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 4's repair round 1 is under its review; 6a is rebriefed to the cut (the collector keeps every finding) and built again in its worktree; 1a runs alone after 4 lands, then 1c; 10 can follow now that 8 has landed.
+- 2026-09-25. Steps 1, 2, 3, 4, 5, 6, 8 and 9 landed (steps 1, 2, 3, 5, 6, 8 and 9 at 5fdaa98, 6458d52, fafda10, e69b588, e9633bd, 3867456 and 129a3f7; step 4 in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 6a's round is reviewed and lands next; step 11's repair round 1 is with its builder; 1a runs alone after 6a lands, then 1c; 10 can follow now that 8 has landed.
 - Open on Axel's side: none.
 
 ## Usage
@@ -149,3 +134,4 @@ dispatch:
 | 6 | claude:opus agent, effort high: 214,647 tokens, 61 tool uses, 922 s; round 1: 313,152 tokens, 38 tool uses, 781 s | 151,111 tokens, 47 tool uses, 513 s; round 1: 167,715 tokens, 46 tool uses, 480 s; landing fixes: 105,908 tokens, 26 tool uses, 375 s | 1 | 10 (7 rulings) | 5 files changed, 628 insertions(+), 99 deletions(-) | no | 14 | 0 | 83 | 75259 | 217318 | 49232763 | 184 | 63 | none |
 | 8 | claude:opus agent, effort high: 183,627 tokens, 37 tool uses, 1,479 s; round 1: 233,528 tokens, 23 tool uses, 2,257 s | 136,212 tokens, 34 tool uses, 539 s; round 1: 115,791 tokens, 24 tool uses, 431 s; landing fixes: 113,847 tokens, 15 tool uses, 299 s | 1 | 7 (5 rulings) | 4 files changed, 334 insertions(+), 31 deletions(-) | no | 10 | 0 | 57 | 49938 | 105681 | 11615352 | 122 | 27 | none |
 | 9 | claude:opus agent, effort high: 238,605 tokens, 70 tool uses, 2,222 s; round 1: 294,367 tokens, 92 tool uses, 3,581 s | 152,366 tokens, 29 tool uses, 664 s; round 1: 130,235 tokens, 28 tool uses, 540 s | 1 | 6 (6 rulings) | 8 files changed, 843 insertions(+), 81 deletions(-) | no | 3 | 0 | 117 | 83680 | 363787 | 31728288 | 252 | 184 | none |
+| 4 | claude:opus agent, effort high: 310,799 tokens, 80 tool uses, 4,353 s; round 1: 408,123 tokens, 55 tool uses, 2,934 s | 155,977 tokens, 43 tool uses, 898 s; round 1: 166,201 tokens, 29 tool uses, 1,060 s | 1 | 10 (10 rulings) | 7 files changed, 1248 insertions(+), 198 deletions(-) | no | 10 | 0 | 111 | 107879 | 312647 | 22253056 | 226 | 38 | none |

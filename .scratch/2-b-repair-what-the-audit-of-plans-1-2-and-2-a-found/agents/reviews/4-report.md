@@ -1,6 +1,6 @@
 # Report: step 4, launch.sh: a pid that owns the builder, bounded note calls, one launch per step
 
-Everything in the brief is done. Two sentences outside this step's path list are made false or incomplete by it and are left for the landing, since the brief keeps this step to its five paths: `README.md:121` and `skills/plan/templates/orchestrator-state.md:27` (see "Found outside the brief").
+Everything in the brief and in the ten rulings of repair round 1 is done. The Files table and judgment call 1 state the tree as it landed; the reverts that prove the landed tree are the table under "Repair round 1", "Reverts", and the landing's own fixes are in `4-landing.md`.
 
 ## Open items of the state file, verbatim
 
@@ -153,7 +153,7 @@ expected
 claude|/private$TMPDIR/launch-test.1e2qeY/a test root/work dir|-p|--session-id||--model|m1|--permission-mode|acceptEdits|--output-format|json
 ```
 
-What the green run does not cover: a builder process that leaves the builder's process tree (a daemon that forks twice or calls setsid itself) is not stopped; the stale-pid refusal trusts `kill -0`, so a pid file naming a live process of another program also refuses; the missing-prompt case and the missing `--cwd` case are red under `body-stderr-to-null` only after the hanging-start case, which is earlier in the file and fails first.
+What the green run does not cover: the missing-prompt case and the missing `--cwd` case are red under `body-stderr-to-null` only after the hanging-start case, which is earlier in the file and fails first; the stale-pid refusal trusts `kill -0`, so a pid file naming a live process of another program also refuses.
 
 ## The audit's reproductions, rerun with stubs
 
@@ -174,27 +174,28 @@ After these runs and the test runs, `ps -A -o pid=,command= | grep -e launch-tes
 
 ## Files
 
-`wc -l` and `git diff --numstat`:
+`wc -l` and `git diff --numstat ec6586e`, on main at the landing:
 
 | File | Lines | Added | Removed |
 |---|---|---|---|
-| `skills/plan-orchestration/templates/launch.sh` | 505 | 350 | 58 |
-| `skills/plan-orchestration/templates/launch.test.sh` | 827 | 544 | 107 |
-| `skills/plan-orchestration/templates/launch-note.md` | 29 | 6 | 5 |
+| `skills/plan-orchestration/templates/launch.sh` | 627 | 472 | 58 |
+| `skills/plan-orchestration/templates/launch.test.sh` | 1020 | 739 | 109 |
+| `skills/plan-orchestration/templates/launch-note.md` | 30 | 7 | 5 |
 | `skills/plan-orchestration/SKILL.md` | 271 | 19 | 14 |
+| `skills/plan/templates/orchestrator-state.md` | 69 | 1 | 1 |
 | `.scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md` | 139 | 9 | 9 |
 
 ## Judgment calls the brief left open
 
-1. **The tool for the session leader and the bounds: perl.** `POSIX::setsid` starts the leader; one perl program (`runner`) runs the builder and each note call in a process group of its own, bounds a note call at 3 s, and on TERM, INT or HUP sends TERM to that group and to every descendant it finds with `ps -A -o pid= -o ppid=`, then KILL one second later. A third perl program makes the session id from 16 bytes of `/dev/urandom`. Reason, in the head comment: macOS has no `setsid` command, and perl ships on macOS and Linux and already runs the ASCII check.
+1. **The tool for the session leader and the bounds: perl.** `POSIX::setsid` starts the leader; one perl program (`runner`) runs the builder and each note call in a process group of its own, bounds a note call at 3 s, and on TERM, INT or HUP sends TERM to that group, to every descendant it finds with `ps -A -o pid= -o ppid=` and, for the builder, to every other process of the leader's session, found through one python3 process the runner starts with the builder and asks over a pipe (`os.getsid`); it looks for them once more and sends KILL to what is left one second later. The runner installs its handlers before it forks, and when its parent is no longer the leader it stops the builder the same way. A third perl program makes the session id from 16 bytes of `/dev/urandom`. Reason, in the head comment: macOS has no `setsid` command, and perl ships on macOS and Linux and already runs the ASCII check.
 2. **The pid file is written by the session leader itself**, and the launch returns once the file holds the leader's pid. Writing `$!` from the launcher returned before `setsid` had run, so the pid file could name a process that did not yet lead its session and had no signal handlers.
-3. **A lock directory, `<pid file>.lock`,** held from the live-pid check to the pid file's write, so two launches started together cannot both pass the check; a launch that finds it refuses with exit 75 and names it. A launcher killed with KILL in that window leaves the directory, and the message says to remove it when no launch runs.
+3. **A lock on `<pid file>.lock`,** held from the live-pid check to the pid file's write, so two launches started together cannot both pass the check. Its end state is under "Repair round 1", ruling 10.
 4. **The grace inside the leader is one second**, so the land skill's KILL at two seconds finds the builder already gone and the exit file written.
 5. **On the signal path the exit file carries the builder's own code when the builder had already ended** (a signal that arrives during `end`), and 128 plus the signal number otherwise.
 6. **`--session-file` is for claude only** (a codex launch with it is a usage error, exit 64); an empty value is a usage error; the file is reread after the write and a mismatch exits 1. `--session-id` is an internal option of `_body_claude`, refused as unknown in the public modes.
 7. **A note call stopped by the bound writes one line to the stderr file** (in the body) or to the caller's stderr (transcript mode): `launch.sh: the launch note's <call> call did not return within 3 seconds and was stopped`. A note call's own stderr still goes to `/dev/null`.
 8. **The launch exits 1** when the stderr, pid or session file cannot be written, or when the detached process ends before it writes the pid file.
-9. **The usage text is wrapped** over several lines per harness; the two usage lines of the base were 270 and 291 characters. The longest line of `launch.sh` is now 108 characters (`awk 'length > 104'`).
+9. **The usage text is wrapped** over several lines per harness; the two usage lines of the base were 270 and 291 characters. The longest line of `launch.sh` is given under "Repair round 1", ruling 3.
 10. **Two cases beyond the brief's list**, from audit finding 8: a note command that cannot run (no record, the builder runs) and a builder killed by a signal (`exit 137`, `end` called).
 11. **The skill's `metadata.version` is unchanged at 2.7.0**; the brief does not name a version change.
 
@@ -223,3 +224,148 @@ The grep that found these, `grep -rn -e 'survives a hangup' -e 'detached process
 ## The brief against the tree
 
 - Nothing in the brief was found wrong. The brief's reading "the claude recipe changes directory before it opens `--prompt`, `--report`, `--stderr` and `--exit`" held: the base `run_claude` ran `cd "$opt_cwd"` before its redirections (`git show HEAD:skills/plan-orchestration/templates/launch.sh`, lines 133-139).
+
+## Repair round 1
+
+The round started at commit 1aa7a17. Its path list adds `skills/plan/templates/orchestrator-state.md`. `README.md:121` is given under "Doc text" below, for the orchestrator to apply at landing. Scratch paths in quoted output are shortened: `/private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/` is written `$TMPDIR/`.
+
+### Rulings and what closes each
+
+| # | Ruling | What closes it |
+|---|---|---|
+| 1 | `stop` also ends every process of the leader's session, found with getsid; TERM to all, KILL after the grace; the "limit" wording removed | The runner in `launch.sh` has a `session_members` step, used for the builder only (seconds 0). It runs `python3 -B -c` with `os.getsid` over the pids that `ps -ax -o pid=` lists, leaves out the leader and the runner, and returns nothing unless the watched pid leads the runner's session. `stop` sends TERM to the builder's group, its descendants and these session members, then KILL one second later. Test case: "A process of the leader's session that is neither in the builder's group nor descended from it". The stub `STUB_SESSION_JOB` forks a sleeper into a process group of its own and exits its parent. The head comment states the one case the mechanism cannot reach: a process that starts a session of its own (setsid) is no longer in the leader's session. The "does not cover" paragraph of the first report no longer lists a miss. |
+| 2 | A codex resume with a note, and a transcript call on a codex record | Test case "A resumed codex run with a note". It checks start with `--harness codex`, the resume call and `note\|end\|note-8`, then `transcript` passing a rollout path to that codex record. |
+| 3 | The longest-line figure reproduced | `awk '{ if (length > m) { m = length; l = FNR } } END { print m, l }' skills/plan-orchestration/templates/launch.sh` prints `105 546`. Judgment call 9 now points here. |
+| 4 | A descendant outside the builder's group gets TERM before KILL | Test case "A descendant of the builder outside its process group gets TERM before the KILL". The stub `STUB_TRAP_CHILD` writes each TERM it receives to `TERM_LOG` and keeps running, and the case asserts that `TERM_LOG` holds `TERM`. |
+| 5 | The land sequence with the leader still alive at two seconds | Test case "The land skill's sequence with the leader still alive at two seconds". The builder ignores TERM. The note's `end` hangs on the signal path, with a child in a process group of its own. The case fails if the leader is gone before the KILL. After the KILL it asserts: the leader gone, the exit file present with `exit 143`, and no builder or note process left. Red under `exit-after-end-on-signal` (no exit file), `no-kill-after-grace` (no exit file: the leader waits on a runner that never ends the builder), `no-descendant-sweep` (the note's child survives) and `no-signal-traps` (the leader dies at TERM, before the KILL). |
+| 6 | The template line; README.md:121 as Doc text | `skills/plan/templates/orchestrator-state.md:27` now reads "The orchestrator writes and commits prompt, output (...), events, stderr, exit, pid, session_file (a claude -p launch's --session-file) and note_id_file before the launch, adds session_id as soon as the launch returns, reviewer_report at the review, ...". Doc text below. |
+| 7 | The test's head comment says exactly what is covered | Its first sentence now reads: "each recipe with no note, with an empty note and with a note (start, the builder, end), a transcript call after a claude record and after a resumed codex record, each recipe resuming a session (codex also with the network setting, with relative files and with a note, claude also with a note)". It then lists every case of this round. |
+| 8 | Close the window between starting a process and recording its pid | `on_signal` checks `spawning`. When a process is being started, it keeps the signal in `pending` and returns. `spawned "$!"` sets `running`, clears `spawning` and acts on `pending`, for the note's start and for the builder. `LAUNCH_TEST_SPAWN_DELAY` (named in the head comment) sleeps inside the window. Test case "A signal while the builder is being started": the builder ignores TERM, TERM is sent inside a 3 s window, and the case asserts the builder is gone by the time the exit file is written, `exit 143`, and no process left. |
+| 9 | A watchdog inside the builder's session | The runner takes the leader's pid as `<watch pid>`. When `getppid()` differs from it (the leader ended), the runner stops the builder, its descendants and the session members the same way, then exits. The same holds for a note call's runner. Test case "KILL to the leader alone": within 3 s no process of the builder is left, and no exit file exists. `SKILL.md` "Resuming", item 5 of "Launching a builder" and the TERM/KILL bullet state that case (no exit file, the builder gone within about a second, no `end`). `launch-note.md` states that neither the exit file nor `end` follows a KILL to the leader. |
+| 10 | The lock records its holder, a dead holder's lock is stale; SKILL.md names both refusals | `take_lock` (perl) opens `<pid file>.lock`, takes an exclusive non-blocking `flock`, writes its pid, and re-runs the launch with the lock descriptor kept open. The session leader closes that descriptor. The system releases the lock when the launcher ends, so a lock file naming a dead launcher is free and is taken over. A live holder refuses with exit 75 and `another launch (pid <n>) holds <lock>; not launched`. Test cases: "A lock held by a live launch refuses with exit 75, naming its pid" and "A lock file left by a launcher that died, naming its dead pid, is taken over". `SKILL.md` item 2 of "Launching a builder" names both refusals. |
+
+### Checks
+
+`sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit=$?"`:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit=0
+```
+
+`sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1` and `LAUNCH_SHELL=dash sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1`, timed with `date +%s`:
+
+```
+PASS: launch.sh scratch tests
+sh took 43s
+PASS: launch.sh scratch tests
+dash took 43s
+```
+
+`python3 -B utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md; echo rc=$?`:
+
+```
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/land.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/ordo-init.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-help.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-retro.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/refute.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/repo-setup.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/roadmap.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/spec.md
+rc=0
+```
+
+The round added no item to `SKILL.md`: `awk '/^## Launching a builder/,/^## What earns/' skills/plan-orchestration/SKILL.md | grep -c '^\(- \|[0-9]\. \)'` prints `17`, and the same over "Resuming" prints `12`. The inventory's places therefore stand as before.
+
+After the runs, `find . -name __pycache__ -not -path './.git/*'` printed nothing. `ps -A -o pid=,command= | grep -e launch-test -e 'red4/r1' | grep -v grep` also printed nothing.
+
+### Reverts
+
+Each revert was applied to a copy of the final `launch.sh` beside a copy of the final test, by a script under `$TMPDIR/red4/` that printed each diff and the run's `tail -12`; neither the script nor its output is kept. The first FAIL line of each run is quoted below; all 26 were red, and the round's reviewer reran ten of them with the same first FAIL lines.
+
+| Revert | Change | First FAIL line |
+|---|---|---|
+| `term-only-group` | `kill "TERM", keys %seen;` deleted from `stop` | `FAIL: a descendant outside the builder's group: $TMPDIR/launch-test.Em70UX/a test root/term.log holds , expected it to contain TERM` |
+| `no-session-sweep` | `session_members` returns `()` always | `FAIL: a job of the leader's session: process 21832 is still running` |
+| `no-watchdog` | the `getppid() != $watch` block deleted | `FAIL: KILL to the leader alone: process 27644 is still running` |
+| `no-spawn-pending` | the `spawning`/`pending` block deleted from `on_signal` | `FAIL: TERM while the builder is being started: the builder ran on after the exit file was written` |
+| `exit-after-end-on-signal` | `write_exit` moved after the note's `end` in `on_signal` | `FAIL: land sequence with KILL: no exit file` |
+| `harness-always-claude` | `--harness "$harness"` becomes `--harness claude` | `FAIL: codex resuming a session with a note: calls were` |
+| `transcript-noop` | the transcript mode's `if read_id; then` becomes `if false; then` | `FAIL: transcript on a codex record: calls were` |
+| `lock-not-taken` | `if (!flock($fh, LOCK_EX \| LOCK_NB)) {` becomes `if (0) {` | `FAIL: a launch with the lock held exited 0, expected 75` |
+| `lock-file-refuses` | the condition becomes `if (-s $lock \|\| !flock(...)) {` | `FAIL: a second launch printed launch.sh: another launch (pid 54430) holds $TMPDIR/launch-test.7BgzUE/a test root/twice out/pid.lock; not launched` |
+| `leader-no-setsid` | the setsid block deleted from `detach` | `FAIL: the pid file's process 33541 is in process group 31400, not its own` |
+| `no-signal-traps` | the three traps deleted from `run_body` | `FAIL: land sequence with KILL: the leader was gone before the KILL` |
+| `no-kill-after-grace` | `kill "-KILL", $pid;` and `kill "KILL", keys %seen;` deleted | `FAIL: land sequence with KILL: no exit file` |
+| `no-descendant-sweep` | `descendants` returns `()` | `FAIL: land sequence with KILL, the note: process 44178 is still running` |
+| `start-unbounded` | no timeout for the start call | `FAIL: no file at $TMPDIR/launch-test.opSHZm/a test root/hang-start out/exit` |
+| `end-unbounded` | no timeout for the end call | `FAIL: no file at $TMPDIR/launch-test.KBL8nw/a test root/hang-end out/exit` |
+| `transcript-unbounded` | no timeout for the transcript call | `FAIL: a hanging transcript held its caller for 60 seconds` |
+| `note-not-exec` | `note_exec` runs perl without `exec` | `FAIL: claude resuming a session with a note: calls were` |
+| `end-not-waited` | `wait "$running"` after `note_exec end &` deleted | `FAIL: claude resuming a session with a note: calls were` |
+| `no-live-pid-check` | `kill -0 "$old_pid"` becomes `false` | `FAIL: a second launch exited 0, expected 75` |
+| `no-absolute-paths` | the `abs_path` lines for cwd, prompt, report, stderr, exit, pid, events deleted | `FAIL: a relative codex resume: calls were` |
+| `body-stderr-to-null` | the detach's stderr to `/dev/null`, the builders given `2>"$opt_stderr"` | `FAIL: a hanging start: $TMPDIR/launch-test.VYbYrb/a test root/hang-start out/stderr holds claude stderr, expected it to contain the launch note's start call did not return within 3 seconds and was stopped` |
+| `no-session-id-flag` | `--session-id` not passed | `FAIL: claude without a note: calls were` |
+| `no-session-file-write` | the session file not written | `FAIL: claude without a note: calls were` |
+| `session-file-after-start` | the session file written after the detach | `FAIL: the session id before the builder: calls were` |
+| `exit-file-in-place` | `write_exit` writes the exit file in place | `FAIL: the exit file was written through the link, not moved into place` |
+| `usage-label-step` | the claude usage line says `--label <step>` | `FAIL: the usage text does not name --label <entry>/<step> for both harnesses: Usage: ...` |
+
+### User-visible changes of this round
+
+- The launch lock: before, a directory `<pid file>.lock` made by `mkdir` and removed by the launcher's EXIT trap. A launcher killed between the two left it behind, and every later launch of the step then exited 75 until the directory was removed by hand. After, a file `<pid file>.lock` held with `flock` by the live launcher, holding its pid. A live holder refuses with exit 75 and `launch.sh: another launch (pid <n>) holds <lock>; not launched`. A file left by a dead launcher is taken over. The file stays beside the pid file after the launch.
+- TERM, INT or HUP to the leader: before, the builder's group and its descendants were stopped. After, every other process of the leader's session is stopped as well.
+- KILL to the leader alone, or a leader that ends without writing the exit file: before, the builder ran on. After, the builder's runner stops the builder and every process of the session within about a second. No exit file is written and `end` is not called.
+- A signal while the builder or the note's start is being started: before, the builder could run on. After, it is stopped as soon as its pid is known.
+- `launch.sh` now needs python3 as well as perl (head comment, "Needs perl and python3").
+- `SKILL.md`, `launch-note.md` and the state template, as in rulings 6, 9 and 10.
+
+### Files, since 1aa7a17
+
+`git diff --numstat 1aa7a17` and `wc -l`:
+
+| File | Lines | Added | Removed |
+|---|---|---|---|
+| `skills/plan-orchestration/templates/launch.sh` | 613 | 146 | 38 |
+| `skills/plan-orchestration/templates/launch.test.sh` | 952 | 145 | 20 |
+| `skills/plan-orchestration/templates/launch-note.md` | 30 | 1 | 0 |
+| `skills/plan-orchestration/SKILL.md` | 271 | 4 | 4 |
+| `skills/plan/templates/orchestrator-state.md` | 69 | 1 | 1 |
+
+### Doc text
+
+`grep -n 'launch.test.sh. runs' README.md` prints:
+
+```
+121:- `launch.test.sh` runs `launch.sh` with stub `claude`, `codex` and launch-note commands, in paths that contain spaces. It checks that each recipe runs with its exact arguments and keeps the builder's exit code with no note, an empty note and a note (`start`, the builder, `end`, then `transcript`). It also covers a resumed session for each harness, the ways `start` can fail to give an id, a launch that returns before its builder ends and survives a hangup, an exit file left by an earlier run, relative files, and every usage error with its message.
+```
+
+Replacement for line 121:
+
+```
+- `launch.test.sh` runs `launch.sh` with stub `claude`, `codex` and launch-note commands, in paths that contain spaces. It checks that each recipe runs with its exact arguments and keeps the builder's exit code with no note, an empty note and a note (`start`, the builder, `end`), and a `transcript` call after a claude record and after a resumed codex record. It also covers a resumed session for each harness (codex also with the network setting, with relative files and with a note), the ways `start` can fail to give an id, a note command that cannot run, a builder killed by a signal, a launch that returns before its builder ends, an exit file left by an earlier run, and every usage error with its message. It checks that the pid in the pid file leads a session of its own and is the pid `start` receives; that TERM, INT and HUP to it stop the builder and write `exit 143`, `130` and `129` before `end`; that the land skill's TERM-then-KILL sequence leaves no process and an exit file, with the leader gone within its grace and with the leader still alive at two seconds; that a descendant outside the builder's group gets TERM before KILL and a process of the leader's session outside the builder's tree is stopped; that KILL to the leader alone leaves no builder process and no exit file; that TERM while the builder is being started stops it; that a note call hanging on `start`, `end` or `transcript` is stopped after 3 seconds; that a second launch is refused with exit 75 while the first runs or while a live launch holds the lock, and that a lock left by a dead launcher is taken over; that relative paths resolve from the caller's directory for both harnesses; that the body's errors reach the stderr file; that the session id is written before the builder starts and passed with `--session-id`; and that the exit file is moved into place. It runs `launch.sh` under `sh`, and under `dash` with `LAUNCH_SHELL=dash`.
+```

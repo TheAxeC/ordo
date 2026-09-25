@@ -1,25 +1,72 @@
 #!/bin/sh
 # Start a builder as a detached process of its own, by the claude -p or codex exec recipe of
-# plan-orchestration, and return at once with the detached process's pid in the pid file.
+# plan-orchestration, and return as soon as that process has written its pid to the pid file.
 #
-# The claude and codex modes check their options and start this script again under nohup in the
-# matching internal mode (_body_claude, _body_codex), which runs in that detached process: the
-# launch note's start, the builder, the note's end, then the exit file. With no launch-note command,
-# or an empty one, the detached process runs the recipe's command alone. With --resume, the builder
-# continues the session of that id, as a repair round does, and a note records the run as a new
-# record under the same label. The launch removes an exit file left by an earlier run before it
-# detaches, so a monitor never reads a stale one. The transcript mode passes a transcript or rollout
-# path to the note. The note command's interface is in launch-note.md beside this script; every
-# call to it is a record only, so its failure never stops the builder or this script.
+# Launch. The claude and codex modes check their options, make every path option absolute from the
+# caller's directory (so a path names the same file for both harnesses, before the claude recipe
+# changes into --cwd), and take an exclusive lock (flock) on <pid file>.lock, writing their pid
+# into it. They refuse with exit 75, before anything starts, when another live launch holds that
+# lock or the pid file names a live process. The system releases the lock when the launcher ends,
+# so a lock file left by a launcher that died, whatever pid it still names, is taken over. They
+# then remove an exit file an earlier run left, so a monitor never reads a stale one, and start
+# this script again in the matching internal mode (_body_claude, _body_codex) as the leader of a
+# new session, through perl's POSIX::setsid, since macOS has no setsid command and perl ships on
+# macOS and Linux alike. The session leader writes its own pid to the pid file, and the launch
+# returns once it has.
+#
+# Body. The session leader runs the launch note's start with --pid set to its own pid, the builder,
+# the note's end, then writes the exit file, and lives until all of that is done. Its own errors
+# and the builder's go to the --stderr file. The builder runs in a process group of its own inside
+# the session, under a runner. TERM, INT or HUP sent to the leader stops the builder: TERM to its
+# process group, to every process descended from it and to every other process of the leader's
+# session (found by session id with python3's os.getsid), KILL one second later to whatever is
+# left. A signal that arrives while the builder or a note call is being started, before the
+# leader has its pid, is acted on as soon as the pid is known. The runner sets its TERM, INT and
+# HUP handlers before it forks the builder, so no builder outlives a signal that reaches the
+# runner. The leader then writes the exit file (exit 128 plus the signal number, or the builder's
+# own code when it had already ended) and calls end, so TERM followed by KILL two seconds later
+# leaves no builder process and an exit file. When the leader
+# ends without doing this (KILL sent to it alone, or a crash), the runner sees its parent gone
+# and stops the builder and every process of the session the same way within about a second;
+# no exit file is written then. A process that starts a session of its own (setsid) is no longer
+# in the leader's session and is not reached by these stops. The exit file is written beside
+# itself as <exit file>.tmp and moved into place, so a monitor never reads it empty.
+#
+# Session id. A first claude launch generates a session id (a random version 4 UUID), passes it to
+# claude -p --session-id, and writes it to the --session-file, when one is given, before the
+# builder starts. With --resume the builder continues the session of that id, as a repair round
+# does, and the --session-file receives that id. A resumed run is recorded by the note as a new
+# record under the same label.
+#
+# Note. With no launch-note command, or an empty one, the recipe's command runs alone. Every call
+# to the note (start, end, transcript) is a record only: a call that fails is ignored, and a call
+# that has not returned after 3 seconds is stopped with its whole process group, so the builder,
+# the exit file and the caller of transcript never wait on it longer. A stopped start counts as a
+# failed one, and end and transcript are then not called. The transcript mode passes a transcript
+# or rollout path to the note. The note command's interface is in launch-note.md beside this
+# script.
+#
+# Needs perl and python3.
+#
+# Exit status: 0 launched, or the transcript passed on; 1 the lock, stderr, pid or session file
+# cannot be written, or the detached process ended before it wrote the pid file (its errors are in
+# the stderr file); 64 a usage error; 75 refused, since a launch of the same pid file is live.
 
 set -u
 
 self=$0
 
 usage() {
-    printf 'Usage: %s claude --cwd <dir> --model <model> --prompt <file> --report <file> --stderr <file> --exit <file> --pid <file> [--resume <session id>] [--note <command> --id <file> --label <step> --parent <session id>]\n' "$self" >&2
-    printf '       %s codex --cwd <dir> --model <model> --prompt <file> --report <file> --stderr <file> --exit <file> --pid <file> --events <file> --effort <effort> [--network] [--resume <session id>] [--note <command> --id <file> --label <step> --parent <session id>]\n' "$self" >&2
-    printf '       %s transcript --note <command> --id <file> <path>\n' "$self" >&2
+    cat >&2 <<EOF
+Usage: $self claude --cwd <dir> --model <model> --prompt <file> --report <file> --stderr <file>
+           --exit <file> --pid <file> [--session-file <file>] [--resume <session id>]
+           [--note <command> --id <file> --label <entry>/<step> --parent <session id>]
+       $self codex --cwd <dir> --model <model> --prompt <file> --report <file> --stderr <file>
+           --exit <file> --pid <file> --events <file> --effort <effort> [--network]
+           [--resume <session id>]
+           [--note <command> --id <file> --label <entry>/<step> --parent <session id>]
+       $self transcript --note <command> --id <file> <path>
+EOF
     exit 64
 }
 
@@ -40,6 +87,7 @@ esac
 opt_cwd='' opt_model='' opt_prompt='' opt_report='' opt_stderr='' opt_exit='' opt_pid=''
 opt_events='' opt_effort='' opt_network=0
 opt_note='' opt_id='' opt_label='' opt_parent='' opt_resume=''
+opt_session_file='' opt_session_id=''
 opt_path=''
 
 while [ "$#" -gt 0 ]; do
@@ -48,7 +96,8 @@ while [ "$#" -gt 0 ]; do
             opt_network=1
             shift
             ;;
-        --cwd | --model | --prompt | --report | --stderr | --exit | --pid | --events | --effort | --note | --id | --label | --parent | --resume)
+        --cwd | --model | --prompt | --report | --stderr | --exit | --pid | --events | --effort | \
+            --note | --id | --label | --parent | --resume | --session-file | --session-id)
             [ "$#" -ge 2 ] || fail_usage "$1 needs a value"
             name=$1
             value=$2
@@ -69,9 +118,20 @@ while [ "$#" -gt 0 ]; do
                 --parent) opt_parent=$value ;;
                 --resume)
                     case "$value" in
-                        '' | -*) fail_usage "--resume needs a session id, not ${value:-an empty value}" ;;
+                        '' | -*)
+                            fail_usage "--resume needs a session id, not ${value:-an empty value}"
+                            ;;
                     esac
                     opt_resume=$value
+                    ;;
+                --session-file)
+                    [ -n "$value" ] || fail_usage "--session-file needs a file name, not an empty value"
+                    opt_session_file=$value
+                    ;;
+                --session-id)
+                    # Internal: the launch hands the generated id to the claude body.
+                    [ "$mode" = _body_claude ] || fail_usage "unknown option $name"
+                    opt_session_id=$value
                     ;;
             esac
             ;;
@@ -94,11 +154,248 @@ done
     *) fail_usage "--note must be an absolute path" ;;
 esac
 
+# runner <seconds> <watch pid> <what> <command...>: run the command in a process group of its own
+# and pass on its exit code (128 plus the signal number when a signal ended it). With seconds
+# above 0 (a note call), the command's standard error goes to /dev/null, and when it has not
+# returned by then its group and every process descended from it are killed, a line naming <what>
+# goes to standard error, and the exit code is 124. With seconds 0 (the builder), the processes
+# stopped also include every process of the runner's session when <watch pid> leads that session,
+# found by their session ids (python3's os.getsid, since ps prints no session id on macOS) through
+# one python3 process the runner starts with the builder and asks over a pipe, so a stop starts no
+# interpreter; the leader, the runner and that process are left out, and a session <watch pid>
+# does not lead is never swept. TERM, INT or HUP to the runner, from the moment it starts, sends TERM to all of these.
+# One second later, or as soon as they have all ended, the runner looks for them once more, sends
+# KILL to what is left, and exits 128 plus the signal number. When <watch pid> is no longer the
+# runner's parent (the leader or the caller has gone), the runner stops the command the same way,
+# so a leader killed with KILL leaves no builder process behind.
+runner='
+use strict;
+use warnings;
+use POSIX ();
+use Time::HiRes ();
+use IPC::Open2 ();
+my ($limit, $watch, $what) = splice @ARGV, 0, 3;
+my $session_py = q{
+import os, subprocess, sys
+sid = os.getsid(0)
+lead = sid == int(sys.argv[1])
+skip = set(int(a) for a in sys.argv[2:])
+skip.add(os.getpid())
+skip.add(sid)
+for request in sys.stdin:
+    if lead:
+        out = subprocess.run(["ps", "-ax", "-o", "pid="], stdout=subprocess.PIPE,
+                             universal_newlines=True)
+        for word in out.stdout.split():
+            p = int(word)
+            if p in skip:
+                continue
+            try:
+                if os.getsid(p) == sid:
+                    print(p)
+            except OSError:
+                pass
+    print("end", flush=True)
+};
+my $got = 0;
+$SIG{HUP} = sub { $got ||= 1 };
+$SIG{INT} = sub { $got ||= 2 };
+$SIG{TERM} = sub { $got ||= 15 };
+my $pid = fork;
+defined $pid or die "launch.sh: cannot start $what: $!\n";
+if (!$pid) {
+    setpgrp(0, 0);
+    $SIG{$_} = "DEFAULT" for qw(HUP INT QUIT TERM);
+    open STDERR, ">", "/dev/null" if $limit > 0;
+    exec { $ARGV[0] } @ARGV or do {
+        print STDERR "launch.sh: cannot run $ARGV[0]: $!\n";
+        POSIX::_exit(127);
+    };
+}
+setpgrp($pid, $pid);
+my ($scan_out, $scan_in, $scanner);
+if ($limit == 0) {
+    $scanner = eval {
+        IPC::Open2::open2($scan_out, $scan_in, "python3", "-B", "-c", $session_py, $watch, "$$");
+    };
+}
+sub descendants {
+    my ($root) = @_;
+    my %kids;
+    open my $ps, "-|", "ps", "-A", "-o", "pid=", "-o", "ppid=" or return ();
+    while (<$ps>) {
+        my ($p, $pp) = split;
+        push @{ $kids{$pp} }, $p if defined $pp;
+    }
+    close $ps;
+    my (@out, @todo);
+    @todo = ($root);
+    while (@todo) {
+        for my $k (@{ $kids{ shift @todo } || [] }) {
+            push @out, $k;
+            push @todo, $k;
+        }
+    }
+    return @out;
+}
+sub session_members {
+    return () unless $scanner;
+    local $SIG{PIPE} = "IGNORE";
+    print {$scan_in} "scan\n" or return ();
+    $scan_in->flush or return ();
+    my @out;
+    while (defined(my $line = <$scan_out>)) {
+        return @out if $line eq "end\n";
+        push @out, $1 if $line =~ /^(\d+)$/;
+    }
+    return @out;
+}
+sub members {
+    return (descendants($pid), session_members());
+}
+sub stop {
+    my ($grace) = @_;
+    my %seen = map { $_ => 1 } members();
+    if ($grace) {
+        kill "-TERM", $pid;
+        kill "TERM", keys %seen;
+        my $until = Time::HiRes::time() + 1;
+        while (Time::HiRes::time() < $until) {
+            waitpid($pid, POSIX::WNOHANG());
+            last unless kill(0, -$pid) || grep { kill 0, $_ } keys %seen;
+            Time::HiRes::sleep(0.05);
+        }
+    }
+    $seen{$_} = 1 for members();
+    kill "-KILL", $pid;
+    kill "KILL", keys %seen;
+    waitpid($pid, 0);
+}
+my $start = Time::HiRes::time();
+while (1) {
+    if (waitpid($pid, POSIX::WNOHANG()) == $pid) {
+        my $s = $?;
+        exit($s & 127 ? 128 + ($s & 127) : $s >> 8);
+    }
+    if ($got) {
+        stop(1);
+        exit 128 + $got;
+    }
+    if (getppid() != $watch) {
+        stop(1);
+        exit 129;
+    }
+    if ($limit > 0 && Time::HiRes::time() - $start >= $limit) {
+        stop(0);
+        print STDERR "launch.sh: $what did not return within $limit seconds and was stopped\n";
+        exit 124;
+    }
+    Time::HiRes::sleep(0.05);
+}
+'
+
+# detach <pid file> <command...>: start the command as the leader of a new session, with HUP, INT,
+# QUIT and TERM at their defaults whatever the caller left ignored, so the body can trap them, and
+# return once the pid file holds its pid: exit 0 then, exit 1 when it ends before writing it.
+detach='
+use strict;
+use warnings;
+use POSIX ();
+use Time::HiRes ();
+my $pid_file = shift @ARGV;
+my $pid = fork;
+defined $pid or die "launch.sh: cannot start $ARGV[0]: $!\n";
+if (!$pid) {
+    defined POSIX::setsid() or do {
+        print STDERR "launch.sh: cannot start a new session: $!\n";
+        POSIX::_exit(126);
+    };
+    POSIX::close($ENV{LAUNCH_LOCK_FD}) if defined $ENV{LAUNCH_LOCK_FD};
+    delete @ENV{qw(LAUNCH_LOCK LAUNCH_LOCK_FD)};
+    $SIG{$_} = "DEFAULT" for qw(HUP INT QUIT TERM);
+    exec { $ARGV[0] } @ARGV or do {
+        print STDERR "launch.sh: cannot run $ARGV[0]: $!\n";
+        POSIX::_exit(127);
+    };
+}
+while (1) {
+    if (open my $f, "<", $pid_file) {
+        my $line = <$f>;
+        exit 0 if defined $line && $line =~ /^(\d+)$/ && $1 == $pid;
+    }
+    exit 1 if waitpid($pid, POSIX::WNOHANG()) == $pid;
+    Time::HiRes::sleep(0.02);
+}
+'
+
+# take_lock <lock file> <command...>: hold an exclusive lock (flock) on the lock file, write this
+# process's pid into it, and run the command with the lock's descriptor still open, its path in
+# LAUNCH_LOCK and its number in LAUNCH_LOCK_FD. The system releases the lock when the last holder
+# of the descriptor ends, so a lock left by a launcher that died is free, whatever pid the file
+# still names. A lock held by a live launch refuses with exit 75, naming the pid in the file.
+take_lock='
+use strict;
+use warnings;
+use Fcntl qw(:flock);
+my $lock = shift @ARGV;
+$^F = 1023;
+open my $fh, "+>>", $lock or do {
+    print STDERR "launch.sh: cannot open $lock: $!\n";
+    exit 1;
+};
+if (!flock($fh, LOCK_EX | LOCK_NB)) {
+    seek $fh, 0, 0;
+    my $holder = <$fh>;
+    $holder = "unknown" unless defined $holder && $holder =~ /^(\d+)$/;
+    chomp $holder;
+    print STDERR "launch.sh: another launch (pid $holder) holds $lock; not launched\n";
+    exit 75;
+}
+truncate $fh, 0;
+seek $fh, 0, 0;
+print $fh "$$\n";
+$fh->flush;
+$ENV{LAUNCH_LOCK} = $lock;
+$ENV{LAUNCH_LOCK_FD} = fileno $fh;
+exec { $ARGV[0] } @ARGV or die "launch.sh: cannot run $ARGV[0]: $!\n";
+'
+
+# A random version 4 UUID, in lower case.
+new_uuid='
+open my $r, "<", "/dev/urandom" or die "launch.sh: cannot read /dev/urandom: $!\n";
+read($r, my $b, 16) == 16 or die "launch.sh: short read from /dev/urandom\n";
+my @x = unpack "C16", $b;
+$x[6] = $x[6] & 0x0f | 0x40;
+$x[8] = $x[8] & 0x3f | 0x80;
+printf "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x\n", @x;
+'
+
+# note_call <call> <arguments...>: one bounded call to the launch-note command. note_exec is the
+# same call replacing the shell that runs it, for a call started with &, so that its pid is the
+# runner's and a signal sent to it reaches the runner.
+note_call() {
+    perl -e "$runner" 3 "$$" "the launch note's $1 call" "$opt_note" "$@"
+}
+
+note_exec() {
+    exec perl -e "$runner" 3 "$$" "the launch note's $1 call" "$opt_note" "$@"
+}
+
 # The id the note's start wrote, first line only, or a failure when there is none.
 read_id() {
     [ -n "$opt_note" ] && [ -n "$opt_id" ] && [ -s "$opt_id" ] || return 1
     note_id=$(head -n 1 "$opt_id")
     [ -n "$note_id" ]
+}
+
+here=$(pwd -P)
+
+# abs_path <path>: sets abs to the path made absolute from the caller's directory.
+abs_path() {
+    case "$1" in
+        /* | '') abs=$1 ;;
+        *) abs=$here/$1 ;;
+    esac
 }
 
 require_launch_options() {
@@ -110,6 +407,7 @@ require_launch_options() {
         codex | _body_codex)
             [ -n "$opt_events" ] || fail_usage "--events is required for codex"
             [ -n "$opt_effort" ] || fail_usage "--effort is required for codex"
+            [ -z "$opt_session_file" ] || fail_usage "--session-file is for claude only"
             ;;
         *)
             [ -z "$opt_events" ] || fail_usage "--events is for codex only"
@@ -121,93 +419,209 @@ require_launch_options() {
         [ -n "$opt_id" ] || fail_usage "--id is required with --note"
         [ -n "$opt_label" ] || fail_usage "--label is required with --note"
         [ -n "$opt_parent" ] || fail_usage "--parent is required with --note"
-        case "$opt_id" in
-            /*) ;;
-            *) opt_id=$(pwd -P)/$opt_id ;;
-        esac
     fi
+    abs_path "$opt_cwd"
+    opt_cwd=$abs
+    abs_path "$opt_prompt"
+    opt_prompt=$abs
+    abs_path "$opt_report"
+    opt_report=$abs
+    abs_path "$opt_stderr"
+    opt_stderr=$abs
+    abs_path "$opt_exit"
+    opt_exit=$abs
+    abs_path "$opt_pid"
+    opt_pid=$abs
+    abs_path "$opt_events"
+    opt_events=$abs
+    abs_path "$opt_id"
+    opt_id=$abs
+    abs_path "$opt_session_file"
+    opt_session_file=$abs
 }
 
-# The claude recipe changes directory in the detached shell itself, so the exit file and the other
-# relative paths resolve from the builder's working directory, as they do in the recipe.
+# The builders run in a subshell started with &, so the claude recipe's change of directory stays
+# inside it, and through the runner, so each builder has a process group of its own. Their
+# standard error is the body's, the --stderr file.
 run_claude() {
-    cd "$opt_cwd" || return
     set -- -p
-    [ -z "$opt_resume" ] || set -- "$@" --resume "$opt_resume"
-    claude "$@" --model "$opt_model" --permission-mode acceptEdits \
-        --output-format json <"$opt_prompt" >"$opt_report" 2>"$opt_stderr"
+    if [ -n "$opt_resume" ]; then
+        set -- "$@" --resume "$opt_resume"
+    else
+        set -- "$@" --session-id "$opt_session_id"
+    fi
+    cd "$opt_cwd" || exit
+    exec perl -e "$runner" 0 "$$" 'the builder' claude "$@" --model "$opt_model" \
+        --permission-mode acceptEdits --output-format json <"$opt_prompt" >"$opt_report"
 }
 
 # codex exec resume takes no -C and no -s, so a resumed codex builder runs in --cwd with the sandbox
-# set through -c; its files resolve from the caller's directory, as those of a first run do, so a
-# relative report path is made absolute before it changes directory.
+# set through -c.
 run_codex() {
-    report=$opt_report
     if [ -n "$opt_resume" ]; then
         set -- exec resume -c 'sandbox_mode="workspace-write"'
-        case "$report" in
-            /*) ;;
-            *) report=$(pwd -P)/$report ;;
-        esac
     else
         set -- exec -C "$opt_cwd" -s workspace-write
     fi
     [ "$opt_network" -eq 0 ] || set -- "$@" -c "sandbox_workspace_write.network_access=true"
-    set -- "$@" -c "model_reasoning_effort=\"$opt_effort\"" -m "$opt_model" -o "$report" --json
+    set -- "$@" -c "model_reasoning_effort=\"$opt_effort\"" -m "$opt_model" -o "$opt_report" --json
     if [ -n "$opt_resume" ]; then
-        (cd "$opt_cwd" && exec codex "$@" "$opt_resume" -) <"$opt_prompt" >"$opt_events" 2>"$opt_stderr"
-    else
-        codex "$@" - <"$opt_prompt" >"$opt_events" 2>"$opt_stderr"
+        cd "$opt_cwd" || exit
+        set -- "$@" "$opt_resume"
     fi
+    exec perl -e "$runner" 0 "$$" 'the builder' codex "$@" - <"$opt_prompt" >"$opt_events"
+}
+
+write_exit() {
+    printf 'exit %s\n' "$1" >"$opt_exit.tmp" && mv -f "$opt_exit.tmp" "$opt_exit"
+}
+
+# The signal path of the body: stop what runs (the builder, or a note call), write the exit file,
+# then close the note's record when start made one and end has not been called. A signal that
+# arrives while a process is being started, before its pid is in running, is kept in pending and
+# acted on as soon as the pid is known.
+on_signal() {
+    if [ -n "$spawning" ]; then
+        pending=$1
+        return
+    fi
+    trap '' HUP INT TERM
+    if [ -n "$running" ]; then
+        kill -TERM "$running" 2>/dev/null
+        wait "$running"
+    fi
+    [ "$note_state" != starting ] || true >"$opt_id"
+    code=${status:-$((128 + $1))}
+    write_exit "$code"
+    if [ "$note_state" = open ] && read_id; then
+        note_state=closed
+        note_call end "$note_id" >/dev/null
+    fi
+    exit "$code"
+}
+
+# spawned <pid>: record the pid of the process just started with &, then act on a signal that
+# arrived while it was being started.
+spawned() {
+    running=$1
+    spawning=''
+    [ -z "$pending" ] || on_signal "$pending"
 }
 
 run_body() {
     harness=$1
+    status='' running='' note_state='' spawning='' pending=''
+    trap 'on_signal 1' HUP
+    trap 'on_signal 2' INT
+    trap 'on_signal 15' TERM
+    { printf '%s\n' "$$" >"$opt_pid.tmp" && mv -f "$opt_pid.tmp" "$opt_pid"; } || exit 1
     if [ -n "$opt_note" ]; then
-        "$opt_note" start --launcher plan-orchestration --label "$opt_label" --harness "$harness" \
-            --model "$opt_model" --parent "$opt_parent" --cwd "$opt_cwd" --pid "$$" >"$opt_id" 2>/dev/null ||
-            : >"$opt_id"
+        note_state=starting
+        spawning=1
+        note_exec start --launcher plan-orchestration --label "$opt_label" --harness "$harness" \
+            --model "$opt_model" --parent "$opt_parent" --cwd "$opt_cwd" --pid "$$" >"$opt_id" &
+        spawned "$!"
+        if wait "$running" && read_id; then
+            note_state=open
+        else
+            true >"$opt_id"
+            note_state=''
+        fi
+        running=''
     fi
-    "run_$harness"
+    spawning=1
+    "run_$harness" &
+    spawned "$!"
+    wait "$running"
     status=$?
-    if read_id; then
-        "$opt_note" end "$note_id" >/dev/null 2>&1 || :
+    running=''
+    if [ "$note_state" = open ]; then
+        note_state=closed
+        note_exec end "$note_id" >/dev/null &
+        running=$!
+        wait "$running"
+        running=''
     fi
-    echo "exit $status" >"$opt_exit"
+    write_exit "$status"
 }
 
 case "$mode" in
     claude | codex)
         require_launch_options
-        set -- "_body_$mode" --cwd "$opt_cwd" --model "$opt_model" --prompt "$opt_prompt" --report "$opt_report" \
-            --stderr "$opt_stderr" --exit "$opt_exit" --pid "$opt_pid"
+        lock=$opt_pid.lock
+        if [ "${LAUNCH_LOCK:-}" != "$lock" ]; then
+            set -- "$mode" --cwd "$opt_cwd" --model "$opt_model" --prompt "$opt_prompt" \
+                --report "$opt_report" --stderr "$opt_stderr" --exit "$opt_exit" --pid "$opt_pid"
+            [ "$mode" = claude ] || set -- "$@" --events "$opt_events" --effort "$opt_effort"
+            [ "$opt_network" -eq 0 ] || set -- "$@" --network
+            [ -z "$opt_resume" ] || set -- "$@" --resume "$opt_resume"
+            [ -z "$opt_session_file" ] || set -- "$@" --session-file "$opt_session_file"
+            [ -z "$opt_note" ] ||
+                set -- "$@" --note "$opt_note" --id "$opt_id" --label "$opt_label" --parent "$opt_parent"
+            exec perl -e "$take_lock" "$lock" sh "$self" "$@"
+        fi
+        unset LAUNCH_LOCK
+        if [ -s "$opt_pid" ]; then
+            old_pid=$(head -n 1 "$opt_pid")
+            case "$old_pid" in
+                '' | *[!0-9]* | 0) ;;
+                *)
+                    if kill -0 "$old_pid" 2>/dev/null; then
+                        printf '%s: %s names pid %s, which is still running; not launched\n' \
+                            "$self" "$opt_pid" "$old_pid" >&2
+                        exit 75
+                    fi
+                    ;;
+            esac
+        fi
+        true >"$opt_stderr" || exit 1
+        true >"$opt_pid" || exit 1
+        rm -f "$opt_exit" "$opt_exit.tmp"
+        set -- "_body_$mode" --cwd "$opt_cwd" --model "$opt_model" --prompt "$opt_prompt" \
+            --report "$opt_report" --stderr "$opt_stderr" --exit "$opt_exit" --pid "$opt_pid"
         [ "$mode" = claude ] || set -- "$@" --events "$opt_events" --effort "$opt_effort"
         [ "$opt_network" -eq 0 ] || set -- "$@" --network
-        [ -z "$opt_resume" ] || set -- "$@" --resume "$opt_resume"
-        [ -z "$opt_note" ] || set -- "$@" --note "$opt_note" --id "$opt_id" --label "$opt_label" --parent "$opt_parent"
-        # The exit file resolves where the detached process writes it: from --cwd for claude.
-        case "$mode:$opt_exit" in
-            claude:/* | codex:*) rm -f "$opt_exit" ;;
-            claude:*) rm -f "$opt_cwd/$opt_exit" ;;
-        esac
-        nohup sh "$self" "$@" </dev/null >/dev/null 2>&1 &
-        echo $! >"$opt_pid"
+        [ -z "$opt_note" ] ||
+            set -- "$@" --note "$opt_note" --id "$opt_id" --label "$opt_label" --parent "$opt_parent"
+        if [ -n "$opt_resume" ]; then
+            set -- "$@" --resume "$opt_resume"
+            session=$opt_resume
+        elif [ "$mode" = claude ]; then
+            session=$(perl -e "$new_uuid") || exit 1
+            set -- "$@" --session-id "$session"
+        fi
+        if [ -n "$opt_session_file" ]; then
+            printf '%s\n' "$session" >"$opt_session_file" || exit 1
+            [ "$(cat "$opt_session_file")" = "$session" ] || {
+                printf '%s: %s does not hold the session id written to it\n' "$self" \
+                    "$opt_session_file" >&2
+                exit 1
+            }
+        fi
+        if ! perl -e "$detach" "$opt_pid" sh "$self" "$@" </dev/null >/dev/null 2>"$opt_stderr"; then
+            printf '%s: the detached process ended before it wrote %s; its errors are in %s\n' \
+                "$self" "$opt_pid" "$opt_stderr" >&2
+            exit 1
+        fi
         ;;
     _body_claude | _body_codex)
         require_launch_options
+        [ "$mode" = _body_codex ] || [ -n "$opt_resume" ] || [ -n "$opt_session_id" ] ||
+            fail_usage "--session-id is required for a first claude run"
         run_body "${mode#_body_}"
         ;;
     transcript)
-        for pair in "cwd:$opt_cwd" "model:$opt_model" "prompt:$opt_prompt" "report:$opt_report" "stderr:$opt_stderr" \
-            "exit:$opt_exit" "pid:$opt_pid" "events:$opt_events" "effort:$opt_effort" "label:$opt_label" "parent:$opt_parent" \
-            "resume:$opt_resume"; do
+        for pair in "cwd:$opt_cwd" "model:$opt_model" "prompt:$opt_prompt" "report:$opt_report" \
+            "stderr:$opt_stderr" "exit:$opt_exit" "pid:$opt_pid" "events:$opt_events" \
+            "effort:$opt_effort" "label:$opt_label" "parent:$opt_parent" "resume:$opt_resume" \
+            "session-file:$opt_session_file"; do
             [ -z "${pair#*:}" ] || fail_usage "--${pair%%:*} is not a transcript option"
         done
         [ "$opt_network" -eq 0 ] || fail_usage "--network is not a transcript option"
         [ -z "$opt_note" ] || [ -n "$opt_id" ] || fail_usage "--id is required with --note"
         [ -n "$opt_path" ] || fail_usage "the transcript path is required"
         if read_id; then
-            "$opt_note" transcript "$note_id" "$opt_path" >/dev/null 2>&1 || :
+            note_call transcript "$note_id" "$opt_path" >/dev/null || :
         fi
         ;;
 esac
