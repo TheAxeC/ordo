@@ -73,7 +73,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- J (raised 2026-09-25 from the cathedra session's five cases): a brief's decisions are never run against the brief's own must-pass and must-refuse examples before dispatch, so the builder is the first to find where they contradict; `skills/spec/templates/brief.md` and `skills/spec/SKILL.md` have no such step. Options: (a) a new step 1c of plan 2.B, after 1a: the brief template gains a "Cases" section (every must-pass and must-refuse example of the brief in one list) and a "Decisions checked against the cases" section (the command that ran each decision over the cases, a prototype of a check rule or the existing behaviour run first, and its output, saved with the step's run files); `/spec` runs that check before the preparation commit and fixes a contradiction before dispatch, or stops when the fix changes the scope; `/refute` reruns the command and checks each case; the checked path list now booked in step 1a moves into 1c, since both are checks of a brief against itself before dispatch. Pros: every repository gets it through the installed skills, and the reviewer can verify it. Cons: one more step before 2.B closes, about an hour. (b) the same inside step 1a. Pros: no new step. Cons: 1a already carries the runner move, its signal tests, the `refute` text and the path list, so its review gets harder. (c) cathedra keeps it as its own practice only. The lazy option: nothing in the skills changes, and the next repository repeats the five cases. Recommendation: (a).
 
 ## Booked, no ruling needed
 
