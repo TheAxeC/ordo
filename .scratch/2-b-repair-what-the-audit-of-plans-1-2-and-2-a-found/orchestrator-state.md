@@ -61,7 +61,7 @@ dispatch:
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6a-report.md
   landing: not-started
-  round: 1 (sent 2026-09-25: the findings of 6a-refuter.md with a ruling each, to the same builder; the worktree at the round's start is uncommitted on base 819b391; the path list keeps skills/plan-retro/templates/retro.md)
+  round: 1 (sent 2026-09-25: the findings of 6a-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit aea1d8d on branch 2b-6a; the path list keeps skills/plan-retro/templates/retro.md)
 - step: 11
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
