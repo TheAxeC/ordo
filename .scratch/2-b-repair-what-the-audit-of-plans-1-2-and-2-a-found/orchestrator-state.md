@@ -78,7 +78,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- K (raised 2026-09-25 from the user's question whether the case scripts are useful): the check of ruling J is made today by a throwaway Python prototype per brief (`agents/runs/6a/cases.py`, 32 lines, and `round1-cases.py`, 31 lines), which duplicates the rule the builder then writes. Of its two runs, the first found no contradiction and the second found two in the orchestrator's own round rules before they were sent. Options for step 1c: (a) the cases are a table in the brief (input, expected) and the builder's first act is to turn them into the step's tests and run them against the unchanged code, reporting which fail and why before it changes anything; the orchestrator writes a prototype only when the rule is new code with no existing behaviour to run, and never keeps it past the step. Pros: no duplicate code; the cases become the tests; the builder finds a contradiction at the start of its work and reports it instead of building on it. Cons: a contradiction is found after dispatch, one builder turn later than a prototype would find it. (b) as now: a prototype per brief, kept in the step's run files. Pros: contradictions found before dispatch. Cons: one throwaway script per brief and per round, which duplicates the rule. (c) the case table only, with no run. The lazy option: nothing checks the decisions against the cases, which is the gap ruling J closes. Recommendation: (a).
 
 ## Booked, no ruling needed
 
