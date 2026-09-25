@@ -46,6 +46,8 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1-report.md
   landing: not-started
   round: 0
+  builder_usage: 129,970 tokens, 36 tool uses, 979 s (the runner's completion notification)
+  reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -54,7 +56,7 @@ dispatch:
 
 ## Booked, no ruling needed
 
-- none.
+- Step 3: the `land` and `plan-orchestration` texts name `utils/verify.sh` as how a landing runs and books the verify list, since step 1's pages already say a landing books its lines (`docs/dev/building.md`, found by step 1's builder). Carried into step 3's brief.
 
 ## Closed items
 
@@ -89,7 +91,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its builder is running.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its builder reported; /refute is running.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 
