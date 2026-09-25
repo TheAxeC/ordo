@@ -4,7 +4,7 @@ Collected with `python3 <collector> <arguments>`: <n> findings from <n> reports 
 
 ## Reports read
 
-- `<path>-refuter.md`
+- `<plan>/agents/reviews/<step>-refuter.md`: <run>, <run>
 
 ## Counts by heading
 
@@ -32,3 +32,9 @@ Collected with `python3 <collector> <arguments>`: <n> findings from <n> reports 
 | Kind | Findings | Steps | Plans |
 |---|---|---|---|
 | <kind> | <n> | <n> | <n> |
+
+## No defect
+
+Findings: <n>, in <n> steps of <n> plans.
+
+- `<report path>` (<location>): <the finding, quoted>

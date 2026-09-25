@@ -47,19 +47,6 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/4-report.md
   landing: not-started
   round: 0
-- step: 6
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: af0886ca919e9c3db (the runner's agent id)
-  builder_usage: 214,647 tokens, 61 tool uses, 922 s; round 1: 313,152 tokens, 38 tool uses, 781 s (the runner's completion notifications)
-  round_reviewer: claude:opus, through /refute over round 1
-  reviewer_report: agents/reviews/6-refuter.md (through /refute; reviewer claude:opus, agent a452be7e9ee21e261; 151,111 tokens, 47 tool uses, 513 s)
-  worktree: .agents/worktrees/2b-6
-  base: f7dd354
-  launched: 2026-09-25
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6-report.md
-  landing: not-started
-  round: 1 (sent 2026-09-25: the findings of 6-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 5b8354c on branch 2b-6)
 - step: 8
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
@@ -83,9 +70,10 @@ dispatch:
 - Step 1b: the ASCII check of the verify list (`docs/dev/change-standard.md`, `docs/dev/building.md`, the state file) exits 0 when perl dies on a file that is not valid UTF-8, so the runner counts it as passed (found by step 2's builder: a scratch file holding `\xf3\r\r\n` printed `Malformed UTF-8 character (fatal)` and exited 0); and `__pycache__/` is not in `.gitignore`, so a folder Python writes is read by the check. A step of its own: it changes a rule page's command.
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added; `skills/plan-orchestration/templates/launch.sh:20-21` usage says `--label <step>` (step 4).
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/plan-orchestration/SKILL.md:206` says `/land` makes the usage row "at its step 8" (now Steps 9, for step 4, the next step to edit that file); `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
-- Step 1a, widened by ruling H: the move of `utils/verify.sh` and its test into `skills/land/templates/`, the pages and the verify list naming the new path, and the `land`, `plan-orchestration`, `refute` and `spec` texts (`land` Steps 6, `refute` "What the reviewer runs", `spec`'s `templates/brief.md` "Verify before you report", `plan-orchestration` where a step's checks run) naming "the land skill's `templates/verify.sh`"; with the runner's summary-test detection and the untested parts of its signal handling (`plan.md`, step 1a; from `agents/reviews/1-refuter.md`, Closed).
+- Step 1a, widened by ruling H: the move of `utils/verify.sh` and its test into `skills/land/templates/`, the pages and the verify list naming the new path, and the `land`, `plan-orchestration`, `refute` and `spec` texts (`land` Steps 6, `refute` "What the reviewer runs", `spec`'s `templates/brief.md` "Verify before you report", `plan-orchestration` where a step's checks run) naming "the land skill's `templates/verify.sh`"; with the runner's summary-test detection and the untested parts of its signal handling; and the `refute` text ("The four headings") and its report template on what a list item under the four headings is (`plan.md`, step 1a; from `agents/reviews/1-refuter.md` and `agents/reviews/6-refuter.md`, Closed).
 - Step 4: the process in `launch.sh`'s pid file owns the builder's whole session (the builder started in a session or process group of its own), so the TERM, grace, KILL that `land`'s Steps 1 sends ends the builder and the exit file is still written; `launch.test.sh` runs that sequence (found by step 3's last review, Behaviour 1: today TERM ends only the wrapper shell and the builder keeps running).
 - Step 4: `plan-orchestration`'s resumption list gains the case of a dispatch block at `landing: backed-out` (the step taken back out of main by a red line: its worktree and branch kept, the step unticked, the failure booked), which step 3 defines in `land` (brief 3, decision 1).
+- Step 6a: `collect_findings.py`'s no-finding forms "nothing", "no finding" and "no defect" narrowed to a whole first sentence; the `^closed` and `: closed` closure forms narrowed to an item that says the closure holds; tests for two heading suffixes and for `--exclude-listed`'s entry checks, each red under its revert; the complete list of archived items that report no defect, and the hand counts given again (`plan.md`, step 6a; from `agents/reviews/6-refuter.md`, Closed).
 
 ## Closed items
 
@@ -124,8 +112,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Steps 1, 2, 3 and 5 landed (5fdaa98, 6458d52, fafda10; step 5 in the commit that carries this line). The tree is clean after it.
-- Steps 4, 6 and 8 are with their builders (8's README line comes as "Doc text", since step 6 holds README.md); 9 follows as a slot frees; 1a waits on open item H.
+- 2026-09-25. Steps 1, 2, 3, 5 and 6 landed (5fdaa98, 6458d52, fafda10, e69b588; step 6 in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Steps 4 and 8 are with their builders (8 in repair round 1; its README line comes as "Doc text" and is applied at its landing); 9 and 6a follow as slots free; 1a runs alone after 4 and 8 land.
 - Open on Axel's side: none.
 
 ## Usage
@@ -136,3 +124,4 @@ dispatch:
 | 2 | claude:opus agent, effort high: 209,393 tokens, 73 tool uses, 777 s; round 1: 238,449 tokens, 13 tool uses, 264 s | 174,608 tokens, 36 tool uses, 433 s; round 1: 155,407 tokens, 26 tool uses, 341 s; landing fixes: 74,661 tokens, 19 tool uses, 315 s | 1 | 20 (12 rulings) | 9 files changed, 120 insertions(+), 104 deletions(-) | no | 6 | 0 | 68 | 75477 | 182612 | 48311299 | 154 | 44 | none |
 | 3 | claude:opus agent, effort high: 208,057 tokens, 60 tool uses, 623 s; round 1: 238,866 tokens, 11 tool uses, 270 s | 179,173 tokens, 49 tool uses, 460 s; round 1: 143,412 tokens, 35 tool uses, 402 s; landing fixes: 85,655 tokens, 17 tool uses, 315 s | 1 | 12 (8 rulings) | 16 files changed, 145 insertions(+), 122 deletions(-) | no | 12 | 0 | 10 | 9732 | 20013 | 8130367 | 22 | 10 | none |
 | 5 | claude:opus agent, effort high: 133,678 tokens, 31 tool uses, 606 s; round 1: 203,386 tokens, 22 tool uses, 559 s | 126,518 tokens, 28 tool uses, 433 s; round 1: 135,722 tokens, 31 tool uses, 484 s; landing fixes: 72,526 tokens, 15 tool uses, 342 s | 1 | 12 (7 rulings) | 3 files changed, 513 insertions(+), 86 deletions(-) | no | 13 | 1 (open item I) | 23 | 16145 | 30037 | 19419115 | 50 | 13 | none |
+| 6 | claude:opus agent, effort high: 214,647 tokens, 61 tool uses, 922 s; round 1: 313,152 tokens, 38 tool uses, 781 s | 151,111 tokens, 47 tool uses, 513 s; round 1: 167,715 tokens, 46 tool uses, 480 s; landing fixes: 105,908 tokens, 26 tool uses, 375 s | 1 | 10 (7 rulings) | 5 files changed, 628 insertions(+), 99 deletions(-) | no | 14 | 0 | 83 | 75259 | 217318 | 49232763 | 184 | 63 | none |

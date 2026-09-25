@@ -12,7 +12,7 @@ metadata:
 ## Quick start
 
 ```
-/plan-retro             the retro over every refuter report since the previous retro
+/plan-retro             the retro over every refuter run the previous retro did not list
 /plan-retro <project>   the same, for one project of a plan.yaml in the projects: form
 ```
 
@@ -28,7 +28,7 @@ metadata:
 1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them: `ledger_root`, `archive_root`, `rules`, `standards`, `verification`.
    - A required key missing is a refusal ("Stops").
 2. Every refuter report under `<ledger_root>/` and `<archive_root>/`, through the collector (Steps 1).
-3. The newest file under `<ledger_root>/retros/`, the previous retro, for its "Reports read" list.
+3. The newest file under `<ledger_root>/retros/`, the previous retro, for its "Reports read" list. With no previous retro, every run is read.
 4. The rules page, every page in `standards`, and the verification page, whole.
 5. For a finding whose kind is unclear from its text, the report it came from and the brief of its step.
 
@@ -42,17 +42,22 @@ metadata:
 
    - It prints one JSON line per finding: plan, step, report, run, heading, location, text.
    - The previous retro is passed to `--exclude-listed` unless the user asks for a retro over everything.
+   - `--exclude-listed` skips the runs the previous retro's "Reports read" lists, matched by plan folder, step and run, so a plan moved into `<archive_root>` stays skipped and a round added to a report later is read.
+   - The collector exits 2 with a message when the previous retro cannot be read as UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md`; the retro stops there with that refusal ("Stops").
 2. Assign each finding one kind, as "Grouping" says.
 3. For each kind, count the findings, the distinct steps and the distinct plans.
 4. For each kind, name the heading its findings fell under.
 5. For each kind, quote two or three findings with their report path and location.
-6. Mark the recurring kinds: a kind is recurring when it appears in at least three steps, or in at least two plans.
+6. Mark the recurring kinds: a kind other than "no defect" is recurring when it appears in at least three steps, or in at least two plans.
 7. For each recurring kind, draft the proposal, as "The proposal for a recurring kind" says.
 8. Write `<ledger_root>/retros/<YYYY-MM-DD>.md` from `templates/retro.md`.
-   - The reports read, every path, so the next retro can start after them.
+   - The reports read: each report in the collector's output, with its path under `<ledger_root>` or `<archive_root>` (`<plan>/agents/reviews/<step>-refuter.md`) and the runs its findings came from, as `templates/retro.md` shows.
+   - The previous retro's "Reports read" entries, carried over, so a run listed once stays skipped by every later retro. A report in both lists has its runs joined in one entry.
+   - A run that gave no finding has no entry; the next retro reads it again, and it gives none again.
    - The counts by heading.
    - The recurring kinds, each with its counts, its quoted findings and its proposal.
-   - Then the other kinds, with their counts and no proposal.
+   - Then the other kinds, "no defect" apart, with their counts and no proposal.
+   - Then the findings set aside as "no defect", each with its report path, location and text, and no proposal.
 9. Show the retro to the user.
 10. Take the user's decision on each proposal, one by one: approved, corrected or declined ("Stops").
 11. Write each decision beside its proposal in the retro.
@@ -66,6 +71,7 @@ metadata:
 - A kind is a sentence that states the defect in general terms, the way a rule would forbid it: "a test that stays green with the change reverted", "a comment that names the step that wrote it", "a document sentence the diff makes false".
 - Findings whose text reports the same defect in different words share a kind.
 - `unclassified` findings from repair rounds are read and assigned like the rest, or set aside when they are a point the reviewer did not check.
+- A finding whose text reports no defect (a confirmation such as "No sentence in the pages is made false") is set aside as the kind "no defect". It is counted and listed in the retro's "No defect" section, and it gets no proposal.
 
 ## The proposal for a recurring kind
 
@@ -82,9 +88,10 @@ The skill checks where the rule should have come from, in this order, and propos
 |---|---|---|---|
 | The proposals | Every retro with a recurring kind, at Steps 10 | The retro, each proposal in it | The user's decision on each: approved, corrected or declined |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/plan-retro` again |
+| A previous retro the collector refuses | The collector exits 2 at Steps 1 | The collector's message | The previous retro's "Reports read" corrected to the form of `templates/retro.md`, or a retro over everything, then `/plan-retro` again |
 
 - The first row is a stop: it waits on the user.
-- The second is a refusal: it names its cause and changes nothing.
+- The second and third rows are refusals: each names its cause and changes nothing.
 
 ## Anti-patterns
 
