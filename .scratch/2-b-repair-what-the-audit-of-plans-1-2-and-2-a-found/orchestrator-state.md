@@ -46,7 +46,8 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1-report.md
   landing: not-started
   round: 1 (sent 2026-09-25: the findings of 1-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 00e8f8b on branch 2b-1)
-  builder_usage: 129,970 tokens, 36 tool uses, 979 s (the runner's completion notification)
+  builder_usage: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s (the runner's completion notifications)
+  round_reviewer: agent a500487f692781184, claude:opus, dispatched 2026-09-25 through /refute over round 1
   reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039; 111,656 tokens, 24 tool uses, 421 s)
 ```
 
@@ -91,7 +92,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 1 is with the same builder.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 1 is done; /refute runs over it.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 
