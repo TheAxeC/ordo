@@ -51,7 +51,7 @@ dispatch:
   executor: agent
   worker: claude:opus (a builder agent, identity written at launch)
   worktree: .agents/worktrees/2b-6
-  base: a95301e
+  base: f7dd354
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6-report.md
   landing: not-started
