@@ -43,7 +43,7 @@ dispatch:
   session_id: ad3f887161cb31e53 (the runner's agent id)
   reviewer_report: agents/reviews/4-refuter.md (through /refute; reviewer claude:opus, agent ab1c552b7ec007bd0; 155,977 tokens, 43 tool uses, 898 s)
   builder_usage: 310,799 tokens, 80 tool uses, 4,353 s; after round 1 the notification reads 408,123 tokens, 55 tool uses, 2,934 s (the runner's completion notifications); round 1 reported done
-  round_reviewer: claude:opus, agent aa1d052d49d51d309, through /refute over round 1, running (dispatched 2026-09-25 by the orchestrator session that resumed the plan)
+  round_reviewer: claude:opus, agent aa1d052d49d51d309, through /refute over round 1: 166,201 tokens, 29 tool uses, 1,060 s
   worktree: .agents/worktrees/2b-4
   base: ec6586e
   launched: 2026-09-25
