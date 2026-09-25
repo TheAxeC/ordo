@@ -63,7 +63,7 @@ dispatch:
 - step: 11
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
-  session_id: not yet launched
+  session_id: ab8951c4d56c145ef (the runner's agent id)
   worktree: .agents/worktrees/2b-11
   base: ebf3c8c
   launched: 2026-09-25
