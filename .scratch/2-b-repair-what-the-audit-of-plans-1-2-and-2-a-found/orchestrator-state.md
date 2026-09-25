@@ -36,7 +36,16 @@ launch_note:                 # none recorded.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: 1a
+  executor: agent
+  worker: claude:opus, a native background agent of the orchestrating session
+  worktree: .agents/worktrees/2b-1a
+  base: 9dee31d
+  launched: 2026-09-25
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1a-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -95,7 +104,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-25. Steps 1, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 2, 3, 4, 5, 6, 6a, 8 and 9 at 5fdaa98, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456 and 129a3f7; step 11 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. 1a runs alone next, then 1c; 10, 12 and 15 follow.
+- Roadmap entry 2.B. Step 1a is dispatched and runs alone; then 1c; 10, 12 and 15 follow.
 - Open on Axel's side: none.
 
 ## Usage
