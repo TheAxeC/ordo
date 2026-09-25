@@ -8,6 +8,8 @@ Collected with `python3 <collector> <arguments>`: <n> findings from <n> reports 
 
 ## Counts by heading
 
+The findings left after the "no defect" set-aside, by the heading they fell under.
+
 | Heading | Findings |
 |---|---|
 | spec | <n> |

@@ -108,3 +108,16 @@ git status --short at the end: the same six modified paths as at the start.
 - A revert of the fence handling, unchanged by the step.
 
 Reviewer usage: 95,799 tokens, 26 tool uses, 325 s (the runner's completion notification; reviewer claude:opus, agent a877a74343597cb07).
+
+## Closed
+
+- Spec (first review): none raised.
+- Proof 1 (the two-digit item number lost with `5-refuter.md`): closed in the round; `10. src/h.py:8` in `6-refuter.md`, red with `ITEM` narrowed to one digit.
+- Proof 2 (a round item's trailing `Proof.` lost with `5-refuter.md`): closed in the round; round items at `src/a.cpp:40` and `:50`, red with `Proof` or `Standards` out of `TRAILING`.
+- Proof 3 (the report said the removed fixtures existed only for a dropped form): closed in the round; the report's "Files" names what `5-refuter.md` also covered and where it now lives.
+- Standards 1 (`README.md:119` and `SKILL.md:74`, "in a repair round"): closed in the round, and the round's wording fixed at landing (below).
+- Standards 2 (the rule 14 grep not quoted): closed in the round; the report's "Brief" quotes it with its output.
+- Behaviour 1 (the collector's count change unstated): closed in the round; 687 before, 705 after, with the split by heading, reproduced by the round's reviewer.
+- Round, Proof 1 (the `closed` entry of `NOT_READ` held by no case): fixed at landing; a `### Closed` subsection in report 3's subheaded round, and with `closed` removed from `NOT_READ` the test prints `FAIL: rows differ from the expected rows (- expected, + got):` then `+ two-plan 3 round 1 unclassified src/c.py:7`.
+- Round, Proof 2 ("seven sentences"): fixed at landing; `6a-report.md` says thirteen.
+- Round, Standards 1 (the list before a round's subheadings named as unread whatever the subheadings): fixed at landing; `SKILL.md:74` and `README.md:119` say it is unread when one of the subheadings is Spec, Proof, Standards or Behaviour.

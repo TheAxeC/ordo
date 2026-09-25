@@ -40,7 +40,7 @@ metadata:
    python3 <this skill's folder>/templates/collect_findings.py [--exclude-listed <previous retro>] <ledger_root> <archive_root>
    ```
 
-   - It prints one JSON line per finding: plan, step, report, run, heading, location, text.
+   - It prints one JSON line per finding, every item it keeps as "Grouping" says: plan, step, report, run, heading, location, text.
    - The previous retro is passed to `--exclude-listed` unless the user asks for a retro over everything.
    - `--exclude-listed` skips the runs the previous retro's "Reports read" lists, matched by plan folder, step and run, so a plan moved into `<archive_root>` stays skipped and a round added to a report later is read.
    - The collector exits 2 with a message when the previous retro cannot be read as UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md`; the retro stops there with that refusal ("Stops").
@@ -54,10 +54,10 @@ metadata:
    - The reports read: each report in the collector's output, with its path under `<ledger_root>` or `<archive_root>` (`<plan>/agents/reviews/<step>-refuter.md`) and the runs its findings came from, as `templates/retro.md` shows.
    - The previous retro's "Reports read" entries, carried over, so a run listed once stays skipped by every later retro. A report in both lists has its runs joined in one entry.
    - A run that gave no finding has no entry; the next retro reads it again, and it gives none again.
-   - The counts by heading.
+   - The counts by heading, of the findings left after the "no defect" set-aside.
    - The recurring kinds, each with its counts, its quoted findings and its proposal.
    - Then the other kinds, "no defect" apart, with their counts and no proposal.
-   - Then the findings set aside as "no defect", each with its report path, location and text, and no proposal.
+   - Then the findings set aside as "no defect", with their own count, each with its report path, location and text, and no proposal.
 9. Show the retro to the user.
 10. Take the user's decision on each proposal, one by one: approved, corrected or declined ("Stops").
 11. Write each decision beside its proposal in the retro.
@@ -71,7 +71,8 @@ metadata:
 - A kind is a sentence that states the defect in general terms, the way a rule would forbid it: "a test that stays green with the change reverted", "a comment that names the step that wrote it", "a document sentence the diff makes false".
 - Findings whose text reports the same defect in different words share a kind.
 - `unclassified` findings from repair rounds are read and assigned like the rest, or set aside when they are a point the reviewer did not check.
-- A finding whose text reports no defect (a confirmation such as "No sentence in the pages is made false") is set aside as the kind "no defect". It is counted and listed in the retro's "No defect" section, and it gets no proposal.
+- The collector keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Not checked, Closed, Closures and Usage lists, and fenced lines.
+- A finding whose text reports no defect (a confirmation such as "None." or "No sentence in the pages is made false") or a closure that holds (such as "Spec 1: closed.") is set aside, by reading, as the kind "no defect", counted and listed in the retro's "No defect" section with no proposal.
 
 ## The proposal for a recurring kind
 

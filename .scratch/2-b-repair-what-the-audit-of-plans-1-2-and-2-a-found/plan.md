@@ -22,7 +22,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 4 `skills/plan-orchestration/templates/launch.sh` and its test: every note call bounded at about 3 s; the pid file names the process that owns the builder, that pid is alive before `start` and is the one passed to it, and a kill still writes the exit file and calls `end`; a second live launch of a step refused; every path made absolute and the script's own errors sent to the stderr file; a Claude session id known before the builder starts; the exit file written in one move; the note label `<entry>/<step>`; "Launching a builder" says to commit the dispatch block before the launch and to watch the pid as well as the exit file; `launch.test.sh` covers each case, and each fault the plan 2.A review planted turns it red (1 commit)
 - ✅ 5 `utils/pin.sh` and its test: check mode flags links into the live clone; pin mode removes only links into the pinned worktree and reports the others; a home folder holding a space; a stale worktree pruned before re-pinning; `pin.test.sh` covers each case, and each fault the checkers review planted turns it red (1 commit)
 - ✅ 6 `skills/plan-retro/templates/collect_findings.py` and its test: numbered findings and the subheadings inside a repair round read; Verification, Not checked, Closed and Usage skipped; `--exclude-listed` compared by real path; its test runs on fixtures shaped like the archived reports, and its count over the three archived plans matches a hand count written in the report (1 commit)
-- 6a `skills/plan-retro/templates/collect_findings.py` keeps every item under the four headings as a finding: the no-finding and closure word lists (`NOTHING_FOUND`, `OTHERS_REPRODUCE`, `CLOSURE`) and their tests go; `skills/plan-retro/SKILL.md` Grouping sets aside, by reading, a finding that reports no defect or a closure that holds (the cut ruled 2026-09-25); `collect_findings.test.sh` passes (1 commit)
+- ✅ 6a `skills/plan-retro/templates/collect_findings.py` keeps every item under the four headings as a finding: the no-finding and closure word lists (`NOTHING_FOUND`, `OTHERS_REPRODUCE`, `CLOSURE`) and their tests go; `skills/plan-retro/SKILL.md` Grouping sets aside, by reading, a finding that reports no defect or a closure that holds (the cut ruled 2026-09-25); `collect_findings.test.sh` passes (1 commit)
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
@@ -389,3 +389,41 @@ verify: 12 commands passed
   and exited 0; `python3 -B utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md` printed `ok:`; three runs of `launch.test.sh` at once each printed `PASS: launch.sh scratch tests`.
 - Booked: nothing new.
 - Usage, orchestrator from step 9's landing (129a3f7) to this booking: 111 messages, 107879 output tokens, 312647 cache-write tokens, 22253056 cache-read tokens, 226 fresh input tokens, 38 minutes. The window also holds step 11's review and round, step 6a's round report and the dispatch of its round review.
+
+### Step 6a, collect_findings.py keeps every item as a finding (landed 2026-09-25)
+
+- Landed: `skills/plan-retro/templates/collect_findings.py` keeps as a finding every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read (the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Not checked, Closed, Closures and Usage sections and subsections, and fenced lines); `NOTHING_FOUND`, `OTHERS_REPRODUCE`, `CLOSURE`, `reports_nothing` and `FIRST_SENTENCE` are removed. `collect_findings.test.sh` asserts that `- None.` under Spec, `- The other figures reproduce.` under Proof and a round's `- Spec 1: closed.` are findings, and keeps its other cases, the two-digit item number and the trailing `Proof.` and `Standards.` of a round among them. `skills/plan-retro/SKILL.md` Grouping sets aside, by reading, a finding that reports no defect or a closure that holds as the kind "no defect"; Steps 1 and 8 and `templates/retro.md` count the headings after that set-aside; `README.md:119` is one sentence.
+- User-visible changes, before and after:
+  - Collector output: before, an item in a no-finding form, an item saying only that the other figures reproduce, and a round's closure item gave no finding; after, each is a finding like any other item.
+  - The count over this repository's ledgers (`python3 skills/plan-retro/templates/collect_findings.py .scratch .scratch/archive` in the step's worktree): before 687 findings, after 705.
+  - The retro's "Counts by heading": before, every finding; after, the findings left after the "no defect" set-aside, which has its own count.
+- Rounds: the first review (7 findings), repair round 1 (6 rulings), the review over it (3 findings), fixed at landing (3): a `### Closed` subsection in the subheaded round's fixture, red with `closed` removed from `NOT_READ` (`+ two-plan 3 round 1 unclassified src/c.py:7`); `SKILL.md:74` and `README.md:119` name the list before a round's subheadings as unread only when one of them is Spec, Proof, Standards or Behaviour, as the collector does; `6a-report.md` gives the base README bullet's thirteen sentences and the control of the `closed` entry (`agents/reviews/6a-refuter.md`, Closed).
+- Verified on main with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+  and exited 0; `grep -n 'NOTHING_FOUND\|OTHERS_REPRODUCE\|CLOSURE\|reports_nothing' skills/plan-retro/templates/collect_findings.py` printed nothing.
+- Booked: nothing new.
+- Usage, orchestrator from step 4's landing (3fbc652) to this booking: 11 messages, 7751 output tokens, 10221 cache-write tokens, 1963904 cache-read tokens, 22 fresh input tokens, 4 minutes.

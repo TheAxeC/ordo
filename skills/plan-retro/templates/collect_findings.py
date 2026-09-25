@@ -10,18 +10,16 @@ A finding is a top-level item ("- ", "<n>. " or "<n>) ") with its indented lines
 paragraph after a blank line included. It is read under a Spec, Proof, Standards or Behaviour
 heading, or in a "Repair round <n>, refuted" section. Inside a round, a "### Spec", "### Proof",
 "### Standards" or "### Behaviour" subheading gives its items their heading, and a round that has
-one keeps its findings under them. In a round with none, an item takes the heading word it ends
-with, is a proof finding when it says a claim was "not reproduced", and is unclassified otherwise.
-A heading's name is compared in either case, without a leading number, closing hashes, a trailing
-parenthetical, or a trailing colon or full stop.
+one keeps its findings under them and does not read the list before them. In a round with none, an
+item takes the heading word it ends with, is a proof finding when it says a claim was "not
+reproduced", and is unclassified otherwise. A heading's name is compared in either case, without a
+leading number, closing hashes, a trailing parenthetical, or a trailing colon or full stop.
 
-An item whose first sentence says that nothing was found is not a finding (NOTHING_FOUND and
-OTHERS_REPRODUCE below list the forms). Nor is a round's item that says a closure holds: one holding
-": closed", or one that opens with "Closed", "Closures checked" or "Checked and holding"; an item
-saying a closure does not hold is a finding. Sections and subsections named Verification, Not
-checked, Closed, Closures or Usage are not read. Nor is anything inside a fence of three or more
-backticks or tildes, indented or not, up to a line of the same character, at least as long, with
-nothing after it.
+Sections and subsections named Verification, Not checked, Closed, Closures or Usage are not read.
+Nor is anything inside a fence of three or more backticks or tildes, indented or not, up to a line
+of the same character, at least as long, with nothing after it. Every other item is a finding,
+whatever its text says: an item that reports no defect, or a round's item saying a closure holds,
+is one too, and the retro sets it aside by reading it.
 
 With --exclude-listed, the findings of the runs listed under the retro's "## Reports read" heading
 are skipped, so a retro can start where the previous one ended. Each entry there names a report by
@@ -51,17 +49,6 @@ HEADING_LINE = re.compile(r"#{1,6}(\s|$)")
 FENCE = re.compile(r"\s*(`{3,}|~{3,})(.*)$")
 LOCATION = re.compile(r"[\w./-]+\.[A-Za-z]+:\d+(?:-\d+)?")
 TRAILING = re.compile(r"\b(Spec|Proof|Standards|Behaviour)\.\s*$")
-CLOSURE = re.compile(r"(^closed\b|^closures checked\b|^checked and holding\b|: closed\b)", re.I)
-FIRST_SENTENCE = re.compile(r"(.*?)(?:[.:;](?:\s|$)|$)")
-# The forms of an item that reports nothing. Its first sentence either opens with one of
-# NOTHING_FOUND, or says only that the other or remaining figures or claims reproduce, as in "The
-# other figures reproduce", "The rest reproduces" or "Every other figure reproduced".
-NOTHING_FOUND = re.compile(
-    r"(none|nothing|no findings?|no defects?|otherwise none|checked, no defects?)\b", re.I
-)
-OTHERS_REPRODUCE = re.compile(
-    r"(the |every )?(other|remaining|rest)\b[^.:;]*\breproduc(e|es|ed)", re.I
-)
 ENTRY = re.compile(r"- `([^`]+)`: (.+)")
 ENTRY_FORM = "- `<plan>/agents/reviews/<step>-refuter.md`: <run>, ..."
 RUN = re.compile(r"first|round [1-9]\d*")
@@ -182,12 +169,6 @@ def parts(name, body):
         yield run, sub if sub in HEADINGS else fixed, lines
 
 
-def reports_nothing(item):
-    """Tell whether the item's first sentence says that nothing was found."""
-    first = FIRST_SENTENCE.match(item.strip()).group(1)
-    return bool(NOTHING_FOUND.match(item.strip()) or OTHERS_REPRODUCE.fullmatch(first))
-
-
 def findings(path):
     plan = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(path))))
     step = os.path.basename(path)[: -len("-refuter.md")]
@@ -195,12 +176,8 @@ def findings(path):
     for name, body in sections([line for _, line in unfenced(text)], 2):
         for run, fixed, lines in parts(name, body):
             for item in items(lines):
-                if reports_nothing(item):
-                    continue
                 kind = fixed
                 if kind is None:
-                    if CLOSURE.search(item):
-                        continue
                     trailing = TRAILING.search(item)
                     if trailing:
                         kind = trailing.group(1).lower()

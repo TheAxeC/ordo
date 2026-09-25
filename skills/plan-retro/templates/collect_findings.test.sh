@@ -1,22 +1,23 @@
 #!/bin/sh
 # Exercise collect_findings.py on a scratch ledger whose reports take the shapes of the archived
 # refuter reports:
-# - dashed findings under numbered and plain headings, a finding on two lines, "none" in both forms;
-# - numbered findings, "1." and "3)", with nested points, under "## Spec" and the other headings;
-# - a repair round with no subheadings: kinds from the trailing word, a "not reproduced" claim, a
-#   ": closed" bullet, a "Closures checked" paragraph, a "Checked and holding" bullet, a finding
-#   whose indented second paragraph follows a blank line, and a closure that does not hold, which
-#   is a finding;
-# - a "## Repair round 1, refuted" section with "### Spec" to "### Behaviour" subheadings, one
-#   numbered and one lower case, and a list before them and "### Verification lines",
-#   "### Closures", "### Not checked" and "### Usage" lists that are not read;
+# - dashed findings under numbered and plain headings, a finding on two lines;
+# - numbered findings, "1.", "10." and "3)", with nested points, under "## Spec" and the other
+#   headings;
+# - a repair round with no subheadings: kinds from a trailing "Spec.", "Proof.", "Standards." or
+#   "Behaviour.", a "not reproduced" claim and a finding whose indented second paragraph follows a
+#   blank line;
+# - a "## Repair round 1, refuted" section with "### Spec", "### proof" and "### Behaviour"
+#   subheadings, one numbered and one lower case, and a list before them and "### Verification
+#   lines", "### Closures", "### Closed", "### Not checked" and "### Usage" lists that are not
+#   read;
 # - "## Not checked", "## Usage" and "## Closed" lists, and a list under a later "# " heading,
 #   that are not read;
 # - headings ending in a colon, a full stop, closing hashes or a parenthetical, and a round's
 #   "### Spec:";
-# - every form of an item that reports nothing ("None found.", "None: ...", "Nothing ...",
-#   "No finding ...", "No defect ...", "Otherwise none ...", "Checked, no defect ...", and "the
-#   other figures reproduce" in four wordings), beside near misses that are findings;
+# - "- None." under "## 1. Spec", "- The other figures reproduce." under "## 2. Proof" and
+#   "- Spec 1: closed." in a round with no subheadings, each a finding, beside Verification, Not
+#   checked, Usage and Closed lists and a fence under "## 1. Spec" that give none;
 # - a tilde fence holding a heading and a bullet, a four-tilde fence holding a three-tilde line, a
 #   four-backtick fence holding a three-backtick line, a fence line with text after it that does
 #   not close its fence, a fence indented under its finding, and a line opening with inline code
@@ -72,8 +73,6 @@ cat >"$reviews/1-refuter.md" <<'MD'
 
 ## 2. Proof
 
-- none.
-
 ```text
 ``` a line with text after the backticks does not close the fence
 - a bullet still inside the fence
@@ -82,10 +81,6 @@ cat >"$reviews/1-refuter.md" <<'MD'
 ## 3. Standards
 
 - src/a.cpp:12: a comment names the step.
-
-## 4. Behaviour
-
-- None. Nothing changes for a user.
 
 ## Not checked
 
@@ -97,18 +92,13 @@ cat >"$reviews/1-refuter.md" <<'MD'
 $ git diff --stat
 ```
 
-- The second case: closed. It is at src/a.cpp:14.
 - src/a.cpp:20: the new guard skips work silently. Behaviour.
 - Report row 3, "0 warnings": not reproduced (no clean build).
 - src/a.cpp:30: the retry loop never ends.
 
   Its second paragraph names the kind. Spec.
-- Closures checked, all hold:
-  - The second case is at src/a.cpp:14.
-  - The guard's message names the file.
-
-  Apart from the bullets above, reading the old file again found nothing lost. Spec.
-- Checked and holding: the step numbers other files cite are unchanged (src/a.cpp:40). Proof.
+- src/a.cpp:40: the count the report gives is not the command's. Proof.
+- src/a.cpp:50: a comment names the step. Standards.
 
 ## Closed
 
@@ -124,10 +114,6 @@ cat >"$reviews/2-refuter.md" <<'MD'
 ```x``` at the start of a line is inline code, not a fence.
 
 - docs/b.md:5: the flag's default is wrong.
-
-## Proof
-
-- none.
 
 # Appendix
 
@@ -170,10 +156,6 @@ none. Every figure of the report reproduces.
 
 3) src/c.py:9: a comment names the step.
 
-## Behaviour
-
-1. none.
-
 ## Not checked
 
 1. The real binary.
@@ -197,6 +179,10 @@ HEAD def; the delta is each file against its copy. I checked each closure agains
 
 1. Spec 1 closed at src/c.py:6.
 
+### Closed
+
+1. Spec 2: fixed at landing at src/c.py:7.
+
 ### 1. Spec
 
 1. src/c.py:11: the round's flag is ignored.
@@ -204,10 +190,6 @@ HEAD def; the delta is each file against its copy. I checked each closure agains
 ### proof
 
 1. The report's figure is not the command's.
-
-### Standards
-
-- none.
 
 ### Behaviour
 
@@ -241,32 +223,6 @@ cat >"$reviews_space/4-refuter.md" <<'MD'
 MD
 reviews_three=$test_root/.scratch/archive/three-plan/agents/reviews
 mkdir -p "$reviews_three"
-cat >"$reviews_three/5-refuter.md" <<'MD'
-# Step 5 refuter
-
-## Spec
-
-1. None found.
-2. None: every figure reproduces.
-3. Nothing else: the ASCII check is clean.
-4. No finding here.
-5. No defect in the new check.
-6. Otherwise none: the rest of the brief holds.
-7. Checked, no defect found: the renamed flag in every caller.
-8. The other figures reproduce.
-9. The rest reproduces.
-10. Every other figure reproduced.
-11. The remaining claims in the report reproduce: 143 lines, 74 rows.
-12. Nonempty lists are refused at src/n.py:2.
-13. src/n.py:4: nothing rejects a relative path.
-14. The other figures reproduce except the line count, which reads 140 where wc -l prints 141.
-15. Checked the fix, and the defect remains at src/n.py:6.
-
-## Repair round 1, refuted
-
-- Closure of Spec 2 does not hold: src/n.py:8 still reads the old flag. Proof.
-- Closures checked, all hold: Spec 1 and Spec 3.
-MD
 cat >"$reviews_three/6-refuter.md" <<'MD'
 # Step 6 refuter
 
@@ -280,6 +236,7 @@ cat >"$reviews_three/6-refuter.md" <<'MD'
 ~~~~
 
 2. src/h.py:7: after a four-tilde fence.
+10. src/h.py:8: an item numbered with two digits.
 
 ## Proof.
 
@@ -311,16 +268,14 @@ one-plan 1 first standards src/a.cpp:12
 one-plan 1 round 1 behaviour src/a.cpp:20
 one-plan 1 round 1 proof -
 one-plan 1 round 1 spec src/a.cpp:30
+one-plan 1 round 1 proof src/a.cpp:40
+one-plan 1 round 1 standards src/a.cpp:50
 one-plan 2 first spec docs/b.md:3
 one-plan 2 first spec docs/b.md:5
 plan with space 4 first spec docs/d.md:2
-three-plan 5 first spec src/n.py:2
-three-plan 5 first spec src/n.py:4
-three-plan 5 first spec -
-three-plan 5 first spec src/n.py:6
-three-plan 5 round 1 proof src/n.py:8
 three-plan 6 first spec src/h.py:1
 three-plan 6 first spec src/h.py:7
+three-plan 6 first spec src/h.py:8
 three-plan 6 first proof src/h.py:2
 three-plan 6 first standards src/h.py:3
 three-plan 6 first behaviour src/h.py:4
@@ -356,6 +311,71 @@ case "$out" in
     *"a finding whose second line is indented with a tab."*) ;;
     *) fail "a continuation line indented with a tab was not joined" ;;
 esac
+
+# Every item under the four headings and in a round is a finding, whatever its text says; the
+# unread sections and a fence give none.
+cases=$test_root/cases/.scratch/cases-plan/agents/reviews
+mkdir -p "$cases"
+cat >"$cases/1-refuter.md" <<'MD'
+# Step 1 refuter
+
+## Verification
+
+- Eight PASS: lines.
+
+## 1. Spec
+
+- None.
+
+```
+- a line inside a fence under a Spec heading
+```
+
+## 2. Proof
+
+- The other figures reproduce.
+
+## Not checked
+
+- The benchmark.
+
+## Usage
+
+- 10 tool uses.
+
+## Closed
+
+- Spec 1: fixed at landing.
+
+## Repair round 1, refuted
+
+- Spec 1: closed.
+MD
+out=$(python3 "$collect" "$test_root/cases/.scratch" 2>/dev/null) ||
+    fail "collect_findings.py exited non-zero on the cases"
+rows=$(printf '%s\n' "$out" | python3 -c '
+import json, sys
+for line in sys.stdin:
+    if line.strip():
+        r = json.loads(line)
+        print("%s|%s|%s" % (r["run"], r["heading"], r["text"]))
+')
+case "$rows" in
+    *"first|spec|None."*) ;;
+    *) fail '"- None." under "## 1. Spec" is not a finding with heading spec' ;;
+esac
+case "$rows" in
+    *"first|proof|The other figures reproduce."*) ;;
+    *) fail '"- The other figures reproduce." under "## 2. Proof" is not a proof finding' ;;
+esac
+case "$rows" in
+    *"round 1|unclassified|Spec 1: closed."*) ;;
+    *) fail '"- Spec 1: closed." in a round with no subheadings is not an unclassified finding' ;;
+esac
+[ "$rows" = "first|spec|None.
+first|proof|The other figures reproduce.
+round 1|unclassified|Spec 1: closed." ] ||
+    fail "the unread sections or the fence gave findings: [$rows]"
 
 # --exclude-listed runs on a second ledger, with an open plan "p" and an archived plan "q r".
 ex=$test_root/ex
