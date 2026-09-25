@@ -59,6 +59,16 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/9-report.md
   landing: not-started
   round: 0
+- step: 6a
+  executor: agent
+  worker: claude:opus, a native background agent of the orchestrating session
+  session_id: (written when the builder starts)
+  worktree: .agents/worktrees/2b-6a
+  base: f9b0856
+  launched: 2026-09-25
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/6a-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -115,7 +125,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-25. Steps 1, 2, 3, 5, 6 and 8 landed (5fdaa98, 6458d52, fafda10, e69b588, e9633bd; step 8 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 4 is in repair round 1; step 9 is with its builder; 6a follows as a slot frees; 1a runs alone after 4 lands, then 1c; 10 can follow now that 8 has landed.
+- Roadmap entry 2.B. Step 4 is in repair round 1; step 9 is with its builder; 6a is with its builder; 1a runs alone after 4 lands, then 1c; 10 can follow now that 8 has landed.
 - Open on Axel's side: none.
 
 ## Usage
