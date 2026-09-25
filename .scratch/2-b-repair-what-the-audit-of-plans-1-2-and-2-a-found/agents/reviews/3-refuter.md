@@ -113,4 +113,4 @@ Inventory sample (read at the new place, 25 rows): land rows 10 (Steps 6), 20 (S
 - The inventory rows whose place did not move, beyond the 25 sampled and the annotated rows the diff changed.
 - Whether `plan-help`'s Steps 3 ("the command that comes next") has a line for a dispatch block at `landing: backed-out`. It was out of this brief.
 
-Reviewer usage: token count not available to the reviewer; 33 tool uses; wall time not measured.
+Reviewer usage: 179,173 tokens, 49 tool uses, 460 s (the runner's completion notification).
