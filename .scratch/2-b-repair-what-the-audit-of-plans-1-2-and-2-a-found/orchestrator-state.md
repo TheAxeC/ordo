@@ -47,6 +47,15 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/2-report.md
   landing: not-started
   round: 0
+- step: 3
+  executor: agent
+  worker: claude:opus (a builder agent, identity written at launch)
+  worktree: .agents/worktrees/2b-3
+  base: 5eaec19
+  launched: 2026-09-25
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/3-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
