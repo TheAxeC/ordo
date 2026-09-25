@@ -98,3 +98,72 @@ grep -c '^FAIL:' $TMPDIR/1c-first/first-run.txt   -> 38 (39 lines, the last "PAS
 - Git history of past ledgers for a dispatch block written as a mapping (only the current files on main were grepped).
 
 Reviewer usage: not known.
+
+## Repair round 1, refuted (on .agents/worktrees/2b-1c, round start 1c09e70)
+
+### Verification (rerun by the reviewer)
+
+```
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh "$TMPDIR/refute1c.XTgx/state.md"
+  (copy of the ledger's state file; diff against the original: "11a12 > - sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1")
+  exit 0; grep -c '^PASS:' prints 11; grep -c '^ok:' prints 10; last line: verify: 13 commands passed
+sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
+  PASS: check_paths.py scratch tests
+dash skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
+  PASS: check_paths.py scratch tests
+python3 skills/spec/templates/check_paths.py /Users/axelfaes/workspace/ordo/.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md 1c
+  error: a yaml block of .../orchestrator-state.md is not valid YAML: mapping values are not allowed here   in "<unicode string>", line 14, column 90:      ... nd-1.md (8 rulings); round start: worktree commit 1c09e70; paths ...
+  exit 64
+python3 skills/spec/templates/check_paths.py .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md 1c   (worktree's copy, as the brief's Verify 3 says)
+  ok: 1c shares no path with no step in flight
+  exit 0
+python3 utils/check_skill_layout.py
+  ten ok: lines, exit 0
+grep -c '^FAIL:' $TMPDIR/1c-first/first-run.txt
+  38 (the file has 39 lines; line 39 is "PASS: check_paths.py scratch tests")
+```
+
+### Closures
+
+- Ruling 1: closed. Case "a range against a whole file" at check_paths.test.sh:188-195; revert A turns it red (Proof).
+- Ruling 2: closed. Case "a path listed twice" at check_paths.test.sh:197-203; revert B turns it red.
+- Ruling 3: closed. Case "a subheading in the section" at check_paths.test.sh:205-214; revert C turns it red.
+- Ruling 4: closed. The report says 38; my grep -c of the first-run file prints 38.
+- Ruling 5: closed as written. skills/spec/SKILL.md:66-67 say what a refusal at Steps 4 restores and that /spec redoes Steps 2; :103 holds for Steps 4. The side effect on a user's change is under Behaviour.
+- Ruling 6: closed. check_paths.py:123-124 wraps a mapping in a list, so a mapping without step: still refuses through :129-131; the new wording is at check_paths.py:32 and :121 and at test :19. `grep -rn "neither none" skills utils docs README.md` finds the old wording nowhere. spec Steps 8 is at SKILL.md:75, and it agrees with the state template at skills/plan/templates/orchestrator-state.md:27. The three new cases are at test :216-228 and :319-323.
+- Ruling 7: closed. brief.md:17-19 and :57, spec SKILL.md:58, plan-orchestration SKILL.md:63-65. `grep -rn "with the findings (Steps 8)"` prints nothing.
+- Ruling 8: closed. skills/plan-help/SKILL.md:68, and the layout check prints `ok: skills/plan-help/SKILL.md`.
+- No closure was made by removing a check. Every changed file is in the brief's path list or is skills/plan-help/SKILL.md.
+
+### Spec
+
+- none.
+
+### Proof
+
+- none. Reverts planted on copies of check_paths.py and its test under $TMPDIR, each run exit 1, first FAIL line:
+  - A (ruling 1): `FAIL: a range against a whole file: exit 0, expected 1 [ok: 1x shares no path with 1y] []`
+  - B (ruling 2): `FAIL: a path listed twice: printed [shared: a.sh (whole) in 1x and whole in 1y`
+  - C (ruling 3): `FAIL: a subheading in the section: exit 0, expected 1 [ok: 1x shares no path with 1y] []`
+  - Ruling 6, the mapping refused: `FAIL: a single entry: exit 64, expected 0 [] [error: the dispatch: key of .../orchestrator-state.md is neither none, an entry with step:, nor a list of entries with step:]`
+  - Ruling 6, the mapping read as none: `FAIL: a single entry: printed [ok: 1x shares no path with no step in flight], expected [ok: 1x shares no path with 1y]`
+  - Ruling 6, a mapping without step: accepted as none: `FAIL: a single entry without step: exit 0, expected 64 [ok: 1x shares no path with no step in flight] []`
+- The counts are right: 47 cases (46 expect_out/expect_error calls plus the "no PyYAML" case), six added in the round, 42 + 8 = 50 reverts, 38 FAIL lines in the first run.
+
+### Standards
+
+- 1. skills/refute/SKILL.md:34 ("The brief `agents/briefs/<step>.md`, the rules file and the standards it points at, and the plan's text for the step") does not name the new round-0 ruling file `agents/briefs/<step>-cases.md` (plan-orchestration SKILL.md:64). A cases ruling changes, inside the scope, what the step is judged on, so a reviewer who reads only the brief judges the diff against rules the ruling replaced.
+- ASCII, line length, history in comments, skill layout: none.
+
+### Behaviour
+
+- 2. skills/spec/SKILL.md:66 restores plan.md with `git restore -- <path>` on a refusal at Steps 4, but the preflight at :45 lets an unrelated uncommitted change of the user's stand, and nothing stops it sitting on the ledger's plan.md or at the brief path. A refusal at Steps 4 then throws the user's edit away with the amendment, against "left alone" and "leaves nothing" (:103, plan-help :68). The report states the restore but not this loss.
+- 3. skills/plan-orchestration/SKILL.md:64 resumes the builder for a cases ruling "by the resume under Steps 8 ("How")" only, not "The resume's options" (:71) or "Before the resume" (:72), so for a `claude -p` or Codex builder the round-0 resume records no file paths in the dispatch block, against :101; and "Launching a builder" item 1 (:171) gives the `repair_` prefix only "for a repair round".
+- 4. Outside the round's delta: the dispatch entry's `round:` value at main's orchestrator-state.md:52 held "round start: worktree commit 1c09e70" unquoted, so the dispatch yaml block was not valid YAML and check_paths.py exited 64 on main's state file.
+
+### Not checked
+
+- A real `/spec` run through the new Steps 4, and a builder handing back a wrong case through plan-orchestration Steps 6.
+- The report's reverts 1-42 and its rows 47 and 49 were not planted again.
+
+Reviewer usage: 100,387 tokens, 21 tool uses, 384 s.
