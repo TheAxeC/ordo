@@ -40,7 +40,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- The greenlight to start step 1. Nothing is dispatched until the user gives it.
+- none.
 
 ## Booked, no ruling needed
 
@@ -51,6 +51,7 @@ dispatch: none
 - 2026-09-24: how to get back on track after the audit: ruled option C, this plan (see `plan.md`, Rulings).
 - 2026-09-24: the audit's recommendations 2a to 2h, and contradictions 3a, 3b, 3c: ruled as recommended (see `plan.md`, Rulings).
 - 2026-09-24: the step list of this plan: approved, with `workers_at_once: 3`.
+- 2026-09-25: the greenlight to start: given by the user; the loop runs from step 1.
 - 2026-09-24: open item E, one end-to-end run of the launch note: ruled (b), step 7 launched from a shell after step 4 and the oculus fixes.
 - 2026-09-24: open items A to D from the review of the oculus changes: ruled A (a), B (a), C (b), D (a); written into steps 2, 3, 4 and 19 (see `plan.md`, Rulings).
 
@@ -78,9 +79,9 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-24. Plan opened; no step started.
-- Next step: 1, the verify runner, on the user's greenlight.
-- Open on Axel's side: the greenlight.
+- 2026-09-25. Greenlight given; step 1 is being prepared by /spec.
+- Next step: 1, the verify runner.
+- Open on Axel's side: none.
 
 ## Usage
 
