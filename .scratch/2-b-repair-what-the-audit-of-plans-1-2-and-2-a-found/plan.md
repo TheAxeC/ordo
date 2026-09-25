@@ -19,7 +19,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 2 Skill texts, part 1: `skills/plan-orchestration/SKILL.md` and `templates/launch-note.md` text, and the `plan` skill's `SKILL.md` and templates: a stop does not end the loop; one meaning for the dispatch block's `report` field; launch paths absolute; the transcript folder named after `--cwd`; the builder writes only its report into the ledger; the stop kinds for a scope-changing finding and for the closing step's roadmap diff (ruling 3a); the sharper-sentence rule (ruling 3b); the exception round beyond `repair_rounds`; the round cap as a rule of its own (at most `repair_rounds` rounds plus the one exception, which the user's yes does not extend; after the last round a step lands with its small fixes and books the rest as steps) and an Anti-patterns row for offering the user another round; Opus as the default model for the orchestrator and every agent, Fable, Astra and Sol allowed for the orchestrator, Sol for the agents, never Fable or Astra for an agent; `inline` kept as an optional executor; stops raised as plain-text open items, never a question-box tool; every report opens with the position line (the roadmap entry, the plan step n of m, the next step), then the open items; the state template's closed list and the `reviewer_report` field; each skill invoked through the runner every time, after a compaction too, never followed from remembered text; `launch-note.md` says the `--pid` process owns the builder and lives until `end`, and that a new `start` field is optional and written on the page before `launch.sh` sends it; the rule inventories of the skills it changes updated; the layout check, the inventory check and a grep per changed rule pass (1 commit)
 - ✅ 3 Skill texts, part 2: `spec` (a false premise stops only when the plan cannot absorb it, ruling 3c; what clears a step-in-flight block), `refute` (the exception round; the "unless the brief lists them" qualifier; `reviewer_report`; the grammar of its opening line), `land` (a first step, before the wip commit, that stops the step's builder and every reviewer through the runner's stop tool and checks the runner's agent listing, and a shell builder's pid and exit file, naming no vendor; the look as its own step; its steps in execution order; the state a backed-out landing leaves; a landed step found short or wrong finished by a new step on top, a landed commit reverted only on the user's ruling), `plan-help` (its printed sequence), `plan-retro` (ruling 3b), `roadmap` (its steps apply to add, move, done and drop), `ordo-init` (the path exception; "never overwrites"; the build-command exception), `repo-setup` (the commit rule); the rule inventories updated; the same checks as step 2 pass (1 commit)
 - 4 `skills/plan-orchestration/templates/launch.sh` and its test: every note call bounded at about 3 s; the pid file names the process that owns the builder, that pid is alive before `start` and is the one passed to it, and a kill still writes the exit file and calls `end`; a second live launch of a step refused; every path made absolute and the script's own errors sent to the stderr file; a Claude session id known before the builder starts; the exit file written in one move; the note label `<entry>/<step>`; "Launching a builder" says to commit the dispatch block before the launch and to watch the pid as well as the exit file; `launch.test.sh` covers each case, and each fault the plan 2.A review planted turns it red (1 commit)
-- 5 `utils/pin.sh` and its test: check mode flags links into the live clone; pin mode removes only links into the pinned worktree and reports the others; a home folder holding a space; a stale worktree pruned before re-pinning; `pin.test.sh` covers each case, and each fault the checkers review planted turns it red (1 commit)
+- ✅ 5 `utils/pin.sh` and its test: check mode flags links into the live clone; pin mode removes only links into the pinned worktree and reports the others; a home folder holding a space; a stale worktree pruned before re-pinning; `pin.test.sh` covers each case, and each fault the checkers review planted turns it red (1 commit)
 - 6 `skills/plan-retro/templates/collect_findings.py` and its test: numbered findings and the subheadings inside a repair round read; Verification, Not checked, Closed and Usage skipped; `--exclude-listed` compared by real path; its test runs on fixtures shaped like the archived reports, and its count over the three archived plans matches a hand count written in the report (1 commit)
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
@@ -179,3 +179,42 @@ verify: 12 commands passed
 
   and exited 0; the ASCII check over the tree exited 0.
 - Usage, orchestrator from step 2's landing (6458d52) to this booking: 10 messages, 9732 output tokens, 20013 cache-write tokens, 8130367 cache-read tokens, 22 fresh input tokens, 10 minutes.
+
+### Step 5, pin.sh (landed 2026-09-25)
+
+- Landed: `utils/pin.sh` checks and refuses before it changes anything: a link into the live clone for a skill the tag lacks, a worktree with local changes, a folder that is not absolute or has leading or trailing whitespace (quoted in the message), an `ORDO_SKILL_DIRS` that names no folder. Check mode flags every link into the live clone. Pin mode removes only links into the pinned worktree, replaces a live-clone link for a skill the tag holds, and reports each change only after the write succeeded. The skill folders are read one per line (a home folder holding a space works); `ORDO_SKILL_DIRS` is split on spaces and tabs or read one per line. A pinned worktree deleted by hand is created again with `git worktree add --force`, which leaves every other worktree's record alone. `utils/pin.test.sh` covers each case under a scratch `HOME` holding a space and writes only under its scratch roots; `README.md` says what the script and its test do.
+- User-visible changes, before and after:
+  - Check mode with a link into the live clone: before, passed; after, fails and names the link.
+  - Pin mode with a live-clone link for a skill the tag lacks: before, removed it silently; after, refuses before anything changes.
+  - A deleted pinned worktree: before, `pin.sh <tag>` failed on the stale registration; after, it is created again.
+  - A relative or whitespace-padded skill folder: before, pinned into the current directory; after, refused with the folder quoted.
+- Rounds: the first review, repair round 1 (7 rulings), the review over it; its findings fixed at landing (7); the landing fixes read by a fresh reviewer (`agents/reviews/5-landing-review.md`) and its findings fixed at landing (6).
+- Open item I (the stray link a reproduction run left in the user's skill folder) stays with the user.
+- Verified on main with `sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+  and exited 0; the ASCII check over the tree exited 0; `ls ~/.claude-work/skills ~/.claude/skills ~/.agents/skills` unchanged apart from the known `alpha`, and the pinned worktree clean.
+- Usage, orchestrator from step 3's landing (fafda10) to this booking: 23 messages, 16145 output tokens, 30037 cache-write tokens, 19419115 cache-read tokens, 50 fresh input tokens, 13 minutes.

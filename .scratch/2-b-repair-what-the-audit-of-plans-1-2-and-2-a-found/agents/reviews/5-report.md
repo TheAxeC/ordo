@@ -304,3 +304,274 @@ Before: `utils/pin.sh` 131, `utils/pin.test.sh` 110, `README.md` 169 (`git show 
 ## Wrong or impossible in the brief
 
 Nothing. The brief's line numbers for `README.md` hold: the bullet is at line 122 and the pin paragraph was at line 165.
+
+# Repair round 1
+
+Every ruling of the round is closed. Nothing is left undone. Where this section and the sections above disagree, this section states the tree as it is now. It replaces judgment calls 2, 7 and 8's prune part, and the user-visible rows for pin mode's live-clone link and the deleted worktree.
+
+Every run of `pin.sh` and `pin.test.sh` in this round started with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE HOME="<scratch>/my home"`, with scratch `ORDO_STABLE` and `ORDO_SKILL_DIRS`. The verify runner also got `PYTHONUSERBASE=/Users/axelfaes/Library/Python/3.13`, where `python3 -c 'import yaml; print(yaml.__file__)'` finds PyYAML, because the scratch HOME hides it.
+
+## Rulings and what closes each
+
+| Ruling | What closes it | Proof |
+|---|---|---|
+| 1. The stray link is the user's | Not touched. A read-only `ls -la` shows it unchanged: `/Users/axelfaes/.claude-work/skills/alpha -> /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-repro.vQ34tT/stable/skills/alpha` | check G |
+| 2. Keep the empty-list refusal, the tab split and the `, ` summary; README and head comment name each | Head comment `utils/pin.sh:11-17`, `README.md:165` (summary) and `README.md:167` (split, absolute paths, empty list) | the files |
+| 3. A test for the summary format, the tab split, a held live-clone link reported once | `utils/pin.test.sh`: summary asserted after the first pin and in check mode; `ORDO_SKILL_DIRS="$plain_root/a  $plain_root/b<TAB>$plain_root/c"` must give three folders; `grep -c -F "$d1/beta"` on check mode's output must be 1. The prune refusal is gone with ruling 6 | reverts M3, M6, M1 red (check C) |
+| 4. The space-separated case uses a root of its own with no space; check that nothing outside the scratch roots changed | `plain_root=$(mktemp -d /tmp/pin-plain.XXXXXX)`, removed by the trap. `run_pin` fails when a summary line names a folder outside the two roots. The test records every path that ends just before a space of a skill folder and does not exist, and fails at the end if one appeared. `HOME` is set before the scratch repository's first `git` command | check D; revert R7a red through the summary guard |
+| 5. A live-clone link for a skill the tag lacks is refused before anything changes; one for a held skill is replaced and reported | The refusal pass (`utils/pin.sh`, after "Every refusal happens here") scans every link of every folder. A link into the live clone whose skill `tag_holds` rejects fails with the brief's message. The linking loop prints `pin: replaced <link>, which linked into the live clone <repo>`. The cleanup no longer has a live-clone branch. `README.md:171` states both and no longer has the "so a link made by hand" clause | reverts R5a, R5b red; check E |
+| 6. No prune; `git worktree add --force --detach`; another missing worktree keeps its record | `git -C "$repo" worktree add -q --force --detach "$stable" "$tag"`. The test registers `$test_root/other`, deletes it and the pinned worktree, pins, and requires `worktree $other` in `git worktree list --porcelain`. Head comment and `README.md:169` say so | reverts R6a, R6b red; check E repro 4 |
+| 7. Every folder absolute, with no leading or trailing whitespace, else `pin: <folder> is not an absolute path` before anything changes | A loop right after the folder list is built, for check mode and pin mode alike. The test runs `rel/skills`, `  $d1`, `$d1 ` and `<TAB>$d1` in the newline form, and `rel/skills` in the space form. Each must be refused with its message, with the worktree still at v2, a link unchanged and the run folder empty. Check mode refuses a padded folder too | reverts R7a, R7b red; check E probe F |
+
+## Check A: the verify list
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE HOME="$T/my home" ORDO_STABLE="$T/stable" ORDO_SKILL_DIRS="$T/sk" PYTHONUSERBASE=/Users/axelfaes/Library/Python/3.13 sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit 0
+```
+
+## Check B: the pin test, under sh and with pin.sh under dash
+
+```
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+```
+
+A scratch copy of the test with `sh "$pin"` replaced by `dash "$pin"`, run with `dash`:
+
+```
+64:    dash "$pin" "$@" >"$test_root/out" 2>"$test_root/err"
+PASS: pin.sh scratch tests
+exit 0
+$ dash -n utils/pin.sh && dash -n utils/pin.test.sh && echo "dash -n ok"
+dash -n ok
+```
+
+Not covered: shells other than macOS `sh` (bash in POSIX mode) and dash.
+
+## Check C: each case red under its revert
+
+Each revert is one exact replacement on a scratch copy of `utils/pin.sh`, with the test copied beside it. It ran under the safety environment with `HOME`, `ORDO_STABLE` and `ORDO_SKILL_DIRS` in a `mktemp` folder (script `reverts2.py` in the session scratchpad). After the runs, that folder held only `my home` (empty) and `rev`.
+
+```
+== M1 check mode: first-loop skip of a live-clone target removed
+FAIL: check mode reported the link into the live clone 2 times: pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.23wYhw/my home/.claude/skills/beta does not link to /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.23wYhw/my home/.local/share/ordo-stable/skills/beta
+pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.23wYhw/my home/.claude/skills/beta links to /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.23wYhw/ordo/skills/beta, in the live clone /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.23wYhw/ordo
+pin: the links do not match the pin at v2
+exit 1
+
+== M3 summary line prints $skill_dirs instead of $shown_dirs
+FAIL: the summary line does not join the folders with a comma; expected ", 2 skills linked in: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.rYaQZH/my home/.claude/skills, /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.rYaQZH/my home/.agents/skills" in: pinned: v1 (4d8d333), 2 skills linked in: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.rYaQZH/my home/.claude/skills
+/private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.rYaQZH/my home/.agents/skills
+exit 1
+
+== M6 space-separated form split on spaces only
+FAIL: /private/tmp/pin-plain.hE5PfN/b/beta not linked from the space-separated list
+exit 1
+
+== R5a refusal of a live-clone link for a skill the tag lacks removed
+FAIL: pin mode did not refuse the link into the live clone; expected "pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.bly4bf/my home/.claude/skills/dev links into the live clone /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.bly4bf/ordo; move it away or pin a tag that holds it" in: pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.bly4bf/my home/.claude/skills/dev links to /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.bly4bf/ordo/skills/dev, in the live clone /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.bly4bf/ordo
+pin: the links do not match the pin after linking
+exit 1
+
+== R5b "pin: replaced" line removed
+FAIL: the replacement of a link into the live clone is not reported; expected "pin: replaced /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.L2HBSL/my home/.claude/skills/beta, which linked into the live clone /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.L2HBSL/ordo" in: pinned: v2 (57a926f), 2 skills linked in: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.L2HBSL/my home/.claude/skills, /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.L2HBSL/my home/.agents/skills
+exit 1
+
+== R6a --force dropped from git worktree add
+FAIL: pinning after the worktree was deleted by hand failed:  fatal: '/private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.2q160v/my home/.local/share/ordo-stable' is a missing but already registered worktree;
+use 'add -f' to override, or 'prune' or 'remove' to clear
+pin: could not create the worktree /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.2q160v/my home/.local/share/ordo-stable at v2
+exit 1
+
+== R6b git worktree prune run before git worktree add
+FAIL: pinning dropped the registration of another missing worktree
+exit 1
+
+== R7a absolute-path check removed
+FAIL: pin.sh linked into rel/skills, outside the scratch roots
+exit 1
+
+== R7b trailing-whitespace check removed
+FAIL: pinned with the folder "/private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.HYnbzS/my home/.claude/skills " (newline form)
+exit 1
+
+== R3c refusal of a list naming no folder removed
+FAIL: the empty ORDO_SKILL_DIRS has no message; expected "pin: ORDO_SKILL_DIRS names no folder" in: pin:  is not an absolute path
+exit 1
+
+== R1 check mode: live-clone report deleted
+FAIL: check mode passed with a link into the live clone
+exit 1
+
+== R2a "pin: removed" line deleted
+FAIL: the removal is not reported; expected "pin: removed /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.ZNrLaC/my home/.claude/skills/alpha, which the tag v2 does not hold" in: pinned: v2 (2929746), 2 skills linked in: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.ZNrLaC/my home/.claude/skills, /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.ZNrLaC/my home/.agents/skills
+exit 1
+
+== R3a default folders back to one space-separated string
+FAIL: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.qdWgJ9/my home/.claude/skills/beta not linked with the default folders
+exit 1
+
+== R3b newline form of ORDO_SKILL_DIRS dropped
+FAIL: first pin failed:  pin: home/.claude/skills is not an absolute path
+exit 1
+
+== P1 check mode: report of a worktree link whose skill the tag lacks deleted
+FAIL: check mode passed with a link to a skill the tag lacks
+exit 1
+
+== P2 not-a-git-worktree refusal deleted
+FAIL: the not-a-worktree refusal has no message; expected "pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.4dkAFx/my home/plain exists and is not a git worktree" in: fatal: not a git repository (or any of the parent directories): .git
+pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.4dkAFx/my home/.claude/skills/beta links to /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.4dkAFx/my home/.local/share/ordo-stable/skills/beta, outside Ordo; move it away and run again
+exit 1
+
+== P3 CLAUDE_CONFIG_DIR folder dropped
+FAIL: the CLAUDE_CONFIG_DIR folder was not linked
+exit 1
+
+== P4 check after linking deleted
+FAIL: pin mode passed with a link it could not make
+exit 1
+
+== P5 real-directory refusal deleted
+FAIL: the real-directory refusal has no message; expected "pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.aSs1bN/my home/.claude/skills/beta is a real directory; move it away and run again" in: pin: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.aSs1bN/my home/.claude/skills/beta links to , outside Ordo; move it away and run again
+exit 1
+```
+
+The check after linking (P4) is now proven by a folder the script cannot write to (`chmod a-w "$d2"` with its `beta` link removed), since a live-clone link no longer reaches that check.
+
+## Check D: a TMPDIR holding a space
+
+```
+$ T=$(mktemp -d "${TMPDIR:-/tmp}/pin-tmpdir.XXXXXX"); mkdir "$T/tmp dir"; ls /tmp | grep -c pin-plain
+0
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE HOME="$T/my home" ORDO_STABLE="$T/stable" ORDO_SKILL_DIRS="$T/sk" TMPDIR="$T/tmp dir" sh utils/pin.test.sh; echo "exit $?"
+PASS: pin.sh scratch tests
+exit 0
+find $T after the run:
+$T
+$T/tmp dir
+pin-plain folders left in /tmp: 0
+```
+
+## Check E: the review's reproductions and the reviewer's probes, on scratch folders
+
+Scratch repository `$T/ordo` with `alpha` and `beta` at `v1`, run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE HOME="$T/my home"`:
+
+```
+CLAUDE_CONFIG_DIR set: []
+--- repro 1: check mode with a live-clone link
+pinned: v1 (c54a0f0), 2 skills linked in: $T/sk
+pin: $T/sk/dev links to $T/ordo/skills/dev, in the live clone $T/ordo
+pin: the links do not match the pin at v1
+exit 1
+--- repro 2: pin mode with the same link and a stale link into the pinned worktree
+pin: $T/sk/dev links into the live clone $T/ordo; move it away or pin a tag that holds it
+exit 1
+$T/sk/alpha -> $T/stable/skills/alpha
+$T/sk/beta -> $T/stable/skills/beta
+$T/sk/dev -> $T/ordo/skills/dev
+$T/sk/old -> $T/stable/skills/old
+pin: removed $T/sk/old, which the tag v1 does not hold
+pinned: v1 (c54a0f0), 2 skills linked in: $T/sk
+exit 0
+--- probe: a hand-made live-clone link for a skill the tag holds
+pin: replaced $T/sk/alpha, which linked into the live clone $T/ordo
+pinned: v1 (c54a0f0), 2 skills linked in: $T/sk
+exit 0
+$T/sk/alpha -> $T/stable/skills/alpha
+--- repro 3: HOME holding a space, ORDO_SKILL_DIRS unset, run from $T/cwd
+pinned: v1 (c54a0f0), 2 skills linked in: $T/my home/.claude/skills, $T/my home/.agents/skills
+exit 0
+ls -A $T/cwd: []
+ls: $T/my: No such file or directory
+--- repro 4: pinned worktree deleted by hand, beside another missing worktree
+pinned: v1 (c54a0f0), 2 skills linked in: $T/my home/.claude/skills, $T/my home/.agents/skills
+exit 0
+alpha
+beta
+worktree $T/ordo
+worktree $T/other
+worktree $T/stable
+--- probe F: a folder with leading spaces in the newline form
+pin:   $T/sk5 is not an absolute path
+exit 1
+ls -A $T/cwd: []
+ls: $T/sk5: No such file or directory
+```
+
+In repro 2, the refused run left `old` in place. The second `pin.sh v1` ran after `rm "$T/sk/dev"` and removed it.
+
+## Check F: ASCII, width, the rule-14 grep
+
+```
+$ LC_ALL=C grep -n "[^ -~]" utils/pin.sh utils/pin.test.sh README.md; echo $?
+exit 1
+$ awk 'length > 100 {print FILENAME":"FNR}' utils/pin.sh utils/pin.test.sh
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne '...'   (the change standard's ASCII check)
+exit 0
+$ grep -rn -e 'ORDO_SKILL_DIRS' -e 'worktree prune' -e 'live clone' -e 'ordo-stable' -e 'could not prune' skills utils docs README.md | grep -v '^utils/pin' | cut -c1-160
+docs/dev/change-standard.md:64:- The pinned worktree `~/.local/share/ordo-stable` is never edited; the installed skills change only through `utils/pin.sh <tag>`
+README.md:122:- `pin.test.sh` runs every case under a scratch `HOME` whose path holds a space, writes only under its two scratch roots, and checks that no path 
+README.md:161:utils/pin.sh v1.0.0      # the worktree ~/.local/share/ordo-stable at v1.0.0, every skill linked from it
+README.md:167:`ORDO_SKILL_DIRS` replaces the list of folders. It is split on spaces and tabs, or read one folder per line when it holds a newline, which is the 
+README.md:171:Check mode fails on a link into the live clone and on a link into the pinned worktree whose skill the tag lacks, and prints each one. Pin mode che
+```
+
+No page outside the three files names the prune or the removed message.
+
+## Check G: the real folders, read only
+
+```
+$ ls -la /Users/axelfaes/.claude-work/skills/alpha
+lrwxr-xr-x@ 1 axelfaes  staff  93 Sep 25 16:43 /Users/axelfaes/.claude-work/skills/alpha -> /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-repro.vQ34tT/stable/skills/alpha
+$ git -C /Users/axelfaes/.local/share/ordo-stable describe --tags --exact-match
+v1.0.0
+$ git -C /Users/axelfaes/.local/share/ordo-stable status --porcelain | wc -l
+       0
+```
+
+## Files after the round
+
+```
+$ wc -l utils/pin.sh utils/pin.test.sh README.md
+     222 utils/pin.sh
+     403 utils/pin.test.sh
+     175 README.md
+$ git diff --stat HEAD
+ README.md         |  10 +--
+ utils/pin.sh      |  75 ++++++++++++++++------
+ utils/pin.test.sh | 184 ++++++++++++++++++++++++++++++++++++++++++++----------
+ 3 files changed, 213 insertions(+), 56 deletions(-)
+```
+
+## User-visible changes in this round
+
+| Surface | After round 0 | Now |
+|---|---|---|
+| Pin mode, live-clone link for a skill the tag lacks | the pin moved, links rewritten, the link reported, exit 1 after linking | refused before anything changes: `pin: <link> links into the live clone <repo>; move it away or pin a tag that holds it`, exit 1 |
+| Pin mode, live-clone link for a skill the tag holds | replaced silently | replaced, `pin: replaced <link>, which linked into the live clone <repo>` |
+| Pinned worktree deleted by hand | `git worktree prune` (drops every missing worktree's record), then `worktree add` | `git worktree add --force --detach`; other records kept; the message `could not prune the worktree list` no longer exists |
+| A skill folder that is relative or padded with whitespace | used as given (relative folders created in the working directory) | refused in both modes: `pin: <folder> is not an absolute path` |
+| Head comment and `README.md:122,165-171` | round-0 behaviour | the behaviour in this table, the tab split, the empty-list refusal and the `, ` summary |

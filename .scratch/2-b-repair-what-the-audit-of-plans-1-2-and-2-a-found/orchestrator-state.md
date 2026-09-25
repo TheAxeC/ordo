@@ -36,20 +36,7 @@ launch_note:                 # none recorded.
 ```
 
 ```yaml
-dispatch:
-- step: 5
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: a660463bbd3208eb9 (the runner's agent id)
-  builder_usage: 133,678 tokens, 31 tool uses, 606 s; round 1: 203,386 tokens, 22 tool uses, 559 s (the runner's completion notifications)
-  round_reviewer: agent a34462f35a8d2c70f, claude:opus, through /refute over round 1: 135,722 tokens, 31 tool uses, 484 s
-  reviewer_report: agents/reviews/5-refuter.md (through /refute; reviewer claude:opus, agent a1c8d8a8f85d6af3f; 126,518 tokens, 28 tool uses, 433 s)
-  worktree: .agents/worktrees/2b-5
-  base: 25d99c9
-  launched: 2026-09-25
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/5-report.md
-  landing: not-started
-  round: 1 (sent 2026-09-25: the findings of 5-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit dfa1f83 on branch 2b-5)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -102,8 +89,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Steps 1 to 3 landed (5fdaa98, 6458d52; step 3 in the commit that carries this line).
-- Step 5 lands next; then 4, 6, 8, 9, three at a time; 1a waits on open item H.
+- 2026-09-25. Steps 1, 2, 3 and 5 landed (5fdaa98, 6458d52, fafda10; step 5 in the commit that carries this line). The tree is clean after it.
+- Next steps: 4, 6 and 8, three at a time, then 9; 1a waits on open item H.
 - Open on Axel's side: none.
 
 ## Usage
@@ -113,3 +100,4 @@ dispatch:
 | 1 | claude:opus agent, effort high: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s; round 2: 352,270 tokens, 52 tool uses, 4,615 s | 111,656 tokens, 24 tool uses, 421 s; round 1: 124,041 tokens, 29 tool uses, 778 s; round 2: 144,379 tokens, 34 tool uses, 1,123 s; landing fixes: 91,589 tokens, 19 tool uses, 314 s | 2 (one under the exception, ruling F) | 17, then 12 | 5 files changed, 781 insertions(+), 1 deletion(-) | no | 10 | 1 (open item F) | 61 | 51853 | 121761 | 33845304 | 136 | 172 | none |
 | 2 | claude:opus agent, effort high: 209,393 tokens, 73 tool uses, 777 s; round 1: 238,449 tokens, 13 tool uses, 264 s | 174,608 tokens, 36 tool uses, 433 s; round 1: 155,407 tokens, 26 tool uses, 341 s; landing fixes: 74,661 tokens, 19 tool uses, 315 s | 1 | 20 (12 rulings) | 9 files changed, 120 insertions(+), 104 deletions(-) | no | 6 | 0 | 68 | 75477 | 182612 | 48311299 | 154 | 44 | none |
 | 3 | claude:opus agent, effort high: 208,057 tokens, 60 tool uses, 623 s; round 1: 238,866 tokens, 11 tool uses, 270 s | 179,173 tokens, 49 tool uses, 460 s; round 1: 143,412 tokens, 35 tool uses, 402 s; landing fixes: 85,655 tokens, 17 tool uses, 315 s | 1 | 12 (8 rulings) | 16 files changed, 145 insertions(+), 122 deletions(-) | no | 12 | 0 | 10 | 9732 | 20013 | 8130367 | 22 | 10 | none |
+| 5 | claude:opus agent, effort high: 133,678 tokens, 31 tool uses, 606 s; round 1: 203,386 tokens, 22 tool uses, 559 s | 126,518 tokens, 28 tool uses, 433 s; round 1: 135,722 tokens, 31 tool uses, 484 s; landing fixes: 72,526 tokens, 15 tool uses, 342 s | 1 | 12 (7 rulings) | 3 files changed, 513 insertions(+), 86 deletions(-) | no | 13 | 1 (open item I) | 23 | 16145 | 30037 | 19419115 | 50 | 13 | none |

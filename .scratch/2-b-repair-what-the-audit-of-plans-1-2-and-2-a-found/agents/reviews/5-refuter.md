@@ -206,3 +206,15 @@ None. Each part of the round's delta falls under one of rulings 2 to 7. The `chm
 - A pin against the user's real v1.0.0 layout, which the safety rule forbids.
 
 Reviewer usage: 135,722 tokens, 31 tool uses, 484 s (the runner's completion notification).
+
+## Closed
+
+- First review: Spec 1 (the stray link in the user's skill folder) is open item I, the user's; every other finding closed in repair round 1 (see `5-report.md`, "Repair round 1"), with rulings 2 to 7.
+- Review over round 1, fixed at landing:
+  - Proof 1: `utils/pin.test.sh` refuses a scratch root whose path holds a newline, before it writes anything.
+  - Standards 1: the comments say git replaces the stale record of a pinned worktree deleted by hand, and that a locked record is still refused.
+  - Standards 2: the head comment and `README.md` say every skill folder (from `ORDO_SKILL_DIRS`, the defaults or `$CLAUDE_CONFIG_DIR/skills`) must be absolute, in the paragraph that lists all the folders.
+  - Standards 3: the `pin.test.sh` bullet describes what the test covers, in sentences of different shape.
+  - Behaviour 1: a folder with leading or trailing whitespace is refused as `pin: '<folder>' has leading or trailing whitespace`, and one that is not absolute as `pin: '<folder>' is not an absolute path`; the test asserts each message.
+  - Behaviour 2: `pin.sh` prints "replaced" or "removed" only after the write succeeded; a test case for each, red with the `|| continue` removed, and each asserting the run fails.
+- The landing fixes were read by a fresh reviewer (`5-landing-review.md`); its findings are the second and third halves of the items above (the whitespace message, the head comment, the README paragraph, the bullet's shape, the `ln` case and the exit status of the `rm` case), fixed at landing.
