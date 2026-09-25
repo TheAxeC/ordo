@@ -4,12 +4,12 @@ Ordo has no build step. The green check is every command below passing, each run
 
 ```sh
 sh skills/land/templates/land.test.sh                  # the landing script and usage.py; the example plan.yaml files against the state template
+sh skills/land/templates/verify.test.sh                # verify.sh on green, red and unusable verify lists
 sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
 sh skills/plan-retro/templates/collect_findings.test.sh
 sh skills/repo-setup/templates/sync_rules.test.sh
 sh skills/plan-orchestration/templates/launch.test.sh  # launch.sh with stub builders and a stub launch-note command
 sh utils/pin.test.sh
-sh utils/verify.test.sh                         # verify.sh on green, red and unusable verify lists
 sh utils/check_skill_layout.test.sh             # the layout check on complete and broken SKILL.md files
 sh utils/check_rule_inventory.test.sh           # the rule inventory check on complete and broken inventories
 sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists
@@ -19,7 +19,7 @@ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $A
 
 A test passes when it exits 0 and its last line starts with `PASS:`; a failure prints a line starting with `FAIL:` and exits 1. The filter that keeps the summary line is `2>&1 | tail -1`.
 
-`sh utils/verify.sh <state file>` runs a plan's verify list and needs `python3` with PyYAML, `bash` and `ps`. It runs each command as written through `bash -o pipefail -c`, so a test that exits non-zero in a pipeline into `tail` makes the pipeline fail, and the runner judges the status the whole command returns (a command that consumes a pipeline's status with `!`, `if`, `while`, `||` or `&` passes or fails on what it returns). A command whose text after its last single pipe is `tail` and its options passes only when it also prints a last line starting with `PASS:`. A landing books the lines the runner prints. The runner's exit status:
+`sh skills/land/templates/verify.sh <state file>`, the land skill's runner, runs a plan's verify list and needs `python3` with PyYAML, `bash` and `ps`. It runs each command as written through `bash -o pipefail -c`, so a test that exits non-zero in a pipeline into `tail` makes the pipeline fail, and the runner judges the status the whole command returns (a command that consumes a pipeline's status with `!`, `if`, `while`, `||` or `&` passes or fails on what it returns). A command whose text after its last single pipe is `tail` and its options passes only when it also prints a last line starting with `PASS:`. A landing books the lines the runner prints. The runner's exit status:
 
 - `0`: every command passed.
 - `1`: a command is red, or the scratch folder cannot be created under `$TMPDIR` (default `/tmp`).

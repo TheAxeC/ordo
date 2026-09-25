@@ -52,6 +52,7 @@ metadata:
    - The ledger's landing script, when there is one, prints the conflicting paths and exits instead.
 5. Restore to main's copy, before anything else, a ledger file the worktree deleted or rewrote (a report written in both trees); the ledger is written only on main.
 6. Run the verification commands of the configuration block on main, in order, each through its filter, stopping at the first failure.
+   - The step's verify list runs through this skill's `templates/verify.sh <state file>` from the root of the checkout it checks (main here), and the lines it prints are what the booking quotes.
    - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here, counted and named the same way as a red line.
    - A red line that a fix inside the brief closes is fixed on main, counted as a fix at landing, and named in the booking with its cause.
    - Any other red line ends the landing there, leaving main in a state the resumption rules of `plan-orchestration` recognise.
@@ -93,8 +94,12 @@ metadata:
 ## The landing script
 
 - A ledger may hold `land.sh`, copied from `templates/land.sh` with its `ADAPT` edits made; it does Steps 3, 4 and 6 as one command.
-- It prints the diff stat, the usage rows (with `--session <session log> --since <previous landing commit time>`, the orchestrator's row through `usage.py`, found beside it or in this skill's templates) and the staged paths.
-- `templates/land.test.sh` proves it on scratch repositories, and proves `templates/usage.py` on a Claude Code log and a Codex rollout.
+- Its check on main (Steps 6) is the ledger's verify list: after main's cherry-pick it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root, and a non-zero exit fails the landing with the output of `verify.sh` printed.
+- It finds `verify.sh` and `usage.py` beside itself, then in this skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`); a missing state file, or a `verify.sh` in none of those places, is refused before main is touched, with the places named.
+- Its `ADAPT` block holds the dependency install the verify list needs and any check beyond the verify list.
+- It prints the diff stat, the usage rows (with `--session <session log> --since <previous landing commit time>`, the orchestrator's row through `usage.py`) and the staged paths.
+- `templates/land.test.sh` proves it on scratch repositories, its verify list run and its lookup of `verify.sh` included, and proves `templates/usage.py` on a Claude Code log and a Codex rollout.
+- `templates/verify.test.sh` proves `templates/verify.sh` on scratch state files, starting it under `sh` and, when it is installed, `dash`.
 - When the ledger holds it, its zero exit passes the checks on main (Steps 6). It never passes the look (Steps 7), which it does not do.
 
 ## Stops

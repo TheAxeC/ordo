@@ -31,9 +31,10 @@ Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. 
 
 Run from <directory>, each must hold, each output piped through the filter the rules file names:
 
-1. `<command>` prints <expected output>.
-2. `<command>`: <the threshold or the shape the output must have>.
-3. Each new or changed test names the revert that turns it red. A test that no revert turns red is an audit, not a proof, and this brief says which it is.
+1. The plan's verify list, run through the `land` skill's `templates/verify.sh` from the root of the checkout it checks as `sh <skills>/land/templates/verify.sh <state file>`, where `<skills>` is the first of the repository's `.agents/skills`, `~/.agents/skills` and `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`) that holds the `land` skill, prints <the `PASS:` line of each command piped into `tail`, the whole output of each other command, then `verify: <n> commands passed`> and exits 0; the lines it prints are what the report quotes.
+2. `<command>` prints <expected output>.
+3. `<command>`: <the threshold or the shape the output must have>.
+4. Each new or changed test names the revert that turns it red. A test that no revert turns red is an audit, not a proof, and this brief says which it is.
 
 ## Report
 

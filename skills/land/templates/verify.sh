@@ -22,7 +22,8 @@
 # scratch folder and exits 128 plus the signal number. It behaves the same under sh, bash or dash,
 # since the shell part only checks its argument and its tools and then hands over to python3.
 #
-# Usage: sh utils/verify.sh <state file>
+# Usage: sh <skills>/land/templates/verify.sh <state file>
+#   <skills> is the folder the skills are installed in.
 #
 # Exit status:
 #   0    every command passed.
@@ -37,7 +38,7 @@
 set -u
 
 [ $# -eq 1 ] || {
-    printf 'verify: usage: sh utils/verify.sh <state file>\n' >&2
+    printf 'verify: usage: sh <skills>/land/templates/verify.sh <state file>\n' >&2
     exit 64
 }
 command -v python3 >/dev/null 2>&1 || {

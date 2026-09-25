@@ -48,6 +48,7 @@ Nothing here needs a command or a fix: a finding that needs no ruling is a step 
 
 - <when the ledger holds a landing script: its invocation from the repository root, what it does, its exit codes, and the test that proves it>.
 - <the commands, and the directory each runs from>.
+- The `verify` list above runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, the worktree and then main, and the lines it prints are what a report or a booking quotes.
 - Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
 
 ## Where things are

@@ -496,7 +496,7 @@ out=$(cd "$work" && TMPDIR=$runner_tmp "$shell_path" "$verify" 2>&1)
 status=$?
 [ "$status" -eq 64 ] || fail "no argument: exit $status, expected 64"
 case "$out" in
-    *"usage: sh utils/verify.sh <state file>"*) ;;
+    *"usage: sh <skills>/land/templates/verify.sh <state file>"*) ;;
     *) fail "no argument: no usage line: $out" ;;
 esac
 

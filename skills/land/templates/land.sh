@@ -1,7 +1,16 @@
 #!/bin/sh
 # Run a reviewed package through a plan's landing checks and print its booking data.
 # A plan copies this file into its ledger folder and makes the three ADAPT edits: the tool
-# directory, the check commands and their pass rules, and the harness and model names in the rows.
+# directory, the dependency install and any check beyond the verify list with their pass rules,
+# and the harness and model names in the rows.
+#
+# Its check on main is the ledger's verify list: after main's cherry-pick it runs
+# sh <verify.sh> <the orchestrator-state.md beside this script> from the repository root, and a
+# non-zero exit fails the landing with exit 1 and verify.sh's output printed. verify.sh and usage.py are
+# looked for beside this script, then in the land skill's templates under the repository's
+# .agents/skills, ~/.agents/skills and $CLAUDE_CONFIG_DIR/skills (default ~/.claude/skills). The
+# preflight refuses, before main is touched, when the state file is missing or no place holds
+# verify.sh, naming the places.
 #
 # In the package's worktree it stages the tool directory and makes a wip commit when something is
 # staged; a builder that committed everything lands with no wip commit.
@@ -115,6 +124,39 @@ if [ ! -d "$landing_tool" ]; then
 fi
 if [ ! -d "$landing_runs" ]; then
     fail "preflight failed: runs directory not found: $landing_runs"
+fi
+
+landing_script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P) ||
+    fail "preflight failed: cannot resolve the folder of $0"
+
+# Looks for the land skill's template $1 beside this script, then in the land skill's templates
+# wherever the skill is installed: the repository, the user's agent skills, the user's Claude
+# Code skills. Sets landing_found to its path, empty when no place holds it, and landing_places
+# to the places in that order, joined by ", ".
+find_template() {
+    landing_found=''
+    landing_places=''
+    for landing_place in \
+        "$landing_script_dir" \
+        "$landing_root/.agents/skills/land/templates" \
+        "$HOME/.agents/skills/land/templates" \
+        "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/land/templates"; do
+        landing_places=$landing_places${landing_places:+, }$landing_place
+        if [ -z "$landing_found" ] && [ -f "$landing_place/$1" ]; then
+            landing_found=$landing_place/$1
+        fi
+    done
+}
+
+landing_state=$landing_script_dir/orchestrator-state.md
+if [ ! -f "$landing_state" ]; then
+    fail "preflight failed: state file not found: $landing_state"
+fi
+find_template verify.sh
+landing_verify=$landing_found
+if [ -z "$landing_verify" ]; then
+    fail "preflight failed: verify.sh not found beside this script or in the land skill's \
+templates: $landing_places"
 fi
 
 landing_tmp=$(mktemp -d "${TMPDIR:-/tmp}/land.XXXXXX") || fail "preflight failed: could not create a temporary directory"
@@ -303,50 +345,18 @@ fi
 wait_for_index "$landing_root"
 run_step "main git cherry-pick" git cherry-pick -n "main..$landing_pkg-land"
 
-# ADAPT: the dependency install and the verify commands from here to the browser check, in the
-# ledger's order, with each pass rule.
+# ADAPT: the dependency install the verify list needs, and any check beyond the verify list with
+# its pass rule, from here to the verify list's run.
 # A package that changed the lockfile brings a dependency main does not hold yet, so the checks
 # would fail on a missing package rather than on the package's own work.
 if git diff --cached --name-only | grep -qx "$landing_tool_path/package-lock.json"; then
     run_step "main npm ci" sh -c 'cd "$1" && npm ci --silent' sh "$landing_tool"
 fi
 
-(cd "$landing_tool" && npm test -- --reporter=dot) >"$landing_output" 2>&1
-landing_status=$?
-if [ -s "$landing_output" ]; then
-    cat "$landing_output"
-fi
-if [ "$landing_status" -ne 0 ]; then
-    fail "npm test -- --reporter=dot failed" "$landing_status"
-fi
-
-run_step "npm run check" sh -c 'cd "$1" && npm run check' land "$landing_tool"
-run_step "npm run build" sh -c 'cd "$1" && npm run build' land "$landing_tool"
-run_step "npm run format:check" sh -c 'cd "$1" && npm run format:check' land "$landing_tool"
-run_step "npm run lint" sh -c 'cd "$1" && npm run lint' land "$landing_tool"
-
-(cd "$landing_tool" && LC_ALL=C grep -rna --exclude=glyphs.yml '[^ -~]' src tests bin config) >"$landing_output" 2>&1
-landing_status=$?
-case "$landing_status" in
-    1)
-        if [ -s "$landing_output" ]; then
-            cat "$landing_output" >&2
-            fail "ASCII check failed"
-        fi
-        ;;
-    0)
-        cat "$landing_output" >&2
-        fail "ASCII check failed"
-        ;;
-    *)
-        if [ -s "$landing_output" ]; then
-            cat "$landing_output" >&2
-        fi
-        fail "ASCII check failed" "$landing_status"
-        ;;
-esac
-
 run_step "source line counts" sh -c 'cd "$1" && find src tests config bin -type f | xargs wc -l | sort -rn | head -3' land "$landing_tool"
+
+# The ledger's verify list, from the repository root on main as the cherry-pick left it.
+run_step "verify list" sh -c 'sh "$1" "$2" || exit 1' land "$landing_verify" "$landing_state"
 
 if [ "$landing_browser" -eq 1 ]; then
     node -e '
@@ -522,22 +532,12 @@ cat "$landing_tmp/diff-stat.txt"
 printf '%s\n' 'Usage rows:'
 cat "$landing_tmp/usage.txt"
 if [ -n "$landing_session" ]; then
-    # The orchestrator's row, from its own session log between the previous landing and now. The
-    # script is looked for beside this one, then in the land skill's templates wherever the skill
-    # is installed: the repository, the user's agent skills, the user's Claude Code skills.
-    landing_usage_script=''
-    landing_script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
-    for landing_usage_dir in \
-        "$landing_script_dir" \
-        "$landing_root/.agents/skills/land/templates" \
-        "$HOME/.agents/skills/land/templates" \
-        "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/land/templates"; do
-        if [ -f "$landing_usage_dir/usage.py" ]; then
-            landing_usage_script=$landing_usage_dir/usage.py
-            break
-        fi
-    done
-    [ -n "$landing_usage_script" ] || fail "booking usage failed: usage.py not found beside this script or in the land skill's templates"
+    # The orchestrator's row, from its own session log between the previous landing and now,
+    # through usage.py found as find_template looks.
+    find_template usage.py
+    landing_usage_script=$landing_found
+    [ -n "$landing_usage_script" ] || fail "booking usage failed: usage.py not found beside this \
+script or in the land skill's templates: $landing_places"
     landing_now=$(date -Iseconds)
     landing_row=$(python3 "$landing_usage_script" "$landing_session" "$landing_since" "$landing_now") || fail "booking usage failed: usage.py on $landing_session"
     printf 'Orchestrator row (%s to %s): %s\n' "$landing_since" "$landing_now" "$landing_row"

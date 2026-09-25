@@ -15,7 +15,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 ## Steps, in execution order
 
 - ✅ 1 `utils/verify.sh <state file>`: runs a plan's verify list, fails on a test's exit status or on a last line that does not start with `PASS:`, and prints every line it saw; its test plants a red test and expects the runner to fail; `docs/dev/building.md` and `docs/dev/change-standard.md` name it, and every later landing uses it (1 commit)
-- 1a The verify runner moved into the land skill (ruling H): `utils/verify.sh` and its test become `skills/land/templates/verify.sh` and `verify.test.sh`; `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and this plan's verify list name the new path; `land` (Steps 6), `refute` ("What the reviewer runs"), `spec`'s `templates/brief.md` ("Verify before you report") and `plan-orchestration` (where a step's checks run) say a step's verify list runs through the land skill's `templates/verify.sh`; `sh skills/land/templates/verify.test.sh` passes from its new place (1 commit)
+- ✅ 1a The verify runner moved into the land skill (ruling H): `utils/verify.sh` and its test become `skills/land/templates/verify.sh` and `verify.test.sh`; `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and this plan's verify list name the new path; `land` (Steps 6), `refute` ("What the reviewer runs"), `spec`'s `templates/brief.md` ("Verify before you report") and `plan-orchestration` (where a step's checks run) say a step's verify list runs through the land skill's `templates/verify.sh`; `sh skills/land/templates/verify.test.sh` passes from its new place (1 commit)
 - 1c A brief checked against itself before dispatch (ruling J (a)): `spec`'s `templates/brief.md` gains a "Cases" section (every must-pass and must-refuse example the brief lists, in one list), and the builder's first task, stated in the template: turn the cases into the step's tests, run them against the unchanged code, and report any case the brief's rules get wrong before changing code (ruling K: no prototype scripts) and a "Paths this step writes" section (one path per line, a shared document with its line range); a contradiction the builder reports is ruled by the orchestrator, or is a stop when the fix changes the scope; `spec`'s Steps refuse a path shared with the brief of a step in the dispatch block, naming both steps; `refute` checks that every case is a test; `plan-orchestration`'s "Two steps in flight" names the path section and its check; the path check is a script in `spec`'s `templates/` with a test red under each revert (1 commit)
 - ✅ 2 Skill texts, part 1: `skills/plan-orchestration/SKILL.md` and `templates/launch-note.md` text, and the `plan` skill's `SKILL.md` and templates: a stop does not end the loop; one meaning for the dispatch block's `report` field; launch paths absolute; the transcript folder named after `--cwd`; the builder writes only its report into the ledger; the stop kinds for a scope-changing finding and for the closing step's roadmap diff (ruling 3a); the sharper-sentence rule (ruling 3b); the exception round beyond `repair_rounds`; the round cap as a rule of its own (at most `repair_rounds` rounds plus the one exception, which the user's yes does not extend; after the last round a step lands with its small fixes and books the rest as steps) and an Anti-patterns row for offering the user another round; Opus as the default model for the orchestrator and every agent, Fable, Astra and Sol allowed for the orchestrator, Sol for the agents, never Fable or Astra for an agent; `inline` kept as an optional executor; stops raised as plain-text open items, never a question-box tool; every report opens with the position line (the roadmap entry, the plan step n of m, the next step), then the open items; the state template's closed list and the `reviewer_report` field; each skill invoked through the runner every time, after a compaction too, never followed from remembered text; `launch-note.md` says the `--pid` process owns the builder and lives until `end`, and that a new `start` field is optional and written on the page before `launch.sh` sends it; the rule inventories of the skills it changes updated; the layout check, the inventory check and a grep per changed rule pass (1 commit)
 - ✅ 3 Skill texts, part 2: `spec` (a false premise stops only when the plan cannot absorb it, ruling 3c; what clears a step-in-flight block), `refute` (the exception round; the "unless the brief lists them" qualifier; `reviewer_report`; the grammar of its opening line), `land` (a first step, before the wip commit, that stops the step's builder and every reviewer through the runner's stop tool and checks the runner's agent listing, and a shell builder's pid and exit file, naming no vendor; the look as its own step; its steps in execution order; the state a backed-out landing leaves; a landed step found short or wrong finished by a new step on top, a landed commit reverted only on the user's ruling), `plan-help` (its printed sequence), `plan-retro` (ruling 3b), `roadmap` (its steps apply to add, move, done and drop), `ordo-init` (the path exception; "never overwrites"; the build-command exception), `repo-setup` (the commit rule); the rule inventories updated; the same checks as step 2 pass (1 commit)
@@ -463,3 +463,42 @@ verify: 12 commands passed
   and exited 0; `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`; `11-rows.md` holds 61 records, and the 50 rows that differ from ebf3c8c are exactly the 50 `fixed` records; no sentence of a reason cell in lines 50-115 is over 35 words.
 - Booked: the ethics rows of the audit's finding 13 at step 14; the cover letter and blind-review removal against roadmap entry 14 at step 10.
 - Usage, orchestrator from step 6a's landing (1e09d35) to this booking: 35 messages, 33466 output tokens, 61996 cache-write tokens, 7840516 cache-read tokens, 76 fresh input tokens, 38 minutes.
+
+### Step 1a, the verify runner moved into the land skill (landed 2026-09-26)
+
+- Landed: `utils/verify.sh` and `utils/verify.test.sh` are `skills/land/templates/verify.sh` and `verify.test.sh`, unchanged apart from the usage, which names `sh <skills>/land/templates/verify.sh <state file>`. `README.md`, `docs/dev/building.md` and `docs/dev/change-standard.md` name the new paths. The land, refute and plan-orchestration skills, the brief template, the state template and the repo-setup change-standard template say that a step's verify list runs through the land skill's `templates/verify.sh` from the root of the checkout it checks, and that its lines are what a report or a booking quotes; the brief template and the change-standard template give the lookup of `<skills>` (the repository's `.agents/skills`, `~/.agents/skills`, `$CLAUDE_CONFIG_DIR/skills`). The landing script template `skills/land/templates/land.sh` runs the ledger's verify list through `verify.sh` as its check on main and fails the landing with exit 1 when it is red; it finds `verify.sh` and `usage.py` beside itself or by that lookup, and its preflight refuses, before main is touched, a missing state file or a `verify.sh` found nowhere. This ledger's verify list and its "Verification, every step" name the new path.
+- User-visible changes, before and after:
+  - The runner's path: before `sh utils/verify.sh <state file>`; after `sh skills/land/templates/verify.sh <state file>` in this repository, `sh <skills>/land/templates/verify.sh <state file>` elsewhere.
+  - The installed skills: before and after, the installed land skill holds `land.sh`, `land.test.sh` and `usage.py`; it holds `verify.sh` only once a tag holding it is pinned with `utils/pin.sh <tag>`, which is the user's decision.
+  - A ledger that copies the new `land.sh`: before, the template's npm checks and an ASCII check ran from the tool directory; after, the ledger's verify list runs from the repository root, and any other check goes in the `ADAPT` block. A ledger that copied the old template keeps its own copy.
+  - A repository set up by `repo-setup`: its change standard gains the sentence on the verify list and the runner's lookup.
+- Rounds: the first review (2 Spec, 2 Standards, 3 Behaviour findings), repair round 1 (rulings in `agents/briefs/1a-round-1.md`; the path list widened to `land.sh`, `land.test.sh` and `README.md` 146-150), the review over it (1 Spec, 1 Proof, 3 Standards, 2 Behaviour findings), fixed at landing (6): `land.sh` exits 1 when the verify list fails, never with `verify.sh`'s own status, with the case "unusable state file", red when the status is passed on; `land.sh` and `land.test.sh` call the script `verify.sh`, not "the runner"; the clean landing's long call split; the test's head comment no longer names stub package.json scripts; `1a-report.md` states what a ledger copying the new template gets and corrects a line length (`agents/reviews/1a-refuter.md`, Closed).
+- Verified on main with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+  and exited 0.
+- Booked: nothing new.
+- Usage, orchestrator from step 11's landing (617f8f3) to this booking: 38 messages, 34463 output tokens, 76696 cache-write tokens, 11356769 cache-read tokens, 82 fresh input tokens, 58 minutes.

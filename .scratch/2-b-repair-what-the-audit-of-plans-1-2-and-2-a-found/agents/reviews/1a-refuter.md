@@ -120,4 +120,20 @@ ls research-hub/package.json: No such file; research-hub/tools/oculus/package.js
 - Whether main's cherry-pick can overwrite the ledger's `orchestrator-state.md` before land.sh reads it. That would need a step range that touches the state file, which the briefs forbid.
 - The exit-69 path of `verify.sh` under land.sh (argued by reading, not run).
 
-Reviewer usage: not known (reviewer claude:opus, agent acd04c243d444d8b3; no completion notification yet).
+Reviewer usage: 134,695 tokens, 34 tool uses, 833 s (the runner's completion notification; reviewer claude:opus, agent acd04c243d444d8b3).
+
+## Closed
+
+- First review, Spec 1 and 2 (the head-comment line defining `<skills>`; README's test line and bullet order): kept as built, ruling 1 of `agents/briefs/1a-round-1.md`.
+- First review, Standards 1 (`skills/land/SKILL.md:99`, "the runner"): closed in the round; the line names `templates/verify.sh`.
+- First review, Standards 2 (the brief template's expected output): closed in the round; `skills/spec/templates/brief.md:34` states what `verify.sh` prints.
+- First review, Behaviour 1 (the installed skills): closed in the round; the report states the pin is needed.
+- First review, Behaviour 2 (`<skills>` with no resolution): closed in the round; the brief template and the change-standard template give the lookup order.
+- First review, Behaviour 3 (`land.sh` against Steps 6): closed in the round; `land.sh` runs the verify list through `verify.sh`, with cases for green, red, the lookup, not found and no state file.
+- Round, Spec (the preflight refusal of a missing state file beyond the ruling): kept; it has its case and revert.
+- Round, Proof (142 and 144 characters): fixed at landing; the report gives 140 before, and the call is split.
+- Round, Standards 1 ("the runner" for `verify.sh` in `land.sh:9` and `land.test.sh`): fixed at landing; each names `verify.sh`.
+- Round, Standards 2 (`land.test.sh:160` over 100 characters): fixed at landing; split in two lines.
+- Round, Standards 3 (`land.test.sh:15-16`, stub package.json scripts): fixed at landing; the sentence names only the expected rows.
+- Round, Behaviour 1 (a ledger copying the new template): fixed at landing; the report and the booking state the before and after, and that a ledger's verify list runs from the repository root, as `plan` requires of every ledger command.
+- Round, Behaviour 2 (an unusable state file passing the preflight and giving exit 64 after main is touched): fixed at landing; `land.sh` fails the verify list with exit 1, and the case "unusable state file" in `land.test.sh`, with the status passed on, prints `FAIL: unusable state file: exit 64, expected 1`.

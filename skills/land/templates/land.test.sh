@@ -4,12 +4,16 @@
 # runs (the bounded wait, shortened through LANDING_LOCK_WAIT), a stale lock, a lock gone before the
 # bound, a stop at the bound after the worktree's checkout and a rerun that lands, a rerun refused
 # while the landing branch holds a change made by hand or main holds staged changes, a bound that
-# is not a whole number, and a tool directory set on the ADAPT line. Check usage.py on a Claude Code
-# log and a Codex rollout, and its refusal of a window time without an offset or unreadable. Check
-# the example plan.yaml files against the state template: inside an Ordo checkout a missing example
+# is not a whole number, and a tool directory set on the ADAPT line. Each landing starts land.sh
+# from a scratch ledger holding its orchestrator-state.md: a green verify list lands, a red one
+# fails the landing with verify.sh's RED line, a state file verify.sh cannot use fails it with
+# exit 1, verify.sh is found in the repository's
+# .agents/skills when the ledger lacks it, and a verify.sh found nowhere, the places named, or a
+# missing state file is refused before main is touched. Check usage.py on a Claude Code log and a
+# Codex rollout, and its refusal of a window time without an offset or unreadable. Check the
+# example plan.yaml files against the state template: inside an Ordo checkout a missing example
 # fails, and only a copy outside one skips the check.
-# A plan copies this file beside its land.sh; the stub package.json scripts and the expected rows
-# follow the ADAPT edits made there.
+# A plan copies this file beside its land.sh; the expected rows follow the ADAPT edits made there.
 
 set -u
 
@@ -40,6 +44,29 @@ land_script=$script_dir/land.sh
 tool_path=$(sed -n 's/^landing_tool_path=\([^ ]*\).*/\1/p' "$land_script")
 [ -n "$tool_path" ] || fail "could not read landing_tool_path from $land_script"
 
+# Writes a scratch ledger folder $1: a copy of land.sh ($2, the template when not given) with
+# verify.sh and usage.py beside it, as a plan copies them, and an orchestrator-state.md whose
+# verify list is the lines of standard input, each written as a literal block item.
+make_ledger() {
+    mkdir -p "$1" || fail "could not create the ledger $1"
+    cp "${2:-$land_script}" "$1/land.sh" || fail "could not copy land.sh into $1"
+    cp "$script_dir/verify.sh" "$script_dir/usage.py" "$1/" || fail "could not copy into $1"
+    {
+        printf '# State\n\n```yaml\nverify:\n'
+        awk '{ print "- |-"; print "  " $0 }'
+        printf '```\n'
+    } >"$1/orchestrator-state.md" || fail "could not write the state file in $1"
+}
+
+# The ledger most landings use: a summary command, and a command that passes only from the
+# repository root after main's cherry-pick, where the package's committed.txt then is.
+ledger=$test_root/ledger
+make_ledger "$ledger" <<EOF
+printf 'noise\\nPASS: green list\\n' | tail -1
+test -f $tool_path/committed.txt && echo on-main-after-cherry-pick
+EOF
+ledger_script=$ledger/land.sh
+
 write_tool_stub() {
     stub_root=$1
     mkdir -p "$stub_root/$tool_path/src" "$stub_root/$tool_path/tests" "$stub_root/$tool_path/bin" "$stub_root/$tool_path/config"
@@ -52,11 +79,6 @@ write_tool_stub() {
     "name": "landing-test",
     "private": true,
     "scripts": {
-        "test": "echo test-stub",
-        "check": "echo check-stub",
-        "build": "echo build-stub",
-        "format:check": "echo format-stub",
-        "lint": "echo lint-stub",
         "test:browser": "echo browser-stub"
     }
 }
@@ -135,7 +157,8 @@ write_events "$clean_runs"
 
 (
     cd "$clean_repo" || exit 1
-    sh "$land_script" clean "$clean_base" "$clean_runs" --no-browser --session "$clean_runs/session.jsonl" --since 2026-09-16T12:00:00+02:00
+    sh "$ledger_script" clean "$clean_base" "$clean_runs" --no-browser \
+        --session "$clean_runs/session.jsonl" --since 2026-09-16T12:00:00+02:00
 ) >"$test_root/clean.out" 2>&1
 clean_status=$?
 clean_output=$(cat "$test_root/clean.out")
@@ -160,7 +183,15 @@ assert_contains "$clean_output" "Orchestrator row (2026-09-16T12:00:00+02:00 to 
 assert_contains "$clean_output" "): 2 messages, 30 output tokens, 100 cache-write tokens, 3000 cache-read tokens, 8 fresh input tokens, " "orchestrator row"
 assert_contains "$clean_output" "$tool_path/committed.txt" "booking paths"
 assert_contains "$clean_output" "$tool_path/pending.txt" "booking paths"
-printf 'clean: exit 0, staged paths, usage rows and the orchestrator row verified\n'
+# The ledger's verify list ran through verify.sh from the repository root after main's
+# cherry-pick. Red when land.sh does not run the list (no count line), and when it runs the list
+# before main's cherry-pick or from another folder (the test -f command is red, and so is the
+# landing).
+assert_contains "$clean_output" "PASS: green list
+on-main-after-cherry-pick
+verify: 2 commands passed" "the verify list on main"
+printf '%s\n' \
+    'clean: exit 0, staged paths, usage rows, the orchestrator row and the verify list verified'
 
 conflict_repo=$test_root/conflict
 initialise_repo "$conflict_repo"
@@ -193,7 +224,7 @@ mkdir -p "$conflict_runs"
 
 (
     cd "$conflict_repo" || exit 1
-    sh "$land_script" conflict "$conflict_base" "$conflict_runs" --no-browser
+    sh "$ledger_script" conflict "$conflict_base" "$conflict_runs" --no-browser
 ) >"$test_root/conflict.out" 2>&1
 conflict_status=$?
 conflict_output=$(cat "$test_root/conflict.out")
@@ -210,7 +241,7 @@ if [ "$conflict_branch" != "conflict-land" ]; then
 fi
 (
     cd "$conflict_repo" || exit 1
-    sh "$land_script" conflict "$conflict_base" "$conflict_runs" --no-browser
+    sh "$ledger_script" conflict "$conflict_base" "$conflict_runs" --no-browser
 ) >"$test_root/conflict-again.out" 2>&1
 conflict_status=$?
 [ "$conflict_status" -eq 1 ] || fail "conflict landing again exited $conflict_status, expected 1"
@@ -246,7 +277,7 @@ start_landing() {
     shift
     (
         cd "$test_root/$landing_name" || exit 1
-        exec env TMPDIR="$test_root/$landing_name-tmp" "$@" sh "$land_script" "$landing_name" \
+        exec env TMPDIR="$test_root/$landing_name-tmp" "$@" sh "$ledger_script" "$landing_name" \
             "$package_base" "$test_root/$landing_name-runs" --no-browser
     ) >"$test_root/$landing_name.out" 2>&1 &
     landing_pid=$!
@@ -454,10 +485,112 @@ assert_contains "$landing_output" \
     "arguments failed: LANDING_LOCK_WAIT must be a whole number of seconds: 2s" "bad bound message"
 printf 'bad bound: LANDING_LOCK_WAIT=2s refused with exit 64\n'
 
+# The landings below start land.sh from their own ledger, with HOME in the scratch folder so that
+# an installed land skill is never found.
+scratch_home=$test_root/home
+mkdir -p "$scratch_home"
+
+# A red command in the verify list fails the landing after main's cherry-pick with verify.sh's
+# RED line and output, and the commands after it do not run. Red when land.sh ignores
+# verify.sh's exit status.
+committed_package red-list
+printf 'printf "FAIL: planted\\n"\nexit 1\n' >"$test_root/red-list/red.test.sh"
+make_ledger "$test_root/red-list-ledger" <<'EOF'
+printf 'PASS: before the red line\n' | tail -1
+sh red.test.sh 2>&1 | tail -1
+touch after-red
+EOF
+ledger_script=$test_root/red-list-ledger/land.sh
+start_landing red-list HOME="$scratch_home"
+finish_landing red-list 60 "the landing did not end"
+[ "$landing_status" -eq 1 ] || fail "red list: exit $landing_status, expected 1: $landing_output"
+assert_contains "$landing_output" "PASS: before the red line
+RED: sh red.test.sh 2>&1 | tail -1
+exit status: 1
+FAIL: planted" "red list runner output"
+assert_contains "$landing_output" "verify list failed" "red list message"
+[ ! -e "$test_root/red-list/after-red" ] || fail "red list: a command after the red line ran"
+case "$landing_output" in
+    *"=== booking ==="*) fail "red list: the landing went on to the booking" ;;
+esac
+printf 'red list: a red command fails the landing with its RED line, exit 1\n'
+
+# A ledger without verify.sh finds it in the land skill's templates under the repository's
+# .agents/skills. Red when land.sh looks for verify.sh only beside itself.
+committed_package lookup
+printf 'test -f %s/committed.txt\n' "$tool_path" |
+    make_ledger "$test_root/lookup-ledger"
+rm "$test_root/lookup-ledger/verify.sh"
+mkdir -p "$test_root/lookup/.agents/skills/land/templates"
+cp "$script_dir/verify.sh" "$test_root/lookup/.agents/skills/land/templates/verify.sh" ||
+    fail "could not install verify.sh in the lookup repository"
+ledger_script=$test_root/lookup-ledger/land.sh
+start_landing lookup HOME="$scratch_home"
+finish_landing lookup 60 "the landing did not end"
+[ "$landing_status" -eq 0 ] || fail "lookup: exit $landing_status, expected 0: $landing_output"
+assert_contains "$landing_output" "verify: 1 commands passed" "lookup verify list"
+printf "lookup: verify.sh found in the repository's .agents/skills, exit 0\n"
+
+# A verify.sh found in none of the places fails before main is touched, with a message naming
+# every place looked in. Red when the preflight does not look for verify.sh (the landing then
+# stages main before it fails), and when the message leaves out a place.
+committed_package nofind
+printf 'true\n' | make_ledger "$test_root/nofind-ledger"
+rm "$test_root/nofind-ledger/verify.sh"
+ledger_script=$test_root/nofind-ledger/land.sh
+start_landing nofind HOME="$scratch_home" CLAUDE_CONFIG_DIR=
+finish_landing nofind 60 "the landing did not end"
+[ "$landing_status" -eq 1 ] || fail "not found: exit $landing_status, expected 1: $landing_output"
+nofind_places="$test_root/nofind-ledger, $test_root/nofind/.agents/skills/land/templates"
+nofind_places="$nofind_places, $scratch_home/.agents/skills/land/templates"
+nofind_places="$nofind_places, $scratch_home/.claude/skills/land/templates"
+assert_contains "$landing_output" \
+    "preflight failed: verify.sh not found beside this script or in the land skill's templates: \
+$nofind_places" "not found message"
+nofind_staged=$(cd "$test_root/nofind" && git diff --cached --name-only) ||
+    fail "could not read the not-found staged paths"
+[ -z "$nofind_staged" ] || fail "not found: main was touched: [$nofind_staged]"
+printf 'not found: no verify.sh in any place refused before main is touched, exit 1\n'
+
+# A ledger without its state file fails before main is touched. Red when the preflight does not
+# check for the state file (verify.sh then refuses after main's cherry-pick).
+committed_package nostate
+printf 'true\n' | make_ledger "$test_root/nostate-ledger"
+rm "$test_root/nostate-ledger/orchestrator-state.md"
+ledger_script=$test_root/nostate-ledger/land.sh
+start_landing nostate HOME="$scratch_home"
+finish_landing nostate 60 "the landing did not end"
+[ "$landing_status" -eq 1 ] ||
+    fail "no state file: exit $landing_status, expected 1: $landing_output"
+assert_contains "$landing_output" \
+    "preflight failed: state file not found: $test_root/nostate-ledger/orchestrator-state.md" \
+    "no state file message"
+nostate_staged=$(cd "$test_root/nostate" && git diff --cached --name-only) ||
+    fail "could not read the no-state staged paths"
+[ -z "$nostate_staged" ] || fail "no state file: main was touched: [$nostate_staged]"
+printf 'no state file: a ledger without orchestrator-state.md refused before main is touched\n'
+
+# A state file verify.sh cannot use (no yaml block) fails the landing with exit 1, the exit of a
+# failed check, and never with verify.sh's own 64, which land.sh keeps for refusals made before
+# main is touched. Red when land.sh passes verify.sh's exit status on.
+committed_package badstate
+printf 'true\n' | make_ledger "$test_root/badstate-ledger"
+printf '# no yaml block\n' >"$test_root/badstate-ledger/orchestrator-state.md"
+ledger_script=$test_root/badstate-ledger/land.sh
+start_landing badstate HOME="$scratch_home"
+finish_landing badstate 60 "the landing did not end"
+[ "$landing_status" -eq 1 ] ||
+    fail "unusable state file: exit $landing_status, expected 1: $landing_output"
+assert_contains "$landing_output" "has no yaml block" "unusable state file verify.sh output"
+assert_contains "$landing_output" "verify list failed" "unusable state file message"
+printf 'unusable state file: verify.sh refusing the state file fails the landing, exit 1\n'
+ledger_script=$ledger/land.sh
+
 # A plan that points the ADAPT line at another tool directory stages that directory and nothing else.
 adapted_dir=$test_root/adapted-script
-mkdir -p "$adapted_dir"
-sed 's#^landing_tool_path=[^ ]*#landing_tool_path=tools/demo#' "$land_script" >"$adapted_dir/land.sh"
+sed 's#^landing_tool_path=[^ ]*#landing_tool_path=tools/demo#' "$land_script" \
+    >"$test_root/adapted-land.sh" || fail "could not write the adapted land.sh"
+printf 'test -f tools/demo/pending.txt\n' | make_ledger "$adapted_dir" "$test_root/adapted-land.sh"
 tool_path=tools/demo
 adapted_repo=$test_root/adapted
 initialise_repo "$adapted_repo"
