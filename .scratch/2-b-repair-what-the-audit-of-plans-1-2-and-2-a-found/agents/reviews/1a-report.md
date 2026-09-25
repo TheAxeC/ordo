@@ -63,7 +63,7 @@ FAIL: no argument: no usage line: verify: usage: sh utils/verify.sh <state file>
 ## User-visible changes
 
 - The runner's usage message. Before: `verify: usage: sh utils/verify.sh <state file>`. After: `verify: usage: sh <skills>/land/templates/verify.sh <state file>`.
-- The runner's and the test's paths. Before: `utils/verify.sh`, `utils/verify.test.sh`. After: `skills/land/templates/verify.sh`, `skills/land/templates/verify.test.sh`; the pinned skills install them with the land skill.
+- The runner's and the test's paths. Before: `utils/verify.sh`, `utils/verify.test.sh`. After: `skills/land/templates/verify.sh`, `skills/land/templates/verify.test.sh`; the installed skills hold them once a tag holding them is pinned (Repair round 1, "The installed skills").
 - `docs/dev/building.md:22`. Before: "`sh utils/verify.sh <state file>` runs a plan's verify list". After: "`sh skills/land/templates/verify.sh <state file>`, the land skill's runner, runs a plan's verify list".
 - `docs/dev/change-standard.md:56`. Before: "A step's verification runs through `sh utils/verify.sh <state file>`". After: "A step's verification runs through `sh skills/land/templates/verify.sh <state file>`".
 - `skills/land/SKILL.md:55`, new: "The step's verify list runs through this skill's `templates/verify.sh <state file>` from the root of the checkout it checks (main here), and the lines it prints are what the booking quotes." `:99`, new: "`templates/verify.test.sh` proves `templates/verify.sh` on scratch state files, with the runner started under `sh` and, when it is installed, `dash`."
@@ -88,3 +88,65 @@ For `.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-
 
 - Line 13, as `grep -n` prints it: `13:- sh utils/verify.test.sh 2>&1 | tail -1`. Replacement: `- sh skills/land/templates/verify.test.sh 2>&1 | tail -1`
 - Line 84, as `grep -n` prints it: ``84:- The `verify` commands above, from the repository root of the worktree and again on main, from step 2 on through `utils/verify.sh`.`` Replacement: ``- The `verify` commands above, from the repository root of the worktree and again on main, from step 2 on through `sh skills/land/templates/verify.sh <state file>`, and the lines it prints are what a report or a booking quotes.``
+
+## Repair round 1
+
+Every ruling of `agents/briefs/1a-round-1.md` is carried out; rulings 1 and 7 needed no change.
+
+### Result table
+
+All commands run from the worktree root with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+
+| Ruling or check | State | Command and its summary line |
+|---|---|---|
+| 1 (Spec 1, Spec 2) | DONE, no change | Kept as built, as ruled. |
+| 2 (`land/SKILL.md:99`) | DONE | `grep -n 'verify.test.sh' skills/land/SKILL.md` prints `:102: ... proves templates/verify.sh on scratch state files, starting it under sh ...`; the line no longer says "the runner". |
+| 3 (brief template's expected output) | DONE | `sed -n 34p skills/spec/templates/brief.md` prints the item below. |
+| 4 (the lookup order in the two templates) | DONE | `sed -n 34p skills/spec/templates/brief.md` and `sed -n 45p skills/repo-setup/templates/docs/dev/change-standard.md` each name `.agents/skills`, `~/.agents/skills`, `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). |
+| 5 (`land.sh` runs the verify list) | DONE | `sh skills/land/templates/land.test.sh 2>&1 \| tail -1` prints `PASS: land.sh and usage.py scratch tests`; the new cases print `clean: ... and the verify list verified`, `red list: a red command fails the landing with its RED line, exit 1`, `lookup: verify.sh found in the repository's .agents/skills, exit 0`, `not found: no verify.sh in any place refused before main is touched, exit 1`, `no state file: a ledger without orchestrator-state.md refused before main is touched`. |
+| 6 (the installed skills) | DONE | Section "The installed skills" below. |
+| 7 (the builder's two notes) | DONE, no change | As ruled. |
+| Verify list through the runner | DONE | `sh skills/land/templates/verify.sh "$TMPDIR/state-1a.md"` (line 13 replaced by the Doc text): ten `PASS:` lines, ten `ok:` lines, `verify: 12 commands passed`, exit 0. The two `Can't open` lines of the first round no longer appear. |
+| The four cases | DONE | `PASS: verify.sh scratch tests (runner under sh dash)`; `verify: usage: sh <skills>/land/templates/verify.sh <state file>`, exit 64; `grep -rn 'utils/verify' README.md docs skills utils` no output, exit 1; `ls` of the old files `No such file or directory` for both, exit 1. |
+| ASCII, syntax | DONE | `LC_ALL=C grep -n '[^ -~]'` over the six files this round changed prints nothing, exit 1; `sh -n` passes on `land.sh` and `land.test.sh`. No line this round added to either script is over 100 characters; the one long line in the diff is the clean landing's `sh "$ledger_script" clean ...` call, which was 142 characters before and 144 after the rename of `land_script`. |
+
+### The new cases of land.test.sh and their red lines
+
+Before `land.sh` changed, the test with the new cases ran red: `FAIL: the verify list on main: missing [PASS: green list` (exit 1). Each revert below was applied to `land.sh` in a copy of `skills/land/templates` under `$TMPDIR`, and the copy's `land.test.sh` run; the first `FAIL:` line of each:
+
+| Case | Revert | First red line |
+|---|---|---|
+| Clean landing runs the green list | The verify list not run | `FAIL: the verify list on main: missing [PASS: green list` |
+| Clean landing runs the green list from the root after main's cherry-pick | The verify list run before main's cherry-pick | `FAIL: clean landing exited 1, expected 0` |
+| Red list | The runner's exit status ignored (`\|\| true`) | `FAIL: red list: exit 0, expected 1: worktree git commit: nothing staged, no wip commit made` |
+| Lookup in the repository's `.agents/skills` | `verify.sh` looked for only beside the script | `FAIL: lookup: exit 1, expected 0: preflight failed: verify.sh not found beside this script or in the land skill's templates: <scratch>/lookup-ledger` |
+| Not found | No preflight refusal | `FAIL: not found: exit 127, expected 1: worktree git commit: nothing staged, no wip commit made` |
+| Not found | The refusal without the places | `FAIL: not found message: missing [preflight failed: verify.sh not found beside this script or in the land skill's templates: <scratch>/nofind-ledger, <scratch>/nofind/.agents/...` |
+| No state file | No preflight state file check | `FAIL: no state file: exit 64, expected 1: worktree git commit: nothing staged, no wip commit made` |
+
+### Dispositions, file by file
+
+- `skills/land/SKILL.md:102` (ruling 2). Before: "... on scratch state files, with the runner started under `sh` and, when it is installed, `dash`." After: "... on scratch state files, starting it under `sh` and, when it is installed, `dash`."
+- `skills/spec/templates/brief.md:34` (rulings 3 and 4). Before: "... (`sh <skills>/land/templates/verify.sh <state file>`), prints <a line per command and `verify: <n> commands passed`> and exits 0; ...". After: "1. The plan's verify list, run through the `land` skill's `templates/verify.sh` from the root of the checkout it checks as `sh <skills>/land/templates/verify.sh <state file>`, where `<skills>` is the first of the repository's `.agents/skills`, `~/.agents/skills` and `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`) that holds the `land` skill, prints <the `PASS:` line of each command piped into `tail`, the whole output of each other command, then `verify: <n> commands passed`> and exits 0; the lines it prints are what the report quotes."
+- `skills/repo-setup/templates/docs/dev/change-standard.md:45` (ruling 4). Before: "A step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, and ...". After: "A step's verify list runs through the `land` skill's `templates/verify.sh` from the root of the checkout it checks, as `sh <skills>/land/templates/verify.sh <state file>` with `<skills>` the first of the repository's `.agents/skills`, `~/.agents/skills` and `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`) that holds the `land` skill, and the lines it prints are what a report or a booking quotes, never a count."
+- `skills/land/templates/land.sh` (ruling 5, 549 lines, 549 before).
+  - The head comment names the `ADAPT` edits as "the dependency install and any check beyond the verify list with their pass rules" (before: "the check commands and their pass rules"), and a new paragraph says the check on main is the ledger's verify list, where `verify.sh` and `usage.py` are looked for, and what the preflight refuses.
+  - Preflight, before main is touched: `find_template` looks for a template beside the script, then in `<repository>/.agents/skills/land/templates`, `~/.agents/skills/land/templates` and `${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/land/templates`. The state file is `orchestrator-state.md` beside the script. New refusals: `preflight failed: state file not found: <path>`, and `preflight failed: verify.sh not found beside this script or in the land skill's templates: <the four places, joined by ", ">`, each exit 1.
+  - After main's cherry-pick: the `ADAPT` block holds the dependency install (`npm ci` when the lockfile changed) and the source line counts, and says any check beyond the verify list goes there. Then `run_step "verify list" sh "$landing_verify" "$landing_state"` runs from the repository root; a non-zero exit prints the output of `verify.sh` and `verify list failed`, and exits with its status. Before: `npm test`, `npm run check`, `npm run build`, `npm run format:check`, `npm run lint` and an ASCII check over the tool directory, hard-coded; they are gone, since the verify list carries a plan's checks.
+  - The booking's `usage.py` lookup uses `find_template`. Before, when no place held it: `booking usage failed: usage.py not found beside this script or in the land skill's templates`. After, the same message followed by `: <the four places>`.
+- `skills/land/templates/land.test.sh` (ruling 5, 749 lines, 632 before). `make_ledger` writes a scratch ledger (a copy of `land.sh`, `verify.sh` and `usage.py` from the templates folder, and an `orchestrator-state.md` with the given verify list); every landing starts `land.sh` from a ledger. The four new cases above were added, and the clean landing asserts the verify list's output. The stub `package.json` keeps only `test:browser`, since `land.sh` no longer runs the other five scripts. The head comment names the new cases.
+- `skills/land/SKILL.md`, "The landing script" (ruling 5, 135 lines). Three new bullets: the check on main is the ledger's verify list run through `verify.sh` from the repository root after main's cherry-pick, and a non-zero exit fails the landing; where `verify.sh` and `usage.py` are found, and the refusals before main is touched; the `ADAPT` block holds the dependency install and any check beyond the verify list. The `land.test.sh` bullet names the verify list run and the lookup of `verify.sh`. The usage-row bullet no longer repeats where `usage.py` is found.
+- `README.md:148` and `:150` (ruling 5, 175 lines). `:148` before: "... the dependency install and verify commands with their pass rules, ...". After: "... the dependency install and any check beyond the verify list with their pass rules, ... Its check on `main` is the ledger's verify list: after the cherry-pick onto `main` it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root, and a non-zero exit fails the landing with the output of `verify.sh` printed." `:150` before: "`land.sh` finds `usage.py` beside itself, then ...". After: "`land.sh` finds `verify.sh` and `usage.py` beside itself, then ... A missing state file, or a `verify.sh` in none of those places, is refused before `main` is touched, with the places named." The `land.test.sh` bullet at `:117` gains one sentence naming the new cases.
+
+### The installed skills
+
+The installed skill folders get `templates/verify.sh` only when a tag that holds it is pinned with `utils/pin.sh <tag>`, which links every skill from the pinned worktree `~/.local/share/ordo-stable` (`utils/pin.sh` head comment, `README.md` "Working on Ordo"). Pinning is the user's decision.
+
+- Before: the installed land skill holds no runner. The refuter's `ls /Users/axelfaes/.claude-work/skills/land/templates/` printed `land.sh land.test.sh usage.py`, linked into the pinned worktree at v1.0.0. I did not rerun it: the round forbids touching the installed skill folders, so the listing is not verified by me.
+- After, once a tag holding this step is pinned: the installed land skill's `templates/` holds `verify.sh` and `verify.test.sh`, so `sh <skills>/land/templates/verify.sh <state file>` and a ledger `land.sh` without its own copy of `verify.sh` find it there. Until then, another repository runs the command only with the runner copied or with `<skills>` pointing at a checkout that holds it, and a ledger's `land.sh` needs `verify.sh` beside it.
+
+### Judgment calls of this round
+
+- The state file `land.sh` reads is the `orchestrator-state.md` in its own folder, since a plan copies `land.sh` into the ledger folder that holds the state file (`README.md:148`); no new argument or `ADAPT` line.
+- The preflight also refuses a missing state file before main is touched, so that a ledger without its state file never leaves main staged; the case and its revert are in the table above.
+- The source line counts stay inside the `ADAPT` region, before the verify list's run; the browser check stays after it, outside that region, where it was.
