@@ -49,7 +49,7 @@ dispatch:
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/1c-report.md
   landing: not-started
-  round: 1, sent to the builder with agents/briefs/1c-round-1.md (8 rulings); round start: worktree commit 1c09e70; paths: the brief's list plus skills/plan-help/SKILL.md; builder reported the round done; reviewer over the round: claude:opus, through /refute, running
+  round: 1, sent to the builder with agents/briefs/1c-round-1.md (8 rulings); round start: worktree commit 1c09e70; paths: the brief's list plus skills/plan-help/SKILL.md; builder reported the round done (257,183 tokens, 38 tool uses, 833 s); reviewer over the round: claude:opus, through /refute, agent abf2fdcc9648dc245, running
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
