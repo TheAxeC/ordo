@@ -66,13 +66,13 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a660463bbd3208eb9 (the runner's agent id)
   builder_usage: 133,678 tokens, 31 tool uses, 606 s (the runner's completion notification)
-  reviewer_report: agents/reviews/5-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent a1c8d8a8f85d6af3f)
+  reviewer_report: agents/reviews/5-refuter.md (through /refute; reviewer claude:opus, agent a1c8d8a8f85d6af3f; 126,518 tokens, 28 tool uses, 433 s)
   worktree: .agents/worktrees/2b-5
   base: 25d99c9
   launched: 2026-09-25
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/5-report.md
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-25: the findings of 5-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit dfa1f83 on branch 2b-5)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
