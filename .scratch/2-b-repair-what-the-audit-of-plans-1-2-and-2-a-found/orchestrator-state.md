@@ -88,7 +88,7 @@ dispatch:
 - Step 4: the process in `launch.sh`'s pid file owns the builder's whole session (the builder started in a session or process group of its own), so the TERM, grace, KILL that `land`'s Steps 1 sends ends the builder and the exit file is still written; `launch.test.sh` runs that sequence (found by step 3's last review, Behaviour 1: today TERM ends only the wrapper shell and the builder keeps running).
 - Step 4: `plan-orchestration`'s resumption list gains the case of a dispatch block at `landing: backed-out` (the step taken back out of main by a red line: its worktree and branch kept, the step unticked, the failure booked), which step 3 defines in `land` (brief 3, decision 1).
 - Step 6a: `collect_findings.py` keeps every finding; its word lists and their tests go; `plan-retro` sets aside, by reading, what reports no defect (`plan.md`, step 6a). The worktree `.agents/worktrees/2b-6a` holds the word-list version from its first build and round 1; it is rebriefed to the cut before it lands.
-- Step 1c (ruling J (a)): the brief template's "Cases", "Decisions checked against the cases" and "Paths this step writes" sections, their checks in `spec` and `refute`, and the path check script with its test (`plan.md`, step 1c).
+- Step 1c (rulings J (a) and K): the brief template's "Cases" and "Paths this step writes" sections, the builder's first task of running the cases as tests before changing code, the checks in `spec` and `refute`, and the path check script with its test (`plan.md`, step 1c).
 
 ## Closed items
 
