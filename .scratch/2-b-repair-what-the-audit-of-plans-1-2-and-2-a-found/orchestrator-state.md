@@ -64,7 +64,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- L (step 11, raised 2026-09-25): the coverage row of `academic-paper/agents/intake_agent.md` drops style calibration with no reason (audit `4-coverage-and-roadmap.md`, finding 11). Intake Step 10 learns the author's voice from three or more of the author's past papers, as a soft guide under the discipline's conventions. Whether the paper skill does this is a capability of the skill you will use, which no rule of the coverage list decides. Options: (a) the paper skill (entry 5) learns the voice from past papers, subordinate to the prose standard; the row names it. Pro: nothing of the source is lost, and a series of ML papers keeps one voice. Con: entry 5 grows, and a voice learned from older papers can carry what the prose standard forbids. (b) drop, with the reason that the writing skill's prose standard sets the voice. Pro: one source of style, the written standard. Con: the voice of your past papers is not learned; this is also the option that costs least. (c) `rebuild later: paper`, built after entry 5's gate. Pro: nothing lost, entry 5 unchanged. Con: the row's other content is `rebuild: paper`, so the clause needs its own row or a split mark the list does not have. Recommendation: (a), because the prose standard stays the rule and past papers only tune what it leaves open (terms, section habits), so nothing is lost and nothing the standard forbids comes in.
 
 ## Booked, no ruling needed
 

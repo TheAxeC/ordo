@@ -80,6 +80,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 ## Blocked, and by what
 
+- 11: the clause on style calibration in the `intake_agent.md` row waits on open item L; the rest of step 11 runs.
 - 16: the user's ruling on each retro proposal, raised when the step runs.
 - 7: step 4 landed. The oculus session's fixes to its launch-note setup are in research-hub's commit 409de414 (the execute bit, `git ls-files -s` shows 100755; the absolute `launch_note` path; `LOCK_WAIT_MS = 2000`).
 
