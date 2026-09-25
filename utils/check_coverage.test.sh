@@ -1,6 +1,11 @@
 #!/bin/sh
 # Exercise check_coverage.py in a scratch git repository: a complete coverage list passes, and each
-# error it exists to catch fails with its message, one change per case.
+# error it exists to catch fails with its message, one change per case. Beyond the list's own
+# errors, the cases cover: a done lettered roadmap entry in both forms (done-lettered); lines split
+# on "\n" only, in the roadmap (roadmap-separators), in the list (separator-names) and in find's
+# output, read NUL-separated (separator-names, newline-name); file names compared in NFC
+# (nfc-names); a last cell ending in \| with no closing pipe (escaped-last-cell); the sorted
+# output (order); a find that fails (find-fails); and the --built mode (the built-* cases).
 
 set -u
 
@@ -10,13 +15,16 @@ fail() {
 }
 
 test_root=$(mktemp -d "${TMPDIR:-/tmp}/check-coverage-test.XXXXXX") || fail "could not create scratch directory"
-trap 'rm -rf "$test_root"' 0 1 2 3 15
+trap 'chmod -R u+rwx "$test_root" 2>/dev/null; rm -rf "$test_root"' 0 1 2 3 15
 script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
 check=$script_dir/check_coverage.py
 
 repo=$test_root/repo
 root=$test_root/skills
 mkdir -p "$repo/docs" "$root/alpha/references/deep" "$root/beta" "$root/gamma" "$root/empty" "$test_root/real/beta"
+mkdir -p "$root/sep" "$root/nl" "$root/nfd"
+mkdir -p "$repo/skills/paper/templates" "$repo/skills/writing"
+mkdir -p "$repo/skills/layout" "$repo/skills/extra"
 git -C "$repo" init -q
 
 cat >"$repo/docs/roadmap.md" <<'MD'
@@ -35,7 +43,11 @@ cat >"$repo/docs/roadmap.md" <<'MD'
 # Done
 
 - [x] 1. One layout for every skill: the gate printed ok.
+- [x] 4.C. A done lettered entry, as the roadmap writes one.
+- [x] 7.D A done lettered entry without the dot after its letter.
 MD
+printf '## 30. A line separator\342\200\250- [x] 31. inside a heading\n' >>"$repo/docs/roadmap.md"
+printf '## 33. A next-line character\302\205- [x] 32. inside a heading\n' >>"$repo/docs/roadmap.md"
 
 printf 'skill\n' >"$root/alpha/SKILL.md"
 printf 'ref\n' >"$root/alpha/references/deep/guide.md"
@@ -48,6 +60,20 @@ ln -s ../real/beta "$root/linked"
 mkdir -p "$root/nested"
 printf 'skill\n' >"$root/nested/SKILL.md"
 ln -s ../../real/beta "$root/nested/sub"
+: >"$root/sep/$(printf 'a\342\200\250b.md')"
+: >"$root/sep/$(printf 'c\302\205d.md')"
+nl_name=$(printf 'a\nb.md')
+: >"$root/nl/$nl_name"
+: >"$root/nfd/$(printf 'cafe\314\201.md')"
+: >"$root/nfd/$(printf 'th\303\251.md')"
+printf 'skill\n' >"$repo/skills/paper/SKILL.md"
+printf 'tex\n' >"$repo/skills/paper/templates/venue.tex"
+printf 'skill\n' >"$repo/skills/writing/SKILL.md"
+printf 'skill\n' >"$repo/skills/layout/SKILL.md"
+printf 'skill\n' >"$repo/skills/extra/SKILL.md"
+printf 'outside\n' >"$test_root/outside.txt"
+ln -s "$test_root/outside.txt" "$repo/skills/paper/linked.md"
+: >"$repo/skills/paper/$(printf 'caf\303\251.md')"
 
 # The complete list. gamma's section is malformed on purpose: gamma is not named on the command line
 # in the cases below, so its section is not read (the control naming it is the case "gamma-named").
@@ -96,9 +122,9 @@ run() {
     shift
     python3 - "$test_root/base.md" "$repo/docs/$name.md" "$test_root/edit.py" <<'PY' || fail "$name: edit failed"
 import sys
-s = open(sys.argv[1]).read()
-exec(open(sys.argv[3]).read())
-open(sys.argv[2], "w").write(s)
+s = open(sys.argv[1], encoding="utf-8").read()
+exec(open(sys.argv[3], encoding="utf-8").read())
+open(sys.argv[2], "w", encoding="utf-8").write(s)
 PY
     direct "$repo/docs/$name.md" "$root" "$@"
 }
@@ -111,10 +137,11 @@ direct() {
     [ "$(snapshot)" = "$before" ] || fail "$name: the check changed something under the scratch folder"
 }
 
-# Every entry under the scratch folder with its type, and every regular file with its checksum.
+# Every entry under the scratch folder with its type, and every regular file with its checksum. A
+# folder the case locks is listed but not read, so find's complaint about it is discarded.
 snapshot() {
-    find "$test_root" ! -name edit.py -exec ls -ld {} + | awk '{print $1, $NF}' | sort
-    find "$test_root" -type f ! -name edit.py -exec cksum {} + | sort
+    find "$test_root" ! -name edit.py -exec ls -ld {} + 2>/dev/null | awk '{print $1, $NF}' | sort
+    find "$test_root" -type f ! -name edit.py -exec cksum {} + 2>/dev/null | sort
 }
 
 edit() {
@@ -149,7 +176,8 @@ run repeated-skill alpha beta alpha
 expect_error ":0: 'alpha/.gitkeep' is not listed"
 [ "$(printf '%s\n' "$output" | grep -c "is not listed")" -eq 1 ] || fail "$name: the error is printed more than once: $output"
 
-# A lettered entry as the roadmap writes it passes; the dotted form the roadmap does not use fails.
+# A lettered heading as the roadmap writes it passes; a heading with a dot after its letter, a form
+# the roadmap does not use for headings, fails.
 edit 's = s.replace("| layout | 1 |", "| layout | 1 |\n| launch | 2.A |")'
 run lettered alpha
 expect_ok
@@ -157,6 +185,67 @@ expect_ok
 edit 's = s.replace("| layout | 1 |", "| layout | 1 |\n| dotted | 6.B |")'
 run lettered-dotted alpha
 expect_error ":12: roadmap entry '6.B' of 'dotted' is not in docs/roadmap.md"
+
+# A done lettered entry passes in both forms: "- [x] 4.C. ", as the roadmap writes it, and
+# "- [x] 7.D ".
+edit 's = s.replace("| layout | 1 |",
+                   "| layout | 1 |\n| done-dotted | 4.C |\n| done-plain | 7.D |")'
+run done-lettered alpha
+expect_ok
+
+# A line separator (U+2028) or a next-line character (U+0085) inside a roadmap line starts no line:
+# the Done text after it is no entry, and the heading before it is one.
+edit 's = s.replace("| layout | 1 |", "| layout | 1 |\n| heading-a | 30 |\n| inside-a | 31 |\n"
+                   "| heading-b | 33 |\n| inside-b | 32 |")'
+run roadmap-separators alpha
+expect_error ":13: roadmap entry '31' of 'inside-a' is not in docs/roadmap.md"
+expect_error ":15: roadmap entry '32' of 'inside-b' is not in docs/roadmap.md"
+case $output in
+    *"'30'"*|*"'33'"*) fail "$name: a heading holding a separator is not an entry: $output" ;;
+esac
+
+# A last cell ending in \| with no closing pipe keeps its escaped pipe.
+edit 's = s.replace("| layout | 1 |", "| layout | 1 |\n| piped | 3\\|")'
+run escaped-last-cell alpha
+expect_error ":12: roadmap entry '3|' of 'piped' is not in docs/roadmap.md"
+
+# A file name holding U+2028 or U+0085 is one name, in find's output and in the list.
+edit 's = s + ("\n## sep\n\n| File | Mark | Reason |\n|---|---|---|\n"
+             "| `a\u2028b.md` | drop | A line separator in the name. |\n"
+             "| `c\u0085d.md` | drop | A next-line character in the name. |\n")'
+run separator-names sep
+expect_ok
+
+# A file name holding a newline is one name: find's output is read NUL-separated.
+edit 's = s + "\n## nl\n\n| File | Mark | Reason |\n|---|---|---|\n"'
+run newline-name nl
+expect_error ":0: 'nl/$nl_name' is not listed"
+[ "$(printf '%s\n' "$output" | grep -c "is not listed")" -eq 1 ] ||
+    fail "$name: one file read as more: $output"
+
+# File names are compared in NFC: a name stored decomposed and listed composed, and one stored
+# composed and listed decomposed, both match.
+edit 's = s + ("\n## nfd\n\n| File | Mark | Reason |\n|---|---|---|\n"
+             "| `caf\u00e9.md` | drop | Stored decomposed, listed composed. |\n"
+             "| `the\u0301.md` | drop | Stored composed, listed decomposed. |\n")'
+run nfc-names nfd
+expect_ok
+
+# Errors print sorted by line number, then by message.
+edit 's = s.replace("| writing | 3 |", "| writing | 99 |")
+s = s.replace("| `.gitkeep` | drop | An empty placeholder. |\n", "")
+s = s.replace("| rebuild: paper |", "| rebuild:paper |")
+s = s + "\n## nested\n\n| File | Mark | Reason |\n|---|---|---|\n"'
+run order nested alpha
+expected=$(printf '%s\n' \
+    "$repo/docs/order.md:0: 'alpha/.gitkeep' is not listed" \
+    "$repo/docs/order.md:0: 'nested/SKILL.md' is not listed" \
+    "$repo/docs/order.md:0: 'nested/sub' is a link; its target is not listed or read" \
+    "$repo/docs/order.md:9: roadmap entry '99' of 'writing' is not in docs/roadmap.md" \
+    "$repo/docs/order.md:21: the mark 'rebuild:paper' is not 'rebuild: <skill>'"\
+", 'rebuild later: <skill>' or 'drop'")
+[ "$status" -eq 1 ] || fail "$name: expected exit 1, got $status: $output"
+[ "$output" = "$expected" ] || fail "$name: expected, in this order: $expected; got: $output"
 
 # An empty table fails for a folder with files, and passes for a folder with none.
 edit 'i = s.index("| `SKILL.md` | rebuild: paper"); j = s.index("## beta\n\n|"); s = s[:i] + "\n" + s[j:]'
@@ -353,6 +442,109 @@ edit 'i = s.index("## beta\n\n|"); j = s.index("## gamma"); s = s[:i] + s[j:]'
 run fenced-heading beta
 expect_error ":0: no '## beta' section"
 
+# --built <skill>: each row marked "rebuild: <skill>" names in backticks a file of skills/<skill>/
+# of the list's repository, as a repository path. It passes beside a file of the source skill.
+edit 's = s.replace("a pipe \\| inside a reason.",
+                   "held by `skills/paper/templates/venue.tex`, from `SKILL.md` and `paper`.")'
+run built-named --built paper alpha
+expect_ok
+
+# A reason that names no path fails; beta's row, marked for a skill not given to --built, is not
+# read.
+edit 's = s'
+run built-none --built paper alpha beta
+expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+" in backticks"
+case $output in
+    *":29:"*) fail "$name: a row of a skill not given to --built was read: $output" ;;
+esac
+
+# A path relative to the skill folder is a path of the source skill, even when skills/paper holds
+# a file of the same name: only a path that starts skills/paper/ counts.
+edit 's = s.replace("a pipe \\| inside a reason.", "held by `SKILL.md` and `templates/venue.tex`.")'
+run built-source-only --built paper alpha
+expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+" in backticks"
+
+# The control: --built repeated reads layout's row as well, and a skill given twice is read once.
+edit 's = s'
+run built-repeated --built paper --built layout --built paper alpha beta
+expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"
+expect_error ":29: the reason of 'SKILL.md' (rebuild: layout) names no file of skills/layout/"
+[ "$(printf '%s\n' "$output" | grep -c ":21:")" -eq 1 ] ||
+    fail "$name: the error is printed more than once: $output"
+
+edit 's = s.replace("a pipe \\| inside a reason.",
+                   "held by `skills/paper/templates/gone.tex` or `skills/paper/SKILL.md.bak`.")'
+run built-missing --built paper alpha
+expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+" that exists: skills/paper/templates/gone.tex, skills/paper/SKILL.md.bak"
+
+# The named path is compared with the listing of skills/paper/'s files, as file cells are: a path
+# not in normal form, the folder itself, a folder in it, a case variant of a file, and a link out
+# of the repository are not files of it, although each reaches something on disk.
+for span in skills/paper/../paper/SKILL.md skills/paper/./SKILL.md skills/paper/. skills/paper/ \
+        skills/paper/templates skills/paper/Templates/VENUE.tex skills/paper/linked.md; do
+    edit "s = s.replace(\"a pipe \\\\| inside a reason.\", \"held by \`$span\`.\")"
+    run built-not-a-file --built paper alpha
+    name="built-not-a-file [$span]"
+    expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+" that exists: $span"
+done
+
+# The named path is compared in NFC: a file stored composed passes when the reason spells it
+# decomposed.
+edit 's = s.replace("a pipe \\| inside a reason.", "held by `skills/paper/cafe\u0301.md`.")'
+run built-nfc --built paper alpha
+expect_ok
+
+# A "rebuild later" row is not read, so --built writing finds no row to check, which is an error;
+# the control marks the same row "rebuild: writing".
+edit 's = s'
+run built-later --built writing alpha
+expect_error ":0: --built names 'writing', but no row of the sections read is marked"\
+" 'rebuild: writing'"
+case $output in
+    *":22:"*) fail "$name: a rebuild later row was read: $output" ;;
+esac
+
+edit 's = s.replace("| rebuild later: writing |", "| rebuild: writing |")'
+run built-later-control --built writing alpha
+expect_error ":22: the reason of 'references/deep/guide.md' (rebuild: writing)"\
+" names no file of skills/writing/ in backticks"
+case $output in
+    *"no row of the sections read"*) fail "$name: the row was not counted: $output" ;;
+esac
+
+# A --built skill whose rows are all in sections not named on the command line: no row to check.
+edit 's = s'
+run built-no-row --built paper beta
+expect_error ":0: --built names 'paper', but no row of the sections read is marked 'rebuild: paper'"
+
+edit 's = s'
+run built-not-new --built extra alpha
+expect_error ":0: --built names 'extra', which is not a row of New skills"
+
+# --built usage errors exit 2: no skill after it, a name that is empty, "." or "..", or holds "/",
+# and a skill with no folder under skills/.
+edit 's = s'
+run built-no-value alpha --built
+[ "$status" -eq 2 ] || fail "$name: expected exit 2, got $status: $output"
+case $output in *"--built needs a skill"*) ;; *) fail "$name: got: $output" ;; esac
+
+for bad in "" . .. paper/templates; do
+    run built-bad-name --built "$bad" alpha
+    [ "$status" -eq 2 ] || fail "$name [$bad]: expected exit 2, got $status: $output"
+    case $output in
+        *"--built '$bad': not a skill name"*) ;;
+        *) fail "$name [$bad]: got: $output" ;;
+    esac
+done
+
+run built-no-folder --built grant alpha
+[ "$status" -eq 2 ] || fail "$name: expected exit 2, got $status: $output"
+case $output in *"skills/grant: not a folder"*) ;; *) fail "$name: got: $output" ;; esac
+
 # Usage errors exit 2.
 edit 's = s'
 run usage-no-skill
@@ -392,5 +584,14 @@ name=outside-repo
 direct "$test_root/outside.md" "$root" alpha
 [ "$status" -eq 2 ] || fail "outside-repo: expected exit 2, got $status: $output"
 case $output in *"not inside a git repository"*) ;; *) fail "outside-repo: got: $output" ;; esac
+
+# A find that fails is a usage error, exit 2.
+mkdir -p "$root/locked/sub"
+chmod 000 "$root/locked/sub"
+name=find-fails
+direct "$repo/docs/complete.md" "$root" locked
+chmod 755 "$root/locked/sub"
+[ "$status" -eq 2 ] || fail "find-fails: expected exit 2, got $status: $output"
+case $output in *"locked: find failed"*) ;; *) fail "find-fails: got: $output" ;; esac
 
 printf 'PASS: check_coverage.py scratch tests\n'

@@ -24,9 +24,9 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 6 `skills/plan-retro/templates/collect_findings.py` and its test: numbered findings and the subheadings inside a repair round read; Verification, Not checked, Closed and Usage skipped; `--exclude-listed` compared by real path; its test runs on fixtures shaped like the archived reports, and its count over the three archived plans matches a hand count written in the report (1 commit)
 - 6a `skills/plan-retro/templates/collect_findings.py` and its test, from the review over step 6's round 1 (`agents/reviews/6-refuter.md`, Closed): "nothing", "no finding" and "no defect" count as the no-finding form only as the item's whole first sentence, "none" staying as ruled; an item is a closure only when it says the closure holds, so "closed in part only", "claimed closed: ... is not" and "Closed? No" stay findings; a fixture with two heading suffixes; tests for `.` as a plan, a name without `-refuter.md` and an empty step in `--exclude-listed`; each red under its revert; the collector's count over `.scratch/archive` and the hand counts of step 6 given again, with the complete list of archived items that report no defect (1 commit)
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
-- 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
+- ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
-- 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode; entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note (1 commit; orchestrator, no agent)
+- 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note (1 commit; orchestrator, no agent)
 - 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
 - 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
 - 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
@@ -262,3 +262,42 @@ verify: 12 commands passed
 
   and exited 0.
 - Usage, orchestrator from step 5's landing (e69b588) to this booking: 83 messages, 75259 output tokens, 217318 cache-write tokens, 49232763 cache-read tokens, 184 fresh input tokens, 63 minutes. The window also holds step 8's round and the answers to the user's questions on cathedra's estimate and the roadmap's run time.
+
+### Step 8, the coverage check (landed 2026-09-25)
+
+- Landed: `utils/check_coverage.py` accepts a done lettered roadmap entry written `- [x] <n>.<letter>. `, splits the list, the roadmap and `find`'s output on newlines only (`find -print0`), and compares file names in NFC. The new option `--built <skill>`, repeatable, fails a row marked `rebuild: <skill>` whose reason names no path `skills/<skill>/...` in backticks that is a file of the folder's `find -type f` listing, and fails a `--built` skill with no such row. `utils/check_coverage.test.sh` covers each case, the three behaviours that had no test, and the usage errors. `docs/academic-coverage.md` (lines 1-30) says what the reason of a built row names and shows the `--built` command and what a pass does not prove; `README.md` says what the test covers.
+- User-visible changes, before and after:
+  - A New skills row naming a done lettered entry (`- [x] 2.A. `): before, "not in docs/roadmap.md"; after, accepted.
+  - A file name holding U+2028 or U+0085: before, two names; after, one.
+  - A file stored in NFD and listed in NFC: before, "not listed" and "not a file"; after, matched.
+  - `--built <skill>`: new; before, no check of built rows.
+- Rounds: the first review (7 findings), repair round 1 (5 rulings), the review over it; its findings fixed at landing (2) or carried into step 10 (the gates of entries 4, 8, 11 and 12 leave `--built` out; each gate that uses it also needs a checked record per built row). The landing fixes were read by a fresh reviewer (`agents/reviews/8-landing-review.md`) and its findings fixed at landing (8). The builder's Doc text for `README.md:126` was applied at landing.
+- Verified on main with `sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+  and exited 0; `python3 -B utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`.
+- Usage, orchestrator from step 6's landing (e9633bd) to this booking: 57 messages, 49938 output tokens, 105681 cache-write tokens, 11615352 cache-read tokens, 122 fresh input tokens, 27 minutes. The window also holds step 4's review and round, step 9's brief and dispatch, and ruling J.
+

@@ -124,3 +124,122 @@ none
 - Reverts R2d, R4e, R4f, R4h and R4i of the builder's list were not rerun (16 reverts were reproduced, including one of my own).
 
 Reviewer usage: 136,212 tokens, 34 tool uses, 539 s (the runner's completion notification).
+
+## Repair round 1, refuted
+
+```
+$ sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit 0
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ python3 -B utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research; echo "exit $?"
+ok: docs/academic-coverage.md
+exit 0
+$ git status --short
+ M .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/8-report.md
+ M docs/academic-coverage.md
+ M utils/check_coverage.py
+ M utils/check_coverage.test.sh
+$ git diff -U0 f052f57 -- docs/academic-coverage.md | grep '^@@'
+@@ -14 +14 @@ The marks:
+@@ -25,0 +26,6 @@ python3 utils/check_coverage.py ...      (within lines 1-30; `## New skills` is now line 32)
+$ wc -l utils/check_coverage.py utils/check_coverage.test.sh docs/academic-coverage.md
+     374 utils/check_coverage.py
+     597 utils/check_coverage.test.sh
+     237 docs/academic-coverage.md          (as the report says)
+$ LC_ALL=C grep -n '[^ -~]' utils/check_coverage.py utils/check_coverage.test.sh docs/academic-coverage.md <ledger>/agents/reviews/8-report.md; echo $?
+1                                        (nothing printed; the NFD span is written with an escape inside the Python edit)
+$ git diff -U0 879a4f0 -- utils | grep '^+' | grep -v '^+++' | awk 'length($0) > 101'
+(nothing)
+$ grep -rn -e '--built' README.md docs skills utils | grep -v '^utils/check_coverage'
+docs/academic-coverage.md:26, docs/academic-coverage.md:29 only (as the report says)
+$ grep -rn 'rebuild:' README.md docs skills utils (table rows and utils/check_coverage* excluded)
+docs/academic-coverage.md:14, :26, docs/roadmap.md:121; each still true
+Main checkout state file, open items: "- none." (the report's quote matches)
+
+Round-start checker (git show 879a4f0:utils/check_coverage.py) with the new test, fail() non-fatal, red cases:
+built-later, built-later-control, built-missing, built-nfc, built-no-row, built-none,
+built-not-a-file x7 (../paper/SKILL.md, ., ./SKILL.md, "", linked.md, templates, Templates/VENUE.tex),
+built-repeated, built-source-only          (matches the report; built-named passes there, as stated)
+
+Reverts on copies under $TMPDIR (worktree untouched), each `sh check_coverage.test.sh`:
+Ruling 1, spans not required to start skills/<skill>/ (a relative span prefixed):
+  exit 1: FAIL: built-source-only: expected exit 1, got 0: ok: .../built-source-only.md
+Ruling 2, lookup through os.path.exists on skills/<skill>/ instead of the find listing:
+  exit 1: FAIL: built-not-a-file [skills/paper/../paper/SKILL.md]: expected exit 1, got 0
+  red with fail() non-fatal: all seven built-not-a-file spans
+Ruling 2, lookup case-folded:
+  exit 1: FAIL: built-not-a-file [skills/paper/Templates/VENUE.tex]: expected exit 1, got 0
+Ruling 3, no-row error removed (`if not count` -> `if False`):
+  exit 1: FAIL: built-later: expected exit 1, got 0: ok: .../built-later.md
+Ruling 3, rebuild later rows counted as rows of the --built skill:
+  exit 1: FAIL: built-later: expected exit 1, got 0: ok: .../built-later.md
+
+--built over the current list:
+$ python3 -B utils/check_coverage.py --built paper docs/academic-coverage.md <hub> <four skills>; echo $?
+usage error: .../2b-8/skills/paper: not a folder
+2
+Per-skill `rebuild:` / `rebuild later:` row counts in docs/academic-coverage.md (grep -c):
+writing 3/0, code-comments 0/0, paper 30/11, paper-review 21/3, rebuttal 7/0, grant 0/0,
+literature 19/6, idea 3/0, scaffold 0/0, project-docs 0/0, researcher 6/1, submit-manuscript 1/0,
+submit-grant 0/0
+Scratch git repo with a copy of the list and roadmap and skills/<s>/SKILL.md for each s:
+code-comments: docs/academic-coverage.md:0: --built names 'code-comments', but no row of the sections read is marked 'rebuild: code-comments'  exit 1
+grant, scaffold, project-docs: the same error, exit 1
+writing: :78 and :102 "names no file of skills/writing/ in backticks", exit 1 (expected until re-marked)
+```
+
+### Spec
+
+none
+
+### Proof
+
+none
+
+### Standards
+
+1. `docs/academic-coverage.md:26`: "Once a new skill is built, the same check with `--built <skill>` (repeatable) also fails a row marked `rebuild: <skill>` whose reason names no file of `skills/<skill>/` in backticks, and fails when no row of the four skills is marked `rebuild: <skill>`." This sentence is about 45 words and states two failure conditions. The line-14 addition, "Once the skill is built, the reason also names, in backticks, the file of the new skill that holds what the file did, as a repository path such as `skills/paper/SKILL.md`; paths of the source skill may stay beside it.", is about 40 words. Both break prose standard E, sentence length (`skills/repo-setup/templates/docs/dev/prose-standard.md`, "under roughly 20 words unless the mechanism needs more"). Line 26 splits into one sentence per failure condition without losing anything.
+2. `docs/academic-coverage.md:26`: "A path counts only when it starts `skills/<skill>/` and is a file there: a folder, a link, a case variant of the name and the source skill's own paths do not count." A span not in normal form, such as `skills/paper/./SKILL.md` or `skills/paper/../paper/SKILL.md`, names a file that exists there but does not count (the built-not-a-file cases; docstring lines 40-42 state it). The page's list leaves it out. This is the page where the option is shown, so it is covered by change standard rule 5 (`docs/dev/change-standard.md:17`).
+
+### Behaviour
+
+1. `utils/check_coverage.py:315-318` (ruling 3, the no-row error) against `plan.md` step 10: "a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode". In the current `docs/academic-coverage.md`, `code-comments` (entry 4), `grant` (8), `scaffold` (11) and `project-docs` (12) have no `rebuild:` or `rebuild later:` row. `--built <skill>` for any of them exits 1 with ":0: --built names '<skill>', but no row of the sections read is marked 'rebuild: <skill>'", even once the skill exists (probe above). No re-marking can clear this, because no source file belongs to those skills. A step 10 gate that uses `--built` for entries 4, 8, 11 or 12 can therefore never pass. Step 10 has to leave `--built` out of those four gates, or the mode needs an explicit way to express "no rows expected". Neither the report's user-visible changes nor the page at line 26 states this. Entry 15.A's gate works: paper, paper-review, literature and researcher all have `rebuild:` rows (30, 21, 19, 6). Today `--built` exits 2 for any new skill, because no `skills/<new skill>/` folder exists yet ("skills/paper: not a folder"), which is what the docstring's usage errors say.
+
+## Not checked
+
+- Behaviour on a case-sensitive file system (Linux) and the NFD span against an NFD-stored file on a file system that keeps the forms distinct. The lookup no longer touches the file system, so the result should not depend on it, but not verified.
+- Reverts R2a-R2d, R3a, R3b, R4d-R4j and R5a-R5c of the report were not rerun in this round. Only the reverts of rulings 1, 2 and 3 above and the round-start run were rerun.
+
+Reviewer usage: 115,791 tokens, 24 tool uses, 431 s (the runner's completion notification).
+
+## Closed
+
+- First review: every finding closed in repair round 1 (see `8-report.md`, "Repair round 1"), under the five rulings sent with it.
+- Review over round 1, fixed at landing:
+  - Standards 1: `docs/academic-coverage.md` lines 14 and 26 split into sentences of one condition each.
+  - Standards 2: the page names a path not in normal form among the spans that do not count.
+- Review over round 1, carried into step 10 (`plan.md`, step 10): Behaviour 1, the gates of entries 4, 8, 11 and 12 leave `--built` out, since those skills have no `rebuild:` row; with it, the builder's note that `--built` proves only that the named file exists, so each gate that uses the mode also requires a checked record per built row.
+- The report's Doc text for `README.md:126` applied at landing, in sentences of one idea each.
+- The landing fixes were read by a fresh reviewer (`8-landing-review.md`). Its findings are fixed at landing: the `README.md` bullet names the check as the subject of every pass, failure and exit status, groups the cases by what they are, and opens its sentences in different ways; `docs/academic-coverage.md` line 14 is split into one statement per sentence and names the two files apart, line 26 is split further, and the page says a `--built` pass shows only that the file exists, not that it holds what the listed file did.

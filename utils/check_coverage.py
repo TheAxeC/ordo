@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check a coverage list: every file of the named skill folders is listed once, with a mark and a reason.
 
-Usage: check_coverage.py <coverage.md> <skills root> <skill>...
+Usage: check_coverage.py [--built <skill>]... <coverage.md> <skills root> <skill>...
 
 The coverage list is a Markdown file:
 
@@ -22,8 +22,9 @@ The coverage list is a Markdown file:
     | `SKILL.md` | rebuild: writing | <reason> |
 
 - New skills: one row per skill a mark may name, with the number of the roadmap entry that builds
-  it. The entry is a heading "## <n>. " or "## <n>.<letter> ", or a Done line "- [x] <n>. " or
-  "- [x] <n>.<letter> ", of docs/roadmap.md in the repository that holds the coverage list.
+  it. The entry is a heading "## <n>. " or "## <n>.<letter> ", or a Done line "- [x] <n>. ",
+  "- [x] <n>.<letter>. " or "- [x] <n>.<letter> ", of docs/roadmap.md in the repository that holds
+  the coverage list.
 - A skill section is a "## " heading whose name is a <skill> given on the command line. Its table
   lists every file that `find -H <skills root>/<skill> -type f` lists exactly once, as a path relative
   to the skill folder, in backticks. Sections of folders not given on the command line are not read.
@@ -33,6 +34,19 @@ The coverage list is a Markdown file:
   accepted; the skill folder itself may be a link.
 - Mark: "rebuild: <skill>", "rebuild later: <skill>" or "drop", the skill a row of New skills.
 - Reason: not empty. A pipe inside a cell is written \\|.
+- --built <skill>, repeatable: the skill is built, so every row marked "rebuild: <skill>" has a
+  reason that names in backticks a file of skills/<skill>/ of the repository that holds the
+  coverage list, as a repository path "skills/<skill>/<path>". The file is looked up, in NFC, in
+  what `find -H skills/<skill> -type f` lists, the listing the file cells are compared with, so a
+  folder, a link, a case variant of a file's name and a path not in normal form are not files of
+  it. Spans that do not start "skills/<skill>/" (the source's own paths, skill names) are not read.
+  A row whose reason names no such file is an error; so is a --built skill that is not a row of
+  New skills, and one that no row of the sections read is marked "rebuild: <skill>" for. Without
+  --built no reason is read for paths.
+
+The lines of the coverage list and of docs/roadmap.md are split on "\\n" only, and the names find
+lists are read NUL-separated, so a name holding a line separator such as U+2028 or U+0085 stays one
+name. A file cell and a file name on disk are compared in Unicode NFC.
 
 Fenced code is ``` or ~~~, of any length, at any indentation, closed by a line of the same character
 at least as long; a backtick fence's info string holds no backtick. This is the fence reading of
@@ -40,16 +54,19 @@ utils/check_skill_layout.py. A "## " line inside fenced code is not a heading, a
 is not read, and a fence left open is an error. A heading's closing hashes are not part of its name.
 
 Prints one line per error as <coverage.md>:<line>: <what is wrong> (line 0 for an error that no line
-of the list carries, such as a file the section does not list), and "ok: <coverage.md>" when there is
-none. Exits 0 when there is no error, 1 when there is one, 2 on a usage error: a missing argument; a
-skills root or skill folder that does not exist; a coverage list outside a git repository; a coverage
-list or docs/roadmap.md that does not exist or is not UTF-8; a find that fails.
+of the list carries, such as a file the section does not list), sorted by line number and then by
+message, and "ok: <coverage.md>" when there is none. Exits 0 when there is no error, 1 when there is
+one, 2 on a usage error: a missing argument; a skills root or skill folder that does not exist; a
+coverage list outside a git repository; a coverage list or docs/roadmap.md that does not exist or is
+not UTF-8; a find that fails; --built with no skill after it, or with a name that is empty, "." or
+"..", or holds "/"; a --built skill with no folder skills/<skill>/ in that repository.
 """
 
 import os
 import re
 import subprocess
 import sys
+import unicodedata
 
 NEW_SKILLS = "New skills"
 NEW_SKILLS_HEADER = ["Skill", "Roadmap entry"]
@@ -59,11 +76,18 @@ SEPARATOR = re.compile(r"^\|(\s*:?-+:?\s*\|)+\s*$")
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 TABLE_ROW = re.compile(r"^ {0,3}\|")
 CLOSING_HASHES = re.compile(r"\s+#+\s*$")
-ROADMAP_ENTRY = re.compile(r"^(?:## |- \[x\] )([0-9]+\.(?:[A-Z](?= )|(?= )))")
+ROADMAP_ENTRY = re.compile(r"^(?:## ([0-9]+\.(?:[A-Z](?= )|(?= )))"
+                           r"|- \[x\] ([0-9]+\.(?:[A-Z]\.?(?= )|(?= ))))")
+BACKTICKED = re.compile(r"`([^`]+)`")
 
 
 class UsageError(Exception):
     pass
+
+
+def read_lines(path):
+    """The lines of a UTF-8 file, split on "\\n" only."""
+    return read_text(path).split("\n")
 
 
 def read_text(path):
@@ -165,30 +189,61 @@ def table(heading_line, body, header, errors, where):
     return body_rows
 
 
-def roadmap_entries(coverage_path):
+def repository(coverage_path):
+    """The top folder of the git repository that holds the coverage list."""
     folder = os.path.dirname(os.path.abspath(coverage_path))
     top = subprocess.run(["git", "-C", folder, "rev-parse", "--show-toplevel"],
                          capture_output=True, text=True)
     if top.returncode != 0:
         raise UsageError(f"{coverage_path}: not inside a git repository")
-    roadmap = os.path.join(top.stdout.strip(), "docs", "roadmap.md")
+    return top.stdout.strip()
+
+
+def roadmap_entries(coverage_path):
+    roadmap = os.path.join(repository(coverage_path), "docs", "roadmap.md")
     entries = set()
-    for line in read_text(roadmap).splitlines():
+    for line in read_lines(roadmap):
         m = ROADMAP_ENTRY.match(line)
         if m:
-            entries.add(m.group(1).rstrip("."))
+            entries.add((m.group(1) or m.group(2)).rstrip("."))
     return entries
 
 
 def find(folder, kind):
-    listed = subprocess.run(["find", "-H", folder, "-type", kind], capture_output=True, text=True)
+    """The paths of the given type under folder, relative to it, in NFC, sorted."""
+    listed = subprocess.run(["find", "-H", folder, "-type", kind, "-print0"], capture_output=True)
     if listed.returncode != 0:
-        raise UsageError(f"{folder}: find failed: {listed.stderr.strip()}")
-    return sorted(os.path.relpath(p, folder) for p in listed.stdout.splitlines())
+        stderr = os.fsdecode(listed.stderr).strip()
+        raise UsageError(f"{folder}: find failed: {stderr}")
+    names = [os.fsdecode(p) for p in listed.stdout.split(b"\0") if p]
+    return sorted(unicodedata.normalize("NFC", os.path.relpath(p, folder)) for p in names)
 
 
-def check(coverage_path, root, skills):
-    lines = read_text(coverage_path).splitlines()
+def plain(path):
+    """Whether path is relative, holds no "..", and is in normal form."""
+    return (not os.path.isabs(path) and ".." not in path.split("/")
+            and os.path.normpath(path) == path)
+
+
+def built_path_error(reason, files, skill):
+    """The error when reason names in backticks no "skills/<skill>/<path>" whose path is in files,
+    else None."""
+    prefix = f"skills/{skill}/"
+    spans = (unicodedata.normalize("NFC", span) for span in BACKTICKED.findall(reason))
+    named = [span for span in spans if span.startswith(prefix)]
+    if not named:
+        return f"names no file of {prefix} in backticks"
+    if any(span[len(prefix):] in files for span in named):
+        return None
+    return f"names no file of {prefix} that exists: {', '.join(named)}"
+
+
+def check(coverage_path, root, skills, built):
+    """The errors of the coverage list, as (line number, message); built maps each --built skill to
+    its folder."""
+    built_files = {skill: set(find(folder, "f")) for skill, folder in built.items()}
+    built_rows = dict.fromkeys(built, 0)
+    lines = read_lines(coverage_path)
     errors = []
     found = sections(lines, errors)
 
@@ -210,6 +265,9 @@ def check(coverage_path, root, skills):
             if entry not in entries:
                 errors.append((n, f"roadmap entry '{entry}' of '{skill}' is not in docs/roadmap.md"))
             new_skills[skill] = entry
+        for skill in built:
+            if skill not in new_skills:
+                errors.append((0, f"--built names '{skill}', which is not a row of New skills"))
 
     for skill in skills:
         folder = os.path.join(root, skill)
@@ -228,8 +286,8 @@ def check(coverage_path, root, skills):
             if not m:
                 errors.append((n, f"the file cell {file_cell!r} is not one path in backticks"))
                 continue
-            path = m.group(1)
-            if os.path.isabs(path) or ".." in path.split("/") or os.path.normpath(path) != path:
+            path = unicodedata.normalize("NFC", m.group(1))
+            if not plain(path):
                 errors.append((n, f"'{path}' is not a plain path relative to the skill folder"))
                 continue
             if path in seen:
@@ -239,19 +297,52 @@ def check(coverage_path, root, skills):
             if path not in on_disk:
                 errors.append((n, f"'{path}' is not a file of {skill}"))
             mm = MARK.match(mark)
+            if mm and mm.group(1) == "rebuild" and mm.group(2) in built:
+                built_rows[mm.group(2)] += 1
             if mark != "drop" and not mm:
                 errors.append((n, f"the mark {mark!r} is not 'rebuild: <skill>', 'rebuild later: <skill>' or 'drop'"))
             elif mm and mm.group(2) not in new_skills:
                 errors.append((n, f"the mark names '{mm.group(2)}', which is not a row of New skills"))
             if not reason:
                 errors.append((n, f"'{path}' has no reason"))
+            elif mm and mm.group(1) == "rebuild" and mm.group(2) in built:
+                problem = built_path_error(reason, built_files[mm.group(2)], mm.group(2))
+                if problem:
+                    errors.append((n, f"the reason of '{path}' ({mark}) {problem}"))
         for path in on_disk:
             if path not in seen:
                 errors.append((0, f"'{skill}/{path}' is not listed"))
+    for skill, count in built_rows.items():
+        if not count:
+            errors.append((0, f"--built names '{skill}', but no row of the sections read is marked"
+                              f" 'rebuild: {skill}'"))
     return errors
 
 
+def options(argv):
+    """Split argv into the --built skills and the other arguments."""
+    built, rest, i = [], [], 0
+    while i < len(argv):
+        if argv[i] != "--built":
+            rest.append(argv[i])
+            i += 1
+            continue
+        if i + 1 == len(argv):
+            raise UsageError("--built needs a skill")
+        name = argv[i + 1]
+        if name in ("", ".", "..") or "/" in name:
+            raise UsageError(f"--built '{name}': not a skill name")
+        built.append(name)
+        i += 2
+    return built, rest
+
+
 def main(argv):
+    try:
+        built_skills, argv = options(argv)
+    except UsageError as e:
+        print(f"usage error: {e}", file=sys.stderr)
+        return 2
     if len(argv) < 3:
         print(__doc__.strip().splitlines()[2], file=sys.stderr)
         return 2
@@ -262,7 +353,12 @@ def main(argv):
         for skill in skills:
             if not os.path.isdir(os.path.join(root, skill)):
                 raise UsageError(f"{os.path.join(root, skill)}: not a folder")
-        errors = check(coverage_path, root, skills)
+        top = repository(coverage_path) if built_skills else None
+        built = {skill: os.path.join(top, "skills", skill) for skill in built_skills}
+        for folder in built.values():
+            if not os.path.isdir(folder):
+                raise UsageError(f"{folder}: not a folder")
+        errors = check(coverage_path, root, skills, built)
     except UsageError as e:
         print(f"usage error: {e}", file=sys.stderr)
         return 2
