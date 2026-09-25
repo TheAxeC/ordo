@@ -94,3 +94,144 @@ none
 - The oculus hub's `dispatch-note.mjs` against the new `--label <entry>/<step>` and `--pid` wording (research-hub is read only; F6, F7 and F9 were read in the review file only).
 
 Reviewer usage: 174,608 tokens, 36 tool uses, 433 s (the runner's completion notification).
+
+## Repair round 1, refuted
+
+I ran every command below from the worktree root `/Users/axelfaes/workspace/ordo/.agents/worktrees/2b-2`.
+
+```
+$ sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit=$?"
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit=0
+
+$ python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md; echo "exit=$?"
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/land.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/ordo-init.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-help.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan-retro.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/plan.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/refute.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/repo-setup.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/roadmap.md
+ok: .scratch/archive/1-one-layout-for-every-skill/inventories/spec.md
+exit=0
+
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh and usage.py scratch tests
+
+$ python3 utils/check_skill_layout.py; echo rc=$?
+(the same ten ok: lines) rc=0
+
+The commands the report quotes, rerun:
+$ git diff 17cf7ca -U0 -- <inventory> | grep -c '^+|'
+44 (plan-orchestration.md), 4 (plan.md)        report: 44 and 4. Reproduced.
+$ wc -l <the nine files>
+268, 28, 82, 69, 31, 23, 45, 139, 48          report: the same. Reproduced.
+$ sed -n 263,267p skills/plan-orchestration/SKILL.md | (wc -w per line)
+17, 30, 20, 20, 27                             report: the same. Reproduced.
+$ LC_ALL=C grep -n '[^ -~]' <the skill files, the plan templates, the two inventories>
+no output, rc=1. Reproduced.
+$ git diff 17cf7ca -U0 -- skills .scratch/archive | grep '^+[^+]' | grep -n '[^ ] - \| -- \|->'
+no output, rc=1. Reproduced. (Over the whole diff, the only hits are list indentation inside the report's quoted lines.)
+$ git diff 17cf7ca -U0 -- skills | grep '^+[^+]' | grep -niE 'easy|simple|quick|very|really|just|simply|ordo|cathedra|research-hub|oculus|2\.B|anthropic|openai'
+no output, rc=1
+The report's per-ruling greps (1), (2), (5) to (12): each output matches the file as it is now.
+$ git status --short
+ M .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/2-report.md
+ M .scratch/archive/1-one-layout-for-every-skill/inventories/plan-orchestration.md
+ M .scratch/archive/1-one-layout-for-every-skill/inventories/plan.md
+ M skills/plan-orchestration/SKILL.md
+ M skills/plan-orchestration/templates/launch-note.md
+ M skills/plan/templates/orchestrator-state.md
+ M skills/plan/templates/plan.md
+ M skills/plan/templates/plan.projects.yaml
+ M skills/plan/templates/plan.yaml
+```
+
+I checked each ruling's closure against the round's delta (`git diff a7c5cff`):
+
+- Rulings 1 to 11 are real fixes. No rule was removed to close any of them.
+- Ruling 12 is taken up under Spec 1 and Standards 1.
+- Nothing in the delta goes beyond the rulings.
+- Against `git show 17cf7ca:<path>`, no rule is lost apart from the wording drift in Spec 1.
+
+I sampled 31 rows of `inventories/plan-orchestration.md` against the text at their places:
+
+- Steps: 1, 2, 3, 4 (six rows), 6, 7 and 8.
+- Rules: 1 to 7.
+- Reports: 3 to 7.
+- Stops: 7 to 11.
+- Anti-patterns: 1, 3, 4, 5, 7, 8, 9 and 10.
+- Launching a builder: 1, 2, 3, 8, 10, 11, 13 and 15.
+- The two tiers, and the harnesses: 1, 3, 5, 6, 8 and 9.
+- Resuming, and handing the plan over: 1 to 10.
+- The recurring-findings pass: 1 to 4.
+- The review, earned: 1 to 6.
+
+I also checked the four changed rows of `inventories/plan.md` (Steps 5, Steps 6, Rules 1, Rules 2). Every sampled row resolves to the text that holds its rule.
+
+### 1. Spec
+
+1. `skills/plan-orchestration/SKILL.md:263-267`. Ruling 12 asked for the rule unchanged. Compared with `git show a7c5cff:skills/plan-orchestration/SKILL.md` line 262, the rule is kept in substance, with three wording drifts:
+   - Line 264, "The exception: one more round when the delta leaves ...". The old text was "and one more only when ...". The word "only" is gone, so the bullet now states a sufficient condition. That the condition is also required now depends on line 263's "plus the one exception below".
+   - Line 267, "Everything else the rounds left undone or beyond the brief is booked ...". The old text was "everything else the rounds left undone or that lies beyond the brief". The new phrasing reads as "the rounds left ... beyond the brief".
+   - Line 267, "in the plan and the booked list, never sent back". The old text was "carried in the state file's booked list and never sent back to the builder". "The booked list" loses its owner, which line 202 names as "the state file's booked list".
+2. `skills/plan-orchestration/SKILL.md:268`: "Every skill the loop invokes (`/spec`, `/refute`, `/land`, and `/roadmap` at the closing) is invoked through the runner every time ...". The parenthesis is written as the full list, but Steps 4 (line 54) also has the loop build a step through `academic-paper` ("The step is built through that skill with the brief as its input"). That skill is missing from the list of skills that must never be carried out from remembered text. Ruling 11 named four skills. The sentence's "Every skill the loop invokes" makes the list claim to be complete.
+
+### 2. Proof
+
+1. `.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/2-report.md`: the "Repair round 1" section is appended, and the sections above it still state the pre-round text as the tree's text. This breaks `docs/dev/change-standard.md` rule 7, "The report states the end state only". Each of these lines is false against the tree now:
+   - Line 67 quotes `260:- The skill carries no project name, ... the options the user ruled in ...`.
+   - Line 86 quotes `198:- Every report opens with a position line ... For example: "Roadmap entry 2.B ...`.
+   - Line 92 quotes `(for example `2.B/4`)`, and line 96 quotes `, for example `2.B/4`,`.
+   - Line 109 quotes the Open items heading "after the position line of every report".
+   - Line 256 gives the Files table's `| 263 | 87 lines changed |`, and line 263 says "these six files modified".
+   - Judgment call 2 (line 268) says "One bullet holds the cap, the exception, ...". The cap is now five bullets.
+   - Judgment call 8 (line 274) says "The Open items heading now says "repeated verbatim after the position line of every report"".
+   - The "User-visible changes" row "Reports | open with the open items | open with the position line, then the open items" no longer holds for a builder's report, which by `SKILL.md:199` keeps the change standard's shape.
+2. `2-report.md:303`, "Doc text" item 3: "The same holds for the report shape in the `spec` skill's `templates/brief.md` line 40 (step 3), which opens the builder's report with the NOT DONE line and then the open items." After ruling 8, `SKILL.md:199` says "A builder's report keeps the shape of the repository's change standard", so `brief.md:40` no longer conflicts with anything. The same stale claim is booked in the main ledger's `orchestrator-state.md:88` ("`skills/spec/templates/brief.md:40` and `skills/land/SKILL.md:70` open a report with the open items, not the position line"). The booking should keep only `land/SKILL.md:70`, which does still conflict. Its line 70 reads "- It holds the open items first, verbatim, ...".
+
+### 3. Standards
+
+1. `skills/plan-orchestration/SKILL.md:263-264`: "- The round cap: a step gets at most `repair_rounds` repair rounds, plus the one exception below." / "- The exception: one more round when ...". This breaks `docs/dev/skill-layout.md`, "Lists and tables", first bullet: "a qualifier that changes the rule (an exception, a limit, a condition) stays in the same bullet as the rule". The split moves the cap's exception out of the cap's bullet. The limit on line 265 ("A new finding ... never earns the exception's round, and the user's yes never extends the cap") is split out the same way. The first review asked only for the last sentence (the landing and the booking) to be split. A layout-conformant form keeps the cap, the exception and the two limits in one bullet, and puts the landing and the booking in separate bullets.
+2. `skills/plan-orchestration/SKILL.md:257`: "as the round cap and the bullets after it in "Rules" say". "The bullets after it" also covers line 268 (the skills-invoked rule), which has nothing to do with the cap. This follows from Standards 1. With the cap in one bullet, the pointer names only that bullet and the landing and booking bullets.
+3. Vendor and tool names outside the models section in changed text, as your check asked:
+   - `SKILL.md:60` ("the `claude -p` JSON or the `codex -o` final message").
+   - `SKILL.md:61` ("A native Claude agent's").
+   - `skills/plan/templates/orchestrator-state.md:13` and `:15` ("codex:gpt-5.6-sol", "Fable or Astra").
+   - `orchestrator-state.md:27` ("the claude -p JSON or the codex -o final message").
+
+   Brief items 3 and 17 and ruling 10 dictated these words. No written rule forbids them now: `SKILL.md:261` and `docs/dev/change-standard.md` "Rules this repository already states" forbid project names and paths, not vendor names. I list them because your criterion hits, not as a breach of a written rule. No project name appears in the changed skill text (grep above, rc=1).
+
+### 4. Behaviour
+
+none
+
+### Not checked
+
+- Whether `skills/plan-orchestration/templates/launch.sh` accepts every path given as absolute (`SKILL.md:166`). The script belongs to step 4, and I did not run it beyond `launch.test.sh` inside the verify runner.
+- The note command's handling of `--label <entry>/<step>` and the `--pid` wording. The oculus hub is read-only, and I did not exercise it.
+- The sentence length of changed sentences outside the round's delta. I read them in the whole diff but did not count words, except for the five round-cap bullets.
+
+Reviewer usage: 155,407 tokens, 26 tool uses, 341 s (the runner's completion notification).
