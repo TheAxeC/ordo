@@ -62,3 +62,62 @@ Sample of 20 holds rows, each file read in full: examples/clinical_citation_veri
 - Whether the shared/ files the source skill references (style_calibration_protocol.md and others) hold content that no row carries: they are outside academic-paper's 61 files.
 
 Reviewer usage: 270,192 tokens, 46 tool uses, 470 s (the runner's completion notification; reviewer claude:opus, agent a59542d649739794e).
+
+## Repair round 1, refuted
+
+```
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md
+  -> 10 PASS: lines, 10 ok: lines, verify: 12 commands passed, exit 0
+python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+  -> ok: docs/academic-coverage.md, exit 0
+grep -cE '^\| [0-9]+ \|' .scratch/.../agents/reviews/11-rows.md -> 61
+records vs find -H academic-paper -type f -> same set of 61, each once; record order = section order; all 61 "1-<n>" equal wc -l; every Words column equals the recomputed base and current counts
+changed rows vs fixed records (base from git show ebf3c8c) -> 50 and 50, changed_equals_fixed; 49 rows changed in this round
+awk over35 on lines 50-115 -> over35: 2 (60 54, 64 46); at cee396b 46; at ebf3c8c 50
+round-start vs now word counts for lines 54, 55, 59, 60, 88, 90, 92, 100 -> 39,37,39,44,36,36,36,36 to 35,35,35,54,35,35,35,35 (as reported)
+mark diff vs base -> 3 changes (abstract_bilingual_agent.md, abstract_writing_guide.md to rebuild: paper; imrad_template.md to drop)
+grep -c '| rebuild later: <skill> |' -> paper 8, literature 6, paper-review 3, researcher 1 (base: 11, 6, 3, 1); docs/roadmap.md:120 reads "8 for paper, 6 for literature, 3 for paper-review, 1 for researcher"
+git diff ebf3c8c -U0 hunks -> docs/academic-coverage.md lines 54-113 only; docs/roadmap.md line 120 only
+sed -n 50,115p | grep -c -E 'dropped\. \|$' -> 0; no cell ends in "go." or "goes."; "later planning dialogue" -> 0 in the section, no hit in docs, skills, README.md
+LC_ALL=C grep -c '[^ -~]' on the doc, roadmap, 11-rows.md, 11-report.md -> 0 each; section still 66 lines
+grep -n -i code .../references/anti_leakage_protocol.md -> no output, exit 1 (builder's correction of line 79 holds)
+```
+
+### Spec
+
+- docs/academic-coverage.md:54 (SKILL.md): the round removed the file's drop of the generator-evaluator contract (SKILL.md 161-260) and of the higher-education defaults (line 18, 460). The current row only says "zh-TW triggers have no use", so under `rebuild: paper` entry 5 must now cover the four-call writer/evaluator protocol. Record 1 does not mention the removal. Ruling 7 required the shortening to keep every destination.
+- docs/academic-coverage.md:59 (formatter_agent.md): the round removed "zh-TW fonts go". The Chinese LaTeX settings (693-724), the xeCJK fallback (846-850) and the Chinese Pandoc command (578) no longer have a drop, so the `rebuild later: paper` mark puts them in entry 15.A. Record 6 does not mention this. Rulings 2 and 3 hold.
+- docs/academic-coverage.md:81 (apa7_extended_guide.md): the base named "(headings, title page, reference forms, bias-free language)"; the current row says only "the APA page rules". Bias-free language (171-188) and the extended citation and reference forms (55-122) are not page rules, so the row no longer says where they go.
+- docs/academic-coverage.md:60 (intake_agent.md): rulings 4, 5 and L (a) hold. The round dropped the interim home for venue limits ("keeps those limits in the project until roadmap entry 13's `venues/` files hold them"); now intake's Step 3 venue profile (136-143) has no home between entries 5 and 13.
+- docs/academic-coverage.md:90 (journal_submission_guide.md): "The paper skill's statements take its templates" replaced "the data, CRediT and AI templates"; the file's cover-letter template belongs with `submit-manuscript`, so "its templates" names the wrong set.
+- docs/academic-coverage.md:66: "Ten figure checks include value fidelity, as entry 5 requires." Entry 5 (roadmap.md:43) has no value-check requirement.
+- Rulings 1, 2, 3, 5, 8, 9, 10 and 11: closed.
+
+### Proof
+
+- 11-report.md, Result table row 2 ("changed 12 fixed 12") and "Wrong in the brief" ("46 are" over; roadmap line 120 "was not changed") are false for the current tree (50 changed rows, 2 cells over 35, line 120 changed), covered only by a blanket "superseded" line.
+- Ruling 12 (no git command run by the builder): not verifiable from the tree.
+
+### Standards
+
+- Ten cells now begin with "It" or "Its" (lines 55, 68, 77, 81, 83, 90, 94, 95, 98, 99), where the base had one (prose standard 0 and E).
+- docs/academic-coverage.md:87: "off-length drafts list sections, never deleting" gives the listing to the draft; failure_paths.md 90-101 has the skill list the over-length chapters and leave deletion to the user.
+- docs/academic-coverage.md:91: "the fixed `apa7` class" does not say what "fixed" means (the justification override and the `\tabcolsep` formula, 177-200).
+- docs/academic-coverage.md:59: "`SKILL.md` takes the checklist" does not say which checklist (the pre-output checklist, formatter_agent.md 309-338 and 790-826).
+
+### Behaviour
+
+- The removed drops on lines 54, 59 and 81 change what entries 5 and 15.A must build; the report says each shortened cell keeps "each mark, destination and deciding content".
+
+### The two long cells
+
+- Line 60 (54 words): no version of about 35 words keeps every required destination with a verb per clause; the shortest found is 49 words, 55 with the interim home for venue limits restored.
+- Line 64 (46 words): can reach 39 words: "Entry 15.A builds this planning dialogue (readiness check, thesis, chapter questions, convergence caps) with plan mode, the three-question intake, stress test, scoring, chapter plan and plan-to-draft gate. `idea` reuses its taxonomy; commitment gates and wording patterns have no use."
+
+### Not checked
+
+- The source files of rows 57, 58, 61, 62, 63, 65, 67, 68, 69, 70, 71, 74, 75, 76, 83, 84, 88, 93, 95, 96, 98, 102, 103, 108, 111 and 113 were not read whole; rows 55, 57, 59, 64, 66 and 87 only in the parts their reasons cover.
+- Whether the builder ran any git command in this round.
+- The `shared/` files the source skill references.
+
+Reviewer usage: 247,793 tokens, 54 tool uses, 648 s (the runner's completion notification; reviewer claude:opus, agent ac24d4cbbea7ffc4f).

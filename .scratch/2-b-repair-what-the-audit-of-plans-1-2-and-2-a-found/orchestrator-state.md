@@ -42,7 +42,7 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: ab8951c4d56c145ef (the runner's agent id)
   builder_usage: 226,019 tokens, 98 tool uses, 875 s (the runner's completion notification); ruling L (a) sent to it mid-build and applied; after round 1 the notification reads 355,519 tokens, 35 tool uses, 863 s; round 1 reported done except two reason cells over about 35 words
-  round_reviewer: claude:opus, agent ac24d4cbbea7ffc4f, through /refute over round 1, running
+  round_reviewer: claude:opus, agent ac24d4cbbea7ffc4f, through /refute over round 1: 247,793 tokens, 54 tool uses, 648 s
   reviewer_report: agents/reviews/11-refuter.md (through /refute; reviewer claude:opus, agent a59542d649739794e; 270,192 tokens, 46 tool uses, 470 s)
   worktree: .agents/worktrees/2b-11
   base: ebf3c8c
@@ -50,6 +50,7 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/11-report.md (records in 11-rows.md)
   landing: not-started
   round: 1 (sent 2026-09-25: the findings of 11-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit cee396b on branch 2b-11; the path list widened to docs/roadmap.md line 120; the prose standard's named exception of ruling 2e is written at this step's landing)
+  round: 2 (the exception round, sent 2026-09-25: brief item 1, no part of a source file left with no row and no reason, is unbuilt after round 1's shortening, which removed destinations from rows 54, 59, 60 and 81 and left 26 shortened rows unchecked against their files; too large to fix at landing; the worktree at the round's start is commit 1f823e7 on branch 2b-11)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
