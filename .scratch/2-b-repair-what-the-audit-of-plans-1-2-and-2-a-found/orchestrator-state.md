@@ -65,6 +65,7 @@ dispatch:
 - 2026-09-24: how to get back on track after the audit: ruled option C, this plan (see `plan.md`, Rulings).
 - 2026-09-24: the audit's recommendations 2a to 2h, and contradictions 3a, 3b, 3c: ruled as recommended (see `plan.md`, Rulings).
 - 2026-09-24: the step list of this plan: approved, with `workers_at_once: 3`.
+- 2026-09-25: open item G, the round cap stated where it cannot be missed: ruled (a), written into step 2.
 - 2026-09-25: open item F, how the runner recognises a test's filter: ruled (a), one repair round beyond the cap under plan-orchestration's exception; the runner runs each command through `bash -o pipefail -c` from its Python in a new session and kills that session on INT, HUP, QUIT or TERM; `bash` a stated requirement.
 - 2026-09-25: the greenlight to start: given by the user; the loop runs from step 1.
 - 2026-09-24: open item E, one end-to-end run of the launch note: ruled (b), step 7 launched from a shell after step 4 and the oculus fixes.
