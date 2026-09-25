@@ -121,3 +121,59 @@ grep -n -i code .../references/anti_leakage_protocol.md -> no output, exit 1 (bu
 - The `shared/` files the source skill references.
 
 Reviewer usage: 247,793 tokens, 54 tool uses, 648 s (the runner's completion notification; reviewer claude:opus, agent ac24d4cbbea7ffc4f).
+
+## Repair round 2, refuted
+
+```
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md
+  -> 10 PASS: lines, 10 ok: lines, verify: 12 commands passed, exit 0
+python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+  -> ok: docs/academic-coverage.md, exit 0
+grep -cE '^\| [0-9]+ \|' .../agents/reviews/11-rows.md -> 61; with '.*\| reserved \|' -> 0
+records vs find -H academic-paper -type f -> same set of 61, no duplicates; record order = section order; every "1-<n>" equals wc -l
+git show ebf3c8c section == builder's MAIN copy (cmp: same); changed vs fixed -> 50, 50, changed_equals_fixed
+mark diff vs ebf3c8c -> abstract_bilingual_agent.md and abstract_writing_guide.md to rebuild: paper; imrad_template.md to drop
+awk cells over 35 words, lines 50-115 -> over35: 14, as reported
+awk sentences over 35 words, lines 50-115 -> sentences over 35: 0 (longest 32, line 109)
+grep -c '| rebuild later: <skill> |' -> 8, 6, 3, 1; docs/roadmap.md:120 -> 8 for paper, 6 for literature, 3 for paper-review, 1 for researcher
+LC_ALL=C grep -c '[^ -~]' doc, roadmap, 11-rows.md, 11-report.md -> 0 each; section 66 lines; every row has 3 cells
+first word of each reason cell in (It|Its) -> 0; "later planning dialogue|as entry 5 requires" -> 0
+grep -rn "35 words" skills docs README.md -> no output, exit 1
+"have no use." endings in the section -> 3 (lines 54, 59, 64); at ebf3c8c -> 0
+```
+
+### Spec
+
+- docs/academic-coverage.md:60 (intake_agent.md): the base named materials and co-authors among the fixed fields (Steps 8 and 9, lines 183-201; SKILL.md 376) and the rule that venue limits are recorded only as the scholar states them (138-140); the row now carries none of the three. Record 7 says the row "Keeps the fixed fields" and leaves out co-authors.
+- docs/academic-coverage.md:81 (apa7_extended_guide.md): the drop of the APA page rules for headings (40-53) and the title page (7-28) is no longer stated; the running head (30-32), abstract page (34-38) and table and figure format (123-153) have no row. Record 28 says it "Names each rest" but omits headings and the title page.
+- docs/academic-coverage.md:66 (visualization_agent.md): round 2 removed "with LaTeX templates" (164-199), which no ruling asked for; record 13 says the row keeps them. The decision tree (43-73) picks the chart type; dpi (79-88) and palettes (100-127) are separate figure standards, while the row says the tree picks chart types "at 300 dpi in colourblind-safe palettes".
+- docs/academic-coverage.md:57 (citation_compliance_agent.md): the base named automatic format correction (33, 128-159); round 1 removed it and round 2 did not restore it. Record 4 says it is "folded into 'checked'".
+- docs/academic-coverage.md:90 and :59: the cover letter (and at :59 blind-review removal) goes to `submit-manuscript`, but roadmap entry 14 (roadmap.md:106-108) names portal filling and a submission record, not a cover letter.
+- Rulings 2, 3, 5 to 11: done as ruled. Ruling 4 done for bias-free language and the reference forms.
+
+### Proof
+
+- 11-report.md line 1 and its Result row "Reason length | NOT DONE" count cells over 35 words; ruling 2e limits sentences, and no sentence in lines 50-115 is over 35. It also says lines 60 and 64 are "permitted by" rulings 5 and 6, which set no length.
+- 11-rows.md record 15: "the clinical safety note (82)"; line 82 of clinical_citation_verification_checklist.md is "Limitation preserved:", the safety note is at 87-88.
+- 11-report.md, round 2 ruling 1: records 4, 7, 13 and 28 claim parts kept that the rows no longer carry.
+
+### Standards
+
+- docs/academic-coverage.md:54, :59, :64: each cell ends "X, Y and Z have no use." (prose-standard.md:18, no repeated construction).
+- docs/academic-coverage.md:77: "Its checklist repeats ..." follows a sentence whose subject is "Abstracts" (prose-standard.md:59).
+- docs/academic-coverage.md:68: the reference is made the subject of all four checks; in the file the source holds the number (24) and the draft must match population and outcome and keep the limitations (25-27).
+- docs/academic-coverage.md:96: "from each policy page and access date" reads as if the access date were a source.
+
+### Behaviour
+
+- 11-report.md's table of rows that change what entry 5 or 15.A must build leaves out line 90 (CRediT 144-161 and AI 186-203 templates added to the paper statements) and lines 60 and 81.
+
+### Not checked
+
+- The source files of rows 77, 92, 94 and 99 (read whole by the review over round 1); journal_submission_guide.md and latex_template_reference.md beyond the ranges rulings 7 and 10 name.
+- The line references and "Keeps all of it" claims of the records round 2 rewrote for unchanged rows (3, 5, 9, 10, 12, 14, 16-18, 21-23, 31-33, 35, 40, 44, 49, 50, 53-55, 58, 60).
+- The record 11 line ranges of argument_builder_agent.md and mode_selection_guide.md.
+- Whether the builder ran any git command.
+- The `shared/` files the source skill references.
+
+Reviewer usage: not known (reviewer claude:opus, agent a98eb3004ccd75ea7; no completion notification received).
