@@ -62,7 +62,7 @@ dispatch:
 - step: 6a
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
-  session_id: (written when the builder starts)
+  session_id: a384a8a4cf13de1b7 (the runner's agent id)
   worktree: .agents/worktrees/2b-6a
   base: f9b0856
   launched: 2026-09-25
