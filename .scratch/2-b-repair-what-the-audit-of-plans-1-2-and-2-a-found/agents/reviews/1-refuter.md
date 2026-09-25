@@ -133,3 +133,173 @@ r9 the count check (lines 108-113) removed:           PASS: verify.sh scratch te
 - Behaviour under a `/bin/sh` other than macOS's bash-as-sh (dash, busybox) was not run.
 
 Reviewer usage: 111,656 tokens, 24 tool uses, 421 s (the runner's completion notification).
+
+## Repair round 1, refuted
+
+Reviewed worktree `/Users/axelfaes/workspace/ordo/.agents/worktrees/2b-1`. The round's delta is `git diff 00e8f8b`, read against `git diff 2ce1804`. `git status --short` shows ` M` on the report, `README.md`, `docs/dev/building.md`, `utils/verify.sh` and `utils/verify.test.sh`. Under `.scratch/`, only `1-report.md` differs from the base, so ruling 9 holds.
+
+```
+$ sh utils/verify.test.sh 2>&1 | tail -1
+PASS: verify.sh scratch tests
+
+$ sh utils/verify.test.sh; echo "exit $?"
+PASS: verify.sh scratch tests
+exit 0
+
+$ sh utils/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: pin.sh scratch tests
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 11 commands passed
+exit 0
+
+The state file's verify list by hand, through its filters, with sh utils/verify.test.sh as a tenth test:
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh and usage.py scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
+PASS: collect_findings.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1
+PASS: launch.sh scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/verify.test.sh 2>&1 | tail -1
+PASS: verify.sh scratch tests
+$ sh utils/check_skill_layout.test.sh 2>&1 | tail -1
+PASS: check_skill_layout.py scratch tests
+$ sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
+PASS: check_rule_inventory.py scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ python3 utils/check_skill_layout.py; echo "exit $?"
+(the ten ok: lines above)
+exit 0
+$ <the ASCII check>; echo "exit $?"
+exit 0
+
+$ grep -n 'verify.test.sh' README.md docs/dev/building.md docs/dev/change-standard.md   (cut to 120 columns)
+README.md:111:sh utils/verify.test.sh
+README.md:123:- `verify.test.sh` checks that `verify.sh` passes a list holding a filtered test, an unfiltered command an
+docs/dev/building.md:12:sh utils/verify.test.sh                         # verify.sh on green, red and unusable verify li
+docs/dev/change-standard.md:48:sh utils/verify.test.sh 2>&1 | tail -1
+
+$ awk 'length>100' utils/verify.sh utils/verify.test.sh ; LC_ALL=C grep -n '[^ -~]' (same files, README.md, building.md)
+(no output)
+
+The report's reproductions, rerun (scratch folder, red.test.sh = printf 'FAIL: x\n'; exit 1):
+| tail -n 1, two spaces, no 2>&1, literal block: each RED, exit status 1, FAIL: x, exit 1 (matches)
+; true: FAIL: x / verify: 1 commands passed / exit 0 (matches)
+
+Reverts reproduced on copies (sh verify.test.sh 2>&1 | tail -3), each red as the report says:
+exact suffix only        -> FAIL: the spelling sh red.test.sh 2>&1 | tail -n 1: exit 0, expected 1
+no rstrip                -> FAIL: a literal block ending in a newline: exit 0, expected 1
+runner's stdin           -> FAIL: a command reading standard input: output differs; got: read from stdin
+stop() does not kill     -> FAIL: the runner waited for the command to end
+no set -m                -> FAIL: the runner waited for the command to end
+fence word yaml only     -> FAIL: a yml fence: exit 64, expected 0
+decode error not caught  -> UnicodeDecodeError traceback (red)
+any pipe into tail       -> FAIL: a command ending in ; true: exit 1, expected 0
+python3 check removed    -> FAIL: no python3: exit 1, expected 69
+traps reduced to 15 only -> PASS: verify.sh scratch tests   (stays green, see Proof 1)
+
+Signals: the runner was started by a Python parent with default dispositions, while "echo $$ >cmd.pid; sleep 4; touch after" ran:
+sh INT: returncode 130 after 0.0s; after=False second=False scratch_left=0
+sh HUP: returncode 129 after 0.0s; after=False second=False scratch_left=0
+sh TERM: returncode 143 after 0.0s; after=False second=False scratch_left=0
+sh QUIT: returncode 131 after 0.0s; after=False second=False scratch_left=0
+dash INT: returncode 130 after 4.0s; after=True second=False scratch_left=0 out="../verify.sh: 163: set: can't access tty; job control turned off\n"
+dash HUP: returncode 129 after 4.0s; after=True ...
+dash TERM: returncode 143 after 4.0s; after=True ...
+dash QUIT: returncode 131 after 4.0s; after=True ...
+
+$ command -v dash  ->  /bin/dash   (/bin/sh here is GNU bash 3.2.57)
+```
+
+### Spec
+
+1. `utils/verify.sh:29-32`:
+   ```
+   command -v python3 >/dev/null 2>&1 || {
+       printf 'verify: python3 is not on PATH\n' >&2
+       exit 69
+   ```
+   This adds a new refusal path. Ruling 2 said to keep exit 69, which existed for a missing PyYAML, and no ruling asks for a separate check that `python3` is on `PATH`. Without the check, a missing `python3` already stops the runner before any command runs, through the failed `count=$(python3 ...)`. The expected ruling item would be ruling 2, but it does not ask for this. The finding is small, and the orchestrator can accept it or drop it at landing.
+2. `utils/verify.sh:133-134`, `utils/verify.test.sh:289-295`:
+   ```
+   if run == "":
+       refuse(where + " pipes nothing into tail")
+   ```
+   This adds a new exit-64 refusal that no ruling asks for. The README bullet at line 123 documents it. The head comment's list of 64 causes (lines 15-16: "no file, not UTF-8, no yaml block, no verify list, a command that is not a non-empty string") leaves it out.
+
+### Proof
+
+1. `utils/verify.test.sh:322-353`: the signal case sends only `kill -TERM`. `verify.sh:49` traps `1 2 3 15`, and the README (`:136`, "128 plus the signal number when a signal stops it") and the head comment speak of any signal. With the trap loop reduced to `for signal in 15; do`, the test prints `PASS: verify.sh scratch tests`. No case proves that INT, HUP or QUIT stop the command, although my own run above shows they do under bash-as-sh.
+2. The suite passes only when `sh` is bash. With the runner invoked as `dash` (the six `sh "$verify"` calls in the test changed to `dash "$verify"`), the first case goes red:
+   ```
+   FAIL: all green: output differs; got: .../verify.sh: 163: set: can't access tty; job control turned off
+   PASS: green
+   .../verify.sh: 163: set: can't access tty; job control turned off
+   unfiltered out
+   ```
+   On a system whose `/bin/sh` is dash, `sh utils/verify.test.sh` is red. The report's judgment call 4 records that dash was not run, which leaves this check undone rather than done (change standard rule 12).
+
+### Standards
+
+1. `README.md:134` ("takes every command whose last pipeline stage is `tail`, in any spelling, as a filtered test"), `docs/dev/building.md:22` ("A command whose last pipeline stage is `tail`, in any spelling"), `utils/verify.sh:5` ("and any other spelling"). These sentences are false for the spellings in Behaviour 1, where the last pipeline stage is `tail` and the runner treats the command as unfiltered. Change standard rule 14: "A sentence in a document or a head comment that the change makes false is a defect of the change."
+2. `utils/verify.sh:9-10` ("Each command runs in its own process group ..., so a signal to the runner stops the running command at once") and `README.md:136` ("a signal also stops the running command"). Both are false under dash (Behaviour 2). The page presents the script as POSIX `sh` (brief, What to build, item 1). The same rule 14 applies.
+
+### Behaviour
+
+1. `utils/verify.sh:118-119`, the tail-stage expression `(?P<run>.*?)\s*(?<!\|)\|(?!\|)\s*(?:\S*/)?tail(?:[ \t]+[^|;&<>()`$\n]*)?\Z`. Each probe below used `red.test.sh` (prints `FAIL: x`, exits 1), each in a literal block. In each, the last pipeline stage is `tail`, yet the command is judged on tail's exit status, and a red test passes green (`FAIL: x` / `verify: 1 commands passed` / `exit 0`):
+   - `sh red.test.sh 2>&1 | tail -1 2>/dev/null` (a redirection on tail)
+   - `sh red.test.sh 2>&1 | tail -1 >&2`
+   - `sh red.test.sh 2>&1 | tail -1;` (a trailing semicolon, nothing after it)
+   - `sh red.test.sh 2>&1 | tail -1 # keep | last` (a shell comment holding a pipe)
+   - `sh red.test.sh 2>&1 | \` then `tail -1` on the next line (backslash-newline)
+
+   These spellings behaved correctly:
+   - `| /usr/bin/tail -1`: red, as required.
+   - `| tail -1 -q`: red, as required.
+   - A comment without a pipe (`| tail -1 # summary`): red, as required.
+   - `|` followed by a newline and then `tail -1`: red, as required.
+   - `sh red.test.sh || tail -1 /dev/null`: judged on exit status and green, which is correct for `||`.
+   - `{ ...| tail -1; }`, `( ... | tail -1 )` and `... | tail -1 && true`: green, since the last stage there is a group or `true`, the same class as `; true`.
+2. `utils/verify.sh:163-164`: under dash with no terminal, `set -m` prints `set: can't access tty; job control turned off` to stderr once per command, and the command gets no process group of its own. `stop()` then sends `kill -TERM -- "-$job"` to a group that does not exist and `wait`s for the command to end. With INT, HUP, TERM and QUIT alike, the runner returned only after the 4-second command finished and had written `after`, which is the defect ruling 4 was meant to close. The report states before and after only for bash-as-sh.
+3. `utils/verify.sh:118-119`: a pipe inside quotes becomes a false red that shows as a shell syntax error:
+   ```
+   == "echo 'PASS: a | tail -1'"
+   RED: echo 'PASS: a | tail -1'
+   exit status: 2
+   sh: -c: line 0: unexpected EOF while looking for matching `''
+   ```
+   The report states this as judgment call 1 ("no command in the lists does this"). That records a known defect as a limit, which change standard rule 12 does not allow.
+4. `utils/verify.sh:131-132` (the run is everything before the last `| tail`). In `sh passexit1.test.sh 2>&1 | grep PASS | tail -1`, where the test prints `PASS: x` and exits 1, the runner judges the command by grep's exit status and prints `PASS: x` / `verify: 1 commands passed` / `exit 0`. This follows ruling 1's wording, but a red test still passes when an earlier stage sits between it and `tail`. The report does not state this among the user-visible changes.
+
+### Not checked
+
+- 27 of the report's 36 reverts were not rerun; nine were reproduced, plus one of my own (traps reduced to 15).
+- Busybox `sh`.
+- dash with a real terminal attached, where `set -m` may succeed.
+- A command that ignores TERM, which keeps the runner waiting (the report's judgment call 2).
+- A raw carriage return in a command was probed. YAML itself reads it as a line break (`yaml.safe_load('x: "a\rb"')` gives `'a b'`), so it is not a runner finding.
+
+Reviewer usage: 124,041 tokens, 29 tool uses, 778 s (the runner's completion notification).

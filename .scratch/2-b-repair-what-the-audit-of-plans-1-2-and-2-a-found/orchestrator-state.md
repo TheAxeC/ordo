@@ -47,13 +47,13 @@ dispatch:
   landing: not-started
   round: 1 (sent 2026-09-25: the findings of 1-refuter.md with a ruling each, to the same builder; the worktree at the round's start is commit 00e8f8b on branch 2b-1)
   builder_usage: 129,970 tokens, 36 tool uses, 979 s; round 1: 207,120 tokens, 28 tool uses, 1,293 s (the runner's completion notifications)
-  round_reviewer: agent a500487f692781184, claude:opus, dispatched 2026-09-25 through /refute over round 1
+  round_reviewer: agent a500487f692781184, claude:opus, through /refute over round 1: 124,041 tokens, 29 tool uses, 778 s
   reviewer_report: agents/reviews/1-refuter.md (dispatched 2026-09-25 through /refute; reviewer claude:opus, agent ad7e4caff71a0f039; 111,656 tokens, 24 tool uses, 421 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- F (raised 2026-09-25 by the review over step 1's repair round, `agents/reviews/1-refuter.md`, "Repair round 1, refuted"): the runner finds a test's filter by reading the command's text with a regular expression, and the review found red tests that still pass (a redirection or a trailing `;` on `tail`, a comment holding a pipe, a backslash-newline, `| grep ... | tail -1`) and a false red on a quoted pipe; and under dash, where `set -m` has no terminal, a signal does not stop the running command. Mending the expression spelling by spelling cannot end this, so the fix is a change of mechanism, beyond a fix at landing. Options: (a) one repair round beyond the cap, which plan-orchestration allows when an acceptance item of the brief is unbuilt and the fix is too large for landing: the runner stops reading the command's text and lets the shell judge it, running each command as written through `bash -o pipefail -c` (so any stage's failure, the test's included, fails the pipeline, whatever the spelling), started from the embedded Python in a new session with standard input closed, and killing that session on INT, HUP, QUIT or TERM; the `PASS:` last-line rule stays for commands that end in a pipe into `tail`; `bash` becomes a stated requirement (dash has no `pipefail`: `dash -c 'set -o pipefail'` prints `Illegal option -o pipefail`); tests for every spelling the review found and for each of the four signals; (b) land as it is, with the pages narrowed to the spellings it handles, and book the mechanism change as its own step; (c) land as it is and book the gaps. Recommended (a): it ends the class of defect instead of listing it, and it is the step's own acceptance item. (b) and (c) land a runner that can still pass a red test, the defect the step exists to end; (c) is the lazy option.
 
 ## Booked, no ruling needed
 
@@ -92,7 +92,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; repair round 1 is done; /refute runs over it.
+- 2026-09-25. Step 1 briefed (2ce1804) and its worktree made; its review is in; the review over round 1 is in; the stop F is with the user.
 - Next step: 1, the verify runner.
 - Open on Axel's side: none.
 
