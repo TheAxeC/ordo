@@ -27,7 +27,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: A `writing` skill folder the writing skills share: the prose standard, the anti-pattern table, and the checks for non-ASCII, dash asides, history words and word counts per section.
-- Gate: each check has a test that fails on a planted violation and passes on a clean file; the skill follows `docs/dev/skill-layout.md` and the layout check passes on it.
+- Gate: each check has a test that fails on a planted violation and passes on a clean file; the skill follows `docs/dev/skill-layout.md` and the layout check passes on it; the coverage check with `--built writing` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, checked by reading both.
 - Waits on: 1, for the layout; 2, for what the base covers; 2.B, for the repaired skills and tools it is built with.
 
 ## 4. code-comments
@@ -41,21 +41,21 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The paper skill: drafting, structure, citations, figures and statistics, disclosure statements and revision patches, as the coverage inventory marks them rebuild, with the `tools/manuscript` scripts moved in.
-- Gate: `anchorize_tex.py` and `apply_tex_patch.py` pass their tests in the skill; the `\cite`-against-`.bib` check and the DOI check pass their tests; a side-by-side run against academic-paper on a real revision round, compared blind, wins or ties.
+- Gate: `anchorize_tex.py` and `apply_tex_patch.py` pass their tests in the skill; the `\cite`-against-`.bib` check and the DOI check pass their tests; a side-by-side run against academic-paper on a real revision round, compared blind, wins or ties; the coverage check with `--built paper` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: paper` row that the file of `skills/paper/` the row names holds what the source file did, checked by reading both.
 - Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 6. paper-review
 
 - Status: [ ]
 - Goal: The internal review skill: the reviewer roles, the editor's synthesis and the re-review mode.
-- Gate: every finding cites a line; a side-by-side run against academic-paper-reviewer on a paper with known referee reports, compared blind, wins or ties.
+- Gate: every finding cites a line; a side-by-side run against academic-paper-reviewer on a paper with known referee reports, compared blind, wins or ties; the coverage check with `--built paper-review` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: paper-review` row that the file of `skills/paper-review/` the row names holds what the source file did, checked by reading both.
 - Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 7. rebuttal
 
 - Status: [ ]
 - Goal: The response letter for a real submission round, from the referee comments and the revision's apply report.
-- Gate: every referee point has a response and a pointer to its change; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind, wins or ties.
+- Gate: every referee point has a response and a pointer to its change; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind, wins or ties; the coverage check with `--built rebuttal` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
 - Waits on: 5, for the apply report; 6, for the point table.
 
 ## 8. grant
@@ -69,14 +69,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The literature skill: search through Crossref, OpenAlex, Semantic Scholar and arXiv, source verification, synthesis and the `.bib`.
-- Gate: every source it cites resolves; a side-by-side run against deep-research on a real topic, compared blind, wins or ties.
+- Gate: every source it cites resolves; a side-by-side run against deep-research on a real topic, compared blind, wins or ties; the coverage check with `--built literature` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
 - Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 10. idea
 
 - Status: [ ]
 - Goal: The idea skill: the interview that sharpens an idea, and the novelty check with cited literature.
-- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind, wins or ties.
+- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind, wins or ties; the coverage check with `--built idea` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: idea` row that the file of `skills/idea/` the row names holds what the source file did, checked by reading both.
 - Waits on: 9, for the literature search.
 
 ## 11. scaffold
@@ -97,14 +97,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The researcher skill: the new-project and revise roadmap templates, an adopt mode for a project already underway (it reads the code, configs, results, logs and draft, writes the roadmap with the finished stages marked done with their evidence, and continues after your approval from the first stage not done), a run over a named range of stages, venue files in `venues/`, and plan-orchestration's support for SLURM jobs. Each stage's input and output files have a written format, so any stage can start from files that exist. When experiments do not beat the baseline, the loop proposes a new method and runs the next experiments; it never writes up a negative result.
-- Gate: a test that every template entry has a gate and that its dependencies exist; a test that each stage's input format is written down; the SLURM support has a test on a stub scheduler; one adopt run on one of your research-hub projects that is mid-experiments, whose roadmap you check; one run over part of the stages on a test project.
+- Gate: a test that every template entry has a gate and that its dependencies exist; a test that each stage's input format is written down; the SLURM support has a test on a stub scheduler; one adopt run on one of your research-hub projects that is mid-experiments, whose roadmap you check; one run over part of the stages on a test project; the coverage check with `--built researcher` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: researcher` row that the file of `skills/researcher/` the row names holds what the source file did, checked by reading both.
 - Waits on: 5 to 12, for the skills its entries call.
 
 ## 14. submit-manuscript
 
 - Status: [ ]
 - Goal: A skill that fills a submission portal from the project and the venue file, stops for every approval, never presses the final Submit, and writes a submission record.
-- Gate: one real run on a portal up to its last page, with the record written.
+- Gate: one real run on a portal up to its last page, with the record written; the coverage check with `--built submit-manuscript` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: submit-manuscript` row that the file of `skills/submit-manuscript/` the row names holds what the source file did, checked by reading both.
 - Waits on: 13, for the venue files; 5, for the documents.
 
 ## 15. submit-grant
