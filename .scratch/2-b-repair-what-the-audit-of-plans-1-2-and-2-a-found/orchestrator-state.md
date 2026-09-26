@@ -42,6 +42,7 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   worktree: .agents/worktrees/2b-7a
+  session_id: a4238a076a55f5c84
   base: df3c6a7
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7a-report.md
