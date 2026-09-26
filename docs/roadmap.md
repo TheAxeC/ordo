@@ -76,7 +76,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The idea skill: the interview that sharpens an idea, and the novelty check with cited literature.
-- Gate: one real run that you review, whose novelty claim cites the sources it checked.
+- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind, wins or ties.
 - Waits on: 9, for the literature search.
 
 ## 11. scaffold
