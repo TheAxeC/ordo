@@ -57,7 +57,9 @@ dispatch:
   round_1_reviewer: claude:opus, a fresh agent, afa0482792415b1e8; 165,597 tokens, 42 tool uses, 991 s
   round_2_start: 35a0300 (the worktree's wip commit)
   round_2_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7a-round-2.md (the one round beyond the cap, for ruling 5 of round 1 unbuilt and launch.test.sh red under load)
-  round_2_paths: the brief's list, plus skills/plan/SKILL.md line 52 and skills/land/SKILL.md lines 39-45
+  round_2_paths: the brief's list, plus skills/plan/SKILL.md line 52, skills/land/SKILL.md lines 39-45 and skills/plan-orchestration/templates/launch-note.md
+  round_2_builder_usage: 218,816 tokens, 101 tool uses, 12,118 s
+  round_2_reviewer: claude:opus, a fresh agent, dispatched
 - step: '7'
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E), on the main session's account, CLAUDE_CONFIG_DIR kept (ruling N)
