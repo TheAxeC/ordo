@@ -91,3 +91,72 @@ none. Every count and command the report quotes reproduced.
 ## Usage
 
 Reviewer: claude:opus, agent aee170f2a8cc8cfc5, 212,129 tokens, 67 tool uses, 638 s.
+
+## Repair round 1, refuted
+
+On .agents/worktrees/2b-14, base 85c035d, round delta `git diff 93ae923`; reviewer claude:opus, agent a6987f89555cf986d.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md   (exit 0)
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+$ python3 utils/check_coverage.py ... -> ok: docs/academic-coverage.md (exit 0)
+$ grep -c '^| [0-9][0-9]* | `' .../14-rows.md -> 52 (fixed 23, holds 29)
+largest sentence over 182-237 and row 55 -> 35 (rows 187, 192, 216); row 55 max 28
+git diff 93ae923 hunks: 55, 186-187, 189-190, 193-195, 197-200, 218, 227
+git diff 85c035d hunks: 55, 186-190, 193-195, 197-200, 204, 210, 213, 218-221, 225, 227-228, 235
+python3 .agents/b14/cases.py -> ALL CASES PASS
+grep -c '| rebuild later: ' -> 15 (base 18); paper 6 (8), literature 6 (6), paper-review 3 (3), researcher 0 (1)
+grep -c '| rebuild: <s> |': paper 34 (32), literature 22 (19), paper-review 20 (21), researcher 7 (6), idea 3 (3)
+roadmap.md:120 and :122 false after the step; the report names both
+LC_ALL=C grep -n '[^ -~]' on the doc and both records -> nothing
+```
+
+### 1. Spec
+
+1. docs/academic-coverage.md:189 and :199 (also 187, 198, 200): the reworded sentences say the order of deep-research's own phases belongs to `researcher` ("stage order is for `researcher` (entry 13) to set"; "which stage follows synthesis is for `researcher` (entry 13) to set"). Those phases are deep-research's six phases (SKILL.md:153-243), which row 186 gives to the literature skill; inside it the report follows synthesis and the editor reviews the report. What `researcher` owns per row 186 is the invocation of the skills, not the order inside literature.
+2. docs/academic-coverage.md:199: "Nothing of its phase-three boundary survives" drops the whole boundary, including its non-folder rules (synthesis_agent.md:18-23: no downstream deliverable, no simulating another agent's output), while rows 187 and 198 keep the same confinement and 189 drops only the folder layout. Three dispositions for one kind of content, and 199's is wider than the finding it answers.
+3. docs/academic-coverage.md:190: "When the ethics check runs is decided by `researcher` (entry 13)" contradicts the row's first sentences, which give the check to `paper` at entry 5 and run it before delivery.
+4. docs/academic-coverage.md:190 and :218: ethics training (ethics_review_agent.md:108, ethics_checklist.md:190) is a qualification the board checks before approval, not a plan of data collection; the drop can stand, the stated reason does not hold for it.
+5. docs/academic-coverage.md:218 against :190: row 218 drops the AI training-bias note "since the literature skill takes sources from live index searches", while row 190 has `paper` take the conflicts section, which includes "Researcher/AI biases acknowledged" (ethics_review_agent.md:99). The paper skill takes the acknowledgement from one file and drops it from the other, and the reason names the wrong skill. The knowledge-cutoff drop holds.
+
+Rulings 2, 3, 4, 5, 7, 8 and 9 hold on the source lines. No line outside 55 and 182-237 differs from base; no closure removed a check. Rows 193 and 199 agree with row 155 and row 58.
+
+### 2. Proof
+
+none. Every command and case reproduced. The ruling 6 command detects identical sentences only, not repeated shapes (Standards 1).
+
+### 3. Standards
+
+1. docs/academic-coverage.md:189 and :199, and :187 and :195: repeated construction (prose-standard section 0; ruling 6): "... is for `researcher` (entry 13) to set, and ... `scripts/check_pipeline_integrity.py` is not installed" in 189 and 199; "`researcher` (entry 13) orders the stages(,) and `scripts/check_pipeline_integrity.py` is not installed" in 187 and 195; rows 189, 195, 198 and 199 share "<statement>: <reason>, and <script> is not installed".
+2. docs/academic-coverage.md:200: "the pipeline order that `researcher` (entry 13) now owns": "now" states a change over time.
+
+### 4. Behaviour
+
+none new.
+
+### Not checked
+
+- Not read against their files: examples/exploratory_research, examples/policy_analysis, examples/systematic_review (row only), systematic_review_toolkit, prisma_protocol_template.
+- Records other than 8, 13, 15, 17, 18, 19, 38 and 42 of 14-rows.md were counted, not read.
+- academic-paper/SKILL.md's AI disclosure section, for the checklist's AI-data labelling destination.

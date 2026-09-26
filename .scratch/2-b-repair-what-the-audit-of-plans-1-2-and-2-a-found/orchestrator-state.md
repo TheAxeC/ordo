@@ -79,8 +79,8 @@ dispatch:
   base: 85c035d
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/14-report.md
-  landing: not-started
-  round: 1, from wip commit 93ae923, rulings in agents/briefs/14-round-1.md, paths widened to docs/academic-coverage.md line 55, builder done (288,032 tokens, 22 tool uses, 518 s), round reviewer claude:opus agent a6987f89555cf986d running
+  landing: cherry-picking
+  round: 1, from wip commit 93ae923, rulings in agents/briefs/14-round-1.md, paths widened to docs/academic-coverage.md line 55, builder done (288,032 tokens, 22 tool uses, 518 s), round reviewer claude:opus agent a6987f89555cf986d, 140,991 tokens, 46 tool uses, 525 s, 5 Spec and 2 Standards findings, all fixed at landing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
