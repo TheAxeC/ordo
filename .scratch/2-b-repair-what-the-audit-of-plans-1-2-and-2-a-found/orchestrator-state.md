@@ -52,6 +52,10 @@ dispatch:
   pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/pid.txt
   session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/session.txt
   note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/note-id.txt
+  pid_value: 62708
+  session_id: ec7fe645-5c70-4ce5-91f7-3307745f943e
+  note_id: 2006b4c7-57a1-44a1-b772-3dff0b6ccae6
+  transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
   landing: not-started
   round: 0
 ```
