@@ -43,6 +43,7 @@ dispatch:
 - step: '7b'
   executor: agent
   worker: claude:opus, a native agent in the background
+  session_id: a80c36789e1ef2e26
   worktree: .agents/worktrees/2b-7b
   base: f761538
   launched: 2026-09-26
