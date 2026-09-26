@@ -49,7 +49,7 @@ dispatch:
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-report.md
   landing: not-started
-  round: 1, from wip commit b32f293, rulings in agents/briefs/15-round-1.md, the brief's git convention corrected to allow the read-only git its checks run, sent to the builder
+  round: 1, from wip commit b32f293, rulings in agents/briefs/15-round-1.md, the brief's git convention corrected to allow the read-only git its checks run, builder done (312,799 tokens, 59 tool uses, 888 s), round reviewer claude:opus agent a8936a4bb6ee057ba running
 - step: '7'
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E)
