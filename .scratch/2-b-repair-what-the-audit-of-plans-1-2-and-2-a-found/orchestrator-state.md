@@ -43,13 +43,13 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: aea6ae56bf6a340aa (the runner's agent id)
   builder_usage: 139,013 tokens, 146 tool uses, 6,742 s
-  reviewer: claude:opus, through /refute, agent a47b2f8d813037915, running
+  reviewer: claude:opus, through /refute, agent a47b2f8d813037915, 209,446 tokens, 64 tool uses, 1,288 s, 5 Spec and 2 Standards findings
   worktree: .agents/worktrees/2b-15
   base: bef2c67
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-report.md
   landing: not-started
-  round: 0
+  round: 1, from wip commit b32f293, rulings in agents/briefs/15-round-1.md, the brief's git convention corrected to allow the read-only git its checks run, sent to the builder
 - step: '7'
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E)
