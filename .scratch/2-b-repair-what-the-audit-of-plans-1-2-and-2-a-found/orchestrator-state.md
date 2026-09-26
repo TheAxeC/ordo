@@ -62,7 +62,13 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- Open item Q (step 10, the roadmap diff): the new `docs/roadmap.md` is drafted in full at `agents/reviews/10-roadmap.md`, and `diff -u docs/roadmap.md .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/10-roadmap.md` prints the diff (117 lines). It carries changes 1 to 7 of open item M, choice 1 (a) (entry 9 moved between entries 4 and 5, its number kept; entry 5 waits on 9 "for the reference lookups"; entry 9 waits only on 3 and 2, which stay ahead of it, and entry 10 still comes after it), choice 2 (a) (entry 14's goal) and plan 1's Done line as ruled on open item O (b). One change departs from change 1 as it was written in open item M, and needs your yes:
+  - Change 1 named `--built paper --built paper-review --built literature --built researcher` in entry 15.A's gate. Change 7 removes 15.A's wait on 13, since no `rebuild later: researcher` row is left (`grep -c '| rebuild later: researcher'` prints 0). With `--built researcher` kept, 15.A's gate would fail until entry 13 builds `skills/researcher/`, which 15.A no longer waits on. The draft names `--built paper --built paper-review --built literature`.
+  - (a) Approve the diff as drafted, with the three `--built` skills. Pro: 15.A's gate matches its waits. Con: none.
+  - (b) Keep `--built researcher` in 15.A's gate and its wait on 13. Con: 15.A waits on a skill none of its rows go to.
+  - Recommendation: (a).
+  - Writing: the roadmap skill commits one change per commit, so the diff lands as 10 commits (changes 1 to 7, the move of entry 9, entry 14's goal, the Done line), not the one commit step 10's line in `plan.md` names.
+  - To rule: `Ruled: Q (a)` or `Ruled: Q (b)`, with any line of the diff to change.
 
 ## Booked, no ruling needed
 

@@ -85,6 +85,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 ## Blocked, and by what
 
+- 10: open item Q, your approval of the roadmap diff (Step 10, Step 0 below).
 - 17: step 7's landing, since 17 touches the rules page and every `SKILL.md`.
 - 18: every step from 1 to 17.
 - 19: step 18.
@@ -102,6 +103,14 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
   - To rule: `Ruled: N: account (a) or (b); oculus (a) or (b)`.
 
 ### Step 10, Step 0 (open item M, ruled 2026-09-26: choice 1 (a), choice 2 (a), changes 1 to 7 shown as the diff; see Rulings)
+
+- Open item Q (step 10, the roadmap diff): the new `docs/roadmap.md` is drafted in full at `agents/reviews/10-roadmap.md`, and `diff -u docs/roadmap.md .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/10-roadmap.md` prints the diff (117 lines). It carries changes 1 to 7 of open item M, choice 1 (a) (entry 9 moved between entries 4 and 5, its number kept; entry 5 waits on 9 "for the reference lookups"; entry 9 waits only on 3 and 2, which stay ahead of it, and entry 10 still comes after it), choice 2 (a) (entry 14's goal) and plan 1's Done line as ruled on open item O (b). One change departs from change 1 as it was written in open item M, and needs your yes:
+  - Change 1 named `--built paper --built paper-review --built literature --built researcher` in entry 15.A's gate. Change 7 removes 15.A's wait on 13, since no `rebuild later: researcher` row is left (`grep -c '| rebuild later: researcher'` prints 0). With `--built researcher` kept, 15.A's gate would fail until entry 13 builds `skills/researcher/`, which 15.A no longer waits on. The draft names `--built paper --built paper-review --built literature`.
+  - (a) Approve the diff as drafted, with the three `--built` skills. Pro: 15.A's gate matches its waits. Con: none.
+  - (b) Keep `--built researcher` in 15.A's gate and its wait on 13. Con: 15.A waits on a skill none of its rows go to.
+  - Recommendation: (a).
+  - Writing: the roadmap skill commits one change per commit, so the diff lands as 10 commits (changes 1 to 7, the move of entry 9, entry 14's goal, the Done line), not the one commit step 10's line in `plan.md` names.
+  - To rule: `Ruled: Q (a)` or `Ruled: Q (b)`, with any line of the diff to change.
 
 - Open item M (step 10, the roadmap's gates and order): the roadmap changes need your approval as a diff (ruling 2h, the `roadmap` skill), and two of them are your choice. Checked on main at step 14's landing: `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 15 (6 paper, 6 literature, 3 paper-review, 0 researcher; entry 15.A's goal still says 8, 6, 3 and 1, which change 7 corrects); the `rebuild:` rows per skill are writing 3, paper 34, paper-review 20, rebuttal 7, literature 22, idea 3, researcher 7, submit-manuscript 1, and code-comments, grant, scaffold, project-docs and submit-grant 0 (`grep -c '| rebuild: <skill> |'`).
   - The changes the plan already fixes, shown for approval:
