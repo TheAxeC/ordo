@@ -83,7 +83,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 - 16: the user's ruling on each retro proposal, raised when the step runs.
 - 10: open item M, the roadmap diff and two choices (Step 10, Step 0 below).
-- 7: step 4 landed. The oculus session's fixes to its launch-note setup are in research-hub's commit 409de414 (the execute bit, `git ls-files -s` shows 100755; the absolute `launch_note` path; `LOCK_WAIT_MS = 2000`).
+- 7: unblocked (step 4 landed; the oculus fixes are in research-hub's 409de414, `git ls-files -s tools/oculus/bin/dispatch-note.mjs` shows 100755); dispatched.
 
 ### Step 10, Step 0 (stop: open item M)
 

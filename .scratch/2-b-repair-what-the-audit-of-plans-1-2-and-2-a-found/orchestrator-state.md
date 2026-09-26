@@ -33,7 +33,7 @@ review_minutes: 0            # no time box.
 look:                        # none: no view changes.
 workers_at_once: 3           # ruled: up to three steps in flight, with disjoint paths.
 bench: []                    # no A/B.
-launch_note:                 # none recorded.
+launch_note: /Users/axelfaes/workspace/research-hub/tools/oculus/bin/dispatch-note.mjs # the hub's note command, for step 7's shell launch (ruling E).
 ```
 
 ```yaml
@@ -56,6 +56,22 @@ dispatch:
   base: bef2c67
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-report.md
+  landing: not-started
+  round: 0
+- step: '7'
+  executor: agent
+  worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E)
+  worktree: .agents/worktrees/2b-7
+  base: 2c71183
+  launched: 2026-09-26
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7-report.md
+  prompt: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/prompt.md
+  output: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/output.json
+  stderr: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/stderr.txt
+  exit: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/exit.txt
+  pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/pid.txt
+  session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/session.txt
+  note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/note-id.txt
   landing: not-started
   round: 0
 ```
@@ -130,7 +146,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 1a, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 at 5fdaa98, 76a2b10, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7 and 617f8f3; step 1c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 10 stopped on open item M; steps 12 and 15 are dispatched; 13 and 14 after 12; 7 after the oculus launch-note fixes; then 16 to 19.
+- Roadmap entry 2.B. Step 10 stopped on open item M; steps 12, 15 and 7 are dispatched; 13 and 14 after 12; then 16 to 19.
 - Open on Axel's side: none.
 
 ## Usage
