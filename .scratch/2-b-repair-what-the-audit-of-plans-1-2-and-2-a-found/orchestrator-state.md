@@ -68,10 +68,10 @@ dispatch:
 
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
-- Step 10: roadmap entry 14 (`docs/roadmap.md:106-108`) names portal filling and a submission record but not the cover letter and blind-review removal that the coverage rows at `docs/academic-coverage.md:59` and `:90` send to `submit-manuscript`; step 10 names them in entry 14's goal or moves them to entry 5, through `/roadmap` with the diff shown (found by step 11's review over round 2).
 
 ## Closed items
 
+- 2026-09-26: booked item, roadmap entry 14's cover letter and blind-review removal: entry 14's goal names both (step 10, 9095ecc).
 - 2026-09-26: open item Q, the roadmap diff of step 10: ruled (a), approved as drafted in `agents/reviews/10-roadmap.md`, entry 15.A's gate naming `--built paper --built paper-review --built literature`.
 - 2026-09-26: open item P, the retro's 19 proposals: ruled all (a) (`Ruled: P: all (a)`); written beside each proposal in `.scratch/retros/2026-09-26.md`; step 17 makes them.
 - 2026-09-26: open item O, plan 1's Done line: ruled (b), the line without the clause on the landing reports' lists; it goes into `docs/roadmap.md:135` through `/roadmap` with step 10's diff.
@@ -118,8 +118,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12, 13, 14 and 15 landed (steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12, 13 and 14 at 5fdaa98, 76a2b10, f23d14a, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7, 617f8f3, 415d669, 3509ccb and 3ad7ebd; step 15 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Open items M, N, O and P ruled 2026-09-26. Step 7 relaunches on the main session's account; step 10 writes the roadmap diff (with plan 1's Done line, ruling O) and shows it for approval; step 17 applies the retro's 19 proposals after step 7 lands, since it touches the rules and every `SKILL.md`; then 18 and 19.
+- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 16's retro at fe6d48b; step 10's roadmap in a9e651b to 80c8dc6, booked in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 7's builder has finished and is read next; step 17 applies the retro's 19 proposals after step 7 lands; then 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -142,3 +142,4 @@ dispatch:
 | 13 | claude:opus agent, effort high: 341,486 tokens, 63 tool uses, 1,139 s; round 1: 69,054 tokens, 15 tool uses, 542 s | 270,063 tokens, 43 tool uses, 488 s; round 1: 167,958 tokens, 38 tool uses, 458 s | 1 | 4 (5 rulings) | 1 file changed, 7 insertions(+), 7 deletions(-) | no | 6 | 0 | 60 | 54060 | 170161 | 10545292 | 136 | 51 | none |
 | 14 | claude:opus agent, effort high: 215,673 tokens, 128 tool uses, 1,289 s; round 1: 288,032 tokens, 22 tool uses, 518 s | 212,129 tokens, 67 tool uses, 638 s; round 1: 140,991 tokens, 46 tool uses, 525 s | 1 | 13 (9 rulings) | 1 file changed, 24 insertions(+), 24 deletions(-) | no | 7 | 0 | 15 | 15993 | 32470 | 2858340 | 32 | 7 | none |
 | 15 | claude:opus agent, effort high: 139,013 tokens, 146 tool uses, 6,742 s; round 1: 312,799 tokens, 59 tool uses, 888 s | 209,446 tokens, 64 tool uses, 1,288 s; round 1: 201,769 tokens, 65 tool uses, 679 s | 1 | 7 (5 rulings) | 29 files changed, 92 insertions(+), 70 deletions(-) | no | 3 | 1 (open item O) | 35 | 31761 | 73082 | 8778410 | 78 | 66 | none |
+| 10 | orchestrator, no agent | none (the diff approved by the user, open item Q) | 0 | 0 | 1 file changed, 22 insertions(+), 22 deletions(-) | yes | 0 | 1 (open item Q) | 101 | 102285 | 664529 | 19671793 | 202 | 375 | none; shared with step 16, step 7's relaunch and the wait on the rulings |

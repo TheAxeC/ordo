@@ -26,7 +26,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
-- 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review); entry 15.A's goal counts and its wait on 13, which step 14's re-marked rows made false (1 commit; orchestrator, no agent)
+- ✅ 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review); entry 15.A's goal counts and its wait on 13, which step 14's re-marked rows made false (1 commit; orchestrator, no agent)
 - ✅ 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
 - ✅ 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
 - ✅ 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
@@ -778,3 +778,37 @@ verify: 13 commands passed
   and exited 0. `python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md` printed ten `ok:` lines.
 - Raised: open item O, the new text of `docs/roadmap.md:135` in two versions. Booked: nothing new.
 - Usage, orchestrator from step 14's landing (3ad7ebd) to this booking: 35 messages, 31761 output tokens, 73082 cache-write tokens, 8778410 cache-read tokens, 78 fresh input tokens, 66 minutes.
+
+### Step 10, the roadmap's gates and order (landed 2026-09-26)
+
+- Landed: `docs/roadmap.md` rewritten through `/roadmap` in ten commits, a9e651b to 80c8dc6, one per change: entry 15.A's gate counts only `| rebuild later: ` rows and runs the coverage check with `--built paper --built paper-review --built literature` (ruling Q); side-by-side runs in the gates of entries 7 and 10; the `--built` clause and a checked record per `rebuild:` row in the gates of entries 3, 5, 6, 7, 9, 10, 13 and 14; entry 16 waits on 14; entry 8 states how it uses the coverage; entry 15.A's counts (6, 6, 3) and waits (5, 6 and 9); entry 9 moved before entry 5, which waits on it for the reference lookups (ruling M, choice 1 (a)); entry 14's goal names the cover letter and the blind-review removal (ruling M, choice 2 (a)); plan 1's Done line restated from the re-run, without the landing reports' lists (ruling O (b)).
+- Proof: `cmp docs/roadmap.md .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/10-roadmap.md` exits 0, the file equal to the diff approved on open item Q; `git diff --shortstat 7a1adf0 80c8dc6 -- docs/roadmap.md` prints `1 file changed, 22 insertions(+), 22 deletions(-)`.
+- Closed from the booked list: roadmap entry 14 now names the cover letter and the blind-review removal.
+- Verification on main after 80c8dc6, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+```
+
+- Usage, orchestrator from step 15's landing (8becbcd) to this booking, shared with step 16 (the retro), step 7's relaunch and the wait on the rulings: 101 messages, 102285 output tokens, 664529 cache-write tokens, 19671793 cache-read tokens, 202 fresh input tokens, 375 minutes.
