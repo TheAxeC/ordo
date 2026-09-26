@@ -74,13 +74,13 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a167763d25ef08941 (the runner's agent id)
   builder_usage: 341,486 tokens, 63 tool uses, 1,139 s
-  reviewer: claude:opus, through /refute, agent a8d1fbbfc485cb1fd, running
+  reviewer: claude:opus, through /refute, agent a8d1fbbfc485cb1fd, 270,063 tokens, 43 tool uses, 488 s, 3 Spec findings and 1 Behaviour finding
   worktree: .agents/worktrees/2b-13
   base: 85c035d
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/13-report.md
   landing: not-started
-  round: 0
+  round: 1, from wip commit 16200ee, rulings in agents/briefs/13-round-1.md, sent to the builder
 - step: '14'
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
