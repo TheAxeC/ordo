@@ -86,6 +86,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 ## Blocked, and by what
 
+- 7: open item R, how a shell-launched `claude` builder is allowed to run commands (Step 7, Step 0 below).
 - 17: step 7's landing, since 17 touches the rules page and every `SKILL.md`.
 - 18: every step from 1 to 17.
 - 19: step 18.
@@ -101,6 +102,13 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
     - Recommendation: (a). The plan's agents all run on one account, and the account is a choice only you can make; (b) is the cheaper option to carry out, and cost is not a reason.
   - The check that the builder's row appears under this session in oculus's Agents view needs oculus running; nothing listens on its port (`lsof -iTCP -sTCP:LISTEN` shows no node process), and research-hub is read only for this plan, so the orchestrator does not start it. (a) You start oculus (`npm run dev` in `tools/oculus`) before the relaunch, and the orchestrator checks the view in the browser. (b) The check is made on the note record alone. Recommendation: (a); the ruling E run exists to see the row in the view.
   - To rule: `Ruled: N: account (a) or (b); oculus (a) or (b)`.
+
+- Open item R (step 7, the builder's permission to run commands): the relaunched builder (session ec7fe645-5c70-4ce5-91f7-3307745f943e) exited 0 after 36 turns without building the step. Its report (`agents/reviews/7-report.md` in the worktree, 83 lines) says each script it tried returned "This command requires approval": `sh utils/check_skill_layout.test.sh`, `python3 utils/check_skill_layout.py` and a `python3 -c` probe; `cat`, `grep` and `wc` ran. It wrote the brief's cases into `utils/check_skill_layout.test.sh` and `utils/check_rule_inventory.test.sh` (147 lines added, `git diff --stat 2c71183` in the worktree) and changed no checker code. The cause is the recipe: `skills/plan-orchestration/templates/launch.sh:455` starts `claude -p` with `--permission-mode acceptEdits`, and neither account's `settings.json` has an allow rule, so a shell-launched `claude` builder cannot run a test on either account. Tried in the worktree with `claude -p --model haiku` and the prompt to run `sh utils/check_rule_inventory.test.sh`: `--permission-mode acceptEdits` answered REFUSED, `--permission-mode auto` answered REFUSED, and `--permission-mode acceptEdits --allowedTools "Bash(sh utils/check_rule_inventory.test.sh:*)"` ran the test and returned its output. How the builder gets that permission is yours:
+  - (a) An allow list: `launch.sh` takes the commands a builder may run and passes them to `claude -p` as `--allowedTools`, the list coming from a new optional key of the ledger's configuration block (the verify commands and the brief's own gate commands by default). Pro: tried and works; a command outside the list stays refused, git included. Con: a new configuration key, and a command the list misses stops the builder.
+  - (b) `--permission-mode bypassPermissions` for a shell-launched `claude` builder. Pro: no list to keep. Con: nothing checks any command the builder runs, git included; the no-git rule rests on the prompt alone. Not tried.
+  - (c) Step 7 runs as a native agent, like the other steps, and ruling E's shell launch is dropped. Con: the recipe stays unable to run a test for every later shell-launched `claude` builder. This is the lazy option: it leaves the defect in place.
+  - Recommendation: (a). The fix is its own step, 7a, since it lands `launch.sh`, its test and the recipe text in `plan-orchestration` before step 7's builder can be resumed (`launch.sh --resume ec7fe645-5c70-4ce5-91f7-3307745f943e` with the list): /spec, a builder, /refute, /land. Step 17 waits on step 7's landing, since both change `utils/check_skill_layout.py` and its test.
+  - To rule: `Ruled: R (a)`, `R (b)` or `R (c)`.
 
 ### Step 10, Step 0 (open item M, ruled 2026-09-26: choice 1 (a), choice 2 (a), changes 1 to 7 shown as the diff; see Rulings)
 

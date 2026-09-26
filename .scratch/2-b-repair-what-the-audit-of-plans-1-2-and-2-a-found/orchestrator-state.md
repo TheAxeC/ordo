@@ -55,6 +55,7 @@ dispatch:
   pid_value: 62708
   session_id: ec7fe645-5c70-4ce5-91f7-3307745f943e
   note_id: 2006b4c7-57a1-44a1-b772-3dff0b6ccae6
+  state: exited 0 with no script run (claude -p under acceptEdits refused every script); its test cases kept in the worktree; resume waits on open item R
   transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
   landing: not-started
   round: 0
@@ -62,7 +63,12 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- Open item R (step 7, the builder's permission to run commands): the relaunched builder (session ec7fe645-5c70-4ce5-91f7-3307745f943e) exited 0 after 36 turns without building the step. Its report (`agents/reviews/7-report.md` in the worktree, 83 lines) says each script it tried returned "This command requires approval": `sh utils/check_skill_layout.test.sh`, `python3 utils/check_skill_layout.py` and a `python3 -c` probe; `cat`, `grep` and `wc` ran. It wrote the brief's cases into `utils/check_skill_layout.test.sh` and `utils/check_rule_inventory.test.sh` (147 lines added, `git diff --stat 2c71183` in the worktree) and changed no checker code. The cause is the recipe: `skills/plan-orchestration/templates/launch.sh:455` starts `claude -p` with `--permission-mode acceptEdits`, and neither account's `settings.json` has an allow rule, so a shell-launched `claude` builder cannot run a test on either account. Tried in the worktree with `claude -p --model haiku` and the prompt to run `sh utils/check_rule_inventory.test.sh`: `--permission-mode acceptEdits` answered REFUSED, `--permission-mode auto` answered REFUSED, and `--permission-mode acceptEdits --allowedTools "Bash(sh utils/check_rule_inventory.test.sh:*)"` ran the test and returned its output. How the builder gets that permission is yours:
+  - (a) An allow list: `launch.sh` takes the commands a builder may run and passes them to `claude -p` as `--allowedTools`, the list coming from a new optional key of the ledger's configuration block (the verify commands and the brief's own gate commands by default). Pro: tried and works; a command outside the list stays refused, git included. Con: a new configuration key, and a command the list misses stops the builder.
+  - (b) `--permission-mode bypassPermissions` for a shell-launched `claude` builder. Pro: no list to keep. Con: nothing checks any command the builder runs, git included; the no-git rule rests on the prompt alone. Not tried.
+  - (c) Step 7 runs as a native agent, like the other steps, and ruling E's shell launch is dropped. Con: the recipe stays unable to run a test for every later shell-launched `claude` builder. This is the lazy option: it leaves the defect in place.
+  - Recommendation: (a). The fix is its own step, 7a, since it lands `launch.sh`, its test and the recipe text in `plan-orchestration` before step 7's builder can be resumed (`launch.sh --resume ec7fe645-5c70-4ce5-91f7-3307745f943e` with the list): /spec, a builder, /refute, /land. Step 17 waits on step 7's landing, since both change `utils/check_skill_layout.py` and its test.
+  - To rule: `Ruled: R (a)`, `R (b)` or `R (c)`.
 
 ## Booked, no ruling needed
 
@@ -119,7 +125,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 16's retro at fe6d48b; step 10's roadmap in a9e651b to 80c8dc6, booked in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 7's builder has finished and is read next; step 17 applies the retro's 19 proposals after step 7 lands; then 18 and 19.
+- Roadmap entry 2.B. Step 7's builder could run no script and stopped; open item R decides how a shell-launched builder is allowed to run commands. Step 17 waits on step 7's landing; then 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
