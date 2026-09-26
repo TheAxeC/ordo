@@ -63,11 +63,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item S (step 7a, the name and form of the allow-list key ruled on open item R): the key is a public shape of `.agents/plan.yaml` and the ledger's configuration block (`skills/plan/templates/plan.yaml`, `skills/plan/templates/orchestrator-state.md`, `skills/ordo-init/templates/check_config.py`), so its name and the form of its values are yours. The existing keys for the builder are `worker`, `worker_effort`, `workers_at_once` and `launch_note`.
-  - (a) `worker_allow:`, a list of command prefixes (`sh utils/check_skill_layout.test.sh`, `python3 utils/`), which `launch.sh` turns into `--allowedTools "Bash(<prefix>:*)"` for a `claude` builder; absent, the list is built from the verify list's commands and the brief's own gate commands. Pro: the values name no harness, as the other keys do not, and the name follows `worker` and `worker_effort`. Con: a rule other than a command prefix cannot be written.
-  - (b) `worker_allowed_tools:`, a list of Claude Code permission rules passed through as written (`Bash(sh utils/*.test.sh:*)`). Pro: any rule the harness takes can be written. Con: the key's values are one harness's syntax, which a Codex builder does not read.
-  - Recommendation: (a). Neither costs more to build than the other.
-  - To rule: `Ruled: S (a)`, `S (b)`, or another name.
+- none.
 
 ## Booked, no ruling needed
 
@@ -76,6 +72,7 @@ dispatch:
 
 ## Closed items
 
+- 2026-09-26: open item S, the allow-list key: ruled (a), `worker_allow:`, a list of command prefixes that `launch.sh` passes to a `claude` builder as `--allowedTools "Bash(<prefix>:*)"`; absent, built from the verify list and the brief's gate commands.
 - 2026-09-26: open item R, how a shell-launched `claude` builder may run commands: ruled (a), an allow list that `launch.sh` passes as `--allowedTools`, from a new optional key; new step 7a builds it, then step 7's builder is resumed with the list.
 - 2026-09-26: booked item, roadmap entry 14's cover letter and blind-review removal: entry 14's goal names both (step 10, 9095ecc).
 - 2026-09-26: open item Q, the roadmap diff of step 10: ruled (a), approved as drafted in `agents/reviews/10-roadmap.md`, entry 15.A's gate naming `--built paper --built paper-review --built literature`.
@@ -125,7 +122,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 16's retro at fe6d48b; step 10's roadmap in a9e651b to 80c8dc6, booked in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Open item R ruled (a): new step 7a gives a shell-launched `claude` builder an allow list; its key's name and form wait on open item S. Step 7 resumes after 7a lands; step 17 after step 7 lands; then 18 and 19.
+- Roadmap entry 2.B. Step 7a (the `worker_allow` key, rulings R and S) is next; step 7 resumes after it lands; step 17 after step 7 lands; then 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
