@@ -40,7 +40,7 @@ launch_note: /Users/axelfaes/workspace/research-hub/tools/oculus/bin/dispatch-no
 dispatch:
 - step: '7'
   executor: agent
-  worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E)
+  worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E), on the main session's account, CLAUDE_CONFIG_DIR kept (ruling N)
   worktree: .agents/worktrees/2b-7
   base: 2c71183
   launched: 2026-09-26
@@ -52,11 +52,6 @@ dispatch:
   pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/pid.txt
   session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/session.txt
   note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/note-id.txt
-  state: stopped with TERM (exit 143) before any change, relaunch waiting on open item N
-  pid_value: 27013
-  session_id: dcce4add-8b4c-4354-b005-27cb6e39c841
-  note_id: 502d4c9d-3b6a-4316-8628-f519325eee87
-  transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/dcce4add-8b4c-4354-b005-27cb6e39c841.jsonl
   landing: not-started
   round: 0
 ```
