@@ -97,6 +97,8 @@ dispatch:
   repair_note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-note-id.txt
   repair_pid_value: 33267
   repair_note_id: 47651a85-5459-45af-8e79-2bf57267c463
+  repair_state: exit 0; 143 turns, 2,602 s, 42,481 output tokens, 70,246 cache-write, 12,663,077 cache-read, 94 fresh input; no permission denial
+  round_1_reviewer: claude:opus, a fresh agent, dispatched
   transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
   landing: not-started
 ```
