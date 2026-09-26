@@ -80,10 +80,21 @@ dispatch:
   resume_note_id: 5546e0f7-4758-431c-9218-9567e8801d1d
   resume_launched: 2026-09-26, session ec7fe645-5c70-4ce5-91f7-3307745f943e resumed
   resume_state: exit 0 at about 18:39; 141 turns, 2,811 s, 55,437 output tokens, 220,172 cache-write, 11,591,867 cache-read, 130 fresh input; 5 permission denials (reads of the main ledger, and two command forms outside the list)
-  reviewer: claude:opus, a fresh agent, dispatched
+  reviewer: claude:opus, a fresh agent, a70fea5f0ba522233; 147,356 tokens, 33 tool uses, 2,172 s
+  round: 1
+  round_1_start: 114dfca (the worktree's wip commit)
+  round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7-round-1.md
+  round_1_paths: the brief's list
+  repair_prompt: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-prompt.md
+  repair_output: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-output.json
+  repair_stderr: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-stderr.txt
+  repair_exit: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-exit.txt
+  repair_pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-pid.txt
+  repair_session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-session.txt
+  repair_allow_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-allow.txt (unchanged, since worker_allow and the brief's check commands did not change)
+  repair_note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-note-id.txt
   transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
   landing: not-started
-  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
