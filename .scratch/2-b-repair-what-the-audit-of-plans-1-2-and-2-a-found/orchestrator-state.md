@@ -55,6 +55,7 @@ dispatch:
   round_1_start: 5fba16f (the worktree's wip commit)
   round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7b-round-1.md
   round_1_paths: the brief's list
+  round_1_builder_usage: the same agent, 316,580 tokens, 37 tool uses, 3,126 s in all (the final notification's totals)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
