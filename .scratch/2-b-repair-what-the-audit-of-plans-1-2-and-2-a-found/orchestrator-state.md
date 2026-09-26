@@ -93,6 +93,8 @@ dispatch:
   repair_session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-session.txt
   repair_allow_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-allow.txt (unchanged, since worker_allow and the brief's check commands did not change)
   repair_note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-note-id.txt
+  repair_pid_value: 33267
+  repair_note_id: 47651a85-5459-45af-8e79-2bf57267c463
   transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
   landing: not-started
 ```
