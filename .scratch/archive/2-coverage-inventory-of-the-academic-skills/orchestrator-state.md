@@ -46,7 +46,12 @@ dispatch: none
 
 ## Closed items
 
-- none.
+- 2026-09-23: the step list approved as drafted, with option A for the marks, by the user (`plan.md:34`, Rulings (2026-09-23)).
+- 2026-09-23: the executor is inline for every step (`plan.md:35`).
+- 2026-09-23: `/refute` runs as a fresh read-only reviewer agent on every step, approved by the user with the step list (`plan.md:36`).
+- 2026-09-23: a new script's test joins `README.md`, `docs/dev/building.md`, `docs/dev/change-standard.md` and the verify list in its own step, step 2 (`plan.md:37`).
+- 2026-09-23: nothing is installed, pinned or removed without the user's explicit permission, and the academic skills are read in `research-hub/.agents/skills/` and never changed, ruled by the user (`plan.md:38`).
+- 2026-09-23: the user approves `docs/academic-coverage.md` as landed at c1ff193 and asks that it be kept for later work (`plan.md:39`). Step 7's approval stop, which the audit's finding 6 (`.scratch/reviews/2026-09-24-audit/1-process-audit.md`) names as never booked in the open items (the state file at c1ff193 says "none"), ended with this approval.
 
 ## The standing demands (from Axel, in force)
 
@@ -72,9 +77,9 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-23. Steps 1 to 8 done (d44092c, 64e50ce, b6fadc8, ed16ff2, 7752a76, c1ff193; steps 7 and 8 in the commit that carries this line). The tree is clean after it.
-- Verified: the verify list on main: eight `PASS:` lines, ten `ok:` lines from the layout check, a clean ASCII check.
+- Verified: at the closing, `sh v.sh 2>&1 | grep -c -E '^(PASS|ok):'` printed `18` (session log `~/.claude-work/projects/-Users-axelfaes-workspace-ordo/7bdaf343-8a39-4a02-a88f-004137adaa7f.jsonl`, line 5960, 19:31:35Z). `sh v.sh >/dev/null 2>&1; echo "verify $?"` printed `verify 0`. No `PASS:` line of the verify list was shown. The script, written at session log line 4496, ended each command with `|| { echo "RED: exit $?"; exit 1; }` and ran the ASCII check last, with no filter. So the script's exit 0 carried the ASCII check's own status. Each test in that script ran as `<test> 2>&1 | tail -1`, so the status it saw was `tail`'s, and a red test could not stop it (`.scratch/reviews/2026-09-24-audit/1-process-audit.md`, "Did the verification actually prove green?"). The re-run at 15703ec (`.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-rerun.md`, "Commit 15703ec") shows these `PASS:` lines, each test exiting 0: `PASS: land.sh and usage.py scratch tests`, `PASS: check_config.py scratch tests`, `PASS: collect_findings.py scratch tests`, `PASS: sync_rules.py scratch tests`, `PASS: check_coverage.py scratch tests`, `PASS: check_rule_inventory.py scratch tests`, `PASS: check_skill_layout.py scratch tests`, `PASS: pin.sh scratch tests`. Its ASCII check prints nothing and exits 0. Its layout check, `python3 utils/check_skill_layout.py`, prints 10 `ok:` lines and exits 0. Its inventory check over the tree's 10 inventories prints 10 `ok:` lines and exits 0.
 - Next step: none; plan 2 is closed and archived. The next roadmap entry is 2.A.
-- Open on Axel's side: none until step 7.
+- Open on Axel's side: none. Plan 2 is closed, and nothing is blocked or owed.
 
 ## Usage
 

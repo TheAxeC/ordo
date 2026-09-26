@@ -31,7 +31,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
 - ✅ 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
 - ✅ 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
-- 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit)
+- ✅ 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit)
 - 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit)
 - 18 The closure table `agents/reviews/closure.md`: every numbered finding of the six reports (the five of the audit and `6-oculus-changes.md`) with the commit that closed it or the user's ruling; its row count equals the count of findings in the reports (1 commit)
@@ -84,6 +84,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 16: the user's ruling on each retro proposal, raised when the step runs.
 - 10: open item M, the roadmap diff and two choices (Step 10, Step 0 below).
 - 7: open item N, the account of its shell-launched builder and the oculus view check (Step 7, Step 0 below).
+- The roadmap line of plan 1's Done entry, from step 15: open item O, which of two versions (Step 15, plan 1's Done line, below); step 15 itself landed.
 
 ### Step 7, Step 0 (stop: open item N)
 
@@ -115,6 +116,15 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
     - (b) Both move to entry 5: entry 5's goal names them, and rows 59 and 90 are rewritten to `paper`. Pro: available with the first writing skill. Con: two rows rewritten, and the paper skill takes venue-specific work without the venue files of entry 13.
     - Recommendation: (a). (a) is also the cheaper option; it is recommended because the work is venue-specific and entry 14 is where the venue files and the portal meet, not because it is cheaper.
   - To rule: `Ruled: M: changes 1-7 <approved, or what to change>; choice 1 (a) or (b); choice 2 (a) or (b)`. On the ruling, step 10 writes the approved diff through `/roadmap`, lands it, and books it.
+
+### Step 15, plan 1's Done line (stop: open item O)
+
+- Open item O (step 15, plan 1's Done line in the roadmap): `docs/roadmap.md:135` says plan 1's gate showed "every command in `docs/dev/building.md` passed on main (seven `PASS:` lines, ten `ok:` lines, a clean ASCII check)", a count nobody saw quoted, since each test ran through `| tail -1`. Step 15 re-ran the tests at the closing commit a866716 on its extracted tree (`agents/reviews/15-rerun.md`, "Commit a866716") and wrote the line again from what was run and seen (`agents/reviews/15-report.md`, "Doc text"; session log lines 3146, 3150, 3179 and 3204 of `7bdaf343-8a39-4a02-a88f-004137adaa7f.jsonl`). The roadmap changes only as a diff you approve (ruling 2h). Two versions, differing in one clause:
+  - (a) Keeps the clause "every landing report `Open items: none. Booked list: empty`", which is true (`grep -h 'Booked' .scratch/archive/1-one-layout-for-every-skill/agents/reviews/*-landing.md | sort | uniq -c` prints `13 Open items: none. Booked list: empty.`). The full line:
+    - [x] 1. One layout for every skill: `docs/dev/skill-layout.md` approved (plan 1's rulings); at the closing on main, `python3 utils/check_skill_layout.py` printed ten `ok:` lines, exit 0, `sh utils/check_skill_layout.test.sh` printed `PASS: check_skill_layout.py scratch tests`, `python3 utils/check_rule_inventory.py` over the ten inventories printed ten `ok:` lines, exit 0, and `sh utils/check_rule_inventory.test.sh` printed `PASS: check_rule_inventory.py scratch tests`, and the ASCII check printed nothing, exit 0; `/refute` ran on steps 2 to 14, once on the build and once over its one repair round, every landing report `Open items: none. Booked list: empty`; the findings of that last run that a rule was changed in meaning were fixed at landing with no further review: step 4 (a sentence the old file does not have), step 6 (a refusal stated without its condition), step 7 (`land`'s red line booked in the open items, against the ruling), step 8 (the refusal for a missing run over the last round merged into another refusal, and part of old line 10 lost), step 10 (the diff rule written twice with different scopes), step 11 (the `drop` refusal placed after the draft it prevents) and step 13 (the rule that nothing is written before approval not limited to the setup); the tests of `docs/dev/building.md` last ran together on main at step 14's landing, each through `| tail -1`, which hides its exit status, and the re-run at a866716 (`.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-rerun.md`, "Commit a866716") shows `PASS: land.sh and usage.py scratch tests`, `PASS: check_config.py scratch tests`, `PASS: collect_findings.py scratch tests`, `PASS: sync_rules.py scratch tests`, `PASS: check_rule_inventory.py scratch tests`, `PASS: check_skill_layout.py scratch tests` and `PASS: pin.sh scratch tests`, each test exiting 0; at step 14's landing `npx skills add . --list` printed `Found 10 skills`.
+  - (b) The same line without that clause. Pro: entry 1's gate (`git show a866716~1:docs/roadmap.md`) never asked for the lists, and the audit's finding 6 shows plan 1 used no booked or closed list and committed one open item (582298b), so the clause reports no gate output. Con: a true sentence leaves the record.
+  - Recommendation: (b). The Done line records what the gate asked and what it printed; the clause is neither. Neither option costs more to carry out than the other.
+  - To rule: `Ruled: O (a)` or `Ruled: O (b)`. On the ruling, the line goes into `docs/roadmap.md:135` through `/roadmap` with the diff shown, together with step 10's diff when open item M is ruled by then.
 
 ### Step 1, the verify runner (landed 2026-09-25)
 
@@ -691,3 +701,42 @@ verify: 13 commands passed
   and exited 0. `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`.
 - Booked: nothing new. Closed from the booked list: the ethics rows of the audit's finding 13, checked and re-marked here. Carried to open item M: change 7 and the updated counts.
 - Usage, orchestrator from step 13's landing (3509ccb) to this booking: 15 messages, 15993 output tokens, 32470 cache-write tokens, 2858340 cache-read tokens, 32 fresh input tokens, 7 minutes.
+
+### Step 15, ledger corrections in the three archived plans (landed 2026-09-26)
+
+- Landed: the tests re-run at each of the 26 landing and closing commits of plans 1, 2 and 2.A on trees extracted with `git archive` (`agents/reviews/15-rerun.md`, one "## Commit <hash>" section each): every test exits 0 with a `PASS:` last line and the ASCII check is clean at all 26; the layout check exits 1 at the 11 commits before fe1f5e7 and joined plan 1's verify list only at bd51f8b. Every booking that claimed a `PASS:` count now quotes the lines of the re-run at its commit and says what the landing itself ran and saw, from the session log line it cites (50 bookings across the three plans' `plan.md`, state files and landing reports). Plan 1's usage rows carry the measured reviewer figures from the session log. The closed lists of the three state files hold one entry per ruling (12, 6 and 7). Plan 2's stale "Blocked" and "Open on Axel's side" lines are true. The three plans count findings under one rule, stated in `15-rerun.md`.
+- User-visible changes, before and after:
+  - An archived booking's verification line: before, "seven `PASS:` lines, ten `ok:` lines, a clean ASCII check"; after, the command the session ran, its log line and what it printed, and the `PASS:` lines of the re-run at that commit.
+  - Plan 1's findings counts: before, 27 for step 2 and 3 for step 13's round; after, 23 and 4, under the rule the other two plans use.
+  - `docs/roadmap.md` is unchanged; the new text of line 135 is open item O.
+- Rounds: the first review (Spec 1-5, Standards 1-2), repair round 1 (5 rulings in `agents/briefs/15-round-1.md`; the brief's git convention corrected to allow the read-only git its checks run), the review over it (5 findings), fixed at landing (3): one counting rule for the three plans, the reason given for Doc text variant 2, and plan 2 step 4's session log citation (`agents/reviews/15-refuter.md`, Closed).
+- Verified on main with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+```
+
+  and exited 0. `python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md` printed ten `ok:` lines.
+- Raised: open item O, the new text of `docs/roadmap.md:135` in two versions. Booked: nothing new.
+- Usage, orchestrator from step 14's landing (3ad7ebd) to this booking: 35 messages, 31761 output tokens, 73082 cache-write tokens, 8778410 cache-read tokens, 78 fresh input tokens, 66 minutes.

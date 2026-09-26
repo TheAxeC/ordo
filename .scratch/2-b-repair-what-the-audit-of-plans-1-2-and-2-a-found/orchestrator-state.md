@@ -38,18 +38,6 @@ launch_note: /Users/axelfaes/workspace/research-hub/tools/oculus/bin/dispatch-no
 
 ```yaml
 dispatch:
-- step: '15'
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: aea6ae56bf6a340aa (the runner's agent id)
-  builder_usage: 139,013 tokens, 146 tool uses, 6,742 s
-  reviewer: claude:opus, through /refute, agent a47b2f8d813037915, 209,446 tokens, 64 tool uses, 1,288 s, 5 Spec and 2 Standards findings
-  worktree: .agents/worktrees/2b-15
-  base: bef2c67
-  launched: 2026-09-26
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-report.md
-  landing: cherry-picking
-  round: 1, from wip commit b32f293, rulings in agents/briefs/15-round-1.md, the brief's git convention corrected to allow the read-only git its checks run, builder done (312,799 tokens, 59 tool uses, 888 s), round reviewer claude:opus agent a8936a4bb6ee057ba, 201,769 tokens, 65 tool uses, 679 s, 4 Spec and 1 Proof finding, fixed at landing
 - step: '7'
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E)
@@ -100,6 +88,12 @@ dispatch:
     - Recommendation: (a). The plan's agents all run on one account, and the account is a choice only you can make; (b) is the cheaper option to carry out, and cost is not a reason.
   - The check that the builder's row appears under this session in oculus's Agents view needs oculus running; nothing listens on its port (`lsof -iTCP -sTCP:LISTEN` shows no node process), and research-hub is read only for this plan, so the orchestrator does not start it. (a) You start oculus (`npm run dev` in `tools/oculus`) before the relaunch, and the orchestrator checks the view in the browser. (b) The check is made on the note record alone. Recommendation: (a); the ruling E run exists to see the row in the view.
   - To rule: `Ruled: N: account (a) or (b); oculus (a) or (b)`.
+- Open item O (step 15, plan 1's Done line in the roadmap): `docs/roadmap.md:135` says plan 1's gate showed "every command in `docs/dev/building.md` passed on main (seven `PASS:` lines, ten `ok:` lines, a clean ASCII check)", a count nobody saw quoted, since each test ran through `| tail -1`. Step 15 re-ran the tests at the closing commit a866716 on its extracted tree (`agents/reviews/15-rerun.md`, "Commit a866716") and wrote the line again from what was run and seen (`agents/reviews/15-report.md`, "Doc text"; session log lines 3146, 3150, 3179 and 3204 of `7bdaf343-8a39-4a02-a88f-004137adaa7f.jsonl`). The roadmap changes only as a diff you approve (ruling 2h). Two versions, differing in one clause:
+  - (a) Keeps the clause "every landing report `Open items: none. Booked list: empty`", which is true (`grep -h 'Booked' .scratch/archive/1-one-layout-for-every-skill/agents/reviews/*-landing.md | sort | uniq -c` prints `13 Open items: none. Booked list: empty.`). The full line:
+    - [x] 1. One layout for every skill: `docs/dev/skill-layout.md` approved (plan 1's rulings); at the closing on main, `python3 utils/check_skill_layout.py` printed ten `ok:` lines, exit 0, `sh utils/check_skill_layout.test.sh` printed `PASS: check_skill_layout.py scratch tests`, `python3 utils/check_rule_inventory.py` over the ten inventories printed ten `ok:` lines, exit 0, and `sh utils/check_rule_inventory.test.sh` printed `PASS: check_rule_inventory.py scratch tests`, and the ASCII check printed nothing, exit 0; `/refute` ran on steps 2 to 14, once on the build and once over its one repair round, every landing report `Open items: none. Booked list: empty`; the findings of that last run that a rule was changed in meaning were fixed at landing with no further review: step 4 (a sentence the old file does not have), step 6 (a refusal stated without its condition), step 7 (`land`'s red line booked in the open items, against the ruling), step 8 (the refusal for a missing run over the last round merged into another refusal, and part of old line 10 lost), step 10 (the diff rule written twice with different scopes), step 11 (the `drop` refusal placed after the draft it prevents) and step 13 (the rule that nothing is written before approval not limited to the setup); the tests of `docs/dev/building.md` last ran together on main at step 14's landing, each through `| tail -1`, which hides its exit status, and the re-run at a866716 (`.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-rerun.md`, "Commit a866716") shows `PASS: land.sh and usage.py scratch tests`, `PASS: check_config.py scratch tests`, `PASS: collect_findings.py scratch tests`, `PASS: sync_rules.py scratch tests`, `PASS: check_rule_inventory.py scratch tests`, `PASS: check_skill_layout.py scratch tests` and `PASS: pin.sh scratch tests`, each test exiting 0; at step 14's landing `npx skills add . --list` printed `Found 10 skills`.
+  - (b) The same line without that clause. Pro: entry 1's gate (`git show a866716~1:docs/roadmap.md`) never asked for the lists, and the audit's finding 6 shows plan 1 used no booked or closed list and committed one open item (582298b), so the clause reports no gate output. Con: a true sentence leaves the record.
+  - Recommendation: (b). The Done line records what the gate asked and what it printed; the clause is neither. Neither option costs more to carry out than the other.
+  - To rule: `Ruled: O (a)` or `Ruled: O (b)`. On the ruling, the line goes into `docs/roadmap.md:135` through `/roadmap` with the diff shown, together with step 10's diff when open item M is ruled by then.
 
 ## Booked, no ruling needed
 
@@ -150,8 +144,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12, 13 and 14 landed (steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12 and 13 at 5fdaa98, 76a2b10, f23d14a, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7, 617f8f3, 415d669 and 3509ccb; step 14 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 10 stopped on open item M; step 15 is dispatched; step 7's builder is stopped on open item N; step 16 follows step 15's landing; then 17 to 19.
+- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12, 13, 14 and 15 landed (steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12, 13 and 14 at 5fdaa98, 76a2b10, f23d14a, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7, 617f8f3, 415d669, 3509ccb and 3ad7ebd; step 15 in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 10 stopped on open item M; step 7's builder is stopped on open item N; plan 1's Done line waits on open item O; step 16 is next; then 17 to 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -173,3 +167,4 @@ dispatch:
 | 12 | claude:opus agent, effort high: 259,411 tokens, 58 tool uses, 692 s; round 1: 315,936 tokens, 20 tool uses, 547 s | 186,224 tokens, 36 tool uses, 451 s; round 1: 101,372 tokens, 25 tool uses, 424 s | 1 | 10 (8 rulings) | 1 file changed, 15 insertions(+), 15 deletions(-) | no | 7 | 0 | 89 | 80935 | 186307 | 21832166 | 186 | 47 | none |
 | 13 | claude:opus agent, effort high: 341,486 tokens, 63 tool uses, 1,139 s; round 1: 69,054 tokens, 15 tool uses, 542 s | 270,063 tokens, 43 tool uses, 488 s; round 1: 167,958 tokens, 38 tool uses, 458 s | 1 | 4 (5 rulings) | 1 file changed, 7 insertions(+), 7 deletions(-) | no | 6 | 0 | 60 | 54060 | 170161 | 10545292 | 136 | 51 | none |
 | 14 | claude:opus agent, effort high: 215,673 tokens, 128 tool uses, 1,289 s; round 1: 288,032 tokens, 22 tool uses, 518 s | 212,129 tokens, 67 tool uses, 638 s; round 1: 140,991 tokens, 46 tool uses, 525 s | 1 | 13 (9 rulings) | 1 file changed, 24 insertions(+), 24 deletions(-) | no | 7 | 0 | 15 | 15993 | 32470 | 2858340 | 32 | 7 | none |
+| 15 | claude:opus agent, effort high: 139,013 tokens, 146 tool uses, 6,742 s; round 1: 312,799 tokens, 59 tool uses, 888 s | 209,446 tokens, 64 tool uses, 1,288 s; round 1: 201,769 tokens, 65 tool uses, 679 s | 1 | 7 (5 rulings) | 29 files changed, 92 insertions(+), 70 deletions(-) | no | 3 | 1 (open item O) | 35 | 31761 | 73082 | 8778410 | 78 | 66 | none |

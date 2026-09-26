@@ -47,7 +47,13 @@ dispatch: none
 
 ## Closed items
 
-- none.
+- 2026-09-23: the step list approved by the user, after the clarification that the native Agent-tool recipe stays the default for Claude builders under Claude Code (`plan.md:29`, Rulings (2026-09-23)).
+- 2026-09-23: the executor is inline for every step (`plan.md:30`).
+- 2026-09-23: `/refute` runs as a fresh read-only reviewer agent on every step (`plan.md:31`).
+- 2026-09-23: the launch-note interface is the one in the oculus session's note, a failed `start` never stops the builder, and the skills name no project and no vendor path (`plan.md:32`).
+- 2026-09-23: nothing is installed, pinned or removed without the user's explicit permission, and the pinned copy does not get this change until the user allows a pin, ruled by the user (`plan.md:33`).
+- 2026-09-24: step 3's widening to the `--resume` option of `launch.sh` approved by the user (`plan.md:37`, Rulings (2026-09-24)). The widening, which the audit's finding 6 (`.scratch/reviews/2026-09-24-audit/1-process-audit.md`) names as never booked in the open items, was built and repaired before the user was asked (the audit's finding 5) and ended with this approval.
+- 2026-09-24: the premise correction of step 3, the step's path list widened to `launch.sh`, `launch.test.sh` and `launch-note.md` with the interface's three calls unchanged (`plan.md:41`, Premise corrections), approved with the ruling above.
 
 ## The standing demands (from Axel, in force)
 

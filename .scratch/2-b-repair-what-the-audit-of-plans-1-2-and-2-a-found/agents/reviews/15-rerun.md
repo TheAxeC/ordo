@@ -2123,22 +2123,22 @@ The reviewer figures of plan 1's usage table (`.scratch/archive/1-one-layout-for
 
 The worker column says each step was built by the orchestrating session (`executor: inline`), so the build's usage is inside the orchestrator columns, which `usage.py` measured from the step's base commit to its landing.
 
-The "findings sent back" and "fixes at landing" cells are counts read from each step's `agents/reviews/<step>-refuter.md`. A finding is a top-level item under the Spec, Proof, Standards or Behaviour heading that reports a defect; an item that reports none ("none", "Otherwise none", "Checked, no defect found", "The other closures hold" and the like) is not counted, the Not checked items are not counted, and an item that restates a finding listed under another heading counts once, with that finding: the refuter says so ("See Spec 4", "listed under Spec", "the same as Spec 1"), or the item names the same lines and the same defect. "Findings sent back" counts the first run's findings, all sent to repair round 1. "Fixes at landing" counts the findings of the run over round 1 that the report's Closed section closes at landing.
+The "findings sent back" and "fixes at landing" cells are counts read from each step's `agents/reviews/<step>-refuter.md`. A finding is a top-level item under the Spec, Proof, Standards or Behaviour heading that reports a defect; an item that reports none ("none", "Otherwise none", "Checked, no defect found", "The other closures hold" and the like) is not counted, the Not checked items are not counted, and an item that restates a finding under a second heading counts under each. "Findings sent back" counts the first run's findings, all sent to repair round 1. "Fixes at landing" counts the findings of the run over round 1 that the report's Closed section closes at landing.
 
-| step | first run: Spec, Proof, Standards, Behaviour | items counted once, with the finding they restate | sent back | run over round 1 | closed at landing | items not counted |
-|---|---|---|---|---|---|---|
-| 2 | 10, 8, 3, 2 | none | 23 | 9 | 9: 7 by an edit, 2 by the orchestrator's ruling (`__x__` as bold, the test joining the lists) | Behaviour 3 (the check exits 1 on the skills not yet restyled, as stated) |
-| 3 | 6, 9, 5, 2 | none | 22 | 7 | 7 | Proof "Inputs handled correctly" |
-| 4 | 13, 1, 2, 3 | 4-refuter.md:71 (Spec :47), :72 (Spec :56), :77 (Spec :44), :78 (Spec :45) | 15 | 9 | 9 | Standards "Other checks, none" |
-| 5 | 10, 0, 3, 2 | 5-refuter.md:56 (Spec :39, :40), :57 (Spec :44, :45), :58 (Spec :42), :63 (Spec :41) | 11 | 2 | 2 | Proof "none"; Standards 4 (the six references still hold); round "The other closures hold" |
-| 6 | 10, 1, 4, 3 | 6-refuter.md:67 (Spec :42), :68 (Spec :43), :69 (Spec :48) | 15 | 6 | 6 | Proof "Otherwise none"; round "Checked, no defect found" |
-| 7 | 13, 0, 2, 4 | 7-refuter.md:69 (Spec :46), :71 (Spec :47), :72 (Spec :44) | 16 | 3 | 3 | Proof "none"; round: the ruling carried to land (the closure holds) and "The other closures claimed ... hold" |
-| 8 | 9, 0, 2, 4 | 8-refuter.md:57 (Spec :45, :46, :47), :58 (Spec :42), :62 (Spec :41), :63 (Spec :42), :64 (Spec :43), :65 (Spec :44) | 9 | 5 | 5 | Proof "none"; Behaviour 5 (the order is unchanged: none); round "Checked and holding" |
-| 9 | 5, 1, 0, 1 | 9-refuter.md:57 (Spec :41) | 6 | 4 | 4: 2 by an edit, 2 by the orchestrator's ruling (a row may name one heading line) | Standards "none"; round: the item on what the check change does not weaken and the Step 3 closure ("No finding here") |
-| 10 | 17, 0, 4, 4 | 10-refuter.md:60 (Spec :39 to :42), :61 (Spec :44 to :46), :62 (Spec :47), :67 (Spec :36), :68 (Spec :38), :70 (Spec :37) | 19 | 6 | 6 | Proof "none" |
-| 11 | 11, 0, 2, 2 | 11-refuter.md:63 (Spec :48, :49, :53), :64 (Spec :50, :52), :69 (Spec :51) | 12 | 3 | 3 | Proof "none"; round "Closures checked, all hold" |
-| 12 | 8, 2, 1, 1 | 12-refuter.md:63 (Spec :45) | 11 | 2 | 2 | Behaviour 2 ("Nothing else found") |
-| 13 | 11, 2, 1, 3 | 13-refuter.md:82 (Spec :60), :83 (Spec :58), :84 (Spec :63); round: :138 (Spec :126) | 14 | 3 | 2 by an edit (Spec 1 with Behaviour 1, Standards 1); Proof 1 needed no fix | Proof 3 and Standards 2 (no defect) |
-| 14 | 1, 2, 2, 1 | none | 6 | 0 | 0 | Spec 2, Proof 3, Standards 3 and Behaviour 1 (no defect) |
+| step | first run: Spec, Proof, Standards, Behaviour | sent back | run over round 1 | closed at landing | items not counted |
+|---|---|---|---|---|---|
+| 2 | 10, 8, 3, 2 | 23 | 9 | 9: 7 by an edit, 2 by the orchestrator's ruling (`__x__` as bold, the test joining the lists) | Behaviour 3 (the check exits 1 on the skills not yet restyled, as stated) |
+| 3 | 6, 9, 5, 2 | 22 | 7 | 7 | Proof "Inputs handled correctly" |
+| 4 | 13, 1, 2, 3 | 19 | 9 | 9 | Standards "Other checks, none" |
+| 5 | 10, 0, 3, 2 | 15 | 2 | 2 | Proof "none"; Standards 4 (the six references still hold); round "The other closures hold" |
+| 6 | 10, 1, 4, 3 | 18 | 6 | 6 | Proof "Otherwise none"; round "Checked, no defect found" |
+| 7 | 13, 0, 2, 4 | 19 | 3 | 3 | Proof "none"; round: the ruling carried to land (the closure holds) and "The other closures claimed ... hold" |
+| 8 | 9, 0, 2, 4 | 15 | 5 | 5 | Proof "none"; Behaviour 5 (the order is unchanged: none); round "Checked and holding" |
+| 9 | 5, 1, 0, 1 | 7 | 4 | 4: 2 by an edit, 2 by the orchestrator's ruling (a row may name one heading line) | Standards "none"; round: the item on what the check change does not weaken and the Step 3 closure ("No finding here") |
+| 10 | 17, 0, 4, 4 | 25 | 6 | 6 | Proof "none" |
+| 11 | 11, 0, 2, 2 | 15 | 3 | 3 | Proof "none"; round "Closures checked, all hold" |
+| 12 | 8, 2, 1, 1 | 12 | 2 | 2 | Behaviour 2 ("Nothing else found") |
+| 13 | 11, 2, 1, 3 | 17 | 4 | 3 by an edit (Spec 1 and Behaviour 1 by one edit, Standards 1); Proof 1 needed no fix | Proof 3 and Standards 2 (no defect) |
+| 14 | 1, 2, 2, 1 | 6 | 0 | 0 | Spec 2, Proof 3, Standards 3 and Behaviour 1 (no defect) |
 
-Plan 1's `plan.md` gives the same counts: its booking of step 2 says 23 findings in the first run, and its booking of step 13 says 14 in the first run and 3 in the run over the round, one needing no fix.
+Plan 1's `plan.md` gives the same counts: its booking of step 2 says 23 findings in the first run, and its booking of step 13 says 17 in the first run and 4 in the run over the round, one needing no fix. The rule is the one the usage rows of plans 2 and 2.A follow, so the three archived plans count findings the same way.

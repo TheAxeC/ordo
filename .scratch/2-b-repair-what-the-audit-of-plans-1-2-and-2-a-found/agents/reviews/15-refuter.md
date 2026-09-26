@@ -102,3 +102,11 @@ none.
 - The "Bookings changed" section entry by entry; plan 2 and 2.A usage rows other than plan 2 step 1 and 2.A steps 2 and 4.
 
 Reviewer usage: 201,769 tokens, 65 tool uses, 679 s.
+
+## Closed
+
+- First review: Spec 1-5 and Standards 2, each ruled in `agents/briefs/15-round-1.md` (5 rulings) and closed in repair round 1, as the review over the round confirms. Standards 1 (git run against the brief) was the brief's defect: its checks run read-only git themselves; the brief's convention now allows the read-only git its checks run and forbids any git that writes, and the review over the round found none written.
+- Review over round 1, fixed at landing on main:
+  1. Spec 1, 2 and 3 (one cause, the counting rule): the three archived plans count findings under one rule, the one plans 2 and 2.A's usage rows follow, stated in `15-rerun.md`: an item that restates a finding under a second heading counts under each. Plan 1's usage rows of steps 4 to 13 give the first pass's counts under that rule (step 4 19, 5 15, 6 18, 7 19, 8 15, 9 7, 10 25, 11 15, 12 12, 13 17; row 13's fixes at landing `3 (a fourth needed no fix)`), plan 1's `plan.md` says 17 and 4 for step 13, and step 2 stays 23 (10, 8, 3 and 2; the old 27 counted the three Not checked items). `15-rerun.md`'s rule, table and closing note say the same. Check: `grep -c 'counts under each' .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-rerun.md` prints 1; the builder's copy prints 0. Spec 2 lapses with the rule it described.
+  2. Spec 4: the reason for Doc text variant 2 in `15-report.md` says the booked and closed lists were never used in plan 1 and one open item was committed there (582298b). Check: `grep -c 'one open item was committed there' .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/15-report.md` prints 1.
+  3. Proof 1: plan 2's `plan.md:81` and `agents/reviews/4-landing.md:9` cite session log line 5509 (18:36:25Z, the main checkout), with its result at line 5515: `18` and `verify exit 0`, read from the log. Check: `grep -c 'line 5551' .scratch/archive/2-coverage-inventory-of-the-academic-skills/plan.md .scratch/archive/2-coverage-inventory-of-the-academic-skills/agents/reviews/4-landing.md` prints 0 for each; the builder's copies print 1.
