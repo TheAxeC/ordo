@@ -55,7 +55,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The response letter for a real submission round, from the referee comments and the revision's apply report.
-- Gate: every referee point has a response and a pointer to its change; a check that no point is left unanswered, with a test that fails on a missing response.
+- Gate: every referee point has a response and a pointer to its change; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind, wins or ties.
 - Waits on: 5, for the apply report; 6, for the point table.
 
 ## 8. grant
