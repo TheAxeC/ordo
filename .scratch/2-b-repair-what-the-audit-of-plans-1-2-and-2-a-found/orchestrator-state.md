@@ -79,6 +79,8 @@ dispatch:
   resume_pid_value: 65651
   resume_note_id: 5546e0f7-4758-431c-9218-9567e8801d1d
   resume_launched: 2026-09-26, session ec7fe645-5c70-4ce5-91f7-3307745f943e resumed
+  resume_state: exit 0 at about 18:39; 141 turns, 2,811 s, 55,437 output tokens, 220,172 cache-write, 11,591,867 cache-read, 130 fresh input; 5 permission denials (reads of the main ledger, and two command forms outside the list)
+  reviewer: claude:opus, a fresh agent, dispatched
   transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
   landing: not-started
   round: 0
