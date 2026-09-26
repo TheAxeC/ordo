@@ -45,13 +45,16 @@ dispatch:
   worker: claude:opus, a native agent in the background
   session_id: aca9757949c9ed248
   builder_usage: 191,457 tokens, 77 tool uses, 3,046 s
-  reviewer: claude:opus, a fresh agent, aeb6c6afaff3c9c42
+  reviewer: claude:opus, a fresh agent, aeb6c6afaff3c9c42; 99,985 tokens, 25 tool uses, 1,409 s
   worktree: .agents/worktrees/2b-7c
   base: 372401f
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7c-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1_start: 59409d1 (the worktree's wip commit)
+  round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7c-round-1.md
+  round_1_paths: the brief's list
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -117,7 +120,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7b in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 7c (the guard and a zombie leader, booked at step 7b's landing) is dispatched; then 17, 17a (the library check, ruling T), 18 and 19.
+- Roadmap entry 2.B. Step 7c (the guard and a zombie leader) is in repair round 1; then 17, 17a (the library check, ruling T), 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
