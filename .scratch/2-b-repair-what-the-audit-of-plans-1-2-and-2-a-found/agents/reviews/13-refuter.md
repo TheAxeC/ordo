@@ -127,3 +127,13 @@ non-ASCII over 147-181 and both records -> none
 - The 22 source files other than the eight holds rows of ruling 5 were not re-read this round.
 - The experiment-provenance inputs (integrity_verification_agent.md 305-309) were not traced to a paper-skill intake row beyond row 154.
 - The records' contents before the round could not be diffed, since they are untracked.
+
+## Closed
+
+- First review: Spec 1-3, Behaviour 1 and Not checked, each ruled in `agents/briefs/13-round-1.md` (5 rulings) and closed in repair round 1, as the review over the round confirms ruling by ruling (its Spec 2 and 5). Proof and Standards reported no defect.
+- Review over round 1, fixed at landing on main:
+  1. Spec 1, Proof 1 and Behaviour 1 (one cause): row 152 ends the orchestrator's round-trip count "with the round-trip caps and counts of `SKILL.md`", matching row 151; the orchestrator record of `13-rows.md` says the same with line 403. Check: `grep -c 'budget display' docs/academic-coverage.md` prints 0; the builder's tree prints 1.
+  2. Spec 3: row 156 says the observer "describes the person's working pattern rather than the research", as collaboration_depth_agent.md 122 and 154 allow; the record of `13-rows.md` says the same. Check: `grep -c 'grades the person' docs/academic-coverage.md` prints 0.
+  3. Spec 4: row 158 says "replaced by a verified source", as integrity_failure_recovery.md 202 says. Check: `grep -c 'replaced by a verified source' docs/academic-coverage.md` prints 1.
+  4. Standards 1: row 152's `slr_lineage` sentence and row 155's constraint-and-drift sentence are reworded so neither copies the shape of a neighbouring sentence. Check: `grep -c 'Nothing reads the `slr_lineage` flag' docs/academic-coverage.md` and `grep -c 'so neither is rebuilt' docs/academic-coverage.md` each print 1.
+- After the fixes: the coverage check prints `ok: docs/academic-coverage.md`; the largest sentence over the reason cells of 147-181 is 35 words; `LC_ALL=C grep -c '[^ -~]' docs/academic-coverage.md` prints 0.
