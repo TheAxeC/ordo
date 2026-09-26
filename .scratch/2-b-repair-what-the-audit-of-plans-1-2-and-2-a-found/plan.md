@@ -28,7 +28,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
 - 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review) (1 commit; orchestrator, no agent)
 - ✅ 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
-- 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
+- ✅ 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
 - 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
 - 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
 - 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit)
@@ -574,3 +574,41 @@ verify: 13 commands passed
   and exited 0.
 - Booked: nothing new.
 - Usage, orchestrator from step 1a's landing (76a2b10) to this booking: 47 messages, 41917 output tokens, 134263 cache-write tokens, 7721087 cache-read tokens, 102 fresh input tokens, 66 minutes.
+
+### Step 12, the coverage rows of academic-paper-reviewer (landed 2026-09-26)
+
+- Landed: every one of the 26 files of research-hub's `academic-paper-reviewer` read in full and its row of `docs/academic-coverage.md` checked; records in `agents/reviews/12-rows.md` (26, ten `fixed`, 16 `holds`). Ten reasons rewritten, no mark changed: the sprint-contract sections send only the pre-commitment rule to `paper-review` at entry 15.A and drop the contract-driven decision; the cross-model option (rows 126 and 131) goes to `paper-review` at entry 15.A with `references/calibration_mode_protocol.md`; the pipeline phase folders are dropped since `researcher` (entry 13) owns the order of stages; SKILL.md's version, related-skill and spectrum sections each have a reason; the field analyst's row names "no ML conference" (audit finding 10). The mark definitions (lines 14-15) state that a part of a `rebuild` file may go to entry 15.A named with the `rebuild later` file of the same skill that carries it, and rows 54 and 60 of academic-paper name their carrying files.
+- User-visible changes, before and after:
+  - The mark definitions: before, a `rebuild:` skill covers the whole file before its entry's gate; after, a part deferred to entry 15.A with a named carrying `rebuild later` file is the one exception (orchestrator's ruling 6 of `agents/briefs/12-round-1.md`, writing down what steps 11 and 12's rows do).
+  - What entry 15.A builds for paper-review: before, the sprint sections whole and no cross-model option; after, the pre-commitment rule, the guided and calibration modes, the cross-model option and the synthesizer's guided-mode issue list, each with its carrying file.
+- Rounds: the first review (Spec 1-4, 6 and 8, Proof 1-2, Behaviour 1, Not checked), repair round 1 (8 rulings in `agents/briefs/12-round-1.md`; the path list widened to the mark definitions), the review over it (7 findings), fixed at landing (7): row 126's reason and sentence split; line 14 names the exception; row 133 names the issue list it carries; record 1's ranges; the ruling 6 check reproduced by grep; line 15 split in two sentences; rows 54 and 60 name their carrying files (`agents/reviews/12-refuter.md`, Closed).
+- Verified on main with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+```
+
+  and exited 0. `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`.
+- Booked: nothing new.
+- Usage, orchestrator from step 1c's landing (f23d14a) to this booking: 89 messages, 80935 output tokens, 186307 cache-write tokens, 21832166 cache-read tokens, 186 fresh input tokens, 47 minutes; the window also holds step 10's stop, the briefs and dispatches of steps 15 and 7, and step 7's stop.

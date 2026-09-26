@@ -109,4 +109,17 @@ LC_ALL=C grep -n '[^ -~]' coverage doc, 12-rows.md, 12-report.md -> nothing
 - The 26 source files were not read in full; only the lines the rulings and changed reasons rest on.
 - The rows outside 116-146 were checked only for their 15.A clauses.
 
-Reviewer usage: not recorded yet.
+Reviewer usage: 101,372 tokens, 25 tool uses, 424 s.
+
+## Closed
+
+- First review: Spec 1-4, 6 and 8, Proof 1-2, Behaviour 1 and Not checked, each ruled in `agents/briefs/12-round-1.md` (8 rulings) and closed in repair round 1, as the review over the round confirms ruling by ruling (Closures above). Spec 5, 7 and 9 and Proof 3 reported no defect.
+- Review over round 1, fixed at landing on main:
+  1. Spec 1: row 126 says the first gate's side-by-side run does not need a second model; its cross-model sentence split in two to stay under 35 words. Check: `grep -c "side-by-side run does not need a second model" docs/academic-coverage.md` prints 1; the builder's tree prints 0.
+  2. Spec 2: line 14 names the one exception, a part deferred to entry 15.A. Check: `grep -c "The one exception is a part deferred to entry 15.A" docs/academic-coverage.md` prints 1; the builder's tree prints 0.
+  3. Spec 3: row 133 names the synthesizer's guided-mode issue list it carries. Check: `grep -c "guided-mode issue list that" docs/academic-coverage.md` prints 1.
+  4. Proof 1: record 1 of `12-rows.md` gives 409-410 and 412, keeps 411, and gives 5-9 with `related_skills` at 10-12 going with Related Skills.
+  5. Proof 2: the check of ruling 6 is reproduced with `grep -n '15\.A' docs/academic-coverage.md`, which prints lines 14, 15, 54, 56, 59, 60, 64, 91, 92, 94, 120, 122-127, 133 and 140 after the landing fixes.
+  6. Standards 1: the definition sentence on line 15 is two sentences (25 words at most).
+  7. Ruling 6's list, rows 54 and 60 (outside the step's section): each names `paper` at entry 15.A and its carrying files, `references/plan_mode_protocol.md`, `agents/socratic_mentor_agent.md` and `agents/formatter_agent.md`, each a `rebuild later: paper` row.
+- After the fixes: the coverage check prints `ok: docs/academic-coverage.md`; the largest sentence of lines 14, 15, 54, 60, 126 and 133 is 27 words.

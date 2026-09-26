@@ -38,19 +38,6 @@ launch_note: /Users/axelfaes/workspace/research-hub/tools/oculus/bin/dispatch-no
 
 ```yaml
 dispatch:
-- step: '12'
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: a4606a26402cb2393 (the runner's agent id)
-  builder_usage: 259,411 tokens, 58 tool uses, 692 s
-  reviewer: claude:opus, through /refute, agent acb7670d161d171c5, done, 186,224 tokens, 36 tool uses, 451 s, findings Spec 1-4, 6 and 8, Proof 1-2, Behaviour 1 and Not checked ruled in agents/briefs/12-round-1.md (8 rulings)
-  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/12-refuter.md
-  worktree: .agents/worktrees/2b-12
-  base: fc12778
-  launched: 2026-09-26
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/12-report.md
-  landing: cherry-picking
-  round: 1, sent to the builder with agents/briefs/12-round-1.md, round start worktree commit 116df6d, paths the brief's list plus docs/academic-coverage.md lines 14-18; builder reported the round done (315,936 tokens, 20 tool uses, 547 s); reviewer over the round claude:opus through /refute, agent ab67586dbce558b7e, done, 7 findings, fixed at landing
 - step: '15'
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
@@ -160,8 +147,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 1a, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 at 5fdaa98, 76a2b10, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7 and 617f8f3; step 1c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 10 stopped on open item M; steps 12 and 15 are dispatched; step 7's builder is stopped on open item N; 13 and 14 after 12; then 16 to 19.
+- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11 and 12 landed (steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 at 5fdaa98, 76a2b10, f23d14a, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7 and 617f8f3; step 12 in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 10 stopped on open item M; step 15 is dispatched; step 7's builder is stopped on open item N; 13 and 14 next; then 16 to 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -180,3 +167,4 @@ dispatch:
 | 11 | claude:opus agent, effort high: 226,019 tokens, 98 tool uses, 875 s; round 1: 355,519 tokens, 35 tool uses, 863 s; round 2: 124,171 tokens, 26 tool uses, 637 s | 270,192 tokens, 46 tool uses, 470 s; round 1: 247,793 tokens, 54 tool uses, 648 s; round 2: 277,802 tokens, 40 tool uses, 533 s | 2 (one under the exception) | 10 (12 rulings), then 13 (12 rulings) | 2 files changed, 51 insertions(+), 51 deletions(-) | no | 14 | 0 | 35 | 33466 | 61996 | 7840516 | 76 | 38 | none |
 | 1a | claude:opus agent, effort high: 133,171 tokens, 44 tool uses, 697 s; round 1: 223,764 tokens, 42 tool uses, 931 s | 100,494 tokens, 20 tool uses, 490 s; round 1: 134,695 tokens, 34 tool uses, 833 s | 1 | 7 (8 rulings) | 13 files changed, 234 insertions(+), 90 deletions(-) | no | 6 | 0 | 38 | 34463 | 76696 | 11356769 | 82 | 58 | none |
 | 1c | claude:opus agent, effort high: 199,787 tokens, 61 tool uses, 1,692 s; round 1: 257,183 tokens, 38 tool uses, 833 s | 130,251 tokens, 35 tool uses, 572 s; round 1: 100,387 tokens, 21 tool uses, 384 s | 1 | 8 (8 rulings) | 11 files changed, 674 insertions(+), 15 deletions(-) | no | 4 | 0 | 47 | 41917 | 134263 | 7721087 | 102 | 66 | none |
+| 12 | claude:opus agent, effort high: 259,411 tokens, 58 tool uses, 692 s; round 1: 315,936 tokens, 20 tool uses, 547 s | 186,224 tokens, 36 tool uses, 451 s; round 1: 101,372 tokens, 25 tool uses, 424 s | 1 | 10 (8 rulings) | 1 file changed, 15 insertions(+), 15 deletions(-) | no | 7 | 0 | 89 | 80935 | 186307 | 21832166 | 186 | 47 | none |
