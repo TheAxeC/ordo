@@ -117,9 +117,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 15.A Rebuild-later rows
 
 - Status: [ ]
-- Goal: Every row of `docs/academic-coverage.md` marked `rebuild later: <skill>` is built into its skill while the installed academic skills are still there to read: 8 for paper, 6 for literature, 3 for paper-review, 1 for researcher.
+- Goal: Every row of `docs/academic-coverage.md` marked `rebuild later: <skill>` is built into its skill while the installed academic skills are still there to read: 6 for paper, 6 for literature, 3 for paper-review.
 - Gate: no row of `docs/academic-coverage.md` is still marked `rebuild later` (`grep -c '| rebuild later: ' docs/academic-coverage.md` prints 0); each built row is re-marked `rebuild: <skill>` and its reason names the file of the skill that now holds it; the coverage check with `--built paper --built paper-review --built literature` prints `ok:`, and the plan's ledger holds a record for each re-marked row that the file it names holds what the source file did, checked by reading both.
-- Waits on: 5, 6, 9 and 13, the skills the rows go to.
+- Waits on: 5, 6 and 9, the skills the rows go to.
 
 ## 16. Switch over
 
