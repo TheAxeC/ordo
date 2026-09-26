@@ -81,11 +81,11 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - Open item N (2026-09-26): account (a), step 7's shell-launched builder runs with whatever account the main session uses, `CLAUDE_CONFIG_DIR` kept; oculus (a), oculus runs at http://127.0.0.1:8790/ and the builder's row is checked in its Agents view (the user).
 - Open item O (2026-09-26): (b), plan 1's Done line at `docs/roadmap.md:135` without the clause "every landing report `Open items: none. Booked list: empty`" (the user).
 - Open item P (2026-09-26): all 19 retro proposals approved as written in `.scratch/retros/2026-09-26.md` (the user).
+- Open item Q (2026-09-26): (a), the roadmap diff approved as drafted in `agents/reviews/10-roadmap.md`; entry 15.A's gate names `--built paper --built paper-review --built literature` (the user).
 - The plan cut to its goal (2026-09-25): a finding of this plan's own reviews that roadmap entry 2.B's goal and gate do not need is not a step. Removed: step 1b (the ASCII check's non-UTF-8 pass and `__pycache__` in `.gitignore`), the runner's edge-case and signal tests and the `refute` list-item wording from step 1a, and step 6a's word-list tuning, replaced by the collector keeping every finding. Step 1c stays (ruling J). (The user.)
 
 ## Blocked, and by what
 
-- 10: open item Q, your approval of the roadmap diff (Step 10, Step 0 below).
 - 17: step 7's landing, since 17 touches the rules page and every `SKILL.md`.
 - 18: every step from 1 to 17.
 - 19: step 18.
