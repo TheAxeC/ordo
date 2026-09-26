@@ -145,3 +145,195 @@ Nothing else: `LC_ALL=C grep -n '[^ -~]'` over the five changed files printed no
 - Commands run: about 22 shell calls, and about 24 full runs of the test suites on scratch copies. Each layout-suite run takes about 3 min 45 s wall time (`time` printed `3:44.68 total`).
 - One tool call ran past its 600 s timeout and was moved to the background by the harness. I read its output file once, after its completion notice.
 - No file in the worktree or the ledger was written.
+
+
+# Repair round 1, refuted
+
+On .agents/worktrees/2b-7, round from 114dfca, base f4dd5e8; reviewer claude:opus, a fresh agent, a05c1101d08ecec48.
+
+Review of repair round 1 of step 7, plan 2.B. The worktree is `.agents/worktrees/2b-7`. I read the round's delta with `git diff 114dfca` and the whole step with `git diff f4dd5e8`.
+
+## 1. Verification lines, verbatim
+
+I ran `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh /Users/axelfaes/workspace/ordo/.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` from the worktree root:
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+exit 0
+```
+That is 12 PASS lines, 10 ok lines and 14 commands.
+
+I ran `python3 utils/check_rule_inventory.py .scratch/archive/1-one-layout-for-every-skill/inventories/*.md` under the same `env -u` prefix. It printed ten `ok:` lines (land, ordo-init, plan-help, plan-orchestration, plan-retro, plan, refute, repo-setup, roadmap, spec) and `exit 0`.
+
+**Reverts.** I ran 13 reverts, each on a copy of the four `utils` files under my scratch directory. In each copy's test, `fail()` was changed so it does not exit, which makes every FAIL line print. The first FAIL line of each:
+- Ruling 2, inventory `HEADING` set to `^#{1,6} `: `FAIL: indented-old: expected a pass, got: .../indented-old.md:0: old line 5 is in no row: ## Rules`
+- Ruling 2, inventory `SECTION` set to `^(##|###) `: `FAIL: indented-section: expected a pass, got: .../indented-section.md:11: no subsection '### Mode A' under '## Steps' in skills/demo/SKILL.md`
+- Ruling 2, `SECTION` with only its `###` part set back to column 0: the same `indented-section` FAIL.
+- Ruling 2, `carries_text` (line 139) only, set to column 0: the same `indented-old` FAIL.
+- Ruling 2, `blocks` (line 276) only, set to column 0: `PASS: check_rule_inventory.py scratch tests`, with no FAIL line.
+- Ruling 2, the single-heading-row check (line 290) only, set to column 0: `PASS`, with no FAIL line.
+- Ruling 2, the range-holds-a-heading check (line 296) only, set to column 0: `PASS`, with no FAIL line.
+- Ruling 4, `BOLD = (?<!\w)(?:\*\*|__)|(?:\*\*|__)(?!\w)`: `FAIL: intraword-stars: expected an error, got a pass: ok: .../intraword-stars/SKILL.md`
+- Ruling 8, old file split with `re.split(r"\r\n?|\n", ...)`: `FAIL: old-return: expected a pass, got: .../old-return.md:11: old lines 9-9 hold a blank line at 9; a range stays inside one block`
+- Ruling 10, layout `HEADING` set to `^(#{1,6}) `: `FAIL: indented-heading: expected a pass, got: .../indented-heading/SKILL.md:8: no '# ' title after the frontmatter`. The later FAIL lines include `indented-second-title`.
+- Ruling 10, `split_sections` at column 0 only: `FAIL: indented-heading: ...:8: no '# ' title after the frontmatter`. Its third FAIL line is `FAIL: indented-stray: expected an error, got a pass`.
+- Ruling 10, `check_title` second-title test at column 0 only: `FAIL: indented-second-title: expected an error, got a pass: ok: .../indented-second-title/SKILL.md`
+- Ruling 10, `check_headings_and_bold` at column 0 only: `FAIL: indented-heading-bold: missing [bold in a heading] in: .../SKILL.md:33: bold outside a list item's label`. The next FAIL line is `version-indented`.
+
+The unreverted control copy printed `PASS` for both suites, with no FAIL line. Every revert the report quotes for this round reproduces its first FAIL line.
+
+**Controls of the silent cases (ruling 6).** I printed the controls' output from a copy of the layout test in which `expect_error` echoes the checker's output:
+- `bom-wrong-name`: `SKILL.md:1: name is 'other', the folder is 'bom-wrong-name'`
+- `indented-code`: `SKILL.md:52: section 'Rules' is missing`
+- `underscore-bold`: `SKILL.md:30: bold outside a list item's label`
+- `dunder`: `SKILL.md:30: bold outside a list item's label`
+- `version-word`: `SKILL.md:33: version tag in heading: ## The file format v2`
+- `version-bare`: `SKILL.md:33: version tag in heading: ## The file format 1.2.0`
+- `crlf-bold`: `SKILL.md:30: bold outside a list item's label`
+
+Each one matches the report's table.
+
+**Ruling 3, the carriage return kept in the line.** I compared each checker's output on the same text written with LF and with CRLF line ends:
+- Inventory, 3000 generated texts: I compared `places`, `fence_flags`, `separator_rows`, `frontmatter_end`, `carries_text` per line, `blocks`, `check_range_block` over every range up to five lines long, `inventory_rows` and each stripped line. It printed `cases 3000 diffs 0`.
+- Layout, 1500 generated files run through `check_file`: `cases 1500 diffs 0`.
+
+**Ruling 10, before and after.** I rebuilt the base checker by applying `git diff f4dd5e8 -- utils/check_skill_layout.py` in reverse to a copy. Base first, then the current checker:
+- `  # Appendix`: ok, then `:54: a second '# ' heading: # Appendix`
+- ` ## Background`: ok, then `:18: section 'Background' is outside the place between Steps and Stops`
+- `  ## The file format v2`: ok, then `:33: version tag in heading: ## The file format v2`
+- `  ## The **file** format`: `:33: bold outside a list item's label`, then `:33: bold in a heading`
+
+Every row of the report's table holds.
+
+## 2. Repair round 1, refuted
+
+### Spec
+
+1. **The ruling's premise for bold in an indented heading is wrong, and the report does not say so.**
+   - Ruling 10 says that bold in an indented heading "now fail[s] where [it] passed".
+   - On the base checker, `  ## The **file** format` already failed, with `bold outside a list item's label`; only the message changed.
+   - The report's table states the true before, `bold outside a list item's label`. It does not report that the ruling's premise was wrong. Change-standard rule 4 asks for a wrong premise to be reported with its evidence.
+   - This is minor. The code and the test (`indented-heading-bold` expects `bold in a heading`) are correct.
+
+Every other ruling is carried out as written:
+- Rulings 1 and 5: `dunder` is unchanged, and the new comment on `crlf` is at `utils/check_skill_layout.test.sh:372-373`.
+- Ruling 3: the diffs of `read_lines` and `split_lines`.
+- Ruling 4: `intraword-stars`.
+- Rulings 7 and 8: README lines 128-129, and the `skills/cr` fixture with the `old-return` case.
+- Ruling 9: the docstring rewrap.
+- Ruling 10: the report's table.
+
+No fix reaches beyond its finding. `SECTION` keeps the column-0 behaviour for `## ` and `### ` and for a `### ` that comes before any section.
+
+### Proof
+
+1. **Ruling 2: two of the four old-file heading matches are indent-aware with nothing to prove it.**
+   - Every place in `utils/check_rule_inventory.py` that matches a heading is now indent-aware:
+     - `HEADING = re.compile(r"^ {0,3}#{1,6} ")`, used at lines 139, 276, 290 and 296;
+     - `SECTION = re.compile(r"^ {0,3}(##|###) ")`, used at line 153.
+   - `indented-old` only reaches the match in `carries_text`, at line 139.
+   - Setting line 290 alone back to column 0 leaves the suite green:
+     `if first == last and first - 1 > end and not flags[first - 1][0] and HEADING.match(old_lines[first - 1]):`
+   - Setting line 296 alone back to column 0 also leaves it green:
+     `if index > end and not flags[index][0] and HEADING.match(old_lines[index]):`
+   - Both differences can be reached. I called `check_range_block` directly on the old file `["---","name: x","---","","Para text.","  ## Rules","- a rule"]`:
+
+     | Row | Current checker | Line 290 at column 0 | Line 296 at column 0 |
+     |---|---|---|---|
+     | `6` (the heading alone) | `None` | `old lines 6-6 hold a heading at 6; ...` | `None` |
+     | `5-6` | `old lines 5-6 hold a heading at 6; ...` | same as current | `old lines 5-6 cross into another block at 6; ...` |
+
+   - Two cases would turn these reverts red:
+     - a row `| 5 | ... |` naming the indented heading line of `skills/indent` alone, expecting a pass;
+     - a range over a text line and an indented heading, expecting "hold a heading at".
+   - The match in `blocks`, at line 276, is output-neutral here, because line 296 reports first. By rule 11 it is still code that no case proves.
+   - The same gap shows in README line 129, which says "a heading indented by up to three spaces read as a heading in the old ... file". Only the carries-text reading of an old line is tested.
+
+No other proof finding:
+- Every other closure this round claims reproduces under its revert.
+- `crlf` is described truthfully as a regression pin, and its control `crlf-bold` prints `:30: bold outside a list item's label`.
+- The controls of `indented-section-code` and `indented-old-code` are asserted in the test with their full message.
+
+### Standards
+
+1. **The docstrings' reason for keeping the carriage return is stronger than the code.**
+   - `utils/check_skill_layout.py:30-31` and `utils/check_rule_inventory.py:52-53` say: "The carriage return of a CRLF line stays in the line, and every reader of a line strips it with the other surrounding whitespace."
+   - Not every reader strips the line. `BOLD.search(plain)`, `LABEL.match`, `ITEM.match`, `is_table_row` (`lstrip` only) and `FENCE` group 2 read the line with its CR.
+   - What is true, and what both differentials show, is narrower: no reader's result depends on the CR, because every reader that looks at the end of a line strips it or ends its pattern in `\s*$`.
+   - The code is correct; the stated reason is not.
+   - The function docstrings (`read_lines` at `check_skill_layout.py:68-69`, `split_lines` at `check_rule_inventory.py:235-236`) are true as written.
+
+Other standards checks came back clean:
+- Ruling 9: every line of the rewrapped paragraph (`check_rule_inventory.py` 24-38) is at most 100 characters. The docstring lines 44-45 (101 and 102 characters) are unchanged from the base.
+- `LC_ALL=C grep -n '[^ -~]'` over the five changed files printed nothing.
+- No history appears in the comments or docstrings.
+- README lines 128-129 are one sentence each.
+- README line 128 now claims the `grep -n` line for the bold error only. `line-separator`, `lone-return` and `crlf-bold` back that claim.
+- README line 129's claim of a lone carriage return in the old file is backed by the fixture `skills/cr` and the case `old-return`, and the `\r\n?` split revert turns `old-return` red.
+
+### Behaviour
+
+None. Every row of the report's "User-visible changes" table that I checked against the rebuilt base checker holds, including the four indented-heading rows (listed under section 1). The table also states the first-table reading and the no-row error for the Stops, Use instead and Anti-patterns tables.
+
+## 3. Not checked
+
+- The inventory before-and-after rows of ruling 10 (an indented heading in the new or old file on the base checker). I did not run these, because a scratch git repository is outside my allowed commands. They are stated from the code and from the `HEADING` and `SECTION` reverts.
+- The round-1 reverts that the report lists and I did not run:
+  - layout: `newline=""`, `utf-8-sig`, `LABEL`, the extra column, `latin`, the no-row reverts and `VERSION_TAG`;
+  - inventory: the blob check, the singular message, `inside()`, the sort order and the three `splitlines` reverts.
+
+  The first review covered them, and this round's diff does not touch them.
+- The report's claim that the controls were printed through in-place edits that were then restored. I checked the result only: `git status --short` and `git diff 114dfca` show no leftover edit, and `fail()` holds `exit 1` in both worktree tests.
+- The report's judgment call that `agents/reviews/7-refuter.md` is missing from the worktree's ledger copy. I confirmed it: `ls` of the worktree copy's `agents/reviews` shows no `7-refuter.md`. Its consequence for the build was not assessed beyond the rulings.
+
+## 4. Usage
+
+- About 17 shell calls.
+- One run of the verify list, which took 3 min 03 s.
+- One foreground `xargs -P 15` batch of 15 suite runs (the control copy of each suite and 13 revert copies), which took 4 min 28 s.
+- One layout-suite run to print the control outputs, about 4 min.
+- Two differential scripts and one direct probe of `check_range_block`.
+- No file in the worktree or the ledger was written. All copies, fixtures and scripts are under the scratchpad's `r7/` folder.
+
+# Closed
+
+The first review's findings were sent back as the ten rulings of round 1 (`agents/briefs/7-round-1.md`); the run over round 1 found each ruling carried out. Its own findings were not sent back; each is closed here.
+
+First review:
+
+- Spec 1, the `__init__.py` case: ruled in round 1 (ruling 1). The brief's case was wrong and the rule is right: CommonMark renders `init` there in strong emphasis. The test's `dunder` case stays; the brief's case is corrected in the ledger at landing (`agents/briefs/7.md`).
+- Spec 2, indented headings in the inventory checker: built in round 1 (ruling 2); the two matches it left unproven are closed under round 1's Proof 1 below.
+- Proof 1, the trailing carriage return: built in round 1 (ruling 3); `read_lines` and `split_lines` split on the line feed only.
+- Proof 2, `**` inside a word: built in round 1 (ruling 4), case `intraword-stars`.
+- Proof 3, the `crlf` case: built in round 1 (ruling 5); the test's comment calls it a regression pin, and its control `crlf-bold` prints the bold error.
+- Proof 4, the silent cases' controls: built in round 1 (ruling 6).
+- Standards 1 and 2, README lines 128 and 129: built in round 1 (rulings 7 and 8), case `old-return` with the fixture `skills/cr`.
+- Standards 3, the docstring line: built in round 1 (ruling 9).
+- Behaviour 1 and 2, the user-visible changes: built in round 1 (ruling 10), in the report's table.
+
+Repair round 1, refuted:
+
+- Spec 1, ruling 10's premise for bold in an indented heading: the premise was wrong. On the base checker `  ## The **file** format` already failed with `bold outside a list item's label`; the step changes the message only, to `bold in a heading`. Stated in the booking in `plan.md`. No code change.
+- Proof 1, two old-file heading matches without a case: fixed at landing. Case `indented-row` (a row naming the indented heading line of `skills/indent` alone, expecting a pass); with line 293 back at column 0: `FAIL: indented-row: expected a pass, got: ...indented-row.md:9: old lines 5-5 hold a heading at 5; ...`. Case `indented-range` (rows over `skills/indent2`, a text line and an indented heading, expecting `indented-range.md:9: old lines 5-6 hold a heading at 6`); with line 299 back at column 0: `FAIL: indented-range: expected an error, got a pass: ok: ...indented-range.md`. The heading match in `blocks` is removed: `check_range_block` returns at a heading before it compares blocks, so the match changed no output and no case could prove it (change-standard rule 11); the docstring of `blocks` says so.
+- Standards 1, the docstrings' reason for keeping the carriage return: fixed at landing in `utils/check_skill_layout.py` and `utils/check_rule_inventory.py`, which now say that no reader's result depends on it, since every reader that looks at the end of a line strips it or lets its pattern end in optional whitespace.

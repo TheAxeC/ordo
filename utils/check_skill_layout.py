@@ -10,21 +10,33 @@ exits 1 when any file has an error.
 
 What is checked:
 - the frontmatter: a YAML mapping whose name equals the folder's name, whose description holds
-  "Triggers on:", and whose metadata.version is <n>.<n>.<n>;
+  "Triggers on:", and whose metadata.version is <n>.<n>.<n>; a top-level version key is an error,
+  since the version lives in metadata.version only, and a frontmatter holding nothing is reported
+  as empty;
 - the first line after the frontmatter is a "# " title, followed by a paragraph before the first
   "## " heading, and no other "# " heading follows;
 - the "## " headings in order: Quick start, Use instead, What it reads, Steps, any reference sections,
   Stops, Anti-patterns, Rules, each once, and nothing after Rules;
 - a code block in Quick start, a numbered list in What it reads and in Steps (its "### " subsections
   count), a bulleted list (- or *) in Rules;
-- the header row of the tables in Use instead, Stops and Anti-patterns;
-- bold (** or __) only as a list item's label, at any list depth, italics inside the label allowed; a
-  heading is not a label;
-- no version tag in any heading, code spans included.
+- the header row of the tables in Use instead, Stops and Anti-patterns, and at least one row after
+  the header and its separator;
+- bold only as a list item's label, at any list depth, italics inside the label allowed; a heading
+  is not a label. ** is bold wherever it stands; __ is bold unless a word character stands on both
+  sides of it, so foo__bar is not bold, while __init__.py is, as a renderer shows it, and belongs
+  in a code span;
+- no version tag in any heading, code spans included: v<digits> as a word, or a bare <n>.<n>.<n>.
+Lines are split on the line feed only, so line numbers are those of grep -n and an editor; a line
+separator or a lone carriage return inside a line does not end it. The carriage return of a CRLF
+line stays in the line; no reader's result depends on it, since every reader that looks at the end
+of a line strips it or lets its pattern end in optional whitespace.
+A byte-order mark at the start of the file is not text. A heading is "#" to "######" and a space,
+indented by at most three spaces.
 Fenced code blocks (``` or ~~~, of any length, at any indentation, closed by a line of the same
 character at least as long; a backtick fence's info string holds no backtick) are not read for
 headings, lists, tables or bold, and a fence left open is an error. Code spans are not read for bold.
-A heading's closing hashes are not part of its name. A missing file is reported at line 0.
+A heading's closing hashes are not part of its name. A missing file, and a file that is not UTF-8,
+are reported at line 0.
 """
 import os
 import re
@@ -41,15 +53,35 @@ TABLES = {
     "Anti-patterns": ["Anti-pattern", "Why it fails", "Do instead"],
 }
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
-HEADING = re.compile(r"^(#{1,6}) ")
+HEADING = re.compile(r"^ {0,3}(#{1,6}) ")
 NUMBERED = re.compile(r"^\s*\d+\. ")
 BULLET = re.compile(r"^\s*[-*] ")
 LABEL = re.compile(r"^\s*(?:[-*] |\d+\. )(\*\*(?:[^*]|\*(?!\*))+\*\*|__(?:[^_]|_(?!_))+__)")
-BOLD = re.compile(r"\*\*|__")
-VERSION_TAG = re.compile(r"\bv\d+\.")
+BOLD = re.compile(r"\*\*|(?<!\w)__|__(?!\w)")
+VERSION_TAG = re.compile(r"\bv\d+\b|\b\d+\.\d+\.\d+\b")
 CODE_SPAN = re.compile(r"`[^`]*`")
 PARAGRAPH = re.compile(r"^(?!\s*(?:#|\||[-*] |\d+\. |`{3,}|~{3,}))\s*\S")
 CLOSING_HASHES = re.compile(r"\s+#+\s*$")
+SEPARATOR = re.compile(r"^\s*\|?(\s*:?-+:?\s*\|)+\s*(:?-+:?)?\s*$")
+
+
+def read_lines(path):
+    """Return the lines of a UTF-8 file, split on the line feed only; a carriage return stays in its
+    line, and a byte-order mark at the start is dropped."""
+    text = open(path, encoding="utf-8-sig", newline="").read()
+    if not text:
+        return []
+    if text.endswith("\n"):
+        text = text[:-1]
+    return text.split("\n")
+
+
+def heading(line):
+    """Return (level, name) for a heading line, or None; the name drops the closing hashes."""
+    m = HEADING.match(line)
+    if not m:
+        return None
+    return len(m.group(1)), CLOSING_HASHES.sub("", line[m.end():]).strip()
 
 
 def split_frontmatter(lines):
@@ -71,9 +103,14 @@ def check_frontmatter(path, text, errors):
     except yaml.YAMLError as exc:
         errors.append((1, f"frontmatter is not YAML: {str(exc).splitlines()[0]}"))
         return
+    if data is None:
+        errors.append((1, "frontmatter is empty"))
+        return
     if not isinstance(data, dict):
         errors.append((1, f"frontmatter is a {type(data).__name__}, not a mapping"))
         return
+    if "version" in data:
+        errors.append((1, "a top-level version key; the version lives in metadata.version only"))
     folder = os.path.basename(os.path.dirname(os.path.abspath(path)))
     if data.get("name") != folder:
         errors.append((1, f"name is {data.get('name')!r}, the folder is {folder!r}"))
@@ -119,8 +156,7 @@ def check_headings_and_bold(marked, errors):
     for number, line, fenced in marked:
         if fenced:
             continue
-        heading = HEADING.match(line)
-        if heading:
+        if HEADING.match(line):
             if VERSION_TAG.search(line):
                 errors.append((number, f"version tag in heading: {line.strip()}"))
             if BOLD.search(CODE_SPAN.sub("", line)):
@@ -139,12 +175,14 @@ def split_sections(marked):
     """Return (title, sections): title is (number, body) or None; sections are (name, number, body)."""
     title, sections, current = None, [], None
     for number, line, fenced in marked:
-        if not fenced and line.startswith("# "):
+        found = None if fenced else heading(line)
+        level = found[0] if found else None
+        if level == 1:
             if title is None and current is None:
                 title = (number, [])
                 continue
-        if not fenced and line.startswith("## "):
-            current = (CLOSING_HASHES.sub("", line[3:]).strip(), number, [])
+        if level == 2:
+            current = (found[1], number, [])
             sections.append(current)
             continue
         if current is not None:
@@ -164,7 +202,8 @@ def check_title(marked, title, errors, first_line):
     if not any(not f and PARAGRAPH.match(l) for _, l, f in title[1]):
         errors.append((title[0], "no paragraph between the title and the first section"))
     for number, line, fenced in marked:
-        if not fenced and line.startswith("# ") and number != title[0]:
+        found = None if fenced else heading(line)
+        if found and found[0] == 1 and number != title[0]:
             errors.append((number, f"a second '# ' heading: {line.strip()}"))
 
 
@@ -205,7 +244,7 @@ def check_section_body(name, number, body, errors):
     if name == "Rules" and not any(BULLET.match(l) for _, l in text_lines):
         errors.append((number, "Rules holds no bulleted list"))
     if name in TABLES:
-        rows = [(n, l) for n, l in text_lines if l.lstrip().startswith("|")]
+        rows = first_table(text_lines)
         want = TABLES[name]
         if not rows:
             errors.append((number, f"{name} holds no table; its header is | {' | '.join(want)} |"))
@@ -213,13 +252,27 @@ def check_section_body(name, number, body, errors):
             cells = [c.strip() for c in rows[0][1].strip().strip("|").split("|")]
             if cells != want:
                 errors.append((rows[0][0], f"{name} table header is | {' | '.join(cells)} |, not | {' | '.join(want)} |"))
+            body = rows[2:] if len(rows) > 1 and SEPARATOR.match(rows[1][1]) else rows[1:]
+            if not body:
+                errors.append((rows[0][0], f"{name} table has no row after its separator"))
+
+
+def first_table(text_lines):
+    """Return the (number, line) rows of the first table: the run of adjacent lines opening with |."""
+    rows = []
+    for n, l in text_lines:
+        if l.lstrip().startswith("|") and (not rows or n == rows[-1][0] + 1):
+            rows.append((n, l))
+        elif rows:
+            break
+    return rows
 
 
 def check_file(path):
     if not os.path.isfile(path):
         return [(0, "no such file")]
     try:
-        lines = open(path, encoding="utf-8").read().splitlines()
+        lines = read_lines(path)
     except UnicodeDecodeError as exc:
         return [(0, f"not UTF-8: {exc.reason}")]
     errors = []

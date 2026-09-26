@@ -23,7 +23,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 5 `utils/pin.sh` and its test: check mode flags links into the live clone; pin mode removes only links into the pinned worktree and reports the others; a home folder holding a space; a stale worktree pruned before re-pinning; `pin.test.sh` covers each case, and each fault the checkers review planted turns it red (1 commit)
 - ✅ 6 `skills/plan-retro/templates/collect_findings.py` and its test: numbered findings and the subheadings inside a repair round read; Verification, Not checked, Closed and Usage skipped; `--exclude-listed` compared by real path; its test runs on fixtures shaped like the archived reports, and its count over the three archived plans matches a hand count written in the report (1 commit)
 - ✅ 6a `skills/plan-retro/templates/collect_findings.py` keeps every item under the four headings as a finding: the no-finding and closure word lists (`NOTHING_FOUND`, `OTHERS_REPRODUCE`, `CLOSURE`) and their tests go; `skills/plan-retro/SKILL.md` Grouping sets aside, by reading, a finding that reports no defect or a closure that holds (the cut ruled 2026-09-25); `collect_findings.test.sh` passes (1 commit)
-- 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
+- ✅ 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 7a The allow list for a shell-launched `claude` builder (ruling R (a)): `skills/plan-orchestration/templates/launch.sh` passes the commands a builder may run to `claude -p` as `--allowedTools`, from the new optional key `worker_allow:` of `.agents/plan.yaml` and the ledger's configuration block, a list of command prefixes, each passed as `Bash(<prefix>:*)` (ruling S (a)), built by default from the verify list and the brief's gate commands; its test, `check_config.py` and its test, the `plan` skill's `templates/plan.yaml` and `templates/orchestrator-state.md`, and the recipe text in `plan-orchestration` change with it; proven by a real `claude -p` run under the list that runs a verify command (1 commit)
 - 7b The exit file's remaining cases in `skills/plan-orchestration/templates/launch.sh`, found by step 7a's review of its round 2: a KILL after the builder ended, while the note's `end` runs, leaves no exit file; the runner of a killed run, still stopping its builder, writes `exit 137` after a later launch with the same exit file removed it; a KILL between the leader's two writes leaves only `<exit file>.tmp`; the runner's no-replace write (the `-e` return and the `link`) has no case that either guard's revert turns red; the runner reads its session scanner's answer with no time limit, so a stop has no bound. Each case with a test its revert turns red, run whole-suite at 16 at once under `sh` and `dash`, and the texts of `plan-orchestration` and `templates/launch-note.md` made to say what the code does (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
@@ -877,3 +877,42 @@ verify: 14 commands passed
 ```
 
 - Usage, orchestrator from step 10's booking (c0ddc44) to this booking, shared with step 7's wait: 115 messages, 98508 output tokens, 535522 cache-write tokens, 23186713 cache-read tokens, 242 fresh input tokens, 405 minutes.
+
+### Step 7, the layout and inventory checkers (landed 2026-09-26)
+
+- Landed: `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests, and the README Tests bullets for both. Both checkers split lines on the line feed only, so line numbers are those of `grep -n` and a line separator or a lone carriage return stays inside its line; a file that is not UTF-8 is an error; a byte-order mark is read as no text. The layout checker counts `__` as bold only where CommonMark does (not inside a word) and `**` everywhere outside code; reads a heading indented by up to three spaces as a heading; reports a version tag in a heading, bold in a heading, and a table with no row after its separator; reads the first table of a section. The inventory checker reads an indented heading as a heading in the old and the new file, and refuses an old path that is a directory. Each fault the checkers' review planted turns a case red, each case with its revert named in `agents/reviews/7-report.md`.
+- Launch: the builder ran from a shell through `templates/launch.sh claude` with the launch note, on this session's account (ruling N), under the allow list of step 7a; its row was seen in oculus's Agents view under this session (Step 0 above).
+- User-visible changes, before and after, from the report's table: layout, empty frontmatter gave `frontmatter is a NoneType, not a mapping` and now gives `frontmatter is empty`; a top-level `version:` passed and is now an error; a Stops, Use instead or Anti-patterns table with no row after its separator passed and is now an error, read on the first table of the section; a version tag in a heading (`v2`, `1.2.0`), indented or not, passed and is now an error; `foo__bar__baz` was a bold error and now passes; a file with a byte-order mark failed and now passes; `  ## Rules` gave `section 'Rules' is missing` and now counts; an indented second `# ` heading and an indented `## ` heading outside the reference place passed and are now errors; bold in an indented heading failed with `bold outside a list item's label` and now fails with `bold in a heading`; after a line separator or a lone carriage return, errors were one line late and are now at the `grep -n` line. Inventory, an old path that is a folder gave range and coverage errors against a tree listing and now gives one error, `the old path is not a file in that commit`; a one-line row outside the file now reads `old line 30 lies outside the old file's 1-24`; a line separator or a lone carriage return in any of the three files gave extra lines and false errors and is now read as part of its line; a heading indented by up to three spaces in the new file is now a section, and in the old file it carries no text, where it was reported as in no row.
+- Repair rounds: round 1, ten rulings (`agents/briefs/7-round-1.md`).
+- Premises corrected: the brief's case `1. Read the input from __init__.py.` expected no bold error, and CommonMark renders `init` there in strong emphasis, so the checker reports it (ruling 1 of round 1; the brief corrected at landing). Ruling 10 of round 1 said bold in an indented heading passed before; it failed before with another message.
+- Fixes at landing (6): case `indented-row` and case `indented-range` of `utils/check_rule_inventory.test.sh`, each red with its heading match set back to column 0; the heading match in `blocks` removed, since `check_range_block` returns at a heading before it compares blocks and no case could prove it; the carriage-return sentence of both module docstrings made true; the brief's `__init__.py` case. Each red check is quoted in `agents/reviews/7-refuter.md`, Closed.
+- Booked: none.
+- Verification on main, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+```
+
+- Usage, orchestrator from step 7a's booking (f4dd5e8) to this booking, shared with step 7b's review and its round 1, and ruling T: 87 messages, 69187 output tokens, 206121 cache-write tokens, 24108442 cache-read tokens, 202 fresh input tokens, 154 minutes.

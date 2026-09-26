@@ -15,20 +15,27 @@ An inventory is a Markdown file:
     | 12-14 | <the rule, quoted or stated> | Steps 3 |
 
 - Old: a relative path, and a commit written as its hexadecimal id (7 to 40 digits); the old file is
-  `git show <commit>:<path>` in the repository that holds the inventory. A branch, a tag or HEAD is
-  refused, since each can later name the new file.
+  `git show <commit>:<path>` in the repository that holds the inventory, and the path must name a
+  file there (`git cat-file -t` prints blob): a folder is reported as "the old path is not a file in
+  that commit". A branch, a tag or HEAD is refused, since each can later name the new file.
 - New: a relative path inside that repository, read from its working tree.
-- Old lines: one line number or a range a-b of the old file. A range stays inside one block: it
-  holds no blank line and no heading, crosses no frontmatter delimiter and no fence boundary (a fenced
-  block, its fence lines included, is a block of its own), and opens at most one item: a list item at
-  any depth (- * + 1. 1)), a table row other than a separator, or a frontmatter key or comment line.
-  A row may also name one heading line alone, for a rule the heading carries.
+- Old and New paths resolve inside the repository's folder itself: a sibling folder whose name
+  starts with the repository's name is outside it.
+- Old lines: one line number or a range a-b of the old file; a row naming one line that the old file
+  does not hold is reported as "old line <n> lies outside the old file's 1-<last>". A range stays
+  inside one block: it holds no blank line and no heading, crosses no frontmatter delimiter and no
+  fence boundary (a fenced block, its fence lines included, is a block of its own), and opens at
+  most one item: a list item at any depth (- * + 1. 1)), a table row other than a separator, or a
+  frontmatter key or comment line. A row may also name one heading line alone, for a rule the
+  heading carries.
 - Rule: not empty. A pipe inside it is written \\|.
 - New place: a "## " section of the new file, optionally followed by " / " and a "### " subsection
   under it, then optionally by an item number n >= 1: the n-th top-level list item (- * + 1. 1))
   or unindented table body row of that section (its own, before any subsection) or of that
-  subsection, counted outside fenced code. Section and subsection names are matched whole, so a name may hold " / " or
-  end in a digit.
+  subsection, counted outside fenced code. Section and subsection names are matched whole, so a
+  name may hold " / " or end in a digit.
+A heading, in the old file and in the new one, is "#" to "######" and a space, indented by at most
+three spaces.
 
 What is checked, besides the above:
 - each header line appears exactly once, the table's header row is | Old lines | Rule | New place |,
@@ -40,9 +47,16 @@ Fenced code is ``` or ~~~, of any length, at any indentation, closed by a line o
 at least as long; a backtick fence's info string holds no backtick. This is the fence reading of
 utils/check_skill_layout.py.
 
+The inventory, the new file and the old file are split into lines on the line feed only, so line
+numbers are those of grep -n and git show; a line separator or a lone carriage return inside a line
+does not end it. The carriage return of a CRLF line stays in the line; no reader's result depends on
+it, since every reader that looks at the end of a line strips it or lets its pattern end in optional
+whitespace.
+
 Prints one line per error as <inventory>:<line>: <what is wrong> (line 0 when the error has no row,
-uncovered old lines in their order) and "ok: <inventory>" for one with none. Exits 1 when any
-inventory has an error, and 2 when no inventory is named.
+uncovered old lines in their order) and "ok: <inventory>" for one with none. An unknown subsection
+is named under the longest section its place starts with. Exits 1 when any inventory has an error,
+and 2 when no inventory is named.
 """
 import os
 import re
@@ -55,7 +69,8 @@ COMMIT = re.compile(r"^[0-9a-f]{7,40}$")
 RANGE = re.compile(r"^(\d+)(?:-(\d+))?$")
 HEADER = ["Old lines", "Rule", "New place"]
 FENCE = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
-HEADING = re.compile(r"^#{1,6} ")
+HEADING = re.compile(r"^ {0,3}#{1,6} ")
+SECTION = re.compile(r"^ {0,3}(##|###) ")
 ITEM = re.compile(r"^(?:[-*+] |\d+[.)] )")
 ANY_ITEM = re.compile(r"^\s*(?:[-*+] |\d+[.)] )")
 YAML_KEY = re.compile(r"^(?:[A-Za-z_][\w-]*\s*:|#)")
@@ -136,12 +151,14 @@ def places(lines):
     for index, line in enumerate(lines):
         if flags[index][0]:
             continue
-        if line.startswith("## "):
-            section, sub = CLOSING_HASHES.sub("", line[3:]).strip(), None
+        heading = SECTION.match(line)
+        name = CLOSING_HASHES.sub("", line[heading.end():]).strip() if heading else None
+        if heading and heading.group(1) == "##":
+            section, sub = name, None
             counts.setdefault((section, None), 0)
             continue
-        if line.startswith("### ") and section is not None:
-            sub = CLOSING_HASHES.sub("", line[4:]).strip()
+        if heading and section is not None:
+            sub = name
             counts.setdefault((section, sub), 0)
             continue
         if section is None or index in separators:
@@ -210,9 +227,19 @@ def inventory_rows(lines, errors):
 
 def read_text(path):
     try:
-        return open(path, encoding="utf-8").read(), None
+        return open(path, encoding="utf-8", newline="").read(), None
     except UnicodeDecodeError as exc:
         return None, f"not UTF-8: {exc.reason}"
+
+
+def split_lines(text):
+    """Split text on the line feed only; a final line feed ends the last line, and a carriage
+    return stays in its line."""
+    if not text:
+        return []
+    if text.endswith("\n"):
+        text = text[:-1]
+    return text.split("\n")
 
 
 def inside(root, path):
@@ -225,10 +252,12 @@ def inside(root, path):
 
 
 def blocks(lines, flags, end):
-    """Return, per line, (block key, whether the line opens an item). A blank line and a heading are
-    blocks of their own and end the block before them; each frontmatter delimiter is a block, the
-    frontmatter between them is one, and each fenced block, its fence lines included, is one. An item
-    is a list item at any depth, a table row other than a separator, or a frontmatter key or comment."""
+    """Return, per line, (block key, whether the line opens an item). A blank line is a block of its
+    own and ends the block before it; a range holding a heading is reported by check_range_block
+    before blocks are compared, so a heading needs no block here. Each frontmatter delimiter is a
+    block, the frontmatter between them is one, and each fenced block, its fence lines included,
+    is one. An item is a list item at any depth, a table row other than a separator, or a
+    frontmatter key or comment."""
     separators = separator_rows(lines, flags)
     result, fence_start, text_start = [], None, None
     for index, line in enumerate(lines):
@@ -247,7 +276,7 @@ def blocks(lines, flags, end):
                 fence_start = None
             text_start = None
             continue
-        if not line.strip() or HEADING.match(line):
+        if not line.strip():
             result.append((("break", index), False))
             text_start = None
             continue
@@ -284,7 +313,7 @@ def check_inventory(path):
     text, problem = read_text(path)
     if problem:
         return [(0, problem)]
-    lines = text.splitlines()
+    lines = split_lines(text)
     errors = []
     olds = [(i + 1, OLD.match(l)) for i, l in enumerate(lines) if OLD.match(l)]
     news = [(i + 1, NEW.match(l)) for i, l in enumerate(lines) if NEW.match(l)]
@@ -317,22 +346,27 @@ def check_inventory(path):
                           capture_output=True, text=True)
     if full.returncode != 0 or not full.stdout.strip().startswith(commit):
         return [(old_at, f"no commit {commit} in the repository")]
-    shown = subprocess.run(["git", "-C", root, "show", f"{full.stdout.strip()}:{old_path}"], capture_output=True)
+    spec = f"{full.stdout.strip()}:{old_path}"
+    shown = subprocess.run(["git", "-C", root, "show", spec], capture_output=True)
     if shown.returncode != 0:
         errors.append((old_at, f"git show {commit}:{old_path} failed: the path is not in that commit"))
+    else:
+        kind = subprocess.run(["git", "-C", root, "cat-file", "-t", spec], capture_output=True, text=True)
+        if kind.stdout.strip() != "blob":
+            errors.append((old_at, "the old path is not a file in that commit"))
     new_file = os.path.join(root, new_path)
     if not os.path.isfile(new_file):
         errors.append((new_at, f"the new file {new_path} does not exist"))
     if errors:
         return errors
     try:
-        old_lines = shown.stdout.decode("utf-8").splitlines()
+        old_lines = split_lines(shown.stdout.decode("utf-8"))
     except UnicodeDecodeError as exc:
         return [(old_at, f"the old file is not UTF-8: {exc.reason}")]
     new_text, problem = read_text(new_file)
     if problem:
         return [(new_at, f"the new file is {problem}")]
-    known = places(new_text.splitlines())
+    known = places(split_lines(new_text))
     flags = fence_flags(old_lines)
     separators = separator_rows(old_lines, flags)
     end = frontmatter_end(old_lines)
@@ -351,7 +385,10 @@ def check_inventory(path):
         else:
             first, last = int(m.group(1)), int(m.group(2) or m.group(1))
             if first < 1 or last > len(old_lines) or first > last:
-                errors.append((number, f"old lines {span} lie outside the old file's 1-{len(old_lines)} or run backwards"))
+                if m.group(2) is None:
+                    errors.append((number, f"old line {span} lies outside the old file's 1-{len(old_lines)}"))
+                else:
+                    errors.append((number, f"old lines {span} lie outside the old file's 1-{len(old_lines)} or run backwards"))
             else:
                 block = check_range_block(old_lines, flags, end, first, last)
                 if block:

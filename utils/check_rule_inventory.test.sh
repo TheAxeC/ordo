@@ -72,6 +72,21 @@ Rule before a fence.
 Rule after a fence.
 MD
 printf 'caf\351\n' >"$repo/skills/bad/SKILL.md"
+# An old file with a line separator inside line 7; grep -n puts the item at line 9.
+mkdir -p "$repo/skills/sep"
+printf -- '---\nname: sep\ndescription: "x. Triggers on: x."\n---\n\n# Sep\nLine with\342\200\250a separator.\n\n- item two\n' >"$repo/skills/sep/SKILL.md"
+# The same old file with a lone carriage return inside line 7.
+mkdir -p "$repo/skills/cr"
+printf -- '---\nname: sep\ndescription: "x. Triggers on: x."\n---\n\n# Sep\nLine with\ra return.\n\n- item two\n' >"$repo/skills/cr/SKILL.md"
+# An old file whose line 5 is a section heading indented by two spaces; it carries no text.
+mkdir -p "$repo/skills/indent"
+printf -- '---\nname: indent\n---\n\n  ## Rules\n\n- a rule\n' >"$repo/skills/indent/SKILL.md"
+# Its control: four spaces make line 5 indented code, which carries text.
+mkdir -p "$repo/skills/indent4"
+printf -- '---\nname: indent\n---\n\n    ## Rules\n\n- a rule\n' >"$repo/skills/indent4/SKILL.md"
+# An old file whose line 6, an indented heading, follows a line of text with no blank between.
+mkdir -p "$repo/skills/indent2"
+printf -- '---\nname: indent\n---\n\nPara text.\n  ## Rules\n- a rule\n' >"$repo/skills/indent2/SKILL.md"
 git -C "$repo" add -A
 git -C "$repo" -c user.name=t -c user.email=t@t commit -q -m old
 old=$(git -C "$repo" rev-parse --short HEAD)
@@ -210,6 +225,17 @@ expect_error branch-named-like-a-commit "no commit deadbee0 in the repository"
 write_inventory bad-old-path
 edit bad-old-path "- Old: \`skills/demo/SKILL.md\`" "- Old: \`skills/none/SKILL.md\`"
 expect_error bad-old-path "git show $old:skills/none/SKILL.md failed: the path is not in that commit"
+write_inventory old-folder
+edit old-folder "- Old: \`skills/demo/SKILL.md\`" "- Old: \`skills/demo\`"
+expect_error old-folder "old-folder.md:3: the old path is not a file in that commit"
+[ "$(printf '%s\n' "$output" | grep -c '')" -eq 1 ] || fail "old-folder: expected one error line, got: $output"
+# A sibling folder whose name starts with the repository's name is outside it, and holds a file the
+# check would otherwise read.
+mkdir -p "$test_root/repo-other"
+cp "$repo/skills/demo/SKILL.md" "$test_root/repo-other/x"
+write_inventory sibling-new
+edit sibling-new "- New: \`skills/demo/SKILL.md\`" "- New: \`../repo-other/x\`"
+expect_error sibling-new "the new path '../repo-other/x' is not a relative path inside the repository"
 write_inventory escaping-new
 edit escaping-new "- New: \`skills/demo/SKILL.md\`" "- New: \`../outside.md\`"
 expect_error escaping-new "the new path '../outside.md' is not a relative path inside the repository"
@@ -250,7 +276,7 @@ expect_pass fenced-rows
 # Coverage.
 write_inventory uncovered
 edit uncovered "| 14 | Write the output | Steps / Mode A 2 |" ""
-expect_error uncovered "old line 14 is in no row: 2. Writes the output."
+expect_error uncovered "uncovered.md:0: old line 14 is in no row: 2. Writes the output."
 write_inventory uncovered-order
 edit uncovered-order "| 9 | What the skill does | Steps / Mode A 1 |" ""
 edit uncovered-order "| 24 | The x row | Rules 2 |" ""
@@ -279,6 +305,9 @@ expect_error spaced-range "old lines '9 - 9' is not a number or a range a-b"
 write_inventory outside-range
 edit outside-range "| 24 |" "| 24-30 |"
 expect_error outside-range "old lines 24-30 lie outside the old file's 1-24 or run backwards"
+write_inventory outside-line
+edit outside-line "| 24 |" "| 30 |"
+expect_error outside-line "outside-line.md:17: old line 30 lies outside the old file's 1-24"
 write_inventory backwards-range
 edit backwards-range "| 14 |" "| 14-13 |"
 expect_error backwards-range "old lines 14-13 lie outside the old file's 1-24 or run backwards"
@@ -332,6 +361,106 @@ expect_pass digit-name
 write_inventory digit-name-item
 edit digit-name-item "| What the skill does | Steps / Mode A 1 |" "| What the skill does | Phase 2 1 |"
 expect_pass digit-name-item
+# With sections 'Inputs' and 'Inputs / outputs', an unknown subsection is named under the longer one.
+write_inventory longest-section
+edit_new "## Inputs / outputs" "## Inputs\n\n- An input.\n\n## Inputs / outputs"
+edit longest-section "| Steps / Mode A 2 |" "| Inputs / outputs / more 1 |"
+expect_error longest-section "no subsection '### more' under '## Inputs / outputs'"
+write_new
+
+# A heading indented by up to three spaces is a heading: a section of the new file, and a line of the
+# old file that carries no text. Four spaces make indented code, the controls.
+write_inventory indented-section
+edit_new "## Rules" "  ## Rules"
+edit_new "### Mode A" "   ### Mode A"
+expect_pass indented-section
+write_new
+write_inventory indented-section-code
+edit_new "## Rules" "    ## Rules"
+expect_error indented-section-code "no section '## Rules' in skills/demo/SKILL.md"
+write_new
+cat >"$repo/ledger/indented-old.md" <<MD
+# Rule inventory: indent
+
+- Old: \`skills/indent/SKILL.md\` at \`$old\`
+- New: \`skills/demo/SKILL.md\`
+
+| Old lines | Rule | New place |
+|---|---|---|
+| 2 | The name | Rules |
+| 7 | A rule | Rules 1 |
+MD
+expect_pass indented-old
+sed 's#skills/indent/#skills/indent4/#' "$repo/ledger/indented-old.md" >"$repo/ledger/indented-old-code.md"
+expect_error indented-old-code "indented-old-code.md:0: old line 5 is in no row: ## Rules"
+# A row naming the indented heading line alone passes, as a heading at column 0 does. Red when the
+# single-heading-row check reads headings at column 0 only.
+sed 's#^| 7 | A rule | Rules 1 |$#| 5 | The heading | Rules |\
+| 7 | A rule | Rules 1 |#' "$repo/ledger/indented-old.md" >"$repo/ledger/indented-row.md"
+expect_pass indented-row
+# A range over a line of text and the indented heading after it holds a heading. Red when the
+# range's heading check reads headings at column 0 only (the range is then reported as crossing
+# into another block, or passes).
+cat >"$repo/ledger/indented-range.md" <<MD
+# Rule inventory: indent
+
+- Old: \`skills/indent2/SKILL.md\` at \`$old\`
+- New: \`skills/demo/SKILL.md\`
+
+| Old lines | Rule | New place |
+|---|---|---|
+| 2 | The name | Rules |
+| 5-6 | Text and heading | Rules |
+| 7 | A rule | Rules 1 |
+MD
+expect_error indented-range "indented-range.md:9: old lines 5-6 hold a heading at 6"
+
+# Lines split on a newline only, as grep -n and git show count them: a line separator or a lone
+# carriage return inside a line of the old file, the new file or the inventory does not end the line.
+cat >"$repo/ledger/old-separator.md" <<MD
+# Rule inventory: sep
+
+- Old: \`skills/sep/SKILL.md\` at \`$old\`
+- New: \`skills/demo/SKILL.md\`
+
+| Old lines | Rule | New place |
+|---|---|---|
+| 2 | The name | Rules |
+| 3 | The description | Rules |
+| 7 | The line with a separator | Rules |
+| 9 | item two | Rules 1 |
+MD
+expect_pass old-separator
+cat >"$repo/ledger/old-return.md" <<MD
+# Rule inventory: cr
+
+- Old: \`skills/cr/SKILL.md\` at \`$old\`
+- New: \`skills/demo/SKILL.md\`
+
+| Old lines | Rule | New place |
+|---|---|---|
+| 2 | The name | Rules |
+| 3 | The description | Rules |
+| 7 | The line with a return | Rules |
+| 9 | item two | Rules 1 |
+MD
+expect_pass old-return
+write_inventory inventory-separator
+edit inventory-separator "| What the skill does |" "| What the skill$(printf '\342\200\250')does |"
+expect_pass inventory-separator
+write_inventory inventory-return
+edit inventory-return "| What the skill does |" "| What the skill$(printf '\r')does |"
+expect_pass inventory-return
+write_inventory new-separator
+edit new-separator "| 24 | The x row | Rules 2 |" "| 24 | The x row | Rules 3 |"
+edit_new "- A rule.\n" "- A rule.$(printf '\342\200\250')- not an item\n"
+expect_error new-separator "item 3 of 'Rules' does not exist; it has 2"
+write_new
+write_inventory new-return
+edit new-return "| 24 | The x row | Rules 2 |" "| 24 | The x row | Rules 3 |"
+edit_new "- A rule.\n" "- A rule.$(printf '\r')- not an item\n"
+expect_error new-return "item 3 of 'Rules' does not exist; it has 2"
+write_new
 
 # Items in the new file: fenced lines, nested bullets and a table's header row are not items; the same
 # bullet outside a fence or at the top level is one, and a closing-hash heading keeps its name.

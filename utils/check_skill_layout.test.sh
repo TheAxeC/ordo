@@ -128,6 +128,26 @@ expect_error list-frontmatter "frontmatter is a list, not a mapping"
 make_skill scalar-metadata
 edit scalar-metadata 'metadata:\n  version: "1.0.0"' 'metadata: "1.0.0"'
 expect_error scalar-metadata "metadata.version is None, not <n>.<n>.<n>"
+make_skill empty-frontmatter
+python3 - "$test_root/empty-frontmatter/SKILL.md" <<'PY2'
+import sys
+p = sys.argv[1]; t = open(p).read(); body = t.split("---\n", 2)[2]; open(p, "w").write("---\n---\n" + body)
+PY2
+expect_error empty-frontmatter "SKILL.md:1: frontmatter is empty"
+make_skill top-version
+edit top-version "metadata:" 'version: "9.9.9"\nmetadata:'
+expect_error top-version "SKILL.md:1: a top-level version key; the version lives in metadata.version only"
+# A byte-order mark is not text: the complete skill behind one passes, and bom-wrong-name, its
+# control, shows the frontmatter behind the mark is still read.
+make_skill bom
+make_skill bom-wrong-name
+edit bom-wrong-name "name: bom-wrong-name" "name: other"
+for name in bom bom-wrong-name; do
+    { printf '\357\273\277'; cat "$test_root/$name/SKILL.md"; } >"$test_root/$name.md"
+    mv "$test_root/$name.md" "$test_root/$name/SKILL.md"
+done
+expect_pass bom
+expect_error bom-wrong-name "SKILL.md:1: name is 'other', the folder is 'bom-wrong-name'"
 
 # Title and paragraph.
 make_skill no-paragraph
@@ -171,6 +191,27 @@ expect_error stray-section "section 'Background' is outside the place between St
 make_skill after-rules
 printf '\n## Notes\n\nMore.\n' >>"$test_root/after-rules/SKILL.md"
 expect_error after-rules "section 'Notes' is outside the place between Steps and Stops"
+# A heading indented by one to three spaces is the heading it is; four spaces make it indented code,
+# so the control reports the section missing.
+make_skill indented-heading
+edit indented-heading "## Rules" "  ## Rules"
+edit indented-heading "# Do the thing" " # Do the thing"
+expect_pass indented-heading
+make_skill indented-heading-three
+edit indented-heading-three "## Rules" "   ## Rules"
+expect_pass indented-heading-three
+make_skill indented-code
+edit indented-code "## Rules" "    ## Rules"
+expect_error indented-code "section 'Rules' is missing"
+make_skill indented-second-title
+printf '\n  # Appendix\n\nMore.\n' >>"$test_root/indented-second-title/SKILL.md"
+expect_error indented-second-title "a second '# ' heading: # Appendix"
+make_skill indented-stray
+edit indented-stray "## Use instead" " ## Background\n\nSome text.\n\n## Use instead"
+expect_error indented-stray "section 'Background' is outside the place between Steps and Stops"
+make_skill indented-heading-bold
+edit indented-heading-bold "## The file format" "  ## The **file** format"
+expect_error indented-heading-bold "bold in a heading"
 
 # The content each section holds.
 make_skill no-code
@@ -205,6 +246,22 @@ expect_error no-table "Stops holds no table"
 make_skill spaced-header
 edit spaced-header "| When | Use |" "|  When  |   Use |"
 expect_pass spaced-header
+make_skill extra-column
+edit extra-column "| When | Use |\n|---|---|\n| The thing is done already | \`/other\` |" "| When | Use | Note |\n|---|---|---|\n| The thing is done already | \`/other\` | x |"
+expect_error extra-column "Use instead table header is | When | Use | Note |, not | When | Use |"
+# Each of the three tables needs a row after its separator.
+make_skill stops-no-row
+edit stops-no-row "\n| None | The skill never stops | Nothing | Nothing |" ""
+expect_error stops-no-row "Stops table has no row after its separator"
+make_skill use-no-row
+edit use-no-row "\n| The thing is done already | \`/other\` |" ""
+expect_error use-no-row "Use instead table has no row after its separator"
+make_skill anti-no-row
+edit anti-no-row "\n| Writing without reading | The file is wrong | Read first |" ""
+expect_error anti-no-row "Anti-patterns table has no row after its separator"
+make_skill stops-second-table
+edit stops-second-table "\n| None | The skill never stops | Nothing | Nothing |" "\n\n| A | B |\n|---|---|\n| x | y |"
+expect_error stops-second-table "Stops table has no row after its separator"
 
 # Bold only as a label.
 make_skill mid-bold
@@ -226,6 +283,24 @@ expect_pass star-bullets
 make_skill underscore-bold
 edit underscore-bold "1. Read the input." "1. Read the __whole__ input."
 expect_error underscore-bold "bold outside a list item's label"
+make_skill underscore-label
+edit underscore-label "- **Paths.** Every path" "- __Paths.__ Every path"
+expect_pass underscore-label
+# A __ with a word character on both sides is not bold; the __ pair of underscore-bold above is the
+# control. The __ of __init__.py each have a word character on one side only, so they are bold, as a
+# renderer shows them. A ** is bold anywhere outside code.
+make_skill intraword
+edit intraword "1. Read the input." "1. Read foo__bar__baz."
+expect_pass intraword
+make_skill dunder
+edit dunder "1. Read the input." "1. Read the input from __init__.py."
+expect_error dunder "bold outside a list item's label"
+make_skill glob-stars
+edit glob-stars "1. Read the input." "1. Read docs/**/*.md."
+expect_error glob-stars "bold outside a list item's label"
+make_skill intraword-stars
+edit intraword-stars "1. Read the input." "1. Read foo**bar**baz."
+expect_error intraword-stars "bold outside a list item's label"
 make_skill heading-bold
 edit heading-bold "## The file format" "## The **file** format"
 expect_error heading-bold "bold in a heading"
@@ -269,6 +344,50 @@ expect_error version-deep "version tag in heading: #### Format v2.1"
 make_skill version-in-span
 edit version-in-span "## The file format" "## The file format \`v1.2.0\`"
 expect_error version-in-span "version tag in heading"
+make_skill version-word
+edit version-word "## The file format" "## The file format v2"
+expect_error version-word "version tag in heading: ## The file format v2"
+make_skill version-bare
+edit version-bare "## The file format" "## The file format 1.2.0"
+expect_error version-bare "version tag in heading: ## The file format 1.2.0"
+make_skill version-indented
+edit version-indented "## The file format" "  ## The file format v2"
+expect_error version-indented "version tag in heading: ## The file format v2"
+make_skill version-control
+edit version-control "## The file format" "## The file format rev2 1.2"
+expect_pass version-control
+
+# Lines split on a newline only, as grep -n and an editor count them: a line separator or a lone
+# carriage return inside a line leaves the line numbers after it unchanged.
+make_skill line-separator
+edit line-separator "1. Read the input." "1. Read the **whole** input."
+edit line-separator "leaves one file behind." "leaves one$(printf '\342\200\250')file behind."
+whole_line=$(grep -n whole "$test_root/line-separator/SKILL.md" | cut -d: -f1)
+expect_error line-separator "SKILL.md:$whole_line: bold outside a list item's label"
+make_skill lone-return
+edit lone-return "1. Read the input." "1. Read the **whole** input."
+edit lone-return "leaves one file behind." "leaves one$(printf '\r')file behind."
+whole_line=$(grep -n whole "$test_root/lone-return/SKILL.md" | cut -d: -f1)
+expect_error lone-return "SKILL.md:$whole_line: bold outside a list item's label"
+# A file in CRLF reads as the same file. crlf is a regression pin, which no revert of the line split
+# turns red; crlf-bold is its control, an error in a CRLF file reported at its grep -n line.
+make_skill crlf
+make_skill crlf-bold
+edit crlf-bold "1. Read the input." "1. Read the **whole** input."
+for name in crlf crlf-bold; do
+    python3 - "$test_root/$name/SKILL.md" <<'PY2'
+import sys
+p = sys.argv[1]; t = open(p, "rb").read(); open(p, "wb").write(t.replace(b"\n", b"\r\n"))
+PY2
+done
+expect_pass crlf
+whole_line=$(grep -n whole "$test_root/crlf-bold/SKILL.md" | cut -d: -f1)
+expect_error crlf-bold "SKILL.md:$whole_line: bold outside a list item's label"
+
+# A file that is not UTF-8 is an error line, not a traceback.
+mkdir -p "$test_root/latin"
+printf 'caf\351\n' >"$test_root/latin/SKILL.md"
+expect_error latin "latin/SKILL.md:0: not UTF-8"
 
 # A path that does not exist is an error line, not a traceback.
 output=$(python3 "$check" "$test_root/nowhere/SKILL.md") && fail "a missing file passed"

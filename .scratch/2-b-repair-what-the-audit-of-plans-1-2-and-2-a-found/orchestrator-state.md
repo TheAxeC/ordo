@@ -55,55 +55,6 @@ dispatch:
   round_1_start: 5fba16f (the worktree's wip commit)
   round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7b-round-1.md
   round_1_paths: the brief's list
-- step: '7'
-  executor: agent
-  worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E), on the main session's account, CLAUDE_CONFIG_DIR kept (ruling N)
-  worktree: .agents/worktrees/2b-7
-  base: f4dd5e8 (the worktree's work moved onto main after step 7a landed; the first run's base was 2c71183)
-  launched: 2026-09-26
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7-report.md
-  prompt: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/prompt.md
-  output: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/output.json
-  stderr: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/stderr.txt
-  exit: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/exit.txt
-  pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/pid.txt
-  session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/session.txt
-  note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/note-id.txt
-  pid_value: 62708
-  session_id: ec7fe645-5c70-4ce5-91f7-3307745f943e
-  note_id: 2006b4c7-57a1-44a1-b772-3dff0b6ccae6
-  state: the first run exited 0 with no script run (claude -p under acceptEdits refused every script); its test cases kept in the worktree; resumed with an allow file after step 7a landed
-  resume_prompt: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-prompt.md
-  resume_output: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-output.json
-  resume_stderr: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-stderr.txt
-  resume_exit: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-exit.txt
-  resume_pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-pid.txt
-  resume_session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-session.txt
-  resume_allow_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-allow.txt
-  resume_note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-note-id.txt
-  resume_pid_value: 65651
-  resume_note_id: 5546e0f7-4758-431c-9218-9567e8801d1d
-  resume_launched: 2026-09-26, session ec7fe645-5c70-4ce5-91f7-3307745f943e resumed
-  resume_state: exit 0 at about 18:39; 141 turns, 2,811 s, 55,437 output tokens, 220,172 cache-write, 11,591,867 cache-read, 130 fresh input; 5 permission denials (reads of the main ledger, and two command forms outside the list)
-  reviewer: claude:opus, a fresh agent, a70fea5f0ba522233; 147,356 tokens, 33 tool uses, 2,172 s
-  round: 1
-  round_1_start: 114dfca (the worktree's wip commit)
-  round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7-round-1.md
-  round_1_paths: the brief's list
-  repair_prompt: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-prompt.md
-  repair_output: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-output.json
-  repair_stderr: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-stderr.txt
-  repair_exit: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-exit.txt
-  repair_pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-pid.txt
-  repair_session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-session.txt
-  repair_allow_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-allow.txt (unchanged, since worker_allow and the brief's check commands did not change)
-  repair_note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/repair-note-id.txt
-  repair_pid_value: 33267
-  repair_note_id: 47651a85-5459-45af-8e79-2bf57267c463
-  repair_state: exit 0; 143 turns, 2,602 s, 42,481 output tokens, 70,246 cache-write, 12,663,077 cache-read, 94 fresh input; no permission denial
-  round_1_reviewer: claude:opus, a fresh agent, dispatched
-  transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
-  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -168,8 +119,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7a in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 7's builder resumes next with an allow file, and step 7b (the exit file's remaining cases, booked at step 7a's landing) is dispatched beside it; step 17 after both land; then 17a (the library check, ruling T), 18 and 19.
+- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7 in the commit that carries this line). The tree is clean after it, apart from step 7b's dispatch.
+- Roadmap entry 2.B. Step 7b is in repair round 1 (its builder running); its review over the round and its landing come next; step 17 after it lands; then 17a (the library check, ruling T), 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -194,3 +145,4 @@ dispatch:
 | 15 | claude:opus agent, effort high: 139,013 tokens, 146 tool uses, 6,742 s; round 1: 312,799 tokens, 59 tool uses, 888 s | 209,446 tokens, 64 tool uses, 1,288 s; round 1: 201,769 tokens, 65 tool uses, 679 s | 1 | 7 (5 rulings) | 29 files changed, 92 insertions(+), 70 deletions(-) | no | 3 | 1 (open item O) | 35 | 31761 | 73082 | 8778410 | 78 | 66 | none |
 | 10 | orchestrator, no agent | none (the diff approved by the user, open item Q) | 0 | 0 | 1 file changed, 22 insertions(+), 22 deletions(-) | yes | 0 | 1 (open item Q) | 101 | 102285 | 664529 | 19671793 | 202 | 375 | none; shared with step 16, step 7's relaunch and the wait on the rulings |
 | 7a | claude:opus agent, effort high: 246,290 tokens, 76 tool uses, 2,315 s; round 1: 365,182 tokens, 63 tool uses, 3,644 s; round 2: 218,816 tokens, 101 tool uses, 12,118 s | 149,503 tokens, 34 tool uses, 1,028 s; round 1: 165,597 tokens, 42 tool uses, 991 s; round 2: 170,557 tokens, 39 tool uses, 1,563 s | 2 (one under the exception, ruling 5 unbuilt) | 9 (9 rulings), then 1 (4 items) | 17 files changed, 1167 insertions(+), 91 deletions(-) | no | 10 | 0 | 115 | 98508 | 535522 | 23186713 | 242 | 405 | none; shared with step 7's wait |
+| 7 | claude:opus, `claude -p` from a shell through `launch.sh` with the launch note: resumed run 55,437 output tokens, 141 turns, 2,811 s; round 1: 42,481 output tokens, 143 turns, 2,602 s | 147,356 tokens, 33 tool uses, 2,172 s; round 1: 120,890 tokens, 27 tool uses, 875 s | 1 | 10 (10 rulings) | 5 files changed, 385 insertions(+), 47 deletions(-) | no | 6 | 0 | 87 | 69187 | 206121 | 24108442 | 202 | 154 | none; shared with step 7b's review and round 1, and ruling T |
