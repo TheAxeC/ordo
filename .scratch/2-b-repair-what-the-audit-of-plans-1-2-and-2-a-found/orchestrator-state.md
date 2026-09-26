@@ -49,7 +49,10 @@ dispatch:
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7a-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1_start: 3204a18 (the worktree's wip commit)
+  round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7a-round-1.md
+  round_1_paths: the brief's list, plus skills/plan/SKILL.md line 52
 - step: '7'
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E), on the main session's account, CLAUDE_CONFIG_DIR kept (ruling N)
