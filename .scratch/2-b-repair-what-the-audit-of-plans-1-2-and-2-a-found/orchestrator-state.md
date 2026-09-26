@@ -44,6 +44,8 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   session_id: aca9757949c9ed248
+  builder_usage: 191,457 tokens, 77 tool uses, 3,046 s
+  reviewer: claude:opus, a fresh agent, aeb6c6afaff3c9c42
   worktree: .agents/worktrees/2b-7c
   base: 372401f
   launched: 2026-09-26
