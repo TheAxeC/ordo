@@ -36,6 +36,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit)
 - ✅ 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit)
+- 17a A library check in `/spec`, set per project (ruling T): a required key `libraries: check | avoid` in `.agents/plan.yaml`, per project in the `projects:` form, in the `plan` skill's `templates/plan.yaml` and `templates/plan.projects.yaml` and in the configuration block of `templates/orchestrator-state.md`; `/ordo-init` asks for it when it drafts the file and `templates/check_config.py` reports it missing or of an unknown value, with cases; `/plan` and `/spec` refuse without it; under `check`, `/spec` looks for libraries for every capability the step builds before it writes the brief, a candidate that could replace hand-written code is a stop for the user with options, pros, cons and one recommendation, and `templates/brief.md` gains a section "Libraries checked" (each candidate's version, license, maintainer, last release, compatibility with the project's dependencies, what it would replace and what stays) naming the library ruled; under `avoid` the brief says no new dependency; under both, a builder adds no dependency the brief did not name and reports an unnamed library that would cover its work instead of installing it, and `/refute` reports a dependency the brief did not name; bundle size is no criterion unless `plan.yaml` names one; this repository's `.agents/plan.yaml` gets `libraries: avoid` (1 commit)
 - 18 The closure table `agents/reviews/closure.md`: every numbered finding of the six reports (the five of the audit and `6-oculus-changes.md`) with the commit that closed it or the user's ruling; its row count equals the count of findings in the reports (1 commit)
 - 19 the closing: `/roadmap done 2.B` with the gate's output, the diff shown to the user; the release tagged and the user's permission asked to pin it with `utils/pin.sh <tag>`, pinned only on that yes; this folder moved to `.scratch/archive/` (orchestrator, no agent)
 
@@ -57,7 +58,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 16 after 6 and 6a (it needs the fixed collector); 17 after 16.
 - 1c runs after 1a (both edit `spec`'s `templates/brief.md` and `plan-orchestration`).
 - 1a runs alone after steps 4, 6 and 8 land: it edits the rule pages, `README.md`, and the skill texts of `land`, `refute`, `spec` and `plan-orchestration`.
-- 18 after every step from 1 to 17.
+- 17a after 17 (both touch the skill texts and templates).
+- 18 after every step from 1 to 17a.
 
 ## Rulings (2026-09-24)
 
@@ -88,12 +90,14 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - Open item Q (2026-09-26): (a), the roadmap diff approved as drafted in `agents/reviews/10-roadmap.md`; entry 15.A's gate names `--built paper --built paper-review --built literature` (the user).
 - Open item R (2026-09-26): (a), `launch.sh` gives a `claude` builder an allow list as `--allowedTools`, from a new optional key; new step 7a (the user).
 - Open item S (2026-09-26): (a), the key is `worker_allow:`, a list of command prefixes that `launch.sh` passes to a `claude` builder as `--allowedTools "Bash(<prefix>:*)"`; absent, it is built from the verify list and the brief's gate commands (the user).
+- Open item T (2026-09-26): 1 (a), the library check is new step 17a of this plan, after 17 and before 18; 2 (a), the key is `libraries: check | avoid`, required, per project, asked by `/ordo-init`, reported by `check_config.py`, a refusal naming it in `/plan` and `/spec`, and `/refute` reports a dependency the brief did not name; 3 (a), this repository's value is `avoid` (the user).
 - The plan cut to its goal (2026-09-25): a finding of this plan's own reviews that roadmap entry 2.B's goal and gate do not need is not a step. Removed: step 1b (the ASCII check's non-UTF-8 pass and `__pycache__` in `.gitignore`), the runner's edge-case and signal tests and the `refute` list-item wording from step 1a, and step 6a's word-list tuning, replaced by the collector keeping every finding. Step 1c stays (ruling J). (The user.)
 
 ## Blocked, and by what
 
 - 17: step 7's and step 7b's landings, since 17 touches the rules page and every `SKILL.md`.
-- 18: every step from 1 to 17.
+- 17a: step 17's landing, since both touch `skills/spec/SKILL.md`, `skills/plan/` and `skills/ordo-init/`.
+- 18: every step from 1 to 17a.
 - 19: step 18.
 
 ### Step 7a, Step 0 (open item S, ruled 2026-09-26: (a); see Rulings)

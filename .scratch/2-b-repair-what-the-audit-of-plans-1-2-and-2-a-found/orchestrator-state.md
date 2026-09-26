@@ -88,7 +88,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- T (raised 2026-09-26, from a prompt another session gave Axel): a library check in `/spec`, set per project in `.agents/plan.yaml`. Under one value the brief gets a section "Libraries checked" (each candidate's version, license, maintainer, last release, compatibility, what it replaces and what stays) and a candidate that could replace hand-written code is a stop for the user; under the other no new dependency is added. Under both, a builder adds no dependency the brief did not name and reports an unnamed library that would cover its work. On the tree: `.agents/plan.yaml` is drafted and checked by `/ordo-init` (`skills/ordo-init/SKILL.md:28-29`, `templates/check_config.py`), with its keys in the `plan` skill's `templates/plan.yaml` and `templates/plan.projects.yaml`; `/plan` only reads it and refuses a missing required key (`skills/plan/SKILL.md:66`); `docs/dev/change-standard.md:23` (rule 11) already forbids a dependency the brief did not name. Choice 1, where: (a) a new step 17a of this plan, after step 17 and before step 18, through `/spec`, a builder, `/refute` and `/land`; (b) a new roadmap entry, planned after 2.B closes. Choice 2, the key: (a) `libraries: check | avoid`, required in both forms, per project in the `projects:` form, asked by `/ordo-init` when it drafts the file, reported missing by `check_config.py`, and a refusal naming it in `/plan` and `/spec`; `/refute` reports a dependency the brief did not name; (b) the same key, optional with default `avoid`. Choice 3, this repository's own value: (a) `avoid` (the skills use POSIX sh, perl and Python with PyYAML); (b) `check`. Recommendation: 1 (a), since the gap is in `/spec` and this plan repairs the skills now, and waiting for a new entry leaves every brief meanwhile without the check (the lazy option is 1 (b)); 2 (a), since a required key makes each project decide, as the prompt asks, and `/ordo-init` is where `plan.yaml` is written, not `/plan` (2 (b) is the lazy option: it lets a project never decide); 3 (a), since the skills' scripts deliberately depend on nothing beyond PyYAML.
+- none.
 
 ## Booked, no ruling needed
 
@@ -98,6 +98,7 @@ dispatch:
 
 ## Closed items
 
+- 2026-09-26: open item T, the library check in `/spec`: ruled 1 (a), new step 17a after 17; 2 (a), `libraries: check | avoid`, required, per project, asked by `/ordo-init`; 3 (a), this repository's value `avoid`.
 - 2026-09-26: open item S, the allow-list key: ruled (a), `worker_allow:`, a list of command prefixes that `launch.sh` passes to a `claude` builder as `--allowedTools "Bash(<prefix>:*)"`; absent, built from the verify list and the brief's gate commands.
 - 2026-09-26: open item R, how a shell-launched `claude` builder may run commands: ruled (a), an allow list that `launch.sh` passes as `--allowedTools`, from a new optional key; new step 7a builds it, then step 7's builder is resumed with the list.
 - 2026-09-26: booked item, roadmap entry 14's cover letter and blind-review removal: entry 14's goal names both (step 10, 9095ecc).
@@ -148,7 +149,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7a in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 7's builder resumes next with an allow file, and step 7b (the exit file's remaining cases, booked at step 7a's landing) is dispatched beside it; step 17 after both land; then 18 and 19.
+- Roadmap entry 2.B. Step 7's builder resumes next with an allow file, and step 7b (the exit file's remaining cases, booked at step 7a's landing) is dispatched beside it; step 17 after both land; then 17a (the library check, ruling T), 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
