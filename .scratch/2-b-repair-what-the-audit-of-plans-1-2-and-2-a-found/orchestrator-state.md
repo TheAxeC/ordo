@@ -40,6 +40,15 @@ worker_allow: []             # empty: a claude -p builder's allow list is built 
 
 ```yaml
 dispatch:
+- step: '7b'
+  executor: agent
+  worker: claude:opus, a native agent in the background
+  worktree: .agents/worktrees/2b-7b
+  base: f761538
+  launched: 2026-09-26
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7b-report.md
+  landing: not-started
+  round: 0
 - step: '7'
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E), on the main session's account, CLAUDE_CONFIG_DIR kept (ruling N)
