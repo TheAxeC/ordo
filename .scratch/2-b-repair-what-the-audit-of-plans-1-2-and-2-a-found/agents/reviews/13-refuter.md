@@ -63,3 +63,67 @@ The source files of 8 `holds` rows were not read in full: agents/collaboration_d
 ## Usage
 
 Reviewer: claude:opus, agent a8d1fbbfc485cb1fd; figures in the state file's dispatch entry once the completion notification carries them.
+
+## Repair round 1, refuted
+
+On .agents/worktrees/2b-13, base 85c035d, round delta `git diff 16200ee`; reviewer claude:opus, agent ad962b768aa05eddd.
+
+```
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md   (exit 0)
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+python3 utils/check_coverage.py ... -> ok: docs/academic-coverage.md, exit 0
+grep -c '^| `' .../13-rows.md -> 30
+largest sentence over the reason cells of 147-181 -> 35 (lines 177 and 162, both unchanged)
+git diff 16200ee --stat -> docs/academic-coverage.md | 6 +++--- (lines 151, 152, 155)
+diff <(git show 85c035d:docs/academic-coverage.md) docs/academic-coverage.md | grep '^[0-9]' -> 151,153c151,153 / 155c155 / 171c171
+grep -c '| rebuild later: ' docs/academic-coverage.md -> 18
+python3 .agents/step13/cases.py -> all five cases as the report quotes, exit 0
+non-ASCII over 147-181 and both records -> none
+```
+
+### 1. Spec
+
+1. docs/academic-coverage.md:152, against 151: row 152 still ends the orchestrator's round-trip count "with the budget display of `SKILL.md`", while row 151 now splits SKILL.md's Budget Transparency section (399-403): the token-cost estimate of line 401 goes to the researcher, and the round-trip caps and counts end. Row 152 should end the round-trip count (orchestrator line 917) with "the round-trip caps and counts of `SKILL.md`". `13-rows.md` repeats the stale wording in the orchestrator record. change-standard rule 14.
+2. Rulings 1 to 4 hold: row 155 against claim_ref_alignment_audit_agent.md 50, 144, 176-223, 261-283, draft_writer_agent.md 540-575 and row 58; row 152's slr_lineage (497-510, readers only in the PRISMA-trAIce anchor files, rows 95 and 85), Style Profile (527, intake_agent.md 203-210, row 60) and experiment-provenance (452; the check is academic-pipeline's own `agents/integrity_verification_agent.md` 292-397, row 154, `rebuild: paper`); row 151 on SKILL.md 401 and 403; the build-obligations column.
+3. docs/academic-coverage.md:156 (holds row): "That grades the person rather than the research" contradicts collaboration_depth_agent.md 122 and 154 ("not the person's character or ability"); the file scores the user's collaboration pattern on three dimensions (33-38, 63). The drop holds; the wording does not. Low severity.
+4. docs/academic-coverage.md:158 (holds row): "replaced by a read source": integrity_failure_recovery.md 202 and 377 say a verified replacement source identified via WebSearch, chosen for citation count and a valid DOI; no line says it was read. The verdict holds; the word "read" is not on the file's lines. Low severity.
+5. The other six holds rows of ruling 5 hold, their line counts and cited lines checked.
+
+### 2. Proof
+
+1. The report's ruling 3 row reads DONE without noting that row 152 still names "the budget display of `SKILL.md`" (Spec 1); no command it quotes checks agreement between rows 151 and 152. Every other command and case reproduces.
+
+### 3. Standards
+
+1. docs/academic-coverage.md:152 and :155: repeated sentence shape (prose-standard section 0). Row 152's "Its `slr_lineage` flag ends, since its only reader is..." copies "Its citation-marker finalizer ends, since the paper skill..."; row 155 has two "... are dropped, since ..." sentences. Low severity.
+
+### 4. Behaviour
+
+1. Row 151 gives entry 13 a new obligation (the token-cost estimate the user confirms); row 152's stale clause would tell a reader of the orchestrator row that the whole budget display ends. The report does not state this conflict.
+
+### Not checked
+
+- The 22 source files other than the eight holds rows of ruling 5 were not re-read this round.
+- The experiment-provenance inputs (integrity_verification_agent.md 305-309) were not traced to a paper-skill intake row beyond row 154.
+- The records' contents before the round could not be diffed, since they are untracked.
