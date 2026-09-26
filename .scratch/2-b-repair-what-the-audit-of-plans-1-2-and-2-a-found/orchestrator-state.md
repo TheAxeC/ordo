@@ -44,7 +44,7 @@ dispatch:
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E), on the main session's account, CLAUDE_CONFIG_DIR kept (ruling N)
   worktree: .agents/worktrees/2b-7
-  base: 2c71183
+  base: f4dd5e8 (the worktree's work moved onto main after step 7a landed; the first run's base was 2c71183)
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7-report.md
   prompt: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/prompt.md
@@ -57,7 +57,15 @@ dispatch:
   pid_value: 62708
   session_id: ec7fe645-5c70-4ce5-91f7-3307745f943e
   note_id: 2006b4c7-57a1-44a1-b772-3dff0b6ccae6
-  state: exited 0 with no script run (claude -p under acceptEdits refused every script); its test cases kept in the worktree; resume waits on open item R
+  state: the first run exited 0 with no script run (claude -p under acceptEdits refused every script); its test cases kept in the worktree; resumed with an allow file after step 7a landed
+  resume_prompt: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-prompt.md
+  resume_output: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-output.json
+  resume_stderr: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-stderr.txt
+  resume_exit: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-exit.txt
+  resume_pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-pid.txt
+  resume_session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-session.txt
+  resume_allow_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-allow.txt
+  resume_note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/resume-note-id.txt
   transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/ec7fe645-5c70-4ce5-91f7-3307745f943e.jsonl
   landing: not-started
   round: 0
