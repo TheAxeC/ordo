@@ -1,0 +1,18 @@
+# Step 7b, repair round 2: the rulings
+
+This is the one round beyond the cap: round 1's delta leaves the brief's "What it must do" item 1 unbuilt (a KILL to a leader that outlives the guard's 10-second bound leaves no exit file), and the fix is too large to make at landing. The round starts at the worktree's wip commit named in the dispatch block. The findings are in `agents/reviews/7b-refuter.md`, section "Repair round 1, refuted". The brief `agents/briefs/7b.md` holds unchanged; every case and every check of "Verify before you report", the load runs included, is run again after the round. The paths are the brief's.
+
+## Rulings
+
+1. **The guard waits for the leader with no time bound** (Spec 1, Standards 1, Behaviour 1). Round 1's ruling 2 is withdrawn: its reason, a reused pid holding the lock, does not arise. POSIX (XBD 4.14, "Process ID Reuse") does not reuse a process ID while a process group with that ID exists, and macOS and Linux both keep to it. The session leader's pid is the ID of its process group, and the builder's runner and its guard are in that group, since the leader's shell does no job control. So while the guard lives, the leader's pid cannot name another process, and `kill 0, $watch` fails only once the leader has ended.
+   - Remove the bound: the guard checks every tenth of a second until the leader is gone, then writes as before.
+   - The guard checks once, when it starts, that its process group is the leader's pid (`getpgrp() == $watch`). When it is not, it prints one line naming that to the stderr file and exits without writing, since its wait would then rest on a pid that can be reused. A case asserts that the guard's process group (`ps -o pgid= -p <guard pid>`) is the leader's pid, red when the guard is moved into a group of its own in a patched copy (`setpgrp(0, 0)` after its fork).
+   - The round-1 guard-bound case is replaced by a case in which the leader lives past 10 seconds after the builder's end (a hanging `end` with the note's limit raised in a patched copy), is then sent a KILL, and within five seconds of that KILL the exit file holds the builder's code and no guard is left. Red when the bound of round 1 is put back in a patched copy.
+   - The texts say what the code does: the head comment of `launch.sh` (the "Exit file" paragraph and the runner's comment), `skills/plan-orchestration/SKILL.md` item 2 of the launch and the bullet "After the builder has ended", with the reason in one clause (the leader's pid is not reused while its process group lives). No text names a bound of 10 seconds any longer.
+2. **The test's head comment** (Standards 2). `launch.test.sh`'s head comment names the stale `<exit>.tmp.<pid>` case, the process-group case and the case of ruling 1, and the report's "Doc text" README replacement names them too.
+3. **Sentence length** (Proof 1, Standards 3). `launch.sh:8-9` and `SKILL.md:182` are split into sentences under about 20 words, one idea each, and every sentence the round adds keeps to it. The report's claim about sentence lengths states what `wc -w` gives.
+4. **"Within about a second"** (Standards 4, last item). `SKILL.md:195`, `SKILL.md:215` and `launch.sh:37` say how long the runner's stop takes when the scanner does not answer: about 3 seconds at most, as `SKILL.md` item 2 says.
+
+## Report
+
+Add a section "Repair round 2" to `agents/reviews/7b-report.md` in the worktree's copy of the ledger: each ruling DONE or NOT DONE with the command that proves it, each new or changed case with its revert's first `FAIL:` line quoted, "Verify before you report" rerun and quoted with the load counts (32 runs at 16 at once under `sh` and under `LAUNCH_SHELL=dash`), and the files changed.

@@ -184,3 +184,129 @@ About 118k tokens (the counter went from about 14,965,000 to about 14,847,000) a
 - The `dash` suite: 2 min 23 s.
 - The two load batches: 4 min 35 s and 4 min 14 s.
 - The revert batches: 3 min 18 s for 11 in parallel, then about 2.5 min each for 3 more.
+
+# Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent, ac652ca64cd8de6c9; 132,302 tokens, 34 tool uses, 1,532 s.
+
+## 1. Verification lines, verbatim
+
+All commands ran from the worktree root under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`. The only git commands run were `git diff` and `git status --short`, and no file in the worktree or the ledger was edited. Reverts and probes ran on copies under `/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/6266a558-ed92-43a1-ac08-9bf8f4bc78a8/scratchpad/7b-r1/`.
+
+`sh skills/land/templates/verify.sh /Users/axelfaes/workspace/ordo/.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` (208 s):
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+exit 0
+```
+That is 12 PASS lines, 10 ok lines and `verify: 14 commands passed`, with exit 0.
+
+- `LAUNCH_SHELL=dash sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1` printed `PASS: launch.sh scratch tests` (124 s).
+- **Load runs.** The whole `launch.test.sh` ran on a copy of the final `launch.sh` and `launch.test.sh`, 16 runs at 16 at once (`xargs -P 16`), in the foreground:
+  - `sh`: exit codes `16 0`, output `16 PASS: launch.sh scratch tests`. 0 red, 325 s.
+  - `LAUNCH_SHELL=dash`: exit codes `16 0`, output `16 PASS: launch.sh scratch tests`. 0 red, 336 s.
+- **Reverts.** Each revert was made on its own copy of the final `launch.sh`, and the whole suite ran against it. The 11 copies ran at once. First `FAIL:` line of each:
+  - A, `rm -f "$opt_exit" "$opt_exit".tmp.*` reverted to `rm -f "$opt_exit"`: `FAIL: an earlier run's temporary exit file was still there after the launch`
+  - B, the guard's bound line `POSIX::_exit(0) if Time::HiRes::time() >= $guard_until;` removed: `FAIL: guard bound: the guard ran on past its bound`
+  - B2, that line made `last if ...`, so the guard writes at its bound: `FAIL: guard bound: an exit file was written while the leader lived`
+  - C, the guard's `Time::HiRes::sleep(0.1)` made `sleep(5)`: `FAIL: a normal end: a process of the session ran on 3 seconds after the leader`
+  - D, the guard's `unlink "$exit_file.tmp.$watch";` removed: `FAIL: KILL during the leader's write: a temporary file was left: exit`
+  - E, `guard($code) if $exit_file ne "";` made `1;`: `FAIL: KILL while end hangs: no exit file five seconds after the KILL`
+  - F, the checked open made `} elsif (0) {`, so no handle is opened: `FAIL: daemons: launch.sh failed`
+  - G, the scanner deadline `+ 2` made `+ 600`: `FAIL: the land sequence with a scanner that never answers: no exit file five seconds after the KILL`
+  - H, `|| -e $exit_file` removed from `publish`'s early return: `FAIL: an exit file present at the runner's check: a temporary file was written`
+  - I, the builder's runner closes the descriptor (`if (1)`): `FAIL: a launch while a killed run's runner lives exited 0, expected 75`
+  - Control, the unchanged final `launch.sh` in the same batch: `PASS: launch.sh scratch tests`
+- **ASCII and line length.** `git diff -U0 5fba16f | grep '^+' | LC_ALL=C grep -c '[^ -~]'` printed `0`. The count of added `.sh` lines over 100 characters is `0`.
+
+## 2. Repair round 1, refuted
+
+### Spec
+
+1. **Ruling 2 leaves a stop with no exit file, which contradicts the brief's "What it must do".** `launch.sh:392-396`:
+   ```
+   my $guard_until = Time::HiRes::time() + 10;
+   while (kill 0, $watch) {
+       POSIX::_exit(0) if Time::HiRes::time() >= $guard_until;
+   ```
+   - When the leader is still alive at the guard's bound and is then killed, no process is left to write the exit file.
+   - Probe 1 used a patched copy (bound 2 s, note limit 8 s, `end` hanging). After the guard was gone the leader was still alive, and I sent it a KILL. Six seconds later: `PROBE: no exit file`, and the directory held `id pid pid.lock report session stderr`.
+   - Probe 2 left the bound at 10 s and raised only the note limit to 15 s. Output: `PROBE: guard gone 10293 ms after end hung; leader alive: yes`, then `PROBE: no exit file 6 s after the KILL`.
+   - The brief's "What it must do" bullet 1 requires an exit file within five seconds of every KILL of a started builder, "a KILL after the builder ended (the guard, the builder's code)" included. This path breaks that.
+   - Ruling 2 chose this design ("when not, it exits without writing, since the leader then writes").
+   - In the unpatched script the leader outlives the bound only when it is still alive more than 10 s after the builder's end. Its `end` call is stopped after 3 s, so this needs a stalled or stopped leader, or an `end` process that a KILL cannot reap. I did not reproduce it on the unpatched script.
+   - Whether the brief's requirement admits this window is the orchestrator's decision. The texts' claim that it cannot happen is Standards 1.
+
+### Proof
+
+1. **Report, ruling 6 row: "no sentence this step added is over 24 words" is not true.** Two sentences added in this round are 27 words each (`wc -w`):
+   - `launch.sh:8-9`, "They refuse with exit 75, before anything starts, in two cases: another live launch or run holds that lock, or the pid file names a live process."
+   - `SKILL.md:182`, "A killed run's builder runner is gone about 3 seconds after the KILL: at most 2 seconds waiting on the session scanner, then 1 second of grace."
+
+   The brief's Conventions ask for sentences "under about 20 words". The sentences the review listed were rewritten as ruled.
+2. Every other closure in the report reproduced: rulings 1 and 2 (reverts A, B and B2) and the earlier cases I reran (C to I). Ruling 3 is an audit, as the report says. My probe ran the extracted runner with `LAUNCH_LOCK_FD=77` (not open) and printed `launch.sh: cannot hold the lock on descriptor 77: Bad file descriptor`. The builder then ran (`rc 3`) and the guard wrote `exit 3`.
+
+### Standards
+
+1. **The texts say a KILL after the builder's end always leaves an exit file. Spec 1 shows it does not after the guard's bound.**
+   - `SKILL.md:216`: "When the leader still lives then, the guard exits without writing, and the leader writes the file. So every KILL once the builder's runner has started leaves an exit file."
+   - `launch.sh:43-44`: "When the leader still lives at the bound, the guard exits without writing, since the leader writes the file. So a KILL while end runs, or during the leader's write, still leaves the exit file."
+   - `launch.sh:32`: "Every stop once the builder's runner has started leaves an exit file."
+   - `SKILL.md:196`: "A KILL after the builder ended leaves the exit file too, as the bullet "After the builder has ended" below says."
+
+   Each sentence is false for a leader killed after the guard's bound. Change-standard rule 14.
+2. **The test's head comment does not list the round's two new cases.** `launch.test.sh:1-59` is unchanged in this round, and the brief says the file "names its cases in the head comment".
+   - Line 7 still says only "an exit file left by an earlier run removed at the launch". It does not mention the stale `<exit>.tmp.<pid>` the case at line 568 now checks.
+   - No line mentions the guard's bound (the case at line 1287).
+   - The report's "Doc text" README replacement (report line 143) was not updated for either case.
+3. **Two sentences are over the brief's limit**, as Proof 1 gives (27 words each at `launch.sh:8-9` and `SKILL.md:182`).
+4. **Sentences the review did not list, checked against the code:**
+   - Correct against the code: ruling 4's `launch.sh:32-34` (the leader moves its own file over the runner's) and "The runner and the guard never replace an exit file present."
+   - Correct against the code: ruling 5's `SKILL.md:196`, which names the bullet at 216, and that bullet exists.
+   - Correct as a total: ruling 7's numbers in `SKILL.md:182-183`. `stop` shares one 2-second scanner deadline across both of its `members` calls (340 and 355), with the 1-second grace between them. So "2 seconds ... then 1 second of grace" is right as a total, not as an order.
+   - Not made false by this round: `SKILL.md:195`, `SKILL.md:215` and `launch.sh:37` still say the runner stops the builder "within about a second". With a scanner that does not answer, the stop takes up to about 3 s, and `SKILL.md:182` now says so. Those lines are context in `git diff f761538`.
+
+### Behaviour
+
+1. Spec 1: a leader killed after the guard's bound leaves no exit file, reproduced in two patched copies.
+2. The report's user-visible line for a KILL during the leader's write (report line 124) is true. After TERM and then KILL during the leader's write, the runner has already published and exited, and no guard exists, so `<exit>.tmp.<leader pid>` stays. After a normal end the guard removes it (revert D). The launch removes any `<exit>.tmp.*` (revert A).
+3. The guard ends at most about 10.1 s after it starts, whatever `kill 0` returns: the bound is checked before every 0.1 s sleep. Probe 2 measured the guard gone 10293 ms after `end` began to hang, a moment after the guard started. When the leader is still alive at the bound, the guard writes nothing: B2 is red, and the guard-bound case finds no exit file while the leader lives.
+4. Ruling 3: `open`'s return value is checked. The descriptor is closed with `POSIX::close` at the top of the runner, before `fork`. The one line goes to the runner's standard error, which the leader inherits from `$detach`'s `2>"$opt_stderr"`, so it lands in the stderr file.
+
+## 3. Not checked
+
+- The report's 32-run counts per shell. I ran 16 at 16 at once per shell.
+- The report's other reverts: the pid-file check disabled, `write_exit` before `end`, the guard writing over an existing exit file, the note limit set to 20 s, the leader's move replaced by a copy, the runner writing nothing after its parent is gone, the guard closing the lock, and the note call's runner keeping the lock.
+- A leader still alive more than 10 s after the builder's end on the unpatched script. Reasoned from the code and shown only in patched copies.
+- A `POSIX::close` after an `open` that failed on a descriptor that is actually open. Only EBADF was probed.
+- A real `claude -p` or `codex exec` run.
+
+## 4. Usage
+
+About 90k tokens (the counter went from about 14,964,500 to about 14,874,500) and about 24 tool uses. Wall time went mostly to runs:
+- verify: 208 s.
+- The `dash` suite: 124 s.
+- The 11 revert copies at once: 191 s.
+- The two load batches: 325 s and 336 s.
+- Two probes: about 30 s each.
