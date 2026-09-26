@@ -310,3 +310,174 @@ About 90k tokens (the counter went from about 14,964,500 to about 14,874,500) an
 - The 11 revert copies at once: 191 s.
 - The two load batches: 325 s and 336 s.
 - Two probes: about 30 s each.
+
+# Repair round 2, refuted
+
+Reviewer: claude:opus, a fresh agent, a768f6cb4fe57e278; 132,373 tokens, 32 tool uses, 1,448 s.
+
+Worktree: /Users/axelfaes/workspace/ordo/.agents/worktrees/2b-7b. Nothing in the worktree or the ledger was changed. The only git commands run were `git diff a211aa5`, `git diff f761538` and `git status --short`. Every revert and probe ran on copies under `/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/6266a558-ed92-43a1-ac08-9bf8f4bc78a8/scratchpad/7b-r2/`.
+
+## 1. Verification lines, verbatim
+
+All commands ran from the worktree root under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+
+**verify.sh.** `sh skills/land/templates/verify.sh /Users/axelfaes/workspace/ordo/.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` took 235 s:
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+exit 0
+```
+That is 12 PASS lines, 10 ok lines and `verify: 14 commands passed`, exit 0.
+
+**Suite under dash.** `LAUNCH_SHELL=dash sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1` printed `PASS: launch.sh scratch tests` (128 s).
+
+**Load runs.** The whole `launch.test.sh` ran on a copy of the final `launch.sh` and `launch.test.sh`, 16 runs at 16 at once (`xargs -P 16`), in the foreground:
+- `sh`: exit codes `16 0`, last lines `16 PASS: launch.sh scratch tests`, no `FAIL` line. 0 red, 284 s.
+- `LAUNCH_SHELL=dash`: exit codes `16 0`, last lines `16 PASS: launch.sh scratch tests`, no `FAIL` line. 0 red, 270 s.
+
+**Reverts.** Each revert is a copy of the final `launch.sh` with the unchanged `launch.test.sh`, 11 copies run at once (203 s). The first `FAIL:`/`PASS:` line of each:
+- bound: round 1's 10-second bound put back in the guard: `FAIL: a KILL more than 10 seconds after the builder's end: no exit file five seconds after the KILL`
+- pg-after: `setpgrp(0, 0)` placed after the guard's group check: `FAIL: guard waits: the guard 7281 is in process group 7281, not the leader's 7039`
+- pg-before: `setpgrp(0, 0)` placed right after the guard's fork, with the check still in place: `FAIL: claude without a note: .../a0 out/stderr holds claude stderr` / `launch.sh: the guard is not in process group 92878; it writes no exit file, expected claude stderr`
+- nocheck: the `getpgrp() != $watch` block removed: `PASS: launch.sh scratch tests`
+- rmtmp: the launch's `rm -f "$opt_exit" "$opt_exit".tmp.*` reverted to `rm -f "$opt_exit"`: `FAIL: an earlier run's temporary exit file was still there after the launch`
+- nounlink: the guard's `unlink "$exit_file.tmp.$watch";` removed: `FAIL: KILL during the leader's write: a temporary file was left: exit`
+- noe: `|| -e $exit_file` removed from `publish`: `FAIL: an exit file present at the runner's check: a temporary file was written`
+- deadline: the scanner deadline `+ 2` made `+ 600`: `FAIL: the land sequence with a scanner that never answers: no exit file five seconds after the KILL`
+- slowpoll: the guard's `sleep(0.1)` made `sleep(5)`: `FAIL: a normal end: a process of the session ran on 3 seconds after the leader`
+- noguard: `guard($code) if $exit_file ne "";` made `1;`: `FAIL: KILL while end hangs: no exit file five seconds after the KILL`
+- control, the unchanged final `launch.sh`: `PASS: launch.sh scratch tests`
+
+**Process-group probe.** This is a copy of the test's setup (lines 1-453) with two live launches, under `sh` and under `LAUNCH_SHELL=dash`, listed with `ps -o pid,ppid,pgid,sess,command` over the members of the leader's session (found with `os.getsid`):
+- While the builder runs (`sh`): leader 63470 has pgid 63470. The builder's runner 63582 has pgid 63470. The scanner 63584 has pgid 63470. The builder 63583 has pgid 63583.
+- While `end` hangs (`sh`): leader 63910. The guard 63936 has ppid 1 and pgid 63910. The `end` runner 63937 has pgid 63910.
+- After a KILL, `exit file: exit 3 after 403 ms`.
+- Under `dash` the result is the same: runner 65491 and scanner 65514 have pgid 65391 (the leader); the guard 66207 has ppid 1 and pgid 66157 (the leader). `exit 3 after 404 ms`.
+- On macOS the `SESS` column prints 0 for every process.
+
+**ASCII and line length.** `git diff -U0 a211aa5 | grep '^+' | LC_ALL=C grep -c '[^ -~]'` printed `0`. The added `.sh` lines over 100 characters counted `0`.
+
+## 2. Repair round 2, refuted
+
+### Spec
+
+None. Ruling by ruling:
+- **Ruling 1.** The bound is gone: `launch.sh:399` is `Time::HiRes::sleep(0.1) while kill 0, $watch;`. The `getpgrp` check is at 388-392, and the guard-bound case is replaced by the guard-waits case at `launch.test.sh:1289-1319`.
+- **Ruling 2.** The head comment names the new cases (`launch.test.sh:7`, `:29-31`), and so does the report's "Doc text" replacement.
+- **Ruling 4.** `launch.sh:38`, `SKILL.md:195` and `SKILL.md:215` now say "within about 3 seconds at most".
+
+On this machine the process-group premise holds under both shells: the builder's runner and its guard are in the leader's group, while the builder runs and while `end` hangs. That is the probe above.
+
+### Proof
+
+1. **The report's sentence-length list leaves out the sentences the round added to `launch.test.sh`, so its claim "Each sentence this round added or rewrote ... largest 19" is false.** The report's "Sentence lengths" section lists only sentences from `launch.sh` and `SKILL.md`. Counted with `printf '%s' ... | wc -w`, the test's new comment has three sentences over the limit (see Standards 1).
+
+2. **The report's quoted red for "`setpgrp(0, 0)` after the guard's fork" is not the suite's first `FAIL:` line.**
+   - The report gives `FAIL: guard waits: no guard in the session while end hangs`.
+   - On the whole suite, the same revert (pg-before) turns red at the first case: `FAIL: claude without a note: .../a0 out/stderr holds claude stderr` / `launch.sh: the guard is not in process group 92878; it writes no exit file, expected claude stderr`. The guard's message reaches the stderr file of every run.
+   - The revert is red either way, so the closure holds. The quoted line was presumably taken from a run of that one case, and the report does not say so.
+   - The other form, the check removed as well, reproduced as quoted: the pg-after revert above.
+
+3. **The guard's `getpgrp` check (`launch.sh:388-392`) has no case that turns red when it is removed (the nocheck revert is `PASS`).**
+   ```
+       if (getpgrp() != $watch) {
+           print STDERR "launch.sh: the guard is not in process group $watch; ",
+               "it writes no exit file\n";
+           POSIX::_exit(0);
+       }
+   ```
+   - The check asserts an invariant that the leader's shell keeps, since it does no job control. So no case can reach its branch, and the ruling did not ask for one.
+   - Change-standard rule 13 still asks the report to say that it is an audit, not a proof. The report's rulings table does not say so.
+   - Its "exits without writing" branch is reached only in the pg-before revert, where the red comes from its message in the stderr file, not from the missing write.
+
+4. The rest reproduced:
+   - The ruling 1 case is red with the bound put back, and red with `setpgrp` in either place.
+   - Seven earlier cases stay red under their reverts on the final `launch.sh`: rmtmp, nounlink, noe, deadline, slowpoll, noguard, and bound.
+   - No finding was closed by removing a check. The guard-bound case was removed because its subject, the bound, was withdrawn by ruling 1, and its replacement asserts the opposite behaviour.
+
+### Standards
+
+1. **Sentences well over "about 20 words", added by this round in `launch.test.sh:1289-1295`** (ruling 3: "every sentence the round adds keeps to it"; brief, Conventions). Counted with `wc -w`:
+   - "The builder exits 3, and end hangs with the note's limit raised to 15 seconds in a patched copy, so the leader lives more than 10 seconds after the builder's end.": 31 words.
+   - "The leader is then killed, and within five seconds of the KILL the exit file holds exit 3 and no process of the session, the guard included, is left.": 29 words.
+   - "Red when the guard is put in a process group of its own (no guard in the leader's group), and when the guard gives up 10 seconds after it started (no exit file).": 33 words.
+   - The head comment's new clause at `launch.test.sh:29-31` ("the guard in the leader's process group, waiting for a leader that lives more than 10 seconds after the builder's end, and after that leader's KILL leaving the builder's code;") is 30 words. It sits inside a list item in the list-style head comment.
+   - The report's "Doc text" replacement adds "It checks that the runner's guard is in the leader's process group, and that it waits ... after that leader's KILL.", about 35 words.
+
+2. **`launch.test.sh:1291-1292` is garbled:**
+   ```
+   # seconds after the builder's end. While end hangs, the guard's process group is the leader's pid,
+   # whose pid is then not reused.
+   ```
+   "the leader's pid, whose pid" names a pid's pid. The intended statement is the one in `launch.sh:42`: the leader's pid is not reused while its process group lives.
+
+3. I grepped `10 seconds`, `bound`, `about a second`, `process group`, `tenth of a second`, `about 3 seconds`, `getpgrp`, `reused` and `guard_until` across `launch.sh`, the head comment of `launch.test.sh`, `SKILL.md`, `launch-note.md`, `skills/land/SKILL.md` and `README.md`. No sentence is left or made false:
+   - "bound" in `launch.sh` matches only `:518`, "one bounded call", which is about the note call.
+   - `README.md` matches only unrelated bullets (`land.test.sh`, `verify.test.sh`, `check_rule_inventory.test.sh`).
+   - `skills/land/SKILL.md:43` is still true.
+   - The head comment's `launch.test.sh:21` ("no process of the builder left within about a second") describes the case at 796-808, where the scanner answers. It is context, not changed by the round, and matches that case.
+   - `SKILL.md:216` states the process-group reason in one clause, as ruling 1 asks. `SKILL.md:182-183` split the long sentence into sentences of 13, 10, 9, 10 and 13 words.
+
+### Behaviour
+
+1. **Ruling 4's numbers, "about 3 seconds at most", are true against the code within the word "about".**
+   - `stop` sets one `$until` 2 s ahead (`launch.sh:349`), and both `members` calls share it.
+   - The grace loop lasts at most 1 s.
+   - After the deadline, `session_members` calls `drop_scanner`.
+   - The remaining time is two `ps` runs in `descendants`, the `waitpid` after KILL, and the runner's 0.05 s poll of `getppid`.
+
+2. **Every stop of a started builder leaves an exit file within five seconds of a KILL, in every path I traced.**
+   - KILL while the builder runs: the runner stops it within about 3 s and writes 137 ("KILL to the leader alone" and the land-sequence cases, green in 32 of 32 load runs).
+   - KILL after the builder ended, at any time, including more than 10 s later: the guard writes within about 0.1 s of the leader's end. The probe measured `exit 3 after 403 ms`, including the test's own polling.
+   - KILL during the leader's write: the guard writes.
+   - Builder ended and leader killed before the runner's `getppid` check: the runner itself publishes.
+
+   There are two exceptions:
+   - The guard's `fork` failing, which was already reported on standard error before this round.
+   - The group check failing. Under the shells here that cannot happen (the probe).
+
+3. **The guard's exit condition is "the leader has been reaped", not "the leader has ended".** `kill 0` succeeds on a zombie.
+   - On macOS the leader is reparented to launchd (ppid 1 in the probe), which reaps it at once.
+   - On Linux, under a child subreaper that does not reap (for example some container inits or a harness that sets `PR_SET_CHILD_SUBREAPER`), a killed leader would stay a zombie. The guard would then wait with no bound, hold the lock, and write no exit file.
+   - Round 1's bound limited this case to 10 s. Now it has no limit.
+   - This is reasoned from the code, not reproduced. The texts ("The guard is gone about a tenth of a second after the leader", `SKILL.md:183`) hold wherever the leader is reaped.
+
+4. The guard-waits case has about a 4-second margin: KILL at `hung + 11000` ms, while the patched note limit stops `end` at 15 s. If a loaded run is delayed by more than that, the case fails with "the leader was gone before the KILL". It was green in all 32 of my load runs.
+
+## 3. Not checked
+
+- The report's 32-run load counts. I ran 16 at 16 at once per shell, 0 red in each.
+- These reverts from the report: `write_exit` before `end`, the guard writing over an exit file present, the pid-file check disabled, the leader closing the lock in `$detach`, the guard closing the lock, the runner opening no handle on the lock, the note call's runner keeping the lock, `link` replaced by `rename`, the note limit set to 20 s, the runner writing nothing after its parent is gone, and the leader's temporary file kept.
+- XNU's and Linux's pid allocator skipping a pid that is still a process group ID. The ruling cites POSIX XBD 4.14. The kernels' allocation code was not read, and reuse was not reproduced.
+- A leader left as a zombie under a subreaper (Behaviour 3).
+- A real `claude -p` or `codex exec` run.
+
+## 4. Usage
+
+About 89k tokens (the counter went from about 14,965,000 to about 14,876,000) and 22 tool uses. Wall time:
+- verify: 235 s
+- the `dash` suite: 128 s
+- the 11 revert copies at once: 203 s
+- the load batches: 284 s and 270 s
+- the process-group probes: about 60 s

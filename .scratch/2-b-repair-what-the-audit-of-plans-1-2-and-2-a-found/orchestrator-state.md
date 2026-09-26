@@ -50,7 +50,7 @@ dispatch:
   base: f761538
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7b-report.md
-  landing: not-started
+  landing: cherry-picking
   round_1_start: 5fba16f (the worktree's wip commit)
   round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7b-round-1.md
   round_1_paths: the brief's list
@@ -61,7 +61,7 @@ dispatch:
   round_2_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7b-round-2.md
   round_2_paths: the brief's list
   round_2_builder_usage: the same agent, 356,254 tokens, 27 tool uses, 2,146 s (the final notification's totals)
-  round_2_reviewer: claude:opus, a fresh agent, a768f6cb4fe57e278
+  round_2_reviewer: claude:opus, a fresh agent, a768f6cb4fe57e278; 132,373 tokens, 32 tool uses, 1,448 s
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
