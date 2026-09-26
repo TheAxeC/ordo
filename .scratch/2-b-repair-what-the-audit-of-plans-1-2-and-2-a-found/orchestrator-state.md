@@ -63,12 +63,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item R (step 7, the builder's permission to run commands): the relaunched builder (session ec7fe645-5c70-4ce5-91f7-3307745f943e) exited 0 after 36 turns without building the step. Its report (`agents/reviews/7-report.md` in the worktree, 83 lines) says each script it tried returned "This command requires approval": `sh utils/check_skill_layout.test.sh`, `python3 utils/check_skill_layout.py` and a `python3 -c` probe; `cat`, `grep` and `wc` ran. It wrote the brief's cases into `utils/check_skill_layout.test.sh` and `utils/check_rule_inventory.test.sh` (147 lines added, `git diff --stat 2c71183` in the worktree) and changed no checker code. The cause is the recipe: `skills/plan-orchestration/templates/launch.sh:455` starts `claude -p` with `--permission-mode acceptEdits`, and neither account's `settings.json` has an allow rule, so a shell-launched `claude` builder cannot run a test on either account. Tried in the worktree with `claude -p --model haiku` and the prompt to run `sh utils/check_rule_inventory.test.sh`: `--permission-mode acceptEdits` answered REFUSED, `--permission-mode auto` answered REFUSED, and `--permission-mode acceptEdits --allowedTools "Bash(sh utils/check_rule_inventory.test.sh:*)"` ran the test and returned its output. How the builder gets that permission is yours:
-  - (a) An allow list: `launch.sh` takes the commands a builder may run and passes them to `claude -p` as `--allowedTools`, the list coming from a new optional key of the ledger's configuration block (the verify commands and the brief's own gate commands by default). Pro: tried and works; a command outside the list stays refused, git included. Con: a new configuration key, and a command the list misses stops the builder.
-  - (b) `--permission-mode bypassPermissions` for a shell-launched `claude` builder. Pro: no list to keep. Con: nothing checks any command the builder runs, git included; the no-git rule rests on the prompt alone. Not tried.
-  - (c) Step 7 runs as a native agent, like the other steps, and ruling E's shell launch is dropped. Con: the recipe stays unable to run a test for every later shell-launched `claude` builder. This is the lazy option: it leaves the defect in place.
-  - Recommendation: (a). The fix is its own step, 7a, since it lands `launch.sh`, its test and the recipe text in `plan-orchestration` before step 7's builder can be resumed (`launch.sh --resume ec7fe645-5c70-4ce5-91f7-3307745f943e` with the list): /spec, a builder, /refute, /land. Step 17 waits on step 7's landing, since both change `utils/check_skill_layout.py` and its test.
-  - To rule: `Ruled: R (a)`, `R (b)` or `R (c)`.
+- Open item S (step 7a, the name and form of the allow-list key ruled on open item R): the key is a public shape of `.agents/plan.yaml` and the ledger's configuration block (`skills/plan/templates/plan.yaml`, `skills/plan/templates/orchestrator-state.md`, `skills/ordo-init/templates/check_config.py`), so its name and the form of its values are yours. The existing keys for the builder are `worker`, `worker_effort`, `workers_at_once` and `launch_note`.
+  - (a) `worker_allow:`, a list of command prefixes (`sh utils/check_skill_layout.test.sh`, `python3 utils/`), which `launch.sh` turns into `--allowedTools "Bash(<prefix>:*)"` for a `claude` builder; absent, the list is built from the verify list's commands and the brief's own gate commands. Pro: the values name no harness, as the other keys do not, and the name follows `worker` and `worker_effort`. Con: a rule other than a command prefix cannot be written.
+  - (b) `worker_allowed_tools:`, a list of Claude Code permission rules passed through as written (`Bash(sh utils/*.test.sh:*)`). Pro: any rule the harness takes can be written. Con: the key's values are one harness's syntax, which a Codex builder does not read.
+  - Recommendation: (a). Neither costs more to build than the other.
+  - To rule: `Ruled: S (a)`, `S (b)`, or another name.
 
 ## Booked, no ruling needed
 
@@ -77,6 +76,7 @@ dispatch:
 
 ## Closed items
 
+- 2026-09-26: open item R, how a shell-launched `claude` builder may run commands: ruled (a), an allow list that `launch.sh` passes as `--allowedTools`, from a new optional key; new step 7a builds it, then step 7's builder is resumed with the list.
 - 2026-09-26: booked item, roadmap entry 14's cover letter and blind-review removal: entry 14's goal names both (step 10, 9095ecc).
 - 2026-09-26: open item Q, the roadmap diff of step 10: ruled (a), approved as drafted in `agents/reviews/10-roadmap.md`, entry 15.A's gate naming `--built paper --built paper-review --built literature`.
 - 2026-09-26: open item P, the retro's 19 proposals: ruled all (a) (`Ruled: P: all (a)`); written beside each proposal in `.scratch/retros/2026-09-26.md`; step 17 makes them.
@@ -125,7 +125,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 16's retro at fe6d48b; step 10's roadmap in a9e651b to 80c8dc6, booked in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 7's builder could run no script and stopped; open item R decides how a shell-launched builder is allowed to run commands. Step 17 waits on step 7's landing; then 18 and 19.
+- Roadmap entry 2.B. Open item R ruled (a): new step 7a gives a shell-launched `claude` builder an allow list; its key's name and form wait on open item S. Step 7 resumes after 7a lands; step 17 after step 7 lands; then 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
