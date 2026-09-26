@@ -103,7 +103,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 14. submit-manuscript
 
 - Status: [ ]
-- Goal: A skill that fills a submission portal from the project and the venue file, stops for every approval, never presses the final Submit, and writes a submission record.
+- Goal: A skill that fills a submission portal from the project and the venue file, stops for every approval, never presses the final Submit, and writes a submission record. It also writes the cover letter, with suggested and excluded reviewers, and removes what identifies the authors for a blind review, from the venue file.
 - Gate: one real run on a portal up to its last page, with the record written; the coverage check with `--built submit-manuscript` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: submit-manuscript` row that the file of `skills/submit-manuscript/` the row names holds what the source file did, checked by reading both.
 - Waits on: 13, for the venue files; 5, for the documents.
 
