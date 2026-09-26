@@ -32,7 +32,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
 - ✅ 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
 - ✅ 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit)
-- 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
+- ✅ 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit)
 - 18 The closure table `agents/reviews/closure.md`: every numbered finding of the six reports (the five of the audit and `6-oculus-changes.md`) with the commit that closed it or the user's ruling; its row count equals the count of findings in the reports (1 commit)
 - 19 the closing: `/roadmap done 2.B` with the gate's output, the diff shown to the user; the release tagged and the user's permission asked to pin it with `utils/pin.sh <tag>`, pinned only on that yes; this folder moved to `.scratch/archive/` (orchestrator, no agent)
@@ -77,16 +77,19 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - Open item J (2026-09-25): (a), a new step 1c after 1a checks a brief against its own cases and its path list against the steps in flight, in `spec`, its brief template, `refute` and `plan-orchestration`; the checked path list moves from 1a into 1c. The lazy option was (c), cathedra's practice only (the user).
 - Open item K (2026-09-25): no prototype scripts; the builder runs the brief's cases as its tests first (the user).
 - Open item L (2026-09-25): (a), the paper skill (entry 5) learns the author's voice from three or more past papers, as a guide subordinate to the prose standard; the `intake_agent.md` coverage row names it (the user). The lazy option was (b), the drop.
+- Open item M (2026-09-26): choice 1 (a), entry 9 moves before entry 5 and entry 5 waits on 9 for the reference lookups; choice 2 (a), entry 14's goal adds the cover letter with suggested and excluded reviewers and the removal of what identifies the authors for a blind review; changes 1 to 7 are approved as the diff step 10 shows (the user).
+- Open item N (2026-09-26): account (a), step 7's shell-launched builder runs with whatever account the main session uses, `CLAUDE_CONFIG_DIR` kept; oculus (a), oculus runs at http://127.0.0.1:8790/ and the builder's row is checked in its Agents view (the user).
+- Open item O (2026-09-26): (b), plan 1's Done line at `docs/roadmap.md:135` without the clause "every landing report `Open items: none. Booked list: empty`" (the user).
+- Open item P (2026-09-26): all 19 retro proposals approved as written in `.scratch/retros/2026-09-26.md` (the user).
 - The plan cut to its goal (2026-09-25): a finding of this plan's own reviews that roadmap entry 2.B's goal and gate do not need is not a step. Removed: step 1b (the ASCII check's non-UTF-8 pass and `__pycache__` in `.gitignore`), the runner's edge-case and signal tests and the `refute` list-item wording from step 1a, and step 6a's word-list tuning, replaced by the collector keeping every finding. Step 1c stays (ruling J). (The user.)
 
 ## Blocked, and by what
 
-- 16: open item P, the ruling on each of the retro's 19 proposals (Step 16, the retro, below); the retro is written at `.scratch/retros/2026-09-26.md`.
-- 10: open item M, the roadmap diff and two choices (Step 10, Step 0 below).
-- 7: open item N, the account of its shell-launched builder and the oculus view check (Step 7, Step 0 below).
-- The roadmap line of plan 1's Done entry, from step 15: open item O, which of two versions (Step 15, plan 1's Done line, below); step 15 itself landed.
+- 17: step 7's landing, since 17 touches the rules page and every `SKILL.md`.
+- 18: every step from 1 to 17.
+- 19: step 18.
 
-### Step 7, Step 0 (stop: open item N)
+### Step 7, Step 0 (open item N, ruled 2026-09-26: account (a), oculus (a); see Rulings)
 
 - Open item N (step 7, the shell launch of its builder): the builder was launched through `templates/launch.sh` with the launch note, and the note record was written (`~/.oculus/dispatches.json` holds id 502d4c9d-3b6a-4316-8628-f519325eee87, label `2.B/7`, parent this session, the transcript path). It ran with `CLAUDE_CONFIG_DIR` unset, which by `tools/oculus/README.md:36` puts a `claude` process on the first account, not the account this session runs on (`~/.claude-work`). It was stopped with TERM before it changed any file (`exit 143` in the exit file; `git status --short` in the worktree prints nothing). A relaunch with `CLAUDE_CONFIG_DIR` kept was refused by the permission classifier, so the builder is not running. Two things are yours:
   - Which account the shell-launched builder runs on.
@@ -96,7 +99,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
   - The check that the builder's row appears under this session in oculus's Agents view needs oculus running; nothing listens on its port (`lsof -iTCP -sTCP:LISTEN` shows no node process), and research-hub is read only for this plan, so the orchestrator does not start it. (a) You start oculus (`npm run dev` in `tools/oculus`) before the relaunch, and the orchestrator checks the view in the browser. (b) The check is made on the note record alone. Recommendation: (a); the ruling E run exists to see the row in the view.
   - To rule: `Ruled: N: account (a) or (b); oculus (a) or (b)`.
 
-### Step 10, Step 0 (stop: open item M)
+### Step 10, Step 0 (open item M, ruled 2026-09-26: choice 1 (a), choice 2 (a), changes 1 to 7 shown as the diff; see Rulings)
 
 - Open item M (step 10, the roadmap's gates and order): the roadmap changes need your approval as a diff (ruling 2h, the `roadmap` skill), and two of them are your choice. Checked on main at step 14's landing: `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 15 (6 paper, 6 literature, 3 paper-review, 0 researcher; entry 15.A's goal still says 8, 6, 3 and 1, which change 7 corrects); the `rebuild:` rows per skill are writing 3, paper 34, paper-review 20, rebuttal 7, literature 22, idea 3, researcher 7, submit-manuscript 1, and code-comments, grant, scaffold, project-docs and submit-grant 0 (`grep -c '| rebuild: <skill> |'`).
   - The changes the plan already fixes, shown for approval:
@@ -117,7 +120,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
     - Recommendation: (a). (a) is also the cheaper option; it is recommended because the work is venue-specific and entry 14 is where the venue files and the portal meet, not because it is cheaper.
   - To rule: `Ruled: M: changes 1-7 <approved, or what to change>; choice 1 (a) or (b); choice 2 (a) or (b)`. On the ruling, step 10 writes the approved diff through `/roadmap`, lands it, and books it.
 
-### Step 16, the retro (stop: open item P)
+### Step 16, the retro (open item P, ruled 2026-09-26: all (a); see Rulings)
 
 - Open item P (step 16, the retro over plans 1, 2 and 2.A): `.scratch/retros/2026-09-26.md` groups the 555 findings of the 23 archived refuter reports (collected by `python3 skills/plan-retro/templates/collect_findings.py .scratch/archive`) into kinds; 20 kinds recur (three or more steps, or two or more plans) and carry 19 proposals, P1 to P19, each quoted in full in the retro under its kind with the findings it would have prevented. Step 17 makes the approved ones; nothing in the rules, the standards or the checks changes before your ruling. For every proposal, (b) is the lazy option: it leaves the cause of the findings in place.
   - P1, a rewrite keeps the meaning of every rule it carries (67 findings, 10 steps): new rule 17 in `docs/dev/change-standard.md`. (a) Approve. Pro: the kind with the most findings has no rule anywhere. Con: none beyond the added rule. (b) Decline. Recommendation: (a).
@@ -141,7 +144,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
   - P19, a point left to the orchestrator is reported as a stop, never decided as a judgment call (2 findings, 2 plans): a sentence added to rule 4. (a) Approve. (b) Decline. Recommendation: (a).
   - To rule: `Ruled: P: P1 (a), P2 (a), ...`, one clause per proposal, or `Ruled: P: all (a)` with any exceptions named. Each ruling is written beside its proposal in the retro, and step 17 makes the approved changes.
 
-### Step 15, plan 1's Done line (stop: open item O)
+### Step 15, plan 1's Done line (open item O, ruled 2026-09-26: (b); see Rulings)
 
 - Open item O (step 15, plan 1's Done line in the roadmap): `docs/roadmap.md:135` says plan 1's gate showed "every command in `docs/dev/building.md` passed on main (seven `PASS:` lines, ten `ok:` lines, a clean ASCII check)", a count nobody saw quoted, since each test ran through `| tail -1`. Step 15 re-ran the tests at the closing commit a866716 on its extracted tree (`agents/reviews/15-rerun.md`, "Commit a866716") and wrote the line again from what was run and seen (`agents/reviews/15-report.md`, "Doc text"; session log lines 3146, 3150, 3179 and 3204 of `7bdaf343-8a39-4a02-a88f-004137adaa7f.jsonl`). The roadmap changes only as a diff you approve (ruling 2h). Two versions, differing in one clause:
   - (a) Keeps the clause "every landing report `Open items: none. Booked list: empty`", which is true (`grep -h 'Booked' .scratch/archive/1-one-layout-for-every-skill/agents/reviews/*-landing.md | sort | uniq -c` prints `13 Open items: none. Booked list: empty.`). The full line:
