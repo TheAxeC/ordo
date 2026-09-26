@@ -45,13 +45,16 @@ dispatch:
   worker: claude:opus, a native agent in the background
   session_id: a80c36789e1ef2e26
   builder_usage: 258,005 tokens, 97 tool uses, 6,205 s
-  reviewer: claude:opus, a fresh agent, dispatched
+  reviewer: claude:opus, a fresh agent, af93f73cb98c31111; 163,825 tokens, 41 tool uses, 2,071 s
   worktree: .agents/worktrees/2b-7b
   base: f761538
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7b-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1_start: 5fba16f (the worktree's wip commit)
+  round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7b-round-1.md
+  round_1_paths: the brief's list
 - step: '7'
   executor: agent
   worker: claude:opus, a claude -p builder launched from a shell through templates/launch.sh with the launch note (ruling E), on the main session's account, CLAUDE_CONFIG_DIR kept (ruling N)

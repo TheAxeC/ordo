@@ -1,0 +1,18 @@
+# Step 7b, repair round 1: the rulings
+
+The round starts at the worktree's wip commit named in the dispatch block. The findings are in `agents/reviews/7b-refuter.md`. The brief `agents/briefs/7b.md` holds unchanged; every case and every check of "Verify before you report", the load runs included, is run again after the round. The paths are the brief's.
+
+## Rulings
+
+1. **The launch's removal of stale temporary files** (Proof 1, Behaviour 2). A case puts a stale `<exit file>.tmp.<pid>` (and an old exit file) in place before a launch and requires both gone once the launch has returned, red when `launch.sh:740` is reverted to `rm -f "$opt_exit"`. The report's user-visible line for a KILL during the leader's write names the path the review found: after TERM and then KILL during the leader's own write, the exit file is present and `<exit>.tmp.<leader pid>` is left until the next launch removes it.
+2. **The guard's lifetime is bounded** (Behaviour 1). After the builder's end the leader runs only the note's `end` (stopped after 3 seconds) and its own write, so the guard needs to outlive the leader by no more. The guard ends at most 10 seconds after it starts, whatever `kill 0` says: when the leader is gone by then it writes as now; when not, it exits without writing, since the leader then writes. So a reused pid holds the lock for at most 10 seconds and never delays an exit file past it. A case with the guard's bound lowered in a patched copy and a leader held alive past it (a hanging `end` with the note's limit raised in the same copy) shows the guard gone at the bound, no exit file written by it, and the leader's write in place; red when the bound is removed. The head comment and `SKILL.md` state the bound.
+3. **The runner's handle on the lock** (Behaviour 3). The return value of `open $lock, "+<&=", $lock_fd` is checked. When it fails, the runner closes the descriptor with `POSIX::close` before it forks the builder, prints one line naming the failure to the stderr file, and goes on without the lock, so the builder never inherits it. No case can make the open fail; the report calls this an audit.
+4. **`launch.sh:43`** (Standards 1). The sentence says what the code does: the runner and the guard never replace an exit file present; the leader, after a stop on a signal, moves its own file into place over the runner's, holding the same line.
+5. **One rule, one place** (Standards 2). The rule of `SKILL.md:194` and `:214` is written once, in the bullet list of stops (line 214); line 194 names that bullet.
+6. **Sentence length** (Standards 3). Each sentence the review lists (`launch.sh:11-13`, `:14-18` with the early line end at 15, `SKILL.md:184`, `:185`, `:194`, `launch-note.md:31`) rewritten in sentences under about 20 words, one idea each.
+7. **A number for "a few seconds"** (Standards 4). `SKILL.md:182` gives the bound: the scanner's 2 seconds and the 1-second grace, so the killed run's runner is gone about 3 seconds after the KILL, and its guard at most 10 seconds after the builder's end.
+8. **The judgment calls** (Proof 2 to 6). Accepted as the review judged them: the hanging-note cases' measure, the late-look case, the "second launch" case with its own pid-file case, `run` waiting for an empty session, and the `-e` case. No change.
+
+## Report
+
+Add a section "Repair round 1" to `agents/reviews/7b-report.md` in the worktree's copy of the ledger: each ruling DONE or NOT DONE with the command that proves it, each new or changed case with its revert's first `FAIL:` line quoted, "Verify before you report" rerun and quoted with the load counts, and the files changed.
