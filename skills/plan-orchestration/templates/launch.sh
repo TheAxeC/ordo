@@ -2,16 +2,20 @@
 # Start a builder as a detached process of its own, by the claude -p or codex exec recipe of
 # plan-orchestration, and return as soon as that process has written its pid to the pid file.
 #
-# Launch. The claude and codex modes check their options, make every path option absolute from the
-# caller's directory (so a path names the same file for both harnesses, before the claude recipe
-# changes into --cwd), and take an exclusive lock (flock) on <pid file>.lock, writing their pid
-# into it. They refuse with exit 75, before anything starts, when another live launch holds that
-# lock or the pid file names a live process. The system releases the lock when the launcher ends,
-# so a lock file left by a launcher that died, whatever pid it still names, is taken over. They
-# then remove an exit file an earlier run left, and start
-# this script again in the matching internal mode (_body_claude, _body_codex) as the leader of a
-# new session, through perl's POSIX::setsid, since macOS has no setsid command and perl ships on
-# macOS and Linux alike. The session leader writes its own pid to the pid file, and the launch
+# Launch. The claude and codex modes check their options. They make every path option absolute from
+# the caller's directory, before the claude recipe changes into --cwd. So a path names the same file
+# for both harnesses. They take an exclusive lock (flock) on <pid file>.lock and write their pid
+# into it. They refuse with exit 75 before anything starts. They do so while another live launch or
+# run holds that lock. They also do so while the pid file names a live process. The lock is held by
+# the launcher, the session leader, the builder's runner and the runner's guard, each for as long as
+# it lives. The builder, the session scanner and the note calls do not hold it. The system releases
+# the lock once all of its holders have ended. A lock file left by a run that has ended is then
+# taken over, whatever pid it still names. So a launch is refused while a killed run's runner or
+# guard lives. A killed run therefore never writes an exit file after a later launch removed it. The
+# launch then removes an exit file and the temporary files an earlier run left. It starts this
+# script again in the matching internal mode (_body_claude, _body_codex) as the leader of a new
+# session. It does so through perl's POSIX::setsid, since macOS has no setsid command and perl ships
+# on macOS and Linux alike. The session leader writes its own pid to the pid file, and the launch
 # returns once it has.
 #
 # Body. The session leader runs the launch note's start with --pid set to its own pid, the builder,
@@ -26,19 +30,25 @@
 # runner. The exit file then says exit 128 plus the signal number, or the builder's own code when
 # it had already ended, and end is called.
 #
-# Exit file. The runner writes it once it has stopped the builder, and the leader writes the same
-# line after it. When the builder had already ended, the leader writes its code before it stops a
-# running end. When the leader is killed while the builder runs, the runner sees its parent gone.
-# It then stops the builder and the session within about a second and writes exit 137. The runner
-# never writes over an exit file already present. So TERM followed by KILL two seconds later leaves
-# an exit file however long the stop takes, while the builder runs. Three cases leave none. A KILL
-# while start runs leaves none, since a note call's runner writes no exit file. A KILL after the
-# builder ended, while end runs, leaves none, since the builder's runner has exited. A KILL between
-# the leader's two writes of the file leaves only <exit file>.tmp. A runner still stopping the
-# builder of a killed run can also write exit 137 after a later launch removed the file. A process
-# that starts a session of its own (setsid) is no longer in the leader's session and is not reached
-# by these stops. The exit file is written beside itself as <exit file>.tmp and moved into place, so
-# a monitor never reads it empty.
+# Exit file. Every stop once the builder's runner has started leaves an exit file. After a stop on
+# TERM, INT or HUP, the runner writes it once it has stopped the builder. The leader then moves its
+# own file, holding the same line, into place over the runner's. When the builder had already ended,
+# the leader writes its code before it stops a running end. When the leader is killed while the
+# builder runs, the runner sees its parent gone. It then stops the builder and the session within
+# about 3 seconds at most and writes exit 137. When the builder had ended, it writes the builder's
+# own code instead. When the builder ends while the leader lives, its runner leaves a guard process
+# holding the builder's code, and exits. The leader calls end and then writes the exit file. The
+# guard ignores TERM, INT and HUP. It waits for the leader however long the leader lives. The
+# leader's pid is not reused while its process group lives, and the guard is in that group. The
+# guard ends within about a tenth of a second of the leader. It then writes the builder's code if no
+# exit file is present. It also removes a temporary file the leader left. So a KILL while end runs,
+# or during the leader's write, still leaves the exit file. The runner and the guard never replace
+# an exit file present. Only a KILL before the builder's runner has started leaves none, as a KILL
+# while start runs does. A process that starts a session of its own (setsid) is no longer in the
+# leader's session and is not reached by these stops. Each writer writes <exit file>.tmp.<its pid>
+# and moves it into place. So a monitor never reads the file empty, and no two writers share a
+# temporary file. A KILL during the leader's write after a stop on a signal leaves
+# <exit file>.tmp.<leader pid>, which the next launch removes.
 #
 # Session id. A first claude launch generates a session id (a random version 4 UUID), passes it to
 # claude -p --session-id, and writes it to the --session-file, when one is given, before the
@@ -70,7 +80,8 @@
 #
 # Exit status: 0 launched, or the transcript passed on; 1 the lock, stderr, pid or session file
 # cannot be written, or the detached process ended before it wrote the pid file (its errors are in
-# the stderr file); 64 a usage error; 75 refused, since a launch of the same pid file is live.
+# the stderr file); 64 a usage error; 75 refused, since a launch or a run of the same pid file is
+# live.
 
 set -u
 
@@ -195,24 +206,46 @@ esac
 # found by their session ids (python3's os.getsid, since ps prints no session id on macOS) through
 # one python3 process the runner starts with the builder and asks over a pipe, so a stop starts no
 # interpreter; the leader, the runner and that process are left out, and a session <watch pid> does
-# not lead is never swept. That process runs the interpreter LAUNCH_PYTHON names. The launch sets
-# it to the interpreter python3 resolves to. A version manager's python3 on PATH is a wrapper, which
+# not lead is never swept. That process runs the interpreter LAUNCH_PYTHON names. The launch sets it
+# to the interpreter python3 resolves to. A version manager's python3 on PATH is a wrapper, which
 # can take seconds to start on a loaded machine. The command does not see LAUNCH_PYTHON. TERM, INT
 # or HUP to the runner, from the moment it starts, sends TERM to all of these. One second later, or
 # as soon as they have all ended, the runner looks for them once more, sends KILL to what is left,
 # and exits 128 plus the signal number. When <watch pid> is no longer the runner's parent (the
 # leader or the caller has gone), the runner stops the command the same way, so a leader killed with
-# KILL leaves no builder process behind. The builder's runner is given the <exit file>, and a note
-# call passes an empty one. After a stop on a signal, the runner writes exit 128 plus the signal
-# number. After a stop on its parent gone, it writes exit 137. When the command ends on its own
-# after its parent has gone, it writes the command's code. It never writes over a file present.
+# KILL leaves no builder process behind. A stop waits at most two seconds for the scanner's answers.
+# Past that, the runner stops the scanner and goes on with the processes descended from the command.
+# The builder's runner is given the <exit file>, and a note call passes an empty one. After a stop
+# on a signal, the runner writes exit 128 plus the signal number. After a stop on its parent gone,
+# it writes exit 137. When the command ends on its own after its parent has gone, it writes the
+# command's code. When the command ends while its parent lives, the builder's runner forks a guard
+# and exits. The guard ignores HUP, INT and TERM. It checks every tenth of a second whether
+# <watch pid> lives. Once that pid is gone, it writes the command's code and removes
+# <exit file>.tmp.<watch pid>. The guard first checks that its process group is <watch pid>. When it
+# is not, it says so on standard error and exits without writing. Its wait would then rest on a pid
+# that can be reused. No write replaces a file present. The launch's lock descriptor, named by
+# LAUNCH_LOCK_FD, is held by the builder's runner and its guard. The handle perl opens on it is
+# closed on exec, so the builder and the scanner do not inherit it. When that handle cannot be
+# opened, the runner closes the descriptor, says so on standard error and goes on without the lock.
+# A note call's runner closes the descriptor before anything else.
 runner='
 use strict;
 use warnings;
 use POSIX ();
 use Time::HiRes ();
 use IPC::Open2 ();
+use IO::Select ();
 my ($limit, $watch, $what, $exit_file) = splice @ARGV, 0, 4;
+my $lock_fd = delete $ENV{LAUNCH_LOCK_FD};
+my $lock;
+if (defined $lock_fd && $lock_fd =~ /^\d+$/) {
+    if ($limit > 0) {
+        POSIX::close($lock_fd);
+    } elsif (!open $lock, "+<&=", $lock_fd) {
+        print STDERR "launch.sh: cannot hold the lock on descriptor $lock_fd: $!\n";
+        POSIX::close($lock_fd);
+    }
+}
 my $session_py = q{
 import os, subprocess, sys
 sid = os.getsid(0)
@@ -278,35 +311,54 @@ sub descendants {
     }
     return @out;
 }
+sub drop_scanner {
+    kill "KILL", $scanner;
+    close $scan_in;
+    close $scan_out;
+    waitpid($scanner, 0);
+    $scanner = undef;
+}
 sub session_members {
+    my ($until) = @_;
     return () unless $scanner;
     local $SIG{PIPE} = "IGNORE";
     print {$scan_in} "scan\n" or return ();
     $scan_in->flush or return ();
-    my @out;
-    while (defined(my $line = <$scan_out>)) {
-        return @out if $line eq "end\n";
-        push @out, $1 if $line =~ /^(\d+)$/;
+    my $ready = IO::Select->new($scan_out);
+    my $answer = "";
+    while ($answer !~ /^end\n/m) {
+        my $left = $until - Time::HiRes::time();
+        if ($left <= 0) {
+            print STDERR "launch.sh: the session scanner did not answer within 2 seconds\n";
+            drop_scanner();
+            return ();
+        }
+        next unless $ready->can_read($left);
+        my $got_bytes = sysread $scan_out, $answer, 4096, length $answer;
+        next if !defined $got_bytes && $!{EINTR};
+        last unless $got_bytes;
     }
-    return @out;
+    return $answer =~ /^(\d+)$/mg;
 }
 sub members {
-    return (descendants($pid), session_members());
+    my ($until) = @_;
+    return (descendants($pid), session_members($until));
 }
 sub stop {
     my ($grace) = @_;
-    my %seen = map { $_ => 1 } members();
+    my $until = Time::HiRes::time() + 2;
+    my %seen = map { $_ => 1 } members($until);
     if ($grace) {
         kill "-TERM", $pid;
         kill "TERM", keys %seen;
-        my $until = Time::HiRes::time() + 1;
-        while (Time::HiRes::time() < $until) {
+        my $end_of_grace = Time::HiRes::time() + 1;
+        while (Time::HiRes::time() < $end_of_grace) {
             waitpid($pid, POSIX::WNOHANG());
             last unless kill(0, -$pid) || grep { kill 0, $_ } keys %seen;
             Time::HiRes::sleep(0.05);
         }
     }
-    $seen{$_} = 1 for members();
+    $seen{$_} = 1 for members($until);
     kill "-KILL", $pid;
     kill "KILL", keys %seen;
     waitpid($pid, 0);
@@ -314,12 +366,40 @@ sub stop {
 sub publish {
     my ($code) = @_;
     return if $exit_file eq "" || -e $exit_file;
-    my $tmp = "$exit_file.tmp";
-    open my $f, ">", $tmp or return;
-    print {$f} "exit $code\n";
-    close $f or return;
+    my $tmp = "$exit_file.tmp.$$";
+    my $f;
+    if (!open($f, ">", $tmp) || !print({$f} "exit $code\n") || !close($f)) {
+        print STDERR "launch.sh: cannot write $tmp: $!\n";
+        unlink $tmp;
+        return;
+    }
     link($tmp, $exit_file) or -e $exit_file or rename($tmp, $exit_file);
     unlink $tmp;
+}
+sub guard {
+    my ($code) = @_;
+    my $guard = fork;
+    if (!defined $guard) {
+        print STDERR "launch.sh: cannot start the guard of the exit file: $!\n";
+        return;
+    }
+    return if $guard;
+    $SIG{$_} = "IGNORE" for qw(HUP INT TERM);
+    if (getpgrp() != $watch) {
+        print STDERR "launch.sh: the guard is not in process group $watch; ",
+            "it writes no exit file\n";
+        POSIX::_exit(0);
+    }
+    if ($scanner) {
+        close $scan_in;
+        close $scan_out;
+    }
+    open STDIN, "<", "/dev/null";
+    open STDOUT, ">", "/dev/null";
+    Time::HiRes::sleep(0.1) while kill 0, $watch;
+    publish($code);
+    unlink "$exit_file.tmp.$watch";
+    POSIX::_exit(0);
 }
 sub code_of {
     my ($s) = @_;
@@ -329,7 +409,11 @@ my $start = Time::HiRes::time();
 while (1) {
     if (waitpid($pid, POSIX::WNOHANG()) == $pid) {
         my $code = code_of($?);
-        publish($code) if getppid() != $watch;
+        if (getppid() == $watch) {
+            guard($code) if $exit_file ne "";
+        } else {
+            publish($code);
+        }
         exit $code;
     }
     if ($got) {
@@ -355,7 +439,8 @@ while (1) {
 # QUIT and TERM at their defaults whatever the caller left ignored, so the body can trap them, and
 # return once the pid file holds its pid: exit 0 then, exit 1 when it ends before writing it. The
 # pid file is read after the check for an ended process, so one that writes it and ends at once
-# is a launch.
+# is a launch. The session leader keeps the lock's descriptor open, so it holds the lock while it
+# lives, and passes its number on in LAUNCH_LOCK_FD.
 detach='
 use strict;
 use warnings;
@@ -369,8 +454,7 @@ if (!$pid) {
         print STDERR "launch.sh: cannot start a new session: $!\n";
         POSIX::_exit(126);
     };
-    POSIX::close($ENV{LAUNCH_LOCK_FD}) if defined $ENV{LAUNCH_LOCK_FD};
-    delete @ENV{qw(LAUNCH_LOCK LAUNCH_LOCK_FD)};
+    delete $ENV{LAUNCH_LOCK};
     $SIG{$_} = "DEFAULT" for qw(HUP INT QUIT TERM);
     exec { $ARGV[0] } @ARGV or do {
         print STDERR "launch.sh: cannot run $ARGV[0]: $!\n";
@@ -391,8 +475,9 @@ while (1) {
 # take_lock <lock file> <command...>: hold an exclusive lock (flock) on the lock file, write this
 # process's pid into it, and run the command with the lock's descriptor still open, its path in
 # LAUNCH_LOCK and its number in LAUNCH_LOCK_FD. The system releases the lock when the last holder
-# of the descriptor ends, so a lock left by a launcher that died is free, whatever pid the file
-# still names. A lock held by a live launch refuses with exit 75, naming the pid in the file.
+# of the descriptor ends, so a lock left by a run that has ended is free, whatever pid the file
+# still names. A lock held by a live launch or run refuses with exit 75, naming the pid in the file,
+# the launcher's.
 take_lock='
 use strict;
 use warnings;
@@ -558,7 +643,7 @@ run_codex() {
 }
 
 write_exit() {
-    printf 'exit %s\n' "$1" >"$opt_exit.tmp" && mv -f "$opt_exit.tmp" "$opt_exit"
+    printf 'exit %s\n' "$1" >"$opt_exit.tmp.$$" && mv -f "$opt_exit.tmp.$$" "$opt_exit"
 }
 
 # The signal path of the body: stop what runs (the builder, or a note call), write the exit file,
@@ -666,7 +751,7 @@ case "$mode" in
         fi
         true >"$opt_stderr" || exit 1
         true >"$opt_pid" || exit 1
-        rm -f "$opt_exit" "$opt_exit.tmp"
+        rm -f "$opt_exit" "$opt_exit".tmp.*
         LAUNCH_PYTHON=$(python3 -B -c 'import sys; print(sys.executable)' 2>/dev/null) ||
             LAUNCH_PYTHON=''
         export LAUNCH_PYTHON

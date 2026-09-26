@@ -39,29 +39,7 @@ worker_allow: []             # empty: a claude -p builder's allow list is built 
 ```
 
 ```yaml
-dispatch:
-- step: '7b'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  session_id: a80c36789e1ef2e26
-  builder_usage: 258,005 tokens, 97 tool uses, 6,205 s
-  reviewer: claude:opus, a fresh agent, af93f73cb98c31111; 163,825 tokens, 41 tool uses, 2,071 s
-  worktree: .agents/worktrees/2b-7b
-  base: f761538
-  launched: 2026-09-26
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7b-report.md
-  landing: cherry-picking
-  round_1_start: 5fba16f (the worktree's wip commit)
-  round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7b-round-1.md
-  round_1_paths: the brief's list
-  round_1_builder_usage: the same agent, 316,580 tokens, 37 tool uses, 3,126 s in all (the final notification's totals)
-  round_1_reviewer: claude:opus, a fresh agent, ac652ca64cd8de6c9; 132,302 tokens, 34 tool uses, 1,532 s
-  round: 2 (the one round beyond the cap, the brief's What it must do item 1 left unbuilt by round 1)
-  round_2_start: a211aa5 (the worktree's wip commit)
-  round_2_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7b-round-2.md
-  round_2_paths: the brief's list
-  round_2_builder_usage: the same agent, 356,254 tokens, 27 tool uses, 2,146 s (the final notification's totals)
-  round_2_reviewer: claude:opus, a fresh agent, a768f6cb4fe57e278; 132,373 tokens, 32 tool uses, 1,448 s
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -70,7 +48,7 @@ dispatch:
 
 ## Booked, no ruling needed
 
-- Found by step 7a's review of its round 2, booked as step 7b in `plan.md`: the exit file's remaining cases in `launch.sh` (a KILL after the builder ended, a killed run's runner writing after a relaunch, a KILL between the leader's two writes, the no-replace guards without red cases, the scanner's answer without a time limit).
+- Found by step 7b's review of its round 2, booked as step 7c in `plan.md`: the runner's guard waits on `kill 0` to the leader's pid, which succeeds on a zombie, so a killed leader its parent does not reap keeps the guard waiting and holding the lock, and no exit file is written.
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 
@@ -126,8 +104,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7 in the commit that carries this line). The tree is clean after it, apart from step 7b's dispatch.
-- Roadmap entry 2.B. Step 7b is in repair round 2, the one round beyond the cap (its builder running); its review over the round and its landing come next; step 17 after it lands; then 17a (the library check, ruling T), 18 and 19.
+- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7b in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 7c (the guard and a zombie leader, booked at step 7b's landing) is next; then 17, 17a (the library check, ruling T), 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -153,3 +131,4 @@ dispatch:
 | 10 | orchestrator, no agent | none (the diff approved by the user, open item Q) | 0 | 0 | 1 file changed, 22 insertions(+), 22 deletions(-) | yes | 0 | 1 (open item Q) | 101 | 102285 | 664529 | 19671793 | 202 | 375 | none; shared with step 16, step 7's relaunch and the wait on the rulings |
 | 7a | claude:opus agent, effort high: 246,290 tokens, 76 tool uses, 2,315 s; round 1: 365,182 tokens, 63 tool uses, 3,644 s; round 2: 218,816 tokens, 101 tool uses, 12,118 s | 149,503 tokens, 34 tool uses, 1,028 s; round 1: 165,597 tokens, 42 tool uses, 991 s; round 2: 170,557 tokens, 39 tool uses, 1,563 s | 2 (one under the exception, ruling 5 unbuilt) | 9 (9 rulings), then 1 (4 items) | 17 files changed, 1167 insertions(+), 91 deletions(-) | no | 10 | 0 | 115 | 98508 | 535522 | 23186713 | 242 | 405 | none; shared with step 7's wait |
 | 7 | claude:opus, `claude -p` from a shell through `launch.sh` with the launch note: resumed run 55,437 output tokens, 141 turns, 2,811 s; round 1: 42,481 output tokens, 143 turns, 2,602 s | 147,356 tokens, 33 tool uses, 2,172 s; round 1: 120,890 tokens, 27 tool uses, 875 s | 1 | 10 (10 rulings) | 5 files changed, 385 insertions(+), 47 deletions(-) | no | 6 | 0 | 87 | 69187 | 206121 | 24108442 | 202 | 154 | none; shared with step 7b's review and round 1, and ruling T |
+| 7b | claude:opus agent, effort high: 258,005 tokens, 97 tool uses, 6,205 s; round 1: 316,580 tokens, 37 tool uses, 3,126 s; round 2: 356,254 tokens, 27 tool uses, 2,146 s (the agent's notification totals) | 163,825 tokens, 41 tool uses, 2,071 s; round 1: 132,302 tokens, 34 tool uses, 1,532 s; round 2: 132,373 tokens, 32 tool uses, 1,448 s | 2 (one under the exception, the brief's What it must do item 1 unbuilt by round 1) | 8 (8 rulings), then 4 (4 rulings) | 5 files changed, 539 insertions(+), 85 deletions(-) | no | 4 | 0 | 49 | 37730 | 91373 | 8081914 | 114 | 137 | none |

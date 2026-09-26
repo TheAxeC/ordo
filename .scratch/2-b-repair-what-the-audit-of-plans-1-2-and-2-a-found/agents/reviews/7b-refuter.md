@@ -481,3 +481,32 @@ About 89k tokens (the counter went from about 14,965,000 to about 14,876,000) an
 - the 11 revert copies at once: 203 s
 - the load batches: 284 s and 270 s
 - the process-group probes: about 60 s
+
+# Closed
+
+The first review's findings were sent back as the eight rulings of round 1 (`agents/briefs/7b-round-1.md`). The run over round 1 found the brief's "What it must do" item 1 unbuilt by round 1's guard bound, which round 2 (`agents/briefs/7b-round-2.md`, the one round beyond the cap) built. The findings of the run over round 2 were not sent back; each is closed here.
+
+First review:
+
+- Proof 1 (the launch's removal of stale temporary files) and Behaviour 2 (a KILL during the leader's write after a stop on a signal): built in round 1 (ruling 1), red under `rm -f "$opt_exit"` in both later runs.
+- Proof 2 to 6 (judgment calls): accepted as judged (ruling 8).
+- Standards 1 to 4: built in round 1 (rulings 4 to 7); the sentences round 1 still left long were built in round 2 (rulings 3 and 4).
+- Behaviour 1 (a reused leader pid): round 1 bounded the guard (ruling 2); round 2 withdrew the bound, since a pid is not reused while its process group lives and the guard is in the leader's group (ruling 1), and added the guard's check of its group.
+- Behaviour 3 (the unchecked open of the lock handle): built in round 1 (ruling 3), an audit.
+- Behaviour 4 to 7: observations, stated in the report and `SKILL.md`; no change.
+
+Repair round 1, refuted:
+
+- Spec 1, Standards 1 and Behaviour 1 (a leader killed after the guard's bound leaves no exit file): built in round 2 (ruling 1); the run over round 2 reproduced the long-leader case red with the bound put back.
+- Proof 1 and Standards 3 (sentences of 27 words): built in round 2 (ruling 3).
+- Standards 2 (the test's head comment): built in round 2 (ruling 2).
+- Standards 4 ("within about a second"): built in round 2 (ruling 4).
+
+Repair round 2, refuted:
+
+- Proof 1 (the report's sentence-length list leaves out `launch.test.sh`) and Standards 1 (three sentences of 29 to 33 words in the guard-waits case's comment, a 30-word head-comment clause, a 35-word README sentence): fixed at landing. The case's comment and the head comment are rewritten in sentences under about 20 words; the README bullet for `launch.test.sh` is applied from the report's "Doc text" with that sentence split.
+- Standards 2 (the garbled "the leader's pid, whose pid"): fixed at landing; the comment says "The leader's pid is not reused while that group lives."
+- Proof 2 (the report's quoted red for `setpgrp(0, 0)` after the guard's fork is not the suite's first `FAIL:` line): the revert is red either way; the booking quotes the first line of the whole suite. No change.
+- Proof 3 (the guard's group check has no red case): fixed at landing with the case "guard group": a patched copy moves the guard into a group of its own and raises the note's limit to 15 seconds; the builder exits 3, `end` hangs and the leader is killed; the stderr file names the guard's refusal and no exit file is written. With the check removed: `FAIL: guard group: no line in the stderr file`. With only the check's `POSIX::_exit(0)` removed: `FAIL: guard group: an exit file was written: exit 3`. Unchanged copy: `PASS: launch.sh scratch tests`.
+- Behaviour 1, 2 and 4: no finding; the guard-waits case's 4-second margin held in the reviewer's 16 load runs per shell and the builder's 32.
+- Behaviour 3 (the guard waits on a zombie leader, since `kill 0` succeeds on one): booked as step 7c. It needs a case that keeps a killed leader a zombie, which takes a patched copy in which the leader's parent stays alive without reaping it, and a zombie check in the guard; that is new code and a new case, beyond a fix at landing.

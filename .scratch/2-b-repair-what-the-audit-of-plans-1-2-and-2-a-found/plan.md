@@ -25,7 +25,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 6a `skills/plan-retro/templates/collect_findings.py` keeps every item under the four headings as a finding: the no-finding and closure word lists (`NOTHING_FOUND`, `OTHERS_REPRODUCE`, `CLOSURE`) and their tests go; `skills/plan-retro/SKILL.md` Grouping sets aside, by reading, a finding that reports no defect or a closure that holds (the cut ruled 2026-09-25); `collect_findings.test.sh` passes (1 commit)
 - ✅ 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 7a The allow list for a shell-launched `claude` builder (ruling R (a)): `skills/plan-orchestration/templates/launch.sh` passes the commands a builder may run to `claude -p` as `--allowedTools`, from the new optional key `worker_allow:` of `.agents/plan.yaml` and the ledger's configuration block, a list of command prefixes, each passed as `Bash(<prefix>:*)` (ruling S (a)), built by default from the verify list and the brief's gate commands; its test, `check_config.py` and its test, the `plan` skill's `templates/plan.yaml` and `templates/orchestrator-state.md`, and the recipe text in `plan-orchestration` change with it; proven by a real `claude -p` run under the list that runs a verify command (1 commit)
-- 7b The exit file's remaining cases in `skills/plan-orchestration/templates/launch.sh`, found by step 7a's review of its round 2: a KILL after the builder ended, while the note's `end` runs, leaves no exit file; the runner of a killed run, still stopping its builder, writes `exit 137` after a later launch with the same exit file removed it; a KILL between the leader's two writes leaves only `<exit file>.tmp`; the runner's no-replace write (the `-e` return and the `link`) has no case that either guard's revert turns red; the runner reads its session scanner's answer with no time limit, so a stop has no bound. Each case with a test its revert turns red, run whole-suite at 16 at once under `sh` and `dash`, and the texts of `plan-orchestration` and `templates/launch-note.md` made to say what the code does (1 commit)
+- ✅ 7b The exit file's remaining cases in `skills/plan-orchestration/templates/launch.sh`, found by step 7a's review of its round 2: a KILL after the builder ended, while the note's `end` runs, leaves no exit file; the runner of a killed run, still stopping its builder, writes `exit 137` after a later launch with the same exit file removed it; a KILL between the leader's two writes leaves only `<exit file>.tmp`; the runner's no-replace write (the `-e` return and the `link`) has no case that either guard's revert turns red; the runner reads its session scanner's answer with no time limit, so a stop has no bound. Each case with a test its revert turns red, run whole-suite at 16 at once under `sh` and `dash`, and the texts of `plan-orchestration` and `templates/launch-note.md` made to say what the code does (1 commit)
+- 7c The runner's guard in `skills/plan-orchestration/templates/launch.sh` waits on `kill 0` to the session leader's pid, which succeeds on a zombie, found by step 7b's review of its round 2: a killed leader that its parent does not reap (a parent still alive, or a Linux child subreaper that does not reap) keeps the guard waiting and holding the lock, and no exit file is written. The guard treats a leader that is a zombie as gone; a case in `launch.test.sh` keeps a killed leader a zombie in a patched copy and requires the builder's code in the exit file within five seconds of the KILL, red with the zombie check removed; the texts of `launch.sh`, `plan-orchestration/SKILL.md` and `launch-note.md` say what the code does (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
 - ✅ 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review); entry 15.A's goal counts and its wait on 13, which step 14's re-marked rows made false (1 commit; orchestrator, no agent)
@@ -50,6 +51,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 7 after 4 and after the oculus session's fixes to its launch-note setup (it is the step launched from a shell).
 - 7a before 7 resumes; step 7's builder is resumed with `launch.sh --resume` once 7a has landed.
 - 7b with 7 after 7a (their paths are disjoint); step 7's resume uses its round's own exit and pid files, which 7b's cases do not reach.
+- 7c after 7b (the same files).
 - 4 after 2 (both edit `skills/plan-orchestration/SKILL.md`).
 - 10 after 8 (it uses step 8's mode).
 - 11, 12, 13, 14 one after another after 8 (they all edit `docs/academic-coverage.md`).
@@ -95,7 +97,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 ## Blocked, and by what
 
-- 17: step 7's and step 7b's landings, since 17 touches the rules page and every `SKILL.md`.
+- 7c: step 7b's landing, since both change `launch.sh` and its test.
+- 17: step 7c's landing, since 17 touches the rules page and every `SKILL.md`.
 - 17a: step 17's landing, since both touch `skills/spec/SKILL.md`, `skills/plan/` and `skills/ordo-init/`.
 - 18: every step from 1 to 17a.
 - 19: step 18.
@@ -916,3 +919,42 @@ verify: 14 commands passed
 ```
 
 - Usage, orchestrator from step 7a's booking (f4dd5e8) to this booking, shared with step 7b's review and its round 1, and ruling T: 87 messages, 69187 output tokens, 206121 cache-write tokens, 24108442 cache-read tokens, 202 fresh input tokens, 154 minutes.
+
+### Step 7b, an exit file after every stop of a started builder (landed 2026-09-26)
+
+- Landed: `skills/plan-orchestration/templates/launch.sh` and its test, `plan-orchestration/SKILL.md`, `templates/launch-note.md` and the README bullet for `launch.test.sh`. When the builder ends while the leader lives, the builder's runner forks a guard that holds the builder's code, ignores TERM, INT and HUP, and waits every tenth of a second until the leader is gone; it then writes the code when no exit file is present and removes the leader's temporary file. The guard checks once that it is in the leader's process group, since the leader's pid is not reused while that group lives, and otherwise says so on standard error and writes nothing. The session leader, the builder's runner and the guard hold the launch's lock for as long as each lives; the builder and the note calls do not; a launch of the same pid file is refused with exit 75 while any of them lives. The runner reads the session scanner's answer with a deadline of 2 seconds shared by the whole stop. Each writer writes `<exit file>.tmp.<its pid>`; the launch removes an exit file and the temporary files an earlier run left. The runner checks the open of its handle on the lock and otherwise closes the descriptor before it forks the builder.
+- User-visible changes, before and after: a KILL after the builder ended, while the note's `end` runs, left no exit file and now leaves the builder's code; a KILL between the leader's temporary write and its move left only `<exit file>.tmp` and now leaves the exit file; a killed run's runner could write `exit 137` after a relaunch removed the file, and a relaunch is now refused with exit 75 until the killed run's runner and guard are gone; a stop could wait on a scanner that never answers with no limit, and now waits at most 2 seconds; a relaunch right after a normal end is refused for about a tenth of a second while the guard ends. After TERM and then KILL during the leader's own write, `<exit file>.tmp.<leader pid>` is left until the next launch removes it.
+- Proof, load: the whole of `launch.test.sh` 16 times at 16 at once, 0 red under `sh` and 0 under `LAUNCH_SHELL=dash` (the round 2 review; the builder's report gives 32 of 32 under each).
+- Repair rounds: round 1, eight rulings (`agents/briefs/7b-round-1.md`); round 2, the one round beyond the cap, since round 1's 10-second bound on the guard left a KILL to a leader alive past it with no exit file, against the brief's "What it must do" item 1 (`agents/briefs/7b-round-2.md`, four rulings; round 1's ruling 2 withdrawn).
+- The builder ran the read-only `git diff` and `git status` in the worktree during the first build and round 1, against the brief's no-git rule, and says so in its report; no git command in round 2.
+- Fixes at landing (4): the guard-waits case's comment rewritten in short sentences, with the garbled pid sentence made true; the test's head comment clause split; case "guard group" (with the group check removed: `FAIL: guard group: no line in the stderr file`; with only its exit removed: `FAIL: guard group: an exit file was written: exit 3`); the README bullet for `launch.test.sh` from the report's "Doc text", its long sentence split and the new case named. Each is quoted in `agents/reviews/7b-refuter.md`, Closed.
+- Booked as step 7c: the guard waits on `kill 0`, which succeeds on a zombie, so a killed leader its parent does not reap keeps the guard waiting and no exit file is written.
+- Verification on main, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+```
+
+- Usage, orchestrator from step 7's booking (a8541ed) to this booking: 49 messages, 37730 output tokens, 91373 cache-write tokens, 8081914 cache-read tokens, 114 fresh input tokens, 137 minutes.
