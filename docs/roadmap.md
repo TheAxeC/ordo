@@ -37,12 +37,19 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: its check flags history words, step numbers, dates and non-ASCII in a diff's comments, and its test fails on each planted case; one real run on a cathedra or game-engine diff that you review.
 - Waits on: 3, for the checks.
 
+## 9. literature
+
+- Status: [ ]
+- Goal: The literature skill: search through Crossref, OpenAlex, Semantic Scholar and arXiv, source verification, synthesis and the `.bib`.
+- Gate: every source it cites resolves; a side-by-side run against deep-research on a real topic, compared blind, wins or ties; the coverage check with `--built literature` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
+- Waits on: 3, for the writing base; 2, for the coverage.
+
 ## 5. paper
 
 - Status: [ ]
 - Goal: The paper skill: drafting, structure, citations, figures and statistics, disclosure statements and revision patches, as the coverage inventory marks them rebuild, with the `tools/manuscript` scripts moved in.
 - Gate: `anchorize_tex.py` and `apply_tex_patch.py` pass their tests in the skill; the `\cite`-against-`.bib` check and the DOI check pass their tests; a side-by-side run against academic-paper on a real revision round, compared blind, wins or ties; the coverage check with `--built paper` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: paper` row that the file of `skills/paper/` the row names holds what the source file did, checked by reading both.
-- Waits on: 3, for the writing base; 2, for the coverage.
+- Waits on: 3, for the writing base; 2, for the coverage; 9, for the reference lookups.
 
 ## 6. paper-review
 
@@ -64,13 +71,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Goal: The grant skill with per-funder config: required sections, page limits, evaluation criteria and the funding statement.
 - Gate: the checks for limits, required sections and the statement text pass their tests; a side-by-side run on a section of a past application, compared with what was submitted.
 - Waits on: 3, for the writing base; 2, for the coverage: no file is marked `grant`, and the funder acknowledgement text reaches it through the paper row of `references/funding_statement_guide.md`.
-
-## 9. literature
-
-- Status: [ ]
-- Goal: The literature skill: search through Crossref, OpenAlex, Semantic Scholar and arXiv, source verification, synthesis and the `.bib`.
-- Gate: every source it cites resolves; a side-by-side run against deep-research on a real topic, compared blind, wins or ties; the coverage check with `--built literature` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
-- Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 10. idea
 
