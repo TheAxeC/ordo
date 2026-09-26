@@ -72,6 +72,7 @@ dispatch:
   pid: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/pid.txt
   session_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/session.txt
   note_id_file: /Users/axelfaes/workspace/ordo/.agents/launch/2b-7/note-id.txt
+  state: stopped with TERM (exit 143) before any change, relaunch waiting on open item N
   pid_value: 27013
   session_id: dcce4add-8b4c-4354-b005-27cb6e39c841
   note_id: 502d4c9d-3b6a-4316-8628-f519325eee87
@@ -99,6 +100,13 @@ dispatch:
     - (b) Both move to entry 5: entry 5's goal names them, and rows 59 and 90 are rewritten to `paper`. Pro: available with the first writing skill. Con: two rows rewritten, and the paper skill takes venue-specific work without the venue files of entry 13.
     - Recommendation: (a). (a) is also the cheaper option; it is recommended because the work is venue-specific and entry 14 is where the venue files and the portal meet, not because it is cheaper.
   - To rule: `Ruled: M: changes 1-6 <approved, or what to change>; choice 1 (a) or (b); choice 2 (a) or (b)`. On the ruling, step 10 writes the approved diff through `/roadmap`, lands it, and books it.
+- Open item N (step 7, the shell launch of its builder): the builder was launched through `templates/launch.sh` with the launch note, and the note record was written (`~/.oculus/dispatches.json` holds id 502d4c9d-3b6a-4316-8628-f519325eee87, label `2.B/7`, parent this session, the transcript path). It ran with `CLAUDE_CONFIG_DIR` unset, which by `tools/oculus/README.md:36` puts a `claude` process on the first account, not the account this session runs on (`~/.claude-work`). It was stopped with TERM before it changed any file (`exit 143` in the exit file; `git status --short` in the worktree prints nothing). A relaunch with `CLAUDE_CONFIG_DIR` kept was refused by the permission classifier, so the builder is not running. Two things are yours:
+  - Which account the shell-launched builder runs on.
+    - (a) This session's account: relaunch with `CLAUDE_CONFIG_DIR=/Users/axelfaes/.claude-work` kept, which needs your permission for that launch (a Bash permission rule, or you run the launch command yourself with `!`). Pro: the builder is billed and configured like every other agent of this plan. Con: one permission to grant.
+    - (b) The first account: relaunch with `CLAUDE_CONFIG_DIR` unset, as the first launch did. Pro: no permission change. Con: the step runs on another account than the plan's other agents.
+    - Recommendation: (a). The plan's agents all run on one account, and the account is a choice only you can make; (b) is the cheaper option to carry out, and cost is not a reason.
+  - The check that the builder's row appears under this session in oculus's Agents view needs oculus running; nothing listens on its port (`lsof -iTCP -sTCP:LISTEN` shows no node process), and research-hub is read only for this plan, so the orchestrator does not start it. (a) You start oculus (`npm run dev` in `tools/oculus`) before the relaunch, and the orchestrator checks the view in the browser. (b) The check is made on the note record alone. Recommendation: (a); the ruling E run exists to see the row in the view.
+  - To rule: `Ruled: N: account (a) or (b); oculus (a) or (b)`.
 
 ## Booked, no ruling needed
 
@@ -150,7 +158,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 landed (steps 1, 1a, 2, 3, 4, 5, 6, 6a, 8, 9 and 11 at 5fdaa98, 76a2b10, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7 and 617f8f3; step 1c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 10 stopped on open item M; steps 12, 15 and 7 are dispatched; 13 and 14 after 12; then 16 to 19.
+- Roadmap entry 2.B. Step 10 stopped on open item M; steps 12 and 15 are dispatched; step 7's builder is stopped on open item N; 13 and 14 after 12; then 16 to 19.
 - Open on Axel's side: none.
 
 ## Usage

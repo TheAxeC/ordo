@@ -83,7 +83,17 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 - 16: the user's ruling on each retro proposal, raised when the step runs.
 - 10: open item M, the roadmap diff and two choices (Step 10, Step 0 below).
-- 7: unblocked (step 4 landed; the oculus fixes are in research-hub's 409de414, `git ls-files -s tools/oculus/bin/dispatch-note.mjs` shows 100755); dispatched.
+- 7: open item N, the account of its shell-launched builder and the oculus view check (Step 7, Step 0 below).
+
+### Step 7, Step 0 (stop: open item N)
+
+- Open item N (step 7, the shell launch of its builder): the builder was launched through `templates/launch.sh` with the launch note, and the note record was written (`~/.oculus/dispatches.json` holds id 502d4c9d-3b6a-4316-8628-f519325eee87, label `2.B/7`, parent this session, the transcript path). It ran with `CLAUDE_CONFIG_DIR` unset, which by `tools/oculus/README.md:36` puts a `claude` process on the first account, not the account this session runs on (`~/.claude-work`). It was stopped with TERM before it changed any file (`exit 143` in the exit file; `git status --short` in the worktree prints nothing). A relaunch with `CLAUDE_CONFIG_DIR` kept was refused by the permission classifier, so the builder is not running. Two things are yours:
+  - Which account the shell-launched builder runs on.
+    - (a) This session's account: relaunch with `CLAUDE_CONFIG_DIR=/Users/axelfaes/.claude-work` kept, which needs your permission for that launch (a Bash permission rule, or you run the launch command yourself with `!`). Pro: the builder is billed and configured like every other agent of this plan. Con: one permission to grant.
+    - (b) The first account: relaunch with `CLAUDE_CONFIG_DIR` unset, as the first launch did. Pro: no permission change. Con: the step runs on another account than the plan's other agents.
+    - Recommendation: (a). The plan's agents all run on one account, and the account is a choice only you can make; (b) is the cheaper option to carry out, and cost is not a reason.
+  - The check that the builder's row appears under this session in oculus's Agents view needs oculus running; nothing listens on its port (`lsof -iTCP -sTCP:LISTEN` shows no node process), and research-hub is read only for this plan, so the orchestrator does not start it. (a) You start oculus (`npm run dev` in `tools/oculus`) before the relaunch, and the orchestrator checks the view in the browser. (b) The check is made on the note record alone. Recommendation: (a); the ruling E run exists to see the row in the view.
+  - To rule: `Ruled: N: account (a) or (b); oculus (a) or (b)`.
 
 ### Step 10, Step 0 (stop: open item M)
 
