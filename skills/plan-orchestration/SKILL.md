@@ -68,7 +68,8 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Save its report, and write its path and its usage into the dispatch block under `reviewer_report`.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
    - **How.** A native Claude agent is resumed by the runner's message tool on its id. A `claude -p` or Codex worker is resumed by `templates/launch.sh` with `--resume <session_id>`, by the numbered list under "Launching a builder".
-   - **The resume's options.** It keeps the launch's `--cwd`, `--model`, `--effort`, `--network`, `--note`, `--label` and `--parent`. Its prompt (the findings), output, stderr, events, exit, pid, session and id files are the round's own.
+   - **The resume's options.** It keeps the launch's `--cwd`, `--model`, `--effort`, `--network`, `--note`, `--label`, `--parent` and `--allow-file`. Its prompt (the findings), output, stderr, events, exit, pid, session and id files are the round's own.
+   - **The allow file on a resume.** A `claude -p` resume keeps the launch's allow file, or writes it again when `worker_allow` or the brief's check commands changed, by item 1 of "Launching a builder".
    - **Before the resume.** Write `round: n` and the round's paths into the dispatch block, each under its field with the `repair_` prefix (`repair_prompt`, `repair_output` and so on), and commit.
    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
    - **After each reply.** Read the whole delta and, when the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its usage recorded beside the first.
@@ -102,7 +103,7 @@ The ledger is the whole handoff. An orchestrator may stop after any step and ano
 
 On resumption with a dispatch block present:
 
-- The builder is checked first, by the check its harness allows: a CLI worker runs while `kill -0` on the pid in its pid file succeeds, has finished when its exit file is present, and is dead when the pid is gone and no exit file is present, its processes then stopped by `templates/launch.sh`; a native Claude agent has its id in `session_id` and the runner's own agent listing.
+- The builder is checked first, by the check its harness allows: a CLI worker runs while `kill -0` on the pid in its pid file succeeds, has finished when its exit file is present, and is dead when the pid is gone and no exit file is present five seconds later, its processes then stopped by `templates/launch.sh`; a native Claude agent has its id in `session_id` and the runner's own agent listing.
 - A builder still running is waited for.
 - A finished builder resumes at the read of its report.
 - A step at `landing: cherry-picking` is checked on main (`git status`, `git diff --cached`) before anything is applied again.
@@ -153,7 +154,7 @@ Both harnesses take the same prompt. What differs is the launch, the sandbox and
 ```sh
 sh <this skill's folder>/templates/launch.sh claude --cwd <worktree>/<tool dir> --model <model> \
     --prompt <prompt file> --report <output file> --stderr <stderr file> --exit <exit file> --pid <pid file> \
-    --session-file <session file> [--resume <session id>] \
+    --session-file <session file> --allow-file <allow file> [--resume <session id>] \
     [--note <launch_note> --id <id file> --label <entry>/<step> --parent <session id>]
 ```
 
@@ -168,13 +169,17 @@ sh <this skill's folder>/templates/launch.sh codex --cwd <worktree>/<tool dir> -
 
 A shell launch runs in this order:
 
-1. Write every path the launch will take into the dispatch block under its field, and commit the block by path before the launch: `prompt`, `output` (the `--report` path), `stderr`, `events`, `exit`, `pid`, `session_file` (the `--session-file` path of a `claude -p` builder) and `note_id_file`, with the `repair_` prefix for a repair round and the `cases_` prefix for the resume on a cases ruling (Steps 6).
+1. Write every path the launch will take into the dispatch block under its field, and commit the block by path before the launch: `prompt`, `output` (the `--report` path), `stderr`, `events`, `exit`, `pid`, `session_file` (the `--session-file` path of a `claude -p` builder), `allow_file` (the `--allow-file` path of a `claude -p` builder) and `note_id_file`, with the `repair_` prefix for a repair round and the `cases_` prefix for the resume on a cases ruling (Steps 6).
+   - For a `claude -p` builder, write the allow file first, with `python3 <this skill's folder>/templates/allow_list.py <state file> <each check command of the brief>`, whose output is the file.
+   - The allow file holds the command prefixes the builder may run, one per line: the configuration block's `worker_allow` when it is not empty, otherwise the prefixes of the simple commands of the verify list and of the brief's check commands, each once.
+   - A resume (a repair round, or a resume on a cases ruling) passes the launch's `allow_file` again, unless `worker_allow` or the brief's check commands changed since it was written; then it writes the allow file again, under the field with the round's prefix (`repair_allow_file`, `cases_allow_file`).
    - Every path given to `templates/launch.sh` is absolute, so it names the same file from the orchestrator's shell, from the builder's `--cwd` and from a later resumption.
    - None of these paths lies in a scratch folder or a machine-local temp directory, since "Resuming, and handing the plan over" needs them to continue.
    - With the configuration block's `launch_note` set, pass the note options: `--id` names the file that receives the note's id, `--label` is `<entry>/<step>`, and `--parent` is the orchestrating session's id.
    - Under Claude Code the orchestrating session's id is its session log's file name without `.jsonl`, and under Codex it is the rollout's session id. "Usage" says where each log is.
    - Without a `launch_note`, the note options are left out.
 2. Run `templates/launch.sh` from the orchestrator's shell. It removes an exit file an earlier run left, starts the builder in a session of its own, and returns once that session's leader has written its pid to the pid file.
+   - The runner of a killed run can still be stopping its builder for about a second after the KILL, and then writes `exit 137`. A launch that reuses that run's exit file waits until the killed run's session has no process left.
    - It refuses with exit 75, starting nothing, while the pid file names a live process, or while another live launch of the same pid file holds its lock file, `<pid file>.lock`, whose pid the refusal names. A lock file left by a launcher that died is taken over. The lock file stays beside the pid file after every launch, so a pid file under the ledger leaves `<pid file>.lock` there, untracked, until it is removed with the step's other launch files once the builder has ended.
 3. As soon as the launch returns, write the builder's identity into the dispatch block and commit it, as item 4 of "Steps" says: the pid from the pid file, and the session id in `session_id`.
    - For a `claude -p` builder the session id is in the session file, which `templates/launch.sh` writes before the builder starts.
@@ -183,17 +188,28 @@ A shell launch runs in this order:
    - A `claude -p` builder writes its transcript as `<session id>.jsonl` from the moment it starts, in the runner's projects folder, in the folder whose name is the builder's `--cwd` with every `/` and `.` replaced by `-`. A resumed run writes to the same file.
    - The rollout under `~/.codex/sessions/` whose name ends with the session id is the transcript of a Codex builder.
 5. Watch the exit file and the pid with a monitor. `templates/launch.sh` writes the builder's exit code to the exit file as `exit <code>` once the builder has ended, and `kill -0 <pid>` fails once the session leader has gone.
-   - A dead pid with no exit file is a dead builder, which "Resuming, and handing the plan over" says how to handle: the session leader ended without writing the exit file, and `templates/launch.sh` has stopped the builder and every process of its session within about a second of it.
+   - When the session leader is killed while the builder runs, the builder's runner stops the builder and its session within about a second. It then writes the exit file, which can follow the pid's end by a few seconds on a loaded machine.
+   - A pid gone with no exit file five seconds later is a dead builder, which "Resuming, and handing the plan over" says how to handle.
+   - It follows a KILL while the note's `start` ran, before any builder started. It also follows a KILL after the builder ended, while the note's `end` ran, since the builder's runner has exited then.
 
 - A first Codex run is `codex exec -C <cwd> -s workspace-write`: `-C` is the working root and `-s workspace-write` confines writes to it.
 - `codex exec resume` takes neither flag, so `templates/launch.sh` runs a resumed Codex builder inside `--cwd` and sets its sandbox with `-c sandbox_mode="workspace-write"`.
 - `--network` is passed whenever the verification commands bind a port.
+- A `claude -p` builder runs under `--permission-mode acceptEdits`, which refuses a script or a test that no rule allows, since a print-mode run cannot ask for approval.
+- `templates/launch.sh` passes each line of the allow file to a `claude -p` builder as `--allowedTools "Bash(<line>:*)"`, so the builder runs each listed command with any further arguments.
+- `claude` cuts apart or ignores a permission rule holding a quote, `$`, a backtick, a backslash, `(`, `)`, `{`, `}`, `[`, `]`, a comma, `*` or `?`.
+- So `templates/allow_list.py` ends a prefix before the first word holding one of them.
+- It refuses a command whose parts are not simple commands (`$(`, a backtick, a subshell, a group), a command that starts with a shell keyword, and a command holding a carriage return.
+- `templates/launch.sh` refuses a `claude` launch without `--allow-file`, with exit 64 before anything starts. It refuses the same way an allow file that is missing, holds no command, holds a line with one of those characters, or holds a carriage return inside a line. A Codex builder takes no allow file, since its sandbox confines it.
 - `-o` writes the final message, and `--json` streams the event log whose last `turn.completed` event carries the usage.
 - The session is not run with `--ephemeral`, so the rollout under `~/.codex/sessions/` is the builder's transcript.
 - A runner's shell tool caps a command at ten minutes and a step takes longer, so `templates/launch.sh` detaches the builder and a monitor watches the exit file and the pid.
 - The launch note is a record only. `templates/launch.sh` ignores a note call that fails and stops one that has not returned after 3 seconds, and `templates/launch-note.md` gives the note command's interface.
 - Codex project settings live in `<repo>/.codex/config.toml` and its command rules in `<repo>/.codex/rules/`; the orchestrator never edits a user-level file.
-- TERM, INT or HUP sent to the pid stops the builder and every process of its session, then writes the exit file as `exit <128 plus the signal number>` and calls the note's `end`. KILL sent to the pid ends the session leader at once, and the builder and its session are stopped within about a second, with no exit file and no `end`, so a builder is stopped with TERM first, as the land skill's Steps 1 does.
+- TERM, INT or HUP sent to the pid stops the builder and every process of its session, then writes the exit file as `exit <128 plus the signal number>` and calls the note's `end`. A builder that had already ended keeps its own code, written before a running `end` is stopped.
+- KILL sent to the pid ends the session leader at once, and no `end` follows. While the builder runs, the builder's runner then stops the builder and its session within about a second. It then writes the exit file as `exit 137`.
+- The builder's runner also writes the exit file after a stop that TERM, INT or HUP started. So a KILL that reaches the leader during that stop still leaves the exit file.
+- A builder is stopped with TERM first, as the land skill's Steps 1 does. The note's `end` is then called when the leader's stop finishes before the KILL two seconds later.
 
 ## What earns a step of its own
 

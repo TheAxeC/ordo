@@ -7,7 +7,10 @@ The keys, which of them are required and each optional key's default come from t
 templates/plan.yaml, found beside this skill's folder. Prints one line per error and per note, and
 exits 1 when there is an error: a required key missing, an unknown key, a value of the wrong kind,
 a page the configuration names that does not exist, a launch_note that is not an absolute path to an
-executable file, a worktree root git does not ignore, or a configuration file git ignores.
+executable file, a worker_allow that is not a list or holds an entry that is not a non-empty
+one-line string or holds a character no permission rule can hold (a quote, $, a backtick, a
+backslash, (, ), {, }, [, ], a comma, * or ?), a worktree root git does not ignore, or a
+configuration file git ignores.
 """
 import os
 import re
@@ -18,6 +21,9 @@ import yaml
 
 PAGE_KEYS = ("roadmap", "verification", "rules")
 HARNESS = re.compile(r"^(claude|codex):\S+$")
+# The characters a command prefix of worker_allow cannot hold: a claude permission rule holding one
+# is cut apart or ignored (the plan-orchestration skill's templates/allow_list.py).
+UNRULY = set("'\"$`\\(){}[],*?")
 
 
 def example_keys():
@@ -76,6 +82,15 @@ def check_project(root, label, config, keys, errors, notes):
             errors.append(f"{prefix}launch_note names a file that does not exist: {note!r}")
         elif not os.access(note, os.X_OK):
             errors.append(f"{prefix}launch_note names a file that is not executable: {note!r}")
+    allow = config.get("worker_allow")
+    for entry in allow if isinstance(allow, list) else []:
+        one_line = isinstance(entry, str) and "\n" not in entry and "\r" not in entry
+        if not (one_line and entry.strip()):
+            errors.append(f"{prefix}worker_allow holds an entry that is not a non-empty "
+                          f"one-line string: {entry!r}")
+        elif UNRULY & set(entry.strip()):
+            errors.append(f"{prefix}worker_allow holds an entry with a character no rule can "
+                          f"hold: {entry!r}")
     if config.get("review") not in (None, "every", "earned"):
         errors.append(f"{prefix}review is neither every nor earned: {config['review']!r}")
     worktree_root = config.get("worktree_root")

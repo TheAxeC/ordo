@@ -23,6 +23,7 @@ projects:
     workers_at_once: 1
     bench: []
     launch_note: ""
+    worker_allow: []
   tool-b:
     roadmap: tools/tool-b/ROADMAP.md
     verification: tools/tool-b/docs/building.md
@@ -43,3 +44,4 @@ projects:
     workers_at_once: 1
     bench: []
     launch_note: ""
+    worker_allow: []

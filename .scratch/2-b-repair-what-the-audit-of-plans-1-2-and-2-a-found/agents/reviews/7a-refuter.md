@@ -276,3 +276,200 @@ exit 0
 ## 4. Usage
 
 About 157k tokens (the counter fell from 15,000,000 to about 14,843,000) and about 30 tool uses. Minutes were not measured.
+
+
+# Repair round 2, refuted
+
+On .agents/worktrees/2b-7a, round from 35a0300, base df3c6a7; reviewer claude:opus, a fresh agent, af4ee248f54ab6f9b; 170,557 tokens, 39 tool uses, 1,563 s.
+
+## 1. Verification lines, verbatim
+
+All commands were run from /Users/axelfaes/workspace/ordo/.agents/worktrees/2b-7a with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`.
+
+`sh skills/land/templates/verify.sh /Users/axelfaes/workspace/ordo/.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+exit 0
+```
+- `sh skills/plan-orchestration/templates/allow_list.test.sh 2>&1 | tail -1` printed `PASS: allow_list.py scratch tests`.
+- `sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1` printed `PASS: launch.sh scratch tests`.
+- `LAUNCH_SHELL=dash sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1` printed `PASS: launch.sh scratch tests`.
+- `sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1` printed `PASS: check_config.py scratch tests`.
+- `python3 skills/plan-orchestration/templates/allow_list.py .scratch/.../orchestrator-state.md` exited 0 and printed the same 15 lines as report lines 357-371 (the last two are `git ls-files -coz --exclude-standard` and `xargs -0 perl -CSD -ne`).
+- Load runs, the whole `launch.test.sh`, 16 at once through `xargs -P16`, on a copy of `skills/` in my scratchpad:
+  - Round's tree, `sh`: `16 PASS: launch.sh scratch tests` (0 red), 3 min 02 s.
+  - Round's tree, `LAUNCH_SHELL=dash`: `16 PASS: launch.sh scratch tests` (0 red), 3 min 03 s.
+  - Base df3c6a7 (`launch.sh` and `launch.test.sh` from the base), `sh`: `16 FAIL: land sequence with KILL: no exit file` (16 red).
+- Reverts, each on a scratch copy, one whole-suite run each. Every one reproduced the report's red:
+  - R2-1, `publish(137);` removed: `FAIL: KILL to the leader alone: no exit file five seconds after the KILL`.
+  - R2-2, `publish(128 + $got);` removed: `FAIL: land sequence with a slow stop, TERM: no exit file five seconds after the KILL`.
+  - R2-3, `publish($code) if getppid() != $watch;` removed: `FAIL: the builder ended as the leader was killed: no exit file five seconds after the KILL`.
+  - R2-4, `-e` return and `link` both removed, plain `rename`: `FAIL: an exit file the leader wrote: .../keep-exit out/exit holds exit 137, expected exit 5`.
+  - R2-6, `kill -TERM "$running"`: `FAIL: land sequence with a slow stop, INT: .../slow-stop-INT out/exit holds exit 143, expected exit 130`.
+  - R2-7, the early `write_exit "$status"` removed and the late write made unconditional: `FAIL: TERM and KILL while end hangs: no exit file five seconds after the KILL`.
+  - R2-10, the detach loop reverted to read-then-waitpid: `FAIL: a detached process that ends right after writing the pid file failed the launch`.
+  - Scanner forced to `"python3"` (ignoring LAUNCH_PYTHON): `FAIL: KILL to the leader alone, TERM ignored: the scanner started through python3 on PATH`.
+- The change standard's ASCII check printed nothing and exited 0. `LC_ALL=C grep '[^ -~]'` over the added lines of `git diff -U0 35a0300` found nothing. No added `.sh` line is over 100 characters.
+
+## 2. Repair round 2, refuted
+
+### Spec
+
+1. Ruling 1 and ruling 4 are not met for a KILL that arrives after the builder has ended. These sentences say otherwise:
+   - `skills/plan-orchestration/SKILL.md:206`: "The builder's runner then stops the builder and its session within about a second and writes the exit file as `exit 137`, or the builder's own code when it had already ended".
+   - `SKILL.md:190`: "When the session leader is killed after the builder started, the builder's runner ... then writes the exit file".
+   - `templates/launch-note.md:30`: "The builder's runner still writes the exit file once the builder has started."
+   - `launch.sh:30-32`: "writes exit 137, or the builder's own code when it had already ended."
+
+   When the builder ends while the leader is alive, the runner exits at once, because it publishes only when `getppid() != $watch` (`launch.sh:326`). The leader then runs the note's `end` for up to 3 s and writes the exit file only after that (`run_body`, and `launch-note.md:27`). A KILL in that window leaves no process that writes the file.
+
+   Probe on a scratch copy, using the suite's own preamble: builder `STUB_EXIT=0 STUB_SLEEP=0`, `NOTE_HANG=end`, `kill -KILL <leader>` once `end` hung, `sleep 6`. It printed `PROBE A (KILL alone while end hangs, builder exited 0): exit file=[MISSING] tmp=absent`.
+
+   `SKILL.md:191` lists when a gone pid leaves no exit file and does not name this case. The only case near it, "TERM and KILL while end hangs", sends TERM first.
+
+2. Judgement on the five changes the ruling's text does not name. None is scope creep:
+   - **The runner writes after a stop that a signal started.** Needed. With the leader killed during that stop, the loop leaves through the `$got` branch and nothing else writes (R2-2 red).
+   - **The leader passes the signal on as it came.** Needed so the runner's code matches the leader's under INT and HUP (R2-6 red).
+   - **The builder's code is written before a running `end` is stopped.** Needed (R2-7 red).
+   - **The detach loop checks for an ended process before it reads the pid file.** This is a launch.sh defect that ruling 3's load counts exposed, so it falls under rule 6. It is a user-visible change, see Behaviour 3.
+   - **The stub's trap child writes its own pid.** Test-only, and needed for zero-red counts.
+
+3. Judgement on `LAUNCH_PYTHON`. The missing exit file is fixed by `publish`, not by `LAUNCH_PYTHON`. `LAUNCH_PYTHON` removes one source of stop latency: the version-manager wrapper (shim) that the `python3` on PATH points to, which the runner started as its session scanner.
+   - It fixes the latency the builder measured, and a revert (the scanner forced to `python3`) turns red.
+   - The stop's duration is still unbounded. `session_members` (`launch.sh:274-285`) reads the scanner's answer with no timeout.
+   - The launcher now runs the shim once, synchronously, at every launch (`launch.sh:662`).
+   - So the land skill's five seconds (`skills/land/SKILL.md:43`) is a measured margin that `launch.sh` does not guarantee. A slow stop gives the land skill's refusal, not a wrong landing.
+
+### Proof
+
+1. The two guards of the no-replace write are each unproven. `launch.sh:311` and `:316`:
+   ```
+   return if $exit_file eq "" || -e $exit_file;
+   ...
+   link($tmp, $exit_file) or -e $exit_file or rename($tmp, $exit_file);
+   ```
+   - Revert r4b, the `link ... or rename` line replaced by `rename($tmp, $exit_file);` with the `-e` return kept: `PASS: launch.sh scratch tests`.
+   - Revert r4c, the `-e` return removed with `link` kept: `PASS: launch.sh scratch tests`.
+   - Only R2-4, which removes both, is red. The "keep-exit" case writes `exit 5` before the KILL, so the early `-e` return always fires and `link` is never reached. The atomic no-replace that the head comment names (`launch.sh:32-33`, "The runner never replaces an exit file the leader wrote") has no case that its own revert turns red. This fails rule 13.
+
+2. `launch.test.sh`, `land_wait`: `until not_alive "$2" && [ -s "$d/exit" ]; do ... [ "$tries" -gt "$land_ticks" ] ...; sleep "$tick"`. The bound is 50 iterations, not five seconds of wall time. Each iteration also forks `sleep` and runs `kill` and `test`, so under load the case allows longer than the land skill's "within five seconds of the KILL". The failure text "no exit file five seconds after the KILL" states a time the case does not measure. Not measured.
+
+3. No case covers either interleaving in Spec 1 or Behaviour 1: a KILL alone after the builder ended, and a relaunch while the old runner is still stopping. Rule 15 asks for a concurrent path to be exercised "after teardown and superseded by a later one".
+
+4. The report's counts: my 16-at-once runs agree in direction (0 of 16 red under `sh` and under `dash` on the round's tree, 16 of 16 red on base under `sh`). I did not reproduce the 32-run and 20-one-at-a-time numbers (see Not checked).
+
+### Standards
+
+1. `launch.sh:11` ("They then remove an exit file an earlier run left, so a monitor never reads a stale one") and `skills/plan-orchestration/SKILL.md:181` ("It removes an exit file an earlier run left") are made false by this round, see Behaviour 1. This fails rule 14.
+
+2. Prose standard E ("under roughly 20 words"). This is the same defect ruling 8 of round 1 fixed in the head comment:
+   - `launch.sh:200-203`: "With an <exit file> (the builder's runner; a note call passes an empty one), the runner writes it after such a stop, exit 128 plus the signal number after a signal and exit 137 when its parent has gone, and when the command ends on its own after its parent has gone, its code; a file already present is left as it is." About 65 words.
+   - `launch.sh:29-32`: "When the leader ends without writing it (KILL sent to it alone, or a crash), the runner sees its parent gone, stops ... and writes exit 137, or the builder's own code when it had already ended." About 51 words.
+   - `launch.sh:27-29`: about 39 words.
+   - `launch.sh:193-195` (the LAUNCH_PYTHON sentence): about 43 words.
+   - `SKILL.md:190`: about 50 words.
+   - `SKILL.md:206`: about 40 words.
+
+3. Two phrases in `SKILL.md` name no concrete case:
+   - `SKILL.md:191`, "or a runner that ended with the leader", does not say when that happens.
+   - `SKILL.md:207`, "so the note's `end` is called whenever the stop ends in time", does not say what "in time" means.
+
+   Prose standard A replaces a vague qualifier with the specific claim.
+
+4. No history in comments. No non-ASCII. No added `.sh` line over 100 characters.
+
+### Behaviour
+
+1. A launch that follows a KILLed one with the same exit file gets the old runner's `exit 137` while its own builder runs. This is new this round: before it, the runner wrote no exit file, and the launch's `rm -f "$opt_exit" "$opt_exit.tmp"` made a stale file impossible.
+   - The relaunch check only looks at the leader's pid (`launch.sh:646-656`). A runner still inside its stop does not block it.
+   - Probe: builder ignoring TERM with an own-group child, `kill -KILL <leader>`, then at once `launch.sh claude` with the same `--exit` and `--pid` and a builder that sleeps 30 s, then `sleep 4`. It printed `PROBE C relaunch exit 0, new leader 33579` and `PROBE C: new leader alive; ... exit file=[exit 137] tmp=absent`.
+   - A monitor reads the new builder as ended with 137.
+   - Within one launch the runner and the leader never write at the same time: the leader writes only after `wait "$running"` returns, and the runner writes only when it has a signal or its parent is gone. So the two writers sharing `<exit file>.tmp` collide only across launches, as here.
+   - The same cross-launch case is the only way the `rename` fallback in `publish` could replace a leader's file: a second launch's leader writes between the runner's `-e` test and its `rename`, on a file system where `link` fails with an error other than EEXIST. That case is not exercised.
+
+2. A KILL after the builder ended leaves no exit file (Spec 1). Before and after this round the behaviour is the same, but the texts now promise the file.
+
+   The leader's own write can also be cut by a KILL. `write_exit` is `printf ... >"$opt_exit.tmp" && mv -f ...`, and `mv` is a separate process. A KILL between the two leaves a stale `.tmp`. On a scratch copy with `sleep 3` put between `printf` and `mv`:
+   - `PROBE E1 (KILL while the leader writes the exit file after a normal end): exit file=[MISSING] tmp=present`.
+   - `PROBE E2 (TERM, then KILL while the leader rewrites the file): exit file=[exit 143] tmp=present`.
+
+   The unpatched window is one fork and exec, so this is a narrow case. It still contradicts `SKILL.md:190` and `launch-note.md:30` for a builder that has ended.
+
+3. The report's "User-visible changes" (report lines 249-256) lists only the test change for round 2. These are not stated with their before and after:
+   - A KILL to the leader: before, no exit file; after, `exit 137`, or the builder's code.
+   - TERM, INT or HUP during a hanging `end`: before, the leader stopped `end` (up to its grace) and then wrote; after, the code is written first.
+   - INT and HUP to the leader: before, forwarded to the runner as TERM; after, as INT and HUP.
+   - A detached body that writes its pid and ends at once: before, `launch.sh` could exit 1 ("the detached process ended before it wrote ..."); after, it exits 0.
+   - The land skill: before, pid gone and exit file present checked once after the KILL; after, a five-second wait checked every tenth of a second.
+
+   This fails rule 7.
+
+Checks the brief named, with no finding:
+- `kill -"$1"` with a numeric signal works under `sh` and `dash`. The INT slow-stop case (130) and the TERM/INT/HUP loop passed in all 16 `dash` runs.
+- `on_signal` writes the builder's code before it stops `end` (R2-7 red).
+- The "land sequence" case again sends TERM, then KILL at 2 s when the pid is alive, then a bounded wait (`land_wait`, then `wait_until ... session_gone`), and requires `exit 143` and no process left. The bound's unit is Proof 2.
+
+## 3. Not checked
+
+- The report's 20-one-at-a-time and 32-at-16-at-once counts. I ran 16 at 16 at once per shell on the round's tree and 16 at 16 at once under `sh` on base. I did not run base under `dash`.
+- Whether "TERM and KILL while end hangs" (KILL `$tick`, 0.1 s, after TERM) goes red under heavier load than 16 at once. It was 0 red in my 32 runs.
+- `publish` on a file system where `link` fails with an error other than EEXIST.
+- The report's timing-copy figures (8 to 16 s scanner start) and the stub trap-child race (1 in 32).
+- The reverts R2-5, R2-8 and R2-9 as the report names them.
+- A real `claude -p` run.
+- Outside the brief's permitted git commands, I ran `git show df3c6a7:skills/plan-orchestration/templates/{launch.sh,launch.test.sh}` to extract the base files for the load run, and the change standard's ASCII check, which runs `git ls-files`. Both are read-only. Nothing in the worktree was changed.
+
+## 4. Usage
+
+About 118k tokens (the counter fell from 14,964,260 to about 14,846,000) and about 31 tool uses. Wall time was mostly the three 3-minute load runs and two rounds of revert runs. Minutes were not measured in total.
+
+# Closed
+
+The first review's findings were sent back as the nine rulings of round 1 (`agents/briefs/7a-round-1.md`); round 1's run found ruling 5 unbuilt, which round 2 (`agents/briefs/7a-round-2.md`, the one round beyond the cap) built. The findings of the runs over rounds 1 and 2 were not sent back; each is closed here.
+
+Round 1, refuted:
+
+- Spec 1, `$(` and a backtick refused inside double quotes too: accepted. `sh` substitutes inside double quotes, so the part is not a simple command there either; the landing note states it.
+- Spec 2, Proof 1, Standards 2, Behaviour 1 (the "land sequence" red): built in round 2; the round 2 run reproduced 0 of 16 red at 16 at once under `sh` and `dash`, 16 of 16 on base.
+- Proof 2 and Behaviour 2, a carriage return inside a command passed through: fixed at landing. `allow_list.py` refuses a command holding a carriage return (cases "a carriage return inside a word" and "a carriage return at the end"; with the check removed: `FAIL: a carriage return inside a word: exited 0, expected 64:`). `launch.sh` refuses an allow file with a carriage return inside a line (case "an allow file with a carriage return inside a line"; with the check removed: `FAIL: an allow file with a carriage return inside a line: exited 0, expected 64:`).
+- Proof 3, the cut case's comment: fixed at landing; the comment names the characters the case proves and where the backtick, `(`, `)`, `{` and `}` are proven.
+- Proof 4, the report's "written once": the report's claim; the text is right as ruling 6 asked. No change.
+- Standards 1, `SKILL.md:197`: fixed at landing, split into four sentences with `claude` as the subject.
+- Standards 3: no finding.
+
+Round 2, refuted:
+
+- Spec 1, a KILL after the builder ended leaves no exit file, against four texts: the texts fixed at landing to state the cases that leave none (`launch.sh` head comment "Exit file" paragraph, `plan-orchestration/SKILL.md` item 5 and the KILL bullets, `launch-note.md`); the code's case booked as step 7b.
+- Spec 2, the five changes beyond the ruling's text: the review judged each needed; accepted.
+- Spec 3, the scanner's answer read with no time limit: booked as step 7b.
+- Proof 1, the `-e` and `link` guards each without a red case: booked as step 7b.
+- Proof 2, `land_wait` bounded by iterations: fixed at landing; it now stops at five seconds of wall time from the KILL (`now_ms`), and `land_ticks` is gone.
+- Proof 3, no case for a KILL after the builder ended or a relaunch while the old runner stops: booked as step 7b with the code.
+- Proof 4: counts agree in direction; no change.
+- Standards 1, `launch.sh:11` and `SKILL.md:181`: fixed at landing; `launch.sh` no longer claims a monitor never reads a stale file, and item 2 of the launch says a launch reusing a killed run's exit file waits until that session has no process left.
+- Standards 2, long sentences in `launch.sh` and `SKILL.md`: fixed at landing, each rewritten in short sentences.
+- Standards 3, "a runner that ended with the leader" and "in time": fixed at landing; the texts name the cases (a KILL while `start` ran, a KILL while `end` ran) and "before the KILL two seconds later".
+- Behaviour 1, a relaunch reading the killed run's `exit 137`: the rule for the orchestrator written at landing (item 2 of the launch); the code's fix booked as step 7b.
+- Behaviour 2, a KILL between the leader's two writes: stated in the head comment at landing; booked as step 7b.
+- Behaviour 3, the user-visible changes without before and after: stated in the booking in `plan.md`.

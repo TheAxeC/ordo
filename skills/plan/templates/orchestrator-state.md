@@ -21,10 +21,11 @@ look:                        # where a changed view is opened at landing (a page
 workers_at_once: 1           # steps in flight at once; above 1 only for steps with disjoint paths (plan-orchestration, "Two steps in flight").
 bench: []                    # the binaries /spec stages and /land runs interleaved, base against new; empty means no A/B.
 launch_note:                 # the command that records a builder started as its own process (the plan-orchestration skill's templates/launch-note.md); empty means none is recorded.
+worker_allow: []             # the command prefixes a builder started from a shell may run (the plan-orchestration skill's templates/allow_list.py); [] means the verify list and the brief's check commands.
 ```
 
 ```yaml
-dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), landing, round. The orchestrator writes and commits prompt, output (a shell launch's --report file: the claude -p JSON or the codex -o final message), events, stderr, exit, pid, session_file (a claude -p launch's --session-file) and note_id_file before the launch, adds session_id as soon as the launch returns, reviewer_report at the review, the repair_ entries while a fix round is in flight, and the cases_ entries while a resume on a cases ruling is in flight.
+dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), landing, round. The orchestrator writes and commits prompt, output (a shell launch's --report file: the claude -p JSON or the codex -o final message), events, stderr, exit, pid, session_file (a claude -p launch's --session-file), allow_file (a claude -p launch's --allow-file) and note_id_file before the launch, adds session_id as soon as the launch returns, reviewer_report at the review, the repair_ entries while a fix round is in flight, and the cases_ entries while a resume on a cases ruling is in flight.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)

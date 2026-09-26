@@ -21,3 +21,4 @@ look: ""                                  # optional, default "". Where a change
 workers_at_once: 1                        # optional, default 1. Steps in flight at once; above 1 only for steps with disjoint paths (plan-orchestration, "Two steps in flight").
 bench: []                                 # optional, default []. Binaries /spec stages and /land runs interleaved, base against new; [] means no A/B.
 launch_note: ""                           # optional, default "". The absolute path of the command that records a builder started as its own process (the plan-orchestration skill's templates/launch-note.md); "" means none is recorded.
+worker_allow: []                          # optional, default []. Command prefixes a builder started from a shell may run (the plan-orchestration skill's templates/allow_list.py); [] means the verify list and the brief's check commands.

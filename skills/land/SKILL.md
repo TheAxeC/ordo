@@ -40,7 +40,7 @@ metadata:
    - An agent is stopped through the runner's stop tool.
    - A shell builder is sent TERM at the pid in its pid file, and KILL two seconds later.
    - Then the runner's agent listing must show none of them left.
-   - A shell builder's pid must then be gone, and its exit file present.
+   - A shell builder's pid must then be gone, and its exit file present, within five seconds of the KILL, checked every tenth of a second. The builder's runner writes the exit file after its stop, which a loaded machine can stretch past the KILL.
    - A check that fails is a refusal before main is touched ("Stops").
 2. Set `landing: cherry-picking` in the dispatch block.
 3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` scoped to the step's tree, and `git commit -q -m wip` when something is staged.

@@ -11,13 +11,17 @@
 #   start and at end, and is gone once the exit file is written;
 # - TERM, INT and HUP to that pid: no builder process left, exit 143, 130 and 129, end called
 #   after the exit file is written, and the runner not among the processes it stops;
-# - the land skill's sequence (TERM, then KILL two seconds later) against a builder that ignores
-#   TERM and has a child in a process group of its own: with the leader gone within its grace, and
-#   with the leader still alive at two seconds (held by a hanging end), so the KILL reaches it; no
-#   process left, an exit file present;
+# - against a builder that ignores TERM and has a child in a process group of its own, the land
+#   skill's sequence (TERM, then KILL two seconds later, then its five-second wait for the pid to
+#   be gone and the exit file present): as it falls, with the leader still alive at two seconds
+#   (held by a hanging end), and with a runner's stop widened past two seconds in a patched copy
+#   (TERM and INT); no process of the session left, the exit file saying 128 plus the signal;
 # - a descendant outside the builder's group gets TERM before the KILL, and a process of the
 #   leader's session outside the builder's group and tree ends on TERM to the leader;
-# - KILL to the leader alone: no process of the builder left within about a second, no exit file;
+# - KILL to the leader alone: no process of the builder left within about a second, the exit file
+#   written by the runner, exit 137, also against a builder that ignores TERM; the builder's own
+#   code when it ended as the leader was killed; an exit file the leader wrote kept; TERM and then
+#   KILL while end hangs: the builder's code; while start hangs: no exit file;
 # - TERM while the builder or the note's start is being started, and while the builder's runner
 #   is between its fork and its next step, each window widened in a patched copy of launch.sh;
 # - a note that hangs on start (after printing an id), on end and on transcript: each stopped
@@ -32,7 +36,16 @@
 #   that cannot be written refusing the launch;
 # - the session id written before the builder starts and passed with --session-id, a new one per
 #   launch, the resumed id written on --resume;
-# - the exit file moved into place, never written in place.
+# - the exit file moved into place, never written in place;
+# - the session scanner started through the interpreter python3 resolves to, not through a python3
+#   on PATH, and that setting kept from the builder;
+# - a detached process that writes the pid file and ends at once counted as launched;
+# - the allow file: each line of it that is not blank passed to claude as --allowedTools
+#   "Bash(<line>:*)", on a first launch and on --resume, from a path holding a space and from a
+#   relative path, carried through the lock re-run and the detached body; a claude launch without
+#   --allow-file, or naming an empty value, a missing file, a directory, an unreadable file or a
+#   file of blank lines, refused with exit 64 before anything starts; --allow-file refused for
+#   codex and for transcript.
 # With LAUNCH_SHELL set (for example dash), sh on PATH is that shell, so launch.sh and the
 # process it starts run under it.
 
@@ -81,11 +94,13 @@ if [ -n "${LAUNCH_SHELL:-}" ]; then
 fi
 
 # A builder stub: logs its name, working directory and arguments (and, with SESSION_CHECK set, what
-# that file holds as it starts), copies its stdin to stdout, writes a line to stderr, records its
-# pid and its children's in PIDS, waits STUB_SLEEP seconds, and exits with STUB_EXIT. With
+# that file holds as it starts, and a line when LAUNCH_PYTHON is in its environment), copies its
+# stdin to stdout, writes a line to stderr, records its pid and its children's in PIDS, waits
+# STUB_SLEEP seconds, and exits with STUB_EXIT. With
 # STUB_IGNORE_TERM it ignores TERM (and so do the children it starts), with STUB_OWN_GROUP it also
 # starts a sleeping child in a process group of its own, with STUB_TRAP_CHILD a child in a process
-# group of its own that records each TERM it receives in TERM_LOG and keeps running, and with
+# group of its own that records each TERM it receives in TERM_LOG and keeps running (it records
+# its own pid once its handler is set, so a TERM sent after that is always recorded), and with
 # STUB_SESSION_JOB a sleeping process in a process group of its own whose parent has exited, so it
 # is neither in the builder's group nor descended from it, only in its session.
 for name in claude codex; do
@@ -96,6 +111,7 @@ for name in claude codex; do
     for a in "\$@"; do printf '|%s' "\$a"; done
     printf '\n'
 } >>"\$CALLS"
+[ -z "\${LAUNCH_PYTHON+set}" ] || printf 'LAUNCH_PYTHON reached the builder\n' >>"\$CALLS"
 if [ -n "\${SESSION_CHECK:-}" ]; then
     if [ -s "\$SESSION_CHECK" ]; then
         printf 'session file|%s\n' "\$(cat "\$SESSION_CHECK")" >>"\$CALLS"
@@ -112,8 +128,10 @@ if [ -n "\${STUB_OWN_GROUP:-}" ]; then
     echo \$! >>"\$PIDS"
 fi
 if [ -n "\${STUB_TRAP_CHILD:-}" ]; then
-    perl -e 'setpgrp(0, 0); \$SIG{TERM} = sub { open my \$f, ">>", \$ENV{TERM_LOG}; print \$f "TERM\\n"; close \$f }; sleep 1 while 1' &
-    echo \$! >>"\$PIDS"
+    perl -e 'setpgrp(0, 0);
+        \$SIG{TERM} = sub { open my \$f, ">>", \$ENV{TERM_LOG}; print \$f "TERM\\n"; close \$f };
+        open my \$p, ">>", \$ENV{PIDS}; print \$p "\$\$\\n"; close \$p;
+        sleep 1 while 1' &
 fi
 if [ -n "\${STUB_SESSION_JOB:-}" ]; then
     perl -e 'my \$p = fork; if (\$p) { print "\$p\\n"; exit 0 } setpgrp(0, 0); exec "sleep", @ARGV' \
@@ -189,14 +207,33 @@ esac
 exec "$real_perl" "\$@"
 EOF
 chmod +x "$bin/perl"
+# A python3 on PATH that passes every call to the real one and records in PY_LOG each start of the
+# runner's session scanner through it.
+real_python=$(command -v python3) || fail "no python3"
+cat >"$bin/python3" <<EOF
+#!/bin/sh
+case "\$*" in
+    *"for request in sys.stdin"*) printf 'scanner\n' >>"\$PY_LOG" ;;
+esac
+exec "$real_python" "\$@"
+EOF
+chmod +x "$bin/python3"
+PY_LOG=$test_root/python.log
+export PY_LOG
 PATH="$bin:$PATH"
 export PATH
 
 cd "$test_root" || fail "could not enter the test root"
 printf 'the prompt\n' >"$test_root/prompt"
+# The allow file of every claude launch: two commands, the first with blanks around it, a blank
+# line and a line of blanks between them, and no newline after the last one.
+allow_file="$test_root/allow list"
+printf '  sh a.sh \t\n\n   \ntail -1' >"$allow_file"
+printf 'sh a.sh\n' >"$test_root/allow-words"
+allowed='|--allowedTools|Bash(sh a.sh:*)|--allowedTools|Bash(tail -1:*)'
 
 # Polling checks every 0.1 second where sleep takes fractions, every second otherwise, and gives
-# up after 30 seconds either way.
+# up after 30 seconds either way (land_wait after five seconds of wall time).
 if sleep 0.1 2>/dev/null; then
     tick=0.1
     max_ticks=300
@@ -260,12 +297,13 @@ launch_into() {
     : >"$PIDS"
     : >"$NOTE_PIDS"
     : >"$ALIVE"
+    : >"$PY_LOG"
     NOTE_EXIT_FILE=$d/exit
     export NOTE_EXIT_FILE
     set -- "$harness" --cwd "$work" --model m1 --prompt "$test_root/prompt" --report "$d/report" \
         --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid" "$@"
     if [ "$harness" = claude ]; then
-        set -- "$@" --session-file "$d/session"
+        set -- "$@" --session-file "$d/session" --allow-file "$allow_file"
     else
         set -- "$@" --events "$d/events" --effort high
     fi
@@ -305,7 +343,7 @@ start_call() {
 
 claude_call() {
     printf 'claude|%s|-p|--session-id|%s' "$work" "$(cat "$d/session")"
-    printf '|--model|m1|--permission-mode|acceptEdits|--output-format|json'
+    printf '|--model|m1|--permission-mode|acceptEdits|--output-format|json%s' "$allowed"
 }
 codex_call() {
     printf 'codex|%s|exec|-C|%s|-s|workspace-write|%s-c|' "$test_root" "$work" "$1"
@@ -314,6 +352,42 @@ codex_call() {
 
 lines_at_least() {
     [ "$(wc -l <"$1")" -ge "$2" ]
+}
+
+# session_gone <session id>: no process is left in the session, found by session id with python3's
+# os.getsid, since ps prints no session id on macOS.
+session_gone() {
+    python3 -B -c '
+import os, subprocess, sys
+sid = int(sys.argv[1])
+out = subprocess.run(["ps", "-ax", "-o", "pid="], stdout=subprocess.PIPE, universal_newlines=True)
+for word in out.stdout.split():
+    try:
+        if os.getsid(int(word)) == sid:
+            sys.exit(1)
+    except OSError:
+        pass
+' "$1"
+}
+
+# now_ms: the wall clock in milliseconds.
+now_ms() {
+    perl -MTime::HiRes=time -e 'printf "%d\n", time() * 1000'
+}
+
+# land_wait <what> <leader>: the land skill's check after its KILL: within five seconds, checked
+# every tenth of a second, the leader is gone and the exit file is present; then no process is
+# left in the leader's session.
+land_wait() {
+    deadline=$(($(now_ms) + 5000))
+    until not_alive "$2" && [ -s "$d/exit" ]; do
+        if [ "$(now_ms)" -gt "$deadline" ]; then
+            not_alive "$2" || fail "$1: the session leader is still running after five seconds"
+            fail "$1: no exit file five seconds after the KILL"
+        fi
+        sleep "$tick"
+    done
+    wait_until "$1: a process of the session is still running" session_gone "$2"
 }
 
 has_builder_call() {
@@ -347,7 +421,7 @@ expect_calls "$(codex_call '-c|sandbox_workspace_write.network_access=true|')" \
 settings 6 0 note-7 '' 0 0
 run a6 claude --resume sess-r
 claude_resume_call="claude|$work|-p|--resume|sess-r|--model|m1|--permission-mode|acceptEdits"
-claude_resume_call="$claude_resume_call|--output-format|json"
+claude_resume_call="$claude_resume_call|--output-format|json$allowed"
 expect_calls "$claude_resume_call" "claude resuming a session"
 expect_file "$d/report" "the prompt" "claude resuming a session"
 expect_file "$d/exit" "exit 6" "claude resuming a session"
@@ -422,8 +496,9 @@ NOTE_EXIT_FILE=$d/exit
 export NOTE_EXIT_FILE
 sh "$launch" claude --cwd "work dir" --model m1 --prompt prompt --report "rel-a out/report" \
     --stderr "rel-a out/stderr" --exit "rel-a out/exit" --pid "rel-a out/pid" \
-    --session-file "rel-a out/session" --note "$note" --id "rel-a out/id" --label 2.B/7 \
-    --parent sess-5 || fail "a relative claude launch failed"
+    --session-file "rel-a out/session" --allow-file "allow list" --note "$note" \
+    --id "rel-a out/id" \
+    --label 2.B/7 --parent sess-5 || fail "a relative claude launch failed"
 cat "$d/pid" >>"$scratch/launched"
 wait_file "$d/exit"
 expect_calls "$(start_call 2.B/7 claude sess-5)
@@ -448,7 +523,8 @@ settings 0 1 note-7 '' 0 0
 printf 'exit 9\n' >"$test_root/rel-s-exit"
 printf 'exit 9\n' >"$work/rel-s-exit"
 sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" --report rel-s-report \
-    --stderr rel-s-stderr --exit rel-s-exit --pid rel-s-pid --resume sess-r ||
+    --stderr rel-s-stderr --exit rel-s-exit --pid rel-s-pid --resume sess-r \
+    --allow-file "allow list" ||
     fail "a relative stale launch failed"
 cat rel-s-pid >>"$scratch/launched"
 [ ! -e "$test_root/rel-s-exit" ] ||
@@ -582,8 +658,7 @@ kill -TERM "$leader" || fail "land sequence with KILL: could not send TERM"
 sleep 2
 kill -0 "$leader" 2>/dev/null || fail "land sequence with KILL: the leader was gone before the KILL"
 kill -KILL "$leader"
-wait_until "land sequence with KILL: the session leader is still running" not_alive "$leader"
-[ -s "$d/exit" ] || fail "land sequence with KILL: no exit file"
+land_wait "land sequence with KILL" "$leader"
 expect_file "$d/exit" "exit 143" "land sequence with KILL"
 expect_gone "land sequence with KILL" "$PIDS"
 expect_gone "land sequence with KILL, the note" "$NOTE_PIDS"
@@ -614,8 +689,9 @@ exit file already written" "$sig to the session leader"
 done
 
 # The land skill's sequence against a builder that ignores TERM and has a child in a process group
-# of its own: TERM, then KILL two seconds later if the pid is still alive. Here the leader has
-# ended within its own one-second grace.
+# of its own: TERM, then KILL two seconds later if the pid is still alive, then the land skill's
+# wait for the pid to be gone and the exit file present. Whether the KILL finds the leader alive
+# depends on how long its stop takes, which a loaded machine stretches past two seconds.
 settings 0 60 note-7 '' 0 0
 STUB_IGNORE_TERM=1 STUB_OWN_GROUP=1
 export STUB_IGNORE_TERM STUB_OWN_GROUP
@@ -627,9 +703,8 @@ sleep 2
 if kill -0 "$leader" 2>/dev/null; then
     kill -KILL "$leader"
 fi
-wait_until "land sequence: the session leader is still running" not_alive "$leader"
+land_wait "land sequence" "$leader"
 expect_gone "land sequence" "$PIDS"
-[ -s "$d/exit" ] || fail "land sequence: no exit file"
 expect_file "$d/exit" "exit 143" "land sequence"
 
 # A descendant of the builder outside its process group gets TERM before the KILL.
@@ -656,17 +731,130 @@ wait_file "$d/exit"
 expect_file "$d/exit" "exit 143" "a job of the leader's session"
 expect_gone "a job of the leader's session" "$PIDS"
 
-# KILL to the leader alone: the builder's runner sees its parent gone and stops every process of
-# the session within about a second; no exit file is written.
+# KILL to the leader alone: the builder's runner sees its parent gone, stops every process of the
+# session within about a second and writes the exit file, exit 137.
 settings 0 60 note-7 '' 0 0
 launch_into leader-killed claude
 wait_until "leader killed: the builder never recorded its pids" lines_at_least "$PIDS" 2
+leader=$(cat "$d/pid")
 began=$(date +%s)
-kill -KILL "$(cat "$d/pid")"
+kill -KILL "$leader"
 expect_gone "KILL to the leader alone" "$PIDS"
 took=$(($(date +%s) - began))
 [ "$took" -le 3 ] || fail "KILL to the leader alone: the builder ran on for $took seconds"
-[ ! -e "$d/exit" ] || fail "KILL to the leader alone: an exit file was written"
+land_wait "KILL to the leader alone" "$leader"
+expect_file "$d/exit" "exit 137" "KILL to the leader alone"
+
+# KILL to the leader alone while the builder ignores TERM and has a child in a process group of its
+# own: the runner's stop ends them with KILL after its grace, and the exit file says exit 137.
+settings 0 60 note-7 '' 0 0
+STUB_IGNORE_TERM=1 STUB_OWN_GROUP=1
+export STUB_IGNORE_TERM STUB_OWN_GROUP
+launch_into leader-killed-hard claude
+wait_until "leader killed, TERM ignored: the builder never recorded its pids" \
+    lines_at_least "$PIDS" 3
+leader=$(cat "$d/pid")
+kill -KILL "$leader"
+land_wait "KILL to the leader alone, TERM ignored" "$leader"
+expect_gone "KILL to the leader alone, TERM ignored" "$PIDS"
+expect_file "$d/exit" "exit 137" "KILL to the leader alone, TERM ignored"
+# The launch resolves python3 to its interpreter once, so the session scanner starts without a
+# wrapper on PATH (a version manager's shim can take seconds on a loaded machine).
+[ ! -s "$PY_LOG" ] ||
+    fail "KILL to the leader alone, TERM ignored: the scanner started through python3 on PATH"
+
+# The land skill's sequence when the runner's stop takes longer than two seconds (widened by a
+# sleep in a patched copy), so the KILL always finds the leader waiting on the runner: the runner
+# writes the exit file itself once it has stopped the builder, with the code of the signal the
+# leader passed on to it (TERM 143, INT 130).
+patched slow-stop \
+    's/(\nsub stop \{\n.*?\n)/$1    Time::HiRes::sleep(2.5) if \$limit == 0;\n/'
+for pair in TERM:143 INT:130; do
+    sig=${pair%%:*}
+    code=${pair#*:}
+    settings 0 60 note-7 '' 0 0
+    STUB_IGNORE_TERM=1 STUB_OWN_GROUP=1
+    export STUB_IGNORE_TERM STUB_OWN_GROUP
+    launch=$patched_launch
+    launch_into "slow-stop-$sig" claude
+    launch=$script_dir/launch.sh
+    wait_until "slow stop, $sig: the builder never recorded its pids" lines_at_least "$PIDS" 3
+    leader=$(cat "$d/pid")
+    kill -s "$sig" "$leader" || fail "slow stop, $sig: could not signal the session leader"
+    sleep 2
+    kill -0 "$leader" 2>/dev/null || fail "slow stop, $sig: the leader was gone before the KILL"
+    kill -KILL "$leader"
+    land_wait "land sequence with a slow stop, $sig" "$leader"
+    expect_gone "land sequence with a slow stop, $sig" "$PIDS"
+    expect_file "$d/exit" "exit $code" "land sequence with a slow stop, $sig"
+done
+
+# The builder ends while the leader is being killed, and the runner finds both at once (its first
+# look delayed by a sleep in a patched copy): the exit file holds the builder's own code.
+patched late-look \
+    's/(\nmy \$start = Time::HiRes::time\(\);\n)/$1Time::HiRes::sleep(2) if \$limit == 0;\n/'
+settings 3 1 note-7 '' 0 0
+launch=$patched_launch
+launch_into late-look claude
+launch=$script_dir/launch.sh
+wait_until "late look: the builder never recorded its pids" lines_at_least "$PIDS" 2
+leader=$(cat "$d/pid")
+kill -KILL "$leader"
+land_wait "the builder ended as the leader was killed" "$leader"
+expect_file "$d/exit" "exit 3" "the builder ended as the leader was killed"
+
+# An exit file the leader has written is never replaced by the runner: a patched copy writes exit 5
+# as soon as the builder starts, and KILL to the leader then leaves exit 5.
+patched keep-exit 's/(\n    "run_\$harness" &\n    spawned "\$!"\n)/$1    write_exit 5\n/'
+settings 0 60 note-7 '' 0 0
+launch=$patched_launch
+launch_into keep-exit claude
+launch=$script_dir/launch.sh
+wait_until "keep exit: the builder never recorded its pids" lines_at_least "$PIDS" 2
+wait_file "$d/exit"
+leader=$(cat "$d/pid")
+kill -KILL "$leader"
+expect_gone "an exit file the leader wrote" "$PIDS"
+wait_until "an exit file the leader wrote: a process of the session is still running" \
+    session_gone "$leader"
+expect_file "$d/exit" "exit 5" "an exit file the leader wrote"
+
+# TERM and then KILL to the leader while the note's end hangs, ignoring TERM, after the builder
+# ended: the leader writes the builder's code to the exit file before it stops end, so the KILL,
+# arriving during that stop, still leaves the exit file.
+settings 0 0 note-7 '' 0 0
+NOTE_HANG=end NOTE_IGNORE_TERM=1
+export NOTE_HANG NOTE_IGNORE_TERM
+launch_into end-kill claude --note "$note" --id "$test_root/end-kill out/id" --label 2.B/9 \
+    --parent sess-7
+wait_until "end kill: end never hung" lines_at_least "$NOTE_PIDS" 3
+leader=$(cat "$d/pid")
+kill -TERM "$leader" || fail "end kill: could not send TERM"
+sleep "$tick"
+kill -KILL "$leader" 2>/dev/null
+land_wait "TERM and KILL while end hangs" "$leader"
+expect_file "$d/exit" "exit 0" "TERM and KILL while end hangs"
+expect_gone "TERM and KILL while end hangs" "$NOTE_PIDS"
+
+# TERM and then KILL to the leader while the note's start hangs, ignoring TERM: no builder ran, the
+# start call's runner stops the note once the leader is gone and writes no exit file.
+settings 0 0 note-7 '' 0 0
+NOTE_HANG=start NOTE_IGNORE_TERM=1
+export NOTE_HANG NOTE_IGNORE_TERM
+launch_into start-kill claude --note "$note" --id "$test_root/start-kill out/id" --label 2.B/9 \
+    --parent sess-7
+wait_until "start kill: start never hung" lines_at_least "$NOTE_PIDS" 3
+leader=$(cat "$d/pid")
+kill -TERM "$leader" || fail "start kill: could not send TERM"
+sleep "$tick"
+kill -KILL "$leader" 2>/dev/null
+wait_until "TERM and KILL while start hangs: the session leader is still running" \
+    not_alive "$leader"
+expect_gone "TERM and KILL while start hangs" "$NOTE_PIDS"
+wait_until "TERM and KILL while start hangs: a process of the session is still running" \
+    session_gone "$leader"
+[ ! -e "$d/exit" ] || fail "TERM and KILL while start hangs: the start call wrote $(cat "$d/exit")"
+expect_calls "$(start_call 2.B/9 claude sess-7)" "TERM and KILL while start hangs"
 
 # A signal while the builder is being started, before the leader has recorded its pid (the window
 # widened by a sleep at the top of spawned in a patched copy): the builder is stopped once its pid
@@ -801,7 +989,8 @@ first_pid=$(cat "$d/pid")
 first_session=$(cat "$d/session")
 wait_until "twice: the builder never started" has_builder_call claude
 out=$(sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" --report "$d/report2" \
-    --stderr "$d/stderr2" --exit "$d/exit" --pid "$d/pid" --session-file "$d/session" 2>&1)
+    --stderr "$d/stderr2" --exit "$d/exit" --pid "$d/pid" --session-file "$d/session" \
+    --allow-file "$allow_file" 2>&1)
 status=$?
 [ "$status" -eq 75 ] || fail "a second launch exited $status, expected 75"
 case "$out" in
@@ -824,7 +1013,7 @@ holds_lock() {
 }
 wait_until "the lock holder never wrote its pid" holds_lock
 out=$(sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" --report "$d/report" \
-    --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid" 2>&1)
+    --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid" --allow-file "$allow_file" 2>&1)
 status=$?
 kill "$holder"
 wait "$holder" 2>/dev/null
@@ -839,7 +1028,8 @@ settings 0 0 note-7 '' 0 0
 mkdir -p "$test_root/lockpid out"
 sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" \
     --report "$test_root/lockpid out/report" --stderr "$test_root/lockpid out/stderr" \
-    --exit "$test_root/lockpid out/exit" --pid "$test_root/lockpid out/pid" &
+    --exit "$test_root/lockpid out/exit" --pid "$test_root/lockpid out/pid" \
+    --allow-file "$allow_file" &
 lock_launcher=$!
 wait "$lock_launcher" || fail "the lock pid launch failed"
 cat "$test_root/lockpid out/pid" >>"$scratch/launched"
@@ -872,7 +1062,8 @@ for n in 1 2; do
     (
         p="$test_root/pair out"
         sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" --report "$p/report" \
-            --stderr "$p/stderr$n" --exit "$p/exit" --pid "$p/pid" >/dev/null 2>&1
+            --stderr "$p/stderr$n" --exit "$p/exit" --pid "$p/pid" --allow-file "$allow_file" \
+            >/dev/null 2>&1
         echo $? >"$test_root/pair out/status$n"
     ) &
 done
@@ -889,7 +1080,7 @@ settings 0 0 note-7 '' 0 0
 d="$test_root/err out"
 mkdir -p "$d"
 sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/no such prompt" --report "$d/report" \
-    --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid2" ||
+    --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid2" --allow-file "$allow_file" ||
     fail "a launch with a missing prompt failed"
 cat "$d/pid2" >>"$scratch/launched"
 wait_file "$d/exit"
@@ -905,8 +1096,19 @@ cat "$d/pid3" >>"$scratch/launched"
 wait_file "$d/exit3"
 expect_in "$d/stderr3" "no such dir" "a missing --cwd"
 expect_calls "" "a missing --cwd"
+# A detached process that writes the pid file and ends at once is a launch, not a failure, even
+# when it ends between the launch's read of the pid file and its check for an ended process (that
+# window widened by a sleep in a patched copy).
+patched quick-end 's/(\n    exit 1 if )/\n    Time::HiRes::sleep(0.5);$1/'
+sh "$patched_launch" codex --cwd "$test_root/no such dir" --model m1 --prompt "$test_root/prompt" \
+    --report "$d/report" --stderr "$d/stderr5" --exit "$d/exit5" --pid "$d/pid5" \
+    --events "$d/events" --effort high --resume thr-1 ||
+    fail "a detached process that ends right after writing the pid file failed the launch"
+cat "$d/pid5" >>"$scratch/launched"
+wait_file "$d/exit5"
 out=$(sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" --report "$d/report" \
-    --stderr "$test_root/no such dir/stderr" --exit "$d/exit4" --pid "$d/pid4" 2>&1)
+    --stderr "$test_root/no such dir/stderr" --exit "$d/exit4" --pid "$d/pid4" \
+    --allow-file "$allow_file" 2>&1)
 status=$?
 [ "$status" -eq 1 ] || fail "a stderr file that cannot be written exited $status, expected 1"
 [ ! -s "$d/pid4" ] || fail "a stderr file that cannot be written: a builder was started"
@@ -929,7 +1131,8 @@ run sid claude
 settings 0 0 note-7 '' 0 0
 : >"$CALLS"
 sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" --report "$d/report" \
-    --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid" || fail "a launch with no session file failed"
+    --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid" --allow-file "$allow_file" ||
+    fail "a launch with no session file failed"
 cat "$d/pid" >>"$scratch/launched"
 wait_file "$d/exit"
 got=$(sed -n 's/^claude|[^|]*|-p|--session-id|\([0-9a-f-]\{36\}\)|--model|.*/\1/p' "$CALLS")
@@ -961,11 +1164,12 @@ usage_error() {
     esac
 }
 full="--cwd x --model m --prompt p --report r --stderr s --exit e --pid p"
+claude_full="$full --allow-file allow-words"
 out=$(sh "$launch" 2>&1)
 status=$?
 [ "$status" -eq 64 ] || fail "a launch with no arguments exited $status, expected 64"
 case "$out" in
-    Usage:*"--session-file <file>"*) ;;
+    Usage:*"--session-file <file>"*"--allow-file <file>"*) ;;
     *) fail "a launch with no arguments printed $out, expected the usage text alone" ;;
 esac
 [ "$(printf '%s\n' "$out" | grep -c -e '--label <entry>/<step>')" -eq 2 ] ||
@@ -985,13 +1189,16 @@ done
 usage_error "--events is required for codex" "codex $full --effort high"
 usage_error "--effort is required for codex" "codex $full --events v"
 usage_error "--session-file is for claude only" "codex $full --events v --effort high --session-file f"
+usage_error "--allow-file is for claude only" \
+    "codex $full --events v --effort high --allow-file allow-words"
 usage_error "--events is for codex only" "claude $full --events v"
 usage_error "--effort is for codex only" "claude $full --effort high"
 usage_error "--network is for codex only" "claude $full --network"
-usage_error "--id is required with --note" "claude $full --note /n --label l --parent p"
-usage_error "--label is required with --note" "claude $full --note /n --id i --parent p"
-usage_error "--parent is required with --note" "claude $full --note /n --id i --label l"
-for name in cwd model prompt report stderr exit pid events effort label parent resume session-file; do
+usage_error "--id is required with --note" "claude $claude_full --note /n --label l --parent p"
+usage_error "--label is required with --note" "claude $claude_full --note /n --id i --parent p"
+usage_error "--parent is required with --note" "claude $claude_full --note /n --id i --label l"
+for name in cwd model prompt report stderr exit pid events effort label parent resume session-file \
+    allow-file; do
     usage_error "--$name is not a transcript option" "transcript --$name v /t"
 done
 usage_error "--network is not a transcript option" "transcript --network /t"
@@ -1015,5 +1222,80 @@ case "$out" in
     *"--session-file needs a file name, not an empty value"*) ;;
     *) fail "an empty --session-file printed $out" ;;
 esac
+
+# A claude launch whose allow file is left out or cannot give a command is refused with exit 64 and
+# the usage text before anything starts: no stderr, pid, lock or session file is written and no
+# builder runs. refused_launch <case> <message> [extra options...]. Red when --allow-file is not
+# required for claude, or when the file is not checked before the launch goes on.
+refused_launch() {
+    what=$1
+    want=$2
+    shift 2
+    d="$test_root/refused out"
+    rm -rf "$d"
+    mkdir -p "$d"
+    : >"$CALLS"
+    out=$(sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" \
+        --report "$d/report" --stderr "$d/stderr" --exit "$d/exit" --pid "$d/pid" \
+        --session-file "$d/session" "$@" 2>&1)
+    status=$?
+    [ "$status" -eq 64 ] || fail "$what: exited $status, expected 64: $out"
+    case "$out" in
+        *"$want"*Usage:*) ;;
+        *) fail "$what: printed $out, expected $want and the usage text" ;;
+    esac
+    for f in stderr pid pid.lock session exit; do
+        [ ! -e "$d/$f" ] || fail "$what: the launch wrote $d/$f"
+    done
+    expect_calls "" "$what"
+}
+settings 0 0 note-7 '' 0 0
+refused_launch "claude without --allow-file" "--allow-file is required for claude"
+refused_launch "claude with --allow-file empty" \
+    "--allow-file needs a file name, not an empty value" \
+    --allow-file ''
+refused_launch "an allow file that does not exist" \
+    "--allow-file names no readable file: $test_root/no such allow list" \
+    --allow-file "$test_root/no such allow list"
+refused_launch "a relative allow file that does not exist, named from the caller's directory" \
+    "--allow-file names no readable file: $test_root/no such allow list" \
+    --allow-file "no such allow list"
+refused_launch "an allow file that is a directory" "--allow-file names no readable file: $work" \
+    --allow-file "$work"
+printf '\n  \n\t\n' >"$test_root/blank allow list"
+refused_launch "an allow file of blank lines" \
+    "--allow-file names a file with no command: $test_root/blank allow list" \
+    --allow-file "$test_root/blank allow list"
+: >"$test_root/empty allow list"
+refused_launch "an empty allow file" \
+    "--allow-file names a file with no command: $test_root/empty allow list" \
+    --allow-file "$test_root/empty allow list"
+printf 'sh a.sh\n' >"$test_root/closed allow list"
+chmod 000 "$test_root/closed allow list"
+[ ! -r "$test_root/closed allow list" ] ||
+    fail "the test runs as a user who reads a file of mode 000"
+refused_launch "an allow file that cannot be read" \
+    "--allow-file names no readable file: $test_root/closed allow list" \
+    --allow-file "$test_root/closed allow list"
+chmod 600 "$test_root/closed allow list"
+# A line holding a character no permission rule can hold is refused, naming the line. Red when the
+# check is removed (the launch goes on and passes the line to claude).
+for line in 'sh b.sh)' 'sh $X' 'sh *.sh' "sh 'q'" 'sh "q"' 'sh a\b' 'sh [a' 'sh a]' 'sh a,b' \
+    'sh {' 'sh }' 'sh (' 'sh `x`' 'sh a?'; do
+    printf 'sh a.sh\n%s\n' "$line" >"$test_root/refused allow list"
+    refused_launch "an allow file holding $line" \
+        "--allow-file holds a line with a character no rule can hold: $line" \
+        --allow-file "$test_root/refused allow list"
+done
+# A carriage return inside a line is refused, naming the line: claude would receive it inside a
+# rule. Red when the check is removed (the launch goes on).
+printf 'sh a.sh\nsh a\rb.sh z\n' >"$test_root/refused allow list"
+refused_launch "an allow file with a carriage return inside a line" \
+    "--allow-file holds a carriage return inside line 2" \
+    --allow-file "$test_root/refused allow list"
+# The control: the same launch with the allow file runs the builder with the list.
+settings 0 0 note-7 '' 0 0
+run allow-control claude
+expect_calls "$(claude_call)" "the allow file control"
 
 printf 'PASS: launch.sh scratch tests\n'

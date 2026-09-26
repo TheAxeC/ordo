@@ -115,6 +115,60 @@ make_repo note-blank
 set_note note-blank "   "
 expect_error note-blank "launch_note is not an absolute path: '   '"
 
+# worker_allow: a list of non-empty one-line strings passes; a value that is not a list, or an
+# entry that is not such a string, is an error naming the key and the value; left out, its default
+# [] applies with a note. set_allow replaces the example's worker_allow line with the one given.
+# Red when worker_allow is not a key of the plan skill's templates/plan.yaml (unknown key), when
+# its comment gives no default (a required key), or when the entries are not checked.
+set_allow() {
+    sed -i.bak '/^worker_allow:/d' "$test_root/$1/.agents/plan.yaml"
+    [ -z "$2" ] || printf '%s\n' "$2" >>"$test_root/$1/.agents/plan.yaml"
+}
+expect_note() {
+    case "$output" in
+        *"note: $2"*) ;;
+        *) fail "$1: missing [note: $2] in: $output" ;;
+    esac
+}
+make_repo allow-ok
+set_allow allow-ok 'worker_allow: [sh a.sh]'
+expect_pass allow-ok
+make_repo allow-default
+set_allow allow-default ''
+expect_pass allow-default
+expect_note allow-default "worker_allow not set, default [] applies"
+make_repo allow-string
+set_allow allow-string 'worker_allow: sh a.sh'
+expect_error allow-string "worker_allow is a str, its default is a list: 'sh a.sh'"
+not_one_line="worker_allow holds an entry that is not a non-empty one-line string"
+make_repo allow-empty-entry
+set_allow allow-empty-entry 'worker_allow: [sh a.sh, ""]'
+expect_error allow-empty-entry "$not_one_line: ''"
+make_repo allow-blank-entry
+set_allow allow-blank-entry 'worker_allow: ["  "]'
+expect_error allow-blank-entry "$not_one_line: '  '"
+make_repo allow-two-lines
+set_allow allow-two-lines 'worker_allow: ["a\nb"]'
+expect_error allow-two-lines "$not_one_line: 'a\\nb'"
+make_repo allow-number
+set_allow allow-number 'worker_allow: [3]'
+expect_error allow-number "$not_one_line: 3"
+# An entry holding a character no permission rule can hold is an error naming the entry. Red when
+# the characters are not checked.
+make_repo allow-unruly
+for entry in "sh 'q'" 'sh "q"' 'sh $X' 'sh `x`' 'sh a\b' 'sh (' 'sh b.sh)' 'sh {' 'sh }' \
+    'sh [a' 'sh a]' 'sh a,b' 'sh *.sh' 'sh a?'; do
+    set_allow allow-unruly "worker_allow: ['$(printf '%s' "$entry" | sed "s/'/''/g")']"
+    want=$(python3 -c 'import sys; print(repr(sys.argv[1]))' "$entry")
+    expect_error allow-unruly "worker_allow holds an entry with a character no rule can hold: $want"
+done
+# The control: a list of one-line strings with spaces, surrounding blanks and a trailing slash is
+# no error.
+make_repo allow-prefixes
+set_allow allow-prefixes \
+    'worker_allow: ["python3 utils/", "sh skills/land/templates/verify.sh", " sh a.sh "]'
+expect_pass allow-prefixes
+
 make_repo projects
 mkdir -p "$test_root/projects/tools/tool-a/docs" "$test_root/projects/tools/tool-b/docs"
 for tool in tool-a tool-b; do
@@ -141,5 +195,18 @@ expect_error projects "tool-a: launch_note names a file that is not executable: 
 cp "$script_dir/../../plan/templates/plan.projects.yaml" "$test_root/projects/.agents/plan.yaml"
 sed -i.bak '/^    worker: /d' "$test_root/projects/.agents/plan.yaml"
 expect_error projects "tool-a: required key missing: worker"
+# worker_allow in the projects form: the example passes as copied, and an entry that is not a
+# non-empty one-line string names its project. Red when the example lacks the key in a project
+# (a note instead of none) or the entries are not checked.
+cp "$script_dir/../../plan/templates/plan.projects.yaml" "$test_root/projects/.agents/plan.yaml"
+output=$(python3 "$check" "$test_root/projects") || fail "projects: expected a pass, got: $output"
+case "$output" in
+    *"worker_allow not set"*) fail "projects: the example leaves worker_allow out: $output" ;;
+esac
+projects_yaml=$test_root/projects/.agents/plan.yaml
+perl -0pi -e 's/^    worker_allow: \[\]/    worker_allow: [""]/m' "$projects_yaml"
+grep -c '^    worker_allow: \[""\]' "$projects_yaml" | grep -qx 1 ||
+    fail "projects: the first worker_allow was not replaced"
+expect_error projects "tool-a: $not_one_line: ''"
 
 printf 'PASS: check_config.py scratch tests\n'

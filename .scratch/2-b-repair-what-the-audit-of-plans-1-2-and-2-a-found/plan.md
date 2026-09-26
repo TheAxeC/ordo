@@ -24,7 +24,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 6 `skills/plan-retro/templates/collect_findings.py` and its test: numbered findings and the subheadings inside a repair round read; Verification, Not checked, Closed and Usage skipped; `--exclude-listed` compared by real path; its test runs on fixtures shaped like the archived reports, and its count over the three archived plans matches a hand count written in the report (1 commit)
 - ✅ 6a `skills/plan-retro/templates/collect_findings.py` keeps every item under the four headings as a finding: the no-finding and closure word lists (`NOTHING_FOUND`, `OTHERS_REPRODUCE`, `CLOSURE`) and their tests go; `skills/plan-retro/SKILL.md` Grouping sets aside, by reading, a finding that reports no defect or a closure that holds (the cut ruled 2026-09-25); `collect_findings.test.sh` passes (1 commit)
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
-- 7a The allow list for a shell-launched `claude` builder (ruling R (a)): `skills/plan-orchestration/templates/launch.sh` passes the commands a builder may run to `claude -p` as `--allowedTools`, from the new optional key `worker_allow:` of `.agents/plan.yaml` and the ledger's configuration block, a list of command prefixes, each passed as `Bash(<prefix>:*)` (ruling S (a)), built by default from the verify list and the brief's gate commands; its test, `check_config.py` and its test, the `plan` skill's `templates/plan.yaml` and `templates/orchestrator-state.md`, and the recipe text in `plan-orchestration` change with it; proven by a real `claude -p` run under the list that runs a verify command (1 commit)
+- ✅ 7a The allow list for a shell-launched `claude` builder (ruling R (a)): `skills/plan-orchestration/templates/launch.sh` passes the commands a builder may run to `claude -p` as `--allowedTools`, from the new optional key `worker_allow:` of `.agents/plan.yaml` and the ledger's configuration block, a list of command prefixes, each passed as `Bash(<prefix>:*)` (ruling S (a)), built by default from the verify list and the brief's gate commands; its test, `check_config.py` and its test, the `plan` skill's `templates/plan.yaml` and `templates/orchestrator-state.md`, and the recipe text in `plan-orchestration` change with it; proven by a real `claude -p` run under the list that runs a verify command (1 commit)
+- 7b The exit file's remaining cases in `skills/plan-orchestration/templates/launch.sh`, found by step 7a's review of its round 2: a KILL after the builder ended, while the note's `end` runs, leaves no exit file; the runner of a killed run, still stopping its builder, writes `exit 137` after a later launch with the same exit file removed it; a KILL between the leader's two writes leaves only `<exit file>.tmp`; the runner's no-replace write (the `-e` return and the `link`) has no case that either guard's revert turns red; the runner reads its session scanner's answer with no time limit, so a stop has no bound. Each case with a test its revert turns red, run whole-suite at 16 at once under `sh` and `dash`, and the texts of `plan-orchestration` and `templates/launch-note.md` made to say what the code does (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
 - ✅ 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review); entry 15.A's goal counts and its wait on 13, which step 14's re-marked rows made false (1 commit; orchestrator, no agent)
@@ -47,6 +48,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 6, 8, 9 with each other and with 2, 3, 5 after 1.
 - 7 after 4 and after the oculus session's fixes to its launch-note setup (it is the step launched from a shell).
 - 7a before 7 resumes; step 7's builder is resumed with `launch.sh --resume` once 7a has landed.
+- 7b with 7 after 7a (their paths are disjoint); step 7's resume uses its round's own exit and pid files, which 7b's cases do not reach.
 - 4 after 2 (both edit `skills/plan-orchestration/SKILL.md`).
 - 10 after 8 (it uses step 8's mode).
 - 11, 12, 13, 14 one after another after 8 (they all edit `docs/academic-coverage.md`).
@@ -90,8 +92,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 ## Blocked, and by what
 
-- 7: step 7a's landing.
-- 17: step 7's landing, since 17 touches the rules page and every `SKILL.md`.
+- 17: step 7's and step 7b's landings, since 17 touches the rules page and every `SKILL.md`.
 - 18: every step from 1 to 17.
 - 19: step 18.
 
@@ -832,3 +833,43 @@ verify: 13 commands passed
 ```
 
 - Usage, orchestrator from step 15's landing (8becbcd) to this booking, shared with step 16 (the retro), step 7's relaunch and the wait on the rulings: 101 messages, 102285 output tokens, 664529 cache-write tokens, 19671793 cache-read tokens, 202 fresh input tokens, 375 minutes.
+
+### Step 7a, the allow list for a shell-launched claude builder (landed 2026-09-26)
+
+- Landed: `skills/plan-orchestration/templates/allow_list.py` and its test (new): the configuration's `worker_allow` entries, or else the prefixes of the simple commands of the verify list and of the brief's check commands, each prefix ended before its first word holding a quote, `$`, a backtick, a backslash, `(`, `)`, `{`, `}`, `[`, `]`, a comma, `*` or `?`; a subshell, a group, a command substitution (inside double quotes too), a shell keyword and a carriage return refused with exit 64; exit 69 without PyYAML, as `check_paths.py` and `verify.sh` have it. `launch.sh` requires `--allow-file` for `claude`, refuses it for `codex`, and passes each stripped line as `--allowedTools "Bash(<line>:*)"` on a first launch and on `--resume`. `check_config.py` checks `worker_allow`; the `plan` templates and `skills/plan/SKILL.md:52` carry the key; `plan-orchestration` gives the recipe and the resume's rule. The exit file under every stop (round 2): the builder's runner writes it after a stop on a signal and when its parent is gone (`exit 137`), never over a file present; the session scanner runs the interpreter `python3` resolves to (`LAUNCH_PYTHON`); the land skill waits five seconds after its KILL for the pid gone and the exit file.
+- User-visible changes, before and after: a `claude` launch without `--allow-file` ran under a permission mode that refused every script, and is now refused with exit 64; a KILL to the leader while the builder runs left no exit file, and now leaves `exit 137`; TERM, INT or HUP during a hanging `end` wrote the file after `end` was stopped, and now writes the builder's code first; INT and HUP reached the runner as TERM, and now as sent (INT gives 130); a detached body that wrote its pid and ended at once could fail the launch with exit 1, and now is a launch; the land skill checked the pid and the exit file once after its KILL, and now waits up to five seconds, every tenth of a second.
+- Proof, a real run: `launch.sh claude --model sonnet` in the main checkout with the allow file `allow_list.py` printed for this plan's state file (16 lines, the ASCII check as `git ls-files -coz --exclude-standard` and `xargs -0 perl -CSD -ne`) ran `sh skills/plan-orchestration/templates/allow_list.test.sh 2>&1 | tail -1` (`PASS: allow_list.py scratch tests`) and a `git ls-files ... | xargs -0 perl -CSD -ne '...'` pipeline, exit file `exit 0`, `permission_denials: []`.
+- Proof, load: the round 2 review's whole-suite runs of `launch.test.sh` at 16 at once: 0 of 16 red under `sh` and under `dash` on the step's tree, 16 of 16 `FAIL: land sequence with KILL: no exit file` on base df3c6a7.
+- Repair rounds: round 1, nine rulings (`agents/briefs/7a-round-1.md`); round 2, the one round beyond the cap for ruling 5 unbuilt and `launch.test.sh` red under load (`agents/briefs/7a-round-2.md`). The path list widened with `skills/plan/SKILL.md` line 52, `skills/land/SKILL.md` lines 39-45 and `templates/launch-note.md`.
+- Premise corrected: the brief's `worker:` line of `templates/plan.yaml` is line 11, not 10.
+- Fixes at landing (10): a carriage return inside a command refused by `allow_list.py`, with two cases; a carriage return inside an allow-file line refused by `launch.sh`, with a case; the cut case's comment made true; `land_wait` bounded by five seconds of wall time; the exit-file sentences of `launch.sh`, `plan-orchestration/SKILL.md` and `launch-note.md` made to say which stops leave no exit file, and the long ones split; the allow-list bullets of `plan-orchestration` split; the README bullets for `launch.test.sh` and `allow_list.test.sh`; `sh skills/plan-orchestration/templates/allow_list.test.sh 2>&1 | tail -1` added to this plan's verify list; `worker_allow: []` in this plan's configuration block; the brief's premise line. Each red check is quoted in `agents/reviews/7a-refuter.md`, Closed.
+- Booked as step 7b: a KILL after the builder ended leaves no exit file; a killed run's runner can write `exit 137` after a relaunch removed the file; a KILL between the leader's two writes leaves only the `.tmp`; the no-replace guards lack red cases; the scanner's answer has no time limit.
+- Verification on main, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+```
+
+- Usage, orchestrator from step 10's booking (c0ddc44) to this booking, shared with step 7's wait: 115 messages, 98508 output tokens, 535522 cache-write tokens, 23186713 cache-read tokens, 242 fresh input tokens, 405 minutes.
