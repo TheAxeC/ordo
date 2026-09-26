@@ -60,3 +60,53 @@ Files read in full: the 9 changed rows' files (SKILL.md, field_analyst, eic, met
 - 8 of the 17 `holds` rows were not read in full: interdisciplinary_review_example, hei_paper_review_example, editorial_decision_standards, review_criteria_framework, statistical_reporting_standards, and the three templates.
 
 Reviewer usage: 186,224 tokens, 36 tool uses, 451 s.
+
+## Repair round 1, refuted (on .agents/worktrees/2b-12, round start 116df6d)
+
+### Verification (rerun by the reviewer)
+
+```
+env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md
+  -> 11 PASS: lines, 10 ok: lines, "verify: 13 commands passed", exit=0
+python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+  -> ok: docs/academic-coverage.md, exit=0
+sed -n '116,146p' docs/academic-coverage.md | python3 -c '<the report's command, verbatim>'  -> 34 (34 over fc12778's copy)
+split on every [.!?] only, sentences >= 33 words -> 34 (field_analyst row), 34 (devils_advocate row); none over 35
+line-15 sentence lengths -> 20, 46 (the new definition sentence is 46 words)
+12-rows.md records -> 26; fixed 10; holds 16
+diff against main's docs/academic-coverage.md -> 15c15, 120,127c120,127, 131c131, 140c140
+cases 1-5 by the reviewer's own script: coverage ok; 26 rows, 26 files, 26 unique records in order; changed 10 = fixed 10, marks identical; largest sentence 34 before and after; no destination lost against main
+grep -n '15\.A' docs/academic-coverage.md -> 15, 54, 56, 59, 60, 64, 91, 92, 94, 120, 122-127, 140
+LC_ALL=C grep -n '[^ -~]' coverage doc, 12-rows.md, 12-report.md -> nothing
+```
+
+### Closures
+
+- Rulings 1 to 8: closed (ruling 1 on eic_agent.md:77-80 and the matching lines of the other four agents; ruling 2 on devils_advocate:348 and calibration:49, 191-193; ruling 3 on eic_agent.md:31; ruling 4 on SKILL.md:68, 395-402, 416-424; ruling 5 by grep; ruling 6 word for word on line 15; ruling 7 by running the quoted command; ruling 8 by 17 spot lines across the eight rows).
+- Ruling 6's list: rows 54 and 60, outside 116-146, name no carrying file. Row 54's plan mode would go with `references/plan_mode_protocol.md` (row 94) and `agents/socratic_mentor_agent.md` (row 64); row 60's plan-mode questions with `agents/socratic_mentor_agent.md` (row 64) and `references/plan_mode_protocol.md` (row 94), its format profiles with `agents/formatter_agent.md` (row 59).
+
+### Spec
+
+1. docs/academic-coverage.md:126: "since the first gate reviews with one model" is not in the roadmap; entry 6's gate (roadmap:51) asks for a blind side-by-side run. It holds as "the first gate's side-by-side run does not need a second model". Low.
+2. docs/academic-coverage.md:14 against :15: line 14 says a `rebuild:` skill "must cover what the file does before that entry's gate" and does not point to the exception on line 15. Low.
+3. Row 133 (`references/guided_mode_protocol.md`) does not name the synthesizer's guided-mode issue list that row 127 sends to it. Low.
+
+### Proof
+
+1. 12-rows.md record 1: "the rest of the hard gate ... (409-412)" includes SKILL.md:411, the methodology_focus panel that row 120 keeps; the dropped range is 409-410 and 412. "The version metadata (5-12)" includes 10-12, `related_skills`, which that reason does not cover. Low.
+2. The report quotes `python3 check15a.py` from its session scratchpad, which cannot be rerun; reproduced with `grep -n '15\.A'`.
+
+### Standards
+
+1. docs/academic-coverage.md:15: the new definition sentence is 46 words; the 35-word exception covers only reason cells. Splitting it into two sentences meets the rule. Low.
+
+### Behaviour
+
+- none. The move of the cross-model option into entry 15.A and the contract-driven decision's drop are stated in the report.
+
+### Not checked
+
+- The 26 source files were not read in full; only the lines the rulings and changed reasons rest on.
+- The rows outside 116-146 were checked only for their 15.A clauses.
+
+Reviewer usage: not recorded yet.

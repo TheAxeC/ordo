@@ -49,8 +49,8 @@ dispatch:
   base: fc12778
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/12-report.md
-  landing: not-started
-  round: 1, sent to the builder with agents/briefs/12-round-1.md, round start worktree commit 116df6d, paths the brief's list plus docs/academic-coverage.md lines 14-18; builder reported the round done (315,936 tokens, 20 tool uses, 547 s); reviewer over the round claude:opus through /refute, agent ab67586dbce558b7e, running
+  landing: cherry-picking
+  round: 1, sent to the builder with agents/briefs/12-round-1.md, round start worktree commit 116df6d, paths the brief's list plus docs/academic-coverage.md lines 14-18; builder reported the round done (315,936 tokens, 20 tool uses, 547 s); reviewer over the round claude:opus through /refute, agent ab67586dbce558b7e, done, 7 findings, fixed at landing
 - step: '15'
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
