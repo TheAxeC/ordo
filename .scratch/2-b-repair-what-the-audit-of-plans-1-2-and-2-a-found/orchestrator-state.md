@@ -43,13 +43,14 @@ dispatch:
   worker: claude:opus, a native background agent of the orchestrating session
   session_id: a4606a26402cb2393 (the runner's agent id)
   builder_usage: 259,411 tokens, 58 tool uses, 692 s
-  reviewer: claude:opus, through /refute, agent acb7670d161d171c5, running
+  reviewer: claude:opus, through /refute, agent acb7670d161d171c5, done, 186,224 tokens, 36 tool uses, 451 s, 12 findings ruled in agents/briefs/12-round-1.md (8 rulings)
+  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/12-refuter.md
   worktree: .agents/worktrees/2b-12
   base: fc12778
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/12-report.md
   landing: not-started
-  round: 0
+  round: 1, sent to the builder with agents/briefs/12-round-1.md, round start worktree commit 116df6d, paths the brief's list plus docs/academic-coverage.md lines 14-18
 - step: '15'
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
