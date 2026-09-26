@@ -80,7 +80,7 @@ dispatch:
   launched: 2026-09-26
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/13-report.md
   landing: not-started
-  round: 1, from wip commit 16200ee, rulings in agents/briefs/13-round-1.md, sent to the builder
+  round: 1, from wip commit 16200ee, rulings in agents/briefs/13-round-1.md, builder done (69,054 tokens, 15 tool uses, 542 s), round reviewer claude:opus agent ad962b768aa05eddd running
 - step: '14'
   executor: agent
   worker: claude:opus, a native background agent of the orchestrating session
