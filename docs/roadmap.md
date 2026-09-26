@@ -63,7 +63,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Status: [ ]
 - Goal: The grant skill with per-funder config: required sections, page limits, evaluation criteria and the funding statement.
 - Gate: the checks for limits, required sections and the statement text pass their tests; a side-by-side run on a section of a past application, compared with what was submitted.
-- Waits on: 3, for the writing base; 2, for the coverage.
+- Waits on: 3, for the writing base; 2, for the coverage: no file is marked `grant`, and the funder acknowledgement text reaches it through the paper row of `references/funding_statement_guide.md`.
 
 ## 9. literature
 
