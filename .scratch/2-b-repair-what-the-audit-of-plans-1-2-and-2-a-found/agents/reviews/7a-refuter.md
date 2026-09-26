@@ -124,3 +124,155 @@ xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705
 ## Usage
 
 About 140k tokens and 28 tool uses, from the token counter falling from 15,000,000 to about 14,860,000. Minutes were not measured.
+
+
+# Repair round 1, refuted
+
+On .agents/worktrees/2b-7a, round from 3204a18, base df3c6a7; reviewer claude:opus, a fresh agent, afa0482792415b1e8; 165,597 tokens, 42 tool uses, 991 s.
+
+## 1. Verification lines, verbatim
+
+All commands were run from /Users/axelfaes/workspace/ordo/.agents/worktrees/2b-7a.
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh /Users/axelfaes/workspace/ordo/.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+exit 0
+```
+- `sh skills/plan-orchestration/templates/allow_list.test.sh 2>&1 | tail -1` printed `PASS: allow_list.py scratch tests`.
+- `sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1` printed `PASS: launch.sh scratch tests`.
+- `LAUNCH_SHELL=dash sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1` printed `PASS: launch.sh scratch tests`.
+- `sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1` printed `PASS: check_config.py scratch tests`.
+- `python3 skills/plan-orchestration/templates/allow_list.py .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` exited 0 and printed 15 lines, the same as report lines 124-138. The last two lines are `git ls-files -coz --exclude-standard` and `xargs -0 perl -CSD -ne`. No printed prefix holds a quote, a parenthesis or a brace, so each one can be written as a `Bash(<prefix>:*)` rule.
+- The ASCII check from change-standard.md printed nothing and exited 0.
+- `git diff --numstat df3c6a7` and `wc -l` match the report's file table: allow_list.py 252, allow_list.test.sh 329, launch.sh +51 -7 (671), launch.test.sh +121 -31 (1109), and the other rows.
+- I ran reverts on scratch copies; the worktree was not touched. Each of these went red with the output the report quotes:
+  - B1, the cut removed: `FAIL: a pipe inside quotes: printed ... 'print if /a|b/'`.
+  - B3, the refusal inside double quotes removed: `FAIL: the command echo "$(date)" | wc -l: exited 0, expected 64`.
+  - B5, `KEYWORDS = set()`: `FAIL: the first word if`.
+  - The backtick removed from UNRULY: `FAIL: worker_allow entry sh `x``.
+  - `$` removed from UNRULY: `FAIL: the cut before each character`.
+  - B6, entries not stripped: `FAIL: worker_allow entries with blanks`.
+  - B7, entry characters not checked: `FAIL: worker_allow entry sh 'q'`.
+  - B2, the refusal outside quotes removed: `FAIL: the command echo $(git ls-files | wc -l)`.
+  - A8c, the newline removed from SEPARATORS: `FAIL: a newline and &`.
+  - launch.sh F2, the character check removed: `FAIL: an allow file holding sh b.sh): exited 0, expected 64`.
+  - launch.sh F1, lines not stripped: red at the `claude without a note` call comparison.
+  - check_config.py C5, the character check replaced by `elif False:`: `FAIL: allow-unruly: expected an error, got a pass`.
+
+## 2. Repair round 1, refuted
+
+### Spec
+
+1. `skills/plan-orchestration/templates/allow_list.py:158-159`
+   ```
+   if c == '"' and (command[j] == "`" or command.startswith("$(", j)):
+       raise grouped
+   ```
+   Ruling 1 refuses `$(` and a backtick "outside quotes". The diff also refuses them inside double quotes. No ruling asks for this wider refusal set. The report discloses it as judgement call 6 (line 241). It is a shape a ruling fixed, and the builder changed it, so the orchestrator should confirm it. With the ruling's literal text, `echo "$(date)" | wc -l` would print `echo` and `wc -l`; the diff refuses it.
+
+2. Ruling 5 is not closed. See Proof 1 and Behaviour 1.
+
+### Proof
+
+1. `skills/plan-orchestration/templates/launch.test.sh:630-646`, the "land sequence" case, which now waits on the leader instead of sending KILL:
+   ```
+   -sleep 2
+   -if kill -0 "$leader" 2>/dev/null; then
+   -    kill -KILL "$leader"
+   -fi
+   -wait_until "land sequence: the session leader is still running" not_alive "$leader"
+   +wait_until "land sequence: the session leader did not end on TERM" not_alive "$leader"
+   ```
+   The intermittent red that ruling 5 asked to trace and end is not ended. It is still in the case above, "land sequence with KILL" (`launch.test.sh:585-597`). That case sends TERM, sleeps a fixed 2 s, sends KILL and requires an exit file. It has the same timing race: the leader's stop (the one-second grace plus two process scans) can still be running at 2 s, and the KILL then ends the leader before it writes the exit file. My runs, whole suite, on copies:
+   - Round's tree, 4 copies at once: 3 PASS, 1 `FAIL: land sequence with KILL: no exit file`.
+   - Round's tree, 16 copies at once: 16 of 16 `FAIL: land sequence with KILL: no exit file`.
+   - Base df3c6a7, 16 copies at once: 16 of 16 the same.
+
+   The report's "after: 20/20 and 32/32 PASS" (lines 17 and 55) was measured with a harness that runs only the "land sequence" case, so it never exercises the case where the red now appears. The closure does not reproduce on the suite. The fix also removed the check rather than fixing what it guarded:
+   - The old case exercised the land skill's real sequence (TERM, then KILL at 2 s) and required an exit file.
+   - The new case sends no KILL. Its failure labels still say "land sequence".
+   - No case now covers a KILL that arrives before the exit file is written. "land sequence with KILL" holds the leader alive with a hanging note `end`, which runs after the exit file is written, so it covers only a KILL that arrives after that point.
+   - The wait itself is bounded: `wait_until` gives up after `max_ticks` (300 ticks of 0.1 s, or 30 of 1 s, set at lines 213-217).
+
+2. `allow_list.py`, the removed line-break refusal (round 0: `if any("\n" in prefix or "\r" in prefix for prefix in found): raise Refusal(...)`). Report line 42 says "no prefix can hold a line break". A carriage return outside quotes proves that false. On a state file with `verify: ["sh a\rb.sh z", "sh c.sh\r"]`:
+   - The round's script exits 0 and prints `sh a\rb.sh z` and `sh c.sh\r` (`od -c` shows `\r` inside both lines).
+   - Round 0 (`git show 3204a18:...allow_list.py`) refused it: `allow_list.py: the command holds a line break inside a word: 'sh a\rb.sh z'`, exit 64.
+
+   The case "a line break inside quotes" (`allow_list.test.sh:160-163`) was changed from expecting 64 to expecting `sh a.sh`. No case covers `\r` outside quotes. `launch.sh` strips a trailing `\r` but passes a `\r` inside a line into `Bash(...:*)`, and its `unruly` check does not catch it. This is a check removed without the input it guarded being handled.
+
+3. `allow_list.test.sh:97-99`. The comment says:
+   ```
+   # quote, $, a backtick inside single quotes, a backslash, [, ], a comma, * or ?. Red when the cut is
+   # removed (the whole simple command is printed) or when any of the characters is not in the set.
+   ```
+   With the backtick taken out of UNRULY, "the cut before each character" stays green. The first red is the later `worker_allow entry sh `x`` case. The word `'`'` holds a quote, so it is cut whatever the backtick does. For the backtick, `(`, `)`, `{` and `}`, this case cannot go red. The comment claims otherwise.
+
+4. Report line 245 (judgement call 10) says the resume rule "is written once". `skills/plan-orchestration/SKILL.md:72` ("A `claude -p` resume keeps the launch's allow file, or writes it again when `worker_allow` or the brief's check commands changed") and line 175 state the same rule. Ruling 6 asked for both places, so the text is right, but the report's claim does not reproduce.
+
+### Standards
+
+1. `skills/plan-orchestration/SKILL.md:197`, the added bullet:
+   ```
+   - A permission rule holding a quote, `$`, a backtick, ... or `?` is cut apart or ignored by `claude`, so `templates/allow_list.py` ends a prefix before the first word holding one, and refuses a command whose parts are not simple commands (...) or that starts with a shell keyword.
+   ```
+   - It is one sentence of about 60 words with three ideas, against prose standard E ("under roughly 20 words").
+   - "is cut apart or ignored by `claude`" is passive with a named actor, also against E.
+   - Ruling 8 fixed the same defect in launch.sh's head comment.
+
+2. `skills/plan-orchestration/templates/launch.sh:27-28`, head comment (unchanged text):
+   ```
+   # own code when it had already ended) and calls end, so TERM followed by KILL two seconds later
+   # leaves no builder process and an exit file.
+   ```
+   - The builder's own trace (report lines 50 and 57) shows this is false: in 7 of 64 runs under load the stop took more than 2 s and no exit file was written.
+   - My whole-suite runs above reproduce it.
+   - The round measured the defect and left the sentence as it was. Rule 14: a head comment the change's evidence shows false. Rule 12: a miss reported as a known limit (report line 57).
+
+3. Ruling 9 holds, including the test files. `git diff -U0 df3c6a7` with an awk length check prints no added `.py` or `.sh` line over 100 characters. The long lines in check_config.py (68, 74, 126) and check_config.test.sh are pre-existing. `grep` on df3c6a7 finds them at 62, 68 and 111.
+
+   The added lines over 100 are the Markdown lines, `plan.yaml:24` and `orchestrator-state.md:24`. The builder's exemption for them holds against the prose standard's actual text: section F requires "one paragraph or bullet per source line, no hard wrapping". `plan.yaml:24` carries the comment the brief prescribed word for word, and check_config.py reads the default from `# optional, default <value>.` on that same line.
+
+### Behaviour
+
+1. The land skill (`skills/land/SKILL.md:41-43`) sends a shell builder TERM, then KILL two seconds later, and refuses the landing when no exit file is present.
+   - Before and after this round, a builder that ignores TERM on a loaded machine can lose its exit file under that sequence, so /land refuses.
+   - The report states the measurement (line 57) and leaves both the 2 s and the grace unchanged.
+   - Ruling 5 allowed "the defect in launch.sh is fixed". The builder changed the test instead, and the defect the old case caught remains. It is not listed under the user-visible changes with its before and after.
+   - The report's only related user-visible line (254) describes the test change.
+
+2. `allow_list.py` now passes a mid-word `\r` from a verify or brief command through to the allow file and on to `--allowedTools`. Before this round, such a command was refused with exit 64. The report does not list this change (see Proof 2).
+
+## 3. Not checked
+
+- Whether the printed prefixes match under a real `claude -p --allowedTools` run. No claude run was made.
+- The reverts not sampled: A1-A7, A9-A12, B4, B4b, C1-C8, and launch.sh L1-L13 and E.
+- The 16-at-once and 4-at-once suite runs under `LAUNCH_SHELL=dash`.
+- Whether the "land sequence with KILL" red occurs with one suite at a time on this machine. My single runs passed. The first reviewer's single-run red was in the other case.
+- A line of the allow file changed between launch.sh's check and the builder's start (launch.sh reads the file again in `run_claude`).
+- A prose-standard review of every changed sentence beyond those cited.
+
+## 4. Usage
+
+About 157k tokens (the counter fell from 15,000,000 to about 14,843,000) and about 30 tool uses. Minutes were not measured.
