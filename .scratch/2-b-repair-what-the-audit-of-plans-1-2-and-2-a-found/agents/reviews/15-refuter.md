@@ -54,3 +54,51 @@ none. Ledger text only; `docs/roadmap.md` unchanged, its line 135 going to the u
 ## Usage
 
 Reviewer: claude:opus, agent a47b2f8d813037915, 209,446 tokens, 64 tool uses, 1,288 s.
+
+## Repair round 1, refuted
+
+On .agents/worktrees/2b-15, base bef2c67, round delta `git diff b32f293` plus the rewritten `15-report.md` and `15-rerun.md`; reviewer claude:opus, agent a8936a4bb6ee057ba.
+
+```
+worktree HEAD: b32f293 wip
+verify runner: exit 0; 11 PASS: lines; 10 ok: lines; verify: 13 commands passed
+Case 1: 50 hits; each quoted PASS: list against its "## Commit <c>" section: hits 50 bad 0 sections 26
+Case 2: 26 trees; 26 "## Commit" sections
+Case 3: 0
+Case 4: plan 1 12/12, plan 2 6/6, plan 2.A 7/7 (6 rulings and 1 premise correction), no "- none."
+Case 5: no output, grep exit 1
+Check 3: 10 ok:, exit 0
+Trees checksum 66c7472a95f6678e59227606711b0bed, unchanged
+Paths: none outside the brief's list (31); docs/roadmap.md unchanged; main git status --short empty
+ASCII and em dash checks over the 31 files: no output
+Doc text: the two variants differ only by the clause; the seven PASS: lines equal the a866716 section; log 3179/3180, 3204/3205 and 3150/3151 ("Found 10 skills", during step 14's landing) hold what the variants say
+Sentence scan over the 50 bookings: 2 sentences of 36 words (2.A plan.md:81 and 2.A 4-landing.md:9), the rest 30 or fewer
+```
+
+### Spec
+
+1. `15-rerun.md:2126`: the round's rule counts an item that restates a finding under another heading once, and on it the builder changed the usage rows of steps 4 to 12 and plan.md:152 and usage row 13 (17 to 14). Each item counted out does restate another (refuter lines checked for all ten steps), but the old figures were not false: they followed the first pass's rule, which counted a restated item under each heading. The extension beyond steps 2 and 13's round is not in ruling 3.
+2. Same line: the round's rule collapses only restatements under another heading; restatements under the same heading (`7-refuter.md:56`, `10-refuter.md:51` and `:52`, `13-refuter.md:66`) still count twice, so it does not give one count per finding either.
+3. Plans 2 and 2.A count a restating item under each heading (plan 2 step 1's 14 includes `1-refuter.md:42`; 2.A step 4's 5 includes `4-refuter.md:20`). After the round plan 1 counts under one rule and plans 2 and 2.A under another, and neither 15-rerun.md nor 15-report.md says so.
+4. `15-report.md`, "Doc text", the reason for variant 2: "the audit's finding 6 ... shows the open, booked and closed lists were never used in plan 1". The audit's own evidence (`1-process-audit.md:74`) names one open item committed in plan 1 (582298b, "Open the plan for roadmap entry 1"). True of the booked and closed lists only.
+
+### Proof
+
+1. `.scratch/archive/2-coverage-inventory-of-the-academic-skills/plan.md:81` and `agents/reviews/4-landing.md:9` cite session log line 5551 (18:38:36Z), which runs in step 5's worktree `.agents/worktrees/2-5`. The run on main at step 4's landing is line 5509 (18:36:25Z, the main checkout), result at 5511: `18` and `verify exit 0`, the same `v.sh >/dev/null 2>&1; echo "verify exit $?"` form.
+
+### Standards
+
+none.
+
+### Behaviour
+
+none.
+
+### Not checked
+
+- The case 1 control was not reproduced; the 26-commit re-run was not redone (checksum and the 50 lists checked).
+- Plan 2's closing (5960) and 2.A's step 3 and closing (7050, 7295) checked for the form of the run only.
+- The seven step descriptions of the Doc text read against the Closed sections of 4, 6, 7, 8, 10, 11 and 13-refuter.md only.
+- The "Bookings changed" section entry by entry; plan 2 and 2.A usage rows other than plan 2 step 1 and 2.A steps 2 and 4.
+
+Reviewer usage: 201,769 tokens, 65 tool uses, 679 s.
