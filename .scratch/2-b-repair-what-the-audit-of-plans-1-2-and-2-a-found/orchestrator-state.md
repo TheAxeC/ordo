@@ -69,23 +69,11 @@ dispatch:
   transcript: /Users/axelfaes/.claude-work/projects/-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7/dcce4add-8b4c-4354-b005-27cb6e39c841.jsonl
   landing: not-started
   round: 0
-- step: '14'
-  executor: agent
-  worker: claude:opus, a native background agent of the orchestrating session
-  session_id: a88b546eedf398612 (the runner's agent id)
-  builder_usage: 215,673 tokens, 128 tool uses, 1,289 s
-  reviewer: claude:opus, through /refute, agent aee170f2a8cc8cfc5, 212,129 tokens, 67 tool uses, 638 s, 6 Spec, 3 Standards and 4 Behaviour findings
-  worktree: .agents/worktrees/2b-14
-  base: 85c035d
-  launched: 2026-09-26
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/14-report.md
-  landing: cherry-picking
-  round: 1, from wip commit 93ae923, rulings in agents/briefs/14-round-1.md, paths widened to docs/academic-coverage.md line 55, builder done (288,032 tokens, 22 tool uses, 518 s), round reviewer claude:opus agent a6987f89555cf986d, 140,991 tokens, 46 tool uses, 525 s, 5 Spec and 2 Standards findings, all fixed at landing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item M (step 10, the roadmap's gates and order): the roadmap changes need your approval as a diff (ruling 2h, the `roadmap` skill), and two of them are your choice. Checked on main at f23d14a: `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 18 (8 paper, 6 literature, 3 paper-review, 1 researcher, as entry 15.A's goal says); the `rebuild:` rows per skill are writing 3, paper 32, paper-review 21, rebuttal 7, literature 19, idea 3, researcher 6, submit-manuscript 1, and code-comments, grant, scaffold, project-docs and submit-grant 0 (`grep -c '| rebuild: <skill> |'`).
+- Open item M (step 10, the roadmap's gates and order): the roadmap changes need your approval as a diff (ruling 2h, the `roadmap` skill), and two of them are your choice. Checked on main at step 14's landing: `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 15 (6 paper, 6 literature, 3 paper-review, 0 researcher; entry 15.A's goal still says 8, 6, 3 and 1, which change 7 corrects); the `rebuild:` rows per skill are writing 3, paper 34, paper-review 20, rebuttal 7, literature 22, idea 3, researcher 7, submit-manuscript 1, and code-comments, grant, scaffold, project-docs and submit-grant 0 (`grep -c '| rebuild: <skill> |'`).
   - The changes the plan already fixes, shown for approval:
     1. Entry 15.A's gate: `grep -c 'rebuild later:'` (which also counts the mark's definition at `docs/academic-coverage.md:15`, so it never reaches 0) becomes `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 0; and the gate adds: the coverage check with `--built paper --built paper-review --built literature --built researcher` prints `ok:`, and the plan's ledger holds a record for each re-marked row that the file it names holds what the source file did, checked by reading both.
     2. Entries 3, 5, 6, 7, 9, 10, 13 and 14 each add to the gate: the coverage check with `--built <its skill>` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: <its skill>` row that the file of `skills/<its skill>/` the row names holds what the source file did, checked by reading both. Entries 4, 8, 11 and 12 get no such clause, since they have no `rebuild:` row and `--built` fails a skill with none.
@@ -93,6 +81,7 @@ dispatch:
     4. Entry 7's gate adds: a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind, wins or ties.
     5. Entry 10's gate adds: a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind, wins or ties.
     6. Entry 8's "Waits on: 3, for the writing base; 2, for the coverage" becomes "3, for the writing base; 2, for the coverage: no file is marked `grant`, and the funder acknowledgement text reaches it through the paper row of `references/funding_statement_guide.md`".
+    7. Entry 15.A's goal and waits, which step 14's re-marked rows made false (`docs/roadmap.md` lines 120 and 122): the goal's "8 for paper, 6 for literature, 3 for paper-review, 1 for researcher" becomes "6 for paper, 6 for literature, 3 for paper-review", and "Waits on: 5, 6, 9 and 13, the skills the rows go to" becomes "Waits on: 5, 6 and 9, the skills the rows go to", since no `rebuild later: researcher` row is left.
   - Choice 1, the order of entries 5 and 9. The paper skill's DOI check and its integrity row (`agents/integrity_verification_agent.md`, looking every reference up) need the lookups through Crossref, OpenAlex, Semantic Scholar and arXiv, and their five rows are `rebuild: literature` (entry 9), which entry 5 does not wait on.
     - (a) Entry 9 moves before entry 5 in the file, keeping its number, and entry 5 waits on 9 "for the reference lookups". Pro: the lookups are built once, where entry 9's goal already names them; the coverage rows stay as they are. Con: paper, the most used skill, comes one entry later.
     - (b) The five lookup rows are re-marked `rebuild: paper` and entry 9 waits on 5, reusing them. Pro: paper comes first. Con: five coverage rows and entry 9's goal are rewritten, and the literature skill depends on the paper skill for its core search.
@@ -101,7 +90,7 @@ dispatch:
     - (a) Entry 14's goal adds: "It also writes the cover letter, with suggested and excluded reviewers, and removes what identifies the authors for a blind review, from the venue file." Pro: matches both rows as written; both are made per venue at submission, from the venue files entry 14 already waits on. Con: a cover letter for a venue with no portal waits for entry 14.
     - (b) Both move to entry 5: entry 5's goal names them, and rows 59 and 90 are rewritten to `paper`. Pro: available with the first writing skill. Con: two rows rewritten, and the paper skill takes venue-specific work without the venue files of entry 13.
     - Recommendation: (a). (a) is also the cheaper option; it is recommended because the work is venue-specific and entry 14 is where the venue files and the portal meet, not because it is cheaper.
-  - To rule: `Ruled: M: changes 1-6 <approved, or what to change>; choice 1 (a) or (b); choice 2 (a) or (b)`. On the ruling, step 10 writes the approved diff through `/roadmap`, lands it, and books it.
+  - To rule: `Ruled: M: changes 1-7 <approved, or what to change>; choice 1 (a) or (b); choice 2 (a) or (b)`. On the ruling, step 10 writes the approved diff through `/roadmap`, lands it, and books it.
 - Open item N (step 7, the shell launch of its builder): the builder was launched through `templates/launch.sh` with the launch note, and the note record was written (`~/.oculus/dispatches.json` holds id 502d4c9d-3b6a-4316-8628-f519325eee87, label `2.B/7`, parent this session, the transcript path). It ran with `CLAUDE_CONFIG_DIR` unset, which by `tools/oculus/README.md:36` puts a `claude` process on the first account, not the account this session runs on (`~/.claude-work`). It was stopped with TERM before it changed any file (`exit 143` in the exit file; `git status --short` in the worktree prints nothing). A relaunch with `CLAUDE_CONFIG_DIR` kept was refused by the permission classifier, so the builder is not running. Two things are yours:
   - Which account the shell-launched builder runs on.
     - (a) This session's account: relaunch with `CLAUDE_CONFIG_DIR=/Users/axelfaes/.claude-work` kept, which needs your permission for that launch (a Bash permission rule, or you run the launch command yourself with `!`). Pro: the builder is billed and configured like every other agent of this plan. Con: one permission to grant.
@@ -115,10 +104,10 @@ dispatch:
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 - Step 10: roadmap entry 14 (`docs/roadmap.md:106-108`) names portal filling and a submission record but not the cover letter and blind-review removal that the coverage rows at `docs/academic-coverage.md:59` and `:90` send to `submit-manuscript`; step 10 names them in entry 14's goal or moves them to entry 5, through `/roadmap` with the diff shown (found by step 11's review over round 2).
-- Step 14: the two ethics rows of the audit's finding 13 (`ethics_checklist`, `ethics_review_agent`) are deep-research rows, `docs/academic-coverage.md` lines 190 and 218 at base ebf3c8c; step 14's brief checks them against finding 13 (found by step 11's review, Behaviour).
 
 ## Closed items
 
+- 2026-09-26: booked item, the two ethics rows of the audit's finding 13: checked at step 14 and re-marked `rebuild: paper` (`plan.md`, Step 14).
 - 2026-09-25: open item L, style calibration in the `intake_agent.md` coverage row: ruled (a); the paper skill (entry 5) learns the author's voice from past papers, subordinate to the prose standard, and the row names it; carried into step 11.
 - 2026-09-25: the plan cut to its goal: step 1b removed, step 1a cut to the runner's move, step 6a replaced by the collector keeping every finding; step 1c stays.
 - 2026-09-25: open item K, how a brief's cases are checked: ruled, no prototype scripts; the scripts of step 6a removed; the builder runs the brief's cases as tests first and reports any case the brief's rules get wrong before it changes code (step 1c).
@@ -159,8 +148,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12 and 13 landed (steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11 and 12 at 5fdaa98, 76a2b10, f23d14a, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7, 617f8f3 and 415d669; step 13 in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 10 stopped on open item M; step 14 is in its round review and lands next; step 15 is dispatched; step 7's builder is stopped on open item N; then 16 to 19.
+- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12, 13 and 14 landed (steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 8, 9, 11, 12 and 13 at 5fdaa98, 76a2b10, f23d14a, 6458d52, fafda10, 3fbc652, e69b588, e9633bd, 1e09d35, 3867456, 129a3f7, 617f8f3, 415d669 and 3509ccb; step 14 in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 10 stopped on open item M; step 15 is dispatched; step 7's builder is stopped on open item N; step 16 follows step 15's landing; then 17 to 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -181,3 +170,4 @@ dispatch:
 | 1c | claude:opus agent, effort high: 199,787 tokens, 61 tool uses, 1,692 s; round 1: 257,183 tokens, 38 tool uses, 833 s | 130,251 tokens, 35 tool uses, 572 s; round 1: 100,387 tokens, 21 tool uses, 384 s | 1 | 8 (8 rulings) | 11 files changed, 674 insertions(+), 15 deletions(-) | no | 4 | 0 | 47 | 41917 | 134263 | 7721087 | 102 | 66 | none |
 | 12 | claude:opus agent, effort high: 259,411 tokens, 58 tool uses, 692 s; round 1: 315,936 tokens, 20 tool uses, 547 s | 186,224 tokens, 36 tool uses, 451 s; round 1: 101,372 tokens, 25 tool uses, 424 s | 1 | 10 (8 rulings) | 1 file changed, 15 insertions(+), 15 deletions(-) | no | 7 | 0 | 89 | 80935 | 186307 | 21832166 | 186 | 47 | none |
 | 13 | claude:opus agent, effort high: 341,486 tokens, 63 tool uses, 1,139 s; round 1: 69,054 tokens, 15 tool uses, 542 s | 270,063 tokens, 43 tool uses, 488 s; round 1: 167,958 tokens, 38 tool uses, 458 s | 1 | 4 (5 rulings) | 1 file changed, 7 insertions(+), 7 deletions(-) | no | 6 | 0 | 60 | 54060 | 170161 | 10545292 | 136 | 51 | none |
+| 14 | claude:opus agent, effort high: 215,673 tokens, 128 tool uses, 1,289 s; round 1: 288,032 tokens, 22 tool uses, 518 s | 212,129 tokens, 67 tool uses, 638 s; round 1: 140,991 tokens, 46 tool uses, 525 s | 1 | 13 (9 rulings) | 1 file changed, 24 insertions(+), 24 deletions(-) | no | 7 | 0 | 15 | 15993 | 32470 | 2858340 | 32 | 7 | none |

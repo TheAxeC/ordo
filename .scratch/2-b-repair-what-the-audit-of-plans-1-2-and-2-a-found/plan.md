@@ -26,11 +26,11 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
-- 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review) (1 commit; orchestrator, no agent)
+- 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review); entry 15.A's goal counts and its wait on 13, which step 14's re-marked rows made false (1 commit; orchestrator, no agent)
 - ✅ 11 Coverage rows of academic-paper (61 rows): a builder reads every file in full, checks its row's mark, reason and target, fixes each defective row, and writes one record per row (the file read, the verdict, the change) to `agents/reviews/11-rows.md`; the record count equals the row count, and the coverage check passes (1 commit)
 - ✅ 12 Coverage rows of academic-paper-reviewer (26 rows), as step 11, records in `agents/reviews/12-rows.md` (1 commit)
 - ✅ 13 Coverage rows of academic-pipeline (30 rows), as step 11, records in `agents/reviews/13-rows.md` (1 commit)
-- 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
+- ✅ 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
 - 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit)
 - 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit)
@@ -97,7 +97,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 ### Step 10, Step 0 (stop: open item M)
 
-- Open item M (step 10, the roadmap's gates and order): the roadmap changes need your approval as a diff (ruling 2h, the `roadmap` skill), and two of them are your choice. Checked on main at f23d14a: `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 18 (8 paper, 6 literature, 3 paper-review, 1 researcher, as entry 15.A's goal says); the `rebuild:` rows per skill are writing 3, paper 32, paper-review 21, rebuttal 7, literature 19, idea 3, researcher 6, submit-manuscript 1, and code-comments, grant, scaffold, project-docs and submit-grant 0 (`grep -c '| rebuild: <skill> |'`).
+- Open item M (step 10, the roadmap's gates and order): the roadmap changes need your approval as a diff (ruling 2h, the `roadmap` skill), and two of them are your choice. Checked on main at step 14's landing: `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 15 (6 paper, 6 literature, 3 paper-review, 0 researcher; entry 15.A's goal still says 8, 6, 3 and 1, which change 7 corrects); the `rebuild:` rows per skill are writing 3, paper 34, paper-review 20, rebuttal 7, literature 22, idea 3, researcher 7, submit-manuscript 1, and code-comments, grant, scaffold, project-docs and submit-grant 0 (`grep -c '| rebuild: <skill> |'`).
   - The changes the plan already fixes, shown for approval:
     1. Entry 15.A's gate: `grep -c 'rebuild later:'` (which also counts the mark's definition at `docs/academic-coverage.md:15`, so it never reaches 0) becomes `grep -c '| rebuild later: ' docs/academic-coverage.md` prints 0; and the gate adds: the coverage check with `--built paper --built paper-review --built literature --built researcher` prints `ok:`, and the plan's ledger holds a record for each re-marked row that the file it names holds what the source file did, checked by reading both.
     2. Entries 3, 5, 6, 7, 9, 10, 13 and 14 each add to the gate: the coverage check with `--built <its skill>` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: <its skill>` row that the file of `skills/<its skill>/` the row names holds what the source file did, checked by reading both. Entries 4, 8, 11 and 12 get no such clause, since they have no `rebuild:` row and `--built` fails a skill with none.
@@ -105,6 +105,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
     4. Entry 7's gate adds: a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind, wins or ties.
     5. Entry 10's gate adds: a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind, wins or ties.
     6. Entry 8's "Waits on: 3, for the writing base; 2, for the coverage" becomes "3, for the writing base; 2, for the coverage: no file is marked `grant`, and the funder acknowledgement text reaches it through the paper row of `references/funding_statement_guide.md`".
+    7. Entry 15.A's goal and waits, which step 14's re-marked rows made false (`docs/roadmap.md` lines 120 and 122): the goal's "8 for paper, 6 for literature, 3 for paper-review, 1 for researcher" becomes "6 for paper, 6 for literature, 3 for paper-review", and "Waits on: 5, 6, 9 and 13, the skills the rows go to" becomes "Waits on: 5, 6 and 9, the skills the rows go to", since no `rebuild later: researcher` row is left.
   - Choice 1, the order of entries 5 and 9. The paper skill's DOI check and its integrity row (`agents/integrity_verification_agent.md`, looking every reference up) need the lookups through Crossref, OpenAlex, Semantic Scholar and arXiv, and their five rows are `rebuild: literature` (entry 9), which entry 5 does not wait on.
     - (a) Entry 9 moves before entry 5 in the file, keeping its number, and entry 5 waits on 9 "for the reference lookups". Pro: the lookups are built once, where entry 9's goal already names them; the coverage rows stay as they are. Con: paper, the most used skill, comes one entry later.
     - (b) The five lookup rows are re-marked `rebuild: paper` and entry 9 waits on 5, reusing them. Pro: paper comes first. Con: five coverage rows and entry 9's goal are rewritten, and the literature skill depends on the paper skill for its core search.
@@ -113,7 +114,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
     - (a) Entry 14's goal adds: "It also writes the cover letter, with suggested and excluded reviewers, and removes what identifies the authors for a blind review, from the venue file." Pro: matches both rows as written; both are made per venue at submission, from the venue files entry 14 already waits on. Con: a cover letter for a venue with no portal waits for entry 14.
     - (b) Both move to entry 5: entry 5's goal names them, and rows 59 and 90 are rewritten to `paper`. Pro: available with the first writing skill. Con: two rows rewritten, and the paper skill takes venue-specific work without the venue files of entry 13.
     - Recommendation: (a). (a) is also the cheaper option; it is recommended because the work is venue-specific and entry 14 is where the venue files and the portal meet, not because it is cheaper.
-  - To rule: `Ruled: M: changes 1-6 <approved, or what to change>; choice 1 (a) or (b); choice 2 (a) or (b)`. On the ruling, step 10 writes the approved diff through `/roadmap`, lands it, and books it.
+  - To rule: `Ruled: M: changes 1-7 <approved, or what to change>; choice 1 (a) or (b); choice 2 (a) or (b)`. On the ruling, step 10 writes the approved diff through `/roadmap`, lands it, and books it.
 
 ### Step 1, the verify runner (landed 2026-09-25)
 
@@ -650,3 +651,43 @@ verify: 13 commands passed
   and exited 0. `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`.
 - Booked: nothing new.
 - Usage, orchestrator from step 12's landing (415d669) to this booking: 60 messages, 54060 output tokens, 170161 cache-write tokens, 10545292 cache-read tokens, 136 fresh input tokens, 51 minutes; the window also holds the reviews and repair round of step 14.
+
+### Step 14, the coverage rows of deep-research (landed 2026-09-26)
+
+- Landed: every one of the 52 files of research-hub's `deep-research` read in full and its row of `docs/academic-coverage.md` checked; records in `agents/reviews/14-rows.md` (52, 23 `fixed`, 29 `holds`). 23 rows of the section rewritten and row 55 of academic-paper (`agents/abstract_bilingual_agent.md`) names the abstract-only protections it takes. Six marks changed: `agents/editor_in_chief_agent.md` drop to `rebuild: literature` (audit finding 12: the literature report's revision loop keeps its editorial review); `agents/ethics_review_agent.md` and `references/ethics_checklist.md` `rebuild later: paper` to `rebuild: paper` (finding 13: entry 5's disclosure statements need the data-licence, dual-use and human-subject checks before its gate); `references/argumentation_reasoning_framework.md` `rebuild: paper-review` to `rebuild: literature` (finding 9); `agents/research_architect_agent.md` `rebuild later: researcher` to `rebuild: researcher` (entry 13's goal designs the next experiments); `references/interdisciplinary_bridges.md` drop to `rebuild: literature`. The pipeline phase folders are dropped row by row with each file's own reason, the agents' confinement to their own deliverable kept; the style profile is optional for the literature skill, so it does not wait on entry 5.
+- User-visible changes, before and after:
+  - The mark counts: `rebuild later` 18 (8 paper, 6 literature, 3 paper-review, 1 researcher) before, 15 (6, 6, 3, 0) after; `rebuild:` paper 32 to 34, literature 19 to 22, paper-review 21 to 20, researcher 6 to 7.
+  - What entry 5 (paper) builds: after, also the ethics self-check and checklist (stop and override, data licence and privacy, dual use, conflicts with the AI-bias acknowledgement, AI disclosure, fair representation, human-subject approval, consent and de-identification) and the abstract-only protections.
+  - What entry 9 (literature) builds: after, also the editor's weighted review driving the report's revision loop, the argumentation framework and the interdisciplinary bridges.
+  - Entry 15.A's goal and waits (roadmap lines 120 and 122) are false after this step; open item M carries their correction as change 7, with its counts updated.
+- Rounds: the first review (Spec 1-6, Standards 1-3, Behaviour 1-4, Not checked), repair round 1 (9 rulings in `agents/briefs/14-round-1.md`; the path list widened to row 55), the review over it (7 findings), fixed at landing (7): the phase-folder sentences of rows 187, 189, 190, 195, 198, 199 and 200 no longer give deep-research's own phase order to `researcher` and no longer repeat one shape; row 199 keeps the synthesis agent's confinement; row 190's timing; the ethics-training reason in rows 190 and 218; the training-bias note to `paper` in row 218; the records with them (`agents/reviews/14-refuter.md`, Closed).
+- Verified on main with `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, which printed:
+
+```text
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+```
+
+  and exited 0. `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`.
+- Booked: nothing new. Closed from the booked list: the ethics rows of the audit's finding 13, checked and re-marked here. Carried to open item M: change 7 and the updated counts.
+- Usage, orchestrator from step 13's landing (3509ccb) to this booking: 15 messages, 15993 output tokens, 32470 cache-write tokens, 2858340 cache-read tokens, 32 fresh input tokens, 7 minutes.

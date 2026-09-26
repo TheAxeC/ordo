@@ -160,3 +160,15 @@ none new.
 - Not read against their files: examples/exploratory_research, examples/policy_analysis, examples/systematic_review (row only), systematic_review_toolkit, prisma_protocol_template.
 - Records other than 8, 13, 15, 17, 18, 19, 38 and 42 of 14-rows.md were counted, not read.
 - academic-paper/SKILL.md's AI disclosure section, for the checklist's AI-data labelling destination.
+
+## Closed
+
+- First review: Spec 1-5, Standards 1-3, Behaviour 2 and 4, and Not checked, each ruled in `agents/briefs/14-round-1.md` (9 rulings) and closed in repair round 1, as the review over the round confirms ruling by ruling. Spec 6 (the builder's scripts under the gitignored `.agents/b14/`) changes no tracked file and no path of another step. Behaviour 1 and 3 and Standards 3's roadmap lines are carried by open item M, change 7 (roadmap lines 120 and 122) and its updated counts, in `orchestrator-state.md` and `plan.md` Step 10, Step 0.
+- Review over round 1, fixed at landing on main:
+  1. Spec 1 and Standards 1 and 2 (one cause): rows 187, 189, 190, 195, 198, 199 and 200 no longer give the order of deep-research's own phases to `researcher`; each says in its own words that the skill taking the file runs its phases within one run, so the pipeline folder goes, and that `scripts/check_pipeline_integrity.py` is not installed. Check: `grep -c 'now owns\|is for `researcher` (entry 13) to set\|orders the stages' docs/academic-coverage.md` prints 0; the builder's tree prints 5.
+  2. Spec 2: row 199 keeps the synthesis agent's confinement to its own deliverable (synthesis_agent.md 18-23) and drops only the phase-three folders. Check: `grep -c 'The agent still delivers only the synthesis' docs/academic-coverage.md` prints 1.
+  3. Spec 3: row 190 says the paper skill runs the check before delivery within its own run. Check: `grep -c 'decided by `researcher`' docs/academic-coverage.md` prints 0; the builder's tree prints 1.
+  4. Spec 4: rows 190 and 218 drop ethics training as a qualification the board checks before approval. Check: `grep -c 'qualification' docs/academic-coverage.md` prints 2; the builder's tree prints 0.
+  5. Spec 5: row 218 sends the training-bias note to `paper` with the conflict-of-interest check of `agents/ethics_review_agent.md` (its line 99); the knowledge-cutoff drop stays. Check: `grep -c 'The training-bias note goes to `paper`' docs/academic-coverage.md` prints 1.
+  6. The records of `14-rows.md` (the header note, the ethics_review_agent and ethics_checklist records) say the same.
+- After the fixes: the coverage check prints `ok: docs/academic-coverage.md`; the largest sentence over the reason cells of 182-237 is 35 words and of row 55 is 28; `LC_ALL=C grep -c '[^ -~]' docs/academic-coverage.md` prints 0; `14-rows.md` holds 52 records.
