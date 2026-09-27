@@ -39,6 +39,7 @@ dispatch:
 - step: '20'
   executor: agent
   worker: claude:opus, a native agent in the background
+  session_id: a68d24db65932482f
   worktree: .agents/worktrees/2b-20
   base: 7d3e907
   launched: 2026-09-27
