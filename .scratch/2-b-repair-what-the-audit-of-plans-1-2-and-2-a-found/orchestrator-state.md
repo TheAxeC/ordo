@@ -81,7 +81,7 @@ dispatch: none
 
 - `~/.claude/CLAUDE.md` and the rules under `~/.claude/rules/`. The ones that bite here: work runs through the skills' agents, never inline; a named thing is its whole (a skill is its folder, templates included); never take the lazy option; no claim about state without a command in the same turn; plain prose, ASCII, no history in a rule file or a comment; questions as plain text, never a question-box tool.
 - `docs/dev/change-standard.md`, in full.
-- The installed skills are pinned at v1.0.0 in `~/.local/share/ordo-stable`; nothing in this plan edits the pinned worktree, and the skills that run this plan are the pinned ones.
+- The installed skills are pinned at v1.1.0 in `~/.local/share/ordo-stable`; nothing in this plan edits the pinned worktree, and the skills that run this plan are the pinned ones.
 - Nothing is installed into the user's skill folders, no `utils/pin.sh <tag>` is run, and no installed skill is removed or replaced without the user's explicit permission, asked for each time.
 - research-hub is read only.
 - Commits: a capitalised imperative subject, a blank line, `- Verb ...` bullets. No attribution of any kind. Never push. A worktree's branch is deleted with the worktree.
@@ -103,7 +103,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 21 and 23 landed (step 23 in the commit that carries this line, with step 22's work merged into it); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 23 landed and `v1.1.0` pinned; next: step 17 (the approved retro proposals without the five script proposals), then 17a, 18 and 19, under the pinned skills.
+- Roadmap entry 2.B, step 23 landed and `v1.1.0` pinned; step 17 prepared (`agents/briefs/17.md`); next after it: step 17a, then 18 and 19. Before 17: step 17 (the approved retro proposals without the five script proposals), then 17a, 18 and 19, under the pinned skills.
 - Open on Axel's side: none.
 
 ## Usage
