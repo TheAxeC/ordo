@@ -49,9 +49,9 @@ lists are read NUL-separated, so a name holding a line separator such as U+2028 
 name. A file cell and a file name on disk are compared in Unicode NFC.
 
 Fenced code is ``` or ~~~, of any length, at any indentation, closed by a line of the same character
-at least as long; a backtick fence's info string holds no backtick. This is the fence reading of
-utils/check_skill_layout.py. A "## " line inside fenced code is not a heading, a table row inside it
-is not read, and a fence left open is an error. A heading's closing hashes are not part of its name.
+at least as long; a backtick fence's info string holds no backtick. A "## " line inside fenced code
+is not a heading, a table row inside it is not read, and a fence left open is an error. A heading's
+closing hashes are not part of its name.
 
 Prints one line per error as <coverage.md>:<line>: <what is wrong> (line 0 for an error that no line
 of the list carries, such as a file the section does not list), sorted by line number and then by

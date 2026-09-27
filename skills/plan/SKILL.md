@@ -1,13 +1,13 @@
 ---
 name: plan
-description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, each approved step tagged (approved), orchestrator-state.md with the configuration block filled from the repository, and the landing script copied into the ledger. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
+description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, each approved step tagged (approved), orchestrator-state.md with the configuration block filled from the repository, and the landing script copied into the ledger with its test, the verify runner and the usage script beside it. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "1.8.0"
+  version: "1.9.0"
 ---
 
 # Open a plan
 
-`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md`, `orchestrator-state.md`, `land.sh` and `land.test.sh`, committed, and `agents/briefs/` and `agents/reviews/`, each holding an empty `.gitkeep`.
+`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh`, `verify.sh` and `usage.py`, committed, and `agents/briefs/` and `agents/reviews/`, each holding an empty `.gitkeep`.
 
 ## Quick start
 
@@ -34,7 +34,7 @@ metadata:
 2. The roadmap the configuration names.
    - `<entry>` is matched against the entries by number or title; no match is a stop ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
-4. The `land` skill's `templates/land.sh` and `templates/land.test.sh`, found as `land.sh` finds `verify.sh`: in the `land` skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`), the first that holds them; not found is a stop ("Stops").
+4. The `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py`, found as `land.sh` finds `verify.sh`. They are read from the `land` skill's `templates/` under the first of these that holds them: the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). Not found is a stop ("Stops").
 
 ## Steps
 
@@ -56,13 +56,14 @@ metadata:
    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
    - The orchestrator chooses the executor per step over that default.
    - The dispatch block is empty, the open items are empty, and the position names the first step.
-5. Copy the `land` skill's `templates/land.sh` and `templates/land.test.sh` into the ledger folder, since `/land` requires the ledger's `land.sh`, and make their `ADAPT` edits from `plan.yaml`:
+5. Copy the `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` into the ledger folder. `/land` requires the ledger's `land.sh`. With the four beside each other, the ledger's `land.sh` and `land.test.sh` run from the ledger whatever skills are installed. Then make the `ADAPT` edits of `land.sh` and `land.test.sh` from `plan.yaml`:
+   - `landing_worktree_root` is `worktree_root`.
    - `landing_ledger_root` is `ledger_root`, the project's own in the `projects:` form.
    - `landing_tool_path` stays `.`, the whole tree.
    - The model names of the usage rows are `worker` and `reviewer`, in `land.sh` and in the rows `land.test.sh` expects.
    - The `ADAPT` block holds the dependency install the verification page's commands need, and stays empty, running nothing, when they need none.
 6. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
-7. Commit `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh` and the two `.gitkeep` files by path as the plan's opening commit, with the roadmap entry's number in the subject.
+7. Commit `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh`, `verify.sh`, `usage.py` and the two `.gitkeep` files by path as the plan's opening commit. Its subject holds the roadmap entry's number.
 
 ## Stops
 
@@ -72,7 +73,7 @@ metadata:
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
-| No landing script | The `land` skill's `templates/land.sh` or `templates/land.test.sh` is in none of the places "What it reads" 4 names | The file missing and the places looked in | The `land` skill installed, then `/plan` again |
+| No landing script | One of the `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` is in none of the places "What it reads" 4 names | The file missing and the places looked in | The `land` skill installed, then `/plan` again |
 | The plan exists | The ledger folder is already there: a plan is opened once | The folder | Nothing |
 
 ## Anti-patterns

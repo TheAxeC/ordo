@@ -102,3 +102,95 @@ none
 ## Usage
 
 About 35 tool calls, run in the foreground only. Token count not measured.
+
+## Repair round 1, refuted
+
+Review of repair round 1 of step 23 of plan 2.B. Worktree: /Users/axelfaes/workspace/ordo/.agents/worktrees/2b-23. Base: 1bab359. I changed no file in the repository. A scratch walk ran in /private/tmp/claude-502/-Users-axelfaes-workspace-ordo/6266a558-ed92-43a1-ac08-9bf8f4bc78a8/scratchpad/refute-23-r1/.
+
+### Verification lines, verbatim
+
+1. `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` exited 0:
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_coverage.py scratch tests
+Can't open skills/plan-retro/templates/collect_findings.py: No such file or directory at -e line 1.
+Can't open skills/plan-retro/templates/collect_findings.test.sh: No such file or directory at -e line 1.
+Can't open skills/spec/templates/check_paths.py: No such file or directory at -e line 1.
+Can't open skills/spec/templates/check_paths.test.sh: No such file or directory at -e line 1.
+Can't open skills/spec/templates/check_step.py: No such file or directory at -e line 1.
+Can't open skills/spec/templates/check_step.test.sh: No such file or directory at -e line 1.
+Can't open utils/check_rule_inventory.py: No such file or directory at -e line 1.
+Can't open utils/check_rule_inventory.test.sh: No such file or directory at -e line 1.
+Can't open utils/check_skill_layout.py: No such file or directory at -e line 1.
+Can't open utils/check_skill_layout.test.sh: No such file or directory at -e line 1.
+verify: 7 commands passed
+```
+The `Can't open` lines come from the ASCII check's perl reading deletions that are not staged. They do not change the exit code.
+
+2. The brief's grep printed hits only in `docs/roadmap.md`, at lines 22, 135 and 137.
+
+3. `LC_ALL=C grep -n '[^ -~]'` over the 21 added or modified files (`git diff --name-only 1bab359 --diff-filter=AM`), plus `23-report.md` and `23-round-1.md`: no output, exit 1.
+
+### Closures
+
+- **Spec 1 is closed.**
+  - `skills/spec/SKILL.md:88` now reads: "A shared path is a file both briefs name, whatever lines each names. It is not a refusal: it goes to the orchestrator's judgment". This agrees with `plan-orchestration/SKILL.md:157` and `skills/plan/templates/orchestrator-state.md:25`.
+  - The overlap exemption was replaced by the judgment. No guard was removed.
+  - `grep -rn -i "line range\|overlap\|disjoint\|same file\|shared path\|shared_paths"` outside `.scratch` and `.git` finds no sentence that still exempts separate line ranges. The only hits outside the step texts are unrelated: `docs/academic-coverage.md:121` "non-overlapping focus", and `brief.md:33` "Read, with line ranges".
+- **Behaviour 1 is closed for the case it named**, a path outside the ledger root. Followed in order from the committed files:
+  1. Steps 14 stops.
+  2. The Stops row at `land/SKILL.md:146` books the open item in the state file with the worktree path, both branches and the cause, and commits it by path as a resume point.
+  3. A later session reads it through `plan-orchestration/SKILL.md:132` ("A landed step whose worktree is still there is named by its open item").
+  4. It runs "Removing a step's worktree" on the names the open item gives, and closes the open item.
+  - No step of that sequence needs the removed dispatch entry.
+  - A related sub-case is not resumable: when the removal fails after the worktree is already gone. It is Behaviour 1 below.
+
+### Spec
+
+none
+
+### Proof
+
+none
+
+### Standards
+
+none
+
+### Behaviour
+
+1. **A removal stopped after `git worktree remove` succeeded cannot be resumed as the texts are written.**
+   - Where: `skills/land/SKILL.md:125-128` ("Removing a step's worktree", steps 2 and 3), read with the Stops row at line 146 and `plan-orchestration/SKILL.md:132`.
+   - The Stops row covers "a removal command fails". Step 4 guards each branch with "each only when it exists". Steps 2 and 3 have no such guard: step 2 runs `git status` "From inside the worktree", and step 3 runs `git worktree remove --force <worktree>`.
+   - The sequence, run in the scratch repository `refute-23-r1/repo`:
+     1. The landing commit is made.
+     2. `git worktree remove --force ../wt` exits 0.
+     3. `git branch -D s1` fails with `cannot lock ref 'refs/heads/s1' ... File exists` and exit 1, which is the Stops row's "a removal command fails". `s1-land` is deleted.
+     4. The open item names `../wt`, `s1` and `s1-land`, and the lock is then removed as the cause put right.
+     5. The resume runs "Removing a step's worktree" on those names. Step 2 cannot enter the worktree (`cd: no such file or directory: ../wt`). Step 3 prints `fatal: '../wt' is not a working tree` with exit 128.
+   - The wrong result:
+     - By the Stops row, the failed command is another stop, so the removal never reaches step 4. `git branch` still lists `s1`.
+     - `plan-orchestration:132` covers only "A landed step whose worktree is still there". It has no case for a worktree that is gone while its branch is left.
+     - So the branch stays, and the open item can never be closed by following the texts.
+   - What would close it: steps 2 and 3 run only when the worktree exists, as step 4 already does for the branches. The resumption case would then also cover a branch that is left.
+
+### Not checked
+
+- There is no snapshot of the tree before the round, so I could not diff the round against the builder's first delivery directly. The evidence that the round changed nothing beyond its two rulings is indirect:
+  - File modification times: only `skills/spec/SKILL.md`, `skills/land/SKILL.md` and `skills/plan-orchestration/SKILL.md` (22:07:56) and `23-report.md` (22:12:18) were written after the round brief (22:07:23). Every other changed file dates from 21:47 to 21:50, the state template included.
+  - Line numbers: the first review's quoted lines still line up. Spec 87-88 and land 124, 146 and 151 are unchanged, and plan-orchestration's "Two steps in flight" line moved from 156 to 157, which matches the one inserted line 132.
+  - I did not compare the text of those three files word by word with the builder's first delivery.
+- Whether an open item whose fix is the user putting a cause right, rather than giving a ruling, fits the open-items header "only what the user must rule on". The header lists "a stop", and the land row is a stop.
+- A session that dies between the land stop and its commit. This is general to every stop and not specific to this round.
+- The step-22 parts of `land.sh`, `pin.sh` and their tests, beyond passing in the verify run.
+
+
+## Closed
+
+- First review, Spec 1 (a shared file exempted when line ranges do not overlap): closed in repair round 1; `skills/spec/SKILL.md` Steps 4 names any file both briefs name, as the review over the round confirmed.
+- First review, Behaviour 1 (a stopped worktree removal not resumable after the landing commit): closed in repair round 1; the Stops row leaves an open item naming the worktree and branches, as the review over the round confirmed.
+- Repair round 1, Behaviour 1 (a removal stopped after `git worktree remove` succeeded): fixed at landing; "Removing a step's worktree" steps 2 and 3 run only when the worktree still exists, and `plan-orchestration` "On every resumption" covers a worktree or branches left.

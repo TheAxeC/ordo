@@ -2,12 +2,12 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.5.0"
+  version: "1.6.0"
 ---
 
 # Refute a step
 
-`/refute <entry> <step>` dispatches one reviewer, who changes nothing and does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with a file and a line, or "none" under a heading, saved and committed by the orchestrator or the session.
+`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with a file and a line, or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
 
 ## Quick start
 
@@ -52,7 +52,8 @@ metadata:
    - Then the four headings, each with findings (the file, the line, the quoted hunk, what is wrong) or "none".
    - Then what was not checked within the time box, named.
    - Then the reviewer's usage.
-7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`, records its usage in the state file's table and its path under the dispatch block's `reviewer_report` field, and commits both by path.
+7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`. It records the report's usage in the state file's table and its path under the dispatch block's `reviewer_report` field.
+   - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
 ### Over a repair round
@@ -66,7 +67,7 @@ metadata:
    - a fix that reaches beyond the finding;
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns every verification command again.
-6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape, and records and commits as Steps 7 says.
+6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape. It records the run as Steps 7 says.
 7. The findings of the run over the last round are never sent to the builder: each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
 8. With `refute_after_repair: no` these runs do not happen, and the orchestrator's read of the delta stands in for them.
 

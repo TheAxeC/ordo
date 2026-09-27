@@ -17,12 +17,12 @@ refute_after_repair: yes     # yes: /refute runs again over each repair round, i
 repair_rounds: 1             # the most repair rounds a step gets; a refutation that finds nothing ends them early; the round cap in plan-orchestration's Rules allows one beyond it under its exception.
 review_minutes: 0            # the reviewer's time box in minutes; 0 is none.
 look:                        # where a changed view is opened at landing (a page, a command); empty means no look step.
-workers_at_once: 1           # steps in flight at once; above 1 only for steps with disjoint paths (plan-orchestration, "Two steps in flight").
+workers_at_once: 1           # steps in flight at once; above 1, two of them share a file only when the orchestrator judges the merge at landing simple (plan-orchestration, "Two steps in flight").
 bench: []                    # the binaries /spec stages and /land runs interleaved, base against new; empty means no A/B.
 ```
 
 ```yaml
-dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), landing, round. The orchestrator adds session_id, the builder's agent id, as soon as the builder is dispatched, and reviewer_report at the review.
+dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), landing, round. The orchestrator adds session_id, the builder's agent id, as soon as the builder is dispatched, and reviewer_report at the review. A step dispatched while another in flight names a file its brief also names carries shared_paths: each shared file and why the merge at landing is simple; with no shared file the key is left out.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)

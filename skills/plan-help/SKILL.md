@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.7.0"
+  version: "1.8.0"
 ---
 
 # Plan help
@@ -52,7 +52,7 @@ metadata:
 then, for every step:
 
 /spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries
-"build it"                    the session writes the code in the worktree, runs the checks, writes the report
+"build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
@@ -63,11 +63,11 @@ read the delta                when plan.yaml says refute_after_repair: no: the o
 when a command stops:
 
 /spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, or a choice is yours: it wrote an open item and no brief
-"Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger and commits
+"Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
 /spec <entry> <step>          again; it now writes the brief
-/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), the brief's "Paths this step writes" shares a path with a step in flight, or a file it reads is unusable: it names the cause and leaves nothing; rule on the step, land the other step or change the paths, then /spec again
+/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), or a file it reads is unusable: it names the cause and leaves nothing; rule on the step, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
 /land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the ledger's land.sh: supply it, then /land again
-/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main and its failure is recorded in its Step 0 in plan.md; /spec that step again when it comes up, with no new ruling, or after your ruling when only you can decide what to do
+/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head
 
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
 

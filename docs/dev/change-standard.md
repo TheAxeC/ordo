@@ -31,32 +31,26 @@ How a change is made in this tree, whoever makes it: a session working inline, o
 
 - In the git worktree the brief names, never in the main checkout. Every path in the brief is relative to that worktree.
 - No git command that changes state: no `add`, `commit`, `stash`, `checkout`, `mv`, `restore`. Reading with `git status`, `git diff` and `git show` is fine; a file is moved with `mv`.
-- Nothing under the ledger folder is edited except the report the brief names, and the rule inventory it names for a step that rewrites a skill (`docs/dev/skill-layout.md`, "A rewrite of a skill"). The plan, the state file and the briefs belong to the orchestrator.
+- Nothing under the ledger folder is edited except the report the brief names. The plan, the state file and the briefs belong to the orchestrator.
 - No sub-agents; no background shells, sleeping or polling, except a capture of a run the runner's command cap would kill, with its whole output written to a file the report names.
 
 ## Commands and their filters
 
-Every build, test or check command runs in the foreground with a long timeout, one configuration per command, and each test's output goes through a filter for its summary lines so raw build output never enters the context; the layout check and the ASCII check take no filter:
+Every build, test or check command runs in the foreground with a long timeout, one configuration per command, and each test's output goes through a filter for its summary lines so raw build output never enters the context; the ASCII check takes no filter:
 
 ```
 sh skills/land/templates/land.test.sh 2>&1 | tail -1
 sh skills/land/templates/verify.test.sh 2>&1 | tail -1
 sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
-sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
-sh skills/spec/templates/check_step.test.sh 2>&1 | tail -1
 sh utils/pin.test.sh 2>&1 | tail -1
-sh utils/check_skill_layout.test.sh 2>&1 | tail -1
-sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
 sh utils/check_coverage.test.sh 2>&1 | tail -1
-python3 utils/check_skill_layout.py
 git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 ```
 
 A step's verification runs through `sh skills/land/templates/verify.sh <state file>`, and the report quotes the lines the runner printed, never a count.
 
-When a test is red, rerun that test without the filter and read its output. The layout check prints each error with its file and line; exit 0 is the pass. The ASCII check prints the offending lines themselves; empty output is the pass. A claim about behaviour, cost or memory names the command that produced it, or is written as not verified.
+When a test is red, rerun that test without the filter and read its output. The ASCII check prints the offending lines themselves; empty output is the pass. A claim about behaviour, cost or memory names the command that produced it, or is written as not verified.
 
 ## Rules this repository already states
 

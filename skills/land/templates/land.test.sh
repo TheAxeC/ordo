@@ -5,7 +5,8 @@
 # runs (the bounded wait, shortened through LANDING_LOCK_WAIT), a stale lock, a lock gone before the
 # bound, a stop at the bound after the worktree's checkout and a rerun that lands, a rerun refused
 # while the landing branch holds a change made by hand or main holds staged changes, a bound that
-# is not a whole number, a tool directory set on the ADAPT line, a ledger inside the repository
+# is not a whole number, a tool directory set on the ADAPT line, a worktree root set on the ADAPT
+# line and one that is not a folder inside the repository refused, a ledger inside the repository
 # whose files left uncommitted in the worktree never reach main, under the template's ledger root, under one
 # holding pattern characters and under one written with a trailing / or a leading ./, and a ledger root that is not a folder inside the repository
 # refused. Each landing starts land.sh
@@ -18,8 +19,9 @@
 # unreadable. Check the
 # example plan.yaml files against the state template: inside an Ordo checkout a missing example
 # fails, and only a copy outside one skips the check.
-# A plan copies this file beside its land.sh; the expected rows follow the ADAPT edits made there.
-# verify.sh and usage.py are found as land.sh finds them, so the copy runs from the ledger.
+# A plan copies this file, verify.sh and usage.py beside its land.sh; the expected rows follow the
+# ADAPT edits made there. verify.sh and usage.py are found as land.sh finds them, beside this file
+# first, so the copy runs from the ledger whatever land skill is installed.
 
 set -u
 
@@ -46,9 +48,12 @@ trap 'rm -rf "$test_root"' 0 1 2 3 15
 test_root=$(CDPATH= cd "$test_root" && pwd -P) || fail "could not resolve the scratch directory"
 script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
 land_script=$script_dir/land.sh
-# The fixtures follow the tool directory and the ledger root land.sh names on its ADAPT lines.
+# The fixtures follow the worktree root, the tool directory and the ledger root land.sh names on
+# its ADAPT lines.
 tool_path=$(sed -n 's/^landing_tool_path=\([^ ]*\).*/\1/p' "$land_script")
 [ -n "$tool_path" ] || fail "could not read landing_tool_path from $land_script"
+worktree_root=$(sed -n 's/^landing_worktree_root=\([^ ]*\).*/\1/p' "$land_script")
+[ -n "$worktree_root" ] || fail "could not read landing_worktree_root from $land_script"
 ledger_root=$(sed -n 's/^landing_ledger_root=\([^ ]*\).*/\1/p' "$land_script")
 [ -n "$ledger_root" ] || fail "could not read landing_ledger_root from $land_script"
 
@@ -127,7 +132,7 @@ initialise_repo() {
         git config user.email "landing-test@example.invalid"
         git add "$tool_path"
         git commit -q -m "Initial fixture"
-        mkdir -p .agents/worktrees
+        mkdir -p "$worktree_root"
     ) || fail "could not initialise scratch repository"
 }
 
@@ -145,15 +150,15 @@ initialise_repo "$clean_repo"
 clean_base=$(cd "$clean_repo" && git rev-parse HEAD) || fail "could not read clean base"
 (
     cd "$clean_repo" || exit 1
-    git worktree add -q -b clean .agents/worktrees/clean "$clean_base"
+    git worktree add -q -b clean "$worktree_root/clean" "$clean_base"
 ) || fail "could not create clean worktree"
-printf 'committed\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/committed.txt"
+printf 'committed\n' >"$clean_repo/$worktree_root/clean/$tool_path/committed.txt"
 (
-    cd "$clean_repo/.agents/worktrees/clean" || exit 1
+    cd "$clean_repo/$worktree_root/clean" || exit 1
     git add "$tool_path/committed.txt"
     git commit -q -m wip
 ) || fail "could not create clean package commit"
-printf 'pending\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/pending.txt"
+printf 'pending\n' >"$clean_repo/$worktree_root/clean/$tool_path/pending.txt"
 clean_session=$test_root/clean-session.jsonl
 write_session "$clean_session"
 # An npm on PATH that records each call, for the landing with the template's defaults below.
@@ -222,15 +227,15 @@ printf 'base\n' >"$conflict_repo/$tool_path/conflict.txt"
 conflict_base=$(cd "$conflict_repo" && git rev-parse HEAD) || fail "could not read conflict base"
 (
     cd "$conflict_repo" || exit 1
-    git worktree add -q -b conflict .agents/worktrees/conflict "$conflict_base"
+    git worktree add -q -b conflict "$worktree_root/conflict" "$conflict_base"
 ) || fail "could not create conflict worktree"
-printf 'package\n' >"$conflict_repo/.agents/worktrees/conflict/$tool_path/conflict.txt"
+printf 'package\n' >"$conflict_repo/$worktree_root/conflict/$tool_path/conflict.txt"
 (
-    cd "$conflict_repo/.agents/worktrees/conflict" || exit 1
+    cd "$conflict_repo/$worktree_root/conflict" || exit 1
     git add "$tool_path/conflict.txt"
     git commit -q -m wip
 ) || fail "could not create conflicting package commit"
-printf 'pending\n' >"$conflict_repo/.agents/worktrees/conflict/$tool_path/pending.txt"
+printf 'pending\n' >"$conflict_repo/$worktree_root/conflict/$tool_path/pending.txt"
 printf 'main\n' >"$conflict_repo/$tool_path/conflict.txt"
 (
     cd "$conflict_repo" || exit 1
@@ -251,7 +256,7 @@ fi
 assert_contains "$conflict_output" "worktree git cherry-pick failed" "conflict step"
 assert_contains "$conflict_output" "Conflicting paths:" "conflict heading"
 assert_contains "$conflict_output" "${tool_prefix}conflict.txt" "conflict path"
-conflict_branch=$(cd "$conflict_repo/.agents/worktrees/conflict" && git branch --show-current) || fail "could not read conflict branch"
+conflict_branch=$(cd "$conflict_repo/$worktree_root/conflict" && git branch --show-current) || fail "could not read conflict branch"
 if [ "$conflict_branch" != "conflict-land" ]; then
     fail "conflict worktree is on $conflict_branch, expected conflict-land"
 fi
@@ -298,11 +303,11 @@ committed_package() {
     package_base=$(cd "$package_repo" && git rev-parse HEAD) || fail "could not read the $1 base"
     (
         cd "$package_repo" || exit 1
-        git worktree add -q -b "$1" ".agents/worktrees/$1" "$package_base"
+        git worktree add -q -b "$1" "$worktree_root/$1" "$package_base"
     ) || fail "could not create the $1 worktree"
-    printf 'committed\n' >"$package_repo/.agents/worktrees/$1/$tool_path/committed.txt"
+    printf 'committed\n' >"$package_repo/$worktree_root/$1/$tool_path/committed.txt"
     (
-        cd "$package_repo/.agents/worktrees/$1" || exit 1
+        cd "$package_repo/$worktree_root/$1" || exit 1
         git add "$tool_path/committed.txt"
         git commit -q -m wip
     ) || fail "could not create the $1 package commit"
@@ -344,7 +349,7 @@ finish_landing() {
 
 # The worktree's git directory, as land.sh reads it from the worktree's .git file.
 worktree_git_dir() {
-    sed -n 's/^gitdir: //p' "$test_root/$1/.agents/worktrees/$1/.git"
+    sed -n 's/^gitdir: //p' "$test_root/$1/$worktree_root/$1/.git"
 }
 
 # A builder that committed everything leaves nothing staged: the landing makes no wip commit. An
@@ -361,7 +366,7 @@ committed_staged=$(cd "$test_root/committed" && git diff --cached --name-only) |
 [ "$committed_staged" = "${tool_prefix}committed.txt" ] ||
     fail "committed staged paths differ: [$committed_staged]"
 committed_log=$(
-    cd "$test_root/committed/.agents/worktrees/committed" && git log --format=%s main..committed-land
+    cd "$test_root/committed/$worktree_root/committed" && git log --format=%s main..committed-land
 ) || fail "could not read the committed landing branch"
 [ "$committed_log" = wip ] ||
     fail "the landing branch holds commits other than the builder's: [$committed_log]"
@@ -435,7 +440,7 @@ finish_landing resumed 30 "the lock wait did not stop at its bound"
 assert_contains "$landing_output" "index lock failed: $resumed_lock still held after 2 s of waiting" \
     "resumed stop"
 assert_contains "$landing_output" "main is untouched; the worktree is on resumed-land" "resumed state"
-resumed_branch=$(cd "$test_root/resumed/.agents/worktrees/resumed" && git branch --show-current) ||
+resumed_branch=$(cd "$test_root/resumed/$worktree_root/resumed" && git branch --show-current) ||
     fail "could not read the resumed worktree branch"
 [ "$resumed_branch" = resumed-land ] || fail "resumed: the stop left the worktree on $resumed_branch"
 rm -f "$resumed_lock"
@@ -454,7 +459,7 @@ printf 'resumed: a lock stop after the checkout, then landing again lands, exit 
 # first while the change is not committed, then once it is a commit of its own.
 committed_package handmade
 handmade_lock=$test_root/handmade/.git/index.lock
-handmade_worktree=$test_root/handmade/.agents/worktrees/handmade
+handmade_worktree=$test_root/handmade/$worktree_root/handmade
 : >"$handmade_lock"
 start_landing handmade LANDING_LOCK_WAIT=2
 finish_landing handmade 30 "the lock wait did not stop at its bound"
@@ -505,7 +510,7 @@ finish_landing staged-main 60 "the landing did not end"
 assert_contains "$landing_output" \
     "preflight failed: main holds staged or unmerged changes, so staged-main-land is kept" \
     "staged-main refusal"
-staged_main_worktree=$test_root/staged-main/.agents/worktrees/staged-main
+staged_main_worktree=$test_root/staged-main/$worktree_root/staged-main
 staged_main_branch=$(cd "$staged_main_worktree" && git branch --show-current) ||
     fail "could not read the staged-main worktree branch"
 [ "$staged_main_branch" = staged-main-land ] ||
@@ -648,9 +653,9 @@ ledger_case() {
     ledger_base=$(cd "$ledger_repo" && git rev-parse HEAD) || fail "$1: could not read the base"
     (
         cd "$ledger_repo" || exit 1
-        git worktree add -q -b "$1" ".agents/worktrees/$1" "$ledger_base"
+        git worktree add -q -b "$1" "$worktree_root/$1" "$ledger_base"
     ) || fail "$1: could not create the worktree"
-    ledger_tree=$ledger_repo/.agents/worktrees/$1
+    ledger_tree=$ledger_repo/$worktree_root/$1
     printf 'committed\n' >"$ledger_tree/${tool_prefix}committed.txt"
     ledger_expected=${tool_prefix}committed.txt
     if [ -n "${4:-}" ]; then
@@ -731,6 +736,51 @@ done
 printf 'ledger root: empty, ., .., ./, /, absolute and leaving the repository refused, exit 1\n'
 ledger_script=$ledger/land.sh
 
+# A plan that sets the worktree root on the ADAPT line, written with a trailing slash, lands the
+# package's worktree from that folder. Red when land.sh builds the worktree's path from a fixed
+# folder (the preflight then finds no worktree).
+rooted_dir=$test_root/rooted-script
+sed 's#^landing_worktree_root=[^ ]*#landing_worktree_root=work/trees/#' "$land_script" \
+    >"$test_root/rooted-land.sh" || fail "could not write the land.sh with a worktree root"
+printf 'test -f %scommitted.txt\n' "$tool_prefix" | make_ledger "$rooted_dir" "$test_root/rooted-land.sh"
+rooted_repo=$test_root/rooted
+initialise_repo "$rooted_repo"
+rooted_base=$(cd "$rooted_repo" && git rev-parse HEAD) || fail "could not read the rooted base"
+(
+    cd "$rooted_repo" || exit 1
+    git worktree add -q -b rooted work/trees/rooted "$rooted_base"
+) || fail "could not create the rooted worktree"
+printf 'committed\n' >"$rooted_repo/work/trees/rooted/${tool_prefix}committed.txt"
+(
+    cd "$rooted_repo" || exit 1
+    HOME="$scratch_home" sh "$rooted_dir/land.sh" rooted "$rooted_base" --no-browser
+) >"$test_root/rooted.out" 2>&1
+rooted_status=$?
+[ "$rooted_status" -eq 0 ] ||
+    fail "a worktree root set on the ADAPT line: exit $rooted_status: $(cat "$test_root/rooted.out")"
+rooted_staged=$(cd "$rooted_repo" && git diff --cached --name-only) ||
+    fail "could not read the rooted staged paths"
+[ "$rooted_staged" = "${tool_prefix}committed.txt" ] || fail "rooted staged paths differ: [$rooted_staged]"
+printf 'rooted: a worktree under work/trees/ set on the ADAPT line landed, exit 0\n'
+
+# A worktree root that is not a folder inside the repository is refused before main is touched.
+for bad_root in '' /tmp/trees ../trees a/../../trees; do
+    sed "s#^landing_worktree_root=[^ ]*#landing_worktree_root='$bad_root'#" "$land_script" \
+        >"$test_root/bad-trees-land.sh" || fail "could not write the land.sh with a bad worktree root"
+    printf 'true\n' | make_ledger "$test_root/bad-trees-ledger" "$test_root/bad-trees-land.sh"
+    (
+        cd "$rooted_repo" || exit 1
+        HOME="$scratch_home" sh "$test_root/bad-trees-ledger/land.sh" rooted "$rooted_base" --no-browser
+    ) >"$test_root/bad-trees.out" 2>&1
+    bad_trees_status=$?
+    [ "$bad_trees_status" -eq 1 ] || fail "worktree root [$bad_root]: exit $bad_trees_status, expected 1"
+    assert_contains "$(cat "$test_root/bad-trees.out")" \
+        "preflight failed: landing_worktree_root must be a folder inside the repository: $bad_root" \
+        "worktree root [$bad_root]"
+    rm -rf "$test_root/bad-trees-ledger"
+done
+printf 'worktree root: empty, absolute and leaving the repository refused, exit 1\n'
+
 # A plan that points the ADAPT line at another tool directory stages that directory and nothing else.
 adapted_dir=$test_root/adapted-script
 sed 's#^landing_tool_path=[^ ]*#landing_tool_path=tools/demo#' "$land_script" \
@@ -743,10 +793,10 @@ initialise_repo "$adapted_repo"
 adapted_base=$(cd "$adapted_repo" && git rev-parse HEAD) || fail "could not read adapted base"
 (
     cd "$adapted_repo" || exit 1
-    git worktree add -q -b adapted .agents/worktrees/adapted "$adapted_base"
+    git worktree add -q -b adapted "$worktree_root/adapted" "$adapted_base"
 ) || fail "could not create adapted worktree"
-printf 'pending\n' >"$adapted_repo/.agents/worktrees/adapted/$tool_path/pending.txt"
-printf 'outside\n' >"$adapted_repo/.agents/worktrees/adapted/outside.txt"
+printf 'pending\n' >"$adapted_repo/$worktree_root/adapted/$tool_path/pending.txt"
+printf 'outside\n' >"$adapted_repo/$worktree_root/adapted/outside.txt"
 (
     cd "$adapted_repo" || exit 1
     sh "$adapted_dir/land.sh" adapted "$adapted_base" --no-browser

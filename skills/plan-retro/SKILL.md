@@ -2,7 +2,7 @@
 name: plan-retro
 description: "Read every refuter report of a repository's plans, open and archived, group the findings by the kind of defect, count the kinds that come back across steps and plans, and for each one propose the change that stops it at its source: a rule on the rules page, a page added to the standards the briefs point at, or a mechanical check. Writes a retro report and changes nothing else until the user approves. Triggers on: plan-retro, retro, run a retro, what do the reviews keep finding, mine the refuter reports."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Retro over the refuter reports
@@ -27,23 +27,17 @@ metadata:
 
 1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them: `ledger_root`, `archive_root`, `rules`, `standards`, `verification`.
    - A required key missing is a refusal ("Stops").
-2. Every refuter report under `<ledger_root>/` and `<archive_root>/`, through the collector (Steps 1).
+2. Every refuter report under `<ledger_root>/` and `<archive_root>/`, each `agents/reviews/<step>-refuter.md`, leaving out the runs the previous retro lists under "Reports read" (Steps 1).
 3. The newest file under `<ledger_root>/retros/`, the previous retro, for its "Reports read" list. With no previous retro, every run is read.
 4. The rules page, every page in `standards`, and the verification page, whole.
 5. For a finding whose kind is unclear from its text, the report it came from and the brief of its step.
 
 ## Steps
 
-1. Collect the findings:
-
-   ```sh
-   python3 <this skill's folder>/templates/collect_findings.py [--exclude-listed <previous retro>] <ledger_root> <archive_root>
-   ```
-
-   - It prints one JSON line per finding, every item it keeps as "Grouping" says: plan, step, report, run, heading, location, text.
-   - The previous retro is passed to `--exclude-listed` unless the user asks for a retro over everything.
-   - `--exclude-listed` skips the runs the previous retro's "Reports read" lists, matched by plan folder, step and run, so a plan moved into `<archive_root>` stays skipped and a round added to a report later is read.
-   - The collector exits 2 with a message when the previous retro cannot be read as UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md`; the retro stops there with that refusal ("Stops").
+1. Read each report "What it reads" 2 lists, run by run: the first review, under its Spec, Proof, Standards and Behaviour headings, and each section "Repair round <n>, refuted".
+   - Each finding is an item "Grouping" keeps, noted with its plan, step, report, run, heading, location and text.
+   - The runs the previous retro's "Reports read" lists are left out unless the user asks for a retro over everything. They are matched by plan folder, step and run, so a plan moved into `<archive_root>` stays left out and a round added to a report later is read.
+   - A previous retro that cannot be read as UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md` stops the retro there, a refusal ("Stops").
 2. Assign each finding one kind, as "Grouping" says.
 3. For each kind, count the findings, the distinct steps and the distinct plans.
 4. For each kind, name the heading its findings fell under.
@@ -51,7 +45,7 @@ metadata:
 6. Mark the recurring kinds: a kind other than "no defect" is recurring when it appears in at least three steps, or in at least two plans.
 7. For each recurring kind, draft the proposal, as "The proposal for a recurring kind" says.
 8. Write `<ledger_root>/retros/<YYYY-MM-DD>.md` from `templates/retro.md`.
-   - The reports read: each report in the collector's output, with its path under `<ledger_root>` or `<archive_root>` (`<plan>/agents/reviews/<step>-refuter.md`) and the runs its findings came from, as `templates/retro.md` shows.
+   - The reports read: each report a finding came from, with its path under `<ledger_root>` or `<archive_root>` (`<plan>/agents/reviews/<step>-refuter.md`) and the runs its findings came from, as `templates/retro.md` shows.
    - The previous retro's "Reports read" entries, carried over, so a run listed once stays skipped by every later retro. A report in both lists has its runs joined in one entry.
    - A run that gave no finding has no entry; the next retro reads it again, and it gives none again.
    - The counts by heading, of the findings left after the "no defect" set-aside.
@@ -71,7 +65,7 @@ metadata:
 - A kind is a sentence that states the defect in general terms, the way a rule would forbid it: "a test that stays green with the change reverted", "a comment that names the step that wrote it", "a document sentence the diff makes false".
 - Findings whose text reports the same defect in different words share a kind.
 - `unclassified` findings from repair rounds are read and assigned like the rest, or set aside when they are a point the reviewer did not check.
-- The collector keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Not checked, Closed, Closures and Usage lists, and fenced lines.
+- The session keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Not checked, Closed, Closures and Usage lists, and fenced lines.
 - A finding whose text reports no defect (a confirmation such as "None." or "No sentence in the pages is made false") or a closure that holds (such as "Spec 1: closed.") is set aside, by reading, as the kind "no defect", counted and listed in the retro's "No defect" section with no proposal.
 
 ## The proposal for a recurring kind
@@ -89,7 +83,7 @@ The skill checks where the rule should have come from, in this order, and propos
 |---|---|---|---|
 | The proposals | Every retro with a recurring kind, at Steps 10 | The retro, each proposal in it | The user's decision on each: approved, corrected or declined |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/plan-retro` again |
-| A previous retro the collector refuses | The collector exits 2 at Steps 1 | The collector's message | The previous retro's "Reports read" corrected to the form of `templates/retro.md`, or a retro over everything, then `/plan-retro` again |
+| A previous retro that cannot be read | At Steps 1, the previous retro is not UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md` | The retro's path and what is wrong in it | The previous retro's "Reports read" corrected to the form of `templates/retro.md`, or a retro over everything, then `/plan-retro` again |
 
 - The first row is a stop: it waits on the user.
 - The second and third rows are refusals: each names its cause and changes nothing.
@@ -101,11 +95,11 @@ The skill checks where the rule should have come from, in this order, and propos
 | A kind that merges two defects | The count rises and the proposal fits neither defect | One kind per defect |
 | A proposal that loosens a rule or adds an exemption | It turns the recurring defect into allowed behaviour | Propose the rule, the page or the check, as "The proposal for a recurring kind" says |
 | An edit made before the user's decision on its proposal | The rules change without the user | Steps 10 to 12 |
-| A number in the retro that no line of the collector's output backs | The count is a guess presented as a measurement | Rules 2 |
+| A number in the retro that no finding listed in it backs | The count is a guess presented as a measurement | Rules 2 |
 
 ## Rules
 
 - The skill reads the ledgers and never edits a report, a brief or a plan.
-- Counts come from the collector's output and the grouping written in the retro.
+- Counts come from the findings listed in the retro, each with its report and location, and the grouping written there.
 - A proposed rule states what to do and at most one clause of why.
 - A proposed rule carries no date, no incident and no step number; the retro file is where those live.

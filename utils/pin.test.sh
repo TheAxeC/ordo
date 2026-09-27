@@ -2,9 +2,11 @@
 # Exercise pin.sh on a scratch repository and scratch skill folders, under a HOME whose path holds a
 # space: a first pin, a move to a tag that adds one skill and drops another, the check mode on good
 # and broken links, links into the live clone, the refusals with their messages, the check after
-# linking, a pinned worktree deleted by hand, the default folder list, both forms of
-# ORDO_SKILL_DIRS, folders that are not absolute paths, and a top-level tag. The test writes only
-# under its two scratch roots, and checks that no path a split on a space could name appeared.
+# linking, a pinned worktree deleted by hand, the default folder list, the links into Ordo in
+# ~/.agents/skills removed and reported, every other entry there kept, and that folder left alone
+# when it resolves to a folder of the list, both forms of ORDO_SKILL_DIRS, folders that are not
+# absolute paths, and a top-level tag. The test writes only under its two scratch roots, and checks
+# that no path a split on a space could name appeared.
 
 set -u
 
@@ -331,6 +333,113 @@ run_pin v2
 [ ! -e "$d2" ] || fail "pin.sh wrote into $d2 with the default folders"
 [ -z "$(ls -A "$work")" ] || fail "pin.sh wrote into the folder it ran from: $(ls -A "$work")"
 [ -e "$test_root/my" ] && fail "pin.sh split the HOME path on its space"
+
+# ~/.agents/skills, a folder the default list does not hold. Pin mode removes each link there to
+# the pinned worktree or the live clone or inside either, with a line for each, and leaves a real
+# folder and a link to anywhere else. One link names a top-level skill folder of the pinned
+# worktree that a skills/ tag does not have; one names the worktree through a link to its parent
+# folder, so it is inside the worktree only once the path is resolved; one names the worktree's
+# root.
+gone_line="in a folder pin.sh no longer links into"
+mkdir -p "$d2/find-skills" "$test_root/foreign/other"
+printf -- '---\nname: find-skills\n---\n' >"$d2/find-skills/SKILL.md"
+ln -s "$ORDO_STABLE/land" "$d2/land"
+ln -s "$repo/skills/gamma" "$d2/gamma"
+ln -s "$test_root/foreign/other" "$d2/other"
+ln -s "$HOME/.local/share" "$HOME/share-link"
+ln -s "$HOME/share-link/ordo-stable/plan" "$d2/plan"
+ln -s "$ORDO_STABLE" "$d2/stable-root"
+run_pin v2
+[ "$status" -eq 0 ] || fail "pinning with links in $d2 failed: $out $err"
+# Red when pin mode leaves the folder alone.
+[ -L "$d2/land" ] && fail "the link into the pinned worktree in $d2 was not removed"
+expect_in "$out" "pin: removed $d2/land, $gone_line" \
+    "the removal of the link into the pinned worktree in $d2 is not reported"
+# Red when the removal matches only the pinned worktree, not the live clone.
+[ -L "$d2/gamma" ] && fail "the link into the live clone in $d2 was not removed"
+expect_in "$out" "pin: removed $d2/gamma, $gone_line" \
+    "the removal of the link into the live clone in $d2 is not reported"
+# Red when the target is compared only as the link names it.
+[ -L "$d2/plan" ] && fail "the link into the pinned worktree through a linked folder was not removed"
+expect_in "$out" "pin: removed $d2/plan, $gone_line" \
+    "the removal of the link through a linked folder is not reported"
+# Red when only a path inside the worktree counts, not the worktree's root.
+[ -L "$d2/stable-root" ] && fail "the link to the pinned worktree's root was not removed"
+expect_in "$out" "pin: removed $d2/stable-root, $gone_line" \
+    "the removal of the link to the pinned worktree's root is not reported"
+# Red when every link in the folder is removed, whatever its target.
+[ "$(readlink "$d2/other")" = "$test_root/foreign/other" ] ||
+    fail "the link to a folder outside Ordo in $d2 was changed"
+[ -f "$d2/find-skills/SKILL.md" ] || fail "the real folder in $d2 was changed"
+case "$out$err" in
+    *"$d2/other"* | *"$d2/find-skills"*) fail "a line names an entry of $d2 kept: $out $err" ;;
+esac
+run_pin
+[ "$status" -eq 0 ] || fail "check mode failed once the links in $d2 were removed: $err"
+
+# Check mode fails on such a link and names it. Red when check mode does not read the folder.
+ln -s "$ORDO_STABLE/land" "$d2/land"
+run_pin
+[ "$status" -eq 1 ] || fail "check mode did not fail on a link in $d2 (exit $status)"
+expect_in "$err" \
+    "pin: $d2/land links to $ORDO_STABLE/land, $gone_line; utils/pin.sh <tag> removes it" \
+    "check mode did not name the link in $d2"
+case "$err" in
+    *"$d2/other"* | *"$d2/find-skills"*) fail "check mode named an entry of $d2 kept: $err" ;;
+esac
+
+# A link that could not be removed is not reported as removed, and the check after linking fails.
+chmod a-w "$d2"
+run_pin v2
+chmod u+w "$d2"
+[ "$status" -ne 0 ] || fail "pin mode passed with a link in $d2 it could not remove"
+[ -L "$d2/land" ] || fail "a link was removed from $d2, which is not writable"
+case "$out" in
+    *"pin: removed $d2/land"*) fail "a link in $d2 that could not be removed was reported" ;;
+esac
+
+# With ORDO_SKILL_DIRS set, the folder is not read. Red when the removal ignores ORDO_SKILL_DIRS.
+# The newline form, since the path of $d1 holds a space.
+export ORDO_SKILL_DIRS="$d1$nl"
+run_pin v2
+[ "$status" -eq 0 ] || fail "pinning with ORDO_SKILL_DIRS set failed: $out $err"
+[ "$(readlink "$d2/land")" = "$ORDO_STABLE/land" ] ||
+    fail "the link in $d2 was removed with ORDO_SKILL_DIRS set"
+case "$out$err" in
+    *"$d2"*) fail "a line names $d2 with ORDO_SKILL_DIRS set: $out $err" ;;
+esac
+run_pin
+[ "$status" -eq 0 ] || fail "check mode read $d2 with ORDO_SKILL_DIRS set: $err"
+unset ORDO_SKILL_DIRS
+
+# With $CLAUDE_CONFIG_DIR/skills naming the folder, it is a folder pin.sh links into, and its
+# links stay. Red when the removal runs on a folder of the list.
+ln -s "$repo/skills/beta" "$d2/beta"
+export CLAUDE_CONFIG_DIR="$HOME/.agents"
+run_pin v2
+[ "$status" -eq 0 ] || fail "pinning with CLAUDE_CONFIG_DIR at $HOME/.agents failed: $out $err"
+[ "$(readlink "$d2/beta")" = "$ORDO_STABLE/skills/beta" ] ||
+    fail "the link in $d2, a folder of the list, was not replaced by a link into the pin"
+case "$out" in
+    *"$gone_line"*) fail "a link in a folder of the list was removed as a leftover: $out" ;;
+esac
+rm -rf "$d2" "$HOME/share-link" "$test_root/foreign"
+unset CLAUDE_CONFIG_DIR
+
+# ~/.agents/skills a link to ~/.claude/skills is a folder of the list by its resolved path: pin and
+# check both pass and nothing is removed. Red when the folders are compared by their paths only.
+mkdir -p "$HOME/.agents"
+ln -s "$d1" "$d2"
+run_pin v2
+[ "$status" -eq 0 ] || fail "pinning with $d2 a link to $d1 failed: $out $err"
+case "$out" in
+    *"$gone_line"*) fail "a link was removed from $d2, a link to a folder of the list: $out" ;;
+esac
+[ "$(readlink "$d1/beta")" = "$ORDO_STABLE/skills/beta" ] || fail "$d1/beta is not linked"
+run_pin
+[ "$status" -eq 0 ] || fail "check mode failed with $d2 a link to $d1: $err"
+rm "$d2"
+rmdir "$HOME/.agents"
 export CLAUDE_CONFIG_DIR="$HOME/config"
 run_pin v2
 [ "$status" -eq 0 ] || fail "pinning with CLAUDE_CONFIG_DIR set failed: $out $err"

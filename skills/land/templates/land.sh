@@ -1,9 +1,10 @@
 #!/bin/sh
 # Run a reviewed package through a plan's landing checks and print its booking data.
-# A plan copies this file into its ledger folder and makes the ADAPT edits: the tool directory
-# (default ., the whole tree), the ledger root, the ADAPT block for the dependency install and any
-# check beyond the verify list with their pass rules (default: nothing runs), and the model names
-# in the rows.
+# A plan copies this file into its ledger folder, with land.test.sh, verify.sh and usage.py
+# beside it, and makes the ADAPT edits: the worktree root (default .agents/worktrees; the package's
+# worktree is <worktree root>/<pkg>), the tool directory (default ., the whole tree), the ledger
+# root, the ADAPT block for the dependency install and any check beyond the verify list with their
+# pass rules (default: nothing runs), and the model names in the rows.
 #
 # Its check on main is the ledger's verify list: after main's cherry-pick it runs
 # sh <verify.sh> <the orchestrator-state.md beside this script> from the repository root, and a
@@ -112,13 +113,22 @@ $landing_lock_bound" 64
 esac
 
 landing_root=$(pwd -P)
-landing_worktree=$landing_root/.agents/worktrees/$landing_pkg
+# ADAPT: .agents/plan.yaml's worktree_root, relative to the repository root.
+landing_worktree_root=.agents/worktrees
 # ADAPT: the tool directory the package's paths are scoped to, relative to the repository root;
 # . is the whole tree.
 landing_tool_path=.
 # ADAPT: .agents/plan.yaml's ledger_root, relative to the repository root.
 landing_ledger_root=.scratch
 landing_tool=$landing_root/$landing_tool_path
+case "$landing_worktree_root" in
+    '' | /* | ../* | */.. | */../* | .. | *'
+'*)
+        fail "preflight failed: landing_worktree_root must be a folder inside the repository: \
+$landing_worktree_root"
+        ;;
+esac
+landing_worktree=$landing_root/${landing_worktree_root%/}/$landing_pkg
 
 # The ledger root as plan.yaml may write it, with every leading ./ and every trailing / removed,
 # so the add's pathspec and the checkout's ignore pattern name the folder itself. A refusal

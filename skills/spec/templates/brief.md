@@ -22,10 +22,9 @@ When the first run finds a case the brief's own rules get wrong, the builder sto
 
 - `<path>`
 - `<path>` lines <a>-<b>
-- `<ledger>/inventories/<skill>.md`
 - `<ledger>/agents/reviews/<step>-report.md`
 
-One path per line: a whole file, or a range of lines of a shared document, numbered as on main at the base. The step writes these paths and nothing else. The rule inventory's line is there only for a step that rewrites an existing skill's `SKILL.md`.
+One path per line: a whole file, or a range of lines of a shared document, numbered as on main at the base. The step writes these paths and nothing else.
 
 ## Decisions taken in this brief (each reversible, none silent)
 
@@ -51,8 +50,7 @@ Run from <directory>, each must hold, each output piped through the filter the r
 1. The plan's verify list, run through the `land` skill's `templates/verify.sh` from the root of the checkout it checks as `sh <skills>/land/templates/verify.sh <state file>`, where `<skills>` is the first of the repository's `.agents/skills`, `~/.agents/skills` and `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`) that holds the `land` skill, prints <the `PASS:` line of each command piped into `tail`, the whole output of each other command, then `verify: <n> commands passed`> and exits 0; the lines it prints are what the report quotes.
 2. `<command>` prints <expected output>.
 3. `<command>`: <the threshold or the shape the output must have>.
-4. <For a step that rewrites an existing skill's `SKILL.md`, as the standards define a rewrite: the rule inventory the standards require, written at `<ledger>/inventories/<skill>.md`, and `<the inventory check the standards name> <ledger>/inventories/<skill>.md` prints `ok: <ledger>/inventories/<skill>.md` and exits 0.>
-5. Each new or changed test names the revert that turns it red. A test that no revert turns red is an audit, not a proof, and this brief says which it is.
+4. Each new or changed test names the revert that turns it red. A test that no revert turns red is an audit, not a proof, and this brief says which it is.
 
 ## Report
 

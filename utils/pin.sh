@@ -24,6 +24,13 @@
 # to anywhere outside Ordo; each is left as it is. It replaces a link into the live clone for a
 # skill the tag holds and prints a line for each, and removes a link into the pinned worktree
 # whose skill the tag lacks and prints a line for each.
+# ~/.agents/skills is not a default folder, so a link there into Ordo is not one of the pin's
+# links. When ORDO_SKILL_DIRS is not set and no folder of the list is ~/.agents/skills (compared by
+# path, and by resolved path for folders that exist), check mode reports each link there to the
+# pinned worktree or the live clone or inside either. The target is read as the link names it and
+# with its folder resolved. Pin mode removes each such link after linking and prints a line for
+# each. Every other entry of that folder, a real folder or a link to anywhere else, is left as it
+# is.
 
 set -u
 
@@ -50,6 +57,23 @@ else
         skill_dirs="$skill_dirs$nl${CLAUDE_CONFIG_DIR%/}/skills"
     fi
 fi
+# Prints ~/.agents/skills, the folder outside the list whose links into Ordo check mode reports
+# and pin mode removes; prints nothing when ORDO_SKILL_DIRS is set, or when the folder is one of
+# the list, by its path or, for folders that exist, by their resolved paths. It is run where it is
+# used, so a folder the pin creates is compared once it exists.
+outside_dir() {
+    [ -z "${ORDO_SKILL_DIRS:-}" ] || return 0
+    outside="$HOME/.agents/skills"
+    outside_real=$(CDPATH= cd "$outside" 2>/dev/null && pwd -P) || outside_real=""
+    while IFS= read -r dir <&4; do
+        [ "$dir" = "$outside" ] && return 0
+        [ -n "$outside_real" ] || continue
+        [ "$(CDPATH= cd "$dir" 2>/dev/null && pwd -P)" = "$outside_real" ] && return 0
+    done 4<<EOF
+$skill_dirs
+EOF
+    printf '%s' "$outside"
+}
 while IFS= read -r dir <&3; do
     case "$dir" in
         [[:space:]]* | *[[:space:]]) fail "'$dir' has leading or trailing whitespace" ;;
@@ -72,6 +96,25 @@ skills_of() {
         [ -f "$entry" ] || continue
         basename "$(dirname "$entry")"
     done
+}
+
+# Succeeds when the link $1 points at the pinned worktree or the live clone or inside either, as
+# its target names it or with the target's folder resolved. A relative target is read from the
+# link's folder.
+links_into_ordo() {
+    ordo_target=$(readlink "$1") || return 1
+    case "$ordo_target" in
+        /*) ;;
+        *) ordo_target=$(dirname "$1")/$ordo_target ;;
+    esac
+    case "$ordo_target" in
+        "$stable" | "$stable"/* | "$repo" | "$repo"/*) return 0 ;;
+    esac
+    ordo_parent=$(CDPATH= cd "$(dirname "$ordo_target")" 2>/dev/null && pwd -P) || return 1
+    case "$ordo_parent/$(basename "$ordo_target")" in
+        "$stable" | "$stable"/* | "$repo" | "$repo"/*) return 0 ;;
+    esac
+    return 1
 }
 
 # Prints one line per problem and returns the count through the exit status (capped at 1).
@@ -116,6 +159,16 @@ EOF
     done 3<<EOF
 $skill_dirs
 EOF
+    old_dir=$(outside_dir)
+    if [ -n "$old_dir" ]; then
+        for link in "$old_dir"/*; do
+            [ -L "$link" ] || continue
+            links_into_ordo "$link" || continue
+            printf 'pin: %s links to %s, in a folder pin.sh no longer links into; %s\n' \
+                "$link" "$(readlink "$link")" 'utils/pin.sh <tag> removes it' >&2
+            problems=$((problems + 1))
+        done
+    fi
     [ "$problems" -eq 0 ]
 }
 
@@ -216,6 +269,15 @@ while IFS= read -r dir <&3; do
 done 3<<EOF
 $skill_dirs
 EOF
+old_dir=$(outside_dir)
+if [ -n "$old_dir" ]; then
+    for link in "$old_dir"/*; do
+        [ -L "$link" ] || continue
+        links_into_ordo "$link" || continue
+        rm "$link" || continue
+        printf 'pin: removed %s, in a folder pin.sh no longer links into\n' "$link"
+    done
+fi
 
 check_links || fail "the links do not match the pin after linking"
 printf 'pinned: %s (%s), %s skills linked in: %s\n' \

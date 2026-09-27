@@ -29,22 +29,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: '23'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  session_id: acbfc6d64ec38cd64
-  builder_usage: 198163 tokens, 59 tool uses, 640 s
-  reviewer: claude:opus, agent af5084a0289dab7a9, launched 2026-09-27, under ruling DD; 172,351 tokens, 36 tool uses, 476 s
-  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/23-refuter.md
-  worktree: .agents/worktrees/2b-23
-  base: 1bab359
-  launched: 2026-09-27
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/23-report.md
-  landing: not-started
-  round: 1
-  round_1: sent 2026-09-27, brief agents/briefs/23-round-1.md, two rulings (Spec 1, Behaviour 1), paths skills/spec/SKILL.md, skills/land/SKILL.md, skills/plan-orchestration/SKILL.md, skills/plan/templates/orchestrator-state.md, the report
-  patch: agents/reviews/22-merged.patch applied at the worktree's creation, without back_out.sh, remove_worktree.sh and their tests
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -116,8 +101,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20 and 21 landed (step 21 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 23 in flight (step 22 merged into it by ruling EE); next: 17, 17a, 18, 19, and the tag and the pin on the user's yes (ruling W).
+- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 21 and 23 landed (step 23 in the commit that carries this line, with step 22's work merged into it); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
+- Roadmap entry 2.B, step 23 landed; next: step 17 (the approved retro proposals without the five script proposals), then 17a, 18, 19, and the tag and the pin on the user's yes (ruling W).
 - Open on Axel's side: none.
 
 ## Usage
@@ -148,3 +133,4 @@ dispatch:
 | 20 | claude:opus agent: 276,603 tokens, 74 tool uses, 1,238 s; round 1: 305,557 tokens, 14 tool uses, 454 s; round 2: 317,425 tokens, 7 tool uses, 322 s (the agent's notification totals) | 175,814 tokens, 47 tool uses, 698 s; round 1: 133,901 tokens, 38 tool uses, 625 s; round 2: 62,230 tokens, 16 tool uses, 300 s | 2 (round 2 the one beyond the cap) | 7 (6 rulings, then 1) | 29 files changed, 213 insertions(+), 4066 deletions(-) | no | 4 | 0 | 184 | 162453 | 383584 | 46277719 | 408 | 339 (from step 7c's landing; shares the user's rulings U to W, the removal of 7d and the brief of step 20) | none |
 | 21 | claude:opus agent: 289,779 tokens, 77 tool uses, 2,071 s; round 1: 352,548 tokens, 32 tool uses, 875 s (the agent's notification totals) | 185,334 tokens, 54 tool uses, 1,017 s; round 1: 193,994 tokens, 45 tool uses, 776 s | 1 | 8 rulings (7 findings and ruling Y) | 19 files changed, 715 insertions(+), 129 deletions(-), then 3 files, 4 insertions(+), 4 deletions(-) at landing | no | 3 | 1 (open item Z) | 64 | 62069 | 326523 | 12756668 | 136 | 199 (from step 20's landing; shares the user's rulings X and Y and the question on ruling Y) | none |
 | 22 | claude:opus agent: 251,729 tokens, 76 tool uses, 1,385 s; round 1: 155,635 tokens, 87 tool uses, 1,849 s; round 2: 223,906 tokens, 26 tool uses, 752 s | 194,988 tokens, 42 tool uses, 666 s; round 1: 223,509 tokens, 52 tool uses, 1,795 s | 2 (round 2 not reviewed) | 11 rulings, then 4 items | 17 files changed, 1588 insertions(+), 96 deletions(-), never landed | no | 0 | 0 | not measured | not measured | not measured | not measured | not measured | not measured | merged into step 23 by ruling EE, its change in agents/reviews/22-merged.patch; the worktree and branch removed by the user |
+| 23 | claude:opus agent: 198,163 tokens, 59 tool uses, 640 s; round 1: 206,713 tokens, 7 tool uses, 304 s | 172,351 tokens, 36 tool uses, 476 s; round 1: 101,282 tokens, 15 tool uses, 261 s | 1 | 2 rulings | 31 files changed, 474 insertions(+), 3689 deletions(-) | no | 1 | 0 | 317 | 274446 | 833814 | 72130839 | 652 | 380 (from step 21's landing; shares step 22, rulings BB to EE, the script review and the roadmap change) | none |

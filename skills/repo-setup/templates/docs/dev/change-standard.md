@@ -31,7 +31,7 @@ How a change is made in this tree, whoever makes it: a session working inline, o
 
 - In the git worktree the brief names, never in the main checkout. Every path in the brief is relative to that worktree.
 - No git command that changes state: no `add`, `commit`, `stash`, `checkout`, `mv`, `restore`. Reading with `git status`, `git diff` and `git show` is fine; a file is moved with `mv`.
-- Nothing under the ledger folder is edited except the report the brief names, and the rule inventory it names for a step that rewrites a skill. The plan, the state file and the briefs belong to the orchestrator.
+- Nothing under the ledger folder is edited except the report the brief names. The plan, the state file and the briefs belong to the orchestrator.
 - No sub-agents; no background shells, sleeping or polling, except a capture of a run the runner's command cap would kill, with its whole output written to a file the report names.
 
 ## Commands and their filters

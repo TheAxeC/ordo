@@ -1,6 +1,6 @@
 # Retro <YYYY-MM-DD>
 
-Collected with `python3 <collector> <arguments>`: <n> findings from <n> reports in <n> plans.
+Read: <n> findings from <n> reports in <n> plans.
 
 ## Reports read
 

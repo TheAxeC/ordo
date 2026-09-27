@@ -164,3 +164,33 @@ The dispatch prompt said to run no git command at all. The builder ran the read-
 | `/plan-retro` | `collect_findings.py` prints the findings | the session reads each report's findings and lists them in the retro with report and location |
 | Test lists | 13 tests and `check_skill_layout.py` in `README.md`, `building.md` and `change-standard.md` | 6 tests and the ASCII check |
 | `workers_at_once` comments | "above 1 only for steps with disjoint paths" | "above 1, two of them share a file only when the orchestrator judges the merge at landing simple" |
+
+## Repair round 1
+
+Both rulings are done. Only the round brief's paths changed: `skills/spec/SKILL.md`, `skills/land/SKILL.md`, `skills/plan-orchestration/SKILL.md` ("On every resumption") and this report. `plan-orchestration` "Two steps in flight" (line 156) and the state template's dispatch comment (line 25) already said "the same file" and "a file its brief also names", so neither needed a change.
+
+| Ruling | State | Changed sentence |
+|---|---|---|
+| 1. A shared file is any file both briefs name | DONE | `skills/spec/SKILL.md:88`: "A shared path is a file both briefs name, whatever lines each names. It is not a refusal: it goes to the orchestrator's judgment, as `plan-orchestration`'s "Two steps in flight" says, and run by hand, the session judges." |
+| 2. A stopped worktree removal leaves an open item | DONE | `skills/land/SKILL.md:146`, `skills/land/SKILL.md:151` and `skills/plan-orchestration/SKILL.md:132`, quoted below |
+
+- `skills/land/SKILL.md:146`, the Stops row "A worktree that cannot be removed":
+  - What it shows: "The open item, booked in the state file's open items and committed by path as a resume point: the worktree path and both branches, as Steps 11 read them, and what stopped the removal (each path outside the ledger root, or the command and what it printed)".
+  - What resumes it: "The cause put right, such as the path moved out of the worktree or removed by the user, then "Removing a step's worktree" run on the worktree and branches the open item names; the open item is then closed".
+- `skills/land/SKILL.md:151`: "The last row is a stop after the landing's commit that leaves an open item: the step is on main, and only its worktree and branches are left, named in the open item. Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item."
+- `skills/plan-orchestration/SKILL.md:132`, under "On every resumption": "A landed step whose worktree is still there is named by its open item (the `land` skill's Stops row "A worktree that cannot be removed"). The removal is run from that open item, on the worktree and branches it names, and the open item is then closed."
+- `grep -rn -i "overlap" skills docs/dev README.md` prints nothing, so no sentence still exempts line ranges that do not overlap.
+
+### The four checks, rerun
+
+1. `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` exits 0. Its last line is `verify: 7 commands passed`.
+2. The brief's grep, file and line of each hit:
+
+   ```
+   docs/roadmap.md:22
+   docs/roadmap.md:135
+   docs/roadmap.md:137
+   ```
+
+3. `ls` of the ten deleted files: all ten print `No such file or directory`.
+4. `LC_ALL=C grep -Hn '[^ -~]'` over each of the 21 modified files, and over this report: no output.

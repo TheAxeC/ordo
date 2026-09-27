@@ -1,6 +1,6 @@
 # The skill layout
 
-Every `skills/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill, and `utils/check_skill_layout.py` can check it. The prose inside follows `skills/repo-setup/templates/docs/dev/prose-standard.md`.
+Every `skills/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill. The prose inside follows `skills/repo-setup/templates/docs/dev/prose-standard.md`.
 
 ## Frontmatter
 
@@ -58,9 +58,7 @@ No other `##` heading appears outside the place row 6 gives it.
 ## A rewrite of a skill
 
 - A step rewrites an existing skill's `SKILL.md` when it restyles it, rebuilds it, or replaces more than its wording in a few places.
-- Such a step writes a rule inventory for that skill in the ledger, at `<ledger>/inventories/<skill>.md`, in the form `utils/check_rule_inventory.py` documents at its head: each rule of the old file, by its lines, with its place in the new file.
-- The step names `python3 utils/check_rule_inventory.py <ledger>/inventories/<skill>.md` among its checks, and the check must pass: it prints `ok: <inventory>` and exits 0.
-- A step that changes a skill's wording in a few places writes no inventory.
+- Such a rewrite keeps every rule of the old text, and the reviewer checks that by reading the old file and the new one.
 
 ## Anti-patterns
 
