@@ -52,6 +52,15 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7d-report.md
   landing: not-started
   round: 0
+- step: '17'
+  executor: agent
+  worker: claude:opus, a native agent in the background
+  worktree: .agents/worktrees/2b-17
+  base: f2fc202
+  launched: 2026-09-27
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -117,7 +126,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 7c, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 7d (`launch.test.sh` under load) is dispatched; then 17, 17a (the library check, ruling T), 18 and 19.
+- Roadmap entry 2.B. Steps 7d (`launch.test.sh` under load) and 17 (the approved retro proposals) are in flight together; then 17a (the library check, ruling T), 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
