@@ -42,6 +42,7 @@ dispatch:
   worktree: .agents/worktrees/2b-21
   base: 8b13b9e
   launched: 2026-09-27
+  builder_usage: 289779 tokens, 77 tool uses, 34.5 min
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/21-report.md
   landing: not-started
   round: 0
