@@ -48,6 +48,7 @@ dispatch:
   landing: not-started
   round: 1
   round_1: sent 2026-09-27, brief agents/briefs/21-round-1.md, paths the brief's plus skills/plan-help/SKILL.md, skills/plan/templates/orchestrator-state.md, skills/repo-setup/templates/docs/dev/change-standard.md, skills/refute/SKILL.md, skills/refute/templates/report.md; builder's round: 352548 tokens (cumulative for the agent), 32 tool uses, 14.6 min
+  reviewer_round_1: claude:opus, agent a42155aba0ef5d14c, launched 2026-09-27
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
