@@ -44,6 +44,7 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   session_id: acd8d1577233d835c
+  state: stopped by the user on 2026-09-27 at about 10:10, before its report; its worktree kept with uncommitted changes to launch.sh and launch.test.sh (198 insertions, 84 deletions against 4bc65fb); no report written
   paths_narrowed: launch.sh, launch.test.sh and the report only, so step 17 runs beside it; a sentence 7d makes false in plan-orchestration/SKILL.md or launch-note.md is given under Doc text and applied at landing
   ab_base_files: the launch.sh and launch.test.sh of 01b029e, copied read-only to the session scratchpad's 7d-base folder
   worktree: .agents/worktrees/2b-7d
@@ -56,6 +57,7 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   worktree: .agents/worktrees/2b-17
+  state: brief and worktree made; no builder launched, held for the user's ruling
   base: f2fc202
   launched: 2026-09-27
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17-report.md
@@ -126,7 +128,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 7c, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Steps 7d (`launch.test.sh` under load) and 17 (the approved retro proposals) are in flight together; then 17a (the library check, ruling T), 18 and 19.
+- Roadmap entry 2.B. Paused by the user: step 7d's builder stopped before its report, step 17 prepared with no builder launched; nothing is dispatched or landed until the user rules.
 - Open on Axel's side: none.
 
 ## Usage
