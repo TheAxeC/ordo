@@ -44,7 +44,7 @@ dispatch: []
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item V (the verify-list review of ruling U 2, raised 2026-09-27, revised on the user's questions): the three scripts nothing runs today each have a job. `skills/repo-setup/templates/sync_rules.py` is `/repo-setup sync`, which keeps a repository's shared-rules block equal to the template; its AGENTS.md check exists for Codex. `utils/check_rule_inventory.py` proves no rule is lost when a skill is rewritten; no skill or open roadmap gate names it. `skills/land/templates/land.sh` does a landing's commit, cherry-pick and verify run as one command; this plan landed by hand instead. (a) Keep all three and make them used: `sync_rules.py` loses its AGENTS.md check in step 20; `docs/dev/skill-layout.md` requires a rule inventory, checked by `check_rule_inventory.py`, for any rewrite of an existing skill; `/land` requires the ledger's `land.sh`, and this plan's ledger gets its copy; the last two in step 21. (b) Keep all three as they are, the lazy option: scripts no process calls. (c) Remove all three. Recommendation (a). Also for the user: the folder `.agents/launch/2b-7`, the pid and exit files of step 7's shell launch, deleted with step 20.
+- none.
 
 ## Booked, no ruling needed
 
@@ -53,6 +53,7 @@ dispatch: []
 
 ## Closed items
 
+- 2026-09-27: open item V, the verify-list review: ruled (a), `land.sh`, `check_rule_inventory.py` and `sync_rules.py` kept and each made part of a process (steps 20 and 21).
 - 2026-09-27: open item U, launch.sh and steps 7a to 7d: ruled 1 (a), Claude only, the shell-launch route and every Codex part of the skills removed, steps 7a to 7d out of the plan (step 20); 2 (a), the verify-list scripts read and tabled for the user's ruling; 3 (a), new commits, no reset; 4 (a), the `/spec` check against unruled steps (step 21). Step 7d's worktree and step 17's worktree deleted with their branches by the user. Step 17's brief is kept and re-checked by `/spec` after step 21.
 - 2026-09-26: open item T, the library check in `/spec`: ruled 1 (a), new step 17a after 17; 2 (a), `libraries: check | avoid`, required, per project, asked by `/ordo-init`; 3 (a), this repository's value `avoid`.
 - 2026-09-26: open item S, the allow-list key: ruled (a), `worker_allow:`, a list of command prefixes that `launch.sh` passes to a `claude` builder as `--allowedTools "Bash(<prefix>:*)"`; absent, built from the verify list and the brief's gate commands.
@@ -105,7 +106,7 @@ dispatch: []
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 7c, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Next: the verify-list review for the user's ruling, then step 20, 21, 17, 17a, 18, 19.
+- Roadmap entry 2.B. Next: step 20, then 21, 17, 17a, 18, 19.
 - Open on Axel's side: none.
 
 ## Usage
