@@ -29,7 +29,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: '17a'
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2b-17a
+  base: '33a30e8'
+  launched: '2026-09-27T23:44:23+02:00'
+  session_id: a4a32bc38cdd37cde
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17a-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -105,7 +115,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 21, 23 and 24 landed (step 24 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 24 landed; next: step 17a, then 25, 18 and 19, under the pinned skills v1.1.0.
+- Roadmap entry 2.B, step 17a in flight (the library check, ruling T); next: step 25, then 18 and 19, under the pinned skills v1.1.0.
 - Open on Axel's side: none.
 
 ## Usage
