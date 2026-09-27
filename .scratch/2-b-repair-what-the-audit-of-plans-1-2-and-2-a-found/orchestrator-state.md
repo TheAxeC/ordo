@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: "18"
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2b-18
+  session_id: a0e3f6c70e96f5129
+  base: "50066e6"
+  launched: 2026-09-28
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/18-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
