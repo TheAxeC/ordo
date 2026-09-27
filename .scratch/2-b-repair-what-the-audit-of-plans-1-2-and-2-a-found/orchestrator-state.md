@@ -44,7 +44,7 @@ dispatch: []
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- Open item V (the verify-list review of ruling U 2, raised 2026-09-27): which scripts go, removed in step 20 with the gate changed to match. Unused on this machine: `skills/land/templates/land.sh` (549 lines, test 765; no ledger holds a copy), `utils/check_rule_inventory.py` (430, test 608; the only inventories are in archived plan 1, no open roadmap entry or skill uses it), `skills/repo-setup/templates/sync_rules.py` (127, test 282; no CLAUDE.md under ~/workspace holds the shared-rules block, and its AGENTS.md link is for Codex). Kept, each used: `verify.sh`, `usage.py` (Claude part), `check_config.py` (without the launch keys), `collect_findings.py`, `check_paths.py`, `pin.sh`, `check_skill_layout.py`, `check_coverage.py`, the ASCII check. (a) Remove the three unused scripts and their tests, and the rule-inventory clause of the gate, in step 20. (b) Keep all, the lazy option. Recommendation (a). Also for the user: deleting the worktrees `.agents/worktrees/2b-7d` and `2b-17` with their branches, which the permission check refused, and the folder `.agents/trees-2b-15` (26 copies of old commits, 25 MB, no git worktree).
 
 ## Booked, no ruling needed
 
