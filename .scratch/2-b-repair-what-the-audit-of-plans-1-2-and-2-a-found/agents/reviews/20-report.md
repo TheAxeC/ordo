@@ -1,6 +1,6 @@
 # Step 20 report: Claude only
 
-Everything in the brief is done. One point needs the orchestrator's ruling, under "Judgment calls" item 1: `land.sh` still takes its `<runs dir>` argument, and that argument no longer feeds anything.
+Everything in the brief and in the six rulings of repair round 1 is done. The section "Repair round 1" at the end gives the current state. Where it differs from an earlier section, it replaces that section.
 
 ## Open items of the state file, verbatim
 
@@ -216,7 +216,7 @@ The cases removed were the `launch_note` and `worker_allow` cases of `check_conf
 | `plan.yaml` keys | `launch_note`, `worker_allow` optional | Neither exists, and `check_config.py` reports either one as `unknown key` |
 | `worker` / `reviewer` values | `claude:<model>` or `codex:<model>` | `claude:<model>` only; any other value gives `error: worker is not claude:<model>: '<value>'` |
 | `usage.py <file> ...` | Read a Claude Code log or a Codex rollout | Reads a Claude Code log; any other file exits 64 with `usage.py: <path> is not a Claude Code session log: no line is an assistant message` |
-| `land.sh` usage rows | `worker codex:gpt-5.6-sol at high, first run: <numbers from events.jsonl>` when a runs dir held event files | Always `worker claude:opus at high, first run: <tokens>, <tool uses> tool uses, <seconds> s (from the runner's result); repair round: <the same, or none>` and `reviewer claude:opus, read-only: review <tokens> / <tool uses> / <seconds> s (from the runner's result)` |
+| `land.sh` usage rows | `worker codex:gpt-5.6-sol at high, first run: <numbers from events.jsonl>` when a runs dir held event files | Always `worker claude:opus, first run: <tokens>, <tool uses> tool uses, <seconds> s (from the runner's result); repair round: <the same, or none>` and `reviewer claude:opus, read-only: review <tokens> / <tool uses> / <seconds> s (from the runner's result)` |
 | `utils/pin.sh` default folders | `~/.claude/skills`, `~/.agents/skills`, and `$CLAUDE_CONFIG_DIR/skills` when set | `~/.claude/skills`, and `$CLAUDE_CONFIG_DIR/skills` when set; `$ORDO_SKILL_DIRS` still replaces the list |
 | `sync_rules.py` | Exit 2 on `error: AGENTS.md is not a symlink to CLAUDE.md` | No `AGENTS.md` check |
 | `/repo-setup` | Created `AGENTS.md -> CLAUDE.md`, installed with `-a claude-code -a codex`, ignored `.codex/` | No `AGENTS.md`, installs with `-a claude-code`, no `.codex/` line |
@@ -229,3 +229,105 @@ The cases removed were the `launch_note` and `worker_allow` cases of `check_conf
 2. **The brief's premise on `land.sh`.** The brief says the rows at lines 503 and 515 "name `codex:gpt-5.6-sol`". The whole branch around those rows read Codex's event log. Judgment call 1 gives what was done and the open point on `<runs dir>`.
 3. **The ASCII check on an uncommitted deletion.** The `Can't open` warnings quoted under V1 come from running the verify list before the deletion is committed. They will stop once the deletion is committed on main. That last point is not verified, since committing is the orchestrator's job.
 4. **Git commands.** The dispatch prompt says to run no git command. The brief's own checks are read-only git commands: the grep in "What is on the tree" (`git grep`) and the verify list's ASCII check (`git ls-files`). Those are the only git commands I ran in the worktree. The tests and the V3 scratch repository run `git` only on scratch repositories under `$TMPDIR` and the scratchpad.
+
+## Repair round 1
+
+The rulings are in `agents/briefs/20-round-1.md`. This section replaces judgment call 1 (`<runs dir>` is now removed), the `worker_effort` entry of judgment call 10 (the key is now removed), item 1 of "What in the brief was wrong" (`skills/spec/SKILL.md:125` is now fixed), and the V1, V2 and V3 outputs above.
+
+| # | Ruling | State | Proof |
+|---|---|---|---|
+| 1 | Remove `land.sh`'s `<runs dir>` | DONE | `git grep -n -i 'runs dir' -- ':!.scratch'` prints nothing. The usage line is now `Usage: %s <pkg> <base> [--no-browser] [--session <session log> --since <ISO time>]`. The code now uses `-lt 2` and `shift 2`, and the runs-directory preflight is gone. Every call in `land.test.sh` passes `<pkg> <base> --no-browser`. The clean landing's session log is now written to `$test_root/clean-session.jsonl`. The `adapted` landing writes no session log, because nothing read it. `write_session` now takes a file path. Neither README nor `skills/land/SKILL.md` named the argument. The same grep is empty over both. |
+| 2 | Remove `worker_effort` | DONE | `git grep -n worker_effort -- ':!.scratch'` now finds only the new test case, `check_config.test.sh` 85 and 86. The key was removed from `plan.yaml`, from both projects of `plan.projects.yaml`, from `orchestrator-state.md`, and from the list in `skills/plan/SKILL.md` Steps 4, which now reads "the worker, the reviewer". Two things follow from the removal. The usage row in `plan-orchestration` now says "the builder's model". `land.sh`'s worker row no longer says `at high`. |
+| 3 | Define a dead builder | DONE | See `skills/plan-orchestration/SKILL.md` lines 109 to 111. A builder is dead when the runner's agent listing no longer shows it and no completion notification with a report arrived. It is also dead when a later session does not find its agent id in its own listing. A dead builder is reported with the worktree's `git status --short` and the builder's last message when there is one. The Anti-patterns row now reads "Its partial work in the worktree is lost without the user knowing", and its "Do instead" points to "Resuming, and handing the plan over". `grep -n transcript skills/plan-orchestration/SKILL.md` finds only lines 33 and 98. Both are about the orchestrator's own transcript: line 33 is the reading order, and line 98 is the handover rule. |
+| 4 | `skills/spec/SKILL.md:125` | DONE | The row now reads: `\| A runner or a vendor named in the brief \| The brief then ties the step to how it is launched, which \`plan-orchestration\`'s "Launching a builder" alone says \| Leave it out \|`. `git grep -n -i harness -- skills/spec/SKILL.md` prints nothing. |
+| 5 | History wording in tests | DONE | `check_config.test.sh` 84 and 85 now read: "A key the plan skill's templates/plan.yaml does not hold is an unknown key: launch_note, worker_allow and worker_effort each. Red when templates/plan.yaml holds the key." The cases are named `unknown-launch_note`, `unknown-worker_allow` and `unknown-worker_effort`. `pin.test.sh` 330 now reads "The default folders are Claude Code's only, so $d2 stays absent. Red when the defaults hold $d2." `grep -n -E 'again\|old-' skills/ordo-init/templates/check_config.test.sh` prints nothing. |
+| 6 | Before-and-after rows | DONE | The table below. |
+
+### Before and after, added in round 1
+
+| Surface | Before | After |
+|---|---|---|
+| `/plan-orchestration` Quick start, `continue the plan` | "resume from the state file, after a compaction or on another harness" | "resume from the state file, after a compaction or in another session" |
+| Dispatch block fields written by the orchestrator | `prompt`, `output`, `events`, `stderr`, `exit`, `pid`, `session_file`, `allow_file`, `note_id_file` before the launch; `session_id` when the launch returns; `reviewer_report`; the `repair_*` entries during a fix round; the `cases_*` entries during a resume on a cases ruling | `session_id`, the builder's agent id, written when the builder is dispatched; `reviewer_report` at the review. `/spec` writes the fields it wrote before. |
+| `land.sh` command line | `land.sh <pkg> <base> <runs dir> [--no-browser] [--session <log> --since <time>]`; refused when `<runs dir>` is not a directory | `land.sh <pkg> <base> [--no-browser] [--session <log> --since <time>]` |
+| `plan.yaml` key `worker_effort` | Optional, default `high` | Not a key; `check_config.py` reports `unknown key: worker_effort` |
+
+### Reverts for the new and changed cases (first `FAIL:` line of each)
+
+Each revert was made in the worktree and then restored from a scratchpad copy, checked equal with `cmp`.
+
+1. `land.test.sh`, the clean landing with the new arguments. Revert: `land.sh` requires `<runs dir>` again (`-lt 3`, `landing_runs=$3`, `shift 3`, and the runs-directory preflight).
+   `FAIL: clean landing exited 1, expected 0`
+2. `land.test.sh`, the worker row (changed: no `at high`). Revert: `land.sh` prints `worker claude:opus at high`.
+   `FAIL: worker row: missing [clean, worker claude:opus, first run: <tokens>, <tool uses> tool uses, <seconds> s (from the runner's result); repair round: <the same, or none>; +2 -0 over 2 files; first report passed its bar: <yes or no>; <N> fixes at landing]`
+3. `check_config.test.sh`, `unknown-worker_effort` (new). Revert: `worker_effort: high  # optional, default high. ...` added back to the plan skill's `templates/plan.yaml`.
+   `FAIL: unknown-worker_effort: expected an error, got a pass: ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists`
+4. `check_config.test.sh`, `unknown-launch_note` (renamed). Revert: `launch_note: ""` added back to the same template.
+   `FAIL: unknown-launch_note: expected an error, got a pass: ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists`
+5. `check_config.test.sh`, `unknown-worker_allow` (renamed). Revert: `worker_allow: []` added back to the same template.
+   `FAIL: unknown-worker_allow: expected an error, got a pass: ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists`
+6. `pin.test.sh`, the default-folders case (only its comment changed). Revert: `pin.sh`'s defaults hold `$HOME/.agents/skills`.
+   `FAIL: pin.sh wrote into /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pin-test.OjWYIt/my home/.agents/skills with the default folders`
+
+### Verify before you report, rerun
+
+V1, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+Can't open skills/plan-orchestration/templates/allow_list.py: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/allow_list.test.sh: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/launch-note.md: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/launch.sh: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/launch.test.sh: No such file or directory at -e line 1.
+verify: 12 commands passed
+```
+
+The `Can't open` lines have the same cause as under V1 above: the deletion is not committed yet. The ASCII check over only the files that exist again printed nothing, `exit=0`.
+
+V2, the brief's grep: now 38 lines. The first-round grep had 37. Only the line numbers in `land.sh` and `land.test.sh` moved, and `check_config.test.sh` 85 is new because the test comment now wraps onto it. Each line keeps its reason from the V2 table above. The lines, as `file:line`:
+
+```
+README.md:50 README.md:58 README.md:118 README.md:151 docs/academic-coverage.md:5 docs/academic-coverage.md:23 docs/academic-coverage.md:29 docs/roadmap.md:22 docs/roadmap.md:136 docs/roadmap.md:137 skills/land/SKILL.md:96 skills/land/templates/land.sh:11 skills/land/templates/land.sh:137 skills/land/templates/land.sh:138 skills/land/templates/land.test.sh:11 skills/land/templates/land.test.sh:489 skills/land/templates/land.test.sh:494 skills/land/templates/land.test.sh:495 skills/land/templates/land.test.sh:502 skills/land/templates/land.test.sh:514 skills/land/templates/land.test.sh:515 skills/ordo-init/SKILL.md:31 skills/ordo-init/SKILL.md:53 skills/ordo-init/templates/check_config.test.sh:79 skills/ordo-init/templates/check_config.test.sh:80 skills/ordo-init/templates/check_config.test.sh:81 skills/ordo-init/templates/check_config.test.sh:82 skills/ordo-init/templates/check_config.test.sh:84 skills/ordo-init/templates/check_config.test.sh:85 skills/ordo-init/templates/check_config.test.sh:86 skills/repo-setup/SKILL.md:44 skills/repo-setup/SKILL.md:55 skills/repo-setup/SKILL.md:64 skills/repo-setup/templates/CLAUDE.md:30 skills/repo-setup/templates/docs/dev/change-standard.md:45 skills/repo-setup/templates/sync_rules.test.sh:29 skills/spec/templates/brief.md:50 utils/pin.test.sh:39
+```
+
+V3, `check_config.py` on the scratch repository with `worker: codex:gpt-5.6-sol`:
+
+```
+error: worker is not claude:<model>: 'codex:gpt-5.6-sol'
+exit=1
+```
+
+### Files changed in round 1 (`wc -l`)
+
+| File | Lines |
+|---|---|
+| `skills/land/templates/land.sh` | 445 |
+| `skills/land/templates/land.test.sh` | 727 |
+| `skills/plan/templates/plan.yaml` | 21 |
+| `skills/plan/templates/plan.projects.yaml` | 41 |
+| `skills/plan/templates/orchestrator-state.md` | 68 |
+| `skills/plan/SKILL.md` | 82 |
+| `skills/plan-orchestration/SKILL.md` | 232 |
+| `skills/spec/SKILL.md` | 130 |
+| `skills/ordo-init/templates/check_config.test.sh` | 104 |
+| `utils/pin.test.sh` | 439 |

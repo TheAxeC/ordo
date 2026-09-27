@@ -50,6 +50,7 @@ dispatch:
   landing: not-started
   round: 1
   round_1_rulings: agents/briefs/20-round-1.md, paths widened by skills/spec/SKILL.md
+  round_1_builder_usage: 305557 tokens, 14 tool uses, 7.6 minutes
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
