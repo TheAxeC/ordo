@@ -12,9 +12,10 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step of work
 
 ## Steps, in execution order
 
-- <1> <what the step delivers, in one line; the check that proves it> (<n> commit)
-- <2> <what the step delivers, in one line; the check that proves it> (<n> commit; orchestrator, no agent)
-- <last> the closing: the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent)
+- <1> <what the step delivers, in one line; the check that proves it> (<n> commit) (approved)
+- <2> <what the step delivers, in one line; the check that proves it> (<n> commit; orchestrator, no agent) (approved)
+- <2a> <a step a ruling of the user added after the approval, in one line; the check that proves it> (<n> commit) (ruling <L>)
+- <last> the closing: the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Could run in parallel
 
@@ -24,7 +25,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 
 ## Rulings (<date>)
 
-- <the user's decision in one line, and what it unblocks>.
+- Open item <L> (<date>): <the user's decision in one line, and what it unblocks> (the user).
 
 ## Blocked, and by what
 

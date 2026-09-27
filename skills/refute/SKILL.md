@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Refute a step
@@ -20,7 +20,7 @@ metadata:
 | When | Use |
 |---|---|
 | The step has no brief or worktree yet | `/spec <entry> <step>` |
-| The findings are closed or booked and the step is ready for main | `/land <entry> <step>` |
+| The findings are closed or raised as open items and the step is ready for main | `/land <entry> <step>` |
 | Every step of the plan, unattended, the reviews included | `/plan-orchestration <entry>` |
 | What the reviews keep finding across plans | `/plan-retro` |
 
@@ -53,7 +53,7 @@ metadata:
    - Then what was not checked within the time box, named.
    - Then the reviewer's usage.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`, records its usage in the state file's table and its path under the dispatch block's `reviewer_report` field, and commits both by path.
-8. Each finding is then closed or booked, as "Finding dispositions" says.
+8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
 ### Over a repair round
 
@@ -67,7 +67,7 @@ metadata:
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns every verification command again.
 6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape, and records and commits as Steps 7 says.
-7. The findings of the run over the last round are never sent to the builder: each is fixed at landing when it is small and inside the brief, or booked as "Finding dispositions" says.
+7. The findings of the run over the last round are never sent to the builder: each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
 8. With `refute_after_repair: no` these runs do not happen, and the orchestrator's read of the delta stands in for them.
 
 ## The four headings
@@ -101,10 +101,10 @@ metadata:
 
 ## Finding dispositions
 
-- A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or booked as its own step in the plan and carried in the state file's booked list.
+- A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or raised to the user as an open item in the state file, as `plan-orchestration`'s Stops section says; it becomes a step only by the user's ruling.
 - The open items hold only what the user must rule on.
 - After the last round, the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading.
-- `/land` refuses while a finding is left neither closed nor booked.
+- `/land` refuses while a finding is left neither closed nor raised as an open item.
 
 ## Stops
 

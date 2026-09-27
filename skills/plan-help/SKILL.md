@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.6.0"
+  version: "1.7.0"
 ---
 
 # Plan help
@@ -56,8 +56,8 @@ then, for every step:
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
-                              repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or booked, never sent back
-read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is booked as its own step and goes to the booked list
+                              repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
+read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and becomes a step only by your ruling
 /land <entry> <step>          stops the step's agents, then onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the usage rows, the booking, the commit
 
 when a command stops:
@@ -65,9 +65,9 @@ when a command stops:
 /spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, or a choice is yours: it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger and commits
 /spec <entry> <step>          again; it now writes the brief
-/spec refuses                 the brief's "Paths this step writes" shares a path with a step in flight, or a state file or brief it reads is unusable: it names the cause and leaves nothing; land the other step or change the paths, then /spec again
-/land refuses                 it names what is missing, such as a finding neither closed nor booked: fix or book it, then /land again
-/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main and its failure is booked; then /spec the next unblocked step, the booked step in its queue order, an open item after your ruling
+/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), the brief's "Paths this step writes" shares a path with a step in flight, or a file it reads is unusable: it names the cause and leaves nothing; rule on the step, land the other step or change the paths, then /spec again
+/land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the ledger's land.sh: supply it, then /land again
+/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main and its failure is recorded in its Step 0 in plan.md; /spec that step again when it comes up, with no new ruling, or after your ruling when only you can decide what to do
 
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
 

@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
 metadata:
-  version: "2.7.0"
+  version: "2.8.0"
 ---
 
 # Plan orchestration
@@ -45,11 +45,12 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
 3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, makes the worktree and writes the dispatch block.
    - A stop it raises goes to the user by "Stops". A stop, here or at any later step, blocks its own step, and the loop moves on to the next unblocked step.
+   - Its refusal of a step without the user's authority (the `spec` skill's `templates/check_step.py`) is raised as a stop of the kind "A finding that is the user's", since only the user's ruling adds a step to the plan.
 4. Choose the step's executor and write it into the dispatch block, then build by that choice.
    - **Choice.** `academic-paper` for a step whose deliverable is manuscript content, always; otherwise what the invocation named (`/plan-orchestration <entry> inline` runs every code step inline); else the configuration block's `executor:`, which is `agent` by default and `inline` when the plan chose it.
    - **`agent`.** Dispatch one builder with the worktree path and the brief, by the recipe under "Launching a builder", and the moment it is launched write its agent id into the dispatch block under `session_id` and commit the block by path.
-   - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report, the main checkout, the user's data); the reading order (the rules file, the brief, the standards); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
-   - **The builder.** It never runs a git command, and in the ledger it writes only its report, at the path the brief names in the worktree's copy of the ledger.
+   - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report and a rule inventory the brief names, the main checkout, the user's data); the reading order (the rules file, the brief, the standards); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
+   - **The builder.** It never runs a git command, and in the ledger it writes only its report and a rule inventory the brief names, at the paths the brief names in the worktree's copy of the ledger.
    - **`inline`.** The orchestrating session builds the step itself in the worktree under the brief and the rules file, and steps 5 and 8 read "the builder" as itself.
    - **`academic-paper`.** The step is built through that skill with the brief as its input, and its output is the step's report.
 5. While the builder runs, do ledger work only: the next step's premise checks, the bookings, the usage table.
@@ -57,6 +58,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Never dispatch while the user has asked for a pause.
 6. On the report, save it into the main ledger at the dispatch block's `report` path, then read the whole diff.
    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
+   - A rule inventory the brief names is copied into the main ledger at its path the same way, since the ledger's `land.sh` leaves a ledger file left uncommitted in the worktree out of the landing.
    - The builder's completion notification carries its final message. When the builder wrote no report file, the orchestrator takes the report from that message into the `report` path.
    - The report is a lead, not a fact.
    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result; read that hand-back the same way as a report.
@@ -68,16 +70,16 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Before the resume.** Write `round: n` into the dispatch block, and commit.
-   - **Only known fixes.** Each ruling says what to change. A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed by the orchestrator, read-only, before the round is sent; the round carries the found cause's fix, and a cause not found is not sent: it is noted at landing and booked. A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
+   - **Only known fixes.** Each ruling says what to change. A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed by the orchestrator, read-only, before the round is sent; the round carries the found cause's fix, and a cause not found is not sent: it is noted at landing and raised to the user as an open item, by "Stops". A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
    - **After each reply.** Read the whole delta and, when the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its usage recorded beside the first.
    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
 9. Invoke `/land <entry> <step>`. Its refusals are its own.
-   - A red line the orchestrator cannot fix at landing takes the step back out of main and is booked with the failure: in the open items when only the user can decide what to do, in the booked list otherwise.
+   - A red line the orchestrator cannot fix at landing takes the step back out of main: its failure is recorded in the step's Step 0 in `plan.md`, and the step keeps its line and its tag and is worked again as that step, through `/spec`, with no new ruling; the failure goes to the user as an open item only when only the user can decide what to do, by "Stops".
 10. Continue with step 2.
     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
-    - The final message opens as "Reports" says, then lists every step landed since the loop began with the path of each report, and the count of the booked list with the steps that carry it.
+    - The final message opens as "Reports" says, then lists every step landed since the loop began with the path of each report, and the open items.
 
 ## The two tiers, and the models
 
@@ -105,7 +107,7 @@ On resumption with a dispatch block present:
 - A builder still running is waited for.
 - A finished builder resumes at the read of its report.
 - A step at `landing: cherry-picking` is checked on main (`git status`, `git diff --cached`) before anything is applied again.
-- A step at `landing: backed-out` was taken back out of main by a red line at its landing: its worktree and branch are kept, it stays unticked in `plan.md`, and it is worked again when its booked item comes up.
+- A step at `landing: backed-out` was taken back out of main by a red line at its landing: its worktree and branch are kept, it stays unticked in `plan.md`, and it is worked again as that step, through `/spec`, its line keeping its tag, with no new ruling; its failure is in its Step 0 in `plan.md`.
 - A builder is dead when the runner's agent listing no longer shows it and no completion notification with a report arrived.
 - A builder is also dead when a later session does not find its agent id in its own listing and no report is at the dispatch block's `report` path in the worktree.
 - A dead builder is reported to the user with the worktree's `git status --short` and the builder's last message when there is one.
@@ -156,9 +158,10 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 ## What earns a step of its own
 
 - A step is a large thing: a new capability, or a defect too nasty or too wide to close where it was found.
-- Everything else is closed in the step that is open: a finding inside a brief by the repair rounds, a finding beyond it at the landing that raised it, a fix in a file another step holds at that step's landing.
+- Everything else is closed in the step that is open: a finding inside a brief by the repair rounds or at landing, a fix in a file another step holds at that step's landing. A finding beyond the brief is raised to the user as an open item, by "Stops".
 - A step's path list is a choice, not a fact: widen it rather than mint a step for what the open step exists to end.
 - A report that asks for a step says what makes the work new, or nasty, or blocked by something in flight.
+- A step enters the step list only by the user's ruling, as a line ending with `(ruling <name>)`, and `/spec` refuses a line without its tag.
 
 ## Reports
 
@@ -166,8 +169,8 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - A builder's report keeps the shape of the repository's change standard.
 - The state file's open items follow the position line, verbatim.
 - The open items hold only what the user must rule on: a stop, and a proposal of the recurring-findings pass.
-- A finding that needs no ruling is not an open item; it is a step in the plan, carried in the state file's booked list, and a report names that list's count and the steps on it rather than its lines.
-- A third list, the closed one, is the log of what was raised and how it ended, and no report carries it.
+- A finding that is neither closed in the repair rounds nor fixed at landing is an open item, since only the user's ruling makes it a step.
+- The other list, the closed one, is the log of what was raised and how it ended, and no report carries it.
 - Then anything NOT DONE first, then the DONE / NOT DONE ledger naming the command that proves each row.
 
 ## Usage
@@ -197,11 +200,12 @@ A stop is for a decision that is the user's, of one of six kinds:
 | A wrong premise | A premise found wrong that the plan cannot absorb | The stop message, below | The user's ruling |
 | A red check | A red check no fix within the plan covers | The stop message, below | The user's ruling |
 | A rule clash | A contradiction between two established rules | The stop message, below | The user's ruling |
-| A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision | The stop message, below | The user's ruling |
+| A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by the user's ruling | The stop message, below | The user's ruling |
 | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
 
 - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
 - A stop is booked in the state file's open items the moment it is raised.
+- A ruling that adds or splits a step is booked as the `spec` skill's "Steps / A ruling" says: the new line in the step list ends with `(ruling <name>)`, naming the ruling's line in the Rulings section.
 - A stop is repeated in every report until the user has ruled.
 - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons. It never goes through a question-box or multiple-choice tool.
 - A pause the user asks for holds until they lift it.
@@ -212,7 +216,7 @@ A stop is for a decision that is the user's, of one of six kinds:
 |---|---|---|
 | Relaunching a dead builder silently | Its partial work in the worktree is lost without the user knowing | Report it as "Resuming, and handing the plan over" says; a continuation builder takes over the worktree when the user says so |
 | Sending a finding that changes the scope, a requirement, a public shape or an established decision back to the builder | The builder then takes a decision that is the user's | Raise it as a stop |
-| Handing a miss inside a brief back as a gap in a report | The work the user asked for is left undone | Close it in the repair rounds or at landing, or book it as its own step in the booked list |
+| Handing a miss inside a brief back as a gap in a report | The work the user asked for is left undone | Close it in the repair rounds or at landing, or raise it to the user as an open item, by "Stops" |
 | Minting a step because the work is inconvenient now | The open step does not end what it exists to end | Widen the open step's path list; see "What earns a step of its own" |
 | An option that breaks a written rule, in a stop | The user is asked to weigh something that is not allowed | Leave it out; do not mention it |
 | Rewriting a rule that keeps being broken when a command can check it | The same words fail the same way | Propose a check for it, which the user rules on, as "The recurring-findings pass" says |
@@ -220,7 +224,7 @@ A stop is for a decision that is the user's, of one of six kinds:
 | Narrating wrong turns taken and backed out | The report no longer says what is true now | State the end state |
 | Stating a measurement not taken | The number is a guess presented as a fact | Name the command behind each number, or leave the number out |
 | Presenting partial work as complete | The user acts on work that is not there | Put anything NOT DONE first |
-| Offering the user another repair round beyond the cap | The cap is a rule the user's yes does not extend, and the extra round only moves work that belongs in a new step | Land the step with its small fixes and book the rest as steps, as the round cap and the two bullets after it in "Rules" say |
+| Offering the user another repair round beyond the cap | The cap is a rule the user's yes does not extend, and the extra round only moves work that belongs to the user's ruling on an open item | Land the step with its small fixes and raise the rest as open items, as the round cap and the two bullets after it in "Rules" say |
 
 ## Rules
 
@@ -228,5 +232,5 @@ A stop is for a decision that is the user's, of one of six kinds:
 - A fix of a defect in delivered work needs no yes.
 - The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing. A new finding of a review never earns that round, and the user's yes never extends the cap.
 - After its last round a step lands, and its small findings, the last review's included, are fixed at landing.
-- Everything else that the rounds left undone, or that lies beyond the brief, is booked as its own step in the plan and carried in the state file's booked list, never sent back to the builder.
+- Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops", never sent back to the builder, and becomes a step only by the user's ruling.
 - Every skill the loop invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, and `/roadmap` at the closing) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.

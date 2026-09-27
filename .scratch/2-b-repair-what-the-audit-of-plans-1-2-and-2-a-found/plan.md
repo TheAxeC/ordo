@@ -38,7 +38,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit) (approved)
 - ✅ 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent) (approved)
 - ✅ 20 Claude only (ruling U 1): the shell-launch route and every Codex part of the skills removed: `launch.sh`, `launch.test.sh`, `allow_list.py` and its test, `launch-note.md`, the `launch_note` and `worker_allow` keys and their checks, the shell recipes, the Codex text of every skill, the AGENTS.md check of `sync_rules.py`, the models ruling's Astra and Sol, and `.agents/launch/2b-7` (1 commit) (ruling U)
-- 21 The process checks (rulings U 4 and V): `/spec` refuses a step whose line lacks `(approved)` or a `(ruling <name>)` the Rulings section holds, through `skills/spec/templates/check_step.py`, and `/plan` writes `(approved)` (ruling X); this plan's step lines tagged; `/land` requires the ledger's `land.sh`, and this plan's ledger gets its copy; `docs/dev/skill-layout.md` requires a rule inventory, checked by `check_rule_inventory.py`, for any rewrite of an existing skill (1 commit); after its landing the release tagged and the user's yes asked to pin it (ruling W) (ruling U) (ruling V) (ruling X) (ruling Y)
+- ✅ 21 The process checks (rulings U 4 and V): `/spec` refuses a step whose line lacks `(approved)` or a `(ruling <name>)` the Rulings section holds, through `skills/spec/templates/check_step.py`, and `/plan` writes `(approved)` (ruling X); this plan's step lines tagged; `/land` requires the ledger's `land.sh`, and this plan's ledger gets its copy; `docs/dev/skill-layout.md` requires a rule inventory, checked by `check_rule_inventory.py`, for any rewrite of an existing skill (1 commit); after its landing the release tagged and the user's yes asked to pin it (ruling W) (ruling U) (ruling V) (ruling X) (ruling Y)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit) (approved)
 - 17a A library check in `/spec`, set per project (ruling T): a required key `libraries: check | avoid` in `.agents/plan.yaml`, per project in the `projects:` form, in the `plan` skill's `templates/plan.yaml` and `templates/plan.projects.yaml` and in the configuration block of `templates/orchestrator-state.md`; `/ordo-init` asks for it when it drafts the file and `templates/check_config.py` reports it missing or of an unknown value, with cases; `/plan` and `/spec` refuse without it; under `check`, `/spec` looks for libraries for every capability the step builds before it writes the brief, a candidate that could replace hand-written code is a stop for the user with options, pros, cons and one recommendation, and `templates/brief.md` gains a section "Libraries checked" (each candidate's version, license, maintainer, last release, compatibility with the project's dependencies, what it would replace and what stays) naming the library ruled; under `avoid` the brief says no new dependency; under both, a builder adds no dependency the brief did not name and reports an unnamed library that would cover its work instead of installing it, and `/refute` reports a dependency the brief did not name; bundle size is no criterion unless `plan.yaml` names one; this repository's `.agents/plan.yaml` gets `libraries: avoid` (1 commit) (ruling T)
 - 18 The closure table `agents/reviews/closure.md`: every numbered finding of the six reports (the five of the audit and `6-oculus-changes.md`) with the commit that closed it or the user's ruling; its row count equals the count of findings in the reports (1 commit) (approved)
@@ -74,6 +74,10 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 ### Step 21, Step 0 (open item Y, ruled 2026-09-27: (a); see Rulings)
 
 - Open item Y (step 21, a step the orchestrator books, raised 2026-09-27): rulings U 4 and X (a) make `/spec` refuse a step whose line carries neither `(approved)` nor `(ruling <name>)`. The skills also let the orchestrator book a step without the user: a finding outside a brief, a red line at landing, work left after the last repair round. Those steps go into the state file's "Booked, no ruling needed" list and are worked in queue order (`skills/land/SKILL.md:131`, `skills/plan/templates/orchestrator-state.md:34`, `skills/plan-orchestration/SKILL.md:172`, `skills/plan-help/SKILL.md:70`). Under step 21 as built, such a step has no tag and `/spec` refuses it, and the builder's worktree adds a sentence to plan-orchestration saying so; the other texts still say the step is worked with no ruling. Which holds is a rule of the loop, so it is the user's. (a) A step the orchestrator books is a stop: it goes to the user as an open item with its options, and it enters the step list only with the user's ruling and its `(ruling <name>)` tag. The booked list and the four sentences above are rewritten to say so, and the state file's heading "Booked, no ruling needed" goes. Pro: no step enters a plan without the user, the thing rulings U 4 and X exist for, with no exception. Con: every such finding costs the user a ruling, and the loop stops more often. (b) A `(booked)` tag that `check_step.py` accepts when the step is in the state file's booked list, worked in queue order as today. Pro: no extra stops. Con: the orchestrator again adds steps the user never saw, which is how steps 7b, 7c and 7d came about; this is the lazy option, since it keeps the texts as they are. Recommendation (a). Step 21's one repair round waits for this ruling, since the round rewrites those sentences.
+
+### Step 21a, Step 0 (open item Z, raised 2026-09-27)
+
+- Open item Z (step 21, how a step taken back out of main is prepared again, raised 2026-09-27): after ruling Y, `land`, `plan-orchestration` and `plan-help` say that a step a red line took back out of main keeps its tag and is worked again "through `/spec`, with no new ruling". `/spec` has no text for that case: its worktree add fails on the kept branch, it writes over the committed brief, and it writes a second dispatch block for the step (the round review's Spec 2, read from `skills/spec/SKILL.md` Steps 3, 6 and 8, not run). The fix is larger than a fix at landing and needs a step, so it needs your ruling. (a) Step 21a: `/spec` of a step at `landing: backed-out` saves the kept worktree's diff into the ledger as a patch, removes the kept worktree and branch, and prepares the step again from main's head, with the failure and the patch in its brief. Pro: every step is prepared the same way, from main's head, and `/refute` and `/land` need no second path. Con: the builder applies the old work again. (b) Step 21a: `/spec` reuses the kept worktree, branch and base, adds the failure to the brief, and resets the dispatch block to `round: 0` and `landing: not-started`. Pro: the work stays where it is. Con: the step builds on an older base, and `/spec`, `/refute` and `/land` each need a second path for it. (c) Change the texts to name no route, the lazy option: a backed-out step is then left with no written way back. Recommendation (a).
 
 ## Rulings (2026-09-24)
 
@@ -1049,6 +1053,44 @@ ok: skills/repo-setup/SKILL.md
 ok: skills/roadmap/SKILL.md
 ok: skills/spec/SKILL.md
 verify: 12 commands passed
+```
+
+- Usage: the row in `orchestrator-state.md`'s Usage table.
+
+### Step 21, the process checks (landed 2026-09-27)
+
+- Landed: `skills/spec/templates/check_step.py` and `check_step.test.sh`; `/spec` runs the check before any premise check and refuses a step whose line carries neither `(approved)` nor a `(ruling <name>)` of the user; `/plan` writes `(approved)` on the approved list and copies `land.sh` and `land.test.sh` into the ledger; `/land` refuses a ledger without `land.sh`; `land.sh` runs no project-specific step by default, scopes the worktree's add to the whole tree, leaves the ledger root out of it, and normalises the ledger root; `docs/dev/skill-layout.md` requires a rule inventory for a rewrite of a skill, and `/spec` and the brief template carry it; the booked list removed by ruling Y, a finding neither closed in the rounds nor fixed at landing going to the user as an open item, and a backed-out step kept with its tag and worked again with no new ruling.
+- User-visible changes, before and after: `/spec` prepared any step in the list, now it refuses one without the user's authority; a ledger could hold `land.sh`, now `/land` requires it; `land.sh` ran a line count over `src tests config bin` and a browser step on port 8792 unless `--no-browser`, now its defaults run neither; a finding beyond a brief became a step in the booked list worked in queue order, now it is an open item and a step only by the user's ruling; `- Open item E: ...` is named `E` by `check_step.py`.
+- Repair rounds: round 1, eight rulings (`agents/briefs/21-round-1.md`), its paths widened by `skills/plan-help/SKILL.md`, `skills/plan/templates/orchestrator-state.md`, `skills/repo-setup/templates/docs/dev/change-standard.md`, `skills/refute/SKILL.md` and `skills/refute/templates/report.md`.
+- Fixes at landing (3), from the review over round 1: `skills/land/SKILL.md` Rules, a landed step found short raised to the user rather than given a new step (Spec 1); `skills/plan-orchestration/SKILL.md` "What earns a step of its own", a finding beyond the brief raised to the user, and its Anti-patterns row on a round beyond the cap (Spec 1 and Spec 3); `skills/spec/SKILL.md`'s description names the refusal (Standards 1).
+- Ledger work at landing: `sh skills/spec/templates/check_step.test.sh 2>&1 | tail -1` added to the verify list (13 commands); `land.sh` and `land.test.sh` copied into this ledger, their `ADAPT` defaults (`.`, `.scratch`, nothing in the block, `claude:opus`) matching this repository; the booked list moved to the closed list.
+- Raised to the user: open item Z, the route of a backed-out step through `/spec` (the round review's Spec 2 and Behaviour 1), as step 21a.
+- Not verified: the ledger's copy of `land.test.sh`, run from the repository root, prints `FAIL: verify.sh not found beside this test or in the land skill's templates`, since the installed `land` skill of v1.0.0 holds no `verify.sh`; it is run again after the pin of ruling W.
+- Verification on main after the fixes at landing, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: check_step.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
 ```
 
 - Usage: the row in `orchestrator-state.md`'s Usage table.

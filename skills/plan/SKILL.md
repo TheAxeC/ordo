@@ -1,13 +1,13 @@
 ---
 name: plan
-description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
+description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, each approved step tagged (approved), orchestrator-state.md with the configuration block filled from the repository, and the landing script copied into the ledger. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "1.7.0"
+  version: "1.8.0"
 ---
 
 # Open a plan
 
-`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md` and `orchestrator-state.md`, committed, and `agents/briefs/` and `agents/reviews/`, each holding an empty `.gitkeep`.
+`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md`, `orchestrator-state.md`, `land.sh` and `land.test.sh`, committed, and `agents/briefs/` and `agents/reviews/`, each holding an empty `.gitkeep`.
 
 ## Quick start
 
@@ -34,6 +34,7 @@ metadata:
 2. The roadmap the configuration names.
    - `<entry>` is matched against the entries by number or title; no match is a stop ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
+4. The `land` skill's `templates/land.sh` and `templates/land.test.sh`, found as `land.sh` finds `verify.sh`: in the `land` skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`), the first that holds them; not found is a stop ("Stops").
 
 ## Steps
 
@@ -48,14 +49,20 @@ metadata:
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
 3. Show the draft to the user, and write `plan.md` once the user has approved or corrected it.
+   - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
    - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`.
    - The block's `executor:` is not a project specific and is not in `plan.yaml`.
    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
    - The orchestrator chooses the executor per step over that default.
    - The dispatch block is empty, the open items are empty, and the position names the first step.
-5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
-6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files by path as the plan's opening commit, with the roadmap entry's number in the subject.
+5. Copy the `land` skill's `templates/land.sh` and `templates/land.test.sh` into the ledger folder, since `/land` requires the ledger's `land.sh`, and make their `ADAPT` edits from `plan.yaml`:
+   - `landing_ledger_root` is `ledger_root`, the project's own in the `projects:` form.
+   - `landing_tool_path` stays `.`, the whole tree.
+   - The model names of the usage rows are `worker` and `reviewer`, in `land.sh` and in the rows `land.test.sh` expects.
+   - The `ADAPT` block holds the dependency install the verification page's commands need, and stays empty, running nothing, when they need none.
+6. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
+7. Commit `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh` and the two `.gitkeep` files by path as the plan's opening commit, with the roadmap entry's number in the subject.
 
 ## Stops
 
@@ -65,6 +72,7 @@ metadata:
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
+| No landing script | The `land` skill's `templates/land.sh` or `templates/land.test.sh` is in none of the places "What it reads" 4 names | The file missing and the places looked in | The `land` skill installed, then `/plan` again |
 | The plan exists | The ledger folder is already there: a plan is opened once | The folder | Nothing |
 
 ## Anti-patterns
@@ -77,6 +85,7 @@ metadata:
 ## Rules
 
 - A step is one deliverable and one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), with the command that proves it, except the bookkeeping steps the orchestrator does itself.
+- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a ruling of the user added later, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.
 - Every path in the ledger is relative to the repository root.
 - Every command in the ledger names the directory it runs from.
 - No history: the ledger records decisions with their dates in `plan.md`'s rulings list; the templates and this file carry none.

@@ -31,7 +31,7 @@ How a change is made in this tree, whoever makes it: a session working inline, o
 
 - In the git worktree the brief names, never in the main checkout. Every path in the brief is relative to that worktree.
 - No git command that changes state: no `add`, `commit`, `stash`, `checkout`, `mv`, `restore`. Reading with `git status`, `git diff` and `git show` is fine; a file is moved with `mv`.
-- Nothing under the ledger folder is edited except the report the brief names. The plan, the state file and the briefs belong to the orchestrator.
+- Nothing under the ledger folder is edited except the report the brief names, and the rule inventory it names for a step that rewrites a skill (`docs/dev/skill-layout.md`, "A rewrite of a skill"). The plan, the state file and the briefs belong to the orchestrator.
 - No sub-agents; no background shells, sleeping or polling, except a capture of a run the runner's command cap would kill, with its whole output written to a file the report names.
 
 ## Commands and their filters
@@ -45,6 +45,7 @@ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
+sh skills/spec/templates/check_step.test.sh 2>&1 | tail -1
 sh utils/pin.test.sh 2>&1 | tail -1
 sh utils/check_skill_layout.test.sh 2>&1 | tail -1
 sh utils/check_rule_inventory.test.sh 2>&1 | tail -1

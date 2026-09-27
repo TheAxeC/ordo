@@ -13,7 +13,7 @@ executor: agent              # the plan's default for who builds a step: agent (
 worker: claude:<model>       # the default worker is claude:opus; a builder never runs on Fable.
 reviewer: claude:<model>     # the model /refute runs on: claude:opus by default; a reviewer never runs on Fable.
 review: every                # every, or earned: under the loop, the reviewer runs unless the worker's record earns the skip (plan-orchestration, "The review, earned").
-refute_after_repair: yes     # yes: /refute runs again over each repair round, its findings fixed at landing or booked, never sent back; no: the orchestrator's read of the round stands in.
+refute_after_repair: yes     # yes: /refute runs again over each repair round, its findings fixed at landing or raised as open items, never sent back; no: the orchestrator's read of the round stands in.
 repair_rounds: 1             # the most repair rounds a step gets; a refutation that finds nothing ends them early; the round cap in plan-orchestration's Rules allows one beyond it under its exception.
 review_minutes: 0            # the reviewer's time box in minutes; 0 is none.
 look:                        # where a changed view is opened at landing (a page, a command); empty means no look step.
@@ -27,11 +27,9 @@ dispatch: none               # or the block /spec writes (a list with workers_at
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-Nothing here needs a command or a fix: a finding that needs no ruling is a step in the plan and belongs in the booked list below, and what is settled belongs in the closed list.
+A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
 
 - <a stop awaiting the user's ruling, or a proposal of the recurring-findings pass, with its options, the pros and cons of each, and one recommendation, as plan-orchestration's Stops section says; or "none">. An item is booked here the moment it is raised; it leaves only when the user has ruled, and then goes to the closed list.
-
-## Booked, no ruling needed (what a review, a look or the closure audit found; each is a step in plan.md and is worked in queue order, and a report names this list's count and its steps)
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -44,7 +42,7 @@ Nothing here needs a command or a fix: a finding that needs no ruling is a step 
 
 ## Verification, every step
 
-- <when the ledger holds a landing script: its invocation from the repository root, what it does, its exit codes, and the test that proves it>.
+- <the ledger's landing script: its invocation from the repository root, what it does, its exit codes, and the test that proves it>.
 - <the commands, and the directory each runs from>.
 - The `verify` list above runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, the worktree and then main, and the lines it prints are what a report or a booking quotes.
 - Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.

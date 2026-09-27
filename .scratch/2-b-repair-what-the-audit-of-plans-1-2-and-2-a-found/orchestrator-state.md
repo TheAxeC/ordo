@@ -9,6 +9,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
+- sh skills/spec/templates/check_step.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh skills/land/templates/verify.test.sh 2>&1 | tail -1
 - sh utils/check_skill_layout.test.sh 2>&1 | tail -1
@@ -34,35 +35,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: '21'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  session_id: abce530a8a38caeac
-  worktree: .agents/worktrees/2b-21
-  base: 8b13b9e
-  launched: 2026-09-27
-  builder_usage: 289779 tokens, 77 tool uses, 34.5 min
-  reviewer: claude:opus, agent ac15f75e2f1f31c4f, launched 2026-09-27
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/21-report.md
-  landing: not-started
-  round: 1
-  round_1: sent 2026-09-27, brief agents/briefs/21-round-1.md, paths the brief's plus skills/plan-help/SKILL.md, skills/plan/templates/orchestrator-state.md, skills/repo-setup/templates/docs/dev/change-standard.md, skills/refute/SKILL.md, skills/refute/templates/report.md; builder's round: 352548 tokens (cumulative for the agent), 32 tool uses, 14.6 min
-  reviewer_round_1: claude:opus, agent a42155aba0ef5d14c, launched 2026-09-27
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
-
-## Booked, no ruling needed
-
-- Found by step 20's review (Behaviour 1), for the pin of ruling W after step 21: `~/.agents/skills` holds ten links into `~/.local/share/ordo-stable` that `pin.sh` no longer manages; the user removes them at that pin, since no session edits a skill folder's links.
-- Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
-- Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
+- Open item Z (step 21, how a step taken back out of main is prepared again, raised 2026-09-27): after ruling Y, `land`, `plan-orchestration` and `plan-help` say that a step a red line took back out of main keeps its tag and is worked again "through `/spec`, with no new ruling". `/spec` has no text for that case: its worktree add fails on the kept branch, it writes over the committed brief, and it writes a second dispatch block for the step (the round review's Spec 2, read from `skills/spec/SKILL.md` Steps 3, 6 and 8, not run). The fix is larger than a fix at landing and needs a step, so it needs your ruling. (a) Step 21a: `/spec` of a step at `landing: backed-out` saves the kept worktree's diff into the ledger as a patch, removes the kept worktree and branch, and prepares the step again from main's head, with the failure and the patch in its brief. Pro: every step is prepared the same way, from main's head, and `/refute` and `/land` need no second path. Con: the builder applies the old work again. (b) Step 21a: `/spec` reuses the kept worktree, branch and base, adds the failure to the brief, and resets the dispatch block to `round: 0` and `landing: not-started`. Pro: the work stays where it is. Con: the step builds on an older base, and `/spec`, `/refute` and `/land` each need a second path for it. (c) Change the texts to name no route, the lazy option: a backed-out step is then left with no written way back. Recommendation (a).
+- The pin of ruling W (raised 2026-09-27): step 21 has landed, and ruling W asks your yes before the release is tagged and pinned. The yes asked: tag main's head as `v1.1.0` (the one tag today is `v1.0.0`, `git tag -l`) and run `utils/pin.sh v1.1.0`. After the pin, `~/.agents/skills` still holds ten links into `~/.local/share/ordo-stable` (land, ordo-init, plan, plan-help, plan-orchestration, plan-retro, refute, repo-setup, roadmap, spec; `ls -la ~/.agents/skills`) that `pin.sh` no longer manages; you remove them yourself, since no session edits a skill folder's links. Until the pin, the ledger's copy of `land.test.sh` fails with `FAIL: verify.sh not found beside this test or in the land skill's templates`, since the installed `land` skill of v1.0.0 holds no `verify.sh`.
 
 ## Closed items
-- Open item Y (step 21, a step the orchestrator books): ruled 2026-09-27, (a); booked in plan.md's Rulings.
+- 2026-09-27: the booked list, removed by ruling Y through step 21. Its three entries: the ten links in `~/.agents/skills`, carried into the open item on the pin of ruling W; `skills/plan/templates/plan.md:3` "one agent dispatch" and the position line in `skills/spec/templates/brief.md`, both gone (`grep -n 'one agent dispatch'` and `grep -n 'position line'` print nothing); `skills/repo-setup/templates/shared-rules.md:19` already limits a stop to a premise the plan cannot absorb, and the `launch_note` exception in the `plan.yaml` templates is moot since step 20 removed the key.
+- 2026-09-27: open item Y (step 21, a step the orchestrator books): ruled (a); built in step 21's repair round.
 
 - 2026-09-27: open item X, how a step line names its authority: ruled (a), each step line ends with `(approved)` or `(ruling <name>)`, checked by `skills/spec/templates/check_step.py`, run by `/spec`, written by `/plan`.
 - 2026-09-27: open item W, when to pin: ruled (a), a tag and a pin once step 21 has landed, the pin run only on the user's yes to that tag.
@@ -118,9 +101,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 and 20 landed (step 20 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 21 in flight: built and refuted, its repair round carrying ruling Y; next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
-- Open on Axel's side: none.
+- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20 and 21 landed (step 21 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
+- Roadmap entry 2.B. Next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19; step 21a waits on open item Z.
+- Open on Axel's side: open item Z and the yes for the pin of ruling W.
 
 ## Usage
 
@@ -148,3 +131,4 @@ dispatch:
 | 7b | claude:opus agent, effort high: 258,005 tokens, 97 tool uses, 6,205 s; round 1: 316,580 tokens, 37 tool uses, 3,126 s; round 2: 356,254 tokens, 27 tool uses, 2,146 s (the agent's notification totals) | 163,825 tokens, 41 tool uses, 2,071 s; round 1: 132,302 tokens, 34 tool uses, 1,532 s; round 2: 132,373 tokens, 32 tool uses, 1,448 s | 2 (one under the exception, the brief's What it must do item 1 unbuilt by round 1) | 8 (8 rulings), then 4 (4 rulings) | 5 files changed, 539 insertions(+), 85 deletions(-) | no | 4 | 0 | 49 | 37730 | 91373 | 8081914 | 114 | 137 | none |
 | 7c | claude:opus agent, effort high: 191,457 tokens, 77 tool uses, 3,046 s; round 1: 59,184 tokens, 158 tool uses, 18,823 s (the agent's notification totals) | 99,985 tokens, 25 tool uses, 1,409 s; round 1: 135,664 tokens, 43 tool uses, 4,961 s | 1 | 7 (7 rulings) | 6 files changed, 408 insertions(+), 39 deletions(-) | no | 6 | 0 | 38 | 37268 | 557266 | 9246203 | 82 | 486 | none |
 | 20 | claude:opus agent: 276,603 tokens, 74 tool uses, 1,238 s; round 1: 305,557 tokens, 14 tool uses, 454 s; round 2: 317,425 tokens, 7 tool uses, 322 s (the agent's notification totals) | 175,814 tokens, 47 tool uses, 698 s; round 1: 133,901 tokens, 38 tool uses, 625 s; round 2: 62,230 tokens, 16 tool uses, 300 s | 2 (round 2 the one beyond the cap) | 7 (6 rulings, then 1) | 29 files changed, 213 insertions(+), 4066 deletions(-) | no | 4 | 0 | 184 | 162453 | 383584 | 46277719 | 408 | 339 (from step 7c's landing; shares the user's rulings U to W, the removal of 7d and the brief of step 20) | none |
+| 21 | claude:opus agent: 289,779 tokens, 77 tool uses, 2,071 s; round 1: 352,548 tokens, 32 tool uses, 875 s (the agent's notification totals) | 185,334 tokens, 54 tool uses, 1,017 s; round 1: 193,994 tokens, 45 tool uses, 776 s | 1 | 8 rulings (7 findings and ruling Y) | 19 files changed, 715 insertions(+), 129 deletions(-), then 3 files, 4 insertions(+), 4 deletions(-) at landing | no | 3 | 1 (open item Z) | 64 | 62069 | 326523 | 12756668 | 136 | 199 (from step 20's landing; shares the user's rulings X and Y and the question on ruling Y) | none |
