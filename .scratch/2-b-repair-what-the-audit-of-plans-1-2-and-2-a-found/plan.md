@@ -67,6 +67,10 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 17a after 17 (both touch the skill texts and templates).
 - 18 after every step from 1 to 17a.
 
+### Step 21, Step 0
+
+- Open item X (step 21, how a step line names its authority, raised 2026-09-27): ruling U 4 says `/spec` refuses a step whose line names neither a step of the approved list nor a ruling of the user. Today step lines name rulings in several free forms (`(ruling H)`, `ruling J`, `(ruling U 1)`, `(ruling 3b)`), and most name nothing, since the user approved the list when the plan opened. How a line names its authority is a shape of every plan's `plan.md`, so it is the user's. (a) Each step line ends with its authority in one form: `(approved)` for a step of the list the user approved when the plan opened, or `(ruling <name>)` naming a line of the Rulings section that ends "(the user)"; `skills/spec/templates/check_step.py <plan.md> <step>` refuses, naming the step, a line with neither or a ruling name the Rulings section lacks; `/spec` runs it before writing a brief; `/plan` writes `(approved)` on each step when the user approves the list; this plan's step lines are tagged from its Rulings section, each tag checked by the reviewer. Pro: the authority is visible on each line and a reviewer can check it. Con: every plan's step lines change shape. (b) One Rulings line lists the approved steps ("Approved steps: 1, 1a, ..."), extended only by a user ruling, and the script checks the step is in it. Pro: one place. Con: the step line shows no reason, and the list can drift from the step list. (c) A sentence in `/spec` and no script, the lazy option: a rule of this kind was already broken. Recommendation (a). The other two parts of step 21 (`/land` requires the ledger's `land.sh`; a rule inventory for any rewrite of a skill) wait with it, since they are one step.
+
 ## Rulings (2026-09-24)
 
 - The way back on track is option C: this repair plan, run in agent mode through the skills, then entry 3; no restart (the user).
