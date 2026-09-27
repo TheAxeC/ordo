@@ -72,3 +72,90 @@ $ ls .agents/launch (main checkout): 2b-7 present.
 - I did not rerun the report's reverts 2, 3 (`bad-harness` message), 5, 6 and 9 of `check_config`/`land` individually. I reran the five listed above.
 
 Reviewer usage: 38 tool uses, about 15 minutes.
+
+## Repair round 1, refuted
+
+```
+$ git status --short        (worktree 2b-20)
+28 tracked files M or D as at the first review, plus skills/spec/SKILL.md M; untracked: agents/briefs/20-round-1.md, agents/reviews/20-refuter.md, agents/reviews/20-report.md
+
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md ... ok: skills/spec/SKILL.md   (ten ok: lines)
+Can't open skills/plan-orchestration/templates/allow_list.py: No such file or directory at -e line 1.
+(four more Can't open lines, one per deleted file)
+verify: 12 commands passed
+exit=0
+
+$ git grep -n -i -E '<the brief's pattern>' -- ':!.scratch' | wc -l
+38
+(the file:line list is identical to the report's V2 list of round 1)
+
+$ python3 skills/ordo-init/templates/check_config.py .   (scratch copy, worker: codex:gpt-5.6-sol)
+error: worker is not claude:<model>: 'codex:gpt-5.6-sol'
+error: worktree_root is not ignored by git: .agents/worktrees   (the copy has no .git; unrelated)
+exit=1
+$ same copy, worker restored, "worker_effort: high" appended:
+error: unknown key: worker_effort
+
+$ grep -rn -i -e '<name>' --exclude-dir=.scratch --exclude-dir=.git .   (outside .agents/worktrees)
+runs dir, runs_dir, runs directory, landing_runs, -runs, write_events, at high, launch recipe: no hits
+worker_effort: check_config.test.sh:85,86 only (the new case)
+effort: those two lines, and docs/academic-coverage.md:143 (unrelated "effort estimates")
+transcript: orchestrator-state.md:3, plan-orchestration/SKILL.md:33, 98 (the orchestrator's own transcript)
+harness: check_config.test.sh:70-72 (case name bad-harness), :78 (comment), repo-setup/SKILL.md:88 ("test harness", unrelated)
+$ grep -n -E 'again|old-' skills/ordo-init/templates/check_config.test.sh   -> no output, rc=1
+$ grep -n -i 'effort\|harness' skills/plan/SKILL.md skills/plan-orchestration/SKILL.md skills/spec/SKILL.md   -> no output, rc=1
+$ ASCII check (perl, building.md form) over git diff 7d3e907 --name-only --diff-filter=AM   -> no output, exit=0
+$ LC_ALL=C grep -n '[^ -~]' agents/reviews/20-report.md   -> no output, rc=1
+$ grep -n worker_effort .scratch/.../orchestrator-state.md
+26:worker_effort: high          # the reasoning effort passed to a worker whose harness takes one.
+
+Reverts, in a scratch copy of the worktree (rsync without .git; the worktree untouched):
+baselines: PASS: land.sh and usage.py scratch tests / PASS: check_config.py scratch tests / PASS: pin.sh scratch tests
+1. land.sh: -lt 3, landing_runs=$3, shift 3, runs-directory preflight restored
+   FAIL: clean landing exited 1, expected 0
+1b. land.sh: only "-lt 2" -> "-lt 3"
+   PASS: land.sh and usage.py scratch tests
+2. land.sh worker row "worker claude:opus at high"
+   FAIL: worker row: missing [clean, worker claude:opus, first run: <tokens>, ...
+3. plan/templates/plan.yaml + "worker_effort: high ... # optional, default high."
+   FAIL: unknown-worker_effort: expected an error, got a pass: ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists
+4. plan/templates/plan.yaml + 'launch_note: ""'
+   FAIL: unknown-launch_note: expected an error, got a pass: ok: ...
+5. utils/pin.sh defaults "$HOME/.claude/skills$nl$HOME/.agents/skills"
+   FAIL: pin.sh wrote into /private/var/folders/.../pin-test.cssoz3/my home/.agents/skills with the default folders
+each restored; tails PASS again. (The copy has no .git, so land.test.sh's check_examples prints "not in an Ordo checkout" there; the state-template/example key equality was checked only by V1 in the worktree.)
+```
+
+Rulings, closure as claimed:
+- Ruling 1 (`<runs dir>`): done as ruled. land.sh:37,46,68 and the preflight lose the argument; land.test.sh's five calls pass `<pkg> <base> --no-browser`; `write_session` takes a file, and the adapted landing's unused log is gone. README and land/SKILL.md never named the argument (grep empty). Revert 1 reproduces the report's FAIL line.
+- Ruling 2 (`worker_effort`): done as ruled across plan.yaml, both projects, orchestrator-state.md, plan/SKILL.md Steps 4. The `unknown-*` loop is red under reverts 3 and 4. The worker row lost `at high`, which follows from the removal (revert 2 red).
+- Ruling 3 (dead builder): done in plan-orchestration/SKILL.md:109-111 and the Anti-patterns row :213, in the ruling's words. See the standards finding on :103 against :110.
+- Ruling 4 (spec/SKILL.md:125): rewritten to "A runner or a vendor named in the brief | The brief then ties the step to how it is launched, which `plan-orchestration`'s "Launching a builder" alone says"; true now; no harness left in the file.
+- Ruling 5 (history wording): check_config.test.sh:84-85 and the `unknown-*` names, pin.test.sh:330 in present terms; grep for `again|old-` empty.
+- Ruling 6 (before and after): the report's "Before and after, added in round 1" has the Quick start row and the dispatch-block row, both matching the diff of plan-orchestration/SKILL.md:17 and orchestrator-state.md:25.
+
+**Spec**
+- none from the builder. Orchestrator's, at landing: the ledger's own `orchestrator-state.md:26` still carries `worker_effort: high` with the comment "a worker whose harness takes one" (ruling 2's grep excluded `.scratch`). The state file is the orchestrator's to rewrite.
+
+**Proof**
+- skills/land/templates/land.sh:46 (`if [ "$#" -lt 2 ]`): the ruling asked for a case that proves land.sh runs with the new arguments. The report's revert 1 bundles four edits, and only the restored preflight turns it red. Revert 1b (only `-lt 2` changed to `-lt 3`) leaves the suite green (`PASS: land.sh and usage.py scratch tests`). Every call in land.test.sh passes `--no-browser` (5 hits), so no case runs the new minimal form `land.sh <pkg> <base>`. The argument-count change is unproven. A fix: a case that calls land.sh with exactly two arguments and asserts it gets past the usage check. A control would assert that one argument exits 64 with the usage line.
+
+**Standards**
+- skills/plan-orchestration/SKILL.md:103 against :110: ":103 A finished builder resumes at the read of its report" and ":110 A builder is also dead when a later session does not find its agent id in its own listing". Both hold for a builder that finished before a handover when the new session's listing lacks it. Whether a listing carries over is not verified. Nothing tells finished from dead in a later session. The report file at the dispatch block's `report` path is the fact that would, and the text does not name it (rule 14, a sentence left half-true). The wording is the ruling's own, so the fix belongs at landing. A fix: ":110 ... and no report is at the dispatch block's `report` path in the worktree".
+- skills/plan-orchestration/SKILL.md:152 "A repair round resumes it with the runner's message tool on that id": no id is named earlier in "Launching a builder". The section's first bullet mentions none, so "that id" has no antecedent (prose standard E, cold open). A fix: "on its agent id in `session_id`".
+
+**Behaviour**
+- none. land.sh's command line, the removal of `worker_effort`, the Quick start line and the dispatch block each have a before-and-after row in the round's table.
+
+Reviewer usage: 34 tool uses, about 20 minutes.

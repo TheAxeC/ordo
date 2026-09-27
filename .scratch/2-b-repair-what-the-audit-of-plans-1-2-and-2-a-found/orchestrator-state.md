@@ -48,9 +48,11 @@ dispatch:
   reviewer: claude:opus, a native agent in the background, a2155aa82f638f98d
   reviewer_report: agents/reviews/20-refuter.md, 175814 tokens, 47 tool uses, 11.6 minutes
   landing: not-started
-  round: 1
+  round: 2
   round_1_rulings: agents/briefs/20-round-1.md, paths widened by skills/spec/SKILL.md
   round_1_builder_usage: 305557 tokens, 14 tool uses, 7.6 minutes
+  round_1_reviewer: 133901 tokens, 38 tool uses, 10.4 minutes
+  round_2_rulings: agents/briefs/20-round-2.md, the one round beyond the cap, for round 1's unbuilt case
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
