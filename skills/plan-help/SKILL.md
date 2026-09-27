@@ -26,7 +26,8 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them; a required key missing is a refusal ("Stops").
+1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+   - A required key missing is a refusal ("Stops").
 2. For `/plan-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").

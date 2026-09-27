@@ -102,3 +102,38 @@ Items still holding two requirements that can each be broken while the other hol
 - plan-orchestration:162: "A step at `landing: backed-out` was taken back out of main by a red line at its landing. Its worktree and its branches are kept." (a definition, then an independent rule).
 - plan-orchestration:260: "At the cut-off anything still running is stopped, its worktree kept."
 - spec:120: "What "Steps / A step taken back out of main" did stays done. The patch stays in the ledger."
+
+## Repair round 1, refuted
+
+Reviewer: a fresh claude:opus agent, read-only. Usage: about 160,000 tokens, 36 tool uses.
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit=$?"` from the worktree root:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_coverage.py scratch tests
+verify: 7 commands passed
+exit=0
+```
+
+Reproduced: `10 files changed, 313 insertions(+), 145 deletions(-)`; 1447 to 1615 lines; 707 items read, 136 split into 304, 875 after; 209 numbered items with the same sections and numbers; 105 position references, the one change ordo-init `Rules 4` to `Rules 5`, each pointing at the same rule; the prose references at plan-orchestration 303 and 151-152 on their rules; `**Only known fixes.**` once; no repeated label, no nesting over three levels. Each of the twelve rulings holds on the current tree at the file:line the report gives.
+
+- Spec: none.
+- Proof: none.
+- Standards 1: `skills/plan-retro/SKILL.md:43-45` open "For each kind" three times in a row ("3. For each kind, count the findings, ...", "4. For each kind, name the heading ...", "5. For each kind, quote two or three findings ..."), against ruling A 4 and `prose-standard.md` section 0; round ruling 2 covers every place in the ten files. The builder left the lines as base text.
+- Behaviour: none.
+
+Not checked: the 571 kept items were not re-judged one by one (the 61 that still hold a semicolon or a second sentence were read); items joined only by "and" were checked in and around the hunks; the rendering of three-level nesting.
+
+## Closed
+
+- Spec 1.1 (eighteen items that did not read alone): closed in round 1, ruling 1; the round's review reproduces each at the file:line of the report's "Repair round 1" table.
+- Proof 2.1 (the report's claim that no rule changed in scope): closed in round 1, ruling 12; `grep -n "No rule was added" 25-report.md` prints nothing.
+- Standards 3.1 (repeated labels and openings): closed in round 1, ruling 2; `grep -c '\*\*Only known fixes\.\*\*' skills/plan-orchestration/SKILL.md` prints 1.
+- Behaviour 4.1 to 4.8: closed in round 1, rulings 3 to 10; the round's review finds none left.
+- The orchestrator's read (five items holding two requirements): closed in round 1, ruling 11.
+- Repair round 1, Standards 1 (plan-retro Steps 3 to 5): fixed at landing, since round ruling 2 covers every place in the ten files; the three items are reworded so no two open alike, with their numbers and meaning kept.

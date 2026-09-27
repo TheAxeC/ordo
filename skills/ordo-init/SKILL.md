@@ -26,7 +26,8 @@ metadata:
 ## What it reads
 
 1. The plan skill's `templates/plan.yaml` (one project) and `templates/plan.projects.yaml` (several), in the `plan` folder beside this skill's folder: the keys, which are required, each optional key's default, and the comment that says what the key is.
-2. `.agents/plan.yaml`, when it exists; then the skill checks instead of drafting ("Steps / Checking an existing file").
+2. `.agents/plan.yaml`, when it exists.
+   - Then the skill checks instead of drafting ("Steps / Checking an existing file").
 3. The repository's commit rule: the answer to `repo-setup`'s question 5 when `/repo-setup` runs this skill, or, when it runs alone, the user's answer at the approval stop of Steps 11.
 4. The repository: `git ls-files`, the CI configuration (`.github/workflows/`, `.gitlab-ci.yml` and the like), the build and package files (`package.json` scripts, `Makefile`, `CMakeLists.txt` and `CMakePresets.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`), the documentation folders, `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, and `.gitignore`.
 
@@ -49,7 +50,8 @@ Run from the repository root.
    - None: the skill offers to write `docs/dev/building.md` from the commands the CI jobs and build files run (install, build, test, lint, type check).
    - Each command is run once from its directory before it is written.
    - Its exit status and the last lines of its output are shown beside it.
-   - A command that fails is not written as a check: it is a stop ("Stops").
+   - A command that fails is not written as a check.
+     - It is a stop ("Stops").
 4. Draft `rules`: the page that says how a change is made (a change standard, `CONTRIBUTING.md`, or the rules section of `AGENTS.md` or `CLAUDE.md`).
    - None: the skill offers to write `docs/dev/change-standard.md` from the `repo-setup` skill's `templates/docs/dev/change-standard.md` (in the `repo-setup` folder beside this skill's folder).
    - Its placeholders are filled from this repository: the standards pages, the folders a renamed name is grepped across, the verification commands with their filters.
@@ -71,10 +73,11 @@ Run from the repository root.
    - When it does not, the draft adds `/<worktree_root>/` to `.gitignore`.
    - `.agents/plan.yaml` must not be ignored: `git check-ignore -q --no-index .agents/plan.yaml` exits 1.
    - A rule that ignores the whole `.agents/` folder is drafted as `.agents/*` with `!.agents/plan.yaml` after it, since git cannot re-include a file whose parent folder is excluded.
-10. Show, in this order: the form and why; the draft `.agents/plan.yaml` in full; each page it would create, in full, with the commands' results for a verification page; the `.gitignore` changes, as Rules 4 says; and, when the skill runs alone, the question whether it may commit.
+10. Show, in this order: the form and why; the draft `.agents/plan.yaml` in full; each page it would create, in full, with the commands' results for a verification page; the `.gitignore` changes, as Rules 5 says; and, when the skill runs alone, the question whether it may commit.
 11. Stop for the approval ("Stops").
 12. Write what was approved.
-13. Run `python3 <this skill's folder>/templates/check_config.py .` and show its output.
+13. Run `python3 <this skill's folder>/templates/check_config.py .`.
+    - Show its output.
     - The setup is done only when that exits 0.
 14. Commit the files written by explicit path list, in one commit whose subject names the plan configuration.
     - The commit is made only when the repository's commit rule ("What it reads" 3) allows it.
@@ -82,7 +85,8 @@ Run from the repository root.
 
 ### Checking an existing file
 
-1. With `.agents/plan.yaml` present, write nothing and run `templates/check_config.py`.
+1. With `.agents/plan.yaml` present, write nothing.
+   - Run `templates/check_config.py`.
 2. It reports: a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>`, `review` neither `every` nor `earned`, `libraries` neither `check` nor `avoid`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
 3. Optional keys left out are listed as notes, with the default that applies.
 4. For each error, propose the fix ("Stops").
@@ -105,12 +109,14 @@ Run from the repository root.
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | A rule the repository does not state, written into a page | The page then binds the builders to something nobody decided | Rules 2 and 3 |
-| Overwriting an existing page or `.agents/plan.yaml` | The user's text is lost without a decision | Rules 4 |
+| Overwriting an existing page or `.agents/plan.yaml` | The user's text is lost without a decision | Rules 4 and 5 |
 
 ## Rules
 
 - The skill writes nothing until the user approves or corrects the draft. The one exception is Steps 3, where each verification command runs once before the draft is shown.
 - The skill draws only from the repository and the user, for the file it drafts and for every page.
-- A page the skill writes states what the repository already does or says, and cites where.
-- The skill never overwrites an existing page or `.agents/plan.yaml`. A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
+- A page the skill writes states what the repository already does or says.
+  - It cites where.
+- The skill never overwrites an existing page or `.agents/plan.yaml`.
+- A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
 - Every path is relative to the repository root.

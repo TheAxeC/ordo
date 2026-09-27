@@ -25,15 +25,19 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them; a required key missing is a refusal ("Stops").
+1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+   - A required key missing is a refusal ("Stops").
 2. The ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
-3. The dispatch block naming this step, with its worktree and base; none is a refusal ("Stops").
-4. The ledger's `land.sh`, as "The landing script" says; none is a refusal ("Stops").
+3. The dispatch block naming this step, with its worktree and base.
+   - None is a refusal ("Stops").
+4. The ledger's `land.sh`, as "The landing script" says.
+   - None is a refusal ("Stops").
 5. `agents/reviews/<step>-report.md` and the refuter report `agents/reviews/<step>-refuter.md`, as the Stops row "The step not ready" requires them.
 6. Main, in the state the Stops row "Main not clean" requires.
-   - The user's unrelated changes are listed by path and left alone.
+   - The user's unrelated changes are listed by path.
+     - They are left alone.
 
 ## Steps
 
@@ -42,41 +46,55 @@ metadata:
    - Then the runner's agent listing must show none of them left.
    - A check that fails is a refusal before main is touched ("Stops").
 2. Set `landing: cherry-picking` in the dispatch block.
-3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` scoped to the step's tree with the ledger root left out, and `git commit -q -m wip` when something is staged.
+3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` scoped to the step's tree with the ledger root left out.
+   - `git commit -q -m wip` when something is staged.
    - A builder that committed everything leaves nothing staged, and the landing makes no wip commit.
    - The landing removes a lock older than 60 s while no `git` process runs, as stale.
-   - Each wait for a lock, here and on main before Steps 4, is bounded at 60 s of waiting; at the bound the landing stops ("Stops").
+   - Each wait for a lock, here and on main before Steps 4, is bounded at 60 s of waiting.
+     - At the bound the landing stops ("Stops").
 4. On main: `git cherry-pick -n <base>..<step>`, the whole range from the recorded base, so the landing applies the complete reviewed change and never only the last fix.
    - A conflict is resolved by the orchestrator or the session, never by an agent.
    - The ledger's `land.sh` prints the conflicting paths and exits 2 instead.
 5. Restore to main's copy, before anything else, a ledger file the cherry-pick deleted or rewrote; the ledger is written only on main.
    - The ledger's `land.sh` leaves the ledger root out of the worktree's add, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches main; a ledger file that a commit of the range holds still does.
 6. Run the verification commands of the configuration block on main, in order, each through its filter, stopping at the first failure.
-   - The step's verify list runs through this skill's `templates/verify.sh <state file>` from the root of the checkout it checks (main here), and the lines it prints are what the booking quotes.
-   - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here, counted and named the same way as a red line.
-   - A red line that a fix inside the brief closes is fixed on main, counted as a fix at landing, and named in the booking with its cause.
+   - The step's verify list runs through this skill's `templates/verify.sh <state file>` from the root of the checkout it checks (main here).
+   - The lines `verify.sh` prints are what the booking quotes.
+   - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here.
+     - It is counted and named the same way as a red line.
+   - A red line that a fix inside the brief closes is fixed on main.
+     - It is counted as a fix at landing.
+     - It is named in the booking with its cause.
    - Any other red line ends the landing there, leaving main in a state the resumption rules of `plan-orchestration` recognise.
    - It takes the step back out of main: `git restore --staged --worktree -- <paths>` for changed files, `git rm --cached` and delete for added ones, run without asking the user.
-   - The dispatch block is then set to `landing: backed-out`, the step's worktree and branches are kept, and the step stays unticked in `plan.md`.
-   - The failure is never sent back to the builder: it is recorded in the step's Step 0 in `plan.md`.
-   - The step keeps its line and its tag, and is worked again as that step, with no new ruling.
+   - The dispatch block is then set to `landing: backed-out`.
+     - The step's worktree and branches are kept.
+     - The step stays unticked in `plan.md`.
+   - The failure is never sent back to the builder.
+     - It is recorded in the step's Step 0 in `plan.md`.
+   - The step keeps its line and its tag.
+     - It is worked again as that step, with no new ruling.
    - The failure goes to the user as an open item only when only the user can decide what to do.
-   - The state file and `plan.md` are then committed by path, a resume point. The commit also holds the other ledger records the session wrote since the last one.
+   - The state file and `plan.md` are then committed by path, a resume point.
+     - The commit also holds the other ledger records the session wrote since the last one.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
 7. Open the changed views, as "The look" says.
 8. Run the A/B: the benchmark commands the configuration block's `bench:` line names, the staged base binary and the new one run alternately after warm-ups, at least ten runs each.
-   - The mean, the standard deviation and the standard error of the difference are written to the scratchpad and quoted in the booking.
+   - The mean, the standard deviation and the standard error of the difference are written to the scratchpad.
+     - They are quoted in the booking.
    - A change past the noise band is a finding, fixed before the booking.
 9. Produce the orchestrator's usage row with `templates/usage.py <session log> <from> <to>`: the session log is the running session's own, `<from>` the previous landing commit's `git log -1 --format=%cI`, `<to>` `date -Iseconds`.
    - The Usage section of `plan-orchestration` says where the session log is.
-10. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B, the usage row; tick the step.
+10. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B, the usage row.
+    - Tick the step.
 11. Read the step's `worktree` from its dispatch entry, for Steps 14.
     - Then rewrite the state file: the step's dispatch entry removed, the position line, the usage rows, the open items as they stand.
 12. Write the landing report, `agents/reviews/<step>-landing.md`, so it lands with the step and stands alone on disk.
     - It opens with the position line: the roadmap entry with its title, the plan step as "step n of m" with its name, and the next step.
     - Then the open items, verbatim, which hold only what the user must rule on.
     - Then the check of Steps 1 with what it showed, anything NOT DONE, what landed with the commit, what was found, and what is next.
-    - Under the loop it is also the report the orchestrator prints; run by hand, it is the message that ends the turn.
+    - Under the loop it is also the report the orchestrator prints.
+    - Run by hand, it is the message that ends the turn.
 13. Commit by explicit path, a resume point: every path from `git diff --cached --name-only`.
     - The commit also holds the ledger files the session wrote since the last resume point, the landing report among them.
     - The paths are written out in the `git add -- <path> ...` command, never through a shell variable.
@@ -99,11 +117,14 @@ metadata:
 
 ## The landing script
 
-- A ledger holds `land.sh`, copied from `templates/land.sh` with its `ADAPT` edits made; `/plan` copies it, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` into the ledger when it opens a plan.
+- A ledger holds `land.sh`, copied from `templates/land.sh` with its `ADAPT` edits made.
+  - `/plan` copies it, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` into the ledger when it opens a plan.
 - `/land` refuses a ledger without it ("Stops").
 - It does Steps 3, 4 and 6 as one command, run from the repository root as `sh <ledger>/land.sh <step> <base>`.
-- Its check on main (Steps 6) is the ledger's verify list: after main's cherry-pick it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root, and a non-zero exit fails the landing with the output of `verify.sh` printed.
-- It finds `verify.sh` and `usage.py` beside itself, then in this skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`); a missing state file, or a `verify.sh` in none of those places, is refused before main is touched, with the places named.
+- Its check on main (Steps 6) is the ledger's verify list: after main's cherry-pick it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root.
+  - A non-zero exit fails the landing with the output of `verify.sh` printed.
+- It finds `verify.sh` and `usage.py` beside itself, then in this skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`).
+  - A missing state file, or a `verify.sh` in none of those places, is refused before main is touched, with the places named.
 - Its `ADAPT` edits are five:
   - `landing_worktree_root`, `.agents/plan.yaml`'s `worktree_root`, the folder that holds the step's worktree `<worktree_root>/<step>`, `.agents/worktrees` by default;
   - `landing_tool_path`, the folder the worktree's add is scoped to, `.` (the whole tree) by default;
@@ -112,16 +133,20 @@ metadata:
   - the model names of the usage rows.
 - A browser check in the `ADAPT` block runs only when `landing_browser` is 1, which `--no-browser` sets to 0.
 - It prints the diff stat, the usage rows (with `--session <session log> --since <previous landing commit time>`, the orchestrator's row through `usage.py`) and the staged paths.
-- `templates/land.test.sh` proves it on scratch repositories, its verify list run and its lookup of `verify.sh` included, that its defaults run no browser step and no line count, and that a ledger file left uncommitted in the worktree never reaches main; it proves `templates/usage.py` on a Claude Code log and its refusal of a file that is not one.
+- `templates/land.test.sh` proves it on scratch repositories, its verify list run and its lookup of `verify.sh` included, that its defaults run no browser step and no line count, and that a ledger file left uncommitted in the worktree never reaches main.
+  - It proves `templates/usage.py` on a Claude Code log and its refusal of a file that is not one.
 - The ledger's copies of `land.sh` and `land.test.sh` find `verify.sh` and `usage.py` beside themselves. Both run from the ledger with the four files beside each other, whatever `land` skill is installed.
 - `templates/verify.test.sh` proves `templates/verify.sh` on scratch state files, starting it under `sh` and, when it is installed, `dash`.
-- Its zero exit passes the checks on main (Steps 6). It never passes the look (Steps 7), which it does not do.
+- Its zero exit passes the checks on main (Steps 6).
+  - It never passes the look (Steps 7), which it does not do.
 
 ## Removing a step's worktree
 
 `/land` does this at Steps 14, after the landing commit, from the repository root of the main checkout. The `spec` skill's "Steps / A step taken back out of main" does it the same way for a kept worktree.
 
-1. Take the step's `worktree`: `/land` read it from the dispatch entry at Steps 11, before the state file was rewritten, and a back-out reads it from the entry. The branch is the worktree folder's name, and `<branch>-land` beside it, as `land.sh` names them; no path or branch is built from the step id.
+1. Take the step's `worktree`: `/land` read it from the dispatch entry at Steps 11, before the state file was rewritten, and a back-out reads it from the entry.
+   - The branch is the worktree folder's name, and `<branch>-land` beside it, as `land.sh` names them.
+   - No path or branch is built from the step id.
 2. When the worktree still exists (`git worktree list` names it), from inside it, `git status --porcelain --untracked-files=all` lists every change, untracked files included. A worktree already gone skips steps 2 and 3.
    - Each path must be under the ledger root, `.agents/plan.yaml`'s `ledger_root` (in the `projects:` form, the one that holds the state file's folder). The ledger is written only on main, so its copies in the worktree are records already saved there or copies the orchestrator put there.
    - Any other path is a stop ("Stops") that names it, and nothing is removed.
@@ -148,7 +173,8 @@ metadata:
 - The first row is a stop: it leaves an open item.
 - The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.
 - The rows after those two, up to the last, are refusals: they come before main is touched.
-- The last row is a stop after the landing's commit that leaves an open item: the step is on main, and only its worktree and branches are left, named in the open item. Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item.
+- The last row is a stop after the landing's commit that leaves an open item: the step is on main, and only its worktree and branches are left, named in the open item.
+  - Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item.
 - A refusal names its cause and leaves nothing.
 - A red line recorded in the step's Step 0 is not a stop: the step is out of main and keeps its line and its tag.
 - It is worked again as that step, with no new ruling, through `/spec`. `/spec` saves its work as a patch and prepares it again from main's head (the `spec` skill's "Steps / A step taken back out of main").
@@ -162,6 +188,9 @@ metadata:
 ## Rules
 
 - One step stays one implementation commit, which keeps each step traceable to its brief, its review and its booking.
-- A landed step found short of its brief, or wrong, is raised to the user as an open item, by `plan-orchestration`'s "Stops"; the step that finishes it on top of what landed enters the plan only by the user's ruling.
-- A landed commit is reverted only on the user's ruling. Its preparation commit stays, and only a step so reverted is booked as reverted.
+- A landed step found short of its brief, or wrong, is raised to the user as an open item, by `plan-orchestration`'s "Stops".
+  - The step that finishes it on top of what landed enters the plan only by the user's ruling.
+- A landed commit is reverted only on the user's ruling.
+  - Its preparation commit stays.
+  - Only a step so reverted is booked as reverted.
 - The state file is rewritten before the commit, so main's head always carries a state file that describes it.

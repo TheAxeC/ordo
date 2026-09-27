@@ -32,9 +32,11 @@ metadata:
    - An optional key missing takes the default the example file gives it.
    - No file, and a required key missing, are stops ("Stops").
 2. The roadmap the configuration names.
-   - `<entry>` is matched against the entries by number or title; no match is a stop ("Stops").
+   - `<entry>` is matched against the entries by number or title.
+     - No match is a stop ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
-4. The `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py`, found as `land.sh` finds `verify.sh`. They are read from the `land` skill's `templates/` under the first of these that holds them: the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). Not found is a stop ("Stops").
+4. The `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py`, found as `land.sh` finds `verify.sh`. They are read from the `land` skill's `templates/` under the first of these that holds them: the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`).
+   - Not found is a stop ("Stops").
 
 ## Steps
 
@@ -48,22 +50,27 @@ metadata:
    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
-3. Show the draft to the user, and write `plan.md` once the user has approved or corrected it.
+3. Show the draft to the user.
+   - Write `plan.md` once the user has approved or corrected it.
    - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
    - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`.
    - The block's `executor:` is not a project specific and is not in `plan.yaml`.
    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
    - The orchestrator chooses the executor per step over that default.
-   - The dispatch block is empty, the open items are empty, and the position names the first step.
-5. Copy the `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` into the ledger folder. `/land` requires the ledger's `land.sh`. With the four beside each other, the ledger's `land.sh` and `land.test.sh` run from the ledger whatever skills are installed. Then make the `ADAPT` edits of `land.sh` and `land.test.sh` from `plan.yaml`:
-   - `landing_worktree_root` is `worktree_root`.
-   - `landing_ledger_root` is `ledger_root`, the project's own in the `projects:` form.
-   - `landing_tool_path` stays `.`, the whole tree.
-   - The model names of the usage rows are `worker` and `reviewer`, in `land.sh` and in the rows `land.test.sh` expects.
-   - The `ADAPT` block holds the dependency install the verification page's commands need, and stays empty, running nothing, when they need none.
+   - The dispatch block is empty.
+   - The open items are empty.
+   - The position names the first step.
+5. Copy the `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` into the ledger folder. `/land` requires the ledger's `land.sh`. With the four beside each other, the ledger's `land.sh` and `land.test.sh` run from the ledger whatever skills are installed.
+   - Then make the `ADAPT` edits of `land.sh` and `land.test.sh` from `plan.yaml`:
+     - `landing_worktree_root` is `worktree_root`.
+     - `landing_ledger_root` is `ledger_root`, the project's own in the `projects:` form.
+     - `landing_tool_path` stays `.`, the whole tree.
+     - The model names of the usage rows are `worker` and `reviewer`, in `land.sh` and in the rows `land.test.sh` expects.
+     - The `ADAPT` block holds the dependency install the verification page's commands need, and stays empty, running nothing, when they need none.
 6. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
-7. Commit `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh`, `verify.sh`, `usage.py` and the two `.gitkeep` files by path as the plan's opening commit. Its subject holds the roadmap entry's number.
+7. Commit `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh`, `verify.sh`, `usage.py` and the two `.gitkeep` files by path as the plan's opening commit.
+   - Its subject holds the roadmap entry's number.
 
 ## Stops
 

@@ -30,21 +30,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: "25"
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2b-25
-  session_id: afd7a4ab16b2a67a7
-  base: "aa0cd84"
-  launched: 2026-09-28
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/25-report.md
-  landing: not-started
-  round: 1
-  round_1: agents/briefs/25-round-1.md, twelve rulings (Spec 1.1, Proof 2.1, Standards 3.1, Behaviour 4.1 to 4.8, and five items the orchestrator's read found still holding two requirements); ruling A sets the form of a split
-  builder_usage: 303,785 tokens, 53 tool uses, 1522 s
-  reviewer: af3c1e38fa19b6aa5
-  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/25-refuter.md
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -120,7 +106,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17a, 20, 21, 23 and 24 landed (step 17a in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 17a landed; next: step 25 (the skills against the one-rule-per-bullet rule, ruling GG), then 18 and 19, under the pinned skills v1.1.0.
+- Roadmap entry 2.B, step 25 landed; next: step 18 (the closure table), then 19 (the closing), under the pinned skills v1.1.0.
 - Open on Axel's side: none.
 
 ## Usage
@@ -155,3 +141,4 @@ dispatch:
 | 17 | claude:opus agent: 87,277 tokens, 24 tool uses, 312 s | 95,185 tokens, 21 tool uses, 268 s | 0 | 0 | 4 files changed, 22 insertions(+), 10 deletions(-) | yes | 0 | 1 (open item GG) | 59 | 41469 | 210410 | 11356576 | 122 | 54 (from step 23's landing; shares the pin, the README question and ruling FF) | none |
 | 24 | claude:opus agent: 132,302 tokens, 34 tool uses, 544 s | 111,225 tokens, 23 tool uses, 290 s | 0 | 0 | 3 files changed, 35 insertions(+), 57 deletions(-) | yes | 1 | 0 | 24 | 18681 | 46210 | 6099754 | 52 | 19 (shares ruling GG; the wait on the user's review of the README) | none |
 | 17a | claude:opus agent: 143,396 tokens, 45 tool uses, 712 s; round 1: 148,108 tokens, 5 tool uses, 164 s | 131,442 tokens, 27 tool uses, 452 s; round 1: 93,345 tokens, 11 tool uses, 207 s | 1 | 3 | 13 files changed, 124 insertions(+), 40 deletions(-) | no | 1 | 0 | 29 | 22318 | 71074 | 9237290 | 64 | 31 | none |
+| 25 | claude:opus agent: 303,785 tokens, 53 tool uses, 1522 s; round 1: 141,876 tokens, 72 tool uses, 1277 s | 209,926 tokens, 31 tool uses, 659 s; round 1: 166,846 tokens, 36 tool uses, 517 s | 1 | 12 | 10 files changed, 315 insertions(+), 147 deletions(-) | no | 1 | 0 | 56 | 47394 | 198474 | 8754657 | 120 | 77 | none |

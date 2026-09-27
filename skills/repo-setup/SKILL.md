@@ -37,13 +37,15 @@ metadata:
 2. Ask "The questions", together, in plain prose, each with its default in brackets ("Stops").
 3. Draft "The tree", every file with its full text.
    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
-   - A placeholder with no answer is shown to the user, and never written as `<...>`.
+   - A placeholder with no answer is shown to the user.
+     - It is never written as `<...>`.
 4. Show the draft, the tree and every file's text together ("Stops").
 5. Write the files the user approved.
 6. Install the project skills from the repository root, per source: `npx skills add <source> --skill <name> [--skill <name>...] -a claude-code -y`.
    - The CLI copies them into `.agents/skills/`, links them under `.claude/skills/`, and writes `skills-lock.json`.
 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
-8. Run `/ordo-init`, with its own draft and approval: it writes `.agents/plan.yaml` and `docs/dev/building.md`, and its check passes.
+8. Run `/ordo-init`, with its own draft and approval: it writes `.agents/plan.yaml` and `docs/dev/building.md`.
+   - Its check passes.
    - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
 9. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
 10. Run the checks:
@@ -61,7 +63,8 @@ metadata:
     - Every file written is named, except those `/ordo-init` committed at Steps 8.
     - The commit is made only when the answer to question 5 allows it.
     - Otherwise the skill stops ("Stops").
-    - `.agents/skills/` and `.claude/` are ignored and not committed; `skills-lock.json` is.
+    - `.agents/skills/` and `.claude/` are ignored and not committed.
+    - `skills-lock.json` is committed.
 
 ### sync
 
@@ -76,7 +79,8 @@ metadata:
    - A rule that differs in substance, kept in Project rules and named.
 5. Show the drafted change ("Stops").
 6. Write it once the user approves.
-7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing, and show the line with the file it names ("Stops").
+7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing.
+   - Show the line with the file it names ("Stops").
    - The file named in the line is fixed first, by the user or with the user's approval.
 8. After a written draft or a fixed file: run the check again, until it exits 0.
 9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
@@ -86,7 +90,8 @@ metadata:
 1. The repository's name and one paragraph on what it is.
 2. The kind, for the `.gitignore` and the build files: `cpp`, `python`, `typescript`, or another the user names (then the user gives the build system and the patterns to ignore).
 3. The build system, language standard and test harness, as far as the user fixes them now.
-4. The license [MIT] and its holder. MIT is written from `templates/LICENSE-MIT`; another license is written from the text the user gives or from its SPDX name's official text, fetched and shown.
+4. The license [MIT] and its holder.
+   - MIT is written from `templates/LICENSE-MIT`; another license is written from the text the user gives or from its SPDX name's official text, fetched and shown.
 5. The commit rule for this repository [commit only when told].
 6. The coding standard: copied from a sibling repository the user names (its page read whole and adapted to this repository's names), written from rules the user states, or none yet.
 7. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
@@ -141,7 +146,8 @@ utils/                           scripts the build and the checks run
 - Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it.
 - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
 - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` the user rules on in `sync`.
-- A page it writes states rules the user or a template gave; it never adds a rule of its own.
+- A page it writes states rules the user or a template gave.
+  - It never adds a rule of its own.
 - The skill never invents a coding rule.
 - Build files are written only for what the user names; nothing is assumed.
 - The plan skills are never installed per project: they are installed per user, and one copy is loaded.

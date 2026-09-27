@@ -26,13 +26,15 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them; a required key missing is a refusal ("Stops").
+1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+   - A required key missing is a refusal ("Stops").
 2. The ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
 3. `orchestrator-state.md`: the dispatch block names the worktree, the base and the report path.
 4. The brief `agents/briefs/<step>.md`, the rules file and the standards it points at, and the plan's text for the step.
-   - The cases ruling `agents/briefs/<step>-cases.md` when one exists, read with the brief: where it rules a case, the diff is judged against the ruling.
+   - The cases ruling `agents/briefs/<step>-cases.md` when one exists, read with the brief.
+     - Where it rules a case, the diff is judged against the ruling.
 5. The diff since the base, from inside the worktree, the new files whole, and a sample of a mechanical sweep with the sample named.
    - `git diff <base>` and `git status --short`, read-only, are the only git the reviewer runs.
 6. The builder's report, last.
@@ -43,16 +45,19 @@ metadata:
 1. Dispatch one reviewer, on the model the configuration block's `reviewer:` names, once per step before its first repair round.
 2. The reviewer reads the inputs in the order "What it reads" gives them.
 3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
-   - The step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks (the step's worktree), and the lines it prints are what the refuter report quotes.
+   - The step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks (the step's worktree).
+   - The lines `verify.sh` prints are what the refuter report quotes.
 4. The reviewer runs every command the report quotes as evidence, in the same form, and compares the output with what the report claims.
-   - Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so and reproduces what it can from the one build.
+   - Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so.
+     - It reproduces what it can from the one build.
 5. The reviewer looks for the findings "The four headings" lists.
 6. The reviewer writes the report from `templates/report.md`.
    - The verification lines first, verbatim.
    - Then the four headings, each with findings (the file, the line, the quoted hunk, what is wrong) or "none".
    - Then what was not checked within the time box, named.
    - Then the reviewer's usage.
-7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`. It records the report's usage in the state file's table and its path under the dispatch block's `reviewer_report` field.
+7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
+   - It records the report's usage in the state file's table and its path under the dispatch block's `reviewer_report` field.
    - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
@@ -67,9 +72,12 @@ metadata:
    - a fix that reaches beyond the finding;
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns every verification command again.
-6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape. It records the run as Steps 7 says.
-7. The findings of the run over the last round are never sent to the builder: each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
-8. With `refute_after_repair: no` these runs do not happen, and the orchestrator's read of the delta stands in for them.
+6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape.
+   - It records the run as Steps 7 says.
+7. The findings of the run over the last round are never sent to the builder.
+   - Each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
+8. With `refute_after_repair: no` these runs do not happen.
+   - The orchestrator's read of the delta stands in for them.
 
 ## The four headings
 
@@ -103,7 +111,8 @@ metadata:
 
 ## Finding dispositions
 
-- A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or raised to the user as an open item in the state file, as `plan-orchestration`'s Stops section says; it becomes a step only by the user's ruling.
+- A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or raised to the user as an open item in the state file, as `plan-orchestration`'s Stops section says.
+  - It becomes a step only by the user's ruling.
 - The open items hold only what the user must rule on.
 - After the last round, the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading.
 - `/land` refuses while a finding is left neither closed nor raised as an open item.

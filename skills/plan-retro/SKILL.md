@@ -36,17 +36,19 @@ metadata:
 
 1. Read each report "What it reads" 2 lists, run by run: the first review, under its Spec, Proof, Standards and Behaviour headings, and each section "Repair round <n>, refuted".
    - Each finding is an item "Grouping" keeps, noted with its plan, step, report, run, heading, location and text.
-   - The runs the previous retro's "Reports read" lists are left out unless the user asks for a retro over everything. They are matched by plan folder, step and run, so a plan moved into `<archive_root>` stays left out and a round added to a report later is read.
+   - The runs the previous retro's "Reports read" lists are left out unless the user asks for a retro over everything.
+     - They are matched by plan folder, step and run, so a plan moved into `<archive_root>` stays left out and a round added to a report later is read.
    - A previous retro that cannot be read as UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md` stops the retro there, a refusal ("Stops").
 2. Assign each finding one kind, as "Grouping" says.
 3. For each kind, count the findings, the distinct steps and the distinct plans.
-4. For each kind, name the heading its findings fell under.
-5. For each kind, quote two or three findings with their report path and location.
+4. Name the heading each kind's findings fell under.
+5. Quote two or three findings of each kind with their report path and location.
 6. Mark the recurring kinds: a kind other than "no defect" is recurring when it appears in at least three steps, or in at least two plans.
 7. For each recurring kind, draft the proposal, as "The proposal for a recurring kind" says.
 8. Write `<ledger_root>/retros/<YYYY-MM-DD>.md` from `templates/retro.md`.
    - The reports read: each report a finding came from, with its path under `<ledger_root>` or `<archive_root>` (`<plan>/agents/reviews/<step>-refuter.md`) and the runs its findings came from, as `templates/retro.md` shows.
-   - The previous retro's "Reports read" entries, carried over, so a run listed once stays skipped by every later retro. A report in both lists has its runs joined in one entry.
+   - The previous retro's "Reports read" entries, carried over, so a run listed once stays skipped by every later retro.
+     - A report in both lists has its runs joined in one entry.
    - A run that gave no finding has no entry; the next retro reads it again, and it gives none again.
    - The counts by heading, of the findings left after the "no defect" set-aside.
    - The recurring kinds, each with its counts, its quoted findings and its proposal.
@@ -66,16 +68,20 @@ metadata:
 - Findings whose text reports the same defect in different words share a kind.
 - `unclassified` findings from repair rounds are read and assigned like the rest, or set aside when they are a point the reviewer did not check.
 - The session keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Not checked, Closed, Closures and Usage lists, and fenced lines.
-- A finding whose text reports no defect (a confirmation such as "None." or "No sentence in the pages is made false") or a closure that holds (such as "Spec 1: closed.") is set aside, by reading, as the kind "no defect", counted and listed in the retro's "No defect" section with no proposal.
+- A finding whose text reports no defect (a confirmation such as "None." or "No sentence in the pages is made false") or a closure that holds (such as "Spec 1: closed.") is set aside, by reading, as the kind "no defect".
+  - It is counted and listed in the retro's "No defect" section with no proposal.
 
 ## The proposal for a recurring kind
 
 The skill checks where the rule should have come from, in this order, and proposes the first change that applies:
 
-1. **The rule is not written anywhere.** Grep the rules page and the standards pages for it. When it is absent, the proposal is the rule's text, in the voice and numbering of the page it goes into (the rules page for how a change is made and reported, a standards page for what the code or prose looks like), with the findings it would have prevented cited.
+1. **The rule is not written anywhere.** Grep the rules page and the standards pages for it.
+   - When it is absent, the proposal is the rule's text, in the voice and numbering of the page it goes into (the rules page for how a change is made and reported, a standards page for what the code or prose looks like), with the findings it would have prevented cited.
 2. **The rule is written on a page the briefs do not point at.** When the rule is on a page that is neither the rules page nor listed in `standards`, the proposal adds the page to `standards` in `.agents/plan.yaml`.
 3. **The rule is written where the briefs point, the defect still recurs, and a command can check the rule.** The proposal is that check: a grep over the diff, a lint rule or a script over the tree, with its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
-4. **The same, and no command can check the rule.** Only then is the proposal a sharper sentence for the existing rule. It says why no command can check the rule, and quotes the findings that show how builders read the current one.
+4. **The same, and no command can check the rule.** Only then is the proposal a sharper sentence for the existing rule.
+   - It says why no command can check the rule.
+   - It quotes the findings that show how builders read the current one.
 
 ## Stops
 
