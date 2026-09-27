@@ -40,10 +40,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item Z (step 21, how a step taken back out of main is prepared again, raised 2026-09-27): after ruling Y, `land`, `plan-orchestration` and `plan-help` say that a step a red line took back out of main keeps its tag and is worked again "through `/spec`, with no new ruling". `/spec` has no text for that case: its worktree add fails on the kept branch, it writes over the committed brief, and it writes a second dispatch block for the step (the round review's Spec 2, read from `skills/spec/SKILL.md` Steps 3, 6 and 8, not run). The fix is larger than a fix at landing and needs a step, so it needs your ruling. (a) Step 21a: `/spec` of a step at `landing: backed-out` saves the kept worktree's diff into the ledger as a patch, removes the kept worktree and branch, and prepares the step again from main's head, with the failure and the patch in its brief. Pro: every step is prepared the same way, from main's head, and `/refute` and `/land` need no second path. Con: the builder applies the old work again. (b) Step 21a: `/spec` reuses the kept worktree, branch and base, adds the failure to the brief, and resets the dispatch block to `round: 0` and `landing: not-started`. Pro: the work stays where it is. Con: the step builds on an older base, and `/spec`, `/refute` and `/land` each need a second path for it. (c) Change the texts to name no route, the lazy option: a backed-out step is then left with no written way back. Recommendation (a).
-- The pin of ruling W (raised 2026-09-27): step 21 has landed, and ruling W asks your yes before the release is tagged and pinned. The yes asked: tag main's head as `v1.1.0` (the one tag today is `v1.0.0`, `git tag -l`) and run `utils/pin.sh v1.1.0`. After the pin, `~/.agents/skills` still holds ten links into `~/.local/share/ordo-stable` (land, ordo-init, plan, plan-help, plan-orchestration, plan-retro, refute, repo-setup, roadmap, spec; `ls -la ~/.agents/skills`) that `pin.sh` no longer manages; you remove them yourself, since no session edits a skill folder's links. Until the pin, the ledger's copy of `land.test.sh` fails with `FAIL: verify.sh not found beside this test or in the land skill's templates`, since the installed `land` skill of v1.0.0 holds no `verify.sh`.
+- none.
 
 ## Closed items
+- 2026-09-27: open item Z (step 21, how a step taken back out of main is prepared again): ruled (a), built in step 22 with the parts the user agreed; the answer on commits ruled as open item AA (a), built in step 22.
+- 2026-09-27: the pin of ruling W: waits for step 22's landing (ruling Z); asked again then.
 - 2026-09-27: the booked list, removed by ruling Y through step 21. Its three entries: the ten links in `~/.agents/skills`, carried into the open item on the pin of ruling W; `skills/plan/templates/plan.md:3` "one agent dispatch" and the position line in `skills/spec/templates/brief.md`, both gone (`grep -n 'one agent dispatch'` and `grep -n 'position line'` print nothing); `skills/repo-setup/templates/shared-rules.md:19` already limits a stop to a premise the plan cannot absorb, and the `launch_note` exception in the `plan.yaml` templates is moot since step 20 removed the key.
 - 2026-09-27: open item Y (step 21, a step the orchestrator books): ruled (a); built in step 21's repair round.
 
@@ -102,8 +103,8 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20 and 21 landed (step 21 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19; step 21a waits on open item Z.
-- Open on Axel's side: open item Z and the yes for the pin of ruling W.
+- Roadmap entry 2.B. Next: step 22, then the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
+- Open on Axel's side: none.
 
 ## Usage
 
