@@ -1,6 +1,6 @@
 ---
 name: plan-orchestration
-description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript on either harness (Claude Code or Codex) with either as the worker, and one orchestrator can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
+description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
 metadata:
   version: "2.7.0"
 ---
@@ -14,7 +14,7 @@ The unattended loop that runs an open plan's steps, one after another, until a p
 ```
 /plan-orchestration <entry>          run the plan's steps unattended until a pause, or until nothing unblocked is left
 /plan-orchestration <entry> inline   the same, with the orchestrating session building every code step itself
-continue the plan                    resume from the state file, after a compaction or on another harness
+continue the plan                    resume from the state file, after a compaction or in another session
 ```
 
 ## Use instead
@@ -47,7 +47,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - A stop it raises goes to the user by "Stops". A stop, here or at any later step, blocks its own step, and the loop moves on to the next unblocked step.
 4. Choose the step's executor and write it into the dispatch block, then build by that choice.
    - **Choice.** `academic-paper` for a step whose deliverable is manuscript content, always; otherwise what the invocation named (`/plan-orchestration <entry> inline` runs every code step inline); else the configuration block's `executor:`, which is `agent` by default and `inline` when the plan chose it.
-   - **`agent`.** Dispatch one builder with the worktree path and the brief, by the recipe under "Launching a builder" for its harness, and the moment it is launched write its identity into the dispatch block and commit the block by path.
+   - **`agent`.** Dispatch one builder with the worktree path and the brief, by the recipe under "Launching a builder", and the moment it is launched write its agent id into the dispatch block under `session_id` and commit the block by path.
    - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report, the main checkout, the user's data); the reading order (the rules file, the brief, the standards); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
    - **The builder.** It never runs a git command, and in the ledger it writes only its report, at the path the brief names in the worktree's copy of the ledger.
    - **`inline`.** The orchestrating session builds the step itself in the worktree under the brief and the rules file, and steps 5 and 8 read "the builder" as itself.
@@ -57,20 +57,17 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Never dispatch while the user has asked for a pause.
 6. On the report, save it into the main ledger at the dispatch block's `report` path, then read the whole diff.
    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
-   - A shell builder's `output` file (the `claude -p` JSON or the `codex -o` final message) holds its final message, and when the builder wrote no report file the orchestrator takes the report from it into the `report` path.
-   - A native Claude agent's final message is in the runner's transcript store under the agent id in `session_id`.
+   - The builder's completion notification carries its final message. When the builder wrote no report file, the orchestrator takes the report from that message into the `report` path.
    - The report is a lead, not a fact.
    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result; read that hand-back the same way as a report.
-   - Rule on such a case when the fix stays inside the step's scope, write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`, commit it by path, and resume the same builder with it, by the whole of Steps 8's resume ("How", "The resume's options" and "Before the resume") with `round: 0` and the `cases_` prefix in place of `repair_`; the builder's final report carries the ruling.
+   - Rule on such a case when the fix stays inside the step's scope, write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`, commit it by path, and resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`; the builder's final report carries the ruling.
    - Such a case whose fix changes the step's scope is a stop of the kind "A finding that is the user's", by "Stops".
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
    - Read the diff yourself while it runs.
    - Save its report, and write its path and its usage into the dispatch block under `reviewer_report`.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
-   - **How.** A native Claude agent is resumed by the runner's message tool on its id. A `claude -p` or Codex worker is resumed by `templates/launch.sh` with `--resume <session_id>`, by the numbered list under "Launching a builder".
-   - **The resume's options.** It keeps the launch's `--cwd`, `--model`, `--effort`, `--network`, `--note`, `--label`, `--parent` and `--allow-file`. Its prompt (the findings), output, stderr, events, exit, pid, session and id files are the round's own.
-   - **The allow file on a resume.** A `claude -p` resume keeps the launch's allow file, or writes it again when `worker_allow` or the brief's check commands changed, by item 1 of "Launching a builder".
-   - **Before the resume.** Write `round: n` and the round's paths into the dispatch block, each under its field with the `repair_` prefix (`repair_prompt`, `repair_output` and so on), and commit.
+   - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
+   - **Before the resume.** Write `round: n` into the dispatch block, and commit.
    - **Only known fixes.** Each ruling says what to change. A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed by the orchestrator, read-only, before the round is sent; the round carries the found cause's fix, and a cause not found is not sent: it is noted at landing and booked. A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
    - **After each reply.** Read the whole delta and, when the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its usage recorded beside the first.
@@ -82,21 +79,21 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
     - The final message opens as "Reports" says, then lists every step landed since the loop began with the path of each report, and the count of the booked list with the steps that carry it.
 
-## The two tiers, and the harnesses
+## The two tiers, and the models
 
 - Two tiers take part: the orchestrator, and the agents it starts (the builders and the reviewers).
 - **Default.** The orchestrator and every agent run on Claude Opus.
-- **Orchestrator.** It may also run on Claude Fable, GPT Astra or GPT Sol. It reads, decides, invokes the skills, lands and books, and never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
-- **Agents.** A builder or a reviewer may also run on GPT Sol, and never runs on Claude Fable or GPT Astra.
+- **Orchestrator.** It may also run on Claude Fable. It reads, decides, invokes the skills, lands and books, and never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
+- **Agents.** A builder or a reviewer runs on a Claude model, and never on Claude Fable.
 - **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names.
 - **Reviewer.** The model the configuration block's `reviewer:` names.
-- **Harnesses.** The Claude models run under Claude Code, and the GPT models under Codex.
+- **Runner.** Both tiers run under Claude Code.
 - Any allowed combination is chosen per step; a new combination is booked in the rulings with what decides it, and measured by its usage row.
-- The same skill runs a code tool, a research project or a manuscript, on either harness, with either as the worker.
+- The same skill runs a code tool, a research project or a manuscript.
 
 ## Resuming, and handing the plan over
 
-The ledger is the whole handoff. An orchestrator may stop after any step and another, on the other harness, continues from the files alone, under three rules:
+The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under three rules:
 
 - Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, every ruling, every path a step depends on, every sharp edge and every usage row is in the ledger folder, committed.
 - The state file is rewritten before every step commit, so main's head always carries a state file that describes main's head.
@@ -104,12 +101,14 @@ The ledger is the whole handoff. An orchestrator may stop after any step and ano
 
 On resumption with a dispatch block present:
 
-- The builder is checked first, by the check its harness allows. A CLI worker runs while the pid in its pid file is not gone. Item 5 of "Launching a builder" says when a pid is gone. It has finished when its exit file is present. It is dead when the pid is gone and no exit file is present five seconds later. `templates/launch.sh` then stops its processes. A native Claude agent has its id in `session_id` and the runner's own agent listing.
+- The builder is checked first, in the runner's own agent listing, by its agent id in `session_id`.
 - A builder still running is waited for.
 - A finished builder resumes at the read of its report.
 - A step at `landing: cherry-picking` is checked on main (`git status`, `git diff --cached`) before anything is applied again.
 - A step at `landing: backed-out` was taken back out of main by a red line at its landing: its worktree and branch are kept, it stays unticked in `plan.md`, and it is worked again when its booked item comes up.
-- A dead builder is reported to the user with what its transcript holds.
+- A builder is dead when the runner's agent listing no longer shows it and no completion notification with a report arrived.
+- A builder is also dead when a later session does not find its agent id in its own listing and no report is at the dispatch block's `report` path in the worktree.
+- A dead builder is reported to the user with the worktree's `git status --short` and the builder's last message when there is one.
 - A fresh continuation builder takes over a dead builder's worktree when the user says so.
 
 On every resumption, with a dispatch block or without one:
@@ -148,79 +147,11 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 
 ## Launching a builder
 
-Both harnesses take the same prompt. What differs is the launch, the sandbox and where the report comes back. Either orchestrator can launch either builder.
-
-- **Claude Code builder (`claude:<model>`), from inside Claude Code.** The runner's Agent tool with `subagent_type: general-purpose` and the model named, run in the background; its completion notification carries the report. It works under the runner's own permission settings.
-- **Claude Code builder, from any shell.** The same prompt through the CLI's print mode, run by this skill's `templates/launch.sh`:
-
-```sh
-sh <this skill's folder>/templates/launch.sh claude --cwd <worktree>/<tool dir> --model <model> \
-    --prompt <prompt file> --report <output file> --stderr <stderr file> --exit <exit file> --pid <pid file> \
-    --session-file <session file> --allow-file <allow file> [--resume <session id>] \
-    [--note <launch_note> --id <id file> --label <entry>/<step> --parent <session id>]
-```
-
-- **Codex builder (`codex:<model>`).** With `codex exec`, from a shell, run by `templates/launch.sh`:
-
-```sh
-sh <this skill's folder>/templates/launch.sh codex --cwd <worktree>/<tool dir> --model <model> \
-    --prompt <prompt file> --report <output file> --stderr <stderr file> --exit <exit file> --pid <pid file> \
-    --events <event log> --effort <worker_effort> [--network] [--resume <session id>] \
-    [--note <launch_note> --id <id file> --label <entry>/<step> --parent <session id>]
-```
-
-A shell launch runs in this order:
-
-1. Write every path the launch will take into the dispatch block under its field, and commit the block by path before the launch: `prompt`, `output` (the `--report` path), `stderr`, `events`, `exit`, `pid`, `session_file` (the `--session-file` path of a `claude -p` builder), `allow_file` (the `--allow-file` path of a `claude -p` builder) and `note_id_file`, with the `repair_` prefix for a repair round and the `cases_` prefix for the resume on a cases ruling (Steps 6).
-   - For a `claude -p` builder, write the allow file first, with `python3 <this skill's folder>/templates/allow_list.py <state file> <each check command of the brief>`, whose output is the file.
-   - The allow file holds the command prefixes the builder may run, one per line: the configuration block's `worker_allow` when it is not empty, otherwise the prefixes of the simple commands of the verify list and of the brief's check commands, each once.
-   - A resume (a repair round, or a resume on a cases ruling) passes the launch's `allow_file` again, unless `worker_allow` or the brief's check commands changed since it was written; then it writes the allow file again, under the field with the round's prefix (`repair_allow_file`, `cases_allow_file`).
-   - Every path given to `templates/launch.sh` is absolute, so it names the same file from the orchestrator's shell, from the builder's `--cwd` and from a later resumption.
-   - None of these paths lies in a scratch folder or a machine-local temp directory, since "Resuming, and handing the plan over" needs them to continue.
-   - With the configuration block's `launch_note` set, pass the note options: `--id` names the file that receives the note's id, `--label` is `<entry>/<step>`, and `--parent` is the orchestrating session's id.
-   - Under Claude Code the orchestrating session's id is its session log's file name without `.jsonl`, and under Codex it is the rollout's session id. "Usage" says where each log is.
-   - Without a `launch_note`, the note options are left out.
-2. Run `templates/launch.sh` from the orchestrator's shell. It removes an exit file an earlier run left, starts the builder in a session of its own, and returns once that session's leader has written its pid to the pid file.
-   - A killed run's builder runner is gone about 3 seconds after the KILL. It waits at most 2 seconds on the session scanner. It also gives the builder 1 second of grace. It writes the exit file before it goes.
-   - The runner leaves a guard once the builder has ended. The guard is gone about a tenth of a second after a leader that is reaped. It is gone within about a second of a leader left a zombie, which item 5 counts as gone. A `ps` call in flight adds up to 2 seconds to either.
-   - The session leader, the builder's runner and its guard hold the launch's lock while each lives. The builder and the note calls do not hold it.
-   - So a launch of the same pid file is refused with exit 75 while any of them lives. A killed run therefore never writes an exit file after a later launch removed it. A relaunch waits until the earlier run's session has no process left.
-   - It refuses with exit 75, starting nothing, while the pid file names a pid that is not gone. Item 5 says when a pid is gone. It also refuses while a live launch or run of the same pid file holds its lock file, `<pid file>.lock`. The refusal names the pid of the launcher that took the lock. A lock file left by a run that has ended is taken over.
-   - The lock file stays beside the pid file after every launch. So a pid file under the ledger leaves `<pid file>.lock` there, untracked. It is removed with the step's other launch files once the builder has ended.
-3. As soon as the launch returns, write the builder's identity into the dispatch block and commit it, as item 4 of "Steps" says: the pid from the pid file, and the session id in `session_id`.
-   - For a `claude -p` builder the session id is in the session file, which `templates/launch.sh` writes before the builder starts.
-   - The event log of a Codex builder carries it as the `thread_id` of its `thread.started` event, once the builder has started.
-4. Once the builder's transcript path is known, pass it to the note with `sh <this skill's folder>/templates/launch.sh transcript --note <launch_note> --id <id file> <path>`. A plan whose `launch_note` is empty skips this item.
-   - A `claude -p` builder writes its transcript as `<session id>.jsonl` from the moment it starts, in the runner's projects folder, in the folder whose name is the builder's `--cwd` with every `/` and `.` replaced by `-`. A resumed run writes to the same file.
-   - The rollout under `~/.codex/sessions/` whose name ends with the session id is the transcript of a Codex builder.
-5. Watch the exit file and the pid with a monitor. `templates/launch.sh` writes the builder's exit code to the exit file as `exit <code>` once the builder has ended.
-   - The pid is gone when `kill -0 <pid>` fails. It is also gone when `ps -o stat= -p <pid>` shows a state starting with `Z`.
-   - `templates/launch.sh` counts a `ps` that fails, answers nothing or takes over 2 seconds as showing no zombie.
-   - A state starting with `Z` marks a zombie: a leader that ended and that its parent has not reaped. `kill -0` still succeeds on it.
-   - The session leader may be killed while the builder runs. The builder's runner then stops the builder and its session within about 3 seconds at most. It then writes the exit file, which can follow the pid's end by a few seconds on a loaded machine.
-   - A KILL after the builder ended leaves the exit file too, as the bullet "After the builder has ended" below says.
-   - A pid gone with no exit file five seconds later is a dead builder, which "Resuming, and handing the plan over" says how to handle.
-   - It follows only a KILL before the builder's runner started, as a KILL while the note's `start` runs.
-
-- A first Codex run is `codex exec -C <cwd> -s workspace-write`: `-C` is the working root and `-s workspace-write` confines writes to it.
-- `codex exec resume` takes neither flag, so `templates/launch.sh` runs a resumed Codex builder inside `--cwd` and sets its sandbox with `-c sandbox_mode="workspace-write"`.
-- `--network` is passed whenever the verification commands bind a port.
-- A `claude -p` builder runs under `--permission-mode acceptEdits`, which refuses a script or a test that no rule allows, since a print-mode run cannot ask for approval.
-- `templates/launch.sh` passes each line of the allow file to a `claude -p` builder as `--allowedTools "Bash(<line>:*)"`, so the builder runs each listed command with any further arguments.
-- `claude` cuts apart or ignores a permission rule holding a quote, `$`, a backtick, a backslash, `(`, `)`, `{`, `}`, `[`, `]`, a comma, `*` or `?`.
-- So `templates/allow_list.py` ends a prefix before the first word holding one of them.
-- It refuses a command whose parts are not simple commands (`$(`, a backtick, a subshell, a group), a command that starts with a shell keyword, and a command holding a carriage return.
-- `templates/launch.sh` refuses a `claude` launch without `--allow-file`, with exit 64 before anything starts. It refuses the same way an allow file that is missing, holds no command, holds a line with one of those characters, or holds a carriage return inside a line. A Codex builder takes no allow file, since its sandbox confines it.
-- `-o` writes the final message, and `--json` streams the event log whose last `turn.completed` event carries the usage.
-- The session is not run with `--ephemeral`, so the rollout under `~/.codex/sessions/` is the builder's transcript.
-- A runner's shell tool caps a command at ten minutes and a step takes longer, so `templates/launch.sh` detaches the builder and a monitor watches the exit file and the pid.
-- The launch note is a record only. `templates/launch.sh` ignores a note call that fails and stops one that has not returned after 3 seconds, and `templates/launch-note.md` gives the note command's interface.
-- Codex project settings live in `<repo>/.codex/config.toml` and its command rules in `<repo>/.codex/rules/`; the orchestrator never edits a user-level file.
-- TERM, INT or HUP sent to the pid stops the builder and every process of its session, then writes the exit file as `exit <128 plus the signal number>` and calls the note's `end`. A builder that had already ended keeps its own code, written before a running `end` is stopped.
-- KILL sent to the pid ends the session leader at once, and no `end` follows. While the builder runs, its runner then stops the builder and its session within about 3 seconds at most. It then writes the exit file as `exit 137`.
-- After the builder has ended, the guard its runner left writes the builder's code once the leader is gone. It writes nothing when the leader wrote the exit file first. It covers a KILL while the note's `end` runs, and one during the leader's own write. The guard waits for the leader however long the leader lives. It counts the leader gone as item 5 of the launch does. So a KILL to a leader its parent does not reap still leaves the exit file. It is in the leader's process group, and the leader's pid is not reused while that group lives. So every KILL once the builder's runner has started leaves an exit file.
-- The builder's runner also writes the exit file after a stop that TERM, INT or HUP started. So a KILL that reaches the leader during that stop still leaves the exit file.
-- A builder is stopped with TERM first, as the land skill's Steps 1 does. The note's `end` is then called when the leader's stop finishes before the KILL two seconds later.
+- A builder (`claude:<model>`) is dispatched with the runner's Agent tool, with `subagent_type: general-purpose`, the model named and the prompt of Steps 4.
+- It runs in the background, and the runner tracks it and reports when it ends.
+- A repair round resumes it with the runner's message tool on its agent id in `session_id`, as Steps 8 says.
+- Its completion notification carries its final message, which Steps 6 reads.
+- It works under the runner's own permission settings.
 
 ## What earns a step of its own
 
@@ -241,12 +172,11 @@ A shell launch runs in this order:
 
 ## Usage
 
-- Per step, one row in the state file's table: the builder's harness, model and effort, tokens, tool uses, wall time; the reviewer the same, and each run over a repair round the same; the fix rounds; the findings sent back; the lines added and removed; whether the first report passed its bar; the fixes at landing; the orchestrator's own row.
-- Tokens and lines say what a step cost; the last four say what it was worth, and a change to the process, the harness or the model is judged on both.
+- Per step, one row in the state file's table: the builder's model, tokens, tool uses, wall time; the reviewer the same, and each run over a repair round the same; the fix rounds; the findings sent back; the lines added and removed; whether the first report passed its bar; the fixes at landing; the orchestrator's own row.
+- Tokens and lines say what a step cost; the last four say what it was worth, and a change to the process or the model is judged on both.
 - The orchestrator's row per step is its messages, output tokens, cache-write tokens, cache-read tokens, fresh input tokens and minutes, from the previous landing commit to this step's booking.
 - `/land` produces it at its Steps 9 with the land skill's `templates/usage.py <session log> <from> <to>`: `<from>` is `git log -1 --format=%cI` on the previous landing commit, `<to>` is `date -Iseconds` at the booking, and the session log is the running session's own.
-- Under Claude Code the session log is the newest `~/.claude/projects/<slug>/<session>.jsonl`, whose assistant lines carry `message.usage` and a timestamp, one message counted once by its id.
-- Under Codex it is the newest rollout under `~/.codex/sessions/`, whose `token_count` events carry the cumulative `total_token_usage`, the row being the difference across the window.
+- The session log is the running Claude Code session's newest `~/.claude/projects/<slug>/<session>.jsonl`, whose assistant lines carry `message.usage` and a timestamp, one message counted once by its id.
 - Work on other steps inside the same window (the next brief, another step's review read) is not separated, and the row says what it shares.
 
 ## The pace when a deadline is set
@@ -280,7 +210,7 @@ A stop is for a decision that is the user's, of one of six kinds:
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| Relaunching a dead builder silently | Its partial work and its transcript are lost without the user knowing | Report it with what its transcript holds; a continuation builder takes over the worktree when the user says so |
+| Relaunching a dead builder silently | Its partial work in the worktree is lost without the user knowing | Report it as "Resuming, and handing the plan over" says; a continuation builder takes over the worktree when the user says so |
 | Sending a finding that changes the scope, a requirement, a public shape or an established decision back to the builder | The builder then takes a decision that is the user's | Raise it as a stop |
 | Handing a miss inside a brief back as a gap in a report | The work the user asked for is left undone | Close it in the repair rounds or at landing, or book it as its own step in the booked list |
 | Minting a step because the work is inconvenient now | The open step does not end what it exists to end | Widen the open step's path list; see "What earns a step of its own" |
@@ -294,7 +224,7 @@ A stop is for a decision that is the user's, of one of six kinds:
 
 ## Rules
 
-- The skill carries no project name, since that is in `.agents/plan.yaml` and the ledger, and the models it names are those in "The two tiers, and the harnesses".
+- The skill carries no project name, since that is in `.agents/plan.yaml` and the ledger, and the models it names are those in "The two tiers, and the models".
 - A fix of a defect in delivered work needs no yes.
 - The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing. A new finding of a review never earns that round, and the user's yes never extends the cap.
 - After its last round a step lands, and its small findings, the last review's included, are fixed at landing.

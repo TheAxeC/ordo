@@ -8,8 +8,8 @@
 # worktree of this repository. A pinned worktree deleted by hand is created again with git
 # worktree add --force: git replaces its stale record and leaves every other worktree's record as
 # it is; a locked record is still refused.
-# The skill folders are ~/.claude/skills, ~/.agents/skills and $CLAUDE_CONFIG_DIR/skills when that
-# variable is set, or $ORDO_SKILL_DIRS when set. $ORDO_SKILL_DIRS is split on spaces and tabs, or
+# The skill folders are ~/.claude/skills and $CLAUDE_CONFIG_DIR/skills when that variable is set,
+# or $ORDO_SKILL_DIRS when set. $ORDO_SKILL_DIRS is split on spaces and tabs, or
 # read one folder per line when it holds a newline (the form for a folder whose path holds a
 # space); empty lines are skipped, and a value that names no folder is refused. The default
 # folders are read one per line, so a home folder holding a space needs nothing. Every skill folder
@@ -45,7 +45,7 @@ if [ -n "${ORDO_SKILL_DIRS:-}" ]; then
     skill_dirs=$(printf '%s\n' "$skill_dirs" | sed '/^$/d')
     [ -n "$skill_dirs" ] || fail "ORDO_SKILL_DIRS names no folder"
 else
-    skill_dirs="$HOME/.claude/skills$nl$HOME/.agents/skills"
+    skill_dirs="$HOME/.claude/skills"
     if [ -n "${CLAUDE_CONFIG_DIR:-}" ] && [ "${CLAUDE_CONFIG_DIR%/}" != "$HOME/.claude" ]; then
         skill_dirs="$skill_dirs$nl${CLAUDE_CONFIG_DIR%/}/skills"
     fi

@@ -4,9 +4,10 @@
     usage.py <session log> <from ISO time> <to ISO time>
 
 The window runs from the previous landing commit (`git log -1 --format=%cI` on it) to the booking
-of this one (`date -Iseconds`). The log is the running session's own: under Claude Code the newest
-`~/.claude/projects/<slug>/<session>.jsonl`, under Codex the newest `~/.codex/sessions/.../rollout-*.jsonl`.
-The format is told from the file itself.
+of this one (`date -Iseconds`). The log is the running Claude Code session's own, the newest
+`~/.claude/projects/<slug>/<session>.jsonl`. A file in which no line is an assistant message with a
+`message` object is not a Claude Code session log, and is refused with a message naming it and
+exit 64.
 
 Both window times carry an offset or a trailing Z, as `%cI` and `date -Iseconds` give them. A time
 without one, or one that cannot be read as an ISO time, is refused with a message naming it and
@@ -14,12 +15,6 @@ exit 64. A log line whose own timestamp has no offset or cannot be read is skipp
 
 Claude Code writes one line per content block of an assistant message, each carrying the message's
 usage, so a message is counted once, by its id, with the usage of its last line in the window.
-
-Codex writes one `response_item` line per item of a turn; the messages are those whose payload is a
-`message` of role `assistant`, so `<n> messages` means the same for both harnesses. Its tokens come
-from `token_count` events, whose `total_token_usage` is cumulative for the session, so the token
-figures are the last total inside the window less the last total before it; its `input_tokens`
-include the cached and cache-written ones, which are taken out to give the fresh input.
 
 Printed as one line:
     <n> messages, <out> output tokens, <cw> cache-write tokens, <cr> cache-read tokens, <fresh> fresh input tokens, <m> minutes
@@ -69,10 +64,16 @@ def lines(path):
                 continue
 
 
-def is_codex(path):
-    for entry in lines(path):
-        return entry.get("type") in ("session_meta", "event_msg", "response_item", "turn_context")
-    return False
+def is_assistant(entry):
+    return (
+        isinstance(entry, dict)
+        and entry.get("type") == "assistant"
+        and isinstance(entry.get("message"), dict)
+    )
+
+
+def is_claude_log(path):
+    return any(is_assistant(entry) for entry in lines(path))
 
 
 def inside(entry, lo, hi):
@@ -83,9 +84,9 @@ def inside(entry, lo, hi):
 def claude_row(path, lo, hi):
     by_id = {}
     for entry in lines(path):
-        if entry.get("type") != "assistant" or not inside(entry, lo, hi):
+        if not is_assistant(entry) or not inside(entry, lo, hi):
             continue
-        message = entry.get("message") or {}
+        message = entry["message"]
         key = message.get("id") or entry.get("uuid")
         by_id[key] = message.get("usage") or {}
     out = cw = cr = fresh = 0
@@ -95,42 +96,6 @@ def claude_row(path, lo, hi):
         cr += usage.get("cache_read_input_tokens", 0) or 0
         fresh += usage.get("input_tokens", 0) or 0
     return len(by_id), out, cw, cr, fresh
-
-
-def codex_row(path, lo, hi):
-    before = None
-    last = None
-    count = 0
-    for entry in lines(path):
-        payload = entry.get("payload") or {}
-        when = stamp(entry)
-        if when is None:
-            continue
-        if entry.get("type") == "response_item":
-            message = payload.get("type") == "message" and payload.get("role") == "assistant"
-            if message and lo <= when <= hi:
-                count += 1
-            continue
-        if entry.get("type") != "event_msg" or payload.get("type") != "token_count":
-            continue
-        total = (payload.get("info") or {}).get("total_token_usage")
-        if not isinstance(total, dict):
-            continue
-        if when < lo:
-            before = total
-        elif when <= hi:
-            last = total
-    if last is None:
-        return count, 0, 0, 0, 0
-
-    def field(name):
-        base = (before or {}).get(name, 0) or 0
-        return (last.get(name, 0) or 0) - base
-
-    cr = field("cached_input_tokens")
-    cw = field("cache_write_input_tokens")
-    fresh = max(0, field("input_tokens") - cr - cw)
-    return count, field("output_tokens"), cw, cr, fresh
 
 
 def refuse(which, text, reason):
@@ -156,7 +121,13 @@ def main(argv):
         except ValueError:
             return refuse(which, text, "cannot be read")
     lo, hi = window
-    row = codex_row(path, lo, hi) if is_codex(path) else claude_row(path, lo, hi)
+    if not is_claude_log(path):
+        print(
+            f"usage.py: {path} is not a Claude Code session log: no line is an assistant message",
+            file=sys.stderr,
+        )
+        return 64
+    row = claude_row(path, lo, hi)
     minutes = round((hi - lo).total_seconds() / 60)
     n, out, cw, cr, fresh = row
     print(

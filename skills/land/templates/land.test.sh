@@ -9,8 +9,9 @@
 # fails the landing with verify.sh's RED line, a state file verify.sh cannot use fails it with
 # exit 1, verify.sh is found in the repository's
 # .agents/skills when the ledger lacks it, and a verify.sh found nowhere, the places named, or a
-# missing state file is refused before main is touched. Check usage.py on a Claude Code log and a
-# Codex rollout, and its refusal of a window time without an offset or unreadable. Check the
+# missing state file is refused before main is touched. Check usage.py on a Claude Code log, its
+# refusal of a file that is not one, and its refusal of a window time without an offset or
+# unreadable. Check the
 # example plan.yaml files against the state template: inside an Ordo checkout a missing example
 # fails, and only a copy outside one skips the check.
 # A plan copies this file beside its land.sh; the expected rows follow the ADAPT edits made there.
@@ -100,42 +101,13 @@ initialise_repo() {
     ) || fail "could not initialise scratch repository"
 }
 
-write_events() {
-    runs_root=$1
-    mkdir -p "$runs_root"
-    cat >"$runs_root/events.jsonl" <<'JSONL'
-{"type":"turn.completed","usage":{"input_tokens":100,"cached_input_tokens":50,"output_tokens":10,"reasoning_output_tokens":3}}
-{"type":"item.completed","item":{"type":"command_execution"}}
-{"type":"turn.completed","usage":{"input_tokens":200,"cached_input_tokens":100,"output_tokens":20,"reasoning_output_tokens":4}}
-{"type":"item.completed","item":{"type":"command_execution"}}
-JSONL
-    cat >"$runs_root/repair-events.jsonl" <<'JSONL'
-{"type":"turn.completed","usage":{"input_tokens":10,"cached_input_tokens":5,"output_tokens":1,"reasoning_output_tokens":1}}
-{"type":"turn.completed","usage":{"input_tokens":20,"cached_input_tokens":10,"output_tokens":2,"reasoning_output_tokens":1}}
-{"type":"item.completed","item":{"type":"command_execution"}}
-JSONL
-    cat >"$runs_root/review-events.jsonl" <<'JSONL'
-{"type":"turn.completed","usage":{"input_tokens":5,"cached_input_tokens":2,"output_tokens":1,"reasoning_output_tokens":1}}
-{"type":"turn.completed","usage":{"input_tokens":15,"cached_input_tokens":8,"output_tokens":1,"reasoning_output_tokens":1}}
-{"type":"item.completed","item":{"type":"command_execution"}}
-JSONL
-    cat >"$runs_root/session.jsonl" <<'JSONL'
+# Writes the orchestrator's Claude Code session log to the file $1.
+write_session() {
+    cat >"$1" <<'JSONL'
 {"type":"assistant","timestamp":"2026-09-16T10:05:00.000Z","message":{"id":"msg_a","usage":{"output_tokens":10,"cache_creation_input_tokens":100,"cache_read_input_tokens":1000,"input_tokens":5}}}
 {"type":"assistant","timestamp":"2026-09-16T10:05:01.000Z","message":{"id":"msg_a","usage":{"output_tokens":10,"cache_creation_input_tokens":100,"cache_read_input_tokens":1000,"input_tokens":5}}}
 {"type":"assistant","timestamp":"2026-09-16T10:30:00.000Z","message":{"id":"msg_b","usage":{"output_tokens":20,"cache_creation_input_tokens":0,"cache_read_input_tokens":2000,"input_tokens":3}}}
 JSONL
-    : >"$runs_root/pid.txt"
-    : >"$runs_root/exit.txt"
-    : >"$runs_root/repair-pid.txt"
-    : >"$runs_root/repair-exit.txt"
-    : >"$runs_root/review-pid.txt"
-    : >"$runs_root/review-exit.txt"
-    touch -t 202609140100.00 "$runs_root/pid.txt"
-    touch -t 202609140101.05 "$runs_root/exit.txt"
-    touch -t 202609140200.00 "$runs_root/repair-pid.txt"
-    touch -t 202609140200.10 "$runs_root/repair-exit.txt"
-    touch -t 202609140300.00 "$runs_root/review-pid.txt"
-    touch -t 202609140300.20 "$runs_root/review-exit.txt"
 }
 
 clean_repo=$test_root/clean
@@ -152,13 +124,13 @@ printf 'committed\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/committed.
     git commit -q -m wip
 ) || fail "could not create clean package commit"
 printf 'pending\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/pending.txt"
-clean_runs=$test_root/clean-runs
-write_events "$clean_runs"
+clean_session=$test_root/clean-session.jsonl
+write_session "$clean_session"
 
 (
     cd "$clean_repo" || exit 1
-    sh "$ledger_script" clean "$clean_base" "$clean_runs" --no-browser \
-        --session "$clean_runs/session.jsonl" --since 2026-09-16T12:00:00+02:00
+    sh "$ledger_script" clean "$clean_base" --no-browser \
+        --session "$clean_session" --since 2026-09-16T12:00:00+02:00
 ) >"$test_root/clean.out" 2>&1
 clean_status=$?
 clean_output=$(cat "$test_root/clean.out")
@@ -172,8 +144,8 @@ clean_expected=$(printf '%s\n%s' "$tool_path/committed.txt" "$tool_path/pending.
 if [ "$clean_staged" != "$clean_expected" ]; then
     fail "clean staged paths differ: [$clean_staged]"
 fi
-assert_contains "$clean_output" "clean, worker codex:gpt-5.6-sol at high, first run: 300 in / 150 cached / 30 out (7 reasoning), 2 items, 65 s (01:00:00 to 01:01:05); repair round on the same thread: 30 in / 15 cached / 3 out (2 reasoning), 1 items, 10 s; +2 -0 over 2 files; first report passed its bar: <yes or no>; <N> fixes at landing" "worker row"
-assert_contains "$clean_output" "clean, reviewer codex:gpt-5.6-sol at high, read-only: review 20 in / 10 cached / 2 out, 1 items, 20 s" "reviewer row"
+assert_contains "$clean_output" "clean, worker claude:opus, first run: <tokens>, <tool uses> tool uses, <seconds> s (from the runner's result); repair round: <the same, or none>; +2 -0 over 2 files; first report passed its bar: <yes or no>; <N> fixes at landing" "worker row"
+assert_contains "$clean_output" "clean, reviewer claude:opus, read-only: review <tokens> / <tool uses> / <seconds> s (from the runner's result)" "reviewer row"
 case "$clean_output" in
     *"second review"*)
         fail "reviewer row still carries a second review"
@@ -219,12 +191,10 @@ printf 'main\n' >"$conflict_repo/$tool_path/conflict.txt"
     git add "$tool_path/conflict.txt"
     git commit -q -m "Change main fixture"
 ) || fail "could not create conflicting main commit"
-conflict_runs=$test_root/conflict-runs
-mkdir -p "$conflict_runs"
 
 (
     cd "$conflict_repo" || exit 1
-    sh "$ledger_script" conflict "$conflict_base" "$conflict_runs" --no-browser
+    sh "$ledger_script" conflict "$conflict_base" --no-browser
 ) >"$test_root/conflict.out" 2>&1
 conflict_status=$?
 conflict_output=$(cat "$test_root/conflict.out")
@@ -241,7 +211,7 @@ if [ "$conflict_branch" != "conflict-land" ]; then
 fi
 (
     cd "$conflict_repo" || exit 1
-    sh "$ledger_script" conflict "$conflict_base" "$conflict_runs" --no-browser
+    sh "$ledger_script" conflict "$conflict_base" --no-browser
 ) >"$test_root/conflict-again.out" 2>&1
 conflict_status=$?
 [ "$conflict_status" -eq 1 ] || fail "conflict landing again exited $conflict_status, expected 1"
@@ -250,8 +220,32 @@ assert_contains "$(cat "$test_root/conflict-again.out")" \
     "conflict landing again"
 printf 'conflict: exit 2, conflicting path and retained landing branch verified, landing again refused\n'
 
+# The command line is <pkg> <base> and options. Exactly two arguments get past the argument-count
+# check: run from a folder that is not a repository root, land.sh then stops at its first
+# preflight check, before main, the worktree or the browser step is touched. Red when land.sh
+# needs a third argument (exit 64 and the usage line instead). The control: one argument is
+# refused with exit 64 and the usage line on stderr.
+args_dir=$test_root/two-arguments
+mkdir -p "$args_dir"
+(cd "$args_dir" && sh "$ledger_script" twoargs "$clean_base") >"$test_root/two-arguments.out" \
+    2>"$test_root/two-arguments.err"
+args_status=$?
+args_errors=$(cat "$test_root/two-arguments.err")
+[ "$args_status" -eq 1 ] ||
+    fail "land.sh <pkg> <base> exited $args_status, expected 1 at the preflight: [$args_errors]"
+[ "$args_errors" = "preflight failed: run this script from the repository root" ] ||
+    fail "land.sh <pkg> <base> did not stop at the first preflight check: [$args_errors]"
+(cd "$args_dir" && sh "$ledger_script" twoargs) >"$test_root/one-argument.out" \
+    2>"$test_root/one-argument.err"
+args_status=$?
+args_errors=$(cat "$test_root/one-argument.err")
+[ "$args_status" -eq 64 ] || fail "land.sh <pkg> exited $args_status, expected 64: [$args_errors]"
+args_usage="Usage: $ledger_script <pkg> <base> [--no-browser] [--session <session log> --since <ISO time>]"
+[ "$args_errors" = "$args_usage" ] || fail "land.sh <pkg> did not print the usage line: [$args_errors]"
+printf 'arguments: <pkg> <base> passes the argument check, <pkg> alone is refused with exit 64\n'
+
 # A scratch repository with a worktree for package $1 holding one committed change and nothing
-# pending, and an empty runs directory; sets $package_base.
+# pending, and a folder for its temporary files; sets $package_base.
 committed_package() {
     package_repo=$test_root/$1
     initialise_repo "$package_repo"
@@ -266,7 +260,7 @@ committed_package() {
         git add "$tool_path/committed.txt"
         git commit -q -m wip
     ) || fail "could not create the $1 package commit"
-    mkdir -p "$test_root/$1-runs" "$test_root/$1-tmp"
+    mkdir -p "$test_root/$1-tmp"
 }
 
 # Starts land.sh on package $1 in the background, with the environment assignments that follow;
@@ -278,7 +272,7 @@ start_landing() {
     (
         cd "$test_root/$landing_name" || exit 1
         exec env TMPDIR="$test_root/$landing_name-tmp" "$@" sh "$ledger_script" "$landing_name" \
-            "$package_base" "$test_root/$landing_name-runs" --no-browser
+            "$package_base" --no-browser
     ) >"$test_root/$landing_name.out" 2>&1 &
     landing_pid=$!
 }
@@ -601,11 +595,9 @@ adapted_base=$(cd "$adapted_repo" && git rev-parse HEAD) || fail "could not read
 ) || fail "could not create adapted worktree"
 printf 'pending\n' >"$adapted_repo/.agents/worktrees/adapted/$tool_path/pending.txt"
 printf 'outside\n' >"$adapted_repo/.agents/worktrees/adapted/outside.txt"
-adapted_runs=$test_root/adapted-runs
-write_events "$adapted_runs"
 (
     cd "$adapted_repo" || exit 1
-    sh "$adapted_dir/land.sh" adapted "$adapted_base" "$adapted_runs" --no-browser
+    sh "$adapted_dir/land.sh" adapted "$adapted_base" --no-browser
 ) >"$test_root/adapted.out" 2>&1
 adapted_status=$?
 if [ "$adapted_status" -ne 0 ]; then
@@ -629,32 +621,26 @@ cat >"$usage_root/claude.jsonl" <<'JSONL'
 {"type":"assistant","timestamp":"2026-09-16T10:40:00","message":{"id":"msg_no_offset","usage":{"output_tokens":999,"cache_creation_input_tokens":999,"cache_read_input_tokens":999,"input_tokens":999}}}
 {"type":"assistant","timestamp":"2026-09-16T11:01:00.000Z","message":{"id":"msg_after","usage":{"output_tokens":999,"cache_creation_input_tokens":999,"cache_read_input_tokens":999,"input_tokens":999}}}
 JSONL
-# Inside the window: three assistant messages and two token_count events, beside a user message,
-# a function call, a reasoning item and an agent_message event, none of which is counted.
-cat >"$usage_root/codex.jsonl" <<'JSONL'
-{"timestamp":"2026-09-16T09:00:00.000Z","type":"session_meta","payload":{"id":"fixture"}}
-{"timestamp":"2026-09-16T09:58:00.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"before"}]}}
-{"timestamp":"2026-09-16T09:59:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":100,"cached_input_tokens":50,"cache_write_input_tokens":0,"output_tokens":10}}}}
-{"timestamp":"2026-09-16T10:02:00.000Z","type":"response_item","payload":{"type":"message","role":"user","content":[{"type":"input_text","text":"go"}]}}
-{"timestamp":"2026-09-16T10:05:00.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"one"}]}}
-{"timestamp":"2026-09-16T10:06:00.000Z","type":"response_item","payload":{"type":"function_call","name":"shell","arguments":"{}","call_id":"call_a"}}
-{"timestamp":"2026-09-16T10:07:00.000Z","type":"response_item","payload":{"type":"reasoning","summary":[]}}
-{"timestamp":"2026-09-16T10:08:00.000Z","type":"event_msg","payload":{"type":"agent_message","message":"one"}}
-{"timestamp":"2026-09-16T10:10:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":300,"cached_input_tokens":150,"cache_write_input_tokens":20,"output_tokens":40}}}}
-{"timestamp":"2026-09-16T10:20:00.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"two"}]}}
-{"timestamp":"2026-09-16T10:40:00.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"three"}]}}
-{"timestamp":"2026-09-16T10:50:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":600,"cached_input_tokens":300,"cache_write_input_tokens":20,"output_tokens":70}}}}
-{"timestamp":"2026-09-16T10:55:00","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"no offset"}]}}
-{"timestamp":"2026-09-16T10:56:00","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":8000,"cached_input_tokens":8000,"cache_write_input_tokens":8000,"output_tokens":8000}}}}
-{"timestamp":"2026-09-16T11:30:00.000Z","type":"event_msg","payload":{"type":"token_count","info":{"total_token_usage":{"input_tokens":9000,"cached_input_tokens":9000,"cache_write_input_tokens":9000,"output_tokens":9000}}}}
-{"timestamp":"2026-09-16T11:40:00.000Z","type":"response_item","payload":{"type":"message","role":"assistant","content":[{"type":"output_text","text":"after"}]}}
-JSONL
-# The window is given with an offset, as git's %cI gives it, while the logs carry Z times.
+# The window is given with an offset, as git's %cI gives it, while the log carries Z times.
 claude_row=$(python3 "$usage_script" "$usage_root/claude.jsonl" 2026-09-16T12:00:00+02:00 2026-09-16T13:00:00+02:00) || fail "usage.py failed on the Claude Code log"
 [ "$claude_row" = "2 messages, 30 output tokens, 100 cache-write tokens, 3000 cache-read tokens, 8 fresh input tokens, 60 minutes" ] || fail "Claude Code usage row differs: [$claude_row]"
-codex_row=$(python3 "$usage_script" "$usage_root/codex.jsonl" 2026-09-16T12:00:00+02:00 2026-09-16T13:00:00+02:00) || fail "usage.py failed on the Codex rollout"
-[ "$codex_row" = "3 messages, 60 output tokens, 20 cache-write tokens, 250 cache-read tokens, 230 fresh input tokens, 60 minutes" ] || fail "Codex usage row differs: [$codex_row]"
-printf 'usage: Claude Code and Codex rows verified, one message per id, the window across offsets\n'
+printf 'usage: the Claude Code row verified, one message per id, the window across offsets\n'
+# A file in which no line is an assistant message is not a Claude Code session log: refused with
+# exit 64 and a message naming it, no row printed. Red when usage.py reads any JSON lines as a log.
+cat >"$usage_root/other.jsonl" <<'JSONL'
+{"type":"user","timestamp":"2026-09-16T10:01:00.000Z","message":{"role":"user","content":"go"}}
+{"type":"note","timestamp":"2026-09-16T10:05:00.000Z","payload":{"usage":{"output_tokens":10}}}
+[1, 2]
+JSONL
+python3 -B "$usage_script" "$usage_root/other.jsonl" 2026-09-16T12:00:00+02:00 2026-09-16T13:00:00+02:00 \
+    >"$test_root/usage.out" 2>"$test_root/usage.err"
+usage_status=$?
+usage_errors=$(cat "$test_root/usage.err")
+[ "$usage_status" -eq 64 ] || fail "usage.py on a file that is not a Claude Code log exited $usage_status, expected 64: $usage_errors"
+[ "$usage_errors" = "usage.py: $usage_root/other.jsonl is not a Claude Code session log: no line is an assistant message" ] ||
+    fail "usage.py on a file that is not a Claude Code log: message differs: [$usage_errors]"
+[ ! -s "$test_root/usage.out" ] || fail "usage.py printed a row for a file that is not a Claude Code log"
+printf 'usage: a file that is not a Claude Code session log refused, exit 64\n'
 # A window time without an offset, or one that cannot be read, is refused with exit 64 and a
 # message naming it, for either argument.
 for usage_window in \
@@ -671,7 +657,7 @@ for usage_window in \
     else
         usage_named=$usage_to
     fi
-    python3 -B "$usage_script" "$usage_root/codex.jsonl" "$usage_from" "$usage_to" \
+    python3 -B "$usage_script" "$usage_root/claude.jsonl" "$usage_from" "$usage_to" \
         >"$test_root/usage.out" 2>"$test_root/usage.err"
     usage_status=$?
     usage_errors=$(cat "$test_root/usage.err")

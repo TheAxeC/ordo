@@ -61,8 +61,6 @@ Run from the repository root.
    - `standards` lists the coding, layout or prose standard pages the repository has.
    - `worktree_paths` is the project's directory in the `projects:` form.
    - `bench` and `look` are left out unless the user names binaries or a view.
-   - `launch_note` is left out unless the user names a command that records launched builders.
-   - `worker_allow` is left out unless the repository names commands a builder must run beyond the verify list.
 8. Give every key written the example's comment for it, without the required/optional marker, in the example's order.
 9. Draft the ignore rules.
    - The worktree root must be ignored: `git check-ignore -q --no-index <worktree_root>/probe` exits 0.
@@ -76,12 +74,12 @@ Run from the repository root.
     - The setup is done only when that exits 0.
 14. Commit the files written by explicit path list, in one commit whose subject names the plan configuration.
     - The commit is made only when the repository's commit rule ("What it reads" 3) allows it.
-    - Otherwise the skill stops ("Stops"), except under `/repo-setup`, where the setup goes on and `repo-setup`'s Steps 13 raises the one stop.
+    - Otherwise the skill stops ("Stops"), except under `/repo-setup`, where the setup goes on and `repo-setup`'s Steps 12 raises the one stop.
 
 ### Checking an existing file
 
 1. With `.agents/plan.yaml` present, write nothing and run `templates/check_config.py`.
-2. It reports: a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>` or `codex:<model>`, `review` neither `every` nor `earned`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a `launch_note` that is not an absolute path to an executable file (relative, missing, a directory, or not executable); a `worker_allow` entry that is not a non-empty one-line string, or that holds a character no permission rule can hold (a quote, `$`, a backtick, a backslash, `(`, `)`, `{`, `}`, `[`, `]`, a comma, `*` or `?`); a worktree root git does not ignore; a configuration file git ignores.
+2. It reports: a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>`, `review` neither `every` nor `earned`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
 3. Optional keys left out are listed as notes, with the default that applies.
 4. For each error, propose the fix ("Stops").
 5. Make each fix the user approved.
@@ -111,4 +109,4 @@ Run from the repository root.
 - The skill draws only from the repository and the user, for the file it drafts and for every page.
 - A page the skill writes states what the repository already does or says, and cites where.
 - The skill never overwrites an existing page or `.agents/plan.yaml`. A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
-- Every path is relative to the repository root, except `launch_note`, which is an absolute path.
+- Every path is relative to the repository root.

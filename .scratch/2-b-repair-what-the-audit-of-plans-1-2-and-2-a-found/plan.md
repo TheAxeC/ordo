@@ -37,7 +37,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 14 Coverage rows of deep-research (52 rows), as step 11, records in `agents/reviews/14-rows.md`; the `ethics_checklist` and `ethics_review_agent` rows checked against the audit's finding 13 (1 commit)
 - ✅ 15 Ledger corrections in the three archived plans: plan 1's usage rows from the measured figures; each booking that claims a `PASS:` count nobody saw rewritten from a re-run of the tests at each of the 26 landing and closing commits, on trees extracted with `git archive` (premise corrected at /spec: the audit's re-run output lived in its session scratchpad and is not on disk); the closed lists filled from each plan's rulings; plan 2's stale lines; plan 1's Done line in the roadmap, given as Doc text and shown to the user as an open item at landing; a grep shows no booking that claims a count without the lines it quotes (1 commit)
 - ✅ 16 `/plan-retro` over the three archived plans, its proposals raised to the user one by one as open items (orchestrator, no agent)
-- 20 Claude only (ruling U 1): the shell-launch route and every Codex part of the skills removed: `launch.sh`, `launch.test.sh`, `allow_list.py` and its test, `launch-note.md`, the `launch_note` and `worker_allow` keys and their checks, the shell recipes, the Codex text of every skill, the AGENTS.md check of `sync_rules.py`, the models ruling's Astra and Sol, and `.agents/launch/2b-7` (1 commit)
+- ✅ 20 Claude only (ruling U 1): the shell-launch route and every Codex part of the skills removed: `launch.sh`, `launch.test.sh`, `allow_list.py` and its test, `launch-note.md`, the `launch_note` and `worker_allow` keys and their checks, the shell recipes, the Codex text of every skill, the AGENTS.md check of `sync_rules.py`, the models ruling's Astra and Sol, and `.agents/launch/2b-7` (1 commit)
 - 21 The process checks (rulings U 4 and V): `/spec` refuses a step whose line in `plan.md` names neither a step of the approved list nor a ruling of the user in the Rulings section; `/land` requires the ledger's `land.sh`, and this plan's ledger gets its copy; `docs/dev/skill-layout.md` requires a rule inventory, checked by `check_rule_inventory.py`, for any rewrite of an existing skill (1 commit); after its landing the release tagged and the user's yes asked to pin it (ruling W)
 - 17 The approved retro proposals applied; each proposed check runs on the tree (1 commit)
 - 17a A library check in `/spec`, set per project (ruling T): a required key `libraries: check | avoid` in `.agents/plan.yaml`, per project in the `projects:` form, in the `plan` skill's `templates/plan.yaml` and `templates/plan.projects.yaml` and in the configuration block of `templates/orchestrator-state.md`; `/ordo-init` asks for it when it drafts the file and `templates/check_config.py` reports it missing or of an unknown value, with cases; `/plan` and `/spec` refuse without it; under `check`, `/spec` looks for libraries for every capability the step builds before it writes the brief, a candidate that could replace hand-written code is a stop for the user with options, pros, cons and one recommendation, and `templates/brief.md` gains a section "Libraries checked" (each candidate's version, license, maintainer, last release, compatibility with the project's dependencies, what it would replace and what stays) naming the library ruled; under `avoid` the brief says no new dependency; under both, a builder adds no dependency the brief did not name and reports an unnamed library that would cover its work instead of installing it, and `/refute` reports a dependency the brief did not name; bundle size is no criterion unless `plan.yaml` names one; this repository's `.agents/plan.yaml` gets `libraries: avoid` (1 commit)
@@ -72,7 +72,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - The way back on track is option C: this repair plan, run in agent mode through the skills, then entry 3; no restart (the user).
 - The recommendations 2a to 2h of the audit report are accepted: the layout seen and confirmed (2a); `__` bold only outside a word (2b); step 14's work pulled into plan 1 step 2 kept (2c); the single-heading-line inventory row kept (2d); about 35 words allowed for the coverage table's reason cells only, written into the prose standard as a named exception (2e); the launch-note page beside `launch.sh` kept (2f); a resumed builder is a new note record, labelled `<entry>/<step>`, the label form checked with the oculus session before it ships (2g); entry 15.A's gate fixed with the diff shown (2h) (the user).
 - Contradiction 3a: the closing step's roadmap diff is a stop of `plan-orchestration`. 3b: a sharper sentence is allowed only when no command can check the rule, in both `plan-orchestration` and `plan-retro`. 3c: a false premise stops only when the plan cannot absorb it; one it can absorb is corrected in `plan.md` in the preparation commit (the user).
-- Models: Opus for the orchestrator and the agents in this plan, and as the skills' default; Fable, Astra and Sol are options for the orchestrator, Sol for the agents, and an agent (builder, reviewer) never runs on Fable or Astra (the user).
+- Models: Opus for the orchestrator and the agents in this plan, and as the skills' default; Fable, Astra and Sol are options for the orchestrator, Sol for the agents, and an agent (builder, reviewer) never runs on Fable or Astra (the user). Superseded by ruling U: Claude only, Fable the only other orchestrator model.
 - Executor: `agent` for this plan; `inline` stays an optional executor in the skills (the user).
 - No question-box tool; a question or a stop is written as plain text, as an open item with options, pros, cons and one recommendation (the user).
 - Every row of `docs/academic-coverage.md` is checked against its file, since a sample of 57 found 7 defective rows (the user).
@@ -1005,3 +1005,40 @@ verify: 14 commands passed
 ```
 
 - Usage, orchestrator from step 7b's booking (01b029e) to this booking: 38 messages, 37268 output tokens, 557266 cache-write tokens, 9246203 cache-read tokens, 82 fresh input tokens, 486 minutes.
+
+### Step 20, Claude only: the shell-launch route and every Codex part of the skills removed (landed 2026-09-27)
+
+- Landed: `launch.sh`, `launch.test.sh`, `allow_list.py`, `allow_list.test.sh` and `launch-note.md` deleted; `plan-orchestration/SKILL.md` dispatches a builder with the runner's Agent tool only, resumes it by its agent id, and defines a dead builder; the plan templates and `check_config.py` accept `claude:<model>` only and drop `launch_note`, `worker_allow` and `worker_effort`; `usage.py` reads a Claude Code session log only; `land.sh` takes `<pkg> <base>` and prints Claude rows; `/repo-setup` no longer creates `AGENTS.md` and `sync_rules.py` no longer checks it; `pin.sh` links into `~/.claude/skills` and `$CLAUDE_CONFIG_DIR/skills` only; README, `building.md`, `change-standard.md`, `.agents/plan.yaml` and `skills/spec/SKILL.md` follow.
+- User-visible changes, before and after: a Codex worker or reviewer in `.agents/plan.yaml` was accepted, now `check_config.py` refuses it; `launch_note`, `worker_allow` and `worker_effort` were keys, now each is an unknown key; `land.sh <pkg> <base> <runs dir>` is now `land.sh <pkg> <base>`; `/repo-setup` wrote `AGENTS.md`, now it does not; `pin.sh` linked into `~/.agents/skills` too, now it does not.
+- Kept on purpose (the brief's item 9): the skills CLI's `.agents/skills` copy and the lookups that follow it, `docs/academic-coverage.md`'s research-hub path, the roadmap's done entries, `ordo-init` lines 31 and 53.
+- Repair rounds: round 1, six rulings (`agents/briefs/20-round-1.md`); round 2, the one round beyond the cap, for round 1's unbuilt case of the two-argument command line (`agents/briefs/20-round-2.md`). The review of round 2 found nothing.
+- Fixes at landing (4): `plan-orchestration/SKILL.md` names the report at the dispatch block's `report` path in the dead-builder test, and "on that id" became "on its agent id in `session_id`" (review of round 1, Standards); the ledger's configuration block lost `worker_effort` (review of round 1, Spec); the models ruling in Rulings marked superseded by ruling U. `.agents/launch/2b-7` deleted.
+- Roadmap: entry 2.B's goal made Claude only through `/roadmap`, the diff approved by the user (commit f37c5e6).
+- Booked for the user at the pin of ruling W: the ten links in `~/.agents/skills` that `pin.sh` no longer manages.
+- Verification on main, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+```
+
+- Usage: the row in `orchestrator-state.md`'s Usage table.

@@ -4,9 +4,8 @@
 Usage: sync_rules.py <repository root> [--write]
 
 The block is the text of CLAUDE.md between the lines "<!-- ordo:shared-rules begin -->" and
-"<!-- ordo:shared-rules end -->"; the template is shared-rules.md beside this script. AGENTS.md
-must be a symlink to CLAUDE.md, so both runners read the same text. The block is compared line by
-line, so a CRLF file whose block holds the template's lines equals it.
+"<!-- ordo:shared-rules end -->"; the template is shared-rules.md beside this script. The block is
+compared line by line, so a CRLF file whose block holds the template's lines equals it.
 
 --write replaces the text between the two markers with the template and keeps every byte outside
 them. It writes the block with the file's own line ending: CRLF or LF, whichever most of its lines
@@ -14,14 +13,13 @@ end with, and the first line's ending on a tie. It then reads the file back to c
 what was written.
 
 Exit status: 0 when the block equals the template (or was just rewritten with --write), 1 when it
-differs (the unified diff is printed), 2 when CLAUDE.md is missing, has no single block, or
-AGENTS.md is not a symlink to it; when CLAUDE.md or shared-rules.md cannot be read or is not UTF-8;
-and when --write cannot write CLAUDE.md or the file does not read back as written. The "ok:" and
-"written:" lines and the diff go to stdout; each "error:" line goes to stderr.
+differs (the unified diff is printed), 2 when CLAUDE.md is missing or has no single block; when
+CLAUDE.md or shared-rules.md cannot be read or is not UTF-8; and when --write cannot write
+CLAUDE.md or the file does not read back as written. The "ok:" and "written:" lines and the diff
+go to stdout; each "error:" line goes to stderr.
 
-The error lines of exit 2. The first two name a block or a link to draft:
+The error lines of exit 2. The first names a block to draft:
     error: CLAUDE.md has no single shared-rules block (<begin marker> ... <end marker>)
-    error: AGENTS.md is not a symlink to CLAUDE.md
 The others name a file to fix before the check can run:
     error: no CLAUDE.md in <root>
     error: <path> is not UTF-8 (byte <n>)
@@ -73,12 +71,8 @@ def main(argv):
         return 2
     template = template.replace("\r\n", "\n").strip("\n")
     claude = os.path.join(root, "CLAUDE.md")
-    agents = os.path.join(root, "AGENTS.md")
     if not os.path.isfile(claude):
         print(f"error: no CLAUDE.md in {root}", file=sys.stderr)
-        return 2
-    if not (os.path.islink(agents) and os.path.realpath(agents) == os.path.realpath(claude)):
-        print("error: AGENTS.md is not a symlink to CLAUDE.md", file=sys.stderr)
         return 2
     text = read(claude)
     if text is None:

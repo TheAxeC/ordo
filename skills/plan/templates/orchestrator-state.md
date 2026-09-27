@@ -1,6 +1,6 @@
 # Orchestrator state (read this first after any context compaction, or as a new orchestrator)
 
-The catch-up note for <the roadmap entry>. Rewritten before every step commit. Everything here is also derivable from `plan.md`, the roadmap, the repository's instruction file and `git log`, but slower. Read this, then `plan.md`, then the tail of the transcript when there is one. Nothing needed to continue lives anywhere but this folder: a session on either harness continues from these files alone.
+The catch-up note for <the roadmap entry>. Rewritten before every step commit. Everything here is also derivable from `plan.md`, the roadmap, the repository's instruction file and `git log`, but slower. Read this, then `plan.md`, then the tail of the transcript when there is one. Nothing needed to continue lives anywhere but this folder: another Claude Code session continues from these files alone.
 
 ```yaml
 verify:                      # commands run in the worktree and again on main, in order; all must pass. Copied from the repository's verification page by /plan.
@@ -10,9 +10,8 @@ standards: []                # files every brief tells the builder to read in fu
 worktree_root: <path>        # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default for who builds a step: agent (a builder dispatched in the worktree), inline (the orchestrating session writes the step itself), academic-paper (the step is built through that skill). Chosen per step by the orchestrator and recorded in the dispatch block; a step of manuscript content is always academic-paper.
-worker: <harness:model>      # the default worker is claude:opus, and codex:gpt-5.6-sol is the other option; a builder never runs on Fable or Astra.
-worker_effort: high          # the reasoning effort passed to a worker whose harness takes one.
-reviewer: <harness:model>    # the model /refute runs on: claude:opus by default, and codex:gpt-5.6-sol is the other option; a reviewer never runs on Fable or Astra.
+worker: claude:<model>       # the default worker is claude:opus; a builder never runs on Fable.
+reviewer: claude:<model>     # the model /refute runs on: claude:opus by default; a reviewer never runs on Fable.
 review: every                # every, or earned: under the loop, the reviewer runs unless the worker's record earns the skip (plan-orchestration, "The review, earned").
 refute_after_repair: yes     # yes: /refute runs again over each repair round, its findings fixed at landing or booked, never sent back; no: the orchestrator's read of the round stands in.
 repair_rounds: 1             # the most repair rounds a step gets; a refutation that finds nothing ends them early; the round cap in plan-orchestration's Rules allows one beyond it under its exception.
@@ -20,12 +19,10 @@ review_minutes: 0            # the reviewer's time box in minutes; 0 is none.
 look:                        # where a changed view is opened at landing (a page, a command); empty means no look step.
 workers_at_once: 1           # steps in flight at once; above 1 only for steps with disjoint paths (plan-orchestration, "Two steps in flight").
 bench: []                    # the binaries /spec stages and /land runs interleaved, base against new; empty means no A/B.
-launch_note:                 # the command that records a builder started as its own process (the plan-orchestration skill's templates/launch-note.md); empty means none is recorded.
-worker_allow: []             # the command prefixes a builder started from a shell may run (the plan-orchestration skill's templates/allow_list.py); [] means the verify list and the brief's check commands.
 ```
 
 ```yaml
-dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), landing, round. The orchestrator writes and commits prompt, output (a shell launch's --report file: the claude -p JSON or the codex -o final message), events, stderr, exit, pid, session_file (a claude -p launch's --session-file), allow_file (a claude -p launch's --allow-file) and note_id_file before the launch, adds session_id as soon as the launch returns, reviewer_report at the review, the repair_ entries while a fix round is in flight, and the cases_ entries while a resume on a cases ruling is in flight.
+dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), landing, round. The orchestrator adds session_id, the builder's agent id, as soon as the builder is dispatched, and reviewer_report at the review.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)

@@ -38,10 +38,7 @@ metadata:
 
 1. Stop the step's builder and every reviewer of the step, before anything in the worktree is committed.
    - An agent is stopped through the runner's stop tool.
-   - A shell builder is sent TERM at the pid in its pid file, and KILL two seconds later.
    - Then the runner's agent listing must show none of them left.
-   - A shell builder's pid must then be gone, and its exit file present, within five seconds of the KILL, checked every tenth of a second. The builder's runner writes the exit file after its stop, which a loaded machine can stretch past the KILL.
-   - The pid is gone when `kill -0` fails. It is also gone when `ps -o stat= -p <pid>` shows a state starting with `Z`. That state is a zombie, a process that has ended and that its parent has not reaped.
    - A check that fails is a refusal before main is touched ("Stops").
 2. Set `landing: cherry-picking` in the dispatch block.
 3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` scoped to the step's tree, and `git commit -q -m wip` when something is staged.
@@ -65,7 +62,7 @@ metadata:
    - The mean, the standard deviation and the standard error of the difference are written to the scratchpad and quoted in the booking.
    - A change past the noise band is a finding, fixed before the booking.
 9. Produce the orchestrator's usage row with `templates/usage.py <session log> <from> <to>`: the session log is the running session's own, `<from>` the previous landing commit's `git log -1 --format=%cI`, `<to>` `date -Iseconds`.
-   - The Usage section of `plan-orchestration` says where each harness keeps the log.
+   - The Usage section of `plan-orchestration` says where the session log is.
 10. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the step it is booked at, the verification lines, the A/B, the usage row; tick the step.
 11. Rewrite the state file: the dispatch block cleared, the position line, the usage rows, the open items as they stand.
 12. Write the landing report, `agents/reviews/<step>-landing.md`, so it lands with the step and stands alone on disk.
@@ -99,7 +96,7 @@ metadata:
 - It finds `verify.sh` and `usage.py` beside itself, then in this skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`); a missing state file, or a `verify.sh` in none of those places, is refused before main is touched, with the places named.
 - Its `ADAPT` block holds the dependency install the verify list needs and any check beyond the verify list.
 - It prints the diff stat, the usage rows (with `--session <session log> --since <previous landing commit time>`, the orchestrator's row through `usage.py`) and the staged paths.
-- `templates/land.test.sh` proves it on scratch repositories, its verify list run and its lookup of `verify.sh` included, and proves `templates/usage.py` on a Claude Code log and a Codex rollout.
+- `templates/land.test.sh` proves it on scratch repositories, its verify list run and its lookup of `verify.sh` included, and proves `templates/usage.py` on a Claude Code log and its refusal of a file that is not one.
 - `templates/verify.test.sh` proves `templates/verify.sh` on scratch state files, starting it under `sh` and, when it is installed, `dash`.
 - When the ledger holds it, its zero exit passes the checks on main (Steps 6). It never passes the look (Steps 7), which it does not do.
 
@@ -114,7 +111,7 @@ metadata:
 | No dispatch block | The state file holds no dispatch block naming this step | That the block is missing | `/spec` for the step |
 | The step not ready | No builder's report; or no refuter report that is either newer than the builder's report or, after the step's repair rounds (up to `repair_rounds`, or one more under plan-orchestration's exception), carrying a run over the last round when `refute_after_repair: yes` (the orchestrator's read of the round when `no`); or a run over the last round owed and missing; or a finding, the last run's included, neither closed under the refuter report's Closed heading nor booked as its own step in the booked list | Which of these it is | What is missing supplied, then `/land` again |
 | Main not clean | On main something staged, a git operation in progress, or one of the step's paths carrying an unrelated change of the user's | What it saw, the user's unrelated changes listed by path | Main put right, then `/land` again |
-| Agents still running | The check of Steps 1 fails: an agent still listed, a shell builder's pid alive, or no exit file | Each one left | Each one stopped, then `/land` again |
+| Agents still running | The check of Steps 1 fails: an agent still listed | Each one left | Each one stopped, then `/land` again |
 
 - The first row is a stop: it leaves an open item.
 - The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.

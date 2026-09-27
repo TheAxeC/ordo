@@ -23,7 +23,6 @@ worktree_root: .agents/worktrees # where a step's worktree is created, relative 
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # ruled: a builder is dispatched in the step's worktree for every step not marked orchestrator.
 worker: claude:opus          # the default worker (ruled: Opus).
-worker_effort: high          # the reasoning effort passed to a worker whose harness takes one.
 reviewer: claude:opus        # the model /refute runs on, as a fresh read-only agent (ruled: Opus).
 review: every                # every step is refuted.
 refute_after_repair: yes     # /refute runs again over each repair round.
@@ -35,26 +34,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: '20'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  session_id: a68d24db65932482f
-  worktree: .agents/worktrees/2b-20
-  base: 7d3e907
-  launched: 2026-09-27
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/20-report.md
-  builder_usage: 276603 tokens, 74 tool uses, 20.6 minutes
-  reviewer: claude:opus, a native agent in the background, a2155aa82f638f98d
-  reviewer_report: agents/reviews/20-refuter.md, 175814 tokens, 47 tool uses, 11.6 minutes
-  landing: cherry-picking
-  round: 2
-  round_1_rulings: agents/briefs/20-round-1.md, paths widened by skills/spec/SKILL.md
-  round_1_builder_usage: 305557 tokens, 14 tool uses, 7.6 minutes
-  round_1_reviewer: 133901 tokens, 38 tool uses, 10.4 minutes
-  round_2_rulings: agents/briefs/20-round-2.md, the one round beyond the cap, for round 1's unbuilt case
-  round_2_builder_usage: 317425 tokens, 7 tool uses, 5.4 minutes
-  round_2_reviewer: a06d1ed389b2a19c1, 14 tool uses, about 8 minutes, no finding
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -122,8 +102,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 7c, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 20 in flight; then 21, 17, 17a, 18, 19.
+- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 and 20 landed (step 20 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
+- Roadmap entry 2.B. Step 20 landed; next: step 21, then the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -151,3 +131,4 @@ dispatch:
 | 7 | claude:opus, `claude -p` from a shell through `launch.sh` with the launch note: resumed run 55,437 output tokens, 141 turns, 2,811 s; round 1: 42,481 output tokens, 143 turns, 2,602 s | 147,356 tokens, 33 tool uses, 2,172 s; round 1: 120,890 tokens, 27 tool uses, 875 s | 1 | 10 (10 rulings) | 5 files changed, 385 insertions(+), 47 deletions(-) | no | 6 | 0 | 87 | 69187 | 206121 | 24108442 | 202 | 154 | none; shared with step 7b's review and round 1, and ruling T |
 | 7b | claude:opus agent, effort high: 258,005 tokens, 97 tool uses, 6,205 s; round 1: 316,580 tokens, 37 tool uses, 3,126 s; round 2: 356,254 tokens, 27 tool uses, 2,146 s (the agent's notification totals) | 163,825 tokens, 41 tool uses, 2,071 s; round 1: 132,302 tokens, 34 tool uses, 1,532 s; round 2: 132,373 tokens, 32 tool uses, 1,448 s | 2 (one under the exception, the brief's What it must do item 1 unbuilt by round 1) | 8 (8 rulings), then 4 (4 rulings) | 5 files changed, 539 insertions(+), 85 deletions(-) | no | 4 | 0 | 49 | 37730 | 91373 | 8081914 | 114 | 137 | none |
 | 7c | claude:opus agent, effort high: 191,457 tokens, 77 tool uses, 3,046 s; round 1: 59,184 tokens, 158 tool uses, 18,823 s (the agent's notification totals) | 99,985 tokens, 25 tool uses, 1,409 s; round 1: 135,664 tokens, 43 tool uses, 4,961 s | 1 | 7 (7 rulings) | 6 files changed, 408 insertions(+), 39 deletions(-) | no | 6 | 0 | 38 | 37268 | 557266 | 9246203 | 82 | 486 | none |
+| 20 | claude:opus agent: 276,603 tokens, 74 tool uses, 1,238 s; round 1: 305,557 tokens, 14 tool uses, 454 s; round 2: 317,425 tokens, 7 tool uses, 322 s (the agent's notification totals) | 175,814 tokens, 47 tool uses, 698 s; round 1: 133,901 tokens, 38 tool uses, 625 s; round 2: 62,230 tokens, 16 tool uses, 300 s | 2 (round 2 the one beyond the cap) | 7 (6 rulings, then 1) | 29 files changed, 213 insertions(+), 4066 deletions(-) | no | 4 | 0 | 184 | 162453 | 383584 | 46277719 | 408 | 339 (from step 7c's landing; shares the user's rulings U to W, the removal of 7d and the brief of step 20) | none |

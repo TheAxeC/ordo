@@ -122,7 +122,7 @@ The first two rows are stops, which leave an open item as "Steps / A stop" says;
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | A brief that tells the builder where to look | A builder told only where to look will not meet what it did not read | Write every requirement the step is judged on into the brief in its own words: the acceptance list, the tests, the conventions, the checks |
-| A harness or a vendor named in the brief | The brief then works for one harness only; what differs per harness is in `plan-orchestration`'s launch recipes | Leave it out |
+| A runner or a vendor named in the brief | The brief then ties the step to how it is launched, which `plan-orchestration`'s "Launching a builder" alone says | Leave it out |
 | History in the brief | It tells the builder what went wrong, not what to build | What to build, and why |
 
 ## Rules

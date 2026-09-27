@@ -4,9 +4,9 @@
 # --write repairs it, keeping every byte outside the block and writing the block in the ending most
 # lines use (CRLF in a file CRLF on every line but its first), the first line's on a tie. Each
 # of these is refused with exit 2 and one error line on stderr, stdout empty: a missing block,
-# reversed markers, a second begin or end marker, a second block, a missing AGENTS.md symlink, a
-# missing CLAUDE.md, a CLAUDE.md or shared-rules.md that is not UTF-8, a missing shared-rules.md, a
-# CLAUDE.md --write cannot open and a write that does not read back as written.
+# reversed markers, a second begin or end marker, a second block, a missing CLAUDE.md, a CLAUDE.md
+# or shared-rules.md that is not UTF-8, a missing shared-rules.md, a CLAUDE.md --write cannot open
+# and a write that does not read back as written.
 
 set -u
 
@@ -25,8 +25,8 @@ begin='<!-- ordo:shared-rules begin -->'
 end='<!-- ordo:shared-rules end -->'
 cr=$(printf '\r')
 
-# A repository whose CLAUDE.md is the template with the shared rules filled in, and AGENTS.md
-# linked to it.
+# A repository whose CLAUDE.md is the template with the shared rules filled in, and no other file.
+# Red when the check requires another file beside CLAUDE.md, as a symlink AGENTS.md.
 make_repo() {
     repo=$test_root/$1
     mkdir -p "$repo"
@@ -39,7 +39,6 @@ begin = "<!-- ordo:shared-rules begin -->\n"
 text = text.replace(begin, begin + rules + "\n")
 open(out, "w").write(text)
 PY
-    ln -s CLAUDE.md "$repo/AGENTS.md"
 }
 
 # Runs the command given and checks its exit status; $output holds its stdout, $errors its stderr.
@@ -218,21 +217,12 @@ printf '%s\nrules\n%s\n' "$begin" "$end" >>"$test_root/two-blocks/CLAUDE.md"
 expect_refusal "two blocks" "no single shared-rules block" \
     python3 -B "$sync" "$test_root/two-blocks"
 
-make_repo no-link
-rm "$test_root/no-link/AGENTS.md"
-cp "$test_root/no-link/CLAUDE.md" "$test_root/no-link/AGENTS.md"
-expect_refusal "no symlink" "AGENTS.md is not a symlink to CLAUDE.md" \
-    python3 -B "$sync" "$test_root/no-link"
-
-# No CLAUDE.md, while AGENTS.md is a symlink to where it would be.
 mkdir -p "$test_root/no-claude"
-ln -s CLAUDE.md "$test_root/no-claude/AGENTS.md"
 expect_refusal "no CLAUDE.md" "no CLAUDE.md in $test_root/no-claude" \
     python3 -B "$sync" "$test_root/no-claude"
 
 mkdir -p "$test_root/not-utf8"
 printf 'a\n%s\n\377\n%s\n' "$begin" "$end" >"$test_root/not-utf8/CLAUDE.md"
-ln -s CLAUDE.md "$test_root/not-utf8/AGENTS.md"
 expect_refusal "CLAUDE.md not UTF-8" "$test_root/not-utf8/CLAUDE.md is not UTF-8" \
     python3 -B "$sync" "$test_root/not-utf8"
 

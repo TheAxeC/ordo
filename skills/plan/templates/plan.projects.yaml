@@ -1,6 +1,6 @@
 # Example .agents/plan.yaml for a repository with several projects. Copy it to .agents/plan.yaml and replace the names and paths.
 # Each project takes the keys of plan.yaml, with the same required keys and the same defaults. A plan is then named <project>/<entry>.
-# Every path is relative to the repository root, except launch_note, which is absolute.
+# Every path is relative to the repository root.
 
 projects:
   tool-a:
@@ -14,7 +14,6 @@ projects:
     reviewer: claude:opus
     standards: []
     worktree_paths: [tools/tool-a]
-    worker_effort: high
     review: every
     refute_after_repair: yes
     repair_rounds: 1
@@ -22,8 +21,6 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
-    launch_note: ""
-    worker_allow: []
   tool-b:
     roadmap: tools/tool-b/ROADMAP.md
     verification: tools/tool-b/docs/building.md
@@ -31,11 +28,10 @@ projects:
     ledger_root: tools/tool-b/.scratch
     archive_root: tools/tool-b/.scratch/archive
     worktree_root: .agents/worktrees
-    worker: codex:gpt-5.6-sol
+    worker: claude:opus
     reviewer: claude:opus
     standards: []
     worktree_paths: [tools/tool-b]
-    worker_effort: high
     review: earned
     refute_after_repair: yes
     repair_rounds: 1
@@ -43,5 +39,3 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
-    launch_note: ""
-    worker_allow: []

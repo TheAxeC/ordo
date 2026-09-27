@@ -2,7 +2,7 @@
 # Run a reviewed package through a plan's landing checks and print its booking data.
 # A plan copies this file into its ledger folder and makes the three ADAPT edits: the tool
 # directory, the dependency install and any check beyond the verify list with their pass rules,
-# and the harness and model names in the rows.
+# and the model names in the rows.
 #
 # Its check on main is the ledger's verify list: after main's cherry-pick it runs
 # sh <verify.sh> <the orchestrator-state.md beside this script> from the repository root, and a
@@ -34,7 +34,7 @@
 set -u
 
 usage() {
-    printf 'Usage: %s <pkg> <base> <runs dir> [--no-browser] [--session <session log> --since <ISO time>]\n' "$0" >&2
+    printf 'Usage: %s <pkg> <base> [--no-browser] [--session <session log> --since <ISO time>]\n' "$0" >&2
     exit 64
 }
 
@@ -43,13 +43,12 @@ fail() {
     exit "${2:-1}"
 }
 
-if [ "$#" -lt 3 ]; then
+if [ "$#" -lt 2 ]; then
     usage
 fi
 
 landing_pkg=$1
 landing_base=$2
-landing_runs=$3
 landing_browser=1
 landing_session=''
 landing_since=''
@@ -66,7 +65,7 @@ case "$landing_base" in
         ;;
 esac
 
-shift 3
+shift 2
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --no-browser)
@@ -121,9 +120,6 @@ if ! command -v node >/dev/null 2>&1; then
 fi
 if [ ! -d "$landing_tool" ]; then
     fail "preflight failed: tool directory not found: $landing_tool"
-fi
-if [ ! -d "$landing_runs" ]; then
-    fail "preflight failed: runs directory not found: $landing_runs"
 fi
 
 landing_script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P) ||
@@ -405,117 +401,17 @@ if [ "$landing_status" -ne 0 ]; then
     fail "booking staged paths failed" "$landing_status"
 fi
 
-node - "$landing_pkg" "$landing_runs" "$landing_additions" "$landing_deletions" "$landing_files" >"$landing_tmp/usage.txt" 2>"$landing_output" <<'NODE'
-const fs = require("fs");
-const path = require("path");
+node - "$landing_pkg" "$landing_additions" "$landing_deletions" "$landing_files" >"$landing_tmp/usage.txt" 2>"$landing_output" <<'NODE'
+const [pkg, additions, deletions, files] = process.argv.slice(2);
 
-const [pkg, runsDir, additions, deletions, files] = process.argv.slice(2);
-
-function requiredFiles(prefix) {
-    return {
-        events: path.join(runsDir, `${prefix}events.jsonl`),
-        pid: path.join(runsDir, `${prefix}pid.txt`),
-        exit: path.join(runsDir, `${prefix}exit.txt`),
-    };
-}
-
-function existsAny(files) {
-    return Object.values(files).some((file) => fs.existsSync(file));
-}
-
-function requireAll(files, label) {
-    for (const file of Object.values(files)) {
-        if (!fs.existsSync(file)) {
-            throw new Error(`${label} is incomplete: missing ${file}`);
-        }
-    }
-}
-
-function readUsage(files, label) {
-    requireAll(files, label);
-    const totals = {
-        input: 0,
-        cached: 0,
-        output: 0,
-        reasoning: 0,
-        items: 0,
-    };
-    const lines = fs.readFileSync(files.events, "utf8").split(/\r?\n/).filter(Boolean);
-    for (const [index, line] of lines.entries()) {
-        let event;
-        try {
-            event = JSON.parse(line);
-        } catch (error) {
-            throw new Error(`${label} has invalid JSON on line ${index + 1}: ${error.message}`);
-        }
-        if (event.type === "turn.completed") {
-            const usage = event.usage || {};
-            totals.input += Number(usage.input_tokens || 0);
-            totals.cached += Number(usage.cached_input_tokens || 0);
-            totals.output += Number(usage.output_tokens || 0);
-            totals.reasoning += Number(usage.reasoning_output_tokens || 0);
-        }
-        if (event.type === "item.completed") {
-            totals.items += 1;
-        }
-    }
-    const startMs = fs.statSync(files.pid).mtimeMs;
-    const endMs = fs.statSync(files.exit).mtimeMs;
-    if (endMs < startMs) {
-        throw new Error(`${label} exit time precedes its pid time`);
-    }
-    totals.seconds = Math.round((endMs - startMs) / 1000);
-    totals.start = Math.round(startMs / 1000);
-    totals.end = Math.round(endMs / 1000);
-    return totals;
-}
-
-function integer(value) {
-    return value.toLocaleString("en-US");
-}
-
-function clock(epoch) {
-    const date = new Date(epoch * 1000);
-    return [date.getHours(), date.getMinutes(), date.getSeconds()]
-        .map((value) => String(value).padStart(2, "0"))
-        .join(":");
-}
-
-function workerPart(label, usage, withClock) {
-    const time = withClock ? ` (${clock(usage.start)} to ${clock(usage.end)})` : "";
-    return `${label}: ${integer(usage.input)} in / ${integer(usage.cached)} cached / ${integer(usage.output)} out (${integer(usage.reasoning)} reasoning), ${integer(usage.items)} items, ${integer(usage.seconds)} s${time}`;
-}
-
-function reviewerPart(label, usage) {
-    return `${label} ${integer(usage.input)} in / ${integer(usage.cached)} cached / ${integer(usage.output)} out, ${integer(usage.items)} items, ${integer(usage.seconds)} s`;
-}
-
-// A worker or reviewer launched through the runner's Agent tool leaves no event log: its tokens,
-// tool uses and seconds come from the runner's result, and its row is written by hand from them.
-const firstFiles = requiredFiles("");
-const repairFiles = requiredFiles("repair-");
-const reviewFiles = requiredFiles("review-");
+// A worker or reviewer dispatched through the runner's Agent tool reports its tokens, tool uses and
+// seconds in its completion notification, and its row is written by hand from them.
 const tail = `; +${additions} -${deletions} over ${files} files; first report passed its bar: <yes or no>; <N> fixes at landing`;
 
-// ADAPT: the harness and model names of the rows, as the state file's Usage section writes them.
-let worker;
-if (existsAny(firstFiles)) {
-    worker = `${pkg}, worker codex:gpt-5.6-sol at high, ${workerPart("first run", readUsage(firstFiles, "first run"), true)}`;
-    if (existsAny(repairFiles)) {
-        worker += `; ${workerPart("repair round on the same thread", readUsage(repairFiles, "repair round"), false)}`;
-    }
-} else {
-    worker = `${pkg}, worker <harness:model>, first run: <tokens>, <tool uses> tool uses, <seconds> s (from the runner's result; no event log)` +
-        `; repair round: <the same, or none>`;
-}
-worker += tail;
-
-let reviewer;
-if (existsAny(reviewFiles)) {
-    reviewer = `${pkg}, reviewer codex:gpt-5.6-sol at high, read-only: ${reviewerPart("review", readUsage(reviewFiles, "review"))}`;
-} else {
-    reviewer = `${pkg}, reviewer <harness:model>, read-only: review <tokens> / <tool uses> / <seconds> s (from the runner's result; no event log)`;
-}
+// ADAPT: the model names of the rows, as the state file's Usage section writes them.
+const worker = `${pkg}, worker claude:opus, first run: <tokens>, <tool uses> tool uses, <seconds> s (from the runner's result)` +
+    `; repair round: <the same, or none>` + tail;
+const reviewer = `${pkg}, reviewer claude:opus, read-only: review <tokens> / <tool uses> / <seconds> s (from the runner's result)`;
 
 console.log(worker);
 console.log(reviewer);

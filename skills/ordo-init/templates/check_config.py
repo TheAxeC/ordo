@@ -5,12 +5,9 @@ Usage: check_config.py [repository root]
 
 The keys, which of them are required and each optional key's default come from the plan skill's
 templates/plan.yaml, found beside this skill's folder. Prints one line per error and per note, and
-exits 1 when there is an error: a required key missing, an unknown key, a value of the wrong kind,
-a page the configuration names that does not exist, a launch_note that is not an absolute path to an
-executable file, a worker_allow that is not a list or holds an entry that is not a non-empty
-one-line string or holds a character no permission rule can hold (a quote, $, a backtick, a
-backslash, (, ), {, }, [, ], a comma, * or ?), a worktree root git does not ignore, or a
-configuration file git ignores.
+exits 1 when there is an error: a required key missing, an unknown key, a value of the wrong kind
+(a worker or reviewer that is not claude:<model> among them), a page the configuration names that
+does not exist, a worktree root git does not ignore, or a configuration file git ignores.
 """
 import os
 import re
@@ -20,10 +17,7 @@ import sys
 import yaml
 
 PAGE_KEYS = ("roadmap", "verification", "rules")
-HARNESS = re.compile(r"^(claude|codex):\S+$")
-# The characters a command prefix of worker_allow cannot hold: a claude permission rule holding one
-# is cut apart or ignored (the plan-orchestration skill's templates/allow_list.py).
-UNRULY = set("'\"$`\\(){}[],*?")
+MODEL = re.compile(r"^claude:\S+$")
 
 
 def example_keys():
@@ -64,33 +58,14 @@ def check_project(root, label, config, keys, errors, notes):
             errors.append(f"{prefix}worktree_paths names a path that does not exist: {path}")
     for key in ("worker", "reviewer"):
         value = config.get(key)
-        if value is not None and not (isinstance(value, str) and HARNESS.match(value)):
-            errors.append(f"{prefix}{key} is not harness:model (claude:<model> or codex:<model>): {value!r}")
+        if value is not None and not (isinstance(value, str) and MODEL.match(value)):
+            errors.append(f"{prefix}{key} is not claude:<model>: {value!r}")
     for key, default in keys.items():
         value = config.get(key)
         if value is None or default is None:
             continue
         if type(value) is not type(default):
             errors.append(f"{prefix}{key} is a {type(value).__name__}, its default is a {type(default).__name__}: {value!r}")
-    note = config.get("launch_note")
-    if isinstance(note, str) and note:
-        if not os.path.isabs(note):
-            errors.append(f"{prefix}launch_note is not an absolute path: {note!r}")
-        elif os.path.isdir(note):
-            errors.append(f"{prefix}launch_note names a directory, not a command: {note!r}")
-        elif not os.path.isfile(note):
-            errors.append(f"{prefix}launch_note names a file that does not exist: {note!r}")
-        elif not os.access(note, os.X_OK):
-            errors.append(f"{prefix}launch_note names a file that is not executable: {note!r}")
-    allow = config.get("worker_allow")
-    for entry in allow if isinstance(allow, list) else []:
-        one_line = isinstance(entry, str) and "\n" not in entry and "\r" not in entry
-        if not (one_line and entry.strip()):
-            errors.append(f"{prefix}worker_allow holds an entry that is not a non-empty "
-                          f"one-line string: {entry!r}")
-        elif UNRULY & set(entry.strip()):
-            errors.append(f"{prefix}worker_allow holds an entry with a character no rule can "
-                          f"hold: {entry!r}")
     if config.get("review") not in (None, "every", "earned"):
         errors.append(f"{prefix}review is neither every nor earned: {config['review']!r}")
     worktree_root = config.get("worktree_root")

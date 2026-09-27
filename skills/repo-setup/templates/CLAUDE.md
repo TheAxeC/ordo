@@ -1,6 +1,6 @@
 # Working conventions for <name>
 
-<One paragraph: what the repository is, its language and build system, and its main parts.> `AGENTS.md` is a symlink to this file, so Claude Code and Codex read the same text.
+<One paragraph: what the repository is, its language and build system, and its main parts.>
 
 <!-- ordo:shared-rules begin -->
 <!-- ordo:shared-rules end -->

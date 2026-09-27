@@ -69,105 +69,25 @@ expect_pass agents-star
 
 make_repo bad-harness
 sed -i.bak 's/^worker: claude:opus/worker: opus/' "$test_root/bad-harness/.agents/plan.yaml"
-expect_error bad-harness "worker is not harness:model"
+expect_error bad-harness "worker is not claude:<model>: 'opus'"
 
 make_repo bad-type
 sed -i.bak 's/^repair_rounds: 1 /repair_rounds: one /' "$test_root/bad-type/.agents/plan.yaml"
 expect_error bad-type "repair_rounds is a str, its default is a int"
 
-# A launch-note command: an absolute path to an executable file passes; a relative path (a path
-# starting with ~ and a blank value among them), a missing file, a file that is not executable and a
-# directory are errors, in the one-project form and, with the project's name before them, in the
-# projects form.
-set_note() {
-    sed -i.bak "s|^launch_note: \"\"|launch_note: \"$2\"|" "$test_root/$1/.agents/plan.yaml"
-}
-make_repo note-ok
-printf '#!/bin/sh\n' >"$test_root/note-ok/recorder"
-chmod +x "$test_root/note-ok/recorder"
-set_note note-ok "$test_root/note-ok/recorder"
-expect_pass note-ok
-grep -q "^launch_note: \"$test_root/note-ok/recorder\"" "$test_root/note-ok/.agents/plan.yaml" || fail "note-ok: the key was not set"
+# A worker on any harness but claude is refused, naming the accepted form. Red when the check
+# accepts codex:<model>.
+make_repo codex-worker
+sed -i.bak 's/^worker: claude:opus/worker: codex:gpt-5.6-sol/' "$test_root/codex-worker/.agents/plan.yaml"
+expect_error codex-worker "worker is not claude:<model>: 'codex:gpt-5.6-sol'"
 
-make_repo note-relative
-set_note note-relative "tools/recorder"
-expect_error note-relative "launch_note is not an absolute path: 'tools/recorder'"
-
-make_repo note-missing
-set_note note-missing "$test_root/note-missing/recorder"
-expect_error note-missing "launch_note names a file that does not exist: '$test_root/note-missing/recorder'"
-
-make_repo note-not-executable
-: >"$test_root/note-not-executable/recorder"
-set_note note-not-executable "$test_root/note-not-executable/recorder"
-expect_error note-not-executable "launch_note names a file that is not executable: '$test_root/note-not-executable/recorder'"
-
-make_repo note-directory
-mkdir -p "$test_root/note-directory/recorder"
-set_note note-directory "$test_root/note-directory/recorder"
-expect_error note-directory "launch_note names a directory, not a command: '$test_root/note-directory/recorder'"
-
-make_repo note-home
-set_note note-home "~/bin/recorder"
-expect_error note-home "launch_note is not an absolute path: '~/bin/recorder'"
-
-make_repo note-blank
-set_note note-blank "   "
-expect_error note-blank "launch_note is not an absolute path: '   '"
-
-# worker_allow: a list of non-empty one-line strings passes; a value that is not a list, or an
-# entry that is not such a string, is an error naming the key and the value; left out, its default
-# [] applies with a note. set_allow replaces the example's worker_allow line with the one given.
-# Red when worker_allow is not a key of the plan skill's templates/plan.yaml (unknown key), when
-# its comment gives no default (a required key), or when the entries are not checked.
-set_allow() {
-    sed -i.bak '/^worker_allow:/d' "$test_root/$1/.agents/plan.yaml"
-    [ -z "$2" ] || printf '%s\n' "$2" >>"$test_root/$1/.agents/plan.yaml"
-}
-expect_note() {
-    case "$output" in
-        *"note: $2"*) ;;
-        *) fail "$1: missing [note: $2] in: $output" ;;
-    esac
-}
-make_repo allow-ok
-set_allow allow-ok 'worker_allow: [sh a.sh]'
-expect_pass allow-ok
-make_repo allow-default
-set_allow allow-default ''
-expect_pass allow-default
-expect_note allow-default "worker_allow not set, default [] applies"
-make_repo allow-string
-set_allow allow-string 'worker_allow: sh a.sh'
-expect_error allow-string "worker_allow is a str, its default is a list: 'sh a.sh'"
-not_one_line="worker_allow holds an entry that is not a non-empty one-line string"
-make_repo allow-empty-entry
-set_allow allow-empty-entry 'worker_allow: [sh a.sh, ""]'
-expect_error allow-empty-entry "$not_one_line: ''"
-make_repo allow-blank-entry
-set_allow allow-blank-entry 'worker_allow: ["  "]'
-expect_error allow-blank-entry "$not_one_line: '  '"
-make_repo allow-two-lines
-set_allow allow-two-lines 'worker_allow: ["a\nb"]'
-expect_error allow-two-lines "$not_one_line: 'a\\nb'"
-make_repo allow-number
-set_allow allow-number 'worker_allow: [3]'
-expect_error allow-number "$not_one_line: 3"
-# An entry holding a character no permission rule can hold is an error naming the entry. Red when
-# the characters are not checked.
-make_repo allow-unruly
-for entry in "sh 'q'" 'sh "q"' 'sh $X' 'sh `x`' 'sh a\b' 'sh (' 'sh b.sh)' 'sh {' 'sh }' \
-    'sh [a' 'sh a]' 'sh a,b' 'sh *.sh' 'sh a?'; do
-    set_allow allow-unruly "worker_allow: ['$(printf '%s' "$entry" | sed "s/'/''/g")']"
-    want=$(python3 -c 'import sys; print(repr(sys.argv[1]))' "$entry")
-    expect_error allow-unruly "worker_allow holds an entry with a character no rule can hold: $want"
+# A key the plan skill's templates/plan.yaml does not hold is an unknown key: launch_note,
+# worker_allow and worker_effort each. Red when templates/plan.yaml holds the key.
+for key in 'launch_note: ""' 'worker_allow: []' 'worker_effort: high'; do
+    make_repo "unknown-${key%%:*}"
+    printf '%s\n' "$key" >>"$test_root/unknown-${key%%:*}/.agents/plan.yaml"
+    expect_error "unknown-${key%%:*}" "unknown key: ${key%%:*}"
 done
-# The control: a list of one-line strings with spaces, surrounding blanks and a trailing slash is
-# no error.
-make_repo allow-prefixes
-set_allow allow-prefixes \
-    'worker_allow: ["python3 utils/", "sh skills/land/templates/verify.sh", " sh a.sh "]'
-expect_pass allow-prefixes
 
 make_repo projects
 mkdir -p "$test_root/projects/tools/tool-a/docs" "$test_root/projects/tools/tool-b/docs"
@@ -178,35 +98,7 @@ for tool in tool-a tool-b; do
 done
 cp "$script_dir/../../plan/templates/plan.projects.yaml" "$test_root/projects/.agents/plan.yaml"
 expect_pass projects
-python3 -c 'import sys; p = sys.argv[1]; t = open(p).read(); open(p, "w").write(t.replace("    launch_note: \"\"", "    launch_note: \"rel/recorder\"", 1))' "$test_root/projects/.agents/plan.yaml"
-expect_error projects "tool-a: launch_note is not an absolute path: 'rel/recorder'"
-set_project_note() {
-    cp "$script_dir/../../plan/templates/plan.projects.yaml" "$test_root/projects/.agents/plan.yaml"
-    python3 -c 'import sys; p = sys.argv[1]; t = open(p).read(); open(p, "w").write(t.replace("    launch_note: \"\"", "    launch_note: \"" + sys.argv[2] + "\"", 1))' "$test_root/projects/.agents/plan.yaml" "$1"
-}
-mkdir -p "$test_root/projects/recorder-dir"
-: >"$test_root/projects/recorder-plain"
-set_project_note "$test_root/projects/recorder-dir"
-expect_error projects "tool-a: launch_note names a directory, not a command: '$test_root/projects/recorder-dir'"
-set_project_note "$test_root/projects/recorder-missing"
-expect_error projects "tool-a: launch_note names a file that does not exist: '$test_root/projects/recorder-missing'"
-set_project_note "$test_root/projects/recorder-plain"
-expect_error projects "tool-a: launch_note names a file that is not executable: '$test_root/projects/recorder-plain'"
-cp "$script_dir/../../plan/templates/plan.projects.yaml" "$test_root/projects/.agents/plan.yaml"
 sed -i.bak '/^    worker: /d' "$test_root/projects/.agents/plan.yaml"
 expect_error projects "tool-a: required key missing: worker"
-# worker_allow in the projects form: the example passes as copied, and an entry that is not a
-# non-empty one-line string names its project. Red when the example lacks the key in a project
-# (a note instead of none) or the entries are not checked.
-cp "$script_dir/../../plan/templates/plan.projects.yaml" "$test_root/projects/.agents/plan.yaml"
-output=$(python3 "$check" "$test_root/projects") || fail "projects: expected a pass, got: $output"
-case "$output" in
-    *"worker_allow not set"*) fail "projects: the example leaves worker_allow out: $output" ;;
-esac
-projects_yaml=$test_root/projects/.agents/plan.yaml
-perl -0pi -e 's/^    worker_allow: \[\]/    worker_allow: [""]/m' "$projects_yaml"
-grep -c '^    worker_allow: \[""\]' "$projects_yaml" | grep -qx 1 ||
-    fail "projects: the first worker_allow was not replaced"
-expect_error projects "tool-a: $not_one_line: ''"
 
 printf 'PASS: check_config.py scratch tests\n'

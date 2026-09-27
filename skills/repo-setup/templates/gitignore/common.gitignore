@@ -2,7 +2,6 @@
 .agents/*
 !.agents/plan.yaml
 .claude/
-.codex/
 
 # OS and editors
 .DS_Store

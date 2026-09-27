@@ -325,10 +325,10 @@ unset ORDO_SKILL_DIRS
 rm -rf "$d1" "$d2"
 run_pin v2
 [ "$status" -eq 0 ] || fail "pinning with the default folders failed: $out $err"
-for dir in "$d1" "$d2"; do
-    [ "$(readlink "$dir/beta")" = "$ORDO_STABLE/skills/beta" ] ||
-        fail "$dir/beta not linked with the default folders"
-done
+[ "$(readlink "$d1/beta")" = "$ORDO_STABLE/skills/beta" ] ||
+    fail "$d1/beta not linked with the default folders"
+# The default folders are Claude Code's only, so $d2 stays absent. Red when the defaults hold $d2.
+[ ! -e "$d2" ] || fail "pin.sh wrote into $d2 with the default folders"
 [ -z "$(ls -A "$work")" ] || fail "pin.sh wrote into the folder it ran from: $(ls -A "$work")"
 [ -e "$test_root/my" ] && fail "pin.sh split the HOME path on its space"
 export CLAUDE_CONFIG_DIR="$HOME/config"
@@ -374,7 +374,7 @@ done
 for bad in "rel/skills" "  $d1" "$d1 " "$tab$d1"; do
     for form in newline space; do
         if [ "$form" = newline ]; then
-            ORDO_SKILL_DIRS="$bad$nl$d2"
+            ORDO_SKILL_DIRS="$bad$nl$d1"
         else
             case "$bad" in
                 *[[:space:]]*) continue ;;
@@ -391,7 +391,7 @@ for bad in "rel/skills" "  $d1" "$d1 " "$tab$d1"; do
             "the folder \"$bad\" ($form form) was not refused with its message"
         [ "$(git -C "$ORDO_STABLE" describe --tags --exact-match)" = "v2" ] ||
             fail "a pin refused for the folder \"$bad\" moved the worktree"
-        [ "$(readlink "$d2/gamma")" = "$ORDO_STABLE/skills/gamma" ] ||
+        [ "$(readlink "$d1/gamma")" = "$ORDO_STABLE/skills/gamma" ] ||
             fail "a pin refused for the folder \"$bad\" changed a link"
         [ -z "$(ls -A "$work")" ] ||
             fail "a pin refused for \"$bad\" wrote into $work: $(ls -A "$work")"

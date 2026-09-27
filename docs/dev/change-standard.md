@@ -44,8 +44,6 @@ sh skills/land/templates/verify.test.sh 2>&1 | tail -1
 sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1
-sh skills/plan-orchestration/templates/allow_list.test.sh 2>&1 | tail -1
 sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
 sh utils/pin.test.sh 2>&1 | tail -1
 sh utils/check_skill_layout.test.sh 2>&1 | tail -1

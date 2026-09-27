@@ -6,5 +6,5 @@ rules: docs/dev/change-standard.md        # How a change is made; every brief po
 ledger_root: .scratch                     # A plan lives in <ledger_root>/<slug>/.
 archive_root: .scratch/archive            # Where a closed plan's folder moves.
 worktree_root: .agents/worktrees          # Where a step's worktree is created; ignored by .gitignore's .agents/* line.
-worker: claude:opus                       # harness:model of the builder, for example codex:gpt-5.6-sol.
-reviewer: claude:opus                     # harness:model /refute runs on.
+worker: claude:opus                       # claude:<model> of the builder, for example claude:sonnet.
+reviewer: claude:opus                     # claude:<model> /refute runs on.
