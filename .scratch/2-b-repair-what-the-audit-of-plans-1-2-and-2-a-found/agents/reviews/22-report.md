@@ -1,6 +1,6 @@
 # Step 22 report
 
-Everything in the brief is done.
+Everything in the brief and in repair round 1 is done. The two new tests, `remove_worktree.test.sh` and `back_out.test.sh`, pass on their own and are not yet in this plan's verify list, which the orchestrator extends at landing.
 
 ## Open items of the state file, verbatim
 
@@ -277,3 +277,153 @@ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE HOME="$(mktemp -d)" s
 ```
 
 It must print `PASS: land.sh and usage.py scratch tests`. The same run on the four template files copied into a scratch folder printed that line (Verify 3); the ledger's own copies were not run here, since the builder writes nothing in the ledger but this report.
+
+## Repair round 1
+
+The eleven rulings of `agents/briefs/22-round-1.md` are all done. This section replaces three parts of the report above: judgment call 5 (`git apply --check --cached` at Steps 3 is gone), judgment call 10 (a resume-point commit now holds only the session's own paths), and the before-and-after bullets "The backed-out path", "The commits of a step" and "The worktree removal". What is true now is below.
+
+### The rulings
+
+| Ruling | State | Command that proves it | Output |
+|---|---|---|---|
+| 1. `remove_worktree.sh` with a test | DONE | `sh skills/land/templates/remove_worktree.test.sh 2>&1 \| tail -1` | `PASS: remove_worktree.sh scratch tests` |
+| 2. `back_out.sh` with a test, `/spec` Steps 3 and 6 on `git apply --3way` | DONE | `sh skills/spec/templates/back_out.test.sh 2>&1 \| tail -1`; `grep -n 'apply --check' skills/*/SKILL.md` | `PASS: back_out.sh scratch tests`; the grep prints nothing |
+| 3. The launch commit under every executor | DONE | `grep -n 'launch commit' skills/plan-orchestration/SKILL.md`; `grep -n 'build it' skills/plan-help/SKILL.md` | `plan-orchestration` lines 52, 55, 56 and 159; `plan-help` line 55; `spec` Steps 8 |
+| 4. A stop is a commit | DONE | `grep -n 'so the stop survives the session' skills/*/SKILL.md`; `sed -n '64p' skills/land/SKILL.md` | `plan-orchestration` line 221, `spec` line 136; `land` line 64 commits the back-out as a resume point |
+| 5. Only the session's own records | DONE | `grep -n -i 'uncommitted\|left alone' skills/spec/SKILL.md skills/plan-orchestration/SKILL.md` | `spec` lines 49-56 and 166, `plan-orchestration` lines 108-111 |
+| 6. `~/.agents/skills` by resolved path; the worktree root counts | DONE | `sh utils/pin.test.sh 2>&1 \| tail -1` | `PASS: pin.sh scratch tests`; reverts P1 and P2 below |
+| 7. No history in `pin.test.sh` and README | DONE | `grep -n 'earlier pin\|pin of v1' utils/pin.sh utils/pin.test.sh README.md` | prints nothing |
+| 8. Sentences over about 25 words split | DONE | the scan below | see below |
+| 9. `landing_worktree_root` | DONE | `grep -n 'landing_worktree_root' skills/land/templates/land.sh skills/land/SKILL.md skills/plan/SKILL.md README.md` | `land.sh` lines 117-131; `land` SKILL.md ADAPT list; `plan` Steps 5; README's ADAPT list; `land.test.sh` case "rooted" and the bad-root loop |
+| 10. The lists | DONE | `grep -n 'remove_worktree.test\|back_out.test' docs/dev/building.md docs/dev/change-standard.md README.md` | `building.md` lines 8 and 14, `change-standard.md` lines 44 and 50, README lines 108, 114, 123 and 129 |
+| 11. The before and after | DONE | "User-visible changes of the round" below | |
+
+`utils/check_skill_layout.py` needed no change: `python3 utils/check_skill_layout.py` prints `ok:` for every skill and exits 0 with the new templates in place.
+
+Ruling 8: a scan of every added Markdown line against the base (`git diff -U0 3371bbc -- '*.md' ':!.scratch'`, each sentence split at its end and kept only when it is not in the base file) lists no prose sentence over 28 words. It still lists five table rows (`land` "No landing script" and "A worktree that cannot be removed", `plan` "No landing script", `spec` "A failed preflight" and "A step taken back out of main that cannot be saved"). The scan counts a whole row as one sentence; each of their cells is one list or one sentence.
+
+### Verify before you report, rerun
+
+1. `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` exits 0 and prints eleven `PASS:` lines (counted with `grep -c '^PASS:'`), ten `ok:` lines (`grep -c '^ok:'`), and:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: check_step.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+verify: 13 commands passed
+```
+
+   The two new tests are not in this plan's verify list; the orchestrator adds them at landing (ruling 10). Run on their own under the same `env -u`:
+
+```
+$ sh skills/land/templates/remove_worktree.test.sh 2>&1 | tail -1
+PASS: remove_worktree.sh scratch tests
+$ sh skills/spec/templates/back_out.test.sh 2>&1 | tail -1
+PASS: back_out.sh scratch tests
+```
+
+2. `sh utils/pin.test.sh 2>&1 | tail -1` prints `PASS: pin.sh scratch tests`.
+3. The copy run: `land.sh`, `land.test.sh`, `verify.sh` and `usage.py` copied from `skills/land/templates/` into a scratch folder, run from the scratchpad with an empty `HOME`, print `PASS: land.sh and usage.py scratch tests`.
+4. `grep -rn -i 'commit' skills/*/SKILL.md README.md docs/dev/*.md`, the hits about resume points read against item 4 and rulings 3 to 5. A step's commits are the stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main at its landing, and the landing (`plan-orchestration` line 106). Each commit holds only the session's own paths (`plan-orchestration` line 108; `spec` lines 51-53, 97 and 186-187; `land` lines 64 and 81-82). A saved report or reviewer is not committed on its own (`plan-orchestration` lines 60 and 71; `refute` lines 10 and 56). The launch commit is made under `agent`, `inline` and `academic-paper` (`plan-orchestration` lines 52, 55 and 56). No hit contradicts these.
+5. `LC_ALL=C grep -n '[^ -~]'` over every changed and new file, this report included, prints nothing (exit 1).
+6. The reverts below.
+
+Versions: unchanged since the first run of the step, which bumped every changed `SKILL.md` once (`spec` 1.6.0, `land` 1.8.0, `plan` 1.9.0, `plan-orchestration` 2.9.0, `plan-help` 1.8.0, `refute` 1.6.0; read with `grep -m1 version`).
+
+### The reverts
+
+Each revert is a `sed` of a scratch copy of the script beside a copy of its test (`scratchpad/reverts2.sh`), run under the same `env -u`. The first `FAIL:` line of each, `<copy>` the scratch copy and `<...-test>` the test's scratch root:
+
+`remove_worktree.test.sh`:
+
+- Script absent: `FAIL: a worktree holding only ledger copies was not removed:  sh: <copy>/skills/land/templates/remove_worktree.sh: No such file or directory`
+- `--force` dropped: `FAIL: a worktree holding only ledger copies was not removed:  fatal: '<remove-worktree-test>/clean/.agents/worktrees/2b-22' contains modified or untracked files, use --force to delete it`
+- `-z` dropped: `FAIL: the untracked path outside the ledger is not named; expected "refused: stray.txt is outside the ledger root .scratch" in: refused: src.txt`
+- The worktree path built from the step id: `FAIL: a worktree holding only ledger copies was not removed:  error: .agents/worktrees/2b-22 is not a worktree of this repository`
+- `<branch>-land` not deleted: `FAIL: branch 2b-22-land is still there`
+- The ledger check dropped: `FAIL: a path outside the ledger root was not refused (exit 0): removed: worktree .agents/worktrees/s2`
+- The ledger match without its `/`: `FAIL: a path .scratchy was taken as under .scratch (exit 0)`
+- `<branch>-land` deleted without checking it exists: `FAIL: a worktree with no landing branch was not removed: removed: worktree .agents/worktrees/s1`
+- The `projects:` form not read: `FAIL: the projects: form's ledger root was not found:  error: no ledger_root of .agents/plan.yaml holds the state file's folder .scratch/p`
+
+`back_out.test.sh`:
+
+- Script absent: `FAIL: the back-out failed:  sh: <copy>/skills/spec/templates/back_out.sh: No such file or directory`
+- `--binary` dropped: `FAIL: the patch carries no binary content; expected "GIT binary patch" in: diff --git a/a.txt b/a.txt`
+- The entry removed with the entries after it: `FAIL: the back-out failed: wrote: .scratch/p/agents/reviews/22-backed-out.patch` (the script's own read-back refuses the write)
+- The entry left in the state file: `FAIL: the state file is not the old one without the entry: 14a15,19`
+- A refusal of `remove_worktree.sh` not passed on: `FAIL: a refusal of remove_worktree.sh did not exit 1 (0): wrote: .scratch/p/agents/reviews/s3-backed-out.patch`
+- The single-entry form not rewritten: `FAIL: the back-out of a single entry failed: wrote: .scratch/p/agents/reviews/s1-backed-out.patch`
+- An old patch kept on an empty diff: `FAIL: an empty diff left a patch`
+- The `landing: backed-out` check dropped: `FAIL: an entry not at landing: backed-out did not exit 64 (0)`
+
+`pin.test.sh`:
+
+- P1, the resolved-path compare dropped: `FAIL: pinning with <pin-test>/my home/.agents/skills a link to <pin-test>/my home/.claude/skills failed: pin: removed <pin-test>/my home/.agents/skills/beta, in a folder pin.sh no longer links into`
+- P2, a link to the pinned worktree's root not counted: `FAIL: the link to the pinned worktree's root was not removed`
+
+`land.test.sh`:
+
+- The worktree root hard-coded as `.agents/worktrees`: `FAIL: a worktree root set on the ADAPT line: exit 1: preflight failed: worktree not found: <land-test>/rooted/.agents/worktrees/rooted`
+- The worktree root not checked: `FAIL: worktree root []: missing [preflight failed: landing_worktree_root must be a folder inside the repository: ]`
+
+The apply half of `back_out.test.sh` (the new worktree, `git apply --3way`, the unmerged and applied files) tests git's behaviour on the patch the script writes. The `--binary` revert turns it red through the patch; the half is otherwise an audit of the `/spec` Steps 6 command, not a proof of a script line.
+
+### Files changed, with line counts
+
+`git diff --numstat 3371bbc` (added, removed) and `wc -l`, over the whole step:
+
+| File | Added | Removed | Lines |
+|---|---|---|---|
+| `README.md` | 10 | 3 | 192 |
+| `docs/dev/building.md` | 2 | 0 | 37 |
+| `docs/dev/change-standard.md` | 2 | 0 | 68 |
+| `skills/land/SKILL.md` | 41 | 17 | 168 |
+| `skills/land/templates/land.sh` | 15 | 5 | 467 |
+| `skills/land/templates/land.test.sh` | 77 | 27 | 952 |
+| `skills/land/templates/remove_worktree.sh` | new | | 207 |
+| `skills/land/templates/remove_worktree.test.sh` | new | | 197 |
+| `skills/plan-help/SKILL.md` | 4 | 4 | 93 |
+| `skills/plan-orchestration/SKILL.md` | 28 | 14 | 250 |
+| `skills/plan/SKILL.md` | 8 | 7 | 92 |
+| `skills/refute/SKILL.md` | 5 | 4 | 134 |
+| `skills/spec/SKILL.md` | 58 | 12 | 187 |
+| `skills/spec/templates/back_out.sh` | new | | 245 |
+| `skills/spec/templates/back_out.test.sh` | new | | 206 |
+| `utils/pin.sh` | 62 | 0 | 285 |
+| `utils/pin.test.sh` | 112 | 3 | 548 |
+
+`docs/dev/change-standard.md` changed only in its test list. `utils/check_skill_layout.py` is unchanged.
+
+### Judgment calls of the round
+
+1. `/land` removes the worktree at Steps 11, before it rewrites the state file, while the entry still names the worktree. `remove_worktree.sh` reads the worktree from the entry, and the rewrite at Steps 11 clears it. A refusal there comes before the landing's commit; the Stops note says so.
+2. `back_out.sh` finds `remove_worktree.sh` in the `land` skill beside the `spec` skill (`../../land/templates/` from its own folder), the layout every install and this repository have. Not found is exit 69.
+3. A session taking over lists the uncommitted ledger changes by path and asks the user which are the previous session's records (`plan-orchestration` line 111). The files alone cannot tell a previous session's record from a user's edit.
+4. `remove_worktree.sh` prints `refused: <path> is outside the ledger root <root>`, the ruling's line with the root named.
+5. `landing_worktree_root` is refused when empty, absolute, or holding `..` as a path part or a newline, with `preflight failed: landing_worktree_root must be a folder inside the repository: <value>`, as `landing_ledger_root` is.
+6. `back_out.sh` refuses exit 64 on an entry with no `base:`, a base that names no commit, or a missing branch, before it writes anything.
+
+### User-visible changes of the round, before and after
+
+- **Check mode on an install with links in `~/.agents/skills`.** A scratch install shaped as the user's: two skills pinned at `v2` into `~/.claude/skills`, and `~/.agents/skills` holding a link to `<stable>/land` (the v1.0.0 shape), a link to `<stable>/skills/spec` and the real folder `find-skills` (`scratchpad/before_after_pin.sh`). Before (`utils/pin.sh` at 3371bbc), check mode prints `pinned: v2, 2 skills linked in: <scratch>/home/.claude/skills` and exits 0. After, it prints one line per link and exits 1:
+
+```
+pin: <scratch>/home/.agents/skills/land links to <scratch>/home/.local/share/ordo-stable/land, in a folder pin.sh no longer links into; utils/pin.sh <tag> removes it
+pin: <scratch>/home/.agents/skills/spec links to <scratch>/home/.local/share/ordo-stable/skills/spec, in a folder pin.sh no longer links into; utils/pin.sh <tag> removes it
+pin: the links do not match the pin at v2
+```
+
+  When `~/.agents/skills` is a link to a folder of the list, both modes leave it alone (the case after the `CLAUDE_CONFIG_DIR` case in `pin.test.sh`, revert P1).
+- **A user's uncommitted ledger edit.** Before (3371bbc): `/spec` refused an uncommitted change on `plan.md` or at the brief's path, and every other ledger change was left alone. After: `/spec` lists every uncommitted ledger change by path. It commits only the paths the session wrote since the last resume point, each named in `git add -- <path> ...`. A change it did not make is left alone and never committed. One on `plan.md` or the state file is refused (`spec` lines 49-56). A session taking over asks the user which uncommitted changes were the previous session's.
+- **A back-out of a step with binary or conflicting files** (`scratchpad/before_after_patch.sh`, a step changing `a.txt` and `img.bin`, main then changing `a.txt`). Before: the patch was `git diff <base> <branch>`, which holds `Binary files a/img.bin and b/img.bin differ` and not the content, and `git apply --check --cached` on main refused it whole: `error: a.txt: patch does not apply`, `error: cannot apply binary patch to 'img.bin' without full index line`, exit 1. After: `back_out.sh` writes `git diff --binary`, and `git apply --3way` in the new worktree prints `Applied patch to 'a.txt' with conflicts.` and `Applied patch to 'img.bin' cleanly.`, exits 1, and leaves `UU a.txt` for the builder and `M  img.bin` with the builder's bytes.
+- **The worktree removal.** `/land` Steps 11 and `back_out.sh` run `remove_worktree.sh <state file> <step>`. It reads the worktree from the entry and takes the branch from the worktree folder's name. From inside the worktree, `git status --porcelain -z --untracked-files=all` must list only paths under the ledger root, or each other path is refused by name and nothing is removed. It then runs `git worktree remove --force` and `git branch -D` of `<branch>` and `<branch>-land`, each only when it exists.
+- **The landing script's worktree folder.** `land.sh` builds the worktree path from the `ADAPT` line `landing_worktree_root`, `.agents/worktrees` by default. `/plan` Steps 5 sets it from `.agents/plan.yaml`'s `worktree_root`.

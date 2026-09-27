@@ -49,12 +49,13 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/22-report.md
   landing: not-started
   round: 1
-  round_1: sent 2026-09-27, brief agents/briefs/22-round-1.md, paths the brief's plus skills/spec/templates/back_out.sh and its test, skills/land/templates/remove_worktree.sh and its test, docs/dev/building.md, docs/dev/change-standard.md
+  round_1: sent 2026-09-27, brief agents/briefs/22-round-1.md, paths the brief's plus skills/spec/templates/back_out.sh and its test, skills/land/templates/remove_worktree.sh and its test, docs/dev/building.md, docs/dev/change-standard.md; builder's round: 155,635 tokens, 87 tool uses, 1,849 s
+  reviewer_round_1: claude:opus, agent aaed00780c5718df8, launched 2026-09-27; 223,509 tokens, 52 tool uses, 1,795 s
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- Open item BB (step 22, whether removing a step's worktree and branches asks the user, raised 2026-09-27): the round moved the removal into `remove_worktree.sh` and `back_out.sh`, and `skills/land/SKILL.md` says the `git worktree remove --force` inside it "stays on the ask list, so the user is asked". That is false: the ask list is matched against the command the session runs (`sh .../remove_worktree.sh ...`), and neither `~/.claude-work/settings.json` nor `~/.claude/settings.json` names `git worktree remove` or `git branch -D` (their `permissions.ask` ends with `Bash(git branch -d *)`). Whether a deletion asks you is yours, since it is your settings and your prompts. (a) The scripts make every check and then print the removal commands; the session runs `git worktree remove --force` and `git branch -D` as its own commands, and you add `Bash(git worktree remove *)` and `Bash(git branch -D *)` to your ask list yourself if you want a prompt (no session edits your settings). Pro: you see every deletion. Con: a prompt at every landing and every back-out, and a one-time settings edit by you. (b) The scripts delete without asking, and the texts say so. The safety is the script's check: every leftover file in the worktree is a ledger copy, and the step's work is committed on main (a landing, with the removal after the commit) or held in the checked patch (a back-out). Pro: nothing to do by hand, and nothing of the step's is lost. Con: branches are deleted without a prompt, while your ask list asks for `git branch -d`. (c) Remove the false sentence and change nothing else, the lazy option: it leaves the question unanswered in the texts. Recommendation (b). The other findings of the review over round 1 go into the one repair round beyond the cap that plan-orchestration allows for an acceptance item left unbuilt (ruling 2's "files that apply are applied" fails when main deleted a file the patch changes); that round waits for this ruling, since it rewrites the same texts.
 
 ## Closed items
 - 2026-09-27: open item Z (step 21, how a step taken back out of main is prepared again): ruled (a), built in step 22 with the parts the user agreed; the answer on commits ruled as open item AA (a), built in step 22.
@@ -117,8 +118,8 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20 and 21 landed (step 21 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 22 in flight; next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
-- Open on Axel's side: none.
+- Roadmap entry 2.B. Step 22 in flight, its round beyond the cap waiting on open item BB; next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
+- Open on Axel's side: open item BB.
 
 ## Usage
 

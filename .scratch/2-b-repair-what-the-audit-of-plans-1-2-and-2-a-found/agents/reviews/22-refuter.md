@@ -92,3 +92,137 @@ exit 0
 ## Usage
 
 - Reviewer: claude:opus, a fresh background agent: 194,988 tokens, 42 tool uses, 666 s.
+
+## Repair round 1, refuted
+
+### Verification
+
+1. From the worktree root: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"`
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: check_step.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 13 commands passed
+exit 0
+```
+2. Under the same `env -u`, each piped to `tail -1`: `sh skills/land/templates/remove_worktree.test.sh` printed `PASS: remove_worktree.sh scratch tests`. `sh skills/spec/templates/back_out.test.sh` printed `PASS: back_out.sh scratch tests`. `sh utils/pin.test.sh` printed `PASS: pin.sh scratch tests`.
+3. Copy run: the four templates copied to `refute-22-r1/copy/`, then `env -u ... HOME=refute-22-r1/eh sh refute-22-r1/copy/land.test.sh 2>&1 | tail -1` printed `PASS: land.sh and usage.py scratch tests`.
+4. Reverts on copies under `refute-22-r1/rv/`, first `FAIL:` line of each:
+   - R1, `--binary` dropped from both diffs in `back_out.sh`: `FAIL: the patch carries no binary content; expected "GIT binary patch" in: diff --git a/a.txt b/a.txt`
+   - R2, `-z` dropped in `remove_worktree.sh`: `FAIL: the untracked path outside the ledger is not named; expected "refused: stray.txt is outside the ledger root .scratch" in: refused: src.txt`
+   - R3, the resolved-path compare line removed from `outside_dir` in `pin.sh`: `FAIL: pinning with .../my home/.agents/skills a link to .../my home/.claude/skills failed: pin: removed .../my home/.agents/skills/beta, in a folder pin.sh no longer links into`
+   - R4, `"$stable" |` removed from both cases of `links_into_ordo`: `FAIL: the link to the pinned worktree's root was not removed`
+   - R5, `landing_worktree` hard-coded to `.agents/worktrees` in `land.sh`: `FAIL: a worktree root set on the ADAPT line: exit 1: preflight failed: worktree not found: .../rooted/.agents/worktrees/rooted`
+   All five match the report's quoted lines.
+5. End-to-end run with the real `land.sh` (script `refute-22-r1/e2e_setup.sh`, repository `refute-22-r1/e2e/repo`). The ledger `.scratch/L` held the worktree's copies of `land.sh`, `land.test.sh`, `verify.sh` and `usage.py`, and a state file whose dispatch block is a list with two entries: `x`, and step `'22'` with `worktree: .agents/worktrees/2b-22`. The verify list was `sh red.sh`, which exits 1. The builder's work was left uncommitted: `a.txt` line 2 changed, `new.txt` and `sp ace.txt` added, the binaries `img.bin` and `both.bin` changed, `del.txt` changed and `clash.txt` added. The ledger copies were an untracked report and a changed `plan.md`.
+   - `sh .scratch/L/land.sh 2b-22 <base>` printed `RED: nope`, `verify list failed`, and `land exit 1`. The worktree was on `2b-22-land`, with ` M .scratch/L/plan.md` and `?? .scratch/L/agents/reviews/22-report.md`.
+   - Back-out by the `/land` Steps 6 text: `git restore --staged --worktree`, `git rm --cached` and delete, entry set to `landing: backed-out`, Step 0 written, and the state file, `plan.md` and the report committed.
+   - Main then moved on: `a.txt` line 2 and `both.bin` changed, `del.txt` deleted, `clash.txt` added, and a ruling appended to `plan.md` without a commit.
+   - `sh <worktree>/skills/spec/templates/back_out.sh .scratch/L/orchestrator-state.md 22` printed `wrote: .scratch/L/agents/reviews/22-backed-out.patch`, `removed: worktree .agents/worktrees/2b-22`, `removed: branch 2b-22`, `removed: branch 2b-22-land` and `removed: dispatch entry 22`, and exited 0. The entry `x` was kept.
+   - The same run from the repository reached through `/tmp` (a symbolic link to `/private/tmp`) also exited 0.
+   - Then the preparation commit (brief, patch, `plan.md`, state file), then `git worktree add -b 22 .agents/worktrees/22 <new base>`. From inside that worktree, `git apply --3way <repo>/.scratch/L/agents/reviews/22-backed-out.patch` printed `error: del.txt: does not exist in index` among its lines and exited 1. `git status --short` then printed nothing, and `ls` showed that `new.txt`, `sp ace.txt` and the builder's `img.bin` were absent.
+   - The same apply with `--exclude=del.txt` gave `UU a.txt`, `UU both.bin`, `AA clash.txt`, `M  img.bin`, `A  new.txt` and `A  "sp ace.txt"`.
+6. Back-out with a comment line directly under `dispatch:` (`refute-22-r1/e2c`, same setup): `back_out.sh` printed `wrote: ...patch`, `removed: worktree .agents/worktrees/2b-22`, `removed: branch 2b-22`, `removed: branch 2b-22-land`, `failed: the dispatch block of .scratch/L/orchestrator-state.md would not hold exactly the other entries`, and exited 1. The entry still read `landing: backed-out`. A rerun printed `error: refs/heads/2b-22 does not name a commit` and exited 64.
+7. A binary change to a 20000-byte file, run through `git diff --binary` (`refute-22-r1/delta`), printed `GIT binary patch` followed by `delta 15`.
+8. `pin.sh` cases (`refute-22-r1/pincases.sh`, `HOME` written through `/tmp`):
+   - `~/.agents/skills` a link to `$CLAUDE_CONFIG_DIR/skills`: pin and check both exit 0, and nothing is removed.
+   - `~/.agents` a link to `~/.claude`: both exit 0.
+   - Links to the pinned worktree root, written both resolved and unresolved, and a relative link into the worktree: check exits 1 naming the three, and pin removes the three.
+   - A link into the sibling folder `ordo-stable-old/land` is kept.
+   - `~/.agents/skills` a link to a `~/.claude/skills` that does not exist yet: pin and check both exit 0.
+9. The ask list: `$CLAUDE_CONFIG_DIR` is `/Users/axelfaes/.claude-work`, and its `settings.json` `permissions.ask` is `['Bash(git push *)', 'Bash(gh pr create *)', 'Bash(gh pr merge *)', 'Bash(gh release *)', 'Bash(git reset --hard *)', 'Bash(git clean *)', 'Bash(git branch -d *)']`. `~/.claude/settings.json` holds the same list. The repository has no `.claude/settings.json`.
+10. `LC_ALL=C grep -n '[^ -~]'` over every changed and new file printed nothing (exit 1). `grep -n 'earlier\|v1\.0\.0\|no longer'` finds, in the changed code, only the brief's printed message and `back_out.sh` line 17 ("a patch an earlier back-out of the step left there", which describes a file on disk and is not history). `grep -n 'remove_worktree.test\|back_out.test'` finds `building.md` lines 8 and 14, `change-standard.md` lines 44 and 50, and README lines 108, 114, 123 and 129.
+
+### Closures
+
+1. Ruling 1, the worktree removal as a script: closed. It is proved by the test and by my run on the real `land.sh` state (Verification 5), with a folder name that differs from the step id and a list of two entries, and reverts R2 and the report's others reproduce. Its sentence "stays on the ask list, so the user is asked" is false: see Spec 3.
+2. Ruling 2, the back-out as a script: not closed.
+   - The ruling says "Files that apply are applied". This fails whenever the patch touches a file that main deleted: `git apply --3way` then applies nothing at all, and `git status --short` is empty (Verification 5). The builder sees nothing to finish, and the old work is dropped as in Behaviour 4 of the first review.
+   - The binary-conflict instruction cannot be carried out by a builder (Spec 2).
+   - The script removes the worktree and branches before it checks that it can edit the state file (Proof 1).
+   - The test cases the ruling lists are present and pass, and R1 reproduces.
+3. Ruling 3, the dispatch entry committed under every executor: closed in the text, at `plan-orchestration` lines 52, 55 and 56, `spec` Steps 8 and `plan-help` "build it". One sentence is false under `agent`: see Standards 1.
+4. Ruling 4, a stop is a commit: closed, at `plan-orchestration` line 221 and `land` line 64.
+5. Ruling 5, only the session's own records: closed in `spec` Steps 1 and 5 and in `plan-orchestration` lines 108-109. The round also added a rule that no ruling asks for: see Spec 1.
+6. Ruling 6, `~/.agents/skills` compared by resolved path, with the worktree root counted: closed. The test's case and reverts R3 and R4 are red as the report says, and my cases in Verification 8 pass.
+7. Ruling 7, no history: closed. The grep in Verification 10 finds no "earlier pin" or "the pin of v1.0.0" in `pin.test.sh` or `README.md`.
+8. Ruling 8, sentence length: closed for the sentences the first review named. The long sentences left in the added lines are older sentences carried into rewritten lines of README.md.
+9. Ruling 9, `landing_worktree_root`: closed. It is in `land.sh`, `land.test.sh` (the case "rooted" and the loop of bad roots), `/plan` Steps 5 and `land` "The landing script", and revert R5 is red.
+10. Ruling 10, the lists: closed (Verification 10).
+11. Ruling 11, the before and after: not closed.
+   - The back-out bullet says the old work is "carried by the patch and applied with `--3way`". It does not state the case where nothing is applied (Behaviour 1).
+   - The `/land` reordering has no before and after (Behaviour 2).
+
+### Spec
+
+1. `skills/plan-orchestration/SKILL.md` line 111: "A session taking over lists the uncommitted ledger changes by path and asks the user which are records of the session it takes over. Those become its own records; the rest are left alone."
+   - No ruling asks for this. Ruling 5 says that a change the session did not make is listed and left alone, and that one on `plan.md` or the state file is a refusal.
+   - It is a question put to the user outside the six kinds of stop at line 208. It is not booked as an open item, so an unattended run blocks on a question that has no place in "Stops".
+   - It contradicts line 104, under which a session continues "from the files alone".
+   - The user can answer only which edits are his own. He cannot tell which files a dead session wrote.
+   - The resume-point rule could make the question unneeded in two ways. A handover could itself be a resume point, so the handing-over session commits its records before it stops. Or the records a session writes could be named in the state file, so a successor reads them there instead of asking. The dispatch entry already names `report:` and `reviewer_report:`.
+2. `skills/spec/SKILL.md` line 103: "The brief says a binary file in conflict keeps main's copy, and that the builder takes the patch's copy for it. The patch carries that copy, since it is written with `--binary`."
+   - For a binary file of any size, `git diff --binary` writes a `delta` against the base's blob, not a literal copy (Verification 7).
+   - A small file gets a zlib-compressed base85 `literal`.
+   - Under the no-git rule the builder cannot rebuild either one. Only `git apply` of that file would do it, and that changes state.
+   - Ruling 2 asked for this sentence, so the ruling was wrong on this point. The report does not say so under "Anything in the brief that was wrong or impossible".
+3. `skills/land/SKILL.md` line 128: "The `git worktree remove --force` inside it stays on the ask list, so the user is asked."
+   - The harness matches the ask list against the Bash command it runs, which is `sh templates/remove_worktree.sh ...`. The `git worktree remove --force` and `git branch -D` inside the script's Python subprocesses never reach it.
+   - Neither ask list names the scripts or `git worktree remove` (Verification 9).
+   - So both `/land` Steps 11 and `back_out.sh` now delete a worktree and two branches without asking the user. Brief decision 4 and ruling 1 rest on the user being asked.
+4. `skills/spec/SKILL.md` lines 99-103 and 240-251 have no text for what `git apply --3way` prints or its exit status.
+   - Exit 1 means some files conflicted, and it also means nothing was applied (Verification 5). The session cannot tell the two apart from the exit status, and the text does not say to read the `error:` lines.
+   - The brief is committed at Steps 5, before the apply, so the builder is never told that the patch applied nothing.
+5. `skills/land/SKILL.md` lines 73-75 move the worktree removal from after the commit to Steps 11, before the state file rewrite, the landing report and the commit. No ruling asks for this.
+   - Ruling 1 asks only that "Removing a step's worktree" run the script.
+   - Walking `/land` in order, nothing after Steps 11 needs the worktree: the look (7) and the A/B (8) come before it.
+   - Two things are lost:
+     - Between Steps 11 and 13, the only refs holding the step's work (`<step>` and `<step>-land`) are deleted, and the work exists only in main's index.
+     - A landing interrupted there is not recognised. With the entry still at `landing: cherry-picking`, `plan-orchestration` line 120 says to check main before anything is applied again, but `/land` again runs `land.sh`, whose preflight fails on `worktree not found`. Once the entry is cleared, `/land` refuses with "No dispatch block", whose resume is `/spec`, and `/spec`'s preflight refuses the staged main. No resumption rule covers either state.
+   - With `landing_tool_path` narrower than `.`, a file outside it stays changed in the worktree after `land.sh`. `remove_worktree.sh` then refuses, and the landing's commit is blocked with main staged.
+   - Removing after the commit, reading the entry from the state file before its rewrite (or from `HEAD~1`), keeps the old safety.
+
+### Proof
+
+1. `skills/spec/templates/back_out.sh` lines 212-225: `remove_worktree.sh` runs at line 212, and `without_entry` and the read-back check run after it.
+   - `without_entry` treats the block as a single entry whenever the first line after `dispatch:` is not a list item, for example a comment line or a blank line. It then writes `dispatch: none`, the read-back check refuses, and by then the worktree and both branches are gone.
+   - A rerun is refused with exit 64 for good (Verification 6), so the Stops row's "The cause put right, then `/spec` again" cannot resume it. The patch survives, but the entry stays at `landing: backed-out` with no route through.
+   - The test has no case with a comment or a blank line under `dispatch:`, and no case proving that the state edit is checked before anything is removed.
+2. `skills/spec/templates/back_out.test.sh`: no case has main delete (or rename) a file the patch changes. That one case turns the apply half from "the clean files applied" into "nothing applied" (Verification 5). The report calls the apply half an audit; it does not cover the case where the command does nothing.
+3. `back_out.test.sh` and `remove_worktree.test.sh` build the back-out state by hand. `<folder>-land` is checked out at main without the cherry-picks that `land.sh` makes. Ruling 2 says "built as `land.sh` leaves a back-out". My run on the real `land.sh` state passed (Verification 5), so this is a gap in the proof, not a defect found.
+4. The report's judgment call 8 (report line 253) still says the `land` Stops row is "a refusal after the landing's commit". The round made it a refusal before the commit, and the round section's list of replaced parts (line 283) does not name call 8.
+
+### Standards
+
+1. `skills/plan-orchestration/SKILL.md` line 52: "The commit comes before the build starts". Line 51 writes the agent id "The moment it is launched", so under `agent` the build has started before the identity exists to commit. The sentence is false for the default executor, and line 113 ("recorded in the state file before the builder starts") says the same thing.
+2. `skills/spec/SKILL.md` line 116 says "no path or branch is built from the step id", and line 99 (Steps 6) still builds both from it: `git worktree add -b <step> <worktree_root>/<step> <base>`. This repository's own entry uses `.agents/worktrees/2b-22` for step `22`. Once a step is prepared again, the new worktree gets a different name from the old one, and `land.sh <pkg>` must then be given `22`, not the name this plan used before. The two sentences are not contradictory as written, but the second path is not stated anywhere.
+
+### Behaviour
+
+1. A back-out of a step that changed a file main has since deleted: before this round, the work was lost. After this round, the patch keeps it, but `/spec` Steps 6 applies none of it, the builder sees an empty `git status --short`, and the brief says nothing. The report's "after" for the back-out shows only a case where the apply succeeds.
+2. `/land` order. Before: the commit, then the removal of the worktree and one branch, so a failed removal left main committed. After: the removal of the worktree and both branches, then the rewrite of the state file, the landing report and the commit, so a refused removal leaves main with the cherry-pick staged and the booking uncommitted. The report gives this only as judgment call 1 of the round, with no before and after.
+3. The deletion of the worktree and branches runs with no prompt (Spec 3). Before, the removal was a bare `git worktree remove` of which the text said nothing about asking. After, the text says the user is asked, and the user is not asked.
+
+### Not checked
+
+- A locked worktree, and a worktree with submodules.
+- A rename on main of a file the patch changes. I expect it to fail like the deletion, from the same `does not exist in index` path, but I did not run it.
+- The ledger copies of `verify.sh` and `usage.py`, which the orchestrator makes at landing.
