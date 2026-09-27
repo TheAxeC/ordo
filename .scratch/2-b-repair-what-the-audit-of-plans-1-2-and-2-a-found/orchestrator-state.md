@@ -18,6 +18,7 @@ worktree_root: .agents/worktrees # where a step's worktree is created, relative 
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # ruled: a builder is dispatched in the step's worktree for every step not marked orchestrator.
 worker: claude:opus          # the default worker (ruled: Opus).
+libraries: avoid             # ruled (ruling T): no new dependency.
 reviewer: claude:opus        # the model /refute runs on, as a fresh read-only agent (ruled: Opus).
 review: every                # every step is refuted.
 refute_after_repair: yes     # /refute runs again over each repair round.
@@ -39,7 +40,11 @@ dispatch:
   session_id: a4a32bc38cdd37cde
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17a-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1: agents/briefs/17a-round-1.md, three findings (Behaviour 1 to 3), paths widened by skills/plan-orchestration/SKILL.md line 156 and skills/plan/SKILL.md line 54
+  builder_usage: 143,396 tokens, 45 tool uses, 712 s
+  reviewer: a9616c997bb1ee420
+  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17a-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
