@@ -43,6 +43,8 @@ dispatch:
 - step: '7d'
   executor: agent
   worker: claude:opus, a native agent in the background
+  session_id: acd8d1577233d835c
+  ab_base_files: the launch.sh and launch.test.sh of 01b029e, copied read-only to the session scratchpad's 7d-base folder
   worktree: .agents/worktrees/2b-7d
   base: 4bc65fb
   launched: 2026-09-27
