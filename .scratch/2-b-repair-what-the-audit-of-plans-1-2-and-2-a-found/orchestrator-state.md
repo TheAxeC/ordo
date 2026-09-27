@@ -40,7 +40,11 @@ dispatch:
   launched: 2026-09-28
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/25-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1: agents/briefs/25-round-1.md, twelve rulings (Spec 1.1, Proof 2.1, Standards 3.1, Behaviour 4.1 to 4.8, and five items the orchestrator's read found still holding two requirements); ruling A sets the form of a split
+  builder_usage: 303,785 tokens, 53 tool uses, 1522 s
+  reviewer: af3c1e38fa19b6aa5
+  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/25-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
