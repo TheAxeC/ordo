@@ -40,12 +40,16 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   session_id: ae6a0276517548619
+  builder_usage: 251729 tokens, 76 tool uses, 1,385 s
+  reviewer: claude:opus, agent a332853749e29b708, launched 2026-09-27; 194,988 tokens, 42 tool uses, 666 s
+  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/22-refuter.md
   worktree: .agents/worktrees/2b-22
   base: 3371bbc
   launched: 2026-09-27
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/22-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1: sent 2026-09-27, brief agents/briefs/22-round-1.md, paths the brief's plus skills/spec/templates/back_out.sh and its test, skills/land/templates/remove_worktree.sh and its test, docs/dev/building.md, docs/dev/change-standard.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
