@@ -331,3 +331,77 @@ exit=1
 | `skills/spec/SKILL.md` | 130 |
 | `skills/ordo-init/templates/check_config.test.sh` | 104 |
 | `utils/pin.test.sh` | 439 |
+
+## Repair round 2
+
+The ruling is in `agents/briefs/20-round-2.md`.
+
+| # | Ruling | State | Proof |
+|---|---|---|---|
+| 1 | Prove `land.sh`'s `<pkg> <base>` command line | DONE | `sh skills/land/templates/land.test.sh` prints `arguments: <pkg> <base> passes the argument check, <pkg> alone is refused with exit 64`, then `PASS: land.sh and usage.py scratch tests`. |
+
+The new case in `land.test.sh`, placed after the conflict case, calls `land.sh twoargs <base>` with no option. It runs from `$test_root/two-arguments`, a folder that is not a repository root.
+
+- **How it avoids the browser.** Past the argument-count check, the first preflight check refuses a folder that is not a repository root. The case asserts exit 1 and a stderr of exactly `preflight failed: run this script from the repository root`. So the call gets past the argument check and stops before it touches main or the worktree. It never reaches the browser step, which would need port 8792 and `npm`.
+- **The control.** `land.sh twoargs` alone must exit 64 with stderr equal to the usage line: `Usage: <land.sh path> <pkg> <base> [--no-browser] [--session <session log> --since <ISO time>]`.
+
+The reverts were run in a scratch copy of `skills/land/templates/`, outside any git repository. The copy printed `PASS: land.sh and usage.py scratch tests` before the first revert.
+
+- Revert `-lt 2` to `-lt 3` in `land.sh`. First `FAIL:` line:
+  `FAIL: land.sh <pkg> <base> exited 64, expected 1 at the preflight: [Usage: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/land-test.WnGT02/ledger/land.sh <pkg> <base> [--no-browser] [--session <session log> --since <ISO time>]]`
+- For the control, revert `-lt 2` to `-lt 1`. First `FAIL:` line:
+  `FAIL: land.sh <pkg> exited 1, expected 64: [/private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/land-test.g2OfJN/ledger/land.sh: line 51: $2: unbound variable]`
+
+### Verify before you report, rerun
+
+V1, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+Can't open skills/plan-orchestration/templates/allow_list.py: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/allow_list.test.sh: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/launch-note.md: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/launch.sh: No such file or directory at -e line 1.
+Can't open skills/plan-orchestration/templates/launch.test.sh: No such file or directory at -e line 1.
+verify: 12 commands passed
+```
+
+The `Can't open` lines are the uncommitted deletion, as before. The ASCII check over only the files that exist printed nothing, `ascii exit=0`.
+
+V2, the brief's grep: 38 lines. They are the same lines as in round 1, except that the `land.test.sh` hits after the new case moved down by 24 lines. The reasons are unchanged:
+
+```
+README.md:50 README.md:58 README.md:118 README.md:151 docs/academic-coverage.md:5 docs/academic-coverage.md:23 docs/academic-coverage.md:29 docs/roadmap.md:22 docs/roadmap.md:136 docs/roadmap.md:137 skills/land/SKILL.md:96 skills/land/templates/land.sh:11 skills/land/templates/land.sh:137 skills/land/templates/land.sh:138 skills/land/templates/land.test.sh:11 skills/land/templates/land.test.sh:513 skills/land/templates/land.test.sh:518 skills/land/templates/land.test.sh:519 skills/land/templates/land.test.sh:526 skills/land/templates/land.test.sh:538 skills/land/templates/land.test.sh:539 skills/ordo-init/SKILL.md:31 skills/ordo-init/SKILL.md:53 skills/ordo-init/templates/check_config.test.sh:79 skills/ordo-init/templates/check_config.test.sh:80 skills/ordo-init/templates/check_config.test.sh:81 skills/ordo-init/templates/check_config.test.sh:82 skills/ordo-init/templates/check_config.test.sh:84 skills/ordo-init/templates/check_config.test.sh:85 skills/ordo-init/templates/check_config.test.sh:86 skills/repo-setup/SKILL.md:44 skills/repo-setup/SKILL.md:55 skills/repo-setup/SKILL.md:64 skills/repo-setup/templates/CLAUDE.md:30 skills/repo-setup/templates/docs/dev/change-standard.md:45 skills/repo-setup/templates/sync_rules.test.sh:29 skills/spec/templates/brief.md:50 utils/pin.test.sh:39
+```
+
+V3, `check_config.py` on the scratch repository with `worker: codex:gpt-5.6-sol`:
+
+```
+error: worker is not claude:<model>: 'codex:gpt-5.6-sol'
+exit=1
+```
+
+### File changed in round 2
+
+| File | Lines |
+|---|---|
+| `skills/land/templates/land.test.sh` | 751 |
