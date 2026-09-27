@@ -46,8 +46,10 @@ dispatch:
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/20-report.md
   builder_usage: 276603 tokens, 74 tool uses, 20.6 minutes
   reviewer: claude:opus, a native agent in the background, a2155aa82f638f98d
+  reviewer_report: agents/reviews/20-refuter.md, 175814 tokens, 47 tool uses, 11.6 minutes
   landing: not-started
-  round: 0
+  round: 1
+  round_1_rulings: agents/briefs/20-round-1.md, paths widened by skills/spec/SKILL.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
