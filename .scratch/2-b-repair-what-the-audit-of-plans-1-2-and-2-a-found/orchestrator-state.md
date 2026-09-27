@@ -34,12 +34,16 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   session_id: acbfc6d64ec38cd64
+  builder_usage: 198163 tokens, 59 tool uses, 640 s
+  reviewer: claude:opus, agent af5084a0289dab7a9, launched 2026-09-27, under ruling DD; 172,351 tokens, 36 tool uses, 476 s
+  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/23-refuter.md
   worktree: .agents/worktrees/2b-23
   base: 1bab359
   launched: 2026-09-27
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/23-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1: sent 2026-09-27, brief agents/briefs/23-round-1.md, two rulings (Spec 1, Behaviour 1), paths skills/spec/SKILL.md, skills/land/SKILL.md, skills/plan-orchestration/SKILL.md, skills/plan/templates/orchestrator-state.md, the report
   patch: agents/reviews/22-merged.patch applied at the worktree's creation, without back_out.sh, remove_worktree.sh and their tests
 ```
 
