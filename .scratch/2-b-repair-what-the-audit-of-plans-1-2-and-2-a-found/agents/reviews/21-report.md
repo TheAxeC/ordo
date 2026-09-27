@@ -1,6 +1,6 @@
 # Report: step 21, the process checks
 
-Everything in the brief is done. Four sentences in three files outside this step's paths are made stale by it; their exact replacements are under "Doc text", for the orchestrator to apply at landing, with the verify-list line the state file now needs.
+Everything in the brief and in repair round 1 is done on the tree. Left to the orchestrator at landing, as the round brief's "Not sent back" says: the verify-list line for `check_step.test.sh` in the state file, the copy of `land.sh` and `land.test.sh` into this plan's ledger, and this plan's state file's "Booked, no ruling needed" list turned into open items.
 
 ## Open items of the state file, verbatim
 
@@ -131,6 +131,8 @@ Audits, not proofs: the defaults `landing_tool_path=.` and `landing_ledger_root=
 
 ## Files
 
+The line counts after repair round 1 are in that section.
+
 | File | Lines |
 |---|---|
 | `skills/spec/templates/check_step.py` (new) | 158 |
@@ -155,13 +157,13 @@ Versions: `spec` 1.5.0, `plan` 1.8.0, `plan-orchestration` 2.8.0, `land` 1.7.0.
 1. **The lines of `check_step.py`.** Exit 0 prints `ok: step <s> has the user's authority: <the tags that count>`; exit 1 prints `refused: step <s> <reason>; the user's ruling is needed`, the reason one of `ends with neither (approved) nor (ruling <name>)`, `names no ruling of the user in the Rulings section: <tags>`, `is removed: its line starts with Removed by`; exit 64 prints one `error:` line on stderr, as `check_paths.py` does.
 2. **A step's name.** The first word after `- `, after the checkmark of a ticked step; on a `Removed by` line, the first word after its first colon. Only unindented `- ` lines count. A section runs to the next heading of level one or two. A step listed twice exits 64, and so does a `Removed by` line with no step after a colon.
 3. **The user's mark.** A ruling line counts when it ends with `(the user)`, in either case, with or without a full stop inside or after the parentheses, which covers `(the user).` and `(The user.)`.
-4. **`- Open item E: (b), ...` (`plan.md` line 87).** The brief's naming rule reads the `Open item <L> (` form only, so this line is named `Open item E:`, not `E`. No step names it. A test pins the brief's rule.
+4. **`- Open item E: (b), ...` (`plan.md`).** Named `E`: a line `- Open item <L>` followed by ` (` or `:` is named `<L>` (repair round 1, ruling 2).
 5. **Where `/spec` runs the check.** As bullets of Steps 1, after the preflight and before any premise check, so Steps 3 stays the brief's writing, as item 7 names it.
 6. **The ledger root in `land.sh`.** An `ADAPT` setting, `landing_ledger_root`, defaulting to `.scratch`, the value of the `plan` skill's `templates/plan.yaml`; empty, `.`, `..`, absolute or leaving the repository is refused before anything is touched. The worktree's add leaves it out through `:(exclude,literal)<root>`. The worktree's checkout of main must also count it as ignored, through a scratch ignore file given as `core.excludesFile`, because the orchestrator commits the builder's report on main before the landing (for example `72781ef Save step 20's builder report in plan 2.B`). An untracked copy of it at the same path in the worktree otherwise stops that checkout (the `checkout` revert above). For that one command the user's own global ignore file is not read.
 7. **`--no-browser`.** Kept: it sets `landing_browser` to 0, which a browser check in the `ADAPT` block reads. The template's `ADAPT` block runs nothing: the browser step, the line count, and the `npm ci` on a changed `package-lock.json` all left it.
 8. **`land.test.sh` in a ledger.** It now finds `verify.sh` and `usage.py` as `land.sh` does, so the copy `/plan` makes runs from the ledger. The test's fixtures follow `landing_tool_path` and `landing_ledger_root` read from `land.sh`.
 9. **The rule inventory.** Written at `<ledger>/inventories/<skill>.md`, the folder plan 1 used (`.scratch/archive/1-one-layout-for-every-skill/inventories/`). The builder writes it, so `plan-orchestration` (Steps 4 and 6) and `docs/dev/change-standard.md` now allow it beside the report, and the orchestrator copies it into the main ledger as it copies the report. The `spec` skill's `SKILL.md` and `templates/brief.md` name "the inventory check the standards name", not `utils/check_rule_inventory.py`, since a skill carries no path; `docs/dev/skill-layout.md` names the script.
-10. **A booked step.** `plan-orchestration` now says a step booked without a ruling carries no tag, `/spec` refuses it until the user's ruling adds one, and that refusal is raised as a stop of the kind "A finding that is the user's". This follows from ruling U 4. It means every booked step waits for a ruling before it runs; the user may want to confirm that.
+10. **A step the orchestrator would book.** Ruled by the user (ruling Y (a)) and built in repair round 1, ruling 1: there is no booked list; such a finding is an open item and becomes a step only by the user's ruling.
 
 ## User-visible changes
 
@@ -177,10 +179,12 @@ Versions: `spec` 1.5.0, `plan` 1.8.0, `plan-orchestration` 2.8.0, `land` 1.7.0.
 
 ## Wrong or impossible in the brief
 
-- The brief keeps four sentences outside its paths that the change makes stale (change standard, rule 14). Their replacements are under "Doc text".
+- The brief kept four sentences outside its paths that the change made stale (change standard, rule 14). Repair round 1 widened the paths and they are changed on the tree.
 - The brief has no "Cases" section, which `templates/brief.md` requires; its cases are under "What it must do", and those were run first.
 
 ## Doc text
+
+Items 1 to 4 are applied on the tree in repair round 1 (ruling 7), merged with ruling 1 where they touch the same lines. Item 5 is the orchestrator's at landing.
 
 1. `skills/plan-help/SKILL.md:68`, current:
    `/spec refuses                 the brief's "Paths this step writes" shares a path with a step in flight, or a state file or brief it reads is unusable: it names the cause and leaves nothing; land the other step or change the paths, then /spec again`
@@ -213,4 +217,115 @@ cp skills/land/templates/land.sh skills/land/templates/land.test.sh .scratch/2-b
 sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/land.test.sh 2>&1 | tail -1
 ```
 
-A copy in a ledger-shaped folder outside any repository printed `PASS: land.sh and usage.py scratch tests` (above). A copy inside this ledger, which also runs the example check of an Ordo checkout, was not run, since the ledger is outside this step's paths: not verified.
+The copy of `land.test.sh` in a ledger finds `verify.sh` only when it is beside it or in an installed `land` skill that holds it. The installed `land` skill at v1.0.0 (`~/.local/share/ordo-stable/land`) holds no `verify.sh`, so the second command above fails with `FAIL: verify.sh not found beside this test or in the land skill's templates` until the pin of ruling W, or until `verify.sh` is copied beside it. `skills/land/SKILL.md` ("The landing script") and the README say the same. A copy in a ledger-shaped folder outside any repository, with `verify.sh` in a scratch `HOME`'s installed `land` skill, printed `PASS: land.sh and usage.py scratch tests` (above). A copy inside this ledger was not run, since the ledger is outside this step's paths: not verified.
+
+## Repair round 1
+
+The rulings of `agents/briefs/21-round-1.md`, each built on the tree.
+
+| Ruling | State | Command | Output |
+|---|---|---|---|
+| 1, no booked list | DONE | `grep -rn -i 'booked list\|no ruling needed\|queue order' skills docs README.md \| grep -v roadmap.md` | no output (exit 1) |
+| 1, backed-out step | DONE | `grep -n 'no new ruling' skills/land/SKILL.md skills/plan-orchestration/SKILL.md skills/plan-help/SKILL.md` | `skills/land/SKILL.md:61`, `:131`; `skills/plan-orchestration/SKILL.md:78`, `:110`; `skills/plan-help/SKILL.md:70` |
+| 1, versions | DONE | `grep -n 'version:' skills/{refute,plan-help}/SKILL.md` | `refute` 1.5.0, `plan-help` 1.7.0 |
+| 2, `Open item <L>:` named `<L>` | DONE | `sh skills/spec/templates/check_step.test.sh 2>&1 \| tail -1` | `PASS: check_step.py scratch tests` |
+| 3, `###` inside a section | DONE | the same | the same |
+| 4, the ledger root normalised | DONE | `sh skills/land/templates/land.test.sh 2>&1 \| grep -E 'slash\|dot:'` | `slash: a ledger root written with a trailing slash left out, exit 0`; `dot: a ledger root written with a leading ./ left out, exit 0` |
+| 5, what reaches main | DONE | `grep -n 'uncommitted' skills/land/templates/land.sh README.md skills/land/SKILL.md` | `land.sh` head comment lines 17-21, `README.md:158`, `skills/land/SKILL.md:53`, `:108` |
+| 6, `/plan`'s inputs | DONE | `grep -n 'land.test.sh' skills/plan/SKILL.md` | "What it reads" 4 (line 37); Stops row "No landing script" (line 75) |
+| 7, the sentences outside the first paths | DONE | `grep -n 'lacks your authority' skills/plan-help/SKILL.md`; `grep -n "the ledger's landing script" skills/plan/templates/orchestrator-state.md`; `grep -n 'rule inventory' skills/repo-setup/templates/docs/dev/change-standard.md` | `skills/plan-help/SKILL.md:68`; `orchestrator-state.md:45`; `change-standard.md:34` |
+| 8, first line and ledger copy | DONE | the report's first line; "Ledger copy"; `grep -n 'v1.0.0' skills/land/SKILL.md README.md` | `skills/land/SKILL.md:109`, `README.md:158` |
+
+### Ruling 1: before and after
+
+- Before: a finding neither closed in the repair rounds nor fixed at landing (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing, a red line at landing) became a step in the state file's "Booked, no ruling needed" list, worked in queue order with no ruling.
+- After: such a finding is an open item in the state file, raised as `plan-orchestration`'s Stops row "A finding that is the user's" says, and it becomes a step only by the user's ruling, as a line ending with `(ruling <name>)`. The state template has no booked list. Reports name the open items, not a booked list's count.
+- A step a red line took back out of main (`landing: backed-out`) is not a new step. Its failure is recorded in its Step 0 in `plan.md`, its line keeps its tag, and it is worked again through `/spec` with no new ruling. It goes to the user as an open item only when only the user can decide what to do.
+- Sentences rewritten: `skills/land/SKILL.md` (description, lines 10, 61, 68, 72, 90, 117, 123, 131); `skills/plan-orchestration/SKILL.md` (lines 73, 78, 82, 110, 164, 172, 173, the Stops row "A finding that is the user's", Anti-patterns rows at 219 and 223, Rules 235); `skills/refute/SKILL.md` (lines 23, 56, 70, 104, 107); `skills/refute/templates/report.md:44`; `skills/plan-help/SKILL.md` (lines 59, 60, 68, 69, 70); `skills/plan/templates/orchestrator-state.md` (lines 16, 30, and the removed "Booked" section); `skills/spec/SKILL.md:70`. "Booking" as the landing's record in `plan.md`, the Closed list and the open items are kept.
+
+### Ruling 2: behaviour before and after
+
+- Before: `(ruling E)` against `- Open item E: (b), ... (the user).` was refused, and `(ruling Open item E:)` passed.
+- After: `(ruling E)` passes, and `(ruling Open item E:)` is refused. `skills/spec/SKILL.md` "A ruling" names both forms, and the text before the first ` (` for any other ruling line.
+
+### New and changed cases, each with its revert's first `FAIL:` line
+
+Reverts run on copies in the scratchpad, as in the first run; the temporary folder is shortened to `$T`.
+
+| Case | Revert | First `FAIL:` line |
+|---|---|---|
+| `Open item E: named E` | the regex back to `Open item ([A-Za-z]+) \(` | `FAIL: Open item E: named E: exit 1, expected 0 [refused: step 7 names no ruling of the user in the Rulings section: (ruling E); the user's ruling is needed] []` |
+| `Open item E: not named by its text` | the text name added for an open item line too (`elif` to `if`) | `FAIL: Open item E: not named by its text: exit 0, expected 1 [ok: step 8 has the user's authority: (ruling Open item E:)] []` |
+| `a subheading in both sections` | `#{1,2}` to `#{1,3}` | `FAIL: a subheading in both sections: exit 64, expected 0 [] [error: step 2 is not in the step list of $T/plan-11.md: 1]` |
+| `slash` (`land.test.sh`) | the trailing `/` branch of the normalisation removed | `FAIL: slash: exit 1, expected 0: error: The following untracked working tree files would be overwritten by checkout:` |
+| `dot` (`land.test.sh`) | the leading `./` branch of the normalisation removed | `FAIL: dot: exit 1, expected 0: error: The following untracked working tree files would be overwritten by checkout:` |
+| `ledger root`, now also `./` and `/` | the check of the ledger root removed | `FAIL: ledger root []: exit 0, expected 1: worktree git commit: nothing staged, no wip commit made` |
+
+The reverts of the first run were run again on the final files, each red at the same first `FAIL:` line as quoted in "Reverts" above. The `crlf` case now reads `plan-18.md`, one plan later. The `Open item E:` revert of the first run tested the regex the round replaced, and the `colon` revert above takes its place. The land reverts `browser`, `linecount`, `add`, `checkout`, `escape` and `literal` gave the lines quoted above.
+
+Ruling 5 changes a head comment and README text and ruling 6 changes skill text: no test reads them, so they are audits by the greps in the table.
+
+### Verify before you report, rerun
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"`
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 12 commands passed
+exit 0
+```
+
+`sh skills/spec/templates/check_step.test.sh 2>&1 | tail -1`: `PASS: check_step.py scratch tests`.
+
+`python3 skills/spec/templates/check_step.py .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/plan.md <step>`:
+
+```
+ok: step 21 has the user's authority: (ruling W) (ruling U) (ruling V) (ruling X) (ruling Y)
+ok: step 17 has the user's authority: (approved)
+ok: step 17a has the user's authority: (ruling T)
+ok: step 18 has the user's authority: (approved)
+ok: step 19 has the user's authority: (approved)
+refused: step 7d is removed: its line starts with Removed by; the user's ruling is needed
+```
+
+Exit 0 for each `ok:` line, exit 1 for 7d.
+
+### Files after the round
+
+| File | Lines |
+|---|---|
+| `skills/spec/SKILL.md` | 141 |
+| `skills/spec/templates/check_step.py` | 158 |
+| `skills/spec/templates/check_step.test.sh` | 211 |
+| `skills/plan/SKILL.md` | 91 |
+| `skills/plan/templates/orchestrator-state.md` | 66 |
+| `skills/plan-orchestration/SKILL.md` | 236 |
+| `skills/plan-help/SKILL.md` | 93 |
+| `skills/land/SKILL.md` | 144 |
+| `skills/land/templates/land.sh` | 457 |
+| `skills/land/templates/land.test.sh` | 902 |
+| `skills/refute/SKILL.md` | 133 |
+| `skills/refute/templates/report.md` | 44 |
+| `skills/repo-setup/templates/docs/dev/change-standard.md` | 47 |
+| `README.md` | 185 |
+
+Versions: `spec` 1.5.0, `plan` 1.8.0, `plan-orchestration` 2.8.0, `plan-help` 1.7.0, `land` 1.7.0, `refute` 1.5.0.
