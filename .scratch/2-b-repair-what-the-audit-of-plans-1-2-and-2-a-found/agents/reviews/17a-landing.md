@@ -18,6 +18,8 @@ Nothing in the brief.
 
 The required key `libraries: check | avoid` in the plan templates, its check in `check_config.py` with its cases, the question in `/ordo-init`, the library search in `/spec` Steps 3 with the brief's "Libraries checked" section, the `/refute` finding for an unnamed dependency, `libraries: avoid` in this repository's `.agents/plan.yaml`, and the README's nine required keys: 13 files changed, 124 insertions(+), 40 deletions(-). Verification on main after the fix: the six `PASS:` lines and `verify: 7 commands passed`, quoted in the booking in `plan.md`.
 
+The builder's report `agents/reviews/17a-report.md` carries its "Repair round 1" section, re-applied on main from the builder's own edit command in its transcript. The landing script checks out main in the worktree, which puts main's committed copy of a ledger file over the worktree's copy, and main held the report as committed when the round was sent.
+
 ## What was found
 
 `agents/reviews/17a-refuter.md`: three findings in the first review, closed in repair round 1; one in the review over the round, fixed at landing (a library ruling settles a candidate only for the capability it was ruled for).

@@ -97,7 +97,9 @@ Each revert was applied to a scratch copy of `skills/ordo-init` and `skills/plan
 | `skills/plan/templates/plan.projects.yaml` | 2 / 0 | 43 |
 | `skills/plan/templates/plan.yaml` | 1 / 0 | 22 |
 | `skills/refute/SKILL.md` | 1 / 0 | 135 |
-| `skills/spec/SKILL.md` | 32 / 23 | 201 |
+| `skills/spec/SKILL.md` | 34 / 24 | 202 |
+| `skills/plan-orchestration/SKILL.md` | 1 / 1 | 252 |
+| `skills/plan/SKILL.md` | 1 / 1 | 92 |
 | `skills/spec/templates/brief.md` | 6 / 0 | 63 |
 | `.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17a-report.md` | new | this file |
 
@@ -124,8 +126,6 @@ Each revert was applied to a scratch copy of `skills/ordo-init` and `skills/plan
 
 ## Sentences elsewhere the change makes false or incomplete (reported, not edited)
 
-- `skills/plan-orchestration/SKILL.md:156`: "`/spec` compares the list with the briefs of the steps in flight by reading them (the `spec` skill's Steps 4)". That comparison is now `/spec`'s Steps 5.
-- `skills/plan/SKILL.md:54`: "The configuration block is filled in from `plan.yaml`, every key of the block written out ...: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`." The block now holds `libraries`, which the list does not name.
 - This ledger's `orchestrator-state.md` configuration block has no `libraries` line (`grep -c '^libraries:' .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md` prints 0; the one other hit of `libraries` is the closed item of ruling T). `land.test.sh` reads the template, not the ledger, so nothing is red; the file is the orchestrator's.
 
 ## Premises of the brief found wrong
@@ -133,3 +133,45 @@ Each revert was applied to a scratch copy of `skills/ordo-init` and `skills/plan
 - "It checks `review`'s value (line 65)": on the base, line 65 is `if value is None or default is None:` of the kind check; the `review` check is lines 69 and 70 (`sed -n 63,70p skills/ordo-init/templates/check_config.py` on the base). The new check sits beside it as the brief asks.
 
 Every other premise was reproduced: `sed -n 1,21p skills/plan/templates/plan.yaml` (required 5 to 12, optional 13 to 21); `land.test.sh` lines 874 to 916 hold `check_examples`; `/ordo-init` lines 58, 82 and 94; `/spec` line 108 the dependency install; `README.md` line 105; `.agents/plan.yaml` without `libraries`.
+
+## Repair round 1
+
+Every item of the round is done.
+
+| Item | State | Command | Output |
+|---|---|---|---|
+| 1. A ruled candidate does not stop `/spec` again | DONE | `grep -n "already ruled on\|library search of Steps 3" skills/spec/SKILL.md` | `75:   - A candidate the user has already ruled on, named by a line of `plan.md`'s Rulings section, is settled: the brief records that ruling under "Libraries checked", and the candidate does not stop `/spec` again.` and `169:   - a ruling that sets a public shape, a vocabulary, a rule or a library choice is also written where the plan keeps its rulings, so later premise checks and the library search of Steps 3 read it;` |
+| 2. `plan-orchestration` line 156 | DONE | `sed -n 156p skills/plan-orchestration/SKILL.md \| grep -o "Steps 5)"` | `Steps 5)` |
+| 3. `plan` line 54 | DONE | `sed -n 54p skills/plan/SKILL.md \| grep -o "the reviewer, \`libraries\`, the review"` | ``the reviewer, `libraries`, the review`` |
+
+The re-run path, by reading `skills/spec/SKILL.md` (`sed -n '/### A ruling/,/## Stops/p'` and `sed -n 71,80p`):
+
+1. `/spec` Steps 3 under `libraries: check` finds a candidate and stops ("A user-visible choice"); "Steps / A stop" leaves the open item with the candidates, their pros and cons and one recommendation.
+2. The user types `Ruled: <the choice>`. "Steps / A ruling" 2 closes the open item, and its bullet at line 169 writes a ruling that makes a library choice where the plan keeps its rulings, the Rulings section of `plan.md` that "What it reads" 4 reads.
+3. "Steps / A ruling" 3: `/spec <entry> <step>` is typed again. Steps 1 and 2 run as before.
+4. Steps 3 searches again, finds the same candidate, and line 75 applies: a line of the Rulings section names it, so it is settled. The brief records the ruling under "Libraries checked" and no stop is raised.
+5. With no other candidate unruled, Steps 3 ends and Steps 4 writes the brief, whose "Libraries checked" bullet at line 89 carries "the library the user ruled".
+
+Judgment call: item 1 asked the Steps / A ruling bullet to name the library search of Steps 3. The bullet also names "a library choice" among the rulings written where the plan keeps its rulings. Without it, a library ruling was not one of the kinds that bullet writes to the Rulings section, and Steps 3 would find nothing there to read.
+
+The verify list, rerun after the round (`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`), exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_coverage.py scratch tests
+verify: 7 commands passed
+```
+
+The other checks of "Verify before you report", rerun: `python3 skills/ordo-init/templates/check_config.py .` prints `ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists` and exits 0. The reverts and red lines of the tests are unchanged, since no test or script changed in the round. `git diff --stat` shows the brief's eleven paths plus the round's two, and `git status --short` shows the report as the only untracked file.
+
+Files changed in the round (`git diff --numstat` for the whole step, `wc -l` after the round):
+
+| File | Round change | Step total added / removed | Lines |
+|---|---|---|---|
+| `skills/spec/SKILL.md` | line 75 added, line 169 rewritten | 34 / 24 | 202 |
+| `skills/plan-orchestration/SKILL.md` | line 156 | 1 / 1 | 252 |
+| `skills/plan/SKILL.md` | line 54 | 1 / 1 | 92 |
