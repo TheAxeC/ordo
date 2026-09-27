@@ -6,16 +6,10 @@ The catch-up note for entry 2.B of `docs/roadmap.md`, the repair of what the aud
 verify:                      # commands run in the worktree and again on main, in order; all must pass. Copied from docs/dev/building.md by /plan.
 - sh skills/land/templates/land.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
-- sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-- sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
-- sh skills/spec/templates/check_step.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh skills/land/templates/verify.test.sh 2>&1 | tail -1
-- sh utils/check_skill_layout.test.sh 2>&1 | tail -1
-- sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
-- python3 utils/check_skill_layout.py
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -30,34 +24,24 @@ refute_after_repair: yes     # /refute runs again over each repair round.
 repair_rounds: 1             # the most repair rounds a step gets.
 review_minutes: 0            # no time box.
 look:                        # none: no view changes.
-workers_at_once: 3           # ruled: up to three steps in flight, with disjoint paths.
+workers_at_once: 3           # ruled: up to three steps in flight; a shared file only when the orchestrator judges the merge simple (ruling CC part 2).
 bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: '22'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  session_id: ae6a0276517548619
-  builder_usage: 251729 tokens, 76 tool uses, 1,385 s
-  reviewer: claude:opus, agent a332853749e29b708, launched 2026-09-27; 194,988 tokens, 42 tool uses, 666 s
-  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/22-refuter.md
-  worktree: .agents/worktrees/2b-22
-  base: 3371bbc
-  launched: 2026-09-27
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/22-report.md
-  landing: not-started
-  round: 1
-  round_1: sent 2026-09-27, brief agents/briefs/22-round-1.md, paths the brief's plus skills/spec/templates/back_out.sh and its test, skills/land/templates/remove_worktree.sh and its test, docs/dev/building.md, docs/dev/change-standard.md; builder's round: 155,635 tokens, 87 tool uses, 1,849 s
-  reviewer_round_1: claude:opus, agent aaed00780c5718df8, launched 2026-09-27; 223,509 tokens, 52 tool uses, 1,795 s
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item BB (step 22, whether removing a step's worktree and branches asks the user, raised 2026-09-27): the round moved the removal into `remove_worktree.sh` and `back_out.sh`, and `skills/land/SKILL.md` says the `git worktree remove --force` inside it "stays on the ask list, so the user is asked". That is false: the ask list is matched against the command the session runs (`sh .../remove_worktree.sh ...`), and neither `~/.claude-work/settings.json` nor `~/.claude/settings.json` names `git worktree remove` or `git branch -D` (their `permissions.ask` ends with `Bash(git branch -d *)`). Whether a deletion asks you is yours, since it is your settings and your prompts. (a) The scripts make every check and then print the removal commands; the session runs `git worktree remove --force` and `git branch -D` as its own commands, and you add `Bash(git worktree remove *)` and `Bash(git branch -D *)` to your ask list yourself if you want a prompt (no session edits your settings). Pro: you see every deletion. Con: a prompt at every landing and every back-out, and a one-time settings edit by you. (b) The scripts delete without asking, and the texts say so. The safety is the script's check: every leftover file in the worktree is a ledger copy, and the step's work is committed on main (a landing, with the removal after the commit) or held in the checked patch (a back-out). Pro: nothing to do by hand, and nothing of the step's is lost. Con: branches are deleted without a prompt, while your ask list asks for `git branch -d`. (c) Remove the false sentence and change nothing else, the lazy option: it leaves the question unanswered in the texts. Recommendation (b). The other findings of the review over round 1 go into the one repair round beyond the cap that plan-orchestration allows for an acceptance item left unbuilt (ruling 2's "files that apply are applied" fails when main deleted a file the patch changes); that round waits for this ruling, since it rewrites the same texts.
 
 ## Closed items
+- 2026-09-27: open item CC (which process scripts go): ruled (a); part 2 ruled (b), `check_paths.py` deleted and side-by-side steps left to the orchestrator's judgment of the merge; booked as step 23.
+- 2026-09-27: the roadmap change of ruling CC: approved and committed in 7fa2da4.
+- 2026-09-27: open item DD (how the plan stops growing): ruled (a).
+- 2026-09-27: open item EE (what happens to step 22): ruled (a); merged into step 23.
+- 2026-09-27: open item BB (step 22, whether removing a step's worktree and branches asks the user): ruled (b). The scripts delete without asking, and the texts say so; the removal at a landing comes after the landing commit. Fixed at step 22's landing.
+- 2026-09-27: the round beyond the cap for step 22: ruled yes. For this round only, the builder does only the four items of `agents/briefs/22-round-2.md`, and the reviewer over the round reviews and comments on only those four items. The other findings of the review over round 1 are fixed at landing.
 - 2026-09-27: open item Z (step 21, how a step taken back out of main is prepared again): ruled (a), built in step 22 with the parts the user agreed; the answer on commits ruled as open item AA (a), built in step 22.
 - 2026-09-27: the pin of ruling W: waits for step 22's landing (ruling Z); asked again then.
 - 2026-09-27: the booked list, removed by ruling Y through step 21. Its three entries: the ten links in `~/.agents/skills`, carried into the open item on the pin of ruling W; `skills/plan/templates/plan.md:3` "one agent dispatch" and the position line in `skills/spec/templates/brief.md`, both gone (`grep -n 'one agent dispatch'` and `grep -n 'position line'` print nothing); `skills/repo-setup/templates/shared-rules.md:19` already limits a stop to a premise the plan cannot absorb, and the `launch_note` exception in the `plan.yaml` templates is moot since step 20 removed the key.
@@ -118,8 +102,8 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20 and 21 landed (step 21 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 22 in flight, its round beyond the cap waiting on open item BB; next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
-- Open on Axel's side: open item BB.
+- Roadmap entry 2.B. Step 22 merged into step 23 (ruling EE), its worktree and branch removed; next: 23, 17, 17a, 18, 19, and the tag and the pin on the user's yes (ruling W).
+- Open on Axel's side: none.
 
 ## Usage
 
@@ -148,3 +132,4 @@ dispatch:
 | 7c | claude:opus agent, effort high: 191,457 tokens, 77 tool uses, 3,046 s; round 1: 59,184 tokens, 158 tool uses, 18,823 s (the agent's notification totals) | 99,985 tokens, 25 tool uses, 1,409 s; round 1: 135,664 tokens, 43 tool uses, 4,961 s | 1 | 7 (7 rulings) | 6 files changed, 408 insertions(+), 39 deletions(-) | no | 6 | 0 | 38 | 37268 | 557266 | 9246203 | 82 | 486 | none |
 | 20 | claude:opus agent: 276,603 tokens, 74 tool uses, 1,238 s; round 1: 305,557 tokens, 14 tool uses, 454 s; round 2: 317,425 tokens, 7 tool uses, 322 s (the agent's notification totals) | 175,814 tokens, 47 tool uses, 698 s; round 1: 133,901 tokens, 38 tool uses, 625 s; round 2: 62,230 tokens, 16 tool uses, 300 s | 2 (round 2 the one beyond the cap) | 7 (6 rulings, then 1) | 29 files changed, 213 insertions(+), 4066 deletions(-) | no | 4 | 0 | 184 | 162453 | 383584 | 46277719 | 408 | 339 (from step 7c's landing; shares the user's rulings U to W, the removal of 7d and the brief of step 20) | none |
 | 21 | claude:opus agent: 289,779 tokens, 77 tool uses, 2,071 s; round 1: 352,548 tokens, 32 tool uses, 875 s (the agent's notification totals) | 185,334 tokens, 54 tool uses, 1,017 s; round 1: 193,994 tokens, 45 tool uses, 776 s | 1 | 8 rulings (7 findings and ruling Y) | 19 files changed, 715 insertions(+), 129 deletions(-), then 3 files, 4 insertions(+), 4 deletions(-) at landing | no | 3 | 1 (open item Z) | 64 | 62069 | 326523 | 12756668 | 136 | 199 (from step 20's landing; shares the user's rulings X and Y and the question on ruling Y) | none |
+| 22 | claude:opus agent: 251,729 tokens, 76 tool uses, 1,385 s; round 1: 155,635 tokens, 87 tool uses, 1,849 s; round 2: 223,906 tokens, 26 tool uses, 752 s | 194,988 tokens, 42 tool uses, 666 s; round 1: 223,509 tokens, 52 tool uses, 1,795 s | 2 (round 2 not reviewed) | 11 rulings, then 4 items | 17 files changed, 1588 insertions(+), 96 deletions(-), never landed | no | 0 | 0 | not measured | not measured | not measured | not measured | not measured | not measured | merged into step 23 by ruling EE, its change in agents/reviews/22-merged.patch; the worktree and branch removed by the user |

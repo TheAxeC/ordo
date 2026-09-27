@@ -1,0 +1,2334 @@
+diff --git a/README.md b/README.md
+index 91f7791..02c159a 100644
+--- a/README.md
++++ b/README.md
+@@ -105,25 +105,29 @@ Each script under a skill's `templates/` or under `utils/` has a test beside it
+ ```sh
+ sh skills/land/templates/land.test.sh
+ sh skills/land/templates/verify.test.sh
++sh skills/land/templates/remove_worktree.test.sh
+ sh skills/ordo-init/templates/check_config.test.sh
+ sh skills/plan-retro/templates/collect_findings.test.sh
+ sh skills/repo-setup/templates/sync_rules.test.sh
+ sh skills/spec/templates/check_paths.test.sh
+ sh skills/spec/templates/check_step.test.sh
++sh skills/spec/templates/back_out.test.sh
+ sh utils/pin.test.sh
+ sh utils/check_skill_layout.test.sh
+ sh utils/check_rule_inventory.test.sh
+ sh utils/check_coverage.test.sh
+ ```
+ 
+-- `land.test.sh` proves the landing on scratch repositories: a clean landing with the template's defaults, which runs no browser step and no line count, a conflicting one and its refused rerun, a builder that committed everything, an index lock held while a `git` process runs (the wait stopped at its bound, shortened for the test through `LANDING_LOCK_WAIT`), a stale lock removed, a lock gone before the bound, a stop at the bound after the worktree's checkout followed by a rerun that lands, a rerun refused when the landing branch holds a change made by hand or main holds staged changes, a bound that is not a whole number, a tool directory set on the `ADAPT` line, a ledger inside the repository whose files left uncommitted in the worktree never reach `main` (under a ledger root holding pattern characters, or written with a trailing `/` or a leading `./`, too), and a ledger root that is not a folder inside the repository refused. Each landing starts `land.sh` from a scratch ledger: a green verify list lands, a red one fails the landing with the `RED:` line of `verify.sh`, `verify.sh` is found in the repository's `.agents/skills` when the ledger lacks it, and a `verify.sh` found nowhere or a missing state file is refused before `main` is touched, the places named. It checks `usage.py` on a Claude Code log (one message counted once by its id, and log lines without an offset skipped), its refusal of a file that is not a Claude Code session log, and its refusal of a window time without an offset or unreadable. It checks that both example `plan.yaml` files carry exactly the keys the state template's configuration block needs, each optional key's value equal to its stated default; inside an Ordo checkout a missing example fails, and only a copy outside one skips the check.
++- `land.test.sh` proves the landing on scratch repositories. It covers a clean landing with the template's defaults, which runs no browser step and no line count. It covers a conflicting landing and its refused rerun, and a builder that committed everything. It covers an index lock held while a `git` process runs, the wait stopped at its bound, which the test shortens through `LANDING_LOCK_WAIT`. It covers a stale lock removed, a lock gone before the bound, and a stop at the bound after the worktree's checkout followed by a rerun that lands. A rerun is refused when the landing branch holds a change made by hand or main holds staged changes. A bound that is not a whole number is refused. It covers a tool directory set on the `ADAPT` line, and a worktree root set there, with one outside the repository refused. Ledger files left uncommitted in the worktree never reach `main`. This holds for a ledger root holding pattern characters, and for one written with a trailing `/` or a leading `./`. A ledger root that is not a folder inside the repository is refused. Each landing starts `land.sh` from a scratch ledger: a green verify list lands, a red one fails the landing with the `RED:` line of `verify.sh`, `verify.sh` is found in the repository's `.agents/skills` when the ledger lacks it, and a `verify.sh` found nowhere or a missing state file is refused before `main` is touched, the places named. It checks `usage.py` on a Claude Code log (one message counted once by its id, and log lines without an offset skipped), its refusal of a file that is not a Claude Code session log, and its refusal of a window time without an offset or unreadable. It checks that both example `plan.yaml` files carry exactly the keys the state template's configuration block needs, each optional key's value equal to its stated default; inside an Ordo checkout a missing example fails, and only a copy outside one skips the check.
+ - `verify.test.sh` checks that `verify.sh` passes a list holding a summary test, a plain command and a command written as a folded scalar, and turns red on a summary test that prints `PASS:` but exits 1, a summary test whose last line does not start with `PASS:`, and a plain command that exits 1. It checks that a test printing `PASS:` and exiting 1 is red under each spelling of a pipe into `tail`: `| tail -n 1`, two spaces before the pipe, no `2>&1`, no spaces, a redirection or `;` after `tail`, a comment holding a pipe, a backslash-newline, `| grep PASS | tail -1`. It checks that a pipe inside quotes runs as written, that a command ending in `; true` is judged on its exit status, that a command reads end-of-file from standard input, that quotes, a newline and a carriage return reach a command as written, that `yml` and `YAML` fences count, and that the run stops at the first red command. Each of INT, HUP, QUIT and TERM stops the running command and its session at once, runs no later command, removes the scratch folder and exits 128 plus the signal number, a command that ignores TERM is killed, and so is a second process group in the command's session. Each state file the runner cannot use exits 64 with its message: a missing file, a file that is not UTF-8, no `yaml` block, a `verify:` list that is missing, empty or not a list, a command that is empty, not a string or holds a NUL, a block that is not valid YAML or never closed, and a list found only in a second `yaml` block. A missing `python3`, PyYAML, `bash` or `ps` exits 69, a command killed by a signal reports exit status 128 plus the signal number, and a scratch folder that cannot be created exits 1. The file runs itself twice, starting the runner with `sh` and, when it is installed, with `dash`; each run ends with its own `PASS:` line, which the outer run checks, and the outer `PASS:` line names the shells the runner ran under.
++- `remove_worktree.test.sh` runs `remove_worktree.sh` on scratch repositories shaped as `land.sh` leaves a step. It checks that a worktree holding only ledger copies is removed with both branches. The copies are an untracked report, a modified `plan.md`, and names holding a space or a quote. The worktree is found by its entry when its folder name differs from the step id. A missing `<branch>-land` is skipped. A path outside the ledger root, `.scratchy` beside `.scratch` included, is refused with nothing removed. The `projects:` form's ledger root is found, and each unusable input exits 64.
+ - `check_config.test.sh` checks that `check_config.py` passes a complete configuration, in both forms, and names each kind of error.
+ - `collect_findings.test.sh` runs the collector over scratch reports in the shapes the refuter writes and checks that every item under a Spec, Proof, Standards or Behaviour heading, and every item of a repair round outside the parts the collector does not read, is a finding whatever its text says, that those parts (the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour and the Verification, Not checked, Closed, Closures and Usage lists) and fenced lines give none, and that `--exclude-listed` skips the runs an earlier retro lists and refuses a retro it cannot use.
+ - `sync_rules.test.sh` checks that a block equal to the template passes, with `CLAUDE.md` or the template in LF or CRLF, and that a drifted block fails with its diff and is repaired by `--write`, which keeps every byte outside the block and writes the block in the ending most of the file's lines use, the first line's on a tie. It checks the refusals, each an exit 2 with one `error:` line on stderr: a missing block, reversed markers, a second begin or end marker, a second block, a missing `CLAUDE.md`, a `CLAUDE.md` or `shared-rules.md` that is not UTF-8, a missing `shared-rules.md`, a `CLAUDE.md` that `--write` cannot write, and a write that does not read back as written.
+ - `check_paths.test.sh` checks that `check_paths.py` passes a step whose brief shares no path with the briefs of the steps in flight (none in flight, other files, line ranges that do not overlap, fenced and prose lines, a dispatch block written as one entry) and reports each shared path once (a file named whole in either brief, overlapping ranges, a path spelled two ways or listed twice, a path after a `###` heading in the section, two steps sharing), and that it refuses with exit 64 each state file, brief and argument it cannot use and with exit 69 a missing PyYAML.
+ - `check_step.test.sh` checks that `check_step.py` passes a step whose line in `plan.md` ends with `(approved)` or with a `(ruling <name>)` naming a ruling of the user in the Rulings section, and refuses, with exit 1 and a line naming the step, one with no tag, one naming no such ruling and one removed, and with exit 64 a plan or an argument it cannot use.
+-- `pin.test.sh` runs every case under a scratch `HOME` whose path holds a space, writes only under its two scratch roots, and checks that no path a split of a skill folder on a space would name appears. In pin mode it covers the link of every skill of a tag, the removal of a link to a skill the next tag drops, the replacement of a live-clone link for a skill the tag holds, a line printed for each change and none for a write that failed, and the summary line's folders joined by `, `. Check mode is tested on a link into the live clone, named once, and on a link into the pinned worktree for a skill the tag lacks. Its other cases are the check after linking on a link that could not be made, a pinned worktree deleted by hand and created again while another missing worktree keeps its registration, and the default folders, the `$CLAUDE_CONFIG_DIR` folder and both forms of `ORDO_SKILL_DIRS`, the space-separated form split on spaces and tabs. Each refusal is checked with its message and shown to change nothing: a link into the live clone for a skill the tag lacks, a worktree with local changes, a path that exists and is not a git worktree, a real directory or a foreign link in a skill folder, an unknown tag, an `ORDO_SKILL_DIRS` that names no folder, a folder that is not an absolute path, and one with leading or trailing whitespace.
++- `back_out.test.sh` runs `back_out.sh` on scratch repositories built as `land.sh` leaves a back-out. It checks that the patch carries a text change, a new file, a name holding a space and a binary change. `git apply --3way` restores them in a new worktree from a later main. A text file and a binary file main changed are left unmerged, the text one with its markers and the binary one at main's copy. It checks that the entry is removed in the list and the single-entry form, with every other byte of the state file unchanged. The worktree and both branches are gone. It also checks an empty diff, a refusal of `remove_worktree.sh` that keeps the patch and the entry, and each unusable input.
++- `pin.test.sh` runs every case under a scratch `HOME` whose path holds a space, and writes only under its two scratch roots. It checks that no path a split of a skill folder on a space would name appears. In pin mode it covers the link of every skill of a tag and the removal of a link to a skill the next tag drops. It covers the replacement of a live-clone link for a skill the tag holds. A line is printed for each change and none for a write that failed, and the summary line joins its folders with `, `. Check mode is tested on a link into the live clone, named once. It is also tested on a link into the pinned worktree for a skill the tag lacks. In `~/.agents/skills` it covers the removal of four links, each with its line. They are a link into the pinned worktree, one named through a linked folder, one to the worktree's root and one into the live clone. No line is printed for a removal that failed. A real folder and a foreign link are kept, and check mode fails on each link into Ordo. The folder is left alone when `ORDO_SKILL_DIRS` is set and when the list holds it. It is also left alone when it is a link to a folder of the list. Another case checks, after linking, a link that could not be made. Another deletes a pinned worktree by hand and creates it again while another missing worktree keeps its registration. The rest cover the default folders, the `$CLAUDE_CONFIG_DIR` folder and both forms of `ORDO_SKILL_DIRS`. The space-separated form is split on spaces and tabs. Each refusal is checked with its message and shown to change nothing. The refusals are a link into the live clone for a skill the tag lacks and a worktree with local changes. A path that exists and is not a git worktree is refused. They are also a real directory or a foreign link in a skill folder, an unknown tag, and an `ORDO_SKILL_DIRS` that names no folder. The last are a folder that is not an absolute path, and one with leading or trailing whitespace.
+ - `check_skill_layout.test.sh` checks that `check_skill_layout.py` passes a complete `SKILL.md`, the same file behind a byte-order mark or in CRLF, headings indented by up to three spaces, a `__Label.__` label and an intraword `__`, and fails one per rule of `docs/dev/skill-layout.md` it enforces: the frontmatter (an empty one and a top-level `version` key included), the title, the section order, what each section holds, the table headers, a table with no row after its separator, bold outside a label (`__init__.py` outside a code span included), a version tag `v<n>` or `<n>.<n>.<n>` in a heading, and a file that is not UTF-8, with the bold error at the line `grep -n` gives when an earlier line holds a line separator or a lone carriage return; and that headings and bold inside fenced code of any form are not read.
+ - `check_rule_inventory.test.sh` checks that `check_rule_inventory.py` passes a complete inventory and fails each error it exists to catch: a header line missing or given twice, a commit that is not a hexadecimal id or not in the repository, an old path that is not a file in that commit, an old or new path outside the repository (a sibling folder whose name starts with the repository's included), a missing new file, an old or new file that is not UTF-8, a table header or cell count that is wrong, a row after the table, an old line with text in no row (reported at line 0), a range that is malformed, out of bounds (one line with its own singular message) or backwards, a range that crosses a blank line, a heading, a frontmatter delimiter or a fence boundary, or opens more than one list item (at any depth, with any marker), table row or frontmatter key, an empty rule, an unknown section or subsection (named under the longest section the place starts with), and an item number of 0 or past the end; and that none of these is an error: a YAML comment and a fenced `~~~` line needing a row, a row of dashes that is not a separator, an inventory table without a separator row, a row naming one heading line alone, fenced rows in the inventory, an escaped pipe in a rule, section names holding ` / ` or ending in a digit, fenced lines, nested bullets, indented tables and table headers not counted as items, a heading indented by up to three spaces read as a heading in the old and the new file, and a line separator or a lone carriage return inside a line of the old file, the new file or the inventory read as part of that line.
+ - `check_coverage.test.sh` checks that `check_coverage.py` passes a complete coverage list over scratch skill folders and a scratch roadmap. The passing cases are a hidden file, a nested file, an escaped pipe, the same file name in two skills' sections, and an empty table for an empty folder. So do a skill folder that is a link, fenced lines, a backtick in a fence's info string that opens no fence, and closing hashes. Further passing cases are file names holding U+2028 or U+0085, and file names stored in one Unicode form and listed in the other. On the roadmap side, a lettered heading passes, and so does a done lettered entry written `- [x] 4.C. ` or `- [x] 7.D `. The check reads only the sections of the skills named on the command line, with a control that reads a malformed one when it is named. A skill named twice on the command line is checked once, so each of its errors is printed once. The check fails a file not listed, listed twice or in the wrong section, a listed path that is no file or is not a plain relative path, and a file cell not in backticks. Each of these marks fails too: an unknown mark, a mark naming a skill the New skills table does not hold, and an empty reason. In a table, a wrong cell count or header, a missing separator row and a row after the table fail. A section with no table fails, as does a missing or repeated section, a fence left open, or a link inside a skill folder. A file whose name holds a newline is reported as one name. In New skills, an entry that is not in the roadmap fails, as does a skill named twice or an empty cell. Such an entry may follow a roadmap heading with a trailing dot after its letter (`## 6.B.`), a line separator inside a roadmap line, or a last cell ending in `\|` with no closing pipe. The errors print sorted by line number, then by message. With `--built <skill>`, the check passes a row marked `rebuild: <skill>` whose reason names in backticks a repository path `skills/<skill>/<path>` that is a file of that folder. Spans that do not start `skills/<skill>/` are not read, and a span spelled in another Unicode form still matches. A reason that names no span starting `skills/<skill>/` fails, including one that names only the source skill's path of the same file name. A `skills/<skill>/` span fails when the folder's `find -type f` listing does not hold it. The failing spans in the test are a missing file, a path not in normal form (`skills/paper/./SKILL.md`, `skills/paper/../paper/SKILL.md`) and the folder itself (`skills/paper/.`, `skills/paper/`). Further failing spans are a folder inside the skill folder, a case variant of a file's name, and a link to a file outside the repository. A `--built` skill that is not a row of New skills fails, as does one with no row marked `rebuild: <skill>` in the sections read. Controls show that `--built` reads only the rows of the skills given to it, reads a repeated skill once, and does not read a `rebuild later:` row. The check exits 2 on each usage error the test exercises. These are no skill argument, a missing skills root, a missing skill folder, a missing coverage list and a missing roadmap. They also include a list that is not UTF-8, a list outside a git repository, and a find that fails. The `--built` usage errors are no skill after it, a name that is empty, `.` or `..` or holds `/`, and a skill with no folder under `skills/`. Every run checks that the check changed nothing under its scratch folder.
+@@ -150,12 +154,13 @@ Each command runs in a session of its own with standard input from `/dev/null`.
+ 
+ `skills/land/templates/land.sh` does the cherry-pick, the checks on `main` and the booking data as one command. A plan's ledger holds a copy of it, and `/land` refuses a ledger without one. `/plan` copies it into the ledger folder when it opens the plan and makes the `ADAPT` edits from `.agents/plan.yaml`:
+ 
++- `landing_worktree_root`: the `worktree_root` key, the folder that holds a step's worktree, `.agents/worktrees` by default.
+ - `landing_tool_path`: the directory a step's changes are scoped to, `.` for the whole tree by default.
+ - `landing_ledger_root`: the `ledger_root` key.
+ - The `ADAPT` block: the dependency install and any check beyond the verify list with their pass rules. It is empty by default, so the template runs no step that belongs to one project.
+ - The model names in the usage rows.
+ 
+-The worktree's add leaves the ledger root out, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches `main`; a ledger file that a commit of the range holds still does. The check of `land.sh` on `main` is the ledger's verify list: after the cherry-pick onto `main` it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root, and a non-zero exit fails the landing with the output of `verify.sh` printed. `/plan` copies `land.test.sh` beside it; it reads `landing_tool_path` and `landing_ledger_root` from `land.sh`, finds `verify.sh` and `usage.py` as `land.sh` does, and proves the landing on scratch repositories. In a ledger it runs only when `verify.sh` is beside it or in an installed `land` skill that holds it; the `land` skill of v1.0.0 holds no `verify.sh`.
++The worktree's add leaves the ledger root out, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches `main`; a ledger file that a commit of the range holds still does. The check of `land.sh` on `main` is the ledger's verify list: after the cherry-pick onto `main` it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root, and a non-zero exit fails the landing with the output of `verify.sh` printed. `/plan` copies `land.test.sh`, `verify.sh` and `usage.py` beside it. `land.test.sh` reads `landing_tool_path` and `landing_ledger_root` from `land.sh`, finds `verify.sh` and `usage.py` as `land.sh` does, and proves the landing on scratch repositories. The ledger's copies of `land.sh` and `land.test.sh` find `verify.sh` and `usage.py` beside themselves. Both run from the ledger with the four files beside each other, whatever `land` skill is installed.
+ 
+ `land.sh` finds `verify.sh` and `usage.py` beside itself, then in the land skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). A missing state file, or a `verify.sh` in none of those places, is refused before `main` is touched, with the places named.
+ 
+@@ -180,6 +185,8 @@ Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back
+ 
+ Check mode fails on a link into the live clone and on a link into the pinned worktree whose skill the tag lacks, and prints each one. Pin mode checks the links before it changes the worktree or any link. A link into the live clone for a skill the tag lacks is a refusal: `pin.sh` prints it, exits 1 and changes nothing. A link into the live clone for a skill the tag holds is replaced, and a link into the pinned worktree whose skill the tag lacks is removed, each with a line that names it.
+ 
++`~/.agents/skills` is not one of the folders `pin.sh` links into. `pin.sh` also reads it when `ORDO_SKILL_DIRS` is not set and it is not a folder of the list. It is compared with the list by path and, for folders that exist, by resolved path. A link there counts when its target is the pinned worktree or the live clone or inside either. The target is read as the link names it and with its folder resolved. Check mode fails on each such link and names it with `utils/pin.sh <tag>`, which removes it. Pin mode removes each one after linking and prints `pin: removed <link>, in a folder pin.sh no longer links into`. Every other entry of that folder, a real folder or a link to anywhere else, is left as it is.
++
+ ## License
+ 
+ MIT. See `LICENSE`.
+diff --git a/docs/dev/building.md b/docs/dev/building.md
+index b1834e5..3f7603e 100644
+--- a/docs/dev/building.md
++++ b/docs/dev/building.md
+@@ -5,11 +5,13 @@ Ordo has no build step. The green check is every command below passing, each run
+ ```sh
+ sh skills/land/templates/land.test.sh                  # the landing script and usage.py; the example plan.yaml files against the state template
+ sh skills/land/templates/verify.test.sh                # verify.sh on green, red and unusable verify lists
++sh skills/land/templates/remove_worktree.test.sh       # remove_worktree.sh on worktrees land.sh leaves, and its refusals
+ sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
+ sh skills/plan-retro/templates/collect_findings.test.sh
+ sh skills/repo-setup/templates/sync_rules.test.sh
+ sh skills/spec/templates/check_paths.test.sh           # check_paths.py on shared, disjoint and unusable briefs and state files
+ sh skills/spec/templates/check_step.test.sh            # check_step.py on steps with and without the user's authority
++sh skills/spec/templates/back_out.test.sh              # back_out.sh on back-outs land.sh leaves, the patch applied with --3way
+ sh utils/pin.test.sh
+ sh utils/check_skill_layout.test.sh             # the layout check on complete and broken SKILL.md files
+ sh utils/check_rule_inventory.test.sh           # the rule inventory check on complete and broken inventories
+diff --git a/docs/dev/change-standard.md b/docs/dev/change-standard.md
+index b5a9613..f17d07a 100644
+--- a/docs/dev/change-standard.md
++++ b/docs/dev/change-standard.md
+@@ -41,11 +41,13 @@ Every build, test or check command runs in the foreground with a long timeout, o
+ ```
+ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+ sh skills/land/templates/verify.test.sh 2>&1 | tail -1
++sh skills/land/templates/remove_worktree.test.sh 2>&1 | tail -1
+ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+ sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
+ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+ sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
+ sh skills/spec/templates/check_step.test.sh 2>&1 | tail -1
++sh skills/spec/templates/back_out.test.sh 2>&1 | tail -1
+ sh utils/pin.test.sh 2>&1 | tail -1
+ sh utils/check_skill_layout.test.sh 2>&1 | tail -1
+ sh utils/check_rule_inventory.test.sh 2>&1 | tail -1
+diff --git a/skills/land/SKILL.md b/skills/land/SKILL.md
+index c32152e..397c153 100644
+--- a/skills/land/SKILL.md
++++ b/skills/land/SKILL.md
+@@ -1,18 +1,18 @@
+ ---
+ name: land
+-description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the orchestrator's usage row, the booking in the plan, the state file rewritten, the landing report, the commit by explicit path list, the worktree and branch removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
++description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the orchestrator's usage row, the booking in the plan, the worktree and its branches removed, the state file rewritten, the landing report, the commit by explicit path list. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
+ metadata:
+-  version: "1.7.0"
++  version: "1.8.0"
+ ---
+ 
+ # Land a step
+ 
+-`/land <entry> <step>` brings a refuted step from its worktree onto main. It leaves behind the step on main in one commit with its booking and its landing report, the state file rewritten, and the step's worktree and branch removed. After a red line no fix inside the brief closes, it leaves the step out of main instead, with its worktree and branch kept and the failure recorded in the step's Step 0 in `plan.md`.
++`/land <entry> <step>` brings a refuted step from its worktree onto main. It leaves behind the step on main in one commit with its booking and its landing report. The state file is rewritten, and the step's worktree and branches are removed. After a red line no fix inside the brief closes, it leaves the step out of main instead. The worktree and branches are then kept for `/spec`, and the failure is recorded in the step's Step 0 in `plan.md`.
+ 
+ ## Quick start
+ 
+ ```
+-/land <entry> <step>     the only way a step reaches main: bring the refuted step over, check it there, book it, commit it, remove its worktree
++/land <entry> <step>     the only way a step reaches main: bring the refuted step over, check it there, book it, remove its worktree, commit it
+ ```
+ 
+ ## Use instead
+@@ -57,8 +57,12 @@ metadata:
+    - A red line that a fix inside the brief closes is fixed on main, counted as a fix at landing, and named in the booking with its cause.
+    - Any other red line ends the landing there, leaving main in a state the resumption rules of `plan-orchestration` recognise.
+    - It takes the step back out of main: `git restore --staged --worktree -- <paths>` for changed files, `git rm --cached` and delete for added ones, both on the ask list, so the user is asked.
+-   - The dispatch block is then set to `landing: backed-out`, the step's worktree and branch are kept, and the step stays unticked in `plan.md`.
+-   - The failure is never sent back to the builder: it is recorded in the step's Step 0 in `plan.md`, and the step keeps its line and its tag and is worked again as that step, through `/spec`, with no new ruling; the failure goes to the user as an open item only when only the user can decide what to do.
++   - The dispatch block is then set to `landing: backed-out`, the step's worktree and branches are kept, and the step stays unticked in `plan.md`.
++   - The failure is never sent back to the builder: it is recorded in the step's Step 0 in `plan.md`.
++   - The step keeps its line and its tag, and is worked again as that step, with no new ruling.
++   - The failure goes to the user as an open item only when only the user can decide what to do.
++   - The state file and `plan.md` are then committed by path, a resume point. The commit also holds the other ledger records the session wrote since the last one.
++   - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+ 7. Open the changed views, as "The look" says.
+ 8. Run the A/B: the benchmark commands the configuration block's `bench:` line names, the staged base binary and the new one run alternately after warm-ups, at least ten runs each.
+    - The mean, the standard deviation and the standard error of the difference are written to the scratchpad and quoted in the booking.
+@@ -66,22 +70,24 @@ metadata:
+ 9. Produce the orchestrator's usage row with `templates/usage.py <session log> <from> <to>`: the session log is the running session's own, `<from>` the previous landing commit's `git log -1 --format=%cI`, `<to>` `date -Iseconds`.
+    - The Usage section of `plan-orchestration` says where the session log is.
+ 10. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B, the usage row; tick the step.
+-11. Rewrite the state file: the dispatch block cleared, the position line, the usage rows, the open items as they stand.
++11. Remove the step's worktree and branches with this skill's `templates/remove_worktree.sh`, as "Removing a step's worktree" says, while the dispatch entry still names the worktree.
++    - `-D` deletes the branches, since the cherry-pick made new commits and neither branch is an ancestor of main.
++    - Then rewrite the state file: the step's dispatch entry removed, the position line, the usage rows, the open items as they stand.
+ 12. Write the landing report, `agents/reviews/<step>-landing.md`, so it lands with the step and stands alone on disk.
+     - It opens with the position line: the roadmap entry with its title, the plan step as "step n of m" with its name, and the next step.
+     - Then the open items, verbatim, which hold only what the user must rule on.
+     - Then the check of Steps 1 with what it showed, anything NOT DONE, what landed with the commit, what was found, and what is next.
+     - Under the loop it is also the report the orchestrator prints; run by hand, it is the message that ends the turn.
+-13. Commit by explicit path: every path from `git diff --cached --name-only` plus the ledger files, the landing report among them.
++13. Commit by explicit path, a resume point: every path from `git diff --cached --name-only`.
++    - The commit also holds the ledger files the session wrote since the last resume point, the landing report among them.
+     - The paths are written out in the `git add -- <path> ...` command, never through a shell variable.
+     - Deleted paths are already staged by the cherry-pick and are not re-added.
+     - The message is in the repository's shape.
+     - The message's last bullet is the booking.
+     - No attribution.
+     - Never push.
+-    - Afterwards `git status --short` shows nothing of the step's and nothing of the ledger's.
+-    - A ledger file left modified means the commit missed the booking, and the head is amended with the ledger paths.
+-14. `git worktree remove <worktree_root>/<step>` and `git branch -D <step>`: `-D`, since the cherry-pick made a new commit and the branch is never an ancestor of main.
++    - Afterwards `git status --short` shows nothing of the step's and no ledger file the session wrote.
++    - Such a ledger file left modified means the commit missed the booking, and the head is amended with its path.
+ 
+ ## The look
+ 
+@@ -93,12 +99,13 @@ metadata:
+ 
+ ## The landing script
+ 
+-- A ledger holds `land.sh`, copied from `templates/land.sh` with its `ADAPT` edits made; `/plan` copies it and `templates/land.test.sh` into the ledger when it opens a plan.
++- A ledger holds `land.sh`, copied from `templates/land.sh` with its `ADAPT` edits made; `/plan` copies it, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` into the ledger when it opens a plan.
+ - `/land` refuses a ledger without it ("Stops").
+ - It does Steps 3, 4 and 6 as one command, run from the repository root as `sh <ledger>/land.sh <step> <base>`.
+ - Its check on main (Steps 6) is the ledger's verify list: after main's cherry-pick it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root, and a non-zero exit fails the landing with the output of `verify.sh` printed.
+ - It finds `verify.sh` and `usage.py` beside itself, then in this skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`); a missing state file, or a `verify.sh` in none of those places, is refused before main is touched, with the places named.
+-- Its `ADAPT` edits are four:
++- Its `ADAPT` edits are five:
++  - `landing_worktree_root`, `.agents/plan.yaml`'s `worktree_root`, the folder that holds the step's worktree `<worktree_root>/<step>`, `.agents/worktrees` by default;
+   - `landing_tool_path`, the folder the worktree's add is scoped to, `.` (the whole tree) by default;
+   - `landing_ledger_root`, `.agents/plan.yaml`'s `ledger_root`, which the worktree's add leaves out;
+   - the `ADAPT` block, for the dependency install the verify list needs and any check beyond the verify list, which runs nothing by default;
+@@ -106,10 +113,24 @@ metadata:
+ - A browser check in the `ADAPT` block runs only when `landing_browser` is 1, which `--no-browser` sets to 0.
+ - It prints the diff stat, the usage rows (with `--session <session log> --since <previous landing commit time>`, the orchestrator's row through `usage.py`) and the staged paths.
+ - `templates/land.test.sh` proves it on scratch repositories, its verify list run and its lookup of `verify.sh` included, that its defaults run no browser step and no line count, and that a ledger file left uncommitted in the worktree never reaches main; it proves `templates/usage.py` on a Claude Code log and its refusal of a file that is not one.
+-- The copy of `templates/land.test.sh` in the ledger finds `verify.sh` and `usage.py` as `land.sh` does, and runs from there only when `verify.sh` is beside it or in an installed `land` skill that holds it; the `land` skill of v1.0.0 holds no `verify.sh`.
++- The ledger's copies of `land.sh` and `land.test.sh` find `verify.sh` and `usage.py` beside themselves. Both run from the ledger with the four files beside each other, whatever `land` skill is installed.
+ - `templates/verify.test.sh` proves `templates/verify.sh` on scratch state files, starting it under `sh` and, when it is installed, `dash`.
+ - Its zero exit passes the checks on main (Steps 6). It never passes the look (Steps 7), which it does not do.
+ 
++## Removing a step's worktree
++
++- `/land` at Steps 11 runs `sh templates/remove_worktree.sh <state file> <step>` from the repository root of the main checkout.
++- The `spec` skill's `templates/back_out.sh` runs it the same way for a step taken back out of main.
++- It reads the step's dispatch entry and takes its `worktree`. The branches are the worktree folder's name and that name with `-land` after it, as `land.sh` names them. No path or branch is built from the step id.
++- From inside the worktree, `git status --porcelain -z --untracked-files=all` lists every change, untracked files included.
++- Each path must be under the ledger root, `.agents/plan.yaml`'s `ledger_root` (in the `projects:` form, the one that holds the state file's folder). The ledger is written only on main, so its copies in the worktree are records already saved there or copies the orchestrator put there.
++- Exit 0: it ran `git worktree remove --force` on the worktree, then `git branch -D` on each branch that exists. It printed `removed: worktree <path>` and `removed: branch <name>` for each.
++- The `git worktree remove --force` inside it stays on the ask list, so the user is asked. Without `--force`, git refuses a worktree holding untracked or modified files.
++- Exit 1 is a refusal ("Stops"): `refused: <path> is outside the ledger root <root>` for each such path, and nothing removed; or a `failed:` line for a git command that failed.
++- Exit 64 names on its `error:` line an argument, a state file, an entry, `.agents/plan.yaml` or a worktree it cannot use. It also names a run from anywhere but the main checkout's root.
++- Exit 69 names a missing `python3` or PyYAML.
++- `templates/remove_worktree.test.sh` proves it on scratch repositories shaped as `land.sh` leaves a step.
++
+ ## Stops
+ 
+ | Stop | When | What it shows | What resumes it |
+@@ -119,16 +140,19 @@ metadata:
+ | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
+ | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
+ | No dispatch block | The state file holds no dispatch block naming this step | That the block is missing | `/spec` for the step |
+-| No landing script | The ledger folder holds no `land.sh` | That it is missing, and `templates/land.sh` to copy | `templates/land.sh` and `templates/land.test.sh` copied into the ledger with their `ADAPT` edits made, as the `plan` skill's Steps 5 says, then `/land` again |
++| No landing script | The ledger folder holds no `land.sh` | That it is missing, and `templates/land.sh` to copy | `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` copied into the ledger, with the `ADAPT` edits made, as the `plan` skill's Steps 5 says, then `/land` again |
+ | The step not ready | No builder's report; or no refuter report that is either newer than the builder's report or, after the step's repair rounds (up to `repair_rounds`, or one more under plan-orchestration's exception), carrying a run over the last round when `refute_after_repair: yes` (the orchestrator's read of the round when `no`); or a run over the last round owed and missing; or a finding, the last run's included, neither closed under the refuter report's Closed heading nor raised to the user as an open item | Which of these it is | What is missing supplied, then `/land` again |
+ | Main not clean | On main something staged, a git operation in progress, or one of the step's paths carrying an unrelated change of the user's | What it saw, the user's unrelated changes listed by path | Main put right, then `/land` again |
+ | Agents still running | The check of Steps 1 fails: an agent still listed | Each one left | Each one stopped, then `/land` again |
++| A worktree that cannot be removed | At Steps 11, `templates/remove_worktree.sh` exits 1, or 64 or 69 ("Removing a step's worktree") | Its `refused:`, `failed:` or `error:` lines | The cause put right, such as the path moved out of the worktree or removed by the user, then Steps 11 again and the landing goes on |
+ 
+ - The first row is a stop: it leaves an open item.
+ - The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.
+-- The rows after those two are refusals: they come before main is touched.
++- The rows after those two, up to the last, are refusals: they come before main is touched.
++- The last row is a refusal before the landing's commit: main holds the cherry-pick and the booking. Removing the worktree again resumes the landing at Steps 11.
+ - A refusal names its cause and leaves nothing.
+-- A red line recorded in the step's Step 0 is not a stop: the step is out of main, keeps its line and its tag, and is worked again as that step, through `/spec`, with no new ruling.
++- A red line recorded in the step's Step 0 is not a stop: the step is out of main and keeps its line and its tag.
++- It is worked again as that step, with no new ruling, through `/spec`. `/spec` saves its work as a patch and prepares it again from main's head (the `spec` skill's "Steps / A step taken back out of main").
+ 
+ ## Anti-patterns
+ 
+diff --git a/skills/land/templates/land.sh b/skills/land/templates/land.sh
+index 949e0cb..b3b7764 100644
+--- a/skills/land/templates/land.sh
++++ b/skills/land/templates/land.sh
+@@ -1,9 +1,10 @@
+ #!/bin/sh
+ # Run a reviewed package through a plan's landing checks and print its booking data.
+-# A plan copies this file into its ledger folder and makes the ADAPT edits: the tool directory
+-# (default ., the whole tree), the ledger root, the ADAPT block for the dependency install and any
+-# check beyond the verify list with their pass rules (default: nothing runs), and the model names
+-# in the rows.
++# A plan copies this file into its ledger folder, with land.test.sh, verify.sh and usage.py
++# beside it, and makes the ADAPT edits: the worktree root (default .agents/worktrees; the package's
++# worktree is <worktree root>/<pkg>), the tool directory (default ., the whole tree), the ledger
++# root, the ADAPT block for the dependency install and any check beyond the verify list with their
++# pass rules (default: nothing runs), and the model names in the rows.
+ #
+ # Its check on main is the ledger's verify list: after main's cherry-pick it runs
+ # sh <verify.sh> <the orchestrator-state.md beside this script> from the repository root, and a
+@@ -112,13 +113,22 @@ $landing_lock_bound" 64
+ esac
+ 
+ landing_root=$(pwd -P)
+-landing_worktree=$landing_root/.agents/worktrees/$landing_pkg
++# ADAPT: .agents/plan.yaml's worktree_root, relative to the repository root.
++landing_worktree_root=.agents/worktrees
+ # ADAPT: the tool directory the package's paths are scoped to, relative to the repository root;
+ # . is the whole tree.
+ landing_tool_path=.
+ # ADAPT: .agents/plan.yaml's ledger_root, relative to the repository root.
+ landing_ledger_root=.scratch
+ landing_tool=$landing_root/$landing_tool_path
++case "$landing_worktree_root" in
++    '' | /* | ../* | */.. | */../* | .. | *'
++'*)
++        fail "preflight failed: landing_worktree_root must be a folder inside the repository: \
++$landing_worktree_root"
++        ;;
++esac
++landing_worktree=$landing_root/${landing_worktree_root%/}/$landing_pkg
+ 
+ # The ledger root as plan.yaml may write it, with every leading ./ and every trailing / removed,
+ # so the add's pathspec and the checkout's ignore pattern name the folder itself. A refusal
+diff --git a/skills/land/templates/land.test.sh b/skills/land/templates/land.test.sh
+index 18234d6..8c9173f 100644
+--- a/skills/land/templates/land.test.sh
++++ b/skills/land/templates/land.test.sh
+@@ -5,7 +5,8 @@
+ # runs (the bounded wait, shortened through LANDING_LOCK_WAIT), a stale lock, a lock gone before the
+ # bound, a stop at the bound after the worktree's checkout and a rerun that lands, a rerun refused
+ # while the landing branch holds a change made by hand or main holds staged changes, a bound that
+-# is not a whole number, a tool directory set on the ADAPT line, a ledger inside the repository
++# is not a whole number, a tool directory set on the ADAPT line, a worktree root set on the ADAPT
++# line and one that is not a folder inside the repository refused, a ledger inside the repository
+ # whose files left uncommitted in the worktree never reach main, under the template's ledger root, under one
+ # holding pattern characters and under one written with a trailing / or a leading ./, and a ledger root that is not a folder inside the repository
+ # refused. Each landing starts land.sh
+@@ -18,8 +19,9 @@
+ # unreadable. Check the
+ # example plan.yaml files against the state template: inside an Ordo checkout a missing example
+ # fails, and only a copy outside one skips the check.
+-# A plan copies this file beside its land.sh; the expected rows follow the ADAPT edits made there.
+-# verify.sh and usage.py are found as land.sh finds them, so the copy runs from the ledger.
++# A plan copies this file, verify.sh and usage.py beside its land.sh; the expected rows follow the
++# ADAPT edits made there. verify.sh and usage.py are found as land.sh finds them, beside this file
++# first, so the copy runs from the ledger whatever land skill is installed.
+ 
+ set -u
+ 
+@@ -46,9 +48,12 @@ trap 'rm -rf "$test_root"' 0 1 2 3 15
+ test_root=$(CDPATH= cd "$test_root" && pwd -P) || fail "could not resolve the scratch directory"
+ script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
+ land_script=$script_dir/land.sh
+-# The fixtures follow the tool directory and the ledger root land.sh names on its ADAPT lines.
++# The fixtures follow the worktree root, the tool directory and the ledger root land.sh names on
++# its ADAPT lines.
+ tool_path=$(sed -n 's/^landing_tool_path=\([^ ]*\).*/\1/p' "$land_script")
+ [ -n "$tool_path" ] || fail "could not read landing_tool_path from $land_script"
++worktree_root=$(sed -n 's/^landing_worktree_root=\([^ ]*\).*/\1/p' "$land_script")
++[ -n "$worktree_root" ] || fail "could not read landing_worktree_root from $land_script"
+ ledger_root=$(sed -n 's/^landing_ledger_root=\([^ ]*\).*/\1/p' "$land_script")
+ [ -n "$ledger_root" ] || fail "could not read landing_ledger_root from $land_script"
+ 
+@@ -127,7 +132,7 @@ initialise_repo() {
+         git config user.email "landing-test@example.invalid"
+         git add "$tool_path"
+         git commit -q -m "Initial fixture"
+-        mkdir -p .agents/worktrees
++        mkdir -p "$worktree_root"
+     ) || fail "could not initialise scratch repository"
+ }
+ 
+@@ -145,15 +150,15 @@ initialise_repo "$clean_repo"
+ clean_base=$(cd "$clean_repo" && git rev-parse HEAD) || fail "could not read clean base"
+ (
+     cd "$clean_repo" || exit 1
+-    git worktree add -q -b clean .agents/worktrees/clean "$clean_base"
++    git worktree add -q -b clean "$worktree_root/clean" "$clean_base"
+ ) || fail "could not create clean worktree"
+-printf 'committed\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/committed.txt"
++printf 'committed\n' >"$clean_repo/$worktree_root/clean/$tool_path/committed.txt"
+ (
+-    cd "$clean_repo/.agents/worktrees/clean" || exit 1
++    cd "$clean_repo/$worktree_root/clean" || exit 1
+     git add "$tool_path/committed.txt"
+     git commit -q -m wip
+ ) || fail "could not create clean package commit"
+-printf 'pending\n' >"$clean_repo/.agents/worktrees/clean/$tool_path/pending.txt"
++printf 'pending\n' >"$clean_repo/$worktree_root/clean/$tool_path/pending.txt"
+ clean_session=$test_root/clean-session.jsonl
+ write_session "$clean_session"
+ # An npm on PATH that records each call, for the landing with the template's defaults below.
+@@ -222,15 +227,15 @@ printf 'base\n' >"$conflict_repo/$tool_path/conflict.txt"
+ conflict_base=$(cd "$conflict_repo" && git rev-parse HEAD) || fail "could not read conflict base"
+ (
+     cd "$conflict_repo" || exit 1
+-    git worktree add -q -b conflict .agents/worktrees/conflict "$conflict_base"
++    git worktree add -q -b conflict "$worktree_root/conflict" "$conflict_base"
+ ) || fail "could not create conflict worktree"
+-printf 'package\n' >"$conflict_repo/.agents/worktrees/conflict/$tool_path/conflict.txt"
++printf 'package\n' >"$conflict_repo/$worktree_root/conflict/$tool_path/conflict.txt"
+ (
+-    cd "$conflict_repo/.agents/worktrees/conflict" || exit 1
++    cd "$conflict_repo/$worktree_root/conflict" || exit 1
+     git add "$tool_path/conflict.txt"
+     git commit -q -m wip
+ ) || fail "could not create conflicting package commit"
+-printf 'pending\n' >"$conflict_repo/.agents/worktrees/conflict/$tool_path/pending.txt"
++printf 'pending\n' >"$conflict_repo/$worktree_root/conflict/$tool_path/pending.txt"
+ printf 'main\n' >"$conflict_repo/$tool_path/conflict.txt"
+ (
+     cd "$conflict_repo" || exit 1
+@@ -251,7 +256,7 @@ fi
+ assert_contains "$conflict_output" "worktree git cherry-pick failed" "conflict step"
+ assert_contains "$conflict_output" "Conflicting paths:" "conflict heading"
+ assert_contains "$conflict_output" "${tool_prefix}conflict.txt" "conflict path"
+-conflict_branch=$(cd "$conflict_repo/.agents/worktrees/conflict" && git branch --show-current) || fail "could not read conflict branch"
++conflict_branch=$(cd "$conflict_repo/$worktree_root/conflict" && git branch --show-current) || fail "could not read conflict branch"
+ if [ "$conflict_branch" != "conflict-land" ]; then
+     fail "conflict worktree is on $conflict_branch, expected conflict-land"
+ fi
+@@ -298,11 +303,11 @@ committed_package() {
+     package_base=$(cd "$package_repo" && git rev-parse HEAD) || fail "could not read the $1 base"
+     (
+         cd "$package_repo" || exit 1
+-        git worktree add -q -b "$1" ".agents/worktrees/$1" "$package_base"
++        git worktree add -q -b "$1" "$worktree_root/$1" "$package_base"
+     ) || fail "could not create the $1 worktree"
+-    printf 'committed\n' >"$package_repo/.agents/worktrees/$1/$tool_path/committed.txt"
++    printf 'committed\n' >"$package_repo/$worktree_root/$1/$tool_path/committed.txt"
+     (
+-        cd "$package_repo/.agents/worktrees/$1" || exit 1
++        cd "$package_repo/$worktree_root/$1" || exit 1
+         git add "$tool_path/committed.txt"
+         git commit -q -m wip
+     ) || fail "could not create the $1 package commit"
+@@ -344,7 +349,7 @@ finish_landing() {
+ 
+ # The worktree's git directory, as land.sh reads it from the worktree's .git file.
+ worktree_git_dir() {
+-    sed -n 's/^gitdir: //p' "$test_root/$1/.agents/worktrees/$1/.git"
++    sed -n 's/^gitdir: //p' "$test_root/$1/$worktree_root/$1/.git"
+ }
+ 
+ # A builder that committed everything leaves nothing staged: the landing makes no wip commit. An
+@@ -361,7 +366,7 @@ committed_staged=$(cd "$test_root/committed" && git diff --cached --name-only) |
+ [ "$committed_staged" = "${tool_prefix}committed.txt" ] ||
+     fail "committed staged paths differ: [$committed_staged]"
+ committed_log=$(
+-    cd "$test_root/committed/.agents/worktrees/committed" && git log --format=%s main..committed-land
++    cd "$test_root/committed/$worktree_root/committed" && git log --format=%s main..committed-land
+ ) || fail "could not read the committed landing branch"
+ [ "$committed_log" = wip ] ||
+     fail "the landing branch holds commits other than the builder's: [$committed_log]"
+@@ -435,7 +440,7 @@ finish_landing resumed 30 "the lock wait did not stop at its bound"
+ assert_contains "$landing_output" "index lock failed: $resumed_lock still held after 2 s of waiting" \
+     "resumed stop"
+ assert_contains "$landing_output" "main is untouched; the worktree is on resumed-land" "resumed state"
+-resumed_branch=$(cd "$test_root/resumed/.agents/worktrees/resumed" && git branch --show-current) ||
++resumed_branch=$(cd "$test_root/resumed/$worktree_root/resumed" && git branch --show-current) ||
+     fail "could not read the resumed worktree branch"
+ [ "$resumed_branch" = resumed-land ] || fail "resumed: the stop left the worktree on $resumed_branch"
+ rm -f "$resumed_lock"
+@@ -454,7 +459,7 @@ printf 'resumed: a lock stop after the checkout, then landing again lands, exit
+ # first while the change is not committed, then once it is a commit of its own.
+ committed_package handmade
+ handmade_lock=$test_root/handmade/.git/index.lock
+-handmade_worktree=$test_root/handmade/.agents/worktrees/handmade
++handmade_worktree=$test_root/handmade/$worktree_root/handmade
+ : >"$handmade_lock"
+ start_landing handmade LANDING_LOCK_WAIT=2
+ finish_landing handmade 30 "the lock wait did not stop at its bound"
+@@ -505,7 +510,7 @@ finish_landing staged-main 60 "the landing did not end"
+ assert_contains "$landing_output" \
+     "preflight failed: main holds staged or unmerged changes, so staged-main-land is kept" \
+     "staged-main refusal"
+-staged_main_worktree=$test_root/staged-main/.agents/worktrees/staged-main
++staged_main_worktree=$test_root/staged-main/$worktree_root/staged-main
+ staged_main_branch=$(cd "$staged_main_worktree" && git branch --show-current) ||
+     fail "could not read the staged-main worktree branch"
+ [ "$staged_main_branch" = staged-main-land ] ||
+@@ -648,9 +653,9 @@ ledger_case() {
+     ledger_base=$(cd "$ledger_repo" && git rev-parse HEAD) || fail "$1: could not read the base"
+     (
+         cd "$ledger_repo" || exit 1
+-        git worktree add -q -b "$1" ".agents/worktrees/$1" "$ledger_base"
++        git worktree add -q -b "$1" "$worktree_root/$1" "$ledger_base"
+     ) || fail "$1: could not create the worktree"
+-    ledger_tree=$ledger_repo/.agents/worktrees/$1
++    ledger_tree=$ledger_repo/$worktree_root/$1
+     printf 'committed\n' >"$ledger_tree/${tool_prefix}committed.txt"
+     ledger_expected=${tool_prefix}committed.txt
+     if [ -n "${4:-}" ]; then
+@@ -731,6 +736,51 @@ done
+ printf 'ledger root: empty, ., .., ./, /, absolute and leaving the repository refused, exit 1\n'
+ ledger_script=$ledger/land.sh
+ 
++# A plan that sets the worktree root on the ADAPT line, written with a trailing slash, lands the
++# package's worktree from that folder. Red when land.sh builds the worktree's path from a fixed
++# folder (the preflight then finds no worktree).
++rooted_dir=$test_root/rooted-script
++sed 's#^landing_worktree_root=[^ ]*#landing_worktree_root=work/trees/#' "$land_script" \
++    >"$test_root/rooted-land.sh" || fail "could not write the land.sh with a worktree root"
++printf 'test -f %scommitted.txt\n' "$tool_prefix" | make_ledger "$rooted_dir" "$test_root/rooted-land.sh"
++rooted_repo=$test_root/rooted
++initialise_repo "$rooted_repo"
++rooted_base=$(cd "$rooted_repo" && git rev-parse HEAD) || fail "could not read the rooted base"
++(
++    cd "$rooted_repo" || exit 1
++    git worktree add -q -b rooted work/trees/rooted "$rooted_base"
++) || fail "could not create the rooted worktree"
++printf 'committed\n' >"$rooted_repo/work/trees/rooted/${tool_prefix}committed.txt"
++(
++    cd "$rooted_repo" || exit 1
++    HOME="$scratch_home" sh "$rooted_dir/land.sh" rooted "$rooted_base" --no-browser
++) >"$test_root/rooted.out" 2>&1
++rooted_status=$?
++[ "$rooted_status" -eq 0 ] ||
++    fail "a worktree root set on the ADAPT line: exit $rooted_status: $(cat "$test_root/rooted.out")"
++rooted_staged=$(cd "$rooted_repo" && git diff --cached --name-only) ||
++    fail "could not read the rooted staged paths"
++[ "$rooted_staged" = "${tool_prefix}committed.txt" ] || fail "rooted staged paths differ: [$rooted_staged]"
++printf 'rooted: a worktree under work/trees/ set on the ADAPT line landed, exit 0\n'
++
++# A worktree root that is not a folder inside the repository is refused before main is touched.
++for bad_root in '' /tmp/trees ../trees a/../../trees; do
++    sed "s#^landing_worktree_root=[^ ]*#landing_worktree_root='$bad_root'#" "$land_script" \
++        >"$test_root/bad-trees-land.sh" || fail "could not write the land.sh with a bad worktree root"
++    printf 'true\n' | make_ledger "$test_root/bad-trees-ledger" "$test_root/bad-trees-land.sh"
++    (
++        cd "$rooted_repo" || exit 1
++        HOME="$scratch_home" sh "$test_root/bad-trees-ledger/land.sh" rooted "$rooted_base" --no-browser
++    ) >"$test_root/bad-trees.out" 2>&1
++    bad_trees_status=$?
++    [ "$bad_trees_status" -eq 1 ] || fail "worktree root [$bad_root]: exit $bad_trees_status, expected 1"
++    assert_contains "$(cat "$test_root/bad-trees.out")" \
++        "preflight failed: landing_worktree_root must be a folder inside the repository: $bad_root" \
++        "worktree root [$bad_root]"
++    rm -rf "$test_root/bad-trees-ledger"
++done
++printf 'worktree root: empty, absolute and leaving the repository refused, exit 1\n'
++
+ # A plan that points the ADAPT line at another tool directory stages that directory and nothing else.
+ adapted_dir=$test_root/adapted-script
+ sed 's#^landing_tool_path=[^ ]*#landing_tool_path=tools/demo#' "$land_script" \
+@@ -743,10 +793,10 @@ initialise_repo "$adapted_repo"
+ adapted_base=$(cd "$adapted_repo" && git rev-parse HEAD) || fail "could not read adapted base"
+ (
+     cd "$adapted_repo" || exit 1
+-    git worktree add -q -b adapted .agents/worktrees/adapted "$adapted_base"
++    git worktree add -q -b adapted "$worktree_root/adapted" "$adapted_base"
+ ) || fail "could not create adapted worktree"
+-printf 'pending\n' >"$adapted_repo/.agents/worktrees/adapted/$tool_path/pending.txt"
+-printf 'outside\n' >"$adapted_repo/.agents/worktrees/adapted/outside.txt"
++printf 'pending\n' >"$adapted_repo/$worktree_root/adapted/$tool_path/pending.txt"
++printf 'outside\n' >"$adapted_repo/$worktree_root/adapted/outside.txt"
+ (
+     cd "$adapted_repo" || exit 1
+     sh "$adapted_dir/land.sh" adapted "$adapted_base" --no-browser
+diff --git a/skills/land/templates/remove_worktree.sh b/skills/land/templates/remove_worktree.sh
+new file mode 100644
+index 0000000..566e89b
+--- /dev/null
++++ b/skills/land/templates/remove_worktree.sh
+@@ -0,0 +1,207 @@
++#!/bin/sh
++# Remove a step's worktree and its branches, once every change in the worktree is a ledger copy.
++#
++# Usage: sh remove_worktree.sh <state file> <step>, from the repository root of the main checkout.
++#
++# The worktree is the worktree: key of the step's entry in the dispatch block of the state file
++# (the dispatch: key of its first yaml block that has one: an entry, or a list of entries, each
++# with a step: key), a path relative to the repository root. The branches are the worktree
++# folder's name and that name with -land after it, as land.sh names them from its package
++# argument; no path or branch is built from the step id.
++#
++# From inside the worktree, git status --porcelain -z --untracked-files=all lists every change,
++# untracked files included, both paths of a rename. Each path must be under the ledger root: the
++# ledger_root of .agents/plan.yaml, or, in its projects: form, the project's ledger_root that the
++# state file's folder sits under. The ledger is written only on main, so its copies in the
++# worktree are records already saved there or copies the orchestrator put there. A path outside
++# the ledger root prints "refused: <path> is outside the ledger root", and the script exits 1
++# having removed nothing.
++#
++# Otherwise it runs git worktree remove --force on the worktree (without --force, git refuses a
++# worktree holding untracked or modified files), then git branch -D on each branch that exists,
++# and checks after each that the thing is gone. It prints one line per thing removed:
++# "removed: worktree <path>", "removed: branch <name>".
++#
++# Exit status: 0 removed; 1 refused, or a git command failed, with its output; 64 an argument, a
++# state file, a dispatch entry, .agents/plan.yaml or a worktree it cannot use, or a run from
++# anywhere but the main checkout's root; 69 python3 or PyYAML missing.
++
++if ! command -v python3 >/dev/null 2>&1; then
++    printf 'error: python3 is not on PATH\n' >&2
++    exit 69
++fi
++exec python3 - "$@" <<'PY'
++import os
++import re
++import subprocess
++import sys
++
++STEP = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
++FENCE = re.compile(r" {0,3}(`{3,}|~{3,})\s*([^`\s]*)[^`]*")
++
++
++class Refusal(Exception):
++    """An input the script cannot use; the message says why."""
++
++
++def git(*args, cwd=None):
++    return subprocess.run(("git",) + args, cwd=cwd, capture_output=True)
++
++
++def yaml_blocks(path):
++    """Return the text of each yaml or yml fenced block of the file, in order."""
++    try:
++        with open(path, encoding="utf-8") as handle:
++            text = handle.read()
++    except UnicodeDecodeError:
++        raise Refusal(f"{path} is not UTF-8")
++    except OSError as error:
++        raise Refusal(f"cannot read {path}: {error.strerror or error}")
++    blocks, fence, lines = [], None, None
++    for line in text.split("\n"):
++        if fence is None:
++            match = FENCE.fullmatch(line)
++            if match:
++                fence = match.group(1)
++                lines = [] if match.group(2).lower() in ("yaml", "yml") else None
++        elif re.fullmatch(r" {0,3}" + re.escape(fence[0]) + "{" + str(len(fence)) + r",}\s*", line):
++            if lines is not None:
++                blocks.append("\n".join(lines))
++            fence, lines = None, None
++        elif lines is not None:
++            lines.append(line)
++    if fence is not None:
++        raise Refusal(f"a fenced block of {path} is not closed")
++    return blocks
++
++
++def entry_of(state, step):
++    import yaml
++
++    for block in yaml_blocks(state):
++        try:
++            data = yaml.safe_load(block)
++        except yaml.YAMLError as error:
++            raise Refusal(f"a yaml block of {state} is not valid YAML: "
++                          + str(error).replace("\n", " "))
++        if isinstance(data, dict) and "dispatch" in data:
++            break
++    else:
++        raise Refusal(f"no yaml block of {state} has a dispatch: key")
++    dispatch = data["dispatch"]
++    entries = [dispatch] if isinstance(dispatch, dict) else dispatch
++    if not isinstance(entries, list):
++        entries = []
++    for entry in entries:
++        if isinstance(entry, dict) and str(entry.get("step")) == step:
++            return entry
++    raise Refusal(f"the dispatch block of {state} has no entry for step {step}")
++
++
++def ledger_root(root, state):
++    import yaml
++
++    config = os.path.join(root, ".agents", "plan.yaml")
++    try:
++        with open(config, encoding="utf-8") as handle:
++            data = yaml.safe_load(handle)
++    except (OSError, UnicodeDecodeError, yaml.YAMLError) as error:
++        raise Refusal(f"cannot read .agents/plan.yaml: {error}")
++    candidates = []
++    if isinstance(data, dict):
++        candidates.append(data.get("ledger_root"))
++        projects = data.get("projects")
++        if isinstance(projects, dict):
++            projects = list(projects.values())
++        for project in projects if isinstance(projects, list) else []:
++            if isinstance(project, dict):
++                candidates.append(project.get("ledger_root"))
++    folder = os.path.relpath(os.path.dirname(os.path.realpath(state)), root)
++    for candidate in candidates:
++        if not isinstance(candidate, str) or not candidate.strip():
++            continue
++        normal = os.path.normpath(candidate)
++        if normal.startswith("..") or os.path.isabs(normal) or normal == ".":
++            continue
++        if folder == normal or folder.startswith(normal + "/"):
++            return normal
++    raise Refusal(f"no ledger_root of .agents/plan.yaml holds the state file's folder {folder}")
++
++
++def changed_paths(worktree):
++    """Every path git status lists in the worktree, both paths of a rename or a copy."""
++    result = git("status", "--porcelain", "-z", "--untracked-files=all", cwd=worktree)
++    if result.returncode != 0:
++        raise Refusal(f"git status failed in {worktree}: "
++                      + result.stderr.decode(errors="replace").strip())
++    fields = result.stdout.decode("utf-8", errors="surrogateescape").split("\0")
++    paths, index = [], 0
++    while index < len(fields):
++        field = fields[index]
++        index += 1
++        if not field:
++            continue
++        status, path = field[:2], field[3:]
++        paths.append(path)
++        if "R" in status or "C" in status:
++            paths.append(fields[index])
++            index += 1
++    return paths
++
++
++def main(argv):
++    if len(argv) != 2:
++        raise Refusal("usage: remove_worktree.sh <state file> <step>")
++    state, step = argv
++    if not STEP.fullmatch(step):
++        raise Refusal(f"step '{step}' is not a step name: letters, digits, '.', '_' and '-'")
++    try:
++        import yaml  # noqa: F401
++    except ImportError:
++        print("error: python3 cannot import yaml (PyYAML)", file=sys.stderr)
++        return 69
++    root = os.getcwd()
++    if not os.path.isdir(os.path.join(root, ".git")):
++        raise Refusal("run this script from the repository root of the main checkout")
++    root = os.path.realpath(root)
++    entry = entry_of(state, step)
++    worktree = entry.get("worktree")
++    if not isinstance(worktree, str) or not worktree.strip():
++        raise Refusal(f"the entry of step {step} has no worktree: key")
++    path = os.path.realpath(os.path.join(root, worktree))
++    listed = git("worktree", "list", "--porcelain", cwd=root).stdout.decode(errors="replace")
++    if path == root or f"worktree {path}\n" not in listed + "\n" or not os.path.isdir(path):
++        raise Refusal(f"{worktree} is not a worktree of this repository")
++    branch = os.path.basename(path)
++    ledger = ledger_root(root, state)
++    outside = [p for p in changed_paths(path) if p != ledger and not p.startswith(ledger + "/")]
++    if outside:
++        for name in outside:
++            print(f"refused: {name} is outside the ledger root {ledger}")
++        return 1
++    result = git("worktree", "remove", "--force", path, cwd=root)
++    listed = git("worktree", "list", "--porcelain", cwd=root).stdout.decode(errors="replace")
++    if result.returncode != 0 or os.path.exists(path) or f"worktree {path}\n" in listed + "\n":
++        sys.stderr.write(result.stderr.decode(errors="replace"))
++        print(f"failed: git worktree remove --force {worktree}", file=sys.stderr)
++        return 1
++    print(f"removed: worktree {worktree}")
++    for name in (branch, branch + "-land"):
++        ref = f"refs/heads/{name}"
++        if git("rev-parse", "-q", "--verify", ref, cwd=root).returncode != 0:
++            continue
++        result = git("branch", "-D", name, cwd=root)
++        if result.returncode != 0 or git("rev-parse", "-q", "--verify", ref, cwd=root).returncode == 0:
++            sys.stderr.write(result.stderr.decode(errors="replace"))
++            print(f"failed: git branch -D {name}", file=sys.stderr)
++            return 1
++        print(f"removed: branch {name}")
++    return 0
++
++
++try:
++    sys.exit(main(sys.argv[1:]))
++except Refusal as refusal:
++    print(f"error: {refusal}", file=sys.stderr)
++    sys.exit(64)
++PY
+diff --git a/skills/land/templates/remove_worktree.test.sh b/skills/land/templates/remove_worktree.test.sh
+new file mode 100644
+index 0000000..ddfdc9f
+--- /dev/null
++++ b/skills/land/templates/remove_worktree.test.sh
+@@ -0,0 +1,197 @@
++#!/bin/sh
++# Exercise remove_worktree.sh on scratch repositories shaped as land.sh leaves a step: the worktree
++# on <branch>-land, <branch> holding the wip commit, and ledger copies left uncommitted in the
++# worktree. Cases: a worktree holding only ledger copies (an untracked report, a modified plan.md,
++# a name holding a space and one holding a quote) removed with both branches; a worktree whose
++# folder name differs from the step id removed by its entry; a missing <branch>-land skipped; a
++# path outside the ledger root, and one whose name only starts with the ledger root's, refused
++# with nothing removed; a ledger root read from the projects: form; and each refusal on an
++# argument, a state file, an entry or a worktree the script cannot use.
++
++set -u
++
++fail() {
++    printf 'FAIL: %s\n' "$1" >&2
++    exit 1
++}
++
++test_root=$(mktemp -d "${TMPDIR:-/tmp}/remove-worktree-test.XXXXXX") ||
++    fail "could not create scratch directory"
++test_root=$(CDPATH= cd "$test_root" && pwd -P)
++trap 'rm -rf "$test_root"' 0 1 2 3 15
++script=$(CDPATH= cd "$(dirname "$0")" && pwd -P)/remove_worktree.sh
++
++g() {
++    git -c user.name=t -c user.email=t@t "$@"
++}
++
++# expect_in <text> <expected part> <what failed>
++expect_in() {
++    case "$1" in
++        *"$2"*) ;;
++        *) fail "$3; expected \"$2\" in: $1" ;;
++    esac
++}
++
++# run <args...>: runs the script from the current folder and sets out, err and status.
++run() {
++    sh "$script" "$@" >"$test_root/out" 2>"$test_root/err"
++    status=$?
++    out=$(cat "$test_root/out")
++    err=$(cat "$test_root/err")
++}
++
++# make_repo <name> <step> <worktree folder>: a repository at $test_root/<name> with a ledger
++# .scratch/p holding plan.md and a state file whose dispatch list holds the step's entry and one
++# other, and the step's worktree left as land.sh leaves a back-out: <folder> holds the wip
++# commit, the worktree is on <folder>-land. Sets repo, wt and state.
++make_repo() {
++    repo=$test_root/$1
++    mkdir -p "$repo/.agents" "$repo/.scratch/p/agents/reviews"
++    cd "$repo" || fail "could not enter $repo"
++    git init -q -b main
++    printf 'ledger_root: .scratch\nworktree_root: .agents/worktrees\n' >.agents/plan.yaml
++    printf '.agents/worktrees/\n' >.gitignore
++    printf '# Plan: p\n' >.scratch/p/plan.md
++    : >.scratch/p/agents/reviews/.gitkeep
++    state=.scratch/p/orchestrator-state.md
++    cat >"$state" <<STATE
++# State
++
++\`\`\`yaml
++dispatch:
++- step: '$2'
++  worktree: .agents/worktrees/$3
++  base: 0000000
++  landing: backed-out
++- step: other
++  worktree: .agents/worktrees/other
++  landing: not-started
++\`\`\`
++STATE
++    printf 'one\n' >src.txt
++    g add -A && g commit -q -m base || fail "could not commit the base"
++    wt=$repo/.agents/worktrees/$3
++    git worktree add -q -b "$3" "$wt" main || fail "could not add the worktree"
++    (cd "$wt" && printf 'two\n' >src.txt && g commit -q -a -m wip) || fail "no wip commit"
++    (cd "$wt" && git checkout -q -b "$3-land" main) || fail "could not check out $3-land"
++}
++
++# gone <folder>: the worktree and both branches are gone.
++gone() {
++    [ -e "$wt" ] && fail "the worktree $wt is still there"
++    git worktree list --porcelain | grep -q -F "worktree $wt" &&
++        fail "the worktree $wt is still registered"
++    git rev-parse -q --verify "refs/heads/$1" >/dev/null && fail "branch $1 is still there"
++    git rev-parse -q --verify "refs/heads/$1-land" >/dev/null && fail "branch $1-land is still there"
++    return 0
++}
++
++# kept <folder>: the worktree and both branches are all still there.
++kept() {
++    [ -d "$wt" ] || fail "the worktree $wt was removed"
++    git rev-parse -q --verify "refs/heads/$1" >/dev/null || fail "branch $1 was removed"
++    git rev-parse -q --verify "refs/heads/$1-land" >/dev/null || fail "branch $1-land was removed"
++}
++
++# Ledger copies only, in a worktree whose folder name (2b-22) differs from the step id (22).
++# Red when --force is dropped (git refuses the untracked files), when the status is read without
++# -z (the quoted names read as paths outside the ledger), when a path or a branch is built from
++# the step id, or when <branch>-land is not deleted.
++make_repo clean 22 2b-22
++printf 'report\n' >"$wt/.scratch/p/agents/reviews/22-report.md"
++printf 'ruling\n' >>"$wt/.scratch/p/plan.md"
++printf 'x\n' >"$wt/.scratch/p/agents/reviews/sp ace.md"
++printf 'x\n' >"$wt/.scratch/p/agents/reviews/quo\"te.md"
++run "$state" 22
++[ "$status" -eq 0 ] || fail "a worktree holding only ledger copies was not removed: $out $err"
++gone 2b-22
++expect_in "$out" "removed: worktree .agents/worktrees/2b-22" "the worktree's removal is not reported"
++expect_in "$out" "removed: branch 2b-22" "the branch's removal is not reported"
++expect_in "$out" "removed: branch 2b-22-land" "the landing branch's removal is not reported"
++git rev-parse -q --verify refs/heads/other >/dev/null && fail "a branch of another entry appeared"
++
++# A missing <branch>-land is skipped, with no line. Red when the script deletes it unguarded.
++make_repo noland s1 s1
++(cd "$wt" && git checkout -q s1 && git branch -q -D s1-land) || fail "could not drop s1-land"
++run "$state" s1
++[ "$status" -eq 0 ] || fail "a worktree with no landing branch was not removed: $out $err"
++[ -e "$wt" ] && fail "the worktree with no landing branch is still there"
++git rev-parse -q --verify refs/heads/s1 >/dev/null && fail "branch s1 is still there"
++case "$out" in
++    *"s1-land"*) fail "a line names the missing landing branch: $out" ;;
++esac
++
++# A path outside the ledger root is refused and nothing is removed. Red when the check is dropped.
++make_repo outside s2 s2
++printf 'report\n' >"$wt/.scratch/p/agents/reviews/s2-report.md"
++printf 'stray\n' >"$wt/stray.txt"
++printf 'x\n' >"$wt/src.txt"
++run "$state" s2
++[ "$status" -eq 1 ] || fail "a path outside the ledger root was not refused (exit $status): $out $err"
++expect_in "$out" "refused: stray.txt is outside the ledger root .scratch" \
++    "the untracked path outside the ledger is not named"
++expect_in "$out" "refused: src.txt is outside the ledger root .scratch" \
++    "the modified path outside the ledger is not named"
++case "$out" in
++    *"s2-report.md"* | *"removed:"*) fail "the refusal named a ledger copy or removed: $out" ;;
++esac
++kept s2
++
++# A name that only starts with the ledger root's is outside it. Red when the match drops the /.
++make_repo prefix s3 s3
++printf 'x\n' >"$wt/.scratchy"
++run "$state" s3
++[ "$status" -eq 1 ] || fail "a path .scratchy was taken as under .scratch (exit $status)"
++expect_in "$out" "refused: .scratchy is outside the ledger root .scratch" "the path .scratchy is not named"
++kept s3
++
++# The ledger root of a project, in the projects: form, is the one holding the state file.
++make_repo projects s4 s4
++printf 'projects:\n  a:\n    ledger_root: elsewhere\n  b:\n    ledger_root: ./.scratch/\n' \
++    >.agents/plan.yaml
++printf 'report\n' >"$wt/.scratch/p/agents/reviews/s4-report.md"
++run "$state" s4
++[ "$status" -eq 0 ] || fail "the projects: form's ledger root was not found: $out $err"
++gone s4
++
++# Refusals, each exit 64 with an error line and nothing removed.
++make_repo refusals s5 s5
++run
++[ "$status" -eq 64 ] || fail "no arguments did not exit 64 ($status)"
++expect_in "$err" "error: usage: remove_worktree.sh <state file> <step>" "no usage line"
++run "$state" 'bad step'
++[ "$status" -eq 64 ] || fail "a step name holding a space did not exit 64 ($status)"
++run .scratch/p/missing.md s5
++[ "$status" -eq 64 ] || fail "a missing state file did not exit 64 ($status)"
++expect_in "$err" "error: cannot read .scratch/p/missing.md" "the missing state file is not named"
++run "$state" s9
++[ "$status" -eq 64 ] || fail "a step with no entry did not exit 64 ($status)"
++expect_in "$err" "has no entry for step s9" "the missing entry is not named"
++run "$state" other
++[ "$status" -eq 64 ] || fail "an entry whose worktree does not exist did not exit 64 ($status)"
++expect_in "$err" "error: .agents/worktrees/other is not a worktree of this repository" \
++    "the worktree that is not one is not named"
++printf '# State\n\n```yaml\ndispatch:\n- step: s5\n  base: 0000000\n```\n' >.scratch/p/nowt.md
++run .scratch/p/nowt.md s5
++[ "$status" -eq 64 ] || fail "an entry with no worktree: key did not exit 64 ($status)"
++expect_in "$err" "error: the entry of step s5 has no worktree: key" "the missing key is not named"
++printf '# State\n\n```yaml\ndispatch: [\n```\n' >.scratch/p/broken.md
++run .scratch/p/broken.md s5
++[ "$status" -eq 64 ] || fail "a state file that is not valid YAML did not exit 64 ($status)"
++expect_in "$err" "is not valid YAML" "the invalid YAML is not named"
++(cd "$wt" && sh "$script" "$repo/$state" s5) >"$test_root/out" 2>"$test_root/err"
++[ "$?" -eq 64 ] || fail "a run from inside the worktree did not exit 64"
++expect_in "$(cat "$test_root/err")" "run this script from the repository root of the main checkout" \
++    "the run from the worktree is not refused with its message"
++mv .agents/plan.yaml .agents/plan.yaml.off
++run "$state" s5
++[ "$status" -eq 64 ] || fail "a missing .agents/plan.yaml did not exit 64 ($status)"
++expect_in "$err" "cannot read .agents/plan.yaml" "the missing plan.yaml is not named"
++mv .agents/plan.yaml.off .agents/plan.yaml
++kept s5
++run "$state" s5
++[ "$status" -eq 0 ] || fail "the worktree was not removed after the refusals: $out $err"
++gone s5
++
++printf 'PASS: remove_worktree.sh scratch tests\n'
+diff --git a/skills/plan-help/SKILL.md b/skills/plan-help/SKILL.md
+index e9828a5..20e5122 100644
+--- a/skills/plan-help/SKILL.md
++++ b/skills/plan-help/SKILL.md
+@@ -2,7 +2,7 @@
+ name: plan-help
+ description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
+ metadata:
+-  version: "1.7.0"
++  version: "1.8.0"
+ ---
+ 
+ # Plan help
+@@ -52,7 +52,7 @@ metadata:
+ then, for every step:
+ 
+ /spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries
+-"build it"                    the session writes the code in the worktree, runs the checks, writes the report
++"build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
+ /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
+ "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
+ /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
+@@ -63,11 +63,11 @@ read the delta                when plan.yaml says refute_after_repair: no: the o
+ when a command stops:
+ 
+ /spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, or a choice is yours: it wrote an open item and no brief
+-"Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger and commits
++"Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
+ /spec <entry> <step>          again; it now writes the brief
+ /spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), the brief's "Paths this step writes" shares a path with a step in flight, or a file it reads is unusable: it names the cause and leaves nothing; rule on the step, land the other step or change the paths, then /spec again
+ /land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the ledger's land.sh: supply it, then /land again
+-/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main and its failure is recorded in its Step 0 in plan.md; /spec that step again when it comes up, with no new ruling, or after your ruling when only you can decide what to do
++/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head
+ 
+ /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
+ 
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index 1fc0c77..cd0238d 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -2,7 +2,7 @@
+ name: plan-orchestration
+ description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
+ metadata:
+-  version: "2.8.0"
++  version: "2.9.0"
+ ---
+ 
+ # Plan orchestration
+@@ -48,34 +48,39 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+    - Its refusal of a step without the user's authority (the `spec` skill's `templates/check_step.py`) is raised as a stop of the kind "A finding that is the user's", since only the user's ruling adds a step to the plan.
+ 4. Choose the step's executor and write it into the dispatch block, then build by that choice.
+    - **Choice.** `academic-paper` for a step whose deliverable is manuscript content, always; otherwise what the invocation named (`/plan-orchestration <entry> inline` runs every code step inline); else the configuration block's `executor:`, which is `agent` by default and `inline` when the plan chose it.
+-   - **`agent`.** Dispatch one builder with the worktree path and the brief, by the recipe under "Launching a builder", and the moment it is launched write its agent id into the dispatch block under `session_id` and commit the block by path.
++   - **`agent`.** Dispatch one builder with the worktree path and the brief, by the recipe under "Launching a builder". The moment it is launched, write its agent id into the dispatch block under `session_id`.
++   - **The launch commit.** Under every executor, the dispatch entry is committed once its builder's identity is in it. The commit comes before the build starts, and it is a resume point. The paths are the state file and the session's own records since the last resume point, named in `git add -- <path> ...`.
+    - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report and a rule inventory the brief names, the main checkout, the user's data); the reading order (the rules file, the brief, the standards); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
+    - **The builder.** It never runs a git command, and in the ledger it writes only its report and a rule inventory the brief names, at the paths the brief names in the worktree's copy of the ledger.
+-   - **`inline`.** The orchestrating session builds the step itself in the worktree under the brief and the rules file, and steps 5 and 8 read "the builder" as itself.
+-   - **`academic-paper`.** The step is built through that skill with the brief as its input, and its output is the step's report.
++   - **`inline`.** The orchestrating session writes `inline` as the builder's identity under `session_id` and makes the launch commit. It then builds the step itself in the worktree under the brief and the rules file. Steps 5 and 8 read "the builder" as itself.
++   - **`academic-paper`.** The session writes `academic-paper` as the builder's identity under `session_id` and makes the launch commit. The step is then built through that skill with the brief as its input, and its output is the step's report.
+ 5. While the builder runs, do ledger work only: the next step's premise checks, the bookings, the usage table.
+    - Never dispatch beyond what `workers_at_once` allows.
+    - Never dispatch while the user has asked for a pause.
+-6. On the report, save it into the main ledger at the dispatch block's `report` path, then read the whole diff.
++6. On the report, save it into the main ledger at the dispatch block's `report` path, on disk and not committed on its own. Then read the whole diff.
+    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
+    - A rule inventory the brief names is copied into the main ledger at its path the same way, since the ledger's `land.sh` leaves a ledger file left uncommitted in the worktree out of the landing.
+    - The builder's completion notification carries its final message. When the builder wrote no report file, the orchestrator takes the report from that message into the `report` path.
+    - The report is a lead, not a fact.
+    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result; read that hand-back the same way as a report.
+-   - Rule on such a case when the fix stays inside the step's scope, write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`, commit it by path, and resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`; the builder's final report carries the ruling.
++   - Rule on such a case when the fix stays inside the step's scope. Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`, and commit it by path as a round sent.
++   - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`. The builder's final report carries the ruling.
+    - Such a case whose fix changes the step's scope is a stop of the kind "A finding that is the user's", by "Stops".
+ 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
+    - Read the diff yourself while it runs.
+-   - Save its report, and write its path and its usage into the dispatch block under `reviewer_report`.
++   - Save its report, and write its path and its usage into the dispatch block under `reviewer_report`, on disk; the next resume-point commit carries them.
+ 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
+    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
+-   - **Before the resume.** Write `round: n` into the dispatch block, and commit.
++   - **Before the resume.** Write `round: n` into the dispatch block. Commit it by path with the round's brief and the session's own records since the last resume point. The commit is a resume point.
+    - **Only known fixes.** Each ruling says what to change. A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed by the orchestrator, read-only, before the round is sent; the round carries the found cause's fix, and a cause not found is not sent: it is noted at landing and raised to the user as an open item, by "Stops". A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
+    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
+    - **After each reply.** Read the whole delta and, when the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its usage recorded beside the first.
+    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
+ 9. Invoke `/land <entry> <step>`. Its refusals are its own.
+-   - A red line the orchestrator cannot fix at landing takes the step back out of main: its failure is recorded in the step's Step 0 in `plan.md`, and the step keeps its line and its tag and is worked again as that step, through `/spec`, with no new ruling; the failure goes to the user as an open item only when only the user can decide what to do, by "Stops".
++   - A red line the orchestrator cannot fix at landing takes the step back out of main. Its failure is recorded in the step's Step 0 in `plan.md`.
++   - The step keeps its line and its tag, and is worked again as that step, with no new ruling.
++   - The failure goes to the user as an open item only when only the user can decide what to do, by "Stops".
++   - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+ 10. Continue with step 2.
+     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
+     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
+@@ -95,9 +100,16 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+ 
+ ## Resuming, and handing the plan over
+ 
+-The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under three rules:
++The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under these rules:
+ 
+-- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, every ruling, every path a step depends on, every sharp edge and every usage row is in the ledger folder, committed.
++- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, ruling, path a step depends on, sharp edge and usage row is in the ledger folder of the main checkout.
++- A step's commits are only the points another session resumes from. They are a stop (its open item and Step 0), the preparation commit, and the dispatch entry once the builder's identity is in it. They are also a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), the landing, and a handover.
++- Every other ledger record is written to disk in the main checkout, and carried by the next of those commits. Such records are a builder's report saved, a refuter report saved, a reviewer recorded, a ruling booked and a usage line.
++- A resume-point commit holds only the paths the session itself wrote since the last one. Each is named in the `git add -- <path> ...` command.
++- A ledger change the session did not make is listed by path and left alone. One on `plan.md` or the state file is a refusal of `/spec` (the `spec` skill's Steps 1).
++- A record not yet committed is on disk in the main checkout. A session taking over reads the ledger in the working tree as well as at main's head.
++- Handing the plan over is a resume point. A session that stops, for a handover, a pause or a stop, first commits by path the records it wrote since the last resume point.
++- So a session taking over finds no uncommitted record of the session before it. A ledger change it did not make is listed and left alone, as the bullets above say.
+ - The state file is rewritten before every step commit, so main's head always carries a state file that describes main's head.
+ - A dispatch in flight is recorded in the state file before the builder starts, so a new orchestrator can tell whether a builder is still running, finished, or died, before it does anything.
+ 
+@@ -107,7 +119,9 @@ On resumption with a dispatch block present:
+ - A builder still running is waited for.
+ - A finished builder resumes at the read of its report.
+ - A step at `landing: cherry-picking` is checked on main (`git status`, `git diff --cached`) before anything is applied again.
+-- A step at `landing: backed-out` was taken back out of main by a red line at its landing: its worktree and branch are kept, it stays unticked in `plan.md`, and it is worked again as that step, through `/spec`, its line keeping its tag, with no new ruling; its failure is in its Step 0 in `plan.md`.
++- A step at `landing: backed-out` was taken back out of main by a red line at its landing. Its worktree and its branches are kept, and it stays unticked in `plan.md`.
++- It is worked again as that step, its line keeping its tag, with no new ruling. Its failure is in its Step 0 in `plan.md`.
++- `/spec` of such a step saves its work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+ - A builder is dead when the runner's agent listing no longer shows it and no completion notification with a report arrived.
+ - A builder is also dead when a later session does not find its agent id in its own listing and no report is at the dispatch block's `report` path in the worktree.
+ - A dead builder is reported to the user with the worktree's `git status --short` and the builder's last message when there is one.
+@@ -143,7 +157,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ - Before the dispatch, `spec` checks the list against the brief of every step in the dispatch block with the `spec` skill's `templates/check_paths.py`, and refuses a shared path, naming both steps.
+ - A shared document is split between steps in flight only by line ranges that do not overlap; a step that touches a configuration file or a rule file runs alone.
+ - Each step has its own worktree, base, builder, reviewer, rounds and dispatch entry.
+-- A later step is dispatched only after the earlier one's dispatch commit, so its base holds the earlier brief and block.
++- A later step is dispatched only after the earlier one's launch commit (Steps 4), so its base holds the earlier brief and dispatch entry.
+ - Landings are one at a time, in the order the steps are verified, and a later one lands on the head the earlier left, its whole diff read again there.
+ - A path both ranges changed means the later step goes back through step 6 on the new head before it lands.
+ 
+@@ -204,7 +218,8 @@ A stop is for a decision that is the user's, of one of six kinds:
+ | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
+ 
+ - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
+-- A stop is booked in the state file's open items the moment it is raised.
++- A stop is booked in the state file's open items the moment it is raised, and under the step's Step 0 in `plan.md`.
++- The ledger files the session wrote are then committed by path, a resume point, so the stop survives the session.
+ - A ruling that adds or splits a step is booked as the `spec` skill's "Steps / A ruling" says: the new line in the step list ends with `(ruling <name>)`, naming the ruling's line in the Rulings section.
+ - A stop is repeated in every report until the user has ruled.
+ - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons. It never goes through a question-box or multiple-choice tool.
+diff --git a/skills/plan/SKILL.md b/skills/plan/SKILL.md
+index 1145653..72dae87 100644
+--- a/skills/plan/SKILL.md
++++ b/skills/plan/SKILL.md
+@@ -1,13 +1,13 @@
+ ---
+ name: plan
+-description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, each approved step tagged (approved), orchestrator-state.md with the configuration block filled from the repository, and the landing script copied into the ledger. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
++description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, each approved step tagged (approved), orchestrator-state.md with the configuration block filled from the repository, and the landing script copied into the ledger with its test, the verify runner and the usage script beside it. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
+ metadata:
+-  version: "1.8.0"
++  version: "1.9.0"
+ ---
+ 
+ # Open a plan
+ 
+-`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md`, `orchestrator-state.md`, `land.sh` and `land.test.sh`, committed, and `agents/briefs/` and `agents/reviews/`, each holding an empty `.gitkeep`.
++`/plan <entry>` turns one roadmap entry into a ledger folder that `/spec`, `/refute`, `/land` and `plan-orchestration` then run from. It leaves behind `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh`, `verify.sh` and `usage.py`, committed, and `agents/briefs/` and `agents/reviews/`, each holding an empty `.gitkeep`.
+ 
+ ## Quick start
+ 
+@@ -34,7 +34,7 @@ metadata:
+ 2. The roadmap the configuration names.
+    - `<entry>` is matched against the entries by number or title; no match is a stop ("Stops").
+ 3. The verification page the configuration names, for the commands every step runs.
+-4. The `land` skill's `templates/land.sh` and `templates/land.test.sh`, found as `land.sh` finds `verify.sh`: in the `land` skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`), the first that holds them; not found is a stop ("Stops").
++4. The `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py`, found as `land.sh` finds `verify.sh`. They are read from the `land` skill's `templates/` under the first of these that holds them: the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). Not found is a stop ("Stops").
+ 
+ ## Steps
+ 
+@@ -56,13 +56,14 @@ metadata:
+    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
+    - The orchestrator chooses the executor per step over that default.
+    - The dispatch block is empty, the open items are empty, and the position names the first step.
+-5. Copy the `land` skill's `templates/land.sh` and `templates/land.test.sh` into the ledger folder, since `/land` requires the ledger's `land.sh`, and make their `ADAPT` edits from `plan.yaml`:
++5. Copy the `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` into the ledger folder. `/land` requires the ledger's `land.sh`. With the four beside each other, the ledger's `land.sh` and `land.test.sh` run from the ledger whatever skills are installed. Then make the `ADAPT` edits of `land.sh` and `land.test.sh` from `plan.yaml`:
++   - `landing_worktree_root` is `worktree_root`.
+    - `landing_ledger_root` is `ledger_root`, the project's own in the `projects:` form.
+    - `landing_tool_path` stays `.`, the whole tree.
+    - The model names of the usage rows are `worker` and `reviewer`, in `land.sh` and in the rows `land.test.sh` expects.
+    - The `ADAPT` block holds the dependency install the verification page's commands need, and stays empty, running nothing, when they need none.
+ 6. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
+-7. Commit `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh` and the two `.gitkeep` files by path as the plan's opening commit, with the roadmap entry's number in the subject.
++7. Commit `plan.md`, `orchestrator-state.md`, `land.sh`, `land.test.sh`, `verify.sh`, `usage.py` and the two `.gitkeep` files by path as the plan's opening commit. Its subject holds the roadmap entry's number.
+ 
+ ## Stops
+ 
+@@ -72,7 +73,7 @@ metadata:
+ | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
+ | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
+ | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
+-| No landing script | The `land` skill's `templates/land.sh` or `templates/land.test.sh` is in none of the places "What it reads" 4 names | The file missing and the places looked in | The `land` skill installed, then `/plan` again |
++| No landing script | One of the `land` skill's `templates/land.sh`, `templates/land.test.sh`, `templates/verify.sh` and `templates/usage.py` is in none of the places "What it reads" 4 names | The file missing and the places looked in | The `land` skill installed, then `/plan` again |
+ | The plan exists | The ledger folder is already there: a plan is opened once | The folder | Nothing |
+ 
+ ## Anti-patterns
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index 4b4e65f..8302ccd 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -2,12 +2,12 @@
+ name: refute
+ description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+ metadata:
+-  version: "1.5.0"
++  version: "1.6.0"
+ ---
+ 
+ # Refute a step
+ 
+-`/refute <entry> <step>` dispatches one reviewer, who changes nothing and does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with a file and a line, or "none" under a heading, saved and committed by the orchestrator or the session.
++`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with a file and a line, or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
+ 
+ ## Quick start
+ 
+@@ -52,7 +52,8 @@ metadata:
+    - Then the four headings, each with findings (the file, the line, the quoted hunk, what is wrong) or "none".
+    - Then what was not checked within the time box, named.
+    - Then the reviewer's usage.
+-7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`, records its usage in the state file's table and its path under the dispatch block's `reviewer_report` field, and commits both by path.
++7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`. It records the report's usage in the state file's table and its path under the dispatch block's `reviewer_report` field.
++   - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+ 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
+ 
+ ### Over a repair round
+@@ -66,7 +67,7 @@ metadata:
+    - a fix that reaches beyond the finding;
+    - a claim of closure the reviewer's own rerun does not reproduce.
+ 5. It reruns every verification command again.
+-6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape, and records and commits as Steps 7 says.
++6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape. It records the run as Steps 7 says.
+ 7. The findings of the run over the last round are never sent to the builder: each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
+ 8. With `refute_after_repair: no` these runs do not happen, and the orchestrator's read of the delta stands in for them.
+ 
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index a8bcc14..655e4d2 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -1,13 +1,13 @@
+ ---
+ name: spec
+-description: "Prepare one step of an open plan: refuse a step whose line carries no authority of the user ((approved) or (ruling <name>)), check every premise the step's text makes against the tree, write the brief (the checked premises, the fix text, the verification list, the report shape, the pointer to the repository's change standard, the cases, the paths it writes), check those paths against the briefs of the steps in flight, create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
++description: "Prepare one step of an open plan: refuse a step whose line carries no authority of the user ((approved) or (ruling <name>)), check every premise the step's text makes against the tree, write the brief (the checked premises, the fix text, the verification list, the report shape, the pointer to the repository's change standard, the cases, the paths it writes), check those paths against the briefs of the steps in flight, create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file; a step a red line took back out of main is prepared again from main's head, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
+ metadata:
+-  version: "1.5.0"
++  version: "1.6.0"
+ ---
+ 
+ # Prepare a step
+ 
+-`/spec <entry> <step>` prepares one step of an open plan for its builder. It leaves behind the brief and the dispatch block, committed, the step's worktree at the base, and the base binaries copied aside.
++`/spec <entry> <step>` prepares one step of an open plan for its builder. It leaves behind the brief in the preparation commit and the dispatch entry written to the state file. It also leaves the step's worktree at the base, and the base binaries copied aside.
+ 
+ ## Quick start
+ 
+@@ -33,25 +33,34 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - No such folder is a refusal ("Stops").
+ 3. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block.
+    - A step already in flight is a refusal, under the condition in "Stops".
++   - A dispatch entry of this step that reads `landing: backed-out` is not a step in flight. The step goes through "Steps / A step taken back out of main", which reads the entry's `base` and `worktree`.
+    - The brief of each step the dispatch block names, `agents/briefs/<step>.md` beside the state file, for its "Paths this step writes" (Steps 4).
+ 4. `plan.md`: the step's line, the rulings that touch it, and everything the plan carries to it.
+    - The step's authority is the tags that end its line: `(approved)` for a step of the list the user approved when the plan opened, or `(ruling <name>)` naming a line of the Rulings section that ends with "(the user)".
+    - A step without that authority is a refusal ("Stops"), checked at Steps 1.
+    - A step not in the list is a refusal ("Stops").
++   - For a step taken back out of main, the failure its landing recorded under the step's Step 0.
+ 5. The tree, on main at its head, for every count, path, name, line number and claim the step's text makes.
+    - Each is checked with a grep or a probe, never taken from the plan's text.
+ 
+ ## Steps
+ 
+ 1. Run the preflight, before any write: on `main`, nothing staged, no git operation in progress.
+-   - Any unrelated change of the user's is listed by path and left alone.
+-   - An uncommitted change on the ledger's `plan.md` or at the brief's path `agents/briefs/<step>.md` is a refusal ("Stops"), named by path, since Steps 3 writes the brief there and a refusal at Steps 4 restores both.
++   - Any unrelated change of the user's outside the ledger folder is listed by path and left alone.
++   - Every uncommitted change under the ledger folder is listed by path (`git status --short -- <ledger>`).
++   - A change the session itself made since the last resume-point commit is one of its own records. Such a change is a ruling it booked, or a report or a reviewer it recorded.
++   - The preparation commit carries the session's own records (Steps 5).
++   - Any other change under the ledger folder is left alone and never committed.
++   - An uncommitted change on the ledger's `plan.md` or state file that the session did not make is a refusal ("Stops"), named by path. Steps 2 and 8 write those files.
++   - `plan.md` is copied aside to the session's scratch folder before Steps 2. A refusal at Steps 4 restores it with the session's own records, so a booked ruling is never lost.
++   - An uncommitted change at the brief's path `agents/briefs/<step>.md` is a refusal ("Stops"), named by path, since Steps 3 writes the brief there.
+    - A preflight that fails is a refusal ("Stops").
+    - Then, before any premise check, run `python3 templates/check_step.py <plan.md> <step>`, which reads the step's line and the Rulings section of `plan.md`.
+    - Exit 0 prints one `ok:` line naming the tags that give the step the user's authority.
+    - Exit 1 is a refusal ("Stops"): its `refused:` line names the step and the reason, and says the user's ruling is needed.
+    - Exit 64 is a refusal on its `error:` line: `plan.md` missing or not UTF-8, a section missing, a step listed twice, or a step not in the list, the list printed.
+    - A refusal here writes nothing.
++   - A step whose dispatch entry reads `landing: backed-out` then goes through "Steps / A step taken back out of main" before Steps 2.
+ 2. Check every premise the step's text makes against the tree.
+    - A premise found false that the plan can absorb is corrected in `plan.md` before the brief exists, never left for the builder to hit.
+    - That correction goes into the preparation commit (Steps 5).
+@@ -69,28 +78,71 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - A choice that decides a format or a rule the builder applies across the tree (a directive shape, an anchor rule, a naming rule, a file layout) is run by the session writing the brief on at least five real cases from the tree, and the brief quotes each input and its output under the decision, so an unreadable or wrong result is seen before dispatch.
+    - Every item of "What to build" is a change whose content is known. An item of the form "find why X happens and end it" is investigation: the session writing the brief does it first, read-only, and writes the found cause and its fix into the item; a cause it cannot find is left out of the brief and raised to the user as an open item.
+    - A user-visible choice (a public shape, a wire format, a config key, a vocabulary) is not taken: it is a stop ("Stops").
++   - For a step taken back out of main, whose Step 0 in `plan.md` records the failure its landing met, the brief carries that failure.
++   - The ledger may hold the step's patch `agents/reviews/<step>-backed-out.patch` ("Steps / A step taken back out of main"). The brief then names its path and says Steps 6 applies it with `sh templates/back_out.sh --apply`.
++   - The brief is committed at Steps 5, before the apply. Its section "The patch as applied" is added after Steps 6, as Steps 6 says.
+    - A step that rewrites an existing skill's `SKILL.md`, as the standards define a rewrite, gets the rule inventory they require: the brief names the inventory's path in the ledger among the paths the step writes, and the inventory check the standards name among its verification commands, as `templates/brief.md` shows.
+ 4. Run `python3 templates/check_paths.py <state file> <step>`, which compares the brief's "Paths this step writes" with the brief of every other step in the dispatch block.
+    - Exit 0 prints one `ok:` line, and the step goes on to its preparation commit.
+    - Exit 1 is a refusal ("Stops"): each `shared:` line names the path, this step and the step in flight whose brief names it.
+    - Exit 64, or 69 when PyYAML is missing, is a refusal ("Stops") on the `error:` line, which names the argument, the state file or the brief and what is wrong with it.
+-   - A refusal here leaves nothing: the brief and any amendment of `plan.md` made at Steps 2 are restored to main's copies (`git restore -- <path>`, or the brief deleted when main has none), and no commit, worktree or dispatch block is made.
++   - A refusal here leaves nothing. The brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
++   - `plan.md` is put back from the copy Steps 1 saved, and no commit, worktree or dispatch entry is made.
++   - What "Steps / A step taken back out of main" did stays done. The patch stays in the ledger, and `/spec` run again prepares the step with it.
+    - `/spec` run again redoes Steps 2 from the start, so the premise checks and their amendments are made again on the tree as it then is.
+-5. Make the preparation commit: the brief, and any amendment to `plan.md` the premise checks forced, committed by path. Its hash is the base.
++5. Make the preparation commit, a resume point ("Rules").
++   - It holds the brief, the patch of a step taken back out of main, and each of the session's own records (Steps 1).
++   - It holds `plan.md` and the state file when this run or the session's own records changed them.
++   - The paths are written out in the `git add -- <path> ...` command. A ledger change the session did not make is not among them.
++   - Its hash is the base.
+ 6. Create the worktree from the base: `git worktree add -b <step> <worktree_root>/<step> <base>`.
+    - Then, from inside it, `git sparse-checkout set <worktree_paths>` when the block names any.
++   - Then, for a step whose patch the ledger holds, from inside the worktree: `sh <this skill>/templates/back_out.sh --apply <repository root>/<ledger>/agents/reviews/<step>-backed-out.patch`. The patch is named by its path in the main checkout, since a sparse checkout may leave the ledger out.
++   - It runs `git apply --3way`. A file git cannot apply at all, such as one main deleted or renamed, makes git apply nothing, so the script excludes that file and applies the rest.
++   - It prints `skipped: <path>` for each excluded file, and writes their parts of the patch to `agents/reviews/<step>-skipped.patch` beside the patch.
++   - It prints `applied: <path>` for each file applied clean and `conflict: <path>` for each file left unmerged with conflict markers.
++   - For a binary file left unmerged it takes the patch's copy and prints `binary: <path>, the patch's copy taken`.
++   - Exit 0 means every file applied clean. Exit 1 means a file was skipped, conflicted or taken as the patch's binary copy, or `failed:` names an apply that applied nothing. Exit 64 names an argument it cannot use.
++   - The session then adds the section "The patch as applied" to the brief, holding those lines as printed.
++   - The section tells the builder that each `conflict:` file is finished from its conflict markers. Each `skipped:` file is rebuilt from its part in `<step>-skipped.patch` against main's tree.
++   - For each `binary:` file, the builder checks the patch's copy against main's change to it. The section names that change: the commits `git log --oneline <old base>..main -- <path>` lists, the old base being the `base` of the entry `back_out.sh` removed.
++   - Nothing is committed in the worktree: `/land`'s wip `git add -A` stages the files the builder finishes, so the builder runs no git command that changes state.
+    - Then the dependency install the project needs.
+ 7. Stage the base binaries for the landing's A/B, copied aside from the current build.
+    - The configuration block's `bench:` line names them; none named, none staged.
+ 8. Write the dispatch block into the state file: step, executor, worker, worktree, base, launched, report path, `landing: not-started`, `round: 0`.
+    - The entry takes the shape the `plan` skill's `templates/orchestrator-state.md` gives: one entry, `dispatch:` followed by its keys, when `workers_at_once` is 1; appended to the list of entries when it is above 1.
+    - The executor is the configuration block's default, until the orchestrator chooses for the step.
+-   - Commit the block by path as a second small commit.
++   - The entry is not committed here. It is committed once, when the builder's identity is in it, before the build starts.
++   - For a step whose patch Steps 6 applied, that commit also carries the brief with its section "The patch as applied" and `agents/reviews/<step>-skipped.patch` when it was written.
++   - Under `plan-orchestration`, its Steps 4 makes that commit under every executor. Run by hand, the session writes itself as the identity and makes it.
+    - The worker's identity goes into the block the moment it is known.
+ 
++### A step taken back out of main
++
++A step whose dispatch entry reads `landing: backed-out` has its old worktree and branches kept by `/land` (the `land` skill's Steps 6). The entry's `worktree` names the worktree, and its folder's name is the branch; no path or branch is built from the step id.
++
++1. Before Steps 2, from the repository root on main, run `sh templates/back_out.sh <state file> <step>`.
++   - It first computes the state file without the entry and checks it: the other entries kept, comment and blank lines under `dispatch:` kept, and every other byte as it was. It also checks that the state file can be written. A check that fails removes nothing.
++   - It writes `git diff --binary <base> <branch>` to `agents/reviews/<step>-backed-out.patch` beside the state file, and compares a second run of the diff with it. With `--binary` the patch carries a binary file's content.
++   - An empty diff writes no patch and removes a patch an earlier back-out of the step left there.
++   - It then runs the `land` skill's `templates/remove_worktree.sh` for the entry, as that skill's "Removing a step's worktree" says.
++   - Last, it writes the state file it computed and reads it back.
++2. Exit 0 prints `wrote: <patch>` or `no patch: the diff is empty`, the `removed:` lines of the worktree and branches, and `removed: dispatch entry <step>`.
++3. Exit 1 is a refusal ("Stops"): a `refused:` line of `remove_worktree.sh` for each path in the worktree outside the ledger root, or a `failed:` line. The entry is left in the state file.
++   - A `failed:` line of the state file's check comes before anything is removed: the worktree, both branches and the entry are kept, and a rerun once the cause is put right goes through.
++4. Exit 64 is a refusal on its `error:` line. It names an argument, the state file or the entry it cannot use, or an entry not at `landing: backed-out`. Exit 69 names a missing `python3`, PyYAML or `remove_worktree.sh`.
++5. After exit 0, go on with Steps 2, which prepares the step as any step, from main's head.
++   - Steps 3 writes a new brief over the old one, which stays in git's history, with the failure and the patch.
++   - Steps 5 makes a new preparation commit, and Steps 6 a new worktree with the patch applied by `sh templates/back_out.sh --apply`.
++   - Steps 8 writes a new dispatch entry at `round: 0`, `landing: not-started`.
++
+ ### A stop
+ 
+-1. Leave three things and nothing else: the open item in the state file (the step, what the tree shows against the step's text, the choice the user owns, one recommendation with its reasons); the same text under the step's Step 0 in `plan.md` or the part file it names; the ledger committed by path, so the stop survives the session.
++1. Leave three things and nothing else.
++   - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns, and one recommendation with its reasons.
++   - The same text under the step's Step 0 in `plan.md` or the part file it names.
++   - The ledger files the session wrote, committed by path as a resume point, so the stop survives the session.
+ 2. No brief, no worktree and no dispatch block exist for the stopped step.
+ 
+ ### A ruling
+@@ -107,12 +159,12 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`, and its own Step 0, its carried premises with it;
+    - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user).", and the step's tag names it as `templates/check_step.py` reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line;
+    - a ruling that sets a public shape, a vocabulary or a rule is also written where the plan keeps its rulings, so later premise checks read it;
+-   - the ledger files are committed by path.
++   - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 5).
+ 3. Then `/spec <entry> <step>` is typed again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
+ 
+ ## Stops
+ 
+-The first two rows are stops, which leave an open item as "Steps / A stop" says; the rest are refusals, which name their cause and leave nothing.
++The first two rows are stops, which leave an open item as "Steps / A stop" says. The rest are refusals. A refusal names its cause and leaves nothing beyond what "Steps / A step taken back out of main" has already done.
+ 
+ | Stop | When | What it shows | What resumes it |
+ |---|---|---|---|
+@@ -120,12 +172,13 @@ The first two rows are stops, which leave an open item as "Steps / A stop" says;
+ | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary | The open item, booked in the open items | A ruling |
+ | A step without the user's authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` naming a ruling of the user in the Rulings section, or it starts with `Removed by` (Steps 1) | The `refused:` line of `templates/check_step.py`, naming the step and the reason | The user's ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
+ | An unusable `plan.md` | `templates/check_step.py` exits 64 on a missing or unreadable `plan.md`, a missing section or a step listed twice (Steps 1) | Its `error:` line | `plan.md` put right, then `/spec` again |
+-| A failed preflight | Not on `main`, something staged, a git operation in progress, or an uncommitted change on the ledger's `plan.md` or at the brief's path | What it saw | The tree put right, then `/spec` again |
++| A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path, or one on the ledger's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |
+ | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/spec` again |
+ | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/spec` |
+ | A step in flight | A step is already in flight, and the configuration block does not allow more than one | The step in flight, named | That step landed, or a red line took its landing back out of main and its dispatch block reads `landing: backed-out` (the `land` skill's Steps 6) |
+ | No such step | The step is not in `plan.md`'s list; `templates/check_step.py` exits 64 and prints the list (Steps 1) | The list | `/spec` with a step in the list |
+ | A path shared with a step in flight | The brief's "Paths this step writes" shares a path with the brief of another step in the dispatch block: the same file, named whole in one of them, or line ranges that overlap (Steps 4) | The `shared:` lines of `templates/check_paths.py`, each naming the path and both steps | The other step landed, or the step's paths changed so they share none, then `/spec` again |
++| A step taken back out of main that cannot be saved | `templates/back_out.sh` exits 1, 64 or 69 ("Steps / A step taken back out of main" 3 and 4). The cause is a path in the kept worktree outside the ledger root, a state file that cannot be written, a write that does not read back, a failed git command, or an unusable input | Its `refused:`, `failed:` or `error:` lines | The cause put right, then `/spec` again. The user moves the path out of the worktree or removes it, makes the ledger or the state file writable, or corrects the entry |
+ | An unusable state file or brief | `templates/check_paths.py` exits 64, or 69 when PyYAML is missing (Steps 4) | Its `error:` line | The state file or the brief put right, or PyYAML installed, then `/spec` again |
+ 
+ ## Anti-patterns
+@@ -139,3 +192,5 @@ The first two rows are stops, which leave an open item as "Steps / A stop" says;
+ ## Rules
+ 
+ - Every git command on a worktree runs from inside it, never as `git -C`.
++- A ledger record is committed only at a resume point, as `plan-orchestration`'s "Resuming, and handing the plan over" lists them. Only the session that wrote it commits it.
++- Every other record stays on disk in the main checkout until the next resume point.
+diff --git a/skills/spec/templates/back_out.sh b/skills/spec/templates/back_out.sh
+new file mode 100644
+index 0000000..d9fe57a
+--- /dev/null
++++ b/skills/spec/templates/back_out.sh
+@@ -0,0 +1,431 @@
++#!/bin/sh
++# Save the work of a step a red line took back out of main, then remove its worktree, its
++# branches and its dispatch entry, so /spec can prepare the step again from main's head; and
++# apply that saved work in the step's new worktree.
++#
++# Usage: sh back_out.sh <state file> <step>, from the repository root of the main checkout, for a
++#        step whose dispatch entry reads landing: backed-out.
++#        sh back_out.sh --apply <patch>, from inside the step's new worktree.
++#
++# The entry is the step's entry in the dispatch block of the state file (the dispatch: key of its
++# first yaml block that has one: an entry, or a list of entries, each with a step: key). Its
++# worktree: key names the worktree, and the worktree folder's name is the branch that holds the
++# builder's work and the landing's wip commit, as land.sh names it; no path or branch is built
++# from the step id. Its base: key is the base.
++#
++# 1. The state file without the entry is computed and checked first: a single entry becomes
++#    dispatch: none, a list keeps its other entries, and comment and blank lines under dispatch:
++#    are kept; every other byte of the file stays as it was. The result is parsed, and the run is
++#    refused unless the dispatch block then holds exactly the other entries and the state file
++#    can be opened for writing. A refusal here removes nothing.
++# 2. git diff --binary <base> <branch> is written to agents/reviews/<step>-backed-out.patch beside
++#    the state file, and a second run of the same diff compared with it byte for byte (cmp). With
++#    --binary the patch carries a binary file's content, so git apply --3way can restore it. An
++#    empty diff writes no patch and removes a patch an earlier back-out of the step left there.
++# 3. The land skill's remove_worktree.sh (../../land/templates/remove_worktree.sh from this
++#    script's folder) removes the worktree and its branches. Its refusal is this script's
++#    refusal, with its exit status: the patch is kept and the entry is left in the state file.
++# 4. The state file computed in 1 is written in place and read back.
++#
++# It prints "wrote: <patch>" or "no patch: the diff is empty", the lines of remove_worktree.sh,
++# and "removed: dispatch entry <step>".
++#
++# With --apply, the patch must be named <step>-backed-out.patch. It runs git apply --3way on it.
++# While git names files it cannot apply at all (a file main deleted or renamed: "error: <path>:
++# does not exist in index", or any other "error: <path>: ..." line), git applies nothing, so the
++# apply is run again with each such file excluded, until the rest applies or no file is left.
++# Each excluded file prints "skipped: <path>", and the parts of the patch for all of them are
++# written to <step>-skipped.patch beside the patch; with none skipped, a <step>-skipped.patch
++# left there is removed. Then git status --porcelain -z gives one line per file: "applied:
++# <path>" for a file applied clean, "conflict: <path>" for a file left unmerged, and, for a
++# binary file left unmerged, the patch's copy is taken (git checkout --theirs, then git add) and
++# it prints "binary: <path>, the patch's copy taken". A failed apply that names no file it can
++# exclude and leaves nothing unmerged prints git's output and "failed:", and exits 1.
++#
++# Exit status: 0 done, or with --apply every file applied clean; 1 a refusal of
++# remove_worktree.sh, a state edit that fails its check, a patch or a state file whose write does
++# not read back as written, a git command that failed, or with --apply a file conflicted,
++# skipped or taken as the patch's binary copy; 64 an argument, a state file or an entry it
++# cannot use, an entry not at landing: backed-out, or a run from anywhere but the main
++# checkout's root (with --apply, from anywhere but a worktree); 69 python3, PyYAML or
++# remove_worktree.sh missing.
++
++if ! command -v python3 >/dev/null 2>&1; then
++    printf 'error: python3 is not on PATH\n' >&2
++    exit 69
++fi
++here=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
++BACK_OUT_REMOVE=$(CDPATH= cd "$here/../../land/templates" 2>/dev/null && pwd -P)/remove_worktree.sh
++export BACK_OUT_REMOVE
++exec python3 - "$@" <<'PY'
++import os
++import re
++import subprocess
++import sys
++
++STEP = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
++FENCE = re.compile(r" {0,3}(`{3,}|~{3,})\s*([^`\s]*)[^`]*")
++ITEM = re.compile(r"( *)- ")
++
++
++class Refusal(Exception):
++    """An input the script cannot use; the message says why."""
++
++
++def git(*args):
++    return subprocess.run(("git",) + args, capture_output=True)
++
++
++def read(path):
++    try:
++        with open(path, "rb") as handle:
++            return handle.read().decode("utf-8")
++    except UnicodeDecodeError:
++        raise Refusal(f"{path} is not UTF-8")
++    except OSError as error:
++        raise Refusal(f"cannot read {path}: {error.strerror or error}")
++
++
++def dispatch_block(text, state):
++    """Return (lines, start, end) of the yaml block holding dispatch:, and its parsed data.
++
++    lines is the file split with its line ends kept; the block's content is lines[start:end].
++    """
++    import yaml
++
++    lines = text.splitlines(keepends=True)
++    fence, start = None, None
++    for number, line in enumerate(lines):
++        bare = line.rstrip("\r\n")
++        if fence is None:
++            match = FENCE.fullmatch(bare)
++            if match:
++                fence = match.group(1)
++                start = number + 1 if match.group(2).lower() in ("yaml", "yml") else None
++        elif re.fullmatch(r" {0,3}" + re.escape(fence[0]) + "{" + str(len(fence)) + r",}\s*", bare):
++            if start is not None:
++                try:
++                    data = yaml.safe_load("".join(lines[start:number]))
++                except yaml.YAMLError as error:
++                    raise Refusal(f"a yaml block of {state} is not valid YAML: "
++                                  + str(error).replace("\n", " "))
++                if isinstance(data, dict) and "dispatch" in data:
++                    return lines, start, number, data
++            fence, start = None, None
++    if fence is not None:
++        raise Refusal(f"a fenced block of {state} is not closed")
++    raise Refusal(f"no yaml block of {state} has a dispatch: key")
++
++
++def entries_of(data):
++    dispatch = data["dispatch"]
++    if isinstance(dispatch, dict):
++        return [dispatch], False
++    if isinstance(dispatch, list):
++        return dispatch, True
++    return [], False
++
++
++def is_filler(line):
++    """A blank line or a comment line, which the entry's removal keeps."""
++    bare = line.strip()
++    return not bare or bare.startswith("#")
++
++
++def without_entry(lines, start, end, step, state):
++    """Return the file's lines with the step's entry removed from the dispatch block.
++
++    Comment and blank lines under dispatch: that are not inside the entry are kept.
++    """
++    key = None
++    for number in range(start, end):
++        if re.match(r"dispatch:\s*(#.*)?$", lines[number].rstrip("\r\n")):
++            key = number
++            break
++    if key is None:
++        raise Refusal(f"the dispatch: key of {state} is not written in block style")
++    stop = key + 1
++    while stop < end:
++        bare = lines[stop].rstrip("\r\n")
++        if bare and not bare.startswith((" ", "-", "#")):
++            break
++        stop += 1
++    body = list(range(key + 1, stop))
++    first_line = next((n for n in body if not is_filler(lines[n])), None)
++    end_of_line = lines[key][len(lines[key].rstrip("\r\n")):]
++    none_line = f"dispatch: none{end_of_line}"
++    if first_line is None or not ITEM.match(lines[first_line]):
++        return lines[:key] + [none_line] + lines[stop:]
++    indent = len(ITEM.match(lines[first_line]).group(1))
++    items = [n for n in body if ITEM.match(lines[n]) and len(ITEM.match(lines[n]).group(1)) == indent]
++    import yaml
++
++    bounds = items + [stop]
++    for index, first in enumerate(items):
++        last = bounds[index + 1]
++        while last > first + 1 and is_filler(lines[last - 1]):
++            last -= 1
++        entry = yaml.safe_load("".join(lines[first:last]))
++        if isinstance(entry, list) and entry and isinstance(entry[0], dict) \
++                and str(entry[0].get("step")) == step:
++            rest = lines[key + 1:first] + lines[last:stop]
++            if not any(ITEM.match(line) for line in rest):
++                return lines[:key] + [none_line] + rest + lines[stop:]
++            return lines[:first] + lines[last:]
++    raise Refusal(f"the entry of step {step} could not be found in the lines of {state}")
++
++
++def write_checked(path, data, what, in_place=False):
++    """Write data to path and read it back. in_place writes the file itself, so a file that
++    cannot be written is refused rather than replaced."""
++    if in_place:
++        with open(path, "wb") as handle:
++            handle.write(data)
++    else:
++        tmp = path + ".back-out.tmp"
++        with open(tmp, "wb") as handle:
++            handle.write(data)
++        os.replace(tmp, path)
++    with open(path, "rb") as handle:
++        if handle.read() != data:
++            raise OSError(f"{what} {path} does not read back as written")
++
++
++def unquote(name):
++    """A path as git prints it, quoted in C style when it holds special characters."""
++    if len(name) < 2 or not (name.startswith('"') and name.endswith('"')):
++        return name
++    raw = name[1:-1].encode("utf-8").decode("unicode_escape").encode("latin-1")
++    return raw.decode("utf-8", errors="surrogateescape")
++
++
++def header_paths(rest):
++    """The a/ and b/ paths of a diff --git header, for a part with no ---/+++ or rename lines."""
++    if rest.startswith('"'):
++        parts = re.findall(r'"(?:[^"\\]|\\.)*"|\S+', rest)
++        return [unquote(p)[2:] for p in parts[:2]]
++    size = (len(rest) - 5) // 2
++    if len(rest) == 2 * size + 5 and rest[2 + size:5 + size] == " b/" \
++            and rest[2:2 + size] == rest[5 + size:]:
++        return [rest[2:2 + size]]
++    return []
++
++
++def patch_parts(patch):
++    """The patch split into one part per file: a list of (paths, text)."""
++    parts, current = [], None
++    for line in patch.splitlines(keepends=True):
++        if line.startswith("diff --git "):
++            current = [set(), [line]]
++            parts.append(current)
++            continue
++        if current is None:
++            continue
++        current[1].append(line)
++        bare = line.rstrip("\n")
++        for prefix in ("--- a/", "+++ b/", "rename from ", "rename to ", "copy from ", "copy to "):
++            if bare.startswith(prefix):
++                current[0].add(unquote(bare[len(prefix):]))
++        for prefix in ('--- "a/', '+++ "b/'):
++            if bare.startswith(prefix):
++                current[0].add(unquote(bare[4:])[2:])
++    result = []
++    for paths, text in parts:
++        if not paths:
++            paths.update(header_paths(text[0][len("diff --git "):].rstrip("\n")))
++        result.append((paths, "".join(text)))
++    return result
++
++
++def is_binary(text):
++    return any(line.startswith(("GIT binary patch", "Binary files ")) for line in text.splitlines())
++
++
++def glob_escape(path):
++    return re.sub(r"([\\*?\[])", r"\\\1", path)
++
++
++def status_entries():
++    """(code, path) for each entry of git status --porcelain -z, the new path of a rename."""
++    result = git("status", "--porcelain", "-z")
++    if result.returncode != 0:
++        raise OSError("git status failed: " + result.stderr.decode(errors="replace").strip())
++    fields = result.stdout.decode("utf-8", errors="surrogateescape").split("\0")
++    entries, index = [], 0
++    while index < len(fields):
++        field = fields[index]
++        index += 1
++        if not field:
++            continue
++        code, path = field[:2], field[3:]
++        if "R" in code or "C" in code:
++            index += 1
++        entries.append((code, path))
++    return entries
++
++
++def apply_mode(argv):
++    if len(argv) != 1:
++        raise Refusal("usage: back_out.sh --apply <patch>")
++    patch_path = os.path.abspath(argv[0])
++    name = os.path.basename(patch_path)
++    if not name.endswith("-backed-out.patch") or not STEP.fullmatch(name[:-len("-backed-out.patch")]):
++        raise Refusal(f"{argv[0]} is not named <step>-backed-out.patch")
++    step = name[:-len("-backed-out.patch")]
++    patch = read(patch_path)
++    inside = git("rev-parse", "--is-inside-work-tree")
++    if inside.returncode != 0 or inside.stdout.strip() != b"true":
++        raise Refusal("run --apply from inside the step's worktree")
++    parts = patch_parts(patch)
++    known = set().union(*(paths for paths, _ in parts)) if parts else set()
++    skipped, stuck = [], False
++    while True:
++        excludes = [f"--exclude={glob_escape(p)}" for p in skipped]
++        result = git("apply", "--3way", *excludes, patch_path)
++        if result.returncode == 0:
++            break
++        found = []
++        for line in result.stderr.decode("utf-8", errors="surrogateescape").splitlines():
++            if not line.startswith("error: ") or line.startswith(("error: patch failed:",
++                                                                   "error: cannot apply")):
++                continue
++            match = re.fullmatch(r"error: (.+?): [^:]+", line)
++            if match:
++                path = unquote(match.group(1))
++                if path in known and path not in skipped and path not in found:
++                    found.append(path)
++        if not found:
++            stuck = True
++            break
++        skipped.extend(found)
++        if all(paths <= set(skipped) for paths, _ in parts):
++            break
++    skipped_path = os.path.join(os.path.dirname(patch_path), f"{step}-skipped.patch")
++    try:
++        if skipped:
++            text = "".join(part for paths, part in parts if paths & set(skipped))
++            write_checked(skipped_path, text.encode("utf-8", errors="surrogateescape"),
++                          "the skipped part")
++        elif os.path.exists(skipped_path):
++            os.remove(skipped_path)
++        entries = status_entries()
++        if stuck and not any("U" in c or c in ("AA", "DD") for c, _ in entries):
++            sys.stderr.write(result.stderr.decode(errors="replace"))
++            print(f"failed: git apply --3way {patch_path} applied nothing", file=sys.stderr)
++            return 1
++        for path in skipped:
++            print(f"skipped: {path}")
++        clean = not skipped
++        for code, path in entries:
++            if code == "??":
++                continue
++            if "U" in code or code in ("AA", "DD"):
++                clean = False
++                part = next((text for paths, text in parts if path in paths), "")
++                if is_binary(part) and git("checkout", "--theirs", "--", path).returncode == 0 \
++                        and git("add", "--", path).returncode == 0:
++                    print(f"binary: {path}, the patch's copy taken")
++                else:
++                    print(f"conflict: {path}")
++            elif code[0] != " ":
++                print(f"applied: {path}")
++    except OSError as error:
++        print(f"failed: {error}", file=sys.stderr)
++        return 1
++    return 0 if clean else 1
++
++
++def main(argv):
++    if argv and argv[0] == "--apply":
++        return apply_mode(argv[1:])
++    if len(argv) != 2:
++        raise Refusal("usage: back_out.sh <state file> <step>")
++    state, step = argv
++    if not STEP.fullmatch(step):
++        raise Refusal(f"step '{step}' is not a step name: letters, digits, '.', '_' and '-'")
++    try:
++        import yaml  # noqa: F401
++    except ImportError:
++        print("error: python3 cannot import yaml (PyYAML)", file=sys.stderr)
++        return 69
++    remove = os.environ.get("BACK_OUT_REMOVE", "")
++    if not os.path.isfile(remove):
++        print("error: the land skill's templates/remove_worktree.sh is not beside the spec skill",
++              file=sys.stderr)
++        return 69
++    if not os.path.isdir(".git"):
++        raise Refusal("run this script from the repository root of the main checkout")
++    text = read(state)
++    lines, start, end, data = dispatch_block(text, state)
++    entries, _ = entries_of(data)
++    entry = next((e for e in entries if isinstance(e, dict) and str(e.get("step")) == step), None)
++    if entry is None:
++        raise Refusal(f"the dispatch block of {state} has no entry for step {step}")
++    if entry.get("landing") != "backed-out":
++        raise Refusal(f"the entry of step {step} reads landing: {entry.get('landing')}, "
++                      "not backed-out")
++    worktree, base = entry.get("worktree"), entry.get("base")
++    if not isinstance(worktree, str) or not worktree.strip():
++        raise Refusal(f"the entry of step {step} has no worktree: key")
++    if base is None or isinstance(base, bool):
++        raise Refusal(f"the entry of step {step} has no base: key")
++    base = str(base)
++    branch = os.path.basename(os.path.normpath(worktree))
++    for ref in (base + "^{commit}", f"refs/heads/{branch}"):
++        if git("rev-parse", "-q", "--verify", ref).returncode != 0:
++            raise Refusal(f"{ref} does not name a commit")
++
++    new_text = "".join(without_entry(lines, start, end, step, state))
++    _, _, _, new_data = dispatch_block(new_text, state)
++    others = [e for e in entries if not (isinstance(e, dict) and str(e.get("step")) == step)]
++    new_entries, _ = entries_of(new_data)
++    if (others and new_entries != others) or (not others and new_data["dispatch"] != "none"):
++        print(f"failed: the dispatch block of {state} would not hold exactly the other entries",
++              file=sys.stderr)
++        return 1
++    if not os.access(state, os.W_OK):
++        print(f"failed: the state file {state} cannot be written", file=sys.stderr)
++        return 1
++
++    patch = os.path.join(os.path.dirname(state), "agents", "reviews", f"{step}-backed-out.patch")
++    diff = git("diff", "--binary", base, f"refs/heads/{branch}")
++    again = git("diff", "--binary", base, f"refs/heads/{branch}")
++    if diff.returncode != 0 or again.returncode != 0:
++        sys.stderr.write(diff.stderr.decode(errors="replace"))
++        print(f"failed: git diff --binary {base} {branch}", file=sys.stderr)
++        return 1
++    try:
++        if diff.stdout:
++            os.makedirs(os.path.dirname(patch), exist_ok=True)
++            write_checked(patch, diff.stdout, "the patch")
++            if again.stdout != diff.stdout:
++                raise OSError(f"the patch {patch} does not compare equal with the diff")
++            print(f"wrote: {patch}")
++        else:
++            if os.path.exists(patch):
++                os.remove(patch)
++            print("no patch: the diff is empty")
++    except OSError as error:
++        print(f"failed: {error}", file=sys.stderr)
++        return 1
++    sys.stdout.flush()
++
++    removed = subprocess.run(["sh", remove, state, step])
++    if removed.returncode != 0:
++        return removed.returncode
++
++    try:
++        write_checked(state, new_text.encode("utf-8"), "the state file", in_place=True)
++    except OSError as error:
++        print(f"failed: {error}", file=sys.stderr)
++        return 1
++    print(f"removed: dispatch entry {step}")
++    return 0
++
++
++try:
++    sys.exit(main(sys.argv[1:]))
++except Refusal as refusal:
++    print(f"error: {refusal}", file=sys.stderr)
++    sys.exit(64)
++PY
+diff --git a/skills/spec/templates/back_out.test.sh b/skills/spec/templates/back_out.test.sh
+new file mode 100644
+index 0000000..60625c5
+--- /dev/null
++++ b/skills/spec/templates/back_out.test.sh
+@@ -0,0 +1,319 @@
++#!/bin/sh
++# Exercise back_out.sh on scratch repositories built as land.sh leaves a back-out: the worktree on
++# <branch>-land, <branch> holding the builder's work and the wip commit, and ledger copies left
++# uncommitted in the worktree. Cases: a text change, a new file, a file whose name holds a space
++# and a binary change carried by the patch and restored by back_out.sh --apply in a new worktree
++# from a later main; a text file main changed left unmerged with its markers, and a binary file
++# both sides changed taken as the patch's copy, while the clean files are applied; a file main
++# deleted and one main renamed skipped, named and saved to the skipped part while the rest is
++# applied; the entry removed and every other byte of the state file unchanged, in the list form,
++# the single entry form, and with a comment line or a blank line under dispatch: and between
++# entries; the worktree and both branches gone; a read-only state file refused before anything
++# is removed, then a rerun that goes through; an empty diff, which writes no patch and removes
++# an old one; a refusal of remove_worktree.sh, which leaves the patch, the entry, the worktree
++# and the branches; and each refusal on an argument, a state file or an entry the script cannot
++# use. The test runs the land skill's remove_worktree.sh from this repository, beside this skill.
++
++set -u
++
++fail() {
++    printf 'FAIL: %s\n' "$1" >&2
++    exit 1
++}
++
++test_root=$(mktemp -d "${TMPDIR:-/tmp}/back-out-test.XXXXXX") || fail "could not create scratch directory"
++test_root=$(CDPATH= cd "$test_root" && pwd -P)
++trap 'rm -rf "$test_root"' 0 1 2 3 15
++script=$(CDPATH= cd "$(dirname "$0")" && pwd -P)/back_out.sh
++
++g() {
++    git -c user.name=t -c user.email=t@t "$@"
++}
++
++expect_in() {
++    case "$1" in
++        *"$2"*) ;;
++        *) fail "$3; expected \"$2\" in: $1" ;;
++    esac
++}
++
++run() {
++    sh "$script" "$@" >"$test_root/out" 2>"$test_root/err"
++    status=$?
++    out=$(cat "$test_root/out")
++    err=$(cat "$test_root/err")
++}
++
++# The state file with the given dispatch block text ($1), written to $state.
++write_state() {
++    {
++        printf '# State\n\nThe configuration.\n\n```yaml\nverify:\n- true\n```\n\n```yaml\n'
++        printf '%s\n' "$1"
++        printf '```\n\n## Open items\n\n- none.\n'
++    } >"$state"
++}
++
++# make_repo <name> <step> <folder> [deleted | renamed]: main holds a.txt, b.txt, img.bin,
++# both.bin, del.txt, ren.txt and a ledger; the base is main's head; the worktree <folder> changes
++# a.txt line 2, adds new.txt and "sp ace.txt", and changes img.bin, both.bin, del.txt and ren.txt,
++# commits them as the wip commit and checks out <folder>-land at main, with a report and a
++# changed plan.md left uncommitted in its ledger copy. Then main moves on: a.txt line 2, b.txt and
++# both.bin change, and with a fourth argument main deletes del.txt or renames ren.txt to
++# ren2.txt. Sets repo, wt, state, base, patch and skipped.
++make_repo() {
++    repo=$test_root/$1
++    mkdir -p "$repo/.agents" "$repo/.scratch/p/agents/reviews"
++    cd "$repo" || fail "could not enter $repo"
++    git init -q -b main
++    printf 'ledger_root: .scratch\n' >.agents/plan.yaml
++    printf '.agents/worktrees/\n' >.gitignore
++    printf '# Plan: p\n' >.scratch/p/plan.md
++    : >.scratch/p/agents/reviews/.gitkeep
++    printf '1\n2\n3\n' >a.txt
++    printf 'b\n' >b.txt
++    printf '\000\001\002x' >img.bin
++    printf '\000\001\002y' >both.bin
++    printf 'd\n' >del.txt
++    printf 'r\nr\nr\n' >ren.txt
++    state=.scratch/p/orchestrator-state.md
++    patch=.scratch/p/agents/reviews/$2-backed-out.patch
++    skipped=.scratch/p/agents/reviews/$2-skipped.patch
++    write_state 'dispatch: none'
++    g add -A && g commit -q -m base || fail "could not commit the base"
++    base=$(git rev-parse --short HEAD)
++    wt=$repo/.agents/worktrees/$3
++    git worktree add -q -b "$3" "$wt" main || fail "could not add the worktree"
++    (
++        cd "$wt" || exit 1
++        printf '1\ntwo\n3\n' >a.txt
++        printf 'new\n' >new.txt
++        printf 'spaced\n' >'sp ace.txt'
++        printf '\000\001\002X\003' >img.bin
++        printf '\000\001\002Z\004' >both.bin
++        printf 'd2\n' >del.txt
++        printf 'r\nR\nr\n' >ren.txt
++        g add -A && g commit -q -m wip && git checkout -q -b "$3-land" main
++    ) || fail "could not build the worktree's work"
++    printf 'report\n' >"$wt/.scratch/p/agents/reviews/$2-report.md"
++    printf 'ruling\n' >>"$wt/.scratch/p/plan.md"
++    printf '1\nTWO\n3\n' >a.txt
++    printf 'b2\n' >b.txt
++    printf '\000\001\002M\005' >both.bin
++    case "${4:-}" in
++        deleted) git rm -q del.txt ;;
++        renamed) git mv ren.txt ren2.txt ;;
++    esac
++    g add -A && g commit -q -m moved || fail "could not move main on"
++}
++
++# prepare <folder>: /spec's preparation commit and a new worktree from main at the same folder.
++# Sets new.
++prepare() {
++    g add -A && g commit -q -m prepare || fail "could not make the preparation commit"
++    new=$repo/.agents/worktrees/$1
++    git worktree add -q -b "$1" "$new" main || fail "could not add the new worktree"
++}
++
++# apply: back_out.sh --apply on the patch from inside the new worktree; sets out, err, status.
++apply() {
++    (cd "$new" && sh "$script" --apply "$repo/$patch") >"$test_root/out" 2>"$test_root/err"
++    status=$?
++    out=$(cat "$test_root/out")
++    err=$(cat "$test_root/err")
++}
++
++# The list form: the step's entry between two others, with a comment kept.
++list_block() {
++    printf 'dispatch:                    # the steps in flight\n'
++    printf -- "- step: first\n  worktree: .agents/worktrees/first\n  landing: not-started\n"
++    printf -- "- step: '%s'\n  worktree: .agents/worktrees/%s\n  base: %s\n  landing: backed-out\n  round: 1\n" \
++        "$1" "$2" "$3"
++    printf -- "- step: last\n  worktree: .agents/worktrees/last\n  landing: not-started\n"
++}
++
++# The patch carries every change, the entry goes, the rest of the state file is unchanged, and the
++# worktree and both branches are gone. Red when --binary is dropped (the patch holds no binary
++# content), when the entry is removed with its neighbours or not at all, or when the worktree or a
++# branch is left.
++make_repo full 22 2b-22
++write_state "$(list_block 22 2b-22 "$base" | sed '/^- step: .22.$/,/^  round: 1$/d')"
++cp "$state" "$test_root/expected"
++write_state "$(list_block 22 2b-22 "$base")"
++run "$state" 22
++[ "$status" -eq 0 ] || fail "the back-out failed: $out $err"
++[ -f "$patch" ] || fail "no patch at $patch"
++expect_in "$out" "wrote: $patch" "the patch's write is not reported"
++expect_in "$(cat "$patch")" "GIT binary patch" "the patch carries no binary content"
++expect_in "$out" "removed: worktree .agents/worktrees/2b-22" "the worktree's removal is not reported"
++expect_in "$out" "removed: dispatch entry 22" "the entry's removal is not reported"
++cmp -s "$state" "$test_root/expected" ||
++    fail "the state file is not the old one without the entry: $(diff "$test_root/expected" "$state")"
++[ -e "$wt" ] && fail "the worktree is still there"
++for branch in 2b-22 2b-22-land; do
++    git rev-parse -q --verify "refs/heads/$branch" >/dev/null && fail "branch $branch is still there"
++done
++
++# /spec's preparation and new worktree, then back_out.sh --apply: the clean files applied, the text
++# file main changed left unmerged, and the binary file both sides changed taken as the patch's
++# copy. Red when the patch lacks the binary content (img.bin is not restored), when the apply mode
++# does not take the patch's copy of a binary in conflict, or when a line is missing.
++prepare 2b-22
++apply
++[ "$status" -eq 1 ] || fail "--apply with a conflict did not exit 1 ($status): $out $err"
++for line in "applied: new.txt" "applied: sp ace.txt" "applied: img.bin" "applied: del.txt" \
++    "applied: ren.txt" "conflict: a.txt" "binary: both.bin, the patch's copy taken"; do
++    expect_in "$out" "$line" "the apply's line is missing"
++done
++case "$out" in
++    *"skipped:"* | *"conflict: both.bin"*) fail "--apply skipped a file or left the binary unmerged: $out" ;;
++esac
++[ -e "$repo/$skipped" ] && fail "--apply wrote a skipped part with nothing skipped"
++shortstatus=$(cd "$new" && git status --short)
++expect_in "$shortstatus" "UU a.txt" "a.txt, which main changed, is not unmerged"
++expect_in "$shortstatus" "M  both.bin" "both.bin is not staged as the patch's copy"
++expect_in "$shortstatus" "A  new.txt" "the new file is not applied"
++expect_in "$shortstatus" 'A  "sp ace.txt"' "the file whose name holds a space is not applied"
++expect_in "$shortstatus" "M  img.bin" "the binary change is not applied"
++[ "$(cat "$new/new.txt")" = new ] || fail "new.txt does not hold the builder's text"
++[ "$(cat "$new/sp ace.txt")" = spaced ] || fail "sp ace.txt does not hold the builder's text"
++printf '\000\001\002X\003' | cmp -s - "$new/img.bin" || fail "img.bin is not the builder's copy"
++printf '\000\001\002Z\004' | cmp -s - "$new/both.bin" || fail "both.bin in conflict is not the patch's copy"
++expect_in "$(cat "$new/a.txt")" "<<<<<<<" "a.txt holds no conflict markers"
++expect_in "$(cat "$new/a.txt")" "two" "a.txt's markers do not hold the builder's line"
++[ "$(cat "$new/b.txt")" = b2 ] || fail "b.txt is not main's copy"
++
++# Main deleted, or renamed, a file the patch changes: git apply --3way alone applies nothing, so
++# --apply excludes that file, applies the rest, names it on a skipped: line and writes its part of
++# the patch to <step>-skipped.patch. Red when the apply is not run again without the file, or
++# when the skipped part is not written.
++for how in deleted:del.txt renamed:ren.txt; do
++    make_repo "${how%%:*}" s5 s5 "${how%%:*}"
++    write_state "$(list_block s5 s5 "$base")"
++    run "$state" s5
++    [ "$status" -eq 0 ] || fail "the back-out failed: $out $err"
++    prepare s5
++    apply
++    [ "$status" -eq 1 ] || fail "--apply with a skipped file did not exit 1 ($status): $out $err"
++    expect_in "$out" "skipped: ${how#*:}" "the file main ${how%%:*} is not named"
++    expect_in "$out" "applied: new.txt" "the other files are not applied when main ${how%%:*} a file"
++    expect_in "$out" "conflict: a.txt" "a.txt is not left unmerged when main ${how%%:*} a file"
++    [ "$(cat "$new/new.txt" 2>/dev/null)" = new ] || fail "new.txt is not on disk when main ${how%%:*} a file"
++    [ -f "$repo/$skipped" ] || fail "no skipped part at $skipped"
++    expect_in "$(cat "$repo/$skipped")" "diff --git a/${how#*:} b/${how#*:}" "the skipped part lacks the file"
++    case "$(cat "$repo/$skipped")" in
++        *"a/a.txt"*) fail "the skipped part holds a file that was applied" ;;
++    esac
++done
++
++# An apply that fails and names no file it can exclude (a corrupt patch), with nothing left
++# unmerged, is a failure, not a clean apply. Red when --apply then exits 0 or prints no failed: line.
++(cd "$new" && git reset -q --hard && git clean -q -fd) || fail "could not reset the new worktree"
++printf 'diff --git a/b.txt b/b.txt\n--- a/b.txt\n+++ b/b.txt\n@@ -1,3 +1,3 @@\n-x\n' \
++    >"$test_root/g-backed-out.patch"
++(cd "$new" && sh "$script" --apply "$test_root/g-backed-out.patch") >"$test_root/out" 2>"$test_root/err"
++[ "$?" -eq 1 ] || fail "an apply that applied nothing did not exit 1"
++expect_in "$(cat "$test_root/err")" "applied nothing" "the apply that applied nothing is not named"
++
++# The single-entry form becomes dispatch: none. Red when that form is not rewritten.
++make_repo single s1 s1
++write_state 'dispatch: none'
++cp "$state" "$test_root/expected"
++write_state "$(printf "dispatch:\n  step: s1\n  worktree: .agents/worktrees/s1\n  base: %s\n  landing: backed-out" "$base")"
++run "$state" s1
++[ "$status" -eq 0 ] || fail "the back-out of a single entry failed: $out $err"
++cmp -s "$state" "$test_root/expected" ||
++    fail "the single entry did not become dispatch: none: $(diff "$test_root/expected" "$state")"
++
++# A comment line and a blank line directly under dispatch:, and between entries, are kept and only
++# the entry goes. Red when the first line under dispatch: is taken for the whole block, or when
++# the lines between the entry and the next one are removed with it.
++for under in '# the steps in flight' ''; do
++    make_repo "filler${under:+-comment}" s6 s6
++    block=$(printf 'dispatch:\n%s\n- step: first\n  landing: not-started\n\n# the backed-out step\n' "$under"
++        printf -- "- step: s6\n  worktree: .agents/worktrees/s6\n  base: %s\n  landing: backed-out\n" "$base"
++        printf '\n# the last step\n- step: last\n  landing: not-started')
++    write_state "$(printf '%s\n' "$block" | sed '/^- step: s6$/,/^  landing: backed-out$/d')"
++    cp "$state" "$test_root/expected"
++    write_state "$block"
++    run "$state" s6
++    [ "$status" -eq 0 ] || fail "the back-out with the line [$under] under dispatch: failed: $out $err"
++    cmp -s "$state" "$test_root/expected" ||
++        fail "the line [$under] under dispatch: or between entries was not kept: $(diff "$test_root/expected" "$state")"
++done
++
++# A state edit that cannot be made (a read-only state file) is refused before anything is
++# removed, and a rerun once the file is writable goes through. Red when the check comes after the
++# worktree's removal.
++make_repo readonly s8 s8
++write_state "$(list_block s8 s8 "$base")"
++cp "$state" "$test_root/expected"
++chmod a-w "$state"
++run "$state" s8
++chmod u+w "$state"
++[ -d "$wt" ] || fail "a state edit that cannot be made removed the worktree"
++for branch in s8 s8-land; do
++    git rev-parse -q --verify "refs/heads/$branch" >/dev/null || fail "a state edit that cannot be made removed $branch"
++done
++[ "$status" -eq 1 ] || fail "a read-only state file did not exit 1 ($status): $out $err"
++expect_in "$err" "failed: the state file $state cannot be written" "the read-only state file is not named"
++cmp -s "$state" "$test_root/expected" || fail "a state edit that cannot be made changed the state file"
++run "$state" s8
++[ "$status" -eq 0 ] || fail "the rerun after the state file was made writable failed: $out $err"
++expect_in "$out" "removed: dispatch entry s8" "the rerun did not remove the entry"
++
++# An empty diff writes no patch and removes an old one. Red when an empty diff writes a patch or
++# leaves the old one.
++make_repo empty s2 s2
++(cd "$wt" && git checkout -q s2 && git reset -q --hard "$base" && git branch -q -D s2-land) ||
++    fail "could not empty the branch"
++write_state "$(printf "dispatch:\n- step: s2\n  worktree: .agents/worktrees/s2\n  base: %s\n  landing: backed-out" "$base")"
++printf 'old\n' >"$patch"
++run "$state" s2
++[ "$status" -eq 0 ] || fail "the back-out of an empty diff failed: $out $err"
++[ -e "$patch" ] && fail "an empty diff left a patch"
++expect_in "$out" "no patch: the diff is empty" "the empty diff is not reported"
++expect_in "$(cat "$state")" "dispatch: none" "the last entry of a list did not leave dispatch: none"
++
++# A refusal of remove_worktree.sh keeps the patch, the entry, the worktree and the branches. Red
++# when the refusal is not passed on, or the entry is removed before the removal succeeds.
++make_repo refused s3 s3
++write_state "$(list_block s3 s3 "$base")"
++cp "$state" "$test_root/expected"
++printf 'stray\n' >"$wt/stray.txt"
++run "$state" s3
++[ "$status" -eq 1 ] || fail "a refusal of remove_worktree.sh did not exit 1 ($status): $out $err"
++expect_in "$out" "refused: stray.txt is outside the ledger root .scratch" "the refusal is not shown"
++[ -f "$patch" ] || fail "the refusal removed the patch"
++cmp -s "$state" "$test_root/expected" || fail "the refusal changed the state file"
++[ -d "$wt" ] || fail "the refusal removed the worktree"
++git rev-parse -q --verify refs/heads/s3 >/dev/null || fail "the refusal removed the branch"
++
++# Refusals, each exit 64 with nothing written.
++make_repo refusals s4 s4
++write_state "$(printf "dispatch:\n- step: s4\n  worktree: .agents/worktrees/s4\n  base: %s\n  landing: not-started" "$base")"
++cp "$state" "$test_root/expected"
++run
++[ "$status" -eq 64 ] || fail "no arguments did not exit 64 ($status)"
++expect_in "$err" "error: usage: back_out.sh <state file> <step>" "no usage line"
++run "$state" s4
++[ "$status" -eq 64 ] || fail "an entry not at landing: backed-out did not exit 64 ($status)"
++expect_in "$err" "reads landing: not-started, not backed-out" "the landing state is not named"
++run "$state" s9
++[ "$status" -eq 64 ] || fail "a step with no entry did not exit 64 ($status)"
++run .scratch/p/missing.md s4
++[ "$status" -eq 64 ] || fail "a missing state file did not exit 64 ($status)"
++write_state "$(printf "dispatch:\n- step: s4\n  worktree: .agents/worktrees/s4\n  base: %s\n  landing: backed-out" 1234567)"
++run "$state" s4
++[ "$status" -eq 64 ] || fail "a base that names no commit did not exit 64 ($status)"
++expect_in "$err" "does not name a commit" "the unknown base is not named"
++[ -e "$patch" ] && fail "a refusal wrote a patch"
++run --apply
++[ "$status" -eq 64 ] || fail "--apply with no patch did not exit 64 ($status)"
++expect_in "$err" "error: usage: back_out.sh --apply <patch>" "no usage line for --apply"
++printf 'x\n' >"$test_root/other.patch"
++(cd "$wt" && sh "$script" --apply "$test_root/other.patch") >"$test_root/out" 2>"$test_root/err"
++[ "$?" -eq 64 ] || fail "--apply on a patch not named <step>-backed-out.patch did not exit 64"
++expect_in "$(cat "$test_root/err")" "is not named <step>-backed-out.patch" "the patch's name is not refused"
++[ -d "$wt" ] || fail "a refusal removed the worktree"
++
++printf 'PASS: back_out.sh scratch tests\n'
+diff --git a/utils/pin.sh b/utils/pin.sh
+index c0056c8..c3c0251 100755
+--- a/utils/pin.sh
++++ b/utils/pin.sh
+@@ -24,6 +24,13 @@
+ # to anywhere outside Ordo; each is left as it is. It replaces a link into the live clone for a
+ # skill the tag holds and prints a line for each, and removes a link into the pinned worktree
+ # whose skill the tag lacks and prints a line for each.
++# ~/.agents/skills is not a default folder, so a link there into Ordo is not one of the pin's
++# links. When ORDO_SKILL_DIRS is not set and no folder of the list is ~/.agents/skills (compared by
++# path, and by resolved path for folders that exist), check mode reports each link there to the
++# pinned worktree or the live clone or inside either. The target is read as the link names it and
++# with its folder resolved. Pin mode removes each such link after linking and prints a line for
++# each. Every other entry of that folder, a real folder or a link to anywhere else, is left as it
++# is.
+ 
+ set -u
+ 
+@@ -50,6 +57,23 @@ else
+         skill_dirs="$skill_dirs$nl${CLAUDE_CONFIG_DIR%/}/skills"
+     fi
+ fi
++# Prints ~/.agents/skills, the folder outside the list whose links into Ordo check mode reports
++# and pin mode removes; prints nothing when ORDO_SKILL_DIRS is set, or when the folder is one of
++# the list, by its path or, for folders that exist, by their resolved paths. It is run where it is
++# used, so a folder the pin creates is compared once it exists.
++outside_dir() {
++    [ -z "${ORDO_SKILL_DIRS:-}" ] || return 0
++    outside="$HOME/.agents/skills"
++    outside_real=$(CDPATH= cd "$outside" 2>/dev/null && pwd -P) || outside_real=""
++    while IFS= read -r dir <&4; do
++        [ "$dir" = "$outside" ] && return 0
++        [ -n "$outside_real" ] || continue
++        [ "$(CDPATH= cd "$dir" 2>/dev/null && pwd -P)" = "$outside_real" ] && return 0
++    done 4<<EOF
++$skill_dirs
++EOF
++    printf '%s' "$outside"
++}
+ while IFS= read -r dir <&3; do
+     case "$dir" in
+         [[:space:]]* | *[[:space:]]) fail "'$dir' has leading or trailing whitespace" ;;
+@@ -74,6 +98,25 @@ skills_of() {
+     done
+ }
+ 
++# Succeeds when the link $1 points at the pinned worktree or the live clone or inside either, as
++# its target names it or with the target's folder resolved. A relative target is read from the
++# link's folder.
++links_into_ordo() {
++    ordo_target=$(readlink "$1") || return 1
++    case "$ordo_target" in
++        /*) ;;
++        *) ordo_target=$(dirname "$1")/$ordo_target ;;
++    esac
++    case "$ordo_target" in
++        "$stable" | "$stable"/* | "$repo" | "$repo"/*) return 0 ;;
++    esac
++    ordo_parent=$(CDPATH= cd "$(dirname "$ordo_target")" 2>/dev/null && pwd -P) || return 1
++    case "$ordo_parent/$(basename "$ordo_target")" in
++        "$stable" | "$stable"/* | "$repo" | "$repo"/*) return 0 ;;
++    esac
++    return 1
++}
++
+ # Prints one line per problem and returns the count through the exit status (capped at 1).
+ # The folder loops read $skill_dirs one line at a time on descriptor 3, so no path is split.
+ check_links() {
+@@ -116,6 +159,16 @@ EOF
+     done 3<<EOF
+ $skill_dirs
+ EOF
++    old_dir=$(outside_dir)
++    if [ -n "$old_dir" ]; then
++        for link in "$old_dir"/*; do
++            [ -L "$link" ] || continue
++            links_into_ordo "$link" || continue
++            printf 'pin: %s links to %s, in a folder pin.sh no longer links into; %s\n' \
++                "$link" "$(readlink "$link")" 'utils/pin.sh <tag> removes it' >&2
++            problems=$((problems + 1))
++        done
++    fi
+     [ "$problems" -eq 0 ]
+ }
+ 
+@@ -216,6 +269,15 @@ while IFS= read -r dir <&3; do
+ done 3<<EOF
+ $skill_dirs
+ EOF
++old_dir=$(outside_dir)
++if [ -n "$old_dir" ]; then
++    for link in "$old_dir"/*; do
++        [ -L "$link" ] || continue
++        links_into_ordo "$link" || continue
++        rm "$link" || continue
++        printf 'pin: removed %s, in a folder pin.sh no longer links into\n' "$link"
++    done
++fi
+ 
+ check_links || fail "the links do not match the pin after linking"
+ printf 'pinned: %s (%s), %s skills linked in: %s\n' \
+diff --git a/utils/pin.test.sh b/utils/pin.test.sh
+index 6fadbed..ade1e01 100755
+--- a/utils/pin.test.sh
++++ b/utils/pin.test.sh
+@@ -2,9 +2,11 @@
+ # Exercise pin.sh on a scratch repository and scratch skill folders, under a HOME whose path holds a
+ # space: a first pin, a move to a tag that adds one skill and drops another, the check mode on good
+ # and broken links, links into the live clone, the refusals with their messages, the check after
+-# linking, a pinned worktree deleted by hand, the default folder list, both forms of
+-# ORDO_SKILL_DIRS, folders that are not absolute paths, and a top-level tag. The test writes only
+-# under its two scratch roots, and checks that no path a split on a space could name appeared.
++# linking, a pinned worktree deleted by hand, the default folder list, the links into Ordo in
++# ~/.agents/skills removed and reported, every other entry there kept, and that folder left alone
++# when it resolves to a folder of the list, both forms of ORDO_SKILL_DIRS, folders that are not
++# absolute paths, and a top-level tag. The test writes only under its two scratch roots, and checks
++# that no path a split on a space could name appeared.
+ 
+ set -u
+ 
+@@ -331,6 +333,113 @@ run_pin v2
+ [ ! -e "$d2" ] || fail "pin.sh wrote into $d2 with the default folders"
+ [ -z "$(ls -A "$work")" ] || fail "pin.sh wrote into the folder it ran from: $(ls -A "$work")"
+ [ -e "$test_root/my" ] && fail "pin.sh split the HOME path on its space"
++
++# ~/.agents/skills, a folder the default list does not hold. Pin mode removes each link there to
++# the pinned worktree or the live clone or inside either, with a line for each, and leaves a real
++# folder and a link to anywhere else. One link names a top-level skill folder of the pinned
++# worktree that a skills/ tag does not have; one names the worktree through a link to its parent
++# folder, so it is inside the worktree only once the path is resolved; one names the worktree's
++# root.
++gone_line="in a folder pin.sh no longer links into"
++mkdir -p "$d2/find-skills" "$test_root/foreign/other"
++printf -- '---\nname: find-skills\n---\n' >"$d2/find-skills/SKILL.md"
++ln -s "$ORDO_STABLE/land" "$d2/land"
++ln -s "$repo/skills/gamma" "$d2/gamma"
++ln -s "$test_root/foreign/other" "$d2/other"
++ln -s "$HOME/.local/share" "$HOME/share-link"
++ln -s "$HOME/share-link/ordo-stable/plan" "$d2/plan"
++ln -s "$ORDO_STABLE" "$d2/stable-root"
++run_pin v2
++[ "$status" -eq 0 ] || fail "pinning with links in $d2 failed: $out $err"
++# Red when pin mode leaves the folder alone.
++[ -L "$d2/land" ] && fail "the link into the pinned worktree in $d2 was not removed"
++expect_in "$out" "pin: removed $d2/land, $gone_line" \
++    "the removal of the link into the pinned worktree in $d2 is not reported"
++# Red when the removal matches only the pinned worktree, not the live clone.
++[ -L "$d2/gamma" ] && fail "the link into the live clone in $d2 was not removed"
++expect_in "$out" "pin: removed $d2/gamma, $gone_line" \
++    "the removal of the link into the live clone in $d2 is not reported"
++# Red when the target is compared only as the link names it.
++[ -L "$d2/plan" ] && fail "the link into the pinned worktree through a linked folder was not removed"
++expect_in "$out" "pin: removed $d2/plan, $gone_line" \
++    "the removal of the link through a linked folder is not reported"
++# Red when only a path inside the worktree counts, not the worktree's root.
++[ -L "$d2/stable-root" ] && fail "the link to the pinned worktree's root was not removed"
++expect_in "$out" "pin: removed $d2/stable-root, $gone_line" \
++    "the removal of the link to the pinned worktree's root is not reported"
++# Red when every link in the folder is removed, whatever its target.
++[ "$(readlink "$d2/other")" = "$test_root/foreign/other" ] ||
++    fail "the link to a folder outside Ordo in $d2 was changed"
++[ -f "$d2/find-skills/SKILL.md" ] || fail "the real folder in $d2 was changed"
++case "$out$err" in
++    *"$d2/other"* | *"$d2/find-skills"*) fail "a line names an entry of $d2 kept: $out $err" ;;
++esac
++run_pin
++[ "$status" -eq 0 ] || fail "check mode failed once the links in $d2 were removed: $err"
++
++# Check mode fails on such a link and names it. Red when check mode does not read the folder.
++ln -s "$ORDO_STABLE/land" "$d2/land"
++run_pin
++[ "$status" -eq 1 ] || fail "check mode did not fail on a link in $d2 (exit $status)"
++expect_in "$err" \
++    "pin: $d2/land links to $ORDO_STABLE/land, $gone_line; utils/pin.sh <tag> removes it" \
++    "check mode did not name the link in $d2"
++case "$err" in
++    *"$d2/other"* | *"$d2/find-skills"*) fail "check mode named an entry of $d2 kept: $err" ;;
++esac
++
++# A link that could not be removed is not reported as removed, and the check after linking fails.
++chmod a-w "$d2"
++run_pin v2
++chmod u+w "$d2"
++[ "$status" -ne 0 ] || fail "pin mode passed with a link in $d2 it could not remove"
++[ -L "$d2/land" ] || fail "a link was removed from $d2, which is not writable"
++case "$out" in
++    *"pin: removed $d2/land"*) fail "a link in $d2 that could not be removed was reported" ;;
++esac
++
++# With ORDO_SKILL_DIRS set, the folder is not read. Red when the removal ignores ORDO_SKILL_DIRS.
++# The newline form, since the path of $d1 holds a space.
++export ORDO_SKILL_DIRS="$d1$nl"
++run_pin v2
++[ "$status" -eq 0 ] || fail "pinning with ORDO_SKILL_DIRS set failed: $out $err"
++[ "$(readlink "$d2/land")" = "$ORDO_STABLE/land" ] ||
++    fail "the link in $d2 was removed with ORDO_SKILL_DIRS set"
++case "$out$err" in
++    *"$d2"*) fail "a line names $d2 with ORDO_SKILL_DIRS set: $out $err" ;;
++esac
++run_pin
++[ "$status" -eq 0 ] || fail "check mode read $d2 with ORDO_SKILL_DIRS set: $err"
++unset ORDO_SKILL_DIRS
++
++# With $CLAUDE_CONFIG_DIR/skills naming the folder, it is a folder pin.sh links into, and its
++# links stay. Red when the removal runs on a folder of the list.
++ln -s "$repo/skills/beta" "$d2/beta"
++export CLAUDE_CONFIG_DIR="$HOME/.agents"
++run_pin v2
++[ "$status" -eq 0 ] || fail "pinning with CLAUDE_CONFIG_DIR at $HOME/.agents failed: $out $err"
++[ "$(readlink "$d2/beta")" = "$ORDO_STABLE/skills/beta" ] ||
++    fail "the link in $d2, a folder of the list, was not replaced by a link into the pin"
++case "$out" in
++    *"$gone_line"*) fail "a link in a folder of the list was removed as a leftover: $out" ;;
++esac
++rm -rf "$d2" "$HOME/share-link" "$test_root/foreign"
++unset CLAUDE_CONFIG_DIR
++
++# ~/.agents/skills a link to ~/.claude/skills is a folder of the list by its resolved path: pin and
++# check both pass and nothing is removed. Red when the folders are compared by their paths only.
++mkdir -p "$HOME/.agents"
++ln -s "$d1" "$d2"
++run_pin v2
++[ "$status" -eq 0 ] || fail "pinning with $d2 a link to $d1 failed: $out $err"
++case "$out" in
++    *"$gone_line"*) fail "a link was removed from $d2, a link to a folder of the list: $out" ;;
++esac
++[ "$(readlink "$d1/beta")" = "$ORDO_STABLE/skills/beta" ] || fail "$d1/beta is not linked"
++run_pin
++[ "$status" -eq 0 ] || fail "check mode failed with $d2 a link to $d1: $err"
++rm "$d2"
++rmdir "$HOME/.agents"
+ export CLAUDE_CONFIG_DIR="$HOME/config"
+ run_pin v2
+ [ "$status" -eq 0 ] || fail "pinning with CLAUDE_CONFIG_DIR set failed: $out $err"

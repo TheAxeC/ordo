@@ -427,3 +427,82 @@ pin: the links do not match the pin at v2
 - **A back-out of a step with binary or conflicting files** (`scratchpad/before_after_patch.sh`, a step changing `a.txt` and `img.bin`, main then changing `a.txt`). Before: the patch was `git diff <base> <branch>`, which holds `Binary files a/img.bin and b/img.bin differ` and not the content, and `git apply --check --cached` on main refused it whole: `error: a.txt: patch does not apply`, `error: cannot apply binary patch to 'img.bin' without full index line`, exit 1. After: `back_out.sh` writes `git diff --binary`, and `git apply --3way` in the new worktree prints `Applied patch to 'a.txt' with conflicts.` and `Applied patch to 'img.bin' cleanly.`, exits 1, and leaves `UU a.txt` for the builder and `M  img.bin` with the builder's bytes.
 - **The worktree removal.** `/land` Steps 11 and `back_out.sh` run `remove_worktree.sh <state file> <step>`. It reads the worktree from the entry and takes the branch from the worktree folder's name. From inside the worktree, `git status --porcelain -z --untracked-files=all` must list only paths under the ledger root, or each other path is refused by name and nothing is removed. It then runs `git worktree remove --force` and `git branch -D` of `<branch>` and `<branch>-land`, each only when it exists.
 - **The landing script's worktree folder.** `land.sh` builds the worktree path from the `ADAPT` line `landing_worktree_root`, `.agents/worktrees` by default. `/plan` Steps 5 sets it from `.agents/plan.yaml`'s `worktree_root`.
+
+## Repair round 2
+
+All four items of `agents/briefs/22-round-2.md` are done. The round changed only `skills/spec/templates/back_out.sh`, `skills/spec/templates/back_out.test.sh`, `skills/spec/SKILL.md` (Steps 3, 6 and 8 where they speak of the patch, "Steps / A step taken back out of main", and its Stops row) and `skills/plan-orchestration/SKILL.md` (the bullets of "Resuming, and handing the plan over").
+
+### The items
+
+| Item | State | Command that proves it |
+|---|---|---|
+| 1. `back_out.sh --apply <patch>`, a file main deleted or renamed skipped | DONE | `sh skills/spec/templates/back_out.test.sh 2>&1 \| tail -1` prints `PASS: back_out.sh scratch tests`; reverts A1, A2, A4, A5 and A6 below |
+| 2. A binary file in conflict taken as the patch's copy by the script | DONE | the same test; revert A3 below |
+| 3. The state edit checked before anything is removed; comment and blank lines under `dispatch:` | DONE | the same test; reverts S1, S2 and S3 below |
+| 4. The takeover question replaced: a handover is a resume point | DONE | `sed -n '106,113p' skills/plan-orchestration/SKILL.md`: line 106 ends "the landing, and a handover"; lines 111-112 hold the two new bullets; the bullet asking the user is gone |
+
+Item 1:
+- `--apply` writes the parts of all skipped files to one file, `agents/reviews/<step>-skipped.patch` beside the patch. With nothing skipped, it removes a `<step>-skipped.patch` left there.
+- It takes the step from the patch's name, which must be `<step>-backed-out.patch`, or it exits 64.
+- Besides the brief's exits, an apply that fails without naming a file it can exclude (a corrupt patch) and leaves nothing unmerged prints git's output and `failed: git apply --3way <patch> applied nothing`, and exits 1. Without this, that case exited 0 with no line.
+
+Item 2: `git checkout --theirs -- <path>` then `git add -- <path>`, for a file unmerged after the apply whose part of the patch is binary. A probe showed stage 3 holding the patch's blob after `git apply --3way` on a binary conflict. `git checkout --theirs` then wrote the builder's bytes, and `git status --porcelain` showed `M  both.bin`. The test checks the bytes with `cmp` and the line `binary: both.bin, the patch's copy taken`. Such a file counts toward exit 1.
+
+Item 3:
+- The state file without the entry is computed and parsed, and `os.access(state, W_OK)` checked, before the patch is written and before `remove_worktree.sh` runs.
+- The state file is then written in place, not by replacing it, so a read-only file is refused rather than replaced.
+- The first line under `dispatch:` that is not blank or a comment decides the list form.
+- Blank and comment lines at the end of an entry's lines stay in the file. When the last entry goes, they stay under `dispatch: none`.
+
+### The new cases and their reverts
+
+Each revert is a `sed` of a scratch copy of `back_out.sh` beside copies of `back_out.test.sh` and `remove_worktree.sh` (`scratchpad/reverts3.sh`), run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`. The first `FAIL:` line of each:
+
+- A1, the apply not run again without the file git names: `FAIL: the file main deleted is not named; expected "skipped: del.txt" in: `
+- A2, the skipped part written elsewhere: `FAIL: no skipped part at .scratch/p/agents/reviews/s5-skipped.patch`
+- A3, no patch's copy taken for a binary in conflict: `FAIL: the apply's line is missing; expected "binary: both.bin, the patch's copy taken" in: conflict: a.txt`
+- A4, no `applied:` lines: `FAIL: the apply's line is missing; expected "applied: new.txt" in: conflict: a.txt`
+- A5, `--apply` exits 0 on a conflict: `FAIL: --apply with a conflict did not exit 1 (0): conflict: a.txt`
+- A6, an apply that applied nothing not reported: `FAIL: an apply that applied nothing did not exit 1`
+- S1, the first line under `dispatch:` taken for the form: `FAIL: the back-out with the line [# the steps in flight] under dispatch: failed:  failed: the dispatch block of .scratch/p/orchestrator-state.md would not hold exactly the other entries`
+- S2, the blank and comment lines between entries removed with the entry: `FAIL: the line [# the steps in flight] under dispatch: or between entries was not kept: 17,18d16`
+- S3, the write check dropped, so the read-only file fails after the removal: `FAIL: a state edit that cannot be made removed the worktree`
+
+The cases:
+- The deleted and renamed cases run the whole back-out and then `--apply` in a new worktree. Each checks exit 1, the `skipped:` line, `applied: new.txt` with the file on disk, `conflict: a.txt`, and the skipped part holding the file's `diff --git` header and not `a.txt`.
+- The comment and blank cases each put the line directly under `dispatch:`, with a blank line and a comment between the entries. Each compares the result with `cmp` against the file with only the entry's lines deleted.
+- The read-only case checks the worktree, both branches and the state file kept, exit 1 and the `failed:` line, then a rerun after `chmod u+w` that exits 0.
+- `--apply` with no patch, and on a patch not named `<step>-backed-out.patch`, exits 64.
+
+No input of the test reaches the check that the computed dispatch block holds exactly the other entries once S1 and S2 are fixed. That check is an audit, not a proof. Its place before the removal is proved only for the write check, by S3.
+
+### Before and after
+
+- **A back-out of a step that changed a file main deleted or renamed** (`/spec` user). Before: `/spec` Steps 6 ran `git apply --3way`, which printed `error: del.txt: does not exist in index`, applied nothing and exited 1. The brief, committed earlier, said nothing, and the builder saw an empty `git status --short`. After: Steps 6 runs `back_out.sh --apply`, which applies every other file. It prints `skipped: del.txt` and writes that file's part to `<step>-skipped.patch`. The brief gains "The patch as applied" with those lines, telling the builder to rebuild the file from its part against main's tree. The launch commit carries the section and the skipped part.
+- **A binary file both sides changed.** Before: the file kept main's copy, and the brief told the builder to take the patch's copy, which a builder who runs no git cannot rebuild from a `--binary` delta or literal. After: the script takes the patch's copy and prints `binary: <path>, the patch's copy taken`. The builder checks it against main's change to the file, which the brief names by its commits.
+- **A comment or blank line under `dispatch:`.** Before: `back_out.sh` removed the worktree and both branches, then refused the state edit with `failed:`, and a rerun was refused with exit 64 for good. After: the entry is removed and the lines are kept. Before: a state file that cannot be written was found after the removal. After: it is refused with the worktree, both branches and the entry kept, and a rerun after the fix goes through.
+- **Handing the plan over** (plan user). Before: a session taking over asked the user which uncommitted ledger changes were the previous session's. After: a session that stops for a handover, a pause or a stop commits its own records by path first. So the next session finds none of them uncommitted and asks nothing.
+
+### Verify
+
+From the worktree root:
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md 2>&1 | tail -1
+verify: 13 commands passed
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/spec/templates/back_out.test.sh 2>&1 | tail -1
+PASS: back_out.sh scratch tests
+```
+
+`LC_ALL=C grep -n '[^ -~]'` over the four files prints nothing (exit 1).
+
+### Files changed in this round, with line counts
+
+`wc -l` after the round, and the change from the line count after round 1:
+
+| File | Lines | Change |
+|---|---|---|
+| `skills/spec/templates/back_out.sh` | 431 | +186 |
+| `skills/spec/templates/back_out.test.sh` | 319 | +113 |
+| `skills/spec/SKILL.md` | 196 | +9 |
+| `skills/plan-orchestration/SKILL.md` | 251 | +1 |
