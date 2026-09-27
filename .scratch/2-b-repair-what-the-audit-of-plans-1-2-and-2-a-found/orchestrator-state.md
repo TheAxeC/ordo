@@ -36,6 +36,7 @@ dispatch: none
 
 
 ## Closed items
+- 2026-09-27: the pin of ruling W: done on the user's yes. `v1.1.0` tagged at e3ab45d; `utils/pin.sh v1.1.0` linked the ten skills in `~/.claude/skills` and `~/.claude-work/skills` and removed the ten old links in `~/.agents/skills`; `utils/pin.sh` check mode exits 0.
 - 2026-09-27: open item CC (which process scripts go): ruled (a); part 2 ruled (b), `check_paths.py` deleted and side-by-side steps left to the orchestrator's judgment of the merge; booked as step 23.
 - 2026-09-27: the roadmap change of ruling CC: approved and committed in 7fa2da4.
 - 2026-09-27: open item DD (how the plan stops growing): ruled (a).
@@ -102,7 +103,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 21 and 23 landed (step 23 in the commit that carries this line, with step 22's work merged into it); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 23 landed; next: step 17 (the approved retro proposals without the five script proposals), then 17a, 18, 19, and the tag and the pin on the user's yes (ruling W).
+- Roadmap entry 2.B, step 23 landed and `v1.1.0` pinned; next: step 17 (the approved retro proposals without the five script proposals), then 17a, 18 and 19, under the pinned skills.
 - Open on Axel's side: none.
 
 ## Usage
