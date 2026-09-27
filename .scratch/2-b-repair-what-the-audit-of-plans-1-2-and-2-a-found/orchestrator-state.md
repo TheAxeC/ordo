@@ -39,7 +39,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item X (step 21, how a step line names its authority, raised 2026-09-27): ruling U 4 says `/spec` refuses a step whose line names neither a step of the approved list nor a ruling of the user. Today step lines name rulings in several free forms (`(ruling H)`, `ruling J`, `(ruling U 1)`, `(ruling 3b)`), and most name nothing, since the user approved the list when the plan opened. How a line names its authority is a shape of every plan's `plan.md`, so it is the user's. (a) Each step line ends with its authority in one form: `(approved)` for a step of the list the user approved when the plan opened, or `(ruling <name>)` naming a line of the Rulings section that ends "(the user)"; `skills/spec/templates/check_step.py <plan.md> <step>` refuses, naming the step, a line with neither or a ruling name the Rulings section lacks; `/spec` runs it before writing a brief; `/plan` writes `(approved)` on each step when the user approves the list; this plan's step lines are tagged from its Rulings section, each tag checked by the reviewer. Pro: the authority is visible on each line and a reviewer can check it. Con: every plan's step lines change shape. (b) One Rulings line lists the approved steps ("Approved steps: 1, 1a, ..."), extended only by a user ruling, and the script checks the step is in it. Pro: one place. Con: the step line shows no reason, and the list can drift from the step list. (c) A sentence in `/spec` and no script, the lazy option: a rule of this kind was already broken. Recommendation (a). The other two parts of step 21 (`/land` requires the ledger's `land.sh`; a rule inventory for any rewrite of a skill) wait with it, since they are one step.
+- none.
 
 ## Booked, no ruling needed
 
@@ -49,6 +49,7 @@ dispatch: none
 
 ## Closed items
 
+- 2026-09-27: open item X, how a step line names its authority: ruled (a), each step line ends with `(approved)` or `(ruling <name>)`, checked by `skills/spec/templates/check_step.py`, run by `/spec`, written by `/plan`.
 - 2026-09-27: open item W, when to pin: ruled (a), a tag and a pin once step 21 has landed, the pin run only on the user's yes to that tag.
 - 2026-09-27: open item V, the verify-list review: ruled (a), `land.sh`, `check_rule_inventory.py` and `sync_rules.py` kept and each made part of a process (steps 20 and 21).
 - 2026-09-27: open item U, launch.sh and steps 7a to 7d: ruled 1 (a), Claude only, the shell-launch route and every Codex part of the skills removed, steps 7a to 7d out of the plan (step 20); 2 (a), the verify-list scripts read and tabled for the user's ruling; 3 (a), new commits, no reset; 4 (a), the `/spec` check against unruled steps (step 21). Step 7d's worktree and step 17's worktree deleted with their branches by the user. Step 17's brief is kept and re-checked by `/spec` after step 21.
@@ -103,7 +104,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 and 20 landed (step 20 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 20 landed; step 21 stopped on open item X; next: step 21, then the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
+- Roadmap entry 2.B. Step 20 landed; next: step 21, then the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
 - Open on Axel's side: none.
 
 ## Usage
