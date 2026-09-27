@@ -106,3 +106,141 @@ File line counts reproduce (`wc -l`): 840, 1796, 34, 299 and 136.
 - About 30 minutes of wall time. It was mostly the verify runner (3:50), the dash suite (2:20), the five parallel revert suites, and the two load runs (318 s and 336 s).
 - About 60k tokens of context.
 - Scratch files are under `/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/6266a558-ed92-43a1-ac08-9bf8f4bc78a8/scratchpad/` (`rev/`, `load-sh/`, `load-dash/`, `one.sh`, `base-launch.sh`). No file in the repository or ledger was changed.
+
+# Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent, a064e914eab636e39; 135,664 tokens, 43 tool uses, 4,961 s.
+
+## 1. Verification lines, verbatim
+
+Command: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh /Users/axelfaes/workspace/ordo/.scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`. It exited 0 after 4:06 wall time, with load 14.87 before the run.
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+```
+`LAUNCH_SHELL=dash sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1`: `PASS: launch.sh scratch tests`
+
+**How the base files were established.** I rebuilt the base files by reverse-applying `git diff 372401f -- <file>` to copies of the step's files. `cmp` against `/Users/axelfaes/workspace/ordo/skills/plan-orchestration/templates/{launch.sh,launch.test.sh}` printed `same launch.sh` and `same launch.test.sh`. `wc -l` gives 806 and 1662 for the base, and 878 and 1946 for the step.
+
+**Batch method.** Each batch is 16 whole runs of `launch.test.sh` at 16 at once (`xargs -P 16`), from `scratchpad/7c-rr1/batch.sh`. `uptime` was recorded before each batch. The machine has 11 cores (`sysctl -n hw.ncpu`). During the runs, `ps -Ao pcpu,comm -r` showed Microsoft Defender at 97.5 %, 42 % and 34.8 %, mds_stores at 32.8 % and node at about 30 % each.
+
+| # | Files | Shell | Load before (1/5/15 min) | Wall time | Red | First `FAIL:` line of each red run |
+|---|---|---|---|---|---|---|
+| 1 | base | sh | 4.47 9.77 15.17 | 428 s | 0/16 | none |
+| 2 | step | sh | 11.24 12.71 14.77 | 462 s | 3/16 | `FAIL: a hanging start held the exit file for 7118 ms`, `... for 7750 ms`, `... for 9751 ms` |
+| 3 | base | sh | 11.70 13.05 14.37 | 397 s | 1/16 | `FAIL: a hanging start held the exit file for 6254 ms` |
+| 4 | step | sh | 12.42 13.39 13.99 | 393 s | 5/16 | `FAIL: a hanging start held the exit file for` 7093, 7085, 7085, 6205 and 7098 ms |
+| 5 (extra) | step | sh | 31.87 23.74 17.61 | 452 s | 0/16 | none |
+| 6 (extra) | base | sh | 19.92 20.84 18.64 | 350 s | 3/16 | `FAIL: start printing two lines: calls were`; `FAIL: a job of the leader's session: process 93310 is still running`; `FAIL: a job of the leader's session: process 93314 is still running` |
+| M (control) | step `launch.sh` with the base `launch.test.sh` | sh | 10.15 9.17 11.35 | 446 s | 1/16 | `FAIL: a hanging start held the exit file for 6188 ms` |
+| D1 | step | dash | 10.20 10.68 11.50 | 438 s | 1/16 | `FAIL: guard waits: no guard in the session while end hangs` |
+| D0 (control) | base | dash | 6.19 9.66 11.13 | 436 s | 2/16 | `FAIL: guard waits: no guard in the session while end hangs`; `FAIL: a hanging start held the exit file for 6950 ms` |
+
+**Are the step's files redder than the base's under the same load?**
+- In the four required alternating `sh` batches, yes: the step had 8 red of 32 runs and the base had 1 of 32. Every one of those reds was the same older case, "a hanging start held the exit file" (limit 6000 ms).
+- Over all six `sh` batches, the step had 8 red of 48 and the base had 4 of 48.
+- Under dash, the step had 1 red of 16 and the base had 2 of 16.
+- None of the reds is in a case this step adds or changes. None of them lies on a path that the step's code runs or lengthens, by the code reading below.
+- Control batch M ran the step's `launch.sh` with the base's test file and had 1 red of 16, the same as the base. That points to the step's longer test file, which puts other load on the 16 parallel runs, and not to `launch.sh`. It is one batch, so this is not proven.
+
+**The red cases, read against the step's code:**
+- **"a hanging start held the exit file"** (`launch.test.sh:1187-1199`). The timed window runs from the moment the note's start records its pid until the exit file appears. In that window: the start hangs, the runner stops it after its 3-second limit, then the scanner and the grace period run, then the builder runs, then the leader writes the exit file.
+  - There is no id, so no `end` runs, and the leader writes the exit file right after the builder's runner exits.
+  - The guard's first `ps_state` call comes 1 second after the guard starts. Even when it runs, it does not block the leader's write.
+  - `pid_gone` does not run: the run folder is new, so there is no pid file. Its timing would also fall outside the timed window.
+  - What the step adds on this path is only the compile of the `ps_state` sub text inside each runner's perl script.
+  - Conclusion: the step's code does not lengthen this path.
+- **"guard waits: no guard in the session while end hangs"** (line 1388, unchanged). The guard is looked up once, right after `end` starts. `ps_state` cannot end the guard: the guard only leaves its loop on a state starting with `Z`, and a running leader does not show one. A `ps` child of the guard has the guard as its parent, not pid 1, so it does not hide the guard from `orphans_of`. The base shows the same red under dash (batch D0).
+- **The builder's reported reds, read without being reproduced:**
+  - "the builder ended as the leader was killed" (lines 953-974): the runner writes the exit file itself and forks no guard. There is no `ps` call on that path.
+  - "a launch while a killed run's guard lives exited 0" (line 1359): the launch takes the lock before it calls `pid_gone` (`launch.sh`, the `exec perl -e "$take_lock"` line comes before `if ! pid_gone`). A `ps_state` call in flight in the guard delays the guard noticing the leader's end, which lengthens the time the guard holds the lock. That makes a 75 more likely, not less.
+
+**Reverts.** Each revert was applied to a copy of the step's `launch.sh` under `scratchpad/7c-rr1/rev/<r>/`, with the step's test file beside it, and the whole suite was run:
+
+| Revert | Exit | First `FAIL:` line |
+|---|---|---|
+| nolimit: `time() + 2` changed to `time() + 1000` in `ps_state` | 1 | `FAIL: ps hang: the session, its guard included, runs on five seconds after the leader's end` |
+| pidgone: `pid_gone` back to `state=$(ps -o stat= -p "$1" 2>/dev/null)` | 1 | `FAIL: a ps that never answers the launch: its ps ended 20023 ms after its start` |
+| nokill: `kill "KILL", $child;` removed | 1 | `FAIL: ps hang: the session, its guard included, runs on five seconds after the leader's end` |
+| noline: the guard's `print STDERR "launch.sh: the guard cannot run ps..."` removed | 1 | `FAIL: no ps: the stderr file holds 0 lines on ps, expected 1` |
+| asked0: `my $asked = 0;` | 1 | `FAIL: a normal end: the guard asked ps 26 ms after the builder: -o stat= -p 13341` |
+| askonce: `$ask_ps = 0;` removed | **0** | none (the suite stays green) |
+
+`grep -n alarm launch.sh` finds only the comment at line 211, so the guard has no alarm.
+
+## Repair round 1, refuted
+
+### Spec
+- **The README Doc text sentence "A normal end starts no `ps` in the guard."** (`7c-report.md`, Doc text). The round changed the case so that it checks only for no `ps` in the guard's first second, and the new head comment says "One that lives longer gets one ps a second while it lives". The README sentence states the stronger claim, which the case no longer checks.
+- **The README Doc text sentence "A guard with no `ps` on its `PATH` says so once in the stderr file."** Nothing proves the "once": see Proof, the askonce revert.
+
+### Proof
+- **Ruling 2's "one line, then asks ps no more" is an audit, not a proof.** `launch.sh:453` `$ask_ps = 0;` removed leaves the whole suite green (exit 0).
+  - The no-ps case keeps the leader alive only 2 seconds after its write (`patched leader-lives ... sleep 2`). So the guard reaches `ps` about once whether or not it stops asking.
+  - The case's check `[ "$lines" -eq 1 ]` (`launch.test.sh`, end of the no-ps case) passes with or without the flag.
+  - The report's ruling 2 row claims the guard "asks `ps` no more" and cites the case; the builder names only the print-line revert.
+- **The normal-end check was widened without a ruling.** At `launch.test.sh`, the case "A normal end starts no ps in the guard's first second":
+  ```
+  -[ ! -s "$PS_STATE_LOG" ] || fail "a normal end: the guard asked ps: $(cat "$PS_STATE_LOG")"
+  +    [ $((at - builder_end)) -ge 1000 ] ||
+  +        fail "a normal end: the guard asked ps $((at - builder_end)) ms after the builder: $call"
+  ```
+  - The predicate went from "no call recorded" to "no call within 1000 ms of the builder's end".
+  - Ruling 4 asked for the head comment to be changed, not the test. The brief's "What it must do" still says "A normal end starts no `ps` in the guard."
+  - The asked0 revert still turns it red (quoted above), but the case now passes a normal end that does start a `ps`.
+  - The report lists this under "changed" cases with no ruling cited for the widening.
+- **The launch-case bound does not measure what ruling 1 asked.** In the new case, the check is `[ $((killed - asked)) -le 4000 ]`. Ruling 1 asked for the refusal "within about 2 seconds of the `ps` call". The case measures when the stub `ps` is killed, with a 4-second bound, and does not time the refusal itself. It still discriminates against the unbounded revert (20023 ms).
+- **The report's first part is stale.** `7c-report.md` line 3 still says "Everything in the brief is done", and "The new cases" still says of the normal-end case "the log is empty". Both contradict the round section: its NOT DONE for the load runs, and the widened check above.
+- **The load-run closure does not reproduce as 0 red.** The builder reports `sh` load runs of 26 of 32 and 31 of 32 passed. My required `sh` batches were 8 red of 32 for the step and 1 red of 32 for the base (table above). The brief's requirement of 32 runs at 16 at once under `sh` and dash, each with 0 red, is not met on this tree under this machine's load. It is not met by the base either.
+
+### Standards
+- **`launch.sh:49-51` and `skills/plan-orchestration/SKILL.md:183` state bounds the round's own 2-second `ps` limit breaks.** `launch.sh` says "The guard ends within about a tenth of a second of a leader that is reaped. It ends within about a second of a leader left a zombie." `SKILL.md:183` says the same.
+  - While a `ps_state` call is in flight, the guard does not check `kill 0` for up to 2 seconds. A reaped leader can therefore be followed by the guard's end about 2 seconds later, and a zombie by about 3 seconds.
+  - The round's own ps-hang case allows 5 seconds for exactly that.
+  - Neither text mentions the `ps` window.
+- **`launch.test.sh` head comment, line 36** says "a normal end starts no ps in the guard, checked through a ps that records its calls". The round narrowed the case to the guard's first second (see Proof), and this line was not carried.
+- none further. The round's added lines have no non-ASCII characters and no added `.sh` line over 100 characters (by `awk` over `git diff 59409d1`). I found no history in the comments.
+  - The word counts in the report reproduce with `printf '%s' ... | wc -w`: 9, 8, 16, 17, 18, 19 and 18.
+  - The README line 124 quoted in the report equals `grep -n '' README.md | sed -n 124p`, byte for byte.
+  - Ruling 5 holds: head comment line 9 reads "names a pid that is not gone". The remaining uses of "live" in `launch.sh` (lines 8, 92 and 539) refer to the lock, not to the pid file.
+
+### Behaviour
+- **The zombie cases' patched copy now also raises the note's limit from 3 to 15 seconds.** The change is `s/"\$runner" 3 "\$\$"/"\$runner" 15 "\$\$"/g` added to `zombie_parent`. No ruling covers it, and it changes what the zombie cases run. It does not weaken what they assert: the r1 revert (the guard's zombie test removed) and the r2 revert (the refusal back to `kill -0`) still turn them red, per the builder; I did not rerun those two. The report states it only as "changed: the copy raises the note's limit to 15 s".
+- none further. The report states the host-visible changes with before and after:
+  - `ps` is found through the builder's `PATH` for the guard and the caller's `PATH` for the launch.
+  - Each call is bounded at 2 seconds.
+  - The guard writes one line to stderr when `ps` cannot be started.
+
+## Not checked
+- Linux, and a child subreaper that does not reap.
+- The builder's r1, r2, r4, r5, r6, r7 and r8 reverts as the builder built them. I ran my own nolimit, pidgone, nokill, noline, asked0 and askonce reverts instead.
+- Runs of 32 at 16 at once. Each of my batches was 16 runs.
+- Whether the step's test file causes the extra "hanging start" reds, beyond the one control batch M.
+- Why the unchanged "guard waits" lookup misses the guard under load. It happens on the base too.
+
+## Usage
+- About 95 minutes of wall time, mostly nine load batches of 350 to 462 s each, one 5-way revert batch, one asked0 revert run, the verify runner (4:06) and one dash suite run.
+- About 32 tool calls, and about 100k tokens of context.
+- The scratch files are under `/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/6266a558-ed92-43a1-ac08-9bf8f4bc78a8/scratchpad/7c-rr1/`: `base/`, `step/`, `mix/`, `recon/`, `rev/`, the batch outputs `b1`, `b2`, `b3`, `s1`, `s2`, `s3`, `m1`, `d1` and `bd1`, and `batch.sh`.
+- No file in the worktree, the repository or the ledger was changed. `git status --short` shows only the builder's four modified files and the untracked report.
