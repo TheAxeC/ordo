@@ -8,8 +8,6 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/plan-retro/templates/collect_findings.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-- sh skills/plan-orchestration/templates/launch.test.sh 2>&1 | tail -1
-- sh skills/plan-orchestration/templates/allow_list.test.sh 2>&1 | tail -1
 - sh skills/spec/templates/check_paths.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh skills/land/templates/verify.test.sh 2>&1 | tail -1
@@ -34,12 +32,10 @@ review_minutes: 0            # no time box.
 look:                        # none: no view changes.
 workers_at_once: 3           # ruled: up to three steps in flight, with disjoint paths.
 bench: []                    # no A/B.
-launch_note: /Users/axelfaes/workspace/research-hub/tools/oculus/bin/dispatch-note.mjs # the hub's note command, for step 7's shell launch (ruling E).
-worker_allow: []             # empty: a claude -p builder's allow list is built from the verify list and the brief's check commands (ruling S).
 ```
 
 ```yaml
-dispatch: []
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
