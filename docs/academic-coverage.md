@@ -15,7 +15,11 @@ The marks:
 - `rebuild later: <skill>`: the file belongs to that new skill, but the skill's first gate does not need it. A part of a `rebuild: <skill>` file that the skill's first gate does not need may go to entry 15.A. The reason names the `rebuild later: <skill>` file of the same skill that carries it, so 15.A builds the part when it builds that file.
 - `drop`: no new skill needs the file; the reason says why, and where a rule in it is kept elsewhere, it names the file that keeps it.
 
-Every file was read in full before it was marked. A file whose content splits across skills is marked for the skill that takes most of it, and the reason names where the rest goes.
+A part goes to the first roadmap entry whose gate needs it, and a skill that reads a part from another skill's files names an entry that is built before its own.
+
+Every file was read in full before it was marked. A file whose content splits across skills is marked for the skill that takes most of it, and the reason names a destination, or a drop with its reason, for every part the file holds. A rewrite of a reason keeps every destination the old reason named, unless it names the part's new one.
+
+Each claim in a reason is one the file's lines make, with the file's own numbers and conditions: a reason does not round a number, turn a condition into a rule, or name a feature the file does not hold.
 
 The check, run from the repository root over the four skills, exits 0 only when every file of the named skills is listed exactly once with a valid mark and a reason:
 

@@ -42,8 +42,9 @@ No other `##` heading appears outside the place row 6 gives it.
 
 ## Lists and tables
 
-- One rule per bullet or item. A bullet is one sentence where it can be, and a qualifier that changes the rule (an exception, a limit, a condition) stays in the same bullet as the rule.
+- One rule per bullet or item: two requirements that can each be broken while the other holds, joined by 'and', 'then', a semicolon or a second sentence, are two bullets. A bullet is one sentence where it can be, and a qualifier that changes the rule (an exception, a limit, a condition) stays in the same bullet as the rule.
 - A numbered list means order. An unordered set is a bulleted list.
+- A step that can refuse or stop comes before every step that writes, drafts or commits what the refusal or stop guards.
 - A table is used when three or more items share the same two or more attributes. A cell holds a phrase or a sentence; a rule that needs more than a cell goes in a list and the table points at it.
 - A code block holds commands, file formats and printed output, and carries a language tag where one applies.
 - Bold marks a list item's label (`- **Label.** ...`) and nothing else.
