@@ -53,6 +53,8 @@ dispatch:
   round_1_builder_usage: 305557 tokens, 14 tool uses, 7.6 minutes
   round_1_reviewer: 133901 tokens, 38 tool uses, 10.4 minutes
   round_2_rulings: agents/briefs/20-round-2.md, the one round beyond the cap, for round 1's unbuilt case
+  round_2_builder_usage: 317425 tokens, 7 tool uses, 5.4 minutes
+  round_2_reviewer: a06d1ed389b2a19c1, 14 tool uses, about 8 minutes, no finding
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -61,6 +63,7 @@ dispatch:
 
 ## Booked, no ruling needed
 
+- Found by step 20's review (Behaviour 1), for the pin of ruling W after step 21: `~/.agents/skills` holds ten links into `~/.local/share/ordo-stable` that `pin.sh` no longer manages; the user removes them at that pin, since no session edits a skill folder's links.
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 

@@ -159,3 +159,87 @@ Rulings, closure as claimed:
 - none. land.sh's command line, the removal of `worker_effort`, the Quick start line and the dispatch block each have a before-and-after row in the round's table.
 
 Reviewer usage: 34 tool uses, about 20 minutes.
+
+## Repair round 2, refuted
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md ... ok: skills/spec/SKILL.md   (10 ok: lines)
+Can't open skills/plan-orchestration/templates/{allow_list.py,allow_list.test.sh,launch-note.md,launch.sh,launch.test.sh} (5 lines, the uncommitted deletion)
+verify: 12 commands passed
+exit=0
+
+$ git grep -n -i -E 'codex|AGENTS\.md|launch\.sh|...|\.agents/launch' -- ':!.scratch' | wc -l
+38
+README.md:50 README.md:58 README.md:118 README.md:151 docs/academic-coverage.md:5 docs/academic-coverage.md:23 docs/academic-coverage.md:29 docs/roadmap.md:22 docs/roadmap.md:136 docs/roadmap.md:137 skills/land/SKILL.md:96 skills/land/templates/land.sh:11 skills/land/templates/land.sh:137 skills/land/templates/land.sh:138 skills/land/templates/land.test.sh:11 skills/land/templates/land.test.sh:513 skills/land/templates/land.test.sh:518 skills/land/templates/land.test.sh:519 skills/land/templates/land.test.sh:526 skills/land/templates/land.test.sh:538 skills/land/templates/land.test.sh:539 skills/ordo-init/SKILL.md:31 skills/ordo-init/SKILL.md:53 skills/ordo-init/templates/check_config.test.sh:79-82,84-86 skills/repo-setup/SKILL.md:44 skills/repo-setup/SKILL.md:55 skills/repo-setup/SKILL.md:64 skills/repo-setup/templates/CLAUDE.md:30 skills/repo-setup/templates/docs/dev/change-standard.md:45 skills/repo-setup/templates/sync_rules.test.sh:29 skills/spec/templates/brief.md:50 utils/pin.test.sh:39
+(identical to the report's V2 list)
+
+$ python3 skills/ordo-init/templates/check_config.py   (scratch git repo, plan.yaml copied with worker: codex:gpt-5.6-sol)
+error: worker is not claude:<model>: 'codex:gpt-5.6-sol'
+(plus missing-page and ignore errors, because my scratch repo holds no docs pages)
+exit=1
+
+Reverts, each in a scratch copy of skills/land/templates under the session scratchpad, never in the worktree:
+[green copy]  sh land.test.sh -> exit=0, "PASS: land.sh and usage.py scratch tests"
+[land.sh:46 `-lt 2` -> `-lt 3`]  exit=1, first FAIL:
+FAIL: land.sh <pkg> <base> exited 64, expected 1 at the preflight: [Usage: /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/land-test.0hmds3/ledger/land.sh <pkg> <base> [--no-browser] [--session <session log> --since <ISO time>]]
+[land.sh:46 `-lt 2` -> `-lt 1`, one argument let through]  exit=1, first FAIL:
+FAIL: land.sh <pkg> exited 1, expected 64: [/private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/land-test.iJyzdN/ledger/land.sh: line 51: $2: unbound variable]
+
+Scope of the round (stat mtimes of every changed path; ruling 20-round-2.md written 12:22:39):
+after the ruling: skills/land/templates/land.test.sh 12:23:16, agents/reviews/20-report.md 12:27:50; every other changed path is 12:07:16 or earlier
+$ wc -l skills/land/templates/land.test.sh
+751
+$ LC_ALL=C grep -n '[^ -~]' skills/land/templates/land.test.sh ; echo ascii=$?
+ascii=1   (no non-ASCII line)
+$ git status --short | wc -l
+33   (unchanged by this review)
+```
+
+### Spec
+- skills/land/templates/land.test.sh:224-245: ruling 1 is closed. The case calls `land.sh twoargs <clean_base>` with no option from `$test_root/two-arguments`. That folder is a mktemp folder, not a repository root. The case asserts exit 1 and a stderr of exactly `preflight failed: run this script from the repository root` (land.sh:112-113). That check comes after the argument-count check, the option loop and the LANDING_LOCK_WAIT check, and before any git, worktree or browser step. The control calls `land.sh twoargs` and asserts exit 64 and a stderr equal to the usage line. My read of land.sh:36-113 confirms this ordering.
+
+### Proof
+- land.test.sh:230-237: the report says the `-lt 3` revert turns the case red. My rerun in a scratch copy gave exit 1, and the first FAIL line is the one quoted above. It has the same text as the report's line; only the mktemp suffix differs. Every earlier case passes `--no-browser`, so this new case is the first one to fail. Closed.
+- land.test.sh:238-243: the report says the control turns red when one argument is let through. My rerun with `-lt 1` gave exit 1, and the first FAIL line is `land.sh <pkg> exited 1, expected 64: [...line 51: $2: unbound variable]`, the same as the report's line. Closed.
+- 20-report.md "Verify before you report, rerun": V1, V2 and V3 match my reruns. V1 printed ten PASS lines, ten ok lines and `verify: 12 commands passed`, exit 0. V2 found the same 38 lines. V3 printed the `worker is not claude:<model>` error with exit 1. The file count (751 lines) also matches. None.
+
+### Standards
+- land.test.sh:224-228: the new comment says what the case does and which revert turns it red. It has no dates, no rounds and no incident history. The file is ASCII only. None.
+- The only paths changed after the ruling are land.test.sh and the report, so nothing beyond them changed in this round. None.
+
+### Behaviour
+- None. land.sh itself did not change in this round.
+
+Reviewer usage: 14 tool uses, about 8 minutes.
+
+## Closed
+
+First run:
+- Spec 1 (the step line's models ruling text and `.agents/launch/2b-7`): fixed at landing, `plan.md` line 75 made Claude only and `.agents/launch/2b-7` deleted.
+- Spec 2 (`worker_effort`): closed in round 1, `git grep -n worker_effort -- ':!.scratch'` finds only the unknown-key case.
+- Spec 3 (the brief's line count of `launch-note.md`): no change needed, the count changes nothing the step did.
+- Standards 1 (`land.sh`'s `<runs dir>`): closed in round 1, its case built in round 2 (red under `-lt 3`).
+- Standards 2 (`skills/spec/SKILL.md:125`): closed in round 1.
+- Standards 3 (the dead builder undefined): closed in round 1, sharpened at landing (see round 1, Standards 1).
+- Standards 4 (history in test comments and names): closed in round 1, `grep -n -E 'again|old-'` on `check_config.test.sh` prints nothing.
+- Behaviour 1 (the links an earlier pin made in `~/.agents/skills`): booked in the state file's booked list, for the user at the pin of ruling W, since no session edits a skill folder's links.
+- Behaviour 2 (the before and after rows): closed in round 1.
+
+Round 1 run:
+- Spec (the ledger's `worker_effort` line): fixed at landing, removed from the state file's configuration block.
+- Proof (the two-argument command line unproven): closed in round 2, the one round beyond the cap.
+- Standards 1 (a finished builder read as dead in a later session): fixed at landing, `plan-orchestration/SKILL.md` names the report at the dispatch block's `report` path.
+- Standards 2 ("on that id" with no antecedent): fixed at landing, "on its agent id in `session_id`".
+
+Round 2 run: none.
