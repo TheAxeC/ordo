@@ -28,7 +28,7 @@ One path per line: a whole file, or a range of lines of a shared document, numbe
 
 ## Decisions taken in this brief (each reversible, none silent)
 
-1. <a choice the plan left open, taken here so the builder does not take it; a user-visible one went to the user before this brief was written>.
+1. <a choice the plan left open, taken here so the builder does not take it; a user-visible one went to the user before this brief was written>. <For a format or a rule applied across the tree: five real cases from the tree, each input and its output under the decision.>
 
 ## Read, with line ranges
 
