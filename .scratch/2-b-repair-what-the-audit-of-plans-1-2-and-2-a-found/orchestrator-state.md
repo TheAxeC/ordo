@@ -46,7 +46,8 @@ dispatch:
   reviewer: claude:opus, agent ac15f75e2f1f31c4f, launched 2026-09-27
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/21-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1: sent 2026-09-27, brief agents/briefs/21-round-1.md, paths the brief's plus skills/plan-help/SKILL.md, skills/plan/templates/orchestrator-state.md, skills/repo-setup/templates/docs/dev/change-standard.md, skills/refute/SKILL.md, skills/refute/templates/report.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
