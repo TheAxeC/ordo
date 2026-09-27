@@ -47,7 +47,7 @@ dispatch:
   builder_usage: 276603 tokens, 74 tool uses, 20.6 minutes
   reviewer: claude:opus, a native agent in the background, a2155aa82f638f98d
   reviewer_report: agents/reviews/20-refuter.md, 175814 tokens, 47 tool uses, 11.6 minutes
-  landing: not-started
+  landing: cherry-picking
   round: 2
   round_1_rulings: agents/briefs/20-round-1.md, paths widened by skills/spec/SKILL.md
   round_1_builder_usage: 305557 tokens, 14 tool uses, 7.6 minutes
