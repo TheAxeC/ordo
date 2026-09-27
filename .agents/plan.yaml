@@ -8,3 +8,4 @@ archive_root: .scratch/archive            # Where a closed plan's folder moves.
 worktree_root: .agents/worktrees          # Where a step's worktree is created; ignored by .gitignore's .agents/* line.
 worker: claude:opus                       # claude:<model> of the builder, for example claude:sonnet.
 reviewer: claude:opus                     # claude:<model> /refute runs on.
+libraries: avoid                          # check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.

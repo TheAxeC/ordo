@@ -12,6 +12,7 @@ projects:
     worktree_root: .agents/worktrees
     worker: claude:opus
     reviewer: claude:opus
+    libraries: check
     standards: []
     worktree_paths: [tools/tool-a]
     review: every
@@ -30,6 +31,7 @@ projects:
     worktree_root: .agents/worktrees
     worker: claude:opus
     reviewer: claude:opus
+    libraries: check
     standards: []
     worktree_paths: [tools/tool-b]
     review: earned

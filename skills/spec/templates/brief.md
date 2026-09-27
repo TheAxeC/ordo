@@ -30,6 +30,12 @@ One path per line: a whole file, or a range of lines of a shared document, numbe
 
 1. <a choice the plan left open, taken here so the builder does not take it; a user-visible one went to the user before this brief was written>. <For a format or a rule applied across the tree: five real cases from the tree, each input and its output under the decision.>
 
+## Libraries checked
+
+<under `libraries: check`: each candidate with its version, license, maintainer, last release, compatibility with the project's dependencies, what it would replace and what stays hand-written, and the library the user ruled; or "none found". Under `libraries: avoid`: "No new dependency: the project's `libraries` is `avoid`.">
+
+The builder adds no dependency this brief does not name. A library the builder finds that would cover its work is reported, not installed.
+
 ## Read, with line ranges
 
 1. <path> <lines>: <what the builder takes from it>.

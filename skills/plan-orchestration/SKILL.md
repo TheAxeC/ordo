@@ -153,7 +153,7 @@ On every resumption, with a dispatch block or without one:
 With `workers_at_once` above 1 the orchestrator, still one, may have that many steps running at once, each through steps 3 to 9 on its own, under these rules:
 
 - Whether two steps can run at once is decided by how simply the second one's change lands on the first's, not by their paths alone. For each pair the orchestrator states what each changes in code the other reads or changes, and how the later landing takes it: nothing to merge, a mechanical rerun (a converter, a formatter, a generator), a hand merge of named functions, or a dependency that forces an order. A pair whose later landing needs more than a mechanical rerun or a hand merge of a few named functions runs in sequence.
-- Each brief lists the paths its step writes under "Paths this step writes", and `/spec` compares the list with the briefs of the steps in flight by reading them (the `spec` skill's Steps 4).
+- Each brief lists the paths its step writes under "Paths this step writes", and `/spec` compares the list with the briefs of the steps in flight by reading them (the `spec` skill's Steps 5).
 - Two steps in flight may name the same file if and only if the orchestrator judges that merging them at landing is simple. It writes that judgment in the later step's dispatch entry as `shared_paths:`, naming each shared file and why the merge is simple; with no shared file the key is left out.
 - When the merge is not simple, the later step waits until the earlier one lands. No script checks the judgment.
 - A step that touches a configuration file or a rule file runs alone.

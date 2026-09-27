@@ -43,3 +43,34 @@ None. `LC_ALL=C grep -n '[^ -~]'` over the eleven files and the report prints no
 - `/plan` and `/spec` were not run with `libraries` missing; checked by reading `skills/plan/SKILL.md:31-33` and `skills/spec/SKILL.md:30`.
 - The report's first-run table was not re-run case by case.
 - This ledger's configuration block has no `libraries` line; the file is the orchestrator's.
+
+## Repair round 1, refuted
+
+Reviewer: a fresh claude:opus agent, read-only. Verification from the worktree root: the six `PASS:` lines and `verify: 7 commands passed`, exit 0; `check_config.py .` nine `note:` lines and its `ok:` line, exit 0. `git diff 33a30e8 --stat`: 13 files changed, 124 insertions(+), 40 deletions(-).
+
+### Spec
+
+None. Item 1 at `skills/spec/SKILL.md` lines 75 and 169, item 2 at `skills/plan-orchestration/SKILL.md` line 156 (Steps 5 is the path comparison, line 96), item 3 at `skills/plan/SKILL.md` line 54. The added "a library choice" on line 169 is needed: without it no bullet writes a library ruling to the Rulings section, and line 75 would read a line nothing writes.
+
+### Proof
+
+None. The round changed no script or test.
+
+### Standards
+
+None.
+
+### Behaviour
+
+1. `skills/spec/SKILL.md:75`: "A candidate the user has already ruled on, named by a line of `plan.md`'s Rulings section, is settled". Any Rulings line naming the candidate settles it, whatever capability it was ruled for, so a ruling for one step settles the same library for a different capability in a later step, and the user never makes that choice.
+
+### Not checked
+
+- The re-run path was traced by reading, not run.
+- The parts outside the round were not reread beyond the stale-name grep.
+
+## Closed
+
+- Spec 1 (the brief's line number for the `review` check): an error in the brief, no change to the diff.
+- Behaviour 1 to 3 of the first review: closed in repair round 1, confirmed by the review over it.
+- Repair round 1, Behaviour 1: fixed at landing. `skills/spec/SKILL.md` line 75 limits a settled candidate to a ruling on that candidate for the capability the step builds.

@@ -78,6 +78,7 @@ metadata:
   - a change no item asks for (name the item you would expect, or say "no item");
   - a substitute mechanism where the brief named a shape;
   - a decision the brief reserved for the user, taken;
+  - a dependency the diff adds that the brief does not name;
   - a premise in the brief's "What is on the tree" section that the reviewer's own grep does not reproduce;
   - a case of the brief's "Cases" that no test of the step checks;
   - a case whose first run on the unchanged tree the report does not give.

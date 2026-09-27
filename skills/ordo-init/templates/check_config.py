@@ -6,8 +6,9 @@ Usage: check_config.py [repository root]
 The keys, which of them are required and each optional key's default come from the plan skill's
 templates/plan.yaml, found beside this skill's folder. Prints one line per error and per note, and
 exits 1 when there is an error: a required key missing, an unknown key, a value of the wrong kind
-(a worker or reviewer that is not claude:<model> among them), a page the configuration names that
-does not exist, a worktree root git does not ignore, or a configuration file git ignores.
+(a worker or reviewer that is not claude:<model>, a review that is neither every nor earned, and a
+libraries that is neither check nor avoid among them), a page the configuration names that does not
+exist, a worktree root git does not ignore, or a configuration file git ignores.
 """
 import os
 import re
@@ -68,6 +69,8 @@ def check_project(root, label, config, keys, errors, notes):
             errors.append(f"{prefix}{key} is a {type(value).__name__}, its default is a {type(default).__name__}: {value!r}")
     if config.get("review") not in (None, "every", "earned"):
         errors.append(f"{prefix}review is neither every nor earned: {config['review']!r}")
+    if "libraries" in config and config["libraries"] not in ("check", "avoid"):
+        errors.append(f"{prefix}libraries is neither check nor avoid: {config['libraries']!r}")
     worktree_root = config.get("worktree_root")
     if isinstance(worktree_root, str):
         probe = os.path.join(worktree_root.rstrip("/"), "step-worktree")

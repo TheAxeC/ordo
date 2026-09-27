@@ -89,16 +89,71 @@ for key in 'launch_note: ""' 'worker_allow: []' 'worker_effort: high'; do
     expect_error "unknown-${key%%:*}" "unknown key: ${key%%:*}"
 done
 
-make_repo projects
-mkdir -p "$test_root/projects/tools/tool-a/docs" "$test_root/projects/tools/tool-b/docs"
-for tool in tool-a tool-b; do
-    : >"$test_root/projects/tools/$tool/ROADMAP.md"
-    : >"$test_root/projects/tools/$tool/docs/building.md"
-    : >"$test_root/projects/tools/$tool/docs/change-standard.md"
-done
-cp "$script_dir/../../plan/templates/plan.projects.yaml" "$test_root/projects/.agents/plan.yaml"
+# A repository whose configuration is the several-projects example, with each project's pages present.
+make_projects_repo() {
+    make_repo "$1"
+    for tool in tool-a tool-b; do
+        mkdir -p "$repo/tools/$tool/docs"
+        : >"$repo/tools/$tool/ROADMAP.md"
+        : >"$repo/tools/$tool/docs/building.md"
+        : >"$repo/tools/$tool/docs/change-standard.md"
+    done
+    cp "$script_dir/../../plan/templates/plan.projects.yaml" "$repo/.agents/plan.yaml"
+}
+
+make_projects_repo projects
 expect_pass projects
 sed -i.bak '/^    worker: /d' "$test_root/projects/.agents/plan.yaml"
 expect_error projects "tool-a: required key missing: worker"
+
+# libraries is a required key. Red when templates/plan.yaml marks it optional or does not hold it.
+make_repo libraries-missing
+sed -i.bak '/^libraries:/d' "$test_root/libraries-missing/.agents/plan.yaml"
+expect_error libraries-missing "required key missing: libraries"
+
+# libraries takes check or avoid, and any other value is refused with the value. Red when
+# check_config.py drops the libraries value check.
+for case in "maybe:maybe:'maybe'" "capital:Check:'Check'" "empty-string:'':''" "boolean:yes:True"; do
+    name=libraries-${case%%:*}
+    value=${case#*:}
+    shown=${value#*:}
+    value=${value%%:*}
+    make_repo "$name"
+    sed -i.bak '/^libraries:/d' "$test_root/$name/.agents/plan.yaml"
+    printf 'libraries: %s\n' "$value" >>"$test_root/$name/.agents/plan.yaml"
+    expect_error "$name" "libraries is neither check nor avoid: $shown"
+done
+
+# An empty libraries value is refused, not taken as missing or as a pass. Red when the value check
+# skips a value of None, as the review check does.
+make_repo libraries-empty
+sed -i.bak '/^libraries:/d' "$test_root/libraries-empty/.agents/plan.yaml"
+printf 'libraries:\n' >>"$test_root/libraries-empty/.agents/plan.yaml"
+expect_error libraries-empty "libraries is neither check nor avoid: None"
+
+# check and avoid both pass; the controls are the refused values above. Red when templates/plan.yaml
+# does not hold libraries (unknown key) or when the value check refuses the value.
+for value in check avoid; do
+    make_repo "libraries-$value"
+    sed -i.bak '/^libraries:/d' "$test_root/libraries-$value/.agents/plan.yaml"
+    printf 'libraries: %s\n' "$value" >>"$test_root/libraries-$value/.agents/plan.yaml"
+    expect_pass "libraries-$value"
+done
+
+# In the projects: form, the project that lacks libraries is named, and the project that has it is
+# not. Red when check_config.py drops the project's label from the error, or when plan.projects.yaml's
+# tool-a has no libraries line.
+make_projects_repo projects-libraries
+sed -i.bak '/^  tool-b:/,${/^    libraries:/d;}' "$test_root/projects-libraries/.agents/plan.yaml"
+expect_error projects-libraries "tool-b: required key missing: libraries"
+case "$output" in
+    *"tool-a: required key missing: libraries"*) fail "projects-libraries: tool-a named although it sets libraries: $output" ;;
+esac
+
+# The value check runs in the projects: form too, and names the project. Red when check_config.py
+# drops the libraries value check.
+make_projects_repo projects-libraries-value
+sed -i.bak '/^  tool-a:/,/^  tool-b:/s/^    libraries: .*/    libraries: maybe/' "$test_root/projects-libraries-value/.agents/plan.yaml"
+expect_error projects-libraries-value "tool-a: libraries is neither check nor avoid: 'maybe'"
 
 printf 'PASS: check_config.py scratch tests\n'

@@ -55,7 +55,11 @@ Run from the repository root.
    - Its placeholders are filled from this repository: the standards pages, the folders a renamed name is grepped across, the verification commands with their filters.
    - Each rule the repository already states elsewhere is added, citing the file it came from.
 5. Draft `ledger_root`, `archive_root` and `worktree_root`: an existing folder of plans (a folder whose subfolders hold `plan.md` and `orchestrator-state.md`) or of worktrees is kept; otherwise the example's values.
-6. Ask for `worker` and `reviewer`, with the example's value as the offered answer ("Stops").
+6. Ask the user for the keys the repository cannot give ("Stops").
+   - `worker` and `reviewer` are asked with the example's value as the offered answer.
+   - `libraries` is asked with its two values and what each means, and with no offered answer, since the example's value is only an example.
+   - `check` means `/spec` looks for a library for every capability a step builds before it writes the brief.
+   - `avoid` means a step adds no new dependency.
 7. Leave each optional key out, so its default applies, unless the repository gives a reason.
    - A key that is written names that reason in its comment.
    - `standards` lists the coding, layout or prose standard pages the repository has.
@@ -79,7 +83,7 @@ Run from the repository root.
 ### Checking an existing file
 
 1. With `.agents/plan.yaml` present, write nothing and run `templates/check_config.py`.
-2. It reports: a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>`, `review` neither `every` nor `earned`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
+2. It reports: a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>`, `review` neither `every` nor `earned`, `libraries` neither `check` nor `avoid`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
 3. Optional keys left out are listed as notes, with the default that applies.
 4. For each error, propose the fix ("Stops").
 5. Make each fix the user approved.
@@ -91,7 +95,7 @@ Run from the repository root.
 |---|---|---|---|
 | The draft | Every setup, at Steps 11 | What Steps 10 lists | The user's approval or correction, and, when the skill runs alone, the answer to the commit question |
 | Several roadmaps | More than one roadmap candidate | The candidates | The user's pick |
-| Worker and reviewer | Every setup, at Steps 6 | The offered answer Steps 6 names | The user's answer |
+| Worker, reviewer and libraries | Every setup, at Steps 6 | The offered answer for `worker` and `reviewer`, and the two values of `libraries` with what each means, as Steps 6 names them | The user's answers |
 | A failing command | A command meant for the verification page fails its one run | What Steps 3 shows beside it | The user's decision |
 | A fix in the check | The check reports an error in an existing file | The error and the proposed fix | The user's approval |
 | No commit allowed | The repository's commit rule does not allow the commit, at Steps 14, when the skill runs alone | The files written, and the command that shows them (`git status --short`) | The user's commit |

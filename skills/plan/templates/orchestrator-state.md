@@ -12,6 +12,7 @@ worktree_paths: []           # sparse-checkout paths for a step's worktree; empt
 executor: agent              # the plan's default for who builds a step: agent (a builder dispatched in the worktree), inline (the orchestrating session writes the step itself), academic-paper (the step is built through that skill). Chosen per step by the orchestrator and recorded in the dispatch block; a step of manuscript content is always academic-paper.
 worker: claude:<model>       # the default worker is claude:opus; a builder never runs on Fable.
 reviewer: claude:<model>     # the model /refute runs on: claude:opus by default; a reviewer never runs on Fable.
+libraries: check|avoid       # the project's library policy from plan.yaml: check, /spec looks for libraries before a brief; avoid, no new dependency.
 review: every                # every, or earned: under the loop, the reviewer runs unless the worker's record earns the skip (plan-orchestration, "The review, earned").
 refute_after_repair: yes     # yes: /refute runs again over each repair round, its findings fixed at landing or raised as open items, never sent back; no: the orchestrator's read of the round stands in.
 repair_rounds: 1             # the most repair rounds a step gets; a refutation that finds nothing ends them early; the round cap in plan-orchestration's Rules allows one beyond it under its exception.

@@ -10,6 +10,7 @@ archive_root: .scratch/archive            # required. Where a closed plan's fold
 worktree_root: .agents/worktrees          # required. Where a step's worktree is created; add it to .gitignore.
 worker: claude:opus                       # required. claude:<model> of the builder.
 reviewer: claude:opus                     # required. claude:<model> /refute runs on.
+libraries: check                          # required. check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
 standards: []                             # optional, default []. Files every brief tells the builder to read in full, and the reviewer holds a diff to.
 worktree_paths: []                        # optional, default []. Sparse-checkout paths for a step's worktree; [] means the whole tree.
 review: every                             # optional, default every. every, or earned (plan-orchestration, "The review, earned").
