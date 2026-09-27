@@ -50,7 +50,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- Open item W (when to pin, raised 2026-09-27): the skills this session runs are the pinned release v1.0.0 (commit 80cfa51, `~/.claude-work/skills/spec` links into `~/.local/share/ordo-stable`), 348 commits behind main, so none of plan 2.B's skill changes, step 21's checks included, bind the orchestrator until a new pin. Step 19 tags and asks. (a) Also tag and pin once step 21 has landed, on the user's yes, so steps 17, 17a, 18 and 19 run under the fixed skills. (b) Pin at step 19 only, the lazy option: the rest of the plan runs under the old skills. Recommendation (a).
 
 ## Booked, no ruling needed
 
