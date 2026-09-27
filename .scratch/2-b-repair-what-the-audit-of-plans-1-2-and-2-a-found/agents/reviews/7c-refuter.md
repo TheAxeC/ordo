@@ -244,3 +244,26 @@ verify: 14 commands passed
 - About 32 tool calls, and about 100k tokens of context.
 - The scratch files are under `/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/6266a558-ed92-43a1-ac08-9bf8f4bc78a8/scratchpad/7c-rr1/`: `base/`, `step/`, `mix/`, `recon/`, `rev/`, the batch outputs `b1`, `b2`, `b3`, `s1`, `s2`, `s3`, `m1`, `d1` and `bd1`, and `batch.sh`.
 - No file in the worktree, the repository or the ledger was changed. `git status --short` shows only the builder's four modified files and the untracked report.
+
+# Closed
+
+The first review's findings were sent back as the seven rulings of round 1 (`agents/briefs/7c-round-1.md`). The findings of the run over round 1 were not sent back; each is closed here.
+
+First review:
+
+- Spec (the Doc text cut short): built in round 1 (ruling 7).
+- Proof (two word counts off by one): built in round 1 (ruling 6).
+- Standards ("so a normal end starts no ps", "live" and "not gone", a 21-word sentence): built in round 1 (rulings 4, 5 and 6).
+- Behaviour (`ps` with no time limit, a failed `ps` silent, `ps` through `PATH`): built in round 1 (rulings 1, 2 and 3).
+
+Repair round 1, refuted:
+
+- The load runs, and Proof's last item (the brief's 0 red under `sh` not met): the brief's "What it must do" load item is not met on this tree under this machine's load, and not by main's files before the step either (alternating `sh` batches: the step 8 red of 32, main's files 1 of 32; over six batches 8 of 48 and 4 of 48; `dash` 1 of 16 and 2 of 16). No red is in a case the step adds or changes, and by the review's reading none lies on a path the step's code lengthens. Booked as step 7d.
+- Spec (the README sentences "A normal end starts no `ps` in the guard" and "says so once"): fixed at landing; the README bullet says a leader that ends within a second of the builder starts no `ps` in the guard, and that a guard with no `ps` says so once and then asks no more.
+- Proof (the guard's "asks no more" an audit): fixed at landing. The no-ps case runs a copy whose leader lives 4 seconds after its write. With `$ask_ps = 0;` removed: `FAIL: no ps: the stderr file holds 3 lines on ps, expected 1`.
+- Proof (the normal-end check narrowed to the guard's first second): accepted. Ruling 4 set the design, a leader alive past a second gets one `ps` a second; the case checks what that design promises, and the `$asked = 0` revert turns it red. The test's head comment line and the README bullet now say the same.
+- Proof (the launch case timed the killed `ps`, not the refusal): fixed at landing. The case also times the refusal, within 4 seconds of the launch, checked first. With `pid_gone` back to an unbounded `ps`: `FAIL: a ps that never answers the launch: refused 20186 ms after the launch`.
+- Proof (the report's first part stale): the report is the builder's record; the booking in `plan.md` states the end state.
+- Standards (`launch.sh` head comment and `SKILL.md:183` without the `ps` window): fixed at landing; both say a `ps` call in flight adds up to 2 seconds, its time limit.
+- Standards (the test's head comment line 36): fixed at landing.
+- Behaviour (the zombie cases' copy raises the note's limit to 15 seconds): accepted; it keeps `end` hanging past the guard's first `ps`, and the zombie reverts stay red.

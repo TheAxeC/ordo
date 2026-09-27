@@ -39,24 +39,7 @@ worker_allow: []             # empty: a claude -p builder's allow list is built 
 ```
 
 ```yaml
-dispatch:
-- step: '7c'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  session_id: aca9757949c9ed248
-  builder_usage: 191,457 tokens, 77 tool uses, 3,046 s
-  reviewer: claude:opus, a fresh agent, aeb6c6afaff3c9c42; 99,985 tokens, 25 tool uses, 1,409 s
-  worktree: .agents/worktrees/2b-7c
-  base: 372401f
-  launched: 2026-09-26
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7c-report.md
-  landing: cherry-picking
-  round: 1
-  round_1_start: 59409d1 (the worktree's wip commit)
-  round_1_rulings: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/briefs/7c-round-1.md
-  round_1_paths: the brief's list
-  round_1_builder_usage: the same agent, 59,184 tokens, 158 tool uses, 18,823 s (the notification's totals); its sh load runs 26 of 32 and 31 of 32, dash 32 of 32
-  round_1_reviewer: claude:opus, a fresh agent, a064e914eab636e39, with an A/B of the base and the step under the same load; 135,664 tokens, 43 tool uses, 4,961 s
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -65,7 +48,7 @@ dispatch:
 
 ## Booked, no ruling needed
 
-- Found by step 7b's review of its round 2, booked as step 7c in `plan.md`: the runner's guard waits on `kill 0` to the leader's pid, which succeeds on a zombie, so a killed leader its parent does not reap keeps the guard waiting and holding the lock, and no exit file is written.
+- Found by step 7c's review of its round 1, booked as step 7d in `plan.md`: `launch.test.sh` red under load in cases with windows of a few seconds, on main's files before step 7c and after it; the brief's load item of step 7c not met.
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 
@@ -121,8 +104,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-26. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7b in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Step 7c (the guard and a zombie leader) is in repair round 1; then 17, 17a (the library check, ruling T), 18 and 19.
+- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 7c, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7c in the commit that carries this line). The tree is clean after it.
+- Roadmap entry 2.B. Step 7d (`launch.test.sh` under load, booked at step 7c's landing) is next; then 17, 17a (the library check, ruling T), 18 and 19.
 - Open on Axel's side: none.
 
 ## Usage
@@ -149,3 +132,4 @@ dispatch:
 | 7a | claude:opus agent, effort high: 246,290 tokens, 76 tool uses, 2,315 s; round 1: 365,182 tokens, 63 tool uses, 3,644 s; round 2: 218,816 tokens, 101 tool uses, 12,118 s | 149,503 tokens, 34 tool uses, 1,028 s; round 1: 165,597 tokens, 42 tool uses, 991 s; round 2: 170,557 tokens, 39 tool uses, 1,563 s | 2 (one under the exception, ruling 5 unbuilt) | 9 (9 rulings), then 1 (4 items) | 17 files changed, 1167 insertions(+), 91 deletions(-) | no | 10 | 0 | 115 | 98508 | 535522 | 23186713 | 242 | 405 | none; shared with step 7's wait |
 | 7 | claude:opus, `claude -p` from a shell through `launch.sh` with the launch note: resumed run 55,437 output tokens, 141 turns, 2,811 s; round 1: 42,481 output tokens, 143 turns, 2,602 s | 147,356 tokens, 33 tool uses, 2,172 s; round 1: 120,890 tokens, 27 tool uses, 875 s | 1 | 10 (10 rulings) | 5 files changed, 385 insertions(+), 47 deletions(-) | no | 6 | 0 | 87 | 69187 | 206121 | 24108442 | 202 | 154 | none; shared with step 7b's review and round 1, and ruling T |
 | 7b | claude:opus agent, effort high: 258,005 tokens, 97 tool uses, 6,205 s; round 1: 316,580 tokens, 37 tool uses, 3,126 s; round 2: 356,254 tokens, 27 tool uses, 2,146 s (the agent's notification totals) | 163,825 tokens, 41 tool uses, 2,071 s; round 1: 132,302 tokens, 34 tool uses, 1,532 s; round 2: 132,373 tokens, 32 tool uses, 1,448 s | 2 (one under the exception, the brief's What it must do item 1 unbuilt by round 1) | 8 (8 rulings), then 4 (4 rulings) | 5 files changed, 539 insertions(+), 85 deletions(-) | no | 4 | 0 | 49 | 37730 | 91373 | 8081914 | 114 | 137 | none |
+| 7c | claude:opus agent, effort high: 191,457 tokens, 77 tool uses, 3,046 s; round 1: 59,184 tokens, 158 tool uses, 18,823 s (the agent's notification totals) | 99,985 tokens, 25 tool uses, 1,409 s; round 1: 135,664 tokens, 43 tool uses, 4,961 s | 1 | 7 (7 rulings) | 6 files changed, 408 insertions(+), 39 deletions(-) | no | 6 | 0 | 38 | 37268 | 557266 | 9246203 | 82 | 486 | none |

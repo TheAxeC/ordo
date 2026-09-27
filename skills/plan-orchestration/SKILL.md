@@ -103,7 +103,7 @@ The ledger is the whole handoff. An orchestrator may stop after any step and ano
 
 On resumption with a dispatch block present:
 
-- The builder is checked first, by the check its harness allows: a CLI worker runs while `kill -0` on the pid in its pid file succeeds, has finished when its exit file is present, and is dead when the pid is gone and no exit file is present five seconds later, its processes then stopped by `templates/launch.sh`; a native Claude agent has its id in `session_id` and the runner's own agent listing.
+- The builder is checked first, by the check its harness allows. A CLI worker runs while the pid in its pid file is not gone. Item 5 of "Launching a builder" says when a pid is gone. It has finished when its exit file is present. It is dead when the pid is gone and no exit file is present five seconds later. `templates/launch.sh` then stops its processes. A native Claude agent has its id in `session_id` and the runner's own agent listing.
 - A builder still running is waited for.
 - A finished builder resumes at the read of its report.
 - A step at `landing: cherry-picking` is checked on main (`git status`, `git diff --cached`) before anything is applied again.
@@ -180,10 +180,10 @@ A shell launch runs in this order:
    - Without a `launch_note`, the note options are left out.
 2. Run `templates/launch.sh` from the orchestrator's shell. It removes an exit file an earlier run left, starts the builder in a session of its own, and returns once that session's leader has written its pid to the pid file.
    - A killed run's builder runner is gone about 3 seconds after the KILL. It waits at most 2 seconds on the session scanner. It also gives the builder 1 second of grace. It writes the exit file before it goes.
-   - The runner leaves a guard once the builder has ended. The guard is gone about a tenth of a second after the leader.
+   - The runner leaves a guard once the builder has ended. The guard is gone about a tenth of a second after a leader that is reaped. It is gone within about a second of a leader left a zombie, which item 5 counts as gone. A `ps` call in flight adds up to 2 seconds to either.
    - The session leader, the builder's runner and its guard hold the launch's lock while each lives. The builder and the note calls do not hold it.
    - So a launch of the same pid file is refused with exit 75 while any of them lives. A killed run therefore never writes an exit file after a later launch removed it. A relaunch waits until the earlier run's session has no process left.
-   - It refuses with exit 75, starting nothing, while the pid file names a live process. It also refuses while a live launch or run of the same pid file holds its lock file, `<pid file>.lock`. The refusal names the pid of the launcher that took the lock. A lock file left by a run that has ended is taken over.
+   - It refuses with exit 75, starting nothing, while the pid file names a pid that is not gone. Item 5 says when a pid is gone. It also refuses while a live launch or run of the same pid file holds its lock file, `<pid file>.lock`. The refusal names the pid of the launcher that took the lock. A lock file left by a run that has ended is taken over.
    - The lock file stays beside the pid file after every launch. So a pid file under the ledger leaves `<pid file>.lock` there, untracked. It is removed with the step's other launch files once the builder has ended.
 3. As soon as the launch returns, write the builder's identity into the dispatch block and commit it, as item 4 of "Steps" says: the pid from the pid file, and the session id in `session_id`.
    - For a `claude -p` builder the session id is in the session file, which `templates/launch.sh` writes before the builder starts.
@@ -191,7 +191,10 @@ A shell launch runs in this order:
 4. Once the builder's transcript path is known, pass it to the note with `sh <this skill's folder>/templates/launch.sh transcript --note <launch_note> --id <id file> <path>`. A plan whose `launch_note` is empty skips this item.
    - A `claude -p` builder writes its transcript as `<session id>.jsonl` from the moment it starts, in the runner's projects folder, in the folder whose name is the builder's `--cwd` with every `/` and `.` replaced by `-`. A resumed run writes to the same file.
    - The rollout under `~/.codex/sessions/` whose name ends with the session id is the transcript of a Codex builder.
-5. Watch the exit file and the pid with a monitor. `templates/launch.sh` writes the builder's exit code to the exit file as `exit <code>` once the builder has ended, and `kill -0 <pid>` fails once the session leader has gone.
+5. Watch the exit file and the pid with a monitor. `templates/launch.sh` writes the builder's exit code to the exit file as `exit <code>` once the builder has ended.
+   - The pid is gone when `kill -0 <pid>` fails. It is also gone when `ps -o stat= -p <pid>` shows a state starting with `Z`.
+   - `templates/launch.sh` counts a `ps` that fails, answers nothing or takes over 2 seconds as showing no zombie.
+   - A state starting with `Z` marks a zombie: a leader that ended and that its parent has not reaped. `kill -0` still succeeds on it.
    - The session leader may be killed while the builder runs. The builder's runner then stops the builder and its session within about 3 seconds at most. It then writes the exit file, which can follow the pid's end by a few seconds on a loaded machine.
    - A KILL after the builder ended leaves the exit file too, as the bullet "After the builder has ended" below says.
    - A pid gone with no exit file five seconds later is a dead builder, which "Resuming, and handing the plan over" says how to handle.
@@ -213,7 +216,7 @@ A shell launch runs in this order:
 - Codex project settings live in `<repo>/.codex/config.toml` and its command rules in `<repo>/.codex/rules/`; the orchestrator never edits a user-level file.
 - TERM, INT or HUP sent to the pid stops the builder and every process of its session, then writes the exit file as `exit <128 plus the signal number>` and calls the note's `end`. A builder that had already ended keeps its own code, written before a running `end` is stopped.
 - KILL sent to the pid ends the session leader at once, and no `end` follows. While the builder runs, its runner then stops the builder and its session within about 3 seconds at most. It then writes the exit file as `exit 137`.
-- After the builder has ended, the guard its runner left writes the builder's code once the leader is gone. It writes nothing when the leader wrote the exit file first. It covers a KILL while the note's `end` runs, and one during the leader's own write. The guard waits for the leader however long the leader lives. It is in the leader's process group, and the leader's pid is not reused while that group lives. So every KILL once the builder's runner has started leaves an exit file.
+- After the builder has ended, the guard its runner left writes the builder's code once the leader is gone. It writes nothing when the leader wrote the exit file first. It covers a KILL while the note's `end` runs, and one during the leader's own write. The guard waits for the leader however long the leader lives. It counts the leader gone as item 5 of the launch does. So a KILL to a leader its parent does not reap still leaves the exit file. It is in the leader's process group, and the leader's pid is not reused while that group lives. So every KILL once the builder's runner has started leaves an exit file.
 - The builder's runner also writes the exit file after a stop that TERM, INT or HUP started. So a KILL that reaches the leader during that stop still leaves the exit file.
 - A builder is stopped with TERM first, as the land skill's Steps 1 does. The note's `end` is then called when the leader's stop finishes before the KILL two seconds later.
 

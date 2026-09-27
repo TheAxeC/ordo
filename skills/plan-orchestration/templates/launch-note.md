@@ -29,5 +29,6 @@ Every call must return at once. `launch.sh` stops a call that has not returned a
 - When TERM, INT or HUP sent to the session leader stops the builder, the leader writes the exit file first and then sends this call.
 - When the session leader is killed with KILL, or ends without finishing, this call does not follow, and the record stays open.
 - A KILL to the session leader while this call runs still leaves the exit file. The builder's runner left a guard, which writes the builder's code once the leader is gone.
+- The guard counts the leader gone when `kill -0` fails, or when `ps` shows it a zombie. So a KILL to a leader its parent does not reap leaves the exit file too.
 - A KILL while the builder runs leaves it too: the builder's runner stops the builder and writes `exit 137`. Only a KILL while `start` runs, before any builder started, leaves no exit file.
 - It closes the record. The builder's exit code reaches the exit file whatever `end` does.

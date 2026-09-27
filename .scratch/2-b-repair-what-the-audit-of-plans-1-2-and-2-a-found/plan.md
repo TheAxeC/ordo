@@ -26,7 +26,8 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - ✅ 7 `utils/check_skill_layout.py` and `utils/check_rule_inventory.py` with their tests: lines split on newlines only; `__` counted as bold only outside a word (ruling 2b); a byte-order mark; indented headings; empty tables and version tags caught; an old path that is a directory refused; each fault the checkers review planted turns a test red; its builder is launched from a shell through `launch.sh claude` with `--note` naming the hub's `dispatch-note.mjs`, and the orchestrator checks that its row appears under this session in oculus's Agents view (1 commit)
 - ✅ 7a The allow list for a shell-launched `claude` builder (ruling R (a)): `skills/plan-orchestration/templates/launch.sh` passes the commands a builder may run to `claude -p` as `--allowedTools`, from the new optional key `worker_allow:` of `.agents/plan.yaml` and the ledger's configuration block, a list of command prefixes, each passed as `Bash(<prefix>:*)` (ruling S (a)), built by default from the verify list and the brief's gate commands; its test, `check_config.py` and its test, the `plan` skill's `templates/plan.yaml` and `templates/orchestrator-state.md`, and the recipe text in `plan-orchestration` change with it; proven by a real `claude -p` run under the list that runs a verify command (1 commit)
 - ✅ 7b The exit file's remaining cases in `skills/plan-orchestration/templates/launch.sh`, found by step 7a's review of its round 2: a KILL after the builder ended, while the note's `end` runs, leaves no exit file; the runner of a killed run, still stopping its builder, writes `exit 137` after a later launch with the same exit file removed it; a KILL between the leader's two writes leaves only `<exit file>.tmp`; the runner's no-replace write (the `-e` return and the `link`) has no case that either guard's revert turns red; the runner reads its session scanner's answer with no time limit, so a stop has no bound. Each case with a test its revert turns red, run whole-suite at 16 at once under `sh` and `dash`, and the texts of `plan-orchestration` and `templates/launch-note.md` made to say what the code does (1 commit)
-- 7c The runner's guard in `skills/plan-orchestration/templates/launch.sh` waits on `kill 0` to the session leader's pid, which succeeds on a zombie, found by step 7b's review of its round 2: a killed leader that its parent does not reap (a parent still alive, or a Linux child subreaper that does not reap) keeps the guard waiting and holding the lock, and no exit file is written. The guard treats a leader that is a zombie as gone; a case in `launch.test.sh` keeps a killed leader a zombie in a patched copy and requires the builder's code in the exit file within five seconds of the KILL, red with the zombie check removed; the launch's refusal of a pid file naming a live process (`launch.sh`, the `kill -0 "$old_pid"` check) also counts a zombie as gone; the texts of `launch.sh`, `plan-orchestration/SKILL.md` (the resumption check and item 5 of the launch, which read a pid as gone when `kill -0` fails), `launch-note.md` and the land skill's `SKILL.md` Steps item 1 say what the code does, a pid counted gone when `kill -0` fails or `ps -o stat=` shows a zombie (1 commit)
+- ✅ 7c The runner's guard in `skills/plan-orchestration/templates/launch.sh` waits on `kill 0` to the session leader's pid, which succeeds on a zombie, found by step 7b's review of its round 2: a killed leader that its parent does not reap (a parent still alive, or a Linux child subreaper that does not reap) keeps the guard waiting and holding the lock, and no exit file is written. The guard treats a leader that is a zombie as gone; a case in `launch.test.sh` keeps a killed leader a zombie in a patched copy and requires the builder's code in the exit file within five seconds of the KILL, red with the zombie check removed; the launch's refusal of a pid file naming a live process (`launch.sh`, the `kill -0 "$old_pid"` check) also counts a zombie as gone; the texts of `launch.sh`, `plan-orchestration/SKILL.md` (the resumption check and item 5 of the launch, which read a pid as gone when `kill -0` fails), `launch-note.md` and the land skill's `SKILL.md` Steps item 1 say what the code does, a pid counted gone when `kill -0` fails or `ps -o stat=` shows a zombie (1 commit)
+- 7d `skills/plan-orchestration/templates/launch.test.sh` red under load, found by step 7c's review of its round 1: with the machine's load average between about 10 and 32 on 11 cores (Microsoft Defender and Spotlight busy), whole-suite runs at 16 at once turn red in cases whose timed windows are a few seconds ("a hanging start held the exit file" past 6000 ms, "guard waits: no guard in the session while end hangs", "a job of the leader's session", "start printing two lines", "the builder ended as the leader was killed", "a launch while a killed run's guard lives exited 0"), on main's files before step 7c and after it. The step finds each case's cause under load, with an A/B of the files before and after step 7c in alternating batches of the same load, and makes the whole suite run 32 times at 16 at once under `sh` and under `LAUNCH_SHELL=dash` with 0 red on this machine, each window's change proven to keep its case red under its revert (1 commit)
 - ✅ 8 `utils/check_coverage.py` and its test: the dotted Done form (`2.A.`); one Unicode normal form for file names; lines split on newlines only; a mode that requires every `rebuild: <skill>` row to name an existing file of `skills/<skill>/`, for the entry gates of step 10; each fault the checkers review planted turns the test red (1 commit)
 - ✅ 9 `skills/repo-setup/templates/sync_rules.py`, `skills/land/templates/land.sh` and `usage.py`, with their tests: an undecodable file exits 2; CRLF kept; `land.sh` lands when nothing is pending, fails instead of skipping its example check inside an Ordo checkout, and stops waiting on a stale lock after a bound; `usage.py` names Codex counts correctly and rejects a time without its offset; each fault the checkers review planted turns a test red (1 commit)
 - ✅ 10 Roadmap gates and order, through `/roadmap` with the diff shown to the user: entry 15.A's gate made passable; a gate for each of entries 3 to 14 that checks its `rebuild:` rows through step 8's mode, left out for entries 4, 8, 11 and 12, which have no `rebuild:` row, since `--built` fails a skill with none (from `agents/reviews/8-refuter.md`, Closed); each gate that uses the mode also requires a checked record per built row that the named file holds what the source file did, since `--built` proves only that the file exists (step 8's report); entry 16 waits on 14; the order of entries 5 and 9; entries 7 and 10 given the side-by-side run entry 16 asks for; entry 8's coverage note; entry 14's goal names the cover letter and the blind-review removal that the coverage rows of `formatter_agent.md` and `journal_submission_guide.md` send to `submit-manuscript`, or those parts move to entry 5 with the diff shown (found by step 11's last review); entry 15.A's goal counts and its wait on 13, which step 14's re-marked rows made false (1 commit; orchestrator, no agent)
@@ -52,6 +53,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 7a before 7 resumes; step 7's builder is resumed with `launch.sh --resume` once 7a has landed.
 - 7b with 7 after 7a (their paths are disjoint); step 7's resume uses its round's own exit and pid files, which 7b's cases do not reach.
 - 7c after 7b (the same files).
+- 7d after 7c (the same test file).
 - 4 after 2 (both edit `skills/plan-orchestration/SKILL.md`).
 - 10 after 8 (it uses step 8's mode).
 - 11, 12, 13, 14 one after another after 8 (they all edit `docs/academic-coverage.md`).
@@ -98,6 +100,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 ## Blocked, and by what
 
 - 7c: step 7b's landing, since both change `launch.sh` and its test.
+- 7d: step 7c's landing, since both change `launch.test.sh`.
 - 17: step 7c's landing, since 17 touches the rules page and every `SKILL.md`.
 - 17a: step 17's landing, since both touch `skills/spec/SKILL.md`, `skills/plan/` and `skills/ordo-init/`.
 - 18: every step from 1 to 17a.
@@ -958,3 +961,42 @@ verify: 14 commands passed
 ```
 
 - Usage, orchestrator from step 7's booking (a8541ed) to this booking: 49 messages, 37730 output tokens, 91373 cache-write tokens, 8081914 cache-read tokens, 114 fresh input tokens, 137 minutes.
+
+### Step 7c, a session leader left as a zombie counted as gone (landed 2026-09-27)
+
+- NOT DONE: the brief's load item (the whole of `launch.test.sh` 32 times at 16 at once under `sh` and `dash`, 0 red) is not met on this machine's load, by this tree or by main's files before it: in alternating `sh` batches of 16 the step's files were 8 red of 32 and main's 1 of 32, over six batches 8 of 48 and 4 of 48, under `dash` 1 of 16 and 2 of 16, every red in an older case. Booked as step 7d.
+- Landed: `skills/plan-orchestration/templates/launch.sh` and its test, `plan-orchestration/SKILL.md`, `templates/launch-note.md`, the land skill's `SKILL.md` Steps item 1 and the README bullet for `launch.test.sh`. A pid counts as gone when `kill -0` fails or `ps -o stat=` shows a state starting with `Z`. The guard checks `kill 0` every tenth of a second, and while it succeeds asks `ps` once a second, the first time one second after its start. The launch's refusal of a pid file uses the same test (`pid_gone`). Every `ps` call goes through one perl sub, `ps_state`, bounded at 2 seconds, the `ps` killed past it; a failed, hung or empty answer counts as not gone. A guard that cannot start `ps` says so once in the stderr file and waits on `kill 0` alone. The test's `not_alive` counts a zombie as gone.
+- User-visible changes, before and after: a killed leader its parent does not reap left no exit file, and its guard waited holding the lock; now the guard writes the builder's code within about a second of the KILL. A pid file naming a zombie refused a launch with exit 75; now it does not, while the guard's lock still refuses as before. The guard ran no `ps`; now a leader alive more than a second after the builder's end gets one `ps` a second, the one on the builder's `PATH`, and the launch runs one `ps` through perl when the pid file names a pid `kill -0` reaches. A guard that cannot run `ps` writes one line to the stderr file.
+- Repair rounds: round 1, seven rulings (`agents/briefs/7c-round-1.md`).
+- Premise widened before the brief: the pid-file check and the land skill's text joined the step, since both read a zombie leader as alive.
+- Fixes at landing (6): the no-ps case keeps the leader 4 seconds, so a guard that went on asking `ps` is red; the launch case times the refusal; the `ps` window in `launch.sh`'s head comment and `SKILL.md` item 2; the test's head comment line on a normal end; the README bullet from the report's "Doc text", its two sentences made true; the overlong comment lines reflowed. Each red is quoted in `agents/reviews/7c-refuter.md`, Closed.
+- Booked as step 7d: `launch.test.sh` red under load on main's files and on this tree.
+- Verification on main, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: collect_findings.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: launch.sh scratch tests
+PASS: allow_list.py scratch tests
+PASS: check_paths.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_skill_layout.py scratch tests
+PASS: check_rule_inventory.py scratch tests
+PASS: check_coverage.py scratch tests
+ok: skills/land/SKILL.md
+ok: skills/ordo-init/SKILL.md
+ok: skills/plan/SKILL.md
+ok: skills/plan-help/SKILL.md
+ok: skills/plan-orchestration/SKILL.md
+ok: skills/plan-retro/SKILL.md
+ok: skills/refute/SKILL.md
+ok: skills/repo-setup/SKILL.md
+ok: skills/roadmap/SKILL.md
+ok: skills/spec/SKILL.md
+verify: 14 commands passed
+```
+
+- Usage, orchestrator from step 7b's booking (01b029e) to this booking: 38 messages, 37268 output tokens, 557266 cache-write tokens, 9246203 cache-read tokens, 82 fresh input tokens, 486 minutes.

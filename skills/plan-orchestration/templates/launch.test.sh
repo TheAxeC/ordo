@@ -30,6 +30,15 @@
 #   in the leader's process group; it waits for a leader that lives on long after the builder's
 #   end, and that leader's KILL leaves the builder's code; a guard outside that group writes no
 #   exit file and says so;
+# - a session leader kept a zombie: a patched copy keeps its parent alive without reaping it; its
+#   KILL while end hangs leaves the builder's code within five seconds; the guard is gone by then
+#   and has asked ps; a pid file naming that zombie does not refuse a launch, while the guard's lock
+#   still does; a leader that ends within a second of the builder starts no ps in the guard,
+#   checked through a ps that records its calls;
+#   a pid counts as gone when kill -0 fails or ps shows a zombie, as in the land skill; a ps that
+#   never answers the guard: it still ends within five seconds of a normal end; a ps that never
+#   answers the launch: a pid file naming a live process still refuses it; that ps is killed; no
+#   ps on the guard's PATH: one line in the stderr file, and the guard ends with the leader;
 # - a session scanner that never answers: the land skill's sequence still leaves the exit file;
 # - TERM while the builder or the note's start is being started, and while the builder's runner
 #   is between its fork and its next step, each window widened in a patched copy of launch.sh;
@@ -117,7 +126,8 @@ fi
 # its own pid once its handler is set, so a TERM sent after that is always recorded), and with
 # STUB_SESSION_JOB a sleeping process in a process group of its own whose parent has exited, so it
 # is neither in the builder's group nor descended from it, only in its session. With STUB_DAEMON it
-# also starts a sleeping process in a session of its own, which records its pid in DAEMONS.
+# also starts a sleeping process in a session of its own, which records its pid in DAEMONS. With
+# STUB_END_LOG set, it writes the time in milliseconds to that file just before it exits.
 for name in claude codex; do
     cat >"$bin/$name" <<EOF
 #!/bin/sh
@@ -159,6 +169,8 @@ fi
 sleep "\${STUB_SLEEP:-0}" &
 echo \$! >>"\$PIDS"
 wait \$!
+[ -z "\${STUB_END_LOG:-}" ] ||
+    perl -MTime::HiRes=time -e 'printf "%d\\n", time() * 1000' >"\$STUB_END_LOG"
 exit "\${STUB_EXIT:-0}"
 EOF
     chmod +x "$bin/$name"
@@ -244,6 +256,53 @@ EOF
 chmod +x "$bin/python3"
 PY_LOG=$test_root/python.log
 export PY_LOG
+# A ps in a folder of its own, put first on PATH for the launches launch_state_logged starts. It
+# records in PS_STATE_LOG each call that asks for a process state, after the time in milliseconds.
+# With PS_HANG set, such a call then runs ps_hang instead of ps. It passes every other call to the
+# real ps.
+# ps_hang <log> <seconds>: writes "start <ms>" to the log and sleeps the seconds. A child it forks
+# writes "end <ms>" once ps_hang has ended, killed or not. It closes its standard streams first.
+real_ps=$(command -v ps) || fail "no ps"
+ps_bin="$test_root/ps bin"
+ps_hang=$test_root/ps-hang.pl
+mkdir -p "$ps_bin" || fail "could not create the folder of the recording ps"
+cat >"$ps_hang" <<'EOF'
+use Time::HiRes qw(time sleep);
+my ($log, $seconds) = @ARGV;
+sub note_time {
+    open my $f, ">>", $log or die "ps_hang: cannot write $log: $!\n";
+    printf {$f} "%s %d\n", $_[0], time() * 1000;
+    close $f;
+}
+note_time("start");
+my $self = $$;
+if (!fork) {
+    close STDIN;
+    close STDOUT;
+    close STDERR;
+    sleep 0.01 while getppid() == $self;
+    note_time("end");
+    exit 0;
+}
+sleep $seconds;
+EOF
+cat >"$ps_bin/ps" <<EOF
+#!/bin/sh
+case " \$* " in
+    *" stat= "*)
+        "$real_perl" -MTime::HiRes=time -e 'printf "%d %s\\n", time() * 1000, "@ARGV"' -- "\$@" \\
+            >>"\$PS_STATE_LOG"
+        [ -z "\${PS_HANG:-}" ] || exec "$real_perl" "$ps_hang" "\$PS_STATE_LOG.hang" "\$PS_HANG"
+        ;;
+esac
+exec "$real_ps" "\$@"
+EOF
+chmod +x "$ps_bin/ps"
+# One call at once. The first run of a new script can take seconds on a loaded machine. A later
+# case times the recording ps.
+"$ps_bin/ps" -p "$$" >/dev/null 2>&1 || fail "the recording ps did not run"
+PS_STATE_LOG=$test_root/ps-state.log
+export PS_STATE_LOG
 PATH="$bin:$PATH"
 export PATH
 
@@ -271,7 +330,7 @@ settings() {
     STUB_EXIT=$1 STUB_SLEEP=$2 NOTE_ID=$3 NOTE_TWO=$4 NOTE_START_EXIT=$5 NOTE_TRANSCRIPT_EXIT=$6
     export STUB_EXIT STUB_SLEEP NOTE_ID NOTE_TWO NOTE_START_EXIT NOTE_TRANSCRIPT_EXIT
     unset STUB_IGNORE_TERM STUB_OWN_GROUP STUB_TRAP_CHILD STUB_SESSION_JOB NOTE_HANG SESSION_CHECK \
-        SLOW_DETACH NOTE_IGNORE_TERM STUB_DAEMON NOTE_DAEMON
+        SLOW_DETACH NOTE_IGNORE_TERM STUB_DAEMON NOTE_DAEMON STUB_END_LOG
 }
 
 # patched <name> <perl expression>: a copy of launch.sh in the scratch folder, changed by the
@@ -298,8 +357,19 @@ wait_file() {
     wait_until "no file at $1" test -s "$1"
 }
 
+# zombie <pid>: ps shows the pid in a state starting with Z, a process that ended unreaped.
+zombie() {
+    state=$(ps -o stat= -p "$1" 2>/dev/null)
+    state=${state#"${state%%[![:space:]]*}"}
+    case "$state" in
+        Z*) return 0 ;;
+    esac
+    return 1
+}
+
+# not_alive <pid>: the pid is gone as the land skill counts it. kill -0 fails, or ps shows a zombie.
 not_alive() {
-    ! kill -0 "$1" 2>/dev/null
+    ! kill -0 "$1" 2>/dev/null || zombie "$1"
 }
 
 # expect_gone <what> <pid file>: every pid the file lists ends within the polling time.
@@ -334,6 +404,17 @@ launch_into() {
     sh "$launch" "$@" || fail "$name: launch.sh failed"
     [ -s "$d/pid" ] || fail "$name: no pid file"
     cat "$d/pid" >>"$scratch/launched"
+}
+
+# launch_state_logged <name> <harness> [extra options...]: launch_into with the recording ps first
+# on PATH, and PS_STATE_LOG emptied.
+launch_state_logged() {
+    : >"$PS_STATE_LOG"
+    rm -f "$PS_STATE_LOG.hang"
+    saved_path=$PATH
+    PATH="$ps_bin:$PATH"
+    launch_into "$@"
+    PATH=$saved_path
 }
 
 # run <name> <harness> [extra options...]: a launch, waited for until its exit file is written and
@@ -1341,6 +1422,216 @@ wait_until "guard group: a process of the session is still running" session_gone
 sleep 1
 [ ! -e "$d/exit" ] || fail "guard group: an exit file was written: $(cat "$d/exit")"
 expect_gone "guard group, the note" "$NOTE_PIDS"
+
+# A session leader left as a zombie. A patched copy puts a process between the launch and the
+# leader. That process lives 20 seconds after its fork and does not reap the leader. It closes the
+# lock's descriptor, so it holds no lock. The launch accepts the leader's pid in the pid file. The
+# copy also raises the note's limit to 15 seconds. A hanging end then keeps the leader and guard.
+zombie_fork='\n    \$SIG{CHLD} = "DEFAULT";\n    if (fork) {\n'
+zombie_fork=$zombie_fork'        POSIX::close(\$ENV{LAUNCH_LOCK_FD});\n        sleep 20;\n'
+zombie_fork=$zombie_fork'        POSIX::_exit(0);\n    }'
+zombie_parent='s/(\n    defined POSIX::setsid\(\) or do \{)/'"$zombie_fork"'$1/;
+    s/\$1 == \$pid/\$1 > 0/; s/"\$runner" 3 "\$\$"/"\$runner" 15 "\$\$"/g'
+
+# has_guard <leader>: the leader's session has a process whose parent is pid 1, the guard. It
+# sets guard to that pid.
+has_guard() {
+    guard=$(orphans_of "$1")
+    [ -n "$guard" ]
+}
+
+# The builder exits 3, end hangs, and the leader is killed and stays a zombie. Within five
+# seconds of the KILL, the land skill's check passes. The leader counts as gone, and the exit file
+# holds exit 3. The guard is gone by then too, and it asked ps for the leader's state. Red when the
+# guard's zombie check is removed (no exit file until the reap). Red when not_alive counts a zombie
+# as alive (the leader still running).
+patched zombie-leader "$zombie_parent"
+settings 3 0 note-7 '' 0 0
+NOTE_HANG=end
+export NOTE_HANG
+launch=$patched_launch
+launch_state_logged zombie-leader claude --note "$note" --id "$test_root/zombie-leader out/id" \
+    --label 2.B/9 --parent sess-7
+launch=$script_dir/launch.sh
+wait_until "zombie leader: end never hung" lines_at_least "$NOTE_PIDS" 3
+leader=$(cat "$d/pid")
+wait_until "zombie leader: no guard in the session while end hangs" has_guard "$leader"
+deadline=$(($(now_ms) + 5000))
+kill -KILL "$leader"
+wait_until "zombie leader: the killed leader $leader is not a zombie" zombie "$leader"
+until not_alive "$leader" && [ -s "$d/exit" ] && not_alive "$guard"; do
+    if [ "$(now_ms)" -gt "$deadline" ]; then
+        not_alive "$leader" ||
+            fail "zombie leader: the session leader is still running five seconds after the KILL"
+        [ -s "$d/exit" ] || fail "zombie leader: no exit file five seconds after the KILL"
+        fail "zombie leader: the guard $guard is still running five seconds after the KILL"
+    fi
+    sleep "$tick"
+done
+expect_file "$d/exit" "exit 3" "a KILL that leaves the leader a zombie"
+[ -s "$PS_STATE_LOG" ] || fail "zombie leader: the guard never asked ps for the leader's state"
+expect_gone "zombie leader, the note" "$NOTE_PIDS"
+
+# A normal end starts no ps in the guard's first second. The builder records the time it ends, and
+# the guard starts after that. Every state call recorded comes at least a second after that time.
+# The note's end returns at once, so the leader usually ends first and no call is recorded. The
+# zombie-leader case above is its control, where the guard asks. Red when the guard asks ps at its
+# first check (a call within the first second).
+settings 0 0 note-7 '' 0 0
+STUB_END_LOG=$test_root/builder-end
+export STUB_END_LOG
+rm -f "$STUB_END_LOG"
+launch_state_logged ps-normal claude --note "$note" --id "$test_root/ps-normal out/id" \
+    --label 2.B/9 --parent sess-7
+unset STUB_END_LOG
+wait_file "$d/exit"
+wait_until "ps normal: the session leader is still running" not_alive "$(cat "$d/pid")"
+wait_until "ps normal: a process of the run is still running" session_gone "$(cat "$d/pid")"
+expect_file "$d/exit" "exit 0" "a normal end with the recording ps"
+builder_end=$(cat "$test_root/builder-end")
+while read -r at call; do
+    [ $((at - builder_end)) -ge 1000 ] ||
+        fail "a normal end: the guard asked ps $((at - builder_end)) ms after the builder: $call"
+done <"$PS_STATE_LOG"
+
+# A pid file naming a zombie leader does not refuse a launch. The zombie-leader copy also holds the
+# guard 3 seconds before its write. The builder exits 3, end hangs, and the leader is killed. A
+# launch at once is refused with exit 75 by the lock the guard holds. Once the guard has written
+# exit 3 and ended, the leader is still a zombie. A launch of the same pid file then runs, and its
+# exit file is its own builder's code. Red when the refusal's zombie check is removed (exit 75).
+patched zombie-relaunch "$zombie_parent;
+    s/($guard_write)/\\n    Time::HiRes::sleep(3);\$1/"
+settings 3 0 note-7 '' 0 0
+NOTE_HANG=end
+export NOTE_HANG
+launch=$patched_launch
+launch_into zombie-relaunch claude --note "$note" --id "$test_root/zombie-relaunch out/id" \
+    --label 2.B/9 --parent sess-7
+launch=$script_dir/launch.sh
+wait_until "zombie relaunch: end never hung" lines_at_least "$NOTE_PIDS" 3
+leader=$(cat "$d/pid")
+wait_until "zombie relaunch: no guard in the session while end hangs" has_guard "$leader"
+kill -KILL "$leader"
+out=$(sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" \
+    --report "$d/report2" --stderr "$d/stderr2" --exit "$d/exit" --pid "$d/pid" \
+    --allow-file "$allow_file" 2>&1)
+status=$?
+[ "$status" -eq 75 ] ||
+    fail "a launch while a zombie leader's guard lives exited $status, expected 75"
+case "$out" in
+    *"holds $d/pid.lock; not launched"*) ;;
+    *) fail "a launch while a zombie leader's guard lives printed $out" ;;
+esac
+wait_file "$d/exit"
+wait_until "zombie relaunch: the guard $guard is still running" not_alive "$guard"
+expect_file "$d/exit" "exit 3" "the killed run with a zombie leader"
+expect_gone "zombie relaunch, the note" "$NOTE_PIDS"
+zombie "$leader" || fail "zombie relaunch: the leader $leader was reaped before the relaunch"
+settings 4 0 note-7 '' 0 0
+run zombie-relaunch claude
+expect_file "$d/exit" "exit 4" "a launch while the pid file names a zombie leader"
+
+# A ps that never answers the guard. A patched copy keeps the leader 2 seconds after its write, so
+# the guard asks ps once. The recording ps sleeps 20 seconds on that call. The leader ends normally
+# while that ps hangs. Within five seconds of the leader's end, the exit file holds exit 0. No
+# process of the session, the guard included, is left by then. Red when ps_state's 2-second limit
+# is removed (the guard waits on ps).
+patched leader-lives 's/(\n    write_exit "\$status"\n)(\}\n)/$1    sleep 2\n$2/'
+settings 0 0 note-7 '' 0 0
+PS_HANG=20
+export PS_HANG
+launch=$patched_launch
+launch_state_logged ps-hang claude
+launch=$script_dir/launch.sh
+unset PS_HANG
+leader=$(cat "$d/pid")
+wait_until "ps hang: the guard never asked ps" test -s "$PS_STATE_LOG.hang"
+wait_until "ps hang: the session leader is still running" not_alive "$leader"
+deadline=$(($(now_ms) + 5000))
+until [ -s "$d/exit" ] && session_gone "$leader"; do
+    if [ "$(now_ms)" -gt "$deadline" ]; then
+        [ -s "$d/exit" ] || fail "ps hang: no exit file five seconds after the leader's end"
+        fail "ps hang: the session, its guard included, runs on five seconds after the leader's end"
+    fi
+    sleep "$tick"
+done
+expect_file "$d/exit" "exit 0" "a ps that never answers the guard"
+
+# A ps that never answers the launch. A pid file names a live process, and the recording ps sleeps
+# 20 seconds on the launch's state call. The launch is still refused with exit 75, naming the pid.
+# It is refused, and that ps killed, within 4 seconds. That is the 2-second limit, plus the
+# scheduling delay of a loaded machine. Red when ps_state's 2-second limit is removed (20 seconds).
+mkdir -p "$test_root/ps-hang-live out"
+sleep 30 &
+live=$!
+printf '%s\n' "$live" >"$test_root/ps-hang-live out/pid"
+: >"$PS_STATE_LOG"
+rm -f "$PS_STATE_LOG.hang"
+saved_path=$PATH
+PATH="$ps_bin:$PATH"
+PS_HANG=20
+export PS_HANG
+started=$(now_ms)
+out=$(sh "$launch" claude --cwd "$work" --model m1 --prompt "$test_root/prompt" \
+    --report "$test_root/ps-hang-live out/report" --stderr "$test_root/ps-hang-live out/stderr" \
+    --exit "$test_root/ps-hang-live out/exit" --pid "$test_root/ps-hang-live out/pid" \
+    --allow-file "$allow_file" 2>&1)
+status=$?
+refused=$(now_ms)
+PATH=$saved_path
+unset PS_HANG
+kill "$live"
+wait "$live" 2>/dev/null
+[ "$status" -eq 75 ] || fail "a ps that never answers the launch: exited $status, expected 75"
+[ $((refused - started)) -le 4000 ] ||
+    fail "a ps that never answers the launch: refused $((refused - started)) ms after the launch"
+case "$out" in
+    *"names pid $live, which is still running; not launched"*) ;;
+    *) fail "a ps that never answers the launch: printed $out" ;;
+esac
+has_end() {
+    grep -q '^end ' "$PS_STATE_LOG.hang" 2>/dev/null
+}
+wait_until "a ps that never answers the launch: its ps never ended" has_end
+asked=$(sed -n 's/^start //p' "$PS_STATE_LOG.hang")
+killed=$(sed -n 's/^end //p' "$PS_STATE_LOG.hang")
+[ $((killed - asked)) -le 4000 ] ||
+    fail "a ps that never answers the launch: its ps ended $((killed - asked)) ms after its start"
+
+# A guard that cannot start ps. The leader-lives copy runs with a PATH that holds no ps. That PATH
+# holds links to the commands the launch uses, then the test's stubs. Its python3 is the
+# interpreter itself, since a version manager's wrapper needs commands this PATH lacks. The guard
+# prints one line to the stderr file and waits on kill 0 alone. The leader lives 4 seconds after
+# its write, so a guard that went on asking would try ps about three times. The exit file holds
+# exit 0. No process of the session is left within five seconds of the leader's end. Red when the
+# guard's line is removed. Red when the guard goes on asking ps (more than one line).
+patched no-ps-lives 's/(\n    write_exit "\$status"\n)(\}\n)/$1    sleep 4\n$2/'
+no_ps="$test_root/no ps bin"
+mkdir -p "$no_ps" || fail "could not create the folder without ps"
+for c in sh head mv rm grep cut cat sleep mkdir; do
+    ln -s "$(command -v "$c")" "$no_ps/$c" || fail "could not link $c"
+done
+ln -s "$(python3 -B -c 'import sys; print(sys.executable)')" "$no_ps/python3" ||
+    fail "could not link python3"
+settings 0 0 note-7 '' 0 0
+saved_path=$PATH
+PATH="$no_ps:$bin"
+launch=$patched_launch
+launch_into no-ps claude
+launch=$script_dir/launch.sh
+PATH=$saved_path
+leader=$(cat "$d/pid")
+wait_file "$d/exit"
+wait_until "no ps: the session leader is still running" not_alive "$leader"
+deadline=$(($(now_ms) + 5000))
+until session_gone "$leader"; do
+    [ "$(now_ms)" -le "$deadline" ] ||
+        fail "no ps: the session, its guard included, runs on five seconds after the leader's end"
+    sleep "$tick"
+done
+expect_file "$d/exit" "exit 0" "a guard that cannot start ps"
+lines=$(grep -c 'the guard cannot run ps: .*; it waits on kill 0 alone' "$d/stderr")
+[ "$lines" -eq 1 ] || fail "no ps: the stderr file holds $lines lines on ps, expected 1"
 
 # The builder and the note's start each leave a process in a session of its own, which no stop
 # reaches; once the run has ended, a launch of the same pid file runs while those processes live.

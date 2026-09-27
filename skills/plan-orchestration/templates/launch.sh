@@ -6,17 +6,19 @@
 # the caller's directory, before the claude recipe changes into --cwd. So a path names the same file
 # for both harnesses. They take an exclusive lock (flock) on <pid file>.lock and write their pid
 # into it. They refuse with exit 75 before anything starts. They do so while another live launch or
-# run holds that lock. They also do so while the pid file names a live process. The lock is held by
-# the launcher, the session leader, the builder's runner and the runner's guard, each for as long as
-# it lives. The builder, the session scanner and the note calls do not hold it. The system releases
-# the lock once all of its holders have ended. A lock file left by a run that has ended is then
-# taken over, whatever pid it still names. So a launch is refused while a killed run's runner or
-# guard lives. A killed run therefore never writes an exit file after a later launch removed it. The
-# launch then removes an exit file and the temporary files an earlier run left. It starts this
-# script again in the matching internal mode (_body_claude, _body_codex) as the leader of a new
-# session. It does so through perl's POSIX::setsid, since macOS has no setsid command and perl ships
-# on macOS and Linux alike. The session leader writes its own pid to the pid file, and the launch
-# returns once it has.
+# run holds that lock. They also do so while the pid file names a pid that is not gone. A pid counts
+# as gone when kill -0 fails or ps shows it in a state starting with Z. That state marks a zombie. A
+# zombie has ended, and only its parent has not reaped it. A ps that cannot run, answers nothing or
+# takes over 2 seconds counts the pid as not gone. The lock is held by the launcher, the session
+# leader, the builder's runner and the runner's guard, each for as long as it lives. The builder,
+# the session scanner and the note calls do not hold it. The system releases the lock once all of
+# its holders have ended. A lock file left by a run that has ended is then taken over, whatever pid
+# it still names. So a launch is refused while a killed run's runner or guard lives. A killed run
+# therefore never writes an exit file after a later launch removed it. The launch then removes an
+# exit file and the temporary files an earlier run left. It starts this script again in the matching
+# internal mode (_body_claude, _body_codex) as the leader of a new session. It does so through
+# perl's POSIX::setsid, since macOS has no setsid command and perl ships on macOS and Linux alike.
+# The session leader writes its own pid to the pid file, and the launch returns once it has.
 #
 # Body. The session leader runs the launch note's start with --pid set to its own pid, the builder,
 # the note's end, then writes the exit file, and lives until all of that is done. Its own errors
@@ -40,15 +42,22 @@
 # holding the builder's code, and exits. The leader calls end and then writes the exit file. The
 # guard ignores TERM, INT and HUP. It waits for the leader however long the leader lives. The
 # leader's pid is not reused while its process group lives, and the guard is in that group. The
-# guard ends within about a tenth of a second of the leader. It then writes the builder's code if no
-# exit file is present. It also removes a temporary file the leader left. So a KILL while end runs,
-# or during the leader's write, still leaves the exit file. The runner and the guard never replace
-# an exit file present. Only a KILL before the builder's runner has started leaves none, as a KILL
-# while start runs does. A process that starts a session of its own (setsid) is no longer in the
-# leader's session and is not reached by these stops. Each writer writes <exit file>.tmp.<its pid>
-# and moves it into place. So a monitor never reads the file empty, and no two writers share a
-# temporary file. A KILL during the leader's write after a stop on a signal leaves
-# <exit file>.tmp.<leader pid>, which the next launch removes.
+# guard counts the leader gone as the launch does. It checks kill -0 every tenth of a second. While
+# kill -0 succeeds, it asks ps once a second, the first time one second after its start. A leader
+# that ends within a second of the builder starts no ps. One that lives longer gets one ps a second
+# while it lives. A note end of up to 3 seconds is such a case. When ps cannot be started, the guard
+# says so once in the stderr file. It then waits on kill -0 alone. The guard ends within about a
+# tenth of a second of a leader that is reaped. It ends within about a second of a leader left a
+# zombie. A ps call in flight adds up to 2 seconds to either, its time limit. It then writes the
+# builder's code if no exit file is present. It also removes a temporary file the leader left.
+# So a KILL while end runs, or during the leader's write, still leaves the exit file. It does so
+# too when the leader's parent does not reap the killed leader. The runner and the guard never
+# replace an exit file present. Only a KILL before the builder's runner has started
+# leaves none, as a KILL while start runs does. A process that starts a session of its own (setsid)
+# is no longer in the leader's session and is not reached by these stops. Each writer writes
+# <exit file>.tmp.<its pid> and moves it into place. So a monitor never reads the file empty, and no
+# two writers share a temporary file. A KILL during the leader's write after a stop on a signal
+# leaves <exit file>.tmp.<leader pid>, which the next launch removes.
 #
 # Session id. A first claude launch generates a session id (a random version 4 UUID), passes it to
 # claude -p --session-id, and writes it to the --session-file, when one is given, before the
@@ -197,6 +206,38 @@ done
     *) fail_usage "--note must be an absolute path" ;;
 esac
 
+# ps_state: a perl sub. ps_state(<pid>) runs the ps found on PATH as ps -o stat= -p <pid>, and
+# returns what it prints. It returns undef, with $! set, when ps cannot be started. A ps that has
+# not answered within 2 seconds is killed, and its answer is then empty. The limit is a select on
+# the pipe, so no alarm can end the caller. Its callers count an empty answer as not a zombie.
+ps_state='
+use IO::Select ();
+use Time::HiRes ();
+sub ps_state {
+    my ($p) = @_;
+    no warnings "exec";
+    my $child = open my $ps, "-|", "ps", "-o", "stat=", "-p", $p;
+    return undef unless $child;
+    my $ready = IO::Select->new($ps);
+    my $until = Time::HiRes::time() + 2;
+    my $answer = "";
+    while (1) {
+        my $left = $until - Time::HiRes::time();
+        if ($left <= 0) {
+            kill "KILL", $child;
+            $answer = "";
+            last;
+        }
+        next unless $ready->can_read($left);
+        my $got = sysread $ps, $answer, 256, length $answer;
+        next if !defined $got && $!{EINTR};
+        last unless $got;
+    }
+    close $ps;
+    return $answer;
+}
+'
+
 # runner <seconds> <watch pid> <what> <exit file> <command...>: run the command in a process group
 # of its own and pass on its exit code (128 plus the signal number when a signal ended it). With
 # seconds above 0 (a note call), the command's standard error goes to /dev/null, and when it has not
@@ -220,14 +261,20 @@ esac
 # it writes exit 137. When the command ends on its own after its parent has gone, it writes the
 # command's code. When the command ends while its parent lives, the builder's runner forks a guard
 # and exits. The guard ignores HUP, INT and TERM. It checks every tenth of a second whether
-# <watch pid> lives. Once that pid is gone, it writes the command's code and removes
-# <exit file>.tmp.<watch pid>. The guard first checks that its process group is <watch pid>. When it
-# is not, it says so on standard error and exits without writing. Its wait would then rest on a pid
-# that can be reused. No write replaces a file present. The launch's lock descriptor, named by
-# LAUNCH_LOCK_FD, is held by the builder's runner and its guard. The handle perl opens on it is
-# closed on exec, so the builder and the scanner do not inherit it. When that handle cannot be
-# opened, the runner closes the descriptor, says so on standard error and goes on without the lock.
-# A note call's runner closes the descriptor before anything else.
+# <watch pid> lives, with kill 0. While kill 0 succeeds, it asks ps for that pid's state once a
+# second, starting one second in. It runs the ps found on the builder's PATH, through ps_state. A
+# state starting with Z, a zombie, counts as gone. A parent that does not reap a killed leader
+# would otherwise keep the guard waiting. A ps that fails, answers nothing or has not answered
+# within 2 seconds counts the pid as not gone. When ps cannot be started, the guard prints one line
+# to standard error and asks ps no more. It then waits on kill 0 alone. Once that pid is gone, it
+# writes the command's code and removes <exit file>.tmp.<watch pid>. The guard first checks that its
+# process group is <watch pid>. When it is not, it says so on standard error and exits without
+# writing. Its wait would then rest on a pid that can be reused. No write replaces a file present.
+# The launch's lock descriptor, named by LAUNCH_LOCK_FD, is held by the builder's runner and its
+# guard. The handle perl opens on it is closed on exec, so the builder and the scanner do not
+# inherit it. When that handle cannot be opened, the runner closes the descriptor, says so on
+# standard error and goes on without the lock. A note call's runner closes the descriptor before
+# anything else.
 runner='
 use strict;
 use warnings;
@@ -235,6 +282,7 @@ use POSIX ();
 use Time::HiRes ();
 use IPC::Open2 ();
 use IO::Select ();
+'"$ps_state"'
 my ($limit, $watch, $what, $exit_file) = splice @ARGV, 0, 4;
 my $lock_fd = delete $ENV{LAUNCH_LOCK_FD};
 my $lock;
@@ -396,7 +444,20 @@ sub guard {
     }
     open STDIN, "<", "/dev/null";
     open STDOUT, ">", "/dev/null";
-    Time::HiRes::sleep(0.1) while kill 0, $watch;
+    my $asked = Time::HiRes::time();
+    my $ask_ps = 1;
+    while (kill 0, $watch) {
+        if ($ask_ps && Time::HiRes::time() - $asked >= 1) {
+            my $state = ps_state($watch);
+            if (!defined $state) {
+                print STDERR "launch.sh: the guard cannot run ps: $!; it waits on kill 0 alone\n";
+                $ask_ps = 0;
+            }
+            last if defined $state && $state =~ /^\s*Z/;
+            $asked = Time::HiRes::time();
+        }
+        Time::HiRes::sleep(0.1);
+    }
     publish($code);
     unlink "$exit_file.tmp.$watch";
     POSIX::_exit(0);
@@ -531,6 +592,18 @@ read_id() {
     [ -n "$opt_note" ] && [ -n "$opt_id" ] && [ -s "$opt_id" ] || return 1
     note_id=$(head -n 1 "$opt_id")
     [ -n "$note_id" ]
+}
+
+# pid_gone <pid>: kill -0 fails, or ps shows the pid in a state starting with Z. A zombie has
+# ended, and only its parent has not reaped it yet. ps runs through ps_state, under its limit.
+pid_gone() {
+    kill -0 "$1" 2>/dev/null || return 0
+    state=$(perl -e "$ps_state"'print ps_state($ARGV[0]) // ""' "$1" 2>/dev/null)
+    state=${state#"${state%%[![:space:]]*}"}
+    case "$state" in
+        Z*) return 0 ;;
+    esac
+    return 1
 }
 
 here=$(pwd -P)
@@ -741,7 +814,7 @@ case "$mode" in
             case "$old_pid" in
                 '' | *[!0-9]* | 0) ;;
                 *)
-                    if kill -0 "$old_pid" 2>/dev/null; then
+                    if ! pid_gone "$old_pid"; then
                         printf '%s: %s names pid %s, which is still running; not launched\n' \
                             "$self" "$opt_pid" "$old_pid" >&2
                         exit 75
