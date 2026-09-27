@@ -29,24 +29,14 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: '24'
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2b-24
-  base: 5089880
-  launched: '2026-09-27T23:22:15+02:00'
-  session_id: a78d5401f51ab6df4
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/24-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item GG (step 17, the skills against the sharpened one-rule-per-bullet rule): step 17 made `docs/dev/skill-layout.md` line 45 say that two requirements that can each be broken while the other holds, joined by 'and', 'then', a semicolon or a second sentence, are two bullets. `skill-layout.md` line 3 says every `SKILL.md` follows the layout, and the review found three Rules bullets that do not (`skills/land/SKILL.md:165` and `:166`, `skills/spec/SKILL.md:191`); a heuristic count gives 161 of the 692 list items of the ten skills as candidates, an upper bound. No brief item asks for the sweep. (a) A new step after 17 goes through every list item of the ten `SKILL.md` files and splits each that holds two independent requirements, keeping every rule's meaning (rule 17). Pro: the page and the skills agree. Con: a sweep over all ten skills, reviewed item by item. (b) Split only the three bullets the review named, at step 17's landing. Con: the rest stay out of line, and line 3 stays false; this is the lazy option. (c) Leave the skills as they are and let the rule apply to new text only, saying so on line 3. Con: the page then describes two standards. Recommendation: (a), run after step 24.
 
 ## Closed items
+- 2026-09-27: open item GG (the skills against the sharpened one-rule-per-bullet rule): ruled (a), new step 25, only items with two independent requirements split, semicolons in valid use kept.
 - 2026-09-27: open item FF (the README from "Configuring a repository" down): ruled (a), new step 24 with the whole README open to change, the Tests section removed, and the user's review of the diff before the landing commit.
 - 2026-09-27: the pin of ruling W: done on the user's yes. `v1.1.0` tagged at e3ab45d; `utils/pin.sh v1.1.0` linked the ten skills in `~/.claude/skills` and `~/.claude-work/skills` and removed the ten old links in `~/.agents/skills`; `utils/pin.sh` check mode exits 0.
 - 2026-09-27: open item CC (which process scripts go): ruled (a); part 2 ruled (b), `check_paths.py` deleted and side-by-side steps left to the orchestrator's judgment of the merge; booked as step 23.
@@ -114,9 +104,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 21 and 23 landed (step 17 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 24 in flight (the README, ruling FF; its diff goes to the user before the landing commit); next: step 17a, then 18 and 19, under the pinned skills v1.1.0.
-- Open on Axel's side: open item GG.
+- 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 21, 23 and 24 landed (step 24 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
+- Roadmap entry 2.B, step 24 landed; next: step 17a, then 25, 18 and 19, under the pinned skills v1.1.0.
+- Open on Axel's side: none.
 
 ## Usage
 
@@ -148,3 +138,4 @@ dispatch:
 | 22 | claude:opus agent: 251,729 tokens, 76 tool uses, 1,385 s; round 1: 155,635 tokens, 87 tool uses, 1,849 s; round 2: 223,906 tokens, 26 tool uses, 752 s | 194,988 tokens, 42 tool uses, 666 s; round 1: 223,509 tokens, 52 tool uses, 1,795 s | 2 (round 2 not reviewed) | 11 rulings, then 4 items | 17 files changed, 1588 insertions(+), 96 deletions(-), never landed | no | 0 | 0 | not measured | not measured | not measured | not measured | not measured | not measured | merged into step 23 by ruling EE, its change in agents/reviews/22-merged.patch; the worktree and branch removed by the user |
 | 23 | claude:opus agent: 198,163 tokens, 59 tool uses, 640 s; round 1: 206,713 tokens, 7 tool uses, 304 s | 172,351 tokens, 36 tool uses, 476 s; round 1: 101,282 tokens, 15 tool uses, 261 s | 1 | 2 rulings | 31 files changed, 474 insertions(+), 3689 deletions(-) | no | 1 | 0 | 317 | 274446 | 833814 | 72130839 | 652 | 380 (from step 21's landing; shares step 22, rulings BB to EE, the script review and the roadmap change) | none |
 | 17 | claude:opus agent: 87,277 tokens, 24 tool uses, 312 s | 95,185 tokens, 21 tool uses, 268 s | 0 | 0 | 4 files changed, 22 insertions(+), 10 deletions(-) | yes | 0 | 1 (open item GG) | 59 | 41469 | 210410 | 11356576 | 122 | 54 (from step 23's landing; shares the pin, the README question and ruling FF) | none |
+| 24 | claude:opus agent: 132,302 tokens, 34 tool uses, 544 s | 111,225 tokens, 23 tool uses, 290 s | 0 | 0 | 3 files changed, 35 insertions(+), 57 deletions(-) | yes | 1 | 0 | 24 | 18681 | 46210 | 6099754 | 52 | 19 (shares ruling GG; the wait on the user's review of the README) | none |

@@ -1,21 +1,25 @@
 # Ordo
 
-Ordo is a set of agent skills for running a multi-step change as a plan: one roadmap entry becomes a ledger folder, each step is briefed, built in its own git worktree, reviewed by a fresh reviewer that changes nothing, and cherry-picked onto `main` only after its checks pass there. Around that loop, `repo-setup` and `ordo-init` set a repository up for it, `roadmap` keeps the entries the plans open, and `plan-retro` turns what the reviewers keep finding into rules. The skills carry no project name and no path. Everything specific to a repository comes from that repository's `.agents/plan.yaml`, so the same skills run a C++ engine, a TypeScript tool or a research project, under Claude Code.
+Ordo is a set of agent skills for Claude Code that run a multi-step change as a plan. The skills carry no project name and no path. Everything specific to a repository comes from that repository's `.agents/plan.yaml`. The same skills therefore run a C++ engine, a TypeScript tool or a research project.
+
+One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
+
+Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, and `plan-retro` turns what the reviewers keep finding into rules.
 
 ## The skills
 
 | Skill | What it does |
 |---|---|
-| `repo-setup` | Sets up a new repository: `CLAUDE.md` with the shared rules, the change and prose standards, a roadmap, an ADR folder, `.gitignore`, `LICENSE`, the project skills, then `/ordo-init`; `sync` keeps an existing repository's shared rules equal to the template |
-| `ordo-init` | Sets a repository up for the others: drafts `.agents/plan.yaml` from the repository, offers the pages it lacks, fixes the ignore rules; on an existing file, checks it |
-| `roadmap` | Keeps the roadmap `/plan` opens entries from: shows the open entries in order, adds an entry with its goal, gate and place, moves, marks done with the gate's output, drops; learns the file's own format, including an ordered build plan over a capability map |
+| `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, a roadmap, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules equal to the template |
+| `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
+| `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and adds an entry with its goal, gate and place. It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
 | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, `orchestrator-state.md`, the landing script |
-| `spec` | Prepares one step: checks that the user approved the step, checks the step's premises against the tree, writes the brief, checks the paths it writes against the steps in flight, creates the worktree, stages the base binaries |
+| `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. It creates the worktree and stages the base binaries |
 | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes findings |
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
 | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
 | `plan-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
-| `plan-retro` | Reads every refuter report, groups the findings by kind, and for each kind that recurs proposes the rule, the standards page or the check that stops it |
+| `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule, the standards page or the check that stops it |
 
 The order of use, shortened from what `/plan-help` prints:
 
@@ -40,9 +44,9 @@ for every step:
 
 ## Requirements
 
-- git, POSIX `sh`, and `python3` with PyYAML; the verify runner also needs `bash` and `ps`.
+- git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/verify.sh`, also needs `bash` and `ps`.
 - `perl`, for the ASCII check of `docs/dev/building.md` and for `sync_rules.test.sh`.
-- `node` and `npx` on `PATH`, for `skills/land/templates/land.sh` (its index-lock wait and the usage rows) and for the skills CLI, which the CLI install and `repo-setup`'s project skills use.
+- `node` and `npx` on `PATH`. `skills/land/templates/land.sh` needs them for its wait on git's index lock and for the usage rows. The skills CLI needs them too, and both the CLI install and `repo-setup`'s project skills use that CLI.
 - Claude Code.
 
 ## Install
@@ -73,15 +77,19 @@ For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills`
 
 ## Configuring a repository
 
-A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the coding standard and the project skills; shows the whole tree and every file; and after approval writes `CLAUDE.md`, the change and prose standards, a roadmap, an ADR folder, `.gitignore`, `LICENSE` and `README.md`, installs the project skills (writing `skills-lock.json`), and runs `/ordo-init`.
+A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the coding standard and the project skills. It then shows the whole tree and every file. After your approval it writes `CLAUDE.md`, the change and prose standards, a roadmap, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`.
 
-The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->` and are a copy of `skills/repo-setup/templates/shared-rules.md`. `/repo-setup sync` compares a repository's block with the template, shows the diff and rewrites it after approval; on a repository with no block yet it drafts where the block goes and which existing rules it replaces. The same comparison runs on its own (`<skills>` is `~/.claude/skills`, or `skills/` in a clone):
+The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->`. They are a copy of `skills/repo-setup/templates/shared-rules.md`.
+
+`/repo-setup sync` compares a repository's block with the template, shows the diff and rewrites the block after approval. On a repository with no block yet, it drafts where the block goes and which existing rules it replaces. The same comparison runs on its own (`<skills>` is `~/.claude/skills`, or `skills/` in a clone):
 
 ```sh
 python3 <skills>/repo-setup/templates/sync_rules.py <repository>
 ```
 
-An existing repository opts in with `.agents/plan.yaml` at its root. Run `/ordo-init` from the repository root: it drafts the file from the repository, shows it with any page it would create and the `.gitignore` lines it would add, and writes after you approve. On a repository that already has the file, it checks it. The same check runs on its own:
+An existing repository opts in with `.agents/plan.yaml` at its root. Run `/ordo-init` from the repository root. It drafts the file from the repository and shows it, with any page it would create and the `.gitignore` lines it would add. It writes after you approve.
+
+On a repository that already has the file, `/ordo-init` checks it. The same check runs on its own:
 
 ```sh
 python3 <skills>/ordo-init/templates/check_config.py <repository>
@@ -94,45 +102,19 @@ cp <skills>/plan/templates/plan.yaml .agents/plan.yaml            # one project
 cp <skills>/plan/templates/plan.projects.yaml .agents/plan.yaml   # several projects; a plan is then named <project>/<entry>
 ```
 
-`plan.yaml` describes every key. Eight are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worker` and `reviewer`. A skill that needs a missing required key stops and names it. Every other key is optional, and when it is left out it takes the default written beside it in `plan.yaml`; for example, a missing `worktree_paths` means the whole tree and a missing `look` means no look step.
+The example `plan.yaml` describes every key. Eight are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worker` and `reviewer`. A skill that needs a missing required key stops and names it.
+
+Every other key is optional. A key left out takes the default written beside it in the example `plan.yaml`. For example, a missing `worktree_paths` means the whole tree, and a missing `look` means that no changed view is opened at landing.
 
 Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
 
-## Tests
+A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of its `orchestrator-state.md`. It runs through `sh <skills>/land/templates/verify.sh <state file>`, from the root of the repository it checks.
 
-Each script under a skill's `templates/` or under `utils/` has a test beside it that runs on scratch repositories:
-
-```sh
-sh skills/land/templates/land.test.sh
-sh skills/land/templates/verify.test.sh
-sh skills/ordo-init/templates/check_config.test.sh
-sh skills/repo-setup/templates/sync_rules.test.sh
-sh utils/pin.test.sh
-sh utils/check_coverage.test.sh
-```
-
-- `land.test.sh` proves the landing on scratch repositories. It covers a clean landing with the template's defaults, which runs no browser step and no line count. It covers a conflicting landing and its refused rerun, and a builder that committed everything. It covers an index lock held while a `git` process runs, the wait stopped at its bound, which the test shortens through `LANDING_LOCK_WAIT`. It covers a stale lock removed, a lock gone before the bound, and a stop at the bound after the worktree's checkout followed by a rerun that lands. A rerun is refused when the landing branch holds a change made by hand or main holds staged changes. A bound that is not a whole number is refused. It covers a tool directory set on the `ADAPT` line, and a worktree root set there, with one outside the repository refused. Ledger files left uncommitted in the worktree never reach `main`. This holds for a ledger root holding pattern characters, and for one written with a trailing `/` or a leading `./`. A ledger root that is not a folder inside the repository is refused. Each landing starts `land.sh` from a scratch ledger: a green verify list lands, a red one fails the landing with the `RED:` line of `verify.sh`, `verify.sh` is found in the repository's `.agents/skills` when the ledger lacks it, and a `verify.sh` found nowhere or a missing state file is refused before `main` is touched, the places named. It checks `usage.py` on a Claude Code log (one message counted once by its id, and log lines without an offset skipped), its refusal of a file that is not a Claude Code session log, and its refusal of a window time without an offset or unreadable. It checks that both example `plan.yaml` files carry exactly the keys the state template's configuration block needs, each optional key's value equal to its stated default; inside an Ordo checkout a missing example fails, and only a copy outside one skips the check.
-- `verify.test.sh` checks that `verify.sh` passes a list holding a summary test, a plain command and a command written as a folded scalar, and turns red on a summary test that prints `PASS:` but exits 1, a summary test whose last line does not start with `PASS:`, and a plain command that exits 1. It checks that a test printing `PASS:` and exiting 1 is red under each spelling of a pipe into `tail`: `| tail -n 1`, two spaces before the pipe, no `2>&1`, no spaces, a redirection or `;` after `tail`, a comment holding a pipe, a backslash-newline, `| grep PASS | tail -1`. It checks that a pipe inside quotes runs as written, that a command ending in `; true` is judged on its exit status, that a command reads end-of-file from standard input, that quotes, a newline and a carriage return reach a command as written, that `yml` and `YAML` fences count, and that the run stops at the first red command. Each of INT, HUP, QUIT and TERM stops the running command and its session at once, runs no later command, removes the scratch folder and exits 128 plus the signal number, a command that ignores TERM is killed, and so is a second process group in the command's session. Each state file the runner cannot use exits 64 with its message: a missing file, a file that is not UTF-8, no `yaml` block, a `verify:` list that is missing, empty or not a list, a command that is empty, not a string or holds a NUL, a block that is not valid YAML or never closed, and a list found only in a second `yaml` block. A missing `python3`, PyYAML, `bash` or `ps` exits 69, a command killed by a signal reports exit status 128 plus the signal number, and a scratch folder that cannot be created exits 1. The file runs itself twice, starting the runner with `sh` and, when it is installed, with `dash`; each run ends with its own `PASS:` line, which the outer run checks, and the outer `PASS:` line names the shells the runner ran under.
-- `check_config.test.sh` checks that `check_config.py` passes a complete configuration, in both forms, and names each kind of error.
-- `sync_rules.test.sh` checks that a block equal to the template passes, with `CLAUDE.md` or the template in LF or CRLF, and that a drifted block fails with its diff and is repaired by `--write`, which keeps every byte outside the block and writes the block in the ending most of the file's lines use, the first line's on a tie. It checks the refusals, each an exit 2 with one `error:` line on stderr: a missing block, reversed markers, a second begin or end marker, a second block, a missing `CLAUDE.md`, a `CLAUDE.md` or `shared-rules.md` that is not UTF-8, a missing `shared-rules.md`, a `CLAUDE.md` that `--write` cannot write, and a write that does not read back as written.
-- `pin.test.sh` runs every case under a scratch `HOME` whose path holds a space, and writes only under its two scratch roots. It checks that no path a split of a skill folder on a space would name appears. In pin mode it covers the link of every skill of a tag and the removal of a link to a skill the next tag drops. It covers the replacement of a live-clone link for a skill the tag holds. A line is printed for each change and none for a write that failed, and the summary line joins its folders with `, `. Check mode is tested on a link into the live clone, named once. It is also tested on a link into the pinned worktree for a skill the tag lacks. In `~/.agents/skills` it covers the removal of four links, each with its line. They are a link into the pinned worktree, one named through a linked folder, one to the worktree's root and one into the live clone. No line is printed for a removal that failed. A real folder and a foreign link are kept, and check mode fails on each link into Ordo. The folder is left alone when `ORDO_SKILL_DIRS` is set and when the list holds it. It is also left alone when it is a link to a folder of the list. Another case checks, after linking, a link that could not be made. Another deletes a pinned worktree by hand and creates it again while another missing worktree keeps its registration. The rest cover the default folders, the `$CLAUDE_CONFIG_DIR` folder and both forms of `ORDO_SKILL_DIRS`. The space-separated form is split on spaces and tabs. Each refusal is checked with its message and shown to change nothing. The refusals are a link into the live clone for a skill the tag lacks and a worktree with local changes. A path that exists and is not a git worktree is refused. They are also a real directory or a foreign link in a skill folder, an unknown tag, and an `ORDO_SKILL_DIRS` that names no folder. The last are a folder that is not an absolute path, and one with leading or trailing whitespace.
-- `check_coverage.test.sh` checks that `check_coverage.py` passes a complete coverage list over scratch skill folders and a scratch roadmap. The passing cases are a hidden file, a nested file, an escaped pipe, the same file name in two skills' sections, and an empty table for an empty folder. So do a skill folder that is a link, fenced lines, a backtick in a fence's info string that opens no fence, and closing hashes. Further passing cases are file names holding U+2028 or U+0085, and file names stored in one Unicode form and listed in the other. On the roadmap side, a lettered heading passes, and so does a done lettered entry written `- [x] 4.C. ` or `- [x] 7.D `. The check reads only the sections of the skills named on the command line, with a control that reads a malformed one when it is named. A skill named twice on the command line is checked once, so each of its errors is printed once. The check fails a file not listed, listed twice or in the wrong section, a listed path that is no file or is not a plain relative path, and a file cell not in backticks. Each of these marks fails too: an unknown mark, a mark naming a skill the New skills table does not hold, and an empty reason. In a table, a wrong cell count or header, a missing separator row and a row after the table fail. A section with no table fails, as does a missing or repeated section, a fence left open, or a link inside a skill folder. A file whose name holds a newline is reported as one name. In New skills, an entry that is not in the roadmap fails, as does a skill named twice or an empty cell. Such an entry may follow a roadmap heading with a trailing dot after its letter (`## 6.B.`), a line separator inside a roadmap line, or a last cell ending in `\|` with no closing pipe. The errors print sorted by line number, then by message. With `--built <skill>`, the check passes a row marked `rebuild: <skill>` whose reason names in backticks a repository path `skills/<skill>/<path>` that is a file of that folder. Spans that do not start `skills/<skill>/` are not read, and a span spelled in another Unicode form still matches. A reason that names no span starting `skills/<skill>/` fails, including one that names only the source skill's path of the same file name. A `skills/<skill>/` span fails when the folder's `find -type f` listing does not hold it. The failing spans in the test are a missing file, a path not in normal form (`skills/paper/./SKILL.md`, `skills/paper/../paper/SKILL.md`) and the folder itself (`skills/paper/.`, `skills/paper/`). Further failing spans are a folder inside the skill folder, a case variant of a file's name, and a link to a file outside the repository. A `--built` skill that is not a row of New skills fails, as does one with no row marked `rebuild: <skill>` in the sections read. Controls show that `--built` reads only the rows of the skills given to it, reads a repeated skill once, and does not read a `rebuild later:` row. The check exits 2 on each usage error the test exercises. These are no skill argument, a missing skills root, a missing skill folder, a missing coverage list and a missing roadmap. They also include a list that is not UTF-8, a list outside a git repository, and a find that fails. The `--built` usage errors are no skill after it, a name that is empty, `.` or `..` or holds `/`, and a skill with no folder under `skills/`. Every run checks that the check changed nothing under its scratch folder.
-
-A plan's verify list, the `verify:` key of the first `yaml` or `yml` block of its `orchestrator-state.md`, runs through the land skill's runner, `sh <skills>/land/templates/verify.sh <state file>` (`skills/land/templates/verify.sh` in this repository), from the root of the checkout it checks. The runner needs `python3` with PyYAML, `bash` and `ps`. It runs each command as written through `bash -o pipefail -c`, so a pipeline fails when any of its stages fails, and a test that exits non-zero in a pipeline into `tail` makes the pipeline fail however the pipe is spelled. The runner judges the status the whole command returns, so a command that consumes a pipeline's status itself (`!`, `if`, `while`, `||`, or a pipeline sent to the background with `&`) passes or fails on what it returns.
-
-A command whose text after its last single pipe is `tail` and its options prints a test's summary: it passes only when it exits 0 and its last line starts with `PASS:`, and the runner prints that line. Any other command, one ending in `; true` included, passes when it exits 0, and the runner prints its whole output. The runner stops at the first red command and prints the command, its exit status and its output.
-
-Each command runs in a session of its own with standard input from `/dev/null`. On INT, HUP, QUIT or TERM the runner sends TERM to every process group of that session and KILL two seconds later, removes its scratch folder and exits 128 plus the signal number. It behaves the same started with `sh`, `bash` or `dash`. Its exit status:
-
-- `0`: every command passed.
-- `1`: a command is red, or the scratch folder cannot be created under `$TMPDIR` (default `/tmp`).
-- `64`: no single argument; a state file that cannot be read or is not UTF-8; no `yaml` block, or a first one that is never closed or is not valid YAML; no `verify:` key, a `verify:` key that is not a list, or an empty list; a command that is not a string, is empty or holds a NUL character.
-- `69`: `python3`, PyYAML, `bash` or `ps` is missing.
-- `128` plus the signal number: INT, HUP, QUIT or TERM stopped the run.
+A command ending in a pipe into `tail` passes only when it exits 0 and its last line starts with `PASS:`. Any other command passes when it exits 0. The run stops at the first command that fails. The head comment of `skills/land/templates/verify.sh` states the rest: the pipe rule in full, what the runner prints, how each command is started, the signals and the exit statuses.
 
 ## The landing script
 
-`skills/land/templates/land.sh` does the cherry-pick, the checks on `main` and the booking data as one command. A plan's ledger holds a copy of it, and `/land` refuses a ledger without one. `/plan` copies it into the ledger folder when it opens the plan and makes the `ADAPT` edits from `.agents/plan.yaml`:
+`skills/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command. It also prints the data for the step's booking in the plan: the diff stat, the usage rows (the tokens, tool uses and time of each agent) and the staged paths. `/plan` copies it into the ledger folder when it opens the plan, with `land.test.sh`, `verify.sh` and `usage.py` beside it. `/land` refuses a ledger without it. `/plan` also makes the `ADAPT` edits from `.agents/plan.yaml`:
 
 - `landing_worktree_root`: the `worktree_root` key, the folder that holds a step's worktree, `.agents/worktrees` by default.
 - `landing_tool_path`: the directory a step's changes are scoped to, `.` for the whole tree by default.
@@ -140,32 +122,28 @@ Each command runs in a session of its own with standard input from `/dev/null`. 
 - The `ADAPT` block: the dependency install and any check beyond the verify list with their pass rules. It is empty by default, so the template runs no step that belongs to one project.
 - The model names in the usage rows.
 
-The worktree's add leaves the ledger root out, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches `main`; a ledger file that a commit of the range holds still does. The check of `land.sh` on `main` is the ledger's verify list: after the cherry-pick onto `main` it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root, and a non-zero exit fails the landing with the output of `verify.sh` printed. `/plan` copies `land.test.sh`, `verify.sh` and `usage.py` beside it. `land.test.sh` reads `landing_tool_path` and `landing_ledger_root` from `land.sh`, finds `verify.sh` and `usage.py` as `land.sh` does, and proves the landing on scratch repositories. The ledger's copies of `land.sh` and `land.test.sh` find `verify.sh` and `usage.py` beside themselves. Both run from the ledger with the four files beside each other, whatever `land` skill is installed.
-
-`land.sh` finds `verify.sh` and `usage.py` beside itself, then in the land skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). A missing state file, or a `verify.sh` in none of those places, is refused before `main` is touched, with the places named.
+`land.sh` finds `verify.sh` and `usage.py` beside itself, and otherwise in the land skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` reads `landing_tool_path` and `landing_ledger_root` from the `land.sh` beside it. The land skill's section "The landing script" in `skills/land/SKILL.md` states the rest, including the check on `main`, the refusals and what `land.test.sh` proves.
 
 ## Working on Ordo
-
-This section is for changing Ordo itself. To use the skills, install them as above.
 
 While Ordo is being changed, the installed skills must not change with it: the plan skills run the change, so they stay at a fixed version until the change is done. The installed skills are links into a pinned checkout, a detached git worktree of the clone at a tag, and the clone's `main` is where the work happens.
 
 ```sh
 git clone https://github.com/TheAxeC/ordo.git ~/workspace/ordo
 cd ~/workspace/ordo
-utils/pin.sh v1.0.0      # the worktree ~/.local/share/ordo-stable at v1.0.0, every skill linked from it
+utils/pin.sh v1.1.0      # the worktree ~/.local/share/ordo-stable at v1.1.0, every skill linked from it
 utils/pin.sh             # checks that every link points into the pinned worktree; changes nothing
 ```
 
-`pin.sh` links into `~/.claude/skills` and, when it is set, `$CLAUDE_CONFIG_DIR/skills`, and works with a home folder whose path holds a space. Every skill folder must be an absolute path with no leading or trailing whitespace, and the refusal quotes the folder. `ORDO_STABLE` moves the worktree. The summary line names the folders joined by `, `.
+`pin.sh` links the skills into `~/.claude/skills` and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`. `ORDO_SKILL_DIRS` replaces that list of folders. `ORDO_STABLE` moves the pinned worktree to another path.
 
-`ORDO_SKILL_DIRS` replaces the list of folders. It is split on spaces and tabs, or read one folder per line when it holds a newline, which is the form for a folder whose path holds a space. A list that names no folder is refused.
+Check mode, `utils/pin.sh` with no tag, changes nothing and fails on each link into the clone and on each link into the pinned worktree for a skill the pinned tag lacks. Pin mode, `utils/pin.sh <tag>`, checks the links first and refuses, changing nothing, a link into the clone for a skill the tag lacks. It then links every skill of the tag, replaces each link into the clone, and removes each link into the pinned worktree for a skill the tag lacks.
 
 Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back is `utils/pin.sh <older tag>`. The pinned worktree is never edited, and `pin.sh` refuses to move one that has local changes. A pinned worktree deleted by hand is created again at the next `utils/pin.sh <tag>`, through `git worktree add --force`, which leaves the registration of every other worktree of the clone as it is.
 
-Check mode fails on a link into the live clone and on a link into the pinned worktree whose skill the tag lacks, and prints each one. Pin mode checks the links before it changes the worktree or any link. A link into the live clone for a skill the tag lacks is a refusal: `pin.sh` prints it, exits 1 and changes nothing. A link into the live clone for a skill the tag holds is replaced, and a link into the pinned worktree whose skill the tag lacks is removed, each with a line that names it.
+`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, folders whose path holds a space, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
 
-`~/.agents/skills` is not one of the folders `pin.sh` links into. `pin.sh` also reads it when `ORDO_SKILL_DIRS` is not set and it is not a folder of the list. It is compared with the list by path and, for folders that exist, by resolved path. A link there counts when its target is the pinned worktree or the live clone or inside either. The target is read as the link names it and with its folder resolved. Check mode fails on each such link and names it with `utils/pin.sh <tag>`, which removes it. Pin mode removes each one after linking and prints `pin: removed <link>, in a folder pin.sh no longer links into`. Every other entry of that folder, a real folder or a link to anywhere else, is left as it is.
+`docs/dev/building.md` lists the tests and checks to run before a change is committed.
 
 ## License
 
