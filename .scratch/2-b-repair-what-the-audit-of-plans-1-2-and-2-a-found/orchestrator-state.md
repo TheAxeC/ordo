@@ -50,7 +50,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item W (when to pin, raised 2026-09-27): the skills this session runs are the pinned release v1.0.0 (commit 80cfa51, `~/.claude-work/skills/spec` links into `~/.local/share/ordo-stable`), 348 commits behind main, so none of plan 2.B's skill changes, step 21's checks included, bind the orchestrator until a new pin. Step 19 tags and asks. (a) Also tag and pin once step 21 has landed, on the user's yes, so steps 17, 17a, 18 and 19 run under the fixed skills. (b) Pin at step 19 only, the lazy option: the rest of the plan runs under the old skills. Recommendation (a).
+- none.
 
 ## Booked, no ruling needed
 
@@ -59,6 +59,7 @@ dispatch:
 
 ## Closed items
 
+- 2026-09-27: open item W, when to pin: ruled (a), a tag and a pin once step 21 has landed, the pin run only on the user's yes to that tag.
 - 2026-09-27: open item V, the verify-list review: ruled (a), `land.sh`, `check_rule_inventory.py` and `sync_rules.py` kept and each made part of a process (steps 20 and 21).
 - 2026-09-27: open item U, launch.sh and steps 7a to 7d: ruled 1 (a), Claude only, the shell-launch route and every Codex part of the skills removed, steps 7a to 7d out of the plan (step 20); 2 (a), the verify-list scripts read and tabled for the user's ruling; 3 (a), new commits, no reset; 4 (a), the `/spec` check against unruled steps (step 21). Step 7d's worktree and step 17's worktree deleted with their branches by the user. Step 17's brief is kept and re-checked by `/spec` after step 21.
 - 2026-09-26: open item T, the library check in `/spec`: ruled 1 (a), new step 17a after 17; 2 (a), `libraries: check | avoid`, required, per project, asked by `/ordo-init`; 3 (a), this repository's value `avoid`.
