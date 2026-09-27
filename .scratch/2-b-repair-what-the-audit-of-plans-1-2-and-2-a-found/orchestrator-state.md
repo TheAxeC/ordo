@@ -51,7 +51,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item Y (step 21, a step the orchestrator books, raised 2026-09-27): rulings U 4 and X (a) make `/spec` refuse a step whose line carries neither `(approved)` nor `(ruling <name>)`. The skills also let the orchestrator book a step without the user: a finding outside a brief, a red line at landing, work left after the last repair round. Those steps go into the state file's "Booked, no ruling needed" list and are worked in queue order (`skills/land/SKILL.md:131`, `skills/plan/templates/orchestrator-state.md:34`, `skills/plan-orchestration/SKILL.md:172`, `skills/plan-help/SKILL.md:70`). Under step 21 as built, such a step has no tag and `/spec` refuses it, and the builder's worktree adds a sentence to plan-orchestration saying so; the other texts still say the step is worked with no ruling. Which holds is a rule of the loop, so it is the user's. (a) A step the orchestrator books is a stop: it goes to the user as an open item with its options, and it enters the step list only with the user's ruling and its `(ruling <name>)` tag. The booked list and the four sentences above are rewritten to say so, and the state file's heading "Booked, no ruling needed" goes. Pro: no step enters a plan without the user, the thing rulings U 4 and X exist for, with no exception. Con: every such finding costs the user a ruling, and the loop stops more often. (b) A `(booked)` tag that `check_step.py` accepts when the step is in the state file's booked list, worked in queue order as today. Pro: no extra stops. Con: the orchestrator again adds steps the user never saw, which is how steps 7b, 7c and 7d came about; this is the lazy option, since it keeps the texts as they are. Recommendation (a). Step 21's one repair round waits for this ruling, since the round rewrites those sentences.
+- none.
 
 ## Booked, no ruling needed
 
@@ -60,6 +60,7 @@ dispatch:
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 
 ## Closed items
+- Open item Y (step 21, a step the orchestrator books): ruled 2026-09-27, (a); booked in plan.md's Rulings.
 
 - 2026-09-27: open item X, how a step line names its authority: ruled (a), each step line ends with `(approved)` or `(ruling <name>)`, checked by `skills/spec/templates/check_step.py`, run by `/spec`, written by `/plan`.
 - 2026-09-27: open item W, when to pin: ruled (a), a tag and a pin once step 21 has landed, the pin run only on the user's yes to that tag.
@@ -116,8 +117,8 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 and 20 landed (step 20 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 21 in flight: built and refuted, its repair round waiting on open item Y; next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
-- Open on Axel's side: open item Y.
+- Roadmap entry 2.B. Step 21 in flight: built and refuted, its repair round carrying ruling Y; next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
+- Open on Axel's side: none.
 
 ## Usage
 
