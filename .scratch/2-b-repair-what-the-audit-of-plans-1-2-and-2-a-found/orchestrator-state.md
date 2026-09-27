@@ -39,42 +39,21 @@ worker_allow: []             # empty: a claude -p builder's allow list is built 
 ```
 
 ```yaml
-dispatch:
-- step: '7d'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  session_id: acd8d1577233d835c
-  paths_narrowed: launch.sh, launch.test.sh and the report only, so step 17 runs beside it; a sentence 7d makes false in plan-orchestration/SKILL.md or launch-note.md is given under Doc text and applied at landing
-  ab_base_files: the launch.sh and launch.test.sh of 01b029e, copied read-only to the session scratchpad's 7d-base folder
-  worktree: .agents/worktrees/2b-7d
-  base: 4bc65fb
-  launched: 2026-09-27
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/7d-report.md
-  landing: not-started
-  round: 0
-- step: '17'
-  executor: agent
-  worker: claude:opus, a native agent in the background
-  worktree: .agents/worktrees/2b-17
-  base: f2fc202
-  launched: 2026-09-27
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17-report.md
-  landing: not-started
-  round: 0
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item U (steps 7b, 7c, 7d and 17, raised 2026-09-27): steps 7b, 7c and 7d were made by the orchestrator from review findings and never ruled by the user; 7d's builder is stopped with uncommitted changes in its worktree and no report; step 17's worktree exists with no builder. Nothing runs until the user rules. (1) 7d: (a) remove it from the plan, delete its worktree and branch, and drop the 16-at-once load requirement from future briefs; (b) finish it under the rules; (c) keep it booked for later, the lazy option. Recommendation (a). (2) 7b and 7c, landed: (a) keep them; (b) revert both commits, the lazy option. Recommendation (a). (3) Step 17: (a) launch its builder and run it through /refute and /land as skill calls; (b) rewrite its brief first. Recommendation (a).
+- none.
 
 ## Booked, no ruling needed
 
-- Found by step 7c's review of its round 1, booked as step 7d in `plan.md`: `launch.test.sh` red under load in cases with windows of a few seconds, on main's files before step 7c and after it; the brief's load item of step 7c not met.
 - Found by step 2's builder, for the step that holds the file: `skills/plan/templates/plan.md:3` still says "one agent dispatch" (step 2's landing, the plan skill being step 2's); `skills/land/SKILL.md:70` opens the landing report with the open items, not the position line (fixed in step 3's worktree, item 12, and lands with step 3); a builder's report keeps the change standard's shape (step 2's Reports), so step 3's landing takes the position line back out of `skills/spec/templates/brief.md:40`, which step 3's worktree added.
 - Found by step 3's builder, sentences in files no step in flight holds, to fix at the landing of the step that touches them or at step 3's landing: `skills/repo-setup/templates/shared-rules.md:19` makes any "premise found wrong" a stop, against ruling 3c (step 3's landing, the repo-setup folder being step 3's); `skills/plan/templates/plan.yaml:2` and `plan.projects.yaml:3` say every path is relative to the repository root without the `launch_note` exception (step 2's landing, the plan skill's templates being step 2's).
 
 ## Closed items
 
+- 2026-09-27: open item U, launch.sh and steps 7a to 7d: ruled 1 (a), Claude only, the shell-launch route and every Codex part of the skills removed, steps 7a to 7d out of the plan (step 20); 2 (a), the verify-list scripts read and tabled for the user's ruling; 3 (a), new commits, no reset; 4 (a), the `/spec` check against unruled steps (step 21). Step 7d's worktree `.agents/worktrees/2b-7d` (uncommitted changes to `launch.sh` and its test) and step 17's worktree `.agents/worktrees/2b-17` are to be deleted with their branches; the permission check refused the deletion, so it waits on the user. Step 17's brief is kept and re-checked by `/spec` after step 21.
 - 2026-09-26: open item T, the library check in `/spec`: ruled 1 (a), new step 17a after 17; 2 (a), `libraries: check | avoid`, required, per project, asked by `/ordo-init`; 3 (a), this repository's value `avoid`.
 - 2026-09-26: open item S, the allow-list key: ruled (a), `worker_allow:`, a list of command prefixes that `launch.sh` passes to a `claude` builder as `--allowedTools "Bash(<prefix>:*)"`; absent, built from the verify list and the brief's gate commands.
 - 2026-09-26: open item R, how a shell-launched `claude` builder may run commands: ruled (a), an allow list that `launch.sh` passes as `--allowedTools`, from a new optional key; new step 7a builds it, then step 7's builder is resumed with the list.
@@ -126,7 +105,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 7c, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Paused on open item U: step 7d's builder is stopped, step 17's builder is not launched.
+- Roadmap entry 2.B. Next: the verify-list review for the user's ruling, then step 20, 21, 17, 17a, 18, 19.
 - Open on Axel's side: none.
 
 ## Usage
