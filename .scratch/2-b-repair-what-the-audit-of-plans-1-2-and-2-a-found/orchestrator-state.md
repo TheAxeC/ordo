@@ -44,6 +44,8 @@ dispatch:
   base: 7d3e907
   launched: 2026-09-27
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/20-report.md
+  builder_usage: 276603 tokens, 74 tool uses, 20.6 minutes
+  reviewer: claude:opus, a native agent in the background, a2155aa82f638f98d
   landing: not-started
   round: 0
 ```
