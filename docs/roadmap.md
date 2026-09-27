@@ -20,21 +20,21 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: Every finding of the five reports in `.scratch/reviews/2026-09-24-audit/` is fixed in the tree or ruled out by the user. That covers the skill texts (the restyle and 2.A defects, the contradictions between skills as ruled, Opus as the default model for the orchestrator and the agents, with Fable as an option for the orchestrator, every agent run under Claude Code, `inline` kept as an optional executor, stops raised as plain-text open items), `launch.sh`, `pin.sh`, `collect_findings.py` and the other tools, the roadmap's gates and order, every row of `docs/academic-coverage.md` checked against its file, a committed verify runner, and the three archived ledgers corrected to what was observed.
-- Gate: the plan's closure table lists every numbered finding of the six reports in `.scratch/reviews/2026-09-24-audit/` with the commit that closes it or the user's ruling; the committed verify runner exits 0 on main, and its test shows it failing on a planted red test; each fault the checkers review planted in a tool now turns that tool's test red; each of the 169 coverage rows carries a recorded check against its research-hub file, and the coverage check passes; `/plan-retro` has run over the three archived plans and each of its proposals is ruled; the layout check and the rule-inventory check pass.
+- Gate: the plan's closure table lists every numbered finding of the six reports in `.scratch/reviews/2026-09-24-audit/` with the commit that closes it or the user's ruling; the committed verify runner exits 0 on main, and its test shows it failing on a planted red test; each fault the checkers review planted in a tool still in the tree now turns that tool's test red; each of the 169 coverage rows carries a recorded check against its research-hub file, and the coverage check passes; `/plan-retro` has run over the three archived plans and each of its proposals is ruled.
 - Waits on: 1, 2 and 2.A, the work it repairs.
 
 ## 3. The writing base
 
 - Status: [ ]
 - Goal: A `writing` skill folder the writing skills share: the prose standard, the anti-pattern table, and the checks for non-ASCII, dash asides, history words and word counts per section.
-- Gate: each check has a test that fails on a planted violation and passes on a clean file; the skill follows `docs/dev/skill-layout.md` and the layout check passes on it; the coverage check with `--built writing` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, checked by reading both.
+- Gate: the checks run on one sample file holding one planted violation per check, flag each of them, and flag nothing in a clean file; the checks run on a real draft of yours, and you review what they flag; the skill follows `docs/dev/skill-layout.md`; the coverage check with `--built writing` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, checked by reading both.
 - Waits on: 1, for the layout; 2, for what the base covers; 2.B, for the repaired skills and tools it is built with.
 
 ## 4. code-comments
 
 - Status: [ ]
 - Goal: A skill that checks and rewrites the comments of a diff: what the code does and why, no history, no step numbers, ASCII only.
-- Gate: its check flags history words, step numbers, dates and non-ASCII in a diff's comments, and its test fails on each planted case; one real run on a cathedra or game-engine diff that you review.
+- Gate: its check flags history words, step numbers, dates and non-ASCII in the comments of one sample diff that plants one of each, and nothing in a clean diff; one real run on a real diff that you review.
 - Waits on: 3, for the checks.
 
 ## 9. literature
@@ -90,14 +90,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: A skill that writes and keeps the main README and `code/README.md` of a project, readable by someone new to it: each page opens with an introduction (what the project or folder is, who it is for, what to read first), explains each idea before using it, defines each term where it first appears, shows how to run things with a worked example, and follows the writing base's prose standard.
-- Gate: a check that every page opens with an introduction paragraph before its first heading and has a section on how to run it; a fresh reader with no context answers a fixed set of questions from the pages alone (what the project does, how to run the main experiment, where results go, what each folder holds), and each question it cannot answer is a finding; one real run on a research project that you review.
+- Gate: a fresh reader with no context answers a fixed set of questions from the pages alone (what the project does, how to run the main experiment, where results go, what each folder holds), and each question it cannot answer is a finding; one real run on a research project that you review.
 - Waits on: 11, for the profiles.
 
 ## 13. researcher
 
 - Status: [ ]
 - Goal: The researcher skill: the new-project and revise roadmap templates, an adopt mode for a project already underway (it reads the code, configs, results, logs and draft, writes the roadmap with the finished stages marked done with their evidence, and continues after your approval from the first stage not done), a run over a named range of stages, venue files in `venues/`, and plan-orchestration's support for SLURM jobs. Each stage's input and output files have a written format, so any stage can start from files that exist. When experiments do not beat the baseline, the loop proposes a new method and runs the next experiments; it never writes up a negative result.
-- Gate: a test that every template entry has a gate and that its dependencies exist; a test that each stage's input format is written down; the SLURM support has a test on a stub scheduler; one adopt run on one of your research-hub projects that is mid-experiments, whose roadmap you check; one run over part of the stages on a test project; the coverage check with `--built researcher` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: researcher` row that the file of `skills/researcher/` the row names holds what the source file did, checked by reading both.
+- Gate: the adopt mode is run once on a real research project that already has code and results but is not finished, and you check that the roadmap it writes marks as done exactly the stages that are done, each with the file that shows it; a run over a named range of stages on a small test project writes each of those stages' output files; submitting jobs to SLURM is tested against a fake scheduler that records the jobs it is sent; the coverage check with `--built researcher` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: researcher` row that the file of `skills/researcher/` the row names holds what the source file did, checked by reading both.
 - Waits on: 5 to 12, for the skills its entries call.
 
 ## 14. submit-manuscript
