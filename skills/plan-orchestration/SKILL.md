@@ -137,6 +137,7 @@ On every resumption, with a dispatch block or without one:
 
 With `workers_at_once` above 1 the orchestrator, still one, may have that many steps running at once, each through steps 3 to 9 on its own, under these rules:
 
+- Whether two steps can run at once is decided by how simply the second one's change lands on the first's, not by their paths alone. For each pair the orchestrator states what each changes in code the other reads or changes, and how the later landing takes it: nothing to merge, a mechanical rerun (a converter, a formatter, a generator), a hand merge of named functions, or a dependency that forces an order. A pair whose later landing needs more than a mechanical rerun or a hand merge of a few named functions runs in sequence.
 - Each brief lists the paths its step writes under "Paths this step writes", and no two steps in flight share a path: the same file, named whole in one of them, or line ranges of one file that overlap.
 - Before the dispatch, `spec` checks the list against the brief of every step in the dispatch block with the `spec` skill's `templates/check_paths.py`, and refuses a shared path, naming both steps.
 - A shared document is split between steps in flight only by line ranges that do not overlap; a step that touches a configuration file or a rule file runs alone.
