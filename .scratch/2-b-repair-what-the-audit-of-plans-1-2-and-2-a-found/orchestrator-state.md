@@ -34,7 +34,16 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: '21'
+  executor: agent
+  worker: claude:opus, a native agent in the background
+  worktree: .agents/worktrees/2b-21
+  base: 8b13b9e
+  launched: 2026-09-27
+  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/21-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
@@ -104,7 +113,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 and 20 landed (step 20 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 20 landed; next: step 21, then the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
+- Roadmap entry 2.B. Step 21 in flight; next: then the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
 - Open on Axel's side: none.
 
 ## Usage
