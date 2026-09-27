@@ -38,6 +38,7 @@ dispatch:
 - step: '21'
   executor: agent
   worker: claude:opus, a native agent in the background
+  session_id: abce530a8a38caeac
   worktree: .agents/worktrees/2b-21
   base: 8b13b9e
   launched: 2026-09-27
@@ -113,7 +114,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 and 20 landed (step 20 in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B. Step 21 in flight; next: then the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
+- Roadmap entry 2.B. Step 21 in flight; next: the tag and the pin on the user's yes (ruling W), then 17, 17a, 18, 19.
 - Open on Axel's side: none.
 
 ## Usage
