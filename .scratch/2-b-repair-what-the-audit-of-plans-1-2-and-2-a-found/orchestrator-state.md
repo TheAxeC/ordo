@@ -44,7 +44,6 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   session_id: acd8d1577233d835c
-  state: stopped by the user on 2026-09-27 at about 10:10, before its report; its worktree kept with uncommitted changes to launch.sh and launch.test.sh (198 insertions, 84 deletions against 4bc65fb); no report written
   paths_narrowed: launch.sh, launch.test.sh and the report only, so step 17 runs beside it; a sentence 7d makes false in plan-orchestration/SKILL.md or launch-note.md is given under Doc text and applied at landing
   ab_base_files: the launch.sh and launch.test.sh of 01b029e, copied read-only to the session scratchpad's 7d-base folder
   worktree: .agents/worktrees/2b-7d
@@ -57,7 +56,6 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   worktree: .agents/worktrees/2b-17
-  state: brief and worktree made; no builder launched, held for the user's ruling
   base: f2fc202
   launched: 2026-09-27
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/17-report.md
@@ -67,7 +65,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- none.
+- Open item U (steps 7b, 7c, 7d and 17, raised 2026-09-27): steps 7b, 7c and 7d were made by the orchestrator from review findings and never ruled by the user; 7d's builder is stopped with uncommitted changes in its worktree and no report; step 17's worktree exists with no builder. Nothing runs until the user rules. (1) 7d: (a) remove it from the plan, delete its worktree and branch, and drop the 16-at-once load requirement from future briefs; (b) finish it under the rules; (c) keep it booked for later, the lazy option. Recommendation (a). (2) 7b and 7c, landed: (a) keep them; (b) revert both commits, the lazy option. Recommendation (a). (3) Step 17: (a) launch its builder and run it through /refute and /land as skill calls; (b) rewrite its brief first. Recommendation (a).
 
 ## Booked, no ruling needed
 
@@ -128,7 +126,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 7a, 7b, 7c, 8, 9, 10, 11, 12, 13, 14, 15 and 16 landed (step 7c in the commit that carries this line). The tree is clean after it.
-- Roadmap entry 2.B. Paused by the user: step 7d's builder stopped before its report, step 17 prepared with no builder launched; nothing is dispatched or landed until the user rules.
+- Roadmap entry 2.B. Paused on open item U: step 7d's builder is stopped, step 17's builder is not launched.
 - Open on Axel's side: none.
 
 ## Usage
