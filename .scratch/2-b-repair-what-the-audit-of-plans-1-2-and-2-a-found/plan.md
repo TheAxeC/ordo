@@ -53,7 +53,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 - 7a before 7 resumes; step 7's builder is resumed with `launch.sh --resume` once 7a has landed.
 - 7b with 7 after 7a (their paths are disjoint); step 7's resume uses its round's own exit and pid files, which 7b's cases do not reach.
 - 7c after 7b (the same files).
-- 7d after 7c (the same test file).
+- 7d after 7c (the same test file); 17 beside 7d.
 - 4 after 2 (both edit `skills/plan-orchestration/SKILL.md`).
 - 10 after 8 (it uses step 8's mode).
 - 11, 12, 13, 14 one after another after 8 (they all edit `docs/academic-coverage.md`).
@@ -101,7 +101,7 @@ the plan's closure table lists every numbered finding of the six reports in `.sc
 
 - 7c: step 7b's landing, since both change `launch.sh` and its test.
 - 7d: step 7c's landing, since both change `launch.test.sh`.
-- 17: step 7c's landing, since 17 touches the rules page and every `SKILL.md`.
+- 17: step 7c's landing, since 17 touches the rules page and every `SKILL.md`; it runs beside 7d, whose paths are `launch.sh` and its test only.
 - 17a: step 17's landing, since both touch `skills/spec/SKILL.md`, `skills/plan/` and `skills/ordo-init/`.
 - 18: every step from 1 to 17a.
 - 19: step 18.

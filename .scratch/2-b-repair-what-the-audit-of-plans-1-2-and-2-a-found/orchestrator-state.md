@@ -44,6 +44,7 @@ dispatch:
   executor: agent
   worker: claude:opus, a native agent in the background
   session_id: acd8d1577233d835c
+  paths_narrowed: launch.sh, launch.test.sh and the report only, so step 17 runs beside it; a sentence 7d makes false in plan-orchestration/SKILL.md or launch-note.md is given under Doc text and applied at landing
   ab_base_files: the launch.sh and launch.test.sh of 01b029e, copied read-only to the session scratchpad's 7d-base folder
   worktree: .agents/worktrees/2b-7d
   base: 4bc65fb
