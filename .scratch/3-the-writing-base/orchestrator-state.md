@@ -36,9 +36,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item I (2026-09-28): step 5's run of `/writing` on the FWO proposal `main.tex` gives 50 script flag lines, and three kinds are wrong flags. (1) The 29 `\bibitem` entries of `thebibliography` are read as running prose: 21 `semicolons` lines and 1 `equal-length` line fall on reference entries, and their 22 citation semicolons and about 726 words enter the file's rate, which reads 53 in 8101 words where the body holds 31 in about 7,400 (4.2 per 1000, still over the limit of 2). (2) `contrast` matches a negation followed by an appositive or absolute clause: line 100 "could not have influenced, an anchor" and line 170 "are not one measurement, i-IFTA having become scorable". (3) `vague` flags "often" in "how often its answer is right" (line 104), where it names a rate. Options: (a) a new step 5a fixes the script: reference-list entries (`thebibliography` and its `\bibitem` lines) are data rows, "how often" is not a vague qualifier, and a narrower `contrast` rule, measured on the repository's Markdown and the 60 research-hub LaTeX files before it is written, with a stop back to the user if no rule separates the two kinds; pro: the flags the user reads are the ones to act on, con: one more step before the closing. (b) keep the script and let `/writing` list these flags as allowed with their reasons each time; pro: no more work in this plan, con: every LaTeX paper's semicolon rate and flag list carry its references. Recommendation: (a). The lazy option is (b).
+- Open item J (2026-09-28): the report shape of `/writing` is unreadable. `skills/writing/SKILL.md` Steps 4 and "The problem list" prescribe one machine line per script flag and per reading, in line order, with the allowed flags listed apart, which on the FWO proposal gave some 80 lines a reader cannot use. Options: (a) a step 5a rewrites Steps 4, "The problem list" and its example, the anti-patterns and the Rules of `SKILL.md`: the report groups the problems by kind, the most consequential first, each group naming its lines, quoting a passage or two and saying what to change; the script's output is one input to the reading and is never listed flag by flag; a flag judged wrong is left out. (b) keep the shape and rewrite each run's output by hand. Recommendation: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item I (three kinds of wrong flags of the checking script on the FWO proposal): closed by the user: the script is an indication and never the truth, and it is not made more exact; its flags are judged by reading.
 
 - 2026-09-28: open item H (step 5 needs `/writing`, and the installed skills are pinned at v2.0.0): ruled (a); main is tagged v2.1.0 at step 4's landing commit f05fb35 and `utils/pin.sh v2.1.0` is run, so step 5 invokes `/writing` as installed.
 
@@ -81,7 +83,7 @@ dispatch:
 
 - 2026-09-28. Steps 1, 2, 3, 2a and 4 landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list and every branch has a case, the reference pages are in `skills/writing/references/`, and `skills/writing/SKILL.md` gives `/writing <file>`. The installed skills are v2.0.0.
 - Next: step 5, a real draft of the user's: the orchestrator runs `/writing` on `/Users/axelfaes/workspace/research-hub/funding/2026-fwo-senior-transplant/proposal/main.tex` (read only), and the user reviews what it flags.
-- Open on Axel's side: step 5's check, the review of the flags of `/writing` on the FWO proposal, and open item I on the wrong flags.
+- Open on Axel's side: step 5's check, the review of `/writing` on the FWO proposal, and open item J on the report shape of `/writing`.
 
 ## Usage
 
