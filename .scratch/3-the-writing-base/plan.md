@@ -31,6 +31,7 @@ Independent of each other; the configuration block's `workers_at_once: 1` still 
 - Question 1 (2026-09-28): (a), the prose standard moves into the `writing` skill, and `/repo-setup` copies it from there, so each rule is written once (the user).
 - Question 2 (2026-09-28): (a), `/writing <file>` checks a file and reports each problem with its line, changing nothing; rewriting belongs to entries 4 and 5, as the roadmap's entry texts give it (the user).
 - Open item A (2026-09-28): (a), `standards: [docs/dev/skill-layout.md, <the prose standard>]` in `.agents/plan.yaml` and in the state file, so every brief points the builder at both pages; step 1 changes the prose standard's path in both. The lazy option was (b), naming the pages in each brief by hand (the user).
+- Steps 2 and 3 in parallel (2026-09-28): (a), in sequence; step 2 edits the rules file `docs/dev/change-standard.md`, and a step that touches a rule file runs alone. Neither option left work undone (the user).
 
 ## Blocked, and by what
 
