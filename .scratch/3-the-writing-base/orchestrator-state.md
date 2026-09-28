@@ -40,12 +40,13 @@ dispatch:
   launched: 2026-09-28
   report: .scratch/3-the-writing-base/agents/reviews/2-report.md
   landing: not-started
-  round: 0
+  round: 1
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/2-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- None.
+- Open item B (step 2, raised 2026-09-28): does rule 10 of `docs/dev/change-standard.md` ("No history in code or comments. ... ASCII only, no em dashes, no double blank lines.") forbid two blank lines between definitions in Python code? The new `check_prose.py` has 26 such places, following Python's usual style (PEP 8), as the four Python scripts already in the tree do (`check_config.py` 5, `sync_rules.py` 4, `check_coverage.py` 16, `usage.py` 11). (a) Yes: the rule applies to code as written; `check_prose.py` gets single blank lines at landing, and the four existing scripts are changed the same way at the same landing, since leaving them would keep the tree breaking its own rule. Pro: the tree follows its rules file. Con: Python files that look different from most Python code, and a landing that touches four files outside the step. (b) No: rule 10 is reworded to say the blank-line limit is for prose and comments, and Python code keeps two blank lines between top-level definitions; the reword lands with step 2. Pro: matches the existing scripts and standard Python style. Con: a rules-file change. (c) Leave rule 10 as it is and the scripts as they are: the lazy option, since the rule and the code keep contradicting each other. Recommendation: (b), since the rule's own sentence is about history and comments, and all five scripts already follow the other reading.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
