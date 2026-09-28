@@ -212,6 +212,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on a topic you name over at least two sessions, the second reading the first's records and scheduling its retrieval practice, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `teach` on the same topic.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
+## 23. Pruning pass
+
+- Status: [ ]
+- Goal: Every Ordo skill held to the writing-for-agents rules of `docs/dev/skill-layout.md`: each sentence that changes no behaviour deleted, each prohibition written as the behaviour wanted, each step ending on its "done when".
+- Gate: you read and approve the whole diff; a reviewer's report lists every deleted sentence with the behaviour it carried and where that behaviour still stands, or why it carried none, read by you.
+- Waits on: every other open entry, so each skill is pruned once, in its final form.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
