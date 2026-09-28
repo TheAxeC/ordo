@@ -25,12 +25,10 @@ metadata:
 
 ## What it reads
 
-1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `docs/dev/change-standard.md`, `docs/adr/README.md`, `docs/adr/template.md`, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
+1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
 2. The user's answers to "The questions".
-3. The `ordo-init` skill beside this skill's folder: `/ordo-init` and the `ordo-init` skill's `templates/check_config.py`.
-4. The `roadmap` skill beside this skill's folder: the `roadmap` skill's `templates/roadmap.md`.
-5. The `writing` skill beside this skill's folder: the `writing` skill's `references/prose-standard.md`.
-6. For `sync`, the repository's `CLAUDE.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` for the exit-2 draft.
+3. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
+4. For `sync`, the repository's `CLAUDE.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` for the exit-2 draft.
 
 ## Steps
 
@@ -108,7 +106,7 @@ LICENSE
 .gitignore                       templates/gitignore/common.gitignore, then the kind's file
 skills-lock.json                 written by the skills CLI when the project skills are installed
 docs/dev/change-standard.md      templates/docs/dev/change-standard.md, its placeholders filled
-docs/dev/prose-standard.md       the writing skill's references/prose-standard.md
+docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md
 docs/dev/coding-standards.md     only when question 6 gave one
 docs/dev/building.md             written by /ordo-init from the build files
 docs/roadmap.md                  the roadmap skill's templates/roadmap.md
@@ -145,7 +143,7 @@ utils/                           scripts the build and the checks run
 
 ## Rules
 
-- Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init`, `roadmap` and `writing` skills beside it.
+- Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it.
 - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
 - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` the user rules on in `sync`.
 - A page it writes states rules the user or a template gave.
@@ -153,4 +151,4 @@ utils/                           scripts the build and the checks run
 - The skill never invents a coding rule.
 - Build files are written only for what the user names; nothing is assumed.
 - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
-- Every file it writes follows the prose standard: ASCII, one paragraph per source line, no history.
+- Every file it writes is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say.

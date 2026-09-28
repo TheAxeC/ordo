@@ -18,7 +18,6 @@ Excluded from style rewrites: vendored and generated trees, and installed skill 
 - **No repeated construction.** A sentence shape that recurs across entries or sections is a template and is rewritten once noticed.
 - **Arrows (`->`) only inside code and code comments**, never as prose punctuation. Rewrite as a sentence.
 - **No chatbot framing.** No "Great question", "Here's what I found", "Would you like me to", and no closing offer of further help.
-- **No history in a rule or a comment.** A rule, a spec, a skill, a rules page and a code comment state what holds and at most one clause of why. They never say when they were made, what came before them, or which step or session wrote them. That belongs in a log, such as a ledger, a commit message or a changelog. A text whose subject is past events reports them, and this rule does not reach it. A paper's related work, a changelog and a ledger are such texts.
 
 ## A. Vocabulary
 

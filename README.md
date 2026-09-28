@@ -4,7 +4,7 @@ Ordo is a set of agent skills for Claude Code that run a multi-step change as a 
 
 One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
 
-Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, and `plan-retro` turns what the reviewers keep finding into rules. `writing` checks a text file's prose and lists each problem with its line.
+Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, and `plan-retro` turns what the reviewers keep finding into rules.
 
 ## The skills
 
@@ -20,7 +20,6 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
 | `plan-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
 | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule, the standards page or the check that stops it |
-| `writing` | Checks a text file against the prose standard and the writing reference pages and lists each problem with its line. It changes nothing |
 
 The order of use, shortened from what `/plan-help` prints:
 
@@ -43,8 +42,6 @@ for every step:
 
 `/plan-help` prints the full sequence, including what to do when a command stops.
 
-`/writing <file>` is not part of that sequence. It checks a file's prose at any time and lists each problem with its line.
-
 ## Requirements
 
 - git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/verify.sh`, also needs `bash` and `ps`.
@@ -54,7 +51,7 @@ for every step:
 
 ## Install
 
-The skills call each other and read each other's templates and references, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
+The skills call each other and read each other's templates, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
 
 ### With the skills CLI
 
@@ -70,7 +67,7 @@ This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec writing; do
+    for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
 done

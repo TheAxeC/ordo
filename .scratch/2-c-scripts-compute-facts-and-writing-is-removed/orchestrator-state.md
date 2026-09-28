@@ -13,7 +13,7 @@ verify:                      # commands run in the worktree and again on main, i
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
-standards: [docs/dev/skill-layout.md, skills/writing/references/prose-standard.md] # files every brief tells the builder to read in full, from .agents/plan.yaml; step 1's landing rewrites the second path.
+standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
@@ -31,25 +31,15 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
-  step: 1
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2c-1
-  base: 64cac893b94e4f444b72f3835e07b85aae7ae734
-  launched: 2026-09-28
-  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/1-report.md
-  landing: not-started
-  round: 0
-  session_id: a3a968ca7fa74904b
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item A (2026-09-28): who runs the verify list at landing, reopened before step 2 is prepared. Question 2 was ruled (a), the session runs each command at `/land` Steps 6. Under (a) nothing records that every command ran, from the repository root, and that each exit status was read right; a session can skip one or read a red line as green. Running a fixed list and reading each exit status has one exact answer, which the rule "scripts compute facts" gives to a script. Options: (a) as ruled, the session runs the list; `land.sh` does only the git work. (b) `land.sh` runs the state file's `verify:` list itself after the cherry-pick: each command through `bash -o pipefail -c` from the repository root, stopping at the first non-zero exit and printing that command and its output; no `PASS:` line reading, no signal handling and no exit-code table, since decision E makes each command fail by its own exit status; `land.test.sh` gains one case, a red command fails the landing and nothing is committed. Recommendation: (b), since it removes the failure mode (a) has and costs about twenty lines. The lazy option is (a): less code now, and the check left to the session's care.
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- none.
+- 2026-09-28: open item A, who runs the verify list: ruled (b), a separate script `skills/land/templates/checks.sh <state file>` that the builder, the reviewer and `land.sh` run; the user approved its name and what it computes.
 
 ## The standing demands (from Axel, in force)
 
@@ -72,12 +62,13 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-28. The plan is opened; nothing of it has landed. Plan 3's ledger `.scratch/3-the-writing-base/` is still on the tree until step 1's landing.
-- Step 1 is prepared (base 64cac89) and its builder is running in `.agents/worktrees/2c-1`.
-- Next step: 1's review, then its landing.
-- Open on Axel's side: open item A.
+- 2026-09-28. Step 1 landed: `skills/writing/` removed, the prose standard and five files back to v2.0.0, plan 3's ledger deleted. Main's tree is clean after the landing commit.
+- Verified: the verify list on main, `verify: 7 commands passed`, exit 0.
+- Next step: 2, the single landing script and `checks.sh`, because it is the next of the list and open item A is ruled.
+- Open on Axel's side: none.
 
 ## Usage
 
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds (up to repair_rounds, or one more under the exception) | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look (views, themes, what was seen) |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | claude:opus 97308 / 20 / 582 s | claude:opus 108994 / 28 / 469 s; no round | 0 | 0 | +13 -2736 | yes | 1 | 0 | 41 | 30822 | 121315 | 9934169 | 90 | 27 (from the plan's opening; shares the window with the four comparison agents' reports) | none |
