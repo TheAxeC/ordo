@@ -39,8 +39,10 @@ dispatch:
   launched: 2026-09-29
   report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/6-report.md
   landing: not-started
-  round: 0
+  round: 1
   session_id: a33a6362e8a9f3bd2
+  builder_usage: round 0, 276577 tokens, 45 tool uses, 1767 s
+  reviewer_report: agents/reviews/6-refuter.md, claude:opus (usage in its completion notice)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
