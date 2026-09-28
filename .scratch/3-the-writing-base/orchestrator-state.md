@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: "1"
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/3-1
+  session_id: aecd05efea50856b9
+  base: "c1de4b5"
+  launched: 2026-09-28
+  report: .scratch/3-the-writing-base/agents/reviews/1-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -65,7 +75,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-28. The plan is opened; nothing has landed. The installed skills are v2.0.0.
-- Next step: 1, the prose standard moved, because steps 2 and 3 name its new path.
+- Step 1, the prose standard moved, dispatched; next: its review and landing, then steps 2 and 3.
 - Open on Axel's side: none.
 
 ## Usage
