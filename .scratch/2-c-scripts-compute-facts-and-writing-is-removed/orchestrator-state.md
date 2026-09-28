@@ -10,7 +10,6 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
-- sh skills/writing/templates/check_prose.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -51,7 +50,7 @@ dispatch:
 ## Verification, every step
 
 - The ledger's landing script, from the repository root: `sh .scratch/2-c-scripts-compute-facts-and-writing-is-removed/land.sh <step branch> <base>`. It commits a wip in the worktree, copies the step's commits onto main (or prints `nothing to copy` when there are none), runs the verify list on main through `verify.sh`, and prints the booking data; exit 0 passes, 1 is a red check or a stop, 2 a conflict. `land.test.sh` beside it proves it. Step 2's landing is the last that uses it; its landing deletes the four copies, and later steps land through `skills/land/templates/land.sh` as installed after step 3.
-- The `verify` list above runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, the worktree and then main, and the lines it prints are what a report or a booking quotes. Step 1's landing removes the `check_prose` line, and step 2's landing rewrites the list from the new `docs/dev/building.md`.
+- The `verify` list above runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, the worktree and then main, and the lines it prints are what a report or a booking quotes. The `check_prose` test is out of the list, since step 1 deletes it; step 2's landing rewrites the list from the new `docs/dev/building.md`.
 - The step's own check, named on its line in `plan.md` and in its brief.
 - Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
 
