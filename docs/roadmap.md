@@ -191,6 +191,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; a blind comparison under the protocol of 2.D against mattpocock's `codebase-design` on the same repository.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
+## 20. improve-codebase-architecture
+
+- Status: [ ]
+- Goal: An `improve-codebase-architecture` skill that reads a repository against its design-standard page and writes candidates, each naming the principle it breaks, its files and lines, the problem, the fix, the benefit and how strongly it is recommended, then grills through the one you pick into a roadmap entry.
+- Gate: one real run on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; a blind comparison under the protocol of 2.D against mattpocock's `improve-codebase-architecture` on the same repository.
+- Waits on: 19, for the design-standard page; 2.E, for `grill`.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
