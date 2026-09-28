@@ -41,7 +41,8 @@ dispatch:
   launched: 2026-09-28
   report: .scratch/3-the-writing-base/agents/reviews/4-report.md
   landing: not-started
-  round: 0
+  round: 1
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/4-refuter.md (138,084 tokens, 38 tool uses, 491 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
