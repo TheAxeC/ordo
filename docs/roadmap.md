@@ -23,6 +23,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: the checks run on one sample file holding one planted violation per check, flag each of them, and flag nothing in a clean file; the checks run on a real draft of yours, and you review what they flag; the skill follows `docs/dev/skill-layout.md`; the coverage check with `--built writing` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, checked by reading both.
 - Waits on: 1, for the layout; 2, for what the base covers; 2.B, for the repaired skills and tools it is built with.
 
+## 3.A Landing checks the brief and the review
+
+- Status: [ ]
+- Goal: `land.sh` refuses to land a step, before main is touched, when the step's base commit does not hold its brief `agents/briefs/<step>.md`, or when its refuter report `agents/reviews/<step>-refuter.md` is missing, is older than the builder's report, lacks a `Repair round <n>, refuted` heading for a round the dispatch entry records under `refute_after_repair: yes`, or lacks its `Closed` heading. The `land` skill's refusal "The step not ready" names these as the script's checks.
+- Gate: `sh skills/land/templates/land.test.sh 2>&1 | tail -1` prints `PASS: land.sh and usage.py scratch tests`, exit 0, with one case per refusal that expects the refusal and leaves main untouched, and one case where all these files are present and the step lands; each refusal removed in a copy of `land.sh` turns the test red with that case's name.
+- Waits on: 2.B, for the landing script as repaired.
+
 ## 4. code-comments
 
 - Status: [ ]
