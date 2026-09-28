@@ -36,9 +36,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item E (step 2a, raised 2026-09-28 at /spec): the data-row rule ruled for step 2a ("a LaTeX data row is a line of one command whose argument text holds no sentence") would add false flags. Measured over 60 research-hub LaTeX files: the current rule leaves out of the semicolon count 64 one-line rows holding a semicolon, 40 of them `\caption{...}` lines, which are prose. (a) The rule as ruled: a row is prose when its argument text holds a sentence end. It counts 49 of the 64: 37 captions, 2 `\leg{...}{...}` lines of the naesens `concept.tex` (prose), and also the 8 indicator lines of `veni2026.tex`'s `\keyoutput` entries ("{Journal article. Indicators: methodological innovation; use by others.}") and 2 `\formfield` labels, which are form data; "max." in a label reads as a sentence end. Pro: no list to keep. Con: 10 false semicolon flags on the Veni form, and 4 captions whose line holds no full stop stay hidden. (b) A row is prose when its command is one that carries prose (`\footnote`, `\caption`, `\emph`, `\textbf`, `\textit`, `\textsl`, `\textsc`, `\underline`) or it is a brace group opened by a size or font switch (`{\small ...}`, `{\footnotesize ...}` and the like); every other one-command row stays data. It counts 41 of the 64: all 40 captions and the `{\footnotesize ...}` figure note, and the reviewer's probe q2.tex has its ten semicolons counted. Pro: no false flag found; the form data stay out. Con: a custom macro that carries prose (the 2 `\leg` lines) stays out, and the list is written in the script's head docstring. (c) Keep the current rule. This is the lazy option: 40 captions stay out of the count. Recommendation: (b).
+- None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item E (the LaTeX data-row rule of step 2a): ruled (b); a one-command line is prose when its command carries prose or it is a brace group opened by a size or font switch, and step 2a's line is rewritten to it.
 
 - 2026-09-28: open item D (whether the `contrast` check counts the one-sentence form joined by a dash, a colon or a semicolon): ruled (c); the check is not widened, and step 2a corrects `anti-patterns.md`'s row. Step 5's draft named: research-hub `funding/2026-fwo-senior-transplant/proposal/main.tex`.
 
@@ -72,8 +74,8 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-28. Steps 1, 2 and 3 landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list, and the reference pages `academic-prose.md`, `judgment.md` and `anti-patterns.md` are in `skills/writing/references/`. The installed skills are v2.0.0.
-- Step 2a, the checking script finished (rulings C and D): stopped at /spec on open item E, the LaTeX data-row rule. No brief, worktree or dispatch entry exists for it. Step 4 waits on step 2a. Step 5's draft is named.
-- Open on Axel's side: open item E.
+- Next: step 2a, the checking script finished (rulings C, D and E). Step 4 waits on step 2a. Step 5's draft is named.
+- Open on Axel's side: none.
 
 ## Usage
 
