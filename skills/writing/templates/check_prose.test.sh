@@ -3,13 +3,13 @@
 # planted violation per check, and the test asserts, check by check, that the lines flagged are
 # exactly the planted ones. A clean Markdown file and a clean LaTeX file hold each check's near
 # miss and must print nothing. Further files cover the forms the checks name: each dash form in
-# Markdown and LaTeX (dash), each history phrase (history), each throat-clearing phrase (throat),
-# each listed word (words), each heading form and --limit form (sections), plain text read without
-# headings (notes), the semicolon limit at its boundary and the lines it leaves out (semi),
-# the equal-length band and the lines it leaves out (equal), both contrast forms and the
-# continuation words (contrast), consecutive colon paragraphs (colon) and non-letter non-ASCII
-# characters (nonascii). The usage errors each exit 64 with nothing on stdout, and no run writes
-# to a file. Non-ASCII input is written with printf octal escapes so this file stays ASCII. Every
+# Markdown and LaTeX (dash), each history phrase (history), each throat-clearing phrase (throat
+# and throatforms), each listed word (words), each heading form and --limit form (sections), plain
+# text read without headings (notes), the semicolon limit at its boundary and the lines it leaves
+# out (semi, and the LaTeX data-row files), the equal-length band and the lines it leaves out
+# (equal), both contrast forms and the continuation words (contrast), the contrast window at a
+# code span (codespan), consecutive colon paragraphs (colon) and non-letter non-ASCII characters
+# (nonascii). The usage errors each exit 64 with nothing on stdout, and no run writes to a file. Non-ASCII input is written with printf octal escapes so this file stays ASCII. Every
 # assertion names its check, so a check turned off fails the test with its name.
 
 set -u
@@ -1082,6 +1082,227 @@ Keywords: prose; checks; flags; exits
 - first
 - second
 EOF
+
+# LaTeX data rows. The twenty-word sentence follows each row in the same paragraph, so the
+# one-line data-row rule of a paragraph never decides the row, except in sizegroupfirst.tex,
+# whose row stands alone before a blank line and is counted as a switch group.
+mkfile proserows.tex <<'EOF'
+The first sentence of the paragraph runs here.
+\footnote{A note that holds one; two; three; four semicolons in a single line of text.}
+\emph{An emphasised line; with one semicolon; and another; and a fourth one.}
+\noindent
+{\small A small group; with semicolons; three; and four of them.}
+The paragraph ends here with a full stop.
+EOF
+mkfile argrow.tex <<'EOF'
+\keyoutput{A}
+{Journal article. Indicators: methodological innovation; use by others.}
+EOF
+printf '%s\n' "$s20" >>argrow.tex
+mkfile nestedrow.tex <<'EOF'
+\formfield{Research idea \limit{(Science: max. 500 words; plain text only, no figures)}}
+EOF
+printf '%s\n' "$s20" >>nestedrow.tex
+mkfile caption.tex <<'EOF'
+\caption{Cohort accounting; one index ECG per patient; the modelling cohort.}
+EOF
+printf '%s\n' "$s20" >>caption.tex
+mkfile sizegroup.tex <<'EOF'
+\keyoutput{A}
+{\footnotesize\color{inkgrey}\textbf{Figure 1.} Data flow; three parts; one model.}
+EOF
+printf '%s\n' "$s20" >>sizegroup.tex
+mkfile customrow.tex <<'EOF'
+\leg{WP1}{A self-supervised objective; a second clause; a third one.}
+EOF
+printf '%s\n' "$s20" >>customrow.tex
+mkfile customrowcontrol.tex <<'EOF'
+\caption[WP1]{A self-supervised objective; a second clause; a third one.}
+EOF
+printf '%s\n' "$s20" >>customrowcontrol.tex
+mkfile nestedrowcontrol.tex <<'EOF'
+\formfield{Research idea} \limit{(Science: max. 500 words; plain text only, no figures)}
+EOF
+printf '%s\n' "$s20" >>nestedrowcontrol.tex
+mkfile cventry.tex <<'EOF'
+\cventry
+{2020; 2021; 2022}{Lecturer; Leuven; Belgium}
+EOF
+printf '%s\n' "$s20" >>cventry.tex
+mkfile vspacerow.tex <<'EOF'
+\vspace{3pt}
+{a; b; c; d}
+EOF
+printf '%s\n' "$s20" >>vspacerow.tex
+mkfile noindentsmall.tex <<'EOF'
+\noindent
+{\small A; b; c; d.}
+EOF
+printf '%s\n' "$s20" >>noindentsmall.tex
+mkfile argafterprose.tex <<'EOF'
+The check reads one page.
+{Two; three; four.}
+EOF
+printf '%s\n' "$s20" >>argafterprose.tex
+mkfile sizegroupfirst.tex <<'EOF'
+{\footnotesize\color{inkgrey}\textbf{Figure 1.} Data flow; three parts; one model.}
+
+EOF
+printf '%s\n' "$s20" >>sizegroupfirst.tex
+mkfile emptyarg.tex <<'EOF'
+\keyoutput{10}{No}
+{A reference to a paper.}
+{}
+{Conference paper (sole author). Indicators: originality; reproducibility.}
+EOF
+printf '%s\n' "$s20" >>emptyarg.tex
+mkfile prosecommands.tex <<'EOF'
+\footnote{One; two.}
+\footnote*{One; two.}
+\caption{One; two.}
+\caption*{One; two.}
+\emph{One; two.}
+\emph*{One; two.}
+\textbf{One; two.}
+\textbf*{One; two.}
+\textit{One; two.}
+\textit*{One; two.}
+\textsl{One; two.}
+\textsl*{One; two.}
+\textsc{One; two.}
+\textsc*{One; two.}
+\underline{One; two.}
+\underline*{One; two.}
+\noindent The text; with; semicolons; here.
+\leg{One; two.}
+\footnotetext{One; two.}
+EOF
+printf '%s\n' "$s20" >>prosecommands.tex
+: >switchgroups.tex
+for switch in tiny scriptsize footnotesize small normalsize large Large LARGE huge Huge itshape bfseries em it bf \
+    smallskip emph{x} ' small'; do
+    printf '\\keyoutput{A}\n{\\%s One; two.}\n' "$switch" >>switchgroups.tex
+done
+sed 's/{\\ small/{ \\small/' switchgroups.tex >"$test_root/switchgroups" && mv "$test_root/switchgroups" switchgroups.tex
+printf '%s\n' "$s20" >>switchgroups.tex
+mkfile piecerow.tex <<'EOF'
+\section{Aims}{Methods; results; and the rest.}
+\begin{itemize}
+\item{Aims; methods; results; and the rest.}
+\end{itemize}
+\section{Methods}
+{Aims; methods; and results.}
+EOF
+printf '%s\n' "$s20" >>piecerow.tex
+mkfile spacerow.tex <<'EOF'
+\keyoutput{a}@TAB@{b; c; d; e.}
+\keyoutput{a}@TAB@b; c; d; e.
+  \keyoutput{a; b; c; d.}  
+  x \keyoutput{a; b; c; d.}
+EOF
+printf '%s\n' "$s20" >>spacerow.tex
+
+# The contrast window and Markdown code spans.
+mkfile codespan.md <<'EOF'
+It is not a style guide, it is a check.
+
+The limit is not a target but a ceiling.
+
+Each flag is not a verdict, a reader decides.
+
+This is not an entry in the form of `x.md`, it stops here.
+
+This is not an entry in the form of a page, it stops here.
+
+This is not an entry in the form of `x.md` that stops here, it ends.
+
+## Not an entry in the form of `x.md` that stops here, it ends
+
+- This is not an entry in the form of `x.md` that stops here, it ends.
+- An item runs on.
+  This is not an entry in the form of `x.md` that stops here, it ends.
+
+| This is not an entry in the form of `x.md` that stops here, it ends. |
+EOF
+mkfile codespanword.md <<'EOF'
+It is not a style guide, it is a check.
+
+The limit is not a target but a ceiling.
+
+Each flag the script prints on its output is not a verdict, a reader decides what to do with it.
+
+This is not needed in the README, `x.md` being enough.
+
+This is not needed in the README, one page being enough.
+
+It is not the page but `x.md` that counts here.
+
+It is not the page but the line that counts here.
+EOF
+mkfile codespanlines.md <<'EOF'
+   - A previous retro that cannot be read as UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md` stops the retro there, a refusal ("Stops").
+
+- The session keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Not checked, Closed, Closures and Usage lists, and fenced lines.
+
+| A previous retro that cannot be read | At Steps 1, the previous retro is not UTF-8, has no `## Reports read` heading, or holds a line there that is not an entry in the form of `templates/retro.md` | The retro's path and what is wrong in it | The previous retro's "Reports read" corrected to the form of `templates/retro.md`, or a retro over everything, then `/plan-retro` again |
+EOF
+
+# The throat-clearing forms of the list's second half, and the near miss without "that".
+mkfile throatforms.md <<'EOF'
+In today's rapidly evolving field, the check reads each page.
+It is important to note that the script writes nothing.
+As a matter of fact, the output is sorted by file and then by line.
+WE NOW TURN OUR ATTENTION TO the limits.
+This section will discuss the exit status and the messages the script prints on error.
+The following paragraph examines the flags.
+It is important to note the order of the flags on each line of the output.
+The script counts each flag, and as a matter
+of fact it counts once.
+EOF
+cp throatforms.md throatforms.tex
+
+# The branches of the LaTeX reading: a structure command inside a heading's title, white space
+# around a heading's optional argument, stray ends, an item label, "but" inside the comma
+# form's window, and inline math across a blank line.
+mkfile headingitem.tex <<'EOF'
+\section{Not speed, accuracy \item Not size, weight.}
+Not cost, value. Not time, care.
+EOF
+mkfile spacedheading.tex <<'EOF'
+\section [Short] {Methods}
+Text here.
+EOF
+mkfile strayitemize.tex <<'EOF'
+\end{itemize}
+The first file is read. The second file is read. The third file is read. The fourth file is read. The last file is read; it ends.
+EOF
+mkfile straytabular.tex <<'EOF'
+\end{tabular}
+The script reads the page in one pass; it never writes; it prints flags.
+EOF
+mkfile strayabstract.tex <<'EOF'
+\end{abstract}
+The script simply reads the page and prints one line for each flag it finds.
+EOF
+mkfile itemlabel.tex <<'EOF'
+\begin{itemize}
+\item[Not speed, accuracy.] text
+\item It is not a style guide, it is a check.
+\item The limit is not a target but a ceiling.
+\end{itemize}
+EOF
+mkfile butcomma.md <<'EOF'
+It is not the cost but, frankly, the time.
+
+It is not a style guide, it is a check.
+
+The limit is not a target but a ceiling.
+EOF
+mkfile dollarblank.tex <<'EOF'
+A cost of $5 is simply high.
+
+The second cost of $6 is simply higher.
+EOF
 before=$(find . -type f -exec cksum {} + 2>/dev/null | sort)
 
 # The samples: each check flags exactly its planted lines.
@@ -1256,6 +1477,73 @@ expect_all quotedcontrol.tex quotedcontrol.tex '' '' '' '' '' '' '' '' '' '' '1 
 run leadin.md 1 leadin.md
 expect_all leadin.md leadin.md '' '' '' '' 1 '' '' '' '' '' '' ''
 run leadincontrol.md 0 leadincontrol.md
+
+# A one-command line whose command carries prose, or a brace group opened by a size or font
+# switch, is running prose; a custom command and its argument lines are data rows.
+run proserows.tex 1 proserows.tex
+expect_all proserows.tex proserows.tex '' '' '' '' '2 3 5' '' '' '' '' '' '' ''
+run argrow.tex 0 argrow.tex
+run nestedrow.tex 0 nestedrow.tex
+run caption.tex 1 caption.tex
+expect_all caption.tex caption.tex '' '' '' '' 1 '' '' '' '' '' '' ''
+run sizegroup.tex 1 sizegroup.tex
+expect_all sizegroup.tex sizegroup.tex '' '' '' '' 2 '' '' '' '' '' '' ''
+run customrow.tex 0 customrow.tex
+run customrowcontrol.tex 1 customrowcontrol.tex
+expect_all customrowcontrol.tex customrowcontrol.tex '' '' '' '' 1 '' '' '' '' '' '' ''
+run nestedrowcontrol.tex 1 nestedrowcontrol.tex
+expect_all nestedrowcontrol.tex nestedrowcontrol.tex '' '' '' '' 1 '' '' '' '' '' '' ''
+run cventry.tex 0 cventry.tex
+run vspacerow.tex 0 vspacerow.tex
+run noindentsmall.tex 1 noindentsmall.tex
+expect_all noindentsmall.tex noindentsmall.tex '' '' '' '' 2 '' '' '' '' '' '' ''
+run argafterprose.tex 1 argafterprose.tex
+expect_all argafterprose.tex argafterprose.tex '' '' '' '' 2 '' '' '' '' '' '' ''
+run sizegroupfirst.tex 1 sizegroupfirst.tex
+expect_all sizegroupfirst.tex sizegroupfirst.tex '' '' '' '' 1 '' '' '' '' '' '' ''
+run emptyarg.tex 0 emptyarg.tex
+run prosecommands.tex 1 prosecommands.tex
+expect_all prosecommands.tex prosecommands.tex '' '' '' '' '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17' '' '' '' '' 1 '' ''
+run switchgroups.tex 1 switchgroups.tex
+expect_all switchgroups.tex switchgroups.tex '' '' '' '' '2 4 6 8 10 12 14 16 18 20 22 24 26 28 30' '' '' '' '' 1 '' ''
+[ "$(sed -n '32p;34p;36p' switchgroups.tex | tr '\n' '/')" = '{\smallskip One; two.}/{\emph{x} One; two.}/{ \small One; two.}/' ] \
+    || fail "switchgroups.tex: the near misses are not at lines 32, 34 and 36 [$(sed -n '32p;34p;36p' switchgroups.tex)]"
+run piecerow.tex 1 piecerow.tex
+expect_all piecerow.tex piecerow.tex '' '' '' '' '1 3 6' '' '' '' '' '' '' ''
+run spacerow.tex 1 spacerow.tex
+expect_all spacerow.tex spacerow.tex '' '' '' '' '2 4' '' '' '' '' '' '' ''
+
+# A removed code span ends the contrast window.
+run codespan.md 1 codespan.md
+expect_all codespan.md codespan.md '' '' '' '' '' '' '' '' '' '' '1 3 5 9' ''
+run codespanlines.md 0 codespanlines.md
+run codespanword.md 1 codespanword.md
+expect_all codespanword.md codespanword.md '' '' '' '' '' '' '' '' '' '' '1 3 5 9 13' ''
+
+# The throat-clearing forms, in Markdown and in LaTeX.
+run throatforms.md 1 throatforms.md
+expect_all throatforms.md throatforms.md '' '' '' '' '' '1 2 3 4 5 6 8' '' '' '' '' '' ''
+run throatforms.tex 1 throatforms.tex
+expect_all throatforms.tex throatforms.tex '' '' '' '' '' '1 2 3 4 5 6 8' '' '' '' '' '' ''
+
+# The branches of the LaTeX reading.
+run headingitem.tex 1 headingitem.tex
+expect_all headingitem.tex headingitem.tex '' '' '' '' '' '' '' '' '' '' '1 2 2' ''
+run spacedheading.tex 1 --limit 'Methods=1' spacedheading.tex
+expect_all spacedheading.tex spacedheading.tex '' '' '' 1 '' '' '' '' '' '' '' ''
+expect_line spacedheading.tex section-words 'spacedheading.tex:1: section-words: "Methods": 2 words, over the limit of 1'
+run strayitemize.tex 1 strayitemize.tex
+expect_all strayitemize.tex strayitemize.tex '' '' '' '' 2 '' '' '' '' 2 '' ''
+run straytabular.tex 1 straytabular.tex
+expect_all straytabular.tex straytabular.tex '' '' '' '' 2 '' '' '' '' '' '' ''
+run strayabstract.tex 1 strayabstract.tex
+expect_all strayabstract.tex strayabstract.tex '' '' '' '' '' '' 2 '' '' '' '' ''
+run itemlabel.tex 1 itemlabel.tex
+expect_all itemlabel.tex itemlabel.tex '' '' '' '' '' '' '' '' '' '' '2 3 4' ''
+run butcomma.md 1 butcomma.md
+expect_all butcomma.md butcomma.md '' '' '' '' '' '' '' '' '' '' '1 3 5' ''
+run dollarblank.tex 1 dollarblank.tex
+expect_all dollarblank.tex dollarblank.tex '' '' '' '' '' '' '1 3' '' '' '' '' ''
 
 # The usage errors.
 usage "no file"

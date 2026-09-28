@@ -1,6 +1,6 @@
 # Step 2a report: the checking script finished
 
-NOT DONE: verify item 1 is red. `verify.sh` stops at its first command, `land.test.sh`, whose case "red list runner output" sets `HOME` to a scratch folder, where `python3` cannot import PyYAML (it is installed in the user site-packages under `HOME`). The same red appears on an export of the base commit d5b8c4a. The step's files are not involved, and the fix is outside this step's paths (a stop for the orchestrator, evidence under "Wrong or impossible in the brief"). Everything else in the brief is done: items 1 to 6, every case, and verify items 2 to 7.
+Everything in the brief and in the round brief `agents/briefs/2a-round-1.md` is done. The verify list passes (section "Repair round 1"). Where that section and the first-round sections differ, the section "Repair round 1" states the end state.
 
 ## Open items of the state file (verbatim)
 
@@ -271,6 +271,122 @@ Line numbers of `skills/writing/references/anti-patterns.md`, on main at the bas
 | 18 | removed | "We now turn our attention to..." row |
 | 19 | removed | "This section will discuss..." row |
 | 20 | removed | "The following paragraph examines..." row |
+| 21 to 45 | 15 to 39 | moved, text unchanged |
+| 46 | 40 | changed: the throat-clearing list entry names the six phrases and the short fixes |
+| 47 to 48 | 41 to 42 | moved, text unchanged |
+
+## Repair round 1
+
+Everything in the round brief `agents/briefs/2a-round-1.md` is done. The verify list passes in this session with no `PYTHONUSERBASE` in the environment (`env | grep -c '^PYTHONUSERBASE='` prints `0`). This section replaces what the sections above say about the following:
+- a one-command line that leaves no text (judgment call 1, and the four no-text rows of the rule-13 table);
+- a brace group after a line that is not a data row (judgment call 2);
+- verify item 1;
+- row 14 of `anti-patterns.md`.
+
+The first run of this round's new cases, on the base script d5b8c4a (the round's review): `cventry.tex` and `vspacerow.tex` silent before and after; `argafterprose.tex` flagged at 2 before and after; `sizegroupfirst.tex` flagged at 1 before and after; `noindentsmall.tex` silent before, flagged at 2 after; `codespanword.md` flagged at 7 and 11 before, not after. Four of the six pin behaviour the step keeps and turn red only under reverts of the new code.
+
+### Rulings
+
+| # | File and line | Change | Command and output |
+|---|---|---|---|
+| 1 | `skills/writing/templates/check_prose.py:521-522` (`alone = len(self.pieces) == first or len(added) == 1 and len(self.pieces) - first == 1`, `row = alone and latex_data_row(line.strip(), state["row"])`), docstring lines 62 to 77 | A line that adds no piece goes through the same data-row reading as a one-piece line. So `\noindent`, `\vspace{3pt}` and a custom command with no text are data rows, and so are their argument lines up to a blank line. A `{\small ...}` group is prose by the switch rule whatever comes before it. A brace group no switch opens is prose only after a line that is not a data row (a heading line, running prose). | `cventry.tex` and `vspacerow.tex` exit 0; `noindentsmall.tex:2`, `argafterprose.tex:2` and `piecerow.tex:6` flagged (outputs below). 60-file count: `turned into running prose: 41`, `turned into data rows: 0`, the same 41 lines as the first round (`diff` of the two lists empty). No line differs from 41. Decision 1's six lines read as decision 1 gives them. |
+| 2 | `check_prose.test.sh`, fixture `sizegroupfirst.tex` | The brief's line as line 1 of a file, then a blank line and the 20-word paragraph. `sizegroup.tex` stays. | `sizegroupfirst.tex:1: semicolons: "inkgrey Figure 1. Data flow; three parts; one model.": 2 semicolons in 29 words of running prose, more than 2 per 1000 words` |
+| 3 | `check_prose.py` docstring | The new docstring prose holds no semicolon. The data-row entry and the contrast entry are written as separate sentences. | Docstring extracted with `ast.get_docstring` and checked: base `11 semicolons in 1438 words`, now `11 semicolons in 1688 words`. |
+| 4 | `skills/writing/references/anti-patterns.md:14` | The "Why it fails" cell holds the ruling's text. `Navier--Stokes` is in a code span, because the page's own `dash-aside` check flags `--` anywhere in Markdown prose. The semicolon stays, because a table cell is not running prose and the check does not count it. | `python3 -B skills/writing/templates/check_prose.py skills/writing/references/anti-patterns.md` prints the four `flagged` lines at line 15 ("landscape", "navigate", "paradigm", "robust"), exit 1. |
+| 5 | This report, "User-visible changes" below | The full `semicolons` change over the 60 files, and the reading of a `{...}` line after a heading line. | See "User-visible changes, after repair round 1". |
+| 6 | `check_prose.py` docstring (contrast entry), fixture `codespanword.md` | A code span ends the window and stands in no word place of the match. A code span as the word after the comma or after "but" stops the match. | `codespanword.md` flags lines 1, 3, 5, 9 and 13; lines 7 (`, `x.md` being`) and 11 (`but `x.md``) are not counted (output below). |
+| 7 | `skills/land/templates/land.test.sh:547-557`, header lines 19 to 20 | Before the first run under the scratch `HOME`, the test reads `python3 -m site --user-base`. It exports `PYTHONUSERBASE` as that value unless the caller set one, which is kept. It then checks that `python3 -m site --user-base` under the scratch `HOME` prints the caller's user base. | `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/land.test.sh 2>&1 \| tail -1` prints `PASS: land.sh and usage.py scratch tests`. The revert is below. The ledger's copy `.scratch/3-the-writing-base/land.test.sh` is not edited. |
+| 8 | Paths | `skills/land/templates/land.test.sh` is the only path added. | `git status --short --untracked-files=all` is quoted below. |
+| 9 | This section | Appended. | This section. |
+
+Ruling 7 and the land skill's pages:
+- `skills/land/SKILL.md` has no sentence about the test's scratch `HOME`, PyYAML or the Python user site. `grep -n -i 'HOME\|pyyaml\|yaml\|user site\|PYTHON' skills/land/SKILL.md` finds only lines about `.agents/plan.yaml`.
+- `docs/dev/building.md:18` says `verify.sh` "needs `python3` with PyYAML", and that stays true.
+- No sentence of either page becomes false, and neither page is changed.
+- `land.test.sh`'s own header comment is extended to name the new check.
+
+### New and changed cases (the rule-13 table, extended)
+
+The whole revert set was rerun on this round's script: 59 reverts, each one change in a scratch copy, run under the tree's test file. All 59 are red. Branch 4's last line is the tail of its traceback, under `FAIL: strayabstract.tex: stderr is not empty [Traceback (most recent call last):`. Four reverts of the first round are gone with the branch they reverted. Two reverts match the new line: branch 5 (`len(added) == 1 and len(self.pieces) - first == 1` to `len(added) == 1`) and "the one piece is prose" (the same expression to `len(self.pieces) - first == 1`). Their red lines are unchanged: `FAIL: piecerow.tex semicolons: flagged lines [6], expected [1 3 6]` and `FAIL: piecerow.tex semicolons: flagged lines [1 3], expected [1 3 6]`.
+
+| Rule | Case | Revert | Red line |
+|---|---|---|---|
+| A one-command line that leaves no text is a data row, and so are its argument lines | `cventry.tex` (`\cventry`, `{2020; 2021; 2022}{Lecturer; Leuven; Belgium}`, the 20-word sentence), `vspacerow.tex` (`\vspace{3pt}`, `{a; b; c; d}`, the sentence), `emptyarg.tex` | `alone = len(self.pieces) == first or len(added)` to `alone = len(added)` | `FAIL: cventry.tex: exit 1, expected 0 []`; `FAIL: vspacerow.tex: exit 1, expected 0 []`; `FAIL: emptyarg.tex: exit 1, expected 0 []` |
+| A switch group is prose after a data row, `\noindent` included | `noindentsmall.tex` (`\noindent`, `{\small A; b; c; d.}`, the sentence), `proserows.tex` line 5 | ` and not SWITCH_GROUP.match(text)` removed | `FAIL: noindentsmall.tex: exit 0, expected 1 []`; `FAIL: proserows.tex semicolons: flagged lines [2 3], expected [2 3 5]` |
+| A brace group no switch opens is prose after a line that is not a data row (running prose, a heading line) | `argafterprose.tex`, `piecerow.tex` line 6 | `return after_row and only_arguments(text)` to `return only_arguments(text)` | `FAIL: argafterprose.tex: exit 0, expected 1 []`; `FAIL: piecerow.tex semicolons: flagged lines [1 3], expected [1 3 6]` |
+| A brace group first in its paragraph is read by the switch rule and the after-row rule | `sizegroupfirst.tex` | `return after_row and only_arguments(text) and not SWITCH_GROUP.match(text)` to `return only_arguments(text)` | `FAIL: sizegroupfirst.tex: exit 0, expected 1 []` |
+| A code span stands in no word place of a contrast | `codespanword.md` lines 7 and 11 (controls 9 and 13) | `marked = CODE_SPAN.sub("`", line)` to `marked = CODE_SPAN.sub(" ", line)` | `FAIL: codespanword.md contrast: flagged lines [1 3 5 7 9 11 13], expected [1 3 5 9 13]` |
+| The runs under the scratch `HOME` keep the caller's user base | the new check in `land.test.sh` | the two lines `[ -n "${PYTHONUSERBASE:-}" ] \|\| PYTHONUSERBASE=$caller_user_base` and `export PYTHONUSERBASE` removed, in a scratch copy of the templates folder | `FAIL: user base: under the scratch HOME python3 reads /private/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/land-test.Qr5Zkz/home/Library/Python/3.13, not the caller's /Users/axelfaes/Library/Python/3.13` |
+
+Silent cases and their controls, from the tree:
+
+| Silent case | Control | Control output |
+|---|---|---|
+| `cventry.tex`, `vspacerow.tex` | `argafterprose.tex`: the same kind of argument line after running prose | `argafterprose.tex:2: semicolons: "Two; three; four.": 2 semicolons in 28 words of running prose, more than 2 per 1000 words` |
+| `codespanword.md` lines 7 and 11 | lines 9 and 13, a plain word in the span's place | `codespanword.md:9: contrast: "not needed in the README, one": a binary contrast, 5 in this file, more than 2` and `codespanword.md:13: contrast: "not the page but the": a binary contrast, 5 in this file, more than 2` |
+
+`noindentsmall.tex` prints `noindentsmall.tex:2: semicolons: "A; b; c; d.": 3 semicolons in 24 words of running prose, more than 2 per 1000 words`.
+
+### Verify, rerun after this round
+
+1. `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/3-the-writing-base/orchestrator-state.md`, with no `PYTHONUSERBASE` set, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: check_coverage.py scratch tests
+PASS: check_prose.py scratch tests
+verify: 8 commands passed
+```
+
+2. `sh skills/writing/templates/check_prose.test.sh 2>&1 | tail -1` prints `PASS: check_prose.py scratch tests`.
+3. The reverts: 59 of 59 red (above and the first round's table, whose other rows produced the same lines on this round's script).
+4. `proserows.tex` (the q2 probe) is asserted at `semicolons` lines 2, 3 and 5 by the green test. `python3 -B skills/writing/templates/check_prose.py skills/plan-retro/SKILL.md | grep contrast` prints nothing (grep exit 1).
+5. The 60 files: 41 lines turned into running prose (40 `\caption` lines and `concept.tex:48`), 0 into data rows, the same list as the first round.
+6. The pages, before and after: the same two differences as the first round, `academic-prose.md:96` gaining the `throat-clearing` flag, and the four `anti-patterns.md` `flagged` lines moving from line 21 to line 15. `judgment.md`, `prose-standard.md`, `README.md` and `docs/dev/change-standard.md` are identical.
+7. `LC_ALL=C grep -n '[^ -~]'` over the four changed files and this report prints nothing (exit 1). `git status --short --untracked-files=all`:
+
+```
+ M skills/land/templates/land.test.sh
+ M skills/writing/references/anti-patterns.md
+ M skills/writing/templates/check_prose.py
+ M skills/writing/templates/check_prose.test.sh
+?? .scratch/3-the-writing-base/agents/reviews/2a-report.md
+```
+
+Files after this round (`wc -l`, then `git diff --numstat` added and removed):
+
+| File | Lines | Added, removed |
+|---|---|---|
+| `skills/writing/templates/check_prose.py` | 817 | 73, 32 |
+| `skills/writing/templates/check_prose.test.sh` | 1573 | 294, 7 |
+| `skills/writing/references/anti-patterns.md` | 42 | 2, 8 |
+| `skills/land/templates/land.test.sh` | 1078 | 14, 1 |
+
+### User-visible changes, after repair round 1
+
+- **`semicolons` over the 60 research-hub files**, base script against this round's script (`python3 -B` on each file, the `semicolons` lines counted):
+  - Flag lines go from 985 to 1042.
+  - The number of flag lines changes in 15 files: `fig-concept.tex` 35 to 36, `concept.tex` 7 to 8, `bttd-source-eeg/manuscript/main.tex` 32 to 34, `dongho-ecg-clustering/manuscript/main.tex` 33 to 34, `btfno/manuscript/supplement.tex` 11 to 12, `btfno/manuscript/main.tex` 31 to 35, `dries-bttr-ecg/manuscript/main.tex` 11 to 16, `bttn-incident-af/manuscript/main.tex` 22 to 29, `bt-operator-theory/manuscript/main.tex` 55 to 59, `ecg-readable-substrate/manuscript/main.tex` 0 to 21, `covert-applied/manuscript/main.tex` 108 to 109, `meseret-cirrhosis/manuscript/main.tex` 14 to 18, `ward-bttr-crosssubject/manuscript/body.tex` and `body_2col.tex` 64 to 65 each, `fed-multicellular-immune/manuscript/main.tex` 46 to 49.
+  - The printed output (flag lines or the count and word total in the message) changes in 25 files. Examples: `bttn-incident-af/manuscript/main.tex` from `34 semicolons in 8613 words` to `42 semicolons in 9170 words`, and `fig-wp-overview.tex` from `14 semicolons in 441 words` to `14 semicolons in 517 words` with the same 14 lines.
+  - One file crosses the limit: `ecg-readable-substrate/manuscript/main.tex`, from no flag to 21 lines at `27 semicolons in 10876 words`.
+  - Measured from the pieces, the semicolon count or the word total of running prose changes in 32 files: the 25 above and 7 that print no flag before or after (for example `linfoot-estimator/manuscript/main.tex`, from 7 semicolons in 10685 words to 10 in 11441). The first review's figure of 26 counted files whose printed output changes, measured on the round-0 script; its 26th file, `funding/2026-fwo-senior-transplant/proposal/main.tex` (8101 to 8102 words), is returned to unchanged by ruling 1, so 25 is the printed count on this tree and 32 the count of running-prose totals (the round's review traced this).
+- **A `{...}` line after a heading line.** Before, `\section{Methods}` followed by `{Aims; methods; and results.}` left the second line a data row, since the heading line counted as a one-command line. Now it is running prose, since a heading line is not a data row (`piecerow.tex:6`). After a data row, including `\noindent`, `\vspace{3pt}` and a custom command with no text, such a line stays a data row, as before.
+- **`contrast`**: a code span in the place of the word after the comma or after "but" stops the match, as does a code span inside the window. `.scratch/archive/2-b-.../plan.md:139` loses its flag for this reason.
+- **`land.test.sh`** prints one more line, `user base: the runs under the scratch HOME read the caller's Python user base`, and passes where the user site-packages hold PyYAML.
+
+### Doc text, after repair round 1
+
+Line numbers of `skills/writing/references/anti-patterns.md`, on main at the base (48 lines) and now (42 lines):
+
+| Line on main | Line now | Change |
+|---|---|---|
+| 1 to 13 | 1 to 13 | unchanged |
+| 14 | 14 | changed: the "Why it fails" cell of the one-sentence contrast row holds ruling 4's text |
+| 15 to 20 | removed | the six phrase rows ("In today's rapidly evolving...", "It is important to note that...", "As a matter of fact...", "We now turn our attention to...", "This section will discuss...", "The following paragraph examines...") |
 | 21 to 45 | 15 to 39 | moved, text unchanged |
 | 46 | 40 | changed: the throat-clearing list entry names the six phrases and the short fixes |
 | 47 to 48 | 41 to 42 | moved, text unchanged |

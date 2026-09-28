@@ -16,7 +16,8 @@
 # fails the landing with verify.sh's RED line, a state file verify.sh cannot use fails it with
 # exit 1, verify.sh is found in the repository's
 # .agents/skills when the ledger lacks it, and a verify.sh found nowhere, the places named, or a
-# missing state file is refused before main is touched. Check usage.py on a Claude Code log, its
+# missing state file is refused before main is touched. The landings under a scratch HOME keep the
+# caller's Python user base, checked before the first of them. Check usage.py on a Claude Code log, its
 # refusal of a file that is not one, and its refusal of a window time without an offset or
 # unreadable. Check the
 # example plan.yaml files against the state template: inside an Ordo checkout a missing example
@@ -542,6 +543,18 @@ printf 'bad bound: LANDING_LOCK_WAIT=2s refused with exit 64\n'
 # an installed land skill is never found.
 scratch_home=$test_root/home
 mkdir -p "$scratch_home"
+
+# The runs under the scratch HOME keep the caller's Python user site, where python3 may find the
+# yaml module verify.sh needs: PYTHONUSERBASE is exported as the caller's user base, and a value
+# the caller set is kept.
+caller_user_base=$(python3 -m site --user-base) || fail "could not read the caller's Python user base"
+[ -n "${PYTHONUSERBASE:-}" ] || PYTHONUSERBASE=$caller_user_base
+export PYTHONUSERBASE
+scratch_user_base=$(HOME="$scratch_home" python3 -m site --user-base) ||
+    fail "could not read the Python user base under the scratch HOME"
+[ "$scratch_user_base" = "$caller_user_base" ] ||
+    fail "user base: under the scratch HOME python3 reads $scratch_user_base, not the caller's $caller_user_base"
+printf 'user base: the runs under the scratch HOME read the caller'"'"'s Python user base\n'
 
 # A red command in the verify list fails the landing after main's cherry-pick with verify.sh's
 # RED line and output, and the commands after it do not run. Red when land.sh ignores

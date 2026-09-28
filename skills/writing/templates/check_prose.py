@@ -29,8 +29,9 @@ What counts as prose:
   backslash, and each cell is its own unit: it is prose for every check except semicolons
   and equal-length, and no sentence runs across a cell boundary.
 - LaTeX: every line with these removed: comments ("%" not preceded by a backslash); inline
-  math ($...$ with "\\$" not opening it, \\(...\\)) and display math ($$...$$, \\[...\\], and
-  the environments equation, align, gather, multline, eqnarray, displaymath and math, starred
+  math ($...$ with "\\$" not opening it and no blank line inside it, \\(...\\)) and display
+  math ($$...$$, \\[...\\], and the environments equation, align, gather, multline,
+  eqnarray, displaymath and math, starred
   too); the environments verbatim, lstlisting and minted, starred too; the argument of \\verb
   (any delimiter), \\lstinline and \\mintinline (a delimiter or braces); and the command, its
   [...] options and its first {...} argument of \\texttt, \\url, \\href, \\label, \\ref,
@@ -54,11 +55,26 @@ What counts as prose:
   over the lines after it that follow with no blank line, or are indented after one.
 - Running prose, which semicolons reads, is the prose outside headings and table cells, list
   items included, less the one-line data rows: a paragraph of one line whose text does not
-  end with ".", "!", "?" or ":" (a closing quote, parenthesis or bracket may follow), and a
-  LaTeX line whose text is one command with its bracketed arguments, together with the
-  lines after it that hold only further bracketed arguments. The lines of a paragraph that
-  are LaTeX data rows are left out when its lines are counted. Equal-length reads
-  running prose without the list items, and keeps the one-line data rows.
+  end with ".", "!", "?" or ":" (a closing quote, parenthesis or bracket may follow), and the
+  LaTeX data rows below. The lines of a paragraph that are LaTeX data rows are left out when
+  its lines are counted. Equal-length reads running prose without the list items, and keeps
+  the one-line data rows.
+- LaTeX data rows: a LaTeX line whose text is one command with its bracketed arguments is
+  running prose, counted by semicolons, when either its command is one that carries prose,
+  one of PROSE_COMMANDS (\\footnote, \\caption, \\emph, \\textbf, \\textit, \\textsl,
+  \\textsc, \\underline, starred forms too), or it is a brace group opened by a size or font
+  switch: "{" directly followed by one of SWITCHES (\\tiny, \\scriptsize, \\footnotesize,
+  \\small, \\normalsize, \\large, \\Large, \\LARGE, \\huge, \\Huge, \\itshape, \\bfseries,
+  \\em, \\it, \\bf), a switch possibly followed by further commands before the text. Every
+  other one-command line stays a data row, whether or not it leaves text, \\noindent,
+  \\vspace{3pt} and a custom command included. So do the lines after it that hold only its
+  further bracketed arguments, up to a blank line, an argument line that leaves no text such
+  as "{}" included. A brace group opened by a switch is running prose whatever the line before
+  it is, so a {\\small ...} group after \\noindent is running prose. A line of only bracketed
+  arguments that no switch opens is running prose when the line before it is not a data row,
+  such as a heading line or a line of running prose. A line that also holds a heading, an
+  \\item, a table cell, or the \\begin or \\end of an abstract, a list or a table is not a
+  data row.
 - A word is a run of letters and digits, joined across "'" and "-". A sentence ends at ".", "!"
   or "?" (a closing quote, parenthesis or bracket may follow) followed by white space or the
   end of its paragraph, list item or cell.
@@ -98,7 +114,9 @@ The checks:
 - contrast: in prose, list items, headings and table cells included, a sentence holding "not
   <window>, <word>" where the word is not one of CONTINUATIONS, or "not <window> but <word>"
   where the window holds no "but". The window is 1 to 10 words, each of letters, digits, "'"
-  and "-" only, so any other character ends it. A match is skipped when the clause that holds
+  and "-" only, so any other character ends it. A removed Markdown code span ends the window
+  too, and it stands in no word place of the match, so a code span as the word after the comma
+  or after "but" stops the match. A match is skipped when the clause that holds
   "not" (the text after the last ",", ";" or ":" before it in the sentence) starts with one of
   SUBORDINATORS, after any opening quote or bracket. A sentence counts once. When a file holds more than 2, each is flagged.
 - colon-lists: two consecutive paragraphs that each end with a colon and are each followed by
@@ -144,7 +162,9 @@ THROAT_PHRASES = (
     "This serves as a testament to", "It goes without saying that", "In order to",
     "It should be noted that", "When it comes to", "At the end of the day",
     "With that being said", "This section explains", "The following covers", "Now that we",
-    "With this setup complete",
+    "With this setup complete", "In today's rapidly evolving", "It is important to note that",
+    "As a matter of fact", "We now turn our attention to", "This section will discuss",
+    "The following paragraph examines",
 )
 HISTORY_PHRASES = (
     "previously", "formerly", "was changed", "were changed", "was added", "added in",
@@ -195,6 +215,12 @@ TEX_STRUCTURE = re.compile(
 TEX_LISTS = ("itemize", "enumerate", "description")
 TEX_TABLES = ("tabular", "tabular*", "tabularx", "longtable")
 TEX_COMMAND = re.compile(r"\\[A-Za-z@]+\*?")
+PROSE_COMMANDS = ("footnote", "caption", "emph", "textbf", "textit", "textsl", "textsc", "underline")
+SWITCHES = (
+    "tiny", "scriptsize", "footnotesize", "small", "normalsize", "large", "Large", "LARGE", "huge",
+    "Huge", "itshape", "bfseries", "em", "it", "bf",
+)
+SWITCH_GROUP = re.compile(r"\{\\(?:%s)(?![A-Za-z@])" % "|".join(SWITCHES))
 TEX_PLAIN_STEPS = (
     (re.compile(
         r"\\(?:input|include|includegraphics|bibliography|bibliographystyle|usepackage|documentclass"
@@ -266,19 +292,29 @@ def only_arguments(text, position=0):
         position = braced(text, position + 1)
 
 
-def one_command(text):
-    """True when text is one LaTeX command followed only by bracketed arguments."""
-    match = TEX_COMMAND.match(text.strip())
-    return bool(match) and only_arguments(text.strip(), match.end())
+def latex_data_row(text, after_row):
+    """True when text, a stripped LaTeX line read as one piece of prose or as nothing, is a data row.
+
+    after_row says whether the line before it is a data row.
+    """
+    command = TEX_COMMAND.match(text)
+    if command and only_arguments(text, command.end()):
+        return command.group(0).rstrip("*")[1:] not in PROSE_COMMANDS
+    return after_row and only_arguments(text) and not SWITCH_GROUP.match(text)
 
 
 class Piece:
-    """A part of one line read as one kind: text, item, cont, heading, cell, or a boundary."""
+    """A part of one line read as one kind: text, item, cont, heading, cell, or a boundary.
 
-    def __init__(self, line, kind, text=""):
+    contrast_text is the text the contrast check reads: the same text, with each removed
+    Markdown code span shown as a backtick instead of a space, so that it ends the window.
+    """
+
+    def __init__(self, line, kind, text="", contrast_text=None):
         self.line = line
         self.kind = kind
         self.text = text
+        self.contrast_text = text if contrast_text is None else contrast_text
         self.data_row = False
 
 
@@ -322,8 +358,8 @@ class Document:
                 for piece in rest:
                     piece.data_row = True
 
-    def add(self, line, kind, text=""):
-        self.pieces.append(Piece(line, kind, text))
+    def add(self, line, kind, text="", contrast_text=None):
+        self.pieces.append(Piece(line, kind, text, contrast_text))
         return self.pieces[-1]
 
     def parse_markdown(self, with_headings):
@@ -358,6 +394,7 @@ class Document:
                 blank_before = True
                 continue
             text = CODE_SPAN.sub(" ", line)
+            marked = CODE_SPAN.sub("`", line)
             marks = line.replace(" ", "").replace("\t", "")
             heading = MD_HEADING.match(text) if with_headings else None
             item = MD_ITEM.match(text)
@@ -370,23 +407,24 @@ class Document:
                 self.add(i, kind)
             elif line.startswith("|"):
                 kind = "cell"
-                for cell in CELL_SPLIT.split(text):
-                    self.add(i, "cell", cell)
+                for cell, marked_cell in zip(CELL_SPLIT.split(text), CELL_SPLIT.split(marked)):
+                    self.add(i, "cell", cell, marked_cell)
                 dash_text = PLACEHOLDER_CELL.sub(lambda m: " " * len(m.group(0)), dash_text)
             elif heading:
                 kind = "heading"
                 title = re.sub(r"(?:^|[ \t]+)#+$", "", heading.group(2).strip()).strip()
+                start = heading.end(2) - len(heading.group(2).lstrip())
                 self.headings.append([len(self.pieces), title, None])
-                self.add(i, kind, title)
+                self.add(i, kind, title, marked[start:start + len(title)])
             elif item:
                 kind = "item"
-                self.add(i, kind, text[item.end():])
+                self.add(i, kind, text[item.end():], marked[item.end():])
             elif last in ("item", "cont") and (not blank_before or line[:1] in " \t"):
                 kind = "cont"
-                self.add(i, kind, text)
+                self.add(i, kind, text, marked)
             else:
                 kind = "text"
-                self.add(i, kind, text)
+                self.add(i, kind, text, marked)
             if kind != "rule":
                 self.dash[i] = dash_text
             last = kind
@@ -406,12 +444,12 @@ class Document:
         processed = TEX_RAW_REGIONS.sub(lambda m: blank_out(m, "code" if m.group("verbatim") else None), text)
         processed = TEX_MATH.sub(lambda m: blank_out(m, "math"), processed)
         lines = processed.split("\n")
-        state = {"list": 0, "table": 0, "abstract": None, "command": False}
+        state = {"list": 0, "table": 0, "abstract": None, "row": False}
         for i in range(len(self.raw)):
             line = lines[i]
             if not self.raw[i].strip():
                 self.add(i, "blank")
-                state["command"] = False
+                state["row"] = False
                 continue
             if not line.strip():
                 if i in removed:
@@ -432,8 +470,7 @@ class Document:
             if state["table"]:
                 if chunk.strip() == "-":
                     dash = dash[:start] + " " * (end - start) + dash[end:]
-                if plain.strip():
-                    self.add(i, "cell", plain)
+                self.add(i, "cell", plain)
             elif plain.strip():
                 self.add(i, "cont" if state["list"] else "text", plain)
 
@@ -481,9 +518,11 @@ class Document:
                 self.add(i, "item", latex_plain(match.group("label") or ""))
         segment(position, len(line))
         added = [p for p in self.pieces[first:] if p.kind in ("text", "cont")]
-        state["command"] = one_command(line) or state["command"] and only_arguments(line.strip())
-        if len(added) == 1 and len(self.pieces) - first == 1 and state["command"]:
-            added[0].data_row = True
+        alone = len(self.pieces) == first or len(added) == 1 and len(self.pieces) - first == 1
+        row = alone and latex_data_row(line.strip(), state["row"])
+        for piece in added:
+            piece.data_row = row
+        state["row"] = row
         return dash
 
     def make_blocks(self):
@@ -681,9 +720,11 @@ def subordinate(sentence, position):
 def check_contrast(doc, limits):
     found = []
     for block in doc.prose_blocks():
+        marked = "\n".join(piece.contrast_text for piece in block.pieces)
         for line, sentence, count, offset in doc.sentences(block):
-            matches = [m for m in CONTRAST_COMMA.finditer(sentence) if m.group(2).lower() not in CONTINUATIONS]
-            matches.extend(CONTRAST_BUT.finditer(sentence))
+            target = marked[offset:offset + len(sentence)]
+            matches = [m for m in CONTRAST_COMMA.finditer(target) if m.group(2).lower() not in CONTINUATIONS]
+            matches.extend(CONTRAST_BUT.finditer(target))
             matches = [m for m in matches if not subordinate(sentence, m.start())]
             if matches:
                 first = min(matches, key=lambda m: m.start())

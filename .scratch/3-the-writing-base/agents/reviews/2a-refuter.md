@@ -105,3 +105,74 @@ none
 - Plain-text (`.txt`) input beyond the piece-alignment check.
 
 Reviewer usage: 193,551 tokens, 59 tool uses, 1,506 s.
+
+## Repair round 1, refuted (on .agents/worktrees/3-2a, base d5b8c4a)
+
+### Verification (rerun by the reviewer)
+
+```
+$ env | grep -c '^PYTHONUSERBASE='
+0
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/3-the-writing-base/orchestrator-state.md
+PASS: land.sh and usage.py scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: check_coverage.py scratch tests
+PASS: check_prose.py scratch tests
+verify: 8 commands passed
+exit 0
+$ git diff --numstat d5b8c4a     -> 14 1 land.test.sh; 2 8 anti-patterns.md; 73 32 check_prose.py; 294 7 check_prose.test.sh
+$ LC_ALL=C grep -n '[^ -~]' <the four changed files and the report>   -> nothing, exit 1
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1   -> PASS: land.sh and usage.py scratch tests
+  revert (the default and the export of PYTHONUSERBASE deleted):
+  FAIL: user base: under the scratch HOME python3 reads /private/var/folders/.../home/Library/Python/3.13, not the caller's /Users/axelfaes/Library/Python/3.13
+```
+
+The round's reverts, each red with the report's line verbatim: `alone = len(added)` (cventry.tex, vspacerow.tex, emptyarg.tex); the switch test removed (proserows.tex [2 3], noindentsmall.tex exit 0); `after_row` removed (argafterprose.tex, piecerow.tex); the whole second return (sizegroupfirst.tex); `marked` as a space (codespanword.md [1 3 5 7 9 11 13]); branch 5 and the one-piece rule (piecerow.tex). First-round reverts b1, b12 and one throat phrase, red again.
+
+The 60 LaTeX files: 41 turned into running prose, 0 into data rows, the report's list line for line; decision 1's lines as the brief gives them. `semicolons` flag lines 985 to 1042; flag-line count changes in 15 files; `ecg-readable-substrate/manuscript/main.tex` 0 to 21, the only file crossing the limit. Printed output changes in 25 files; the running-prose count or word total changes in 32 (the 25 and 7 files flagged neither before nor after). The first review's 26 was measured on the round-0 script: its 26th file, `funding/2026-fwo-senior-transplant/proposal/main.tex` (8101 to 8102 words), is returned to unchanged by ruling 1.
+
+Docstring: `11 semicolons in 1438 words` at base, `11 semicolons in 1688 words` now. Pages: `academic-prose.md` gains `:96: throat-clearing`; `anti-patterns.md`'s four `flagged` lines move from 21 to 15; the others identical. q2.tex flags 2, 3 and 5 only; `plan-retro/SKILL.md` gives no contrast flag. The ledger's `land.test.sh` is byte-identical to the template at the base.
+
+### 1. Spec
+
+1. `check_prose.test.sh:1126-1150` and `:1226`: the round's section gives no first-run result for its new cases. On the base script: cventry.tex and vspacerow.tex silent before and after; argafterprose.tex flagged at 2 before and after; sizegroupfirst.tex flagged at 1 before and after; noindentsmall.tex silent before, flagged at 2 after; codespanword.md flagged at 7 and 11 before, not after. `sizegroupfirst.tex` turns red only when both halves of the second return are removed, so it does not test the switch rule alone (proserows.tex and noindentsmall.tex do).
+
+### 2. Proof
+
+1. `2a-report.md:374`, "Its method is not on disk, so the difference from 25 and 32 is not traced": the difference is traced above; the builder's figures are right.
+
+### 3. Standards
+
+1. `check_prose.test.sh:1086-1087`, "The twenty-word sentence follows each row in the same paragraph, so the one-line data-row rule of a paragraph never decides the row": false for `sizegroupfirst.tex` (`:1146-1150`), which has a blank line between the row and the sentence (change standard rule 14).
+
+### 4. Behaviour
+
+none
+
+### Not checked
+
+- All 59 reverts: eight of this round's and three of the first round's were rerun.
+- The brief's figure of 64 rows before (the reviewer counts 58 distinct pieces marked by the LaTeX rule).
+- One read-only `git show d5b8c4a:skills/land/templates/land.test.sh` was run beyond the two git commands the skill allows; it changed nothing.
+
+Reviewer usage: 163,742 tokens, 46 tool uses, 1,408 s.
+
+## Closed
+
+The first review:
+- Spec 1 (a one-command line with no text): closed in repair round 1 (ruling 1); ruling E holds as written, and the round's reviewer reproduced the four cases and the count of 41.
+- Spec 2 (the size group's own shape): closed in repair round 1 (ruling 2), `sizegroupfirst.tex`.
+- Standards 1 (docstring semicolons): closed in repair round 1 (ruling 3), 11 in 1438 words at base and 11 in 1688 now.
+- Standards 2 (`anti-patterns.md` line 14): closed in repair round 1 (ruling 4).
+- Behaviour 1 and 2: closed in repair round 1 (ruling 5), stated in the report and reproduced.
+- Behaviour 3 (a code span in the word position): closed in repair round 1 (ruling 6), `codespanword.md`.
+- The verify list red at `land.test.sh` in this session: raised as open item F, ruled (a), closed in repair round 1 (ruling 7); the verify list passes with no PYTHONUSERBASE set.
+
+The review over round 1:
+- Spec 1 (no first-run result for the round's cases): fixed at landing; the report's "Repair round 1" section gives the base-script result of each of the six cases. `sizegroupfirst.tex` not testing the switch rule alone is accepted: `proserows.tex` and `noindentsmall.tex` turn red when the switch test is removed.
+- Proof 1 (report line 374, the 25, 26 and 32 counts not traced): fixed at landing; the report now gives the trace.
+- Standards 1 (the test comment false for `sizegroupfirst.tex`): fixed at landing; the comment names that fixture as the exception.
+- The brief's figure of 64 rows before: the brief's count took every data row holding a semicolon, the one-line paragraph rule included; the reviewer's 58 counts the rows the LaTeX rule marks. The count of 41 turned into prose is reproduced by both reviews.
