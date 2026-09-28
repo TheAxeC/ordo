@@ -205,6 +205,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run for a project's manual setup you name, the script run by you, reviewed by you.
 - Waits on: 2.D, for the layout rules.
 
+## 22. teach
+
+- Status: [ ]
+- Goal: A `teach` skill: a teaching workspace that persists across sessions, with a mission file saying why you learn the topic, short lessons tied to it, reference sheets, records of what you learned, and retrieval practice spaced over time.
+- Gate: one real run on a topic you name over at least two sessions, the second reading the first's records and scheduling its retrieval practice, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `teach` on the same topic.
+- Waits on: 2.D, for the layout rules and the blind-comparison protocol.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
