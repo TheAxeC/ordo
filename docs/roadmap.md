@@ -16,12 +16,19 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
+## 2.C Scripts compute facts, and /writing is removed
+
+- Status: [ ]
+- Goal: Ordo keeps a script only where a machine computes the answer exactly, and its rules stop asking for scripts and tests where a judgment is made by reading. Everything plan 3 built for `/writing` is removed, and the prose standard is back where it was at v2.0.0.
+- Gate: the rule "scripts compute facts; judgment is read" stands in `docs/dev/change-standard.md` and `skills/repo-setup/templates/shared-rules.md`, and you approve the rewritten rules by reading their diff; `skills/writing/`, `verify.sh`, `verify.test.sh`, `usage.py`, the ledger copies of `land.sh` and the `--built` mode of `utils/check_coverage.py` are gone, and `git grep -n -e check_prose -e verify.sh -e usage.py -e ADAPT -e no-browser -e '--built' -- ':!.scratch' ':!docs/roadmap.md'` prints nothing (the roadmap is left out, since this gate names those words), and no other entry of `docs/roadmap.md` names `--built`; entry 3.A is dropped with its reason, and entries 3 and 4 say they are drafted again, from their sources, before either is opened; `git diff v2.0.0 -- skills/repo-setup/templates/docs/dev/prose-standard.md` prints nothing; `.scratch/3-the-writing-base/` is gone; each command of the verify list in `docs/dev/building.md`, run as written, exits 0; the entry's last step lands through the single `skills/land/templates/land.sh`, reading its paths from `.agents/plan.yaml`.
+- Waits on: 2.B, for the skills and tools it changes.
+
 ## 3. The writing base
 
 - Status: [ ]
 - Goal: A `writing` skill folder the writing skills share: the prose standard, the anti-pattern table, and the checks for non-ASCII, dash asides, history words and word counts per section.
 - Gate: the checks run on one sample file holding one planted violation per check, flag each of them, and flag nothing in a clean file; the checks run on a real draft of yours, and you review what they flag; the skill follows `docs/dev/skill-layout.md`; the coverage check with `--built writing` (the command in `docs/academic-coverage.md`) prints `ok:`, and the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, checked by reading both.
-- Waits on: 1, for the layout; 2, for what the base covers; 2.B, for the repaired skills and tools it is built with.
+- Waits on: 1, for the layout; 2, for what the base covers; 2.B, for the repaired skills and tools it is built with; 2.C, for the rules it is built under and a tree without the old `/writing`.
 
 ## 3.A Landing checks the brief and the review
 
