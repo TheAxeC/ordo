@@ -13,7 +13,7 @@ verify:                      # commands run in the worktree and again on main, i
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
-standards: []                # files every brief tells the builder to read in full; .agents/plan.yaml names none (open item A).
+standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md] # files every brief tells the builder to read in full (ruling A).
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
@@ -35,9 +35,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item A (2026-09-28, the files every brief tells the builder to read): `.agents/plan.yaml` has no `standards` key, so the configuration block above lists none, and a builder of this plan would not be told to read `docs/dev/skill-layout.md` or the prose standard, which steps 1 to 4 are judged against. (a) Add `standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md]` to `.agents/plan.yaml` and to the block above now; step 1 then changes the prose standard's path in both, with the other references it moves. Pro: every brief points the builder at the two pages, and every later plan gets them too. (b) Leave `standards` empty and name the two pages in each brief by hand. Con: a brief that forgets them leaves the builder without them; this is the lazy option. Recommendation: (a).
+- None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item A (the files every brief tells the builder to read): ruled (a); `standards` added to `.agents/plan.yaml` and to the block above, and step 1 changes the prose standard's path in both.
 
 - 2026-09-28: the step list, and questions 1 and 2 of the draft: approved; question 1 (a), question 2 (a).
 
@@ -64,7 +66,7 @@ dispatch: none
 
 - 2026-09-28. The plan is opened; nothing has landed. The installed skills are v2.0.0.
 - Next step: 1, the prose standard moved, because steps 2 and 3 name its new path.
-- Open on Axel's side: open item A.
+- Open on Axel's side: none.
 
 ## Usage
 
