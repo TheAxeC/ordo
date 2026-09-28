@@ -184,6 +184,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: runs on three real messages you name as not landed, each re-explanation read by you and judged clear.
 - Waits on: 2.D, for the glossary.
 
+## 19. codebase-design
+
+- Status: [ ]
+- Goal: A `codebase-design` skill and a design-standard page in `repo-setup`'s templates, in the form of Cathedra's "Design principles" (`docs/dev/standards/coding-standards.md`): single responsibility, separation of concerns, open for extension and closed for modification, substitutability, interface segregation, dependency inversion, do not repeat yourself, keep it simple and you are not going to need it, each stated in the concrete form it takes in the repository, with the check that enforces it where one exists.
+- Gate: one real run on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; a blind comparison under the protocol of 2.D against mattpocock's `codebase-design` on the same repository.
+- Waits on: 2.D, for the layout rules and the blind-comparison protocol.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
