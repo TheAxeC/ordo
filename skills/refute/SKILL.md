@@ -45,8 +45,8 @@ metadata:
 1. Dispatch one reviewer, on the model the configuration block's `reviewer:` names, once per step before its first repair round.
 2. The reviewer reads the inputs in the order "What it reads" gives them.
 3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
-   - The step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks (the step's worktree).
-   - The lines `verify.sh` prints are what the refuter report quotes.
+   - The step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks (the step's worktree).
+   - The lines `checks.sh` prints are what the refuter report quotes.
 4. The reviewer runs every command the report quotes as evidence, in the same form, and compares the output with what the report claims.
    - Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so.
      - It reproduces what it can from the one build.
@@ -57,7 +57,7 @@ metadata:
    - Then what was not checked within the time box, named.
    - Then the reviewer's usage.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
-   - It records the report's usage in the state file's table and its path under the dispatch block's `reviewer_report` field.
+   - It records the report's path under the dispatch block's `reviewer_report` field, with the reviewer's tokens, tool uses and time from its completion notice beside it.
    - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 

@@ -34,11 +34,10 @@ continue the plan                    resume from the state file, after a compact
 3. The dispatch block in the state file, which "Resuming, and handing the plan over" reads.
 4. The builder's report, the diff since the step's base, and the refuter reports of the step.
 5. For the recurring-findings pass, the refuter reports written since the last pass.
-6. For the usage rows, the running session's own log, as "Usage" says.
 
 ## Steps
 
-The loop runs over a plan that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/plan-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops, the reports and the usage table.
+The loop runs over a plan that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/plan-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops and the reports.
 
 1. Read the inputs in the order "What it reads" gives them.
    - Resolve a dispatch block before anything else.
@@ -58,7 +57,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **The launch commit.** Under every executor, the dispatch entry is committed once its builder's identity is in it, and the commit is a resume point.
      - Under `agent` it comes right after the launch, since the builder's agent id exists only once it is launched; under `inline` and `academic-paper` it comes before the build starts.
      - The paths are the state file and the session's own records since the last resume point, named in `git add -- <path> ...`.
-   - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report, the main checkout, the user's data); the reading order (the rules file, the brief, the standards); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
+   - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report, the main checkout, the user's data); the reading order (the rules file, the brief, the standards); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
    - **The builder.** It never runs a git command.
      - In the ledger it writes only its report, at the path the brief names in the worktree's copy of the ledger.
    - **`inline`.** The orchestrating session writes `inline` as the builder's identity under `session_id`.
@@ -68,13 +67,14 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - It makes the launch commit.
      - The step is then built through that skill with the brief as its input.
      - That skill's output is the step's report.
-5. While the builder runs, do ledger work only: the next step's premise checks, the bookings, the usage table.
+5. While the builder runs, do ledger work only: the next step's premise checks, the bookings.
    - Never dispatch beyond what `workers_at_once` allows.
    - Never dispatch while the user has asked for a pause.
 6. On the report, save it into the main ledger at the dispatch block's `report` path, on disk and not committed on its own.
    - Then read the whole diff.
    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
    - The builder's completion notification carries its final message. When the builder wrote no report file, the orchestrator takes the report from that message into the `report` path.
+   - The orchestrator writes the builder's tokens, tool uses and time, from its completion notice, into the dispatch block under `builder_usage`, beside `report`, on disk; the next resume-point commit carries them.
    - The report is a lead, not a fact.
    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result.
      - Read that hand-back the same way as a report.
@@ -87,7 +87,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
    - Read the diff yourself while it runs.
    - Save its report.
-     - Write its path and its usage into the dispatch block under `reviewer_report`, on disk; the next resume-point commit carries them.
+     - Write its path, with the reviewer's tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report`, on disk; the next resume-point commit carries them.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Before the resume.** Write `round: n` into the dispatch block.
@@ -101,7 +101,8 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
    - **After each reply.** Read the whole delta.
-     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its usage recorded beside the first.
+     - Add the builder's tokens, tool uses and time for the round, from its completion notice, to `builder_usage` in the dispatch block, on disk.
+     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its path and its usage recorded under `reviewer_report` beside the first.
    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
 9. Invoke `/land <entry> <step>`. Its refusals are its own.
    - A red line the orchestrator cannot fix at landing takes the step back out of main.
@@ -129,16 +130,16 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 - **Runner.** Both tiers run under Claude Code.
 - Any allowed combination is chosen per step.
 - A new combination is booked in the rulings with what decides it.
-  - It is measured by its usage row.
+  - It is measured by the landing reports of the steps it ran: each agent's tokens, tool uses and time, whether the first report passed its bar, and the fixes at landing.
 - The same skill runs a code tool, a research project or a manuscript.
 
 ## Resuming, and handing the plan over
 
 The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under these rules:
 
-- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, ruling, path a step depends on, sharp edge and usage row is in the ledger folder of the main checkout.
+- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, ruling, path a step depends on, sharp edge and landing report is in the ledger folder of the main checkout.
 - A step's commits are only the points another session resumes from. They are a stop (its open item and Step 0), the preparation commit, and the dispatch entry once the builder's identity is in it. They are also a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), the landing, and a handover.
-- Every other ledger record is written to disk in the main checkout. Such records are a builder's report saved, a refuter report saved, a reviewer recorded, a ruling booked and a usage line.
+- Every other ledger record is written to disk in the main checkout. Such records are a builder's report saved, the builder's usage under `builder_usage`, a refuter report saved, a reviewer recorded and a ruling booked.
   - It is carried by the next of those commits.
 - A resume-point commit holds only the paths the session itself wrote since the last one.
   - Each is named in the `git add -- <path> ...` command.
@@ -179,12 +180,12 @@ On every resumption, with a dispatch block or without one:
 
 ## The review, earned
 
-- Under `review: earned` the reviewer stage is decided per step from the ledger's rows and the diff, never from the builder's name.
-- The reviewer runs on a builder's first step under this rule, and when any of the builder's last three rows did not pass the bar with at most one fix at landing.
+- Under `review: earned` the reviewer stage is decided per step from the landing reports of the builder's earlier steps and the diff, never from the builder's name.
+- The reviewer runs on a builder's first step under this rule, and when any of the builder's last three landing reports shows a first report that did not pass the bar with at most one fix at landing.
 - Whatever the record, the reviewer runs when the step's brief touches a public surface, a server module, a state layer or a wire shape.
 - A failed bar puts the reviewer back for the builder's next three steps.
 - The runs over the repair rounds follow `refute_after_repair`, and under `earned` they run only on a step whose first review ran.
-- The rows record which branch each step took.
+- The landing report records which branch each step took.
 
 ## The recurring-findings pass
 
@@ -244,13 +245,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 
 ## Usage
 
-- Per step, one row in the state file's table: the builder's model, tokens, tool uses, wall time; the reviewer the same, and each run over a repair round the same; the fix rounds; the findings sent back; the lines added and removed; whether the first report passed its bar; the fixes at landing; the orchestrator's own row.
-- Tokens and lines say what a step cost; the last four say what it was worth, and a change to the process or the model is judged on both.
-- The orchestrator's row per step is its messages, output tokens, cache-write tokens, cache-read tokens, fresh input tokens and minutes, from the previous landing commit to this step's booking.
-- `/land` produces it at its Steps 9 with the land skill's `templates/usage.py <session log> <from> <to>`: `<from>` is `git log -1 --format=%cI` on the previous landing commit, `<to>` is `date -Iseconds` at the booking, and the session log is the running session's own.
-- The session log is the running Claude Code session's newest `~/.claude/projects/<slug>/<session>.jsonl`, whose assistant lines carry `message.usage` and a timestamp, one message counted once by its id.
-- Work on other steps inside the same window (the next brief, another step's review read) is not separated.
-  - The row says what it shares.
+- The landing report states each agent's tokens, tool uses and time, from its completion notice.
 
 ## The pace when a deadline is set
 

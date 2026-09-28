@@ -13,7 +13,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, a roadmap, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules equal to the template |
 | `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
 | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and adds an entry with its goal, gate and place. It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
-| `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, `orchestrator-state.md`, the landing script |
+| `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, `orchestrator-state.md` |
 | `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. It creates the worktree and stages the base binaries |
 | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes findings |
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
@@ -44,9 +44,9 @@ for every step:
 
 ## Requirements
 
-- git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/verify.sh`, also needs `bash` and `ps`.
+- git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/checks.sh`, also needs `bash`.
 - `perl`, for the ASCII check of `docs/dev/building.md` and for `sync_rules.test.sh`.
-- `node` and `npx` on `PATH`. `skills/land/templates/land.sh` needs them for its wait on git's index lock and for the usage rows. The skills CLI needs them too, and both the CLI install and `repo-setup`'s project skills use that CLI.
+- `node` and `npx` on `PATH`, for the skills CLI only. Both the CLI install and `repo-setup`'s project skills use that CLI.
 - Claude Code.
 
 ## Install
@@ -108,21 +108,17 @@ Every other key is optional. A key left out takes the default written beside it 
 
 Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
 
-A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of its `orchestrator-state.md`. It runs through `sh <skills>/land/templates/verify.sh <state file>`, from the root of the repository it checks.
+A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of its `orchestrator-state.md`. It runs through `sh <the land skill's folder>/templates/checks.sh <state file>`, from the root of the repository it checks.
 
-A command ending in a pipe into `tail` passes only when it exits 0 and its last line starts with `PASS:`. Any other command passes when it exits 0. The run stops at the first command that fails. The head comment of `skills/land/templates/verify.sh` states the rest: the pipe rule in full, what the runner prints, how each command is started, the signals and the exit statuses.
+Each command runs through `bash -o pipefail -c` and passes when it exits 0. The run stops at the first command that fails. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
 
 ## The landing script
 
-`skills/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command. It also prints the data for the step's booking in the plan: the diff stat, the usage rows (the tokens, tool uses and time of each agent) and the staged paths. `/plan` copies it into the ledger folder when it opens the plan, with `land.test.sh`, `verify.sh` and `usage.py` beside it. `/land` refuses a ledger without it. `/plan` also makes the `ADAPT` edits from `.agents/plan.yaml`:
+`skills/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`. It runs from the `land` skill itself, and nothing is copied into the ledger.
 
-- `landing_worktree_root`: the `worktree_root` key, the folder that holds a step's worktree, `.agents/worktrees` by default.
-- `landing_tool_path`: the directory a step's changes are scoped to, `.` for the whole tree by default.
-- `landing_ledger_root`: the `ledger_root` key.
-- The `ADAPT` block: the dependency install and any check beyond the verify list with their pass rules. It is empty by default, so the template runs no step that belongs to one project.
-- The model names in the usage rows.
+`land.sh` reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`, and refuses with exit 64 when either is missing. In the `projects:` form it reads those of the project whose `ledger_root` holds the state file. After main's cherry-pick it runs the verify list through the `checks.sh` in its own folder. It then prints the data for the step's booking in the plan: the diff stat against the base and the staged paths.
 
-`land.sh` finds `verify.sh` and `usage.py` beside itself, and otherwise in the land skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`). A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` reads `landing_tool_path` and `landing_ledger_root` from the `land.sh` beside it. The land skill's section "The landing script" in `skills/land/SKILL.md` states the rest, including the check on `main`, the refusals and what `land.test.sh` proves.
+A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` proves `land.sh` on scratch repositories, and `checks.test.sh` proves `checks.sh` on scratch state files. The land skill's section "The landing script" in `skills/land/SKILL.md` states the rest, including the refusals and the exit statuses.
 
 ## Working on Ordo
 

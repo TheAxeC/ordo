@@ -163,3 +163,261 @@ land.sh, tried on scratch repositories: no `.agents/plan.yaml`, no `ledger_root`
 - A state file or ledger root reached through a symbolic link: `land.sh` compares `os.path.realpath` of the state file with the literal `ledger_root`.
 
 Reviewer usage: not available to the reviewer; the orchestrator takes it from the completion notice.
+
+## Repair round 1, refuted
+
+On `.agents/worktrees/2c-2`, base `410997a352e408005a7949d2f24f47771a663b22`. Every command ran from the worktree root unless named otherwise; those that touch skill folders ran under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`. The worktree's state file and the main checkout's hold the same verify list (lines 1-33 equal; the first difference is the dispatch block at line 34). No round-0 snapshot of the tree exists, so the round's delta was read as the whole diff since the base against the twelve rulings of `agents/briefs/2-round-1.md` and the first refuter report's quoted hunks and line numbers.
+
+```
+$ sh ~/.claude/skills/land/templates/verify.sh .scratch/2-c-scripts-compute-facts-and-writing-is-removed/orchestrator-state.md; echo "exit $?"
+PASS: land.sh scratch tests
+RED: sh skills/land/templates/verify.test.sh 2>&1 | tail -1
+exit status: 127
+sh: skills/land/templates/verify.test.sh: No such file or directory
+exit 1
+```
+
+The other commands of the list by hand, each through `bash -o pipefail -c`:
+
+```
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+exit 0
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+exit 0
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+exit 0
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+exit 0
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+exit 0
+$ ascii (the list's perl command as written)
+Can't open skills/land/templates/usage.py: No such file or directory at -e line 1.
+Can't open skills/land/templates/verify.sh: No such file or directory at -e line 1.
+Can't open skills/land/templates/verify.test.sh: No such file or directory at -e line 1.
+exit 0
+```
+
+`checks.sh` on the state file as it is:
+
+```
+$ sh skills/land/templates/checks.sh .scratch/2-c-scripts-compute-facts-and-writing-is-removed/orchestrator-state.md; echo "exit $?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/verify.test.sh 2>&1 | tail -1
+sh: skills/land/templates/verify.test.sh: No such file or directory
+checks: failed with exit 127: sh skills/land/templates/verify.test.sh 2>&1 | tail -1
+exit 1
+```
+
+`checks.sh` on a scratch copy with that one line replaced (`diff` of copy against original):
+
+```
+8c8
+< - sh skills/land/templates/verify.test.sh 2>&1 | tail -1
+---
+> - sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne '...'
+Can't open skills/land/templates/usage.py: No such file or directory at -e line 1.
+Can't open skills/land/templates/verify.sh: No such file or directory at -e line 1.
+Can't open skills/land/templates/verify.test.sh: No such file or directory at -e line 1.
+checks: 7 commands passed
+exit 0
+```
+
+The Cases:
+
+```
+$ git show 410997a...:skills/land/templates/checks.test.sh
+fatal: path 'skills/land/templates/checks.test.sh' exists on disk, but not in '410997a352e408005a7949d2f24f47771a663b22'
+$ sh skills/land/templates/checks.test.sh; echo "exit $?"
+PASS: checks.sh scratch tests
+exit 0
+$ sh skills/land/templates/land.test.sh; echo "exit $?"
+PASS: land.sh scratch tests
+exit 0
+$ git grep -n -e verify.sh -e usage.py -e ADAPT -e no-browser -- ':!.scratch' ':!docs/roadmap.md'; echo "exit $?"
+exit 1
+$ git grep -n -e 'usage row' -e 'usage table' -e 'Usage section' -e "ledger's .land\.sh" -- ':!.scratch' ':!docs/roadmap.md'; echo "exit $?"
+exit 1
+$ grep -n node skills/land/templates/land.sh; echo "exit $?"
+exit 1
+$ LC_ALL=C grep -n '[^ -~]' <the 16 files the step writes> <the report>; echo "exit $?"
+exit 1
+```
+
+Revert proofs, each on a fresh copy of `skills/land/templates/*.sh` under the scratch folder, the copy's test run from the copy:
+
+```
+-- checks.sh ["bash", "-o", "pipefail", "-c", command] -> ["bash", "-c", command]
+$ echo first ran
+first ran
+$ sh -c 'echo FAIL: x; exit 3' 2>&1 | tail -1
+FAIL: x
+$ touch third-ran
+checks: 3 commands passed
+FAIL: failing list exited 0, expected 1
+exit 1
+-- checks.sh sys.exit(1) after the failure line -> sys.exit(0)
+FAIL: failing list exited 0, expected 1
+-- checks.sh count printed as len(commands) - 1
+FAIL: passing list: missing [checks: 2 commands passed]
+-- checks.sh "has no yaml block" refusal -> sys.exit(1)
+FAIL: no yaml block exited 1, expected 2
+-- land.sh line 442 (sh "$landing_script_dir/checks.sh" "$landing_state") -> true
+FAIL: failing check exited 0, expected 1
+-- land.sh add without ":(exclude,literal)$3"
+FAIL: ledger landing staged [tools/b/.scratch/plan/agents/reviews/report.md
+-- land.sh conflict exit 2 -> exit 1
+FAIL: conflict exited 1, expected 2
+-- land.sh main's cherry-pick -> :
+FAIL: ledger landing staged [], expected [tools/b/change.txt]
+-- land.sh folder(project["worktree_root"], ...) -> folder(".agents/worktrees", ...)
+FAIL: ledger landing exited 1, expected 0
+-- land.sh folder(config["worktree_root"], ...) -> folder(".agents/worktrees", ...)
+FAIL: conflict exited 1, expected 2
+```
+
+First run of the cases, ruling 5: `git archive 410997a | tar -x` into the scratch folder, the two current tests copied into its `skills/land/templates/` with `^    exit 1$` replaced by `    : continue` (`grep -c ': continue'` prints 1 for each). The output matches the report's block line for line except the `mktemp` names in the paths:
+
+```
+$ sh skills/land/templates/land.test.sh
+arguments failed: invalid package name: ledger/plan/orchestrator-state.md
+FAIL: conflict exited 64, expected 2
+arguments failed: invalid package name: ledger/plan/orchestrator-state.md
+FAIL: conflict: missing [Conflicting paths:
+base.txt]
+arguments failed: invalid package name: /private/var/folders/.../land-test.qIArJ0/ledger/tools/b/.scratch/plan/orchestrator-state.md
+FAIL: ledger landing exited 64, expected 0
+FAIL: ledger landing staged [], expected [tools/b/change.txt]
+arguments failed: invalid package name: ledger/plan/orchestrator-state.md
+FAIL: failing check exited 64, expected 1
+arguments failed: invalid package name: ledger/plan/orchestrator-state.md
+FAIL: failing check: missing [checks: failed with exit 1: false]
+arguments failed: invalid package name: ledger/plan/orchestrator-state.md
+FAIL: clean landing exited 64, expected 0
+arguments failed: invalid package name: ledger/plan/orchestrator-state.md
+FAIL: clean landing: missing [checks: 1 commands passed]
+FAIL: clean landing staged [], expected [change.txt pending.txt]
+PASS: land.sh scratch tests
+exit 0
+$ sh skills/land/templates/checks.test.sh
+sh: <scratch>/base/skills/land/templates/checks.sh: No such file or directory
+FAIL: failing list exited 127, expected 1
+(the same sh: line before each of the next five FAIL lines)
+FAIL: failing list: missing [checks: failed with exit 3: sh -c 'echo FAIL: x; exit 3' 2>&1 | tail -1]
+FAIL: failing list echo: missing [$ echo first ran]
+FAIL: passing list exited 127, expected 0
+FAIL: passing list: missing [checks: 2 commands passed]
+FAIL: no yaml block exited 127, expected 2
+FAIL: no yaml block: missing [checks: ]
+PASS: checks.sh scratch tests
+exit 0
+```
+
+Ruling 6 by hand. On a scratch repository with a step worktree `wt/st` holding an uncommitted `z.txt`, and `.agents/plan.yaml` first `ledger_root: led` alone, then a `projects:` form whose matched project `b` has no `worktree_root`:
+
+```
+--- one-project, no worktree_root
+configuration failed: no worktree_root in .agents/plan.yaml
+exit 64
+--- projects, matched project b without worktree_root
+configuration failed: no worktree_root of the project b in .agents/plan.yaml
+exit 64
+--- after
+main HEAD unchanged
+ M .agents/plan.yaml        (the reviewer's own edit of the fixture between the two runs)
+staged: 0
+worktree: st, 1 commit, ?? z.txt
+```
+
+Ruling 11 by hand. `land.sh` copied alone into a scratch folder; the scratch repository's worktree `st` holds one commit and an uncommitted `z.txt`:
+
+```
+--- land.sh alone, no checks.sh
+preflight failed: checks.sh not found beside land.sh: <scratch>/alone/checks.sh
+exit 64
+--- after
+main HEAD unchanged
+staged: 0
+worktree: st, 1 commit past the base, ?? z.txt; branches: st only (no st-land)
+--- control: the same repository with the real land.sh
+... [st-land 362e3a5] c ... [st-land 27bb079] wip ...
+$ true
+checks: 1 commands passed
+=== booking === ... Staged paths: c.txt z.txt === end booking ===
+exit 0
+```
+
+Report round-1 claims rerun: `git grep -n builder_usage -- skills` prints `skills/land/SKILL.md:87`, `skills/plan-orchestration/SKILL.md:77`, `skills/plan/templates/orchestrator-state.md:26`; `git grep -n 'No landing script' -- skills docs README.md` prints nothing, exit 1; `git diff --numstat 410997a` and `wc -l` reproduce every row of "Line counts after the round"; `grep -n 'fail "\|exit \|refuse(' skills/land/templates/land.sh` lists 21 exit-1 `fail` calls (22 lines match without a trailing ` 64`, one of them the continued `LANDING_LOCK_WAIT` refusal at line 115, whose `64` is on line 116) plus the PyYAML `refuse(..., 1)`, and each is named in the head comment's exit-1 list (lines 58-73). `git status --short` in the worktree after all runs is the same 20 entries as before them.
+
+The twelve rulings against the tree:
+
+1. `docs/academic-coverage.md:155,177`: both clauses read as ruled, numstat `2 2`; the Cases grep exits 1. Closed.
+2. `skills/plan-help/SKILL.md:70`: reads as ruled. Closed.
+3. `skills/plan-orchestration/SKILL.md:77`, `skills/plan/templates/orchestrator-state.md:26`, `skills/land/SKILL.md:87`: as ruled. Closed; see the Spec finding on repair-round usage.
+4. `skills/land/templates/checks.test.sh:52,57`: the pipeline case; the `pipefail` revert is red. Closed. No check was loosened: the three approved cases keep every assertion they had.
+5. Report lines 13-53: reproduced above. Closed.
+6. `land.sh:204-205,213-214`, head comment line 51, `README.md:119`, `skills/land/SKILL.md:125,128`: refusal in both forms, default gone. Closed.
+7. `docs/dev/building.md:21`: as ruled. Closed.
+8. `land.sh:58-73`: every exit-1 stop listed. Closed.
+9. `skills/land/SKILL.md:134`, `skills/plan/templates/orchestrator-state.md:46`: both carry git's own status. Closed.
+10. `skills/land/SKILL.md:144`: as ruled. Closed.
+11. `land.sh:126-128`, head comment line 79, `skills/land/SKILL.md:128`: preflight before any git step, reproduced above. Closed; see the Standards finding on "What it reads" 4.
+12. Report line 145: the row is there with before and after. Closed.
+
+### 1. Spec
+
+- `skills/plan-orchestration/SKILL.md:104-105` ("**After each reply.** Read the whole delta. ... invoke `/refute` ... its path and its usage recorded under `reviewer_report` beside the first."): a repair round's reviewer usage has a place, and the round's builder usage has none. Steps 6 (line 77) writes `builder_usage` "On the report", and `/land` Steps 9 (`skills/land/SKILL.md:87`) books the builder's usage from `builder_usage` alone, so the tokens, tool uses and time of a repair round's reply reach the booking only if Steps 6 is read as covering each reply. The ledger's own state file already records the round there (`builder_usage: ... (round 0); 263090 / 24 / 322 s (round 1)`), which the text does not say to do. Line 142's list of on-disk records ("a builder's report saved, a refuter report saved, a reviewer recorded and a ruling booked") also leaves the builder's usage out. Ruling 3 did not ask for this (the first refuter proposed it), so the builder was right not to add it; it is a gap the ruling left. Correct fix, small and inside the brief's "What it must do" (the landing report is where each agent's usage is written), at landing: in Steps 8 "After each reply", add "Add the round's builder tokens, tool uses and time from its completion notice to `builder_usage`, marked with the round." and name "the builder's usage recorded" in line 142's list.
+
+### 2. Proof
+
+- Report `2-report.md:102-121` ("Files" table): `checks.test.sh` 74 lines, `land.sh` 448 and `+194 -232`, `skills/land/SKILL.md` `+41 -42`, `orchestrator-state.md` `+2 -7`, `plan-orchestration/SKILL.md` 309 and `+12 -19`, and no row for `docs/academic-coverage.md`. The rerun gives 77, 468 and `+213 -231`, `+42 -43`, `+3 -8`, 310 and `+13 -19`, and `2 2` for `docs/academic-coverage.md`; the round's table at lines 326-346 carries the right numbers. The report now states two different counts for the same files, and the first set is not the end state (change standard rule 7). Fix at landing: replace the "Files" table's numbers with those of lines 326-346, or delete the older table and point to the round's.
+- Report `2-report.md:92-93` (revert proofs): "`project.get("worktree_root", ...)` replaced by `".agents/worktrees"`" and "`config.get("worktree_root", ...)` replaced by ...". After ruling 6, `land.sh` holds no `.get(` (`grep -n 'get(' skills/land/templates/land.sh` exits 1); the code is `folder(project["worktree_root"], ...)` and `folder(config["worktree_root"], ...)` at lines 206 and 215. The same revert on those lines gives the quoted red lines (above), so the proof holds, but the revert the report names cannot be made on the tree. Fix at landing: rewrite the two cells to name `folder(project["worktree_root"], ...)` and `folder(config["worktree_root"], ...)`.
+
+### 3. Standards
+
+- `skills/land/SKILL.md:35` ("4. This skill's `templates/land.sh` and `templates/checks.sh`, as \"The landing script\" says."): after ruling 11 a missing `checks.sh` is a refusal (exit 64, before anything is touched, line 128), and `docs/dev/skill-layout.md` "Sections, in order", row 4, says "An input whose absence is a refusal says so in its item." Item 4 does not, and the Stops table has no row for it, although the report's user-visible row (line 145) calls it "`land.sh`'s exit-64 refusal". Fix at landing: add under item 4 "- A missing `templates/checks.sh` is refused by `land.sh` with exit 64 before anything is touched (\"The landing script\")." A Stops row (When: `land.sh` exits 64 with `checks.sh not found beside land.sh`; What resumes it: the `land` skill reinstalled, then `/land` again) would make the refusal complete; which of the two is the orchestrator's choice.
+- `skills/land/templates/land.sh:77-83` (exit-64 list): `land.sh:192` refuses "projects: in .agents/plan.yaml is not a mapping of projects" and `land.sh:185` refuses "cannot read .agents/plan.yaml: ..." for an `OSError` or a file that is not UTF-8, both with exit 64. The list names "no .agents/plan.yaml, or one that is not valid YAML or not a mapping", which covers neither. Change standard rule 14: a head comment lists every error the script prints and its exit status. This predates the round (ruling 8 covered exit 1 only) and the first review did not name it. Fix at landing: add "a projects: key that is not a non-empty mapping; a plan.yaml that cannot be read or is not UTF-8" to the exit-64 list.
+
+### 4. Behaviour
+
+- none. The two behaviours the round adds (the `worktree_root` refusal and the `checks.sh` preflight) are stated with before and after in the report (Judgment calls 4, round items 6 and 11, user-visible row at line 145) and reproduce above.
+
+### Declined to judge
+
+- Rule 13 of the change standard asks for a case per branch; the two refusals ruling 6 and ruling 11 add have hand proofs and no case in `land.test.sh`. The ruling holds `land.test.sh` to its four approved cases, so the hand proofs are what was asked; whether rule 13 or the four-case limit governs is the orchestrator's, as the first review said.
+- The exit-status table of `land.sh`'s head comment lists `n` (git's own status) between `2` and `64`, and a git step that fails with status 1 or 2 is then indistinguishable from the rows `1` and `2`. This is the shape the base script had and the rulings kept; no ruling asked for it.
+
+### Not checked
+
+- The exact delta of round 1 against the round-0 tree: no snapshot of the round-0 tree exists (no commit, no patch in the ledger). The round was judged by the twelve rulings, the first review's quoted hunks and line numbers, and the numstat difference between the report's two tables (`land.sh` +19 net lines, `checks.test.sh` +3, the text files +1 each). A change to `land.sh` in the round beyond rulings 6, 8 and 11 that leaves those counts would not be seen.
+- `checks.sh` and `land.sh` under `dash`, a signal sent to `checks.sh` itself, and a state file or ledger root reached through a symbolic link, as in the first review.
+- That the main checkout of the repository is untouched was not checked with a command; every hand run above was in scratch repositories under the scratch folder, and the tests create theirs under `$TMPDIR`.
+
+Reviewer usage: not available to the reviewer; the orchestrator takes it from the completion notice.
+
+## Closed
+
+- First review, findings 1 to 12 (Spec 1-3, Proof 4-5, Standards 6-10, Behaviour 11-12): each sent to the builder as the ruling of the same number in `agents/briefs/2-round-1.md`, made in repair round 1, and each closure reproduced by the run over the round ("Repair round 1, refuted": "All twelve rulings are closed").
+- Round 1, finding 1 (Spec, the builder's usage of a repair round has no place): fixed at landing. `skills/plan-orchestration/SKILL.md` "After each reply" adds the round's builder usage to `builder_usage`, and the list of on-disk records under "Resuming, and handing the plan over" names `builder_usage`.
+- Round 1, finding 2 (Proof, the round-0 Files table of the report is stale): fixed at landing. The table is marked as the count after round 0, and points at the round-1 table, which the reviewer's rerun reproduces.
+- Round 1, finding 3 (Proof, two revert cells name `.get(` code that is gone): fixed at landing. The cells name `project["worktree_root"]` (`land.sh` line 207) and `config["worktree_root"]` (line 216); rerun on a scratch copy of the landed `land.sh`, the reverts print `FAIL: ledger landing exited 1, expected 0` and `FAIL: conflict exited 1, expected 2`.
+- Round 1, finding 4 (Standards, a missing `checks.sh` not stated as a refusal in the `land` skill): fixed at landing. "What it reads" 4 says a `checks.sh` missing beside `land.sh` is a refusal, and the Stops table has the row "No verify runner".
+- Round 1, finding 5 (Standards, two exit-64 refusals missing from `land.sh`'s head comment): fixed at landing. The exit-64 list names a plan.yaml that cannot be read or is not UTF-8, and a `projects:` key that is not a mapping of projects.

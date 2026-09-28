@@ -5,7 +5,7 @@ The catch-up note for entry 2.C of `docs/roadmap.md`, scripts compute facts, and
 ```yaml
 verify:                      # commands run in the worktree and again on main, in order; all must pass. Copied from docs/dev/building.md by /plan, with the filters of docs/dev/change-standard.md.
 - sh skills/land/templates/land.test.sh 2>&1 | tail -1
-- sh skills/land/templates/verify.test.sh 2>&1 | tail -1
+- sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
@@ -30,25 +30,12 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2c-2
-  base: 410997a352e408005a7949d2f24f47771a663b22
-  launched: 2026-09-28
-  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/2-report.md
-  builder_usage: claude:opus 211705 tokens / 63 tool uses / 796 s (round 0)
-  landing: not-started
-  round: 1
-  session_id: a54dcd77e96e0f34d
-  reviewer_report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/2-refuter.md (claude:opus 215961 tokens / 64 tool uses / 726 s)
-  round_1: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/briefs/2-round-1.md, sent on the tree of the round-0 report
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- none.
+- B (2026-09-29), step 3: tag main v2.2.0 at step 2's landing commit and run `utils/pin.sh v2.2.0`, so steps 4 to 7 run under the new `/land`, `/refute` and `/spec` texts and the installed skills lose `writing`. Options: (a) yes, now; (b) not yet, and steps 4 to 7 wait, since the plan blocks them on step 3. Recommendation (a): the pinned skills today are v2.1's, whose `/land` still asks for the ledger copies this ledger no longer has. The lazy option is none here; (b) only delays.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -62,8 +49,8 @@ dispatch:
 
 ## Verification, every step
 
-- The ledger's landing script, from the repository root: `sh .scratch/2-c-scripts-compute-facts-and-writing-is-removed/land.sh <step branch> <base>`. It commits a wip in the worktree, copies the step's commits onto main (or prints `nothing to copy` when there are none), runs the verify list on main through `verify.sh`, and prints the booking data; exit 0 passes, 1 is a red check or a stop, 2 a conflict. `land.test.sh` beside it proves it. Step 2's landing is the last that uses it; its landing deletes the four copies, and later steps land through `skills/land/templates/land.sh` as installed after step 3.
-- The `verify` list above runs through the `land` skill's `templates/verify.sh <state file>` from the root of the checkout it checks, the worktree and then main, and the lines it prints are what a report or a booking quotes. The `check_prose` test is out of the list, since step 1 deletes it; step 2's landing rewrites the list from the new `docs/dev/building.md`.
+- A landing runs the `land` skill's `templates/land.sh` from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`. It commits the step's work in its worktree, cherry-picks the range onto main, runs the `verify` list on main through `templates/checks.sh` and prints the booking data. It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict and 64 on a refusal, or with git's own status when a git step fails; the `land` skill's `templates/land.test.sh` proves it. Until step 3's pin, the installed `land` skill is v2.1's, so steps land through `skills/land/templates/land.sh` of this checkout, run by path.
+- The `verify` list above runs through `sh skills/land/templates/checks.sh <state file>` from the root of the checkout it checks, the worktree and then main. It prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and the lines it prints are what a report or a booking quotes.
 - The step's own check, named on its line in `plan.md` and in its brief.
 - Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
 
@@ -75,14 +62,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-28. Step 1 landed: `skills/writing/` removed, the prose standard and five files back to v2.0.0, plan 3's ledger deleted. Main's tree is clean after the landing commit.
-- Verified: the verify list on main, `verify: 7 commands passed`, exit 0.
-- Step 2 is prepared (base 410997a) and its builder is running in `.agents/worktrees/2c-2`. At its landing the state file's verify list is rewritten from the new `docs/dev/building.md` before the ledger's `land.sh` runs, since the old list names `verify.test.sh`, which the step deletes.
-- Next step: 2's review, then its landing.
-- Open on Axel's side: none.
-
-## Usage
-
-| step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds (up to repair_rounds, or one more under the exception) | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look (views, themes, what was seen) |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | claude:opus 97308 / 20 / 582 s | claude:opus 108994 / 28 / 469 s; no round | 0 | 0 | +13 -2736 | yes | 1 | 0 | 41 | 30822 | 121315 | 9934169 | 90 | 27 (from the plan's opening; shares the window with the four comparison agents' reports) | none |
+- 2026-09-29. Steps 1 and 2 landed. Step 2: one `land.sh` in the `land` skill, `checks.sh` beside it, `verify.sh`, `verify.test.sh` and `usage.py` deleted, and this ledger's script copies gone.
+- Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
+- Next step: 3, tag v2.2.0 and pin, which waits on the user's yes.
+- Open on Axel's side: the yes to tagging main v2.2.0 and running `utils/pin.sh v2.2.0`.

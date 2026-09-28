@@ -45,6 +45,6 @@ Every build, test or check command runs in the foreground with a long timeout, o
 <each verification command from docs/dev/building.md, piped through the grep that keeps its summary lines>
 ```
 
-A step's verify list runs through the `land` skill's `templates/verify.sh` from the root of the checkout it checks, as `sh <skills>/land/templates/verify.sh <state file>` with `<skills>` the first of the repository's `.agents/skills`, `~/.agents/skills` and `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`) that holds the `land` skill, and the lines it prints are what a report or a booking quotes, never a count.
+A step's verify list runs through the `land` skill's `templates/checks.sh` from the root of the checkout it checks, as `sh <the land skill's folder>/templates/checks.sh <state file>`, and the lines it prints are what a report or a booking quotes, never a count. Each command in the verify list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`.
 
 When a run is red, rerun the one suite or check that failed and read that output, never the whole run's. A claim about behaviour, cost or memory names the command that produced it, or is written as not verified.

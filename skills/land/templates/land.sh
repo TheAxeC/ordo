@@ -1,73 +1,106 @@
 #!/bin/sh
-# Run a reviewed package through a plan's landing checks and print its booking data.
-# A plan copies this file into its ledger folder, with land.test.sh, verify.sh and usage.py
-# beside it, and makes the ADAPT edits: the worktree root (default .agents/worktrees; the package's
-# worktree is <worktree root>/<pkg>), the tool directory (default ., the whole tree), the ledger
-# root, the ADAPT block for the dependency install and any check beyond the verify list with their
-# pass rules (default: nothing runs), and the model names in the rows.
+# Lands a reviewed step from its worktree onto main: the step's work is committed in its worktree,
+# copied onto main as staged changes, the plan's verify list is run on main through checks.sh, and
+# the booking data is printed.
 #
-# Its check on main is the ledger's verify list: after main's cherry-pick it runs
-# sh <verify.sh> <the orchestrator-state.md beside this script> from the repository root, and a
-# non-zero exit fails the landing with exit 1 and verify.sh's output printed. A range <base>..<pkg>
-# that holds no commit (git rev-list --count prints 0) copies nothing: both cherry-picks are
-# skipped, "nothing to copy: <base>..<pkg> holds no commit" is printed, and the verify list still
-# runs on main, while a count git fails ends the landing with "worktree git rev-list --count
-# failed", git's output and its exit status. verify.sh and usage.py are looked for beside this
-# script, then in the land skill's templates under the repository's .agents/skills,
-# ~/.agents/skills and $CLAUDE_CONFIG_DIR/skills (default ~/.claude/skills). The preflight
-# refuses, before main is touched, when the state file is missing or no place holds verify.sh,
-# naming the places.
+# In the step's worktree it stages the whole tree with the ledger root left out and makes a wip
+# commit when something is staged; a builder that committed everything lands with no wip commit.
+# It then checks out <step>-land from main in the worktree, with the ledger root as an ignore
+# pattern, so a ledger file left untracked in the worktree counts as ignored there, and
+# cherry-picks <base>..<step> onto it. A ledger file left uncommitted in the worktree (a builder's
+# report, any other ledger copy) never reaches main; a ledger file that a commit of the range
+# holds still does, since the cherry-picks take whole commits. A conflict prints git's output and
+# the conflicting paths. Otherwise git cherry-pick -n main..<step>-land stages the range on main.
+# A range that holds no commit (git rev-list --count prints 0) copies nothing: both cherry-picks
+# are skipped, "nothing to copy: <base>..<step> holds no commit" is printed, and the verify list
+# still runs on main; a count git fails ends the landing with "worktree git rev-list --count
+# failed", git's output and its exit status.
 #
-# In the package's worktree it stages the tool directory and makes a wip commit when something is
-# staged; a builder that committed everything lands with no wip commit. The ledger root is left
-# out of that add, and a ledger file left untracked in the worktree counts as ignored when the
-# worktree checks out main, so a ledger file left uncommitted in the worktree (a builder's report,
-# any other ledger copy) never reaches main. A ledger file that a commit of the range holds still
-# does, since the cherry-picks take whole commits.
+# After the cherry-pick on main it runs sh <its own folder>/checks.sh <state file> from the
+# repository root, its own folder being the one that holds this script; a non-zero exit fails the
+# landing with checks.sh's output printed. It then prints the booking data between
+# "=== booking ===" and "=== end booking ===": the diff stat against <base> and the paths staged
+# on main.
 #
 # Before each git step it waits for the repository's index.lock to go, and removes a lock older
 # than 60 s while no process named git runs, as stale. The wait is bounded: after 60 s of waiting
 # the landing stops with a message naming the lock and exit 1, whatever processes run. The
 # environment variable LANDING_LOCK_WAIT, when set and not empty, gives the bound in whole seconds
-# instead (its test shortens it); a value that is not a whole number is refused with exit 64.
+# instead; a value that is not a whole number is refused with exit 64.
 #
 # Every stop at a lock leaves main untouched. A stop after the worktree's checkout leaves the
-# worktree on <pkg>-land, and landing again resumes: the preflight sees <pkg>-land, returns the
-# worktree to <pkg>, deletes <pkg>-land and lands from the start. This is done on the next run
+# worktree on <step>-land, and landing again resumes: the preflight sees <step>-land, returns the
+# worktree to <step>, deletes <step>-land and lands from the start. This is done on the next run
 # and not at the stop, because the held lock may be the worktree's own, which blocks the checkout
-# that would undo the branch. The preflight refuses instead, keeping <pkg>-land, when main holds
+# that would undo the branch. The preflight refuses instead, keeping <step>-land, when main holds
 # staged or unmerged changes (a run that reached main's cherry-pick, stopped at a failed check or
-# ended, leaves them for the orchestrator), and when <pkg>-land holds a cherry-pick in progress (a
+# ended, leaves them for the orchestrator), and when <step>-land holds a cherry-pick in progress (a
 # conflict left for the orchestrator), changes not committed, or a commit that is not a
-# cherry-pick of the package's own commits (git cherry marks it +).
+# cherry-pick of the step's own commits (git cherry marks it +).
 #
-# --no-browser sets landing_browser to 0, for a browser check the ADAPT block may hold.
+# Arguments, run from the repository root:
+#   sh <the land skill's folder>/templates/land.sh <state file> <step> <base>
+#   <state file>  the plan's orchestrator-state.md, relative to the repository root or absolute.
+#   <step>        the step's branch, which is also its worktree folder's name (letters, digits,
+#                 ".", "_" and "-").
+#   <base>        the recorded base commit, in hexadecimal.
+#
+# It reads .agents/plan.yaml with python3 and PyYAML. In the one-project form it takes
+# worktree_root and ledger_root. In the projects: form it takes the project whose ledger_root
+# holds the state file (the deepest, when ledger roots nest) and that project's worktree_root.
+# Both keys are required; a missing one is refused. A leading ./ and a trailing / of either value
+# are dropped. The step's worktree is <worktree_root>/<step>. It also reads the state file, through
+# checks.sh, and the git state of main and of the step's worktree.
+#
+# Exit status:
+#   0   landed and checked: the range is staged on main and every command of the verify list
+#       passed.
+#   1   a failed check or a stop:
+#       - checks.sh exited non-zero;
+#       - the current folder is not the root of a git checkout;
+#       - the folder of this script cannot be resolved;
+#       - python3 or PyYAML is missing;
+#       - the temporary directory cannot be created, or the ledger ignore file cannot be written in
+#         it;
+#       - the step's worktree is not found;
+#       - the branch of the main checkout or of the step's worktree cannot be read;
+#       - the main checkout is not on main, or the worktree is on neither <step> nor <step>-land;
+#       - the preflight of a resume refused: main holds staged or unmerged changes, or what main
+#         has staged cannot be read; a cherry-pick is in progress on <step>-land; the status of
+#         <step>-land cannot be read, or it holds changes not committed; <step>-land cannot be
+#         compared with <step>, or holds a commit that is not a cherry-pick of <step>'s;
+#       - an index lock was held past the bound, its .git folder could not be resolved, or a stale
+#         one could not be removed.
+#   2   a conflict in the worktree's cherry-pick.
+#   n   any other status: a git step failed, and the landing ends with git's own exit status after
+#       printing git's output and the step that failed.
+#   64  a refusal of its arguments or configuration, before anything is touched: not three
+#       arguments; a step name or a base that is not of the form above; a LANDING_LOCK_WAIT that is
+#       not a whole number; no checks.sh in the folder of this script; a state file that is not a
+#       file; no .agents/plan.yaml, or one that cannot be read, is not UTF-8, is not valid YAML or is
+#       not a mapping; a projects: key that is not a mapping of projects; no ledger_root
+#       or no worktree_root, in the one-project form or in the project the state file belongs to,
+#       or a project of the projects: form without a ledger_root; a ledger_root or worktree_root
+#       that is not a folder inside the repository; a state file under no project's ledger_root.
 
 set -u
-
-usage() {
-    printf 'Usage: %s <pkg> <base> [--no-browser] [--session <session log> --since <ISO time>]\n' "$0" >&2
-    exit 64
-}
 
 fail() {
     printf '%s\n' "$1" >&2
     exit "${2:-1}"
 }
 
-if [ "$#" -lt 2 ]; then
-    usage
+if [ "$#" -ne 3 ]; then
+    fail "Usage: sh <the land skill's folder>/templates/land.sh <state file> <step> <base>" 64
 fi
 
-landing_pkg=$1
-landing_base=$2
-landing_browser=1
-landing_session=''
-landing_since=''
+landing_state_arg=$1
+landing_step=$2
+landing_base=$3
 
-case "$landing_pkg" in
+case "$landing_step" in
     '' | *[!A-Za-z0-9._-]*)
-        fail "arguments failed: invalid package name: $landing_pkg" 64
+        fail "arguments failed: invalid step name: $landing_step" 64
         ;;
 esac
 
@@ -77,37 +110,6 @@ case "$landing_base" in
         ;;
 esac
 
-shift 2
-while [ "$#" -gt 0 ]; do
-    case "$1" in
-        --no-browser)
-            landing_browser=0
-            shift
-            ;;
-        --session)
-            [ "$#" -ge 2 ] || usage
-            landing_session=$2
-            shift 2
-            ;;
-        --since)
-            [ "$#" -ge 2 ] || usage
-            landing_since=$2
-            shift 2
-            ;;
-        *)
-            usage
-            ;;
-    esac
-done
-if [ -n "$landing_session" ] && [ -z "$landing_since" ]; then
-    fail "arguments failed: --session needs --since, the previous landing commit's git log -1 --format=%cI" 64
-fi
-if [ -z "$landing_session" ] && [ -n "$landing_since" ]; then
-    fail "arguments failed: --since needs --session, the running session's own log" 64
-fi
-if [ -n "$landing_session" ] && [ ! -f "$landing_session" ]; then
-    fail "arguments failed: session log not found: $landing_session" 64
-fi
 landing_lock_bound=${LANDING_LOCK_WAIT:-60}
 case "$landing_lock_bound" in
     *[!0-9]*)
@@ -117,91 +119,119 @@ $landing_lock_bound" 64
 esac
 
 landing_root=$(pwd -P)
-# ADAPT: .agents/plan.yaml's worktree_root, relative to the repository root.
-landing_worktree_root=.agents/worktrees
-# ADAPT: the tool directory the package's paths are scoped to, relative to the repository root;
-# . is the whole tree.
-landing_tool_path=.
-# ADAPT: .agents/plan.yaml's ledger_root, relative to the repository root.
-landing_ledger_root=.scratch
-landing_tool=$landing_root/$landing_tool_path
-case "$landing_worktree_root" in
-    '' | /* | ../* | */.. | */../* | .. | *'
-'*)
-        fail "preflight failed: landing_worktree_root must be a folder inside the repository: \
-$landing_worktree_root"
-        ;;
-esac
-landing_worktree=$landing_root/${landing_worktree_root%/}/$landing_pkg
-
-# The ledger root as plan.yaml may write it, with every leading ./ and every trailing / removed,
-# so the add's pathspec and the checkout's ignore pattern name the folder itself. A refusal
-# quotes the value as written.
-landing_ledger_written=$landing_ledger_root
-while :; do
-    case "$landing_ledger_root" in
-        ./*) landing_ledger_root=${landing_ledger_root#./} ;;
-        */) landing_ledger_root=${landing_ledger_root%/} ;;
-        *) break ;;
-    esac
-done
-case "$landing_ledger_root" in
-    '' | . | .. | /* | ../* | */.. | */../* | *'
-'*)
-        fail "preflight failed: landing_ledger_root must be a folder inside the repository: \
-$landing_ledger_written"
-        ;;
-esac
-
 if [ ! -d "$landing_root/.git" ]; then
     fail "preflight failed: run this script from the repository root"
 fi
-if [ ! -d "$landing_worktree" ]; then
-    fail "preflight failed: worktree not found: $landing_worktree"
-fi
-if ! command -v node >/dev/null 2>&1; then
-    fail "preflight failed: node is not on PATH; the lock wait and the usage rows run on it"
-fi
-if [ ! -d "$landing_tool" ]; then
-    fail "preflight failed: tool directory not found: $landing_tool"
-fi
-
 landing_script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P) ||
     fail "preflight failed: cannot resolve the folder of $0"
-
-# Looks for the land skill's template $1 beside this script, then in the land skill's templates
-# wherever the skill is installed: the repository, the user's agent skills, the user's Claude
-# Code skills. Sets landing_found to its path, empty when no place holds it, and landing_places
-# to the places in that order, joined by ", ".
-find_template() {
-    landing_found=''
-    landing_places=''
-    for landing_place in \
-        "$landing_script_dir" \
-        "$landing_root/.agents/skills/land/templates" \
-        "$HOME/.agents/skills/land/templates" \
-        "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/land/templates"; do
-        landing_places=$landing_places${landing_places:+, }$landing_place
-        if [ -z "$landing_found" ] && [ -f "$landing_place/$1" ]; then
-            landing_found=$landing_place/$1
-        fi
-    done
-}
-
-landing_state=$landing_script_dir/orchestrator-state.md
-if [ ! -f "$landing_state" ]; then
-    fail "preflight failed: state file not found: $landing_state"
+if [ ! -f "$landing_script_dir/checks.sh" ]; then
+    fail "preflight failed: checks.sh not found beside land.sh: $landing_script_dir/checks.sh" 64
 fi
-find_template verify.sh
-landing_verify=$landing_found
-if [ -z "$landing_verify" ]; then
-    fail "preflight failed: verify.sh not found beside this script or in the land skill's \
-templates: $landing_places"
+if ! command -v python3 >/dev/null 2>&1; then
+    fail "preflight failed: python3 is not on PATH; the configuration, the lock wait and checks.sh run on it"
 fi
 
 landing_tmp=$(mktemp -d "${TMPDIR:-/tmp}/land.XXXXXX") || fail "preflight failed: could not create a temporary directory"
 trap 'rm -rf "$landing_tmp"' 0 1 2 3 15
 landing_output=$landing_tmp/output.txt
+
+# Prints the state file's absolute path, the worktree root and the ledger root, one per line, or
+# refuses with a message and exit 64 (exit 1 when PyYAML is missing).
+python3 - "$landing_root" "$landing_state_arg" >"$landing_tmp/config.txt" <<'PYTHON'
+import os, sys
+
+root, state = sys.argv[1], sys.argv[2]
+
+def refuse(message, status=64):
+    sys.stderr.write("configuration failed: " + message + "\n")
+    sys.exit(status)
+
+try:
+    import yaml
+except ImportError:
+    refuse("python3 cannot import yaml; install PyYAML", 1)
+
+state_path = os.path.realpath(os.path.join(root, state))
+if not os.path.isfile(state_path):
+    refuse("state file not found: " + state)
+relative = os.path.relpath(state_path, root)
+
+def folder(value, key, where, dot_allowed):
+    if not isinstance(value, str):
+        refuse(key + where + " must be a folder inside the repository: " + repr(value))
+    written = value
+    while True:
+        if value.startswith("./"):
+            value = value[2:]
+        elif value.endswith("/"):
+            value = value[:-1]
+        else:
+            break
+    parts = value.split("/")
+    if (value == "" or (value == "." and not dot_allowed) or value.startswith("/")
+            or ".." in parts or "\n" in value):
+        refuse(key + where + " must be a folder inside the repository: " + written)
+    return value
+
+def under(path, folder_path):
+    return path == folder_path or path.startswith(folder_path + "/")
+
+config_path = os.path.join(root, ".agents", "plan.yaml")
+try:
+    with open(config_path, encoding="utf-8") as handle:
+        config = yaml.safe_load(handle)
+except FileNotFoundError:
+    refuse(".agents/plan.yaml not found")
+except (OSError, UnicodeDecodeError, yaml.YAMLError) as error:
+    refuse("cannot read .agents/plan.yaml: " + str(error).replace("\n", " "))
+if not isinstance(config, dict):
+    refuse(".agents/plan.yaml is not a mapping")
+
+if "projects" in config:
+    projects = config["projects"]
+    if not isinstance(projects, dict) or not projects:
+        refuse("projects: in .agents/plan.yaml is not a mapping of projects")
+    found = None
+    for name, project in projects.items():
+        where = " of the project " + str(name)
+        if not isinstance(project, dict) or "ledger_root" not in project:
+            refuse("no ledger_root" + where + " in .agents/plan.yaml")
+        ledger = folder(project["ledger_root"], "ledger_root", where, False)
+        if under(relative, ledger) and (found is None or len(ledger) > len(found[1])):
+            found = (project, ledger, where)
+    if found is None:
+        refuse("the state file " + state + " is under no project's ledger_root")
+    project, ledger, where = found
+    if "worktree_root" not in project:
+        refuse("no worktree_root" + where + " in .agents/plan.yaml")
+    worktrees = folder(project["worktree_root"], "worktree_root", where, True)
+else:
+    if "ledger_root" not in config:
+        refuse("no ledger_root in .agents/plan.yaml")
+    ledger = folder(config["ledger_root"], "ledger_root", "", False)
+    if not under(relative, ledger):
+        refuse("the state file " + state + " is not under the ledger_root " + ledger)
+    if "worktree_root" not in config:
+        refuse("no worktree_root in .agents/plan.yaml")
+    worktrees = folder(config["worktree_root"], "worktree_root", "", True)
+
+print(state_path)
+print(worktrees)
+print(ledger)
+PYTHON
+landing_status=$?
+if [ "$landing_status" -ne 0 ]; then
+    exit "$landing_status"
+fi
+landing_state=$(sed -n 1p "$landing_tmp/config.txt")
+landing_worktree_root=$(sed -n 2p "$landing_tmp/config.txt")
+landing_ledger_root=$(sed -n 3p "$landing_tmp/config.txt")
+landing_worktree=$landing_root/$landing_worktree_root/$landing_step
+
+if [ ! -d "$landing_worktree" ]; then
+    fail "preflight failed: worktree not found: $landing_worktree"
+fi
+
 # The ledger root as a gitignore pattern anchored at the worktree's root, its special characters
 # escaped, for the worktree's checkout of main.
 landing_ledger_ignore=$landing_tmp/ledger.gitignore
@@ -250,7 +280,7 @@ wait_for_index() {
     landing_lock=$landing_git_dir/index.lock
     landing_waited=0
     while [ -e "$landing_lock" ]; do
-        landing_age=$(node -e 'const fs = require("fs"); const age = Math.floor((Date.now() - fs.statSync(process.argv[1]).mtimeMs) / 1000); process.stdout.write(String(age));' "$landing_lock" 2>/dev/null || printf '0')
+        landing_age=$(python3 -c 'import os, sys, time; print(int(time.time() - os.stat(sys.argv[1]).st_mtime))' "$landing_lock" 2>/dev/null || printf '0')
         if [ "$landing_age" -gt 60 ] && ! git_process_alive; then
             rm -f "$landing_lock" || fail "index lock failed: cannot remove stale lock: $landing_lock"
             continue
@@ -269,7 +299,7 @@ then land again to resume."
 }
 
 run_step() {
-    landing_step=$1
+    landing_label=$1
     shift
     "$@" >"$landing_output" 2>&1
     landing_status=$?
@@ -277,7 +307,7 @@ run_step() {
         cat "$landing_output"
     fi
     if [ "$landing_status" -ne 0 ]; then
-        printf '%s failed\n' "$landing_step" >&2
+        printf '%s failed\n' "$landing_label" >&2
         exit "$landing_status"
     fi
 }
@@ -296,56 +326,56 @@ landing_worktree_branch=$(cd "$landing_worktree" && git branch --show-current 2>
 landing_status=$?
 if [ "$landing_status" -ne 0 ]; then
     cat "$landing_output" >&2
-    fail "preflight failed: cannot read the package worktree branch"
+    fail "preflight failed: cannot read the step worktree branch"
 fi
-landing_left_land="$landing_pkg-land, which landing again removes before it starts over"
-landing_left=$landing_pkg
-if [ "$landing_worktree_branch" = "$landing_pkg-land" ]; then
+landing_left_land="$landing_step-land, which landing again removes before it starts over"
+landing_left=$landing_step
+if [ "$landing_worktree_branch" = "$landing_step-land" ]; then
     landing_left=$landing_left_land
-    # A landing stopped after its checkout: <pkg>-land holds at most the cherry-picks of the
-    # package's commits, so it is removed and the landing starts over from <pkg>, onto a main with
+    # A landing stopped after its checkout: <step>-land holds at most the cherry-picks of the
+    # step's commits, so it is removed and the landing starts over from <step>, onto a main with
     # nothing staged.
     wait_for_index "$landing_root"
     git diff --cached --quiet >"$landing_output" 2>&1
     landing_status=$?
     if [ "$landing_status" -eq 1 ]; then
         fail "preflight failed: main holds staged or unmerged changes, so \
-$landing_pkg-land is kept; land again once main has nothing staged"
+$landing_step-land is kept; land again once main has nothing staged"
     elif [ "$landing_status" -ne 0 ]; then
         cat "$landing_output" >&2
         fail "preflight failed: cannot read what main has staged"
     fi
     wait_for_index "$landing_worktree"
     if (cd "$landing_worktree" && git rev-parse -q --verify CHERRY_PICK_HEAD) >/dev/null 2>&1; then
-        fail "preflight failed: a cherry-pick is in progress on $landing_pkg-land; \
+        fail "preflight failed: a cherry-pick is in progress on $landing_step-land; \
 resolve or abort it by hand"
     fi
     landing_dirty=$(cd "$landing_worktree" && git status --porcelain --untracked-files=no) ||
-        fail "preflight failed: cannot read the status of $landing_pkg-land"
+        fail "preflight failed: cannot read the status of $landing_step-land"
     if [ -n "$landing_dirty" ]; then
-        fail "preflight failed: $landing_pkg-land has changes not committed; \
+        fail "preflight failed: $landing_step-land has changes not committed; \
 commit or discard them by hand"
     fi
-    landing_foreign=$(cd "$landing_worktree" && git cherry "$landing_pkg" "$landing_pkg-land" main) ||
-        fail "preflight failed: cannot compare $landing_pkg-land with $landing_pkg"
+    landing_foreign=$(cd "$landing_worktree" && git cherry "$landing_step" "$landing_step-land" main) ||
+        fail "preflight failed: cannot compare $landing_step-land with $landing_step"
     landing_foreign=$(printf '%s\n' "$landing_foreign" | sed -n 's/^+ //p' | tr '\n' ' ' | sed 's/ $//')
     if [ -n "$landing_foreign" ]; then
-        fail "preflight failed: $landing_pkg-land holds commits that are not cherry-picks of \
-$landing_pkg: $landing_foreign"
+        fail "preflight failed: $landing_step-land holds commits that are not cherry-picks of \
+$landing_step: $landing_foreign"
     fi
-    run_step "worktree git checkout $landing_pkg" sh -c 'cd "$1" && git checkout -q "$2"' land \
-        "$landing_worktree" "$landing_pkg"
+    run_step "worktree git checkout $landing_step" sh -c 'cd "$1" && git checkout -q "$2"' land \
+        "$landing_worktree" "$landing_step"
     wait_for_index "$landing_worktree"
     run_step "worktree git branch -D" sh -c 'cd "$1" && git branch -q -D "$2-land"' land \
-        "$landing_worktree" "$landing_pkg"
-    printf 'resume: the worktree is back on %s, %s-land removed\n' "$landing_pkg" "$landing_pkg"
-elif [ "$landing_worktree_branch" != "$landing_pkg" ]; then
-    fail "preflight failed: package worktree is on $landing_worktree_branch, expected $landing_pkg"
+        "$landing_worktree" "$landing_step"
+    printf 'resume: the worktree is back on %s, %s-land removed\n' "$landing_step" "$landing_step"
+elif [ "$landing_worktree_branch" != "$landing_step" ]; then
+    fail "preflight failed: step worktree is on $landing_worktree_branch, expected $landing_step"
 fi
 
 wait_for_index "$landing_worktree"
 run_step "worktree git add" sh -c 'cd "$1" && git add -A -- "$2" ":(exclude,literal)$3"' land \
-    "$landing_worktree" "$landing_tool_path" "$landing_ledger_root"
+    "$landing_worktree" . "$landing_ledger_root"
 
 wait_for_index "$landing_worktree"
 (cd "$landing_worktree" && git diff --cached --quiet) >"$landing_output" 2>&1
@@ -368,13 +398,13 @@ wait_for_index "$landing_worktree"
 # A ledger file left untracked in the worktree counts as ignored here, so main's copy of it is
 # checked out over it rather than stopping the checkout.
 run_step "worktree git checkout" sh -c 'cd "$1" && git -c core.excludesFile="$3" checkout -b "$2-land" main' \
-    land "$landing_worktree" "$landing_pkg" "$landing_ledger_ignore"
+    land "$landing_worktree" "$landing_step" "$landing_ledger_ignore"
 landing_left=$landing_left_land
 
 # A range with no commit, as when the builder's only output is a ledger file the add leaves out,
 # is one git cherry-pick refuses, so both cherry-picks are skipped and main is left as it is.
 wait_for_index "$landing_worktree"
-(cd "$landing_worktree" && git rev-list --count "$landing_base..$landing_pkg") \
+(cd "$landing_worktree" && git rev-list --count "$landing_base..$landing_step") \
     >"$landing_tmp/count.txt" 2>"$landing_output"
 landing_status=$?
 if [ "$landing_status" -ne 0 ]; then
@@ -382,10 +412,10 @@ if [ "$landing_status" -ne 0 ]; then
     fail "worktree git rev-list --count failed" "$landing_status"
 fi
 if [ "$(cat "$landing_tmp/count.txt")" = 0 ]; then
-    printf 'nothing to copy: %s..%s holds no commit\n' "$landing_base" "$landing_pkg"
+    printf 'nothing to copy: %s..%s holds no commit\n' "$landing_base" "$landing_step"
 else
     wait_for_index "$landing_worktree"
-    (cd "$landing_worktree" && git cherry-pick "$landing_base..$landing_pkg") >"$landing_output" 2>&1
+    (cd "$landing_worktree" && git cherry-pick "$landing_base..$landing_step") >"$landing_output" 2>&1
     landing_status=$?
     if [ "$landing_status" -ne 0 ]; then
         if [ -s "$landing_output" ]; then
@@ -405,35 +435,24 @@ else
     fi
 
     wait_for_index "$landing_root"
-    run_step "main git cherry-pick" git cherry-pick -n "main..$landing_pkg-land"
+    run_step "main git cherry-pick" git cherry-pick -n "main..$landing_step-land"
 fi
 
-# ADAPT: the dependency install the verify list needs, and any check or count beyond the verify
-# list with its pass rule, each through run_step, from here to the verify list's run. A check that
-# needs a browser runs only when landing_browser is 1. By default nothing runs here.
-
-# The ledger's verify list, from the repository root on main as the cherry-pick left it, or as it
+# The plan's verify list, from the repository root on main as the cherry-pick left it, or as it
 # was when the range holds no commit.
-run_step "verify list" sh -c 'sh "$1" "$2" || exit 1' land "$landing_verify" "$landing_state"
+sh "$landing_script_dir/checks.sh" "$landing_state"
+landing_status=$?
+if [ "$landing_status" -ne 0 ]; then
+    fail "checks failed: checks.sh exited $landing_status"
+fi
 
-landing_range=$landing_base..$landing_pkg
+landing_range=$landing_base..$landing_step
 git diff --stat "$landing_range" >"$landing_tmp/diff-stat.txt" 2>"$landing_output"
 landing_status=$?
 if [ "$landing_status" -ne 0 ]; then
     cat "$landing_output" >&2
     fail "booking diff stat failed" "$landing_status"
 fi
-
-git diff --numstat "$landing_range" >"$landing_tmp/diff-numstat.txt" 2>"$landing_output"
-landing_status=$?
-if [ "$landing_status" -ne 0 ]; then
-    cat "$landing_output" >&2
-    fail "booking diff counts failed" "$landing_status"
-fi
-landing_counts=$(awk '{ additions += ($1 == "-" ? 0 : $1); deletions += ($2 == "-" ? 0 : $2); files += 1 } END { printf "%d|%d|%d", additions, deletions, files }' "$landing_tmp/diff-numstat.txt")
-landing_additions=$(printf '%s' "$landing_counts" | cut -d '|' -f 1)
-landing_deletions=$(printf '%s' "$landing_counts" | cut -d '|' -f 2)
-landing_files=$(printf '%s' "$landing_counts" | cut -d '|' -f 3)
 
 git diff --cached --name-only >"$landing_tmp/staged-paths.txt" 2>"$landing_output"
 landing_status=$?
@@ -442,45 +461,9 @@ if [ "$landing_status" -ne 0 ]; then
     fail "booking staged paths failed" "$landing_status"
 fi
 
-node - "$landing_pkg" "$landing_additions" "$landing_deletions" "$landing_files" >"$landing_tmp/usage.txt" 2>"$landing_output" <<'NODE'
-const [pkg, additions, deletions, files] = process.argv.slice(2);
-
-// A worker or reviewer dispatched through the runner's Agent tool reports its tokens, tool uses and
-// seconds in its completion notification, and its row is written by hand from them.
-const tail = `; +${additions} -${deletions} over ${files} files; first report passed its bar: <yes or no>; <N> fixes at landing`;
-
-// ADAPT: the model names of the rows, as the state file's Usage section writes them.
-const worker = `${pkg}, worker claude:opus, first run: <tokens>, <tool uses> tool uses, <seconds> s (from the runner's result)` +
-    `; repair round: <the same, or none>` + tail;
-const reviewer = `${pkg}, reviewer claude:opus, read-only: review <tokens> / <tool uses> / <seconds> s (from the runner's result)`;
-
-console.log(worker);
-console.log(reviewer);
-NODE
-landing_status=$?
-if [ "$landing_status" -ne 0 ]; then
-    cat "$landing_output" >&2
-    fail "booking usage failed" "$landing_status"
-fi
-
 printf '%s\n' '=== booking ==='
 printf 'Diff stat against %s:\n' "$landing_base"
 cat "$landing_tmp/diff-stat.txt"
-printf '%s\n' 'Usage rows:'
-cat "$landing_tmp/usage.txt"
-if [ -n "$landing_session" ]; then
-    # The orchestrator's row, from its own session log between the previous landing and now,
-    # through usage.py found as find_template looks.
-    find_template usage.py
-    landing_usage_script=$landing_found
-    [ -n "$landing_usage_script" ] || fail "booking usage failed: usage.py not found beside this \
-script or in the land skill's templates: $landing_places"
-    landing_now=$(date -Iseconds)
-    landing_row=$(python3 "$landing_usage_script" "$landing_session" "$landing_since" "$landing_now") || fail "booking usage failed: usage.py on $landing_session"
-    printf 'Orchestrator row (%s to %s): %s\n' "$landing_since" "$landing_now" "$landing_row"
-else
-    printf '%s\n' 'Orchestrator row: not produced; pass --session <session log> --since <previous landing commit time>'
-fi
 printf '%s\n' 'Staged paths:'
 cat "$landing_tmp/staged-paths.txt"
 printf '%s\n' '=== end booking ==='
