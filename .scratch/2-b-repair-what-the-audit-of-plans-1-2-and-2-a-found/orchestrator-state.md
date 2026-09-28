@@ -30,29 +30,20 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: "18a"
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2b-18a
-  session_id: a4812ab126b9fa46b
-  base: "2c703c4"
-  launched: 2026-09-28
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/18a-report.md
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
-- Open item JJ (audit finding 1-15, review files that do not say how each problem was resolved): every review file ends with a section, written by the orchestrator before the landing, that records how each problem the reviewer found was resolved. The template asks for one line per problem, naming where it was fixed and how to check it. Eleven review files of plan 1 and fifteen of this plan give one line for all the problems, or one line for a group (the closure table's row 1-15 names each file). Those sections are records of what was checked at each landing; rewriting them now would present checks as made at the landing that were not recorded then. (a) Count the finding as dealt with, as open item II ruled for the briefs: the old sections stay as they were written, and every Closed section from now on gives one line per problem. (b) Keep the old sections, and add below each a separate section, headed and dated as a later check, that checks each problem on today's tree. Con: a pass over 26 files, which would find out whether a problem closed only in a group was in fact left unfixed. Recommendation: (a).
+- None.
 
 ## Closed items
+- 2026-09-28: open item JJ (audit finding 1-15, Closed sections that group findings): ruled (a), as II: the written sections stay, and every Closed section from now on gives one line per finding; closure row 1-15 ruled.
 - 2026-09-28: open item HH (the landing script stops on a step that made no commit): ruled (a), new step 18a.
 - 2026-09-28: open item II (audit finding 1-4, briefs that left out sections): ruled (a), dealt with; closure row 1-4 ruled.
 - 2026-09-28: open item KK (audit findings 1-H1 and 3-H1, the stray `home/` folder): ruled (a), resolved; closure rows 1-H1 and 3-H1 ruled.
 - 2026-09-28: open item LL (audit finding 6-F13, research-hub's report-order rule): ruled (a), research-hub's to do; closure row 6-F13 ruled.
-- 2026-09-28: open item MM (research-hub's settings fail Ordo's check): ruled (a), the orchestrator drafts the message to the research-hub session, sent only on the user's yes; the draft is with the user.
+- 2026-09-28: open item MM (research-hub's settings fail Ordo's check): ruled (a), the orchestrator drafts the message to the research-hub session, sent only on the user's yes; sent to the research-hub session on the user's yes, 2026-09-28. The research-hub session did not change its file and put the change to the user. Checked on a scratch copy of its `.agents/plan.yaml`: with `launch_note` and `worker_effort` removed, neither the working-tree checker nor the installed v1.1.0 checker reports a key error; with `libraries` added, the installed v1.1.0 checker reports `unknown key: libraries`. So the two keys can go now, and `libraries` is added once the release of this plan is pinned (step 19). Ruled (a) by the user, who told the research-hub session; the reminder is on step 19's line in `plan.md`. research-hub removed the two keys in its commit 0626474e: the installed v1.1.0 checker exits 0 on it, and the working-tree checker exits 1 with only `required key missing: libraries`, which the pin of step 19 and the reminder close.
 - 2026-09-27: open item GG (the skills against the sharpened one-rule-per-bullet rule): ruled (a), new step 25, only items with two independent requirements split, semicolons in valid use kept.
 - 2026-09-27: open item FF (the README from "Configuring a repository" down): ruled (a), new step 24 with the whole README open to change, the Tests section removed, and the user's review of the diff before the landing commit.
 - 2026-09-27: the pin of ruling W: done on the user's yes. `v1.1.0` tagged at e3ab45d; `utils/pin.sh v1.1.0` linked the ten skills in `~/.claude/skills` and `~/.claude-work/skills` and removed the ten old links in `~/.agents/skills`; `utils/pin.sh` check mode exits 0.
@@ -122,7 +113,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17a, 20, 21, 23 and 24 landed (step 17a in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 18a (ruling HH) dispatched; next: its review and landing, then the user's ruling on open item JJ, then step 19 (the closing), under the pinned skills v1.1.0.
+- Roadmap entry 2.B, step 18a landed; next: step 19 (the closing), under the pinned skills v1.1.0.
 - Open on Axel's side: none.
 
 ## Usage
@@ -159,3 +150,4 @@ dispatch:
 | 17a | claude:opus agent: 143,396 tokens, 45 tool uses, 712 s; round 1: 148,108 tokens, 5 tool uses, 164 s | 131,442 tokens, 27 tool uses, 452 s; round 1: 93,345 tokens, 11 tool uses, 207 s | 1 | 3 | 13 files changed, 124 insertions(+), 40 deletions(-) | no | 1 | 0 | 29 | 22318 | 71074 | 9237290 | 64 | 31 | none |
 | 25 | claude:opus agent: 303,785 tokens, 53 tool uses, 1522 s; round 1: 141,876 tokens, 72 tool uses, 1277 s | 209,926 tokens, 31 tool uses, 659 s; round 1: 166,846 tokens, 36 tool uses, 517 s | 1 | 12 | 10 files changed, 315 insertions(+), 147 deletions(-) | no | 1 | 0 | 56 | 47394 | 198474 | 8754657 | 120 | 77 | none |
 | 18 | claude:opus agent: 136,569 tokens, 144 tool uses, 1976 s; round 1: 172,238 tokens, 20 tool uses, 282 s | 242,483 tokens, 67 tool uses, 690 s; round 1: 102,608 tokens, 21 tool uses, 259 s | 1 | 6 | ledger only: closure.md 154 rows | no | 1 | 4 | 66 | 51624 | 136148 | 19362965 | 140 | 63 | none |
+| 18a | claude:opus agent: 145,321 tokens, 40 tool uses, 1092 s | 110,404 tokens, 20 tool uses, 749 s | 0 | 0 | 3 files changed, 161 insertions(+), 25 deletions(-) | yes | 0 | 0 | 59 | 47331 | 172635 | 9234209 | 126 | 51 | none |

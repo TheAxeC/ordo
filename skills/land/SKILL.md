@@ -55,6 +55,7 @@ metadata:
 4. On main: `git cherry-pick -n <base>..<step>`, the whole range from the recorded base, so the landing applies the complete reviewed change and never only the last fix.
    - A conflict is resolved by the orchestrator or the session, never by an agent.
    - The ledger's `land.sh` prints the conflicting paths and exits 2 instead.
+   - A range with no commit, as when the step's only output is a ledger file, has nothing to copy, and the landing goes on to Steps 6.
 5. Restore to main's copy, before anything else, a ledger file the cherry-pick deleted or rewrote; the ledger is written only on main.
    - The ledger's `land.sh` leaves the ledger root out of the worktree's add, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches main; a ledger file that a commit of the range holds still does.
 6. Run the verification commands of the configuration block on main, in order, each through its filter, stopping at the first failure.
@@ -123,6 +124,9 @@ metadata:
 - It does Steps 3, 4 and 6 as one command, run from the repository root as `sh <ledger>/land.sh <step> <base>`.
 - Its check on main (Steps 6) is the ledger's verify list: after main's cherry-pick it runs `sh <verify.sh> <the ledger's orchestrator-state.md>` from the repository root.
   - A non-zero exit fails the landing with the output of `verify.sh` printed.
+- When `<base>..<step>` holds no commit, it skips both cherry-picks.
+  - It prints `nothing to copy: <base>..<step> holds no commit` in place of the cherry-picks' output.
+  - It still runs the verify list on main (Steps 6).
 - It finds `verify.sh` and `usage.py` beside itself, then in this skill's `templates/` under the repository's `.agents/skills`, `~/.agents/skills` or `$CLAUDE_CONFIG_DIR/skills` (default `~/.claude/skills`).
   - A missing state file, or a `verify.sh` in none of those places, is refused before main is touched, with the places named.
 - Its `ADAPT` edits are five:
@@ -151,7 +155,7 @@ metadata:
    - Each path must be under the ledger root, `.agents/plan.yaml`'s `ledger_root` (in the `projects:` form, the one that holds the state file's folder). The ledger is written only on main, so its copies in the worktree are records already saved there or copies the orchestrator put there.
    - Any other path is a stop ("Stops") that names it, and nothing is removed.
 3. Run `git worktree remove --force <worktree>`, when it still exists. Without `--force`, git refuses a worktree holding untracked or modified files, such as those ledger copies.
-4. Run `git branch -D` for `<branch>` and for `<branch>-land`, each only when it exists. `-D` deletes them, since the cherry-pick made new commits and neither branch is an ancestor of main.
+4. Run `git branch -D` for `<branch>` and for `<branch>-land`, each only when it exists. `-D` deletes them whether or not they are merged into main; after a cherry-pick neither is, since the cherry-pick made new commits.
 5. These commands run without asking the user, since the step's work is committed on main.
    - When the runner refuses one of them, the session gives the user the command to run and waits.
 

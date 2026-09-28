@@ -8,11 +8,15 @@
 #
 # Its check on main is the ledger's verify list: after main's cherry-pick it runs
 # sh <verify.sh> <the orchestrator-state.md beside this script> from the repository root, and a
-# non-zero exit fails the landing with exit 1 and verify.sh's output printed. verify.sh and usage.py are
-# looked for beside this script, then in the land skill's templates under the repository's
-# .agents/skills, ~/.agents/skills and $CLAUDE_CONFIG_DIR/skills (default ~/.claude/skills). The
-# preflight refuses, before main is touched, when the state file is missing or no place holds
-# verify.sh, naming the places.
+# non-zero exit fails the landing with exit 1 and verify.sh's output printed. A range <base>..<pkg>
+# that holds no commit (git rev-list --count prints 0) copies nothing: both cherry-picks are
+# skipped, "nothing to copy: <base>..<pkg> holds no commit" is printed, and the verify list still
+# runs on main, while a count git fails ends the landing with "worktree git rev-list --count
+# failed", git's output and its exit status. verify.sh and usage.py are looked for beside this
+# script, then in the land skill's templates under the repository's .agents/skills,
+# ~/.agents/skills and $CLAUDE_CONFIG_DIR/skills (default ~/.claude/skills). The preflight
+# refuses, before main is touched, when the state file is missing or no place holds verify.sh,
+# naming the places.
 #
 # In the package's worktree it stages the tool directory and makes a wip commit when something is
 # staged; a builder that committed everything lands with no wip commit. The ledger root is left
@@ -367,34 +371,49 @@ run_step "worktree git checkout" sh -c 'cd "$1" && git -c core.excludesFile="$3"
     land "$landing_worktree" "$landing_pkg" "$landing_ledger_ignore"
 landing_left=$landing_left_land
 
+# A range with no commit, as when the builder's only output is a ledger file the add leaves out,
+# is one git cherry-pick refuses, so both cherry-picks are skipped and main is left as it is.
 wait_for_index "$landing_worktree"
-(cd "$landing_worktree" && git cherry-pick "$landing_base..$landing_pkg") >"$landing_output" 2>&1
+(cd "$landing_worktree" && git rev-list --count "$landing_base..$landing_pkg") \
+    >"$landing_tmp/count.txt" 2>"$landing_output"
 landing_status=$?
 if [ "$landing_status" -ne 0 ]; then
+    cat "$landing_tmp/count.txt" "$landing_output" >&2
+    fail "worktree git rev-list --count failed" "$landing_status"
+fi
+if [ "$(cat "$landing_tmp/count.txt")" = 0 ]; then
+    printf 'nothing to copy: %s..%s holds no commit\n' "$landing_base" "$landing_pkg"
+else
+    wait_for_index "$landing_worktree"
+    (cd "$landing_worktree" && git cherry-pick "$landing_base..$landing_pkg") >"$landing_output" 2>&1
+    landing_status=$?
+    if [ "$landing_status" -ne 0 ]; then
+        if [ -s "$landing_output" ]; then
+            cat "$landing_output" >&2
+        fi
+        printf 'worktree git cherry-pick failed\n' >&2
+        landing_conflicts=$(cd "$landing_worktree" && git diff --name-only --diff-filter=U)
+        if [ -z "$landing_conflicts" ]; then
+            exit "$landing_status"
+        fi
+        printf 'Conflicting paths:\n' >&2
+        printf '%s\n' "$landing_conflicts" >&2
+        exit 2
+    fi
     if [ -s "$landing_output" ]; then
-        cat "$landing_output" >&2
+        cat "$landing_output"
     fi
-    printf 'worktree git cherry-pick failed\n' >&2
-    landing_conflicts=$(cd "$landing_worktree" && git diff --name-only --diff-filter=U)
-    if [ -z "$landing_conflicts" ]; then
-        exit "$landing_status"
-    fi
-    printf 'Conflicting paths:\n' >&2
-    printf '%s\n' "$landing_conflicts" >&2
-    exit 2
-fi
-if [ -s "$landing_output" ]; then
-    cat "$landing_output"
-fi
 
-wait_for_index "$landing_root"
-run_step "main git cherry-pick" git cherry-pick -n "main..$landing_pkg-land"
+    wait_for_index "$landing_root"
+    run_step "main git cherry-pick" git cherry-pick -n "main..$landing_pkg-land"
+fi
 
 # ADAPT: the dependency install the verify list needs, and any check or count beyond the verify
 # list with its pass rule, each through run_step, from here to the verify list's run. A check that
 # needs a browser runs only when landing_browser is 1. By default nothing runs here.
 
-# The ledger's verify list, from the repository root on main as the cherry-pick left it.
+# The ledger's verify list, from the repository root on main as the cherry-pick left it, or as it
+# was when the range holds no commit.
 run_step "verify list" sh -c 'sh "$1" "$2" || exit 1' land "$landing_verify" "$landing_state"
 
 landing_range=$landing_base..$landing_pkg

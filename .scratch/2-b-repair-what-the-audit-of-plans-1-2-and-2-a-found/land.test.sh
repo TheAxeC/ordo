@@ -8,8 +8,10 @@
 # is not a whole number, a tool directory set on the ADAPT line, a worktree root set on the ADAPT
 # line and one that is not a folder inside the repository refused, a ledger inside the repository
 # whose files left uncommitted in the worktree never reach main, under the template's ledger root, under one
-# holding pattern characters and under one written with a trailing / or a leading ./, and a ledger root that is not a folder inside the repository
-# refused. Each landing starts land.sh
+# holding pattern characters and under one written with a trailing / or a leading ./, a ledger root that is not a folder inside the repository
+# refused, an empty range (a builder that made no commit and left only a ledger file) that copies
+# nothing and lands under a green verify list or fails under a red one, and a count of the range
+# that git cannot take. Each landing starts land.sh
 # from a scratch ledger holding its orchestrator-state.md: a green verify list lands, a red one
 # fails the landing with verify.sh's RED line, a state file verify.sh cannot use fails it with
 # exit 1, verify.sh is found in the repository's
@@ -196,6 +198,12 @@ assert_contains "$clean_output" "Orchestrator row (2026-09-16T12:00:00+02:00 to 
 assert_contains "$clean_output" "): 2 messages, 30 output tokens, 100 cache-write tokens, 3000 cache-read tokens, 8 fresh input tokens, " "orchestrator row"
 assert_contains "$clean_output" "${tool_prefix}committed.txt" "booking paths"
 assert_contains "$clean_output" "${tool_prefix}pending.txt" "booking paths"
+# A range that holds commits is copied, and the line of an empty range is not printed. Red when
+# land.sh prints that line whatever the count, and when it skips the cherry-picks whatever the
+# count (the staged paths above are then empty).
+case "$clean_output" in
+    *"nothing to copy"*) fail "clean: a range with commits printed [nothing to copy]" ;;
+esac
 # The ledger's verify list ran through verify.sh from the repository root after main's
 # cherry-pick. Red when land.sh does not run the list (no count line), and when it runs the list
 # before main's cherry-pick or from another folder (the test -f command is red, and so is the
@@ -735,6 +743,111 @@ for bad_root in '' . .. ./ / /tmp/ledger ../ledger a/../../ledger; do
 done
 printf 'ledger root: empty, ., .., ./, /, absolute and leaving the repository refused, exit 1\n'
 ledger_script=$ledger/land.sh
+
+# A step whose builder made no commit and left only a ledger file untracked in the worktree, so
+# the range <base>..<pkg> holds no commit: $1 names the package, and the verify list is the lines
+# of standard input. The ledger is committed on main, the worktree is made at that base, the
+# builder leaves its report untracked in the worktree, and main commits its own copy of the report,
+# as the orchestrator saves it. Sets $empty_base, $empty_status, $empty_output, $empty_staged (the
+# paths main has staged after the landing) and $empty_report (main's copy of the report).
+empty_range_case() {
+    empty_repo=$test_root/$1
+    initialise_repo "$empty_repo"
+    empty_ledger=$empty_repo/$ledger_root/plan
+    make_ledger "$empty_ledger"
+    (
+        cd "$empty_repo" || exit 1
+        git add -- ":(literal)$ledger_root"
+        git commit -q -m "Open the plan"
+    ) || fail "$1: could not commit the ledger"
+    empty_base=$(cd "$empty_repo" && git rev-parse HEAD) || fail "$1: could not read the base"
+    (
+        cd "$empty_repo" || exit 1
+        git worktree add -q -b "$1" "$worktree_root/$1" "$empty_base"
+    ) || fail "$1: could not create the worktree"
+    empty_tree=$empty_repo/$worktree_root/$1
+    mkdir -p "$empty_tree/$ledger_root/plan/agents/reviews"
+    printf 'builder copy\n' >"$empty_tree/$ledger_root/plan/agents/reviews/report.md"
+    mkdir -p "$empty_ledger/agents/reviews"
+    printf 'main copy\n' >"$empty_ledger/agents/reviews/report.md"
+    (
+        cd "$empty_repo" || exit 1
+        git add -- ":(literal)$ledger_root/plan/agents/reviews/report.md"
+        git commit -q -m "Save the report"
+    ) || fail "$1: could not commit main's report"
+    (
+        cd "$empty_repo" || exit 1
+        HOME="$scratch_home" sh "$empty_ledger/land.sh" "$1" "$empty_base" --no-browser
+    ) >"$test_root/$1.out" 2>&1
+    empty_status=$?
+    empty_output=$(cat "$test_root/$1.out")
+    empty_staged=$(cd "$empty_repo" && git diff --cached --name-only) ||
+        fail "$1: could not read the staged paths"
+    empty_report=$(cat "$empty_ledger/agents/reviews/report.md") ||
+        fail "$1: could not read main's report"
+}
+
+# An empty range with a green verify list copies nothing, prints the line that says so, runs the
+# verify list on main and books the step, exit 0. Red when land.sh does not count the range and
+# skip both cherry-picks on a count of 0 (git cherry-pick then refuses the empty commit set, exit
+# 128), and when it skips the verify list on an empty range (no verify lines).
+empty_range_case empty <<EOF
+printf 'PASS: empty range green\\n' | tail -1
+grep -qx 'main copy' $ledger_root/plan/agents/reviews/report.md && echo main-report-on-main
+EOF
+[ "$empty_status" -eq 0 ] || fail "empty range: exit $empty_status, expected 0: $empty_output"
+assert_contains "$empty_output" "nothing to copy: $empty_base..empty holds no commit
+PASS: empty range green
+main-report-on-main
+verify: 2 commands passed" "empty range verify list"
+assert_contains "$empty_output" "=== booking ===" "empty range booking"
+[ -z "$empty_staged" ] || fail "empty range: main has staged paths: [$empty_staged]"
+[ "$empty_report" = "main copy" ] || fail "empty range: main's report changed: [$empty_report]"
+printf 'empty range: nothing to copy, the verify list ran on main and the step booked, exit 0\n'
+
+# The same empty range with a red command in the verify list fails the landing with verify.sh's
+# RED line, exit 1, main with nothing staged. Red when land.sh does not count the range and skip
+# both cherry-picks (exit 128, no RED line), and when it skips the verify list on an empty range
+# (exit 0, no RED line).
+empty_range_case empty-red <<'EOF'
+printf 'PASS: before the red line\n' | tail -1
+printf 'FAIL: planted\n'; exit 1
+EOF
+[ "$empty_status" -eq 1 ] || fail "empty range red: exit $empty_status, expected 1: $empty_output"
+assert_contains "$empty_output" "nothing to copy: $empty_base..empty-red holds no commit" \
+    "empty range red line"
+assert_contains "$empty_output" "PASS: before the red line
+RED: printf 'FAIL: planted\n'; exit 1
+exit status: 1
+FAIL: planted" "empty range red runner output"
+assert_contains "$empty_output" "verify list failed" "empty range red message"
+case "$empty_output" in
+    *"=== booking ==="*) fail "empty range red: the landing went on to the booking" ;;
+esac
+[ -z "$empty_staged" ] || fail "empty range red: main has staged paths: [$empty_staged]"
+printf 'empty range red: nothing to copy, the red verify list fails the landing, exit 1\n'
+
+# A count git cannot take (a base that names no commit of the repository) fails the landing with
+# git's output and its exit status, before either cherry-pick. Red when land.sh goes on past a
+# failed count (the worktree's cherry-pick then fails instead, with its own message).
+committed_package count-failed
+(
+    cd "$test_root/count-failed" || exit 1
+    HOME="$scratch_home" sh "$ledger_script" count-failed 0000000000000000000000000000000000000000 \
+        --no-browser
+) >"$test_root/count-failed.out" 2>&1
+count_status=$?
+count_output=$(cat "$test_root/count-failed.out")
+[ "$count_status" -eq 128 ] || fail "failed count: exit $count_status, expected 128: $count_output"
+assert_contains "$count_output" "fatal: " "failed count git output"
+assert_contains "$count_output" "worktree git rev-list --count failed" "failed count message"
+case "$count_output" in
+    *"cherry-pick failed"*) fail "failed count: a cherry-pick ran: [$count_output]" ;;
+esac
+count_staged=$(cd "$test_root/count-failed" && git diff --cached --name-only) ||
+    fail "could not read the failed-count staged paths"
+[ -z "$count_staged" ] || fail "failed count: main has staged paths: [$count_staged]"
+printf 'empty range count: a count git cannot take fails the landing with its exit 128\n'
 
 # A plan that sets the worktree root on the ADAPT line, written with a trailing slash, lands the
 # package's worktree from that folder. Red when land.sh builds the worktree's path from a fixed
