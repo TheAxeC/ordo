@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 4
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2c-4
+  base: fbf6f8bc7a610d632dde01d29621edbfa770adda
+  launched: 2026-09-29
+  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/4-report.md
+  landing: not-started
+  round: 0
+  session_id: a004469c20e6397d6
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -66,6 +76,6 @@ None.
 
 - 2026-09-29. Steps 1 to 3 done. Step 3: main tagged v2.2.0 at 9a382b5, the installed skills pinned to it, `writing` no longer installed.
 - Verified: `git -C ~/.local/share/ordo-stable describe --tags` prints `v2.2.0`; `sh utils/pin.sh` prints `pinned: v2.2.0, 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0.
-- Next step: 4, `--built` removed, through `/spec`, landing through `sh skills/land/templates/land.sh <state file> 4 <base>`.
+- Step 4, `--built` removed, is in flight: brief `agents/briefs/4.md`, base fbf6f8b, builder launched; it lands through `sh skills/land/templates/land.sh <state file> 4 <base>`.
 - Open on Axel's side: the section "Open, for Axel" of `.scratch/comparison-2026-09-28/rulings.md`, where the accepted items of the comparison go in the roadmap.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
