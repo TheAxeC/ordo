@@ -36,9 +36,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item D (step 3's landing, raised 2026-09-28): the `contrast` check of `skills/writing/templates/check_prose.py` counts a one-sentence binary contrast only when a comma or "but" joins it ("It's not about X, it's about Y"). The source's own example joins it with an em dash, and a colon or a semicolon form is missed too; `skills/writing/references/anti-patterns.md` line 14 now lists these forms for judgment by hand. (a) Step 2a also counts the one-sentence form joined by a dash (em dash, en dash, spaced hyphen or `--`), a colon or a semicolon, with cases each way, and `anti-patterns.md` line 14 moves into its list of patterns the script finds. Pro: every form prose standard section D limits is counted, including the source's own example. Con: a wider pattern can give false contrasts, which the cases must pin down, and step 2a grows a little. (b) Leave these forms to judgment by hand, as the page now says. This is the lazy option: the script misses the form the source gives as its example. Recommendation: (a).
+- Open item E (step 2a, raised 2026-09-28 at /spec): the data-row rule ruled for step 2a ("a LaTeX data row is a line of one command whose argument text holds no sentence") would add false flags. Measured over 60 research-hub LaTeX files: the current rule leaves out of the semicolon count 64 one-line rows holding a semicolon, 40 of them `\caption{...}` lines, which are prose. (a) The rule as ruled: a row is prose when its argument text holds a sentence end. It counts 49 of the 64: 37 captions, 2 `\leg{...}{...}` lines of the naesens `concept.tex` (prose), and also the 8 indicator lines of `veni2026.tex`'s `\keyoutput` entries ("{Journal article. Indicators: methodological innovation; use by others.}") and 2 `\formfield` labels, which are form data; "max." in a label reads as a sentence end. Pro: no list to keep. Con: 10 false semicolon flags on the Veni form, and 4 captions whose line holds no full stop stay hidden. (b) A row is prose when its command is one that carries prose (`\footnote`, `\caption`, `\emph`, `\textbf`, `\textit`, `\textsl`, `\textsc`, `\underline`) or it is a brace group opened by a size or font switch (`{\small ...}`, `{\footnotesize ...}` and the like); every other one-command row stays data. It counts 41 of the 64: all 40 captions and the `{\footnotesize ...}` figure note, and the reviewer's probe q2.tex has its ten semicolons counted. Pro: no false flag found; the form data stay out. Con: a custom macro that carries prose (the 2 `\leg` lines) stays out, and the list is written in the script's head docstring. (c) Keep the current rule. This is the lazy option: 40 captions stay out of the count. Recommendation: (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item D (whether the `contrast` check counts the one-sentence form joined by a dash, a colon or a semicolon): ruled (c); the check is not widened, and step 2a corrects `anti-patterns.md`'s row. Step 5's draft named: research-hub `funding/2026-fwo-senior-transplant/proposal/main.tex`.
 
 - 2026-09-28: open item C (the work the review over step 2's last round left on the checking script): ruled (a); step 2a added before step 4.
 
@@ -70,8 +72,8 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-28. Steps 1, 2 and 3 landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list, and the reference pages `academic-prose.md`, `judgment.md` and `anti-patterns.md` are in `skills/writing/references/`. The installed skills are v2.0.0.
-- Next: step 2a, the checking script finished (ruling C). Its brief waits on open item D, which decides whether 2a also counts the one-sentence contrast joined by a dash, a colon or a semicolon. Step 4 waits on steps 2a and 3.
-- Open on Axel's side: open item D.
+- Step 2a, the checking script finished (rulings C and D): stopped at /spec on open item E, the LaTeX data-row rule. No brief, worktree or dispatch entry exists for it. Step 4 waits on step 2a. Step 5's draft is named.
+- Open on Axel's side: open item E.
 
 ## Usage
 
