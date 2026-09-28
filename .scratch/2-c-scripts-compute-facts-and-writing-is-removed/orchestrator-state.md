@@ -31,6 +31,16 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
+  step: 1
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2c-1
+  base: 64cac893b94e4f444b72f3835e07b85aae7ae734
+  launched: 2026-09-28
+  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/1-report.md
+  landing: not-started
+  round: 0
+  session_id: a3a968ca7fa74904b
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -63,7 +73,8 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-28. The plan is opened; nothing of it has landed. Plan 3's ledger `.scratch/3-the-writing-base/` is still on the tree until step 1's landing.
-- Next step: 1, the first of the list and blocked by nothing.
+- Step 1 is prepared (base 64cac89) and its builder is running in `.agents/worktrees/2c-1`.
+- Next step: 1's review, then its landing.
 - Open on Axel's side: open item A.
 
 ## Usage
