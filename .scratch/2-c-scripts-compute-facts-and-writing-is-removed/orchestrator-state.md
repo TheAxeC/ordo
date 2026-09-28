@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 6
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2c-6
+  base: ceb39fd19488a86bb630546839fac11d301287a4
+  launched: 2026-09-29
+  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/6-report.md
+  landing: not-started
+  round: 0
+  session_id: a33a6362e8a9f3bd2
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -67,6 +77,6 @@ dispatch: none
 
 - 2026-09-29. Steps 1 to 4 done. Step 4: the `--built` mode out of `utils/check_coverage.py`, its test and `docs/academic-coverage.md`; a dash argument is refused.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 5, the rules, which waits on open item C.
+- Next step: 5, the rules, which waits on open item C. Step 6, the tests held to the rule, is in flight: brief `agents/briefs/6.md`, base ceb39fd, builder launched. Step 7, the roadmap, is drafted and waits on the user's approval of its diff.
 - Open on Axel's side: open item C.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
