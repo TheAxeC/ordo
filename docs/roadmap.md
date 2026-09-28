@@ -37,6 +37,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: the skill follows `docs/dev/skill-layout.md`, read by you; one real run that redrafts roadmap entry 3 from its sources, whose glossary terms and rulings are on disk when the interview ends, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `grill-with-docs` on the same entry.
 - Waits on: 2.D, for the glossary, the layout rules and the blind-comparison protocol.
 
+## 2.F diagnose
+
+- Status: [ ]
+- Goal: A `diagnose` skill: one command red on the exact symptom before any theory; the case shrunk; three to five ranked hypotheses that each name what would falsify it, shown to you; one change per probe; the fix with a test that is red without it; the cause written in the booking. `plan-orchestration`'s rule for a finding whose cause is not known points at it.
+- Gate: one real run on a defect of an archived plan whose cause the ledger books, put back on a scratch copy of the tree: the run reaches that cause, its red command and its hypotheses quoted, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `diagnosing-bugs` on the same defect.
+- Waits on: 2.D, for the layout rules and the blind-comparison protocol.
+
 ## 3. The writing base
 
 - Status: [ ]
