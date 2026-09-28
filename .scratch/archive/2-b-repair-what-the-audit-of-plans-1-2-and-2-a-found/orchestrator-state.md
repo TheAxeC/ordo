@@ -38,6 +38,7 @@ dispatch: none
 - None.
 
 ## Closed items
+- 2026-09-28: the pin of v2.0.0: done on the user's yes; `utils/pin.sh` check mode prints `pinned: v2.0.0, 10 skills linked in: /Users/axelfaes/.claude/skills, /Users/axelfaes/.claude-work/skills`, exit 0.
 - 2026-09-28: open item JJ (audit finding 1-15, Closed sections that group findings): ruled (a), as II: the written sections stay, and every Closed section from now on gives one line per finding; closure row 1-15 ruled.
 - 2026-09-28: open item HH (the landing script stops on a step that made no commit): ruled (a), new step 18a.
 - 2026-09-28: open item II (audit finding 1-4, briefs that left out sections): ruled (a), dealt with; closure row 1-4 ruled.
@@ -113,7 +114,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17a, 20, 21, 23 and 24 landed (step 17a in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 19 (the closing) in progress: the gate passed and entry 2.B is marked done in the roadmap (8b3d5b1); next: the release tag and the pin, on the user's yes, then the reminder and prompt for research-hub, then this folder archived.
+- Roadmap entry 2.B done (8b3d5b1); the plan is closed: v2.0.0 tagged and pinned, this folder archived. Next: nothing in this plan.
 - Open on Axel's side: none.
 
 ## Usage
