@@ -27,12 +27,6 @@ The check, run from the repository root over the four skills, exits 0 only when 
 python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
 ```
 
-Once a new skill is built, the same check can take `--built <skill>`, repeatable. It then fails a row marked `rebuild: <skill>` whose reason names no file of `skills/<skill>/` in backticks. It also fails when no row of the four skills is marked `rebuild: <skill>`, so it applies only to a skill that has such rows. A path counts only when it starts `skills/<skill>/` and is a file there. A folder, a link, a case variant of the name, a path not in normal form (`skills/paper/./SKILL.md`) and the source skill's own paths do not count. A pass shows only that the named file exists in `skills/<skill>/`, not that it holds what the listed file did; that is checked by reading the two files.
-
-```sh
-python3 utils/check_coverage.py --built <skill> docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
-```
-
 ## New skills
 
 | Skill | Roadmap entry |

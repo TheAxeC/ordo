@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check a coverage list: every file of the named skill folders is listed once, with a mark and a reason.
 
-Usage: check_coverage.py [--built <skill>]... <coverage.md> <skills root> <skill>...
+Usage: check_coverage.py <coverage.md> <skills root> <skill>...
 
 The coverage list is a Markdown file:
 
@@ -21,45 +21,29 @@ The coverage list is a Markdown file:
     |---|---|---|
     | `SKILL.md` | rebuild: writing | <reason> |
 
-- New skills: one row per skill a mark may name, with the number of the roadmap entry that builds
-  it. The entry is a heading "## <n>. " or "## <n>.<letter> ", or a Done line "- [x] <n>. ",
-  "- [x] <n>.<letter>. " or "- [x] <n>.<letter> ", of docs/roadmap.md in the repository that holds
-  the coverage list.
-- A skill section is a "## " heading whose name is a <skill> given on the command line. Its table
-  lists every file that `find -H <skills root>/<skill> -type f` lists exactly once, as a path relative
-  to the skill folder, in backticks. Sections of folders not given on the command line are not read.
-- A section's table is its first run of lines outside fenced code that start with "|" (after at most
-  three spaces); a blank line or any other line ends it, and a table row after that end is an error.
-- A link inside a skill folder is an error, since its target's files would be neither required nor
-  accepted; the skill folder itself may be a link.
+- New skills: one row per skill a mark may name, with the number of the roadmap entry that builds it. The entry is a heading "## <n>. " or "## <n>.<letter> ", or a Done line "- [x] <n>. ", "- [x] <n>.<letter>. " or "- [x] <n>.<letter> ", of docs/roadmap.md in the repository that holds the coverage list.
+- A skill section is a "## " heading whose name is a <skill> given on the command line. Its table lists every file that `find -H <skills root>/<skill> -type f` lists exactly once, as a path relative to the skill folder, in backticks. Sections of folders not given on the command line are not read.
+- A section's table is its first run of lines outside fenced code that start with "|" (after at most three spaces); a blank line or any other line ends it, and a table row after that end is an error.
+- A link inside a skill folder is an error, since its target's files would be neither required nor accepted; the skill folder itself may be a link.
 - Mark: "rebuild: <skill>", "rebuild later: <skill>" or "drop", the skill a row of New skills.
 - Reason: not empty. A pipe inside a cell is written \\|.
-- --built <skill>, repeatable: the skill is built, so every row marked "rebuild: <skill>" has a
-  reason that names in backticks a file of skills/<skill>/ of the repository that holds the
-  coverage list, as a repository path "skills/<skill>/<path>". The file is looked up, in NFC, in
-  what `find -H skills/<skill> -type f` lists, the listing the file cells are compared with, so a
-  folder, a link, a case variant of a file's name and a path not in normal form are not files of
-  it. Spans that do not start "skills/<skill>/" (the source's own paths, skill names) are not read.
-  A row whose reason names no such file is an error; so is a --built skill that is not a row of
-  New skills, and one that no row of the sections read is marked "rebuild: <skill>" for. Without
-  --built no reason is read for paths.
 
-The lines of the coverage list and of docs/roadmap.md are split on "\\n" only, and the names find
-lists are read NUL-separated, so a name holding a line separator such as U+2028 or U+0085 stays one
-name. A file cell and a file name on disk are compared in Unicode NFC.
+The lines of the coverage list and of docs/roadmap.md are split on "\\n" only, and the names find lists are read NUL-separated, so a name holding a line separator such as U+2028 or U+0085 stays one name. A file cell and a file name on disk are compared in Unicode NFC.
 
-Fenced code is ``` or ~~~, of any length, at any indentation, closed by a line of the same character
-at least as long; a backtick fence's info string holds no backtick. A "## " line inside fenced code
-is not a heading, a table row inside it is not read, and a fence left open is an error. A heading's
-closing hashes are not part of its name.
+Fenced code is ``` or ~~~, of any length, at any indentation, closed by a line of the same character at least as long; a backtick fence's info string holds no backtick. A "## " line inside fenced code is not a heading, a table row inside it is not read, and a fence left open is an error. A heading's closing hashes are not part of its name.
 
-Prints one line per error as <coverage.md>:<line>: <what is wrong> (line 0 for an error that no line
-of the list carries, such as a file the section does not list), sorted by line number and then by
-message, and "ok: <coverage.md>" when there is none. Exits 0 when there is no error, 1 when there is
-one, 2 on a usage error: a missing argument; a skills root or skill folder that does not exist; a
-coverage list outside a git repository; a coverage list or docs/roadmap.md that does not exist or is
-not UTF-8; a find that fails; --built with no skill after it, or with a name that is empty, "." or
-"..", or holds "/"; a --built skill with no folder skills/<skill>/ in that repository.
+Prints one line per error as <coverage.md>:<line>: <what is wrong> (line 0 for an error that no line of the list carries, such as a file the section does not list), sorted by line number and then by message, and "ok: <coverage.md>" when there is none. Exits 0 when there is no error, 1 when there is one, 2 on a usage error.
+
+A usage error is printed on standard error as "usage error: <message>", except a missing argument, which prints the Usage line. The usage errors are:
+
+- an argument that starts with "-", "--" included, checked before any other argument is read, with the message "<argument>: not an argument this script takes";
+- a missing argument;
+- a skills root or skill folder that does not exist;
+- a coverage list outside a git repository;
+- a coverage list or docs/roadmap.md that does not exist or is not UTF-8;
+- a find that fails.
+
+A coverage list or skills root whose path starts with "-" is passed as "./<path>". A skill folder whose name starts with "-" is passed as "./<name>", and its section heading is then "## ./<name>", since the heading is the skill as given on the command line.
 """
 
 import os
@@ -78,7 +62,6 @@ TABLE_ROW = re.compile(r"^ {0,3}\|")
 CLOSING_HASHES = re.compile(r"\s+#+\s*$")
 ROADMAP_ENTRY = re.compile(r"^(?:## ([0-9]+\.(?:[A-Z](?= )|(?= )))"
                            r"|- \[x\] ([0-9]+\.(?:[A-Z]\.?(?= )|(?= ))))")
-BACKTICKED = re.compile(r"`([^`]+)`")
 
 
 class UsageError(Exception):
@@ -130,9 +113,7 @@ def fence_opener(line):
 
 
 def sections(lines, errors):
-    """Map each "## " heading name outside fenced code, closing hashes removed, to [(heading line
-    number, [(line number, text, inside fenced code or on a fence line)] of its body)], one entry per
-    time the heading appears; an unclosed fence is appended to errors."""
+    """Map each "## " heading name outside fenced code, closing hashes removed, to [(heading line number, [(line number, text, inside fenced code or on a fence line)] of its body)], one entry per time the heading appears; an unclosed fence is appended to errors."""
     found, current = {}, None
     opener, opened_at = None, 0
     for number, line in enumerate(lines, 1):
@@ -225,24 +206,8 @@ def plain(path):
             and os.path.normpath(path) == path)
 
 
-def built_path_error(reason, files, skill):
-    """The error when reason names in backticks no "skills/<skill>/<path>" whose path is in files,
-    else None."""
-    prefix = f"skills/{skill}/"
-    spans = (unicodedata.normalize("NFC", span) for span in BACKTICKED.findall(reason))
-    named = [span for span in spans if span.startswith(prefix)]
-    if not named:
-        return f"names no file of {prefix} in backticks"
-    if any(span[len(prefix):] in files for span in named):
-        return None
-    return f"names no file of {prefix} that exists: {', '.join(named)}"
-
-
-def check(coverage_path, root, skills, built):
-    """The errors of the coverage list, as (line number, message); built maps each --built skill to
-    its folder."""
-    built_files = {skill: set(find(folder, "f")) for skill, folder in built.items()}
-    built_rows = dict.fromkeys(built, 0)
+def check(coverage_path, root, skills):
+    """The errors of the coverage list, as (line number, message)."""
     lines = read_lines(coverage_path)
     errors = []
     found = sections(lines, errors)
@@ -265,9 +230,6 @@ def check(coverage_path, root, skills, built):
             if entry not in entries:
                 errors.append((n, f"roadmap entry '{entry}' of '{skill}' is not in docs/roadmap.md"))
             new_skills[skill] = entry
-        for skill in built:
-            if skill not in new_skills:
-                errors.append((0, f"--built names '{skill}', which is not a row of New skills"))
 
     for skill in skills:
         folder = os.path.join(root, skill)
@@ -297,52 +259,23 @@ def check(coverage_path, root, skills, built):
             if path not in on_disk:
                 errors.append((n, f"'{path}' is not a file of {skill}"))
             mm = MARK.match(mark)
-            if mm and mm.group(1) == "rebuild" and mm.group(2) in built:
-                built_rows[mm.group(2)] += 1
             if mark != "drop" and not mm:
                 errors.append((n, f"the mark {mark!r} is not 'rebuild: <skill>', 'rebuild later: <skill>' or 'drop'"))
             elif mm and mm.group(2) not in new_skills:
                 errors.append((n, f"the mark names '{mm.group(2)}', which is not a row of New skills"))
             if not reason:
                 errors.append((n, f"'{path}' has no reason"))
-            elif mm and mm.group(1) == "rebuild" and mm.group(2) in built:
-                problem = built_path_error(reason, built_files[mm.group(2)], mm.group(2))
-                if problem:
-                    errors.append((n, f"the reason of '{path}' ({mark}) {problem}"))
         for path in on_disk:
             if path not in seen:
                 errors.append((0, f"'{skill}/{path}' is not listed"))
-    for skill, count in built_rows.items():
-        if not count:
-            errors.append((0, f"--built names '{skill}', but no row of the sections read is marked"
-                              f" 'rebuild: {skill}'"))
     return errors
 
 
-def options(argv):
-    """Split argv into the --built skills and the other arguments."""
-    built, rest, i = [], [], 0
-    while i < len(argv):
-        if argv[i] != "--built":
-            rest.append(argv[i])
-            i += 1
-            continue
-        if i + 1 == len(argv):
-            raise UsageError("--built needs a skill")
-        name = argv[i + 1]
-        if name in ("", ".", "..") or "/" in name:
-            raise UsageError(f"--built '{name}': not a skill name")
-        built.append(name)
-        i += 2
-    return built, rest
-
-
 def main(argv):
-    try:
-        built_skills, argv = options(argv)
-    except UsageError as e:
-        print(f"usage error: {e}", file=sys.stderr)
-        return 2
+    for argument in argv:
+        if argument.startswith("-"):
+            print(f"usage error: {argument}: not an argument this script takes", file=sys.stderr)
+            return 2
     if len(argv) < 3:
         print(__doc__.strip().splitlines()[2], file=sys.stderr)
         return 2
@@ -353,12 +286,7 @@ def main(argv):
         for skill in skills:
             if not os.path.isdir(os.path.join(root, skill)):
                 raise UsageError(f"{os.path.join(root, skill)}: not a folder")
-        top = repository(coverage_path) if built_skills else None
-        built = {skill: os.path.join(top, "skills", skill) for skill in built_skills}
-        for folder in built.values():
-            if not os.path.isdir(folder):
-                raise UsageError(f"{folder}: not a folder")
-        errors = check(coverage_path, root, skills, built)
+        errors = check(coverage_path, root, skills)
     except UsageError as e:
         print(f"usage error: {e}", file=sys.stderr)
         return 2

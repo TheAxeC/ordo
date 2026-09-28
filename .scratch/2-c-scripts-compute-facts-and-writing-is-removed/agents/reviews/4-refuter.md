@@ -60,3 +60,50 @@ None.
 - Whether the no-hard-wrap rule binds wrapped code comments in scripts whose comments are all wrapped: the standards do not settle it.
 - `checks.sh` without the `env -u` prefix: not rerun.
 - A linter pass: pyflakes and pycodestyle are not installed; imports and blank lines checked by reading.
+
+## Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent; 106448 tokens, 27 tool uses, 406 s. The round's delta read against `agents/reviews/4-round-0.diff`.
+
+### Verification lines
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh <state file>` in the worktree: the six `PASS:` lines of the first run, the ASCII check with no output, `checks: 7 commands passed`, exit 0. Brief verify 2 to 6 reproduced: the test's `PASS:` line; `usage error: --built: not an argument this script takes` and `2`; the `git grep` only `exit 1`; the real list `ok: docs/academic-coverage.md`, exit 0, before (base script) and after; the revert proof `FAIL: unknown-option: got: usage error: .../repo/docs/complete.md: not a folder`.
+
+### Spec
+
+1. The report's user-visible changes (`4-report.md` line 124) say a coverage list or skills root whose path starts with `-` was "passed as it is" before; for a skills root that is false (the base printed `usage error: -r/x: not a folder`, and with root `-r` and skill `-x`, `usage error: -r/-x: find failed: find: illegal option -- r`). The list also leaves out that a skill folder whose name starts with `-` was checked at the base under its heading (`ok: -c2.md`, exit 0) and is now refused (`usage error: -x: not an argument this script takes`, exit 2).
+
+### Proof
+
+None.
+
+### Standards
+
+1. `utils/check_coverage.py` line 37: the usage errors are six list-shaped items joined by semicolons in one sentence of about 85 words, against the prose standard D (three or more list-shaped items become a list), E (sentence length) and B (semicolons); the usage-error form the round made exact is buried at its start.
+
+### Behaviour
+
+1. A skill folder named with a leading `-` can be checked only as `./-x` (or an absolute path) with its section heading spelled the same way: with `## ./-x`, `python3 check_coverage.py docs/c.md $S/skills ./-x` printed `ok: docs/c.md`, exit 0, and an unlisted file then printed `docs/c.md:0: './-x/extra.md' is not listed`, exit 1. No skill in research-hub is affected (`ls research-hub/.agents/skills | grep '^-'` exited 1).
+
+### Round items
+
+- Item 1: closed. Item 2: not applicable. Item 3: closed (word diffs of round 0 against the current files show only joined lines and the words of items 4 and 5; line 3 of the docstring is still the `Usage:` line and prints). Item 4: closed. Item 5: closed except the skill-name clause; the builder's claim that such a folder cannot be passed in any form is refuted as stated (Behaviour 1).
+
+### Declined to judge / not checked
+
+- The ASCII check does not fail when perl dies: a `utils/__pycache__/check_coverage.cpython-313.pyc` the reviewer's own `python3 -c "import check_coverage"` created was listed by `git ls-files -o --exclude-standard` (`.gitignore` does not ignore `__pycache__`), perl printed `Malformed UTF-8 character (fatal) at -e line 1, <> line 1.` and the command still exited 0, since its `END` block sets the exit status; the reviewer deleted that cache file afterwards. Raised as a concern outside the step's diff.
+- Parts of the test file were not re-read line by line this round (a permission classifier refused a `sed -n` read); judged from the round's line and word diffs and the suite runs.
+- `checks.sh` without the `env -u` prefix: not rerun.
+
+## Closed
+
+- First run, Spec 1: closed in repair round 1, item 1 (the report's first-run section quotes the three forms against the base script).
+- First run, Proof: none.
+- First run, Standards 1 (roadmap gates naming `--built`): not sent; plan step 7 (`plan.md` line 21) removes those clauses from the roadmap on main after steps 5 and 6. Until then the gates of entries 5 to 15.A on main name a command `docs/academic-coverage.md` no longer holds.
+- First run, Standards 2 (hard wrapping): closed in repair round 1, item 3.
+- First run, Standards 3 (the printed form of the usage error): closed in repair round 1, item 4.
+- First run, Behaviour 1 (`--` refused, the `./` form): closed in repair round 1, item 5, and at landing for the skill-name clause.
+- Round 1, Spec 1 (the report's user-visible changes): fixed at landing in `agents/reviews/4-report.md` lines 124-125: the skills root's before corrected, and the skill folder's before and after added.
+- Round 1, Standards 1 (the usage errors in one sentence): fixed at landing in `utils/check_coverage.py`: the usage errors are a list, one per line.
+- Round 1, Behaviour 1 (a skill folder whose name starts with `-`): fixed at landing: the docstring states that such a folder is passed as `./<name>` with the heading `## ./<name>`; proved on main in a scratch repository with a folder `-x` and the heading `## ./-x`, `python3 utils/check_coverage.py docs/c.md skills ./-x` printed `ok: docs/c.md`, exit 0.
+- Round 1, not checked: the ASCII check exits 0 when perl dies on a file it cannot decode, reproduced on main (a file holding `\377\376` printed `Malformed UTF-8 character (fatal)` and the command exited 0), and `.gitignore` does not ignore `__pycache__` (`grep -n pycache .gitignore` exits 1). Outside this step's brief; raised as open item C.

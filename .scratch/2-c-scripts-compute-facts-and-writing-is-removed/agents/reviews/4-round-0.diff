@@ -1,0 +1,344 @@
+diff --git a/docs/academic-coverage.md b/docs/academic-coverage.md
+index 0fa4058..d92df79 100644
+--- a/docs/academic-coverage.md
++++ b/docs/academic-coverage.md
+@@ -27,12 +27,6 @@ The check, run from the repository root over the four skills, exits 0 only when
+ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+ ```
+ 
+-Once a new skill is built, the same check can take `--built <skill>`, repeatable. It then fails a row marked `rebuild: <skill>` whose reason names no file of `skills/<skill>/` in backticks. It also fails when no row of the four skills is marked `rebuild: <skill>`, so it applies only to a skill that has such rows. A path counts only when it starts `skills/<skill>/` and is a file there. A folder, a link, a case variant of the name, a path not in normal form (`skills/paper/./SKILL.md`) and the source skill's own paths do not count. A pass shows only that the named file exists in `skills/<skill>/`, not that it holds what the listed file did; that is checked by reading the two files.
+-
+-```sh
+-python3 utils/check_coverage.py --built <skill> docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+-```
+-
+ ## New skills
+ 
+ | Skill | Roadmap entry |
+diff --git a/utils/check_coverage.py b/utils/check_coverage.py
+index 1d5454d..cac91d9 100755
+--- a/utils/check_coverage.py
++++ b/utils/check_coverage.py
+@@ -1,7 +1,7 @@
+ #!/usr/bin/env python3
+ """Check a coverage list: every file of the named skill folders is listed once, with a mark and a reason.
+ 
+-Usage: check_coverage.py [--built <skill>]... <coverage.md> <skills root> <skill>...
++Usage: check_coverage.py <coverage.md> <skills root> <skill>...
+ 
+ The coverage list is a Markdown file:
+ 
+@@ -34,15 +34,6 @@ The coverage list is a Markdown file:
+   accepted; the skill folder itself may be a link.
+ - Mark: "rebuild: <skill>", "rebuild later: <skill>" or "drop", the skill a row of New skills.
+ - Reason: not empty. A pipe inside a cell is written \\|.
+-- --built <skill>, repeatable: the skill is built, so every row marked "rebuild: <skill>" has a
+-  reason that names in backticks a file of skills/<skill>/ of the repository that holds the
+-  coverage list, as a repository path "skills/<skill>/<path>". The file is looked up, in NFC, in
+-  what `find -H skills/<skill> -type f` lists, the listing the file cells are compared with, so a
+-  folder, a link, a case variant of a file's name and a path not in normal form are not files of
+-  it. Spans that do not start "skills/<skill>/" (the source's own paths, skill names) are not read.
+-  A row whose reason names no such file is an error; so is a --built skill that is not a row of
+-  New skills, and one that no row of the sections read is marked "rebuild: <skill>" for. Without
+-  --built no reason is read for paths.
+ 
+ The lines of the coverage list and of docs/roadmap.md are split on "\\n" only, and the names find
+ lists are read NUL-separated, so a name holding a line separator such as U+2028 or U+0085 stays one
+@@ -56,10 +47,10 @@ closing hashes are not part of its name.
+ Prints one line per error as <coverage.md>:<line>: <what is wrong> (line 0 for an error that no line
+ of the list carries, such as a file the section does not list), sorted by line number and then by
+ message, and "ok: <coverage.md>" when there is none. Exits 0 when there is no error, 1 when there is
+-one, 2 on a usage error: a missing argument; a skills root or skill folder that does not exist; a
+-coverage list outside a git repository; a coverage list or docs/roadmap.md that does not exist or is
+-not UTF-8; a find that fails; --built with no skill after it, or with a name that is empty, "." or
+-"..", or holds "/"; a --built skill with no folder skills/<skill>/ in that repository.
++one, 2 on a usage error: an argument that starts with "-", printed as "<argument>: not an argument
++this script takes" and checked before any other argument is read; a missing argument; a skills root
++or skill folder that does not exist; a coverage list outside a git repository; a coverage list or
++docs/roadmap.md that does not exist or is not UTF-8; a find that fails.
+ """
+ 
+ import os
+@@ -78,7 +69,6 @@ TABLE_ROW = re.compile(r"^ {0,3}\|")
+ CLOSING_HASHES = re.compile(r"\s+#+\s*$")
+ ROADMAP_ENTRY = re.compile(r"^(?:## ([0-9]+\.(?:[A-Z](?= )|(?= )))"
+                            r"|- \[x\] ([0-9]+\.(?:[A-Z]\.?(?= )|(?= ))))")
+-BACKTICKED = re.compile(r"`([^`]+)`")
+ 
+ 
+ class UsageError(Exception):
+@@ -225,24 +215,8 @@ def plain(path):
+             and os.path.normpath(path) == path)
+ 
+ 
+-def built_path_error(reason, files, skill):
+-    """The error when reason names in backticks no "skills/<skill>/<path>" whose path is in files,
+-    else None."""
+-    prefix = f"skills/{skill}/"
+-    spans = (unicodedata.normalize("NFC", span) for span in BACKTICKED.findall(reason))
+-    named = [span for span in spans if span.startswith(prefix)]
+-    if not named:
+-        return f"names no file of {prefix} in backticks"
+-    if any(span[len(prefix):] in files for span in named):
+-        return None
+-    return f"names no file of {prefix} that exists: {', '.join(named)}"
+-
+-
+-def check(coverage_path, root, skills, built):
+-    """The errors of the coverage list, as (line number, message); built maps each --built skill to
+-    its folder."""
+-    built_files = {skill: set(find(folder, "f")) for skill, folder in built.items()}
+-    built_rows = dict.fromkeys(built, 0)
++def check(coverage_path, root, skills):
++    """The errors of the coverage list, as (line number, message)."""
+     lines = read_lines(coverage_path)
+     errors = []
+     found = sections(lines, errors)
+@@ -265,9 +239,6 @@ def check(coverage_path, root, skills, built):
+             if entry not in entries:
+                 errors.append((n, f"roadmap entry '{entry}' of '{skill}' is not in docs/roadmap.md"))
+             new_skills[skill] = entry
+-        for skill in built:
+-            if skill not in new_skills:
+-                errors.append((0, f"--built names '{skill}', which is not a row of New skills"))
+ 
+     for skill in skills:
+         folder = os.path.join(root, skill)
+@@ -297,52 +268,23 @@ def check(coverage_path, root, skills, built):
+             if path not in on_disk:
+                 errors.append((n, f"'{path}' is not a file of {skill}"))
+             mm = MARK.match(mark)
+-            if mm and mm.group(1) == "rebuild" and mm.group(2) in built:
+-                built_rows[mm.group(2)] += 1
+             if mark != "drop" and not mm:
+                 errors.append((n, f"the mark {mark!r} is not 'rebuild: <skill>', 'rebuild later: <skill>' or 'drop'"))
+             elif mm and mm.group(2) not in new_skills:
+                 errors.append((n, f"the mark names '{mm.group(2)}', which is not a row of New skills"))
+             if not reason:
+                 errors.append((n, f"'{path}' has no reason"))
+-            elif mm and mm.group(1) == "rebuild" and mm.group(2) in built:
+-                problem = built_path_error(reason, built_files[mm.group(2)], mm.group(2))
+-                if problem:
+-                    errors.append((n, f"the reason of '{path}' ({mark}) {problem}"))
+         for path in on_disk:
+             if path not in seen:
+                 errors.append((0, f"'{skill}/{path}' is not listed"))
+-    for skill, count in built_rows.items():
+-        if not count:
+-            errors.append((0, f"--built names '{skill}', but no row of the sections read is marked"
+-                              f" 'rebuild: {skill}'"))
+     return errors
+ 
+ 
+-def options(argv):
+-    """Split argv into the --built skills and the other arguments."""
+-    built, rest, i = [], [], 0
+-    while i < len(argv):
+-        if argv[i] != "--built":
+-            rest.append(argv[i])
+-            i += 1
+-            continue
+-        if i + 1 == len(argv):
+-            raise UsageError("--built needs a skill")
+-        name = argv[i + 1]
+-        if name in ("", ".", "..") or "/" in name:
+-            raise UsageError(f"--built '{name}': not a skill name")
+-        built.append(name)
+-        i += 2
+-    return built, rest
+-
+-
+ def main(argv):
+-    try:
+-        built_skills, argv = options(argv)
+-    except UsageError as e:
+-        print(f"usage error: {e}", file=sys.stderr)
+-        return 2
++    for argument in argv:
++        if argument.startswith("-"):
++            print(f"usage error: {argument}: not an argument this script takes", file=sys.stderr)
++            return 2
+     if len(argv) < 3:
+         print(__doc__.strip().splitlines()[2], file=sys.stderr)
+         return 2
+@@ -353,12 +295,7 @@ def main(argv):
+         for skill in skills:
+             if not os.path.isdir(os.path.join(root, skill)):
+                 raise UsageError(f"{os.path.join(root, skill)}: not a folder")
+-        top = repository(coverage_path) if built_skills else None
+-        built = {skill: os.path.join(top, "skills", skill) for skill in built_skills}
+-        for folder in built.values():
+-            if not os.path.isdir(folder):
+-                raise UsageError(f"{folder}: not a folder")
+-        errors = check(coverage_path, root, skills, built)
++        errors = check(coverage_path, root, skills)
+     except UsageError as e:
+         print(f"usage error: {e}", file=sys.stderr)
+         return 2
+diff --git a/utils/check_coverage.test.sh b/utils/check_coverage.test.sh
+index d155a71..c18f6bf 100755
+--- a/utils/check_coverage.test.sh
++++ b/utils/check_coverage.test.sh
+@@ -5,7 +5,8 @@
+ # on "\n" only, in the roadmap (roadmap-separators), in the list (separator-names) and in find's
+ # output, read NUL-separated (separator-names, newline-name); file names compared in NFC
+ # (nfc-names); a last cell ending in \| with no closing pipe (escaped-last-cell); the sorted
+-# output (order); a find that fails (find-fails); and the --built mode (the built-* cases).
++# output (order); a find that fails (find-fails); and an argument that starts with "-"
++# (unknown-option).
+ 
+ set -u
+ 
+@@ -23,8 +24,6 @@ repo=$test_root/repo
+ root=$test_root/skills
+ mkdir -p "$repo/docs" "$root/alpha/references/deep" "$root/beta" "$root/gamma" "$root/empty" "$test_root/real/beta"
+ mkdir -p "$root/sep" "$root/nl" "$root/nfd"
+-mkdir -p "$repo/skills/paper/templates" "$repo/skills/writing"
+-mkdir -p "$repo/skills/layout" "$repo/skills/extra"
+ git -C "$repo" init -q
+ 
+ cat >"$repo/docs/roadmap.md" <<'MD'
+@@ -66,14 +65,6 @@ nl_name=$(printf 'a\nb.md')
+ : >"$root/nl/$nl_name"
+ : >"$root/nfd/$(printf 'cafe\314\201.md')"
+ : >"$root/nfd/$(printf 'th\303\251.md')"
+-printf 'skill\n' >"$repo/skills/paper/SKILL.md"
+-printf 'tex\n' >"$repo/skills/paper/templates/venue.tex"
+-printf 'skill\n' >"$repo/skills/writing/SKILL.md"
+-printf 'skill\n' >"$repo/skills/layout/SKILL.md"
+-printf 'skill\n' >"$repo/skills/extra/SKILL.md"
+-printf 'outside\n' >"$test_root/outside.txt"
+-ln -s "$test_root/outside.txt" "$repo/skills/paper/linked.md"
+-: >"$repo/skills/paper/$(printf 'caf\303\251.md')"
+ 
+ # The complete list. gamma's section is malformed on purpose: gamma is not named on the command line
+ # in the cases below, so its section is not read (the control naming it is the case "gamma-named").
+@@ -442,113 +433,27 @@ edit 'i = s.index("## beta\n\n|"); j = s.index("## gamma"); s = s[:i] + s[j:]'
+ run fenced-heading beta
+ expect_error ":0: no '## beta' section"
+ 
+-# --built <skill>: each row marked "rebuild: <skill>" names in backticks a file of skills/<skill>/
+-# of the list's repository, as a repository path. It passes beside a file of the source skill.
+-edit 's = s.replace("a pipe \\| inside a reason.",
+-                   "held by `skills/paper/templates/venue.tex`, from `SKILL.md` and `paper`.")'
+-run built-named --built paper alpha
+-expect_ok
+-
+-# A reason that names no path fails; beta's row, marked for a skill not given to --built, is not
+-# read.
+-edit 's = s'
+-run built-none --built paper alpha beta
+-expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+-" in backticks"
+-case $output in
+-    *":29:"*) fail "$name: a row of a skill not given to --built was read: $output" ;;
+-esac
+-
+-# A path relative to the skill folder is a path of the source skill, even when skills/paper holds
+-# a file of the same name: only a path that starts skills/paper/ counts.
+-edit 's = s.replace("a pipe \\| inside a reason.", "held by `SKILL.md` and `templates/venue.tex`.")'
+-run built-source-only --built paper alpha
+-expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+-" in backticks"
+-
+-# The control: --built repeated reads layout's row as well, and a skill given twice is read once.
+-edit 's = s'
+-run built-repeated --built paper --built layout --built paper alpha beta
+-expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"
+-expect_error ":29: the reason of 'SKILL.md' (rebuild: layout) names no file of skills/layout/"
+-[ "$(printf '%s\n' "$output" | grep -c ":21:")" -eq 1 ] ||
+-    fail "$name: the error is printed more than once: $output"
+-
+-edit 's = s.replace("a pipe \\| inside a reason.",
+-                   "held by `skills/paper/templates/gone.tex` or `skills/paper/SKILL.md.bak`.")'
+-run built-missing --built paper alpha
+-expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+-" that exists: skills/paper/templates/gone.tex, skills/paper/SKILL.md.bak"
+-
+-# The named path is compared with the listing of skills/paper/'s files, as file cells are: a path
+-# not in normal form, the folder itself, a folder in it, a case variant of a file, and a link out
+-# of the repository are not files of it, although each reaches something on disk.
+-for span in skills/paper/../paper/SKILL.md skills/paper/./SKILL.md skills/paper/. skills/paper/ \
+-        skills/paper/templates skills/paper/Templates/VENUE.tex skills/paper/linked.md; do
+-    edit "s = s.replace(\"a pipe \\\\| inside a reason.\", \"held by \`$span\`.\")"
+-    run built-not-a-file --built paper alpha
+-    name="built-not-a-file [$span]"
+-    expect_error ":21: the reason of 'SKILL.md' (rebuild: paper) names no file of skills/paper/"\
+-" that exists: $span"
+-done
+-
+-# The named path is compared in NFC: a file stored composed passes when the reason spells it
+-# decomposed.
+-edit 's = s.replace("a pipe \\| inside a reason.", "held by `skills/paper/cafe\u0301.md`.")'
+-run built-nfc --built paper alpha
+-expect_ok
+-
+-# A "rebuild later" row is not read, so --built writing finds no row to check, which is an error;
+-# the control marks the same row "rebuild: writing".
+-edit 's = s'
+-run built-later --built writing alpha
+-expect_error ":0: --built names 'writing', but no row of the sections read is marked"\
+-" 'rebuild: writing'"
+-case $output in
+-    *":22:"*) fail "$name: a rebuild later row was read: $output" ;;
+-esac
+-
+-edit 's = s.replace("| rebuild later: writing |", "| rebuild: writing |")'
+-run built-later-control --built writing alpha
+-expect_error ":22: the reason of 'references/deep/guide.md' (rebuild: writing)"\
+-" names no file of skills/writing/ in backticks"
+-case $output in
+-    *"no row of the sections read"*) fail "$name: the row was not counted: $output" ;;
+-esac
+-
+-# A --built skill whose rows are all in sections not named on the command line: no row to check.
+-edit 's = s'
+-run built-no-row --built paper beta
+-expect_error ":0: --built names 'paper', but no row of the sections read is marked 'rebuild: paper'"
+-
++# Usage errors exit 2.
+ edit 's = s'
+-run built-not-new --built extra alpha
+-expect_error ":0: --built names 'extra', which is not a row of New skills"
++run usage-no-skill
++[ "$status" -eq 2 ] || fail "usage-no-skill: expected exit 2, got $status: $output"
+ 
+-# --built usage errors exit 2: no skill after it, a name that is empty, "." or "..", or holds "/",
+-# and a skill with no folder under skills/.
+-edit 's = s'
+-run built-no-value alpha --built
++# An argument that starts with "-" is refused before any other argument is read: as the first
++# argument, as the last, and as the only one, where the count of arguments would otherwise be the error.
++name=unknown-option
++direct --bogus "$repo/docs/complete.md" "$root" alpha
+ [ "$status" -eq 2 ] || fail "$name: expected exit 2, got $status: $output"
+-case $output in *"--built needs a skill"*) ;; *) fail "$name: got: $output" ;; esac
++[ "$output" = "usage error: --bogus: not an argument this script takes" ] || fail "$name: got: $output"
+ 
+-for bad in "" . .. paper/templates; do
+-    run built-bad-name --built "$bad" alpha
+-    [ "$status" -eq 2 ] || fail "$name [$bad]: expected exit 2, got $status: $output"
+-    case $output in
+-        *"--built '$bad': not a skill name"*) ;;
+-        *) fail "$name [$bad]: got: $output" ;;
+-    esac
+-done
+-
+-run built-no-folder --built grant alpha
++name="unknown-option [last]"
++direct "$repo/docs/complete.md" "$root" alpha -q
+ [ "$status" -eq 2 ] || fail "$name: expected exit 2, got $status: $output"
+-case $output in *"skills/grant: not a folder"*) ;; *) fail "$name: got: $output" ;; esac
++[ "$output" = "usage error: -q: not an argument this script takes" ] || fail "$name: got: $output"
+ 
+-# Usage errors exit 2.
+-edit 's = s'
+-run usage-no-skill
+-[ "$status" -eq 2 ] || fail "usage-no-skill: expected exit 2, got $status: $output"
++name="unknown-option [alone]"
++direct --x
++[ "$status" -eq 2 ] || fail "$name: expected exit 2, got $status: $output"
++[ "$output" = "usage error: --x: not an argument this script takes" ] || fail "$name: got: $output"
+ 
+ name=usage-missing-root
+ direct "$test_root/base.md" "$test_root/nosuch" alpha

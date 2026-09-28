@@ -30,27 +30,16 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 4
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2c-4
-  base: fbf6f8bc7a610d632dde01d29621edbfa770adda
-  launched: 2026-09-29
-  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/4-report.md
-  landing: not-started
-  round: 1
-  session_id: a004469c20e6397d6
-  builder_usage: round 0 hand-back, 101332 tokens, 18 tool uses, 206 s; resumed with agents/briefs/4-cases.md; round 0 total at the final report, 120438 tokens, 32 tool uses, 449 s
-  reviewer_report: agents/reviews/4-refuter.md, claude:opus, 115131 tokens, 20 tool uses, 431 s
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-None.
+- C (2026-09-29), step 5: the ASCII check of the verify list (`docs/dev/building.md`, the command blocks of both change standards, this state file) exits 0 when perl dies on a file it cannot decode, since its `END` block sets the exit status: a file holding the bytes `\377\376` made it print `Malformed UTF-8 character (fatal)` and exit 0. `.gitignore` does not ignore `__pycache__`, so a `python3` import leaves such a file in the check's reach. Options: (a) step 5 is widened to end both, the command keeping perl's own non-zero status when it dies and `__pycache__/` added to `.gitignore` (and to `repo-setup`'s `.gitignore` template if it has the same gap); (b) a new step after step 6 does it; (c) leave it. Recommendation (a): step 5 rewrites the rule that each verify command exits non-zero when it fails, and this command breaks that rule, so the fix belongs with it. The lazy option is (c); (b) only moves the same work later.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: step 4's case hand-back ruled by the orchestrator inside the brief (`agents/briefs/4-cases.md`).
 - 2026-09-29: open item B, the tag and the pin: ruled (a), yes; main tagged v2.2.0 at 9a382b5 and `utils/pin.sh v2.2.0` run.
 - 2026-09-28: open item A, who runs the verify list: ruled (b), a separate script `skills/land/templates/checks.sh <state file>` that the builder, the reviewer and `land.sh` run; the user approved its name and what it computes.
 
@@ -76,8 +65,8 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1 to 3 done. Step 3: main tagged v2.2.0 at 9a382b5, the installed skills pinned to it, `writing` no longer installed.
-- Verified: `git -C ~/.local/share/ordo-stable describe --tags` prints `v2.2.0`; `sh utils/pin.sh` prints `pinned: v2.2.0, 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0.
-- Step 4, `--built` removed, is in flight: brief `agents/briefs/4.md`, base fbf6f8b, builder launched; it lands through `sh skills/land/templates/land.sh <state file> 4 <base>`.
-- Open on Axel's side: nothing. The comparison items are all ruled in `.scratch/comparison-2026-09-28/rulings.md` and go into the roadmap through `/roadmap add` after this entry closes.
+- 2026-09-29. Steps 1 to 4 done. Step 4: the `--built` mode out of `utils/check_coverage.py`, its test and `docs/academic-coverage.md`; a dash argument is refused.
+- Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
+- Next step: 5, the rules, which waits on open item C.
+- Open on Axel's side: open item C.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
