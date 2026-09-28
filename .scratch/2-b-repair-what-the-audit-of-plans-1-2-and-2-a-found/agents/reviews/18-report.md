@@ -60,7 +60,7 @@ The two rows ruled alone are 1-5 (the audit's recommendations 2a to 2h) and 6-F1
 - 1-H1's where is `1-process-audit.md:202`, the text line under its heading at :201; 3-H1's is `3-checkers.md:3`, its bold "Repository state." line.
 - "ruled:" leads the disposition when a Rulings line decides the finding, with the commits that carried the ruling after "; ", as case 1-2 does.
 - Ruling names are the short names the lines are known by: the letter for an "Open item <L>" line (spec's rule, `skills/spec/SKILL.md:44`), and for the unlettered lines the brief's own names (Models, Executor, No question-box tool, Every report opens with a position line, `start` gets no `--transcript` flag, the audit's recommendations 2a to 2h). The four rulings on line 107 are named A, B, C and D and the three on line 99 3a, 3b and 3c, the letters the lines give them; by spec's rule read literally, line 107's name would be its text before " (", "From the review of the oculus session's changes".
-- 1-4 and 1-15 are open. Both are defects of practice in the archived plans whose rule predates this plan (`git log -S` gives 643dca8, an ancestor of 9be174e); no commit of this plan corrects the archived briefs or plan 1's refuter reports, and no ruling decides them.
+- 1-4 is open under the round's ruling 4: its Fix, "write the briefs from the template in full", is the practice 6458d52's rule (`skills/plan-orchestration/SKILL.md:316`) requires, and the grep over this plan's 30 step briefs finds `## Cases` missing from ten (1, 2, 3, 4, 5, 6, 8, 9, 20, 21) and `## Conventions` missing from 23. 1-15 is open: its rule predates this plan (`git log -S` gives 643dca8, an ancestor of 9be174e), plan 1's refuter reports are unchanged, and fourteen Closed sections of this plan's own refuter reports close findings as a group.
 - 1-H1 and 3-H1 are open: the folder is gone, but no ruling, booking or closed item records the finding, and the rules give no disposition for a finding that ended without a record.
 - 6-F13 is open: the demand is research-hub's, and no ruling or `plan.md` text places it outside Ordo; ruling A takes only the findings "for Ordo".
 - `plan.md:58` ("7 after 4 and after the oculus session's fixes to its launch-note setup") is taken as the plan's text placing the hub's launch-note setup outside Ordo: 6-F1, F3, F16, F17 (its found-note part), F19, F20. 6-F21 is placed by ruling C's second half, "the oculus session cutting its lock wait to about 2 s" (`plan.md:107`).
@@ -71,10 +71,46 @@ The two rows ruled alone are 1-5 (the audit's recommendations 2a to 2h) and 6-F1
 ## Defects found on the tree
 
 - research-hub's `.agents/plan.yaml` still carries `launch_note` and `worker_effort` and lacks `libraries`: `python3 skills/ordo-init/templates/check_config.py /Users/axelfaes/workspace/research-hub` prints `error: oculus: required key missing: libraries`, `error: oculus: unknown key: worker_effort`, `error: oculus: unknown key: launch_note` and exits 1. It is the hub's file, outside this worktree; rows 6-F1, 6-F19 and 6-F20 quote it.
-- research-hub's `tools/oculus/.scratch/migration/orchestrator-state.md:64` still carries the demand of 6-F13, which its own line 61 books for dropping once the Ordo release carrying plan 2.B is pinned; the pin of v1.1.0 is done (`orchestrator-state.md:42`).
+- research-hub's `tools/oculus/.scratch/migration/orchestrator-state.md:66` still carries the demand of 6-F13, which its own line 63 books for dropping once the Ordo release carrying plan 2.B is pinned; the pin of v1.1.0 is done (`orchestrator-state.md:42`).
 
 ## Wrong in the brief
 
 - Check 4 expects every ruling line to end with "(the user)". Two lines the brief itself names do not: Models (`plan.md:100`) ends with its "Superseded by ruling U" note, and "The plan cut to its goal" (`plan.md:125`) ends with "(The user.)".
 - The brief calls the 2a to 2h line "the first ruling line"; the first line of Rulings is option C at `plan.md:97`, and the 2a to 2h line is `plan.md:98`.
 - `plan.md:5` and the Goal at `plan.md:9` still say "five reports"; the Gate (`plan.md:13`) and step 18 (`plan.md:48`) say six, and six exist.
+
+## Repair round 1
+
+The six rulings of `agents/briefs/18-round-1.md`, each applied. The dispositions, the counts and the open rows are unchanged by the round: 1-4 stays `open` under ruling 4's own condition.
+
+| Ruling | Row | New cell text | Command that shows it |
+|---|---|---|---|
+| 1, 3-H1's place | 3-H1 | the row now heads report 3, before 3-check_skill_layout.py-1 | `grep -E '^\| 3-' closure.md \| head -2` prints the 3-H1 row, then the 3-check_skill_layout.py-1 row |
+| 2, 6-F17's finding cell | 6-F17 | "F17 (medium): the found-note in state line 102 is out of date or wrong in..." | `grep -oE '\| F17 \(medium\)[^\|]*' closure.md \| sed 's/^\| //' \| wc -w` prints 15 |
+| 3, the research-hub line numbers | 6-F13, 6-F17, this report's research-hub bullet under "Defects found on the tree" | 6-F13: `:66` for the demand and `:63` for the hub's booked drop; 6-F17: `:129`; 6-F16's `:21`, 6-F1's and 6-F20's `.agents/plan.yaml:23` checked and unchanged; this report: `orchestrator-state.md:66`, "its own line 63" | `sed -n '21p;63p;66p;129p' research-hub/tools/oculus/.scratch/migration/orchestrator-state.md` shows the `launch_note` line, "When Axel says the Ordo release carrying plan 2.B is pinned: drop this file's demand...", "each report opens with the state file's open items, verbatim, then the count of the booked list...", "O32's launch recipes in the Ordo plan skills..." (holding "O32 closes only after Axel pins the Ordo release that carries 2.B"); `sed -n 23p research-hub/.agents/plan.yaml` shows `launch_note:` |
+| 4, 1-4 | 1-4 | `open`; evidence: the Fix (`1-process-audit.md:55`) and the rule 6458d52 added (`skills/plan-orchestration/SKILL.md:316`); section counts over the 30 step briefs: Decisions taken in this brief 30, Verify before you report 30, Report 30, Conventions 29, Cases 20, every Verify section writing its commands out; missing: `## Cases` in briefs 1, 2, 3, 4, 5, 6, 8, 9 (added before f23d14a put Cases into the template), 20 and 21, and `## Conventions` in brief 23 | `ls agents/briefs \| grep -v -- -round- \| grep -c .` prints 30; for each section, a loop of `grep -qF -- '<section>' <brief>` over those 30 prints the missing briefs; `git log --diff-filter=A` on each missing brief and `git merge-base --is-ancestor f23d14a <hash>` date them |
+| 5, 1-15 | 1-15 | `open`; evidence adds this plan's Closed sections that do not list each finding with its own closure: `1-refuter.md:472-473`, `2-refuter.md:241`, `3-refuter.md:251`, `5-refuter.md:212`, `6-refuter.md:270`, `8-refuter.md:239`, `1c-refuter.md:173` (no finding named), and `12-refuter.md:116`, `13-refuter.md:133`, `14-refuter.md:166`, `15-refuter.md:108`, `17a-refuter.md:75`, `25-refuter.md:137`, `7b-refuter.md:493` and `:496` (findings named, one closure for the group) | each of the 28 `*-refuter.md` files with a Closed heading, of 29 printed with `sed`, then an `awk` over them for "every finding", "every other finding", "findings: each", "each ruled in" and "<n> to <m>" ranges; 22-refuter.md marks it `### Closures`, and 18-refuter.md is this step's own |
+| 6, the counts and the report | this report | first line unchanged (the same five open rows); the 1-4 and 1-15 judgment call and the research-hub bullet rewritten | the checks below |
+
+Checks rerun after the round, from the worktree root:
+
+- `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/verify.sh .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/orchestrator-state.md; echo "exit $?"` printed:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_coverage.py scratch tests
+verify: 7 commands passed
+exit 0
+```
+
+- Rows: `grep -cE '^\| (1|2|3|4|5|6)-' closure.md` prints 154.
+- Ids: `grep -oE '^\| [^ |]+' closure.md | sort | uniq -d` prints nothing.
+- Hashes: `git merge-base --is-ancestor <h> HEAD` prints ok for all 27 distinct hashes of the disposition column (the same 27 as the first run).
+- Rulings: each name found in `plan.md` lines 95 to 140: 2a to 2h 98, 3a/3b/3c 99, Models 100, Executor 101, No question-box tool 102, Every report opens with a position line 104, A to D 107, E 108, `start` gets no `--transcript` flag 113, L 116, M 117, O 119, U 126, W 129, Y 131, AA 133, BB 134, CC 135.
+- Counts by disposition: closed 63, closed then removed 33, ruled 28, no defect reported 17, outside Ordo 6, removed 2, open 5 (1-4, 1-15, 1-H1, 3-H1, 6-F13).
+- ASCII: `LC_ALL=C grep -n '[^ -~]' closure.md 18-report.md` prints nothing.
+- `git status --short` lists four untracked ledger files: `agents/reviews/closure.md` and `agents/reviews/18-report.md`, written by this step, and `agents/briefs/18-round-1.md` and `agents/reviews/18-refuter.md`, which the orchestrator put in the worktree for this round.

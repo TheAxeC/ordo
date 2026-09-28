@@ -30,25 +30,15 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-- step: "18"
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2b-18
-  session_id: a0e3f6c70e96f5129
-  base: "50066e6"
-  launched: 2026-09-28
-  report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/18-report.md
-  landing: not-started
-  round: 1
-  round_1: agents/briefs/18-round-1.md, six rulings (Spec 1 and 2, Behaviour 1 and 2, 1-15's evidence, the counts)
-  builder_usage: 136,569 tokens, 144 tool uses, 1976 s
-  reviewer: a904a300be9aeb494
-  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/18-refuter.md
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
 
+- Open item HH (step 18's landing, the landing script and a step with no commit): `land.sh` runs `git cherry-pick <base>..<step>` in the worktree (`skills/land/templates/land.sh:371`, the ledger's copy identical), and a step whose work is only ledger files has an empty range, so the script stops with `error: empty commit set passed` before main's check. Step 18 was landed by hand. (a) A new step 18a before the closing: `land.sh` skips the cherry-pick when the range is empty and goes on to the verify list and the booking output, with a `land.test.sh` case for a step with no commit, and the ledger's copy updated. Pro: the release the closing tags lands every kind of step. Con: one more step before the closing. (b) Leave it, and land a ledger-only step by hand. Con: the skill's only landing path fails on a kind of step plans have; this is the lazy option. Recommendation: (a).
+- Open item II (step 18, closure rows 1-4 and 1-15, this plan's own records): 1-4's Fix is "write the briefs from the template in full"; every brief from step 22 on carries the template's sections (`grep -c '^## Cases'` gives 1 for briefs 22, 23, 24, 25, 17, 17a and 18), and the earlier ones lack Cases (1 to 6, 8, 9, 20, 21) or Conventions (23). 1-15's Fix is "list each finding with its closure"; eleven refuter reports of plan 1 and fifteen of this plan give one closure for a group of findings, including those the orchestrator wrote this session (`25-refuter.md:137`). For 1-4: (a) ruled closed by practice from step 22 on, the spent briefs left as they are, since adding sections to a brief after its build would record a brief the builder never read. (b) Keep it open. Con: nothing can close it. Recommendation: (a). For 1-15: (a) a new step 18b rewrites each group closure in those reports into one line per finding with the file:line and check that shows it, from each report's own findings and the round reports, and the orchestrator writes Closed that way from now on. Pro: the records say what closed each finding, as the template asks. Con: a sweep over about 26 reports. (b) Ruled closed by practice from now on, the old records left. Con: the defect stays in the records and the practice has not held this session; this is the lazy option. Recommendation: (a).
+- Open item JJ (step 18, closure rows 1-H1 and 3-H1, the untracked `home/` folder): report 3 says of the folder its own probe made "I listed it and removed it. `git status --porcelain` now prints nothing." (`3-checkers.md:3`), and `ls -d home` finds nothing now. No ruling or booking records it. (a) Ruled closed on that evidence. (b) Keep both rows open. Con: nothing is left to do, so they would stay open for good. Recommendation: (a).
+- Open item KK (step 18, closure row 6-F13 and the research-hub configuration): the hub still carries the demand that reports open with the open items verbatim (`research-hub/tools/oculus/.scratch/migration/orchestrator-state.md:66`), which this plan's position line now precedes, and books its own drop of it at `:63` once the 2.B release is pinned. Ordo's `check_config.py` on the hub prints `unknown key: launch_note`, `unknown key: worker_effort` and `required key missing: libraries` and exits 1. Research-hub is read-only for this session. (a) Ruled outside Ordo: the hub's own session drops the demand and fixes its `.agents/plan.yaml` (removes `launch_note` and `worker_effort`, adds `libraries`), and this session drafts the note for it, sent only on your yes. (b) Ordo accepts `worker_effort` as an optional key. Con: adds a key no Ordo skill reads. Recommendation: (a).
 
 ## Closed items
 - 2026-09-27: open item GG (the skills against the sharpened one-rule-per-bullet rule): ruled (a), new step 25, only items with two independent requirements split, semicolons in valid use kept.
@@ -120,7 +110,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17a, 20, 21, 23 and 24 landed (step 17a in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 25 landed; next: step 18 (the closure table), then 19 (the closing), under the pinned skills v1.1.0.
+- Roadmap entry 2.B, step 18 landed; next: the user's rulings on open items HH to KK, then step 19 (the closing), under the pinned skills v1.1.0.
 - Open on Axel's side: none.
 
 ## Usage
@@ -156,3 +146,4 @@ dispatch:
 | 24 | claude:opus agent: 132,302 tokens, 34 tool uses, 544 s | 111,225 tokens, 23 tool uses, 290 s | 0 | 0 | 3 files changed, 35 insertions(+), 57 deletions(-) | yes | 1 | 0 | 24 | 18681 | 46210 | 6099754 | 52 | 19 (shares ruling GG; the wait on the user's review of the README) | none |
 | 17a | claude:opus agent: 143,396 tokens, 45 tool uses, 712 s; round 1: 148,108 tokens, 5 tool uses, 164 s | 131,442 tokens, 27 tool uses, 452 s; round 1: 93,345 tokens, 11 tool uses, 207 s | 1 | 3 | 13 files changed, 124 insertions(+), 40 deletions(-) | no | 1 | 0 | 29 | 22318 | 71074 | 9237290 | 64 | 31 | none |
 | 25 | claude:opus agent: 303,785 tokens, 53 tool uses, 1522 s; round 1: 141,876 tokens, 72 tool uses, 1277 s | 209,926 tokens, 31 tool uses, 659 s; round 1: 166,846 tokens, 36 tool uses, 517 s | 1 | 12 | 10 files changed, 315 insertions(+), 147 deletions(-) | no | 1 | 0 | 56 | 47394 | 198474 | 8754657 | 120 | 77 | none |
+| 18 | claude:opus agent: 136,569 tokens, 144 tool uses, 1976 s; round 1: 172,238 tokens, 20 tool uses, 282 s | 242,483 tokens, 67 tool uses, 690 s; round 1: 102,608 tokens, 21 tool uses, 259 s | 1 | 6 | ledger only: closure.md 154 rows | no | 1 | 4 | 66 | 51624 | 136148 | 19362965 | 140 | 63 | none |

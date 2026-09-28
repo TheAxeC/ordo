@@ -51,3 +51,39 @@ Checked and holding: 1-15 (`open`; plan 1's refuter reports unchanged, `5-refute
 - Attribution was done by `git log -S'<fix text>' 9be174e..HEAD -- <file>` and by `git show <hash> | grep -cF '<quoted phrase>'` for 6458d52, 3fbc652, a8541ed, e9633bd and fafda10; those five diffs were not read in full.
 - 5-8: 3fbc652's `launch.test.sh` checked by grep for the cases the finding names; the test was not run at that commit.
 - The 26-commit re-run behind 1-V2 to 1-V4 was not rerun; the rewritten archived booking lines were read.
+
+## Repair round 1, refuted
+
+Reviewer: a fresh claude:opus agent, read-only. Usage: about 90,000 tokens, 16 tool uses, about 4 minutes.
+
+From the worktree root, the verify list through `verify.sh`, exit 0:
+
+```
+PASS: land.sh and usage.py scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: verify.sh scratch tests (runner under sh dash)
+PASS: check_coverage.py scratch tests
+verify: 7 commands passed
+```
+
+Reproduced: 154 rows, unique ids, 25/45/37/14/11/22 per report; the counts by disposition unchanged; the 27 hashes ancestors of HEAD; every ruling on a Rulings line; the ASCII check. The round changed only rows 1-4, 1-15, 3-H1 (moved to the head of report 3), 6-F13 and 6-F17, the report's 1-4/1-15 judgment call and its research-hub bullet, and appended "Repair round 1". Each of the six rulings holds on the current files: 3-H1 at line 75; 6-F17's cell 15 words; the hub lines :21, :66, :63 and :129 hold their quoted text; the brief grep (30 briefs: Cases missing from 1, 2, 3, 4, 5, 6, 8, 9, 20 and 21, Conventions from 23; f23d14a the only commit adding `## Cases` to the template); the fourteen cited Closed lines hold their text.
+
+- Spec: none.
+- Proof 1: 1-15's list of Closed sections that give one closure for a group of named findings leaves out `11-refuter.md` (lines 184, 189, 191, and 194 to 197, "Round 1, Spec (rows 54, 59, 81, 60, 90, 66): closed in round 2." and the same for Proof, Standards and Behaviour).
+- Proof 2: the report's ruling-5 row says "each of the 28 `*-refuter.md` Closed sections"; `ls *-refuter.md | wc -l` prints 29, and `7-refuter.md`, `7a-refuter.md`, `7c-refuter.md` and `22-refuter.md` have no Closed section, so 25 files have one. 1-15's evidence names none of the four without a Closed section.
+- Standards: none.
+- Behaviour: none.
+
+Not checked: Closed entries that name one finding without the template's "<file:line and the check that shows it>" (for example `11-refuter.md:185`); the research-hub lines were checked as the hub is now.
+
+## Closed
+
+- Spec 1 (3-H1 out of order): closed in round 1; `grep -nE '^\| 3-' closure.md | head -2` puts 3-H1 first.
+- Spec 2 (6-F17's cell over 15 words): closed in round 1; `wc -w` on the cell prints 15.
+- Proof: none in the first review.
+- Behaviour 1 (research-hub line numbers): closed in round 1; `grep -n` on the hub state file finds the quoted text at :66, :63 and :129.
+- Behaviour 2 (1-4's evidence): closed in round 1 under the orchestrator's ruling; the row stays `open` with the brief grep naming the briefs that lack Cases or Conventions.
+- Repair round 1, Proof 1: fixed at landing; 1-15's evidence adds `11-refuter.md`'s group closures.
+- Repair round 1, Proof 2: not reproduced by the orchestrator. `grep -n Closed` finds `# Closed` at `7-refuter.md:319`, `7a-refuter.md:447` and `7c-refuter.md:248`, and `### Closures` at `22-refuter.md:154`, so every one of the 29 reports has a closure section; the reviewer's grep looked for `## ` headings only. The report's sentence is corrected at landing to "each of the 28 `*-refuter.md` files with a Closed heading, of 29; 22-refuter.md marks it `### Closures`, and 18-refuter.md is this step's own".
