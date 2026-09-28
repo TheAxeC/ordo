@@ -47,7 +47,7 @@ Independent of each other; the configuration block's `workers_at_once: 1` still 
 - 2: step 1's landing, since the script's test and the reference pages name the moved page.
 - 3: step 1's landing.
 - 2a: nothing; open items D and E are ruled.
-- 5: nothing; open item H is ruled. The draft is named in the Rulings.
+- 5: the user's review of the flags, and open item I.
 - 6: steps 1 to 5, and 2a.
 
 ### Step 1, the prose standard moved (landed 2026-09-28)
@@ -113,3 +113,7 @@ Independent of each other; the configuration block's `workers_at_once: 1` still 
 ### Step 5, Step 0 (open item H, ruled 2026-09-28: (a); see Rulings)
 
 Open item H (2026-09-28): step 5 needs `/writing`, and the installed skills are pinned at v2.0.0, which has no `writing` skill (`ls ~/.claude/skills ~/.claude-work/skills` lists none), so the runner cannot invoke `/writing`. Options: (a) tag main after step 4's landing as v2.1.0 and run `utils/pin.sh v2.1.0`, which links `writing` and moves every installed skill to main's version; step 5 then invokes `/writing` as a user would; pro: step 5 tests the skill as installed, con: the plan skills running this plan change mid-plan to main's version (the changes since v2.0.0 are the ones plans 2.B and 3 landed). (b) the orchestrator reads `skills/writing/SKILL.md` from main and carries out its Steps by hand, disclosed as not an invocation; pro: nothing installed changes, con: it does not test the skill's installation, frontmatter or triggers. Recommendation: (a). The lazy option is (b).
+
+### Step 5, open item I (open)
+
+Open item I (2026-09-28): step 5's run of `/writing` on the FWO proposal `main.tex` gives 50 script flag lines, and three kinds are wrong flags. (1) The 29 `\bibitem` entries of `thebibliography` are read as running prose: 21 `semicolons` lines and 1 `equal-length` line fall on reference entries, and their 22 citation semicolons and about 726 words enter the file's rate, which reads 53 in 8101 words where the body holds 31 in about 7,400 (4.2 per 1000, still over the limit of 2). (2) `contrast` matches a negation followed by an appositive or absolute clause: line 100 "could not have influenced, an anchor" and line 170 "are not one measurement, i-IFTA having become scorable". (3) `vague` flags "often" in "how often its answer is right" (line 104), where it names a rate. Options: (a) a new step 5a fixes the script: reference-list entries (`thebibliography` and its `\bibitem` lines) are data rows, "how often" is not a vague qualifier, and a narrower `contrast` rule, measured on the repository's Markdown and the 60 research-hub LaTeX files before it is written, with a stop back to the user if no rule separates the two kinds; pro: the flags the user reads are the ones to act on, con: one more step before the closing. (b) keep the script and let `/writing` list these flags as allowed with their reasons each time; pro: no more work in this plan, con: every LaTeX paper's semicolon rate and flag list carry its references. Recommendation: (a). The lazy option is (b).
