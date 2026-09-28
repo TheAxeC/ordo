@@ -36,9 +36,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item H (2026-09-28): step 5 needs `/writing`, and the installed skills are pinned at v2.0.0, which has no `writing` skill (`ls ~/.claude/skills ~/.claude-work/skills` lists none), so the runner cannot invoke `/writing`. Options: (a) tag main after step 4's landing as v2.1.0 and run `utils/pin.sh v2.1.0`, which links `writing` and moves every installed skill to main's version; step 5 then invokes `/writing` as a user would; pro: step 5 tests the skill as installed, con: the plan skills running this plan change mid-plan to main's version (the changes since v2.0.0 are the ones plans 2.B and 3 landed). (b) the orchestrator reads `skills/writing/SKILL.md` from main and carries out its Steps by hand, disclosed as not an invocation; pro: nothing installed changes, con: it does not test the skill's installation, frontmatter or triggers. Recommendation: (a). The lazy option is (b).
+- None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item H (step 5 needs `/writing`, and the installed skills are pinned at v2.0.0): ruled (a); main is tagged v2.1.0 at step 4's landing commit f05fb35 and `utils/pin.sh v2.1.0` is run, so step 5 invokes `/writing` as installed.
 
 - 2026-09-28: open item G (the no-history rule in the prose standard, raised in step 4's repair round): ruled (a); prose standard section 0 carries the rule, with past-events text exempt.
 
@@ -79,7 +81,7 @@ dispatch:
 
 - 2026-09-28. Steps 1, 2, 3, 2a and 4 landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list and every branch has a case, the reference pages are in `skills/writing/references/`, and `skills/writing/SKILL.md` gives `/writing <file>`. The installed skills are v2.0.0.
 - Next: step 5, a real draft of the user's: the orchestrator runs `/writing` on `/Users/axelfaes/workspace/research-hub/funding/2026-fwo-senior-transplant/proposal/main.tex` (read only), and the user reviews what it flags.
-- Open on Axel's side: open item H, how step 5 runs `/writing`.
+- Open on Axel's side: none.
 
 ## Usage
 

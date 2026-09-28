@@ -40,13 +40,14 @@ Independent of each other; the configuration block's `workers_at_once: 1` still 
 - Open item F (2026-09-28): (a), step 2a is widened: `skills/land/templates/land.test.sh` and the ledger's copy keep the caller's Python user site (PYTHONUSERBASE from `python3 -m site --user-base`) when they set a scratch HOME, with a case that fails without it, sent in 2a's repair round. The lazy option was (c), changing only the environment (the user).
 - Step 5's draft (2026-09-28): `/Users/axelfaes/workspace/research-hub/funding/2026-fwo-senior-transplant/proposal/main.tex`, read only; `/writing` reads the `.tex`, since the script reads text files (the user).
 - Open item G (2026-09-28): (a), step 4 is widened: `skills/writing/references/prose-standard.md` section 0 carries the no-history rule for rules, specs, skills, rules pages and code comments, with text whose subject is past events (a paper's related work, a changelog, a ledger) exempt, so the script's `history` check has a written rule; `anti-patterns.md` names where the rule of `history`, `non-ascii` and `section-words` lives (the user).
+- Open item H (2026-09-28): (a), main is tagged v2.1.0 at step 4's landing commit f05fb35 and `utils/pin.sh v2.1.0` is run, so step 5 invokes `/writing` as installed; the plan skills running this plan move to main's version (the user).
 
 ## Blocked, and by what
 
 - 2: step 1's landing, since the script's test and the reference pages name the moved page.
 - 3: step 1's landing.
 - 2a: nothing; open items D and E are ruled.
-- 5: open item H, how step 5 runs `/writing` while the installed skills are pinned at v2.0.0. The draft is named in the Rulings.
+- 5: nothing; open item H is ruled. The draft is named in the Rulings.
 - 6: steps 1 to 5, and 2a.
 
 ### Step 1, the prose standard moved (landed 2026-09-28)
@@ -109,6 +110,6 @@ Independent of each other; the configuration block's `workers_at_once: 1` still 
 - Carried from the review over step 2's last round (`agents/reviews/2-refuter.md`, "Repair round 1, refuted", Proof 1 and Behaviour 1 and 3): the list of untested branches with their lines, the probe q2.tex (ten semicolons in `\footnote`, `\emph` and `{\small ...}` lines uncounted), and `skills/plan-retro/SKILL.md` line 41 (a contrast read across a removed code span). From step 3's report: the five throat-clearing forms.
 - Open item E (the LaTeX data-row rule), raised at /spec 2026-09-28: ruled (b); see Rulings.
 
-### Step 5, Step 0 (open item H, open)
+### Step 5, Step 0 (open item H, ruled 2026-09-28: (a); see Rulings)
 
 Open item H (2026-09-28): step 5 needs `/writing`, and the installed skills are pinned at v2.0.0, which has no `writing` skill (`ls ~/.claude/skills ~/.claude-work/skills` lists none), so the runner cannot invoke `/writing`. Options: (a) tag main after step 4's landing as v2.1.0 and run `utils/pin.sh v2.1.0`, which links `writing` and moves every installed skill to main's version; step 5 then invokes `/writing` as a user would; pro: step 5 tests the skill as installed, con: the plan skills running this plan change mid-plan to main's version (the changes since v2.0.0 are the ones plans 2.B and 3 landed). (b) the orchestrator reads `skills/writing/SKILL.md` from main and carries out its Steps by hand, disclosed as not an invocation; pro: nothing installed changes, con: it does not test the skill's installation, frontmatter or triggers. Recommendation: (a). The lazy option is (b).
