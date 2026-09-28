@@ -38,9 +38,12 @@ dispatch:
   base: 410997a352e408005a7949d2f24f47771a663b22
   launched: 2026-09-28
   report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/2-report.md
+  builder_usage: claude:opus 211705 tokens / 63 tool uses / 796 s (round 0)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a54dcd77e96e0f34d
+  reviewer_report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/2-refuter.md (claude:opus 215961 tokens / 64 tool uses / 726 s)
+  round_1: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/briefs/2-round-1.md, sent on the tree of the round-0 report
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
