@@ -13,7 +13,7 @@ verify:                      # commands run in the worktree and again on main, i
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
-standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md] # files every brief tells the builder to read in full (ruling A).
+standards: [docs/dev/skill-layout.md, skills/writing/references/prose-standard.md] # files every brief tells the builder to read in full (ruling A).
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
@@ -31,17 +31,6 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
-- step: "1"
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/3-1
-  session_id: aecd05efea50856b9
-  base: "c1de4b5"
-  launched: 2026-09-28
-  report: .scratch/3-the-writing-base/agents/reviews/1-report.md
-  landing: not-started
-  round: 1
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/1-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -75,11 +64,12 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-28. The plan is opened; nothing has landed. The installed skills are v2.0.0.
-- Step 1, the prose standard moved, dispatched; next: its review and landing, then steps 2 and 3.
+- 2026-09-28. Step 1, the prose standard moved, landed; the prose standard is `skills/writing/references/prose-standard.md`. The installed skills are v2.0.0.
+- Next: step 2, the checking script, then step 3, the reference pages (serial, `workers_at_once: 1`).
 - Open on Axel's side: none.
 
 ## Usage
 
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | claude:opus agent: 91,634 tokens, 28 tool uses, 371 s; round 1: 132,384 tokens, 14 tool uses, 302 s | 113,019 tokens, 20 tool uses, 470 s; round 1: 121,092 tokens, 23 tool uses, 530 s | 1 | 5 (4 rulings) | 5 files changed, 11 insertions(+), 9 deletions(-) | no | 1 | 0 | 66 | 54292 | 223787 | 16479072 | 140 | 62 | none |

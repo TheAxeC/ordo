@@ -1,6 +1,6 @@
 # The skill layout
 
-Every `skills/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill. The prose inside follows `skills/repo-setup/templates/docs/dev/prose-standard.md`.
+Every `skills/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill. The prose inside follows `skills/writing/references/prose-standard.md`.
 
 ## Frontmatter
 

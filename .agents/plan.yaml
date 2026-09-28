@@ -9,4 +9,4 @@ worktree_root: .agents/worktrees          # Where a step's worktree is created; 
 worker: claude:opus                       # claude:<model> of the builder, for example claude:sonnet.
 reviewer: claude:opus                     # claude:<model> /refute runs on.
 libraries: avoid                          # check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
-standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md] # Files every brief tells the builder to read in full, and the reviewer holds a diff to.
+standards: [docs/dev/skill-layout.md, skills/writing/references/prose-standard.md] # Files every brief tells the builder to read in full, and the reviewer holds a diff to.
