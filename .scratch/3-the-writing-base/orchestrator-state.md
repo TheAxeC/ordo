@@ -10,6 +10,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
+- sh skills/writing/templates/check_prose.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -31,24 +32,15 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
-  step: "2"
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/3-2
-  session_id: a95fae87ee719731d
-  base: "55e4eec"
-  launched: 2026-09-28
-  report: .scratch/3-the-writing-base/agents/reviews/2-report.md
-  landing: not-started
-  round: 1
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/2-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item B (step 2, raised 2026-09-28): does rule 10 of `docs/dev/change-standard.md` ("No history in code or comments. ... ASCII only, no em dashes, no double blank lines.") forbid two blank lines between definitions in Python code? The new `check_prose.py` has 26 such places, following Python's usual style (PEP 8), as the four Python scripts already in the tree do (`check_config.py` 5, `sync_rules.py` 4, `check_coverage.py` 16, `usage.py` 11). (a) Yes: the rule applies to code as written; `check_prose.py` gets single blank lines at landing, and the four existing scripts are changed the same way at the same landing, since leaving them would keep the tree breaking its own rule. Pro: the tree follows its rules file. Con: Python files that look different from most Python code, and a landing that touches four files outside the step. (b) No: rule 10 is reworded to say the blank-line limit is for prose and comments, and Python code keeps two blank lines between top-level definitions; the reword lands with step 2. Pro: matches the existing scripts and standard Python style. Con: a rules-file change. (c) Leave rule 10 as it is and the scripts as they are: the lazy option, since the rule and the code keep contradicting each other. Recommendation: (b), since the rule's own sentence is about history and comments, and all five scripts already follow the other reading.
+- Open item C (step 2, raised 2026-09-28): the review over step 2's last repair round left work that is not small enough to fix at landing, and the round cap allows no further round. (1) Twelve branches of `check_prose.py` have no test case, so removing any of them leaves the test green: among them the floor at 0 of the LaTeX list and table depth (a stray `\end{itemize}` would make every later line a list item), the guard for a stray `\end{abstract}` (without it the script would crash), the `\item` label read as text, and inline `$...$` not spanning a blank line (also missing from the head docstring). (2) LaTeX data rows reach beyond data: a line that is one command with its arguments, such as `\footnote{...}` or `\emph{...}`, and the brace groups after a lone command such as `{\small ...}` after `\noindent`, are left out of the semicolon count; the reviewer's probe hid ten semicolons. (3) The contrast window runs across a removed Markdown code span, which gives a false contrast in `skills/plan-retro/SKILL.md` line 41. (a) A new step 2a, before step 4: a builder gives each of the twelve branches a case, or removes the branch where no input reaches it; narrows the LaTeX data row to a line of one command whose argument text holds no sentence and drops the argument-line reading except for lines that continue that command; and makes a removed code span end the contrast window; with its own review. Step 4 runs this script, so it waits for 2a. Pro: `/writing` is built on a script whose every rule is proven. Con: one more build and review. (b) Land step 2 as it is and leave the three points. This is the lazy option: the script keeps untested branches and hides semicolons in footnotes. Recommendation: (a).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item B (whether change standard rule 10's "no double blank lines" covers Python code): ruled (b); rule 10 is reworded at step 2's landing so the blank-line limit is for prose and comments, and Python code keeps two blank lines between top-level definitions.
 
 - 2026-09-28: open item A (the files every brief tells the builder to read): ruled (a); `standards` added to `.agents/plan.yaml` and to the block above, and step 1 changes the prose standard's path in both.
 
@@ -75,12 +67,13 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-28. Step 1, the prose standard moved, landed; the prose standard is `skills/writing/references/prose-standard.md`. The installed skills are v2.0.0.
-- Step 2, the checking script, dispatched; next: its review and landing, then step 3, the reference pages (serial, `workers_at_once: 1`).
-- Open on Axel's side: none.
+- 2026-09-28. Steps 1 and 2 landed: the prose standard is `skills/writing/references/prose-standard.md`, and `skills/writing/templates/check_prose.py` with its test is in the verify list. The installed skills are v2.0.0.
+- Next: step 3, the reference pages. Step 4 waits on step 3 and on the user's ruling on open item C.
+- Open on Axel's side: open item C.
 
 ## Usage
 
 | step | worker (tokens / tool uses / wall) | reviewer (the review; the runs over the repair rounds) | repair rounds | findings sent back | lines +/- | first report passed | fixes at landing | findings booked for the user | orchestrator messages | orchestrator output tokens | orchestrator cache-write tokens | orchestrator cache-read tokens | orchestrator fresh input tokens | orchestrator minutes | the look |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | claude:opus agent: 91,634 tokens, 28 tool uses, 371 s; round 1: 132,384 tokens, 14 tool uses, 302 s | 113,019 tokens, 20 tool uses, 470 s; round 1: 121,092 tokens, 23 tool uses, 530 s | 1 | 5 (4 rulings) | 5 files changed, 11 insertions(+), 9 deletions(-) | no | 1 | 0 | 66 | 54292 | 223787 | 16479072 | 140 | 62 | none |
+| 2 | claude:opus agent: 304,209 tokens, 56 tool uses, 3,007 s (a cases hand-back at 933 s); round 1: 267,170 tokens, 97 tool uses, 5,083 s | 209,060 tokens, 44 tool uses, 891 s; round 1: 222,949 tokens, 48 tool uses, 980 s | 1 | 18 (12 rulings) | 4 files changed, 2064 insertions(+) | no | 5 | 1 (open item C) | 73 | 69778 | 150164 | 16379009 | 156 | 180 | none |
