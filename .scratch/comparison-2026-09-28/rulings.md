@@ -32,14 +32,18 @@ The source repositories were cloned under the session scratchpad; the file and l
 | Entry 7 | the gate adds a verdict per referee point: addressed / partly / not / cannot be checked from the manuscript, judged by reading | yes |
 | Entry 10 | its interview is `grill` (A) pointed at a research idea; the novelty check stays | follows from A |
 | Entries 3 and 4 lesson | "run checks on a real corpus" | withdrawn: 2.C removes those checks and 3 and 4 are redrafted |
+| codebase-design | a design-standard skill and page, focused on design principles in the form of Cathedra's `docs/dev/standards/coding-standards.md` "Design principles" (lines 58-70): each principle (single responsibility, separation of concerns, open/closed, Liskov, interface segregation, dependency inversion, DRY, keep it simple, YAGNI) stated in the concrete form it takes in the repository, "a principle without a concrete form is a slogan", a check named where one exists. Source: mattpocock `codebase-design` | yes (2026-09-29, Axel) |
+| improve-codebase-architecture | an Ordo skill that scans a repository for violations of those same design principles, writes candidates (files, problem, fix, benefit, strength), and grills through the one Axel picks into a roadmap entry | yes (2026-09-29, Axel) |
+| grill | as A | yes, confirmed again (2026-09-29, Axel) |
+| writing-for-agents | its rules into `docs/dev/skill-layout.md` | yes (2026-09-29, Axel) |
+| wayfinder | no separate skill; F and A cover it | agreed (2026-09-29, Axel) |
+| pruning pass | the writing-for-agents rules applied to every Ordo skill, Axel reads the whole diff | yes, as the last entry of the roadmap, after 16 (Switch over), no sooner (2026-09-29, Axel) |
+| wizard | a skill that generates a script walking a person through steps only a person can do, writing each value to `.env` or a secret, confirming before each irreversible action | yes, wanted (2026-09-29, Axel) |
+| teach | a teaching workspace: mission file, short lessons tied to it, reference sheets, learning records, retrieval practice and spacing | Axel disagreed both that it does not belong in Ordo and that mattpocock's should be installed as is: it is reimplemented as an Ordo skill (2026-09-29) |
 
 ## Open, for Axel
 
-- Where the accepted items go. Recommendation: two roadmap entries after 2.C, through `/roadmap add`: 2.D, process changes to existing skills (2, 3, 4, 5, 7, 8, 10, E1, F, the blind-comparison protocol and the gate changes of entries 7, 9 and 10 as roadmap edits); 2.E, new skills (A with B, C, E2, G, wait-what, and whatever of the rows below is accepted). The lazy option is one large entry.
-- `codebase-design` and `improve-codebase-architecture` (mattpocock). See "Answers owed" below. Recommendation: yes, as one skill in 2.E plus a design-standard page in `repo-setup`'s templates.
-- `writing-for-agents` rules into `skill-layout.md` (2.D), and the pruning pass over Ordo's ten skills (its own step, Axel reads the diff). Recommendation: yes to both.
-- `wizard`: recommendation, a maybe, low priority; a `repo-setup` option for a project's manual setup.
-- `teach`: recommendation, install mattpocock's `teach` as it is (MIT license) outside Ordo; no reimplementation.
+- Where the accepted items go. Recommendation: two roadmap entries after 2.C, through `/roadmap add`: 2.D, process changes to existing skills (2, 3, 4, 5, 7, 8, 10, E1, F, writing-for-agents into `skill-layout.md`, the blind-comparison protocol and the gate changes of entries 7, 9 and 10 as roadmap edits); 2.E, new skills (grill with the glossary, diagnose, standalone review, git guard, wait-what, codebase-design, improve-codebase-architecture, wizard, teach). The pruning pass is ruled as the last roadmap entry. The lazy option is one large entry.
 - Step 3 of 2.C: tag v2.2.0 and `utils/pin.sh v2.2.0` (open item B of the 2.C state file).
 
 ## Answers owed or given, for the record
