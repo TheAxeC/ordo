@@ -77,5 +77,5 @@ None.
 - 2026-09-29. Steps 1 to 3 done. Step 3: main tagged v2.2.0 at 9a382b5, the installed skills pinned to it, `writing` no longer installed.
 - Verified: `git -C ~/.local/share/ordo-stable describe --tags` prints `v2.2.0`; `sh utils/pin.sh` prints `pinned: v2.2.0, 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0.
 - Step 4, `--built` removed, is in flight: brief `agents/briefs/4.md`, base fbf6f8b, builder launched; it lands through `sh skills/land/templates/land.sh <state file> 4 <base>`.
-- Open on Axel's side: the section "Open, for Axel" of `.scratch/comparison-2026-09-28/rulings.md`, where the accepted items of the comparison go in the roadmap.
+- Open on Axel's side: nothing. The comparison items are all ruled in `.scratch/comparison-2026-09-28/rulings.md` and go into the roadmap through `/roadmap add` after this entry closes.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
