@@ -41,14 +41,17 @@ dispatch:
   launched: 2026-09-28
   report: .scratch/3-the-writing-base/agents/reviews/3-report.md
   landing: not-started
-  round: 0
+  round: 1
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/3-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item C (step 2, raised 2026-09-28): the review over step 2's last repair round left work that is not small enough to fix at landing, and the round cap allows no further round. (1) Twelve branches of `check_prose.py` have no test case, so removing any of them leaves the test green: among them the floor at 0 of the LaTeX list and table depth (a stray `\end{itemize}` would make every later line a list item), the guard for a stray `\end{abstract}` (without it the script would crash), the `\item` label read as text, and inline `$...$` not spanning a blank line (also missing from the head docstring). (2) LaTeX data rows reach beyond data: a line that is one command with its arguments, such as `\footnote{...}` or `\emph{...}`, and the brace groups after a lone command such as `{\small ...}` after `\noindent`, are left out of the semicolon count; the reviewer's probe hid ten semicolons. (3) The contrast window runs across a removed Markdown code span, which gives a false contrast in `skills/plan-retro/SKILL.md` line 41. (a) A new step 2a, before step 4: a builder gives each of the twelve branches a case, or removes the branch where no input reaches it; narrows the LaTeX data row to a line of one command whose argument text holds no sentence and drops the argument-line reading except for lines that continue that command; and makes a removed code span end the contrast window; with its own review. Step 4 runs this script, so it waits for 2a. Pro: `/writing` is built on a script whose every rule is proven. Con: one more build and review. (b) Land step 2 as it is and leave the three points. This is the lazy option: the script keeps untested branches and hides semicolons in footnotes. Recommendation: (a).
+- None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item C (the work the review over step 2's last round left on the checking script): ruled (a); step 2a added before step 4.
 
 - 2026-09-28: open item B (whether change standard rule 10's "no double blank lines" covers Python code): ruled (b); rule 10 is reworded at step 2's landing so the blank-line limit is for prose and comments, and Python code keeps two blank lines between top-level definitions.
 
@@ -78,8 +81,8 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-28. Steps 1 and 2 landed: the prose standard is `skills/writing/references/prose-standard.md`, and `skills/writing/templates/check_prose.py` with its test is in the verify list. The installed skills are v2.0.0.
-- Step 3, the reference pages, dispatched; next: its review and landing. Step 4 waits on step 3 and on the user's ruling on open item C.
-- Open on Axel's side: open item C.
+- Step 3, the reference pages, dispatched; next: its review and landing. Then step 2a, the checking script finished (ruling C). Step 4 waits on steps 3 and 2a.
+- Open on Axel's side: none.
 
 ## Usage
 
