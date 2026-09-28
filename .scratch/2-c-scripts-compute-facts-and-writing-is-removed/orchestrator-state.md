@@ -35,10 +35,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- B (2026-09-29), step 3: tag main v2.2.0 at step 2's landing commit and run `utils/pin.sh v2.2.0`, so steps 4 to 7 run under the new `/land`, `/refute` and `/spec` texts and the installed skills lose `writing`. Options: (a) yes, now; (b) not yet, and steps 4 to 7 wait, since the plan blocks them on step 3. Recommendation (a): the pinned skills today are v2.1's, whose `/land` still asks for the ledger copies this ledger no longer has. The lazy option is none here; (b) only delays.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: open item B, the tag and the pin: ruled (a), yes; main tagged v2.2.0 at 9a382b5 and `utils/pin.sh v2.2.0` run.
 - 2026-09-28: open item A, who runs the verify list: ruled (b), a separate script `skills/land/templates/checks.sh <state file>` that the builder, the reviewer and `land.sh` run; the user approved its name and what it computes.
 
 ## The standing demands (from Axel, in force)
@@ -63,8 +64,8 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1 and 2 landed. Step 2: one `land.sh` in the `land` skill, `checks.sh` beside it, `verify.sh`, `verify.test.sh` and `usage.py` deleted, and this ledger's script copies gone.
-- Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 3, tag v2.2.0 and pin, which waits on the user's yes.
-- Open on Axel's side: the yes to tagging main v2.2.0 and running `utils/pin.sh v2.2.0` (open item B); and the section "Open, for Axel" of `.scratch/comparison-2026-09-28/rulings.md`, the comparison with other skill packs, whose accepted items go into new roadmap entries after 2.C.
+- 2026-09-29. Steps 1 to 3 done. Step 3: main tagged v2.2.0 at 9a382b5, the installed skills pinned to it, `writing` no longer installed.
+- Verified: `git -C ~/.local/share/ordo-stable describe --tags` prints `v2.2.0`; `sh utils/pin.sh` prints `pinned: v2.2.0, 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0.
+- Next step: 4, `--built` removed, through `/spec`, landing through `sh skills/land/templates/land.sh <state file> 4 <base>`.
+- Open on Axel's side: the section "Open, for Axel" of `.scratch/comparison-2026-09-28/rulings.md`, where the accepted items of the comparison go in the roadmap.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
