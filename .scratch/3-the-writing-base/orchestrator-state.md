@@ -41,7 +41,8 @@ dispatch:
   launched: 2026-09-28
   report: .scratch/3-the-writing-base/agents/reviews/2a-report.md
   landing: not-started
-  round: 0
+  round: 1
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/2a-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -49,6 +50,8 @@ dispatch:
 - None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item F (the verify list red at land.test.sh in this session): ruled (a); step 2a is widened to make land.test.sh keep the caller's Python user site, sent in its repair round.
 
 - 2026-09-28: open item E (the LaTeX data-row rule of step 2a): ruled (b); a one-command line is prose when its command carries prose or it is a brace group opened by a size or font switch, and step 2a's line is rewritten to it.
 
@@ -94,3 +97,4 @@ dispatch:
 | 1 | claude:opus agent: 91,634 tokens, 28 tool uses, 371 s; round 1: 132,384 tokens, 14 tool uses, 302 s | 113,019 tokens, 20 tool uses, 470 s; round 1: 121,092 tokens, 23 tool uses, 530 s | 1 | 5 (4 rulings) | 5 files changed, 11 insertions(+), 9 deletions(-) | no | 1 | 0 | 66 | 54292 | 223787 | 16479072 | 140 | 62 | none |
 | 2 | claude:opus agent: 304,209 tokens, 56 tool uses, 3,007 s (a cases hand-back at 933 s); round 1: 267,170 tokens, 97 tool uses, 5,083 s | 209,060 tokens, 44 tool uses, 891 s; round 1: 222,949 tokens, 48 tool uses, 980 s | 1 | 18 (12 rulings) | 4 files changed, 2064 insertions(+) | no | 5 | 1 (open item C) | 73 | 69778 | 150164 | 16379009 | 156 | 180 | none |
 | 3 | claude:opus agent: 174,888 tokens, 34 tool uses, 1,299 s (a cases hand-back at 363 s); round 1: 279,075 tokens, 26 tool uses, 775 s | 156,305 tokens, 34 tool uses, 542 s; round 1: 183,552 tokens, 41 tool uses, 601 s | 1 | 15 (14 rulings) | 3 files changed, 220 insertions(+) | no | 11 | 1 (open item D) | 53 | 49542 | 170570 | 12031800 | 116 | 66 | none |
+| 2a (in flight) | claude:opus agent: 294,024 tokens, 77 tool uses, 2,597 s | 193,551 tokens, 59 tool uses, 1,506 s | | | | | | | | | | | | | none |
