@@ -51,6 +51,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: the hook script's test runs each blocked command and expects the block, and runs `git branch -D` and `git worktree remove` and expects them allowed; each block removed in a scratch copy turns the test red; `repo-setup`'s text for the offer read by you.
 - Waits on: 2.C, for the rule that the test exists because a failure loses work.
 
+## 2.H session-retro
+
+- Status: [ ]
+- Goal: A `session-retro` skill that reads the transcripts of Claude Code sessions and reports both what went well, to keep and repeat, and what went wrong, to change, each point with the place in the transcript quoted and the change it proposes to a rule, a skill or a brief; you rule on each proposal.
+- Gate: one real run over the sessions of plan 2.C, its report holding points of both kinds, each with its quoted place, reviewed by you, with your ruling written beside each proposal.
+- Waits on: 2.D, for the layout rules.
+
 ## 3. The writing base
 
 - Status: [ ]
