@@ -40,7 +40,11 @@ dispatch:
   launched: 2026-09-28
   report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/18-report.md
   landing: not-started
-  round: 0
+  round: 1
+  round_1: agents/briefs/18-round-1.md, six rulings (Spec 1 and 2, Behaviour 1 and 2, 1-15's evidence, the counts)
+  builder_usage: 136,569 tokens, 144 tool uses, 1976 s
+  reviewer: a904a300be9aeb494
+  reviewer_report: .scratch/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/agents/reviews/18-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim at the top of every report until ruled)
