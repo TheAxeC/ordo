@@ -58,6 +58,7 @@ dispatch: none
 
 - Design: `docs/roadmap.md` entry 2.C, and the rulings in `plan.md`. Ledger: `.scratch/2-c-scripts-compute-facts-and-writing-is-removed/`, with `agents/briefs/` and `agents/reviews/`.
 - The v2.0.0 tag holds the text step 1 restores: `git show v2.0.0:<path>`.
+- The comparison with other skill packs, its rulings and the count of past findings by cause: `.scratch/comparison-2026-09-28/`.
 - Nothing running that a step must not disturb.
 
 ## Current position (rewritten before every step commit)
@@ -65,4 +66,5 @@ dispatch: none
 - 2026-09-29. Steps 1 and 2 landed. Step 2: one `land.sh` in the `land` skill, `checks.sh` beside it, `verify.sh`, `verify.test.sh` and `usage.py` deleted, and this ledger's script copies gone.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
 - Next step: 3, tag v2.2.0 and pin, which waits on the user's yes.
-- Open on Axel's side: the yes to tagging main v2.2.0 and running `utils/pin.sh v2.2.0`.
+- Open on Axel's side: the yes to tagging main v2.2.0 and running `utils/pin.sh v2.2.0` (open item B); and the section "Open, for Axel" of `.scratch/comparison-2026-09-28/rulings.md`, the comparison with other skill packs, whose accepted items go into new roadmap entries after 2.C.
+- Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
