@@ -113,7 +113,7 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-27. Steps 1, 1a, 1c, 2, 3, 4, 5, 6, 6a, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 17a, 20, 21, 23 and 24 landed (step 17a in the commit that carries this line); steps 7a, 7b and 7c landed and were then removed by ruling U through step 20. The tree is clean after it.
-- Roadmap entry 2.B, step 18a landed; next: step 19 (the closing), under the pinned skills v1.1.0.
+- Roadmap entry 2.B, step 19 (the closing) in progress: the gate passed and entry 2.B is marked done in the roadmap (8b3d5b1); next: the release tag and the pin, on the user's yes, then the reminder and prompt for research-hub, then this folder archived.
 - Open on Axel's side: none.
 
 ## Usage
