@@ -30,6 +30,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: you approve the diff of each changed skill, page and roadmap entry by reading it; `python3 -c` over every `skills/*/SKILL.md` prints each description's length and none is above 1,024; the entry's last code step is prepared, built and refuted under the new texts after a pin: its brief-check report lists every name the step changes with the hits outside its path list, and its refuter report gives the verdict per item and per Case, both read by you.
 - Waits on: 2.C, for the rules and the single landing script these skills now run under.
 
+## 2.E grill
+
+- Status: [ ]
+- Goal: A `grill` skill: an interview in rounds, each round asking every question whose prerequisites are settled, each question with its options, their pros and cons, one recommendation and the lazy option named; facts looked up by agents instead of asked; each answer written, as it settles, into the roadmap entry, the plan's Rulings and `docs/glossary.md`.
+- Gate: the skill follows `docs/dev/skill-layout.md`, read by you; one real run that redrafts roadmap entry 3 from its sources, whose glossary terms and rulings are on disk when the interview ends, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `grill-with-docs` on the same entry.
+- Waits on: 2.D, for the glossary, the layout rules and the blind-comparison protocol.
+
 ## 3. The writing base
 
 - Status: [ ]
