@@ -177,6 +177,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on a diff that holds a defect you know of, which the review finds with its failure scenario, reviewed by you; a blind comparison under the protocol of 2.D against ConnorGriffin's `code-review` on the same diff.
 - Waits on: 2.D, for the verdict form.
 
+## 18. wait-what
+
+- Status: [ ]
+- Goal: A `wait-what` skill you type when a message did not land: the message explained again in simple English with the context it left out, using the glossary's terms.
+- Gate: runs on three real messages you name as not landed, each re-explanation read by you and judged clear.
+- Waits on: 2.D, for the glossary.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
