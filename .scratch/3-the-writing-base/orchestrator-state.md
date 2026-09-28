@@ -32,22 +32,11 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
-  step: "3"
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/3-3
-  session_id: a3f3934d9eb1210c7
-  base: "755bcf9"
-  launched: 2026-09-28
-  report: .scratch/3-the-writing-base/agents/reviews/3-report.md
-  landing: not-started
-  round: 1
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/3-refuter.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- None.
+- Open item D (step 3's landing, raised 2026-09-28): the `contrast` check of `skills/writing/templates/check_prose.py` counts a one-sentence binary contrast only when a comma or "but" joins it ("It's not about X, it's about Y"). The source's own example joins it with an em dash, and a colon or a semicolon form is missed too; `skills/writing/references/anti-patterns.md` line 14 now lists these forms for judgment by hand. (a) Step 2a also counts the one-sentence form joined by a dash (em dash, en dash, spaced hyphen or `--`), a colon or a semicolon, with cases each way, and `anti-patterns.md` line 14 moves into its list of patterns the script finds. Pro: every form prose standard section D limits is counted, including the source's own example. Con: a wider pattern can give false contrasts, which the cases must pin down, and step 2a grows a little. (b) Leave these forms to judgment by hand, as the page now says. This is the lazy option: the script misses the form the source gives as its example. Recommendation: (a).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -80,9 +69,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-28. Steps 1 and 2 landed: the prose standard is `skills/writing/references/prose-standard.md`, and `skills/writing/templates/check_prose.py` with its test is in the verify list. The installed skills are v2.0.0.
-- Step 3, the reference pages, dispatched; next: its review and landing. Then step 2a, the checking script finished (ruling C). Step 4 waits on steps 3 and 2a.
-- Open on Axel's side: none.
+- 2026-09-28. Steps 1, 2 and 3 landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list, and the reference pages `academic-prose.md`, `judgment.md` and `anti-patterns.md` are in `skills/writing/references/`. The installed skills are v2.0.0.
+- Next: step 2a, the checking script finished (ruling C). Its brief waits on open item D, which decides whether 2a also counts the one-sentence contrast joined by a dash, a colon or a semicolon. Step 4 waits on steps 2a and 3.
+- Open on Axel's side: open item D.
 
 ## Usage
 
@@ -90,3 +79,4 @@ dispatch:
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | claude:opus agent: 91,634 tokens, 28 tool uses, 371 s; round 1: 132,384 tokens, 14 tool uses, 302 s | 113,019 tokens, 20 tool uses, 470 s; round 1: 121,092 tokens, 23 tool uses, 530 s | 1 | 5 (4 rulings) | 5 files changed, 11 insertions(+), 9 deletions(-) | no | 1 | 0 | 66 | 54292 | 223787 | 16479072 | 140 | 62 | none |
 | 2 | claude:opus agent: 304,209 tokens, 56 tool uses, 3,007 s (a cases hand-back at 933 s); round 1: 267,170 tokens, 97 tool uses, 5,083 s | 209,060 tokens, 44 tool uses, 891 s; round 1: 222,949 tokens, 48 tool uses, 980 s | 1 | 18 (12 rulings) | 4 files changed, 2064 insertions(+) | no | 5 | 1 (open item C) | 73 | 69778 | 150164 | 16379009 | 156 | 180 | none |
+| 3 | claude:opus agent: 174,888 tokens, 34 tool uses, 1,299 s (a cases hand-back at 363 s); round 1: 279,075 tokens, 26 tool uses, 775 s | 156,305 tokens, 34 tool uses, 542 s; round 1: 183,552 tokens, 41 tool uses, 601 s | 1 | 15 (14 rulings) | 3 files changed, 220 insertions(+) | no | 11 | 1 (open item D) | 53 | 49542 | 170570 | 12031800 | 116 | 66 | none |
