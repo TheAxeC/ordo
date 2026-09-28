@@ -31,7 +31,7 @@ An introduction's roadmap sentence, such as "Section 2 reviews the literature, a
 
 ## Patterns the script finds
 
-Each of these is reported by a check of `templates/check_prose.py`. Each entry names the section of the prose standard that holds the rule, and some add the fix:
+Each of these is reported by a check of `templates/check_prose.py`, and every check of the script has one entry. Each entry names where the rule is, a section of the prose standard or the user's `--limit`, and some add the fix:
 
 - **Filler, vague and flagged words.** The checks `filler`, `vague` and `flagged`, prose standard, section A.
 - **Em dashes and dash asides.** The check `dash-aside`, prose standard, sections 0 and B.
@@ -40,3 +40,6 @@ Each of these is reported by a check of `templates/check_prose.py`. Each entry n
 - **Throat-clearing openers and meta-commentary.** The check `throat-clearing` finds the phrases prose standard, section C, holds, and six more: `In today's rapidly evolving`, `It is important to note that`, `As a matter of fact`, `We now turn our attention to`, `This section will discuss` and `The following paragraph examines`. The fix for an opener is to delete it and state the point, and for meta-commentary to turn to the subject.
 - **Binary contrasts within one sentence.** The check `contrast` finds "not X, Y" and "not X but Y" within one sentence, prose standard, section D.
 - **Runs of equal-length sentences.** The check `equal-length` flags a run of five or more sentences whose longest and shortest differ by at most 2 words. The rule is prose standard, section E.
+- **Words of history.** The check `history`, prose standard, section 0. The fix moves the history to the log or cuts it.
+- **Characters outside ASCII.** The check `non-ascii`, prose standard, section B.
+- **Sections over a word limit.** The check `section-words` flags a section over the word limit the user passes with `--limit`, such as a funder's or a venue's limit, and the fix is to cut the section to the limit. It also flags line 1 when no heading of the file matches a `--limit`, and the fix is to correct that `--limit`.

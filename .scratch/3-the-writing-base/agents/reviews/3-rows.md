@@ -14,9 +14,9 @@ Rows: 74. Source lines listed: 135.
 | The most specific term | 5, 7, 8 | `academic-prose.md`, line 7 |
 | Technical terms defined at first use | 9 | `academic-prose.md`, line 8 |
 | A pronoun only with a clear antecedent | 10 | `academic-prose.md`, line 9 |
-| Filler words and redundant phrases cut | 12, 13 | `academic-prose.md`, line 11, naming section A at `prose-standard.md`, line 24; the redundant phrases are the wordy forms table under Wordy forms |
+| Filler words and redundant phrases cut | 12, 13 | `academic-prose.md`, line 11, naming section A at `prose-standard.md`, line 25; the redundant phrases are the wordy forms table under Wordy forms |
 | One idea per sentence, or clearly connected ideas | 14 | `academic-prose.md`, line 10 (ruling 4(ii)) |
-| Short sentences preferred for complex ideas | 15 | Not carried as its own rule (ruling 4(iii)): section E's limit is kept, `prose-standard.md`, line 64, named at `academic-prose.md`, line 12 |
+| Short sentences preferred for complex ideas | 15 | Not carried as its own rule (ruling 4(iii)): section E's limit is kept, `prose-standard.md`, line 65, named at `academic-prose.md`, line 12 |
 | Claims based on evidence, not opinion | 17, 18 | `academic-prose.md`, line 13 |
 | Hedging for uncertain claims | 19 | `academic-prose.md`, line 14 |
 | Limitations and alternative interpretations acknowledged | 20 | `academic-prose.md`, line 15 |
@@ -27,7 +27,7 @@ Rows: 74. Source lines listed: 135.
 | Social sciences register | 37, 39, 40, 41, 42 | Not carried: the coverage row keeps Engineering and CS of the six registers |
 | Humanities register | 45, 47, 48, 49, 50 | Not carried: the coverage row keeps Engineering and CS of the six registers |
 | Engineering and CS register: formal, problem and solution, specification-precise | 27, 53, 55 | `academic-prose.md`, line 24 |
-| Engineering and CS voice: passive for methods, active for contributions | 56 | `academic-prose.md`, line 25 (ruling 5, beside section E's passive rule, `prose-standard.md`, line 63) |
+| Engineering and CS voice: passive for methods, active for contributions | 56 | `academic-prose.md`, line 25 (ruling 5, beside section E's passive rule, `prose-standard.md`, line 64) |
 | Engineering and CS terminology: technical specifications, performance metrics | 57 | `academic-prose.md`, line 26 |
 | Engineering and CS example sentence | 58 | `academic-prose.md`, line 27 |
 | Education register | 61, 63, 64, 65, 66 | Not carried: the coverage row keeps Engineering and CS of the six registers |
@@ -54,9 +54,9 @@ Rows: 74. Source lines listed: 135.
 | Paragraph shape: explanation | 125 | `academic-prose.md`, line 76 |
 | Paragraph shape: link | 126 | `academic-prose.md`, line 77 |
 | Paragraph shape example, in ASCII (kappa, no em dashes) | 128, 129 | `academic-prose.md`, line 81 |
-| Wordy: "in order to" | 136 | `academic-prose.md`, line 96, naming section C at `prose-standard.md`, line 39 |
+| Wordy: "in order to" | 136 | `academic-prose.md`, line 96, naming section C at `prose-standard.md`, line 40 |
 | Wordy: "due to the fact that" to "because" | 131, 133, 134, 137 | `academic-prose.md`, line 87 |
-| Wordy: "a large number of" to "many" | 138 | `academic-prose.md`, line 88: the source's "many" replaced with "the number itself" naming section A, since "many" is on section A's vague list, `prose-standard.md`, line 26 (ruling 1) |
+| Wordy: "a large number of" to "many" | 138 | `academic-prose.md`, line 88: the source's "many" replaced with "the number itself" naming section A, since "many" is on section A's vague list, `prose-standard.md`, line 27 (ruling 1) |
 | Wordy: "at the present time" to "currently" or "now" | 139 | `academic-prose.md`, line 89 |
 | Wordy: "it is important to note that" to "notably" | 140 | `anti-patterns.md`, line 40, the full form, which the `throat-clearing` check holds beside section C's contracted form, pointed at from `academic-prose.md`, line 96; the replacement "notably" is not carried, since the source's own throat-clearing table deletes the opener (source line 84) and section C deletes openers |
 | Wordy: "in the event that" to "if" | 141 | `academic-prose.md`, line 90 |
@@ -134,30 +134,30 @@ Rows: 39. Source lines listed: 123.
 | The file's title and purpose: rules for good prose whoever wrote it | 1, 3, 5 | Not a rule: the page's opening paragraph states its scope, which names no author, `anti-patterns.md`, line 3 |
 | Design boundary: better prose, not detector evasion | 7 | Not a rule: it states the source skill's aim, and no page carries a detector rule |
 | The drafting steps that use the checklist | 9 | Not a rule: the page's opening paragraph names its readers (ruling 4(vii)), `anti-patterns.md`, line 3 |
-| Flagged terms: not banned, each checked as the most precise word | 13, 15 | `prose-standard.md`, line 28, found by the check `flagged`, `check_prose.py`, line 106, named at `anti-patterns.md`, line 36 |
-| The flagged-term list | 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45 | `prose-standard.md`, line 28; the "why it's flagged" and "better alternatives" columns are not carried (ruling 4(iv)); line 40's "paradigm shift" exception is at `anti-patterns.md`, line 15 |
-| Standard terminology of the discipline is exempt | 47, 49 | `prose-standard.md`, line 28 |
+| Flagged terms: not banned, each checked as the most precise word | 13, 15 | `prose-standard.md`, line 29, found by the check `flagged`, `check_prose.py`, line 106, named at `anti-patterns.md`, line 36 |
+| The flagged-term list | 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45 | `prose-standard.md`, line 29; the "why it's flagged" and "better alternatives" columns are not carried (ruling 4(iv)); line 40's "paradigm shift" exception is at `anti-patterns.md`, line 15 |
+| Standard terminology of the discipline is exempt | 47, 49 | `prose-standard.md`, line 29 |
 | The exemption's four examples | 50, 51, 52, 53 | `anti-patterns.md`, line 15 |
 | Em dash limit of 3 per paper, with its reason | 57, 59, 60, 61 | Not carried: the prose standard's zero is stricter (brief item 3), `prose-standard.md`, line 13 |
 | Em dash fix: commas, parentheses or separate sentences | 62 | `prose-standard.md`, line 13, found by the check `dash-aside`, `check_prose.py`, line 86 |
 | Quotations keep their original punctuation | 63 | `academic-prose.md`, line 121 |
-| Semicolons at most 2 per 1000 words, a full stop instead | 65, 66, 67, 68 | `prose-standard.md`, line 33, found by the check `semicolons`, `check_prose.py`, line 101; the fix, a kept semicolon joining closely related parallel structures and any other becoming a full stop, is at `anti-patterns.md`, line 38 (repair round 1, ruling 5) |
-| No two consecutive colon-and-list paragraphs | 70, 71, 72, 73 | `prose-standard.md`, line 34, found by the check `colon-lists`, `check_prose.py`, line 122; the fix, one consolidated list or a list of fewer than three items in the prose within section D, is at `anti-patterns.md`, line 39 (repair round 1, ruling 6) |
-| Throat-clearing openers deleted | 77, 79, 81 | `prose-standard.md`, line 39 |
-| The throat-clearing phrases the script's list holds | 83, 84, 85, 87, 88, 89, 90, 92, 93, 94 | `prose-standard.md`, line 39, found by the check `throat-clearing`, `check_prose.py`, line 104; each phrase's own fix is not repeated, since the ones the script finds are named and section C deletes the opener (brief item 3); line 84's contracted "It's important to note that" is the form section C holds, and the script holds both it and the full form, named at `anti-patterns.md`, line 40 |
+| Semicolons at most 2 per 1000 words, a full stop instead | 65, 66, 67, 68 | `prose-standard.md`, line 34, found by the check `semicolons`, `check_prose.py`, line 101; the fix, a kept semicolon joining closely related parallel structures and any other becoming a full stop, is at `anti-patterns.md`, line 38 (repair round 1, ruling 5) |
+| No two consecutive colon-and-list paragraphs | 70, 71, 72, 73 | `prose-standard.md`, line 35, found by the check `colon-lists`, `check_prose.py`, line 122; the fix, one consolidated list or a list of fewer than three items in the prose within section D, is at `anti-patterns.md`, line 39 (repair round 1, ruling 6) |
+| Throat-clearing openers deleted | 77, 79, 81 | `prose-standard.md`, line 40 |
+| The throat-clearing phrases the script's list holds | 83, 84, 85, 87, 88, 89, 90, 92, 93, 94 | `prose-standard.md`, line 40, found by the check `throat-clearing`, `check_prose.py`, line 104; each phrase's own fix is not repeated, since the ones the script finds are named and section C deletes the opener (brief item 3); line 84's contracted "It's important to note that" is the form section C holds, and the script holds both it and the full form, named at `anti-patterns.md`, line 40 |
 | "In today's rapidly evolving" | 86 | `anti-patterns.md`, line 40 |
 | "As a matter of fact" | 91 | `anti-patterns.md`, line 40 |
-| Meta-commentary: no sentence describing what the text does | 96, 98 | `prose-standard.md`, line 41 |
+| Meta-commentary: no sentence describing what the text does | 96, 98 | `prose-standard.md`, line 42 |
 | "This section will discuss" | 99 | `anti-patterns.md`, line 40 |
 | "The following paragraph examines" | 100 | `anti-patterns.md`, line 40 |
 | "We now turn our attention to" | 101 | `anti-patterns.md`, line 40 |
 | The Introduction's roadmap sentence is kept | 103 | `anti-patterns.md`, line 30 |
-| Forced groups of three | 107, 109, 110, 111, 112 | `anti-patterns.md`, line 9, naming section D, `prose-standard.md`, line 47 (ruling 3) |
-| Uniform paragraph length | 114, 115, 116, 117 | `anti-patterns.md`, line 10, naming section D, `prose-standard.md`, line 49; the example "a 2-sentence paragraph after a 10-sentence paragraph" is not carried, since a 10-sentence paragraph breaks section D's "under roughly four sentences" (ruling 3) |
-| Synonym cycling | 119, 120, 121, 122 | `anti-patterns.md`, line 11, naming section D, `prose-standard.md`, line 50; "per section" is not carried, since section D's one term per concept on the whole page is stricter (ruling 2) |
-| Binary contrast at most 2 per paper | 124, 125, 126, 127 | `prose-standard.md`, line 51, the limit; the one-sentence form is found by the check `contrast`, `check_prose.py`, line 114, only when a comma or "but" joins it ("It's not about X, it's about Y"), named at `anti-patterns.md`, line 41; the one-sentence form joined by the source's dash, a colon or a semicolon, which the check does not count, is at `anti-patterns.md`, line 14 (landing); the two-sentence form "Not X. Y." of source line 125, which the check does not find, is at `anti-patterns.md`, line 13 (repair round 1, ruling 2) |
-| Mirror structure | 129, 130, 131, 132 | `anti-patterns.md`, line 12, naming section D, `prose-standard.md`, line 52 (ruling 3) |
-| Sentence length varies | 136, 138, 139 | `prose-standard.md`, line 64 |
+| Forced groups of three | 107, 109, 110, 111, 112 | `anti-patterns.md`, line 9, naming section D, `prose-standard.md`, line 48 (ruling 3) |
+| Uniform paragraph length | 114, 115, 116, 117 | `anti-patterns.md`, line 10, naming section D, `prose-standard.md`, line 50; the example "a 2-sentence paragraph after a 10-sentence paragraph" is not carried, since a 10-sentence paragraph breaks section D's "under roughly four sentences" (ruling 3) |
+| Synonym cycling | 119, 120, 121, 122 | `anti-patterns.md`, line 11, naming section D, `prose-standard.md`, line 51; "per section" is not carried, since section D's one term per concept on the whole page is stricter (ruling 2) |
+| Binary contrast at most 2 per paper | 124, 125, 126, 127 | `prose-standard.md`, line 52, the limit; the one-sentence form is found by the check `contrast`, `check_prose.py`, line 114, only when a comma or "but" joins it ("It's not about X, it's about Y"), named at `anti-patterns.md`, line 41; the one-sentence form joined by the source's dash, a colon or a semicolon, which the check does not count, is at `anti-patterns.md`, line 14 (landing); the two-sentence form "Not X. Y." of source line 125, which the check does not find, is at `anti-patterns.md`, line 13 (repair round 1, ruling 2) |
+| Mirror structure | 129, 130, 131, 132 | `anti-patterns.md`, line 12, naming section D, `prose-standard.md`, line 53 (ruling 3) |
+| Sentence length varies | 136, 138, 139 | `prose-standard.md`, line 65 |
 | Five or more consecutive sentences of a narrow length range flagged | 141, 142 | `check_prose.py`, line 110, the check `equal-length`, which flags a spread of at most 2 words, named at `anti-patterns.md`, line 42; a run within a wider narrow range, such as the source's 20 to 25 words, is judged by hand at `anti-patterns.md`, line 16 (repair round 1, ruling 4) |
 | Fixes for a run of equal-length sentences | 144, 145, 146, 147 | `anti-patterns.md`, line 17, as alternatives, with source line 146's condition "if the pattern is monotonously short" (ruling 4(v); landing) |
 | Abstract: moderate variation | 149, 150 | `anti-patterns.md`, line 21 |

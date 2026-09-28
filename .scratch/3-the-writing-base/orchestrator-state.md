@@ -32,24 +32,15 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
-  step: "4"
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/3-4
-  session_id: ae5d80e3e04da8495
-  base: "934832e03193cc2db32b05a08e2166d0048b7816"
-  launched: 2026-09-28
-  report: .scratch/3-the-writing-base/agents/reviews/4-report.md
-  landing: not-started
-  round: 1
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/4-refuter.md (138,084 tokens, 38 tool uses, 491 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- None.
+- Open item H (2026-09-28): step 5 needs `/writing`, and the installed skills are pinned at v2.0.0, which has no `writing` skill (`ls ~/.claude/skills ~/.claude-work/skills` lists none), so the runner cannot invoke `/writing`. Options: (a) tag main after step 4's landing as v2.1.0 and run `utils/pin.sh v2.1.0`, which links `writing` and moves every installed skill to main's version; step 5 then invokes `/writing` as a user would; pro: step 5 tests the skill as installed, con: the plan skills running this plan change mid-plan to main's version (the changes since v2.0.0 are the ones plans 2.B and 3 landed). (b) the orchestrator reads `skills/writing/SKILL.md` from main and carries out its Steps by hand, disclosed as not an invocation; pro: nothing installed changes, con: it does not test the skill's installation, frontmatter or triggers. Recommendation: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item G (the no-history rule in the prose standard, raised in step 4's repair round): ruled (a); prose standard section 0 carries the rule, with past-events text exempt.
 
 - 2026-09-28: open item F (the verify list red at land.test.sh in this session): ruled (a); step 2a is widened to make land.test.sh keep the caller's Python user site, sent in its repair round.
 
@@ -86,9 +77,9 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-28. Steps 1, 2, 3 and 2a landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list and every branch has a case, and the reference pages are in `skills/writing/references/`. The installed skills are v2.0.0.
-- Next: step 4, the `writing` skill. Step 5's draft is named.
-- Open on Axel's side: none.
+- 2026-09-28. Steps 1, 2, 3, 2a and 4 landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list and every branch has a case, the reference pages are in `skills/writing/references/`, and `skills/writing/SKILL.md` gives `/writing <file>`. The installed skills are v2.0.0.
+- Next: step 5, a real draft of the user's: the orchestrator runs `/writing` on `/Users/axelfaes/workspace/research-hub/funding/2026-fwo-senior-transplant/proposal/main.tex` (read only), and the user reviews what it flags.
+- Open on Axel's side: open item H, how step 5 runs `/writing`.
 
 ## Usage
 
@@ -98,3 +89,4 @@ dispatch:
 | 2 | claude:opus agent: 304,209 tokens, 56 tool uses, 3,007 s (a cases hand-back at 933 s); round 1: 267,170 tokens, 97 tool uses, 5,083 s | 209,060 tokens, 44 tool uses, 891 s; round 1: 222,949 tokens, 48 tool uses, 980 s | 1 | 18 (12 rulings) | 4 files changed, 2064 insertions(+) | no | 5 | 1 (open item C) | 73 | 69778 | 150164 | 16379009 | 156 | 180 | none |
 | 3 | claude:opus agent: 174,888 tokens, 34 tool uses, 1,299 s (a cases hand-back at 363 s); round 1: 279,075 tokens, 26 tool uses, 775 s | 156,305 tokens, 34 tool uses, 542 s; round 1: 183,552 tokens, 41 tool uses, 601 s | 1 | 15 (14 rulings) | 3 files changed, 220 insertions(+) | no | 11 | 1 (open item D) | 53 | 49542 | 170570 | 12031800 | 116 | 66 | none |
 | 2a | claude:opus agent: 294,024 tokens, 77 tool uses, 2,597 s; round 1: 340,972 tokens, 33 tool uses, 1,713 s | 193,551 tokens, 59 tool uses, 1,506 s; round 1: 163,742 tokens, 46 tool uses, 1,408 s | 1 | 7 (9 rulings, with ruling F) | 4 files changed, 384 insertions(+), 48 deletions(-) | no | 5 | 1 (open item F) | 66 | 74190 | 370808 | 15085270 | 140 | 159 | none |
+| 4 | claude:opus agent: 139,752 tokens, 31 tool uses, 627 s; round 1: 197,913 tokens, 24 tool uses, 718 s | 138,084 tokens, 38 tool uses, 491 s; round 1: 155,647 tokens, 37 tool uses, 650 s | 1 | 6 (7 rulings, with ruling G) | 5 files changed, 119 insertions(+), 5 deletions(-) | no | 5 | 1 (open item G) | 60 | 42542 | 194569 | 10521498 | 128 | 55 | none |
