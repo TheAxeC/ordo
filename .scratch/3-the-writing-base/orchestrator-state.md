@@ -36,9 +36,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item J (2026-09-28): the report shape of `/writing` is unreadable. `skills/writing/SKILL.md` Steps 4 and "The problem list" prescribe one machine line per script flag and per reading, in line order, with the allowed flags listed apart, which on the FWO proposal gave some 80 lines a reader cannot use. Options: (a) a step 5a rewrites Steps 4, "The problem list" and its example, the anti-patterns and the Rules of `SKILL.md`: the report groups the problems by kind, the most consequential first, each group naming its lines, quoting a passage or two and saying what to change; the script's output is one input to the reading and is never listed flag by flag; a flag judged wrong is left out. (b) keep the shape and rewrite each run's output by hand. Recommendation: (a). The lazy option is (b).
+- None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-09-28: open item J (the report shape of `/writing`): superseded by the user's ruling on the review of Ordo: `/writing` is thrown out whole, plan 3 stops at step 5, and entry 3 is redone.
 
 - 2026-09-28: open item I (three kinds of wrong flags of the checking script on the FWO proposal): closed by the user: the script is an indication and never the truth, and it is not made more exact; its flags are judged by reading.
 
@@ -83,7 +85,7 @@ dispatch:
 
 - 2026-09-28. Steps 1, 2, 3, 2a and 4 landed: the prose standard is `skills/writing/references/prose-standard.md`, `skills/writing/templates/check_prose.py` with its test is in the verify list and every branch has a case, the reference pages are in `skills/writing/references/`, and `skills/writing/SKILL.md` gives `/writing <file>`. The installed skills are v2.0.0.
 - Next: step 5, a real draft of the user's: the orchestrator runs `/writing` on `/Users/axelfaes/workspace/research-hub/funding/2026-fwo-senior-transplant/proposal/main.tex` (read only), and the user reviews what it flags.
-- Open on Axel's side: step 5's check, the review of `/writing` on the FWO proposal, and open item J on the report shape of `/writing`.
+- Open on Axel's side: the plan for the fix of Ordo, the usage table, and how far "everything of /writing" reaches.
 
 ## Usage
 

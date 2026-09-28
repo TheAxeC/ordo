@@ -42,13 +42,14 @@ Independent of each other; the configuration block's `workers_at_once: 1` still 
 - Open item G (2026-09-28): (a), step 4 is widened: `skills/writing/references/prose-standard.md` section 0 carries the no-history rule for rules, specs, skills, rules pages and code comments, with text whose subject is past events (a paper's related work, a changelog, a ledger) exempt, so the script's `history` check has a written rule; `anti-patterns.md` names where the rule of `history`, `non-ascii` and `section-words` lives (the user).
 - Open item H (2026-09-28): (a), main is tagged v2.1.0 at step 4's landing commit f05fb35 and `utils/pin.sh v2.1.0` is run, so step 5 invokes `/writing` as installed; the plan skills running this plan move to main's version (the user).
 - Open item I (2026-09-28): closed by the user; the checking script is an indication and never the truth, and no step makes it more exact; `/writing` judges its flags by reading (the user).
+- Open item J and the review of Ordo (2026-09-28): the user rules: Ordo is fixed, not reset; plan 3 stops at step 5, and everything of `/writing` is thrown out rather than repaired; roadmap entry 3 is redone from its sources after a new entry that removes the script layer from Ordo and the rules that produce it; the global rule "scripts compute facts; judgment is read" is added to the user's `~/.claude/CLAUDE.md` and `~/.claude/rules/scripts-compute-facts.md` (the user).
 
 ## Blocked, and by what
 
 - 2: step 1's landing, since the script's test and the reference pages name the moved page.
 - 3: step 1's landing.
 - 2a: nothing; open items D and E are ruled.
-- 5: the user's review of the findings, and open item J.
+- 5: stopped; plan 3 ends here by the user's ruling, and entry 3 is redone.
 - 6: steps 1 to 5, and 2a.
 
 ### Step 1, the prose standard moved (landed 2026-09-28)
