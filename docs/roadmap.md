@@ -198,6 +198,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; a blind comparison under the protocol of 2.D against mattpocock's `improve-codebase-architecture` on the same repository.
 - Waits on: 19, for the design-standard page; 2.E, for `grill`.
 
+## 21. wizard
+
+- Status: [ ]
+- Goal: A `wizard` skill that writes a script walking a person through the steps only a person can do (open a dashboard, copy a key, paste it), writing each value to `.env` or a GitHub secret, asking before each irreversible action and never printing a secret.
+- Gate: one real run for a project's manual setup you name, the script run by you, reviewed by you.
+- Waits on: 2.D, for the layout rules.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
