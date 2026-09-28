@@ -32,6 +32,16 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
+  step: "3"
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/3-3
+  session_id: a3f3934d9eb1210c7
+  base: "755bcf9"
+  launched: 2026-09-28
+  report: .scratch/3-the-writing-base/agents/reviews/3-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -68,7 +78,7 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-28. Steps 1 and 2 landed: the prose standard is `skills/writing/references/prose-standard.md`, and `skills/writing/templates/check_prose.py` with its test is in the verify list. The installed skills are v2.0.0.
-- Next: step 3, the reference pages. Step 4 waits on step 3 and on the user's ruling on open item C.
+- Step 3, the reference pages, dispatched; next: its review and landing. Step 4 waits on step 3 and on the user's ruling on open item C.
 - Open on Axel's side: open item C.
 
 ## Usage
