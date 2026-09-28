@@ -31,6 +31,16 @@ bench: []                    # no A/B.
 
 ```yaml
 dispatch:
+  step: 2
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2c-2
+  base: 410997a352e408005a7949d2f24f47771a663b22
+  launched: 2026-09-28
+  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/2-report.md
+  landing: not-started
+  round: 0
+  session_id: a54dcd77e96e0f34d
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -64,7 +74,8 @@ dispatch:
 
 - 2026-09-28. Step 1 landed: `skills/writing/` removed, the prose standard and five files back to v2.0.0, plan 3's ledger deleted. Main's tree is clean after the landing commit.
 - Verified: the verify list on main, `verify: 7 commands passed`, exit 0.
-- Next step: 2, the single landing script and `checks.sh`, because it is the next of the list and open item A is ruled.
+- Step 2 is prepared (base 410997a) and its builder is running in `.agents/worktrees/2c-2`. At its landing the state file's verify list is rewritten from the new `docs/dev/building.md` before the ledger's `land.sh` runs, since the old list names `verify.test.sh`, which the step deletes.
+- Next step: 2's review, then its landing.
 - Open on Axel's side: none.
 
 ## Usage
