@@ -43,8 +43,7 @@ The source repositories were cloned under the session scratchpad; the file and l
 
 ## Open, for Axel
 
-- Where the accepted items go. Recommendation: two roadmap entries after 2.C, through `/roadmap add`: 2.D, process changes to existing skills (2, 3, 4, 5, 7, 8, 10, E1, F, writing-for-agents into `skill-layout.md`, the blind-comparison protocol and the gate changes of entries 7, 9 and 10 as roadmap edits); 2.E, new skills (grill with the glossary, diagnose, standalone review, git guard, wait-what, codebase-design, improve-codebase-architecture, wizard, teach). The pruning pass is ruled as the last roadmap entry. The lazy option is one large entry.
-- Step 3 of 2.C: tag v2.2.0 and `utils/pin.sh v2.2.0` (open item B of the 2.C state file).
+- Where the accepted items go. The earlier recommendation put every item before entry 3; Axel asked why (2026-09-29). The rule for the order: an item goes before entry 3 only when the later entries' plans run with it or are drafted with it; the rest go after 16, before the pruning pass. Recommendation: before 3, entry 2.D (process changes to existing skills: 2, 3, 4, 5, 7, 8, 10, E1, F, writing-for-agents into `skill-layout.md`, glossary B, the blind-comparison protocol and the gate changes of entries 7, 9 and 10 as roadmap edits), then 2.E `grill` (the redraft of entries 3 onward and entry 10 use it), 2.F `diagnose` and 2.G the git guard (both act on every later plan run). After 16, one entry per skill in the order Axel picks: standalone `/review`, `wait-what`, `codebase-design`, `improve-codebase-architecture`, `wizard`, `teach`; then the pruning pass last. The lazy option is one large entry.
 
 ## Answers owed or given, for the record
 
