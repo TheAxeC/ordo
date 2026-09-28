@@ -170,6 +170,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: with the user's explicit permission, asked for before any of it: your global `CLAUDE.md` and research-hub's `CLAUDE.md` name the new skills; the installed academic skills are removed from research-hub; `tools/manuscript` points at `paper`. Nothing of it is done without that permission.
 - Waits on: 5 to 10, each with its side-by-side run passed; 14, for the submission checks and the cover letter of `references/journal_submission_guide.md`; 15.A, so every later row is built before the academic skills are removed.
 
+## 17. review
+
+- Status: [ ]
+- Goal: A standalone `/review` of any diff since a commit, outside a plan, in the verdict form of `/refute`: a verdict per stated intent of the change and per claim of its commit messages, each finding with its failure scenario.
+- Gate: one real run on a diff that holds a defect you know of, which the review finds with its failure scenario, reviewed by you; a blind comparison under the protocol of 2.D against ConnorGriffin's `code-review` on the same diff.
+- Waits on: 2.D, for the verdict form.
+
 # Done
 
 <!-- - [x] <n>. <title>: <the gate's command> printed <its summary line> -->
