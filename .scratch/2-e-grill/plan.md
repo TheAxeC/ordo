@@ -93,6 +93,7 @@ Carried to step 7 (found by step 4's brief check): the pages form a folder `docs
 - O6 (a): a project name appears in a roadmap entry only where the entry reads or changes that project, as a path; the rule sentence is step 9 (the user).
 - Open item A (2026-09-29): (a), the figures of step 12a are drawn by a generator script, `docs/figures/gen_figures.py`, which computes only the SVG files from the boxes, arrows and labels written in it; no test (the user).
 - Figures: figures in the form of research-hub's `tools/figures/plan-loop.svg`, marking where Axel is in the loop and whether that point is required or optional (the user).
+- Open item B (2026-09-29): (a). At step 5's landing, roadmap entry 11's goal becomes "`repo-setup` renamed to `scaffold`, with the `library` and `research-project` profiles, hub-specific config, and Ordo's own `CLAUDE.md`." through `/roadmap`, in one commit; this ruling approves that diff. (the user)
 
 ## Blocked, and by what
 

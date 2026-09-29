@@ -43,7 +43,8 @@ dispatch:
   builder_usage: 193038 tokens, 37 tool uses, 1303 s
   brief_check: .scratch/2-e-grill/agents/reviews/2-brief-check.md (110579 tokens, 21 tool uses, 271 s)
   landing: not-started
-  round: 0
+  reviewer_report: .scratch/2-e-grill/agents/reviews/2-refuter.md (148659 tokens, 32 tool uses, 407 s)
+  round: 1
 - step: 4
   executor: agent
   worker: claude:opus
@@ -55,7 +56,8 @@ dispatch:
   builder_usage: 96874 tokens, 14 tool uses, 186 s
   brief_check: .scratch/2-e-grill/agents/reviews/4-brief-check.md (112374 tokens, 25 tool uses, 242 s)
   landing: not-started
-  round: 0
+  reviewer_report: .scratch/2-e-grill/agents/reviews/4-refuter.md (122792 tokens, 20 tool uses, 323 s)
+  round: 1
 - step: 5
   executor: agent
   worker: claude:opus
@@ -71,9 +73,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- B (2026-09-29, found by step 5's brief check). Roadmap entry 11's goal (`docs/roadmap.md:108`) names "the Python standard (ruff, pyright in standard mode, Python 3.10 or newer) and the C++ standard", which step 5 of this plan delivers as `coding-standards/python.md` and `cpp.md`. After step 5 lands, entry 11 names work already done. Entry 11's gate does not check the standards, so only its goal is affected. Options: (a) at step 5's landing, change entry 11's goal to "`repo-setup` renamed to `scaffold`, with the `library` and `research-project` profiles, hub-specific config, and Ordo's own `CLAUDE.md`." through `/roadmap`, in one commit, the approval of this option being the approval of that diff; (b) make the same change at 2.E's closing step; (c) leave entry 11 as it is. Recommendation: (a), since the entry is wrong from the moment step 5 lands and the change is one line. (b) leaves the roadmap wrong for the rest of the plan; (c) is the lazy option, leaving a roadmap entry that asks for work that exists. Step 5 does not wait on this ruling.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- B (2026-09-29, found by step 5's brief check). Roadmap entry 11's goal (`docs/roadmap.md:108`) names "the Python standard (ruff, pyright in standard mode, Python 3.10 or newer) and the C++ standard", which step 5 of this plan delivers as `coding-standards/python.md` and `cpp.md`. After step 5 lands, entry 11 names work already done. Entry 11's gate does not check the standards, so only its goal is affected. Options: (a) at step 5's landing, change entry 11's goal to "`repo-setup` renamed to `scaffold`, with the `library` and `research-project` profiles, hub-specific config, and Ordo's own `CLAUDE.md`." through `/roadmap`, in one commit, the approval of this option being the approval of that diff; (b) make the same change at 2.E's closing step; (c) leave entry 11 as it is. Recommendation: (a), since the entry is wrong from the moment step 5 lands and the change is one line. (b) leaves the roadmap wrong for the rest of the plan; (c) is the lazy option, leaving a roadmap entry that asks for work that exists. Step 5 does not wait on this ruling. Ruled (2026-09-29): (a).
 
 - 2026-09-29: open item A (step 12a, how the figures are drawn): ruled (a), a generator script `docs/figures/gen_figures.py` that computes only the SVG files from the boxes, arrows and labels written in it; no test.
 
