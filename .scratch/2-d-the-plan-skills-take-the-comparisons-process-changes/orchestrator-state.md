@@ -35,7 +35,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-None.
+- Open item D (2026-09-29, step 7): six gates of `docs/roadmap.md` (entries 2.E, 2.F, 17, 19, 20 and 22, lines 30, 37, 163, 177, 184 and 198) say "a blind comparison under the protocol of 2.D against <a skill> on <the same input>"; they name no page and no result. Step 7's line covers only entries 5, 6, 7, 9 and 10. Options: (a) step 7 also rewrites those six to "a blind comparison as `docs/dev/blind-comparison.md` says against <the skill> on <the same input>, wins or ties", so every comparison gate names the page and a result that fails when the new skill loses; (b) only the page named, no result added, so each gate passes whatever the comparison shows; (c) leave the six as they are until each entry is planned. Recommendation: (a); "the protocol of 2.D" resolves only through this plan's history once it is archived, and a comparison with no result can pass without the goal being reached. The lazy option is (c).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -67,5 +67,5 @@ None.
 
 - 2026-09-29. Step 6 landed: `docs/dev/blind-comparison.md` states the blind-comparison protocol as ruled, with open item C's ruling, and `docs/dev/change-standard.md` points at it.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: step 7, the roadmap through `/roadmap`, each change shown to Axel before it is written.
+- In flight: step 7, the roadmap; its five changes are drafted and shown to Axel for approval, none written yet; open item D asks whether six more gates change with them.
 - Open on Axel's side: nothing.
