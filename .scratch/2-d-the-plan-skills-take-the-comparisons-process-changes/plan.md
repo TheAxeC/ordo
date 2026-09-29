@@ -39,6 +39,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item D: the six gates that named "the protocol of 2.D" (entries 2.E, 2.F, 17, 19, 20 and 22) cite `docs/dev/blind-comparison.md` and need a win or a tie, changed in step 7 (the user).
 - Open item E: the glossary template of `/repo-setup` carries the plan skills' terms, with a section for the project's own terms, and `/repo-setup sync` keeps that section equal to the template as it does the shared-rules block; `docs/glossary.md` is in `.agents/plan.yaml`'s `standards` (the user).
 - The extended `sync_rules.py`: it checks the plan-terms block of `docs/glossary.md` against `skills/repo-setup/templates/plan-terms.md` beside the shared-rules block, exit 2 with a new error line for a missing glossary or block, `--write` for both, `--only glossary` for a repository without a shared-rules block; Ordo's verify list gains `python3 skills/repo-setup/templates/sync_rules.py . --only glossary`; its test gains the scratch cases; approved by the user (the user).
+- Open item F: `/ordo-init` lists `docs/glossary.md` in `standards` whenever the repository has one; added to step 9 by `agents/briefs/9-ruling-F.md` (the user).
 
 ## Blocked, and by what
 

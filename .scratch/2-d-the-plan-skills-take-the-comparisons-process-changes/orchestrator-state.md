@@ -50,6 +50,7 @@ None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: open item F (`/ordo-init` and a new repository's `standards`): ruled (a) by the user; `skills/ordo-init/SKILL.md` Steps 7 lists `docs/glossary.md` when the repository has one, added to step 9 by `agents/briefs/9-ruling-F.md` and sent to its builder.
 - 2026-09-29: open item E (the glossary template, and the glossary as a standard): ruled by the user, Q1 (b) the plan skills' terms copied into the template with a section for the project's own terms, kept in step by `/repo-setup sync` like the shared-rules block; Q2 (a) `docs/glossary.md` added to `.agents/plan.yaml`'s `standards`. Step 9's line rewritten; the sync's computation goes to the user for approval before the brief is written.
 - 2026-09-29: open item D (six gates citing "the protocol of 2.D"): ruled (a) by the user; the gates of entries 2.E, 2.F, 17, 19, 20 and 22 read "a blind comparison as `docs/dev/blind-comparison.md` says against <the skill> on the same <input>, wins or ties", committed at step 7.
 - 2026-09-29: step 7's five roadmap changes: approved by the user as shown.
