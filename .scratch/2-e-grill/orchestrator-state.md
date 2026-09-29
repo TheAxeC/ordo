@@ -74,13 +74,14 @@ dispatch:
   session_id: ae2714d2e377ffba9 (transcript model field: claude-sonnet-5-5, Claude Code 2.1.285)
   report: .scratch/2-e-grill/agents/reviews/3s55-report.md
   builder_usage: 205260 tokens, 47 tool uses, 1001 s
+  reviewer_report: .scratch/2-e-grill/agents/reviews/3s55-refuter.md (177523 tokens, 38 tool uses, 506 s)
   landing: not-started
   round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-none
+- Step 3, "Sonnet trial" (2026-09-29): which build of step 3 lands, and the builder model after it. Builds: Opus 5.5 (`2e-3`, review `3-refuter.md`), Sonnet 5 (`2e-3s`, `3s-refuter.md`), Sonnet 5.5 (`2e-3s55`, `3s55-refuter.md`). Options: (a) land the Opus 5.5 build and set `worker:` to Sonnet 5.5 for the next three code steps, measured by their landing reports; (b) land the Opus 5.5 build and keep Opus as builder; (c) land the Sonnet 5.5 build and set `worker:` to Sonnet 5.5. Recommendation: (a). The lazy option is (b), which ends the trial on one sample.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
