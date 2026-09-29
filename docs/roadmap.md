@@ -105,7 +105,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 11. scaffold
 
 - Status: [ ]
-- Goal: `repo-setup` renamed to `scaffold`, with the `library` and `research-project` profiles, the Python standard (ruff, pyright in standard mode, Python 3.10 or newer) and the C++ standard, hub-specific config, and Ordo's own `CLAUDE.md`.
+- Goal: `repo-setup` renamed to `scaffold`, with the `library` and `research-project` profiles, hub-specific config, and Ordo's own `CLAUDE.md`.
 - Gate: no file names `repo-setup` (a grep prints nothing); each profile scaffolds a scratch folder that passes `sync_rules.py` and `check_config.py`; `sync_rules.py` exits 0 on Ordo.
 - Waits on: 1, for the layout.
 
