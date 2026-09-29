@@ -45,6 +45,9 @@ dispatch:
   launched: 2026-09-29 21:44
   session_id: a4e5bce8772d0d657
   report: .scratch/2-e-grill/agents/reviews/3-report.md
+  builder_usage: 270520 tokens, 83 tool uses, 1857 s
+  cases_ruling: .scratch/2-e-grill/agents/briefs/3-cases.md (after the build; applies to 3 and 3s)
+  reviewer_report: .scratch/2-e-grill/agents/reviews/3-refuter.md (197731 tokens, 33 tool uses, 621 s)
   brief_check: .scratch/2-e-grill/agents/reviews/3-brief-check.md (173243 tokens, 33 tool uses, 520 s)
   landing: not-started
   round: 0
