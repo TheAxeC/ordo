@@ -105,9 +105,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 10. idea
 
 - Status: [ ]
-- Goal: The idea skill: the interview that sharpens an idea, and the novelty check with cited literature.
+- Goal: The idea skill: the `grill` interview (entry 2.E) pointed at a research idea, and the novelty check with cited literature.
 - Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: idea` row that the file of `skills/idea/` the row names holds what the source file did, checked by reading both.
-- Waits on: 9, for the literature search.
+- Waits on: 2.E, for the `grill` interview; 9, for the literature search.
 
 ## 11. scaffold
 
