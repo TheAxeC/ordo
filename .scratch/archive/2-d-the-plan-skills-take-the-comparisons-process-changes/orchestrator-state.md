@@ -40,6 +40,7 @@ None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: open item G (the closing of 2.D): ruled (a) by the user, the diffs and step 9's reports read and approved; `/roadmap done 2.D`, the archive, and the tag and pin of v2.5.0.
 - 2026-09-29: open item F (`/ordo-init` and a new repository's `standards`): ruled (a) by the user; `skills/ordo-init/SKILL.md` Steps 7 lists `docs/glossary.md` when the repository has one, added to step 9 by `agents/briefs/9-ruling-F.md` and sent to its builder.
 - 2026-09-29: open item E (the glossary template, and the glossary as a standard): ruled by the user, Q1 (b) the plan skills' terms copied into the template with a section for the project's own terms, kept in step by `/repo-setup sync` like the shared-rules block; Q2 (a) `docs/glossary.md` added to `.agents/plan.yaml`'s `standards`. Step 9's line rewritten; the sync's computation goes to the user for approval before the brief is written.
 - 2026-09-29: open item D (six gates citing "the protocol of 2.D"): ruled (a) by the user; the gates of entries 2.E, 2.F, 17, 19, 20 and 22 read "a blind comparison as `docs/dev/blind-comparison.md` says against <the skill> on the same <input>, wins or ties", committed at step 7.
@@ -70,7 +71,6 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 9 landed: the glossary, `docs/glossary.md` and the `repo-setup` template kept in step by `/repo-setup sync`.
-- Verified: `sh skills/land/templates/checks.sh` on this state file printed `checks: 8 commands passed` on main after the fixes at landing.
-- Next: step 10, the closing: every clause of the gate run, `/roadmap done 2.D`, the ledger moved to `.scratch/archive/`, and v2.5.0 tagged and pinned after your yes.
-- Open on Axel's side: the read of step 9's brief-check report and refuter report (the step's check), and the yes to tag and pin v2.5.0.
+- 2026-09-29. Plan 2.D closed: step 10 done, roadmap entry 2.D in Done (987e43f), this folder archived.
+- Next: tag v2.5.0 on the archive commit and run `utils/pin.sh v2.5.0`, on the user's yes given at open item G; then `/plan 2.E`.
+- Open on Axel's side: nothing.
