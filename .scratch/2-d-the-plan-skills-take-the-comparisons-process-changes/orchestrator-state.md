@@ -70,5 +70,5 @@ None.
 
 - 2026-09-29. Step 8 done: main tagged v2.4.0 at 5be7e73 and the installed skills pinned to it.
 - Verified: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.4.0`.
-- Next step: step 9, the glossary, as ruled on open item E; what the extended `sync_rules.py` computes is shown to Axel for approval before the brief is written.
-- Open on Axel's side: approval of what the extended `sync_rules.py` computes.
+- Next step: step 9, the glossary; its brief is written and its brief check runs.
+- Open on Axel's side: nothing.

@@ -38,11 +38,12 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item C: a side of a blind comparison that stops without a whole output, because it fails or stops to ask a question, is judged on what it produced, and each part it does not give is a critical failure; applied in `docs/dev/blind-comparison.md`, step 1 (the user).
 - Open item D: the six gates that named "the protocol of 2.D" (entries 2.E, 2.F, 17, 19, 20 and 22) cite `docs/dev/blind-comparison.md` and need a win or a tie, changed in step 7 (the user).
 - Open item E: the glossary template of `/repo-setup` carries the plan skills' terms, with a section for the project's own terms, and `/repo-setup sync` keeps that section equal to the template as it does the shared-rules block; `docs/glossary.md` is in `.agents/plan.yaml`'s `standards` (the user).
+- The extended `sync_rules.py`: it checks the plan-terms block of `docs/glossary.md` against `skills/repo-setup/templates/plan-terms.md` beside the shared-rules block, exit 2 with a new error line for a missing glossary or block, `--write` for both, `--only glossary` for a repository without a shared-rules block; Ordo's verify list gains `python3 skills/repo-setup/templates/sync_rules.py . --only glossary`; its test gains the scratch cases; approved by the user (the user).
 
 ## Blocked, and by what
 
 - 8: steps 1 to 7, and your yes to the pin.
-- 9: your approval of what the extended `sync_rules.py` computes.
+- 9: step 8.
 - 10: steps 1 to 9, your reading of every diff, and your yes to the pin.
 
 ### Step 1, the writing rules for skill text (landed 2026-09-29)
