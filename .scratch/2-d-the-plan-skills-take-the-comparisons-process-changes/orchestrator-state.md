@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 4
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2d-4
+  base: 77aa78803f98d7d017c22fd10f022357e2529b1c
+  launched: 2026-09-29
+  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/4-report.md
+  landing: not-started
+  round: 0
+  session_id: a60e841f2439d5c00
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -65,5 +75,5 @@ dispatch: none
 
 - 2026-09-29. Step 3 landed: the brief template asks for the inputs a script step implies, and a secret in quoted command output is written `<REDACTED>` (both change standards, `/refute`, `/land`, `/roadmap done`).
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 4, the roadmap and plan checks: "could this pass without the goal being reached", and the "Not yet specified" section.
+- In flight: step 4, the roadmap and plan checks; its builder runs in `.agents/worktrees/2d-4`.
 - Open on Axel's side: open item B.
