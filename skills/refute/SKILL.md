@@ -104,7 +104,9 @@ metadata:
   - a `static`, `thread_local` or file-scope mutable added;
   - a null guard, an early return or a fallback standing where a fix was asked for;
   - a count, a path or a measurement in the report that the reviewer's own run does not reproduce, when a decision rests on it, and the finding names that decision;
-  - a test that stays green with the change reverted, named with the revert that leaves it green (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs).
+  - a new or changed test of a behaviour the change adds or changes with no failure on the unchanged tree quoted for it in the form it has after the change;
+  - a new or changed test of a behaviour the change preserves with no passing run quoted for it after the change, or on the unchanged tree where it could run there;
+  - a test that would still pass with the behaviour it is written for taken out of the code, found by reading it (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs).
 - **Standards.** A finding is:
   - a documented standard the diff breaks, citing the standard's file and rule;
   - a comment that carries history (a step or item number, a date, what the code did before);

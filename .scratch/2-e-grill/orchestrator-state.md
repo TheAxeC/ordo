@@ -36,24 +36,12 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-- step: 8
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-8
-  base: f4e63fff2407373feecf0822350e8796b75f63a2
-  launched: 2026-09-30 01:24
-  session_id: a645de77ce926447e (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
-  report: .scratch/2-e-grill/agents/reviews/8-report.md
-  brief_check: .scratch/2-e-grill/agents/reviews/8-brief-check.md (claude-opus-5-5; 133639 tokens, 25 tool uses, 313 s)
-  builder_usage: round 0, claude-sonnet-5-5, 103483 tokens, 15 tool uses, 118 s
-  reviewer_report: .scratch/2-e-grill/agents/reviews/8-refuter.md (claude-opus-5-5; 129512 tokens, 25 tool uses, 311 s)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
+- Old rule 13 in game-engine and cathedra (2026-09-30, raised at step 8's landing): step 8 rewrote rule 13 of Ordo's change standard and its template, and `/spec`'s brief template and `/refute` now brief and review under it. game-engine's `docs/dev/change-standard.md:25` and cathedra's `docs/dev/standards/change-standard.md:25` still hold the old rule ("names the revert that turns it red"), and `repo-setup` does not sync the change standard. After the next pin, a brief in either repository would ask for a failure on the unchanged tree while its rules file, which a brief never overrides, asks for a named revert per test. Options: (a) step 15, which already edits those two repositories and leaves the edits for Axel to commit, also rewrites rule 13 there to Ordo's text, adapted to each page's numbering; (b) leave their pages, and accept that Ordo's skills and their rules files disagree on this rule. Recommendation: (a), since the mismatch reaches every step run there after the pin and the edit rides on a step that already touches both. (b) is the lazy option.
 - Step 6 reading (2026-09-30): step 6 landed with its check, Axel's reading of `skills/repo-setup/templates/docs/dev/ui-standard.md`, pending (ruling "Overnight work" 2); it stays unticked until he approves. Points for his reading: the three rules beyond the plan's four (colour never the only carrier, styling a shared component, text from the catalog) and the added thresholds (the brief's decision 3); the AA criteria not cited (1.4.4, 1.4.10, 2.5.8, 4.1.2), bound by the opening; 2.4.7 stated for keyboard focus in every mode, stricter than the criterion's "a mode of operation"; large text without the CJK clause of WCAG's definition. Options: (a) approve as landed; (b) name the changes, made on top of what landed as a correction. Recommendation: (a), after reading the page, which is 11 lines.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
@@ -92,7 +80,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 to 5 and 7 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
-- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 7's fixes at landing.
-- Next step: 8, the revert rule rewritten, since it waits on nothing; it touches the rules file, so it runs alone.
-- Open on Axel's side: the reading of step 6.
+- 2026-09-30. Steps 1 to 5, 7 and 8 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
+- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 8's fixes at landing.
+- Next step: 9, the two rule sentences (the open-item form of `plan-orchestration` and `spec`, and the `roadmap` skill's Rules); it touches skill texts only.
+- Open on Axel's side: the reading of step 6; the old rule 13 in game-engine and cathedra.

@@ -59,7 +59,7 @@ Run from <directory>, each must hold, each output piped through the filter the r
 1. The plan's verify list, run through the `land` skill's `templates/checks.sh` from the root of the checkout it checks as `sh <the land skill's folder>/templates/checks.sh <state file>`, prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and exits 0; the lines it prints are what the report quotes.
 2. `<command>` prints <expected output>.
 3. `<command>`: <the threshold or the shape the output must have>.
-4. Each new or changed test names the revert that turns it red. A test that no revert turns red is an audit, not a proof, and this brief says which it is.
+4. Each new or changed test of a behaviour the change adds or changes fails on the unchanged tree, in the form it has after its last change, and the report quotes that failure; each new or changed test of a behaviour the change preserves passes after the change and, where it can run there, on the unchanged tree, and the report quotes those runs. A test that would still pass with the behaviour it is written for taken out of the code is an audit, not a proof, and this brief says which it is.
 
 ## Report
 

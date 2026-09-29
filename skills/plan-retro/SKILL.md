@@ -64,7 +64,7 @@ metadata:
 
 ## Grouping
 
-- A kind is a sentence that states the defect in general terms, the way a rule would forbid it: "a test that stays green with the change reverted", "a comment that names the step that wrote it", "a document sentence the diff makes false".
+- A kind is a sentence that states the defect in general terms, the way a rule would forbid it: "a test that cannot fail", "a comment that names the step that wrote it", "a document sentence the diff makes false".
 - Findings whose text reports the same defect in different words share a kind.
 - `unclassified` findings from repair rounds are read and assigned like the rest, or set aside when they are a point the reviewer did not check.
 - The session keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Verdicts, Declined to judge, Not checked, Closed, Closures and Usage lists, and fenced lines.

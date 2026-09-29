@@ -10,4 +10,4 @@ The language pages in `docs/dev/coding-standards/` add to this page and never re
 - **Markdown and YAML.** Each paragraph and each bullet is one line, as the prose standard's section F sets for source formatting.
 - **Names.** A name says what the thing is in the repository's vocabulary, whose terms `docs/glossary.md` holds. One concept keeps one name, the rule "No synonym cycling" of the prose standard's section D.
 - **Errors.** A failure is reported through the language's error mechanism, with what failed and why. Nothing fails silently, and no catch-all handler hides a failure.
-- **Tests.** A test proves behaviour whose failure costs something, under the change standard's section "Scripts compute facts; judgment is read". Its rule "A test proves the change by failing without it, and the report quotes the red" sets how the proof is shown.
+- **Tests.** A test proves behaviour whose failure costs something, under the change standard's section "Scripts compute facts; judgment is read". Its rule "A test proves the change by failing on the unchanged tree, and the report quotes the failure" sets how the proof is shown.
