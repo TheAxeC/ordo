@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 2
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2d-2
+  base: 544c20420c48429c183c3bf60fa9201f5d27c02a
+  launched: 2026-09-29
+  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/2-report.md
+  landing: not-started
+  round: 0
+  session_id: a3a51b6bc43a624b1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -64,5 +74,5 @@ dispatch: none
 
 - 2026-09-29. Step 1 landed: the writing rules for skill text in `docs/dev/skill-layout.md`, `/spec`'s description at 999 characters.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 2, `/refute` takes the verdict form. Its brief also covers `/land`'s "The step not ready" and `/plan-retro`'s rule on what counts as a finding, which read the refuter report.
+- In flight: step 2, `/refute` takes the verdict form; its builder runs in `.agents/worktrees/2d-2`.
 - Open on Axel's side: open item A.
