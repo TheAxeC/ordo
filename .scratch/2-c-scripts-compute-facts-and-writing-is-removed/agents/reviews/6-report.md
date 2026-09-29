@@ -349,7 +349,7 @@ Two lines state a rule that the removals contradict, rule 15 of both change stan
 Each line that names what one of these tests proves was reread (`git grep -n -e 'pin.test' -e 'sync_rules.test' -e 'check_config.test' -e 'check_coverage.test'` over `skills`, `utils`, `docs`, `README.md`, `CLAUDE.md`):
 
 - `docs/dev/building.md` line 8, "check_config.py on complete and broken configurations": the complete case and the refusal cases remain.
-- `docs/dev/building.md` line 9, "sync_rules.py on matching and drifted shared-rules blocks, its --write repair and its refusals": the drift case checks the matching block after `--write` (`expect 0 python3 -B "$sync" "$test_root/drift"`), and four refusals remain.
+- `docs/dev/building.md` line 9, "sync_rules.py on matching and drifted shared-rules blocks, its --write repair and its refusals": the drift case checks the matching block after `--write` (`expect 0 python3 -B "$sync" "$test_root/drift"`), and five refusals remain (reversed, two-begins, two-blocks, not-utf8, lost-write; count corrected at landing).
 - `docs/dev/building.md` line 10, "pin.sh in pin and check mode under a scratch HOME, its refusals included": both modes and five refusals remain.
 - `docs/dev/building.md` line 11, "the coverage check on complete and broken coverage lists": the complete case and the refusal cases remain.
 - `README.md` line 48, perl "for `sync_rules.test.sh`": the test still runs perl (`to_crlf`, the reversed and two-begins fixtures).
@@ -408,6 +408,8 @@ R1 pin foreign link: relink first | exit 1 | FAIL: a pin refused for a link outs
 ```
 
 ### Item 5: rule 15 of both change standards
+
+Not taken at landing: the proposed text below keeps unconditioned demands beside a sentence that forbids them (refuter, run over round 1, Standards 3); step 5 writes rule 15.
 
 `docs/dev/change-standard.md` line 27 and `skills/repo-setup/templates/docs/dev/change-standard.md` line 27 carry the same text (`sed -n 27p` of each):
 

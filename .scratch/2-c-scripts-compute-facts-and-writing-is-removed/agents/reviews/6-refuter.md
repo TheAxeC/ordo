@@ -41,7 +41,7 @@ None beyond Spec 1 and 2.
 
 ## Repair round 1, refuted
 
-Reviewer: claude:opus, a fresh agent (usage in its completion notice, recorded in the dispatch entry). The round's delta read against `agents/reviews/6-round-0.diff`: 12 hunks, each under items 1, 2, 4 or 6.
+Reviewer: claude:opus, a fresh agent; 164110 tokens, 28 tool uses, 361 s. The round's delta read against `agents/reviews/6-round-0.diff`: 12 hunks, each under items 1, 2, 4 or 6.
 
 ### Verification lines
 
@@ -73,3 +73,17 @@ None.
 
 - The builder's full revert set (80 runs) not rerun; the round-0 tables beyond the rows item 1 changed not rejudged; the first run not rerun.
 - A revert that throws away the pinned worktree's local changes and then refuses is not caught by `describe --tags`; not tested, and not asked by the round.
+
+## Closed
+
+- First run, Spec 1 (the not-UTF-8 CLAUDE.md case): closed in repair round 1, item 1.
+- First run, Spec 2 (two kept cases red only on a message or status): closed in repair round 1, item 2.
+- First run, Spec 3 (`utils/pin.sh` line 69): raised as open item D; ruled (a) by the user, the line deleted at landing, and the two comments that described the path comparison (`utils/pin.sh` lines 28-29 and 60-62) rewritten to the resolved-path comparison; `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/pin.test.sh` prints `PASS: pin.sh scratch tests` and `sh utils/pin.sh` prints `pinned: v2.2.0, 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0, on main.
+- First run, Proof 1 (pin's "before the worktree or a link changes"): closed in repair round 1, item 4.
+- First run, Standards 1 (rule 15): step 5 rewrites rule 15 in both change standards, a premise correction at its `/spec`.
+- First run, Standards 2 (hard-wrapped comments): closed in repair round 1, item 6.
+- Round 1, Proof 1 (two audit assertions of the not-a-worktree case): fixed at landing: the empty-folder assertion and the `$d1/beta` readlink assertion removed from `utils/pin.test.sh`; the case keeps the live clone's branch, the exit status, the message and the untouched folder.
+- Round 1, Standards 1 (the comment "and link into it"): fixed at landing: the comment ends at "check the live clone out at the tag".
+- Round 1, Standards 2 (the report's count): fixed at landing in `agents/reviews/6-report.md` line 352, five refusals named.
+- Round 1, Standards 3 (the rule-15 proposal): the proposal is marked not taken in the report; step 5 writes rule 15.
+- Round 1, not checked (a revert that discards the pinned worktree's local changes before refusing): the local-changes case asserts the tag and the links; the pinned worktree's content is not compared. A different concern from this step's removals; noted here, and not raised, since the refusal on `utils/pin.sh` runs before any git command that changes the worktree (read on main).

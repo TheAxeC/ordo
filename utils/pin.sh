@@ -26,7 +26,7 @@
 # whose skill the tag lacks and prints a line for each.
 # ~/.agents/skills is not a default folder, so a link there into Ordo is not one of the pin's
 # links. When ORDO_SKILL_DIRS is not set and no folder of the list is ~/.agents/skills (compared by
-# path, and by resolved path for folders that exist), check mode reports each link there to the
+# resolved path, so a folder of the list matches it once both exist), check mode reports each link there to the
 # pinned worktree or the live clone or inside either. The target is read as the link names it and
 # with its folder resolved. Pin mode removes each such link after linking and prints a line for
 # each. Every other entry of that folder, a real folder or a link to anywhere else, is left as it
@@ -59,14 +59,13 @@ else
 fi
 # Prints ~/.agents/skills, the folder outside the list whose links into Ordo check mode reports
 # and pin mode removes; prints nothing when ORDO_SKILL_DIRS is set, or when the folder is one of
-# the list, by its path or, for folders that exist, by their resolved paths. It is run where it is
+# the list, by their resolved paths, both folders existing. It is run where it is
 # used, so a folder the pin creates is compared once it exists.
 outside_dir() {
     [ -z "${ORDO_SKILL_DIRS:-}" ] || return 0
     outside="$HOME/.agents/skills"
     outside_real=$(CDPATH= cd "$outside" 2>/dev/null && pwd -P) || outside_real=""
     while IFS= read -r dir <&4; do
-        [ "$dir" = "$outside" ] && return 0
         [ -n "$outside_real" ] || continue
         [ "$(CDPATH= cd "$dir" 2>/dev/null && pwd -P)" = "$outside_real" ] && return 0
     done 4<<EOF

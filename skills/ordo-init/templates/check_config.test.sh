@@ -1,6 +1,7 @@
 #!/bin/sh
-# Exercise check_config.py on scratch repositories: a complete configuration passes, and each kind of
-# error it exists to catch fails with the line that names it.
+# Exercise check_config.py on scratch repositories, each case one configuration it must refuse or pass.
+# A configuration is refused, with the line that names its error, when it misses a required key (reviewer; worker in the projects: form, named with its project), holds an unknown key, names a page that does not exist, leaves the worktree root not ignored, has .agents/plan.yaml ignored by git, sets worker to a model with no harness or to a harness other than claude, gives repair_rounds a value of the wrong kind, or sets libraries to a value other than check or avoid (a word, a boolean, or nothing).
+# The example configuration of each form passes, as does .agents/* with !.agents/plan.yaml after it, and libraries: avoid.
 
 set -u
 
@@ -75,19 +76,10 @@ make_repo bad-type
 sed -i.bak 's/^repair_rounds: 1 /repair_rounds: one /' "$test_root/bad-type/.agents/plan.yaml"
 expect_error bad-type "repair_rounds is a str, its default is a int"
 
-# A worker on any harness but claude is refused, naming the accepted form. Red when the check
-# accepts codex:<model>.
+# A worker on any harness but claude is refused. Red when the check accepts codex:<model>.
 make_repo codex-worker
 sed -i.bak 's/^worker: claude:opus/worker: codex:gpt-5.6-sol/' "$test_root/codex-worker/.agents/plan.yaml"
 expect_error codex-worker "worker is not claude:<model>: 'codex:gpt-5.6-sol'"
-
-# A key the plan skill's templates/plan.yaml does not hold is an unknown key: launch_note,
-# worker_allow and worker_effort each. Red when templates/plan.yaml holds the key.
-for key in 'launch_note: ""' 'worker_allow: []' 'worker_effort: high'; do
-    make_repo "unknown-${key%%:*}"
-    printf '%s\n' "$key" >>"$test_root/unknown-${key%%:*}/.agents/plan.yaml"
-    expect_error "unknown-${key%%:*}" "unknown key: ${key%%:*}"
-done
 
 # A repository whose configuration is the several-projects example, with each project's pages present.
 make_projects_repo() {
@@ -106,14 +98,8 @@ expect_pass projects
 sed -i.bak '/^    worker: /d' "$test_root/projects/.agents/plan.yaml"
 expect_error projects "tool-a: required key missing: worker"
 
-# libraries is a required key. Red when templates/plan.yaml marks it optional or does not hold it.
-make_repo libraries-missing
-sed -i.bak '/^libraries:/d' "$test_root/libraries-missing/.agents/plan.yaml"
-expect_error libraries-missing "required key missing: libraries"
-
-# libraries takes check or avoid, and any other value is refused with the value. Red when
-# check_config.py drops the libraries value check.
-for case in "maybe:maybe:'maybe'" "capital:Check:'Check'" "empty-string:'':''" "boolean:yes:True"; do
+# libraries takes check or avoid, and any other value is refused with the value. Red when check_config.py drops the libraries value check, or skips a value that is not a string.
+for case in "maybe:maybe:'maybe'" "boolean:yes:True"; do
     name=libraries-${case%%:*}
     value=${case#*:}
     shown=${value#*:}
@@ -124,36 +110,16 @@ for case in "maybe:maybe:'maybe'" "capital:Check:'Check'" "empty-string:'':''" "
     expect_error "$name" "libraries is neither check nor avoid: $shown"
 done
 
-# An empty libraries value is refused, not taken as missing or as a pass. Red when the value check
-# skips a value of None, as the review check does.
+# An empty libraries value is refused, not taken as missing or as a pass. Red when the value check skips a value of None, as the review check does.
 make_repo libraries-empty
 sed -i.bak '/^libraries:/d' "$test_root/libraries-empty/.agents/plan.yaml"
 printf 'libraries:\n' >>"$test_root/libraries-empty/.agents/plan.yaml"
 expect_error libraries-empty "libraries is neither check nor avoid: None"
 
-# check and avoid both pass; the controls are the refused values above. Red when templates/plan.yaml
-# does not hold libraries (unknown key) or when the value check refuses the value.
-for value in check avoid; do
-    make_repo "libraries-$value"
-    sed -i.bak '/^libraries:/d' "$test_root/libraries-$value/.agents/plan.yaml"
-    printf 'libraries: %s\n' "$value" >>"$test_root/libraries-$value/.agents/plan.yaml"
-    expect_pass "libraries-$value"
-done
-
-# In the projects: form, the project that lacks libraries is named, and the project that has it is
-# not. Red when check_config.py drops the project's label from the error, or when plan.projects.yaml's
-# tool-a has no libraries line.
-make_projects_repo projects-libraries
-sed -i.bak '/^  tool-b:/,${/^    libraries:/d;}' "$test_root/projects-libraries/.agents/plan.yaml"
-expect_error projects-libraries "tool-b: required key missing: libraries"
-case "$output" in
-    *"tool-a: required key missing: libraries"*) fail "projects-libraries: tool-a named although it sets libraries: $output" ;;
-esac
-
-# The value check runs in the projects: form too, and names the project. Red when check_config.py
-# drops the libraries value check.
-make_projects_repo projects-libraries-value
-sed -i.bak '/^  tool-a:/,/^  tool-b:/s/^    libraries: .*/    libraries: maybe/' "$test_root/projects-libraries-value/.agents/plan.yaml"
-expect_error projects-libraries-value "tool-a: libraries is neither check nor avoid: 'maybe'"
+# avoid passes; check passes in the complete configuration. Red when the value check refuses avoid.
+make_repo libraries-avoid
+sed -i.bak '/^libraries:/d' "$test_root/libraries-avoid/.agents/plan.yaml"
+printf 'libraries: avoid\n' >>"$test_root/libraries-avoid/.agents/plan.yaml"
+expect_pass libraries-avoid
 
 printf 'PASS: check_config.py scratch tests\n'

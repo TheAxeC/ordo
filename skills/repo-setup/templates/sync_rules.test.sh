@@ -1,12 +1,7 @@
 #!/bin/sh
-# Exercise sync_rules.py on scratch repositories. A block equal to the template passes, with the
-# CLAUDE.md or the template in LF or in CRLF. A drifted block fails with its diff on stdout, and
-# --write repairs it, keeping every byte outside the block and writing the block in the ending most
-# lines use (CRLF in a file CRLF on every line but its first), the first line's on a tie. Each
-# of these is refused with exit 2 and one error line on stderr, stdout empty: a missing block,
-# reversed markers, a second begin or end marker, a second block, a missing CLAUDE.md, a CLAUDE.md
-# or shared-rules.md that is not UTF-8, a missing shared-rules.md, a CLAUDE.md --write cannot open
-# and a write that does not read back as written.
+# Exercise sync_rules.py on scratch repositories whose CLAUDE.md holds a drifted shared-rules block.
+# The check exits 1 on the drifted block and prints its diff, and --write then makes the block equal the template, keeping every byte outside the block, in an LF file under a preamble holding a tab, trailing spaces and a UTF-8 letter, and in a CRLF file, where the block is written in CRLF too.
+# Each of these is refused with exit 2 and one error line on stderr, stdout empty: reversed markers, a second begin marker, a second block, a CLAUDE.md that is not UTF-8 (whose bytes --write leaves as they were), and a --write whose file does not read back as written.
 
 set -u
 
@@ -17,7 +12,7 @@ fail() {
 
 test_root=$(mktemp -d "${TMPDIR:-/tmp}/sync-rules-test.XXXXXX") ||
     fail "could not create scratch directory"
-trap 'chmod -R u+w "$test_root" 2>/dev/null; rm -rf "$test_root"' 0 1 2 3 15
+trap 'rm -rf "$test_root"' 0 1 2 3 15
 test_root=$(CDPATH= cd "$test_root" && pwd -P) || fail "could not resolve the scratch directory"
 script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
 sync=$script_dir/sync_rules.py
@@ -25,8 +20,7 @@ begin='<!-- ordo:shared-rules begin -->'
 end='<!-- ordo:shared-rules end -->'
 cr=$(printf '\r')
 
-# A repository whose CLAUDE.md is the template with the shared rules filled in, and no other file.
-# Red when the check requires another file beside CLAUDE.md, as a symlink AGENTS.md.
+# A repository whose CLAUDE.md is the template with the shared rules filled in, and no other file. Red when the check requires another file beside CLAUDE.md, as a symlink AGENTS.md.
 make_repo() {
     repo=$test_root/$1
     mkdir -p "$repo"
@@ -89,17 +83,6 @@ to_crlf() {
     perl -pi -e 's/\n/\r\n/' "$1"
 }
 
-make_repo same
-expect 0 python3 -B "$sync" "$test_root/same"
-case "$output" in
-    "ok: "*) ;;
-    *) fail "a block equal to the template does not print ok: [$output]" ;;
-esac
-
-make_repo same-crlf
-to_crlf "$test_root/same-crlf/CLAUDE.md"
-expect 0 python3 -B "$sync" "$test_root/same-crlf"
-
 # A drifted block, under a preamble holding a tab, trailing spaces and a UTF-8 letter.
 make_repo drift
 drift drift
@@ -140,61 +123,6 @@ outside_block "$test_root/crlf/CLAUDE.md" >"$test_root/crlf/outside-after"
 cmp -s "$test_root/crlf/outside-before" "$test_root/crlf/outside-after" ||
     fail "--write changed bytes outside the block of a CRLF file"
 
-# A file CRLF on every line but its first: the block takes the ending most lines use.
-make_repo mixed
-drift mixed
-to_crlf "$test_root/mixed/CLAUDE.md"
-perl -pi -e 's/\r\n/\n/ if $. == 1' "$test_root/mixed/CLAUDE.md"
-mixed_lines=$(grep -c "$cr\$" "$test_root/mixed/CLAUDE.md")
-outside_block "$test_root/mixed/CLAUDE.md" >"$test_root/mixed/outside-before"
-expect 0 python3 -B "$sync" "$test_root/mixed" --write
-mixed_after=$(grep -c "$cr\$" "$test_root/mixed/CLAUDE.md")
-[ "$mixed_after" = "$mixed_lines" ] ||
-    fail "mixed: --write left $mixed_after CRLF lines of $mixed_lines"
-mixed_lf=$(grep -vc "$cr\$" "$test_root/mixed/CLAUDE.md")
-[ "$mixed_lf" = 1 ] ||
-    fail "mixed: --write left $mixed_lf lines without CR, expected the first one only"
-outside_block "$test_root/mixed/CLAUDE.md" >"$test_root/mixed/outside-after"
-cmp -s "$test_root/mixed/outside-before" "$test_root/mixed/outside-after" ||
-    fail "mixed: --write changed bytes outside the block"
-
-# Makes a drifted repository whose lines are half CRLF and half LF, the first line in the ending
-# given ($2: crlf or lf); --write must then write the block in the first line's ending.
-tie_case() {
-    make_repo "$1"
-    drift "$1"
-    python3 -B - "$test_root/$1/CLAUDE.md" "$2" <<'PY'
-import sys
-path, first = sys.argv[1], sys.argv[2]
-lines = open(path, newline="").read().split("\n")[:-1]
-if len(lines) % 2:
-    lines.append("")
-half = len(lines) // 2
-crlf = [i < half for i in range(len(lines))]
-if first == "lf":
-    crlf.reverse()
-open(path, "w", newline="").write("".join(l + ("\r\n" if c else "\n") for l, c in zip(lines, crlf)))
-PY
-    expect 0 python3 -B "$sync" "$test_root/$1" --write
-    tie_endings=$(python3 -B - "$test_root/$1/CLAUDE.md" <<'PY'
-import sys
-text = open(sys.argv[1], "rb").read()
-block = text[text.index(b"begin -->") + 9:text.index(b"<!-- ordo:shared-rules end -->")]
-lines = block.split(b"\n")[:-1]
-ends = {l.endswith(b"\r") for l in lines}
-print("crlf" if ends == {True} else "lf" if ends == {False} else "mixed")
-PY
-)
-    [ "$tie_endings" = "$2" ] ||
-        fail "$1: a tie wrote the block in $tie_endings, expected $2 as the first line"
-}
-tie_case tie-crlf crlf
-tie_case tie-lf lf
-
-make_repo no-block
-sed -i.bak '/ordo:shared-rules/d' "$test_root/no-block/CLAUDE.md"
-expect_refusal "no block" "no single shared-rules block" python3 -B "$sync" "$test_root/no-block"
-
 make_repo reversed
 perl -pi -e "s/\\Q$begin\\E/MARK/; s/\\Q$end\\E/$begin/; s/MARK/$end/" \
     "$test_root/reversed/CLAUDE.md"
@@ -207,43 +135,23 @@ perl -pi -e "print \"$begin\\n\" if /\\Q$begin\\E/" "$test_root/two-begins/CLAUD
 expect_refusal "two begin markers" "no single shared-rules block" \
     python3 -B "$sync" "$test_root/two-begins"
 
-make_repo two-ends
-perl -pi -e "print \"$end\\n\" if /\\Q$end\\E/" "$test_root/two-ends/CLAUDE.md"
-expect_refusal "two end markers" "no single shared-rules block" \
-    python3 -B "$sync" "$test_root/two-ends"
-
 make_repo two-blocks
 printf '%s\nrules\n%s\n' "$begin" "$end" >>"$test_root/two-blocks/CLAUDE.md"
 expect_refusal "two blocks" "no single shared-rules block" \
     python3 -B "$sync" "$test_root/two-blocks"
 
-mkdir -p "$test_root/no-claude"
-expect_refusal "no CLAUDE.md" "no CLAUDE.md in $test_root/no-claude" \
-    python3 -B "$sync" "$test_root/no-claude"
-
-mkdir -p "$test_root/not-utf8"
-printf 'a\n%s\n\377\n%s\n' "$begin" "$end" >"$test_root/not-utf8/CLAUDE.md"
+# A CLAUDE.md that is not UTF-8, with a Latin-1 letter outside a drifted block, is refused by --write and left byte for byte as it was. Red when the file is decoded with replacement characters, which --write would then write over the user's letter.
+make_repo not-utf8
+drift not-utf8
+printf 'Caf\351 notes\n' >"$test_root/not-utf8/preamble"
+cat "$test_root/not-utf8/preamble" "$test_root/not-utf8/CLAUDE.md" >"$test_root/not-utf8/joined"
+mv "$test_root/not-utf8/joined" "$test_root/not-utf8/CLAUDE.md"
+cp "$test_root/not-utf8/CLAUDE.md" "$test_root/not-utf8/before"
+python3 -B "$sync" "$test_root/not-utf8" --write >/dev/null 2>&1
+cmp -s "$test_root/not-utf8/before" "$test_root/not-utf8/CLAUDE.md" ||
+    fail "--write changed a CLAUDE.md that is not UTF-8"
 expect_refusal "CLAUDE.md not UTF-8" "$test_root/not-utf8/CLAUDE.md is not UTF-8" \
-    python3 -B "$sync" "$test_root/not-utf8"
-
-# The script copied to a folder with no shared-rules.md, then with a CRLF one, then with one that
-# is not UTF-8.
-mkdir -p "$test_root/no-template"
-cp "$sync" "$test_root/no-template/sync_rules.py"
-expect_refusal "no shared-rules.md" "cannot read $test_root/no-template/shared-rules.md" \
-    python3 -B "$test_root/no-template/sync_rules.py" "$test_root/same"
-cp "$script_dir/shared-rules.md" "$test_root/no-template/shared-rules.md"
-to_crlf "$test_root/no-template/shared-rules.md"
-expect 0 python3 -B "$test_root/no-template/sync_rules.py" "$test_root/same"
-printf 'rules \377\n' >"$test_root/no-template/shared-rules.md"
-expect_refusal "shared-rules.md not UTF-8" "$test_root/no-template/shared-rules.md is not UTF-8" \
-    python3 -B "$test_root/no-template/sync_rules.py" "$test_root/same"
-
-make_repo read-only
-drift read-only
-chmod a-w "$test_root/read-only/CLAUDE.md"
-expect_refusal "read-only CLAUDE.md" "cannot write $test_root/read-only/CLAUDE.md" \
-    python3 -B "$sync" "$test_root/read-only" --write
+    python3 -B "$sync" "$test_root/not-utf8" --write
 
 # A write that does not take: the script's open() sends what it writes to the null device.
 make_repo lost-write
