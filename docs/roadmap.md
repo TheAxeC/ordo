@@ -71,7 +71,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The literature skill: search through Crossref, OpenAlex, Semantic Scholar and arXiv, source verification, synthesis and the `.bib`.
-- Gate: every source it cites resolves; a side-by-side run against deep-research on a real topic, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
+- Gate: every source it cites resolves; for a sample of twenty citations drawn at random, the cited passage is read and supports the claim it is cited for, and a source that cannot be accessed is reported, not written around; a side-by-side run against deep-research on a real topic, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
 - Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 5. paper
