@@ -1,0 +1,41 @@
+# Plan: 2.D The plan skills take the comparison's process changes
+
+Execution ledger for entry 2.D of `docs/roadmap.md`. One bullet is one step of work and one dispatch of its executor (a builder agent by default), except the bookkeeping steps the orchestrator does itself (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+The existing skills carry the process changes ruled in `.scratch/comparison-2026-09-28/rulings.md`: the reviewer invokes no skill and starts no agent; the refuter report has a "Declined to judge" heading and gives a verdict per item of the brief's "What to build" (holds / violated / not applicable) and per Case (met / partial / unmet / not verifiable), each finding with its failure scenario; a brief for a step that builds a script names the inputs the step implies, each with its expected result; secrets in quoted command output are written `<REDACTED>`; `/roadmap add` and `/plan` ask of every gate and step check whether it could pass without the goal being reached; `/spec` runs a fresh read-only agent that checks the brief against the tree before the build; `/roadmap` has a "Not yet specified" section, which `/plan` refuses to open; `docs/dev/skill-layout.md` holds the writing-for-agents rules, the 1,024-character limit on a description and the rule that a term is used only as `docs/glossary.md` defines it; `docs/glossary.md` exists in Ordo and in `repo-setup`'s templates; one blind-comparison protocol page is cited by the gates of entries 5, 6, 7, 9 and 10, and the gates of entries 7, 9 and 10 carry their ruled additions.
+
+## Gate
+
+You approve the diff of each changed skill, page and roadmap entry by reading it; `python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/SKILL.md"))]'` prints no length above 1,024 (it prints 1031 for `skills/spec/SKILL.md` today); the entry's last code step is prepared, built and refuted under the new texts after a pin: its brief-check report lists every name the step changes with the hits outside its path list, and its refuter report gives the verdict per item and per Case, both read by you.
+
+## Steps, in execution order
+
+- 1 The writing rules for skill text: `docs/dev/skill-layout.md` holds the writing-for-agents rules (a description is a trigger, its leading word first and one trigger per case; the target behaviour stated, not a prohibition; one source of truth per meaning; no sentence that does not change behaviour from the default; each step ends on its completion criterion; reference material out of the main file) and the rule that a description is at most 1,024 characters; `skills/spec/SKILL.md`'s description shortened to fit. Check: the gate's length command prints no length above 1,024; the diff read by you at the closing. (approved)
+- 2 `/refute` takes the verdict form: its Rules say the reviewer invokes no skill and starts no agent; its report template and "Steps" give a verdict per item of the brief's "What to build" (holds / violated / not applicable) and per Case (met / partial / unmet / not verifiable), each finding with its failure scenario, and the heading "Declined to judge" in place of "Not checked"; `/land` and `plan-orchestration`, which read the refuter report, carry the new headings. Check: `grep -n` of the two vocabularies and the heading in `skills/refute/SKILL.md` and `skills/refute/templates/report.md`; this step's own refuter report is the first written in the new form, read by you. (approved)
+- 3 Briefs and reports: `skills/spec/templates/brief.md`, for a step that builds a script, names the inputs the step implies but never states, each with its expected result; both change standards and `/refute` say a secret in quoted command output is written `<REDACTED>`. Check: `grep -n '<REDACTED>'` over both change standards and `skills/refute/`; the diff read by you. (approved)
+- 4 The roadmap and plan checks: `/roadmap add` and `/plan` ask of every gate and step check whether it could pass without the goal being reached, and the draft they show states the answer for each; `/roadmap` and `skills/roadmap/templates/roadmap.md` have a "Not yet specified" section for work whose gate cannot yet be named, and `/plan` refuses an entry in it. Check: a scratch roadmap holding one entry under "Not yet specified", on which `/plan` is read to refuse; the diff read by you. (approved)
+- 5 The brief check at `/spec`: after the brief and before the build, a fresh read-only agent checks the brief against the tree (every name the step changes grepped, the hits outside the path list listed; every item of the plan's step line present in "What to build"; every premise command rerun; the Cases consistent with the rules) and its report is saved at `agents/reviews/<step>-brief-check.md`; `plan-orchestration` and `plan-help` carry the new stage. Check: the diff read by you; the stage runs for the first time at step 8. (approved)
+- 6 The blind-comparison protocol: one page, `docs/dev/blind-comparison.md`, as ruled (the same input for both outputs; the judge sees them unlabelled in random order with only the input; each output read whole and its critical failures listed before a preference; the verdict written with reasons; judged twice with the order swapped, a disagreement a tie; a fresh agent judges twice and you read both outputs and the verdict for the final call). Check: the page read by you. (approved)
+- 7 The roadmap, through `/roadmap`, each change shown to you before it is written: a "Not yet specified" section in `docs/roadmap.md`; the gates of entries 5, 6, 7, 9 and 10 cite `docs/dev/blind-comparison.md`; entry 7's gate adds a verdict per referee point (addressed / partly / not / cannot be checked from the manuscript); entry 9's gate adds that for a sample of citations the cited passage is read and supports the claim, an inaccessible source reported, not written around; entry 10's interview is `grill` pointed at a research idea, the novelty check kept. Check: `grep -n 'blind-comparison.md' docs/roadmap.md` names entries 5, 6, 7, 9 and 10; each diff approved by you (orchestrator, no agent). (approved)
+- 8 Tag and pin: main tagged v2.4.0 at step 7's commit, and `utils/pin.sh v2.4.0` run after your yes, so step 9 is prepared, built and refuted under the new texts. Check: `git -C ~/.local/share/ordo-stable describe --tags` prints `v2.4.0` (orchestrator, no agent). (approved)
+- 9 The glossary, the entry's last code step, under the new texts: `docs/glossary.md` in Ordo, defining each term the skills use in a sense of their own (step, brief, ledger, landing, finding, open item and the rest the brief lists); a glossary template in `skills/repo-setup/templates/docs/`, which `/repo-setup` installs; `docs/dev/skill-layout.md` says a term is used only as the glossary defines it. Check: its brief-check report `agents/reviews/9-brief-check.md` lists every name the step changes with the hits outside its path list, and its refuter report gives the verdict per item and per Case, both read by you. (approved)
+- 10 The closing: every clause of the gate run and its output quoted, the length command among them; the roadmap entry ticked with that output (`/roadmap done 2.D`); this folder moved to `.scratch/archive/`; main tagged v2.5.0 and `utils/pin.sh v2.5.0` run after your yes (orchestrator, no agent). (approved)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless the configuration block allows more.
+
+- 3, 4 and 6 with each other, after 1.
+- 7 with anything after 6.
+
+## Rulings (2026-09-29)
+
+- The step list: approved as drafted, with its choices (the glossary as the last code step; the diffs read at the closing; `docs/dev/blind-comparison.md`; v2.4.0 before step 9 and v2.5.0 at the closing) (the user).
+
+## Blocked, and by what
+
+- 8: steps 1 to 7, and your yes to the pin.
+- 9: step 8.
+- 10: steps 1 to 9, your reading of every diff, and your yes to the pin.
