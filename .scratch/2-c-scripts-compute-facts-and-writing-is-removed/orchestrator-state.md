@@ -39,13 +39,15 @@ dispatch:
   launched: 2026-09-29
   report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/5-report.md
   landing: not-started
-  round: 0
+  round: 1
   session_id: aff737080ccfb46ce
+  builder_usage: round 0, 152802 tokens, 42 tool uses, 535 s
+  reviewer_report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/5-refuter.md, first run, 180529 tokens, 38 tool uses, 484 s
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-None.
+- E (2026-09-29, step 5): the word "script" in the template change standard and the shared rules. Step 5 writes the rule "scripts compute facts; judgment is read" into `skills/repo-setup/templates/docs/dev/change-standard.md` and `skills/repo-setup/templates/shared-rules.md`, which `/repo-setup` installs into code repositories (`game-engine/docs/dev/change-standard.md` came from it). There rule 1 reads "A defect in a script begins with a test that fails on the tree as it is" and the section reads "A test exists only for a script", so a defect in application code is neither a script nor text and would need no failing test first. Options: (a) in the two template files, "code" where Ordo's copy says "script" (a defect in code begins with a failing test; a test exists only for code, and only for behaviour whose failure costs something), Ordo's own change standard keeping "script", since Ordo's only code is its scripts; pro: a code repository keeps test-first for its product code; con: the template's wording differs from your global rule's. (b) "script" everywhere, as the global rule says; pro: one wording; con: in a code repository the rule reads as exempting application code from tests, the opposite of its intent. Recommendation: (a), applied at step 5's landing. The lazy option is (b), since it needs no change.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -81,6 +83,6 @@ None.
 
 - 2026-09-29. Steps 1 to 4, 6 and 7 done. Step 7: the roadmap change the user approved, commit 51ca1a5. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 5, the rules, widened by open item C and carrying rule 15; its builder runs in `.agents/worktrees/2c-5`.
-- Open on Axel's side: nothing until step 5's rules diff is ready for his reading.
+- In flight: step 5, the rules, widened by open item C and carrying rule 15; repair round 1 sent to its builder in `.agents/worktrees/2c-5`.
+- Open on Axel's side: open item E; then the reading of step 5's rules diff.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
