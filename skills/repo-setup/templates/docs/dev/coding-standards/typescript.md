@@ -45,5 +45,5 @@ This section holds only in a repository that uses Svelte or SvelteKit.
 - `svelte/comment-directive`, set with `reportUnusedDisableDirectives: true`, fails an unused disable comment in markup.
 - An async handler on a control is allowed: `@typescript-eslint/no-misused-promises` runs with `checksVoidReturn: false`.
 - A component file stays under <600> lines, and <the size check> fails the verify list at <540>. The limit for other files is in `docs/dev/coding-standards/common.md`.
-- A view draws its controls with the repository's shared components. Under <the views folder>, `svelte/no-restricted-html-elements` fails a raw `button`, `input`, `select` or `textarea`.
+- Under <the views folder>, `svelte/no-restricted-html-elements` fails a raw `button`, `input`, `select` or `textarea`, the check of the shared-controls rule in `docs/dev/ui-standard.md`.
 - A route reaches the server's objects through the request's locals (`event.locals`), never through a module global. The no-globals rule itself is in `docs/dev/design-principles.md`.

@@ -180,3 +180,199 @@ The standards findings a reviewer is asked to look for that the diff does not sh
 - Spec 2 to 6 and Standards 1 and 2 are in text item 1 of the brief dictated word for word. Whether they are closed in a repair round or at landing, as a change to the brief's wording, is the orchestrator's call.
 
 Agent usage: (left for the orchestrator)
+
+## Repair round 1, refuted
+
+Worktree `.agents/worktrees/2e-6`, base `425af4f88e863f227b63280b45ae1083d4aa4087`. The round's delta was computed against `6-round-0.diff`. `diff` of the round-0 page against the current page prints `6,7c6,7` and `9,10c9,10`. The `typescript.md` hunk is byte-identical to round 0 (`TS_SAME`). `git status --short` shows ` M ...typescript.md`, `?? .scratch/2-e-grill/agents/reviews/6-report.md` and `?? ...ui-standard.md`. The main-checkout copy of the report and the worktree copy are identical (`diff` printed nothing, `SAME`).
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+exit=0
+```
+
+The brief's grep cases and the commands the report quotes, rerun from the worktree root (F = `skills/repo-setup/templates/docs/dev/ui-standard.md`, T = `skills/repo-setup/templates/docs/dev/coding-standards/typescript.md`):
+
+```
+$ grep -o -E '[0-9]\.[0-9]\.[0-9]+' F | sort -u
+1.4.1
+1.4.11
+1.4.3
+2.1.1
+2.1.2
+2.4.11
+2.4.3
+2.4.7
+$ ls F && ! grep -n -i -E 'cathedra|...|tailwind' F && ! grep -n -i -w -E 'rite|curia|monastery|missal' F
+skills/repo-setup/templates/docs/dev/ui-standard.md
+rc=0
+$ ls F && ! LC_ALL=C grep -n '[^ -~]' F
+skills/repo-setup/templates/docs/dev/ui-standard.md
+rc=0
+$ ls F && ! grep -n -E '[^ ] - |--' F
+skills/repo-setup/templates/docs/dev/ui-standard.md
+rc=0
+$ grep -n 'ui-standard.md' T
+48:- Under <the views folder>, `svelte/no-restricted-html-elements` fails a raw `button`, `input`, `select` or `textarea`, the check of the shared-controls rule in `docs/dev/ui-standard.md`.
+$ grep -c -i 'shared components' T
+0
+$ git diff --stat -- T
+ skills/repo-setup/templates/docs/dev/coding-standards/typescript.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ wc -l F
+      11 skills/repo-setup/templates/docs/dev/ui-standard.md
+$ grep -c ';' F
+0
+$ LC_ALL=C grep -n '[^ -~]' F T
+nonascii rc=1
+$ git rev-parse HEAD; git show HEAD:T | sed -n 48p
+425af4f88e863f227b63280b45ae1083d4aa4087
+- A view draws its controls with the repository's shared components. Under <the views folder>, `svelte/no-restricted-html-elements` fails a raw `button`, `input`, `select` or `textarea`.
+$ git show 425af4f...:F     (unchanged tree)
+fatal: path 'skills/repo-setup/templates/docs/dev/ui-standard.md' exists on disk, but not in '425af4f88e863f227b63280b45ae1083d4aa4087'
+$ git show 425af4f...:T | grep -c -i 'shared components'
+1
+$ grep -n -i -E 'token|colou?r|contrast|keyboard|focus|catalog' .../coding-standards/*.md .../design-principles.md
+rc=1
+$ git grep -n -i -E 'ui-standard|shared.controls|no-restricted-html-elements' -- ':!.scratch'
+skills/repo-setup/templates/docs/dev/coding-standards/typescript.md:48:... (the line above)
+```
+
+(The project-name command ran in full as the brief writes it. It is shortened here only.)
+
+The brief's premises reproduce. `ls` of the dev folder and the coding-standards folder lists the pages the brief names. `plan.yaml:25` reads `design_references: []  # optional, default []. Published standards a design is held to, such as WCAG 2.2 AA; ...`, and `check_config.py:160-162` validates the key as a list of text.
+
+WCAG 2.2 was fetched with `curl -sL https://www.w3.org/TR/WCAG22/` (512457 bytes) and the text of each cited criterion extracted:
+- 1.4.1 is Level A. 1.4.3 is Level AA. 1.4.11 is Level AA. 2.1.1 is Level A. 2.1.2 is Level A. 2.4.3 is Level A. 2.4.7 is Level AA. 2.4.11 is Level AA.
+- Every WCAG sentence the report quotes in its Point 10 table matches the fetched normative text word for word. The large-scale definition fragment "at least 18 point or 14 point bold" is accurate; it omits the CJK clause.
+- The page states: "Introductory material, appendices, sections marked as "non-normative", diagrams, examples, and notes are informative (non-normative)."
+
+Also fetched with curl: W3C's Understanding pages for 1.4.11, 2.4.7 and 2.1.1.
+- Understanding 1.4.11: "the visual focus indicator for a component must have sufficient contrast against the adjacent background when the component is focused". This confirms the page's 1.4.11 attribution of the focus indicator.
+- Understanding 2.1.1: "Examples of "specific timings for individual keystrokes" include situations where a user would be required to repeat or execute multiple keystrokes within a short period of time or where a key must be held down for an extended period before the keystroke is registered."
+- Understanding 2.4.7: "In most cases there is only one mode of operation so this success criterion applies."
+
+### Closures claimed, checked against the first report and the round's rulings
+
+- Spec 1: closed. Line 10 ends with "These four criteria are checked by reading at review.", the ruling's wording.
+- Spec 2: the ruling's sentence is in place, but the finding's failure scenario is still reachable. See Spec 2 below.
+- Spec 3: closed. "Focus moves in an order that preserves meaning and operation (2.4.3)." matches the normative text.
+- Spec 4: closed with the ruling's wording. See Declined to judge for the "mode of operation" clause.
+- Spec 5: closed. The ruling's wording is in place and matches 1.4.1's "only visual means".
+- Spec 6: partial. "Reachable" became "performed", and the ruling's timing clause was added verbatim, but that clause is narrower than 2.1.1. See Spec 1 below.
+- Standards 1: closed. The sentence is split into two, as ruled.
+- Standards 2: closed. The text now reads "fails a style rule".
+- Proof 1: closed. The report's runner quote now equals my runner output line for line, the full perl command included.
+- Proof 2: rows added, and every WCAG quote verified. The 2.1.1 row's "met" is not reproduced; see Proof 1 below.
+- Behaviour 1: closed. The before line is reproduced by `git show HEAD:T | sed -n 48p` with HEAD at the base, and the after line by `grep -n`.
+- No closure removed a check. The delta touches lines 6, 7, 9 and 10 only, and each change maps to a round point. There is no change beyond the rulings.
+- The Contrast bullet and the Keyboard bullet have six sentences each, counted by reading.
+
+### Verdicts (whole diff since the base)
+
+Items of the brief's "What to build", with item 1's dictated text as replaced by the round's rulings:
+- 1: holds. By reading, the title, the opening and all seven bullets carry the text of item 1 and of rulings 1 to 8 word for word. Each check placeholder sits inside its rule's sentence. The page is 11 lines (`wc -l`), has 0 semicolons, and no bullet has more than six sentences. The defects in the dictated wording are recorded against the cases (Spec 1 and Spec 2).
+- 2: holds. `grep -n` prints the brief's line at 48. `git diff --stat` shows 1 insertion and 1 deletion. `grep -c -i 'shared components'` prints 0.
+
+Cases of the brief's "Cases":
+- Every rule of item 1 present, each with its check as a placeholder or "checked by reading at review": met, by reading lines 5 to 11.
+- Each cited criterion's wording and level match WCAG 2.2: partial. All eight criteria are level A or AA per the fetched text. Six of them (1.4.1, 1.4.11, 2.1.2, 2.4.3, 2.4.7, 2.4.11) are worded within their criterion. Two are not:
+  - 2.1.1 attributes less than the criterion asks (Spec 1).
+  - The contrast check's sentence still fails exempt pairs under 1.4.3 and 1.4.11 (Spec 2).
+- The opening names WCAG 2.2 AA and `design_references` and says a stricter listed standard holds, with no default stated: met, by reading line 3.
+- WCAG numbers grep: met. It prints the eight numbers and nothing else.
+- No source project, library or framework: met (rc=0).
+- ASCII: met (rc=0).
+- No dash aside: met (rc=0).
+- No hard wrapping and no semicolon run: met. 11 lines, one paragraph or bullet per line, `grep -c ';'` prints 0.
+- The shared-controls rule is stated on the UI page only, and `typescript.md:48` cites the page: met.
+- `typescript.md` changes on line 48 only: met.
+- No rule of `design-principles.md` or `coding-standards/common.md` restated: met. By reading, the four sentences changed in this round state WCAG thresholds and focus rules, and neither page holds anything on those. The first run's reading of the unchanged lines stands, and my grep over both pages for token, colour, contrast, keyboard, focus and catalog returns rc=1.
+- On the unchanged tree every case fails: met. `git show` of F at the base fails, and the base `typescript.md` gives `shared components` count 1 and no `ui-standard.md` hit.
+
+## 1. Spec
+
+1. `ui-standard.md:10`, Keyboard: "Every action a pointer performs can be performed from the keyboard, with no timing required between keystrokes, unless the action depends on the path the pointer draws (2.1.1)."
+   - What is wrong: 2.1.1 reads "without requiring specific timings for individual keystrokes". Understanding 2.1.1 gives two examples of such timing: keystrokes within a short period, and "a key must be held down for an extended period before the keystroke is registered". "Between keystrokes" covers only the first. So the rule that cites 2.1.1 asks less than 2.1.1 asks.
+   - This is the round ruling's point 6 wording, which the builder applied verbatim. It closes the first report's Spec 6 only in part.
+   - Failure scenario: a reviewer holding a diff to the page accepts a control that activates only when Space is held for two seconds. No timing "between keystrokes" is involved, so the rule as written passes it, and 2.1.1 fails it.
+   - Fix: "with no specific timing required for any keystroke" (or "no keystroke timed, held or repeated").
+   - Verdict: the WCAG-wording case is partial.
+
+2. `ui-standard.md:6`, Contrast: "The exemptions of 1.4.3 and 1.4.11 hold, such as an inactive control, pure decoration and a logotype. <the contrast check> computes each text pair and each non-text pair from the tokens and fails one below its threshold. A failure is fixed in the token's value, never by lowering the threshold."
+   - What is wrong: the ruled exemption sentence now stands, but the next two sentences are unchanged. The check still computes every text pair and fails any pair below its threshold, and the only permitted repair is the token's value.
+   - The first report's failure scenario for its Spec 2 is therefore still reachable: a logotype pair fails the check, and the page tells the author to change the brand colour. The page now states the exemption and, one sentence later, a check that does not honour it.
+   - Failure scenario: a repository whose brand token pair is 2.8:1 writes its contrast check to the page, the check fails the logotype pair, and the author either changes the brand colour, which 1.4.3 does not require, or cannot tell which of the two sentences governs.
+   - Fix: "<the contrast check> computes each text pair and each non-text pair from the tokens, leaving out the pairs an exemption covers, and fails one below its threshold."
+   - Verdict: the WCAG-wording case is partial.
+
+The other Spec findings a reviewer looks for are not in the diff. The delta changes only the four lines the rulings name. No dependency is added. No decision reserved for Axel is taken.
+
+## 2. Proof
+
+1. `6-report.md`, "Repair round 1", "Point 10, the reading cases", the row "2.1.1, level A ... met".
+   - What is wrong: the row quotes 2.1.1 correctly and then marks "met" the page sentence "with no timing required between keystrokes". My reading against the normative text and Understanding 2.1.1 does not reproduce "met" (Spec 1).
+   - The decision that rests on it is whether the WCAG-wording case counts as met at landing.
+   - Failure scenario: the orchestrator reads the table as all met and lands the page with the 2.1.1 narrowing, and Axel reads a rule that states less than the criterion it cites.
+   - Verdict: the WCAG-wording case is partial.
+
+Every other quoted command reproduces its stated output: the runner's lines, the grep cases, `wc -l`, `grep -c ';'`, and the before and after of line 48.
+
+## 3. Standards
+
+1. `ui-standard.md:3`, the opening: "Further published standards a design is held to are listed under `design_references` in `.agents/plan.yaml`, and where one of them is stricter than a rule here, it holds."
+   - Also on line 3: "The rules below are the concrete form of WCAG 2.2 level AA in this repository, and WCAG 2.2 AA holds in full wherever it asks more than a rule here." (30 words).
+   - Also `ui-standard.md:9`: "A difference the view needs is a property or a token of the component, and <the styling check> fails a style rule that reaches into a component." (27 words).
+   - What is wrong: each of these sentences joins two independent ideas with ", and" and runs 27 to 30 words. The prose standard's section E "Sentence length" asks for under roughly 20 words unless the mechanism needs more, and here only the conjunction makes them long.
+   - In the first sentence, "it holds" has two candidate antecedents, "one of them" and the nearer "a rule here".
+   - This text is from round 0 and was dictated by the brief. The first report did not raise it.
+   - Failure scenario: a reader resolves "it" to the nearer noun and takes the page's own rule to hold over a stricter listed standard, the reverse of the intent.
+   - Fix: split each sentence at ", and", and write "that standard holds" in place of "it holds".
+   - Verdict: none. The item and cases do not cover sentence length.
+
+The other Standards findings a reviewer looks for are not in the diff:
+- Non-ASCII: `rc=1` on F and T.
+- History in the new text: none.
+- Dash asides: `rc=0`.
+- Secrets in quoted lines: none.
+- A sentence elsewhere made false: the `git grep` above hits only `typescript.md:48`.
+
+## 4. Behaviour
+
+none. The round changes only the text of the new page, which no skill installs yet (step 7). The report's "Changes, old beside new" table gives each changed sentence before and after, and "Point 11" gives line 48 before and after.
+
+## Declined to judge
+
+- 2.4.7: the page's "Keyboard focus shows a visible focus indicator" leaves out the criterion's "has a mode of operation where". The page's sentence is stricter only on a platform that offers a second mode. Understanding 2.4.7 says "In most cases there is only one mode of operation", so I do not raise it. Whether the page should keep the stricter form is Axel's reading.
+- 2.4.11: the page's sentence matches the normative text. Notes 1 and 2 (user-movable content, content opened by the user) are informative per the fetched page, so their absence is not a misattribution.
+- 1.4.3 large text: the page omits the CJK clause of "large scale (text)". This narrows the definition for CJK scripts only. Whether the template needs the clause is Axel's reading.
+- The page's other sentences over 20 words (line 5 at 28, line 6 at 33 and 28, line 7 at 26, line 8 at 34, line 10 at 28 and 22) each carry a list or a threshold that the mechanism needs. They are the brief's or the rulings' wording, and I judged them within the rule's "unless the mechanism needs more".
+- "These four criteria" sits in a bullet that cites five criteria. By reading, it refers to the four named after the keyboard-tests sentence. I judged it clear, but Axel's reading settles it.
+- The additions beyond the plan's four rules, and the uncited AA criteria (1.4.4, 1.4.10, 2.5.8, 4.1.2), are Axel's reading per the brief's decision 3.
+- The oculus source lines were not reread. The page names no source, and no claim of this round rests on them.
+- Spec 1, Spec 2 and Standards 1 are all in text the brief or the round's rulings dictated. Whether they are fixed at landing (each is a one-sentence change inside the brief) or raised to Axel is the orchestrator's call.
+
+Agent usage: claude-opus-5-5 (from its transcript), 123555 tokens, 20 tool uses, 271 s.
+## Closed
+
+The findings of the run over the last round are not sent to the builder. Each is small and inside the brief, and is fixed on main at landing by the orchestrator:
+
+- Spec 1 (2.1.1 timing). "with no timing required between keystrokes" becomes "with no specific timing required for any keystroke", which covers a held key as Understanding 2.1.1 does.
+- Spec 2 (the contrast check and the exemptions). The check's sentence becomes "<the contrast check> computes each text pair and each non-text pair from the tokens, leaving out the pairs an exemption covers, and fails one below its threshold."
+- Proof 1 (the report's 2.1.1 row marked met). Closed by the fix of Spec 1; the landing report says the report's row was not reproduced.
+- Standards 1 (three sentences joined by ", and", and "it holds"). Each is split at ", and", and "it holds" becomes "that standard holds".
+- Declined to judge, the 2.4.7 mode clause, the CJK clause and "These four criteria": left to Axel's reading of the page, named in the landing report.

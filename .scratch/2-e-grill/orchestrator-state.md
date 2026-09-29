@@ -36,26 +36,12 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-- step: 6
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-6
-  base: 425af4f88e863f227b63280b45ae1083d4aa4087
-  launched: 2026-09-30 00:23
-  session_id: a298a7e61f0556c39 (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
-  report: .scratch/2-e-grill/agents/reviews/6-report.md
-  builder_usage: 79172 tokens, 14 tool uses, 134 s (claude-sonnet-5-5 throughout, from its transcript)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/6-refuter.md (claude-opus-5-5; 135966 tokens, 32 tool uses, 281 s)
-  brief_check: .scratch/2-e-grill/agents/reviews/6-brief-check.md (claude-opus-5-5; 112737 tokens, 21 tool uses, 226 s)
-  landing: not-started
-  round: 1
-  round_1: brief .scratch/2-e-grill/agents/briefs/6-round-1.md; the tree when sent .scratch/2-e-grill/agents/reviews/6-round-0.diff
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-none
+- Step 6 reading (2026-09-30): step 6 landed with its check, Axel's reading of `skills/repo-setup/templates/docs/dev/ui-standard.md`, pending (ruling "Overnight work" 2); it stays unticked until he approves. Points for his reading: the three rules beyond the plan's four (colour never the only carrier, styling a shared component, text from the catalog) and the added thresholds (the brief's decision 3); the AA criteria not cited (1.4.4, 1.4.10, 2.5.8, 4.1.2), bound by the opening; 2.4.7 stated for keyboard focus in every mode, stricter than the criterion's "a mode of operation"; large text without the CJK clause of WCAG's definition. Options: (a) approve as landed; (b) name the changes, made on top of what landed as a correction. Recommendation: (a), after reading the page, which is 11 lines.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -93,7 +79,7 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 to 5 are on main; step 3 landed from the Opus 5.5 build, the Sonnet 5 and Sonnet 5.5 builds' worktrees removed (ruling "Sonnet trial result").
-- `worker: claude:sonnet` for steps 6, 7 and 8, the Sonnet 5.5 measurement; each launch's served model is read from the agent's transcript and recorded.
-- Next: step 6, `ui-standard.md`, through `/spec`.
-- Open on Axel's side: the next pin, which puts step 3's skill texts and agents into use, needs his yes.
+- 2026-09-30. Steps 1 to 5 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
+- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 6's fixes at landing.
+- Next step: 7, `repo-setup` installs the pages, since it waits only on 4, 5 and 6, all on main.
+- Open on Axel's side: the reading of step 6.
