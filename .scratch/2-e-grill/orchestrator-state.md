@@ -43,9 +43,9 @@ dispatch:
   worktree: .agents/worktrees/2e-3
   base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
   launched: 2026-09-29 21:44
-  session_id: a4e5bce8772d0d657
+  session_id: a4e5bce8772d0d657 (claude-opus-5-5 at the launch and at round 1, from its transcript)
   report: .scratch/2-e-grill/agents/reviews/3-report.md
-  builder_usage: 270520 tokens, 83 tool uses, 1857 s
+  builder_usage: 270520 tokens, 83 tool uses, 1857 s; round 1: 319642 tokens, 28 tool uses, 387 s
   cases_ruling: .scratch/2-e-grill/agents/briefs/3-cases.md (after the build; applies to 3 and 3s)
   reviewer_report: .scratch/2-e-grill/agents/reviews/3-refuter.md (197731 tokens, 33 tool uses, 621 s)
   brief_check: .scratch/2-e-grill/agents/reviews/3-brief-check.md (173243 tokens, 33 tool uses, 520 s)

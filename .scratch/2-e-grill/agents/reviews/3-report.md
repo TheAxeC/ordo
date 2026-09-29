@@ -211,3 +211,185 @@ Of the tests: the notes.txt, sub/x.md and .hidden.md case stayed green on the un
    - What the case means holds. Removing the agent names (`sed -E 's/ordo-(<level>|<worker_effort>|<reviewer_effort>|low|medium|high|xhigh|max)//g'`) from every hit and grepping again gives output identical to `git grep -h -i -E 'ordo|pin\.sh|README' HEAD -- skills` (`diff` printed nothing).
    - The substitute check is the orchestrator's to write. The brief's hand-back rule asked for a stop at the first run on a case the brief gets wrong. The first run recorded the 48 base hits and did not see that the items require new `ordo-` hits, so this case surfaced only when the case was run after the build.
 2. **Verify 4 as written (`git grep -n -E 'general-purpose|links every skill from it|installed skills change only'`, with no pathspec) hits ledger files under `.scratch/`,** listed under Verify 4 above. Each quotes the old wording as a record, and the builder may not edit them. The case's form with `':!.scratch'` hits nothing.
+
+## Repair round 1
+
+All four points of `3-round-1.md` are done. One text outside the path list needs a matching change: `skills/spec/templates/brief-check.md:45`, given under "Doc text" below.
+
+### Point 1: the "both a skill folder and an agent folder" refusal
+
+- `utils/pin.sh:329`. Old: `[ "${dir%/}" = "$agent_dir" ] && fail "$agent_dir is both a skill folder and an agent folder"`. New: `same_folder "$dir" "$agent_dir" && fail "$agent_dir is both a skill folder and an agent folder"`.
+- `utils/pin.sh:145-154`, a new helper `same_folder`:
+  - It succeeds when the two folders give the same path with every trailing slash stripped (`sed 's#//*$##'`), the form the agent folders are built in at line 112.
+  - Otherwise, when both exist, it succeeds when their physical paths (`cd -P ... && pwd -P`) are equal.
+- `utils/pin.sh:42-44`, the head comment. Old: "an agent folder that is also a skill folder of the run,". New: "an agent folder that is also a skill folder of the run (the same path with every trailing slash stripped or, when both exist, the same physical path),".
+- `utils/pin.test.sh:566-580`, two cases beside the existing one:
+  - `ORDO_SKILL_DIRS="$d1$nl$a1//"`;
+  - `ORDO_SKILL_DIRS="$d1$nl$test_root/agents-alias"`, where `agents-alias` is a symbolic link to `$a1`.
+  - Each pins v3 while v4 is held. Each expects exit 1 and `pin: $a1 is both a skill folder and an agent folder`, with the pinned worktree still at v4 and the skill links and the agent folder entries unchanged (`expect_refused v4`).
+
+Red lines. The two-slash case was red on the tree as the round found it, before the fix: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/pin.test.sh 2>&1 | tail -1` printed:
+
+```
+FAIL: a pin with the agent folder spelled with two trailing slashes as a skill folder: the pinned worktree moved
+```
+
+With the fix in place, each part was reverted on a scratch copy of `pin.sh`, the test copied beside it unchanged:
+
+| Revert | Red line |
+|---|---|
+| R1a: line 329 back to `[ "${dir%/}" = "$agent_dir" ] && fail ...` | `FAIL: a pin with the agent folder spelled with two trailing slashes as a skill folder: the pinned worktree moved` |
+| R1b: `same_folder` returns 1 after the stripped-path comparison, so no physical comparison | `FAIL: a pin with the agent folder reached through a symbolic link as a skill folder: the pinned worktree moved` |
+
+### Point 2: the comment of the directory case
+
+`utils/pin.test.sh:531`.
+
+- Old: `# An agent folder entry ordo-a.md that is a directory is refused before anything changes. Red when the refusal is dropped: ln -sfn would then link inside that directory.`
+- New: `# An agent folder entry ordo-a.md that is a directory is refused before anything changes, with the directory refusal's own message. Red when the directory branch is dropped: the real-file branch then refuses the entry with another message.`
+
+The directory branch was reverted on a scratch copy (M11). The test went red on the message, as the comment now says:
+
+```
+M11-no-directory-refusal: FAIL: the directory ordo-a.md was not refused with its message; expected "pin: <T>/my home/.claude/agents/ordo-a.md is a directory; move it away and run again" in: pin: <T>/my home/.claude/agents/ordo-a.md is a real file; move it away and run again
+```
+
+### Point 3: the before and after of `pin.sh`'s behaviour
+
+The entry "`utils/pin.sh` behaviour" of "Host- and user-visible changes" above is corrected here. It said the next pin "of a tag holding `agents/`" creates `/Users/axelfaes/.claude/agents`. The code does something wider: pin mode runs `mkdir -p` for every agent folder whatever the tag holds (`utils/pin.sh`, the linking loop over `$agent_dirs`).
+
+- Any `utils/pin.sh <tag>` creates `~/.claude/agents`, a re-pin of v2.5.0 included.
+- It creates `$CLAUDE_CONFIG_DIR/agents` when that variable is set.
+- It creates `~/.agents/agents` when `ORDO_SKILL_DIRS` names `~/.agents/skills`.
+- It links the five `ordo-*.md` agents only for a tag that holds them.
+- Check mode creates no folder.
+
+The code stays, since item 2 asks for it.
+
+### Point 4: the model check
+
+Each change below is a sentence of skill text; no script and no test was added. Line numbers are after the change.
+
+`skills/plan-orchestration/SKILL.md`:
+- Steps 4, "The launch commit", line 62. Old: "Under `agent` it comes right after the launch, since ...". New: "Under `agent` it comes right after the launch and the model check of "Launching a builder", since ...".
+- "Launching a builder", lines 229 to 232, four new bullets:
+  - "Right after the launch, and before the launch commit (Steps 4), the orchestrator reads the model the runner served the builder from the runner's own record of the agent: under Claude Code, the `model` field of the assistant entries of the agent's transcript, `subagents/agent-<agent id>.jsonl` in the session's folder under `~/.claude/projects/`, or under `$CLAUDE_CONFIG_DIR/projects/` when that variable is set."
+  - "The orchestrator writes that model beside `session_id` in the dispatch entry, as `session_id: <agent id> (<served model>)`."
+  - "The same check runs when the builder is resumed for a repair round."
+  - "A served model that is not the configured one is the stop "A model other than the configured one" ("Stops")."
+- "Stops" preamble, line 278. Old: "The table holds six kinds of stop, ...". New: "The table holds seven kinds of stop, ...".
+- "Stops", line 288, a new row, placed before the refusal row that stays last:
+  - Stop: "A model other than the configured one".
+  - When: "The runner served a builder, a reviewer or a brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder"). The agent is stopped through the runner's stop tool, and nothing it wrote is used".
+  - What it shows: "The stop message, below, with the configured value, the served model and the Claude Code version".
+  - What resumes it: "The user's ruling".
+
+`skills/refute/SKILL.md`:
+- Steps 1, lines 49 and 50, two new bullets:
+  - "Right after the dispatch, the orchestrator or the session reads the model the runner served the reviewer, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says."
+  - "A served model that is not the configured one is the stop "A model other than the configured one" ("Stops")."
+  - Over a repair round, the reviewer is "dispatched as Steps 1 says", so the check covers it too.
+- Steps 7, line 66. Old: "with the reviewer's tokens, tool uses and time from its completion notice beside it". New: "with the reviewer's served model (Steps 1) and its tokens, tool uses and time from its completion notice beside it".
+- "Stops", line 145. The skill now has a stop, so the old first row "No stop | The skill never stops for a decision; the rows below are refusals, which name their cause and leave nothing" is replaced. The new preamble reads "The first row is a stop, a decision for the user. The rows below it are refusals, which name their cause and leave nothing."
+- "Stops", line 149, the new first row:
+  - Stop: "A model other than the configured one".
+  - When: "The runner served the reviewer a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1). The reviewer is stopped through the runner's stop tool, and nothing it wrote is used".
+  - What it shows: "The configured value, the served model and the Claude Code version".
+  - What resumes it: "The user's ruling, then `/refute` again".
+
+`skills/spec/SKILL.md`:
+- "Steps / The brief check" item 1, lines 225 and 226, two new bullets:
+  - "Right after the start, the session reads the model the runner served the agent, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says."
+  - "A served model that is not the configured one is the stop "A model other than the configured one" ("Stops")."
+- Item 3, line 236. Old: "the usage line filled with the agent's tokens, tool uses and time from its completion notice". New: "the usage line filled with the agent's served model (item 1) and its tokens, tool uses and time from its completion notice". Item 5 reads an earlier run's record from that line.
+- Item 5, line 245. Old: "with each run's tokens, tool uses and time". New: "with each run's served model and its tokens, tool uses and time".
+- "Stops" preamble, line 250. Old: "The first three rows are stops". New: "The first four rows are stops".
+- "Stops", line 257, a new fourth row:
+  - Stop: "A model other than the configured one".
+  - When: "The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check"). The agent is stopped through the runner's stop tool, and nothing it wrote is used".
+  - What it shows: "The open item, booked in the open items, with the configured value, the served model and the Claude Code version".
+  - What resumes it: "A ruling".
+
+`skills/plan-help/SKILL.md`:
+- Line 67, `/spec stops`. Old: "..., a finding of the brief check would change the step's scope, or a choice is yours: it wrote an open item and no brief". New: "..., a finding of the brief check would change the step's scope, a choice is yours, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief".
+- Line 71, a new line, "/refute stops                 the reviewer was served a model other than the configured one: it stops the reviewer, uses nothing it wrote, and shows the configured value, the served model and the Claude Code version; rule on it, then /refute again".
+
+`skills/plan/templates/orchestrator-state.md`, line 31, the comment on the `dispatch:` line:
+- "brief_check (the brief check's report path, with each run's tokens, tool uses and time)" becomes "brief_check (the brief check's report path, with each run's served model, tokens, tool uses and time)".
+- "The orchestrator adds session_id, the builder's agent id, as soon as the builder is dispatched," becomes "The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read,".
+- "and reviewer_report at the review." becomes "and reviewer_report (the refuter report's path, with each reviewer's served model, tokens, tool uses and time) at the review."
+
+Judgment calls of point 4:
+- **The form of the served model.**
+  - `session_id` is written `<agent id> (<served model>)`.
+  - `brief_check` and `reviewer_report` carry the model first inside their existing parenthesis of usage.
+  - No new key was added: the round brief says "beside" and "followed by", and a key would be a shape of the dispatch block.
+- **Where each rule is written.** How and where the model is read is written once, in plan-orchestration's "Launching a builder", and `refute` and `spec` name that section. The mismatch test (another family, or an older version than the newest of the alias) and what happens to the agent are in each skill's Stops row.
+- **`refute`'s "No stop" row is replaced,** since the skill now stops for a decision (rules file rule 19).
+
+### Doc text
+
+`skills/spec/templates/brief-check.md` is outside the path list. `grep -n` prints its usage line:
+
+```
+45:Agent usage: <tokens>, <tool uses>, <minutes>.
+```
+
+`spec`'s item 3 now fills the served model into that line. The replacement:
+
+```
+Agent usage: <served model>, <tokens>, <tool uses>, <minutes>.
+```
+
+`skills/refute/templates/report.md:42` and `:63` (`Reviewer usage: <tokens>, <tool uses>, <minutes>.`) need no change: the reviewer's model is recorded in the dispatch entry, not in the report.
+
+### Checks after the round
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md`, exit 0:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+```
+
+`wc -l utils/pin.sh utils/pin.test.sh`:
+
+```
+     469 utils/pin.sh
+     642 utils/pin.test.sh
+    1111 total
+```
+
+Other checks after the round:
+- Cases ruling 1, run as `3-cases.md` gives it against the base 44caaf6f: `diff` printed nothing (`RULING 1: EQUAL`).
+- Verify 4, as cases ruling 2 gives it (`-- ':!.scratch'`): no output, exit 1.
+- `LC_ALL=C grep -n '[^ -~]'` over every changed file and `agents/*.md`: no output, exit 1.
+- Every new or changed Stops row has 4 cells (`awk -F'|'`).
+
+`git diff --numstat` for the files this round changed, against the base:
+
+| File | Added | Removed |
+|---|---|---|
+| `utils/pin.sh` | 187 | 2 |
+| `utils/pin.test.sh` | 279 | 17 |
+| `skills/plan-orchestration/SKILL.md` | 15 | 6 |
+| `skills/refute/SKILL.md` | 12 | 4 |
+| `skills/spec/SKILL.md` | 11 | 4 |
+| `skills/plan-help/SKILL.md` | 4 | 2 |
+| `skills/plan/templates/orchestrator-state.md` | 1 | 1 |
+
+`wc -l` of the changed skill files: `skills/plan-orchestration/SKILL.md` 327, `skills/refute/SKILL.md` 173, `skills/spec/SKILL.md` 281, `skills/plan-help/SKILL.md` 97, `skills/plan/templates/orchestrator-state.md` 67.
