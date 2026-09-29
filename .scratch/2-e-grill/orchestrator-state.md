@@ -31,7 +31,18 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 2
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2e-2
+  base: 4e514c0b7de7d3b204cc53736b81e1acc81961ae
+  launched: 2026-09-29 20:23
+  session_id: aca77c40330700c5a
+  report: .scratch/2-e-grill/agents/reviews/2-report.md
+  brief_check: .scratch/2-e-grill/agents/reviews/2-brief-check.md (110579 tokens, 21 tool uses, 271 s)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -66,5 +77,6 @@ None.
 
 - 2026-09-29. Step 1 landed: Ordo's `docs/adr/` and the ADR test in the template (this commit).
 - Verified: `land.sh` on main printed `checks: 8 commands passed`, exit 0.
-- Next step: 2, the `plan.yaml` settings, because it is the next in the list and nothing blocks it.
+- Step 2 in flight: brief and brief check committed (4e514c0), builder launched.
+- Next step: 3 after step 2 lands.
 - Open on Axel's side: nothing.
