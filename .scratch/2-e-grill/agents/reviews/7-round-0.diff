@@ -1,0 +1,215 @@
+diff --git a/README.md b/README.md
+index 2d6ddd2..f04ae28 100644
+--- a/README.md
++++ b/README.md
+@@ -10,7 +10,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
+ 
+ | Skill | What it does |
+ |---|---|
+-| `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
++| `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, the standards pages, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
+ | `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
+ | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
+ | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
+@@ -94,7 +94,7 @@ The loop copies the agents into the `agents` folder beside each skill folder. Fo
+ 
+ ## Configuring a repository
+ 
+-A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the coding standard and the project skills. It then shows the whole tree and every file. After your approval it writes `CLAUDE.md`, the change and prose standards, a roadmap, a glossary, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`.
++A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the standards pages, whether the repository has a user interface, and the project skills. It then shows the whole tree and every file. After your approval it writes `CLAUDE.md`, the change and prose standards, the standards pages (the design principles, the coding standards for its languages and, with a user interface, the UI standard), a roadmap, a glossary, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`.
+ 
+ The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->`. They are a copy of `skills/repo-setup/templates/shared-rules.md`. The plan terms in `docs/glossary.md` sit between `<!-- ordo:plan-terms begin -->` and `<!-- ordo:plan-terms end -->`. They are a copy of `skills/repo-setup/templates/plan-terms.md`, and the project's own terms follow them.
+ 
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 6bbe1df..9906153 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -60,7 +60,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **project skills**: the skills a repository installs with the skills CLI into `.agents/skills/`, linked under `.claude/skills/` and listed in `skills-lock.json` and in `CLAUDE.md`'s Skills section. Stated in: `repo-setup`, Steps 6 and 7.
+ - **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
+ - **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
+-- **questions, the**: the eight questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
++- **questions, the**: the nine questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+ - **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is a failing check of the plan's verification, wherever it runs. Stated in: `plan-orchestration`, "Stops".
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+@@ -80,7 +80,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+-- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`, the change standard and the prose standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
++- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+ - **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+ - **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
+diff --git a/skills/ordo-init/SKILL.md b/skills/ordo-init/SKILL.md
+index 5dc3c2a..14fe9f1 100644
+--- a/skills/ordo-init/SKILL.md
++++ b/skills/ordo-init/SKILL.md
+@@ -64,7 +64,8 @@ Run from the repository root.
+    - `avoid` means a step adds no new dependency.
+ 7. Leave each optional key out, so its default applies, unless the repository gives a reason.
+    - A key that is written names that reason in its comment.
+-   - `standards` lists the coding, layout or prose standard pages the repository has, and `docs/glossary.md` when the repository has one, so every brief names it.
++   - `standards` lists every standards page the repository has, wherever it is (design principles, coding standards, a UI standard, a layout or prose standard), and `docs/glossary.md` when the repository has one, so every brief names them.
++     - The paths `/repo-setup` installs are `docs/dev/design-principles.md`, the pages under `docs/dev/coding-standards/` and `docs/dev/ui-standard.md`.
+    - `worktree_paths` is the project's directory in the `projects:` form.
+    - `bench` and `look` are left out unless the user names binaries or a view.
+    - `adr` is written only when the repository keeps its decision records (a folder of `NNNN-*.md` records) in a folder other than `docs/adr`, and it names that folder.
+diff --git a/skills/repo-setup/SKILL.md b/skills/repo-setup/SKILL.md
+index d9bc479..a38a91a 100644
+--- a/skills/repo-setup/SKILL.md
++++ b/skills/repo-setup/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: repo-setup
+-description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
++description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
+ metadata:
+   version: "1.2.1"
+ ---
+@@ -27,8 +27,11 @@ metadata:
+ 
+ 1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
+ 2. The user's answers to "The questions".
+-3. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
+-4. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
++3. The names of the files the folder holds, for the languages of question 6.
++   - The language of a file is read from its extension: C++ from `.cpp`, `.cc`, `.cxx`, `.h`, `.hpp`, `.hh`; Python from `.py`; TypeScript from `.ts`, `.tsx`, `.svelte`.
++   - Files under `.git/` are left out.
++4. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
++5. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
+ 
+ ## Steps
+ 
+@@ -38,6 +41,15 @@ metadata:
+ 3. Draft "The tree", every file with its full text.
+    - The plan-terms block of `docs/glossary.md` is filled from `templates/plan-terms.md`, as the shared-rules block of `CLAUDE.md` is from `templates/shared-rules.md`.
+    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
++   - Every placeholder of an installed standards page is filled from the answers, from the files written before, or with the value the template writes inside it when that is a default value (`<1000>` becomes `1000`).
++     - A placeholder is a `<...>` that names what fills it, inside inline code or not (`include/<lib>/`).
++     - A language's own angle brackets in code (`std::get<>`, `std::span<const T>`) are code and stay as they are.
++     - A placeholder none of these fills is listed with the draft at Steps 4, and the user gives its value.
++     - A check the repository does not have yet is written as "checked by reading at review" in place of the placeholder's sentence part, so the page states nothing nobody filled in.
++   - `coding-standards/typescript.md` keeps its section "Svelte and SvelteKit" only when the repository uses Svelte or SvelteKit (a `.svelte` file, or the answer to question 3).
++     - Otherwise the section, its heading included, is left out of the installed page.
++     - A repository that uses Svelte or SvelteKit has a user interface, so it gets `docs/dev/ui-standard.md`.
++     - The draft shows the answer to question 7 as yes, with the file or the answer that made it so.
+    - A placeholder inside an HTML comment that shows an entry's form, as in the roadmap's and the glossary's, is written as it is, since it is the form and not a value.
+    - Any other placeholder with no answer is shown to the user.
+      - It is never written as `<...>`.
+@@ -48,6 +60,7 @@ metadata:
+ 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
+ 8. Run `/ordo-init`, with its own draft and approval: it writes `.agents/plan.yaml` and `docs/dev/building.md`.
+    - Its check passes.
++   - The `standards` key it drafts lists every standards page written at Steps 5.
+    - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
+ 9. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
+ 10. Run the checks:
+@@ -97,9 +110,11 @@ metadata:
+ 4. The license [MIT] and its holder.
+    - MIT is written from `templates/LICENSE-MIT`; another license is written from the text the user gives or from its SPDX name's official text, fetched and shown.
+ 5. The commit rule for this repository [commit only when told].
+-6. The coding standard: copied from a sibling repository the user names (its page read whole and adapted to this repository's names), written from rules the user states, or none yet.
+-7. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
+-8. Rules that belong to this repository only, for the Project rules section.
++6. The standards pages: Ordo's defaults [the defaults], or pages copied from a sibling repository the user names (each read whole and adapted to this repository's names), or pages written from rules the user states.
++   - The defaults are `docs/dev/design-principles.md` and `docs/dev/coding-standards/common.md` always, a language page under `docs/dev/coding-standards/` for each language of question 2 and each language whose files the folder holds, and `docs/dev/ui-standard.md` when the user says the repository has a user interface.
++7. Does the repository have a user interface a reader sees and operates? [no]
++8. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
++9. Rules that belong to this repository only, for the Project rules section.
+ 
+ ## The tree
+ 
+@@ -111,7 +126,10 @@ LICENSE
+ skills-lock.json                 written by the skills CLI when the project skills are installed
+ docs/dev/change-standard.md      templates/docs/dev/change-standard.md, its placeholders filled
+ docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md
+-docs/dev/coding-standards.md     only when question 6 gave one
++docs/dev/design-principles.md    templates/docs/dev/design-principles.md, its placeholders filled
++docs/dev/coding-standards/common.md   templates/docs/dev/coding-standards/common.md, its placeholders filled
++docs/dev/coding-standards/<language>.md   templates/docs/dev/coding-standards/<language>.md for each language as question 6 says, its placeholders filled
++docs/dev/ui-standard.md          templates/docs/dev/ui-standard.md, its placeholders filled, when the repository has a user interface
+ docs/dev/building.md             written by /ordo-init from the build files
+ docs/roadmap.md                  the roadmap skill's templates/roadmap.md
+ docs/glossary.md                 templates/docs/glossary.md, the plan-terms block filled from templates/plan-terms.md
+@@ -126,8 +144,8 @@ utils/                           scripts the build and the checks run
+ 
+ | Stop | When | What it shows | What resumes it |
+ |---|---|---|---|
+-| The questions | Every setup, at Steps 2 | The eight questions, each with its default | The user's answers |
+-| The draft | Every setup, at Steps 4 | The tree and every file's text | The user's approval or correction |
++| The questions | Every setup, at Steps 2 | The nine questions, each with its default | The user's answers |
++| The draft | Every setup, at Steps 4 | The tree, every file's text, and the placeholders that Steps 3 lists for the user's value | The user's approval or correction |
+ | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
+ | The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block | The change Steps / sync 4 drafts | The user's approval |
+ | A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
+@@ -142,7 +160,7 @@ utils/                           scripts the build and the checks run
+ | Anti-pattern | Why it fails | Do instead |
+ |---|---|---|
+ | A build file for something the user did not name | It fixes a choice nobody made | See Rules: build files only for what the user names |
+-| A coding rule the user did not state | The repository then binds builders to something nobody decided | See Rules: the skill never invents a coding rule |
++| A coding rule the user did not state | The repository then binds builders to something nobody decided | See Rules: the skill adds no other rule |
+ | The plan skills installed per project | Two copies load, and the project's copy drifts from the user's | See Rules: the plan skills are installed per user |
+ | A `<...>` placeholder written into a file, other than one inside an HTML comment that shows an entry's form | The file then states something nobody filled in | See Steps 3 |
+ 
+@@ -151,9 +169,7 @@ utils/                           scripts the build and the checks run
+ - Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it.
+ - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
+ - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on in `sync`.
+-- A page it writes states rules the user or a template gave.
+-  - It never adds a rule of its own.
+-- The skill never invents a coding rule.
++- The rules are Ordo's shipped defaults or the user's; the skill adds no other rule.
+ - Build files are written only for what the user names; nothing is assumed.
+ - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
+ - Every file it writes is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say.
+diff --git a/skills/repo-setup/templates/CLAUDE.md b/skills/repo-setup/templates/CLAUDE.md
+index 23f2f7b..4425373 100644
+--- a/skills/repo-setup/templates/CLAUDE.md
++++ b/skills/repo-setup/templates/CLAUDE.md
+@@ -14,7 +14,8 @@
+ 
+ - `docs/dev/building.md`: how to build and test, and what the green check is. Read it before running or reporting any build.
+ - `docs/dev/change-standard.md`: how a change is made and reported. Every brief points here first.
+-<- `docs/dev/coding-standards.md`: how code is written.>
++<- `docs/dev/design-principles.md` and the pages under `docs/dev/coding-standards/`: how code is designed and written.>
++<- `docs/dev/ui-standard.md`: how the user interface is built.>
+ - `docs/dev/prose-standard.md`: how every comment, page and message is written.
+ - `docs/roadmap.md`: what is open and in what order. Answer "what is left?" from this file, never from memory.
+ - `docs/glossary.md`: the terms this repository and the skills it is set up with use in a sense of their own, each defined once.
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index c8a80ec..4bfe8c2 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -55,7 +55,7 @@
+ - **project skills**: the skills a repository installs with the skills CLI into `.agents/skills/`, linked under `.claude/skills/` and listed in `skills-lock.json` and in `CLAUDE.md`'s Skills section. Stated in: `repo-setup`, Steps 6 and 7.
+ - **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
+ - **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
+-- **questions, the**: the eight questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
++- **questions, the**: the nine questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+ - **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is a failing check of the plan's verification, wherever it runs. Stated in: `plan-orchestration`, "Stops".
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+@@ -75,7 +75,7 @@
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+-- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`, the change standard and the prose standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
++- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+ - **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+ - **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
+diff --git a/skills/spec/templates/brief.md b/skills/spec/templates/brief.md
+index 06cbdea..9a135a5 100644
+--- a/skills/spec/templates/brief.md
++++ b/skills/spec/templates/brief.md
+@@ -2,6 +2,8 @@
+ 
+ Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. Then, in full: <the standards the configuration lists>.
+ 
++A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it.
++
+ ## What is on the tree (read on main at <commit>)
+ 
+ - <each fact the step rests on: the file, the count, the name, the line number in code or the section of a page, and the command that checked it>.
