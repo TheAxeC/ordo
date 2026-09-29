@@ -82,7 +82,7 @@ No case is one the brief's rules get wrong, so there was no hand-back and no rul
 |---|---|---|
 | 1. `plan.yaml`: five keys after `bench`, in the layout and comment form | DONE | `example_keys()` parses them: `'adr': 'docs/adr', 'design_bar': 'industry', 'design_references': [], 'worker_effort': 'high', 'reviewer_effort': 'high'` (`python3 -c "import sys; sys.path.insert(0,'skills/ordo-init/templates'); import check_config as c; print(c.example_keys())"`) |
 | 2. `plan.projects.yaml`: five keys with defaults after `bench` in both projects | DONE | Key count column 2 below is 2 for each key; case `projects-five` |
-| 3. `check_config.py`: duplicate refusal, the five value checks replacing the kind check, `adr` under the root, the `docs/adr` note, docstring | DONE | The test's cases below, each passing; docstring lines 2-20 |
+| 3. `check_config.py`: duplicate refusal, the five value checks replacing the kind check, `adr` under the root, the `docs/adr` note, docstring | DONE | The test's cases below, each passing; docstring lines 2-21 |
 | 4. `check_config.test.sh`: one case per case, exact line, one `error:` line per refusal, header comment | DONE | `PASS: check_config.py scratch tests`; header lines 3-4 |
 | 5. `orchestrator-state.md`: five keys after `bench` with comments | DONE | Key count column 3 |
 | 6. `/plan` Steps 4 key list | DONE | `skills/plan/SKILL.md:61` ends "`bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`." |
@@ -177,8 +177,8 @@ The case `reviewer-effort-huge` is turned red by the same revert as `worker-effo
 |---|---|
 | `docs/glossary.md` | 108 |
 | `skills/ordo-init/SKILL.md` | 124 |
-| `skills/ordo-init/templates/check_config.py` | 190 |
-| `skills/ordo-init/templates/check_config.test.sh` | 323 |
+| `skills/ordo-init/templates/check_config.py` | 192 |
+| `skills/ordo-init/templates/check_config.test.sh` | 348 |
 | `skills/plan/SKILL.md` | 96 |
 | `skills/plan/templates/orchestrator-state.md` | 67 |
 | `skills/plan/templates/plan.projects.yaml` | 53 |
@@ -214,3 +214,71 @@ Rule 14: `git grep -n -i 'check_config\|wrong kind\|kind differs' -- skills util
 ## Wrong in the brief
 
 - "Cases", last line: "the duplicated key passes silently" on the unchanged tree. The duplicated `worker_effort` case gives `error: unknown key: worker_effort` there (first run above), since `worker_effort` is not yet a known key. The rest of the brief lands unchanged; the duplicate refusal is proven by `twice-reviewer`, which passes silently on the unchanged tree (`FAIL: twice-reviewer: expected an error, got a pass`), and by revert R28 for both duplicate cases.
+
+## Repair round 1
+
+The three findings of `agents/reviews/2-refuter.md` are closed as their rulings in `agents/briefs/2-round-1.md` say. The line counts in "Files and line counts" above are updated: `check_config.py` 192, `check_config.test.sh` 348 (`git diff --name-only | xargs wc -l`).
+
+### Changes
+
+1. Merge key. `check_config.py:32` adds `MERGE_TAG = "tag:yaml.org,2002:merge"`. `check_config.py:60`, in `UniqueKeyLoader.construct_mapping`, reads `if not isinstance(key_node, yaml.ScalarNode) or key_node.tag == MERGE_TAG:` followed by `continue`, so a merge key node is skipped before it is constructed. The class docstring says the scan compares only the keys written in the mapping itself, so a key that overrides a merged value is not a duplicate.
+2. Default `docs/adr` as a file. No code change; the case below proves the refusal that `check_adr` already made.
+3. `keys beside projects`. The docstring's list of errors gains `- keys beside projects: [...], a key other than projects at the top of the projects: form;` (`check_config.py:10`), matching the line the script prints at `check_config.py:177`. `skills/ordo-init/SKILL.md` "Checking an existing file" 2 did not hold it. Before: "2. It reports: a key written twice; a required key missing; ...". After: "2. It reports: a key written twice; a key beside `projects:` in the `projects:` form; a required key missing; ..." (`skills/ordo-init/SKILL.md:92`).
+
+The test's header comment names the new cases: a key written twice in a project that also holds a merge key, the default `docs/adr` as a file, and a project that takes another's keys through `<<: *base` and overrides one of them, which passes.
+
+### New cases in `check_config.test.sh`
+
+- `adr-default-file`: the example with `adr: docs/adr` and `docs/adr` created as an empty file. The expected output is the one error line `error: adr names a folder that does not exist: docs/adr`.
+- `merge-key`: the several-projects example with `tool-a: &base`, and `tool-b:` holding `<<: *base`, its own `roadmap`, `verification` and `worker_effort: max`. It passes, and the test checks that its output holds no `error:` line.
+- `merge-key-twice`: the same file with `worker_effort` written twice inside `tool-b`. The expected output is the one error line `error: tool-b: key written twice: worker_effort`.
+
+### First run of the new cases, before the code change
+
+The test ran on the code of the first report, through the scratch copy that does not stop at a failure (`first_run_r1.sh`). The red lines, verbatim:
+
+```text
+FAIL: merge-key: expected a pass, got: 
+yaml.constructor.ConstructorError: could not determine a constructor for the tag 'tag:yaml.org,2002:merge'
+FAIL: merge-key-twice: missing the line [error: tool-b: key written twice: worker_effort] in: 
+FAIL: merge-key-twice: expected one error line, got 0 in: 
+```
+
+`adr-default-file` passed on that code, since the refusal existed and only its proof was missing.
+
+### Rule 13 reverts
+
+Each revert was applied to a scratch copy of `skills/ordo-init` and `skills/plan` (script `reverts_r1.py` in the session scratch folder). The copied test exited 1 for each revert.
+
+| Behaviour | Case | Revert | Red line |
+|---|---|---|---|
+| A merge key is skipped by the duplicate scan | `merge-key` | the `or key_node.tag == MERGE_TAG` condition removed | `FAIL: merge-key: expected a pass, got: ` followed by the traceback, whose last line is `yaml.constructor.ConstructorError: could not determine a constructor for the tag 'tag:yaml.org,2002:merge'` (the traceback line is from the first run above, where the code had no skip) |
+| A key written twice beside a merge key is still refused | `merge-key-twice` | `if key_node.tag == MERGE_TAG: break` before the scalar test, so the scan stops at the merge key | `FAIL: merge-key-twice: expected an error, got a pass: note: tool-a: adr folder docs/adr does not exist yet; repo-setup or grill creates it` |
+| The default `docs/adr` as a file is refused | `adr-default-file` | `not os.path.exists(full) and` removed from the default-note condition | `FAIL: adr-default-file: expected an error, got a pass: note: adr folder docs/adr does not exist yet; repo-setup or grill creates it` |
+
+### Outputs
+
+`sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1`: `PASS: check_config.py scratch tests`.
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-e-grill/orchestrator-state.md`, exit 0:
+
+```text
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+```
+
+`python3 skills/ordo-init/templates/check_config.py .`: exit 0, last line `ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists`. `LC_ALL=C git diff -U0 | grep -c '^+.*[^ -~]'`: `0`. `git status --short` lists the same nine files and this report.

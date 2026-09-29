@@ -40,7 +40,7 @@ dispatch:
   launched: 2026-09-29 20:23
   session_id: aca77c40330700c5a
   report: .scratch/2-e-grill/agents/reviews/2-report.md
-  builder_usage: 193038 tokens, 37 tool uses, 1303 s
+  builder_usage: 193038 tokens, 37 tool uses, 1303 s; round 1: 206243 tokens, 8 tool uses, 273 s
   brief_check: .scratch/2-e-grill/agents/reviews/2-brief-check.md (110579 tokens, 21 tool uses, 271 s)
   landing: not-started
   reviewer_report: .scratch/2-e-grill/agents/reviews/2-refuter.md (148659 tokens, 32 tool uses, 407 s)
@@ -53,7 +53,7 @@ dispatch:
   launched: 2026-09-29 20:44
   session_id: ab59f62dd9e66f9e7
   report: .scratch/2-e-grill/agents/reviews/4-report.md
-  builder_usage: 96874 tokens, 14 tool uses, 186 s
+  builder_usage: 96874 tokens, 14 tool uses, 186 s; round 1: 131510 tokens, 12 tool uses, 257 s
   brief_check: .scratch/2-e-grill/agents/reviews/4-brief-check.md (112374 tokens, 25 tool uses, 242 s)
   landing: not-started
   reviewer_report: .scratch/2-e-grill/agents/reviews/4-refuter.md (122792 tokens, 20 tool uses, 323 s)
@@ -66,9 +66,11 @@ dispatch:
   launched: 2026-09-29 20:49
   session_id: a875f9d0a947f6cda
   report: .scratch/2-e-grill/agents/reviews/5-report.md
+  builder_usage: 142808 tokens, 33 tool uses, 437 s
   brief_check: .scratch/2-e-grill/agents/reviews/5-brief-check.md (144932 tokens, 33 tool uses, 416 s)
   landing: not-started
-  round: 0
+  reviewer_report: .scratch/2-e-grill/agents/reviews/5-refuter.md (150395 tokens, 34 tool uses, 329 s)
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
