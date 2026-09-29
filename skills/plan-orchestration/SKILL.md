@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
 metadata:
-  version: "2.9.0"
+  version: "2.10.0"
 ---
 
 # Plan orchestration
@@ -43,7 +43,8 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Resolve a dispatch block before anything else.
 2. Pick the next step that nothing blocks.
    - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
-3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, makes the worktree and writes the dispatch block.
+3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
+   - Before dispatching the builder, read the brief check's report and the changes to the brief its "Closed" heading names.
    - A stop it raises goes to the user by "Stops".
    - A stop, here or at any later step, blocks its own step.
      - The loop moves on to the next unblocked step.
@@ -119,14 +120,15 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 
 ## The two tiers, and the models
 
-- Two tiers take part: the orchestrator, and the agents it starts (the builders and the reviewers).
+- Two tiers take part: the orchestrator, and the agents it starts (the builders, the reviewers and the brief-check agents).
 - **Default.** The orchestrator and every agent run on Claude Opus.
 - **Orchestrator.** It may also run on Claude Fable.
   - It reads, decides, invokes the skills, lands and books.
   - It never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
-- **Agents.** A builder or a reviewer runs on a Claude model, and never on Claude Fable.
+- **Agents.** A builder, a reviewer or a brief-check agent runs on a Claude model, and never on Claude Fable.
 - **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names.
 - **Reviewer.** The model the configuration block's `reviewer:` names.
+- **Brief-check agent.** One per `/spec` run that reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model.
 - **Runner.** Both tiers run under Claude Code.
 - Any allowed combination is chosen per step.
 - A new combination is booked in the rulings with what decides it.

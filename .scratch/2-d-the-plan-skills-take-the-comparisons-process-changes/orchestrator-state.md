@@ -30,19 +30,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 5
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2d-5
-  base: 3024434d6647ce2965e0784508d4464a048a3f00
-  launched: 2026-09-29
-  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/5-report.md
-  landing: not-started
-  round: 1
-  session_id: aeee2edf205848c83
-  builder_usage: first run 161947 tokens, 50 tool uses, 573 s
-  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/5-refuter.md (first run 151227 tokens, 27 tool uses, 325 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -76,7 +64,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 4 landed: `/roadmap add` and `/plan` ask "could this pass without the goal being reached?" of every gate and step check, and `/roadmap` has the "Not yet specified" section, which `/plan` refuses.
+- 2026-09-29. Step 5 landed: `/spec` runs the brief check, a fresh read-only agent that checks the brief against the tree before the preparation commit, its report at `agents/reviews/<step>-brief-check.md`.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 5, the brief check at `/spec`; its builder runs in `.agents/worktrees/2d-5`.
+- Next step: step 6, the blind-comparison protocol.
 - Open on Axel's side: nothing.

@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit by explicit path list, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "1.8.1"
+  version: "1.8.2"
 ---
 
 # Land a step
@@ -86,7 +86,7 @@ metadata:
    - A change past the noise band is a finding, fixed before the booking.
 9. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B.
    - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
-   - The booking states the builder's and each reviewer's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage` and `reviewer_report`.
+   - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`.
    - It states whether the builder's first report passed its bar, and the fixes at landing.
    - Tick the step.
 10. Read the step's `worktree` from its dispatch entry, for Steps 13.

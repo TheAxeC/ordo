@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.8.2"
+  version: "1.8.3"
 ---
 
 # Plan help
@@ -53,7 +53,7 @@ metadata:
 
 then, for every step:
 
-/spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries
+/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
 "build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
@@ -64,7 +64,7 @@ read the delta                when plan.yaml says refute_after_repair: no: the o
 
 when a command stops:
 
-/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, or a choice is yours: it wrote an open item and no brief
+/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, or a choice is yours: it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
 /spec <entry> <step>          again; it now writes the brief
 /spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), or a file it reads is unusable: it names the cause and leaves nothing; rule on the step, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise

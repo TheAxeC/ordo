@@ -400,19 +400,96 @@ Verify 3, `LC_ALL=C grep -n '[^ -~]' skills/spec/SKILL.md skills/spec/templates/
 
 - Case 1's "on the unchanged tree nothing, exit 1": grep exits 2 there, because `skills/spec/templates/brief-check.md` does not exist yet; over the three files that exist it exits 1. The case still separates before from after.
 - Case 3's pattern matches none of the numbered citations of `/spec` that exist; the three citations it misses (`skills/plan-orchestration/SKILL.md`, "the `spec` skill's Steps 1" twice and "Steps 5" once) stay true, as the first run shows.
-- The brief's "What is on the tree" does not list the four sentences outside the path list that the change makes incomplete; they are under "Doc text".
+- The brief's "What is on the tree" does not list the four sentences outside its path list that the change made incomplete (`README.md:17`, `README.md:34`, `skills/land/SKILL.md:89`, `skills/plan/templates/orchestrator-state.md:26`); repair round 1 widened the path list to them and changed each, as "Repair round 1" item 4 shows.
 
 ## Doc text
 
-Found with `git grep -n -i` of each changed name ("brief check", `brief_check`, `reviewer_report`, "writes the brief, makes the worktree", "It writes the brief", "preparation commit", "builder or a reviewer", "the builders and the reviewers") across `docs/`, `skills/`, `README.md` and `utils/`, outside the four paths of the step.
+Found with `git grep -n -i` of each changed name ("brief check", `brief_check`, `reviewer_report`, "tokens", "writes the brief, makes the worktree", "It writes the brief", "preparation commit", "builder or a reviewer", "the builders and the reviewers") across `docs/`, `skills/`, `README.md` and `utils/`, outside the step's paths.
 
-- `README.md:17`, current: `| \`spec\` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. It creates the worktree and stages the base binaries |`
-  Replacement: `| \`spec\` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |`
-- `README.md:34`, current: `/spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries`
-  Replacement (the line `/plan-help` now prints): `/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries`
-- `skills/land/SKILL.md:89`, current: `   - The booking states the builder's and each reviewer's tokens, tool uses and time, from their completion notices, read from the dispatch block's \`builder_usage\` and \`reviewer_report\`.`
-  Replacement: `   - The booking states the brief-check agent's, the builder's and each reviewer's tokens, tool uses and time, from their completion notices, read from the dispatch block's \`brief_check\`, \`builder_usage\` and \`reviewer_report\`.` (a version bump of `land` goes with it, one patch).
-- `skills/plan/templates/orchestrator-state.md:26`, current: `dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), landing, round. ...`
-  Replacement of its first sentence: `dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's tokens, tool uses and time), landing, round. ...`, the rest of the line unchanged.
+- `skills/plan/SKILL.md:5`, current: `  version: "1.10.0"`. Replacement: `  version: "1.10.1"`, since round 1 changed `skills/plan/templates/orchestrator-state.md`, the `plan` skill's template, and `skills/plan/SKILL.md` is outside the path list.
 
-Sentences read again and still true: `docs/roadmap.md:23` (the gate of 2.D names the brief-check report), `skills/land/SKILL.md:201` ("Its preparation commit stays."), `skills/plan-orchestration/SKILL.md:143` and `:144` (the preparation commit is a resume point, and the report is committed in it, so it is no "other ledger record"), `skills/plan-orchestration/SKILL.md:255` ("each agent's tokens" covers the brief-check agent), `skills/plan-orchestration/SKILL.md:51`, `:150`, `:212` (numbered citations of `/spec`, numbers unchanged).
+Sentences read again and true after round 1:
+
+- `skills/land/SKILL.md:3`, the description, "the booking in the plan with each agent's tokens, tool uses and time": true, since `/land` Steps 9 (line 89) now reads `brief_check` beside `builder_usage` and `reviewer_report`.
+- `skills/plan-orchestration/SKILL.md:255`, "The landing report states each agent's tokens, tool uses and time, from its completion notice.": true, since `/land` Steps 11 states "the agents' usage ... as the booking of Steps 9 states them", and Steps 9 now includes the brief-check agent.
+- `skills/plan-orchestration/SKILL.md:135`, "each agent's tokens, tool uses and time": true for the same reason.
+- `docs/roadmap.md:23` (the gate of 2.D names the brief-check report), `skills/land/SKILL.md:201` ("Its preparation commit stays."), `skills/plan-orchestration/SKILL.md:143` and `:144` (the preparation commit is a resume point, and the report is committed in it, so it is no "other ledger record"), `skills/plan-orchestration/SKILL.md:51`, `:150`, `:212` (numbered citations of `/spec`, numbers unchanged).
+
+## Repair round 1
+
+Every ruling of `agents/briefs/5-round-1.md` is done.
+
+1. Standards 1, when the check runs and what the commit carries, each stated once.
+   - Change: the subsection's opening sentence no longer restates the order, and its item 5 keeps only the `brief_check` record, pointing at Steps 6 for the commit. Steps 5 (line 127) remains the one place that says when the check runs, and Steps 6 (line 130) the one place that says the commit holds the report.
+   - Old, opening: "Steps 5 runs this on every step that goes on, after the path comparison and before the preparation commit (Steps 6):". New, line 214: "Steps 5 says when this runs."
+   - Old, item 5: "5. The preparation commit (Steps 6) carries the report." with the sub-bullet "- The dispatch entry (Steps 9) records the report's path under `brief_check`, with the agent's tokens, tool uses and time." New, lines 239 and 240: "5. The dispatch entry (Steps 9) records the report's path under `brief_check`, with the agent's tokens, tool uses and time." with the sub-bullet "- The report is committed as Steps 6 says."
+   - Command: `grep -n "Steps 5 says when\|A step that goes on runs\|It holds the brief, the brief\|^5\. The dispatch entry\|The report is committed as" skills/spec/SKILL.md` printed lines 127, 130, 214, 239 and 240, quoted above.
+2. Standards 2, the template's copy of the list of input forms.
+   - New, `skills/spec/templates/brief-check.md` line 37: "- <for a code step (a script, or a product's code): each input the step implies but never states, in the forms `templates/brief.md`'s "Cases" names>: listed under "Cases", or missing, with the expected result it should have. Or: not a code step."
+   - Command: `grep -c "a missing or unreadable file" skills/spec/templates/brief-check.md skills/spec/templates/brief.md` printed `skills/spec/templates/brief-check.md:0` and `skills/spec/templates/brief.md:1`: the list lives in `templates/brief.md` only.
+3. Standards 3, the stop bullet split.
+   - New, `skills/spec/SKILL.md` lines 236 and 237: "- At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none)." and "- At such a stop the report is among the ledger files the stop commits."
+4. Standards 4, the brief-check agent's usage booked.
+   - `skills/land/SKILL.md` Steps 9, line 89. Old: "- The booking states the builder's and each reviewer's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage` and `reviewer_report`." New: "- The booking states the builder's, each reviewer's and the brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`." Steps 11 is unchanged: "Then the agents' usage, whether the first report passed its bar and the fixes at landing, as the booking of Steps 9 states them." `metadata.version` from "1.8.1" to "1.8.2"; the description is unchanged and at 726 characters.
+   - `skills/plan/templates/orchestrator-state.md` line 26: the dispatch keys read "step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's tokens, tool uses and time), landing, round.", `brief_check` after the report path as `/spec` Steps 9 lists it; the rest of the line is unchanged.
+   - `README.md` line 17, new: "| `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |".
+   - `README.md` line 34, new: "/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries", the line `/plan-help` prints.
+   - The report's "Doc text" and its list of sentences that stay true are corrected above: `skills/land/SKILL.md:3` and `skills/plan-orchestration/SKILL.md:255` and `:135` are true because `/land` Steps 9 now reads `brief_check`. The one sentence left outside the path list is the `plan` skill's version, given under "Doc text".
+   - Command: `git grep -n -i "tokens\|brief_check" -- README.md docs utils skills | grep -v '^skills/spec/'` lists `skills/land/SKILL.md:89` with `brief_check` and `skills/plan/templates/orchestrator-state.md:26` with `brief_check`; the other hits are the builder's and reviewer's own records and two unrelated lines of `docs/academic-coverage.md`.
+5. Standards 5, "One per `/spec` run".
+   - New, `skills/plan-orchestration/SKILL.md` line 131: "- **Brief-check agent.** One per `/spec` run that reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model."
+6. Declined to judge.
+   - `/spec`'s description reads "under libraries: check, look for a library for each capability the step builds"; the length command prints `1022 skills/spec/SKILL.md`, at most 1,024.
+   - Case 3: its pattern matches no citation. The broader grep, `git grep -n "spec. skill's Steps [0-9]" -- skills docs README.md utils`, prints `skills/plan-orchestration/SKILL.md:51`, `:150` and `:212` (Steps 1, Steps 1, Steps 5) after the round, the same three citations as on the base at lines 50, 148 and 210, each still naming the step it named.
+
+### Verification after the round
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/orchestrator-state.md` from the worktree root, exit 0:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 7 commands passed
+```
+
+The gate's length command, whole:
+
+```
+726 skills/land/SKILL.md
+632 skills/ordo-init/SKILL.md
+386 skills/plan-help/SKILL.md
+788 skills/plan-orchestration/SKILL.md
+616 skills/plan-retro/SKILL.md
+477 skills/plan/SKILL.md
+951 skills/refute/SKILL.md
+630 skills/repo-setup/SKILL.md
+997 skills/roadmap/SKILL.md
+1022 skills/spec/SKILL.md
+```
+
+`LC_ALL=C grep -n '[^ -~]'` over `skills/spec/SKILL.md`, `skills/spec/templates/brief-check.md`, `skills/plan-orchestration/SKILL.md`, `skills/plan-help/SKILL.md`, `skills/land/SKILL.md`, `skills/plan/templates/orchestrator-state.md` and `README.md`: no output, exit 1.
+
+### Line counts after the round
+
+| File | Lines at the base | Lines now |
+|---|---|---|
+| `skills/spec/SKILL.md` | 238 | 273 |
+| `skills/spec/templates/brief-check.md` | (new) | 49 |
+| `skills/plan-orchestration/SKILL.md` | 316 | 318 |
+| `skills/plan-help/SKILL.md` | 95 | 95 |
+| `skills/land/SKILL.md` | 203 | 203 |
+| `skills/plan/templates/orchestrator-state.md` | 62 | 62 |
+| `README.md` | 147 | 147 |
+
+(`wc -l` in the worktree, and `git show HEAD:<path> | wc -l` for the base.)
