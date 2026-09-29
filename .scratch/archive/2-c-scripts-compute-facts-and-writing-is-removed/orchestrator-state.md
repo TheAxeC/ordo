@@ -70,8 +70,8 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1 to 7 done. Step 5: the rule "scripts compute facts; judgment is read" in both change standards and the shared rules, the rules and skills rewritten under it, the ASCII check fixed, open item E applied. Step 7: the roadmap change the user approved, commit 51ca1a5. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
-- Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 8, the closing: the user reads and approves the rewritten rules (the gate), every clause of the gate is run, `/roadmap done 2.C`, the ledger archived, then v2.3.0 tagged and pinned on the user's yes.
-- Step 8 under way: every clause of the gate run on main at 566a198 and passed; the `/roadmap done 2.C` change drafted and shown to the user. Open on Axel's side: the approval of that roadmap change.
+- 2026-09-29. Plan 2.C closed: steps 1 to 8 done; roadmap entry 2.C marked done (5a864fd); this folder archived; v2.3.0 tagged and pinned on the user's yes.
+- Verified: every clause of the gate on main at 566a198; `sh skills/land/templates/checks.sh` on this state file, `checks: 7 commands passed`, exit 0.
+- Next: roadmap entries 3 onward are drafted again from their sources, entries 2.D to 2.H first.
+- Open on Axel's side: nothing.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.

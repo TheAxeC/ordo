@@ -19,7 +19,7 @@ The rule "scripts compute facts; judgment is read" stands in `docs/dev/change-st
 - ✅ 5 The rules: "scripts compute facts; judgment is read" added to `docs/dev/change-standard.md`, `skills/repo-setup/templates/docs/dev/change-standard.md` and `skills/repo-setup/templates/shared-rules.md`; the rules that ask for scripts and tests rewritten under it: change standard rules 1, 6 and 13 and the line "Each script ... has a test beside it" (only in `docs/dev/change-standard.md`, premise corrected at /spec), `plan-orchestration`'s recurring-findings pass, `plan-retro`'s description, proposal order and Steps 12 and 13, the brief template's Cases paragraph, and `refute`'s Proof heading; `refute` gains "a wrong number is a finding only when a decision rests on it", and the change standard and the refuter report template say a ledger cites a page by its section, never by line. Also, by open item C: the ASCII check of the verify list (`docs/dev/building.md`, the command blocks of both change standards, the state file) keeps perl's non-zero status when perl dies on a file it cannot decode, and `__pycache__/` is in `.gitignore` and in `repo-setup`'s `.gitignore` template if it lacks it; and rule 15 of both change standards is rewritten under the rule (premise correction from step 6). Check: the user reads the diff and approves it; `sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1` prints `PASS:`; the verify list exits 0; a file holding the bytes `\377\376` makes the ASCII check exit non-zero (1 commit) (approved) (ruling C)
 - ✅ 6 The tests of the kept scripts held to the rule: each case of `utils/pin.test.sh`, `skills/ordo-init/templates/check_config.test.sh`, `skills/repo-setup/templates/sync_rules.test.sh` and `utils/check_coverage.test.sh` kept only where its failure costs something (lost work, a broken installation, a wrong configuration accepted), and the report lists every case removed with that reason. Check: the user reads the list of removed cases and approves it; the verify list exits 0 (1 commit) (approved)
 - ✅ 7 The roadmap, through `/roadmap`, each change shown to the user before it is written: entry 3.A dropped with its reason; entries 3 and 4 say they are drafted again, from their sources, before either is opened; the `--built` clauses out of the gates of entries 5 to 15.A. Check: `grep -n -e --built docs/roadmap.md` prints only entry 2.C's gate line (orchestrator, no agent) (approved)
-- 8 The closing: every clause of the gate run and its output quoted; the roadmap entry ticked with that output (`/roadmap done 2.C`); this folder moved to `.scratch/archive/`; main tagged v2.3.0 and `utils/pin.sh v2.3.0` run after the user's yes, then `git -C ~/.local/share/ordo-stable describe --tags` prints `v2.3.0` (orchestrator, no agent) (approved)
+- ✅ 8 The closing: every clause of the gate run and its output quoted; the roadmap entry ticked with that output (`/roadmap done 2.C`); this folder moved to `.scratch/archive/`; main tagged v2.3.0 and `utils/pin.sh v2.3.0` run after the user's yes, then `git -C ~/.local/share/ordo-stable describe --tags` prints `v2.3.0` (orchestrator, no agent) (approved)
 
 ## Could run in parallel
 
@@ -45,7 +45,7 @@ None. Steps 1, 2, 4, 5 and 6 each touch a rule file, a verification page or the 
 
 ## Blocked, and by what
 
-- 8: the user's reading and approval of the rewritten rules (the gate), and the user's yes to the pin.
+None.
 
 ### Step 1, `/writing` and plan 3's edits removed (landed 2026-09-28)
 
@@ -112,3 +112,10 @@ None. Steps 1, 2, 4, 5 and 6 each touch a rule file, a verification page or the 
 - Verification on main: `sh skills/land/templates/land.sh .scratch/2-c-scripts-compute-facts-and-writing-is-removed/orchestrator-state.md 2c-5 659c1ee` printed the six `PASS:` lines and `checks: 7 commands passed`, exit 0. After the fixes at landing, `sh skills/land/templates/checks.sh` on this state file, the new ASCII command in it, printed `PASS: land.sh scratch tests`, `PASS: checks.sh scratch tests`, `PASS: check_config.py scratch tests`, `PASS: sync_rules.py scratch tests`, `PASS: pin.sh scratch tests`, `PASS: check_coverage.py scratch tests` and `checks: 7 commands passed`, exit 0.
 - A/B: none (`bench: []`). Look: none (`look:` empty).
 - Usage: builder claude:opus 152802 tokens, 42 tool uses, 535 s (round 0) and 177778 tokens, 13 tool uses, 171 s (round 1); reviewer claude:opus 180529 tokens, 38 tool uses, 484 s, and over round 1 148531 tokens, 36 tool uses, 330 s (from the completion notices); first report passed its bar: no (three spec, one proof, eight standards and one behaviour finding); fixes at landing: 4, and open item E.
+
+### Step 8, the closing (done 2026-09-29)
+
+- The user approved the rewritten rules on reading their diff, and gave the yes to tag and pin v2.3.0.
+- Every clause of the gate run on main at 566a198 and passed, each with its command and output in the Done line of `docs/roadmap.md`.
+- `/roadmap done 2.C` written on the user's approval of its diff, commit 5a864fd.
+- This folder moved to `.scratch/archive/`; main then tagged v2.3.0 and `utils/pin.sh v2.3.0` run, the output in the commit that records it.
