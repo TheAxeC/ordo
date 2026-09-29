@@ -4,7 +4,7 @@ Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. 
 
 ## What is on the tree (read on main at <commit>)
 
-- <each fact the step rests on: the file, the count, the name, the line number, and the command that checked it>.
+- <each fact the step rests on: the file, the count, the name, the line number in code or the section of a page, and the command that checked it>.
 
 ## What to build
 
@@ -14,7 +14,7 @@ Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. 
 
 - <every must-pass and must-refuse example this brief gives, in one list: the input, then its expected result>.
 
-The builder's first task, before any code changes: turn every case above into a test of the step, run the tests against the unchanged tree, and note each case's result. No prototype script stands in for the tests.
+The builder's first task, before any change, is the first run of every case above on the unchanged tree, with each case's result noted. A case of a code step (a script, or a product's code) becomes a test of the step, run on the unchanged tree first; no prototype script stands in for the test. A case of a text or judgment step is checked by reading the unchanged tree, and that first read is noted.
 
 When the first run finds a case the brief's own rules get wrong, the builder stops there, before changing any code, and hands back the first run and that case, with the rule and the result it gives. The orchestrator rules on the case and resumes the builder with the ruling, and the final report carries it.
 
@@ -36,9 +36,9 @@ One path per line: a whole file, or a range of lines of a shared document, numbe
 
 The builder adds no dependency this brief does not name. A library the builder finds that would cover its work is reported, not installed.
 
-## Read, with line ranges
+## Read, with sections or line ranges
 
-1. <path> <lines>: <what the builder takes from it>.
+1. <path> <the section of a page, or the lines of code>: <what the builder takes from it>.
 2. <path> whole: <what the builder takes from it, and what it must not take>.
 
 ## What it must do

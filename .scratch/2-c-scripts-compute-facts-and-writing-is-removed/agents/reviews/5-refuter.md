@@ -112,3 +112,19 @@ None.
 - Whether each rewritten rule reads well as a whole: the user's gate.
 - The rerun of `checks.sh` over a scratch copy of the state file with the new command: in the pre-round section, reproduced by the first reviewer.
 - `git check-ignore -v --no-index` and `git status --short --ignored` were run, read-only, though not on the brief's list of git commands.
+
+## Closed
+
+- First run, Spec 1 (rule 15's condition, the untrusted-input sentence): closed in repair round 1, item 1; the changes of meaning listed for the user's reading.
+- First run, Spec 2 (the citing bullet's exception): closed in repair round 1, item 2, widened to a "Doc text" entry.
+- First run, Spec 3 (the brief's `git grep` premise): a defect of the orchestrator's brief; the builder ran the grep with `-- ':!.scratch'`, and on main `git grep -n 'has a test beside it' -- ':!.scratch'` prints only `docs/dev/change-standard.md`'s line. Closed at landing, no change.
+- First run, Proof 1 (lines of "mechanical"): closed in repair round 1, item 4.
+- First run, Standards 1, 2, 3, 5, 6, 7, 8: closed in repair round 1, items 5, 6, 2, 8, 9, 10, 11.
+- First run, Standards 4: the first pair closed in repair round 1, item 7; the second pair not sent, since "A failing check is a finding" is about a check of the verify list and the tests, and the helper-script clause about a script's indication.
+- First run, Behaviour 1: closed in repair round 1, item 12, and at landing (below).
+- First run, "Declined to judge", the word "script" in the template rules: raised as open item E, ruled (a) by the user; applied at landing: the template change standard reads "names code, a script, a test or a check", "A test exists only for code", "A defect in code begins with a test" and "For code, a form of input"; the template shared rules read "A test exists only for code"; since the skills also run in code repositories, `skills/spec/templates/brief.md`, `skills/spec/SKILL.md` (Steps 4) and `skills/refute/SKILL.md` (Spec heading) name "a code step" where they named "a script step".
+- First run, "Declined to judge", `skills/roadmap/SKILL.md`, the gate forms: not a false sentence (it does not say "only"); no change.
+- Round 1, Spec 1 (the report's open items): fixed at landing in `agents/reviews/5-report.md`, "Open items of the state file, verbatim".
+- Round 1, Standards 1 (the report's stale new-text quotes): fixed at landing; every new-text quote of "Old and new text" now holds the text on main, with the template's words under ruling E.
+- Round 1, Behaviour 1 and 2 (the user-visible changes left out): fixed at landing; the section lists the changed shared rule "No claim about state...", the words under ruling E, and what `/refute`, `/plan-retro` with the recurring-findings pass, and briefs from `/spec` now do, each with before and after.
+- The report's "Doc text", five lines: applied on main at landing (the state file's ASCII command, `README.md` lines 22 and 40, `skills/plan-help/SKILL.md` line 75, `skills/spec/SKILL.md` line 94).

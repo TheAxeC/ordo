@@ -72,7 +72,7 @@ when a command stops:
 
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
 
-/plan-retro                   after plans have run: the findings the reviews keep making, and the rule, page or check that stops each
+/plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
 ```
 
 ## Stops

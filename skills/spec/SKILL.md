@@ -91,7 +91,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - The fix text, in the brief's own words, not a pointer.
    - The verification commands from the configuration block plus the step's own gate, each with the directory it runs from and the output that counts as a pass.
    - The report shape, with the cases' first run before the result table.
-   - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result, and the builder's first task as the template states it: the cases turned into tests and run against the unchanged tree before any code changes, and a case the brief's rules get wrong handed back before any code changes.
+   - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result, and the builder's first task as the template states it: the first run of every case on the unchanged tree before any change, a case of a code step as a test and a case of a text or judgment step by reading, and a case the brief's rules get wrong handed back before any code changes.
    - Under "Paths this step writes", every path the step writes, one per line, the report path included: ``- `<path>` `` for a whole file, or ``- `<path>` lines <a>-<b>` `` for a range of a shared document, numbered as on main at the base.
    - A choice the plan leaves open is taken in the brief.
      - It is listed under "Decisions taken in this brief", each reversible.

@@ -1,13 +1,13 @@
 ---
 name: refute
-description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding, and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
   version: "1.6.0"
 ---
 
 # Refute a step
 
-`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with a file and a line, or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
+`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with its place (a file and a line in code, a page and its section in a page), or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
 
 ## Quick start
 
@@ -53,7 +53,7 @@ metadata:
 5. The reviewer looks for the findings "The four headings" lists.
 6. The reviewer writes the report from `templates/report.md`.
    - The verification lines first, verbatim.
-   - Then the four headings, each with findings (the file, the line, the quoted hunk, what is wrong) or "none".
+   - Then the four headings, each with findings (the place: a file and a line in code, a page and its section in a page; the quoted hunk; what is wrong) or "none".
    - Then what was not checked within the time box, named.
    - Then the reviewer's usage.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
@@ -88,16 +88,16 @@ metadata:
   - a decision the brief reserved for the user, taken;
   - a dependency the diff adds that the brief does not name;
   - a premise in the brief's "What is on the tree" section that the reviewer's own grep does not reproduce;
-  - a case of the brief's "Cases" that no test of the step checks;
+  - a case of a code step in the brief's "Cases" that no test of the step checks;
   - a case whose first run on the unchanged tree the report does not give.
-- **Proof.** A finding is:
+- **Proof.** A test of behaviour whose failure costs nothing is not a Proof pass; it is a Standards finding, as the next heading says. A finding is:
   - a "seen failing first" claim with no quoted failing check;
   - a test that asserts a known defect as the expected result;
   - a threshold, tolerance or predicate widened;
   - a check made to pass by copying or exempting;
   - a `static`, `thread_local` or file-scope mutable added;
   - a null guard, an early return or a fallback standing where a fix was asked for;
-  - a count, a path or a measurement in the report that the reviewer's own run does not reproduce;
+  - a count, a path or a measurement in the report that the reviewer's own run does not reproduce, when a decision rests on it, and the finding names that decision;
   - a test that stays green with the change reverted, named with the revert that leaves it green (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs).
 - **Standards.** A finding is:
   - a documented standard the diff breaks, citing the standard's file and rule;
@@ -106,7 +106,8 @@ metadata:
   - a public surface changed without its page;
   - a sentence in a document, a head comment or a rules file that the diff makes false, found by grepping each name the diff changed across the documents and the comments;
   - a file over the size limit;
-  - a rule of the repository's checks that the diff satisfies only because the check does not read that path yet.
+  - a rule of the repository's checks that the diff satisfies only because the check does not read that path yet;
+  - a test of behaviour whose failure costs nothing (neither lost work, nor a broken installation, nor a wrong configuration accepted), under the rules file's rule that a test exists only for behaviour whose failure costs something.
 - **Behaviour.** A finding is a host- or user-visible change the report does not state, or states without the before and after.
 
 ## Finding dispositions
@@ -140,5 +141,5 @@ metadata:
 
 - The reviewer is a fresh session or agent every time, for the first run and every run over a repair round: never the builder, and never the session that wrote the brief when another is available.
 - The reviewer never writes into the ledger itself.
-- An unreproduced claim is a finding.
+- An unreproduced claim is a finding, except a count, a path or a measurement no decision rests on, as the Proof heading says.
 - A time box, the configuration block's `review_minutes` when above 0 or one the invocation names, is respected by reporting what was checked and naming what was not.

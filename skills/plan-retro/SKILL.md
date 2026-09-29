@@ -1,13 +1,13 @@
 ---
 name: plan-retro
-description: "Read every refuter report of a repository's plans, open and archived, group the findings by the kind of defect, count the kinds that come back across steps and plans, and for each one propose the change that stops it at its source: a rule on the rules page, a page added to the standards the briefs point at, or a mechanical check. Writes a retro report and changes nothing else until the user approves. Triggers on: plan-retro, retro, run a retro, what do the reviews keep finding, mine the refuter reports."
+description: "Read every refuter report of a repository's plans, open and archived, group the findings by the kind of defect, count the kinds that come back across steps and plans, and for each one propose the change that stops it at its source: a rule sentence on the rules page, a change to the text that should have prevented the defect, a page added to the standards the briefs point at, or, for a fact a machine computes, a check the user approves. Writes a retro report and changes nothing else until the user approves. Triggers on: plan-retro, retro, run a retro, what do the reviews keep finding, mine the refuter reports."
 metadata:
   version: "1.2.0"
 ---
 
 # Retro over the refuter reports
 
-`/plan-retro` turns the findings of every `/refute` run into proposed changes to the repository's rules. A finding the refuter keeps making is a rule the builder was not given, or was given where the brief did not point, or a check nobody runs. It leaves behind a retro report in the ledger and, for each proposal the user approves, the edit it proposes, committed together.
+`/plan-retro` turns the findings of every `/refute` run into proposed changes to the repository's rules. A finding the refuter keeps making is a rule the builder was not given, or was given where the brief did not point, or was given in words the builders misread, or, for a fact a machine computes, is a check nobody runs. It leaves behind a retro report in the ledger and, for each proposal the user approves, the edit it proposes, committed together.
 
 ## Quick start
 
@@ -57,8 +57,8 @@ metadata:
 9. Show the retro to the user.
 10. Take the user's decision on each proposal, one by one: approved, corrected or declined ("Stops").
 11. Write each decision beside its proposal in the retro.
-12. Make the approved edits: the rules page, a standards page, `.agents/plan.yaml`, the verification page, a new check script.
-13. Run each check proposal's command.
+12. Make the approved edits: the rules page, a standards page, the text that should have prevented the defect, `.agents/plan.yaml`, the verification page, and, for an approved check of a fact, its script.
+13. Run each approved check's command.
 14. Show each command's output.
 15. Commit the retro and the edited files by explicit path list, in one commit whose subject names the retro.
 
@@ -73,15 +73,17 @@ metadata:
 
 ## The proposal for a recurring kind
 
-The skill checks where the rule should have come from, in this order, and proposes the first change that applies:
+The skill checks where the rule should have come from, in this order, and proposes the first change of 1 to 3 that applies; a check is proposed only as 4 says:
 
 1. **The rule is not written anywhere.** Grep the rules page and the standards pages for it.
    - When it is absent, the proposal is the rule's text, in the voice and numbering of the page it goes into (the rules page for how a change is made and reported, a standards page for what the code or prose looks like), with the findings it would have prevented cited.
 2. **The rule is written on a page the briefs do not point at.** When the rule is on a page that is neither the rules page nor listed in `standards`, the proposal adds the page to `standards` in `.agents/plan.yaml`.
-3. **The rule is written where the briefs point, the defect still recurs, and a command can check the rule.** The proposal is that check: a grep over the diff, a lint rule or a script over the tree, with its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
-4. **The same, and no command can check the rule.** Only then is the proposal a sharper sentence for the existing rule.
-   - It says why no command can check the rule.
-   - It quotes the findings that show how builders read the current one.
+3. **The rule is written where the briefs point, and the defect still recurs.** The proposal is a sharper sentence for the existing rule, or a change to the text that should have prevented the defect (a brief template, a skill's step).
+   - It quotes the findings that show how builders read the current text.
+4. **Whether the rule is kept is a fact a machine computes.** Only then may the proposal add a check beside the change of 3: a grep over the diff, a lint rule or a script over the tree.
+   - It states what the check computes, its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
+   - The user approves what it computes before it is written.
+   - A rule whose breach is judged by reading gets no check.
 
 ## Stops
 
@@ -99,7 +101,7 @@ The skill checks where the rule should have come from, in this order, and propos
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | A kind that merges two defects | The count rises and the proposal fits neither defect | One kind per defect |
-| A proposal that loosens a rule or adds an exemption | It turns the recurring defect into allowed behaviour | Propose the rule, the page or the check, as "The proposal for a recurring kind" says |
+| A proposal that loosens a rule or adds an exemption | It turns the recurring defect into allowed behaviour | Propose the rule, the page, the sharper sentence or text change, or a check of a fact, as "The proposal for a recurring kind" says |
 | An edit made before the user's decision on its proposal | The rules change without the user | Steps 10 to 12 |
 | A number in the retro that no finding listed in it backs | The count is a guess presented as a measurement | Rules 2 |
 

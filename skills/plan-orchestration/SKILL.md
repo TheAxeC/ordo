@@ -190,8 +190,13 @@ On every resumption, with a dispatch block or without one:
 ## The recurring-findings pass
 
 - Every tenth landed step, and at any pause, the orchestrator reads the refuter reports written since the last pass and groups their findings by cause.
-- A cause that appears in three or more steps is booked in the open items, since the user rules on it, with the smallest change that would end it: a line in the rules file, a command in the verification list, or a test in the tree.
-- For a rule already written that keeps being broken, what is proposed is a check, and a sharper sentence for the rule is proposed only when no command can check it.
+- A cause that appears in three or more steps is booked in the open items, since the user rules on it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
+- For a rule already written that keeps being broken, what is proposed is a sharper sentence for the rule or a change to the text that should have prevented it.
+- A check (a command in the verification list, or a script) is proposed under these limits:
+  - It is proposed only for a fact a machine computes.
+  - It comes after the rule sentence or the text change.
+  - The proposal states what it computes.
+  - The user approves what it computes before it is written.
 - The user rules on each proposal.
 
 ## Two steps in flight
@@ -290,7 +295,7 @@ A stop is for a decision that is the user's, of one of six kinds:
 | Handing a miss inside a brief back as a gap in a report | The work the user asked for is left undone | Close it in the repair rounds or at landing, or raise it to the user as an open item, by "Stops" |
 | Minting a step because the work is inconvenient now | The open step does not end what it exists to end | Widen the open step's path list; see "What earns a step of its own" |
 | An option that breaks a written rule, in a stop | The user is asked to weigh something that is not allowed | Leave it out; do not mention it |
-| Rewriting a rule that keeps being broken when a command can check it | The same words fail the same way | Propose a check for it, which the user rules on, as "The recurring-findings pass" says |
+| Proposing a check for a recurring cause that is a matter of judgment | A script's output then stands in for a judgment that is made by reading | Propose a rule sentence or a change to the text that should have prevented it, and a check only for a fact a machine computes, as "The recurring-findings pass" says |
 | Changing the rules file without the user's ruling | The builders then work under rules the user did not set | Book the proposal in the open items and wait for the ruling |
 | Narrating wrong turns taken and backed out | The report no longer says what is true now | State the end state |
 | Stating a measurement not taken | The number is a guess presented as a fact | Name the command behind each number, or leave the number out |

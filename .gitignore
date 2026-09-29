@@ -1,3 +1,5 @@
 # The plan skills: the step worktrees under .agents/worktrees/ and any locally installed skill. The plan configuration stays tracked.
 .agents/*
 !.agents/plan.yaml
+# Python bytecode that running a script under a skill or under utils/ leaves beside it.
+__pycache__/

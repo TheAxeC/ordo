@@ -19,7 +19,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
 | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
 | `plan-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
-| `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule, the standards page or the check that stops it |
+| `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
 
 The order of use, shortened from what `/plan-help` prints:
 
@@ -37,7 +37,7 @@ for every step:
 /land <entry> <step>          onto main, checks on main, the booking, the commit
 
 /plan-orchestration <entry>   instead of the step lines: runs them for every step unattended
-/plan-retro                   after plans have run: the findings that recur, and the rule, page or check that stops each
+/plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
 ```
 
 `/plan-help` prints the full sequence, including what to do when a command stops.

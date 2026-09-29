@@ -4,7 +4,7 @@ Everything in the brief is done.
 
 ## Open items of the state file, verbatim
 
-None.
+None. Open item E, raised during the step on the word "script" in the template rules, was ruled (a) by the user and applied at landing.
 
 ## First run, on the unchanged tree (base 659c1ee)
 
@@ -46,12 +46,14 @@ Every rule on this page that names a script, a test or a check is read under thi
 New rule in `skills/repo-setup/templates/shared-rules.md`, placed after "A failing check is a finding" so that the last rule stays "No history in a rule file or a comment", which `docs/dev/change-standard.md` cites as the last rule:
 
 ```
-- **Scripts compute facts; judgment is read.** A script does only what has one correct answer that a machine computes exactly: moving files and commits, validating configuration keys, comparing two texts, counting, resolving an identifier such as a citation key or a DOI. Whether text is good, whether content is right, whether work is done, and anything a careful person could dispute is judged by reading, by the model or by the user; no script output stands in for that judgment, gates it, or is shown to the user as a finding. A script is never made more exact in the hope of reaching such a judgment, and a wrong hit of a helper script is dropped, not raised as work. A new script needs the user's approval of what it computes before it is written. A test exists only for a script, and only for behaviour whose failure costs something: lost work, a broken installation, a wrong configuration accepted. A gate for a judgment is a review, the user's or a blind comparison; "a script prints ok" is a gate only for a fact. A recurring finding is answered with a rule sentence or a change to the text that should have prevented it, and a check is proposed only for a fact a machine computes, with the user's approval. What a skill or tool gives the user is written for a person to read, never in a machine's format.
+- **Scripts compute facts; judgment is read.** A script does only what has one correct answer that a machine computes exactly: moving files and commits, validating configuration keys, comparing two texts, counting, resolving an identifier such as a citation key or a DOI. Whether text is good, whether content is right, whether work is done, and anything a careful person could dispute is judged by reading, by the model or by the user; no script output stands in for that judgment, gates it, or is shown to the user as a finding. A script is never made more exact in the hope of reaching such a judgment, and a wrong hit of a helper script is dropped, not raised as work. A new script needs the user's approval of what it computes before it is written. A test exists only for code, and only for behaviour whose failure costs something: lost work, a broken installation, a wrong configuration accepted. A gate for a judgment is a review, the user's or a blind comparison; "a script prints ok" is a gate only for a fact. A recurring finding is answered with a rule sentence or a change to the text that should have prevented it, and a check is proposed only for a fact a machine computes, with the user's approval. What a skill or tool gives the user is written for a person to read, never in a machine's format.
 ```
+
+In the template change standard, under ruling E, the first line reads "Every rule on this page that names code, a script, a test or a check is read under this section." and the test bullet reads "- A test exists only for code, and only for behaviour whose failure costs something: lost work, a broken installation, a wrong configuration accepted."; Ordo's own change standard keeps "script", since Ordo's only code is its scripts.
 
 Rules 1, 6, 13 and 15 cite the section by its name, "Scripts compute facts; judgment is read", and state none of its points again.
 
-### 2. Rules rewritten under it, in both change standards (identical text in both)
+### 2. Rules rewritten under it, in both change standards (the same text in both, except the words ruling E sets in the template)
 
 Rule 1, old:
 
@@ -59,10 +61,16 @@ Rule 1, old:
 1. **A defect fix begins with a test that fails on the tree as it is.** Write the test, run it, see it fail for the reason the brief states, and only then change the code. The report quotes the failing check. A test written after the fix, or one that would have passed before it, is not a test of the defect.
 ```
 
-Rule 1, new:
+Rule 1, new, in Ordo's change standard:
 
 ```
 1. **A defect in a script begins with a test that fails on the tree as it is.** Write the test, run it, see it fail for the reason the brief states, and only then change the code. The report quotes the failing check. A test written after the fix, or one that would have passed before it, is not a test of the defect. A defect in text or in a judgment (a page, a rule, a skill's instructions, a brief) is fixed by reading, with no test, and the report quotes the text before and after, as "Scripts compute facts; judgment is read" says.
+```
+
+Rule 1, new, in the template change standard (ruling E):
+
+```
+1. **A defect in code begins with a test that fails on the tree as it is.** Write the test, run it, see it fail for the reason the brief states, and only then change the code. The report quotes the failing check. A test written after the fix, or one that would have passed before it, is not a test of the defect. A defect in text or in a judgment (a page, a rule, a skill's instructions, a brief) is fixed by reading, with no test, and the report quotes the text before and after, as "Scripts compute facts; judgment is read" says.
 ```
 
 Rule 6, old (first sentence; the rest is unchanged):
@@ -95,10 +103,10 @@ Rule 15, old:
 15. **Edges are exercised, not assumed.** For a script, every form of input its own rules name is a case: each heading level, list marker and fence form the rules cover, a relative and an absolute path, a directory where a file is expected, an empty value, and text inside fenced code. Every id or key a change introduces is exercised empty, duplicated and colliding with a reserved one; every concurrent path is exercised in flight, after teardown and superseded by a later one; a value a user, a file or a script supplies is untrusted where it reaches a command, a path or generated text.
 ```
 
-Rule 15, new:
+Rule 15, new, in Ordo's change standard (the template's reads "For code," where this reads "For a script,", ruling E):
 
 ```
-15. **Edges whose failure costs something are exercised, not assumed.** For a script, a form of input its own rules name is a case only when a wrong answer on it costs something, as "Scripts compute facts; judgment is read" says; the forms weighed are each heading level, list marker and fence form the rules cover, a relative and an absolute path, a directory where a file is expected, an empty value, and text inside fenced code. Under the same condition, every id or key a change introduces is exercised empty, duplicated and colliding with a reserved one, and every concurrent path in flight, after teardown and superseded by a later one. A value a user, a file or a script supplies is untrusted where it reaches a command, a path or generated text, and each such place is a case.
+15. **Edges whose failure costs something are exercised, not assumed.** For a script, a form of input its own rules name is a case only when a wrong answer on it costs something, as "Scripts compute facts; judgment is read" says; the forms weighed are each heading level, list marker and fence form the rules cover, a relative and an absolute path, a directory where a file is expected, an empty value, and text inside fenced code. Under the same condition, every id or key a change introduces is exercised empty, duplicated and colliding with a reserved one, and every concurrent path in flight, after teardown and superseded by a later one. A value a user, a file or a script supplies is untrusted where it reaches a command, a path or generated text, and each such place is a case, since a wrong answer there runs a command, writes outside its folder or puts the supplied text where it was not meant to go.
 ```
 
 `docs/dev/change-standard.md`, "Rules this repository already states", old:
@@ -116,7 +124,7 @@ New:
 Citing a page by its section, new bullet in "Where the work happens" of both change standards:
 
 ```
-- A ledger file cites a page (the rules page, a standard, a skill's text) by its section, never by a line number, since a page's lines move and a section's name does not. A finding in code keeps its `file:line`, and a brief's "Paths this step writes" keeps its line ranges, numbered as on main at the base.
+- A ledger file cites a page (the rules page, a standard, a skill's text) by its section, never by a line number, since a page's lines move and a section's name does not. A finding in code keeps its `file:line`. A brief's "Paths this step writes" keeps its line ranges, numbered as on main at the base. A "Doc text" entry quotes the current line with the number `grep -n` prints, and the quoted text is what locates it.
 ```
 
 The same in `skills/refute/templates/report.md`, new paragraph under the title:
@@ -139,7 +147,11 @@ New:
 ```
 - A cause that appears in three or more steps is booked in the open items, since the user rules on it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
 - For a rule already written that keeps being broken, what is proposed is a sharper sentence for the rule or a change to the text that should have prevented it.
-- A check (a command in the verification list, or a script) is proposed only for a fact a machine computes, after the rule sentence or the text change, and the proposal states what it computes, which the user approves before it is written.
+- A check (a command in the verification list, or a script) is proposed under these limits:
+  - It is proposed only for a fact a machine computes.
+  - It comes after the rule sentence or the text change.
+  - The proposal states what it computes.
+  - The user approves what it computes before it is written.
 ```
 
 Anti-patterns row, old:
@@ -156,7 +168,7 @@ New:
 
 ### 4. `skills/plan-retro/SKILL.md` and `templates/retro.md`
 
-Description, old: `... propose the change that stops it at its source: a rule on the rules page, a page added to the standards the briefs point at, or a mechanical check.` New: `... propose the change that stops it at its source: a rule sentence on the rules page, a page added to the standards the briefs point at, or, for a fact a machine computes, a check the user approves.`
+Description, old: `... propose the change that stops it at its source: a rule on the rules page, a page added to the standards the briefs point at, or a mechanical check.` New: `propose the change that stops it at its source: a rule sentence on the rules page, a change to the text that should have prevented the defect, a page added to the standards the briefs point at, or, for a fact a machine computes, a check the user approves. Writes a retro report and changes nothing else until the user approves. Triggers on: plan-retro, retro, run a retro, what do the reviews keep finding, mine the refuter reports.`
 
 Introduction, old: `A finding the refuter keeps making is a rule the builder was not given, or was given where the brief did not point, or a check nobody runs.` New: `A finding the refuter keeps making is a rule the builder was not given, or was given where the brief did not point, or was given in words the builders misread, or, for a fact a machine computes, is a check nobody runs.`
 
@@ -178,7 +190,7 @@ The skill checks where the rule should have come from, in this order, and propos
 ...
 3. **The rule is written where the briefs point, and the defect still recurs.** The proposal is a sharper sentence for the existing rule, or a change to the text that should have prevented the defect (a brief template, a skill's step).
    - It quotes the findings that show how builders read the current text.
-4. **The rule is a fact a machine computes.** Only then may the proposal add a check beside the change of 3: a grep over the diff, a lint rule or a script over the tree.
+4. **Whether the rule is kept is a fact a machine computes.** Only then may the proposal add a check beside the change of 3: a grep over the diff, a lint rule or a script over the tree.
    - It states what the check computes, its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
    - The user approves what it computes before it is written.
    - A rule whose breach is judged by reading gets no check.
@@ -201,10 +213,10 @@ The builder's first task, before any code changes: turn every case above into a 
 New:
 
 ```
-The builder's first task, before any change, is the first run of every case above on the unchanged tree, with each case's result noted. A case of a script step becomes a test of the step, run on the unchanged tree first; no prototype script stands in for the test. A case of a text or judgment step is checked by reading the unchanged tree, and that first read is noted.
+The builder's first task, before any change, is the first run of every case above on the unchanged tree, with each case's result noted. A case of a code step (a script, or a product's code) becomes a test of the step, run on the unchanged tree first; no prototype script stands in for the test. A case of a text or judgment step is checked by reading the unchanged tree, and that first read is noted.
 ```
 
-The hand-back paragraph after it is unchanged.
+The hand-back paragraph after it is unchanged. "A code step (a script, or a product's code)" and the same words in `skills/refute/SKILL.md`, Spec heading, and `skills/spec/SKILL.md`, Steps 4, are applied at landing under ruling E, since the skills also run in code repositories.
 
 ### 6. `skills/refute/SKILL.md`, Proof heading
 
@@ -214,7 +226,7 @@ New: `- **Proof.** A test of behaviour whose failure costs nothing is not a Proo
 
 New last bullet under Standards: `  - a test of behaviour whose failure costs nothing (neither lost work, nor a broken installation, nor a wrong configuration accepted), under the rules file's rule that a test exists only for behaviour whose failure costs something.`
 
-`templates/report.md`, Proof line, old: `- <file:line>: <the claim>, <what the rerun showed>. Or: none.` New: `- <file:line>: <the claim>, <what the rerun showed>; for a count, a path or a measurement, <the decision that rests on it>. Or: none.`
+`templates/report.md`, Proof line, old: `- <file:line>: <the claim>, <what the rerun showed>. Or: none.` New: `- <file:line, or page and section>: <the claim>, <what the rerun showed>; for a count, a path or a measurement, <the decision that rests on it>. Or: none.`. Every other finding placeholder reads `<file:line, or page and section>`.
 
 ### 7. The ASCII check
 
@@ -222,7 +234,7 @@ In `docs/dev/building.md` line 12 and the command block of `docs/dev/change-stan
 
 In `END`, `$?` holds the status perl is about to exit with; the old `exit()` replaced a die's non-zero status with 0, and the new block keeps it and sets 1 only when a line was printed and the status was 0.
 
-`docs/dev/building.md`, the paragraph on the ASCII check gains: `A file that is not valid UTF-8 stops it with perl's `Malformed UTF-8 character (fatal)` error and a non-zero exit status.`
+`docs/dev/building.md`, the paragraph on the ASCII check gains: `A file that is not valid UTF-8 makes it exit non-zero: perl either stops with its `Malformed UTF-8 character (fatal)` error or prints the line.`
 
 ### 8. `.gitignore`
 
@@ -437,10 +449,15 @@ Every item the round file sends is done. Items 3, the second pair of 7, and 13 a
 - **A new repository from `/repo-setup`.** Before: its change standard had no section on scripts and judgment, rules 1, 6, 13 and 15 in their old text, and no bullet on citing a page; its `CLAUDE.md` block had 19 rules. After: the section "Scripts compute facts; judgment is read", the rewritten rules 1, 6, 13 and 15, the citing bullet in "Where the work happens", and a 20th shared rule, "Scripts compute facts; judgment is read".
 - **The ASCII check on an untracked `.pyc` that git does not ignore.** Before: exit 0, since perl died on the bytes and the `END` block set 0. After: exit 1. Shown on a `.pyc` compiled from `sync_rules.py` into the scratch folder: the old command `exit=0`, the new command `exit=1`. The `__pycache__/` line of `.gitignore` keeps Ordo's own bytecode out of the file list (`git check-ignore`, quoted in item 8 of the first round).
 - **The ASCII check on a file that is not valid UTF-8.** Before: the `(fatal)` error on stderr and exit 0. After: exit non-zero, by the fatal error or by the printed line, as item 10 shows.
-- **Rule 1, both change standards.** Before: every defect fix begins with a failing test. After: a defect in a script does; a defect in text or in a judgment is fixed by reading, with no test, and the report quotes the text before and after.
+- **Rule 1, both change standards.** Before: every defect fix begins with a failing test. After: a defect in a script does (in the template change standard, a defect in code, ruling E); a defect in text or in a judgment is fixed by reading, with no test, and the report quotes the text before and after.
 - **Rule 6, both change standards.** Before: "Verification is the whole tree, every suite, every check". After: verification runs the verify list and every check over the whole tree, and a check verifies a fact, never whether the work is right, which the review judges by reading.
 - **Rule 13, both change standards.** Before: every branch the change adds or changes, and every rule its head comment states, has a case in the table. After: each behaviour whose failure costs something has a case; the table does not cover every branch or every head-comment rule. The revert proof for each new or changed test is unchanged.
 - **Rule 15, both change standards.** Before: every input form the script's rules name is a case, and ids, keys and concurrent paths are exercised unconditionally. After: an input form is a case only when a wrong answer on it costs something, and ids, keys and concurrent paths are exercised under the same condition. The untrusted-input sentence stays unconditional and now gives its reason: a wrong answer there runs a command, writes outside its folder or puts the supplied text where it was not meant to go.
+- **A new repository from `/repo-setup`, the shared rule "No claim about state without a command in the same turn".** Before: it ends "Read the source and cite `file:line`." After: it ends "Read the source and cite it: `file:line` for code, the section for a page."
+- **The words "code" and "script" under ruling E.** The template change standard and the template shared rules say a defect in code begins with a failing test and a test exists only for code, so a code repository keeps test-first for its product code; Ordo's own change standard says "script". The brief template, `/spec` and `/refute` name "a code step (a script, or a product's code)".
+- **`/refute`.** Before: every finding has a file and a line, and every unreproduced count, path or measurement is a finding. After: a finding in a page is placed by its section and a finding in code by `file:line`; an unreproduced count, path or measurement is a finding only when a decision rests on it, and the finding names the decision; a test of behaviour whose failure costs nothing is a Standards finding; a case of the brief with no test is a finding only for a code step.
+- **`/plan-retro` and the recurring-findings pass of `/plan-orchestration`.** Before: for a rule already written that keeps being broken, a check is proposed first, and a sharper sentence only when no command can check it. After: a rule sentence or a change to the text that should have prevented the defect is proposed first; a check only when whether the rule is kept is a fact a machine computes, stating what it computes, which the user approves before it is written.
+- **Briefs from `/spec`.** Before: the builder's first task turns every case into a test run on the unchanged tree; the heading "Read, with line ranges". After: every case gets a first run on the unchanged tree, a case of a code step as a test and a case of a text or judgment step by reading; the heading "Read, with sections or line ranges", and a page is named by its section.
 
 ### Reruns
 

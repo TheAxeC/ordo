@@ -26,7 +26,7 @@ The findings left after the "no defect" set-aside, by the heading they fell unde
 - `<report path>` (<location>): <the finding, quoted>
 - `<report path>` (<location>): <the finding, quoted>
 - Where the rule stands: <absent | on <page>, which the briefs do not point at | on <page>, which the briefs point at>.
-- Proposal: <the rule text and the page it goes into | the page added to standards | the check, its command and its output on the current tree>.
+- Proposal: <the rule text and the page it goes into | the page added to standards | the sharper sentence or the text change, and the file it goes into>; for a fact a machine computes, also <the check: what it computes, its command and its output on the current tree>.
 - Decision: <approved | corrected: ... | declined>.
 
 ## Other kinds

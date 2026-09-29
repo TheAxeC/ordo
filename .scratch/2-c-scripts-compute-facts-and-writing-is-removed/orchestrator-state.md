@@ -11,7 +11,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
 - >-
-  git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
+  git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
 standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
@@ -30,27 +30,15 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 5
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2c-5
-  base: 659c1eeee929fc8411ce6b0a812fb8cb56510a5d
-  launched: 2026-09-29
-  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/5-report.md
-  landing: not-started
-  round: 1
-  session_id: aff737080ccfb46ce
-  builder_usage: round 0, 152802 tokens, 42 tool uses, 535 s; round 1, 177778 tokens, 13 tool uses, 171 s
-  reviewer_report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/5-refuter.md, first run, 180529 tokens, 38 tool uses, 484 s; over round 1, 148531 tokens, 36 tool uses, 330 s
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- E (2026-09-29, step 5): the word "script" in the template change standard and the shared rules. Step 5 writes the rule "scripts compute facts; judgment is read" into `skills/repo-setup/templates/docs/dev/change-standard.md` and `skills/repo-setup/templates/shared-rules.md`, which `/repo-setup` installs into code repositories (`game-engine/docs/dev/change-standard.md` came from it). There rule 1 reads "A defect in a script begins with a test that fails on the tree as it is" and the section reads "A test exists only for a script", so a defect in application code is neither a script nor text and would need no failing test first. Options: (a) in the two template files, "code" where Ordo's copy says "script" (a defect in code begins with a failing test; a test exists only for code, and only for behaviour whose failure costs something), Ordo's own change standard keeping "script", since Ordo's only code is its scripts; pro: a code repository keeps test-first for its product code; con: the template's wording differs from your global rule's. (b) "script" everywhere, as the global rule says; pro: one wording; con: in a code repository the rule reads as exempting application code from tests, the opposite of its intent. Recommendation: (a), applied at step 5's landing. The lazy option is (b), since it needs no change.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: open item E, the word "script" in the template rules: ruled (a), "code" in the two template files, applied at step 5's landing.
 - 2026-09-29: step 7's roadmap diff approved by the user and written (51ca1a5).
 - 2026-09-29: open item C, the ASCII check's exit status and `__pycache__`: ruled (a), step 5 is widened to fix both.
 - 2026-09-29: open item D, `utils/pin.sh` line 69: ruled (a), deleted at step 6's landing.
@@ -81,8 +69,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1 to 4, 6 and 7 done. Step 7: the roadmap change the user approved, commit 51ca1a5. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
+- 2026-09-29. Steps 1 to 7 done. Step 5: the rule "scripts compute facts; judgment is read" in both change standards and the shared rules, the rules and skills rewritten under it, the ASCII check fixed, open item E applied. Step 7: the roadmap change the user approved, commit 51ca1a5. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 5, the rules, widened by open item C and carrying rule 15; built, repaired in round 1 and refuted over the round; it lands once open item E is ruled, since the landing applies the ruling, with the run's findings on the builder's report fixed at landing.
-- Open on Axel's side: open item E; then the reading of step 5's rules diff.
+- Next step: 8, the closing: the user reads and approves the rewritten rules (the gate), every clause of the gate is run, `/roadmap done 2.C`, the ledger archived, then v2.3.0 tagged and pinned on the user's yes.
+- Open on Axel's side: the reading and approval of the rewritten rules (`git diff 659c1ee <landing commit>`, and the builder's report, "Old and new text" and "User-visible changes"); then the yes to tag and pin v2.3.0.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
