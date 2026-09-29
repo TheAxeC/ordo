@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 3
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2d-3
+  base: 34098e5290fd8e3775ed0ee4dec4198b2d6a0d23
+  launched: 2026-09-29
+  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/3-report.md
+  landing: not-started
+  round: 0
+  session_id: affe6b9ee2ba5ff71
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -65,5 +75,5 @@ None.
 
 - 2026-09-29. Step 2 landed: `/refute` gives a verdict per item and per case, each finding with its failure scenario, and "Declined to judge"; `/plan-retro` sets the new lists aside.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 3, briefs and reports: the inputs a script step implies in the brief template, and `<REDACTED>` in both change standards and `/refute`.
+- In flight: step 3, briefs and reports; its builder runs in `.agents/worktrees/2d-3`.
 - Open on Axel's side: nothing.
