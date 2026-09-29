@@ -2,7 +2,7 @@
 name: plan-retro
 description: "Read every refuter report of a repository's plans, open and archived, group the findings by the kind of defect, count the kinds that come back across steps and plans, and for each one propose the change that stops it at its source: a rule sentence on the rules page, a change to the text that should have prevented the defect, a page added to the standards the briefs point at, or, for a fact a machine computes, a check the user approves. Writes a retro report and changes nothing else until the user approves. Triggers on: plan-retro, retro, run a retro, what do the reviews keep finding, mine the refuter reports."
 metadata:
-  version: "1.2.0"
+  version: "1.2.1"
 ---
 
 # Retro over the refuter reports
@@ -67,7 +67,7 @@ metadata:
 - A kind is a sentence that states the defect in general terms, the way a rule would forbid it: "a test that stays green with the change reverted", "a comment that names the step that wrote it", "a document sentence the diff makes false".
 - Findings whose text reports the same defect in different words share a kind.
 - `unclassified` findings from repair rounds are read and assigned like the rest, or set aside when they are a point the reviewer did not check.
-- The session keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Not checked, Closed, Closures and Usage lists, and fenced lines.
+- The session keeps as a finding, whatever its text says, every top-level item under a Spec, Proof, Standards or Behaviour heading and every item of a repair round outside the parts it does not read: the list before a round's subheadings when one of them is Spec, Proof, Standards or Behaviour, the Verification, Verdicts, Declined to judge, Not checked, Closed, Closures and Usage lists, and fenced lines.
 - A finding whose text reports no defect (a confirmation such as "None." or "No sentence in the pages is made false") or a closure that holds (such as "Spec 1: closed.") is set aside, by reading, as the kind "no defect".
   - It is counted and listed in the retro's "No defect" section with no proposal.
 

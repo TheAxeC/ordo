@@ -107,3 +107,63 @@ Cases of the brief's "Cases":
 - Whether the verdict form serves the user better than the old form is the user's reading at the gate, and a read and a rerun cannot settle it.
 
 Reviewer usage: claude:opus, a fresh agent; 114631 tokens, 23 tool uses, 264 s (from the completion notice). Saved by the orchestrator from the reviewer's final message.
+
+## Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent; 108083 tokens, 17 tool uses, 224 s (from the completion notice). The round's delta read as `git diff 544c204` against `agents/reviews/2-round-0.diff`.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/orchestrator-state.md   (worktree root)
+PASS: land.sh scratch tests
+PASS: checks.sh scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: check_coverage.py scratch tests
+(the ASCII check: no output)
+checks: 7 commands passed
+exit 0
+
+The length command: 726 land, 632 ordo-init, 386 plan-help, 788 plan-orchestration, 616 plan-retro, 386 plan, 951 refute, 630 repo-setup, 647 roadmap, 999 spec.
+LC_ALL=C grep -n '[^ -~]' skills/refute/SKILL.md skills/refute/templates/report.md skills/plan-retro/SKILL.md: no output, exit 1.
+The round's delta: Steps 6 fourth bullet (adds the verdict it names); the Rules bullet split into two; the template's five finding lines gain "<the quoted hunk>" and "what is wrong:", Behaviour gains the place; "### Declined to judge" in the round section. plan-retro unchanged in the round.
+grep -c '"<the quoted hunk>"; what is wrong: ' skills/refute/templates/report.md: 5. grep -c 'failure scenario:': 5.
+grep -n 'invokes no skill\|starts no agent' skills/refute/SKILL.md: 160 and 161.
+grep -n '^#' skills/refute/templates/report.md: Verification 5, Verdicts 12, 1. Spec 22, 2. Proof 26, 3. Standards 30, 4. Behaviour 34, Declined to judge 38, Repair round 44, ### Verdicts 50, ### Findings 54, ### Declined to judge 58, Closed 64.
+wc -l: 163, 66, 113; git diff --numstat 544c204: 26 8, 27 7, 2 2.
+grep -n 'invokes no skill and starts no agent' skills/refute/SKILL.md: no output, exit 1 (see Proof 1).
+git grep over skills, docs, README.md, utils, CLAUDE.md outside skills/refute for the changed terms: docs/roadmap.md:22, :162, :163 and skills/plan-retro/SKILL.md:70; no sentence made false.
+```
+
+### Verdicts
+
+- 1 to 7: holds. Item 1 at `skills/refute/SKILL.md:160` and `:161`, two bullets, each naming its own alternative; item 5 with the five finding lines in the order Steps 6 lists and the round section's Verdicts, Findings and Declined to judge (Standards 1 names one narrow slot, item 5's text holds).
+- Case 1 (length at most 1,024): met, 951. Case 2 (the ruled terms): met, the rule on skills and agents now at 160 and 161. Case 3 (`/plan-retro` over the new form): met by reading `skills/plan-retro/SKILL.md:70` against the new template; the round's `### Declined to judge` is set aside, `### Findings` kept, and "Not checked" still set aside over `1-refuter.md`.
+
+### Findings
+
+- Rulings 1, 2 and 3: closed; no check removed, no change beyond the rulings.
+- Standards 1. `skills/refute/templates/report.md:56` against `skills/refute/SKILL.md`, "Over a repair round", item 4: "what is wrong: <the closure claimed>, <what the rerun or the read showed>". Item 4 has the reviewer look for the four kinds of defect over the delta as well as for failed closures, and the line gives a slot only to a closure (change-standard rule 19). Failure scenario: a reviewer finds a defect the delta introduced that no closure covers and must invent a closure or leave the slot empty; the orchestrator then cannot tell a delta defect from a failed closure. Verdict: none.
+- Proof 1. The builder's report (worktree copy), "DONE / NOT DONE" row 1 and Case 2 quote `grep -n 'invokes no skill and starts no agent'` printing line 160; after the round it prints nothing. Judgment call 6, the line counts 162/62 and "Doc text"'s `:162` are also pre-round; the round section updates the counts and the line move but not row 1, Case 2 or call 6. Failure scenario: the orchestrator copies row 1's command as the proof of item 1, and a rerun prints nothing. Verdict: none; item 1 and Case 2 hold on the reviewer's grep.
+
+### Declined to judge
+
+- Steps 6, fourth bullet (line 57), one sentence of about 50 words: whether a five-part list is what prose standard "E. Sentence shapes" allows "unless the mechanism needs more" is a reading the standard does not settle.
+- "Over a repair round", item 6 ("appends the run's findings ... in the same shape") names only findings, while the round section also holds Verdicts and Declined to judge; incomplete, not false, unchanged from the base, outside the items.
+- The round section's verification fence names only the verification commands, not each command the report quotes as evidence, as the top-level fence does; unchanged from the base and asked by no item.
+- `README.md:18`, `README.md:35`, `skills/plan-help/SKILL.md:57`: ruling 4 gives them to the orchestrator at landing.
+- Semicolons in list terminators: ruling 5, not judged again.
+- Whether the verdict form serves the user better is the user's reading at the gate.
+
+## Closed
+
+- First run, Standards 1 (Steps 6 and the template disagree on what a finding carries): closed in repair round 1, ruling 1.
+- First run, Declined to judge 1 (two requirements in one Rules bullet): closed in repair round 1, ruling 2.
+- First run, Declined to judge 3 (no Declined to judge list in a round's section): closed in repair round 1, ruling 3.
+- First run, Declined to judge 2 (`README.md:18`, `README.md:35`, `skills/plan-help/SKILL.md:57`): applied at landing; each says `/refute` writes verdicts and findings, `plan-help` at version 1.8.1.
+- First run, Declined to judge 4 (semicolons in list terminators): no change, ruling 5; they end list items and template rows, which are not running prose.
+- Round 1, Standards 1 (the round's finding line has a slot only for a closure): fixed at landing; `templates/report.md` reads "what is wrong: <the closure claimed and what the rerun or the read showed, or what is there against what the brief or the standard asks>".
+- Round 1, Proof 1 (the builder's report's pre-round DONE row 1 and Case 2 quote a grep that no longer matches): no change to the builder's report, which is its record of the first run; the proof of item 1 and Case 2 is the round reviewer's `grep -n 'invokes no skill\|starts no agent' skills/refute/SKILL.md`, lines 160 and 161, and the booking cites that.
+- Round 1, Declined to judge (Steps 6's long sentence): no change; it lists the five parts of a finding, which prose standard "E. Sentence shapes" allows when the content needs it.
+- Round 1, Declined to judge ("Over a repair round" item 6 names only findings): fixed at landing; it names the verdicts, findings and points declined to judge, in the shape `templates/report.md` gives.
+- Round 1, Declined to judge (the round's fence names only the verification commands): fixed at landing; the fence also holds each command the round's report quotes as evidence.

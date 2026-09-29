@@ -1,18 +1,18 @@
 ---
 name: refute
-description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report under four headings (spec, proof, standards, behaviour). Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.6.0"
+  version: "1.7.0"
 ---
 
 # Refute a step
 
-`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`, a list of findings each with its place (a file and a line in code, a page and its section in a page), or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
+`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`: a verdict per item of the brief and per case, and a list of findings each with its place (a file and a line in code, a page and its section in a page) and its failure scenario, or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
 
 ## Quick start
 
 ```
-/refute <entry> <step>   a fresh reviewer reads the step's diff, reruns every check and every quoted command, and writes findings
+/refute <entry> <step>   a fresh reviewer reads the step's diff, reruns every check and every quoted command, and writes verdicts and findings
 ```
 
 ## Use instead
@@ -50,11 +50,12 @@ metadata:
 4. The reviewer runs every command the report quotes as evidence, in the same form, and compares the output with what the report claims.
    - Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so.
      - It reproduces what it can from the one build.
-5. The reviewer looks for the findings "The four headings" lists.
+5. The reviewer looks for the findings "The four headings" lists and gives the verdicts "The verdicts" lists, until every item of the brief's "What to build" and every case of its "Cases" has a verdict.
 6. The reviewer writes the report from `templates/report.md`.
    - The verification lines first, verbatim.
-   - Then the four headings, each with findings (the place: a file and a line in code, a page and its section in a page; the quoted hunk; what is wrong) or "none".
-   - Then what was not checked within the time box, named.
+   - Then the verdicts, as "The verdicts" says: one per item of the brief's "What to build", then one per case of its "Cases".
+   - Then the four headings, each with findings, or "none", and each finding with its place (a file and a line in code, a page and its section in a page), the quoted hunk, what is wrong, its failure scenario as "The four headings" says, and the verdict it names when it has one, as "The verdicts" says.
+   - Then "Declined to judge": each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason.
    - Then the reviewer's usage.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
    - It records the report's path under the dispatch block's `reviewer_report` field, with the reviewer's tokens, tool uses and time from its completion notice beside it.
@@ -72,7 +73,7 @@ metadata:
    - a fix that reaches beyond the finding;
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns every verification command again.
-6. The orchestrator or the session appends the run's findings to the same file under "Repair round <n>, refuted", in the same shape.
+6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
    - It records the run as Steps 7 says.
 7. The findings of the run over the last round are never sent to the builder.
    - Each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
@@ -109,6 +110,21 @@ metadata:
   - a rule of the repository's checks that the diff satisfies only because the check does not read that path yet;
   - a test of behaviour whose failure costs nothing (neither lost work, nor a broken installation, nor a wrong configuration accepted), under the rules file's rule that a test exists only for behaviour whose failure costs something.
 - **Behaviour.** A finding is a host- or user-visible change the report does not state, or states without the before and after.
+- Each finding, under any of the four headings, carries its failure scenario: the concrete input or state and the wrong result it gives, or, for a finding in text, the reader and what the text leads them to do wrong.
+
+## The verdicts
+
+- **Items.** One verdict per item of the brief's "What to build", in the brief's numbering:
+  - holds: the diff does what the item's text says, with the evidence named;
+  - violated: the diff does not do what the item's text says, with the finding under its heading named;
+  - not applicable: the item does not apply to this tree, with the reason.
+- **Cases.** One verdict per case of the brief's "Cases":
+  - met: the test or the reading gives the expected result;
+  - partial: the test or the reading gives part of the expected result, with the missing part named;
+  - unmet: the test or the reading does not give the expected result;
+  - not verifiable: neither a test nor a reading can settle the case here, with what would settle it.
+- A verdict of violated, partial or unmet always has a finding under one of "The four headings", and the verdict and the finding name each other.
+- Over a repair round, the reviewer gives the verdicts again for the whole diff since the base.
 
 ## Finding dispositions
 
@@ -135,11 +151,13 @@ metadata:
 | An edit to any file, anywhere, by the reviewer | The step under review is no longer the step that was built | Report the finding; the builder or the landing fixes it |
 | A background shell, or polling, the brief does not list | It outlasts the review | Run each command in the foreground and wait for it |
 | A benchmark suite or a sanitizer run the brief does not list | It measures what the brief did not ask about | Steps 3 and 4 |
-| An unchecked point reported as a finding or as a pass | The report then claims what nobody checked | Steps 6 |
+| An unchecked point reported as a finding or as a pass | The report then claims what nobody checked | Name it under "Declined to judge" with the reason, as Steps 6 says |
 
 ## Rules
 
 - The reviewer is a fresh session or agent every time, for the first run and every run over a repair round: never the builder, and never the session that wrote the brief when another is available.
 - The reviewer never writes into the ledger itself.
+- The reviewer invokes no skill: it reads the inputs "What it reads" lists, runs the commands this skill names, and writes its report itself.
+- The reviewer starts no agent: every read and every command of the review runs in the reviewer's own session.
 - An unreproduced claim is a finding, except a count, a path or a measurement no decision rests on, as the Proof heading says.
 - A time box, the configuration block's `review_minutes` when above 0 or one the invocation names, is respected by reporting what was checked and naming what was not.

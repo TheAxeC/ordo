@@ -338,3 +338,106 @@ Found by `git grep -n -i 'not checked\|four headings\|declined to judge\|failure
 - `skills/plan-help/SKILL.md:57`: "/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings". Replacement: "/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings", with `plan-help`'s `metadata.version` up one patch.
 
 The other hits hold after the change: `skills/plan-retro/SKILL.md:37` reads the findings "under its Spec, Proof, Standards and Behaviour headings, and each section Repair round <n>, refuted", which the template still has; `skills/land/SKILL.md:173` names only the Closed heading, which is unchanged; `docs/roadmap.md:22`, `:23` and `:162` to `:164` describe the verdict form this step writes; `skills/refute/SKILL.md:162` (the time box, "naming what was not") names what goes under "Declined to judge".
+
+## Repair round 1
+
+Every item of `agents/briefs/2-round-1.md` that was sent is done. Items 4 and 5 were not sent (4 is applied by the orchestrator at landing from "Doc text"; 5 is no change).
+
+### Item 1, Steps 6 and the template state one list of a finding's parts
+
+Steps 6, fourth bullet, old:
+
+> - Then the four headings, each with findings, or "none", and each finding with its place (a file and a line in code, a page and its section in a page), the quoted hunk, what is wrong and its failure scenario, as "The four headings" says.
+
+New (`skills/refute/SKILL.md:57`):
+
+> - Then the four headings, each with findings, or "none", and each finding with its place (a file and a line in code, a page and its section in a page), the quoted hunk, what is wrong, its failure scenario as "The four headings" says, and the verdict it names when it has one, as "The verdicts" says.
+
+The template's five finding lines, new (`skills/refute/templates/report.md` lines 24, 28, 32, 36 and 56); each gives the place, the quoted hunk, what is wrong, the failure scenario and the verdict, in the order Steps 6 lists them. Proof keeps its decision field and Standards its standard's file and rule; Behaviour gains the place and the hunk.
+
+```
+- <file:line, or page and section>: "<the quoted hunk>"; what is wrong: <what is there>, <what the brief asked for>; failure scenario: <the input or state and the wrong result it gives, or the reader and what the text leads them to do wrong>; verdict: <the item or case it makes violated, partial or unmet, when there is one>. Or: none.
+- <file:line, or page and section>: "<the quoted hunk>"; what is wrong: <the claim>, <what the rerun showed>; for a count, a path or a measurement, <the decision that rests on it>; failure scenario: <the input or state and the wrong result it gives, or the reader and what the text leads them to do wrong>; verdict: <the item or case it makes violated, partial or unmet, when there is one>. Or: none.
+- <file:line, or page and section>: "<the quoted hunk>"; what is wrong: <the rule broken, with the standard's file and rule>; failure scenario: <the input or state and the wrong result it gives, or the reader and what the text leads them to do wrong>; verdict: <the item or case it makes violated, partial or unmet, when there is one>. Or: none.
+- <file:line, or page and section>: "<the quoted hunk>"; what is wrong: <what a host or a user sees change>, <where the report should have stated it>; failure scenario: <the input or state and the wrong result it gives, or the reader and what the text leads them to do wrong>; verdict: <the item or case it makes violated, partial or unmet, when there is one>. Or: none.
+- <file:line, or page and section>: "<the quoted hunk>"; what is wrong: <the closure claimed>, <what the rerun or the read showed>; under the heading it belongs to (spec, proof, standards, behaviour); failure scenario: <the input or state and the wrong result it gives, or the reader and what the text leads them to do wrong>; verdict: <the item or case it makes violated, partial or unmet, when there is one>. Or: none.
+```
+
+The old lines are quoted under "`skills/refute/templates/report.md` (item 5)" above. Command: `grep -c '"<the quoted hunk>"; what is wrong: ' skills/refute/templates/report.md` prints `5`; `grep -c 'failure scenario:' skills/refute/templates/report.md` prints `5`.
+
+### Item 2, the Rules bullet split in two
+
+Old (one bullet):
+
+> - The reviewer invokes no skill and starts no agent: it reads the inputs "What it reads" lists, runs the commands this skill names, and writes its report itself.
+
+New (`skills/refute/SKILL.md:160` and `:161`):
+
+> - The reviewer invokes no skill: it reads the inputs "What it reads" lists, runs the commands this skill names, and writes its report itself.
+> - The reviewer starts no agent: every read and every command of the review runs in the reviewer's own session.
+
+Each bullet states its own alternative. Command: `grep -n 'invokes no skill\|starts no agent' skills/refute/SKILL.md` prints lines 160 and 161 as quoted.
+
+### Item 3, "Declined to judge" in the repair round section
+
+New, after `### Findings` in `skills/refute/templates/report.md`, in the form of the top-level one:
+
+```
+### Declined to judge
+
+- <a point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
+```
+
+Command: `grep -n '^#' skills/refute/templates/report.md` prints Verification 5, Verdicts 12, 1. Spec 22, 2. Proof 26, 3. Standards 30, 4. Behaviour 34, Declined to judge 38, Repair round 44, `### Verdicts` 50, `### Findings` 54, `### Declined to judge` 58, Closed 64.
+
+Read against `/plan-retro`'s fourth bullet of "Grouping": that bullet sets aside "the Verification, Verdicts, Declined to judge, Not checked, Closed, Closures and Usage lists, and fenced lines" wherever they appear, and the bullet's "every item of a repair round outside the parts it does not read" makes the round's `### Declined to judge` list one of those parts. The round's findings under `### Findings` stay kept. No change to `/plan-retro` is needed.
+
+### Checks after the round
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/orchestrator-state.md`, from the worktree root, exit 0:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 7 commands passed
+```
+
+The gate's length command:
+
+```
+726 skills/land/SKILL.md
+632 skills/ordo-init/SKILL.md
+386 skills/plan-help/SKILL.md
+788 skills/plan-orchestration/SKILL.md
+616 skills/plan-retro/SKILL.md
+386 skills/plan/SKILL.md
+951 skills/refute/SKILL.md
+630 skills/repo-setup/SKILL.md
+647 skills/roadmap/SKILL.md
+999 skills/spec/SKILL.md
+```
+
+`LC_ALL=C grep -n '[^ -~]' skills/refute/SKILL.md skills/refute/templates/report.md skills/plan-retro/SKILL.md`: no output, exit 1. `git diff -U0 | grep '^+' | grep -n '[^ |] - \|--\|[^ -~]'`: no output, exit 1.
+
+### Line counts after the round
+
+`wc -l` and `git diff --numstat` against the base 544c204:
+
+| File | Lines, base | Lines, now | Added | Removed |
+|---|---|---|---|---|
+| `skills/refute/SKILL.md` | 145 | 163 | 26 | 8 |
+| `skills/refute/templates/report.md` | 46 | 66 | 27 | 7 |
+| `skills/plan-retro/SKILL.md` | 113 | 113 | 2 | 2 |
+
+The line numbers quoted in the sections above the round for `skills/refute/SKILL.md` hold through line 159; the Rules bullets are at 160 and 161, and the time-box bullet moved from 162 to 163.

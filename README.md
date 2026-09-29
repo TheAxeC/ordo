@@ -15,7 +15,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and adds an entry with its goal, gate and place. It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
 | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, `orchestrator-state.md` |
 | `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. It creates the worktree and stages the base binaries |
-| `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes findings |
+| `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
 | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
 | `plan-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
@@ -32,7 +32,7 @@ The order of use, shortened from what `/plan-help` prints:
 for every step:
 /spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries
 "build it"                    the session writes the code in the worktree, runs the checks, writes the report
-/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
+/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
 "close them"                  a repair round, up to repair_rounds times
 /land <entry> <step>          onto main, checks on main, the booking, the commit
 

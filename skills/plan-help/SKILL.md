@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.8.0"
+  version: "1.8.1"
 ---
 
 # Plan help
@@ -54,7 +54,7 @@ then, for every step:
 
 /spec <entry> <step>          writes the brief, makes the worktree, stages the base binaries
 "build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
-/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes findings
+/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
                               repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back

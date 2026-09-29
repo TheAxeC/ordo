@@ -30,19 +30,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2d-2
-  base: 544c20420c48429c183c3bf60fa9201f5d27c02a
-  launched: 2026-09-29
-  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/2-report.md
-  landing: not-started
-  round: 1
-  session_id: a3a51b6bc43a624b1
-  builder_usage: first run 128585 tokens, 23 tool uses, 403 s
-  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/2-refuter.md (first run 114631 tokens, 23 tool uses, 264 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -75,7 +63,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 1 landed: the writing rules for skill text in `docs/dev/skill-layout.md`, `/spec`'s description at 999 characters.
+- 2026-09-29. Step 2 landed: `/refute` gives a verdict per item and per case, each finding with its failure scenario, and "Declined to judge"; `/plan-retro` sets the new lists aside.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 2, `/refute` takes the verdict form; its builder runs in `.agents/worktrees/2d-2`.
+- Next step: 3, briefs and reports: the inputs a script step implies in the brief template, and `<REDACTED>` in both change standards and `/refute`.
 - Open on Axel's side: nothing.
