@@ -353,7 +353,7 @@ Replacement:
 Replacement:
 
 ```
-| `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
+| `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
 ```
 
 3. `README.md`, current:
@@ -365,7 +365,7 @@ Replacement:
 Replacement:
 
 ```
-/plan-retro                   after plans have run: the findings that recur, and the rule sentence or page that stops each, a check only for a fact
+/plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
 ```
 
 4. `skills/plan-help/SKILL.md`, current:
@@ -377,7 +377,7 @@ Replacement:
 Replacement:
 
 ```
-/plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence or page that stops each, a check only for a fact
+/plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
 ```
 
 5. `skills/spec/SKILL.md`, current:
@@ -392,4 +392,103 @@ Replacement:
    - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result, and the builder's first task as the template states it: the first run of every case on the unchanged tree before any change, a case of a script step as a test and a case of a text or judgment step by reading, and a case the brief's rules get wrong handed back before any code changes.
 ```
 
-The grep that found them: `git grep -n -i -E 'a test\b|revert|every branch|mechanical check|propose[sd]? a check|a check\b|test beside|exit\(\$bad|turn every case|into a test|test of the step|unreproduced' -- skills docs README.md`, `git grep -n -E 'page or check|or the check|the check that stops' -- skills docs README.md`, and `git grep -n -E 'Cases|\btests?\b'` over the other skills and pages. The other hits (`skills/land/SKILL.md` lines 198 and 200 on a reverted landing, `skills/plan-retro/SKILL.md` line 67 quoting a kind, `skills/refute/SKILL.md` line 38 and `skills/plan-orchestration/SKILL.md` lines 202-203 using "mechanical" for a sweep or a rerun, change-standard rule 8's "the check that pinned it") are not made false by the change.
+The grep that found them: `git grep -n -i -E 'a test\b|revert|every branch|mechanical check|propose[sd]? a check|a check\b|test beside|exit\(\$bad|turn every case|into a test|test of the step|unreproduced' -- skills docs README.md`, `git grep -n -E 'page or check|or the check|the check that stops' -- skills docs README.md`, and `git grep -n -E 'Cases|\btests?\b'` over the other skills and pages. The other hits (`skills/land/SKILL.md` lines 198 and 200 on a reverted landing, `skills/plan-retro/SKILL.md` line 67 quoting a kind, `skills/refute/SKILL.md` line 38 and `skills/plan-orchestration/SKILL.md` lines 207-208 using "mechanical" for a sweep or a rerun, change-standard rule 8's "the check that pinned it") are not made false by the change.
+
+## Repair round 1
+
+Every item the round file sends is done. Items 3, the second pair of 7, and 13 are not sent. Where this section quotes a line, it replaces the version quoted in the sections above.
+
+### Items
+
+1. Spec 1, rule 15 of both change standards: the cost condition on ids, keys and concurrent paths stays. The untrusted-input sentence now reads: `A value a user, a file or a script supplies is untrusted where it reaches a command, a path or generated text, and each such place is a case, since a wrong answer there runs a command, writes outside its folder or puts the supplied text where it was not meant to go.` Shown by `grep -c 'writes outside its folder' docs/dev/change-standard.md skills/repo-setup/templates/docs/dev/change-standard.md`: `docs/dev/change-standard.md:1`, `skills/repo-setup/templates/docs/dev/change-standard.md:1`. Both changes of meaning are listed under "User-visible changes" below.
+2. Spec 2 and Standards 3, the citing bullet of "Where the work happens" in both change standards, now: `- A ledger file cites a page (the rules page, a standard, a skill's text) by its section, never by a line number, since a page's lines move and a section's name does not. A finding in code keeps its `file:line`. A brief's "Paths this step writes" keeps its line ranges, numbered as on main at the base. A "Doc text" entry quotes the current line with the number `grep -n` prints, and the quoted text is what locates it.` Shown by `grep -c 'quoted text is what locates it'` on both files: 1 each. `skills/spec/templates/brief.md` "Report" is unchanged.
+4. Proof 1: the "Doc text" closing paragraph names `skills/plan-orchestration/SKILL.md` lines 207-208 for "mechanical", the lines on the current tree after item 8 added four lines; `grep -n 'mechanical' skills/plan-orchestration/SKILL.md` prints 207 and 208.
+5. Standards 1, `skills/refute/SKILL.md`: the opening paragraph now says `a list of findings each with its place (a file and a line in code, a page and its section in a page), or "none" under a heading`; Steps 6 now says `each with findings (the place: a file and a line in code, a page and its section in a page; the quoted hunk; what is wrong) or "none"`.
+6. Standards 2, `skills/refute/templates/report.md`: `grep -n 'file:line' skills/refute/templates/report.md` prints:
+
+```
+3:A page this report cites (the rules file, a standard, a skill's text) is named with its section, never with a line number, since a page's lines move and a section's name does not. A finding in code keeps its `file:line`.
+14:- <file:line, or page and section>: <what is there>, <what the brief asked for>. Or: none.
+18:- <file:line, or page and section>: <the claim>, <what the rerun showed>; for a count, a path or a measurement, <the decision that rests on it>. Or: none.
+22:- <file:line, or page and section>: <the rule broken, with the standard's file and rule>. Or: none.
+40:- <file:line, or page and section>: <the closure claimed>, <what the rerun or the read showed>; under the heading it belongs to (spec, proof, standards, behaviour). Or: none.
+46:- <finding>: closed in the round, <file:line, or page and section, and the check that shows it>; or fixed at landing, <what and where>; or raised to the user as an open item, <the item as the state file holds it>.
+```
+
+7. Standards 4, first pair, `skills/repo-setup/templates/shared-rules.md` line 5: `Read the source and cite `file:line`.` became `Read the source and cite it: `file:line` for code, the section for a page.`
+8. Standards 5, `skills/plan-orchestration/SKILL.md`, "The recurring-findings pass", the check bullet now:
+
+```
+- A check (a command in the verification list, or a script) is proposed under these limits:
+  - It is proposed only for a fact a machine computes.
+  - It comes after the rule sentence or the text change.
+  - The proposal states what it computes.
+  - The user approves what it computes before it is written.
+```
+
+9. Standards 6, `skills/plan-retro/SKILL.md`, item 4's label: `4. **Whether the rule is kept is a fact a machine computes.**`
+10. Standards 7, `docs/dev/building.md` line 25, the sentence now: `A file that is not valid UTF-8 makes it exit non-zero: perl either stops with its `Malformed UTF-8 character (fatal)` error or prints the line.` Both branches, with the new command: the `\377\376` file stops with the fatal error and exits 1 (quoted under "Reruns"); a file of `printf 'x\355\240\200y\n'` (an encoded surrogate) prints `Unicode surrogate U+D800 is illegal in UTF-8 at -e line 1, <> line 1.` and the line itself, and exits 1.
+11. Standards 8, the `plan-retro` description: `... propose the change that stops it at its source: a rule sentence on the rules page, a change to the text that should have prevented the defect, a page added to the standards the briefs point at, or, for a fact a machine computes, a check the user approves.` The "Doc text" items 2 to 4 above now name the text change: `README.md` line 22 `it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves`; `README.md` line 40 and `skills/plan-help/SKILL.md` line 75 `the rule sentence, text change or page that stops each, a check only for a fact`.
+12. Behaviour 1: the section "User-visible changes" below.
+
+### User-visible changes
+
+- **`/repo-setup sync` on a repository whose `CLAUDE.md` carries the current shared-rules block.** Before: `sync_rules.py` prints `ok:` and exits 0. After: it prints a unified diff (the new rule, and the changed line 5) and exits 1 until `--write` is run. Shown on a scratch repository whose block is the base template (`git show HEAD:skills/repo-setup/templates/shared-rules.md` between the markers): `python3 skills/repo-setup/templates/sync_rules.py <scratch>` printed a diff of 5 `+`/`-` lines and exited 1; `--write` printed `written: the shared-rules block now equals the template`, exit 0; the check after it printed `ok: the shared-rules block equals the template`, exit 0.
+- **A new repository from `/repo-setup`.** Before: its change standard had no section on scripts and judgment, rules 1, 6, 13 and 15 in their old text, and no bullet on citing a page; its `CLAUDE.md` block had 19 rules. After: the section "Scripts compute facts; judgment is read", the rewritten rules 1, 6, 13 and 15, the citing bullet in "Where the work happens", and a 20th shared rule, "Scripts compute facts; judgment is read".
+- **The ASCII check on an untracked `.pyc` that git does not ignore.** Before: exit 0, since perl died on the bytes and the `END` block set 0. After: exit 1. Shown on a `.pyc` compiled from `sync_rules.py` into the scratch folder: the old command `exit=0`, the new command `exit=1`. The `__pycache__/` line of `.gitignore` keeps Ordo's own bytecode out of the file list (`git check-ignore`, quoted in item 8 of the first round).
+- **The ASCII check on a file that is not valid UTF-8.** Before: the `(fatal)` error on stderr and exit 0. After: exit non-zero, by the fatal error or by the printed line, as item 10 shows.
+- **Rule 1, both change standards.** Before: every defect fix begins with a failing test. After: a defect in a script does; a defect in text or in a judgment is fixed by reading, with no test, and the report quotes the text before and after.
+- **Rule 6, both change standards.** Before: "Verification is the whole tree, every suite, every check". After: verification runs the verify list and every check over the whole tree, and a check verifies a fact, never whether the work is right, which the review judges by reading.
+- **Rule 13, both change standards.** Before: every branch the change adds or changes, and every rule its head comment states, has a case in the table. After: each behaviour whose failure costs something has a case; the table does not cover every branch or every head-comment rule. The revert proof for each new or changed test is unchanged.
+- **Rule 15, both change standards.** Before: every input form the script's rules name is a case, and ids, keys and concurrent paths are exercised unconditionally. After: an input form is a case only when a wrong answer on it costs something, and ids, keys and concurrent paths are exercised under the same condition. The untrusted-input sentence stays unconditional and now gives its reason: a wrong answer there runs a command, writes outside its folder or puts the supplied text where it was not meant to go.
+
+### Reruns
+
+The verify list, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-c-scripts-compute-facts-and-writing-is-removed/orchestrator-state.md` from the worktree root:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
+checks: 7 commands passed
+exit=0
+```
+
+The new ASCII command (`... END { $? ||= 1 if $bad }'`, the same text in `docs/dev/building.md` line 12 and `docs/dev/change-standard.md`, `cmp` printed nothing): on the clean tree, no output and `exit=0`; on the `printf 'ok\n\377\376bad\n'` file:
+
+```
+Malformed UTF-8 character: \xff\xfe\x62\x61\x64\x0a (too short; 6 bytes available, need 13) in pattern match (m//) at -e line 1, <> line 2.
+Malformed UTF-8 character: \xff\xfe\x62\x61\x64\x0a (unexpected non-continuation byte 0xfe, immediately after start byte 0xff; need 13 bytes, got 1) in pattern match (m//) at -e line 1, <> line 2.
+Malformed UTF-8 character (fatal) at -e line 1, <> line 2.
+exit=1
+```
+
+The ASCII grep, `for f in $(git diff --name-only) <this report>; do LC_ALL=C grep -n '[^ -~]' $f; done`: no output.
+
+### Line counts
+
+`git diff --numstat`, its tabs written as spaces:
+
+```
+2 0 .gitignore
+2 2 docs/dev/building.md
+21 6 docs/dev/change-standard.md
+8 3 skills/plan-orchestration/SKILL.md
+12 10 skills/plan-retro/SKILL.md
+1 1 skills/plan-retro/templates/retro.md
+9 8 skills/refute/SKILL.md
+7 5 skills/refute/templates/report.md
+19 4 skills/repo-setup/templates/docs/dev/change-standard.md
+2 1 skills/repo-setup/templates/shared-rules.md
+4 4 skills/spec/templates/brief.md
+```

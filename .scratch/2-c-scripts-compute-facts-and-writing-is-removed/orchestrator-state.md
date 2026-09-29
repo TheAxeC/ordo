@@ -41,8 +41,8 @@ dispatch:
   landing: not-started
   round: 1
   session_id: aff737080ccfb46ce
-  builder_usage: round 0, 152802 tokens, 42 tool uses, 535 s
-  reviewer_report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/5-refuter.md, first run, 180529 tokens, 38 tool uses, 484 s
+  builder_usage: round 0, 152802 tokens, 42 tool uses, 535 s; round 1, 177778 tokens, 13 tool uses, 171 s
+  reviewer_report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/5-refuter.md, first run, 180529 tokens, 38 tool uses, 484 s; over round 1, 148531 tokens, 36 tool uses, 330 s
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -83,6 +83,6 @@ dispatch:
 
 - 2026-09-29. Steps 1 to 4, 6 and 7 done. Step 7: the roadmap change the user approved, commit 51ca1a5. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 5, the rules, widened by open item C and carrying rule 15; repair round 1 sent to its builder in `.agents/worktrees/2c-5`.
+- In flight: step 5, the rules, widened by open item C and carrying rule 15; built, repaired in round 1 and refuted over the round; it lands once open item E is ruled, since the landing applies the ruling, with the run's findings on the builder's report fixed at landing.
 - Open on Axel's side: open item E; then the reading of step 5's rules diff.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.

@@ -75,3 +75,40 @@ Commands the builder's report quotes as evidence, rerun: perl exit 25 on `bad.tx
 - `skills/roadmap/SKILL.md:57` ("Draft the gate: ... a command ..., a test named ..., or an observable result someone can check") does not name a review as a gate; not judged false, since it does not say "only".
 - Whether each rewritten rule reads well as a whole: the step's gate is the user's reading of the diff.
 - Nothing left for lack of time (`review_minutes: 0`).
+
+## Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent; usage under the dispatch entry's `reviewer_report`. Saved by the orchestrator from the reviewer's final message. No copy of the tree before the round was saved; the round was read as the diff since the base against the first report and `agents/briefs/5-round-1.md`.
+
+### Verification lines
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh <state file>` in the worktree: the six `PASS:` lines, the old ASCII command with no output, `checks: 7 commands passed`, exit 0. The new ASCII command (`docs/dev/building.md:12`, the same text as `docs/dev/change-standard.md:67`): clean worktree, no output, exit 0; `printf 'ok\n\377\376bad\n'`, three `Malformed UTF-8` lines ending `Malformed UTF-8 character (fatal) at -e line 1, <> line 2.`, exit 1 with and without pipefail; encoded surrogate, above U+10FFFF and noncharacter U+FFFE, a warning and the line printed, exit 1; overlong and truncated, `(fatal)`, exit 1; U+2705 in a `.md`, exit 0. Every command of the report's "Repair round 1" and "User-visible changes" sections reproduced (the greps, `sync_rules.py` on a scratch repository exit 1 then `--write` then `ok:`, 19 then 20 shared rules, the `.pyc` exit 0 old and 1 new, `git check-ignore`, the numstat, the ASCII grep, the "Doc text" current lines).
+
+### Round items
+
+1 closed; 2 closed; 4 closed (lines 207-208 after item 8); 5 closed; 6 closed; 7 first pair closed; 8 closed; 9 closed; 10 closed (held for every non-UTF-8 input tried); 11 closed; 12 closed as ruled. Items 3, 7's second pair and 13 were not sent. The numstat moved only in the files the rulings name, and no hunk outside a ruling was found.
+
+### Spec
+
+1. Report lines 5-7, "Open items of the state file, verbatim: None.": open item E was in the state file when the round was sent (`git show ca64b05:<state file> | grep -c '^- E ('` printed 1); the "Repair round 1" section does not carry it either (change-standard rule 7).
+
+### Proof
+
+None.
+
+### Standards
+
+1. Report lines 101, 119, 142, 159, 181, 217, 225: "Old and new text" still gives the text before the round as the new text for rule 15, the citing bullet, the recurring-findings bullet, the `plan-retro` description, item 4's label, the report template's Proof line and the `building.md` sentence; the section the user reads for his approval states text that is not on the tree (rule 7).
+
+### Behaviour
+
+1. Report line 437, "A new repository from `/repo-setup`", leaves out the changed wording of the shared rule "No claim about state..." (a page cited by its section).
+2. "User-visible changes" does not list what the skills now do differently: `/refute` cites a page by its section and an unreproduced count or path is a finding only when a decision rests on it; `/plan-retro` and the recurring-findings pass propose a sentence or a text change first and a check only for a fact; briefs from `/spec` get the new Cases paragraph and the heading "Read, with sections or line ranges".
+
+### Declined to judge / not checked
+
+- Whether the builder's report is bound by the citing bullet the step adds (its round section cites pages by line number, as the rulings do; the bullet takes effect when it lands).
+- Open item E, round item 3 and the second pair of item 7: not sent, not judged.
+- Whether each rewritten rule reads well as a whole: the user's gate.
+- The rerun of `checks.sh` over a scratch copy of the state file with the new command: in the pre-round section, reproduced by the first reviewer.
+- `git check-ignore -v --no-index` and `git status --short --ignored` were run, read-only, though not on the brief's list of git commands.
