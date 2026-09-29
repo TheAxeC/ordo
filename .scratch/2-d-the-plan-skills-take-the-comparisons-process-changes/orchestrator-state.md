@@ -39,17 +39,20 @@ dispatch:
   launched: 2026-09-29
   report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/4-report.md
   landing: not-started
-  round: 0
+  round: 1
   session_id: a60e841f2439d5c00
+  builder_usage: first run 138594 tokens, 35 tool uses, 423 s
+  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/4-refuter.md (first run 126545 tokens, 21 tool uses, 348 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- B (2026-09-29, step 3): whether the brief's list of inputs a step implies but never states covers product code as well as scripts. Your ruling row 4 says "for a step that builds a script", and step 3 landed with that wording in `skills/spec/templates/brief.md`, "Cases", and `skills/spec/SKILL.md`, Steps 4. The brief template serves every repository `/repo-setup` sets up, and its own "Cases" paragraph already speaks of "a code step (a script, or a product's code)". Options: (a) keep "a step that builds or changes a script"; pro: exactly your ruling, and briefs for product code stay shorter; con: in a product repository a step that changes a parser or an API handler gets no list of the inputs it implies, which is where a missed empty value or malformed line costs most. (b) widen to "a code step (a script, or a product's code)", the two lines changed on main; pro: the same protection for product code, and one wording with the template's paragraph; con: longer briefs in product repositories, and each listed input becomes a case the reviewer expects a test for. Recommendation: (b), because the reason for the rule (a wrong answer on an unstated input costs something) holds for product code as much as for scripts, and the cost condition already keeps the list short. (a) is the cheaper option, since nothing changes; (b) is recommended for the coverage, not the cost.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-09-29: the step list: approved by the user as drafted.
+- 2026-09-29: open item B (the implied inputs for product code): ruled (b) by the user; `skills/spec/templates/brief.md` "Cases" and `skills/spec/SKILL.md` Steps 4 say "a code step (a script, or a product's code)", `/spec` 1.6.3, applied on main.
 - 2026-09-29: open item A (one trigger per case): ruled (a) by the user, at least one phrase per case and several phrasings allowed; applied on main in `docs/dev/skill-layout.md`, Frontmatter.
 
 ## The standing demands (from Axel, in force)
@@ -76,4 +79,4 @@ dispatch:
 - 2026-09-29. Step 3 landed: the brief template asks for the inputs a script step implies, and a secret in quoted command output is written `<REDACTED>` (both change standards, `/refute`, `/land`, `/roadmap done`).
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
 - In flight: step 4, the roadmap and plan checks; its builder runs in `.agents/worktrees/2d-4`.
-- Open on Axel's side: open item B.
+- Open on Axel's side: nothing.
