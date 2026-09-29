@@ -168,9 +168,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 19. codebase-design
 
 - Status: [ ]
-- Goal: A `codebase-design` skill and a design-standard page in `repo-setup`'s templates, in the form of Cathedra's "Design principles" (`docs/dev/standards/coding-standards.md`): single responsibility, separation of concerns, open for extension and closed for modification, substitutability, interface segregation, dependency inversion, do not repeat yourself, keep it simple and you are not going to need it, each stated in the concrete form it takes in the repository, with the check that enforces it where one exists.
+- Goal: A `codebase-design` skill that adapts `repo-setup`'s default design-principles page to an existing repository: each principle stated in the concrete form it takes there, with the check that enforces it where one exists.
 - Gate: one real run on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `codebase-design` on the same repository, wins or ties.
-- Waits on: 2.D, for the layout rules and the blind-comparison protocol.
+- Waits on: 2.E, for the design-principles page.
 
 ## 20. improve-codebase-architecture
 
