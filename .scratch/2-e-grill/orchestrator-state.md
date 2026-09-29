@@ -76,6 +76,6 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-29. Steps 1, 2, 4 and 5 are on main.
-- Roadmap entry 11's goal is changed as ruling B (a) says, in its own commit after step 5's landing.
+- Roadmap entry 11's goal is changed as ruling B (a) says (cb92d65).
 - Next step: step 3, the effort agents, which step 2's keys unblock.
 - Open on Axel's side: nothing.
