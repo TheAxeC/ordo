@@ -119,3 +119,4 @@ None.
 - Every clause of the gate run on main at 566a198 and passed, each with its command and output in the Done line of `docs/roadmap.md`.
 - `/roadmap done 2.C` written on the user's approval of its diff, commit 5a864fd.
 - This folder moved to `.scratch/archive/`; main then tagged v2.3.0 and `utils/pin.sh v2.3.0` run, the output in the commit that records it.
+- Tag and pin: `git tag -a v2.3.0 -m "Ordo v2.3.0" d016bf6`; `sh utils/pin.sh v2.3.0` printed `pinned: v2.3.0 (d016bf6), 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0; `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.3.0`; `sh utils/pin.sh` (check mode) printed `pinned: v2.3.0, 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0.
