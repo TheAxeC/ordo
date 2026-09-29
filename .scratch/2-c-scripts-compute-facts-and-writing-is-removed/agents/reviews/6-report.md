@@ -1,6 +1,6 @@
 # Step 6 report: the tests of the kept scripts held to the rule
 
-Everything in the brief is done. Two kept cases prove their cost only through their message line, because their fixture does not build the situation where the cost arises (pin.sh's not-a-worktree refusal, check_coverage.py's failing find); they are under "Cases kept on an assumption" and "Found in the brief's reach", since strengthening a fixture is outside this step.
+Everything in the brief and in repair round 1 (items 1, 2, 4, 5 and 6; item 3 was not sent) is done. The sections before "Repair round 1" state the end state after the round; the round's changes, commands and outputs are in that section at the end.
 
 ## Open items of the state file, verbatim
 
@@ -75,7 +75,7 @@ utils/check_coverage.test.sh exit 0 : PASS: check_coverage.py scratch tests
 ### Cases kept on an assumption
 
 - Check mode passes on a fresh pin. Assumption: a false alarm of check mode costs something. It is also the control that keeps every check-mode failure case from passing against a check that always fails.
-- A pinned worktree path that is not a git worktree is refused. Assumption: `$ORDO_STABLE` can name a folder inside another git repository, where `git -C "$stable" checkout` would move that repository. The fixture's folder is inside no repository, so the revert turns the case red only through its message line (the pin still stops when `git checkout` fails); see "Found in the brief's reach".
+- A pinned worktree path that is not a git worktree is refused. Assumption: `$ORDO_STABLE` can name a folder inside another git repository, where a pin that went ahead would check that repository out. The fixture now builds that situation (the folder inside the live clone, an empty skill folder), and the revert turns the case red on the live clone's branch ("Repair round 1", item 2).
 - The removals from `~/.agents/skills` (a link into the pinned worktree, into the live clone, through a linked parent folder, to the worktree's root) and check mode failing on such a link. Assumption: a harness the user runs reads `~/.agents/skills`, so a link left there installs a skill wrongly.
 
 ## skills/ordo-init/templates/check_config.test.sh
@@ -124,7 +124,6 @@ Each is "a wrong configuration accepted", which every plan skill then reads:
 | no-block | A CLAUDE.md with no markers is refused with exit 2 | Without the check the script stops with a traceback, exit 1, before any write. Evidence: `exit 1, expected 2: [] [Traceback (most recent call last):` |
 | two-ends | A second end marker is refused | The block runs to the first end marker and the text after it is outside the block and kept; nothing is lost and no drifted block is reported equal. Evidence: `exit 0, expected 2: [ok: the shared-rules block equals the template] []` |
 | no-claude | A missing CLAUDE.md is refused with its own message | The read then fails with `error: cannot read .../CLAUDE.md: No such file or directory`, exit 2 |
-| not-utf8 (CLAUDE.md) | A non-UTF-8 CLAUDE.md is refused with exit 2 | Without the handler the script stops with a traceback before any write. Evidence: `exit 1, expected 2: [] [Traceback (most recent call last):` |
 | no-template, shared-rules.md in CRLF, shared-rules.md not UTF-8 | The template's own read errors and its CRLF form | A missing or unreadable template stops the script before any write (evidence: `exit 1, expected 2 ... cannot read .../shared-rules.md`); a CRLF template not normalised reports a drift, exit 1, and loses nothing |
 | read-only | A CLAUDE.md `--write` cannot open is refused with exit 2 | The open for writing fails before the file is truncated, so the script stops with a traceback and the file is unchanged. Evidence: `exit 1, expected 2: [] [Traceback (most recent call last):` |
 
@@ -135,6 +134,7 @@ Each is "a wrong configuration accepted", which every plan skill then reads:
 - reversed markers refused: without the refusal `--write` writes `text[:start] + template + text[stop:]` with `stop` before `start`, duplicating the user's text between the markers.
 - two-begins refused: without the refusal `--write` replaces everything from the first begin marker, including any user text between the two.
 - two-blocks refused: without the refusal a drifted second block is reported equal (`exit 0 ... ok:`).
+- not-utf8 restored: a CLAUDE.md that is not UTF-8, with a Latin-1 letter outside a drifted block, is refused by `--write` and left byte for byte as it was. Failure rewrites the user's text outside the block: decoded with replacement characters, `--write` writes U+FFFD over the letter.
 - lost-write refused: a write that did not take reported as written, the user's repair silently not written.
 
 ### Cases kept on an assumption
@@ -204,7 +204,7 @@ Each is "a coverage list accepted that misses a file or gives a file no decision
 - complete. Assumption: a false refusal of a correct list costs something. It is also the control of every refusal case, and it catches the hidden-file, nested-file and per-section reverts (see the revert table).
 - nested-link. Assumption: a link appears inside a covered skill folder; the four real folders hold none.
 - usage-no-skill. Assumption: the check is run without the skill names; the documented command names all four.
-- find-fails. Assumption: a covered folder holds a subfolder `find` cannot read. The fixture's list has no section for the locked folder, so the revert turns the case red by its exit status (1 instead of 2) rather than by accepting a list; see "Found in the brief's reach".
+- find-fails. Assumption: a covered folder holds a subfolder `find` cannot read. The fixture now has a `## locked` section listing only the readable file, and the revert turns the case red on the `ok:` line the check would print ("Repair round 1", item 2).
 
 ## Revert proofs
 
@@ -246,7 +246,11 @@ Every kept case, the revert that turns it red, and the red line. Run against the
 | pin check after linking | the final `check_links || fail` made `|| :` | `FAIL: pin mode passed with a link it could not make` |
 | pin local changes | the local-changes refusal dropped | `FAIL: pinned over a worktree with local changes` |
 | pin foreign link | the outside-Ordo refusal dropped | `FAIL: replaced a link to a folder outside Ordo` |
-| pin not a worktree | the toplevel refusal dropped | `FAIL: the not-a-worktree refusal has no message; expected "pin: $TMPDIR/pin-test.C8G6kr/my home/plain exists and is not a git worktree" in: fatal: not a git repository (or any of the parent directories): .git` |
+| pin local changes, worktree | the pin checks the worktree out before the local-changes refusal | `FAIL: a pin refused for local changes moved the worktree` |
+| pin local changes, links | the pin relinks before the local-changes refusal | `FAIL: a pin refused for local changes changed a link` |
+| pin foreign link, worktree | the pin checks the worktree out before the outside-Ordo refusal | `FAIL: a pin refused for a link outside Ordo moved the worktree` |
+| pin foreign link, links | the pin relinks before the outside-Ordo refusal | `FAIL: a pin refused for a link outside Ordo changed a link` |
+| pin not a worktree | the toplevel refusal dropped | `FAIL: a pin into a folder inside the live clone moved the live clone off refs/heads/master` |
 | pin deleted by hand | `--force` dropped from `git worktree add` | `FAIL: pinning after the worktree was deleted by hand failed:  fatal: '.../ordo-stable' is a missing but already registered worktree;` |
 | pin other registration | `git worktree prune` run before `git worktree add` | `FAIL: pinning dropped the registration of another missing worktree` |
 | pin defaults | the defaults include `~/.agents/skills` | `FAIL: pin.sh wrote into $TMPDIR/pin-test.zdoo8h/my home/.agents/skills with the default folders` |
@@ -280,7 +284,8 @@ Every kept case, the revert that turns it red, and the red line. Run against the
 | cov section-twice | the appears-twice error for a skill dropped | `FAIL: section-twice: expected exit 1, got 0: ok: .../section-twice.md` |
 | cov entry-missing | the roadmap entry check dropped | `FAIL: entry-missing: expected exit 1, got 0: ok: .../entry-missing.md` |
 | cov usage-no-skill | `len(argv) < 3` becomes `< 2` | `FAIL: usage-no-skill: expected exit 2, got 0: ok: .../usage-no-skill.md` |
-| cov find-fails | the `find` return-code check dropped | `FAIL: find-fails: expected exit 2, got 1: .../complete.md:0: no '## locked' section` |
+| sr not-utf8 | `read()` decodes with `errors="replace"` | `FAIL: --write changed a CLAUDE.md that is not UTF-8` |
+| cov find-fails | the `find` return-code check dropped | `FAIL: find-fails: a list missing a file find could not read passed: ok: .../find-fails.md` |
 
 ### Revert proofs, verbatim
 
@@ -300,7 +305,7 @@ cov usage-no-skill | exit 1 | FAIL: usage-no-skill: expected exit 2, got 0: ok: 
 | Item | State | Command and output |
 |---|---|---|
 | First run on the unchanged tree | DONE | Quoted under "The first run" |
-| Cases sorted, the costless removed, the kept unchanged | DONE | The tables above; `git diff --stat`: `4 files changed, 46 insertions(+), 667 deletions(-)` |
+| Cases sorted, the costless removed, the kept unchanged | DONE | The tables above; `git diff --stat`: `4 files changed, 102 insertions(+), 689 deletions(-)` |
 | Fixtures used only by removed cases removed | DONE | pin: `split_prefixes` and `absent`; sync_rules: the `chmod` of the trap (only the read-only case locked a file); check_coverage: the folders `gamma`, `empty`, `sep`, `nl`, `nfd`, the link `linked`, the roadmap lines for 2.A, 6.B, 4.C, 7.D, 30 to 33, and the fenced `## beta` and the `## gamma` section of `base.md`; check_config: none |
 | Head comments rewritten, one paragraph per line | DONE | Lines 2-9 of `utils/pin.test.sh`, 2-4 of `check_config.test.sh`, 2-4 of `sync_rules.test.sh`, 2-5 of `check_coverage.test.sh`; each statement there has a kept case |
 | No script changed, no case added | DONE | `git status --short` lists only the four test files: ` M skills/ordo-init/templates/check_config.test.sh`, ` M skills/repo-setup/templates/sync_rules.test.sh`, ` M utils/check_coverage.test.sh`, ` M utils/pin.test.sh` |
@@ -332,14 +337,16 @@ checks: 7 commands passed
 
 | File | Before | After |
 |---|---|---|
-| `utils/pin.test.sh` | 548 | 363 |
-| `skills/ordo-init/templates/check_config.test.sh` | 159 | 126 |
-| `skills/repo-setup/templates/sync_rules.test.sh` | 272 | 168 |
-| `utils/check_coverage.test.sh` | 486 | 187 |
+| `utils/pin.test.sh` | 548 | 383 |
+| `skills/ordo-init/templates/check_config.test.sh` | 159 | 125 |
+| `skills/repo-setup/templates/sync_rules.test.sh` | 272 | 180 |
+| `utils/check_coverage.test.sh` | 486 | 190 |
 
 ## Doc text
 
-No line elsewhere is made false. Each line that names what one of these tests proves was reread (`git grep -n -e 'pin.test' -e 'sync_rules.test' -e 'check_config.test' -e 'check_coverage.test'` over `skills`, `utils`, `docs`, `README.md`, `CLAUDE.md`):
+Two lines state a rule that the removals contradict, rule 15 of both change standards; the replacement proposed for step 5 is under "Repair round 1", item 5. The lines below that name what the tests prove still hold.
+
+Each line that names what one of these tests proves was reread (`git grep -n -e 'pin.test' -e 'sync_rules.test' -e 'check_config.test' -e 'check_coverage.test'` over `skills`, `utils`, `docs`, `README.md`, `CLAUDE.md`):
 
 - `docs/dev/building.md` line 8, "check_config.py on complete and broken configurations": the complete case and the refusal cases remain.
 - `docs/dev/building.md` line 9, "sync_rules.py on matching and drifted shared-rules blocks, its --write repair and its refusals": the drift case checks the matching block after `--write` (`expect 0 python3 -B "$sync" "$test_root/drift"`), and four refusals remain.
@@ -357,8 +364,116 @@ No line elsewhere is made false. Each line that names what one of these tests pr
 
 ## Found in the brief's reach
 
-These are facts for the orchestrator; changing a kept case's fixture or the scripts is outside this step's paths and "No script changes. No case is added."
+This is a fact for the orchestrator; changing a script is outside this step's "No script changes".
 
-- `utils/pin.test.sh`, the not-a-worktree case: its folder `$HOME/plain` is inside no git repository, so with the refusal dropped the pin still stops when `git checkout` fails, and the case goes red only through its message line. The cost the refusal prevents, a checkout of an enclosing repository, is not built by the fixture.
-- `utils/check_coverage.test.sh`, find-fails: the list has no `## locked` section, so with the return-code check dropped the list is still refused (exit 1) and the case goes red by exit status. A fixture whose locked folder has a section and hides an unlisted file would show the list accepted.
 - `utils/pin.sh` line 69, `[ "$dir" = "$outside" ] && return 0`: no case of the original or the final test turns red when it is removed (`H pin CLAUDE_CONFIG_DIR=~/.agents, path comparison only | exit 0 | PASS: pin.sh scratch tests`), because every folder the tests compare exists and the resolved-path line matches it first.
+
+## Repair round 1
+
+The items of `agents/briefs/6-round-1.md`, each made as ruled. Item 3 was not sent. The revert harness is the same file as before, with the round's reverts added under labels starting `R1`; its output below is unedited, from `python3 .../scratchpad/reverts.py "R1 "` run from the worktree root.
+
+### Item 1: the not-UTF-8 CLAUDE.md case restored and strengthened
+
+- Change, `skills/repo-setup/templates/sync_rules.test.sh`: a case before the lost-write case builds a repository whose CLAUDE.md starts with `Caf\351 notes` (a Latin-1 letter, outside the block) above a drifted block. It copies the file, runs `--write`, compares the file with the copy byte for byte (`fail "--write changed a CLAUDE.md that is not UTF-8"`), then runs `--write` again through `expect_refusal`: exit 2, stdout empty, one stderr line `error: <path> is not UTF-8`. The byte comparison comes first so that a revert shows red on the cost. The head comment names the case.
+- The row moved from the removed table to the kept list, with the cost "the user's text outside the block rewritten".
+- Revert, the reviewer's: `read()` opens with `errors="replace"`. Output:
+
+```
+R1 sr not-utf8 (errors=replace) | exit 1 | FAIL: --write changed a CLAUDE.md that is not UTF-8
+```
+
+### Item 2: not-a-worktree and find-fails red on their cost
+
+- Change, `utils/pin.test.sh`: `ORDO_STABLE` is an existing plain folder inside the live clone (`$repo/plain`) and `ORDO_SKILL_DIRS` is one empty folder (`$test_root/empty-skills`), so no other refusal stops a pin that went ahead. Before `run_pin v1` the test saves `git -C "$repo" symbolic-ref -q HEAD`. After it, in this order: the live clone is on the same branch, the skill folder holds no entry, the exit status is 1, the not-a-worktree message is printed, and the plain folder is empty. Both variables are restored afterwards.
+- Change, `utils/check_coverage.test.sh`: `$root/locked` holds `SKILL.md` and `sub/guide.md`, the list gets a `## locked` section listing only `SKILL.md`, and `sub` is made unreadable for the run. The case asserts, in this order: no `ok:` line, exit 2, and `locked: find failed`.
+- Reverts and outputs:
+
+```
+R1 cov find-fails | exit 1 | FAIL: find-fails: a list missing a file find could not read passed: ok: /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//check-coverage-test.ANefSh/repo/docs/find-fails.md
+R1 pin not a worktree | exit 1 | FAIL: a pin into a folder inside the live clone moved the live clone off refs/heads/master
+```
+
+The find-fails revert drops the return-code check (`if listed.returncode != 0:` becomes `if False:`). The not-a-worktree revert drops the toplevel refusal. Each case goes red on its costly assertion: the list passes, or the live clone leaves its branch.
+
+### Item 4: local-changes and foreign-link refusals change nothing
+
+- Change, `utils/pin.test.sh`: a helper `links_state` prints each entry of the two skill folders with its link target. Both cases save it before the run and assert after it that `git -C "$ORDO_STABLE" describe --tags --exact-match` is still `v2` and `links_state` is unchanged. The foreign-link case now pins `v1`, not `v2`, so that a pin which checked the worktree out first would move it. Each case has a one-line comment naming the reverts that turn it red.
+- Reverts: in each refusal, a `git -C "$stable" checkout -q --detach "$tag"`, or an `ln -sfn` of the skill `alpha`, is run before the refusal fires. For local changes the step is guarded by the same dirty-worktree test; for the foreign link it is put before the `fail` in the `*)` branch. Outputs:
+
+```
+R1 pin local changes: checkout first | exit 1 | FAIL: a pin refused for local changes moved the worktree
+R1 pin local changes: relink first | exit 1 | FAIL: a pin refused for local changes changed a link
+R1 pin foreign link: checkout first | exit 1 | FAIL: a pin refused for a link outside Ordo moved the worktree
+R1 pin foreign link: relink first | exit 1 | FAIL: a pin refused for a link outside Ordo changed a link
+```
+
+### Item 5: rule 15 of both change standards
+
+`docs/dev/change-standard.md` line 27 and `skills/repo-setup/templates/docs/dev/change-standard.md` line 27 carry the same text (`sed -n 27p` of each):
+
+> 15. **Edges are exercised, not assumed.** For a script, every form of input its own rules name is a case: each heading level, list marker and fence form the rules cover, a relative and an absolute path, a directory where a file is expected, an empty value, and text inside fenced code. Every id or key a change introduces is exercised empty, duplicated and colliding with a reserved one; every concurrent path is exercised in flight, after teardown and superseded by a later one; a value a user, a file or a script supplies is untrusted where it reaches a command, a path or generated text.
+
+The step's removals contradict "every form of input its own rules name is a case": fence forms, closing hashes, the plain-path forms and pin's leading-whitespace forms are removed. Replacement proposed for both files, for step 5 to write:
+
+> 15. **Edges are exercised where their failure costs something.** A test exists only for a script, and only for behaviour whose failure costs something: lost work, a broken installation, a wrong configuration accepted. For a script, a form of input its own rules name (a heading level, a list marker or fence form, a relative or an absolute path, a directory where a file is expected, an empty value, text inside fenced code) is a case when the script's answer on that form, if wrong, would cost one of these; a form whose wrong answer is refused by another check, or changes only a message, is not. Every id or key a change introduces is exercised empty, duplicated and colliding with a reserved one; every concurrent path is exercised in flight, after teardown and superseded by a later one; a value a user, a file or a script supplies is untrusted where it reaches a command, a path or generated text.
+
+### Item 6: hard-wrapped comments
+
+Each wrapped comment the reviewer listed is now one line: `utils/pin.test.sh` (the scratch-root comment, `run_pin`, the live-clone refusal, the deleted-by-hand case, the ORDO_SKILL_DIRS case, whose two lines became one paragraph), `check_config.test.sh` (the libraries-empty comment), and `sync_rules.test.sh` (the `make_repo` comment). The scan below lists every pair of adjacent comment lines after the head comments. Each hit is two separate paragraphs, one per line: pin's head comment lines 5-9 and the two `~/.agents/skills` paragraphs at 258-259.
+
+```
+$ for f in <the four files>; do awk -v f="$f" '/^[ \t]*#/ && NR>4 { if (prev) print f": "NR-1"-"NR; prev=1; next } { prev=0 }' "$f"; done
+utils/pin.test.sh: 5-6
+utils/pin.test.sh: 6-7
+utils/pin.test.sh: 7-8
+utils/pin.test.sh: 8-9
+utils/pin.test.sh: 258-259
+```
+
+### The tests, the verify list and the revert set after the round
+
+Each test, run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`, output to a file, then its last line and exit status:
+
+```
+utils/pin.test.sh exit 0 : PASS: pin.sh scratch tests
+skills/ordo-init/templates/check_config.test.sh exit 0 : PASS: check_config.py scratch tests
+skills/repo-setup/templates/sync_rules.test.sh exit 0 : PASS: sync_rules.py scratch tests
+utils/check_coverage.test.sh exit 0 : PASS: check_coverage.py scratch tests
+```
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-c-scripts-compute-facts-and-writing-is-removed/orchestrator-state.md`, then `exit 0`:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { exit($bad ? 1 : 0) }'
+checks: 7 commands passed
+```
+
+The whole revert set was rerun against the changed tests: `python3 .../scratchpad/reverts.py`, with the exit-status column counted by `awk -F' \\| ' '{print $2}' | sort | uniq -c`:
+
+```
+   3 exit 0
+  77 exit 1
+```
+
+The three `exit 0` runs are the reverts of removed cases whose green result is the evidence for their removal: `REMOVED pin real directory`, `REMOVED pin CLAUDE_CONFIG_DIR=~/.agents, path comparison only` and `REMOVED cov linked-empty`. Every revert of a kept case exits 1. `git status --short` lists the four test files ` M` and this report `??`. `LC_ALL=C grep -n '[^ -~]'` over the four files printed nothing.
+
+### Line counts after the round (`wc -l`)
+
+| File | Before the step | After the round |
+|---|---|---|
+| `utils/pin.test.sh` | 548 | 383 |
+| `skills/ordo-init/templates/check_config.test.sh` | 159 | 125 |
+| `skills/repo-setup/templates/sync_rules.test.sh` | 272 | 180 |
+| `utils/check_coverage.test.sh` | 486 | 190 |

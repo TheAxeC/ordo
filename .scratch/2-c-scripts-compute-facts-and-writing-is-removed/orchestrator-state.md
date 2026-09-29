@@ -41,13 +41,14 @@ dispatch:
   landing: not-started
   round: 1
   session_id: a33a6362e8a9f3bd2
-  builder_usage: round 0, 276577 tokens, 45 tool uses, 1767 s
-  reviewer_report: agents/reviews/6-refuter.md, claude:opus (usage in its completion notice)
+  builder_usage: round 0, 276577 tokens, 45 tool uses, 1767 s; round 1, 317837 tokens, 15 tool uses, 641 s
+  reviewer_report: agents/reviews/6-refuter.md, claude:opus, 211445 tokens, 37 tool uses, 804 s
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
 - C (2026-09-29), step 5: the ASCII check of the verify list (`docs/dev/building.md`, the command blocks of both change standards, this state file) exits 0 when perl dies on a file it cannot decode, since its `END` block sets the exit status: a file holding the bytes `\377\376` made it print `Malformed UTF-8 character (fatal)` and exit 0. `.gitignore` does not ignore `__pycache__`, so a `python3` import leaves such a file in the check's reach. Options: (a) step 5 is widened to end both, the command keeping perl's own non-zero status when it dies and `__pycache__/` added to `.gitignore` (and to `repo-setup`'s `.gitignore` template if it has the same gap); (b) a new step after step 6 does it; (c) leave it. Recommendation (a): step 5 rewrites the rule that each verify command exits non-zero when it fails, and this command breaks that rule, so the fix belongs with it. The lazy option is (c); (b) only moves the same work later.
+- D (2026-09-29), step 6: `utils/pin.sh` line 69, `[ "$dir" = "$outside" ] && return 0`, has no observable effect: pin mode creates each skill folder (line 247) before it compares folders (line 272), so the resolved-path comparison on line 71 always decides first, and removing line 69 leaves the old and the new tests green (step 6's reviewer). Options: (a) delete the line in step 6's landing, as a fix of dead code in a file the step tests; (b) delete it in step 5; (c) keep it. Recommendation (a): a line no state reaches is code without a caller, and the step already reads that script case by case. The lazy option is (c).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -80,5 +81,6 @@ dispatch:
 - 2026-09-29. Steps 1 to 4 done. Step 4: the `--built` mode out of `utils/check_coverage.py`, its test and `docs/academic-coverage.md`; a dash argument is refused.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
 - Next step: 5, the rules, which waits on open item C. Step 6, the tests held to the rule, is in flight: brief `agents/briefs/6.md`, base ceb39fd, builder launched. Step 7, the roadmap, is drafted and waits on the user's approval of its diff.
-- Open on Axel's side: open item C.
+- Open on Axel's side: open items C and D, and the approval of step 7's roadmap diff.
+- Step 5's `/spec` adds change-standard rule 15 (both copies, line 27) to the rules it rewrites, as a premise correction: step 6's removals contradict it, and it asks for tests of every input form.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.

@@ -1,6 +1,6 @@
 # Step 6 refuter report
 
-Reviewer: claude:opus, a fresh agent. Worktree `.agents/worktrees/2c-6`, base `ceb39fd`.
+Reviewer: claude:opus, a fresh agent; 211445 tokens, 37 tool uses, 804 s. Worktree `.agents/worktrees/2c-6`, base `ceb39fd`.
 
 ## Verification lines
 
@@ -38,3 +38,38 @@ None beyond Spec 1 and 2.
 - The pass controls kept on an assumption (check_config complete, projects, agents-star, libraries-avoid; pin's fresh-pin check; cov complete): the user's ruling.
 - The CRLF shared-rules.md removal: considered and not a finding, since it loses nothing outside the block; whether a Windows install is in scope is not settled.
 - The reviewer's scratch folders under `$TMPDIR` were left in place.
+
+## Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent (usage in its completion notice, recorded in the dispatch entry). The round's delta read against `agents/reviews/6-round-0.diff`: 12 hunks, each under items 1, 2, 4 or 6.
+
+### Verification lines
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh <state file>` in the worktree, exit 0: the six `PASS:` lines, the ASCII check with no output, `checks: 7 commands passed`. Each test on its own: exit 0 and its `PASS:` line. `wc -l`: 383, 190, 125, 180. Reverts rerun in `$TMPDIR`: sync_rules `errors="replace"` and a latin-1 fallback, `FAIL: --write changed a CLAUDE.md that is not UTF-8`; coverage find-fails, `FAIL: find-fails: a list missing a file find could not read passed: ok: ...`; pin not-a-worktree, `FAIL: a pin into a folder inside the live clone moved the live clone off refs/heads/master`; pin local changes and foreign link, checkout first, relink first, remove or retarget a link first, each red on "moved the worktree" or "changed a link"; the foreign-link case left at `v2` with checkout first passes (so the switch to `v1` is needed).
+
+### Spec
+
+None.
+
+### Proof
+
+1. `utils/pin.test.sh` lines 225-227 (`[ -z "$(ls -A "$test_root/empty-skills")" ]`) and 236 (`[ "$(readlink "$d1/beta")" = "$ORDO_STABLE/skills/beta" ]`) cannot go red under the revert of the not-a-worktree refusal: the pin removes the links it made into `$repo/plain` in the same run, and `$d1` is not a skill folder of that run. The case goes red on the live clone's branch; these two are audits.
+
+### Standards
+
+1. `utils/pin.test.sh` line 215: "it would check the live clone out at the tag and link into it" is false as an end state; under the dropped refusal the run exits 0 with `0 skills linked`.
+2. `6-report.md` line 352 says four refusals remain in `sync_rules.test.sh`; there are five (reversed, two-begins, two-blocks, not-utf8, lost-write).
+3. `6-report.md` line 418, the rule-15 replacement proposed under item 5, keeps unconditioned demands ("Every id or key a change introduces is exercised empty, duplicated and colliding ...") beside a first sentence that forbids tests whose failure costs nothing, and restates the rule step 5 adds to the same page.
+
+### Behaviour
+
+None.
+
+### Round items
+
+- Item 1: closed. Item 2: closed (Proof 1 and Standards 1 are on its text). Item 4: closed. Item 5: not closed (Standards 3). Item 6: closed.
+
+### Declined to judge / not checked
+
+- The builder's full revert set (80 runs) not rerun; the round-0 tables beyond the rows item 1 changed not rejudged; the first run not rerun.
+- A revert that throws away the pinned worktree's local changes and then refuses is not caught by `describe --tags`; not tested, and not asked by the round.
