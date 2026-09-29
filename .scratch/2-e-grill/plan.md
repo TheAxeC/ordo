@@ -89,8 +89,9 @@ Existing repositories keep their own pages: game-engine's and cathedra's are mor
 - O4 (a): the effort agents as step 3 says, `worker_effort` and `reviewer_effort` defaulting to `high` (the user).
 - O5: the revert rule (a), step 8; ruling Y stays (a) after the count of 2.C's and 2.D's stops (26 stops, 4 from ruling Y); the worktree-removal permission is Axel's to set in his settings; the one-ruling sentence, step 9 (the user).
 - O6 (a): a project name appears in a roadmap entry only where the entry reads or changes that project, as a path; the rule sentence is step 9 (the user).
+- Open item A (2026-09-29): (a), the figures of step 12a are drawn by a generator script, `docs/figures/gen_figures.py`, which computes only the SVG files from the boxes, arrows and labels written in it; no test (the user).
 - Figures: figures in the form of research-hub's `tools/figures/plan-loop.svg`, marking where Axel is in the loop and whether that point is required or optional (the user).
 
 ## Blocked, and by what
 
-- 12a: whether the figures are drawn by a generator script, whose computation Axel approves, or written by hand; open item A in `orchestrator-state.md`.
+- Nothing is blocked.

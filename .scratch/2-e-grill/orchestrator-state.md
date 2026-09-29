@@ -31,16 +31,27 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 1
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2e-1
+  base: 1645496e2c768df9e3889c3de25ca1da2898b31c
+  launched: 2026-09-29 20:04
+  session_id: a7e2d8da2f7e6b429
+  report: .scratch/2-e-grill/agents/reviews/1-report.md
+  brief_check: .scratch/2-e-grill/agents/reviews/1-brief-check.md (98196 tokens, 13 tool uses, 155 s)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- A (step 12a, the figures): how the figures are drawn. (a) A generator script, `docs/figures/gen_figures.py`, in the form of research-hub's `tools/figures/gen_figures.py`: it computes only the SVG files from the boxes, arrows and labels written in it, and nothing else; the SVGs are committed; no test, since a wrong figure is caught by reading it. Pro: a change to the pipeline is an edit of a list, and the figures stay consistent in size and colour. Con: one more script in Ordo. Approving (a) approves that computation. (b) The SVG files written by hand, no script. Pro: no script. Con: every change is an edit of coordinates, and the figures drift apart. Recommendation: (a). The lazy option is (b). Blocks step 12a only.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- None yet.
+- 2026-09-29: open item A (step 12a, how the figures are drawn): ruled (a), a generator script `docs/figures/gen_figures.py` that computes only the SVG files from the boxes, arrows and labels written in it; no test.
 
 ## The standing demands (from Axel, in force)
 
@@ -65,5 +76,6 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-29. Plan opened; the roadmap changes of rulings O3 and O6 are on main (c830ed3, 4c74cdd, 9230459).
-- Next step: 1, the first in the list.
-- Open on Axel's side: open item A, which blocks step 12a only.
+- Step 1 in flight: brief and brief check committed (1645496), builder launched.
+- Next step: 2 after step 1 lands.
+- Open on Axel's side: nothing.
