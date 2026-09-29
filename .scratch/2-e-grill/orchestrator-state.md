@@ -73,6 +73,7 @@ dispatch:
   launched: 2026-09-29 23:25
   session_id: ae2714d2e377ffba9 (transcript model field: claude-sonnet-5-5, Claude Code 2.1.285)
   report: .scratch/2-e-grill/agents/reviews/3s55-report.md
+  builder_usage: 205260 tokens, 47 tool uses, 1001 s
   landing: not-started
   round: 0
 ```
