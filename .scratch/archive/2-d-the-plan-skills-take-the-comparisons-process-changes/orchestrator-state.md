@@ -72,5 +72,6 @@ None.
 ## Current position (rewritten before every step commit)
 
 - 2026-09-29. Plan 2.D closed: step 10 done, roadmap entry 2.D in Done (987e43f), this folder archived.
-- Next: tag v2.5.0 on the archive commit and run `utils/pin.sh v2.5.0`, on the user's yes given at open item G; then `/plan 2.E`.
+- Tagged v2.5.0 at 52baa91 and pinned: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.5.0`.
+- Next: `/plan 2.E`.
 - Open on Axel's side: nothing.
