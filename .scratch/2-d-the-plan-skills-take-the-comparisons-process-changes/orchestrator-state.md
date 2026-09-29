@@ -35,10 +35,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Open item E (2026-09-29, step 9, a stop at /spec's brief check, `agents/reviews/9-brief-check.md`): what the glossary template of `/repo-setup` holds, and whether a glossary is a standard. The plan skills run in every repository `/repo-setup` sets up, and their ledgers use their terms there (brief, ledger, landing, open item), but the skills are installed per user, so Ordo's `docs/glossary.md` is not in that repository's tree. Question 1, the template: (a) empty, an introduction and an entry form, for the project's own terms only; the plan skills' terms stay in Ordo's glossary alone; (b) the plan skills' terms copied into the template, with a section for the project's own terms below them; (c) a pointer to Ordo's glossary for the plan skills' terms, and the project's own terms below it. Pros and cons: (a) one source for each plan-skill term, but a repository's reader meets "brief" or "open item" in its ledger with no definition on disk; (b) every term defined in the repository, but each plan-skill term then has two copies that drift apart as the skills change, unless `/repo-setup sync` keeps them in step as it does the shared rules; (c) one source and a way to find it, but the pointer is a path on the user's machine or a URL, which a reader without Ordo installed cannot follow. Recommendation: (b), with the plan-skill section kept in step by `/repo-setup sync` like the shared-rules block, because the ledger is read in the repository, often by an agent that has only the repository; the sync makes the copy a mechanical fact rather than a second source. The lazy option is (a). Question 2: add `docs/glossary.md` to `.agents/plan.yaml`'s `standards`, so every brief points builders and reviewers at it: (a) yes, (b) no. Recommendation: (a), since the new rule in `docs/dev/skill-layout.md` binds every skill text a builder writes, and a builder reads the standards the brief names.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: open item E (the glossary template, and the glossary as a standard): ruled by the user, Q1 (b) the plan skills' terms copied into the template with a section for the project's own terms, kept in step by `/repo-setup sync` like the shared-rules block; Q2 (a) `docs/glossary.md` added to `.agents/plan.yaml`'s `standards`. Step 9's line rewritten; the sync's computation goes to the user for approval before the brief is written.
 - 2026-09-29: open item D (six gates citing "the protocol of 2.D"): ruled (a) by the user; the gates of entries 2.E, 2.F, 17, 19, 20 and 22 read "a blind comparison as `docs/dev/blind-comparison.md` says against <the skill> on the same <input>, wins or ties", committed at step 7.
 - 2026-09-29: step 7's five roadmap changes: approved by the user as shown.
 - 2026-09-29: open item C (a side of a blind comparison that produces no whole output): ruled (b) by the user, what the side produced is judged and each part it does not give is a critical failure; applied at step 6's landing in `docs/dev/blind-comparison.md`, step 1.
@@ -69,5 +70,5 @@ dispatch: none
 
 - 2026-09-29. Step 8 done: main tagged v2.4.0 at 5be7e73 and the installed skills pinned to it.
 - Verified: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.4.0`.
-- Stopped: step 9, the glossary, at its brief check; open item E waits on Axel. No brief, worktree or dispatch entry exists for it.
-- Open on Axel's side: open item E.
+- Next step: step 9, the glossary, as ruled on open item E; what the extended `sync_rules.py` computes is shown to Axel for approval before the brief is written.
+- Open on Axel's side: approval of what the extended `sync_rules.py` computes.
