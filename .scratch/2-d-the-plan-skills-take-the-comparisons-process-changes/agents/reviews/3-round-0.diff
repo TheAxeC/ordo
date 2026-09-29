@@ -1,0 +1,127 @@
+diff --git a/docs/dev/change-standard.md b/docs/dev/change-standard.md
+index d4bf01f..969f309 100644
+--- a/docs/dev/change-standard.md
++++ b/docs/dev/change-standard.md
+@@ -44,6 +44,7 @@ Every rule on this page that names a script, a test or a check is read under thi
+ 18. **A map from old text to new places names one rule per row and a place that states it.** In the coverage list, each row covers one rule of the old text, and the place the row names states that rule whole, with its qualifiers; the report quotes, for each row, the line of the named place that states it.
+ 19. **A change leaves no two statements that contradict each other.** Each rule the change writes is grepped by its key terms across the changed files and the pages they name, and a statement that says otherwise is changed in the same step, or reported as a stop when the brief does not cover it.
+ 20. **Nothing is changed that no brief item asks for.** A change outside the brief's items is left out; when an item cannot be met without it, the report lists it under the judgment calls with the item it serves.
++21. **A secret in quoted command output is written `<REDACTED>`.** Every quote of a command's output, a verbatim one included, carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed.
+ 
+ ## Where the work happens
+ 
+diff --git a/skills/land/SKILL.md b/skills/land/SKILL.md
+index 574892d..a2506b8 100644
+--- a/skills/land/SKILL.md
++++ b/skills/land/SKILL.md
+@@ -2,7 +2,7 @@
+ name: land
+ description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit by explicit path list, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
+ metadata:
+-  version: "1.8.0"
++  version: "1.8.1"
+ ---
+ 
+ # Land a step
+@@ -85,6 +85,7 @@ metadata:
+      - They are quoted in the booking.
+    - A change past the noise band is a finding, fixed before the booking.
+ 9. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B.
++   - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
+    - The booking states the builder's and each reviewer's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage` and `reviewer_report`.
+    - It states whether the builder's first report passed its bar, and the fixes at landing.
+    - Tick the step.
+@@ -95,6 +96,7 @@ metadata:
+     - Then the open items, verbatim, which hold only what the user must rule on.
+     - Then the check of Steps 1 with what it showed, anything NOT DONE, what landed with the commit, what was found, and what is next.
+     - Then the agents' usage, whether the first report passed its bar and the fixes at landing, as the booking of Steps 9 states them.
++    - The verification lines it quotes carry `<REDACTED>` in place of a secret, as Steps 9 says.
+     - Under the loop it is also the report the orchestrator prints.
+     - Run by hand, it is the message that ends the turn.
+ 12. Commit by explicit path, a resume point: every path from `git diff --cached --name-only`.
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index 11f4167..22a64a8 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -2,7 +2,7 @@
+ name: refute
+ description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+ metadata:
+-  version: "1.7.0"
++  version: "1.7.1"
+ ---
+ 
+ # Refute a step
+@@ -104,6 +104,7 @@ metadata:
+   - a documented standard the diff breaks, citing the standard's file and rule;
+   - a comment that carries history (a step or item number, a date, what the code did before);
+   - non-ASCII;
++  - a secret left unredacted in a line the builder's report quotes, under the rules file's rule on secrets in quoted command output;
+   - a public surface changed without its page;
+   - a sentence in a document, a head comment or a rules file that the diff makes false, found by grepping each name the diff changed across the documents and the comments;
+   - a file over the size limit;
+@@ -159,5 +160,6 @@ metadata:
+ - The reviewer never writes into the ledger itself.
+ - The reviewer invokes no skill: it reads the inputs "What it reads" lists, runs the commands this skill names, and writes its report itself.
+ - The reviewer starts no agent: every read and every command of the review runs in the reviewer's own session.
++- The reviewer writes `<REDACTED>` in place of the value of a secret in every line it quotes, a verbatim one included, as the rules file's rule on secrets in quoted command output says.
+ - An unreproduced claim is a finding, except a count, a path or a measurement no decision rests on, as the Proof heading says.
+ - A time box, the configuration block's `review_minutes` when above 0 or one the invocation names, is respected by reporting what was checked and naming what was not.
+diff --git a/skills/repo-setup/SKILL.md b/skills/repo-setup/SKILL.md
+index ae8f477..e97d663 100644
+--- a/skills/repo-setup/SKILL.md
++++ b/skills/repo-setup/SKILL.md
+@@ -2,7 +2,7 @@
+ name: repo-setup
+ description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the building page, a roadmap and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block with the template and rewrites it after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules."
+ metadata:
+-  version: "1.1.1"
++  version: "1.1.2"
+ ---
+ 
+ # Set up a repository
+diff --git a/skills/repo-setup/templates/docs/dev/change-standard.md b/skills/repo-setup/templates/docs/dev/change-standard.md
+index 33a83f3..9111fba 100644
+--- a/skills/repo-setup/templates/docs/dev/change-standard.md
++++ b/skills/repo-setup/templates/docs/dev/change-standard.md
+@@ -43,6 +43,7 @@ Every rule on this page that names code, a script, a test or a check is read und
+ 17. **A rewrite keeps the meaning of every rule it carries.** When a change rewrites, moves or splits text that states a rule, the new text states the same rule with the same scope: every condition, exception and limit of the old text is kept and none is added. A change of meaning the brief does not ask for is reported as a stop.
+ 18. **A change leaves no two statements that contradict each other.** Each rule the change writes is grepped by its key terms across the changed files and the pages they name, and a statement that says otherwise is changed in the same step, or reported as a stop when the brief does not cover it.
+ 19. **Nothing is changed that no brief item asks for.** A change outside the brief's items is left out; when an item cannot be met without it, the report lists it under the judgment calls with the item it serves.
++20. **A secret in quoted command output is written `<REDACTED>`.** Every quote of a command's output, a verbatim one included, carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed.
+ 
+ ## Where the work happens
+ 
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index 7b82360..13a273b 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -2,7 +2,7 @@
+ name: spec
+ description: "Prepare one step of an open plan: refuse a step whose line carries no authority of the user ((approved) or (ruling <name>)), check every premise the step's text makes against the tree, look for a library for every capability the step builds when the project's libraries is check, a candidate being the user's choice, write the brief (checked premises, fix text, verification list, report shape, pointer to the repository's change standard, cases, libraries checked, paths it writes), compare those paths with the briefs of the steps in flight and hand a shared file to the orchestrator's judgment, create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again from main's head, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
+ metadata:
+-  version: "1.6.1"
++  version: "1.6.2"
+ ---
+ 
+ # Prepare a step
+@@ -92,6 +92,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - The verification commands from the configuration block plus the step's own gate, each with the directory it runs from and the output that counts as a pass.
+    - The report shape, with the cases' first run before the result table.
+    - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result, and the builder's first task as the template states it: the first run of every case on the unchanged tree before any change, a case of a code step as a test and a case of a text or judgment step by reading, and a case the brief's rules get wrong handed back before any code changes.
++     - For a step that builds or changes a script, the list also holds the inputs the step's text implies but never states, as `templates/brief.md`'s "Cases" names them, each with its expected result, found by the session writing the brief from the script's rules and its callers.
+    - Under "Paths this step writes", every path the step writes, one per line, the report path included: ``- `<path>` `` for a whole file, or ``- `<path>` lines <a>-<b>` `` for a range of a shared document, numbered as on main at the base.
+    - A choice the plan leaves open is taken in the brief.
+      - It is listed under "Decisions taken in this brief", each reversible.
+diff --git a/skills/spec/templates/brief.md b/skills/spec/templates/brief.md
+index 45433eb..bf8729f 100644
+--- a/skills/spec/templates/brief.md
++++ b/skills/spec/templates/brief.md
+@@ -13,6 +13,7 @@ Read `<rules file from plan.yaml>` first; its rules govern this step unchanged.
+ ## Cases
+ 
+ - <every must-pass and must-refuse example this brief gives, in one list: the input, then its expected result>.
++- <for a step that builds or changes a script, each input the step's text implies but never states (a missing or unreadable file, an empty value, a malformed line, a path with a space, a value that reaches a command or a path), with its expected result; only the inputs where a wrong answer costs something, as the rules file's rule on edges weighs them>.
+ 
+ The builder's first task, before any change, is the first run of every case above on the unchanged tree, with each case's result noted. A case of a code step (a script, or a product's code) becomes a test of the step, run on the unchanged tree first; no prototype script stands in for the test. A case of a text or judgment step is checked by reading the unchanged tree, and that first read is noted.
+ 
