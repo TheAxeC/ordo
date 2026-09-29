@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 6
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2d-6
+  base: 30ca18f3f7660a090f33481e8f1a580064c593fb
+  launched: 2026-09-29
+  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/6-report.md
+  landing: not-started
+  round: 0
+  session_id: acfd8106a712da265
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -66,5 +76,5 @@ None.
 
 - 2026-09-29. Step 5 landed: `/spec` runs the brief check, a fresh read-only agent that checks the brief against the tree before the preparation commit, its report at `agents/reviews/<step>-brief-check.md`.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: step 6, the blind-comparison protocol.
+- In flight: step 6, the blind-comparison protocol; its builder runs in `.agents/worktrees/2d-6`.
 - Open on Axel's side: nothing.
