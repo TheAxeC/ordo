@@ -1,8 +1,8 @@
 ---
 name: plan
-description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
+description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "1.9.0"
+  version: "1.10.0"
 ---
 
 # Open a plan
@@ -34,6 +34,7 @@ metadata:
 2. The roadmap the configuration names.
    - `<entry>` is matched against the entries by number or title.
      - No match is a stop ("Stops").
+     - An entry that stands under the roadmap's "Not yet specified" section is a refusal that names `/roadmap add <entry>`, which names its gate ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
 
 ## Steps
@@ -45,10 +46,15 @@ metadata:
 2. Draft `plan.md` from `templates/plan.md`.
    - It opens with `# Plan: <entry>`, which is how every other skill finds it.
    - The entry's goal and its gate are copied in.
+   - The session asks of the copied gate "could this pass without the goal being reached?" and writes the answer with its reason in the section "## Gate", on the line the template gives the gate.
+   - A copied gate that could pass without the goal is kept as the roadmap has it, and its answer and reason go to the user at Steps 3, since the gate is the roadmap's and the user's.
    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
+   - The session asks the same question of each step's check, "the goal" there being the part of the goal the step delivers, and writes the answer with its reason in "## Gate", one line per step, as the template gives it.
+   - The answer stands only in "## Gate", and each step line keeps the shape the template gives it.
+   - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again before the draft is shown.
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
-3. Show the draft to the user.
+3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).
    - Write `plan.md` once the user has approved or corrected it.
    - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
@@ -67,10 +73,11 @@ metadata:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The drafted step list | Every plan, after Steps 2: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check | The user's approval or correction |
+| The drafted step list | Every plan, after Steps 2: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check | The user's approval or correction |
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
+| Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate to draft steps from | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
 | The plan exists | The ledger folder is already there: a plan is opened once | The folder | Nothing |
 
 ## Anti-patterns

@@ -10,6 +10,9 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step of work
 
 <the roadmap entry's completeness contract: what must hold, and the command or check that proves each part>
 
+- The gate: could this pass without the goal being reached? <no or yes>, <the reason>
+- Step <1>: could this pass without the goal being reached? <no>, <the reason, for the part of the goal the step delivers>
+
 ## Steps, in execution order
 
 - <1> <what the step delivers, in one line; the check that proves it> (<n> commit) (approved)

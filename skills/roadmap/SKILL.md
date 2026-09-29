@@ -1,8 +1,8 @@
 ---
 name: roadmap
-description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, add an entry (goal, gate, what it waits on) in the file's own format and in dependency order, move an entry, mark one done with its gate's output, or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, mark the entry done, drop the entry, reorder the roadmap."
+description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
-  version: "1.1.2"
+  version: "1.2.0"
 ---
 
 # Keep the roadmap
@@ -12,8 +12,9 @@ metadata:
 ## Quick start
 
 ```
-/roadmap                                  the open entries in order: status, what each waits on, the plan open for it, the next one
+/roadmap                                  the open entries in order: status, what each waits on, the plan open for it, the next one; then the entries not yet specified
 /roadmap add <goal>                       drafts an entry and its place in the order, writes it after approval
+/roadmap add <entry>                      for an entry under "Not yet specified": drafts its gate and its place in the order, writes it after approval
 /roadmap move <entry> before|after <entry>
 /roadmap done <entry>                     marks it done with the gate's output; the closing step of a plan uses it
 /roadmap drop <entry> <reason>
@@ -43,7 +44,7 @@ metadata:
    - The plain `/roadmap` then runs "Steps / Show" and ends there: it changes nothing and shows nothing for approval.
 2. For `add`, `move`, `done` and `drop` only, draft the change by the command's subsection below.
    - Nothing is written yet.
-3. Show each change as a diff of the roadmap file, and of the system file for a map.
+3. Show each change as a diff of the roadmap file, and of the system file for a map, and for `add` the gate's answer with its reason (Steps / add 6).
 4. Write the change once the user approves or corrects it ("Stops").
 5. Commit the files by explicit path list, one commit per change, the subject naming the entry and what changed.
 
@@ -51,23 +52,32 @@ metadata:
 
 1. Print the open entries in order: the status of each, what it waits on, the plan open for it.
 2. Name the next one.
+3. After naming the next one, list every entry under "Not yet specified", apart from the open order, each with its title and what must be known before its gate can be named. The show is done when every entry of that section is listed.
 
 ### add
 
 1. From the goal the user gives, draft the title, in the file's form, and the goal, in one or two sentences.
+   - When the argument matches an entry under "Not yet specified" by number or title, the title and the goal are that entry's.
+   - The draft moves that entry out of "Not yet specified" to the place of Steps / add 5, with the gate of Steps / add 2 and 3 and what it waits on.
+   - The entry keeps its number ("The format is the file's", bullet "Numbering under Not yet specified").
 2. Draft the gate: the check that proves the entry done, as a command from the verification page, a test named and what it asserts, or an observable result someone can check.
-   - A goal whose gate cannot be named is not added.
-     - That is a stop ("Stops").
-3. Draft what it waits on: the entries (open or done) the work depends on, found from the goal and the entries' text, each with the reason.
+   - A goal whose gate cannot be named is a stop ("Stops", row "No gate").
+   - At that stop the user may put the entry under "Not yet specified": it is drafted in the form of "The format is the file's", bullet "Not yet specified", and the draft goes to Steps / add 6 without Steps / add 3 to 5.
+3. Ask of the drafted gate "could this pass without the goal being reached?" and write the answer with its reason in the draft that Steps / add 6 shows, never in the roadmap entry.
+   - A gate that could (a file that exists without saying what the goal asks, a command that exits 0 on an empty result, a count with no content behind it) is redrafted and asked again.
+   - A goal for which every gate drafted could pass without it is a goal whose gate cannot be named (Steps / add 2).
+   - The step is done when the gate's answer is no and the answer with its reason stands in the draft.
+4. Draft what it waits on: the entries (open or done) the work depends on, found from the goal and the entries' text, each with the reason.
    - A dependency the roadmap does not hold is a stop ("Stops").
-4. Draft the place: after everything it waits on and before the entries that will depend on it, with that reason written out.
+5. Draft the place: after everything it waits on and before the entries that will depend on it, with that reason written out.
    - When the file's order is foundation first, a new entry never goes ahead of an entry it depends on to reach something sooner.
-5. Show the draft with the lines around its place and, for a map, the capability's draft.
+6. Show the draft with the lines around its place, the gate's answer of Steps / add 3 with its reason and, for a map, the capability's draft.
 
 ### move
 
-1. Check the new place against both entries' dependencies.
-2. A place ahead of something the entry waits on is a refusal that names it ("Stops").
+1. A `move` in which either entry, the one moved or the one it is placed before or after, stands under "Not yet specified" is a refusal that names `/roadmap add <entry>` for that entry ("Stops").
+2. Check the new place against both entries' dependencies.
+3. A place ahead of something the entry waits on is a refusal that names it ("Stops").
 
 ### done
 
@@ -94,7 +104,10 @@ The skill writes in the format the file already uses, read from its existing ent
 - **The status rules.** The rules the introduction attaches to the status vocabulary bind the skill.
 - **Numbering.** A new entry between two others takes the file's own insertion form (`37.A`, `12.5`).
 - **No insertion form yet.** A stop ("Stops").
-- **No roadmap.** A repository with none gets `templates/roadmap.md`: the introduction, the legend, and the Open, Done and Dropped sections, with no entries.
+- **Not yet specified.** Work whose gate cannot yet be named sits in the section "Not yet specified", after the open entries and before the done ones. Each entry there has its title, its goal and what must be known before its gate can be named.
+- **Numbering under Not yet specified.** An entry put under "Not yet specified" takes the next whole number above the highest in the file, at the level it is added at, and keeps it when it moves to the open order; it never takes the insertion form of "Numbering".
+- **No such section yet.** A roadmap without "Not yet specified" gets it, in the file's own heading form, the first time an entry goes there.
+- **No roadmap.** A repository with none gets `templates/roadmap.md`: the introduction, the legend, and the Open, Not yet specified, Done and Dropped sections, with no entries.
 
 ## A capability map beside the ordered file
 
@@ -113,14 +126,15 @@ When the roadmap's introduction links an index as the map of what the product is
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The change | Every change of `add`, `move`, `done` or `drop`, at Steps 3 | The diff | The user's approval or correction |
-| No gate | The goal's gate cannot be named | What is missing | The user's answer |
+| The change | Every change of `add`, `move`, `done` or `drop`, at Steps 3 | What Steps 3 shows | The user's approval or correction |
+| No gate | The goal's gate cannot be named | What is missing, and the two options: name the gate, or put the entry under "Not yet specified" with what must be known before its gate can be named | The user's gate, or the user's approval of the entry under "Not yet specified" |
 | The level | Entries exist at two levels and the goal does not settle which | The two levels | The user's choice |
 | The insertion form | The file has no insertion form yet | The question, once | The user's answer, used from then on |
 | A missing dependency | The draft finds a dependency the roadmap does not hold | The dependency, as a question in the draft, not added as an entry | The user's answer |
 | No configuration | `.agents/plan.yaml` is missing | A refusal that names `/ordo-init` | `/ordo-init`, then `/roadmap` again |
 | A required key missing | A required key is not in `.agents/plan.yaml` | The key | The key added |
 | A place too early | `move` to a place ahead of something the entry waits on | What it waits on | `move` to a place after it |
+| Not yet specified | `move` in which the entry moved or the entry it is placed before or after stands under "Not yet specified" | That entry and `/roadmap add <entry>` for it | `/roadmap add <entry>` |
 | No gate output | `done` with no output of the gate | The gate | The gate run, its output given |
 | An open plan | `drop` of an entry whose plan is open | The plan | The plan closed or archived |
 
@@ -139,6 +153,6 @@ When the roadmap's introduction links an index as the map of what the product is
 ## Rules
 
 - Nothing is added that the user did not ask for.
-- Entry text states the goal, the gate and the dependencies.
-- Every entry this skill writes has a goal and a gate, since `/plan <entry>` matches `<entry>` against the entries by number or title and copies the entry's goal and gate into the plan.
+- Entry text states the goal, the gate and the dependencies, except that an entry under "Not yet specified" states the goal and what must be known, as the next rule says.
+- Every entry this skill writes has a goal and a gate, since `/plan <entry>` matches `<entry>` against the entries by number or title and copies the entry's goal and gate into the plan; an entry under "Not yet specified" has a goal and what must be known before its gate can be named in place of a gate.
 - Every path is relative to the repository root.

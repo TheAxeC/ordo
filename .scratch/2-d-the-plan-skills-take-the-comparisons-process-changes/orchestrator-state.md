@@ -30,19 +30,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 4
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2d-4
-  base: 77aa78803f98d7d017c22fd10f022357e2529b1c
-  launched: 2026-09-29
-  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/4-report.md
-  landing: not-started
-  round: 1
-  session_id: a60e841f2439d5c00
-  builder_usage: first run 138594 tokens, 35 tool uses, 423 s
-  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/4-refuter.md (first run 126545 tokens, 21 tool uses, 348 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -76,7 +64,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 3 landed: the brief template asks for the inputs a script step implies, and a secret in quoted command output is written `<REDACTED>` (both change standards, `/refute`, `/land`, `/roadmap done`).
+- 2026-09-29. Step 4 landed: `/roadmap add` and `/plan` ask "could this pass without the goal being reached?" of every gate and step check, and `/roadmap` has the "Not yet specified" section, which `/plan` refuses.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 4, the roadmap and plan checks; its builder runs in `.agents/worktrees/2d-4`.
+- Next step: 5, the brief check at `/spec`; its brief check also asks the question of every step's check, so a step a ruling adds is covered (step 4's booking).
 - Open on Axel's side: nothing.

@@ -12,8 +12,8 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 |---|---|
 | `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, a roadmap, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules equal to the template |
 | `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
-| `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and adds an entry with its goal, gate and place. It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
-| `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, `orchestrator-state.md` |
+| `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
+| `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
 | `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. It creates the worktree and stages the base binaries |
 | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
@@ -27,6 +27,7 @@ The order of use, shortened from what `/plan-help` prints:
 /repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
 /ordo-init                    once per existing repository: writes .agents/plan.yaml, or checks the one there
 /roadmap add <goal>           an entry with its goal, gate and place in the order
+/roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan opens it
 /plan <entry>                 once per entry: opens the plan, shows the step list for approval
 
 for every step:

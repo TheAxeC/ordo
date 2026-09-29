@@ -104,3 +104,52 @@ none. The report's "User-visible changes" table states each change with before a
 - README lines 15, 16 and 29 and `skills/plan-help/SKILL.md`'s line for `/roadmap add`, made incomplete; the report's "Doc text" lists each with a replacement. No other hit outside the three changed files. `utils/check_coverage.py` matches a roadmap entry by its `## <n>. ` heading and would accept an entry under "Not yet specified"; outside this step's paths.
 
 Reviewer usage: claude:opus, a fresh agent; 126545 tokens, 21 tool uses, 348 s (from the completion notice). Saved by the orchestrator from the reviewer's final message.
+
+## Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent; 122904 tokens, 26 tool uses, 292 s (from the completion notice). The round's delta read as `diff -u` of the round-0 tree (`4-round-0.diff` applied to the base) against the worktree, and against `git diff 77aa788` as a whole.
+
+```
+checks.sh on the worktree: the six PASS lines, the ASCII check with no output, checks: 7 commands passed, exit 0
+The length command: 726 land, 632 ordo-init, 386 plan-help, 788 plan-orchestration, 616 plan-retro, 477 plan, 951 refute, 630 repo-setup, 997 roadmap, 999 spec
+LC_ALL=C grep -n '[^ -~]' over the four changed files and the report: nothing, exit 1
+skills/roadmap/SKILL.md:78 (move 1, both entries) and :137 (the Stops row); roadmap.md line 3 "An entry of the open order"; "Numbering under" at :62 and :108
+grep -rn '## Gate' skills docs README.md: skills/plan/SKILL.md:49, :52, :53, :57, :76; skills/plan/templates/plan.md:9
+git diff 77aa788 --stat: 4 files changed, 55 insertions(+), 19 deletions(-)
+wc -l: 158 roadmap/SKILL.md, 37 roadmap.md, 96 plan/SKILL.md, 35 plan.md (base 32)
+No other skill's trigger phrase contains "not yet specified", "park", "gate" or "name the gate".
+```
+
+Rulings 1 to 6 closed as ruled; 7 settled by 4; 8 not sent. No check removed, no fix beyond its ruling.
+
+### Verdicts
+
+- 1 to 4: holds. Finding 2 concerns the show of item 1; Finding 1 the numbering sentence of item 3's template; Finding 3 a wording point of item 4.
+- Cases 1 to 4: met, read against the reviewer's own scratch roadmaps; lengths 997 and 477.
+
+### Findings
+
+- Standards 1. `skills/roadmap/templates/roadmap.md` line 3: "an entry placed between two others takes the number of the one before it with a letter (`3.A`)", against the skill's "Numbering under Not yet specified": "takes the next number free in the file, as "Numbering" gives numbers, and keeps it when it moves to the open order"; what is wrong: two statements give the same entry different numbers (change-standard rule 19), and "as "Numbering" gives numbers" points at a bullet that gives only the insertion form; failure scenario: `/roadmap add 7` places entry 7 between 3 and 4 and a reader of the introduction renumbers it `3.A`, breaking the number ledgers use; verdict: none.
+- Standards 2. `skills/roadmap/SKILL.md`, Stops row "The change" ("The diff") and Steps 3 ("Show each change as a diff of the roadmap file"), against "Steps / add" 3 and 6 (the answer in the draft, never in the entry); what is wrong: the show is described two ways, one without the answer (rule 19); failure scenario: a session resuming at "The change" shows only the diff, the user approves without seeing the gate's answer, and the answer is lost; verdict: none.
+- Standards 3. `skills/plan/SKILL.md`, Steps 2, bullet 7: "A step line keeps its shape and ends with its authority tag; the answer stands only in "## Gate"."; what is wrong: two requirements in one bullet, and the authority tag restated from Steps 3 and Rules (`docs/dev/skill-layout.md`, "Lists and tables", "Writing for an agent"); failure scenario: Rules gains a third authority form and this copy still says only "its authority tag"; verdict: none.
+
+### Declined to judge
+
+- Steps a ruling adds after `/plan` opens the plan get no answer line in "## Gate", since `/plan` asks only of the list it drafts; outside item 4.
+- What "the next number free in the file" gives in a two-level file (`38.0`) or with letter forms (`15.A`); not checked.
+- README lines 15, 16 and 29 and `skills/plan-help/SKILL.md` line 50: left to the orchestrator at landing.
+- Rules bullet 3 of `skills/roadmap/SKILL.md`, 58 words, keeps its base "since" clause giving the rule's reason.
+
+## Closed
+
+- First run, Spec 1 (the anchor of `move`): closed in repair round 1, ruling 1.
+- First run, Standards 1 to 4: closed in repair round 1, rulings 2 to 5.
+- First run, Declined to judge (what "the goal" is for a step's check; numbering): closed in repair round 1, rulings 4 and 6.
+- First run, Declined to judge (README, `plan-help`): applied at landing; `README.md` lines 15, 16 and 29 and `skills/plan-help/SKILL.md` (1.8.2) name the new behaviour and `/roadmap add <entry>`.
+- First run, Declined to judge (`utils/check_coverage.py` accepts an entry under "Not yet specified"): no change; a coverage row may name work whose gate is not yet named, and no sentence is made false.
+- Round 1, Standards 1 (numbering stated two ways): fixed at landing; the skill's bullet reads "takes the next whole number above the highest in the file, at the level it is added at, and keeps it when it moves to the open order; it never takes the insertion form of "Numbering"", and the template's introduction adds "an entry that moves in from "Not yet specified" keeps its number".
+- Round 1, Standards 2 (the show without the answer): fixed at landing; Steps 3 shows "for `add` the gate's answer with its reason (Steps / add 6)", and the Stops row "The change" shows "What Steps 3 shows".
+- Round 1, Standards 3 (two requirements in one bullet): fixed at landing; `/plan` Steps 2 reads "The answer stands only in "## Gate", and each step line keeps the shape the template gives it."
+- Round 1, Declined to judge (a step a ruling adds has no answer line): carried to step 5, whose brief check at `/spec` asks the question of every step's check; booked in `plan.md`, step 4's booking.
+- Round 1, Declined to judge (two-level or lettered numbering): closed by the landing fix of Standards 1, "at the level it is added at".
+- Round 1, Declined to judge (Rules bullet 3's "since" clause): no change; it gives the rule's reason.

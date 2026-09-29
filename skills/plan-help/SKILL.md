@@ -2,7 +2,7 @@
 name: plan-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
-  version: "1.8.1"
+  version: "1.8.2"
 ---
 
 # Plan help
@@ -48,6 +48,7 @@ metadata:
 /repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
 /ordo-init                    once per repository: writes .agents/plan.yaml, or checks the one there
 /roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
+/roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan can open it
 /plan <entry>                 once: opens the plan, shows the step list for approval
 
 then, for every step:
