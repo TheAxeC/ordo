@@ -1,0 +1,15 @@
+# Step 3, repair round 1
+
+The reviewer's report is `.scratch/2-e-grill/agents/reviews/3-refuter.md` in the main checkout (/Users/axelfaes/workspace/ordo); read it whole first. The tree as it stood when the round was sent is `.scratch/2-e-grill/agents/reviews/3-round-0.diff` there, the new files included. Each point below carries the orchestrator's ruling. The brief, the cases ruling `3-cases.md`, the rules file, the no-git rule, the paths and the report path are unchanged.
+
+1. Spec 1 (the "both a skill folder and an agent folder" refusal compares strings). The cause is that `utils/pin.sh:317` compares a skill folder with an agent folder as spelled, stripping one trailing slash, while the agent folders are built with every trailing slash stripped (`utils/pin.sh:112`). The comparison is made on the same form of both paths:
+   - both sides with every trailing slash stripped, as line 112 does;
+   - and, when both paths exist, their physical paths (`cd -P ... && pwd -P`), so a spelling through a symbolic link is refused too.
+   - Add a case to `utils/pin.test.sh`, beside the existing one at line 557: `ORDO_SKILL_DIRS` naming a skill folder and, as a second skill folder, that folder's sibling `agents` folder spelled with two trailing slashes. Pinning a tag other than the one held is refused with `pin: <agents folder> is both a skill folder and an agent folder`, exit 1, and the pinned worktree's tag, the skill links and the agent links are unchanged. Add a second such case with the agents folder reached through a symbolic link.
+   - Each new case is seen red with the fix reverted; quote the red line.
+2. Standards 1 (`utils/pin.test.sh:531`, the comment of the directory case). With the directory branch dropped the entry is still refused, by the real-file branch, and the test goes red only on the message. The comment says what the test proves and what goes red: the directory refusal's own message, red when the directory branch is dropped, since the real-file branch then refuses it with another message.
+3. Behaviour 1 (the report's before and after). Pin mode runs `mkdir -p` for every agent folder whatever the tag holds (`utils/pin.sh:415`). The report's "Host- or user-visible changes" says so: any pin creates `~/.claude/agents` (and `$CLAUDE_CONFIG_DIR/agents` when that variable is set), a re-pin of v2.5.0 included, and `~/.agents/agents` when `ORDO_SKILL_DIRS` names `~/.agents/skills`. The code stays; item 2 asks for it.
+
+After the changes, rerun from the worktree root `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md` and `wc -l utils/pin.sh utils/pin.test.sh`, and quote the lines they print.
+
+Append to the same report, `.scratch/2-e-grill/agents/reviews/3-report.md` in the worktree, a section "Repair round 1" with each point's change, old beside new, the command that shows it and its output verbatim, the red lines of point 1's reverts, and the updated line counts. Your final message is that section.

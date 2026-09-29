@@ -18,7 +18,7 @@ standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
-worker: claude:opus          # the default worker.
+worker: claude:sonnet        # the default worker.
 reviewer: claude:opus        # the model /refute runs on, as a fresh read-only agent.
 libraries: avoid             # from .agents/plan.yaml: no new dependency.
 review: every                # every step is refuted.
@@ -50,7 +50,8 @@ dispatch:
   reviewer_report: .scratch/2-e-grill/agents/reviews/3-refuter.md (197731 tokens, 33 tool uses, 621 s)
   brief_check: .scratch/2-e-grill/agents/reviews/3-brief-check.md (173243 tokens, 33 tool uses, 520 s)
   landing: not-started
-  round: 0
+  round: 1
+  round_1: brief .scratch/2-e-grill/agents/briefs/3-round-1.md; the tree when sent .scratch/2-e-grill/agents/reviews/3-round-0.diff
 - step: 3s
   trial: launched as the Sonnet 5.5 build of step 3 under the ruling "Sonnet trial"; it ran on claude-sonnet-5 (Sonnet 5), since the session was then Claude Code 2.1.283, whose `sonnet` alias gives claude-sonnet-5 (every model field of agent-afb733385e80a6b22.jsonl reads claude-sonnet-5); kept as a data point; only one of 3, 3s and 3s55 lands
   executor: agent
@@ -81,9 +82,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 3, "Sonnet trial" (2026-09-29): which build of step 3 lands, and the builder model after it. Builds: Opus 5.5 (`2e-3`, review `3-refuter.md`), Sonnet 5 (`2e-3s`, `3s-refuter.md`), Sonnet 5.5 (`2e-3s55`, `3s55-refuter.md`). Options: (a) land the Opus 5.5 build and set `worker:` to Sonnet 5.5 for the next three code steps, measured by their landing reports; (b) land the Opus 5.5 build and keep Opus as builder; (c) land the Sonnet 5.5 build and set `worker:` to Sonnet 5.5. Recommendation: (a). The lazy option is (b), which ends the trial on one sample.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- Step 3, "Sonnet trial" (2026-09-29): which build of step 3 lands, and the builder model after it. Builds: Opus 5.5 (`2e-3`, review `3-refuter.md`), Sonnet 5 (`2e-3s`, `3s-refuter.md`), Sonnet 5.5 (`2e-3s55`, `3s55-refuter.md`). Options: (a) land the Opus 5.5 build and set `worker:` to Sonnet 5.5 for the next three code steps, measured by their landing reports; (b) land the Opus 5.5 build and keep Opus as builder; (c) land the Sonnet 5.5 build and set `worker:` to Sonnet 5.5. Recommendation: (a). The lazy option is (b), which ends the trial on one sample. Ruled (2026-09-29): (a); booked in plan.md Rulings as "Sonnet trial result".
 
 - Sonnet trial (2026-09-29): Axel ruled (a), a controlled trial of Sonnet 5.5 as builder on one step; booked in plan.md Rulings.
 

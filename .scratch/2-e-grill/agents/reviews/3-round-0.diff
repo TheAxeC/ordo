@@ -1,0 +1,881 @@
+diff --git a/README.md b/README.md
+index c1d3f73..2d6ddd2 100644
+--- a/README.md
++++ b/README.md
+@@ -54,6 +54,8 @@ for every step:
+ 
+ The skills call each other and read each other's templates, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
+ 
++The plan skills launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
++
+ ### With the skills CLI
+ 
+ ```sh
+@@ -62,6 +64,17 @@ npx skills add TheAxeC/ordo --skill '*' -g -a claude-code
+ 
+ This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`.
+ 
++The CLI installs and updates skills only. After `npx skills add`, and after each `npx skills update -g`, copy the agents from a clone:
++
++```sh
++rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
++mkdir -p ~/.claude/agents
++rm -f ~/.claude/agents/ordo-*.md
++cp /tmp/ordo/agents/*.md ~/.claude/agents/
++```
++
++For a second Claude Code account, run the last three commands again with `$CLAUDE_CONFIG_DIR/agents` in place of `~/.claude/agents`.
++
+ ### By copying the folders
+ 
+ ```sh
+@@ -71,10 +84,13 @@ for dir in ~/.claude/skills; do
+     for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
+         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
+     done
++    agents=$(dirname "$dir")/agents
++    mkdir -p "$agents"
++    rm -f "$agents"/ordo-*.md && cp /tmp/ordo/agents/*.md "$agents/"
+ done
+ ```
+ 
+-For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders. Updating is the same commands again: each skill folder is replaced whole, so a file a newer version removes does not linger.
++The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger.
+ 
+ ## Configuring a repository
+ 
+@@ -124,22 +140,22 @@ A ledger file left uncommitted in the worktree, such as a builder's report, neve
+ 
+ ## Working on Ordo
+ 
+-While Ordo is being changed, the installed skills must not change with it: the plan skills run the change, so they stay at a fixed version until the change is done. The installed skills are links into a pinned checkout, a detached git worktree of the clone at a tag, and the clone's `main` is where the work happens.
++While Ordo is being changed, the installed skills and agents must not change with it: the plan skills run the change, so they stay at a fixed version until the change is done. The installed skills and agents are links into a pinned checkout, a detached git worktree of the clone at a tag, and the clone's `main` is where the work happens.
+ 
+ ```sh
+ git clone https://github.com/TheAxeC/ordo.git ~/workspace/ordo
+ cd ~/workspace/ordo
+-utils/pin.sh v1.1.0      # the worktree ~/.local/share/ordo-stable at v1.1.0, every skill linked from it
++utils/pin.sh v1.1.0      # the worktree ~/.local/share/ordo-stable at v1.1.0, every skill and every agent linked from it
+ utils/pin.sh             # checks that every link points into the pinned worktree; changes nothing
+ ```
+ 
+-`pin.sh` links the skills into `~/.claude/skills` and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`. `ORDO_SKILL_DIRS` replaces that list of folders. `ORDO_STABLE` moves the pinned worktree to another path.
++`pin.sh` links the skills into `~/.claude/skills` and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`. `ORDO_SKILL_DIRS` replaces that list of folders. `pin.sh` links the agents into the `agents` folder beside each skill folder: `~/.claude/agents`, `$CLAUDE_CONFIG_DIR/agents`, or the sibling of each folder of `ORDO_SKILL_DIRS`. `ORDO_STABLE` moves the pinned worktree to another path.
+ 
+-Check mode, `utils/pin.sh` with no tag, changes nothing and fails on each link into the clone and on each link into the pinned worktree for a skill the pinned tag lacks. Pin mode, `utils/pin.sh <tag>`, checks the links first and refuses, changing nothing, a link into the clone for a skill the tag lacks. It then links every skill of the tag, replaces each link into the clone, and removes each link into the pinned worktree for a skill the tag lacks.
++Check mode, `utils/pin.sh` with no tag, changes nothing and fails on each link into the clone and on each link into the pinned worktree for a skill or an agent the pinned tag lacks. Pin mode, `utils/pin.sh <tag>`, checks the links first and refuses, changing nothing, a link into the clone for a skill or an agent the tag lacks. It then links every skill and every agent of the tag, replaces each link into the clone, and removes each link into the pinned worktree for a skill or an agent the tag lacks.
+ 
+ Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back is `utils/pin.sh <older tag>`. The pinned worktree is never edited, and `pin.sh` refuses to move one that has local changes. A pinned worktree deleted by hand is created again at the next `utils/pin.sh <tag>`, through `git worktree add --force`, which leaves the registration of every other worktree of the clone as it is.
+ 
+-`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, folders whose path holds a space, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
++`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, folders whose path holds a space, what an agent of a tag is, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
+ 
+ `docs/dev/building.md` lists the tests and checks to run before a change is committed.
+ 
+diff --git a/agents/ordo-high.md b/agents/ordo-high.md
+new file mode 100644
+index 0000000..9fc5fb5
+--- /dev/null
++++ b/agents/ordo-high.md
+@@ -0,0 +1,6 @@
++---
++name: ordo-high
++description: Ordo's agent at high effort. The plan skills launch it by name for a builder, a reviewer or a brief-check agent; it is never chosen for other work.
++effort: high
++---
++You are an agent that Ordo's plan skills launch: a builder, a reviewer or a brief-check agent. The prompt you are given holds the whole task: where to work, what to read first, what never to touch, and the report to write. Do the task with the tools it needs, and end with the report the prompt asks for as your final message.
+diff --git a/agents/ordo-low.md b/agents/ordo-low.md
+new file mode 100644
+index 0000000..fe0bebf
+--- /dev/null
++++ b/agents/ordo-low.md
+@@ -0,0 +1,6 @@
++---
++name: ordo-low
++description: Ordo's agent at low effort. The plan skills launch it by name for a builder, a reviewer or a brief-check agent; it is never chosen for other work.
++effort: low
++---
++You are an agent that Ordo's plan skills launch: a builder, a reviewer or a brief-check agent. The prompt you are given holds the whole task: where to work, what to read first, what never to touch, and the report to write. Do the task with the tools it needs, and end with the report the prompt asks for as your final message.
+diff --git a/agents/ordo-max.md b/agents/ordo-max.md
+new file mode 100644
+index 0000000..e8d1652
+--- /dev/null
++++ b/agents/ordo-max.md
+@@ -0,0 +1,6 @@
++---
++name: ordo-max
++description: Ordo's agent at max effort. The plan skills launch it by name for a builder, a reviewer or a brief-check agent; it is never chosen for other work.
++effort: max
++---
++You are an agent that Ordo's plan skills launch: a builder, a reviewer or a brief-check agent. The prompt you are given holds the whole task: where to work, what to read first, what never to touch, and the report to write. Do the task with the tools it needs, and end with the report the prompt asks for as your final message.
+diff --git a/agents/ordo-medium.md b/agents/ordo-medium.md
+new file mode 100644
+index 0000000..f015cd4
+--- /dev/null
++++ b/agents/ordo-medium.md
+@@ -0,0 +1,6 @@
++---
++name: ordo-medium
++description: Ordo's agent at medium effort. The plan skills launch it by name for a builder, a reviewer or a brief-check agent; it is never chosen for other work.
++effort: medium
++---
++You are an agent that Ordo's plan skills launch: a builder, a reviewer or a brief-check agent. The prompt you are given holds the whole task: where to work, what to read first, what never to touch, and the report to write. Do the task with the tools it needs, and end with the report the prompt asks for as your final message.
+diff --git a/agents/ordo-xhigh.md b/agents/ordo-xhigh.md
+new file mode 100644
+index 0000000..7ee1442
+--- /dev/null
++++ b/agents/ordo-xhigh.md
+@@ -0,0 +1,6 @@
++---
++name: ordo-xhigh
++description: Ordo's agent at xhigh effort. The plan skills launch it by name for a builder, a reviewer or a brief-check agent; it is never chosen for other work.
++effort: xhigh
++---
++You are an agent that Ordo's plan skills launch: a builder, a reviewer or a brief-check agent. The prompt you are given holds the whole task: where to work, what to read first, what never to touch, and the report to write. Do the task with the tools it needs, and end with the report the prompt asks for as your final message.
+diff --git a/docs/dev/change-standard.md b/docs/dev/change-standard.md
+index 8e9f59e..88a09b3 100644
+--- a/docs/dev/change-standard.md
++++ b/docs/dev/change-standard.md
+@@ -77,5 +77,5 @@ When a test is red, rerun that test without the filter and read its output. The
+ 
+ - The skills carry no project name and no path; everything specific to a repository comes from its `.agents/plan.yaml` (`README.md`, first paragraph).
+ - Each script under a skill's `templates/` or under `utils/` has a test beside it for the behaviour whose failure costs something, run on scratch repositories or scratch files (`docs/dev/building.md`).
+-- The pinned worktree `~/.local/share/ordo-stable` is never edited; the installed skills change only through `utils/pin.sh <tag>` (`README.md`, Working on Ordo).
++- The pinned worktree `~/.local/share/ordo-stable` is never edited; the installed skills and agents change only through `utils/pin.sh <tag>` (`README.md`, Working on Ordo).
+ - A skill's rules state the rule; no dates, incidents or history (`skills/repo-setup/templates/shared-rules.md`, last rule).
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 9faf2cc..1f794b2 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -27,6 +27,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
++- **effort agent**: one of the agent definitions `ordo-low`, `ordo-medium`, `ordo-high`, `ordo-xhigh` and `ordo-max`, installed with the plan skills, each setting the effort an agent runs at and no model; a builder is launched as `ordo-<worker_effort>`, a reviewer and a brief-check agent as `ordo-<reviewer_effort>`. Stated in: `plan-orchestration`, "Launching a builder"; `refute`, Steps 1; `spec`, "Steps / The brief check".
+ - **executor**: who builds a step: `agent`, a builder dispatched in the worktree, `inline`, the orchestrating session itself, or `academic-paper`, that skill. The configuration block holds the plan's default, and the orchestrator chooses per step. Stated in: `plan-orchestration`, Steps 4; `plan`, Steps 4.
+ - **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item. A finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
+ - **fix at landing**: a fix made on main during `/land`, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
+@@ -104,5 +105,5 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **coverage list**: the list a rewrite of text keeps, one row per rule of the old text, each naming the place in the new text that states that rule whole. Stated in: `docs/dev/change-standard.md`, rule 18. Also the Markdown file `utils/check_coverage.py` checks, which lists every file of the named skill folders once with a mark (`rebuild: <skill>`, `rebuild later: <skill>` or `drop`) and a reason. Stated in: `utils/check_coverage.py`, its head comment.
+ - **critical failure**: a failure that makes an output of a blind comparison unfit for the purpose the input sets, such as a claim the input contradicts, a missing part the input asks for, or a citation that does not resolve. Stated in: `docs/dev/blind-comparison.md`, steps 1 and 5.
+ - **loop, in the README**: the path every step of a plan takes, from its brief through its build in a worktree and its review to its cherry-pick onto main. Stated in: `README.md`, the introduction.
+-- **pin**: the installed skills held at a tag while Ordo is changed: `utils/pin.sh <tag>` puts the pinned worktree `~/.local/share/ordo-stable` at that tag and links every skill from it, and `utils/pin.sh` with no tag checks the links. Stated in: `README.md`, "Working on Ordo"; `utils/pin.sh`, its head comment.
++- **pin**: the installed skills and agents held at a tag while Ordo is changed: `utils/pin.sh <tag>` puts the pinned worktree `~/.local/share/ordo-stable` at that tag and links every skill and every agent from it, and `utils/pin.sh` with no tag checks the links. Stated in: `README.md`, "Working on Ordo"; `utils/pin.sh`, its head comment.
+ - **verdict, of a blind comparison**: a judge's A, B or tie with its reasons; the two verdicts, read through the key, give the result when they agree and a tie when they differ. Stated in: `docs/dev/blind-comparison.md`, steps 6 and 7.
+diff --git a/skills/plan-help/SKILL.md b/skills/plan-help/SKILL.md
+index e18247b..2fd0e15 100644
+--- a/skills/plan-help/SKILL.md
++++ b/skills/plan-help/SKILL.md
+@@ -67,7 +67,8 @@ when a command stops:
+ /spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, or a choice is yours: it wrote an open item and no brief
+ "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
+ /spec <entry> <step>          again; it now writes the brief
+-/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), or a file it reads is unusable: it names the cause and leaves nothing; rule on the step, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
++/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
++/refute refuses               it names the cause and leaves nothing, such as the configured effort that cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): install the effort agents as the plan skills are, or unset the variable, then /refute again in a new session
+ /land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the step's dispatch block: supply it, then /land again
+ /land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head
+ 
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index d7b90d4..4a4ce20 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -41,6 +41,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+ 
+ 1. Read the inputs in the order "What it reads" gives them.
+    - Resolve a dispatch block before anything else.
++   - Before any dispatch, check that the runner lists the effort agents `ordo-<worker_effort>` and `ordo-<reviewer_effort>` among its agent types, each level `high` when the configuration block has no such key.
++   - Before any dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
++   - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and the loop dispatches nothing.
+ 2. Pick the next step that nothing blocks.
+    - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
+ 3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
+@@ -126,9 +129,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+   - It reads, decides, invokes the skills, lands and books.
+   - It never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
+ - **Agents.** A builder, a reviewer or a brief-check agent runs on a Claude model, and never on Claude Fable.
+-- **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names.
+-- **Reviewer.** The model the configuration block's `reviewer:` names.
+-- **Brief-check agent.** One per `/spec` run that reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model.
++- **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names, at the effort `worker_effort` names, launched as "Launching a builder" says.
++- **Reviewer.** The model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
++- **Brief-check agent.** One per `/spec` run that reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+ - **Runner.** Both tiers run under Claude Code.
+ - Any allowed combination is chosen per step.
+ - A new combination is booked in the rulings with what decides it.
+@@ -222,7 +225,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ 
+ ## Launching a builder
+ 
+-- A builder (`claude:<model>`) is dispatched with the runner's Agent tool, with `subagent_type: general-purpose`, the model named and the prompt of Steps 4.
++- A builder (`claude:<model>`) is dispatched with the runner's Agent tool, with `subagent_type: ordo-<worker_effort>`, the effort agent of the configuration block's `worker_effort` (`high` when the block has no such key), the model named and the prompt of Steps 4.
+ - It runs in the background.
+   - The runner tracks it and reports when it ends.
+ - A repair round resumes it with the runner's message tool on its agent id in `session_id`, as Steps 8 says.
+@@ -268,7 +271,7 @@ When the user sets a time by which no agent may run, the loop keeps a night rule
+ 
+ ## Stops
+ 
+-A stop is for a decision that is the user's, of one of six kinds:
++The table holds six kinds of stop, each for a decision that is the user's, and one refusal, the last row, which names its cause and leaves no open item:
+ 
+ | Stop | When | What it shows | What resumes it |
+ |---|---|---|---|
+@@ -278,6 +281,7 @@ A stop is for a decision that is the user's, of one of six kinds:
+ | A rule clash | A contradiction between two established rules | The stop message, below | The user's ruling |
+ | A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by the user's ruling | The stop message, below | The user's ruling |
+ | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
++| The configured effort cannot apply | A refusal (Steps 1): the runner lists no `ordo-<level>` agent for a level the configuration block names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then a new session |
+ 
+ - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
+ - A stop is booked in the state file's open items the moment it is raised, and under the step's Step 0 in `plan.md`.
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index 22a64a8..b923879 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -42,7 +42,10 @@ metadata:
+ 
+ ## Steps
+ 
+-1. Dispatch one reviewer, on the model the configuration block's `reviewer:` names, once per step before its first repair round.
++1. Dispatch one reviewer as the effort agent `ordo-<reviewer_effort>` (the configuration block's `reviewer_effort`, `high` when the block has no such key), on the model the configuration block's `reviewer:` names, once per step before its first repair round.
++   - Before the dispatch, check that the runner lists that agent among its agent types.
++   - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
++   - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
+ 2. The reviewer reads the inputs in the order "What it reads" gives them.
+ 3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
+    - The step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks (the step's worktree).
+@@ -64,7 +67,7 @@ metadata:
+ 
+ ### Over a repair round
+ 
+-1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says.
++1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says.
+    - A run that finds nothing ends the rounds.
+ 2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
+ 3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
+@@ -143,6 +146,7 @@ metadata:
+ | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/refute` again |
+ | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared and built |
+ | No report | No builder's report on disk | The report path the builder was told to write to | The report written, then `/refute` again |
++| The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level the configuration block's `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/refute` again in a new session |
+ 
+ ## Anti-patterns
+ 
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 6160c0f..2168a77 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -22,6 +22,7 @@
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
++- **effort agent**: one of the agent definitions `ordo-low`, `ordo-medium`, `ordo-high`, `ordo-xhigh` and `ordo-max`, installed with the plan skills, each setting the effort an agent runs at and no model; a builder is launched as `ordo-<worker_effort>`, a reviewer and a brief-check agent as `ordo-<reviewer_effort>`. Stated in: `plan-orchestration`, "Launching a builder"; `refute`, Steps 1; `spec`, "Steps / The brief check".
+ - **executor**: who builds a step: `agent`, a builder dispatched in the worktree, `inline`, the orchestrating session itself, or `academic-paper`, that skill. The configuration block holds the plan's default, and the orchestrator chooses per step. Stated in: `plan-orchestration`, Steps 4; `plan`, Steps 4.
+ - **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item. A finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
+ - **fix at landing**: a fix made on main during `/land`, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index c2b8ad1..d40167c 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -64,6 +64,9 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+      - A step that waits at Steps 5 restores it with the session's own records, so a booked ruling is never lost.
+    - An uncommitted change at the brief's path `agents/briefs/<step>.md` is a refusal ("Stops"), named by path, since Steps 4 writes the brief there.
+    - An uncommitted change at the brief check's report path `agents/reviews/<step>-brief-check.md` is a refusal ("Stops"), named by path, since "Steps / The brief check" saves the report there.
++   - The runner lists the effort agent `ordo-<reviewer_effort>` among its agent types, the level `high` when the configuration block has no `reviewer_effort` key, since "Steps / The brief check" starts that agent.
++   - `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
++   - Either effort check failing is the refusal "The configured effort cannot apply" ("Stops"), and writes nothing.
+    - A preflight that fails is a refusal ("Stops").
+    - Then, before any premise check, read the step's line and the Rulings section of `plan.md`, as "What it reads" 4 says.
+    - A step whose line carries the user's authority goes on.
+@@ -213,7 +216,7 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
+ 
+ Steps 5 says when this runs.
+ 
+-1. Start one fresh agent on the model the configuration block's `reviewer:` names, never the session that wrote the brief.
++1. Start one fresh agent as the effort agent `ordo-<reviewer_effort>`, on the model the configuration block's `reviewer:` names, never the session that wrote the brief.
+    - It reads the brief, `plan.md`'s Goal, the step's line and the Rulings section, the rules file and the standards the configuration names, and the tree on main at its head.
+    - It changes nothing: every finding goes into its report.
+    - It invokes no skill: it runs the reads and commands of item 2 itself.
+@@ -256,6 +259,7 @@ The first three rows are stops, which leave an open item as "Steps / A stop" say
+ | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/spec` |
+ | A step in flight | A step is already in flight, and the configuration block does not allow more than one | The step in flight, named | That step landed, or a red line took its landing back out of main and its dispatch block reads `landing: backed-out` (the `land` skill's Steps 6) |
+ | No such step | The step is not in `plan.md`'s list (Steps 1) | The list | `/spec` with a step in the list |
++| The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level the configuration block's `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/spec` again in a new session |
+ | A step taken back out of main that cannot be saved | At "Steps / A step taken back out of main", a path in the kept worktree outside the ledger root, two diffs that differ, a failed git command, or a state file that cannot be written or does not read back | The path, or the command and what it printed | The cause put right, then `/spec` again. The user moves the path out of the worktree or removes it, makes the ledger or the state file writable, or corrects the entry |
+ 
+ ## Anti-patterns
+diff --git a/utils/pin.sh b/utils/pin.sh
+index d3f630c..71701af 100755
+--- a/utils/pin.sh
++++ b/utils/pin.sh
+@@ -1,7 +1,7 @@
+ #!/bin/sh
+-# Pin the installed Ordo skills to a tag of this repository, or check the pin.
++# Pin the installed Ordo skills and agents to a tag of this repository, or check the pin.
+ #
+-# Usage: utils/pin.sh <tag>    check the pinned worktree out at <tag> and link every skill from it
++# Usage: utils/pin.sh <tag>    check the pinned worktree out at <tag> and link every skill and every agent from it
+ #        utils/pin.sh          check that every link points into the pinned worktree; change nothing
+ #
+ # The pinned worktree is $ORDO_STABLE (default ~/.local/share/ordo-stable), a detached git
+@@ -31,6 +31,29 @@
+ # with its folder resolved. Pin mode removes each such link after linking and prints a line for
+ # each. Every other entry of that folder, a real folder or a link to anywhere else, is left as it
+ # is.
++# The agent folders are the agents folder beside each skill folder (the skill folder's parent
++# followed by /agents): ~/.claude/agents, $CLAUDE_CONFIG_DIR/agents, or the sibling of each
++# folder of $ORDO_SKILL_DIRS. Agent folders with the same path are one folder, linked once and
++# named once. Pin mode creates an agent folder that does not exist; check mode does not.
++# An agent is a file agents/<name>.md directly in the tag's agents/ folder, named by its file name
++# without .md; a file not ending .md, a file whose name starts with a dot and anything in a
++# subfolder is not an agent, and a tag with no agents/ folder has no agents. In an agent folder,
++# the entry <name>.md is the entry of the agent <name>; an entry not ending .md is no agent's.
++# Pin mode refuses, before anything changes, an agent folder that is also a skill folder of the
++# run, an agent folder path that exists and is not a folder, an entry for an agent of the tag that
++# is a real file, a directory or a link to anywhere outside Ordo, and a link into the live clone
++# for an agent the tag lacks; each is left as it is. It then links <folder>/<name>.md to
++# <pinned worktree>/agents/<name>.md for every agent of the tag, replaces a link into the live
++# clone and prints a line for each, and removes a link into the pinned worktree whose agent the
++# tag lacks and prints a line for each. Every other entry of an agent folder, a user's own file or
++# a link to anywhere else, is left as it is.
++# Check mode, and the check after linking, report an agent of the pinned worktree not linked from
++# an agent folder, every link into the live clone, and every link into the pinned worktree whose
++# agent the pinned worktree lacks.
++# Each mode prints a second summary line after the skills line: pinned: <m> agents linked in:
++# <agent folders>, the folders joined by ", ".
++# Every refusal and every failed check prints a line starting "pin: " on stderr and exits 1; a run
++# that pins, or a check that passes, exits 0.
+ 
+ set -u
+ 
+@@ -84,6 +107,10 @@ $skill_dirs
+ EOF
+ # The folders as the summary line names them.
+ shown_dirs=$(printf '%s\n' "$skill_dirs" | awk 'NR > 1 { printf ", " } { printf "%s", $0 }')
++# The agent folders, one per line: the agents folder beside each skill folder, each path once.
++agent_dirs=$(printf '%s\n' "$skill_dirs" |
++    awk '{ sub(/\/+$/, ""); sub(/\/[^\/]*$/, ""); dir = $0 "/agents" } !seen[dir]++ { print dir }')
++shown_agent_dirs=$(printf '%s\n' "$agent_dirs" | awk 'NR > 1 { printf ", " } { printf "%s", $0 }')
+ 
+ # The folder that holds the skills in a checkout: skills/ when it exists, the top level otherwise.
+ skill_root() {
+@@ -97,6 +124,32 @@ skills_of() {
+     done
+ }
+ 
++# The agents of a checkout, one per line: each file agents/<name>.md, <name> not starting with a dot.
++agents_of() {
++    for entry in "$1"/agents/*.md; do
++        [ -f "$entry" ] || continue
++        basename "$entry" .md
++    done
++}
++
++# Prints the agent an agent folder entry $1 is named for: its file name without .md, or nothing
++# when the name does not end in .md after at least one character.
++agent_name() {
++    agent_base=${1##*/}
++    case "$agent_base" in
++        ?*.md) printf '%s' "${agent_base%.md}" ;;
++    esac
++}
++
++# Succeeds when the list $1, one name per line, holds the name $2; an empty name is in no list.
++in_list() {
++    [ -n "$2" ] || return 1
++    case "$nl$1$nl" in
++        *"$nl$2$nl"*) return 0 ;;
++    esac
++    return 1
++}
++
+ # Succeeds when the link $1 points at the pinned worktree or the live clone or inside either, as
+ # its target names it or with the target's folder resolved. A relative target is read from the
+ # link's folder.
+@@ -168,9 +221,58 @@ EOF
+             problems=$((problems + 1))
+         done
+     fi
++    # The agents: the folder loops read $agent_dirs on descriptor 3 and the agent list on 4.
++    stable_agents=$(agents_of "$stable")
++    while IFS= read -r agent <&4; do
++        [ -n "$agent" ] || continue
++        while IFS= read -r dir <&3; do
++            target=$(readlink "$dir/$agent.md" 2>/dev/null) || target=""
++            [ "$target" = "$stable/agents/$agent.md" ] && continue
++            # A link into the live clone is reported by the loop below.
++            case "$target" in
++                "$stable"/*) ;;
++                "$repo"/*) continue ;;
++            esac
++            printf 'pin: %s/%s.md does not link to %s/agents/%s.md\n' \
++                "$dir" "$agent" "$stable" "$agent" >&2
++            problems=$((problems + 1))
++        done 3<<EOF
++$agent_dirs
++EOF
++    done 4<<EOF
++$stable_agents
++EOF
++    while IFS= read -r dir <&3; do
++        for link in "$dir"/*; do
++            [ -L "$link" ] || continue
++            target=$(readlink "$link")
++            case "$target" in
++                "$stable"/*)
++                    in_list "$stable_agents" "$(agent_name "$link")" || {
++                        printf 'pin: %s links to %s, which the pinned tag does not have\n' \
++                            "$link" "$target" >&2
++                        problems=$((problems + 1))
++                    }
++                    ;;
++                "$repo"/*)
++                    printf 'pin: %s links to %s, in the live clone %s\n' \
++                        "$link" "$target" "$repo" >&2
++                    problems=$((problems + 1))
++                    ;;
++            esac
++        done
++    done 3<<EOF
++$agent_dirs
++EOF
+     [ "$problems" -eq 0 ]
+ }
+ 
++# Prints the agents summary line, which follows the skills summary line in both modes.
++print_agents_line() {
++    printf 'pinned: %s agents linked in: %s\n' \
++        "$(agents_of "$stable" | wc -l | tr -d ' ')" "$shown_agent_dirs"
++}
++
+ if [ $# -eq 0 ]; then
+     [ -d "$stable" ] || fail "no pinned worktree at $stable; run utils/pin.sh <tag>"
+     stable=$(CDPATH= cd "$stable" && pwd -P)
+@@ -179,6 +281,7 @@ if [ $# -eq 0 ]; then
+     check_links || fail "the links do not match the pin at $pinned"
+     printf 'pinned: %s, %s skills linked in: %s\n' \
+         "$pinned" "$(skills_of "$stable" | wc -l | tr -d ' ')" "$shown_dirs"
++    print_agents_line
+     exit 0
+ fi
+ 
+@@ -190,6 +293,7 @@ tag_skills=$(printf '%s\n' "$tag_files" | sed -n 's#^skills/\([^/]*\)/SKILL\.md$
+ [ -n "$tag_skills" ] ||
+     tag_skills=$(printf '%s\n' "$tag_files" | sed -n 's#^\([^/]*\)/SKILL\.md$#\1#p')
+ [ -n "$tag_skills" ] || fail "tag $tag holds no skill"
++tag_agents=$(printf '%s\n' "$tag_files" | sed -n 's#^agents/\([^/.][^/]*\)\.md$#\1#p')
+ 
+ # Succeeds when the tag holds the skill named $1.
+ tag_holds() {
+@@ -208,6 +312,45 @@ if [ -e "$stable" ]; then
+         fail "$stable has local changes; the pinned worktree is never edited"
+     stable=$(CDPATH= cd "$stable" && pwd -P)
+ fi
++while IFS= read -r agent_dir <&3; do
++    while IFS= read -r dir <&4; do
++        [ "${dir%/}" = "$agent_dir" ] && fail "$agent_dir is both a skill folder and an agent folder"
++    done 4<<EOF
++$skill_dirs
++EOF
++    if [ -e "$agent_dir" ] || [ -L "$agent_dir" ]; then
++        [ -d "$agent_dir" ] || fail "$agent_dir is not a folder; move it away and run again"
++    fi
++    while IFS= read -r agent <&4; do
++        [ -n "$agent" ] || continue
++        entry=$agent_dir/$agent.md
++        if [ -L "$entry" ]; then
++            target=$(readlink "$entry")
++            case "$target" in
++                "$stable"/*|"$repo"/*) ;;
++                *) fail "$entry links to $target, outside Ordo; move it away and run again" ;;
++            esac
++        elif [ -d "$entry" ]; then
++            fail "$entry is a directory; move it away and run again"
++        elif [ -e "$entry" ]; then
++            fail "$entry is a real file; move it away and run again"
++        fi
++    done 4<<EOF
++$tag_agents
++EOF
++    for link in "$agent_dir"/*; do
++        [ -L "$link" ] || continue
++        case "$(readlink "$link")" in
++            "$stable"/*) continue ;;
++            "$repo"/*) ;;
++            *) continue ;;
++        esac
++        in_list "$tag_agents" "$(agent_name "$link")" ||
++            fail "$link links into the live clone $repo; move it away or pin a tag that holds it"
++    done
++done 3<<EOF
++$agent_dirs
++EOF
+ while IFS= read -r dir <&3; do
+     for skill in $tag_skills; do
+         [ -e "$dir/$skill" ] || [ -L "$dir/$skill" ] || continue
+@@ -268,6 +411,35 @@ while IFS= read -r dir <&3; do
+ done 3<<EOF
+ $skill_dirs
+ EOF
++while IFS= read -r agent_dir <&3; do
++    mkdir -p "$agent_dir"
++    while IFS= read -r agent <&4; do
++        [ -n "$agent" ] || continue
++        entry=$agent_dir/$agent.md
++        old=$(readlink "$entry" 2>/dev/null) || old=""
++        ln -sfn "$stable/agents/$agent.md" "$entry" || continue
++        case "$old" in
++            "$stable"/*) ;;
++            "$repo"/*)
++                printf 'pin: replaced %s, which linked into the live clone %s\n' "$entry" "$repo"
++                ;;
++        esac
++    done 4<<EOF
++$tag_agents
++EOF
++    for link in "$agent_dir"/*; do
++        [ -L "$link" ] || continue
++        in_list "$tag_agents" "$(agent_name "$link")" && continue
++        case "$(readlink "$link")" in
++            "$stable"/*)
++                rm "$link" || continue
++                printf 'pin: removed %s, which the tag %s does not hold\n' "$link" "$tag"
++                ;;
++        esac
++    done
++done 3<<EOF
++$agent_dirs
++EOF
+ old_dir=$(outside_dir)
+ if [ -n "$old_dir" ]; then
+     for link in "$old_dir"/*; do
+@@ -282,3 +454,4 @@ check_links || fail "the links do not match the pin after linking"
+ printf 'pinned: %s (%s), %s skills linked in: %s\n' \
+     "$tag" "$(git -C "$stable" rev-parse --short HEAD)" \
+     "$(skills_of "$stable" | wc -l | tr -d ' ')" "$shown_dirs"
++print_agents_line
+diff --git a/utils/pin.test.sh b/utils/pin.test.sh
+index 32e6be6..7240449 100755
+--- a/utils/pin.test.sh
++++ b/utils/pin.test.sh
+@@ -1,12 +1,16 @@
+ #!/bin/sh
+-# Exercise pin.sh on a scratch repository and scratch skill folders, under a HOME whose path holds a space, checking the links it leaves, the pinned worktree, and its exit status; a run whose summary line names a folder outside the test's two scratch roots fails the test.
++# Exercise pin.sh on a scratch repository and scratch skill folders, under a HOME whose path holds a space, checking the links it leaves, the pinned worktree, and its exit status; a run whose skills summary line or agents line names a folder outside the test's two scratch roots fails the test.
+ # Pin mode links every skill of the tag in every skill folder into the pinned worktree, leaves the pinned worktree where it is when the live clone moves on, removes the link of a skill the tag drops, and replaces a link into the live clone for a skill the tag holds.
+ # Pin mode refuses, before the worktree or a link changes, a link into the live clone for a skill the tag lacks, a pinned worktree with local changes, a link to a folder outside Ordo, a pinned worktree path that is not a git worktree (a folder inside the live clone, which stays on its branch), and a skill folder that is not an absolute path or ends in whitespace.
+ # Pin mode fails when the check after linking finds a link it could not make, and creates again a pinned worktree deleted by hand while another missing worktree keeps its registration.
+ # Check mode fails with no pinned worktree, and fails naming a link to a skill the tag lacks, a link into the live clone, a link left in ~/.agents/skills, and a missing link in the $CLAUDE_CONFIG_DIR folder; it passes on a fresh pin.
+-# The default folders are ~/.claude/skills and $CLAUDE_CONFIG_DIR/skills, not ~/.agents/skills, and ORDO_SKILL_DIRS in its space-separated form is split on spaces and tabs.
++# The default folders are ~/.claude/skills and $CLAUDE_CONFIG_DIR/skills, not ~/.agents/skills, and ~/.agents/agents is not created with them, and ORDO_SKILL_DIRS in its space-separated form is split on spaces and tabs.
+ # In ~/.agents/skills, pin mode removes each link to the pinned worktree or the live clone or inside either, and keeps a real folder and a link to anywhere else; it leaves the folder alone when ORDO_SKILL_DIRS is set, and when the folder resolves to a folder of the list.
+ # A tag whose skills are top-level folders pins, and so does the move back to a skills/ tag.
++# The agents: pin mode links every agent of the tag (a file agents/<name>.md) into the agents folder beside each skill folder, creating it, from ORDO_SKILL_DIRS and from the default folders with CLAUDE_CONFIG_DIR set, and prints the agents line after an unchanged skills line; a file not ending .md, a file in a subfolder and a hidden file are neither linked nor counted; two skill folders under one parent give one agents folder, linked once and named once.
++# Pin mode replaces an agent link into the live clone, removes the links of an agent the tag drops and of every agent when the tag has no agents/ folder, and leaves a user's own agent file and a link outside Ordo under a name the tag does not hold.
++# Pin mode refuses, before the worktree or a link changes, an agent link into the live clone for an agent the tag lacks, an entry for an agent of the tag that is a real file, a link outside Ordo or a directory, an agent folder path that is a file, and a folder that is both a skill folder and an agent folder; it fails when the check after linking finds an agent link it could not make.
++# Check mode prints the agents line, fails naming a missing agent link, an agent link into the live clone and a link to an agent the pinned tag lacks, and with no agent folder and no agents passes without creating the folder.
+ 
+ set -u
+ 
+@@ -42,24 +46,27 @@ export ORDO_STABLE="$HOME/.local/share/ordo-stable"
+ export ORDO_SKILL_DIRS="$d1$nl$d2"
+ unset CLAUDE_CONFIG_DIR
+ 
+-# Runs pin.sh with the given arguments and sets out, err and status from the run. A summary line must name only folders under the scratch roots.
++# Runs pin.sh with the given arguments and sets out, err and status from the run. The skills summary line and the agents line are read apart, and each must name only folders under the scratch roots.
+ run_pin() {
+     sh "$pin" "$@" >"$test_root/out" 2>"$test_root/err"
+     status=$?
+     out=$(cat "$test_root/out")
+     err=$(cat "$test_root/err")
+-    case "$out" in
+-        *"skills linked in: "*) ;;
+-        *) return 0 ;;
+-    esac
+-    printf '%s\n' "${out##*skills linked in: }" |
+-    awk -F ', ' '{ for (i = 1; i <= NF; i++) print $i }' |
+-    while IFS= read -r dir; do
+-        case "$dir" in
+-            "$test_root"/*|"$plain_root"/*) ;;
+-            *) fail "pin.sh linked into $dir, outside the scratch roots" ;;
+-        esac
+-    done || exit 1
++    for kind in skills agents; do
++        printf '%s\n' "$out" | sed -n "s/^pinned: .* $kind linked in: //p" |
++        awk -F ', ' '{ for (i = 1; i <= NF; i++) print $i }' |
++        while IFS= read -r dir; do
++            case "$dir" in
++                "$test_root"/*|"$plain_root"/*) ;;
++                *) fail "pin.sh linked $kind into $dir, outside the scratch roots" ;;
++            esac
++        done || exit 1
++    done
++}
++
++# expect_line <text> <line> <what failed>: the text holds the line whole.
++expect_line() {
++    printf '%s\n' "$1" | grep -q -x -F -e "$2" || fail "$3; expected the line \"$2\" in: $1"
+ }
+ 
+ # expect_in <text> <expected part> <what failed>
+@@ -244,13 +251,14 @@ git -C "$repo" worktree list --porcelain | grep -q -x -F "worktree $other" ||
+ 
+ # The default folder list, under the HOME that holds a space, with and without CLAUDE_CONFIG_DIR.
+ unset ORDO_SKILL_DIRS
+-rm -rf "$d1" "$d2"
++rm -rf "$d1" "$d2" "$HOME/.agents/agents"
+ run_pin v2
+ [ "$status" -eq 0 ] || fail "pinning with the default folders failed: $out $err"
+ [ "$(readlink "$d1/beta")" = "$ORDO_STABLE/skills/beta" ] ||
+     fail "$d1/beta not linked with the default folders"
+-# The default folders are Claude Code's only, so $d2 stays absent. Red when the defaults hold $d2.
++# The default folders are Claude Code's only, so $d2 and its agents folder stay absent. Red when the defaults hold $d2.
+ [ ! -e "$d2" ] || fail "pin.sh wrote into $d2 with the default folders"
++[ ! -e "$HOME/.agents/agents" ] || fail "pin.sh created $HOME/.agents/agents with the default folders"
+ 
+ # ~/.agents/skills, a folder the default list does not hold. Pin mode removes each link there to the pinned worktree or the live clone or inside either, and leaves a real folder and a link to anywhere else.
+ # One link names a top-level skill folder of the pinned worktree that a skills/ tag does not have; one names the worktree through a link to its parent folder, so it is inside the worktree only once the path is resolved; one names the worktree's root.
+@@ -377,4 +385,242 @@ run_pin v2
+     fail "beta not linked from skills/ after moving back"
+ [ -L "$d1/delta" ] && fail "the top-level skill is still linked after moving back"
+ 
++# The agents: v3 holds agents/ordo-a.md and agents/ordo-b.md beside a file that is not .md, a file in a subfolder and a hidden file; v4 drops ordo-b.md; v2 has no agents/ folder. The agent folders are the agents folders beside the skill folders.
++a1=$HOME/.claude/agents
++a2=$HOME/.agents/agents
++mkdir -p "$repo/agents/sub"
++for agent in ordo-a ordo-b; do
++    printf -- '---\nname: %s\n---\n' "$agent" >"$repo/agents/$agent.md"
++done
++printf 'notes\n' >"$repo/agents/notes.txt"
++printf -- '---\nname: x\n---\n' >"$repo/agents/sub/x.md"
++printf -- '---\nname: hidden\n---\n' >"$repo/agents/.hidden.md"
++git -C "$repo" add -A
++git -C "$repo" -c user.name=t -c user.email=t@t commit -q -m agents
++git -C "$repo" tag v3
++git -C "$repo" rm -q agents/ordo-b.md
++git -C "$repo" -c user.name=t -c user.email=t@t commit -q -m drop-b
++git -C "$repo" tag v4
++
++# Prints each entry of the two agent folders with its link target, one per line, to compare the entries before and after a run.
++agent_links_state() {
++    for entry in "$a1"/* "$a2"/*; do
++        printf '%s -> %s\n' "$entry" "$(readlink "$entry")"
++    done
++}
++
++# expect_refused <tag the worktree stays at> <what failed>: the run exited 1 and changed neither the worktree nor a link.
++expect_refused() {
++    [ "$status" -eq 1 ] || fail "$2: exit $status, expected 1: $out $err"
++    [ "$(git -C "$ORDO_STABLE" describe --tags --exact-match)" = "$1" ] ||
++        fail "$2: the pinned worktree moved"
++    [ "$(links_state)" = "$skill_links_before" ] || fail "$2: a skill link changed"
++    [ "$(agent_links_state)" = "$agent_links_before" ] || fail "$2: an agent folder entry changed"
++}
++
++# A first pin links both agents in the agents folder beside each of the two ORDO_SKILL_DIRS folders, creating the folders, and prints the agents line after the skills line. Red when pin.sh does not link the agents, or prints no agents line.
++# The earlier pins of tags without agents left both agent folders empty; they are removed so the first agent pin creates them.
++rmdir "$a1" "$a2" || fail "an agent folder is not empty before the first agent pin"
++run_pin v3
++[ "$status" -eq 0 ] || fail "the first pin of a tag with agents failed: $out $err"
++for dir in "$a1" "$a2"; do
++    for agent in ordo-a ordo-b; do
++        [ "$(readlink "$dir/$agent.md")" = "$ORDO_STABLE/agents/$agent.md" ] ||
++            fail "$dir/$agent.md does not link into the pin"
++    done
++done
++expect_line "$out" "pinned: 2 agents linked in: $a1, $a2" "the first agent pin printed no agents line"
++[ "$(printf '%s\n' "$out" | sed -n 's/^pinned: v3 ([0-9a-f]*), 2 skills linked in: .*/skills/p')" = skills ] ||
++    fail "the skills summary line changed its form: $out"
++
++# A file not ending .md, a file in a subfolder of agents/ and a hidden file are not agents: neither linked nor counted. Red when every file under agents/ counts.
++for entry in notes.txt x.md sub .hidden.md; do
++    [ -e "$a1/$entry" ] || [ -L "$a1/$entry" ] && fail "$a1/$entry was linked, and it is not an agent"
++done
++
++# Check mode passes on a fresh pin and prints the agents line. Red when check mode prints no agents line.
++run_pin
++[ "$status" -eq 0 ] || fail "check mode failed on a fresh agent pin: $err"
++expect_line "$out" "pinned: 2 agents linked in: $a1, $a2" "check mode printed no agents line"
++
++# Check mode fails naming an agent whose link is missing. Red when check mode does not read the agent folders.
++rm "$a1/ordo-a.md"
++run_pin
++[ "$status" -ne 0 ] || fail "check mode passed with an agent link missing"
++expect_in "$err" "pin: $a1/ordo-a.md does not link to $ORDO_STABLE/agents/ordo-a.md" \
++    "check mode did not name the missing agent link"
++
++# Check mode fails naming an agent link into the live clone; pin mode replaces it, since the tag holds the agent. Red when either mode ignores links into the live clone in an agent folder.
++ln -s "$repo/agents/ordo-a.md" "$a1/ordo-a.md"
++run_pin
++[ "$status" -ne 0 ] || fail "check mode passed with an agent link into the live clone"
++expect_in "$err" "pin: $a1/ordo-a.md links to $repo/agents/ordo-a.md, in the live clone $repo" \
++    "check mode did not name the agent link into the live clone"
++run_pin v3
++[ "$status" -eq 0 ] || fail "re-pinning over an agent link into the live clone failed: $out $err"
++expect_line "$out" "pin: replaced $a1/ordo-a.md, which linked into the live clone $repo" \
++    "pin mode did not report the replaced agent link"
++[ "$(readlink "$a1/ordo-a.md")" = "$ORDO_STABLE/agents/ordo-a.md" ] ||
++    fail "the agent link into the live clone was not replaced"
++
++# An agent link into the live clone for an agent the tag lacks is refused before anything changes. Red when pin mode does not read the agent folders before it moves the worktree.
++ln -s "$repo/agents/ordo-z.md" "$a1/ordo-z.md"
++skill_links_before=$(links_state)
++agent_links_before=$(agent_links_state)
++run_pin v4
++expect_refused v3 "a pin over an agent link into the live clone for an agent the tag lacks"
++expect_in "$err" \
++    "pin: $a1/ordo-z.md links into the live clone $repo; move it away or pin a tag that holds it" \
++    "the agent link into the live clone was not refused with its message"
++rm "$a1/ordo-z.md"
++
++# A user's own agent file and a link to a file outside Ordo, under names the tag does not hold, are left as they are by pin mode and not reported by check mode. The controls: the same two entries under the name of an agent the tag holds are refused, so the silence is about the name. Red when pin mode refuses, moves or removes every real file or foreign link in an agent folder.
++printf 'mine\n' >"$a1/mine.md"
++printf 'other\n' >"$test_root/foreign-agent.md"
++ln -s "$test_root/foreign-agent.md" "$a1/other.md"
++rm "$a1/ordo-a.md"
++printf 'my own ordo-a\n' >"$a1/ordo-a.md"
++skill_links_before=$(links_state)
++agent_links_before=$(agent_links_state)
++run_pin v4
++expect_refused v3 "a pin over a real file ordo-a.md"
++expect_in "$err" "pin: $a1/ordo-a.md is a real file; move it away and run again" \
++    "the real agent file was not refused with its message"
++[ "$(cat "$a1/ordo-a.md")" = "my own ordo-a" ] || fail "a refused pin changed the real agent file"
++rm "$a1/ordo-a.md"
++ln -s "$test_root/foreign-agent.md" "$a1/ordo-a.md"
++agent_links_before=$(agent_links_state)
++run_pin v4
++expect_refused v3 "a pin over an agent link outside Ordo"
++expect_in "$err" \
++    "pin: $a1/ordo-a.md links to $test_root/foreign-agent.md, outside Ordo; move it away and run again" \
++    "the agent link outside Ordo was not refused with its message"
++rm "$a1/ordo-a.md"
++ln -s "$ORDO_STABLE/agents/ordo-a.md" "$a1/ordo-a.md"
++run_pin v3
++[ "$status" -eq 0 ] || fail "a pin with a user's own agent file and a foreign link failed: $out $err"
++[ "$(cat "$a1/mine.md")" = "mine" ] && [ ! -L "$a1/mine.md" ] || fail "pin mode changed the user's own agent file"
++[ "$(readlink "$a1/other.md")" = "$test_root/foreign-agent.md" ] || fail "pin mode changed the link outside Ordo"
++run_pin
++[ "$status" -eq 0 ] || fail "check mode failed on a user's own agent file or a foreign link: $err"
++case "$err" in
++    *mine.md* | *other.md*) fail "check mode reported the user's own entries: $err" ;;
++esac
++
++# A later tag without ordo-b.md removes its links and keeps ordo-a.md's. Red when pin mode leaves the links of an agent the tag drops.
++run_pin v4
++[ "$status" -eq 0 ] || fail "pinning a tag that drops an agent failed: $out $err"
++for dir in "$a1" "$a2"; do
++    [ -L "$dir/ordo-b.md" ] && fail "$dir/ordo-b.md still linked after the tag dropped it"
++    expect_line "$out" "pin: removed $dir/ordo-b.md, which the tag v4 does not hold" \
++        "pin mode did not report the removed agent link in $dir"
++    [ "$(readlink "$dir/ordo-a.md")" = "$ORDO_STABLE/agents/ordo-a.md" ] ||
++        fail "$dir/ordo-a.md lost its link when the tag dropped ordo-b.md"
++done
++expect_line "$out" "pinned: 1 agents linked in: $a1, $a2" "the agents line does not count 1 agent"
++
++# Check mode fails naming a link into the pinned worktree for an agent the pinned tag lacks. Red when check mode reads only the agents of the pinned worktree.
++ln -s "$ORDO_STABLE/agents/ordo-b.md" "$a1/ordo-b.md"
++run_pin
++[ "$status" -ne 0 ] || fail "check mode passed with a link to an agent the tag lacks"
++expect_in "$err" \
++    "pin: $a1/ordo-b.md links to $ORDO_STABLE/agents/ordo-b.md, which the pinned tag does not have" \
++    "check mode did not name the link to an agent the tag lacks"
++rm "$a1/ordo-b.md"
++
++# An agent folder entry ordo-a.md that is a directory is refused before anything changes. Red when the refusal is dropped: ln -sfn would then link inside that directory.
++rm "$a1/ordo-a.md"
++mkdir "$a1/ordo-a.md"
++skill_links_before=$(links_state)
++agent_links_before=$(agent_links_state)
++run_pin v3
++expect_refused v4 "a pin over a directory ordo-a.md"
++expect_in "$err" "pin: $a1/ordo-a.md is a directory; move it away and run again" \
++    "the directory ordo-a.md was not refused with its message"
++[ -z "$(ls -A "$a1/ordo-a.md")" ] || fail "a refused pin wrote into the directory ordo-a.md"
++rmdir "$a1/ordo-a.md"
++ln -s "$ORDO_STABLE/agents/ordo-a.md" "$a1/ordo-a.md"
++
++# An agent folder path that is a regular file is refused before anything changes. Red when the refusal is dropped: the pin would move the worktree and then fail.
++mkdir -p "$test_root/filed/skills"
++printf 'not a folder\n' >"$test_root/filed/agents"
++export ORDO_SKILL_DIRS="$test_root/filed/skills$nl"
++run_pin v3
++[ "$status" -eq 1 ] || fail "a pin with an agent folder that is a file exited $status: $out $err"
++expect_in "$err" "pin: $test_root/filed/agents is not a folder; move it away and run again" \
++    "the agent folder that is a file was not refused with its message"
++[ "$(git -C "$ORDO_STABLE" describe --tags --exact-match)" = "v4" ] ||
++    fail "a pin refused for an agent folder that is a file moved the worktree"
++[ -z "$(ls -A "$test_root/filed/skills")" ] || fail "a pin refused for an agent folder that is a file linked a skill"
++rm -rf "$test_root/filed"
++
++# A folder that is both a skill folder and an agent folder is refused before anything changes. Red when the refusal is dropped: the skills would be linked into the agent folder.
++export ORDO_SKILL_DIRS="$d1$nl$a1"
++skill_links_before=$(links_state)
++agent_links_before=$(agent_links_state)
++run_pin v3
++expect_refused v4 "a pin with a folder that is both a skill folder and an agent folder"
++expect_in "$err" "pin: $a1 is both a skill folder and an agent folder" \
++    "the folder that is both was not refused with its message"
++export ORDO_SKILL_DIRS="$d1$nl$d2"
++
++# A tag with no agents/ folder pins with 0 agents and removes every agent link into the pinned worktree, leaving the user's own entries. Red when the removal reads only the agents a tag holds.
++run_pin v3
++[ "$status" -eq 0 ] || fail "pinning v3 again failed: $out $err"
++run_pin v2
++[ "$status" -eq 0 ] || fail "pinning a tag with no agents failed: $out $err"
++expect_line "$out" "pinned: 0 agents linked in: $a1, $a2" "the agents line of a tag with no agents"
++for dir in "$a1" "$a2"; do
++    for agent in ordo-a ordo-b; do
++        [ -L "$dir/$agent.md" ] && fail "$dir/$agent.md still linked after a tag with no agents"
++    done
++done
++[ "$(cat "$a1/mine.md")" = "mine" ] || fail "a tag with no agents changed the user's own agent file"
++[ "$(readlink "$a1/other.md")" = "$test_root/foreign-agent.md" ] ||
++    fail "a tag with no agents changed the link outside Ordo"
++
++# Check mode with no agent folder and a pinned tag without agents passes with 0 agents and creates no folder. Red when check mode creates the agent folders.
++rm -rf "$a1" "$a2"
++run_pin
++[ "$status" -eq 0 ] || fail "check mode failed with no agent folder and no agents: $err"
++expect_line "$out" "pinned: 0 agents linked in: $a1, $a2" "check mode's agents line with no agents"
++[ ! -e "$a1" ] && [ ! -e "$a2" ] || fail "check mode created an agent folder"
++
++# The check after linking fails when an agent link could not be made. Red when the check after linking does not read the agent folders.
++mkdir -p "$a2"
++chmod a-w "$a2"
++run_pin v3
++chmod u+w "$a2"
++[ "$status" -ne 0 ] || fail "pin mode passed with an agent link it could not make"
++expect_in "$err" "pin: $a2/ordo-a.md does not link to $ORDO_STABLE/agents/ordo-a.md" \
++    "the check after linking did not name the missing agent link"
++expect_in "$err" "pin: the links do not match the pin after linking" \
++    "the check after linking did not fail on the missing agent link"
++run_pin v3
++[ "$status" -eq 0 ] || fail "re-pinning after the unwritable agent folder failed: $out $err"
++
++# With the default folders and CLAUDE_CONFIG_DIR set, ~/.claude/agents and $CLAUDE_CONFIG_DIR/agents both get the links. Red when the agent folders are not derived from the default skill folders.
++unset ORDO_SKILL_DIRS
++export CLAUDE_CONFIG_DIR="$HOME/config"
++run_pin v3
++[ "$status" -eq 0 ] || fail "an agent pin with CLAUDE_CONFIG_DIR set failed: $out $err"
++for dir in "$a1" "$CLAUDE_CONFIG_DIR/agents"; do
++    [ "$(readlink "$dir/ordo-a.md")" = "$ORDO_STABLE/agents/ordo-a.md" ] ||
++        fail "$dir/ordo-a.md not linked with CLAUDE_CONFIG_DIR set"
++done
++expect_line "$out" "pinned: 2 agents linked in: $a1, $CLAUDE_CONFIG_DIR/agents" \
++    "the agents line with CLAUDE_CONFIG_DIR set"
++rm -rf "$CLAUDE_CONFIG_DIR"
++unset CLAUDE_CONFIG_DIR
++
++# Two skill folders under one parent share one agents folder, linked once and named once. Red when the agent folders are not deduplicated.
++export ORDO_SKILL_DIRS="$plain_root/a  $plain_root/b$tab$plain_root/c"
++run_pin v3
++[ "$status" -eq 0 ] || fail "an agent pin with one parent for three skill folders failed: $out $err"
++[ "$(readlink "$plain_root/agents/ordo-a.md")" = "$ORDO_STABLE/agents/ordo-a.md" ] ||
++    fail "$plain_root/agents/ordo-a.md not linked"
++expect_line "$out" "pinned: 2 agents linked in: $plain_root/agents" \
++    "the shared agents folder is not named once"
++export ORDO_SKILL_DIRS="$d1$nl$d2"
++
+ printf 'PASS: pin.sh scratch tests\n'

@@ -97,6 +97,8 @@ Carried to step 7 (found by step 4's brief check): the pages form a folder `docs
 
 - Sonnet trial (2026-09-29): (a). Step 3 is built twice from its brief at base 44caaf6, by an Opus builder in `.agents/worktrees/2e-3` and a Sonnet 5.5 builder (`claude-sonnet-5-5`) in `.agents/worktrees/2e-3s`; one fresh Opus reviewer reviews each build; the findings, tokens and time are compared and Axel rules from that; the better build lands and the other worktree is removed; Axel's yes to (a) also covers changing `worker:` in `.agents/plan.yaml` to Sonnet 5.5 should it win (the user).
 
+- Sonnet trial result (2026-09-29): (a). Three builds of step 3 were compared: Opus 5.5 (`2e-3`), Sonnet 5 (`2e-3s`, launched as Sonnet 5.5 under Claude Code 2.1.283, whose `sonnet` alias gave claude-sonnet-5) and Sonnet 5.5 (`2e-3s55`). The Opus 5.5 build lands after its repair round; the other two worktrees and branches are removed. `worker:` in `.agents/plan.yaml` and in the state file's configuration block becomes `claude:sonnet` (claude-sonnet-5-5 under Claude Code 2.1.285) for the next three code steps of this plan, each measured by its landing report (whether the first report passed its bar, the fixes at landing, tokens, time and cost); `reviewer:` stays `claude:opus`; after the three steps the result goes to Axel, and `worker:` returns to Opus only by his ruling (the user).
+
 ## Blocked, and by what
 
 - Nothing is blocked.
