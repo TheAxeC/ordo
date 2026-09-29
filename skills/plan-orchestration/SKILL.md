@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
 metadata:
-  version: "2.10.0"
+  version: "2.10.1"
 ---
 
 # Plan orchestration
@@ -259,7 +259,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 When the user sets a time by which no agent may run, the loop keeps a night rule and writes it into the state file:
 
 - A builder is dispatched only while the longest step so far still fits before the cut-off.
-- A reviewer or a fix round is dispatched only while its usual length fits before the cut-off.
+- A reviewer or a repair round is dispatched only while its usual length fits before the cut-off.
 - At the cut-off anything still running is stopped.
   - Its worktree is kept.
   - The state file is rewritten with what was in flight.

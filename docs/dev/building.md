@@ -6,7 +6,8 @@ Ordo has no build step. The green check is every command below passing, each run
 sh skills/land/templates/land.test.sh                  # land.sh on a conflict, a ledger file left in the worktree, a failing check and a clean landing
 sh skills/land/templates/checks.test.sh                # checks.sh on a failing list, a passing list and a state file with no yaml block
 sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
-sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules blocks, its --write repair and its refusals
+sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules and plan-terms blocks, its --write repair, its --only glossary form and its refusals
+python3 skills/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
 sh utils/pin.test.sh                                   # pin.sh in pin and check mode under a scratch HOME, its refusals included
 sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists
 git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'

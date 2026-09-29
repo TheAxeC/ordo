@@ -207,3 +207,112 @@ None. The report states the before and after for `sync` on a repository set up e
 - The builder's reverts R2, R7, R8 and R11 were not reproduced. The ten others above were.
 
 Reviewer usage: claude:opus, a fresh agent; 258063 tokens, 59 tool uses, 665 s (from the completion notice). Saved by the orchestrator from the reviewer's final message, its verification block as the reviewer quoted it.
+
+## Repair round 1, refuted
+
+Reviewer: a fresh agent, read-only. The worktree is `.agents/worktrees/2d-9` and the base is 888f8e65faebaf690ed7c8b6846034df8552f6cd. To get the round's delta the reviewer rebuilt the round-0 tree under `$TMPDIR/r9`: it reverse-applied `git diff 888f8e6` to copies of the current files, then applied `agents/reviews/9-round-0.diff`, then ran `diff -ru r0 now`. The delta touches six files: `docs/glossary.md` (block lines 5 to 96 only), `skills/plan-orchestration/SKILL.md`, `skills/repo-setup/SKILL.md`, `skills/repo-setup/templates/CLAUDE.md`, `skills/repo-setup/templates/docs/glossary.md` and `skills/repo-setup/templates/plan-terms.md`. No script changed in this round.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/orchestrator-state.md
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne '...'
+checks: 7 commands passed
+exit 0
+
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+
+$ python3 -c 'import glob,yaml; ...' (the length command)
+726 skills/land/SKILL.md
+632 skills/ordo-init/SKILL.md
+386 skills/plan-help/SKILL.md
+788 skills/plan-orchestration/SKILL.md
+616 skills/plan-retro/SKILL.md
+477 skills/plan/SKILL.md
+951 skills/refute/SKILL.md
+702 skills/repo-setup/SKILL.md
+997 skills/roadmap/SKILL.md
+1022 skills/spec/SKILL.md
+
+$ { git diff --name-only 888f8e6; git ls-files --others --exclude-standard; } | tr '\n' '\0' | xargs -0 env LC_ALL=C grep -n '[^ -~]'
+(nothing printed) grep exit 1
+
+The round section's own evidence, rerun in the same form:
+sorted (the entry order check)
+semicolons outside Stated in: 0 semicolons in all: 61
+3858 skills/repo-setup/templates/plan-terms.md (wc -w)
+grep -n -e 'at least' -e 'every tenth' -e 'three or more' -e 'only when' plan-terms.md: nothing printed, exit 1
+wc -l: 92 plan-terms.md, 108 docs/glossary.md, 13 templates/docs/glossary.md, 33 templates/CLAUDE.md, 159 repo-setup/SKILL.md, 318 plan-orchestration/SKILL.md
+git diff --numstat: 2 2 plan-orchestration/SKILL.md; 22 17 repo-setup/SKILL.md; 1 0 templates/CLAUDE.md
+
+The reviewer's own checks:
+- A second semicolon count, by locating each ";" relative to the nearest "Stated in: " before it: none outside a "Stated in" list.
+- A sentence count per sense: no sense over two sentences.
+- The block of docs/glossary.md between the markers, compared with plan-terms.md by diff: equal. The own-terms part: unchanged since round 0.
+- Entry names, round 0 against now: 90 and 90, same order. 60 entries changed in the round.
+- Each of the 60 "Old:" lines of the round section is byte for byte a line of the round-0 plan-terms.md, and each "New:" line a line of the current file (grep -qxF, no misses).
+- grep -rn -i "fix round" skills docs README.md .agents/plan.yaml: only docs/academic-coverage.md:98, a different sense, which point 6 keeps.
+- grep "plan skills' terms", "of the plan skills": nothing. grep -rn -i "draft nothing": only skills/repo-setup/SKILL.md:86, the new item 7.
+- grep -rn -e '2\.10\.0' -e '1\.2\.0' over skills docs README.md utils .agents/plan.yaml: only skills/roadmap/SKILL.md:5, that skill's own version.
+```
+
+### Verdicts
+
+- Round point 1: partial. The eight named entries are changed exactly as ruled. Of the 33 further entries, 29 still say what the term names; bar, time box and hand-back lost the part that is the term's meaning, and red line's second sense changed meaning (Findings 1 to 4).
+- Point 2: holds. Point 3: partial (Finding 5). Points 4 to 8: hold. Point 5's "no fact dropped" holds on 22 entries read old beside new: booking, brief, Closed, completion notice, dispatch entry, finding, ledger, open item, preparation commit, refusal, refuter report, ruling, session (the), step, rules file, verification page, in flight, case, executor, gate, user-visible choice and worktree.
+- First report: Spec 1 closed for the eight entries and the round-cap duplicate; Spec 2 closed; Spec 3 closed for fix round and refuter, "stop" as ending an agent closed with a narrower sense (Finding 5) and a further sense missing (Finding 6); Standards 1 and 2 closed; the semicolon and entry-length points closed.
+- Brief items over the whole diff: 1 violated (Findings 1 to 4 and 6); 2 to 12 hold.
+- Cases: all met, except "each term grepped", partial (Finding 6).
+
+### Findings
+
+1. Spec. `skills/repo-setup/templates/plan-terms.md:6`, bar: "the standard a builder's first report is judged against at its step's landing. The booking and the landing report state whether the first report passed it." What is wrong: the definition no longer says what the standard is. `plan-orchestration`, "The review, earned", is the only text that says it: "a first report that did not pass the bar with at most one fix at landing". "At most one fix at landing" is the term's meaning. Failure scenario: a session booking a step under `land` Steps 9 cannot decide the bar, and a step landed with three fixes at landing is booked as having passed. Keep: "the standard a builder's first report passes when its step lands with at most one fix at landing". Verdict: item 1 violated.
+2. Spec. `plan-terms.md:85`, time box: "the reviewer's limit, the configuration block's `review_minutes` or one the invocation names." What is wrong: "when above 0" was dropped; `refute` Rules and `plan`'s `templates/orchestrator-state.md:19` ("0 is none") make 0 no time box. Failure scenario: this plan's `review_minutes: 0` read as a limit of 0 minutes. Keep: "the configuration block's `review_minutes` when above 0, or one the invocation names". Verdict: item 1 violated.
+3. Spec. `plan-terms.md:31`, hand-back: "a builder's stop that returns its first run and a case the brief's rules get wrong, with the rule and the result." What is wrong: "before any change" was dropped; `plan-orchestration` Steps 6 and `spec`'s `templates/brief.md:20` make it what sets a hand-back apart from a report. Failure scenario: a final report that includes the first run and such a case is taken as a hand-back, and the orchestrator writes a round-0 cases ruling instead of refuting it. Keep: "a builder's stop before changing any code, returning its first run and a case the brief's rules get wrong, with the rule and the result". Verdict: item 1 violated.
+4. Spec. `plan-terms.md:59`, red line, second sense: "A red check is the stop for a failing check that no fix within the plan covers." What is wrong: at round 0 a red check was the failing check; the new text makes it the name of the stop, a change of meaning point 5 did not ask for (change standard, rule 17), which contradicts `skills/plan-orchestration/SKILL.md:277`. Failure scenario: a skill author writes "a red check" for the stop and "a red line" for the failing check in one section. Fix: say that "red check" is the word for a failing check anywhere in the plan, with "Stated in: `plan-orchestration`, "Stops"". Verdict: item 1 violated.
+5. Spec. `plan-terms.md:81`, stop, third sense: "to end a running builder or reviewer through the runner's stop tool." What is wrong: point 3 ruled "a running agent"; `plan-orchestration`, "The pace when a deadline is set", stops anything still running, a brief-check agent included. Fix: "to end a running agent through the runner's stop tool". Verdict: point 3 partial.
+6. Spec, present since round 0. `plan-terms.md:31` ("a builder's stop") against the stop entry at line 81. What is wrong: the skills use "stop" for a builder halting its work and reporting to the orchestrator (`skills/plan-orchestration/SKILL.md:80`, `spec`'s `templates/brief.md:20`), and none of the entry's senses covers it. Failure scenario: a hand-back booked as an open item for the user. Fix: add the sense, for example "A builder also stops when it halts its work and returns what it has to the orchestrator, as a hand-back does. Stated in: `plan-orchestration`, Steps 6; `spec`, `templates/brief.md`." Verdict: case "each term grepped" partial, item 1 violated.
+
+No fix in the round reaches beyond its finding, no check was removed, and every closure the round section claims reproduces, apart from Findings 1 to 5.
+
+### Declined to judge
+
+- Finding 1 conflicts with the letter of point 1 ("never carries the rule's numbers"), since the bar's meaning is a number; the orchestrator rules.
+- The script cases and the first report's ten reverts were not rerun, since no script or test changed in the round.
+- The table of terms' rows were not re-read line by line; they rest on the unchanged entry order.
+- "kind" reads "the threshold that section states" after naming two sources, "Grouping" and Steps 6, so "that section" is loosely placed.
+
+Reviewer usage over round 1: claude:opus, a fresh agent; 165498 tokens, 42 tool uses, 400 s (from the completion notice). Saved by the orchestrator from the reviewer's final message, its verification block condensed to the lines it printed.
+
+## Closed
+
+- First run, Spec 1 (entries restating rules): closed in repair round 1, point 1; the round's sweep of the other entries cut four too far (round 1, Findings 1 to 4), fixed at landing.
+- First run, Spec 2 (base, dispatch block): closed in repair round 1, point 2.
+- First run, Spec 3 (stop as ending an agent, refuter, fix round): closed in repair round 1, points 3, 4 and 6; the stop sense widened at landing (round 1, Finding 5).
+- First run, Standards 1 ("plan skills" used wider than its entry): closed in repair round 1, point 7.
+- First run, Standards 2 (sync items 4 and 7): closed in repair round 1, point 8.
+- First run, Declined to judge (semicolons; entry length): closed in repair round 1, point 5: no semicolon outside the "Stated in" lists, at most two sentences per sense.
+- First run, Declined to judge (the skill-layout bullet holding two rules): no change; its text is the brief's item 8, which the user approved with the step.
+- First run, Declined to judge (the state file's verify list and `standards`): done at landing; the verify list holds `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` after the `sync_rules.test.sh` line, and `standards` ends with `docs/glossary.md`.
+- Round 1, Finding 1 (bar): fixed at landing: "the standard a builder's first report passes when its step lands with at most one fix at landing". The number is the term's meaning, so point 1's test does not remove it.
+- Round 1, Finding 2 (time box): fixed at landing: "`review_minutes` when above 0, or one the invocation names".
+- Round 1, Finding 3 (hand-back): fixed at landing: "a builder's stop before changing any code, returning its first run and a case the brief's rules get wrong, with the rule and the result".
+- Round 1, Finding 4 (red line, second sense): fixed at landing: "A red check is a failing check of the plan's verification, wherever it runs."
+- Round 1, Finding 5 (stop, a running agent): fixed at landing: "to end a running agent through the runner's stop tool".
+- Round 1, Finding 6 (a builder's stop): fixed at landing: the stop entry gains "A builder also stops when it halts its work and returns what it has to the orchestrator, as a hand-back does. Stated in: `plan-orchestration`, Steps 6; `spec`, `templates/brief.md`."
+- Round 1, Declined to judge ("kind", "that section"): fixed at landing: "the threshold Steps 6 states".
+- Round 1, Declined to judge (the other three points): no change; none names a defect.
+- The builder's Doc text: applied at landing, `docs/dev/change-standard.md:59` reads "...; the glossary check and the ASCII check take no filter:".
+- After the fixes, `sync_rules.py . --only glossary --write` rewrote Ordo's block and the recheck printed `ok: the plan-terms block equals the template`; `checks.sh` printed `checks: 8 commands passed`.

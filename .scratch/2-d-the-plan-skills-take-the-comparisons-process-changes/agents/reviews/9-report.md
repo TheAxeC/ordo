@@ -745,3 +745,318 @@ The case: on the unchanged tree `grep -n 'glossary' skills/ordo-init/SKILL.md` e
 
 The point for the user named in the builder's prompt, whether `/ordo-init` should put `docs/glossary.md` into a new repository's `standards`: the user ruled it (open item F, option (a)), and item 12 builds it.
 
+
+## Repair round 1
+
+All eight points of the round brief (`agents/briefs/9-round-1.md`) are done as ruled. Nothing in the round could not be done as written.
+
+### Points 1 to 5: `skills/repo-setup/templates/plan-terms.md`
+
+Point 1, the eight entries the brief names: A/B, acceptance item, dead builder, kind, night rule, recurring finding, repair round, shared path. Each was changed as the brief rules. The old and new text of each is in the list below.
+
+Point 1, the same test applied to every other entry. An entry says what the term names and points at the section, and carries no rule's number, threshold or condition. These entries changed under it:
+
+- authority: dropped "`/spec` refuses a step without it" (what a skill does on a missing tag, a rule).
+- bar: dropped "with at most one fix at landing" (a number) and "under `review: earned` a failed bar puts the reviewer back" (a condition).
+- brief check: dropped "before the preparation commit" (when it runs) and the clause on how each finding is closed (a rule, which the entry finding states as its second sentence).
+- builder: dropped "runs no git command and writes in the ledger only its report" (the builder's rules).
+- case: dropped "comes before any change, a code step's case as a test and a text step's by reading" (the order and method rule of the first run) and "at least five of them" (a number).
+- delta: dropped the `refute_after_repair: no` clause (a condition).
+- executor: dropped "always for manuscript content" (a condition).
+- fix at landing: dropped the two conditions under which a fix at landing is allowed.
+- four headings: dropped "each finding with its failure scenario" (a rule on a finding's form, which the entry finding states).
+- gate: dropped "a script for a fact, a review for a judgment" (the rule of the section it cites).
+- goal: dropped "in one or two sentences" (a number).
+- hand-back: dropped "before any change when its first run finds" (a timing condition), keeping that it is a builder's stop that returns its first run and the case.
+- launch commit: dropped the timing clause under each executor (a condition).
+- look: dropped "when the step changes a view" and "an empty `look:` means no look" (conditions).
+- loop: dropped "until a pause or until nothing unblocked is left" (the loop's end condition), and the inside-a-step sense "up to `repair_rounds` times, or once more under the round cap's exception" became "within the round cap" (a number and a condition).
+- Not yet specified: dropped "`/plan` refuses such an entry until `/roadmap add <entry>` names its gate" (a rule).
+- orchestrator: dropped "writes no step code beyond a fix at landing unless the step's executor is `inline`" (a rule with its condition).
+- pause: dropped "nothing is dispatched during it" (a rule).
+- plan configuration: "the only place a project specific lives" became "which holds a repository's project specifics" ("the only place" is the rule that specifics live nowhere else).
+- premise: dropped what happens to a false premise (absorbed or a stop, a condition).
+- red line: dropped what a red line leads to (fix at landing or taken back out, conditions), and the second sense was rephrased from "A red check no fix within the plan covers is a stop" to name what a red check is.
+- resume point: dropped "each holding only the paths its session wrote since the last one" (a rule on the commit's contents).
+- reviewer: dropped "never the builder" (a rule).
+- roadmap entry: dropped "that never changes" (a rule on numbering).
+- state file: dropped "rewritten before every step commit and read first after a compaction" (when it is written and read).
+- stop: dropped "booked as ... committed as a resume point" and "under the loop it blocks only its own step" (what a stop leads to), keeping "which leaves an open item in the state file and under the step's Step 0".
+- taken back out of main: dropped "its worktree and branches are kept, its failure goes into its Step 0, and `/spec` saves its work as a patch and prepares it again" (the procedure that follows), keeping what the term names: the changes removed from main and `landing: backed-out`.
+- time box: dropped "when above 0" (a threshold) and "kept by reporting what was checked and naming what was not" (a rule).
+- user-visible choice: dropped "a brief never takes one, and `/spec` stops on it" (the rule); "under `libraries: check`" is kept because without it the entry would say every replaceable library is the user's choice, which `spec` Stops does not say.
+- verdict: dropped "a verdict of violated, partial or unmet naming its finding" (a rule on the verdict's form).
+- verify list: dropped "run in order ... from the root of the checkout it checks, the worktree and then main" and "the lines it prints are what a report or a booking quotes" (procedure and a rule), keeping the key and the script that runs it.
+- wip: dropped "when something is staged" (a condition).
+- worktree: dropped "removed by `/land` after the landing and kept after a step is taken back out of main" (what happens to it, conditions).
+
+Kept under the test, with the reason. brief, ledger, landing, finding and open item: the brief names them as samples, and what they carry is the contents of a file or a report and how an item closes, not a number, a threshold or a condition. plan skills: point 7 keeps the entry as it is. ledger keeps "the builder writes only its report" in the worktree's copy, because that sentence says what the copy holds. rules file keeps "Every brief points at it first" and verification page keeps "`/plan` copies them into the verify list", because each says where the named thing is used, with no number or condition. dispatch entry keeps its list of keys, because the keys are what the entry is.
+
+Point 2. base: "; the base binaries are the build `/spec` stages from it for the A/B" is dropped and its `spec` source reads Steps 6 and 7. dispatch block: its "Stated in" reads `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`, and its definition is unchanged. `skills/plan/templates/orchestrator-state.md` line 26 is the `dispatch: none` line that defines the block.
+
+Point 3. stop gains a third sense: "To stop an agent is also to end a running builder or reviewer through the runner's stop tool. Stated in: `land`, Steps 1; `plan-orchestration`, "The pace when a deadline is set"." The lines using it: `skills/land/SKILL.md:45` ("An agent is stopped through the runner's stop tool.") and `skills/plan-orchestration/SKILL.md:263` ("At the cut-off anything still running is stopped.").
+
+Point 4. reviewer gains "It is also called the refuter." and `plan-retro`, the introduction, in its sources. The line using it: `skills/plan-retro/SKILL.md:10` ("A finding the refuter keeps making is a rule the builder was not given, ...").
+
+Point 5. Every definition is written without semicolons, with full stops. Each sense is at most two sentences plus its "Stated in". Where a definition joined its parts with a colon (booking, completion notice, Closed, open item, orchestrator, refusal, refuter report, state file), the colon became a comma or "holding"/"which" so that the sense stays one sentence. No fact left after points 1 to 4 was dropped: each changed entry below was read old beside new for it.
+
+The entry count is 90 and the order is unchanged: the command `diff <(grep -o '^- \*\*[^*]*\*\*' plan-terms.round0.md) <(grep -o '^- \*\*[^*]*\*\*' skills/repo-setup/templates/plan-terms.md)` printed nothing, where `plan-terms.round0.md` is the copy of the file before the round. The bullet line numbers of the table of terms above therefore hold. The section "`skills/repo-setup/templates/plan-terms.md`, whole" above shows the file before this round; the list below gives every entry that changed.
+
+The table of terms above changes in these rows: base, "Stated in" `spec`, Steps 6 and 7; `land`, Steps 4; `refute`, "What it reads" 5. dispatch block, "Stated in" `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`, line `skills/plan/templates/orchestrator-state.md:26`. reviewer, "Stated in" adds `plan-retro`, the introduction. New row: reviewer (refuter), bullet `skills/repo-setup/templates/plan-terms.md:66`, `plan-retro`, the introduction, line `skills/plan-retro/SKILL.md:10`. New row: stop (an agent), bullet `skills/repo-setup/templates/plan-terms.md:81`, `land`, Steps 1; `plan-orchestration`, "The pace when a deadline is set", line `skills/land/SKILL.md:45`.
+
+Every changed entry, old beside new (produced by comparing the saved round-0 copy with the file, entry by entry):
+
+- A/B
+  - Old: **A/B**: the landing's comparison of the staged base binaries with the new build, the benchmark commands the configuration block's `bench:` names run alternately after warm-ups, at least ten runs each; an empty `bench:` means no A/B. Stated in: `land`, Steps 8; `spec`, Steps 8.
+  - New: **A/B**: the landing's comparison of the staged base binaries with the new build, by the benchmark commands the configuration block's `bench:` names. Stated in: `land`, Steps 8; `spec`, Steps 8.
+- acceptance item
+  - Old: **acceptance item**: a requirement of the brief's "What to build"; one the delta leaves unbuilt, with a fix too large for landing, is one of the two conditions that allow a round beyond `repair_rounds`. Stated in: `plan-orchestration`, Rules.
+  - New: **acceptance item**: a requirement of the brief's "What to build". Stated in: `plan-orchestration`, Rules.
+- authority
+  - Old: **authority**: the tags that end a step line of `plan.md`, `(approved)` for a step of the list the user approved when the plan opened and `(ruling <name>)` for each ruling the step rests on; `/spec` refuses a step without it. Stated in: `plan`, Rules; `spec`, "What it reads" 4 and Steps 1.
+  - New: **authority**: the tags that end a step line of `plan.md`, `(approved)` for a step of the list the user approved when the plan opened and `(ruling <name>)` for each ruling the step rests on. Stated in: `plan`, Rules; `spec`, "What it reads" 4 and Steps 1.
+- bar
+  - Old: **bar**: the standard a builder's first report meets when its step lands with at most one fix at landing; the booking and the landing report state whether it passed, and under `review: earned` a failed bar puts the reviewer back. Stated in: `land`, Steps 9 and 11; `plan-orchestration`, "The review, earned".
+  - New: **bar**: the standard a builder's first report is judged against at its step's landing. The booking and the landing report state whether the first report passed it. Stated in: `land`, Steps 9 and 11; `plan-orchestration`, "The review, earned".
+- base
+  - Old: **base**: the hash of a step's preparation commit, recorded in its dispatch entry: the worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it; the base binaries are the build `/spec` stages from it for the A/B. Stated in: `spec`, Steps 6, 7 and 8; `land`, Steps 4; `refute`, "What it reads" 5.
+  - New: **base**: the hash of a step's preparation commit, recorded in its dispatch entry. The worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it. Stated in: `spec`, Steps 6 and 7; `land`, Steps 4; `refute`, "What it reads" 5.
+- booking
+  - Old: **booking**: the record `/land` appends to `plan.md` for a landed step: what landed and where, the premise corrections, the findings raised as open items, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
+  - New: **booking**: the record `/land` appends to `plan.md` for a landed step, holding what landed and where, the premise corrections, the findings raised as open items, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
+- brief
+  - Old: **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape; a repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
+  - New: **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape. A repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
+- brief check
+  - Old: **brief check**: the check of a brief against the tree, before the preparation commit, by one fresh read-only agent on the reviewer's model (the brief-check agent), whose report is saved at `agents/reviews/<step>-brief-check.md` and each of whose findings is closed by a change to the brief or is a stop. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+  - New: **brief check**: the check of a brief against the tree by one fresh read-only agent on the reviewer's model, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+- builder
+  - Old: **builder**: the agent that builds one step in the step's worktree under the brief and the rules file, runs no git command and writes in the ledger only its report; under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+  - New: **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+- case
+  - Old: **case**: an example under a brief's "Cases", an input with its expected result, each must-pass and must-refuse example the step's text gives and, for a code step, each input it implies; the builder's first run of every case on the unchanged tree comes before any change, a code step's case as a test and a text step's by reading. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run, at least five of them. Stated in: `spec`, Steps 4.
+  - New: **case**: an example under a brief's "Cases", an input with its expected result, from the must-pass and must-refuse examples the step's text gives and, for a code step, the inputs it implies. The first run is the run of every case on the unchanged tree. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run. Stated in: `spec`, Steps 4.
+- Closed
+  - Old: **Closed**: the heading of a report that holds each finding's disposition: in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+  - New: **Closed**: the heading of a report that holds each finding's disposition, in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+- completion notice
+  - Old: **completion notice**: what the runner reports when an agent ends: its final message, and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+  - New: **completion notice**: what the runner reports when an agent ends, its final message and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+- dead builder
+  - Old: **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived; it is reported to the user, and a continuation builder takes over its worktree only when the user says so. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+  - New: **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+- delta
+  - Old: **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base; with `refute_after_repair: no` the orchestrator's read of the delta stands in for a refutation. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
+  - New: **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
+- dispatch block
+  - Old: **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9.
+  - New: **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+- dispatch entry
+  - Old: **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared; the orchestrator adds the builder's identity under `session_id` (its agent id, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7; `land`, Steps 2 and 6.
+  - New: **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7; `land`, Steps 2 and 6.
+- executor
+  - Old: **executor**: who builds a step: `agent`, a builder dispatched in the worktree; `inline`, the orchestrating session itself; `academic-paper`, that skill, always for manuscript content; the configuration block holds the plan's default and the orchestrator chooses per step. Stated in: `plan-orchestration`, Steps 4; `plan`, Steps 4.
+  - New: **executor**: who builds a step: `agent`, a builder dispatched in the worktree, `inline`, the orchestrating session itself, or `academic-paper`, that skill. The configuration block holds the plan's default, and the orchestrator chooses per step. Stated in: `plan-orchestration`, Steps 4; `plan`, Steps 4.
+- finding
+  - Old: **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item; a finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
+  - New: **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item. A finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
+- fix at landing
+  - Old: **fix at landing**: a fix made on main during `/land`, for a red line a fix inside the brief closes or for a small finding of the last round's refutation inside the brief, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
+  - New: **fix at landing**: a fix made on main during `/land`, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
+- four headings
+  - Old: **four headings**: the headings a reviewer's findings go under, Spec, Proof, Standards and Behaviour, each finding with its failure scenario. Stated in: `refute`, "The four headings".
+  - New: **four headings**: the headings a reviewer's findings go under, Spec, Proof, Standards and Behaviour. Stated in: `refute`, "The four headings".
+- gate
+  - Old: **gate**: the check that proves a roadmap entry done, a command from the verification page, a test and what it asserts, or an observable result, which `/plan` copies into `plan.md`'s "## Gate"; a step's own gate is the check on its step line. Stated in: `roadmap`, "Steps / add" 2 and 3; `plan`, Steps 2; `spec`, Steps 4. Also any check that decides whether work passes: a script for a fact, a review for a judgment. Stated in: `repo-setup`, `templates/shared-rules.md`, "Scripts compute facts; judgment is read".
+  - New: **gate**: the check that proves a roadmap entry done, a command from the verification page, a test and what it asserts, or an observable result, which `/plan` copies into `plan.md`'s "## Gate". A step's own gate is the check on its step line. Stated in: `roadmap`, "Steps / add" 2 and 3; `plan`, Steps 2; `spec`, Steps 4. Also any check that decides whether work passes. Stated in: `repo-setup`, `templates/shared-rules.md`, "Scripts compute facts; judgment is read".
+- goal
+  - Old: **goal**: what exists when a roadmap entry is done, in one or two sentences, copied into `plan.md`; in the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
+  - New: **goal**: what exists when a roadmap entry is done, copied into `plan.md`. In the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
+- hand-back
+  - Old: **hand-back**: a builder's stop before any change when its first run finds a case the brief's rules get wrong, returning the first run and that case with the rule and the result; the orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
+  - New: **hand-back**: a builder's stop that returns its first run and a case the brief's rules get wrong, with the rule and the result. The orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
+- in flight
+  - Old: **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`; `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+  - New: **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`. The configuration block's `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+- kind
+  - Old: **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings; a kind is recurring when it appears in at least three steps or two plans, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+  - New: **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold that section states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+- launch commit
+  - Old: **launch commit**: the commit of a dispatch entry once its builder's identity is in it, right after the launch under `agent` and before the build under `inline` and `academic-paper`; it is a resume point. Stated in: `plan-orchestration`, Steps 4.
+  - New: **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
+- ledger
+  - Old: **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`; it is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
+  - New: **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`. It is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
+- look
+  - Old: **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state, when the step changes a view; an empty `look:` means no look. Stated in: `land`, "The look".
+  - New: **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state. Stated in: `land`, "The look".
+- loop
+  - Old: **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another, until a pause or until nothing unblocked is left. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated up to `repair_rounds` times, or once more under the round cap's exception. Stated in: `plan-help`, "The sequence, printed verbatim".
+  - New: **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `plan-help`, "The sequence, printed verbatim".
+- night rule
+  - Old: **night rule**: the limit the loop keeps when the user sets a time by which no agent may run: dispatch only what fits before the cut-off, and at the cut-off stop what runs and pause the plan. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+  - New: **night rule**: the limit the loop keeps when the user sets a time by which no agent may run. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+- Not yet specified
+  - Old: **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first; `/plan` refuses such an entry until `/roadmap add <entry>` names its gate. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
+  - New: **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
+- open item
+  - Old: **open item**: an entry of the state file's open items: a decision only the user can make, with its options, their pros and cons and one recommendation, closed by the user's ruling; or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
+  - New: **open item**: an entry of the state file's open items. It is a decision only the user can make, with its options, their pros and cons and one recommendation, closed by the user's ruling, or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
+- orchestrator
+  - Old: **orchestrator**: the session that runs a plan: it reads, decides, invokes the skills, lands and books, and writes no step code beyond a fix at landing unless the step's executor is `inline`; run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+  - New: **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+- pause
+  - Old: **pause**: a halt of the loop the user asks for, which holds until the user lifts it; nothing is dispatched during it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
+  - New: **pause**: a halt of the loop the user asks for, which holds until the user lifts it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
+- plan configuration
+  - Old: **plan configuration**: `.agents/plan.yaml`, the only place a project specific lives, which every plan skill reads; `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
+  - New: **plan configuration**: `.agents/plan.yaml`, which holds a repository's project specifics and which every plan skill reads. `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
+- premise
+  - Old: **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe; a false one the plan can absorb is corrected in `plan.md`, and one it cannot is a stop. Stated in: `spec`, "What it reads" 5 and Steps 2.
+  - New: **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe. Stated in: `spec`, "What it reads" 5 and Steps 2.
+- preparation commit
+  - Old: **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists; its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
+  - New: **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists. Its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
+- recurring finding
+  - Old: **recurring finding**: a cause of findings that `plan-orchestration`'s pass, every tenth landed step and at any pause, finds in three or more steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+  - New: **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+- red line
+  - Old: **red line**: a verification line that fails on main after the cherry-pick; one a fix inside the brief closes is a fix at landing, and any other takes the step back out of main. Stated in: `land`, Steps 6. A red check no fix within the plan covers is a stop. Stated in: `plan-orchestration`, "Stops".
+  - New: **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is the stop for a failing check that no fix within the plan covers. Stated in: `plan-orchestration`, "Stops".
+- refusal
+  - Old: **refusal**: a skill's end without a decision for the user: it names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+  - New: **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+- refuter report
+  - Old: **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`: the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, with a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
+  - New: **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`, with the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, and a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
+- repair round
+  - Old: **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry; the round cap allows at most `repair_rounds`, and one more only when the delta leaves a verification command red or an acceptance item unbuilt with a fix too large for landing. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
+  - New: **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry. The number of rounds a step gets is the round cap. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
+- resume point
+  - Old: **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover, each holding only the paths its session wrote since the last one. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+  - New: **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+- reviewer
+  - Old: **reviewer**: the fresh session or agent that refutes a built step without changing anything, never the builder, on the model the configuration block's `reviewer:` names, which the brief-check agent also runs on. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models".
+  - New: **reviewer**: the fresh session or agent that refutes a built step without changing anything, on the model the configuration block's `reviewer:` names, which the brief-check agent also runs on. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction.
+- roadmap entry
+  - Old: **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number that never changes; `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
+  - New: **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
+- rules file
+  - Old: **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported; every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+  - New: **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported. Every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+- ruling
+  - Old: **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session, a ruling that adds or splits a step also written in the Rulings section of `plan.md` as a line ending with "(the user)" and named by a step's `(ruling <name>)` tag. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
+  - New: **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
+- session, the
+  - Old: **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand; its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+  - New: **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+- shared path
+  - Old: **shared path**: a file the briefs of two steps in flight both name, allowed only when the orchestrator judges the merge at landing simple and names it under `shared_paths:` in the later step's dispatch entry. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+  - New: **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+- state file
+  - Old: **state file**: the plan's `orchestrator-state.md`: the configuration block, the dispatch block, the open items, the closed items and the current position, rewritten before every step commit and read first after a compaction. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+  - New: **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+- step
+  - Old: **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority; the orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+  - New: **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+- stop
+  - Old: **stop**: a halt for a decision that is the user's, booked as an open item in the state file and under the step's Step 0 and committed as a resume point; under the loop it blocks only its own step. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops".
+  - New: **stop**: a halt for a decision that is the user's, which leaves an open item in the state file and under the step's Step 0. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops". To stop an agent is also to end a running builder or reviewer through the runner's stop tool. Stated in: `land`, Steps 1; `plan-orchestration`, "The pace when a deadline is set".
+- taken back out of main
+  - Old: **taken back out of main**: what a red line no fix inside the brief closes does to a step at landing: its changes are removed from main, its dispatch entry reads `landing: backed-out`, its worktree and branches are kept, its failure goes into its Step 0, and `/spec` saves its work as a patch and prepares it again. Stated in: `land`, Steps 6; `spec`, "Steps / A step taken back out of main".
+  - New: **taken back out of main**: what a red line no fix inside the brief closes does to a step at landing. Its changes are removed from main and its dispatch entry reads `landing: backed-out`. Stated in: `land`, Steps 6; `spec`, "Steps / A step taken back out of main".
+- time box
+  - Old: **time box**: the reviewer's limit, the configuration block's `review_minutes` when above 0 or one the invocation names, kept by reporting what was checked and naming what was not. Stated in: `refute`, Rules.
+  - New: **time box**: the reviewer's limit, the configuration block's `review_minutes` or one the invocation names. Stated in: `refute`, Rules.
+- user-visible choice
+  - Old: **user-visible choice**: a choice the user owns: a public shape, a wire format, a config key or a vocabulary, and, under `libraries: check`, a library that could replace code the step would write by hand; a brief never takes one, and `/spec` stops on it. Stated in: `spec`, Steps 4 and "Stops".
+  - New: **user-visible choice**: a choice the user owns, which is a public shape, a wire format, a config key or a vocabulary, and under `libraries: check` a library that could replace code the step would write by hand. Stated in: `spec`, Steps 4 and "Stops".
+- verdict
+  - Old: **verdict**: the reviewer's judgment of each item of the brief's "What to build" (holds, violated or not applicable) and of each case (met, partial, unmet or not verifiable), a verdict of violated, partial or unmet naming its finding. Stated in: `refute`, "The verdicts".
+  - New: **verdict**: the reviewer's judgment of each item of the brief's "What to build" (holds, violated or not applicable) and of each case (met, partial, unmet or not verifiable). Stated in: `refute`, "The verdicts".
+- verification page
+  - Old: **verification page**: the page `.agents/plan.yaml`'s `verification:` names, which defines the green check with the commands every step runs; `/plan` copies them into the verify list. Stated in: `plan`, "What it reads" 3 and Steps 4; `ordo-init`, Steps 3.
+  - New: **verification page**: the page `.agents/plan.yaml`'s `verification:` names, which defines the green check with the commands every step runs. `/plan` copies them into the verify list. Stated in: `plan`, "What it reads" 3 and Steps 4; `ordo-init`, Steps 3.
+- verify list
+  - Old: **verify list**: the `verify:` key of the configuration block, run in order through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, the worktree and then main; the lines it prints are what a report or a booking quotes. Stated in: `land`, "The landing script"; `plan`, Steps 4.
+  - New: **verify list**: the `verify:` key of the configuration block, the commands the `land` skill's `templates/checks.sh <state file>` runs. Stated in: `land`, "The landing script"; `plan`, Steps 4.
+- wip
+  - Old: **wip**: the commit `/land` makes in the step's worktree of everything the builder left, the ledger root left out, when something is staged. Stated in: `land`, Steps 3.
+  - New: **wip**: the commit `/land` makes in the step's worktree of everything the builder left, the ledger root left out. Stated in: `land`, Steps 3.
+- worktree
+  - Old: **worktree**: a step's git worktree at `<worktree_root>/<step>`, on a branch named after its folder, created from the base; the builder's only place to work, removed by `/land` after the landing and kept after a step is taken back out of main. Stated in: `spec`, Steps 7; `land`, "Removing a step's worktree".
+  - New: **worktree**: a step's git worktree at `<worktree_root>/<step>`, on a branch named after its folder, created from the base. It is the builder's only place to work. Stated in: `spec`, Steps 7; `land`, "Removing a step's worktree".
+
+60 of the 90 entries changed; the other 30 are unchanged.
+
+### Point 6: `skills/plan-orchestration/SKILL.md`
+
+- Old line 262: "- A reviewer or a fix round is dispatched only while its usual length fits before the cut-off."
+- New line 262: "- A reviewer or a repair round is dispatched only while its usual length fits before the cut-off."
+- Version, line 5: "2.10.0" became "2.10.1". `docs/academic-coverage.md` is not changed.
+
+### Point 7: "plan skills"
+
+The entry plan skills is unchanged.
+
+- `skills/repo-setup/templates/docs/glossary.md` line 3, old: "The plan skills' terms stand in the block below, which ..."
+- New: "The terms the plan skills, `roadmap`, `plan-retro`, `repo-setup` and `ordo-init` use in a sense of their own stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only." The rest of the paragraph is unchanged.
+- `skills/repo-setup/templates/CLAUDE.md` line 20, old: "- `docs/glossary.md`: the terms of this repository and of the plan skills, each in the sense the repository uses it."
+- New: "- `docs/glossary.md`: the terms this repository and the skills it is set up with use in a sense of their own, each defined once."
+
+### Point 8: `skills/repo-setup/SKILL.md`, "Steps / sync" item 7
+
+- Old line 86: "7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing."
+- New line 86: "7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names. A no-single-block line of the same run is still drafted, as step 4 says."
+- Its two sub-bullets (lines 87 and 88) are unchanged. Step 4 of the section is line 78. Version, line 5: "1.2.0" became "1.2.1". The description is unchanged; the length command below prints 702 for it, as before the round.
+
+### Checks
+
+Commands and their output, verbatim:
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/orchestrator-state.md
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 7 commands passed
+exit 0
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+$ python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/SKILL.md"))]'
+726 skills/land/SKILL.md
+632 skills/ordo-init/SKILL.md
+386 skills/plan-help/SKILL.md
+788 skills/plan-orchestration/SKILL.md
+616 skills/plan-retro/SKILL.md
+477 skills/plan/SKILL.md
+951 skills/refute/SKILL.md
+702 skills/repo-setup/SKILL.md
+997 skills/roadmap/SKILL.md
+1022 skills/spec/SKILL.md
+$ { git diff --name-only; git ls-files --others --exclude-standard; } | tr '\n' '\0' | xargs -0 env LC_ALL=C grep -n '[^ -~]'
+exit 1 (1: no line matched)
+$ grep -o '^- \*\*[^*]*\*\*' skills/repo-setup/templates/plan-terms.md | sed 's/^- \*\*//;s/\*\*$//' | tr -d '`' | LC_ALL=C sort -f -c && echo sorted
+sorted
+$ python3 -c 'import re; t=open("skills/repo-setup/templates/plan-terms.md").read(); d=re.sub(r"Stated in: .*?\.(?= |$)","",t,flags=re.M); print("semicolons outside Stated in:", d.count(";"), "semicolons in all:", t.count(";"))'
+semicolons outside Stated in: 0 semicolons in all: 61
+$ wc -w skills/repo-setup/templates/plan-terms.md
+    3858 skills/repo-setup/templates/plan-terms.md
+$ grep -n -e 'at least' -e 'every tenth' -e 'three or more' -e 'only when' skills/repo-setup/templates/plan-terms.md
+exit 1 (1: no line matched)
+```
+
+### Line counts after the round
+
+`wc -l`: `skills/repo-setup/templates/plan-terms.md` 92, `docs/glossary.md` 108, `skills/repo-setup/templates/docs/glossary.md` 13, `skills/repo-setup/templates/CLAUDE.md` 33, `skills/repo-setup/SKILL.md` 159, `skills/plan-orchestration/SKILL.md` 318. The other files of the step are unchanged in this round. `git diff --numstat` (added, removed) for the tracked files this round touched: `skills/plan-orchestration/SKILL.md` 2 2, `skills/repo-setup/SKILL.md` 22 17, `skills/repo-setup/templates/CLAUDE.md` 1 0. `wc -w skills/repo-setup/templates/plan-terms.md`: 3858 words, against 4343 before the round.

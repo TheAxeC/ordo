@@ -17,6 +17,7 @@
 <- `docs/dev/coding-standards.md`: how code is written.>
 - `docs/dev/prose-standard.md`: how every comment, page and message is written.
 - `docs/roadmap.md`: what is open and in what order. Answer "what is left?" from this file, never from memory.
+- `docs/glossary.md`: the terms this repository and the skills it is set up with use in a sense of their own, each defined once.
 - `docs/adr/`: the decisions, with the alternatives rejected. A change that contradicts an ADR is a rule clash.
 
 ## Build

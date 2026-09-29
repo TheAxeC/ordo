@@ -8,12 +8,13 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+- python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
-standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
+standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
@@ -30,20 +31,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 9
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2d-9
-  base: 888f8e65faebaf690ed7c8b6846034df8552f6cd
-  launched: 2026-09-29
-  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-report.md
-  brief_check: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-brief-check.md (run 1 143632 tokens, 39 tool uses, 387 s; run 2 161763 tokens, 32 tool uses, 475 s)
-  landing: not-started
-  round: 1
-  session_id: adbfbd5f3e5b016d9
-  builder_usage: first run 337615 tokens, 75 tool uses, 1328 s
-  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-refuter.md (first run: 258063 tokens, 59 tool uses, 665 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -82,7 +70,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 8 done: main tagged v2.4.0 at 5be7e73 and the installed skills pinned to it.
-- Verified: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.4.0`.
-- In flight: step 9, the glossary; its builder runs in `.agents/worktrees/2d-9`.
-- Open on Axel's side: nothing.
+- 2026-09-29. Step 9 landed: the glossary, `docs/glossary.md` and the `repo-setup` template kept in step by `/repo-setup sync`.
+- Verified: `sh skills/land/templates/checks.sh` on this state file printed `checks: 8 commands passed` on main after the fixes at landing.
+- Next: step 10, the closing: every clause of the gate run, `/roadmap done 2.D`, the ledger moved to `.scratch/archive/`, and v2.5.0 tagged and pinned after your yes.
+- Open on Axel's side: the read of step 9's brief-check report and refuter report (the step's check), and the yes to tag and pin v2.5.0.

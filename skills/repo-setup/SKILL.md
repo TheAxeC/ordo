@@ -1,19 +1,19 @@
 ---
 name: repo-setup
-description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the building page, a roadmap and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block with the template and rewrites it after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules."
+description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
 metadata:
-  version: "1.1.2"
+  version: "1.2.1"
 ---
 
 # Set up a repository
 
-`/repo-setup` sets up a new repository in the shape the plan skills expect, or keeps an existing repository's shared-rules block equal to the template. It leaves behind the approved tree, committed when the repository's commit rule allows it, or the synced block.
+`/repo-setup` sets up a new repository in the shape the plan skills expect, or keeps an existing repository's shared-rules block and its glossary's plan-terms block equal to their templates. It leaves behind the approved tree, committed when the repository's commit rule allows it, or the synced blocks.
 
 ## Quick start
 
 ```
 /repo-setup [<path>]          a new repository at <path> (default: the current folder, which must hold no tracked file)
-/repo-setup sync [<path>]     an existing repository: its shared-rules block against the template
+/repo-setup sync [<path>]     an existing repository: its shared-rules block and its glossary's plan-terms block against their templates
 ```
 
 ## Use instead
@@ -25,10 +25,10 @@ metadata:
 
 ## What it reads
 
-1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
+1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
 2. The user's answers to "The questions".
 3. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
-4. For `sync`, the repository's `CLAUDE.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` for the exit-2 draft.
+4. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
 
 ## Steps
 
@@ -36,8 +36,10 @@ metadata:
    - A folder with tracked files is a refusal ("Stops").
 2. Ask "The questions", together, in plain prose, each with its default in brackets ("Stops").
 3. Draft "The tree", every file with its full text.
+   - The plan-terms block of `docs/glossary.md` is filled from `templates/plan-terms.md`, as the shared-rules block of `CLAUDE.md` is from `templates/shared-rules.md`.
    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
-   - A placeholder with no answer is shown to the user.
+   - A placeholder inside an HTML comment that shows an entry's form, as in the roadmap's and the glossary's, is written as it is, since it is the form and not a value.
+   - Any other placeholder with no answer is shown to the user.
      - It is never written as `<...>`.
 4. Show the draft, the tree and every file's text together ("Stops").
 5. Write the files the user approved.
@@ -68,18 +70,20 @@ metadata:
 
 ### sync
 
-1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`; steps 2 to 9 follow its exit status and, on exit 2, its `error:` line.
-2. Exit 0: the block equals the template; nothing to do.
-3. Exit 1: the block differs; show the diff, for the user's ruling per hunk ("Stops").
+1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of `docs/glossary.md`; steps 2 to 9 follow its exit status and, on exit 2, its `error:` lines.
+2. Exit 0: both blocks equal their templates; nothing to do.
+3. Exit 1: a block differs; show the diff of each block that differs, for the user's ruling per hunk ("Stops").
    - The template's text goes into the repository: `--write`, after the approval.
-   - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` in this skill's folder, after which every repository set up from it differs until it is synced.
-4. Exit 2 with `error: CLAUDE.md has no single shared-rules block`: draft the change.
-   - The block inserted after the opening paragraph.
+   - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` or `templates/plan-terms.md` in this skill's folder, after which every repository set up from it differs until it is synced.
+4. Exit 2 with `error: CLAUDE.md has no single shared-rules block` or `error: docs/glossary.md has no single plan-terms block`: draft the change for each block the lines name.
+   - The shared-rules block inserted after the opening paragraph of `CLAUDE.md`.
    - Each rule of the existing `CLAUDE.md` that the block now states, listed for removal with the block rule that replaces it.
    - A rule that differs in substance, kept in Project rules and named.
+   - With no `docs/glossary.md`, the file written from `templates/docs/glossary.md`, its plan-terms block filled from `templates/plan-terms.md`.
+   - With a `docs/glossary.md` that has no single block, the plan-terms block inserted after its opening paragraph, and each existing entry that the block now defines listed for removal.
 5. Show the drafted change ("Stops").
 6. Write it once the user approves.
-7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing.
+7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names. A no-single-block line of the same run is still drafted, as step 4 says.
    - Show the line with the file it names ("Stops").
    - The file named in the line is fixed first, by the user or with the user's approval.
 8. After a written draft or a fixed file: run the check again, until it exits 0.
@@ -110,6 +114,7 @@ docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md
 docs/dev/coding-standards.md     only when question 6 gave one
 docs/dev/building.md             written by /ordo-init from the build files
 docs/roadmap.md                  the roadmap skill's templates/roadmap.md
+docs/glossary.md                 templates/docs/glossary.md, the plan-terms block filled from templates/plan-terms.md
 docs/adr/README.md               templates/docs/adr/README.md
 docs/adr/template.md             templates/docs/adr/template.md
 src/                             the source tree, with the build files for the kind as far as question 3 fixed them
@@ -124,7 +129,7 @@ utils/                           scripts the build and the checks run
 | The questions | Every setup, at Steps 2 | The eight questions, each with its default | The user's answers |
 | The draft | Every setup, at Steps 4 | The tree and every file's text | The user's approval or correction |
 | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
-| The drafted sync change | `sync` exits 2 with the `error:` line of Steps / sync 4 | The change Steps / sync 4 drafts | The user's approval |
+| The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block | The change Steps / sync 4 drafts | The user's approval |
 | A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
 | No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 12 or Steps / sync 9 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
 | Tracked files | The folder for a new repository holds tracked files | A refusal that names `/repo-setup sync` and `/ordo-init` | One of those, or a folder with no tracked file |
@@ -139,13 +144,13 @@ utils/                           scripts the build and the checks run
 | A build file for something the user did not name | It fixes a choice nobody made | See Rules: build files only for what the user names |
 | A coding rule the user did not state | The repository then binds builders to something nobody decided | See Rules: the skill never invents a coding rule |
 | The plan skills installed per project | Two copies load, and the project's copy drifts from the user's | See Rules: the plan skills are installed per user |
-| A `<...>` placeholder written into a file | The file then states something nobody filled in | See Steps 3 |
+| A `<...>` placeholder written into a file, other than one inside an HTML comment that shows an entry's form | The file then states something nobody filled in | See Steps 3 |
 
 ## Rules
 
 - Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it.
 - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
-- The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` the user rules on in `sync`.
+- The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on in `sync`.
 - A page it writes states rules the user or a template gave.
   - It never adds a rule of its own.
 - The skill never invents a coding rule.

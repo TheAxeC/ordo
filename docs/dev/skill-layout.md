@@ -57,6 +57,7 @@ No other `##` heading appears outside the place row 6 gives it.
 
 - A rule states the behaviour wanted: a rule written as a prohibition names the behaviour to do instead, in the same bullet or in the Do instead cell of its Anti-patterns row, since a bare prohibition draws attention to what it forbids.
 - One meaning has one place, as "Where a rule goes" says for a rule.
+- A term that `docs/glossary.md` defines is used only in a sense it defines there. A skill that needs a new term, or a term in a new sense, adds or changes its entry in `skills/repo-setup/templates/plan-terms.md` first, and `docs/glossary.md`'s block is synced from it.
 - A sentence stays only when it changes what the reader does from what they would do without it. A sentence that restates a default, praises, or explains what the reader already knows is cut.
 - Each item of Steps ends on its completion criterion: what is true, or what exists, when the step is done.
 - Material a step needs only in some runs (a long format, a table of cases, a protocol) goes in a file `references/<name>.md` beside `SKILL.md`, named by its path from the step that reads it. Reference material goes in `references/`, never in `templates/`, which holds the files a skill copies into a repository or runs from its own folder.
