@@ -38,6 +38,7 @@ dispatch: none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: the rewritten rules approved by the user on reading their diff (the gate's approval); the user's yes to tag and pin v2.3.0.
 - 2026-09-29: open item E, the word "script" in the template rules: ruled (a), "code" in the two template files, applied at step 5's landing.
 - 2026-09-29: step 7's roadmap diff approved by the user and written (51ca1a5).
 - 2026-09-29: open item C, the ASCII check's exit status and `__pycache__`: ruled (a), step 5 is widened to fix both.
@@ -72,5 +73,5 @@ dispatch: none
 - 2026-09-29. Steps 1 to 7 done. Step 5: the rule "scripts compute facts; judgment is read" in both change standards and the shared rules, the rules and skills rewritten under it, the ASCII check fixed, open item E applied. Step 7: the roadmap change the user approved, commit 51ca1a5. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
 - Next step: 8, the closing: the user reads and approves the rewritten rules (the gate), every clause of the gate is run, `/roadmap done 2.C`, the ledger archived, then v2.3.0 tagged and pinned on the user's yes.
-- Open on Axel's side: the reading and approval of the rewritten rules (`git diff 659c1ee <landing commit>`, and the builder's report, "Old and new text" and "User-visible changes"); then the yes to tag and pin v2.3.0.
+- Step 8 under way: every clause of the gate run on main at 566a198 and passed; the `/roadmap done 2.C` change drafted and shown to the user. Open on Axel's side: the approval of that roadmap change.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
