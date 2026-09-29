@@ -72,6 +72,6 @@ dispatch: none
 
 - 2026-09-29. Plan 2.C closed: steps 1 to 8 done; roadmap entry 2.C marked done (5a864fd); this folder archived; v2.3.0 tagged and pinned on the user's yes.
 - Verified: every clause of the gate on main at 566a198; `sh skills/land/templates/checks.sh` on this state file, `checks: 7 commands passed`, exit 0.
-- Next: roadmap entries 3 onward are drafted again from their sources, entries 2.D to 2.H first.
+- Next: `/plan 2.D`, the next open roadmap entry; entries 3 and 4 are drafted again from their sources, entry 3 by the real run of 2.E's gate.
 - Open on Axel's side: nothing.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
