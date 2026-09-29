@@ -30,19 +30,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2d-1
-  base: 8bb98e80a01c23d4dd55eb42499b6b0bbd5c9dc8
-  launched: 2026-09-29
-  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/1-report.md
-  landing: not-started
-  round: 1
-  session_id: aa7c9f7235df0acd8
-  builder_usage: round 0, 100397 tokens, 23 tool uses, 270 s
-  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/1-refuter.md, first run, 110523 tokens, 22 tool uses, 277 s
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -74,7 +62,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Plan opened; nothing landed. Main at the opening commit, working tree clean.
-- Verified: `sh skills/land/templates/checks.sh` on this state file on main, before the opening commit.
-- In flight: step 1, the writing rules for skill text; repair round 1 sent to its builder in `.agents/worktrees/2d-1`.
+- 2026-09-29. Step 1 landed: the writing rules for skill text in `docs/dev/skill-layout.md`, `/spec`'s description at 999 characters.
+- Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
+- Next step: 2, `/refute` takes the verdict form. Its brief also covers `/land`'s "The step not ready" and `/plan-retro`'s rule on what counts as a finding, which read the refuter report.
 - Open on Axel's side: open item A.

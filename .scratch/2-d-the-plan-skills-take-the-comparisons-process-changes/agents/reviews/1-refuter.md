@@ -49,3 +49,52 @@ None.
 - Whether each of the nine other descriptions satisfies the new rule on first words; the report states they do.
 - Whether the `roadmap` description's mention of `/plan` breaks the older rule "It names no neighbouring skill": outside this step.
 - The meaning of "one trigger per case" in the source the ruling cites: the clones are not kept.
+
+## Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent; 110533 tokens, 21 tool uses, 204 s (from the completion notice). The round's delta read as `git diff 8bb98e8` against `agents/reviews/1-round-0.diff`.
+
+```
+checks.sh on the worktree: the six PASS lines, the ASCII check with no output, checks: 7 commands passed, exit 0
+The length command: 726 land, 632 ordo-init, 386 plan-help, 788 plan-orchestration, 616 plan-retro, 386 plan, 775 refute, 626 repo-setup, 630 roadmap, 999 spec
+LC_ALL=C grep -n '[^ -~]' docs/dev/skill-layout.md skills/spec/SKILL.md: nothing
+git diff 8bb98e8 --numstat: 17 2 docs/dev/skill-layout.md, 2 2 skills/spec/SKILL.md
+Semicolons in running prose, the reviewer's own count: base 2 in 429 words, now 2 in 753 words
+```
+
+### Round items
+
+Ruling 1 closed (line 64; the table of ten descriptions reproduced). Ruling 2 closed (bullet 58 unchanged). Ruling 3 not sent (open item A). Ruling 4 closed (line 62, the clause word for word, and it matches `ls skills/*/templates/`). Ruling 5 closed as dictated (see Standards 1). Ruling 6 closed (line 3; the reread of rule 14 holds). Ruling 7 closed (lines 60 and 64). Every changed line maps to a ruling; no check removed; the spec file unchanged by the round.
+
+### Spec
+
+None.
+
+### Proof
+
+1. The report's "Doc text" names two descriptions that name a neighbouring skill (roadmap, repo-setup); `skills/plan-help/SKILL.md:3` lists "(open, spec, build, refute, close, land, and the loop inside a step)", which may be a third, a reading call the report does not state.
+
+### Standards
+
+1. Row 6 of "Sections, in order" (line 33) now says reference sections hold material "that every run reads", and bullet 63 of "Writing for an agent" says the same: one rule in two places ("Where a rule goes"; the page's Anti-patterns row "The same rule written in two sections"; change-standard rule 19). From the ruling's dictated text; small and inside the brief.
+
+### Behaviour
+
+None.
+
+### Not checked
+
+- The meaning of "one phrase for each case": open item A.
+- Whether "next step" of plan-orchestration could match a request meant for `/spec` or `/plan-help`.
+- The builder's own semicolon counter, not visible; reproduced with the reviewer's own count.
+
+## Closed
+
+- First run, Spec 1 (the scope of the section): closed in repair round 1, ruling 1; the builder's scope stands.
+- First run, Spec 2 (the first bullet): closed in repair round 1, ruling 2, no change.
+- First run, Spec 3 (one trigger per case): raised to the user as open item A; applied on main when ruled.
+- First run, Spec 4 (the `templates/` clause): closed in repair round 1, ruling 4.
+- First run, Standards 1, 2, 3: closed in repair round 1, rulings 5, 6, 7.
+- Round 1, Proof 1 (a third description naming a neighbour): no change; `skills/plan-help/SKILL.md`'s description lists the commands it prints, which is what the skill produces, not a pointer to a neighbouring skill for another case.
+- Round 1, Standards 1 (row 6 and bullet 63 state one rule twice): fixed at landing; row 6's cell names the material and points at the limit "Writing for an agent" sets, and bullet 63 states the limit once.
+- The report's "Doc text", two descriptions naming a neighbouring skill: applied at landing; `skills/roadmap/SKILL.md` "Keep the roadmap, the ordered list of work a plan is opened for:" and `skills/repo-setup/SKILL.md` "and the plan configuration .agents/plan.yaml.", each at version 1.1.1.

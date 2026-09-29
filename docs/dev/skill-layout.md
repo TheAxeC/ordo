@@ -1,6 +1,6 @@
 # The skill layout
 
-Every `skills/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill. The prose inside follows `skills/repo-setup/templates/docs/dev/prose-standard.md`.
+Every `skills/<name>/SKILL.md` follows this layout, so a reader finds the same thing in the same place in every skill. The section "Writing for an agent" binds a skill's text as that section's last bullet says. The prose inside follows `skills/repo-setup/templates/docs/dev/prose-standard.md`.
 
 ## Frontmatter
 
@@ -15,6 +15,10 @@ metadata:
 
 - `name` equals the folder's name.
 - `description` is one paragraph: what the skill does, what it produces, then `Triggers on:` and the phrases. It names no neighbouring skill; that is the Use instead section's job.
+- `description` is at most 1,024 characters, counted as the length of its YAML value once parsed: `python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/SKILL.md"))]'` prints each skill's count.
+- The first words of `description` name what the skill does, in the phrase a reader or a model matches a request on.
+- `Triggers on:` lists one phrase for each case the skill is for.
+- A phrase for a case a neighbouring skill is for goes in that skill's `Triggers on:`, not in this one.
 - The version lives in `metadata.version` only. The text of the skill carries no version, date or change history.
 
 ## Sections, in order
@@ -26,7 +30,7 @@ metadata:
 | 3 | `## Use instead` | yes | A table with the columns When and Use: the situations where a neighbouring skill is the right one. |
 | 4 | `## What it reads` | yes | A numbered list, one input per item. An input whose absence is a refusal says so in its item. |
 | 5 | `## Steps` | yes | A numbered list in execution order, one action per item. A skill with modes or phases gives each a `### <name>` subsection with its own numbered list. |
-| 6 | Reference sections | no | Any number of `## <label>` sections for material the steps point at: a script, a file format, a launch command. Each heading is a noun-phrase label. |
+| 6 | Reference sections | no | Any number of `## <label>` sections for material the steps point at (a script, a file format, a launch command), within the limit "Writing for an agent" sets for them. Each heading is a noun-phrase label. |
 | 7 | `## Stops` | yes | A table with the columns Stop, When, What it shows and What resumes it. A skill that never stops has one row that says so. |
 | 8 | `## Anti-patterns` | yes | A table with the columns Anti-pattern, Why it fails and Do instead. |
 | 9 | `## Rules` | yes | A bulleted list, one rule per bullet. |
@@ -49,9 +53,20 @@ No other `##` heading appears outside the place row 6 gives it.
 - A code block holds commands, file formats and printed output, and carries a language tag where one applies.
 - Bold marks a list item's label (`- **Label.** ...`) and nothing else.
 
+## Writing for an agent
+
+- A rule states the behaviour wanted: a rule written as a prohibition names the behaviour to do instead, in the same bullet or in the Do instead cell of its Anti-patterns row, since a bare prohibition draws attention to what it forbids.
+- One meaning has one place, as "Where a rule goes" says for a rule.
+- A sentence stays only when it changes what the reader does from what they would do without it. A sentence that restates a default, praises, or explains what the reader already knows is cut.
+- Each item of Steps ends on its completion criterion: what is true, or what exists, when the step is done.
+- Material a step needs only in some runs (a long format, a table of cases, a protocol) goes in a file `references/<name>.md` beside `SKILL.md`, named by its path from the step that reads it. Reference material goes in `references/`, never in `templates/`, which holds the files a skill copies into a repository or runs from its own folder.
+- A reference section of row 6 of "Sections, in order" holds only material every run reads.
+- The rules of this section apply to a skill's text when it is written or rewritten. Roadmap entry 23, the pruning pass, applies them to every existing skill.
+
 ## Paths and names
 
 - A file of this skill is named from the skill's folder: `templates/<file>`.
+- A file of this skill's `references/` is named `references/<file>`, as a file of its `templates/` is named `templates/<file>`.
 - A file of another skill is named with its skill: "the `plan` skill's `templates/plan.yaml`".
 - A repository path is relative to the repository root, and a key of `.agents/plan.yaml` is written as it appears there, in code.
 - A skill is named by its `name` in code: `/plan` for the invocation, `plan` for the skill.
