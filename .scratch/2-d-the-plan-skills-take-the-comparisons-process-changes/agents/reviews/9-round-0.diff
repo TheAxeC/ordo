@@ -1,0 +1,1033 @@
+diff --git a/.agents/plan.yaml b/.agents/plan.yaml
+index b789b33..53cf592 100644
+--- a/.agents/plan.yaml
++++ b/.agents/plan.yaml
+@@ -9,4 +9,4 @@ worktree_root: .agents/worktrees          # Where a step's worktree is created;
+ worker: claude:opus                       # claude:<model> of the builder, for example claude:sonnet.
+ reviewer: claude:opus                     # claude:<model> /refute runs on.
+ libraries: avoid                          # check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
+-standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md] # Files every brief tells the builder to read in full, and the reviewer holds a diff to.
++standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # Files every brief tells the builder to read in full, and the reviewer holds a diff to.
+diff --git a/README.md b/README.md
+index 3da8d32..c1d3f73 100644
+--- a/README.md
++++ b/README.md
+@@ -10,7 +10,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
+ 
+ | Skill | What it does |
+ |---|---|
+-| `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, a roadmap, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules equal to the template |
++| `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
+ | `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
+ | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
+ | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
+@@ -78,14 +78,15 @@ For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills`
+ 
+ ## Configuring a repository
+ 
+-A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the coding standard and the project skills. It then shows the whole tree and every file. After your approval it writes `CLAUDE.md`, the change and prose standards, a roadmap, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`.
++A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the coding standard and the project skills. It then shows the whole tree and every file. After your approval it writes `CLAUDE.md`, the change and prose standards, a roadmap, a glossary, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`.
+ 
+-The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->`. They are a copy of `skills/repo-setup/templates/shared-rules.md`.
++The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->`. They are a copy of `skills/repo-setup/templates/shared-rules.md`. The plan terms in `docs/glossary.md` sit between `<!-- ordo:plan-terms begin -->` and `<!-- ordo:plan-terms end -->`. They are a copy of `skills/repo-setup/templates/plan-terms.md`, and the project's own terms follow them.
+ 
+-`/repo-setup sync` compares a repository's block with the template, shows the diff and rewrites the block after approval. On a repository with no block yet, it drafts where the block goes and which existing rules it replaces. The same comparison runs on its own (`<skills>` is `~/.claude/skills`, or `skills/` in a clone):
++`/repo-setup sync` compares both blocks with their templates, shows the diff of each block that differs and rewrites it after approval. On a repository with no block yet, it drafts where the block goes and which existing rules or glossary entries it replaces. The same comparison runs on its own (`<skills>` is `~/.claude/skills`, or `skills/` in a clone), and `--only glossary` compares the plan-terms block alone, for a repository whose `CLAUDE.md` has no shared-rules block:
+ 
+ ```sh
+ python3 <skills>/repo-setup/templates/sync_rules.py <repository>
++python3 <skills>/repo-setup/templates/sync_rules.py <repository> --only glossary
+ ```
+ 
+ An existing repository opts in with `.agents/plan.yaml` at its root. Run `/ordo-init` from the repository root. It drafts the file from the repository and shows it, with any page it would create and the `.gitignore` lines it would add. It writes after you approve.
+diff --git a/docs/dev/building.md b/docs/dev/building.md
+index 0593a3c..e230dba 100644
+--- a/docs/dev/building.md
++++ b/docs/dev/building.md
+@@ -6,7 +6,8 @@ Ordo has no build step. The green check is every command below passing, each run
+ sh skills/land/templates/land.test.sh                  # land.sh on a conflict, a ledger file left in the worktree, a failing check and a clean landing
+ sh skills/land/templates/checks.test.sh                # checks.sh on a failing list, a passing list and a state file with no yaml block
+ sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
+-sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules blocks, its --write repair and its refusals
++sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules and plan-terms blocks, its --write repair, its --only glossary form and its refusals
++python3 skills/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
+ sh utils/pin.test.sh                                   # pin.sh in pin and check mode under a scratch HOME, its refusals included
+ sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists
+ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+diff --git a/docs/dev/change-standard.md b/docs/dev/change-standard.md
+index c882364..0ff14b7 100644
+--- a/docs/dev/change-standard.md
++++ b/docs/dev/change-standard.md
+@@ -63,6 +63,7 @@ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
++python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ sh utils/pin.test.sh 2>&1 | tail -1
+ sh utils/check_coverage.test.sh 2>&1 | tail -1
+ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+diff --git a/docs/dev/skill-layout.md b/docs/dev/skill-layout.md
+index bba10c6..6bcf15e 100644
+--- a/docs/dev/skill-layout.md
++++ b/docs/dev/skill-layout.md
+@@ -57,6 +57,7 @@ No other `##` heading appears outside the place row 6 gives it.
+ 
+ - A rule states the behaviour wanted: a rule written as a prohibition names the behaviour to do instead, in the same bullet or in the Do instead cell of its Anti-patterns row, since a bare prohibition draws attention to what it forbids.
+ - One meaning has one place, as "Where a rule goes" says for a rule.
++- A term that `docs/glossary.md` defines is used only in a sense it defines there. A skill that needs a new term, or a term in a new sense, adds or changes its entry in `skills/repo-setup/templates/plan-terms.md` first, and `docs/glossary.md`'s block is synced from it.
+ - A sentence stays only when it changes what the reader does from what they would do without it. A sentence that restates a default, praises, or explains what the reader already knows is cut.
+ - Each item of Steps ends on its completion criterion: what is true, or what exists, when the step is done.
+ - Material a step needs only in some runs (a long format, a table of cases, a protocol) goes in a file `references/<name>.md` beside `SKILL.md`, named by its path from the step that reads it. Reference material goes in `references/`, never in `templates/`, which holds the files a skill copies into a repository or runs from its own folder.
+diff --git a/skills/ordo-init/SKILL.md b/skills/ordo-init/SKILL.md
+index 9168b91..2d01ce8 100644
+--- a/skills/ordo-init/SKILL.md
++++ b/skills/ordo-init/SKILL.md
+@@ -2,7 +2,7 @@
+ name: ordo-init
+ description: "Set a repository up for the plan skills: draft .agents/plan.yaml from what the repository already has (the roadmap, the page that defines the checks, the change standard, the check commands its CI and build files run, one project or several), offer the pages it lacks, make git ignore the worktree root and keep the configuration tracked, and write nothing until the user approves. On a repository that already has .agents/plan.yaml it checks the file instead: required keys, unknown keys, values, the pages it names, the ignore rules. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml."
+ metadata:
+-  version: "1.1.0"
++  version: "1.1.1"
+ ---
+ 
+ # Set a repository up for the plan skills
+@@ -64,7 +64,7 @@ Run from the repository root.
+    - `avoid` means a step adds no new dependency.
+ 7. Leave each optional key out, so its default applies, unless the repository gives a reason.
+    - A key that is written names that reason in its comment.
+-   - `standards` lists the coding, layout or prose standard pages the repository has.
++   - `standards` lists the coding, layout or prose standard pages the repository has, and `docs/glossary.md` when the repository has one, so every brief names it.
+    - `worktree_paths` is the project's directory in the `projects:` form.
+    - `bench` and `look` are left out unless the user names binaries or a view.
+ 8. Give every key written the example's comment for it, without the required/optional marker, in the example's order.
+diff --git a/skills/repo-setup/SKILL.md b/skills/repo-setup/SKILL.md
+index e97d663..ad1c48e 100644
+--- a/skills/repo-setup/SKILL.md
++++ b/skills/repo-setup/SKILL.md
+@@ -1,19 +1,19 @@
+ ---
+ name: repo-setup
+-description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the building page, a roadmap and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block with the template and rewrites it after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules."
++description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
+ metadata:
+-  version: "1.1.2"
++  version: "1.2.0"
+ ---
+ 
+ # Set up a repository
+ 
+-`/repo-setup` sets up a new repository in the shape the plan skills expect, or keeps an existing repository's shared-rules block equal to the template. It leaves behind the approved tree, committed when the repository's commit rule allows it, or the synced block.
++`/repo-setup` sets up a new repository in the shape the plan skills expect, or keeps an existing repository's shared-rules block and its glossary's plan-terms block equal to their templates. It leaves behind the approved tree, committed when the repository's commit rule allows it, or the synced blocks.
+ 
+ ## Quick start
+ 
+ ```
+ /repo-setup [<path>]          a new repository at <path> (default: the current folder, which must hold no tracked file)
+-/repo-setup sync [<path>]     an existing repository: its shared-rules block against the template
++/repo-setup sync [<path>]     an existing repository: its shared-rules block and its glossary's plan-terms block against their templates
+ ```
+ 
+ ## Use instead
+@@ -25,10 +25,10 @@ metadata:
+ 
+ ## What it reads
+ 
+-1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
++1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
+ 2. The user's answers to "The questions".
+ 3. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
+-4. For `sync`, the repository's `CLAUDE.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` for the exit-2 draft.
++4. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
+ 
+ ## Steps
+ 
+@@ -36,8 +36,10 @@ metadata:
+    - A folder with tracked files is a refusal ("Stops").
+ 2. Ask "The questions", together, in plain prose, each with its default in brackets ("Stops").
+ 3. Draft "The tree", every file with its full text.
++   - The plan-terms block of `docs/glossary.md` is filled from `templates/plan-terms.md`, as the shared-rules block of `CLAUDE.md` is from `templates/shared-rules.md`.
+    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
+-   - A placeholder with no answer is shown to the user.
++   - A placeholder inside an HTML comment that shows an entry's form, as in the roadmap's and the glossary's, is written as it is, since it is the form and not a value.
++   - Any other placeholder with no answer is shown to the user.
+      - It is never written as `<...>`.
+ 4. Show the draft, the tree and every file's text together ("Stops").
+ 5. Write the files the user approved.
+@@ -68,15 +70,17 @@ metadata:
+ 
+ ### sync
+ 
+-1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`; steps 2 to 9 follow its exit status and, on exit 2, its `error:` line.
+-2. Exit 0: the block equals the template; nothing to do.
+-3. Exit 1: the block differs; show the diff, for the user's ruling per hunk ("Stops").
++1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of `docs/glossary.md`; steps 2 to 9 follow its exit status and, on exit 2, its `error:` lines.
++2. Exit 0: both blocks equal their templates; nothing to do.
++3. Exit 1: a block differs; show the diff of each block that differs, for the user's ruling per hunk ("Stops").
+    - The template's text goes into the repository: `--write`, after the approval.
+-   - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` in this skill's folder, after which every repository set up from it differs until it is synced.
+-4. Exit 2 with `error: CLAUDE.md has no single shared-rules block`: draft the change.
+-   - The block inserted after the opening paragraph.
++   - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` or `templates/plan-terms.md` in this skill's folder, after which every repository set up from it differs until it is synced.
++4. Exit 2 with `error: CLAUDE.md has no single shared-rules block` or `error: docs/glossary.md has no single plan-terms block`: draft the change for each block the lines name.
++   - The shared-rules block inserted after the opening paragraph of `CLAUDE.md`.
+    - Each rule of the existing `CLAUDE.md` that the block now states, listed for removal with the block rule that replaces it.
+    - A rule that differs in substance, kept in Project rules and named.
++   - With no `docs/glossary.md`, the file written from `templates/docs/glossary.md`, its plan-terms block filled from `templates/plan-terms.md`.
++   - With a `docs/glossary.md` that has no single block, the plan-terms block inserted after its opening paragraph, and each existing entry that the block now defines listed for removal.
+ 5. Show the drafted change ("Stops").
+ 6. Write it once the user approves.
+ 7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing.
+@@ -110,6 +114,7 @@ docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md
+ docs/dev/coding-standards.md     only when question 6 gave one
+ docs/dev/building.md             written by /ordo-init from the build files
+ docs/roadmap.md                  the roadmap skill's templates/roadmap.md
++docs/glossary.md                 templates/docs/glossary.md, the plan-terms block filled from templates/plan-terms.md
+ docs/adr/README.md               templates/docs/adr/README.md
+ docs/adr/template.md             templates/docs/adr/template.md
+ src/                             the source tree, with the build files for the kind as far as question 3 fixed them
+@@ -124,7 +129,7 @@ utils/                           scripts the build and the checks run
+ | The questions | Every setup, at Steps 2 | The eight questions, each with its default | The user's answers |
+ | The draft | Every setup, at Steps 4 | The tree and every file's text | The user's approval or correction |
+ | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
+-| The drafted sync change | `sync` exits 2 with the `error:` line of Steps / sync 4 | The change Steps / sync 4 drafts | The user's approval |
++| The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block | The change Steps / sync 4 drafts | The user's approval |
+ | A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
+ | No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 12 or Steps / sync 9 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
+ | Tracked files | The folder for a new repository holds tracked files | A refusal that names `/repo-setup sync` and `/ordo-init` | One of those, or a folder with no tracked file |
+@@ -139,13 +144,13 @@ utils/                           scripts the build and the checks run
+ | A build file for something the user did not name | It fixes a choice nobody made | See Rules: build files only for what the user names |
+ | A coding rule the user did not state | The repository then binds builders to something nobody decided | See Rules: the skill never invents a coding rule |
+ | The plan skills installed per project | Two copies load, and the project's copy drifts from the user's | See Rules: the plan skills are installed per user |
+-| A `<...>` placeholder written into a file | The file then states something nobody filled in | See Steps 3 |
++| A `<...>` placeholder written into a file, other than one inside an HTML comment that shows an entry's form | The file then states something nobody filled in | See Steps 3 |
+ 
+ ## Rules
+ 
+ - Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it.
+ - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
+-- The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` the user rules on in `sync`.
++- The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on in `sync`.
+ - A page it writes states rules the user or a template gave.
+   - It never adds a rule of its own.
+ - The skill never invents a coding rule.
+diff --git a/skills/repo-setup/templates/CLAUDE.md b/skills/repo-setup/templates/CLAUDE.md
+index 295b5c1..3e3e876 100644
+--- a/skills/repo-setup/templates/CLAUDE.md
++++ b/skills/repo-setup/templates/CLAUDE.md
+@@ -17,6 +17,7 @@
+ <- `docs/dev/coding-standards.md`: how code is written.>
+ - `docs/dev/prose-standard.md`: how every comment, page and message is written.
+ - `docs/roadmap.md`: what is open and in what order. Answer "what is left?" from this file, never from memory.
++- `docs/glossary.md`: the terms of this repository and of the plan skills, each in the sense the repository uses it.
+ - `docs/adr/`: the decisions, with the alternatives rejected. A change that contradicts an ADR is a rule clash.
+ 
+ ## Build
+diff --git a/skills/repo-setup/templates/sync_rules.py b/skills/repo-setup/templates/sync_rules.py
+index 7caa47a..e53edde 100644
+--- a/skills/repo-setup/templates/sync_rules.py
++++ b/skills/repo-setup/templates/sync_rules.py
+@@ -1,39 +1,53 @@
+ #!/usr/bin/env python3
+-"""Compare a repository's shared-rules block with the template, and rewrite it on request.
++"""Compare a repository's shared-rules block and plan-terms block with their templates, and rewrite them on request.
+ 
+-Usage: sync_rules.py <repository root> [--write]
++Usage: sync_rules.py <repository root> [--write] [--only glossary]
+ 
+-The block is the text of CLAUDE.md between the lines "<!-- ordo:shared-rules begin -->" and
+-"<!-- ordo:shared-rules end -->"; the template is shared-rules.md beside this script. The block is
+-compared line by line, so a CRLF file whose block holds the template's lines equals it.
++The shared-rules block is the text of CLAUDE.md between the lines "<!-- ordo:shared-rules begin -->" and "<!-- ordo:shared-rules end -->"; its template is shared-rules.md beside this script. The plan-terms block is the text of docs/glossary.md between "<!-- ordo:plan-terms begin -->" and "<!-- ordo:plan-terms end -->"; its template is plan-terms.md beside this script. A marker string is counted wherever it stands, inside a line of prose too. Each block is compared line by line, so a CRLF file whose block holds the template's lines equals it.
+ 
+---write replaces the text between the two markers with the template and keeps every byte outside
+-them. It writes the block with the file's own line ending: CRLF or LF, whichever most of its lines
+-end with, and the first line's ending on a tie. It then reads the file back to check that it holds
+-what was written.
++The shared-rules block is checked first, then the plan-terms block. --only glossary checks the plan-terms block alone, for a repository with no shared-rules block, and then neither CLAUDE.md nor shared-rules.md is read. Every file is read and every block located before anything is written or printed on stdout, so an error in any file writes nothing. Each file in error prints its own "error:" line, in the order the files are read: shared-rules.md, CLAUDE.md, plan-terms.md, docs/glossary.md.
+ 
+-Exit status: 0 when the block equals the template (or was just rewritten with --write), 1 when it
+-differs (the unified diff is printed), 2 when CLAUDE.md is missing or has no single block; when
+-CLAUDE.md or shared-rules.md cannot be read or is not UTF-8; and when --write cannot write
+-CLAUDE.md or the file does not read back as written. The "ok:" and "written:" lines and the diff
+-go to stdout; each "error:" line goes to stderr.
++--write replaces the text between the two markers of each block that differs with its template and keeps every byte outside them. It writes the block with the file's own line ending: CRLF or LF, whichever most of its lines end with, and the first line's ending on a tie. It then reads the file back to check that it holds what was written. CLAUDE.md is written first, and a failed write or read-back of it stops before docs/glossary.md is written.
+ 
+-The error lines of exit 2. The first names a block to draft:
++Exit status: 0 when every block checked equals its template (or was just rewritten with --write); 1 when a block differs, with the unified diff of each differing block printed under its file's name; 2 when CLAUDE.md is missing, when CLAUDE.md or docs/glossary.md has no single block (a missing docs/glossary.md included), when a file cannot be read or is not UTF-8, and when --write cannot write a file or the file does not read back as written. The "ok:" and "written:" lines and the diffs go to stdout, the shared-rules block's first; each "error:" line goes to stderr.
++
++The lines on stdout, besides the diffs, which are labelled "CLAUDE.md (shared rules)" or "docs/glossary.md (plan terms)" against "template":
++    ok: the shared-rules block equals the template
++    ok: the plan-terms block equals the template
++    written: the shared-rules block now equals the template
++    written: the plan-terms block now equals the template
++
++The error lines of exit 2. The first two name a block to draft:
+     error: CLAUDE.md has no single shared-rules block (<begin marker> ... <end marker>)
++    error: docs/glossary.md has no single plan-terms block (<begin marker> ... <end marker>)
+ The others name a file to fix before the check can run:
+     error: no CLAUDE.md in <root>
+     error: <path> is not UTF-8 (byte <n>)
+     error: cannot read <path>: <reason>
+     error: cannot write <path>: <reason>
+     error: <path> does not read back as written
+-The usage line, on stderr, also exits 2.
++The usage line, on stderr, also exits 2: for no path or a second path, and for --only with no value, with a value other than glossary, given twice, or written as --only=glossary.
+ """
+ import difflib
+ import os
+ import sys
+ 
+-BEGIN = "<!-- ordo:shared-rules begin -->"
+-END = "<!-- ordo:shared-rules end -->"
++SHARED_RULES = {
++    "name": "shared-rules",
++    "page": "CLAUDE.md",
++    "label": "CLAUDE.md (shared rules)",
++    "template": "shared-rules.md",
++    "begin": "<!-- ordo:shared-rules begin -->",
++    "end": "<!-- ordo:shared-rules end -->",
++}
++PLAN_TERMS = {
++    "name": "plan-terms",
++    "page": "docs/glossary.md",
++    "label": "docs/glossary.md (plan terms)",
++    "template": "plan-terms.md",
++    "begin": "<!-- ordo:plan-terms begin -->",
++    "end": "<!-- ordo:plan-terms end -->",
++}
+ 
+ 
+ def read(path):
+@@ -58,63 +72,100 @@ def line_ending(text):
+     return "\r\n" if first_newline > 0 and text[first_newline - 1] == "\r" else "\n"
+ 
+ 
+-def main(argv):
+-    write = "--write" in argv
+-    args = [a for a in argv if a != "--write"]
+-    if len(args) != 1:
+-        print(__doc__.strip().splitlines()[2], file=sys.stderr)
+-        return 2
+-    root = os.path.abspath(args[0])
+-    here = os.path.dirname(os.path.realpath(__file__))
+-    template = read(os.path.join(here, "shared-rules.md"))
+-    if template is None:
+-        return 2
+-    template = template.replace("\r\n", "\n").strip("\n")
+-    claude = os.path.join(root, "CLAUDE.md")
+-    if not os.path.isfile(claude):
++def arguments(argv):
++    """The root, --write and --only glossary, in any order; None when the usage line is due."""
++    root = None
++    write = False
++    only = False
++    rest = list(argv)
++    while rest:
++        arg = rest.pop(0)
++        if arg == "--write":
++            write = True
++        elif arg == "--only":
++            if only or not rest or rest.pop(0) != "glossary":
++                return None
++            only = True
++        elif arg.startswith("--only") or root is not None:
++            return None
++        else:
++            root = arg
++    if root is None:
++        return None
++    return root, write, only
++
++
++def load(root, here, block):
++    """The block's path, its file's text, the span between its markers and its template; None after the error line of each file in error."""
++    template = read(os.path.join(here, block["template"]))
++    path = os.path.join(root, block["page"])
++    if block is SHARED_RULES and not os.path.isfile(path):
+         print(f"error: no CLAUDE.md in {root}", file=sys.stderr)
+-        return 2
+-    text = read(claude)
++        return None
++    text = read(path) if os.path.exists(path) else ""
+     if text is None:
+-        return 2
+-    if text.count(BEGIN) != 1 or text.count(END) != 1 or text.index(BEGIN) > text.index(END):
++        return None
++    begin, end = block["begin"], block["end"]
++    if text.count(begin) != 1 or text.count(end) != 1 or text.index(begin) > text.index(end):
+         print(
+-            f"error: CLAUDE.md has no single shared-rules block ({BEGIN} ... {END})",
++            f"error: {block['page']} has no single {block['name']} block ({begin} ... {end})",
+             file=sys.stderr,
+         )
++        return None
++    if template is None:
++        return None
++    start = text.index(begin) + len(begin)
++    stop = text.index(end)
++    return path, text, start, stop, template.replace("\r\n", "\n").strip("\n")
++
++
++def rewrite(path, text, start, stop, template):
++    """Writes the template between the markers and reads the file back; False after an error line."""
++    eol = line_ending(text)
++    rewritten = text[:start] + eol + template.replace("\n", eol) + eol + text[stop:]
++    try:
++        with open(path, "w", encoding="utf-8", newline="") as out:
++            out.write(rewritten)
++    except OSError as error:
++        print(f"error: cannot write {path}: {error.strerror}", file=sys.stderr)
++        return False
++    reread = read(path)
++    if reread is None:
++        return False
++    if reread != rewritten:
++        print(f"error: {path} does not read back as written", file=sys.stderr)
++        return False
++    return True
++
++
++def main(argv):
++    parsed = arguments(argv)
++    if parsed is None:
++        print(__doc__.strip().splitlines()[2], file=sys.stderr)
++        return 2
++    root, write, only = parsed
++    root = os.path.abspath(root)
++    here = os.path.dirname(os.path.realpath(__file__))
++    blocks = [PLAN_TERMS] if only else [SHARED_RULES, PLAN_TERMS]
++    loaded = [load(root, here, block) for block in blocks]
++    if None in loaded:
+         return 2
+-    start = text.index(BEGIN) + len(BEGIN)
+-    stop = text.index(END)
+-    block = text[start:stop].replace("\r\n", "\n").strip("\n")
+-    if block == template:
+-        print("ok: the shared-rules block equals the template")
+-        return 0
+-    if write:
+-        eol = line_ending(text)
+-        rewritten = text[:start] + eol + template.replace("\n", eol) + eol + text[stop:]
+-        try:
+-            with open(claude, "w", encoding="utf-8", newline="") as out:
+-                out.write(rewritten)
+-        except OSError as error:
+-            print(f"error: cannot write {claude}: {error.strerror}", file=sys.stderr)
+-            return 2
+-        reread = read(claude)
+-        if reread is None:
+-            return 2
+-        if reread != rewritten:
+-            print(f"error: {claude} does not read back as written", file=sys.stderr)
+-            return 2
+-        print("written: the shared-rules block now equals the template")
+-        return 0
+-    diff = difflib.unified_diff(
+-        block.splitlines(),
+-        template.splitlines(),
+-        "CLAUDE.md (shared rules)",
+-        "template",
+-        lineterm="",
+-    )
+-    print("\n".join(diff))
+-    return 1
++    status = 0
++    for block, (path, text, start, stop, template) in zip(blocks, loaded):
++        current = text[start:stop].replace("\r\n", "\n").strip("\n")
++        if current == template:
++            print(f"ok: the {block['name']} block equals the template")
++        elif write:
++            if not rewrite(path, text, start, stop, template):
++                return 2
++            print(f"written: the {block['name']} block now equals the template")
++        else:
++            diff = difflib.unified_diff(
++                current.splitlines(), template.splitlines(), block["label"], "template", lineterm=""
++            )
++            print("\n".join(diff))
++            status = 1
++    return status
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/skills/repo-setup/templates/sync_rules.test.sh b/skills/repo-setup/templates/sync_rules.test.sh
+index b6d892b..123f72f 100644
+--- a/skills/repo-setup/templates/sync_rules.test.sh
++++ b/skills/repo-setup/templates/sync_rules.test.sh
+@@ -1,7 +1,10 @@
+ #!/bin/sh
+-# Exercise sync_rules.py on scratch repositories whose CLAUDE.md holds a drifted shared-rules block.
+-# The check exits 1 on the drifted block and prints its diff, and --write then makes the block equal the template, keeping every byte outside the block, in an LF file under a preamble holding a tab, trailing spaces and a UTF-8 letter, and in a CRLF file, where the block is written in CRLF too.
++# Exercise sync_rules.py on scratch repositories whose CLAUDE.md holds the shared-rules block and whose docs/glossary.md holds the plan-terms block, each filled from its template.
++# The check exits 1 on a drifted block and prints its diff, and --write then makes the block equal the template, keeping every byte outside the block, in an LF file under a preamble holding a tab, trailing spaces and a UTF-8 letter, and in a CRLF file, where the block is written in CRLF too.
+ # Each of these is refused with exit 2 and one error line on stderr, stdout empty: reversed markers, a second begin marker, a second block, a CLAUDE.md that is not UTF-8 (whose bytes --write leaves as they were), and a --write whose file does not read back as written.
++# The glossary's block is checked after the shared-rules block, with its own ok:, written: and diff lines. A missing glossary, one with no single block (none, two, reversed, or a marker quoted in prose), a directory, a glossary that is not UTF-8, a missing plan-terms.md, and a write of the glossary that fails or does not read back are each refused with exit 2.
++# Every input is checked before anything is written or printed on stdout: a drifted shared-rules block beside a missing glossary writes nothing, and two files in error print two error lines, CLAUDE.md's first. With --write, a failed write of CLAUDE.md leaves the glossary unwritten.
++# --only glossary checks the glossary alone and never reads CLAUDE.md. --only with no value, with another value, twice or as --only=glossary, and a second path, print the usage line and exit 2.
+ 
+ set -u
+ 
+@@ -18,20 +21,25 @@ script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
+ sync=$script_dir/sync_rules.py
+ begin='<!-- ordo:shared-rules begin -->'
+ end='<!-- ordo:shared-rules end -->'
++terms_begin='<!-- ordo:plan-terms begin -->'
++terms_end='<!-- ordo:plan-terms end -->'
++usage='Usage: sync_rules.py <repository root> [--write] [--only glossary]'
+ cr=$(printf '\r')
+ 
+-# A repository whose CLAUDE.md is the template with the shared rules filled in, and no other file. Red when the check requires another file beside CLAUDE.md, as a symlink AGENTS.md.
++# A repository whose CLAUDE.md and docs/glossary.md are the templates with their blocks filled in, and no other file. Red when the check requires another file beside them, as a symlink AGENTS.md.
+ make_repo() {
+     repo=$test_root/$1
+-    mkdir -p "$repo"
+-    python3 -B - "$script_dir" "$repo/CLAUDE.md" <<'PY'
++    mkdir -p "$repo/docs"
++    python3 -B - "$script_dir" "$repo" <<'PY'
+ import sys
+-here, out = sys.argv[1], sys.argv[2]
+-text = open(f"{here}/CLAUDE.md").read()
+-rules = open(f"{here}/shared-rules.md").read().strip("\n")
+-begin = "<!-- ordo:shared-rules begin -->\n"
+-text = text.replace(begin, begin + rules + "\n")
+-open(out, "w").write(text)
++here, repo = sys.argv[1], sys.argv[2]
++for page, source, marker in (
++    ("CLAUDE.md", "shared-rules.md", "<!-- ordo:shared-rules begin -->\n"),
++    ("docs/glossary.md", "plan-terms.md", "<!-- ordo:plan-terms begin -->\n"),
++):
++    text = open(f"{here}/{page}").read()
++    block = open(f"{here}/{source}").read().strip("\n")
++    open(f"{repo}/{page}", "w").write(text.replace(marker, marker + block + "\n"))
+ PY
+ }
+ 
+@@ -61,13 +69,14 @@ expect_refusal() {
+     esac
+ }
+ 
+-# Writes the bytes of a file before its begin marker and from its end marker on, for cmp.
++# Writes the bytes of a file before its begin marker and from its end marker on, for cmp; the markers are the shared-rules ones, or the plan-terms ones when "terms" follows the file.
+ outside_block() {
+-    python3 -B - "$1" <<'PY'
++    python3 -B - "$1" "${2:-rules}" <<'PY'
+ import sys
+ text = open(sys.argv[1], "rb").read()
+-begin = text.index(b"<!-- ordo:shared-rules begin -->")
+-end = text.index(b"<!-- ordo:shared-rules end -->")
++name = b"plan-terms" if sys.argv[2] == "terms" else b"shared-rules"
++begin = text.index(b"<!-- ordo:" + name + b" begin -->")
++end = text.index(b"<!-- ordo:" + name + b" end -->")
+ sys.stdout.buffer.write(text[:begin] + text[end:])
+ PY
+ }
+@@ -83,6 +92,30 @@ to_crlf() {
+     perl -pi -e 's/\n/\r\n/' "$1"
+ }
+ 
++# Changes the first entry of a repository's plan-terms block.
++drift_terms() {
++    perl -pi -e 'if (!$done && s/^- \*\*.*/- **drifted**: a changed entry./) { $done = 1 }' \
++        "$test_root/$1/docs/glossary.md"
++    grep -q '^- \*\*drifted\*\*' "$test_root/$1/docs/glossary.md" || fail "drift_terms changed nothing in $1"
++}
++
++# A refusal with the usage line: exit 2, nothing on stdout, the usage line alone on stderr.
++expect_usage() {
++    label=$1
++    shift
++    expect 2 "$@"
++    [ -z "$output" ] || fail "$label: stdout is not empty: [$output]"
++    [ "$errors" = "$usage" ] || fail "$label: stderr is not the usage line: [$errors]"
++}
++
++# Checks that stdout is exactly the lines given, one per argument.
++expect_lines() {
++    label=$1
++    shift
++    wanted=$(printf '%s\n' "$@")
++    [ "$output" = "$wanted" ] || fail "$label: stdout is [$output], expected [$wanted]"
++}
++
+ # A drifted block, under a preamble holding a tab, trailing spaces and a UTF-8 letter.
+ make_repo drift
+ drift drift
+@@ -153,28 +186,237 @@ cmp -s "$test_root/not-utf8/before" "$test_root/not-utf8/CLAUDE.md" ||
+ expect_refusal "CLAUDE.md not UTF-8" "$test_root/not-utf8/CLAUDE.md is not UTF-8" \
+     python3 -B "$sync" "$test_root/not-utf8" --write
+ 
+-# A write that does not take: the script's open() sends what it writes to the null device.
+-make_repo lost-write
+-drift lost-write
+-cat >"$test_root/lost-write.py" <<'PY'
++# Runs sync_rules.py with its open() changed for a write to a path ending in the suffix given: "lost" sends what it writes to the null device, "denied" raises a permission error.
++cat >"$test_root/fake-open.py" <<'PY'
++import errno
+ import importlib.util
+ import os
+ import sys
+ 
+-spec = importlib.util.spec_from_file_location("sync_rules", sys.argv[1])
++how, suffix, script = sys.argv[1:4]
++spec = importlib.util.spec_from_file_location("sync_rules", script)
+ module = importlib.util.module_from_spec(spec)
+ spec.loader.exec_module(module)
+ real_open = open
+ 
+ 
+-def lost_write(path, mode="r", *args, **kwargs):
+-    return real_open(os.devnull if "w" in mode else path, mode, *args, **kwargs)
++def fake_open(path, mode="r", *args, **kwargs):
++    if "w" in mode and str(path).endswith(suffix):
++        if how == "denied":
++            raise PermissionError(errno.EACCES, os.strerror(errno.EACCES), path)
++        path = os.devnull
++    return real_open(path, mode, *args, **kwargs)
+ 
+ 
+-module.open = lost_write
+-sys.exit(module.main(sys.argv[2:]))
++module.open = fake_open
++sys.exit(module.main(sys.argv[4:]))
+ PY
++
++# A write that does not take: the script's open() sends what it writes to the null device.
++make_repo lost-write
++drift lost-write
+ expect_refusal "lost write" "does not read back as written" \
+-    python3 -B "$test_root/lost-write.py" "$sync" "$test_root/lost-write" --write
++    python3 -B "$test_root/fake-open.py" lost CLAUDE.md "$sync" "$test_root/lost-write" --write
++
++# Both blocks equal their templates: an ok: line for each, the shared-rules block's first.
++make_repo equal
++expect 0 python3 -B "$sync" "$test_root/equal"
++[ -z "$errors" ] || fail "equal blocks printed on stderr: [$errors]"
++expect_lines "equal blocks" "ok: the shared-rules block equals the template" "ok: the plan-terms block equals the template"
++
++# The glossary block differs by one line: exit 1, the shared-rules ok: line, then the glossary's diff under its labels.
++make_repo terms-drift
++drift_terms terms-drift
++expect 1 python3 -B "$sync" "$test_root/terms-drift"
++[ -z "$errors" ] || fail "a drifted glossary printed on stderr: [$errors]"
++case "$output" in
++    "ok: the shared-rules block equals the template
++--- docs/glossary.md (plan terms)
+++++ template
++"*"-- **drifted**: a changed entry."*) ;;
++    *) fail "a drifted glossary does not print the ok: line and its diff: [$output]" ;;
++esac
++
++# Both blocks differ: exit 1, both diffs, CLAUDE.md's first.
++make_repo both-drift
++drift both-drift
++drift_terms both-drift
++expect 1 python3 -B "$sync" "$test_root/both-drift"
++case "$output" in
++    "--- CLAUDE.md (shared rules)"*"-- **Zero warnings.** Mostly."*"--- docs/glossary.md (plan terms)"*"-- **drifted**: a changed entry."*) ;;
++    *) fail "two drifted blocks do not print both diffs in order: [$output]" ;;
++esac
++
++# --write with both blocks differing, the glossary in CRLF under a preamble: both rewritten, CRLF kept, every byte outside the markers kept.
++make_repo both-write
++drift both-write
++drift_terms both-write
++glossary=$test_root/both-write/docs/glossary.md
++printf '# Title\t  \ncaf\303\251  \n' >"$test_root/both-write/preamble"
++cat "$test_root/both-write/preamble" "$glossary" >"$test_root/both-write/joined"
++mv "$test_root/both-write/joined" "$glossary"
++to_crlf "$glossary"
++crlf_lines=$(grep -c "$cr\$" "$glossary")
++outside_block "$test_root/both-write/CLAUDE.md" >"$test_root/both-write/rules-before"
++outside_block "$glossary" terms >"$test_root/both-write/terms-before"
++expect 0 python3 -B "$sync" "$test_root/both-write" --write
++expect_lines "--write of both blocks" "written: the shared-rules block now equals the template" "written: the plan-terms block now equals the template"
++expect 0 python3 -B "$sync" "$test_root/both-write"
++crlf_after=$(grep -c "$cr\$" "$glossary")
++[ "$crlf_after" = "$crlf_lines" ] || fail "--write left $crlf_after CRLF lines of $crlf_lines in the glossary"
++lf_only=$(grep -vc "$cr\$" "$glossary")
++[ "$lf_only" = 0 ] || fail "--write left $lf_only lines without CR in a CRLF glossary"
++outside_block "$test_root/both-write/CLAUDE.md" >"$test_root/both-write/rules-after"
++outside_block "$glossary" terms >"$test_root/both-write/terms-after"
++cmp -s "$test_root/both-write/rules-before" "$test_root/both-write/rules-after" ||
++    fail "--write changed bytes outside the shared-rules block"
++cmp -s "$test_root/both-write/terms-before" "$test_root/both-write/terms-after" ||
++    fail "--write changed bytes outside the plan-terms block"
++
++no_block="docs/glossary.md has no single plan-terms block ($terms_begin ... $terms_end)"
++
++# No docs/glossary.md.
++make_repo no-glossary
++rm "$test_root/no-glossary/docs/glossary.md"
++expect_refusal "no glossary" "$no_block" python3 -B "$sync" "$test_root/no-glossary"
++
++# A glossary with no block, with two blocks, and with the end marker before the begin marker.
++make_repo no-terms-block
++perl -ni -e "print unless /\\Q$terms_begin\\E|\\Q$terms_end\\E/" "$test_root/no-terms-block/docs/glossary.md"
++expect_refusal "glossary with no block" "$no_block" python3 -B "$sync" "$test_root/no-terms-block"
++make_repo two-terms-blocks
++printf '%s\nterms\n%s\n' "$terms_begin" "$terms_end" >>"$test_root/two-terms-blocks/docs/glossary.md"
++expect_refusal "glossary with two blocks" "$no_block" python3 -B "$sync" "$test_root/two-terms-blocks"
++make_repo reversed-terms
++perl -pi -e "s/\\Q$terms_begin\\E/MARK/; s/\\Q$terms_end\\E/$terms_begin/; s/MARK/$terms_end/" \
++    "$test_root/reversed-terms/docs/glossary.md"
++grep -q "$terms_end" "$test_root/reversed-terms/docs/glossary.md" || fail "the reversed glossary lost its markers"
++expect_refusal "glossary with reversed markers" "$no_block" python3 -B "$sync" "$test_root/reversed-terms"
++
++# A marker string quoted in a line of prose counts as a marker, so the glossary has no single block.
++make_repo quoted-marker
++printf 'The block opens with `%s`.\n' "$terms_begin" >>"$test_root/quoted-marker/docs/glossary.md"
++expect_refusal "a marker quoted in prose" "$no_block" python3 -B "$sync" "$test_root/quoted-marker"
++
++# A glossary that is not UTF-8, checked and under --write, whose bytes stay as they were.
++make_repo terms-not-utf8
++drift_terms terms-not-utf8
++printf 'Caf\351 notes\n' >>"$test_root/terms-not-utf8/docs/glossary.md"
++cp "$test_root/terms-not-utf8/docs/glossary.md" "$test_root/terms-not-utf8/before"
++expect_refusal "glossary not UTF-8" "$test_root/terms-not-utf8/docs/glossary.md is not UTF-8 (byte " \
++    python3 -B "$sync" "$test_root/terms-not-utf8"
++expect_refusal "glossary not UTF-8, --write" "$test_root/terms-not-utf8/docs/glossary.md is not UTF-8 (byte " \
++    python3 -B "$sync" "$test_root/terms-not-utf8" --write
++cmp -s "$test_root/terms-not-utf8/before" "$test_root/terms-not-utf8/docs/glossary.md" ||
++    fail "--write changed a glossary that is not UTF-8"
++
++# A glossary that is a directory.
++make_repo terms-dir
++rm "$test_root/terms-dir/docs/glossary.md"
++mkdir "$test_root/terms-dir/docs/glossary.md"
++expect_refusal "glossary a directory" "cannot read $test_root/terms-dir/docs/glossary.md: Is a directory" \
++    python3 -B "$sync" "$test_root/terms-dir"
++
++# plan-terms.md missing beside the script: a copy of the script with shared-rules.md and no plan-terms.md.
++mkdir "$test_root/lone-script"
++cp "$sync" "$script_dir/shared-rules.md" "$test_root/lone-script/"
++make_repo lone
++expect_refusal "no plan-terms.md" "cannot read $test_root/lone-script/plan-terms.md: No such file or directory" \
++    python3 -B "$test_root/lone-script/sync_rules.py" "$test_root/lone"
++
++# --only glossary with no CLAUDE.md: exit 0 on an equal block, 1 on a differing one.
++make_repo only-no-claude
++rm "$test_root/only-no-claude/CLAUDE.md"
++expect 0 python3 -B "$sync" "$test_root/only-no-claude" --only glossary
++expect_lines "--only glossary, equal" "ok: the plan-terms block equals the template"
++drift_terms only-no-claude
++expect 1 python3 -B "$sync" "$test_root/only-no-claude" --only glossary
++case "$output" in
++    "--- docs/glossary.md (plan terms)"*"-- **drifted**: a changed entry."*) ;;
++    *) fail "--only glossary on a drifted block does not print its diff: [$output]" ;;
++esac
++
++# --only glossary beside a drifted shared-rules block, and beside none: the glossary alone decides.
++make_repo only-drifted-rules
++drift only-drifted-rules
++expect 0 python3 -B "$sync" "$test_root/only-drifted-rules" --only glossary
++expect_lines "--only glossary beside a drifted shared-rules block" "ok: the plan-terms block equals the template"
++make_repo only-no-rules-block
++perl -ni -e "print unless /\\Q$begin\\E|\\Q$end\\E/" "$test_root/only-no-rules-block/CLAUDE.md"
++expect 0 python3 -B "$sync" "$test_root/only-no-rules-block" --only glossary
++expect_lines "--only glossary beside no shared-rules block" "ok: the plan-terms block equals the template"
++
++# --only glossary --write on a differing glossary: only the glossary rewritten, a drifted CLAUDE.md left byte for byte.
++make_repo only-write
++drift only-write
++drift_terms only-write
++cp "$test_root/only-write/CLAUDE.md" "$test_root/only-write/claude-before"
++expect 0 python3 -B "$sync" "$test_root/only-write" --only glossary --write
++expect_lines "--only glossary --write" "written: the plan-terms block now equals the template"
++cmp -s "$test_root/only-write/claude-before" "$test_root/only-write/CLAUDE.md" ||
++    fail "--only glossary --write changed CLAUDE.md"
++expect 0 python3 -B "$sync" "$test_root/only-write" --only glossary
++
++# The arguments: --only glossary before the path is accepted; the rest print the usage line.
++make_repo args
++expect 0 python3 -B "$sync" --only glossary "$test_root/args"
++expect_lines "--only glossary before the path" "ok: the plan-terms block equals the template"
++expect_usage "--only with another value" python3 -B "$sync" "$test_root/args" --only rules
++expect_usage "two paths" python3 -B "$sync" "$test_root/args" "$test_root/args"
++expect_usage "--only last with no value" python3 -B "$sync" "$test_root/args" --only
++expect_usage "--only=glossary" python3 -B "$sync" "$test_root/args" --only=glossary
++expect_usage "--only=glossary with no other argument" python3 -B "$sync" --only=glossary
++expect_usage "--only glossary twice" python3 -B "$sync" "$test_root/args" --only glossary --only glossary
++
++# A drifted shared-rules block and no glossary, with and without --write: the glossary's error alone, nothing on stdout, CLAUDE.md unchanged.
++make_repo drift-no-glossary
++drift drift-no-glossary
++rm "$test_root/drift-no-glossary/docs/glossary.md"
++cp "$test_root/drift-no-glossary/CLAUDE.md" "$test_root/drift-no-glossary/before"
++expect_refusal "drifted rules, no glossary" "$no_block" python3 -B "$sync" "$test_root/drift-no-glossary"
++expect_refusal "drifted rules, no glossary, --write" "$no_block" \
++    python3 -B "$sync" "$test_root/drift-no-glossary" --write
++cmp -s "$test_root/drift-no-glossary/before" "$test_root/drift-no-glossary/CLAUDE.md" ||
++    fail "--write changed CLAUDE.md beside a missing glossary"
++
++# CLAUDE.md with no single block and no glossary: two error lines, CLAUDE.md's first, nothing on stdout.
++make_repo two-errors
++perl -ni -e "print unless /\\Q$begin\\E/" "$test_root/two-errors/CLAUDE.md"
++rm "$test_root/two-errors/docs/glossary.md"
++expect 2 python3 -B "$sync" "$test_root/two-errors"
++[ -z "$output" ] || fail "two files in error printed on stdout: [$output]"
++[ "$errors" = "error: CLAUDE.md has no single shared-rules block ($begin ... $end)
++error: $no_block" ] || fail "two files in error do not print both error lines in order: [$errors]"
++
++# --write with only the glossary block differing: the shared-rules ok: line, the glossary's written: line, CLAUDE.md unchanged.
++make_repo terms-write
++drift_terms terms-write
++cp "$test_root/terms-write/CLAUDE.md" "$test_root/terms-write/before"
++expect 0 python3 -B "$sync" "$test_root/terms-write" --write
++expect_lines "--write of the glossary alone" "ok: the shared-rules block equals the template" "written: the plan-terms block now equals the template"
++cmp -s "$test_root/terms-write/before" "$test_root/terms-write/CLAUDE.md" ||
++    fail "--write of the glossary alone changed CLAUDE.md"
++
++# --write where CLAUDE.md cannot be written: its error line, and the drifted glossary not written.
++make_repo claude-denied
++drift claude-denied
++drift_terms claude-denied
++cp "$test_root/claude-denied/docs/glossary.md" "$test_root/claude-denied/before"
++expect_refusal "CLAUDE.md not writable" "cannot write $test_root/claude-denied/CLAUDE.md: Permission denied" \
++    python3 -B "$test_root/fake-open.py" denied CLAUDE.md "$sync" "$test_root/claude-denied" --write
++cmp -s "$test_root/claude-denied/before" "$test_root/claude-denied/docs/glossary.md" ||
++    fail "a failed write of CLAUDE.md went on to write the glossary"
++
++# The glossary cannot be written, or does not read back as written.
++make_repo terms-denied
++drift_terms terms-denied
++expect 2 python3 -B "$test_root/fake-open.py" denied glossary.md "$sync" "$test_root/terms-denied" --write
++[ "$errors" = "error: cannot write $test_root/terms-denied/docs/glossary.md: Permission denied" ] ||
++    fail "a glossary that cannot be written does not print its error line: [$errors]"
++make_repo terms-lost
++drift_terms terms-lost
++expect 2 python3 -B "$test_root/fake-open.py" lost glossary.md "$sync" "$test_root/terms-lost" --write
++[ "$errors" = "error: $test_root/terms-lost/docs/glossary.md does not read back as written" ] ||
++    fail "a glossary that does not read back does not print its error line: [$errors]"
+ 
+ printf 'PASS: sync_rules.py scratch tests\n'
+diff --git a/docs/glossary.md b/docs/glossary.md
+new file mode 100644
+index 0000000..7bfcc8f
+--- /dev/null
++++ b/docs/glossary.md
+@@ -0,0 +1,108 @@
++# Glossary
++
++This page defines each term that the Ordo skills, the pages under `docs/dev/` and the README use in a sense of their own. The block below is `skills/repo-setup/templates/plan-terms.md` copied whole, which `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` compares with that file, so a plan term is changed in that file only. The rule on how a term is used is in `docs/dev/skill-layout.md`, "Writing for an agent". Ordo's own terms follow the block.
++
++<!-- ordo:plan-terms begin -->
++## Plan terms
++
++- **A/B**: the landing's comparison of the staged base binaries with the new build, the benchmark commands the configuration block's `bench:` names run alternately after warm-ups, at least ten runs each; an empty `bench:` means no A/B. Stated in: `land`, Steps 8; `spec`, Steps 8.
++- **acceptance item**: a requirement of the brief's "What to build"; one the delta leaves unbuilt, with a fix too large for landing, is one of the two conditions that allow a round beyond `repair_rounds`. Stated in: `plan-orchestration`, Rules.
++- **authority**: the tags that end a step line of `plan.md`, `(approved)` for a step of the list the user approved when the plan opened and `(ruling <name>)` for each ruling the step rests on; `/spec` refuses a step without it. Stated in: `plan`, Rules; `spec`, "What it reads" 4 and Steps 1.
++- **bar**: the standard a builder's first report meets when its step lands with at most one fix at landing; the booking and the landing report state whether it passed, and under `review: earned` a failed bar puts the reviewer back. Stated in: `land`, Steps 9 and 11; `plan-orchestration`, "The review, earned".
++- **base**: the hash of a step's preparation commit, recorded in its dispatch entry: the worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it; the base binaries are the build `/spec` stages from it for the A/B. Stated in: `spec`, Steps 6, 7 and 8; `land`, Steps 4; `refute`, "What it reads" 5.
++- **booking**: the record `/land` appends to `plan.md` for a landed step: what landed and where, the premise corrections, the findings raised as open items, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
++- **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape; a repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
++- **brief check**: the check of a brief against the tree, before the preparation commit, by one fresh read-only agent on the reviewer's model (the brief-check agent), whose report is saved at `agents/reviews/<step>-brief-check.md` and each of whose findings is closed by a change to the brief or is a stop. Stated in: `spec`, Steps 5 and "Steps / The brief check".
++- **builder**: the agent that builds one step in the step's worktree under the brief and the rules file, runs no git command and writes in the ledger only its report; under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
++- **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
++- **case**: an example under a brief's "Cases", an input with its expected result, each must-pass and must-refuse example the step's text gives and, for a code step, each input it implies; the builder's first run of every case on the unchanged tree comes before any change, a code step's case as a test and a text step's by reading. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run, at least five of them. Stated in: `spec`, Steps 4.
++- **Closed**: the heading of a report that holds each finding's disposition: in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
++- **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
++- **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
++- **completion notice**: what the runner reports when an agent ends: its final message, and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
++- **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once` and `bench`. Stated in: `plan`, Steps 4.
++- **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived; it is reported to the user, and a continuation builder takes over its worktree only when the user says so. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **Declined to judge**: the section of a refuter or brief-check report that names each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason. Stated in: `refute`, Steps 6; `spec`, "Steps / The brief check".
++- **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base; with `refute_after_repair: no` the orchestrator's read of the delta stands in for a refutation. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
++- **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9.
++- **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared; the orchestrator adds the builder's identity under `session_id` (its agent id, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7; `land`, Steps 2 and 6.
++- **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
++- **executor**: who builds a step: `agent`, a builder dispatched in the worktree; `inline`, the orchestrating session itself; `academic-paper`, that skill, always for manuscript content; the configuration block holds the plan's default and the orchestrator chooses per step. Stated in: `plan-orchestration`, Steps 4; `plan`, Steps 4.
++- **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item; a finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
++- **fix at landing**: a fix made on main during `/land`, for a red line a fix inside the brief closes or for a small finding of the last round's refutation inside the brief, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
++- **four headings**: the headings a reviewer's findings go under, Spec, Proof, Standards and Behaviour, each finding with its failure scenario. Stated in: `refute`, "The four headings".
++- **gate**: the check that proves a roadmap entry done, a command from the verification page, a test and what it asserts, or an observable result, which `/plan` copies into `plan.md`'s "## Gate"; a step's own gate is the check on its step line. Stated in: `roadmap`, "Steps / add" 2 and 3; `plan`, Steps 2; `spec`, Steps 4. Also any check that decides whether work passes: a script for a fact, a review for a judgment. Stated in: `repo-setup`, `templates/shared-rules.md`, "Scripts compute facts; judgment is read".
++- **goal**: what exists when a roadmap entry is done, in one or two sentences, copied into `plan.md`; in the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
++- **hand-back**: a builder's stop before any change when its first run finds a case the brief's rules get wrong, returning the first run and that case with the rule and the result; the orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
++- **handover**: one session stopping and another continuing the plan from the ledger alone, a resume point at which the stopping session commits the records it wrote. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`; `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
++- **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
++- **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings; a kind is recurring when it appears in at least three steps or two plans, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
++- **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
++- **launch commit**: the commit of a dispatch entry once its builder's identity is in it, right after the launch under `agent` and before the build under `inline` and `academic-paper`; it is a resume point. Stated in: `plan-orchestration`, Steps 4.
++- **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`; it is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
++- **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state, when the step changes a view; an empty `look:` means no look. Stated in: `land`, "The look".
++- **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another, until a pause or until nothing unblocked is left. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated up to `repair_rounds` times, or once more under the round cap's exception. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **night rule**: the limit the loop keeps when the user sets a time by which no agent may run: dispatch only what fits before the cut-off, and at the cut-off stop what runs and pause the plan. Stated in: `plan-orchestration`, "The pace when a deadline is set".
++- **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first; `/plan` refuses such an entry until `/roadmap add <entry>` names its gate. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
++- **open item**: an entry of the state file's open items: a decision only the user can make, with its options, their pros and cons and one recommendation, closed by the user's ruling; or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
++- **orchestrator**: the session that runs a plan: it reads, decides, invokes the skills, lands and books, and writes no step code beyond a fix at landing unless the step's executor is `inline`; run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
++- **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
++- **pause**: a halt of the loop the user asks for, which holds until the user lifts it; nothing is dispatched during it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
++- **plan**: the work of one roadmap entry, opened by `/plan` as a ledger folder whose `plan.md` holds the goal, the gate, the step list and the rulings. Stated in: `plan`, Steps. Also the roadmap file as the ordered build plan over a capability map. Stated in: `roadmap`, "A capability map beside the ordered file".
++- **plan configuration**: `.agents/plan.yaml`, the only place a project specific lives, which every plan skill reads; `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
++- **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `plan-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
++- **plan-terms block**: the text of `docs/glossary.md` between the plan-terms markers, a copy of the `repo-setup` skill's `templates/plan-terms.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
++- **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe; a false one the plan can absorb is corrected in `plan.md`, and one it cannot is a stop. Stated in: `spec`, "What it reads" 5 and Steps 2.
++- **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists; its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
++- **project skills**: the skills a repository installs with the skills CLI into `.agents/skills/`, linked under `.claude/skills/` and listed in `skills-lock.json` and in `CLAUDE.md`'s Skills section. Stated in: `repo-setup`, Steps 6 and 7.
++- **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
++- **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
++- **questions, the**: the eight questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
++- **recurring finding**: a cause of findings that `plan-orchestration`'s pass, every tenth landed step and at any pause, finds in three or more steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
++- **red line**: a verification line that fails on main after the cherry-pick; one a fix inside the brief closes is a fix at landing, and any other takes the step back out of main. Stated in: `land`, Steps 6. A red check no fix within the plan covers is a stop. Stated in: `plan-orchestration`, "Stops".
++- **refusal**: a skill's end without a decision for the user: it names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
++- **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`: the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, with a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
++- **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry; the round cap allows at most `repair_rounds`, and one more only when the delta leaves a verification command red or an acceptance item unbuilt with a fix too large for landing. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
++- **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover, each holding only the paths its session wrote since the last one. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
++- **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
++- **reviewer**: the fresh session or agent that refutes a built step without changing anything, never the builder, on the model the configuration block's `reviewer:` names, which the brief-check agent also runs on. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models".
++- **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number that never changes; `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
++- **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes".
++- **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported; every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
++- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session, a ruling that adds or splits a step also written in the Rulings section of `plan.md` as a line ending with "(the user)" and named by a step's `(ruling <name>)` tag. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
++- **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
++- **sequence, the**: the command sequence for running a plan by hand that `/plan-help` prints verbatim. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand; its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
++- **shared path**: a file the briefs of two steps in flight both name, allowed only when the orchestrator judges the merge at landing simple and names it under `shared_paths:` in the later step's dispatch entry. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
++- **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
++- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`, the change standard and the prose standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
++- **state file**: the plan's `orchestrator-state.md`: the configuration block, the dispatch block, the open items, the closed items and the current position, rewritten before every step commit and read first after a compaction. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
++- **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority; the orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
++- **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
++- **stop**: a halt for a decision that is the user's, booked as an open item in the state file and under the step's Step 0 and committed as a resume point; under the loop it blocks only its own step. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops".
++- **sync**: `/repo-setup sync`, which compares a repository's shared-rules block and plan-terms block with their templates and rewrites them after approval. Stated in: `repo-setup`, "Steps / sync".
++- **taken back out of main**: what a red line no fix inside the brief closes does to a step at landing: its changes are removed from main, its dispatch entry reads `landing: backed-out`, its worktree and branches are kept, its failure goes into its Step 0, and `/spec` saves its work as a patch and prepares it again. Stated in: `land`, Steps 6; `spec`, "Steps / A step taken back out of main".
++- **tiers**: the orchestrator, and the agents it starts (builders, reviewers and brief-check agents), each on the model the section names. Stated in: `plan-orchestration`, "The two tiers, and the models".
++- **time box**: the reviewer's limit, the configuration block's `review_minutes` when above 0 or one the invocation names, kept by reporting what was checked and naming what was not. Stated in: `refute`, Rules.
++- **user-visible choice**: a choice the user owns: a public shape, a wire format, a config key or a vocabulary, and, under `libraries: check`, a library that could replace code the step would write by hand; a brief never takes one, and `/spec` stops on it. Stated in: `spec`, Steps 4 and "Stops".
++- **verdict**: the reviewer's judgment of each item of the brief's "What to build" (holds, violated or not applicable) and of each case (met, partial, unmet or not verifiable), a verdict of violated, partial or unmet naming its finding. Stated in: `refute`, "The verdicts".
++- **verification page**: the page `.agents/plan.yaml`'s `verification:` names, which defines the green check with the commands every step runs; `/plan` copies them into the verify list. Stated in: `plan`, "What it reads" 3 and Steps 4; `ordo-init`, Steps 3.
++- **verify list**: the `verify:` key of the configuration block, run in order through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, the worktree and then main; the lines it prints are what a report or a booking quotes. Stated in: `land`, "The landing script"; `plan`, Steps 4.
++- **wip**: the commit `/land` makes in the step's worktree of everything the builder left, the ledger root left out, when something is staged. Stated in: `land`, Steps 3.
++- **worker**: the configuration key `worker:`, `claude:<model>` of the builder. Stated in: `plan-orchestration`, "The two tiers, and the models"; `plan`, Steps 4. Also the builder itself, whose identity the dispatch entry records. Stated in: `spec`, Steps 9.
++- **worktree**: a step's git worktree at `<worktree_root>/<step>`, on a branch named after its folder, created from the base; the builder's only place to work, removed by `/land` after the landing and kept after a step is taken back out of main. Stated in: `spec`, Steps 7; `land`, "Removing a step's worktree".
++<!-- ordo:plan-terms end -->
++
++## Ordo's own terms
++
++- **blind comparison**: the comparison of a new skill's output with another skill's on one real input, judged unlabelled and in random order by two fresh judges with the order swapped, the user making the final call a gate reads. Stated in: `docs/dev/blind-comparison.md`.
++- **case, of a skill's description**: a request a skill is for, for which its description's `Triggers on:` lists at least one phrase. Stated in: `docs/dev/skill-layout.md`, "Frontmatter".
++- **coverage list**: the list a rewrite of text keeps, one row per rule of the old text, each naming the place in the new text that states that rule whole. Stated in: `docs/dev/change-standard.md`, rule 18. Also the Markdown file `utils/check_coverage.py` checks, which lists every file of the named skill folders once with a mark (`rebuild: <skill>`, `rebuild later: <skill>` or `drop`) and a reason. Stated in: `utils/check_coverage.py`, its head comment.
++- **critical failure**: a failure that makes an output of a blind comparison unfit for the purpose the input sets, such as a claim the input contradicts, a missing part the input asks for, or a citation that does not resolve. Stated in: `docs/dev/blind-comparison.md`, steps 1 and 5.
++- **loop, in the README**: the path every step of a plan takes, from its brief through its build in a worktree and its review to its cherry-pick onto main. Stated in: `README.md`, the introduction.
++- **pin**: the installed skills held at a tag while Ordo is changed: `utils/pin.sh <tag>` puts the pinned worktree `~/.local/share/ordo-stable` at that tag and links every skill from it, and `utils/pin.sh` with no tag checks the links. Stated in: `README.md`, "Working on Ordo"; `utils/pin.sh`, its head comment.
++- **verdict, of a blind comparison**: a judge's A, B or tie with its reasons; the two verdicts, read through the key, give the result when they agree and a tie when they differ. Stated in: `docs/dev/blind-comparison.md`, steps 6 and 7.
+diff --git a/skills/repo-setup/templates/docs/glossary.md b/skills/repo-setup/templates/docs/glossary.md
+new file mode 100644
+index 0000000..6f6ac77
+--- /dev/null
++++ b/skills/repo-setup/templates/docs/glossary.md
+@@ -0,0 +1,13 @@
++# Glossary
++
++This page defines each term this project uses in a sense of its own. The plan skills' terms stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only. The project's own terms follow the block, and each is used only in the sense defined here.
++
++<!-- ordo:plan-terms begin -->
++<!-- ordo:plan-terms end -->
++
++## Project terms
++
++<!-- An entry:
++
++- **<term>**: <definition, one or two sentences>.
++-->
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+new file mode 100644
+index 0000000..beaebca
+--- /dev/null
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -0,0 +1,92 @@
++## Plan terms
++
++- **A/B**: the landing's comparison of the staged base binaries with the new build, the benchmark commands the configuration block's `bench:` names run alternately after warm-ups, at least ten runs each; an empty `bench:` means no A/B. Stated in: `land`, Steps 8; `spec`, Steps 8.
++- **acceptance item**: a requirement of the brief's "What to build"; one the delta leaves unbuilt, with a fix too large for landing, is one of the two conditions that allow a round beyond `repair_rounds`. Stated in: `plan-orchestration`, Rules.
++- **authority**: the tags that end a step line of `plan.md`, `(approved)` for a step of the list the user approved when the plan opened and `(ruling <name>)` for each ruling the step rests on; `/spec` refuses a step without it. Stated in: `plan`, Rules; `spec`, "What it reads" 4 and Steps 1.
++- **bar**: the standard a builder's first report meets when its step lands with at most one fix at landing; the booking and the landing report state whether it passed, and under `review: earned` a failed bar puts the reviewer back. Stated in: `land`, Steps 9 and 11; `plan-orchestration`, "The review, earned".
++- **base**: the hash of a step's preparation commit, recorded in its dispatch entry: the worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it; the base binaries are the build `/spec` stages from it for the A/B. Stated in: `spec`, Steps 6, 7 and 8; `land`, Steps 4; `refute`, "What it reads" 5.
++- **booking**: the record `/land` appends to `plan.md` for a landed step: what landed and where, the premise corrections, the findings raised as open items, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
++- **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape; a repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
++- **brief check**: the check of a brief against the tree, before the preparation commit, by one fresh read-only agent on the reviewer's model (the brief-check agent), whose report is saved at `agents/reviews/<step>-brief-check.md` and each of whose findings is closed by a change to the brief or is a stop. Stated in: `spec`, Steps 5 and "Steps / The brief check".
++- **builder**: the agent that builds one step in the step's worktree under the brief and the rules file, runs no git command and writes in the ledger only its report; under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
++- **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
++- **case**: an example under a brief's "Cases", an input with its expected result, each must-pass and must-refuse example the step's text gives and, for a code step, each input it implies; the builder's first run of every case on the unchanged tree comes before any change, a code step's case as a test and a text step's by reading. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run, at least five of them. Stated in: `spec`, Steps 4.
++- **Closed**: the heading of a report that holds each finding's disposition: in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
++- **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
++- **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
++- **completion notice**: what the runner reports when an agent ends: its final message, and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
++- **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once` and `bench`. Stated in: `plan`, Steps 4.
++- **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived; it is reported to the user, and a continuation builder takes over its worktree only when the user says so. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **Declined to judge**: the section of a refuter or brief-check report that names each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason. Stated in: `refute`, Steps 6; `spec`, "Steps / The brief check".
++- **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base; with `refute_after_repair: no` the orchestrator's read of the delta stands in for a refutation. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
++- **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9.
++- **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared; the orchestrator adds the builder's identity under `session_id` (its agent id, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7; `land`, Steps 2 and 6.
++- **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
++- **executor**: who builds a step: `agent`, a builder dispatched in the worktree; `inline`, the orchestrating session itself; `academic-paper`, that skill, always for manuscript content; the configuration block holds the plan's default and the orchestrator chooses per step. Stated in: `plan-orchestration`, Steps 4; `plan`, Steps 4.
++- **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item; a finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
++- **fix at landing**: a fix made on main during `/land`, for a red line a fix inside the brief closes or for a small finding of the last round's refutation inside the brief, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
++- **four headings**: the headings a reviewer's findings go under, Spec, Proof, Standards and Behaviour, each finding with its failure scenario. Stated in: `refute`, "The four headings".
++- **gate**: the check that proves a roadmap entry done, a command from the verification page, a test and what it asserts, or an observable result, which `/plan` copies into `plan.md`'s "## Gate"; a step's own gate is the check on its step line. Stated in: `roadmap`, "Steps / add" 2 and 3; `plan`, Steps 2; `spec`, Steps 4. Also any check that decides whether work passes: a script for a fact, a review for a judgment. Stated in: `repo-setup`, `templates/shared-rules.md`, "Scripts compute facts; judgment is read".
++- **goal**: what exists when a roadmap entry is done, in one or two sentences, copied into `plan.md`; in the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
++- **hand-back**: a builder's stop before any change when its first run finds a case the brief's rules get wrong, returning the first run and that case with the rule and the result; the orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
++- **handover**: one session stopping and another continuing the plan from the ledger alone, a resume point at which the stopping session commits the records it wrote. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`; `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
++- **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
++- **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings; a kind is recurring when it appears in at least three steps or two plans, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
++- **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
++- **launch commit**: the commit of a dispatch entry once its builder's identity is in it, right after the launch under `agent` and before the build under `inline` and `academic-paper`; it is a resume point. Stated in: `plan-orchestration`, Steps 4.
++- **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`; it is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
++- **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state, when the step changes a view; an empty `look:` means no look. Stated in: `land`, "The look".
++- **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another, until a pause or until nothing unblocked is left. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated up to `repair_rounds` times, or once more under the round cap's exception. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **night rule**: the limit the loop keeps when the user sets a time by which no agent may run: dispatch only what fits before the cut-off, and at the cut-off stop what runs and pause the plan. Stated in: `plan-orchestration`, "The pace when a deadline is set".
++- **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first; `/plan` refuses such an entry until `/roadmap add <entry>` names its gate. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
++- **open item**: an entry of the state file's open items: a decision only the user can make, with its options, their pros and cons and one recommendation, closed by the user's ruling; or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
++- **orchestrator**: the session that runs a plan: it reads, decides, invokes the skills, lands and books, and writes no step code beyond a fix at landing unless the step's executor is `inline`; run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
++- **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
++- **pause**: a halt of the loop the user asks for, which holds until the user lifts it; nothing is dispatched during it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
++- **plan**: the work of one roadmap entry, opened by `/plan` as a ledger folder whose `plan.md` holds the goal, the gate, the step list and the rulings. Stated in: `plan`, Steps. Also the roadmap file as the ordered build plan over a capability map. Stated in: `roadmap`, "A capability map beside the ordered file".
++- **plan configuration**: `.agents/plan.yaml`, the only place a project specific lives, which every plan skill reads; `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
++- **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `plan-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
++- **plan-terms block**: the text of `docs/glossary.md` between the plan-terms markers, a copy of the `repo-setup` skill's `templates/plan-terms.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
++- **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe; a false one the plan can absorb is corrected in `plan.md`, and one it cannot is a stop. Stated in: `spec`, "What it reads" 5 and Steps 2.
++- **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists; its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
++- **project skills**: the skills a repository installs with the skills CLI into `.agents/skills/`, linked under `.claude/skills/` and listed in `skills-lock.json` and in `CLAUDE.md`'s Skills section. Stated in: `repo-setup`, Steps 6 and 7.
++- **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
++- **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
++- **questions, the**: the eight questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
++- **recurring finding**: a cause of findings that `plan-orchestration`'s pass, every tenth landed step and at any pause, finds in three or more steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
++- **red line**: a verification line that fails on main after the cherry-pick; one a fix inside the brief closes is a fix at landing, and any other takes the step back out of main. Stated in: `land`, Steps 6. A red check no fix within the plan covers is a stop. Stated in: `plan-orchestration`, "Stops".
++- **refusal**: a skill's end without a decision for the user: it names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
++- **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`: the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, with a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
++- **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry; the round cap allows at most `repair_rounds`, and one more only when the delta leaves a verification command red or an acceptance item unbuilt with a fix too large for landing. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
++- **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover, each holding only the paths its session wrote since the last one. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
++- **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
++- **reviewer**: the fresh session or agent that refutes a built step without changing anything, never the builder, on the model the configuration block's `reviewer:` names, which the brief-check agent also runs on. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models".
++- **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number that never changes; `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
++- **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes".
++- **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported; every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
++- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session, a ruling that adds or splits a step also written in the Rulings section of `plan.md` as a line ending with "(the user)" and named by a step's `(ruling <name>)` tag. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
++- **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
++- **sequence, the**: the command sequence for running a plan by hand that `/plan-help` prints verbatim. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand; its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
++- **shared path**: a file the briefs of two steps in flight both name, allowed only when the orchestrator judges the merge at landing simple and names it under `shared_paths:` in the later step's dispatch entry. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
++- **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
++- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`, the change standard and the prose standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
++- **state file**: the plan's `orchestrator-state.md`: the configuration block, the dispatch block, the open items, the closed items and the current position, rewritten before every step commit and read first after a compaction. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
++- **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority; the orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
++- **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
++- **stop**: a halt for a decision that is the user's, booked as an open item in the state file and under the step's Step 0 and committed as a resume point; under the loop it blocks only its own step. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops".
++- **sync**: `/repo-setup sync`, which compares a repository's shared-rules block and plan-terms block with their templates and rewrites them after approval. Stated in: `repo-setup`, "Steps / sync".
++- **taken back out of main**: what a red line no fix inside the brief closes does to a step at landing: its changes are removed from main, its dispatch entry reads `landing: backed-out`, its worktree and branches are kept, its failure goes into its Step 0, and `/spec` saves its work as a patch and prepares it again. Stated in: `land`, Steps 6; `spec`, "Steps / A step taken back out of main".
++- **tiers**: the orchestrator, and the agents it starts (builders, reviewers and brief-check agents), each on the model the section names. Stated in: `plan-orchestration`, "The two tiers, and the models".
++- **time box**: the reviewer's limit, the configuration block's `review_minutes` when above 0 or one the invocation names, kept by reporting what was checked and naming what was not. Stated in: `refute`, Rules.
++- **user-visible choice**: a choice the user owns: a public shape, a wire format, a config key or a vocabulary, and, under `libraries: check`, a library that could replace code the step would write by hand; a brief never takes one, and `/spec` stops on it. Stated in: `spec`, Steps 4 and "Stops".
++- **verdict**: the reviewer's judgment of each item of the brief's "What to build" (holds, violated or not applicable) and of each case (met, partial, unmet or not verifiable), a verdict of violated, partial or unmet naming its finding. Stated in: `refute`, "The verdicts".
++- **verification page**: the page `.agents/plan.yaml`'s `verification:` names, which defines the green check with the commands every step runs; `/plan` copies them into the verify list. Stated in: `plan`, "What it reads" 3 and Steps 4; `ordo-init`, Steps 3.
++- **verify list**: the `verify:` key of the configuration block, run in order through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, the worktree and then main; the lines it prints are what a report or a booking quotes. Stated in: `land`, "The landing script"; `plan`, Steps 4.
++- **wip**: the commit `/land` makes in the step's worktree of everything the builder left, the ledger root left out, when something is staged. Stated in: `land`, Steps 3.
++- **worker**: the configuration key `worker:`, `claude:<model>` of the builder. Stated in: `plan-orchestration`, "The two tiers, and the models"; `plan`, Steps 4. Also the builder itself, whose identity the dispatch entry records. Stated in: `spec`, Steps 9.
++- **worktree**: a step's git worktree at `<worktree_root>/<step>`, on a branch named after its folder, created from the base; the builder's only place to work, removed by `/land` after the landing and kept after a step is taken back out of main. Stated in: `spec`, Steps 7; `land`, "Removing a step's worktree".

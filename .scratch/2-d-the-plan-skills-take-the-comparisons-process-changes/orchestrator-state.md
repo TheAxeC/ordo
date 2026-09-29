@@ -40,8 +40,10 @@ dispatch:
   report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-report.md
   brief_check: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-brief-check.md (run 1 143632 tokens, 39 tool uses, 387 s; run 2 161763 tokens, 32 tool uses, 475 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: adbfbd5f3e5b016d9
+  builder_usage: first run 337615 tokens, 75 tool uses, 1328 s
+  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-refuter.md (first run: 258063 tokens, 59 tool uses, 665 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
