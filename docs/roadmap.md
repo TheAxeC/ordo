@@ -29,14 +29,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: A `grill` skill: an interview in rounds, each round asking every question whose prerequisites are settled, each question with its options, their pros and cons, one recommendation and the lazy option named; facts looked up by agents instead of asked; each answer written, as it settles, into the roadmap entry, the plan's Rulings and `docs/glossary.md`.
-- Gate: the skill follows `docs/dev/skill-layout.md`, read by you; one real run that redrafts roadmap entry 3 from its sources, whose glossary terms and rulings are on disk when the interview ends, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `grill-with-docs` on the same entry.
+- Gate: the skill follows `docs/dev/skill-layout.md`, read by you; one real run that redrafts roadmap entry 3 from its sources, whose glossary terms and rulings are on disk when the interview ends, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `grill-with-docs` on the same entry, wins or ties.
 - Waits on: 2.D, for the glossary, the layout rules and the blind-comparison protocol.
 
 ## 2.F diagnose
 
 - Status: [ ]
 - Goal: A `diagnose` skill: one command red on the exact symptom before any theory; the case shrunk; three to five ranked hypotheses that each name what would falsify it, shown to you; one change per probe; the fix with a test that is red without it; the cause written in the booking. `plan-orchestration`'s rule for a finding whose cause is not known points at it.
-- Gate: one real run on a defect of an archived plan whose cause the ledger books, put back on a scratch copy of the tree: the run reaches that cause, its red command and its hypotheses quoted, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `diagnosing-bugs` on the same defect.
+- Gate: one real run on a defect of an archived plan whose cause the ledger books, put back on a scratch copy of the tree: the run reaches that cause, its red command and its hypotheses quoted, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `diagnosing-bugs` on the same defect, wins or ties.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
 ## 2.G git guard
@@ -162,7 +162,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: A standalone `/review` of any diff since a commit, outside a plan, in the verdict form of `/refute`: a verdict per stated intent of the change and per claim of its commit messages, each finding with its failure scenario.
-- Gate: one real run on a diff that holds a defect you know of, which the review finds with its failure scenario, reviewed by you; a blind comparison under the protocol of 2.D against ConnorGriffin's `code-review` on the same diff.
+- Gate: one real run on a diff that holds a defect you know of, which the review finds with its failure scenario, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against ConnorGriffin's `code-review` on the same diff, wins or ties.
 - Waits on: 2.D, for the verdict form.
 
 ## 18. wait-what
@@ -176,14 +176,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: A `codebase-design` skill and a design-standard page in `repo-setup`'s templates, in the form of Cathedra's "Design principles" (`docs/dev/standards/coding-standards.md`): single responsibility, separation of concerns, open for extension and closed for modification, substitutability, interface segregation, dependency inversion, do not repeat yourself, keep it simple and you are not going to need it, each stated in the concrete form it takes in the repository, with the check that enforces it where one exists.
-- Gate: one real run on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; a blind comparison under the protocol of 2.D against mattpocock's `codebase-design` on the same repository.
+- Gate: one real run on a repository you name that fills its design-standard page, reviewed by you; one run on Cathedra whose page holds every point of its existing "Design principles" section, checked by reading both; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `codebase-design` on the same repository, wins or ties.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
 ## 20. improve-codebase-architecture
 
 - Status: [ ]
 - Goal: An `improve-codebase-architecture` skill that reads a repository against its design-standard page and writes candidates, each naming the principle it breaks, its files and lines, the problem, the fix, the benefit and how strongly it is recommended, then grills through the one you pick into a roadmap entry.
-- Gate: one real run on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; a blind comparison under the protocol of 2.D against mattpocock's `improve-codebase-architecture` on the same repository.
+- Gate: one real run on Cathedra, each candidate reviewed by you, the one you pick written into its roadmap entry through `grill`; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `improve-codebase-architecture` on the same repository, wins or ties.
 - Waits on: 19, for the design-standard page; 2.E, for `grill`.
 
 ## 21. wizard
@@ -197,7 +197,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: A `teach` skill: a teaching workspace that persists across sessions, with a mission file saying why you learn the topic, short lessons tied to it, reference sheets, records of what you learned, and retrieval practice spaced over time.
-- Gate: one real run on a topic you name over at least two sessions, the second reading the first's records and scheduling its retrieval practice, reviewed by you; a blind comparison under the protocol of 2.D against mattpocock's `teach` on the same topic.
+- Gate: one real run on a topic you name over at least two sessions, the second reading the first's records and scheduling its retrieval practice, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `teach` on the same topic, wins or ties.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
 ## 23. Pruning pass
