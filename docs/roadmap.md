@@ -71,28 +71,28 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The literature skill: search through Crossref, OpenAlex, Semantic Scholar and arXiv, source verification, synthesis and the `.bib`.
-- Gate: every source it cites resolves; a side-by-side run against deep-research on a real topic, compared blind, wins or ties; the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
+- Gate: every source it cites resolves; a side-by-side run against deep-research on a real topic, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
 - Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 5. paper
 
 - Status: [ ]
 - Goal: The paper skill: drafting, structure, citations, figures and statistics, disclosure statements and revision patches, as the coverage inventory marks them rebuild, with the `tools/manuscript` scripts moved in.
-- Gate: `anchorize_tex.py` and `apply_tex_patch.py` pass their tests in the skill; the `\cite`-against-`.bib` check and the DOI check pass their tests; a side-by-side run against academic-paper on a real revision round, compared blind, wins or ties; the plan's ledger holds a record for each `rebuild: paper` row that the file of `skills/paper/` the row names holds what the source file did, checked by reading both.
+- Gate: `anchorize_tex.py` and `apply_tex_patch.py` pass their tests in the skill; the `\cite`-against-`.bib` check and the DOI check pass their tests; a side-by-side run against academic-paper on a real revision round, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: paper` row that the file of `skills/paper/` the row names holds what the source file did, checked by reading both.
 - Waits on: 3, for the writing base; 2, for the coverage; 9, for the reference lookups.
 
 ## 6. paper-review
 
 - Status: [ ]
 - Goal: The internal review skill: the reviewer roles, the editor's synthesis and the re-review mode.
-- Gate: every finding cites a line; a side-by-side run against academic-paper-reviewer on a paper with known referee reports, compared blind, wins or ties; the plan's ledger holds a record for each `rebuild: paper-review` row that the file of `skills/paper-review/` the row names holds what the source file did, checked by reading both.
+- Gate: every finding cites a line; a side-by-side run against academic-paper-reviewer on a paper with known referee reports, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: paper-review` row that the file of `skills/paper-review/` the row names holds what the source file did, checked by reading both.
 - Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 7. rebuttal
 
 - Status: [ ]
 - Goal: The response letter for a real submission round, from the referee comments and the revision's apply report.
-- Gate: every referee point has a response and a pointer to its change; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
+- Gate: every referee point has a response and a pointer to its change; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
 - Waits on: 5, for the apply report; 6, for the point table.
 
 ## 8. grant
@@ -106,7 +106,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The idea skill: the interview that sharpens an idea, and the novelty check with cited literature.
-- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind, wins or ties; the plan's ledger holds a record for each `rebuild: idea` row that the file of `skills/idea/` the row names holds what the source file did, checked by reading both.
+- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: idea` row that the file of `skills/idea/` the row names holds what the source file did, checked by reading both.
 - Waits on: 9, for the literature search.
 
 ## 11. scaffold
