@@ -35,7 +35,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-None.
+- Open item E (2026-09-29, step 9, a stop at /spec's brief check, `agents/reviews/9-brief-check.md`): what the glossary template of `/repo-setup` holds, and whether a glossary is a standard. The plan skills run in every repository `/repo-setup` sets up, and their ledgers use their terms there (brief, ledger, landing, open item), but the skills are installed per user, so Ordo's `docs/glossary.md` is not in that repository's tree. Question 1, the template: (a) empty, an introduction and an entry form, for the project's own terms only; the plan skills' terms stay in Ordo's glossary alone; (b) the plan skills' terms copied into the template, with a section for the project's own terms below them; (c) a pointer to Ordo's glossary for the plan skills' terms, and the project's own terms below it. Pros and cons: (a) one source for each plan-skill term, but a repository's reader meets "brief" or "open item" in its ledger with no definition on disk; (b) every term defined in the repository, but each plan-skill term then has two copies that drift apart as the skills change, unless `/repo-setup sync` keeps them in step as it does the shared rules; (c) one source and a way to find it, but the pointer is a path on the user's machine or a URL, which a reader without Ordo installed cannot follow. Recommendation: (b), with the plan-skill section kept in step by `/repo-setup sync` like the shared-rules block, because the ledger is read in the repository, often by an agent that has only the repository; the sync makes the copy a mechanical fact rather than a second source. The lazy option is (a). Question 2: add `docs/glossary.md` to `.agents/plan.yaml`'s `standards`, so every brief points builders and reviewers at it: (a) yes, (b) no. Recommendation: (a), since the new rule in `docs/dev/skill-layout.md` binds every skill text a builder writes, and a builder reads the standards the brief names.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -69,5 +69,5 @@ None.
 
 - 2026-09-29. Step 8 done: main tagged v2.4.0 at 5be7e73 and the installed skills pinned to it.
 - Verified: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.4.0`.
-- Next step: step 9, the glossary, prepared, built and refuted under the v2.4.0 skills.
-- Open on Axel's side: nothing.
+- Stopped: step 9, the glossary, at its brief check; open item E waits on Axel. No brief, worktree or dispatch entry exists for it.
+- Open on Axel's side: open item E.

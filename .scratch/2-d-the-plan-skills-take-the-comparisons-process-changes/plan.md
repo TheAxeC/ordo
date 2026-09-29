@@ -41,7 +41,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 ## Blocked, and by what
 
 - 8: steps 1 to 7, and your yes to the pin.
-- 9: step 8.
+- 9: open item E, the ruling on the glossary template and the standards.
 - 10: steps 1 to 9, your reading of every diff, and your yes to the pin.
 
 ### Step 1, the writing rules for skill text (landed 2026-09-29)
@@ -120,3 +120,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - On the user's yes: `git tag -a v2.4.0 -m "Ordo v2.4.0" 5be7e73`, then `sh utils/pin.sh v2.4.0`, which printed `pinned: v2.4.0 (5be7e73), 10 skills linked in: /Users/axelfaes/.claude/skills`, exit 0.
 - Verification: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.4.0`; the installed `spec` skill reads `version: "1.7.0"` and holds "The brief check".
 - Usage: no agent.
+
+### Step 9, Step 0 (a stop at /spec, 2026-09-29)
+
+- Open item E (2026-09-29, step 9, a stop at /spec's brief check, `agents/reviews/9-brief-check.md`): what the glossary template of `/repo-setup` holds, and whether a glossary is a standard. The plan skills run in every repository `/repo-setup` sets up, and their ledgers use their terms there (brief, ledger, landing, open item), but the skills are installed per user, so Ordo's `docs/glossary.md` is not in that repository's tree. Question 1, the template: (a) empty, an introduction and an entry form, for the project's own terms only; the plan skills' terms stay in Ordo's glossary alone; (b) the plan skills' terms copied into the template, with a section for the project's own terms below them; (c) a pointer to Ordo's glossary for the plan skills' terms, and the project's own terms below it. Pros and cons: (a) one source for each plan-skill term, but a repository's reader meets "brief" or "open item" in its ledger with no definition on disk; (b) every term defined in the repository, but each plan-skill term then has two copies that drift apart as the skills change, unless `/repo-setup sync` keeps them in step as it does the shared rules; (c) one source and a way to find it, but the pointer is a path on the user's machine or a URL, which a reader without Ordo installed cannot follow. Recommendation: (b), with the plan-skill section kept in step by `/repo-setup sync` like the shared-rules block, because the ledger is read in the repository, often by an agent that has only the repository; the sync makes the copy a mechanical fact rather than a second source. The lazy option is (a). Question 2: add `docs/glossary.md` to `.agents/plan.yaml`'s `standards`, so every brief points builders and reviewers at it: (a) yes, (b) no. Recommendation: (a), since the new rule in `docs/dev/skill-layout.md` binds every skill text a builder writes, and a builder reads the standards the brief names.
