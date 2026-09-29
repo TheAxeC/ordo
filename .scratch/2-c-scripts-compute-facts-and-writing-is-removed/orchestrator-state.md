@@ -49,6 +49,7 @@ None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: step 7's roadmap diff approved by the user and written (51ca1a5).
 - 2026-09-29: open item C, the ASCII check's exit status and `__pycache__`: ruled (a), step 5 is widened to fix both.
 - 2026-09-29: open item D, `utils/pin.sh` line 69: ruled (a), deleted at step 6's landing.
 - 2026-09-29: step 6's removed cases approved by the user.
@@ -78,8 +79,8 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1 to 4 and 6 done. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
+- 2026-09-29. Steps 1 to 4, 6 and 7 done. Step 7: the roadmap change the user approved, commit 51ca1a5. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 5, the rules, widened by open item C and carrying rule 15; its builder runs in `.agents/worktrees/2c-5`. Step 7, the roadmap, is drafted and waits on the user's approval of its diff.
-- Open on Axel's side: the approval of step 7's roadmap diff.
+- In flight: step 5, the rules, widened by open item C and carrying rule 15; its builder runs in `.agents/worktrees/2c-5`.
+- Open on Axel's side: nothing until step 5's rules diff is ready for his reading.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
