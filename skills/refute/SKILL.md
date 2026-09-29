@@ -42,7 +42,12 @@ metadata:
 
 ## Steps
 
-1. Dispatch one reviewer, on the model the configuration block's `reviewer:` names, once per step before its first repair round.
+1. Dispatch one reviewer as the effort agent `ordo-<reviewer_effort>` (the configuration block's `reviewer_effort`, `high` when the block has no such key), on the model the configuration block's `reviewer:` names, once per step before its first repair round.
+   - Before the dispatch, check that the runner lists that agent among its agent types.
+   - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
+   - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
+   - Right after the dispatch, the orchestrator or the session reads the model the runner served the reviewer, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
+   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
 2. The reviewer reads the inputs in the order "What it reads" gives them.
 3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
    - The step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks (the step's worktree).
@@ -58,13 +63,13 @@ metadata:
    - Then "Declined to judge": each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason.
    - Then the reviewer's usage.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
-   - It records the report's path under the dispatch block's `reviewer_report` field, with the reviewer's tokens, tool uses and time from its completion notice beside it.
+   - It records the report's path under the dispatch block's `reviewer_report` field, with the reviewer's served model (Steps 1) and its tokens, tool uses and time from its completion notice beside it.
    - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
 ### Over a repair round
 
-1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says.
+1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says.
    - A run that finds nothing ends the rounds.
 2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
 3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
@@ -137,12 +142,15 @@ metadata:
 
 ## Stops
 
+The first row is a stop, a decision for the user: it leaves an open item, booked in the state file's open items. The rows below it are refusals, which name their cause and leave nothing.
+
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| No stop | The skill never stops for a decision; the rows below are refusals, which name their cause and leave nothing | Nothing | Nothing |
+| A model other than the configured one | The runner served the reviewer a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | The user's ruling, then `/refute` again |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/refute` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared and built |
 | No report | No builder's report on disk | The report path the builder was told to write to | The report written, then `/refute` again |
+| The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level the configuration block's `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/refute` again in a new session |
 
 ## Anti-patterns
 

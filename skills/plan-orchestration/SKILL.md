@@ -41,6 +41,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 
 1. Read the inputs in the order "What it reads" gives them.
    - Resolve a dispatch block before anything else.
+   - Before any dispatch, check that the runner lists the effort agents `ordo-<worker_effort>` and `ordo-<reviewer_effort>` among its agent types, each level `high` when the configuration block has no such key.
+   - Before any dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
+   - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and the loop dispatches nothing.
 2. Pick the next step that nothing blocks.
    - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
 3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
@@ -56,7 +59,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **`agent`.** Dispatch one builder with the worktree path and the brief, by the recipe under "Launching a builder".
      - The moment it is launched, write its agent id into the dispatch block under `session_id`.
    - **The launch commit.** Under every executor, the dispatch entry is committed once its builder's identity is in it, and the commit is a resume point.
-     - Under `agent` it comes right after the launch, since the builder's agent id exists only once it is launched; under `inline` and `academic-paper` it comes before the build starts.
+     - Under `agent` it comes right after the launch and the model check of "Launching a builder", since the builder's agent id exists only once it is launched; under `inline` and `academic-paper` it comes before the build starts.
      - The paths are the state file and the session's own records since the last resume point, named in `git add -- <path> ...`.
    - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report, the main checkout, the user's data); the reading order (the rules file, the brief, the standards); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
    - **The builder.** It never runs a git command.
@@ -88,7 +91,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
    - Read the diff yourself while it runs.
    - Save its report.
-     - Write its path, with the reviewer's tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report`, on disk; the next resume-point commit carries them.
+     - Write its path, with the reviewer's served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report`, on disk; the next resume-point commit carries them.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Before the resume.** Write `round: n` into the dispatch block.
@@ -126,9 +129,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
   - It reads, decides, invokes the skills, lands and books.
   - It never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
 - **Agents.** A builder, a reviewer or a brief-check agent runs on a Claude model, and never on Claude Fable.
-- **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names.
-- **Reviewer.** The model the configuration block's `reviewer:` names.
-- **Brief-check agent.** One per `/spec` run that reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model.
+- **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names, at the effort `worker_effort` names, launched as "Launching a builder" says.
+- **Reviewer.** The model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+- **Brief-check agent.** One per `/spec` run that reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
 - **Runner.** Both tiers run under Claude Code.
 - Any allowed combination is chosen per step.
 - A new combination is booked in the rulings with what decides it.
@@ -222,7 +225,11 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 
 ## Launching a builder
 
-- A builder (`claude:<model>`) is dispatched with the runner's Agent tool, with `subagent_type: general-purpose`, the model named and the prompt of Steps 4.
+- A builder (`claude:<model>`) is dispatched with the runner's Agent tool, with `subagent_type: ordo-<worker_effort>`, the effort agent of the configuration block's `worker_effort` (`high` when the block has no such key), the model named and the prompt of Steps 4.
+- Right after the launch, and before the launch commit (Steps 4), the orchestrator reads the model the runner served the builder from the runner's own record of the agent: under Claude Code, the `model` field of the assistant entries of the agent's transcript, `subagents/agent-<agent id>.jsonl` in the session's folder under `~/.claude/projects/`, or under `$CLAUDE_CONFIG_DIR/projects/` when that variable is set.
+- The orchestrator writes that model beside `session_id` in the dispatch entry, as `session_id: <agent id> (<served model>)`.
+- The same check runs when the builder is resumed for a repair round.
+- A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
 - It runs in the background.
   - The runner tracks it and reports when it ends.
 - A repair round resumes it with the runner's message tool on its agent id in `session_id`, as Steps 8 says.
@@ -268,7 +275,7 @@ When the user sets a time by which no agent may run, the loop keeps a night rule
 
 ## Stops
 
-A stop is for a decision that is the user's, of one of six kinds:
+The table holds seven kinds of stop, each for a decision that is the user's, and one refusal, the last row, which names its cause and leaves no open item:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
@@ -278,6 +285,8 @@ A stop is for a decision that is the user's, of one of six kinds:
 | A rule clash | A contradiction between two established rules | The stop message, below | The user's ruling |
 | A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by the user's ruling | The stop message, below | The user's ruling |
 | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
+| A model other than the configured one | The runner served a builder, a reviewer or a brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
+| The configured effort cannot apply | A refusal (Steps 1): the runner lists no `ordo-<level>` agent for a level the configuration block names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then a new session |
 
 - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
 - A stop is booked in the state file's open items the moment it is raised, and under the step's Step 0 in `plan.md`.

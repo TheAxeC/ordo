@@ -42,7 +42,7 @@ Findings: <each implied input missing from "Cases">. Or: none.
 
 - <a point the agent did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
 
-Agent usage: <tokens>, <tool uses>, <minutes>.
+Agent usage: <served model>, <tokens>, <tool uses>, <minutes>.
 
 ## Closed (the session's change to the brief for every finding above, made before the preparation commit)
 

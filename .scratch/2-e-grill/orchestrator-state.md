@@ -36,48 +36,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-- step: 3
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2e-3
-  base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
-  launched: 2026-09-29 21:44
-  session_id: a4e5bce8772d0d657 (claude-opus-5-5 at the launch and at round 1, from its transcript)
-  report: .scratch/2-e-grill/agents/reviews/3-report.md
-  builder_usage: 270520 tokens, 83 tool uses, 1857 s; round 1: 319642 tokens, 28 tool uses, 387 s
-  cases_ruling: .scratch/2-e-grill/agents/briefs/3-cases.md (after the build; applies to 3 and 3s)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/3-refuter.md (197731 tokens, 33 tool uses, 621 s)
-  brief_check: .scratch/2-e-grill/agents/reviews/3-brief-check.md (173243 tokens, 33 tool uses, 520 s)
-  landing: not-started
-  round: 1
-  round_1: brief .scratch/2-e-grill/agents/briefs/3-round-1.md; the tree when sent .scratch/2-e-grill/agents/reviews/3-round-0.diff
-- step: 3s
-  trial: launched as the Sonnet 5.5 build of step 3 under the ruling "Sonnet trial"; it ran on claude-sonnet-5 (Sonnet 5), since the session was then Claude Code 2.1.283, whose `sonnet` alias gives claude-sonnet-5 (every model field of agent-afb733385e80a6b22.jsonl reads claude-sonnet-5); kept as a data point; only one of 3, 3s and 3s55 lands
-  executor: agent
-  worker: claude:sonnet (ran as claude-sonnet-5)
-  worktree: .agents/worktrees/2e-3s
-  base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
-  launched: 2026-09-29 22:00
-  session_id: afb733385e80a6b22
-  report: .scratch/2-e-grill/agents/reviews/3s-report.md
-  builder_usage: 322209 tokens, 118 tool uses, 1805 s
-  reviewer_report: .scratch/2-e-grill/agents/reviews/3s-refuter.md (175588 tokens, 37 tool uses, 526 s)
-  landing: not-started
-  round: 0
-- step: 3s55
-  trial: the Sonnet 5.5 build of step 3 under the ruling "Sonnet trial", launched under Claude Code 2.1.285, whose `sonnet` alias gives claude-sonnet-5-5 (probe: a `claude -p` session's general-purpose agent with model sonnet recorded claude-sonnet-5-5); the same prompt as 3s with its paths; only one of 3, 3s and 3s55 lands
-  executor: agent
-  worker: claude:sonnet (claude-sonnet-5-5 under 2.1.285)
-  worktree: .agents/worktrees/2e-3s55
-  base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
-  launched: 2026-09-29 23:25
-  session_id: ae2714d2e377ffba9 (transcript model field: claude-sonnet-5-5, Claude Code 2.1.285)
-  report: .scratch/2-e-grill/agents/reviews/3s55-report.md
-  builder_usage: 205260 tokens, 47 tool uses, 1001 s
-  reviewer_report: .scratch/2-e-grill/agents/reviews/3s55-refuter.md (177523 tokens, 38 tool uses, 506 s)
-  landing: not-started
-  round: 0
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -120,7 +79,7 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1, 2, 4 and 5 are on main; roadmap entry 11's goal changed as ruling B (a) says (cb92d65).
-- Step 3: built twice under the ruling "Sonnet trial": Opus in `.agents/worktrees/2e-3` (reviewed, `3-refuter.md`) and Sonnet 5.5 in `.agents/worktrees/2e-3s` (built, `3s-report.md`, not yet reviewed). Paused at Axel's request for a restart, with no agent running.
-- Next on resume: a fresh Opus reviewer of the Sonnet build (`/refute`, the same instructions as the Opus build's, report saved as `3s-refuter.md`); then the comparison goes to Axel; the winning build gets its repair round and lands, and the other worktree and branch are removed.
-- Open on Axel's side: nothing yet; the trial's comparison comes to him after the second review.
+- 2026-09-30. Steps 1 to 5 are on main; step 3 landed from the Opus 5.5 build, the Sonnet 5 and Sonnet 5.5 builds' worktrees removed (ruling "Sonnet trial result").
+- `worker: claude:sonnet` for steps 6, 7 and 8, the Sonnet 5.5 measurement; each launch's served model is read from the agent's transcript and recorded.
+- Next: step 6, `ui-standard.md`, through `/spec`.
+- Open on Axel's side: the next pin, which puts step 3's skill texts and agents into use, needs his yes.

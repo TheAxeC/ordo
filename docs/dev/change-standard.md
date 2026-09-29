@@ -77,5 +77,5 @@ When a test is red, rerun that test without the filter and read its output. The 
 
 - The skills carry no project name and no path; everything specific to a repository comes from its `.agents/plan.yaml` (`README.md`, first paragraph).
 - Each script under a skill's `templates/` or under `utils/` has a test beside it for the behaviour whose failure costs something, run on scratch repositories or scratch files (`docs/dev/building.md`).
-- The pinned worktree `~/.local/share/ordo-stable` is never edited; the installed skills change only through `utils/pin.sh <tag>` (`README.md`, Working on Ordo).
+- The pinned worktree `~/.local/share/ordo-stable` is never edited; the installed skills and agents change only through `utils/pin.sh <tag>` (`README.md`, Working on Ordo).
 - A skill's rules state the rule; no dates, incidents or history (`skills/repo-setup/templates/shared-rules.md`, last rule).

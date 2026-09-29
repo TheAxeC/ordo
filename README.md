@@ -54,6 +54,8 @@ for every step:
 
 The skills call each other and read each other's templates, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
 
+The plan skills launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
+
 ### With the skills CLI
 
 ```sh
@@ -61,6 +63,17 @@ npx skills add TheAxeC/ordo --skill '*' -g -a claude-code
 ```
 
 This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`.
+
+The CLI installs and updates skills only. After `npx skills add`, and after each `npx skills update -g`, copy the agents from a clone:
+
+```sh
+rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
+mkdir -p ~/.claude/agents
+rm -f ~/.claude/agents/ordo-*.md
+cp /tmp/ordo/agents/*.md ~/.claude/agents/
+```
+
+For a second Claude Code account, run the last three commands again with `$CLAUDE_CONFIG_DIR/agents` in place of `~/.claude/agents`.
 
 ### By copying the folders
 
@@ -71,10 +84,13 @@ for dir in ~/.claude/skills; do
     for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
+    agents=$(dirname "$dir")/agents
+    mkdir -p "$agents"
+    rm -f "$agents"/ordo-*.md && cp /tmp/ordo/agents/*.md "$agents/"
 done
 ```
 
-For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders. Updating is the same commands again: each skill folder is replaced whole, so a file a newer version removes does not linger.
+The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger.
 
 ## Configuring a repository
 
@@ -124,22 +140,22 @@ A ledger file left uncommitted in the worktree, such as a builder's report, neve
 
 ## Working on Ordo
 
-While Ordo is being changed, the installed skills must not change with it: the plan skills run the change, so they stay at a fixed version until the change is done. The installed skills are links into a pinned checkout, a detached git worktree of the clone at a tag, and the clone's `main` is where the work happens.
+While Ordo is being changed, the installed skills and agents must not change with it: the plan skills run the change, so they stay at a fixed version until the change is done. The installed skills and agents are links into a pinned checkout, a detached git worktree of the clone at a tag, and the clone's `main` is where the work happens.
 
 ```sh
 git clone https://github.com/TheAxeC/ordo.git ~/workspace/ordo
 cd ~/workspace/ordo
-utils/pin.sh v1.1.0      # the worktree ~/.local/share/ordo-stable at v1.1.0, every skill linked from it
+utils/pin.sh v1.1.0      # the worktree ~/.local/share/ordo-stable at v1.1.0, every skill and every agent linked from it
 utils/pin.sh             # checks that every link points into the pinned worktree; changes nothing
 ```
 
-`pin.sh` links the skills into `~/.claude/skills` and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`. `ORDO_SKILL_DIRS` replaces that list of folders. `ORDO_STABLE` moves the pinned worktree to another path.
+`pin.sh` links the skills into `~/.claude/skills` and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`. `ORDO_SKILL_DIRS` replaces that list of folders. `pin.sh` links the agents into the `agents` folder beside each skill folder: `~/.claude/agents`, `$CLAUDE_CONFIG_DIR/agents`, or the sibling of each folder of `ORDO_SKILL_DIRS`. `ORDO_STABLE` moves the pinned worktree to another path.
 
-Check mode, `utils/pin.sh` with no tag, changes nothing and fails on each link into the clone and on each link into the pinned worktree for a skill the pinned tag lacks. Pin mode, `utils/pin.sh <tag>`, checks the links first and refuses, changing nothing, a link into the clone for a skill the tag lacks. It then links every skill of the tag, replaces each link into the clone, and removes each link into the pinned worktree for a skill the tag lacks.
+Check mode, `utils/pin.sh` with no tag, changes nothing and fails on each link into the clone and on each link into the pinned worktree for a skill or an agent the pinned tag lacks. Pin mode, `utils/pin.sh <tag>`, checks the links first and refuses, changing nothing, a link into the clone for a skill or an agent the tag lacks. It then links every skill and every agent of the tag, replaces each link into the clone, and removes each link into the pinned worktree for a skill or an agent the tag lacks.
 
 Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back is `utils/pin.sh <older tag>`. The pinned worktree is never edited, and `pin.sh` refuses to move one that has local changes. A pinned worktree deleted by hand is created again at the next `utils/pin.sh <tag>`, through `git worktree add --force`, which leaves the registration of every other worktree of the clone as it is.
 
-`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, folders whose path holds a space, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
+`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, folders whose path holds a space, what an agent of a tag is, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
 
 `docs/dev/building.md` lists the tests and checks to run before a change is committed.
 

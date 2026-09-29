@@ -1,7 +1,7 @@
 #!/bin/sh
-# Pin the installed Ordo skills to a tag of this repository, or check the pin.
+# Pin the installed Ordo skills and agents to a tag of this repository, or check the pin.
 #
-# Usage: utils/pin.sh <tag>    check the pinned worktree out at <tag> and link every skill from it
+# Usage: utils/pin.sh <tag>    check the pinned worktree out at <tag> and link every skill and every agent from it
 #        utils/pin.sh          check that every link points into the pinned worktree; change nothing
 #
 # The pinned worktree is $ORDO_STABLE (default ~/.local/share/ordo-stable), a detached git
@@ -31,6 +31,30 @@
 # with its folder resolved. Pin mode removes each such link after linking and prints a line for
 # each. Every other entry of that folder, a real folder or a link to anywhere else, is left as it
 # is.
+# The agent folders are the agents folder beside each skill folder (the skill folder's parent
+# followed by /agents): ~/.claude/agents, $CLAUDE_CONFIG_DIR/agents, or the sibling of each
+# folder of $ORDO_SKILL_DIRS. Agent folders with the same path are one folder, linked once and
+# named once. Pin mode creates an agent folder that does not exist; check mode does not.
+# An agent is a file agents/<name>.md directly in the tag's agents/ folder, named by its file name
+# without .md; a file not ending .md, a file whose name starts with a dot and anything in a
+# subfolder is not an agent, and a tag with no agents/ folder has no agents. In an agent folder,
+# the entry <name>.md is the entry of the agent <name>; an entry not ending .md is no agent's.
+# Pin mode refuses, before anything changes, an agent folder that is also a skill folder of the
+# run (the same path with every trailing slash stripped or, when both exist, the same physical
+# path), an agent folder path that exists and is not a folder, an entry for an agent of the tag that
+# is a real file, a directory or a link to anywhere outside Ordo, and a link into the live clone
+# for an agent the tag lacks; each is left as it is. It then links <folder>/<name>.md to
+# <pinned worktree>/agents/<name>.md for every agent of the tag, replaces a link into the live
+# clone and prints a line for each, and removes a link into the pinned worktree whose agent the
+# tag lacks and prints a line for each. Every other entry of an agent folder, a user's own file or
+# a link to anywhere else, is left as it is.
+# Check mode, and the check after linking, report an agent of the pinned worktree not linked from
+# an agent folder, every link into the live clone, and every link into the pinned worktree whose
+# agent the pinned worktree lacks.
+# Each mode prints a second summary line after the skills line: pinned: <m> agents linked in:
+# <agent folders>, the folders joined by ", ".
+# Every refusal and every failed check prints a line starting "pin: " on stderr and exits 1; a run
+# that pins, or a check that passes, exits 0.
 
 set -u
 
@@ -84,6 +108,10 @@ $skill_dirs
 EOF
 # The folders as the summary line names them.
 shown_dirs=$(printf '%s\n' "$skill_dirs" | awk 'NR > 1 { printf ", " } { printf "%s", $0 }')
+# The agent folders, one per line: the agents folder beside each skill folder, each path once.
+agent_dirs=$(printf '%s\n' "$skill_dirs" |
+    awk '{ sub(/\/+$/, ""); sub(/\/[^\/]*$/, ""); dir = $0 "/agents" } !seen[dir]++ { print dir }')
+shown_agent_dirs=$(printf '%s\n' "$agent_dirs" | awk 'NR > 1 { printf ", " } { printf "%s", $0 }')
 
 # The folder that holds the skills in a checkout: skills/ when it exists, the top level otherwise.
 skill_root() {
@@ -95,6 +123,43 @@ skills_of() {
         [ -f "$entry" ] || continue
         basename "$(dirname "$entry")"
     done
+}
+
+# The agents of a checkout, one per line: each file agents/<name>.md, <name> not starting with a dot.
+agents_of() {
+    for entry in "$1"/agents/*.md; do
+        [ -f "$entry" ] || continue
+        basename "$entry" .md
+    done
+}
+
+# Prints the agent an agent folder entry $1 is named for: its file name without .md, or nothing
+# when the name does not end in .md after at least one character.
+agent_name() {
+    agent_base=${1##*/}
+    case "$agent_base" in
+        ?*.md) printf '%s' "${agent_base%.md}" ;;
+    esac
+}
+
+# Succeeds when the folders $1 and $2 are one folder: the same path with every trailing slash
+# stripped, as the agent folders are built, or, when both exist, the same physical path.
+same_folder() {
+    same_one=$(printf '%s\n' "$1" | sed 's#//*$##')
+    same_two=$(printf '%s\n' "$2" | sed 's#//*$##')
+    [ "$same_one" = "$same_two" ] && return 0
+    same_one=$(CDPATH= cd -P "$1" 2>/dev/null && pwd -P) || return 1
+    same_two=$(CDPATH= cd -P "$2" 2>/dev/null && pwd -P) || return 1
+    [ "$same_one" = "$same_two" ]
+}
+
+# Succeeds when the list $1, one name per line, holds the name $2; an empty name is in no list.
+in_list() {
+    [ -n "$2" ] || return 1
+    case "$nl$1$nl" in
+        *"$nl$2$nl"*) return 0 ;;
+    esac
+    return 1
 }
 
 # Succeeds when the link $1 points at the pinned worktree or the live clone or inside either, as
@@ -168,7 +233,56 @@ EOF
             problems=$((problems + 1))
         done
     fi
+    # The agents: the folder loops read $agent_dirs on descriptor 3 and the agent list on 4.
+    stable_agents=$(agents_of "$stable")
+    while IFS= read -r agent <&4; do
+        [ -n "$agent" ] || continue
+        while IFS= read -r dir <&3; do
+            target=$(readlink "$dir/$agent.md" 2>/dev/null) || target=""
+            [ "$target" = "$stable/agents/$agent.md" ] && continue
+            # A link into the live clone is reported by the loop below.
+            case "$target" in
+                "$stable"/*) ;;
+                "$repo"/*) continue ;;
+            esac
+            printf 'pin: %s/%s.md does not link to %s/agents/%s.md\n' \
+                "$dir" "$agent" "$stable" "$agent" >&2
+            problems=$((problems + 1))
+        done 3<<EOF
+$agent_dirs
+EOF
+    done 4<<EOF
+$stable_agents
+EOF
+    while IFS= read -r dir <&3; do
+        for link in "$dir"/*; do
+            [ -L "$link" ] || continue
+            target=$(readlink "$link")
+            case "$target" in
+                "$stable"/*)
+                    in_list "$stable_agents" "$(agent_name "$link")" || {
+                        printf 'pin: %s links to %s, which the pinned tag does not have\n' \
+                            "$link" "$target" >&2
+                        problems=$((problems + 1))
+                    }
+                    ;;
+                "$repo"/*)
+                    printf 'pin: %s links to %s, in the live clone %s\n' \
+                        "$link" "$target" "$repo" >&2
+                    problems=$((problems + 1))
+                    ;;
+            esac
+        done
+    done 3<<EOF
+$agent_dirs
+EOF
     [ "$problems" -eq 0 ]
+}
+
+# Prints the agents summary line, which follows the skills summary line in both modes.
+print_agents_line() {
+    printf 'pinned: %s agents linked in: %s\n' \
+        "$(agents_of "$stable" | wc -l | tr -d ' ')" "$shown_agent_dirs"
 }
 
 if [ $# -eq 0 ]; then
@@ -179,6 +293,7 @@ if [ $# -eq 0 ]; then
     check_links || fail "the links do not match the pin at $pinned"
     printf 'pinned: %s, %s skills linked in: %s\n' \
         "$pinned" "$(skills_of "$stable" | wc -l | tr -d ' ')" "$shown_dirs"
+    print_agents_line
     exit 0
 fi
 
@@ -190,6 +305,7 @@ tag_skills=$(printf '%s\n' "$tag_files" | sed -n 's#^skills/\([^/]*\)/SKILL\.md$
 [ -n "$tag_skills" ] ||
     tag_skills=$(printf '%s\n' "$tag_files" | sed -n 's#^\([^/]*\)/SKILL\.md$#\1#p')
 [ -n "$tag_skills" ] || fail "tag $tag holds no skill"
+tag_agents=$(printf '%s\n' "$tag_files" | sed -n 's#^agents/\([^/.][^/]*\)\.md$#\1#p')
 
 # Succeeds when the tag holds the skill named $1.
 tag_holds() {
@@ -208,6 +324,45 @@ if [ -e "$stable" ]; then
         fail "$stable has local changes; the pinned worktree is never edited"
     stable=$(CDPATH= cd "$stable" && pwd -P)
 fi
+while IFS= read -r agent_dir <&3; do
+    while IFS= read -r dir <&4; do
+        same_folder "$dir" "$agent_dir" && fail "$agent_dir is both a skill folder and an agent folder"
+    done 4<<EOF
+$skill_dirs
+EOF
+    if [ -e "$agent_dir" ] || [ -L "$agent_dir" ]; then
+        [ -d "$agent_dir" ] || fail "$agent_dir is not a folder; move it away and run again"
+    fi
+    while IFS= read -r agent <&4; do
+        [ -n "$agent" ] || continue
+        entry=$agent_dir/$agent.md
+        if [ -L "$entry" ]; then
+            target=$(readlink "$entry")
+            case "$target" in
+                "$stable"/*|"$repo"/*) ;;
+                *) fail "$entry links to $target, outside Ordo; move it away and run again" ;;
+            esac
+        elif [ -d "$entry" ]; then
+            fail "$entry is a directory; move it away and run again"
+        elif [ -e "$entry" ]; then
+            fail "$entry is a real file; move it away and run again"
+        fi
+    done 4<<EOF
+$tag_agents
+EOF
+    for link in "$agent_dir"/*; do
+        [ -L "$link" ] || continue
+        case "$(readlink "$link")" in
+            "$stable"/*) continue ;;
+            "$repo"/*) ;;
+            *) continue ;;
+        esac
+        in_list "$tag_agents" "$(agent_name "$link")" ||
+            fail "$link links into the live clone $repo; move it away or pin a tag that holds it"
+    done
+done 3<<EOF
+$agent_dirs
+EOF
 while IFS= read -r dir <&3; do
     for skill in $tag_skills; do
         [ -e "$dir/$skill" ] || [ -L "$dir/$skill" ] || continue
@@ -268,6 +423,35 @@ while IFS= read -r dir <&3; do
 done 3<<EOF
 $skill_dirs
 EOF
+while IFS= read -r agent_dir <&3; do
+    mkdir -p "$agent_dir"
+    while IFS= read -r agent <&4; do
+        [ -n "$agent" ] || continue
+        entry=$agent_dir/$agent.md
+        old=$(readlink "$entry" 2>/dev/null) || old=""
+        ln -sfn "$stable/agents/$agent.md" "$entry" || continue
+        case "$old" in
+            "$stable"/*) ;;
+            "$repo"/*)
+                printf 'pin: replaced %s, which linked into the live clone %s\n' "$entry" "$repo"
+                ;;
+        esac
+    done 4<<EOF
+$tag_agents
+EOF
+    for link in "$agent_dir"/*; do
+        [ -L "$link" ] || continue
+        in_list "$tag_agents" "$(agent_name "$link")" && continue
+        case "$(readlink "$link")" in
+            "$stable"/*)
+                rm "$link" || continue
+                printf 'pin: removed %s, which the tag %s does not hold\n' "$link" "$tag"
+                ;;
+        esac
+    done
+done 3<<EOF
+$agent_dirs
+EOF
 old_dir=$(outside_dir)
 if [ -n "$old_dir" ]; then
     for link in "$old_dir"/*; do
@@ -282,3 +466,4 @@ check_links || fail "the links do not match the pin after linking"
 printf 'pinned: %s (%s), %s skills linked in: %s\n' \
     "$tag" "$(git -C "$stable" rev-parse --short HEAD)" \
     "$(skills_of "$stable" | wc -l | tr -d ' ')" "$shown_dirs"
+print_agents_line
