@@ -135,3 +135,144 @@ These checks verify the tests and the ASCII rule; whether the page states the ru
 ## Doc text
 
 None. `grep -rn 'blind comparison' docs README.md skills utils` finds the roadmap gates at lines 30, 37, 163, 177, 184 and 198 (the gates at 72, 79, 86, 93 and 107 say "compared blind"; all eleven are step 7's to change), `docs/academic-coverage.md` lines 129 and 131 (name a blind comparison as a gate, which stays true), and the two template files the brief leaves unchanged. No sentence found lists the pages of `docs/dev/` (`grep -rn 'docs/dev' README.md CLAUDE.md docs/dev/building.md docs/dev/skill-layout.md .agents/plan.yaml` names single pages only), so none is made false by the new page.
+
+## Repair round 1
+
+Rulings 1 to 4 of `agents/briefs/6-round-1.md` are done. Ruling 5 sends nothing to this round. All changes are in `docs/dev/blind-comparison.md`; `docs/dev/change-standard.md` is as in round 0.
+
+### 1. The tie (Spec 1, Standards 1), line 11
+
+- Old: `When the two verdicts, read through the key, name different sides, the disagreement is a tie: the result of the two judgments is a tie.`
+- New: `When the two verdicts, read through the key, differ, the disagreement is a tie; when they agree, the result is the verdict they share.`
+- Shown by: `grep -c 'result of the two judgments' docs/dev/blind-comparison.md` prints `0`, and `grep -n -o 'disagreement is a tie\|the verdict they share' docs/dev/blind-comparison.md` prints `11:disagreement is a tie` and `11:the verdict they share`.
+
+### 2. The input a side writes into, line 5
+
+- Old: `The orchestrator gives the same input to both sides: one real input, the one the gate names, unchanged, to the new skill and to the skill it is compared against. Each side runs in its own fresh session with only that input and its own skill, and neither sees the other's output.`
+- New: `The orchestrator gives the same input to both sides, the new skill and the skill it is compared against. The input is one real input, the one the gate names, unchanged. When the input is a tree or a repository that a side changes, each side gets its own copy, made from the same commit, so both start from the same input. Each side runs in its own fresh session with only that input and its own skill. Neither side sees the other's output.`
+- Shown by: `grep -n -o 'each side gets its own copy, made from the same commit' docs/dev/blind-comparison.md` prints `5:each side gets its own copy, made from the same commit`. The ruled sentence is the third; the others are ruling 4's split of the old two sentences.
+
+### 3. The example command, line 7
+
+- Old: `A command whose result the orchestrator does not choose decides which output is A, for example `python3 -c 'import random; print(random.choice(["new first", "old first"]))'`, and the orchestrator keeps the command and its output with the key.`
+- New: `A command whose result the orchestrator does not choose prints which output is A, for example `python3 -c 'import random; print(random.choice(["new is A", "old is A"]))'`, and the orchestrator keeps the command and its output with the key.`
+- Shown by: `grep -n -o 'prints which output is A' docs/dev/blind-comparison.md` prints `7:prints which output is A`; `grep -c 'new first' docs/dev/blind-comparison.md` prints `0`.
+
+### 4. Sentence length, lines 3, 5, 9 and 13
+
+Words per sentence, counted by splitting each line at ". " before a capital letter, after the changes: line 3 [17, 11, 22]; line 5 [19, 12, 31, 16, 6]; line 9 [17, 16, 24, 9]; line 13 [17, 38].
+
+- Line 3. Old: `A gate that compares a new skill with another skill on a real input cites this page, and the comparison the gate names runs as the steps below say.` New: `A gate that compares a new skill with another skill on a real input cites this page. The comparison that gate names runs as the steps below say.`
+- Line 5: the change is item 2's. The 31-word sentence is the ruled sentence of ruling 2, kept as ruled.
+- Line 9. Old: `A critical failure is one that makes the output unfit for the purpose the input sets (a claim the input contradicts, a missing part the input asks for, a citation that does not resolve), and the judge quotes each one with its place.` New: `A critical failure is one that makes the output unfit for the purpose the input sets. For example, a claim the input contradicts, a missing part the input asks for and a citation that does not resolve are critical failures. The judge quotes each critical failure with its place.`
+- Line 13. Old: `... at `agents/reviews/<step>-blind-comparison.md`: the input or its path, ...` New: `... at `agents/reviews/<step>-blind-comparison.md`. The record holds the input or its path, ...`. The remaining 38-word sentence is the list of the record's six parts, all kept; the list is what the sentence states, so it is not split further.
+- Every ruled word and every enumeration item is kept: the clause map below reproduces every clause on the new text.
+
+### Checks, rerun after the changes
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/orchestrator-state.md`, exit 0:
+
+```text
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 7 commands passed
+```
+
+`LC_ALL=C grep -n '[^ -~]' docs/dev/blind-comparison.md docs/dev/change-standard.md`: no output, exit 1.
+
+The cases, read again on the new text:
+
+```text
+$ grep -n -o <clauses>
+5:same input
+5:each side gets its own copy, made from the same commit
+5:same input
+6:unlabelled
+7:random order
+7:prints which output is A
+8:only the input
+9:reads each output whole
+9:critical failures before stating a preference
+10:writes the verdict, A, B or a tie, with the reasons
+11:judged twice, the second time with the order swapped
+11:A fresh agent makes each judgment
+11:disagreement is a tie
+11:the verdict they share
+12:reads the input, both outputs and both verdicts
+12:makes the final call
+13:agents/reviews/<step>-blind-comparison.md
+$ grep -c "result of the two judgments" docs/dev/blind-comparison.md
+0
+$ grep -n -i "fresh agent\|swapped\|tie" docs/dev/blind-comparison.md | cut -c1-40
+10:6. **The verdict.** The judge writes 
+11:7. **Twice, the order swapped.** The 
+12:8. **The final call.** The user reads
+$ grep -n blind-comparison.md docs/dev/change-standard.md | cut -c1-40
+21:- A gate for a judgment is a review: 
+$ wc -l
+      13 docs/dev/blind-comparison.md
+      80 docs/dev/change-standard.md
+      93 total
+$ git status --short
+ M docs/dev/change-standard.md
+?? .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/6-report.md
+?? docs/dev/blind-comparison.md
+```
+
+- Ruled clauses: each is stated once (map below). "disagreement is a tie" now covers every pair of verdicts that differ, as ruled.
+- Entry 7's gate: the walk in round 0 holds on the new text. Its step 5 now reads: a second fresh agent judges with A and B swapped; two verdicts that differ through the key make a tie, two that agree give their shared verdict.
+- Entry 2.F's gate: the walk in round 0 holds. The input there is a defect put back on a scratch copy of the tree, so by line 5 each side gets its own copy made from the same commit. The page still adds no pass condition.
+- The term grep prints lines 10, 11 and 12; the change-standard grep prints line 21.
+
+### The page, whole, as it now stands
+
+# Blind comparison
+
+A gate that compares a new skill with another skill on a real input cites this page. The comparison that gate names runs as the steps below say. The orchestrator of the plan whose gate needs the comparison runs it, from the two runs of the skills to the record.
+
+1. **The input.** The orchestrator gives the same input to both sides, the new skill and the skill it is compared against. The input is one real input, the one the gate names, unchanged. When the input is a tree or a repository that a side changes, each side gets its own copy, made from the same commit, so both start from the same input. Each side runs in its own fresh session with only that input and its own skill. Neither side sees the other's output.
+2. **Unlabelled.** The judge sees the two outputs unlabelled. Before judging, the orchestrator removes from each output every mark of which side made it (a skill's name, a file or folder name, a header or footer a skill writes), writes the key (which output is which) to a file the judges are not given, and names the two outputs A and B.
+3. **Random order.** The judge sees the two outputs in random order. A command whose result the orchestrator does not choose prints which output is A, for example `python3 -c 'import random; print(random.choice(["new is A", "old is A"]))'`, and the orchestrator keeps the command and its output with the key.
+4. **The judge's input.** The judge receives the two outputs with only the input, and nothing else: no skill name, no gate, no statement of which output is expected to win.
+5. **Reading.** The judge reads each output whole, and for each lists its critical failures before stating a preference. A critical failure is one that makes the output unfit for the purpose the input sets. For example, a claim the input contradicts, a missing part the input asks for and a citation that does not resolve are critical failures. The judge quotes each critical failure with its place.
+6. **The verdict.** The judge writes the verdict, A, B or a tie, with the reasons, each reason pointing at the failures or the passages it rests on.
+7. **Twice, the order swapped.** The orchestrator has the comparison judged twice, the second time with the order swapped: the output that was A is given as B, and the output that was B as A. A fresh agent makes each judgment, so the second judge has no memory of the first. When the two verdicts, read through the key, differ, the disagreement is a tie; when they agree, the result is the verdict they share.
+8. **The final call.** The user reads the input, both outputs and both verdicts, and makes the final call: the new skill wins, ties or loses. The user's call is the result the gate reads, and "wins or ties" in a gate means the call is a win or a tie.
+9. **The record.** The orchestrator keeps the comparison in the ledger of the plan whose gate needs it, at `agents/reviews/<step>-blind-comparison.md`. The record holds the input or its path, the two outputs as judged, the key, the command that set the order and its output, both verdicts as the judges wrote them, and the user's call with the reasons.
+
+### Clause map, updated
+
+| Ruled clause | Line | The page's words |
+|---|---|---|
+| same input for both outputs | 5 | "The orchestrator gives the same input to both sides" |
+| unlabelled | 6 | "The judge sees the two outputs unlabelled." |
+| random order | 7 | "The judge sees the two outputs in random order." |
+| with only the input | 8 | "The judge receives the two outputs with only the input, and nothing else" |
+| each output read whole | 9 | "The judge reads each output whole" |
+| critical failures listed before a preference | 9 | "for each lists its critical failures before stating a preference" |
+| verdict written with reasons | 10 | "The judge writes the verdict, A, B or a tie, with the reasons" |
+| judged twice with the order swapped | 11 | "The orchestrator has the comparison judged twice, the second time with the order swapped" |
+| disagreement is a tie | 11 | "When the two verdicts, read through the key, differ, the disagreement is a tie" |
+| a fresh agent judges twice | 11 | "A fresh agent makes each judgment, so the second judge has no memory of the first." |
+| Axel reads both outputs and the verdict | 12 | "The user reads the input, both outputs and both verdicts" |
+| for the final call | 12 | "and makes the final call: the new skill wins, ties or loses" |
+
+"same input" also appears at the end of the ruled sentence of ruling 2 on line 5 ("so both start from the same input"), which states why each side gets a copy; the clause itself is stated once.
+
+### Line counts (`wc -l`)
+
+- `docs/dev/blind-comparison.md`: 13 lines (six lines changed this round: 3, 5, 7, 9, 11, 13).
+- `docs/dev/change-standard.md`: 80 lines, unchanged this round.
+
+Doc text: none. The round changes only the page, and no sentence elsewhere describes its wording.

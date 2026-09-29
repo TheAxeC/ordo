@@ -67,3 +67,62 @@ none
 - Sentences elsewhere the change makes false: none found.
 
 Reviewer usage: claude:opus, a fresh agent; 103485 tokens, 18 tool uses, 279 s (from the completion notice). Saved by the orchestrator from the reviewer's final message, its verification block condensed to the lines it printed.
+
+## Repair round 1, refuted
+
+Reviewer: a fresh agent, no edit, git limited to `git diff` and `git status --short`.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/orchestrator-state.md   (worktree root)
+PASS: land.sh scratch tests
+PASS: checks.sh scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+PASS: pin.sh scratch tests
+PASS: check_coverage.py scratch tests
+checks: 7 commands passed
+(exit 0)
+$ LC_ALL=C grep -n '[^ -~]' docs/dev/blind-comparison.md docs/dev/change-standard.md
+(no output, exit 1)
+Round delta: the page's lines 3, 5, 7, 9, 11 and 13 changed; change-standard.md unchanged this round.
+The builder's quoted commands rerun: 'result of the two judgments' 0; 'disagreement is a tie' and 'the verdict they share' on 11; the copy sentence on 5; 'prints which output is A' on 7; 'new first' 0; every clause pattern found (lines 5 to 13); the three terms on 10, 11, 12; change-standard line 21, nothing at base.
+Words per sentence: line 3 [17, 11, 22]; line 5 [19, 12, 31, 16, 6]; line 6 [7, 53]; line 7 [9, 38]; line 8 [27]; line 9 [17, 16, 24, 9]; line 10 [25]; line 11 [31, 16, 24]; line 12 [22, 25]; line 13 [17, 38].
+```
+
+The builder's note that some case output was captured before the last split of line 9 is not in the report on disk; every case command was rerun on the current tree and matches the round section.
+
+### Verdicts
+
+- Items 1, 2 and 3: hold.
+- Case, ruled clauses against the page: met; every clause of the ruling row is on the page with its words, and "disagreement is a tie" covers every pair of differing verdicts. Entry 7's walk: met. Entry 2.F's walk: met. The grep of the three terms: met. The change-standard grep: met.
+- First report, Spec 1 and Standards 1: closed (line 11 is ruling 1's sentence word for word; the restating clause is gone).
+- Ruling 1: done. Ruling 2: done. Ruling 3: done. Ruling 4: done for lines 3, 5 and 9; line 13 keeps a 38-word sentence (Finding 1). Ruling 5: nothing sent.
+
+### Findings
+
+1. Standards. `docs/dev/blind-comparison.md:13`: "The record holds the input or its path, the two outputs as judged, the key, the command that set the order and its output, both verdicts as the judges wrote them, and the user's call with the reasons."; what is wrong: 38 words holding six list-shaped items (prose standard E and D); failure scenario: an orchestrator writing the record leaves one part out, such as the order command's output, and the record cannot show the runner did not choose the order; verdict: ruling 4 partly done on line 13.
+2. Standards. `docs/dev/blind-comparison.md:6` (a 53-word sentence joining removing the marks, writing the key and naming A and B) and `:7` (38 words); what is wrong: prose standard E, each joining actions that do not depend on one another; outside ruling 4's list; failure scenario: an orchestrator names the outputs A and B without writing the key to a separate file, and step 7's "read through the key" has no key; verdict: none.
+3. Standards. `docs/dev/blind-comparison.md:5`: five sentences covering what the input is and how each side runs (prose standard D), and "Neither side sees the other's output." repeats "only that input"; failure scenario: a reader looks for a second step to enforce the repeated requirement; verdict: none.
+
+### Declined to judge
+
+- Ruling 2's "made from the same commit": for entry 2.F the defect may be put back as uncommitted changes, which two copies made from the same commit do not both carry; the wording is the orchestrator's call.
+- Whether line 9's "For example, ... are critical failures" reads more categorically than the old parenthesis; the user settles it when reading the page.
+- Line 3's second sentence standing alone; read as a rule, not raised.
+- Sentences of 25 to 31 words on lines 8, 10, 11 and 12, outside ruling 4; left to the user's read.
+- Brief decision 1 and the point raised to the user (a side that produces no output) are the user's.
+
+Reviewer usage over round 1: claude:opus, a fresh agent; 90028 tokens, 16 tool uses, 220 s (from the completion notice). Saved by the orchestrator from the reviewer's final message, its verification block condensed to the lines it printed.
+
+## Closed
+
+- First run, Spec 1 and Standards 1 (the tie rule): closed in repair round 1, ruling 1.
+- First run, Declined to judge (the input a side writes into; the example command; sentence length): closed in repair round 1, rulings 2 to 4.
+- First run, Declined to judge (a side that produces no output): raised as open item C, ruled (b) by the user, applied at landing: step 1 reads "A side that stops without a whole output, because it fails or stops to ask a question, is judged on what it produced, and each part it does not give is a critical failure."
+- First run, Declined to judge (entry 7's input; the six "protocol of 2.D" gates): carried to step 7, which owns the gates.
+- First run, Declined to judge (brief decision 1, a fresh agent for each judgment): stands as the brief took it; the user reads the page at step 6's check.
+- Round 1, Finding 1 (the record's six parts in one sentence): fixed at landing; step 9 lists them as six bullets.
+- Round 1, Finding 2 (steps 2 and 3, long sentences joining separate actions): fixed at landing; step 2 has one sentence for removing the marks and one for writing the key, and step 3 one for the command and one for keeping it.
+- Round 1, Finding 3 (step 1, five sentences and a repeated requirement): fixed at landing; step 1 has four sentences and "Neither side sees the other's output." is gone, "only that input" carrying it.
+- Round 1, Declined to judge ("made from the same commit" for an input with uncommitted changes): fixed at landing; step 1 reads "each side gets its own identical copy".
+- Round 1, Declined to judge (line 9's "For example"; line 3's second sentence; sentences of 25 to 31 words on lines 8, 10, 11 and 12): no change; left to the user's read of the page, which is the step's check.

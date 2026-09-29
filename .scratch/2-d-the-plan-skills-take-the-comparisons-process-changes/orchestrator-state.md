@@ -30,19 +30,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 6
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2d-6
-  base: 30ca18f3f7660a090f33481e8f1a580064c593fb
-  launched: 2026-09-29
-  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/6-report.md
-  landing: not-started
-  round: 1
-  session_id: acfd8106a712da265
-  builder_usage: first run 77298 tokens, 15 tool uses, 226 s
-  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/6-refuter.md (first run 103485 tokens, 18 tool uses, 279 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -51,6 +39,7 @@ None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-09-29: open item C (a side of a blind comparison that produces no whole output): ruled (b) by the user, what the side produced is judged and each part it does not give is a critical failure; applied at step 6's landing in `docs/dev/blind-comparison.md`, step 1.
 - 2026-09-29: the step list: approved by the user as drafted.
 - 2026-09-29: open item B (the implied inputs for product code): ruled (b) by the user; `skills/spec/templates/brief.md` "Cases" and `skills/spec/SKILL.md` Steps 4 say "a code step (a script, or a product's code)", `/spec` 1.6.3, applied on main.
 - 2026-09-29: open item A (one trigger per case): ruled (a) by the user, at least one phrase per case and several phrasings allowed; applied on main in `docs/dev/skill-layout.md`, Frontmatter.
@@ -76,7 +65,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 5 landed: `/spec` runs the brief check, a fresh read-only agent that checks the brief against the tree before the preparation commit, its report at `agents/reviews/<step>-brief-check.md`.
+- 2026-09-29. Step 6 landed: `docs/dev/blind-comparison.md` states the blind-comparison protocol as ruled, with open item C's ruling, and `docs/dev/change-standard.md` points at it.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 6, the blind-comparison protocol; its builder runs in `.agents/worktrees/2d-6`.
+- Next step: step 7, the roadmap through `/roadmap`, each change shown to Axel before it is written.
 - Open on Axel's side: nothing.
