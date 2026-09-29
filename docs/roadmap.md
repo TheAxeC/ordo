@@ -1,6 +1,8 @@
 # Roadmap
 
-What is open, in the order it is built, and what is done. An entry is one piece of work `/plan` can open: its goal, its gate (the check that proves it done) and what it waits on. The order is dependency order: an entry comes after everything it waits on. Entry numbers never change once written; an entry placed between two others takes the number of the one before it with a letter (`3.A`).
+What is open, in the order it is built, what is not yet specified, and what is done. An entry of the open order is one piece of work `/plan` can open: its goal, its gate (the check that proves it done) and what it waits on. The order is dependency order: an entry comes after everything it waits on. Entry numbers never change once written; an entry placed between two others takes the number of the one before it with a letter (`3.A`), and an entry that moves in from "Not yet specified" keeps its number.
+
+The section "Not yet specified" holds work whose gate cannot yet be named, each entry with its goal and what must be known before its gate can be named. `/plan` refuses such an entry until `/roadmap add <entry>` names its gate and places it in the open order.
 
 Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with the output beside it).
 
@@ -204,6 +206,16 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Goal: Every Ordo skill held to the writing-for-agents rules of `docs/dev/skill-layout.md`: each sentence that changes no behaviour deleted, each prohibition written as the behaviour wanted, each step ending on its "done when".
 - Gate: you read and approve the whole diff; a reviewer's report lists every deleted sentence with the behaviour it carried and where that behaviour still stands, or why it carried none, read by you.
 - Waits on: every other open entry, so each skill is pruned once, in its final form.
+
+# Not yet specified
+
+<!-- An entry:
+
+## <n>. <title>
+
+- Goal: <what exists when it is done, in one or two sentences>
+- Must be known: <what must be known before its gate can be named>
+-->
 
 # Done
 
