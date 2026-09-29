@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 5
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2c-5
+  base: 659c1eeee929fc8411ce6b0a812fb8cb56510a5d
+  launched: 2026-09-29
+  report: .scratch/2-c-scripts-compute-facts-and-writing-is-removed/agents/reviews/5-report.md
+  landing: not-started
+  round: 0
+  session_id: aff737080ccfb46ce
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -70,6 +80,6 @@ None.
 
 - 2026-09-29. Steps 1 to 4 and 6 done. Step 6: the four test files hold only cases whose failure costs something; `utils/pin.sh` line 69 deleted.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 5, the rules, widened by open item C and carrying rule 15. Step 7, the roadmap, is drafted and waits on the user's approval of its diff.
+- In flight: step 5, the rules, widened by open item C and carrying rule 15; its builder runs in `.agents/worktrees/2c-5`. Step 7, the roadmap, is drafted and waits on the user's approval of its diff.
 - Open on Axel's side: the approval of step 7's roadmap diff.
 - Also done outside the plan: the sentence "Write for a reader who was not inside my reasoning..." added to the plain-prose rule of `~/.claude/CLAUDE.md`, on Axel's yes.
