@@ -26,13 +26,13 @@ refute_after_repair: yes     # /refute runs again over each repair round.
 repair_rounds: 1             # the most repair rounds a step gets.
 review_minutes: 0            # no time box.
 look:                        # none: no view changes.
-workers_at_once: 1           # steps in flight at once.
+workers_at_once: 3           # steps in flight at once, from .agents/plan.yaml.
 bench: []                    # no A/B.
 ```
 
 ```yaml
 dispatch:
-  step: 2
+- step: 2
   executor: agent
   worker: claude:opus
   worktree: .agents/worktrees/2e-2
@@ -70,7 +70,7 @@ None.
 
 - Design: `docs/roadmap.md` entry 2.E and the rulings in `plan.md`. Ledger: `.scratch/2-e-grill/`, with `agents/briefs/` and `agents/reviews/`.
 - mattpocock's skills (`grilling`, `grill-with-docs`, `domain-modeling`) for step 14 and as a reference for step 12: github.com/mattpocock/skills at commit d81f3a1, cloned into the session's scratch folder; clone it again at that commit when it is gone.
-- The sources of the default pages: game-engine `docs/dev/coding-standards.md`, cathedra `docs/dev/standards/coding-standards.md`, research-hub `tools/oculus/DESIGN.md`, `tools/oculus/eslint.config.js`, `tools/oculus/tests/checks/` and `tools/oculus/.scratch/migration/agents/spec.md`, and for step 12a research-hub `tools/figures/gen_figures.py` and `plan-loop.svg`. game-engine, cathedra and research-hub are read only, except step 15's one line in each of game-engine's and cathedra's `.agents/plan.yaml`.
+- The sources of the default pages: game-engine `docs/dev/coding-standards.md`, cathedra `docs/dev/standards/coding-standards.md`, research-hub `tools/oculus/DESIGN.md`, `tools/oculus/eslint.config.js`, `tools/oculus/tests/checks/` and `tools/oculus/.scratch/migration/agents/spec.md`, and for step 12a research-hub `tools/figures/gen_figures.py` and `plan-loop.svg`, which research-hub embeds in `docs/AGENT-APPROACH.md`. game-engine, cathedra and research-hub are read only, except step 15's one line in each of game-engine's and cathedra's `.agents/plan.yaml`.
 - Nothing running that a step must not disturb.
 
 ## Current position (rewritten before every step commit)

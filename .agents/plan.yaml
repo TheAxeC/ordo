@@ -10,3 +10,4 @@ worker: claude:opus                       # claude:<model> of the builder, for e
 reviewer: claude:opus                     # claude:<model> /refute runs on.
 libraries: avoid                          # check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
 standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # Files every brief tells the builder to read in full, and the reviewer holds a diff to.
+workers_at_once: 3                        # Steps in flight at once; above 1, two of them share a file only when the orchestrator judges the merge at landing simple (plan-orchestration, "Two steps in flight").
