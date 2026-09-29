@@ -102,3 +102,12 @@ Every closure of round 0 reproduces. The three changes beyond the numbered rulin
 - Which comment rule an installed repository carries (Spec 1): Axel's decision.
 
 Reviewer usage over round 1: 113579 tokens, 19 tool uses, 4.7 minutes (283 s), claude:opus, a fresh agent (from its completion notice).
+
+## Closed
+
+- Round 0, Spec 1 to 5 and Standards 1 to 7: closed in repair round 1 by rulings 1 to 12 of `agents/briefs/4-round-1.md`; the run over the round reproduced each closure.
+- Round 1, Spec 1, the "why, never what" comment rule dropped: no change. The pages cite the change standard's rule "No history in code or comments", "A comment says what the code does and why", which is the user's own rule in every project; the oculus wording contradicted it, and the round-0 finding was that contradiction.
+- Round 1, Spec 2, step 5's brief lists wording step 4's round changed: closed by step 5's repair round 1, whose rulings 1 and 8 drop `cpp.md`'s citation of the removed rule and write every path from the repository root; step 5's run over its round reads its pages against step 4's pages as they stand.
+- Round 1, Standards 1, "A new kind of view": fixed in the step's worktree by the orchestrator before the landing, "A new view, backend, key or command is registered at an extension point" (`design-principles.md:7`); `grep -n -i -w -E 'case|cases|refusal|kind|maintainer|template|static'` over both pages prints nothing.
+- Round 1, Standards 2, the error rule on both pages: fixed in the step's worktree by the orchestrator before the landing; `design-principles.md:8` now reads "A failure is reported as `docs/dev/coding-standards/common.md` says, never through a flag that means two things."
+- Round 1, Standards 3, five bullets of one shape: fixed in the step's worktree by the orchestrator before the landing; `common.md`'s opening paragraph names the change standard and the prose standard with their paths once, and the Comments, Character set, Markdown and YAML, Names and Tests bullets state their rule and cite the section in varied forms.

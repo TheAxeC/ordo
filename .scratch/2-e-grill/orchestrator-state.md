@@ -47,8 +47,8 @@ dispatch:
   report: .scratch/2-e-grill/agents/reviews/4-report.md
   builder_usage: 96874 tokens, 14 tool uses, 186 s; round 1: 131510 tokens, 12 tool uses, 257 s
   brief_check: .scratch/2-e-grill/agents/reviews/4-brief-check.md (112374 tokens, 25 tool uses, 242 s)
-  landing: not-started
   reviewer_report: .scratch/2-e-grill/agents/reviews/4-refuter.md (122792 tokens, 20 tool uses, 323 s; round 1: 113579 tokens, 19 tool uses, 283 s)
+  landing: not-started
   round: 1
 - step: 5
   executor: agent
@@ -67,7 +67,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-None.
+- C (2026-09-29). Steps 4 and 5 are checked by Axel's reading (their lines: "read and approved by Axel"), so neither lands before he has read its pages. Step 4 is built, reviewed twice and fixed; its pages are `.agents/worktrees/2e-4/skills/repo-setup/templates/docs/dev/design-principles.md` and `.../coding-standards/common.md`. Step 5's pages follow when its run over round 1 is done. Options: (a) Axel reads the pages and says "approved", or names what to change; each change is made in the step's worktree and the step then lands; (b) the steps land now and his reading follows, a change becoming a new step by his ruling. Recommendation: (a), since the step's check is his reading and a landing before it would book a check that has not happened. (b) is the lazy option: it books the step done before its check.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -97,8 +97,8 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 2 landed: the five `plan.yaml` settings and their checks (this commit). Steps 1 and 2 are on main.
-- Verified: `land.sh` on main printed `checks: 8 commands passed`, exit 0, and again after the fix at landing.
-- In flight: step 4 (its run over round 1 is saved, to land next) and step 5 (its round 1 under review).
-- Next step: land step 4, then step 5; then step 3, which reads `worker_effort` and `reviewer_effort`.
-- Open on Axel's side: nothing.
+- 2026-09-29. Steps 1 and 2 are on main (step 2 in be98a0d).
+- Step 4: built, refuted, round 1 refuted; three wording fixes from the run over round 1 made in its worktree. It waits on open item C, Axel's reading, before it lands.
+- Step 5: round 1 under review; after that it waits on open item C too.
+- Next step: step 3, the effort agents, which step 2's keys unblock.
+- Open on Axel's side: open item C.
