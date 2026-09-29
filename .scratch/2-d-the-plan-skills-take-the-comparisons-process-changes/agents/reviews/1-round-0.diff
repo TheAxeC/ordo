@@ -1,0 +1,51 @@
+diff --git a/docs/dev/skill-layout.md b/docs/dev/skill-layout.md
+index 3597386..5d21709 100644
+--- a/docs/dev/skill-layout.md
++++ b/docs/dev/skill-layout.md
+@@ -15,6 +15,10 @@ metadata:
+ 
+ - `name` equals the folder's name.
+ - `description` is one paragraph: what the skill does, what it produces, then `Triggers on:` and the phrases. It names no neighbouring skill; that is the Use instead section's job.
++- `description` is at most 1,024 characters, counted as the length of its YAML value once parsed: `python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/SKILL.md"))]'` prints each skill's count.
++- The first words of `description` name what the skill does, in the phrase a reader or a model matches a request on.
++- `Triggers on:` lists one phrase for each case the skill is for.
++- A phrase for a case a neighbouring skill is for goes in that skill's `Triggers on:`, not in this one.
+ - The version lives in `metadata.version` only. The text of the skill carries no version, date or change history.
+ 
+ ## Sections, in order
+@@ -49,9 +53,20 @@ No other `##` heading appears outside the place row 6 gives it.
+ - A code block holds commands, file formats and printed output, and carries a language tag where one applies.
+ - Bold marks a list item's label (`- **Label.** ...`) and nothing else.
+ 
++## Writing for an agent
++
++- A rule states the behaviour wanted: a rule written as a prohibition names the behaviour to do instead, in the same bullet or in the Do instead cell of its Anti-patterns row, since a bare prohibition draws attention to what it forbids.
++- One meaning has one place, as "Where a rule goes" says for a rule.
++- A sentence stays only when it changes what the reader does from what they would do without it; a sentence that restates a default, praises, or explains what the reader already knows is cut.
++- Each item of Steps ends on its completion criterion: what is true, or what exists, when the step is done.
++- Material a step needs only in some runs (a long format, a table of cases, a protocol) goes in a file `references/<name>.md` beside `SKILL.md`, named by its path from the step that reads it.
++- A reference section of row 6 of "Sections, in order" holds only material every run reads.
++- The rules of this section apply to a skill's text when it is written or rewritten; roadmap entry 23, the pruning pass, applies them to every existing skill.
++
+ ## Paths and names
+ 
+ - A file of this skill is named from the skill's folder: `templates/<file>`.
++- A file of this skill's `references/` is named `references/<file>`, as a file of its `templates/` is named `templates/<file>`.
+ - A file of another skill is named with its skill: "the `plan` skill's `templates/plan.yaml`".
+ - A repository path is relative to the repository root, and a key of `.agents/plan.yaml` is written as it appears there, in code.
+ - A skill is named by its `name` in code: `/plan` for the invocation, `plan` for the skill.
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index 2ac9b40..7b82360 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: spec
+-description: "Prepare one step of an open plan: refuse a step whose line carries no authority of the user ((approved) or (ruling <name>)), check every premise the step's text makes against the tree, look for a library for every capability the step builds when the project's libraries is check, a candidate being the user's choice, write the brief (the checked premises, the fix text, the verification list, the report shape, the pointer to the repository's change standard, the cases, the libraries checked, the paths it writes), compare those paths with the briefs of the steps in flight and hand a shared file to the orchestrator's judgment, create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file; a step a red line took back out of main is prepared again from main's head, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
++description: "Prepare one step of an open plan: refuse a step whose line carries no authority of the user ((approved) or (ruling <name>)), check every premise the step's text makes against the tree, look for a library for every capability the step builds when the project's libraries is check, a candidate being the user's choice, write the brief (checked premises, fix text, verification list, report shape, pointer to the repository's change standard, cases, libraries checked, paths it writes), compare those paths with the briefs of the steps in flight and hand a shared file to the orchestrator's judgment, create the step's worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again from main's head, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
+ metadata:
+-  version: "1.6.0"
++  version: "1.6.1"
+ ---
+ 
+ # Prepare a step

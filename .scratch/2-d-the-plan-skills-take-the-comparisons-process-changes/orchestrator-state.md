@@ -39,13 +39,15 @@ dispatch:
   launched: 2026-09-29
   report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/1-report.md
   landing: not-started
-  round: 0
+  round: 1
   session_id: aa7c9f7235df0acd8
+  builder_usage: round 0, 100397 tokens, 23 tool uses, 270 s
+  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/1-refuter.md, first run, 110523 tokens, 22 tool uses, 277 s
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-None.
+- A (2026-09-29, step 1): what "one trigger per case" means in `docs/dev/skill-layout.md`, Frontmatter. The ruling says "a description is a trigger (front-load the leading word, one trigger per case)". Step 1 wrote "`Triggers on:` lists one phrase for each case the skill is for.", and `/spec`'s description keeps four phrases for its one case (`spec <entry> <step>, brief <step>, prepare step <n>, write the brief`). Options: (a) each case the skill is for has at least one trigger phrase, and several phrasings of one case are allowed; the page sentence says so; pro: every case is covered and a request worded differently still matches; con: longer lists, and the line between a case and a phrasing is judged by reading. (b) exactly one phrase per case; `/spec` keeps one of its four and the other skills are brought in line by roadmap entry 23; pro: short lists; con: a request worded as "write the brief" or "prepare step 3" no longer matches its phrase. Recommendation: (a), since the purpose of the trigger list is that each case is found, and the other phrasings are how a request worded differently is found. (a) is also the cheaper option, since no description changes; it is recommended for the matching, not the cost.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -74,5 +76,5 @@ None.
 
 - 2026-09-29. Plan opened; nothing landed. Main at the opening commit, working tree clean.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, before the opening commit.
-- In flight: step 1, the writing rules for skill text; its builder runs in `.agents/worktrees/2d-1`.
-- Open on Axel's side: nothing.
+- In flight: step 1, the writing rules for skill text; repair round 1 sent to its builder in `.agents/worktrees/2d-1`.
+- Open on Axel's side: open item A.
