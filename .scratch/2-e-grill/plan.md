@@ -99,6 +99,8 @@ Carried to step 7 (found by step 4's brief check): the pages form a folder `docs
 
 - Sonnet trial result (2026-09-29): (a). Three builds of step 3 were compared: Opus 5.5 (`2e-3`), Sonnet 5 (`2e-3s`, launched as Sonnet 5.5 under Claude Code 2.1.283, whose `sonnet` alias gave claude-sonnet-5) and Sonnet 5.5 (`2e-3s55`). The Opus 5.5 build lands after its repair round; the other two worktrees and branches are removed. `worker:` in `.agents/plan.yaml` and in the state file's configuration block becomes `claude:sonnet` (claude-sonnet-5-5 under Claude Code 2.1.285) for the next three code steps of this plan, each measured by its landing report (whether the first report passed its bar, the fixes at landing, tokens, time and cost); `reviewer:` stays `claude:opus`; after the three steps the result goes to Axel, and `worker:` returns to Opus only by his ruling (the user).
 
+- Model check (2026-09-29): (a). Step 3's repair round 1 gains point 4: plan-orchestration, refute and spec check the model the runner served each agent they launch, from the runner's own record, write it into the dispatch entry, and stop on a model other than the configured one; step 3's paths gain `skills/plan/templates/orchestrator-state.md` (the dispatch comment). The lazy option was (c), the check as the orchestrator's practice only (the user).
+
 ## Blocked, and by what
 
 - Nothing is blocked.
