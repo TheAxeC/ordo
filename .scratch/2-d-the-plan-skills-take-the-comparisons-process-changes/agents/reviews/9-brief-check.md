@@ -164,7 +164,7 @@ All closed, except: the "brief" sample (round-brief path); Anti-patterns row 4; 
 - The term rule stated twice in a new repository (the template's paragraph and the `CLAUDE.md` bullet).
 - The "Stated in" of the other terms: left to the builder.
 
-Agent usage: claude:opus, a fresh agent; 161763 tokens, 39 tool uses, 475 s (from the completion notice). Saved by the orchestrator from the agent's final message, condensed to its findings and the lines it printed.
+Agent usage: claude:opus, a fresh agent; 161763 tokens, 32 tool uses, 475 s (from the completion notice). Saved by the orchestrator from the agent's final message, condensed to its findings and the lines it printed.
 
 ## Closed (the session's change to the brief for every finding of this run, made before the preparation commit)
 

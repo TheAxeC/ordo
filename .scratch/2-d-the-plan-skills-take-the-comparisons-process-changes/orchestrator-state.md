@@ -30,7 +30,18 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 9
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2d-9
+  base: 888f8e65faebaf690ed7c8b6846034df8552f6cd
+  launched: 2026-09-29
+  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-report.md
+  brief_check: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/9-brief-check.md (run 1 143632 tokens, 39 tool uses, 387 s; run 2 161763 tokens, 32 tool uses, 475 s)
+  landing: not-started
+  round: 0
+  session_id: adbfbd5f3e5b016d9
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -70,5 +81,5 @@ None.
 
 - 2026-09-29. Step 8 done: main tagged v2.4.0 at 5be7e73 and the installed skills pinned to it.
 - Verified: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.4.0`.
-- Next step: step 9, the glossary; its brief is written and its brief check runs.
+- In flight: step 9, the glossary; its builder runs in `.agents/worktrees/2d-9`.
 - Open on Axel's side: nothing.
