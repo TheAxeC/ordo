@@ -30,24 +30,12 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 3
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2d-3
-  base: 34098e5290fd8e3775ed0ee4dec4198b2d6a0d23
-  launched: 2026-09-29
-  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/3-report.md
-  landing: not-started
-  round: 1
-  session_id: affe6b9ee2ba5ff71
-  builder_usage: first run 136338 tokens, 37 tool uses, 387 s
-  reviewer_report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/3-refuter.md (first run 120045 tokens, 23 tool uses, 252 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-None.
+- B (2026-09-29, step 3): whether the brief's list of inputs a step implies but never states covers product code as well as scripts. Your ruling row 4 says "for a step that builds a script", and step 3 landed with that wording in `skills/spec/templates/brief.md`, "Cases", and `skills/spec/SKILL.md`, Steps 4. The brief template serves every repository `/repo-setup` sets up, and its own "Cases" paragraph already speaks of "a code step (a script, or a product's code)". Options: (a) keep "a step that builds or changes a script"; pro: exactly your ruling, and briefs for product code stay shorter; con: in a product repository a step that changes a parser or an API handler gets no list of the inputs it implies, which is where a missed empty value or malformed line costs most. (b) widen to "a code step (a script, or a product's code)", the two lines changed on main; pro: the same protection for product code, and one wording with the template's paragraph; con: longer briefs in product repositories, and each listed input becomes a case the reviewer expects a test for. Recommendation: (b), because the reason for the rule (a wrong answer on an unstated input costs something) holds for product code as much as for scripts, and the cost condition already keeps the list short. (a) is the cheaper option, since nothing changes; (b) is recommended for the coverage, not the cost.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -75,7 +63,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 2 landed: `/refute` gives a verdict per item and per case, each finding with its failure scenario, and "Declined to judge"; `/plan-retro` sets the new lists aside.
+- 2026-09-29. Step 3 landed: the brief template asks for the inputs a script step implies, and a secret in quoted command output is written `<REDACTED>` (both change standards, `/refute`, `/land`, `/roadmap done`).
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- In flight: step 3, briefs and reports; its builder runs in `.agents/worktrees/2d-3`.
-- Open on Axel's side: nothing.
+- Next step: 4, the roadmap and plan checks: "could this pass without the goal being reached", and the "Not yet specified" section.
+- Open on Axel's side: open item B.

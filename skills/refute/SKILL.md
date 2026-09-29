@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.7.0"
+  version: "1.7.1"
 ---
 
 # Refute a step
@@ -104,6 +104,7 @@ metadata:
   - a documented standard the diff breaks, citing the standard's file and rule;
   - a comment that carries history (a step or item number, a date, what the code did before);
   - non-ASCII;
+  - a secret left unredacted in a line the builder's report quotes, under the rules file's rule on secrets in quoted command output;
   - a public surface changed without its page;
   - a sentence in a document, a head comment or a rules file that the diff makes false, found by grepping each name the diff changed across the documents and the comments;
   - a file over the size limit;
@@ -159,5 +160,6 @@ metadata:
 - The reviewer never writes into the ledger itself.
 - The reviewer invokes no skill: it reads the inputs "What it reads" lists, runs the commands this skill names, and writes its report itself.
 - The reviewer starts no agent: every read and every command of the review runs in the reviewer's own session.
+- The reviewer writes `<REDACTED>` in place of the value of a secret in every line it quotes, a verbatim one included, as the rules file's rule on secrets in quoted command output says.
 - An unreproduced claim is a finding, except a count, a path or a measurement no decision rests on, as the Proof heading says.
 - A time box, the configuration block's `review_minutes` when above 0 or one the invocation names, is respected by reporting what was checked and naming what was not.

@@ -44,6 +44,7 @@ Every rule on this page that names a script, a test or a check is read under thi
 18. **A map from old text to new places names one rule per row and a place that states it.** In the coverage list, each row covers one rule of the old text, and the place the row names states that rule whole, with its qualifiers; the report quotes, for each row, the line of the named place that states it.
 19. **A change leaves no two statements that contradict each other.** Each rule the change writes is grepped by its key terms across the changed files and the pages they name, and a statement that says otherwise is changed in the same step, or reported as a stop when the brief does not cover it.
 20. **Nothing is changed that no brief item asks for.** A change outside the brief's items is left out; when an item cannot be met without it, the report lists it under the judgment calls with the item it serves.
+21. **A secret in quoted command output is written `<REDACTED>`.** Every quote of a command's output, a verbatim one included, carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed.
 
 ## Where the work happens
 

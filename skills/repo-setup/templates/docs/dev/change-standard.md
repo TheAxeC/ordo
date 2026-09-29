@@ -43,6 +43,7 @@ Every rule on this page that names code, a script, a test or a check is read und
 17. **A rewrite keeps the meaning of every rule it carries.** When a change rewrites, moves or splits text that states a rule, the new text states the same rule with the same scope: every condition, exception and limit of the old text is kept and none is added. A change of meaning the brief does not ask for is reported as a stop.
 18. **A change leaves no two statements that contradict each other.** Each rule the change writes is grepped by its key terms across the changed files and the pages they name, and a statement that says otherwise is changed in the same step, or reported as a stop when the brief does not cover it.
 19. **Nothing is changed that no brief item asks for.** A change outside the brief's items is left out; when an item cannot be met without it, the report lists it under the judgment calls with the item it serves.
+20. **A secret in quoted command output is written `<REDACTED>`.** Every quote of a command's output, a verbatim one included, carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed.
 
 ## Where the work happens
 

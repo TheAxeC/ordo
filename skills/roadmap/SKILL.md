@@ -2,7 +2,7 @@
 name: roadmap
 description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, add an entry (goal, gate, what it waits on) in the file's own format and in dependency order, move an entry, mark one done with its gate's output, or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
-  version: "1.1.1"
+  version: "1.1.2"
 ---
 
 # Keep the roadmap
@@ -29,12 +29,13 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them: `roadmap`, `ledger_root`, `archive_root`, `verification`.
+1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them: `roadmap`, `ledger_root`, `archive_root`, `verification`, `rules`.
    - In the `projects:` form, the named project's keys.
    - No file, and a required key missing, are refusals ("Stops").
 2. The roadmap file, whole, and every file its introduction links as part of the roadmap.
 3. The ledger folders under `<ledger_root>/` and `<archive_root>/`, for the plan each entry has: a folder whose `plan.md` opens with `# Plan: <entry>`.
 4. The verification page, for the commands a gate can name.
+5. The rules file `rules:` names, for its rule on secrets in quoted command output, which `done` applies to the gate's output.
 
 ## Steps
 
@@ -71,6 +72,7 @@ metadata:
 ### done
 
 1. Take the gate's output: the command and the lines it printed, from this session's run or quoted by the user.
+   - The lines are written with `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says (item 5 of "What it reads").
    - No output is a refusal ("Stops").
 2. Draft the entry marked in the file's vocabulary.
 3. Draft the output line beside it, where the file keeps such lines.

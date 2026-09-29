@@ -133,3 +133,51 @@ none. The report's "User-visible changes, before and after" states each change: 
 - One command I ran falls outside the git commands this review allows: `git show 34098e5:<file>` for the ten SKILL.md files, to compute the base description lengths. It is read-only and changed nothing, and its result is quoted above.
 
 Reviewer usage: claude:opus, a fresh agent; 120045 tokens, 23 tool uses, 252 s (from the completion notice). Saved by the orchestrator from the reviewer's final message.
+
+## Repair round 1, refuted
+
+Reviewer: claude:opus, a fresh agent; 109962 tokens, 25 tool uses, 216 s (from the completion notice). The round's delta read as `git diff 34098e5` against `agents/reviews/3-round-0.diff`: `skills/land/SKILL.md` Steps 11, `skills/roadmap/SKILL.md` (version, "What it reads" 1, "Steps / done" 1), `skills/spec/SKILL.md` Steps 4 and `skills/spec/templates/brief.md` "Cases".
+
+```
+checks.sh on the worktree: the six PASS lines, the ASCII check with no output, checks: 7 commands passed, exit 0
+The length command: 726 land, 632 ordo-init, 386 plan-help, 788 plan-orchestration, 616 plan-retro, 386 plan, 951 refute, 630 repo-setup, 647 roadmap, 999 spec
+LC_ALL=C grep -n '[^ -~]' over the eight changed files and the report: nothing, exit 1
+grep -n '<REDACTED>' over the four files and skills/roadmap/SKILL.md: change-standard.md:47, template change-standard.md:46, refute/SKILL.md:163, land/SKILL.md:88, roadmap/SKILL.md:74
+grep -n '^[0-9]*\. \*\*' over both change standards: rules 1 to 21 and 1 to 20
+grep -rn "script's rules" skills docs: nothing, exit 1
+git diff 34098e5 --stat: 8 files changed, 15 insertions(+), 6 deletions(-)
+grep -n 'rules' skills/plan/templates/plan.yaml: rules: docs/dev/change-standard.md  # required.
+skills/ordo-init/templates/check_config.py:20: PAGE_KEYS = ("roadmap", "verification", "rules")
+```
+
+### Verdicts
+
+- 1 to 5: holds. Items 1 and 2 hold under either wording (see Spec 1); item 5 with Steps 11 now pointing at Steps 9 without restating.
+- Cases 1 to 4: met. Case 1 with `skills/roadmap/SKILL.md:74` a fifth hit; case 3 by reading, `checks.sh` being a script.
+
+### Findings
+
+- Spec 1. `skills/spec/templates/brief.md` "Cases" line 16 and `skills/spec/SKILL.md` Steps 4 line 95: "for a code step (a script, or a product's code)"; what is wrong: ruling 3 of the round widens the item beyond the user's approved step line and ruling row 4 ("for a step that builds a script"); the first refuter report named the point as the user's call, and no user ruling on it is in the state file; failure scenario: in a product repository every brief for a product-code step lists implied inputs, each of which `/refute` then expects as a test, which neither the ruling nor the step line asked for; verdict: none.
+- Standards 2. `skills/roadmap/SKILL.md:74`: "as the rule on secrets in quoted command output in the rules file `.agents/plan.yaml`'s `rules:` names says."; what is wrong: the apposition reads as naming `.agents/plan.yaml` the rules file, and the sentence ends on "names says" (prose standard, sections 0 and E); it departs from the pointer form of `skills/land/SKILL.md:88` and `skills/refute/SKILL.md:163`; failure scenario: a session opens `.agents/plan.yaml` for the rule, does not find it, and writes `postgres://u:pw@host/db` unredacted into the tracked roadmap; verdict: none.
+- Standards 3. `skills/roadmap/SKILL.md`, "What it reads" 1: the `rules` key is listed, but the rules file is not an item of "What it reads" though "Steps / done" 1 depends on a rule in it (`docs/dev/skill-layout.md`, "Sections, in order", row 4); failure scenario: an agent builds its reading list from "What it reads", never opens the rules file, and redacts without the rule's list of kinds; verdict: none.
+- Behaviour 4. `skills/roadmap/SKILL.md`, "What it reads" 1: `/roadmap` now refuses in every mode when `.agents/plan.yaml` has no `rules:` key; the round report does not state this before and after; failure scenario: a user whose hand-written `plan.yaml` has no `rules:` runs `/roadmap` and gets a refusal nothing told them of; verdict: none.
+- Rulings 1, 2, 3 and 4: done as ruled; the extra wording in `/spec` Steps 4 stays inside ruling 3 (it keeps one bullet from opening on "code" and closing on "script"); no check removed.
+
+### Declined to judge
+
+- Whether the orchestrator could rule the widening of ruling 3 without the user: raised as Spec 1, the user's call.
+- The place of the `/roadmap` sub-bullet under "done" item 1: no reading found on which it gives a wrong result.
+- Whether `/land`'s "What it reads" should list the rules file as Standards 3 proposes for `/roadmap`: the orchestrator's choice.
+- The first-run "Doc text" line naming `skills/roadmap/SKILL.md:5: version: "1.1.1"`, made stale by the round; no decision rests on it.
+
+## Closed
+
+- First run, Standards 1 (`/land` Steps 11 restated the rule with another object): closed in repair round 1, ruling 1.
+- First run, Declined to judge 1 (`/roadmap done` writes command output unredacted): closed in repair round 1, ruling 2.
+- First run, Declined to judge 2 (script or code): sent in repair round 1 as ruling 3, then reverted to the ruled scope at landing (round 1, Spec 1) and raised to the user as open item B.
+- First run, Declined to judge 3 (`skills/refute/templates/report.md` "verbatim"): no change, ruling 4; neither line is false, and `/refute`'s Rules bullet says a verbatim quote is redacted.
+- Round 1, Spec 1 (the widening to product code taken without the user): fixed at landing; `skills/spec/templates/brief.md` "Cases" and `skills/spec/SKILL.md` Steps 4 say "a step that builds or changes a script" and "the script's rules and its callers", as ruling row 4 and the approved step line say; the widening is open item B.
+- Round 1, Standards 2 (the `/roadmap done` sub-bullet's wording): fixed at landing; it reads "as the rules file's rule on secrets in quoted command output says (item 5 of "What it reads")".
+- Round 1, Standards 3 (the rules file not an item of `/roadmap`'s "What it reads"): fixed at landing; item 5 names the rules file `rules:` names, for the rule `done` applies.
+- Round 1, Behaviour 4 (`/roadmap` refuses without a `rules:` key): booked as a user-visible change in `plan.md`, step 3's booking, with before and after; the refusal stays, since `rules` is a required key of `/plan`'s configuration.
+- Round 1, Declined to judge (`/land`'s "What it reads" and the rules file): no change; `/land` reads `.agents/plan.yaml` as its first input and names the rules file by its key where it applies it.
