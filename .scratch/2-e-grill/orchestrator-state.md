@@ -52,15 +52,27 @@ dispatch:
   landing: not-started
   round: 0
 - step: 3s
-  trial: the Sonnet 5.5 build of step 3 under the ruling "Sonnet trial"; only one of 3 and 3s lands
+  trial: launched as the Sonnet 5.5 build of step 3 under the ruling "Sonnet trial"; it ran on claude-sonnet-5 (Sonnet 5), since the session was then Claude Code 2.1.283, whose `sonnet` alias gives claude-sonnet-5 (every model field of agent-afb733385e80a6b22.jsonl reads claude-sonnet-5); kept as a data point; only one of 3, 3s and 3s55 lands
   executor: agent
-  worker: claude:sonnet (resolves to claude-sonnet-5-5)
+  worker: claude:sonnet (ran as claude-sonnet-5)
   worktree: .agents/worktrees/2e-3s
   base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
   launched: 2026-09-29 22:00
   session_id: afb733385e80a6b22
   report: .scratch/2-e-grill/agents/reviews/3s-report.md
   builder_usage: 322209 tokens, 118 tool uses, 1805 s
+  reviewer_report: .scratch/2-e-grill/agents/reviews/3s-refuter.md (175588 tokens, 37 tool uses, 526 s)
+  landing: not-started
+  round: 0
+- step: 3s55
+  trial: the Sonnet 5.5 build of step 3 under the ruling "Sonnet trial", launched under Claude Code 2.1.285, whose `sonnet` alias gives claude-sonnet-5-5 (probe: a `claude -p` session's general-purpose agent with model sonnet recorded claude-sonnet-5-5); the same prompt as 3s with its paths; only one of 3, 3s and 3s55 lands
+  executor: agent
+  worker: claude:sonnet (claude-sonnet-5-5 under 2.1.285)
+  worktree: .agents/worktrees/2e-3s55
+  base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
+  launched: 2026-09-29 23:25
+  session_id: ae2714d2e377ffba9 (transcript model field: claude-sonnet-5-5, Claude Code 2.1.285)
+  report: .scratch/2-e-grill/agents/reviews/3s55-report.md
   landing: not-started
   round: 0
 ```
