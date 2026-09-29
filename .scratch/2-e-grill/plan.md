@@ -1,0 +1,96 @@
+# Plan: 2.E grill
+
+Execution ledger for entry 2.E of `docs/roadmap.md`. One bullet is one step of work and one dispatch of its executor (a builder agent by default), except the bookkeeping steps the orchestrator does itself (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+A `grill` skill: an interview in rounds, each round asking every question whose prerequisites are settled, each question with its options, their pros and cons, one recommendation and the lazy option named; facts looked up by agents instead of asked; each answer written, as it settles, into the roadmap entry, the plan's Rulings and `docs/glossary.md`. Ordo's default standards: a design-principles page and coding-standard pages (common, C++, Python, TypeScript) and a UI standard, which `repo-setup` installs and which `grill` and every brief hold a design and its code to; and the `plan.yaml` settings `adr`, `design_bar`, `design_references`, `worker_effort` and `reviewer_effort`, with agents launched at the configured effort.
+
+## Gate
+
+The skill follows `docs/dev/skill-layout.md`, read by Axel; one real run that redrafts roadmap entry 3 from its sources, whose glossary terms and rulings are on disk when the interview ends, reviewed by Axel; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `grill-with-docs` on the same entry, wins or ties; each default page read and approved by Axel; `repo-setup` run on a scratch repository holding C++ and TypeScript files installs the design-principles, common, C++ and TypeScript pages and lists them under `standards`; `check_config.test.sh` passes with a case for each new setting's wrong value.
+
+- The gate: could this pass without the goal being reached? No. Each part is either Axel's reading of the delivered text, a real run whose output is on disk, a blind comparison he judges, or a test whose cases fail on the unchanged tree. One part of the goal has no gate part: agents launched at the configured effort; step 3 carries it, and its answer says how far it can be shown.
+- Step 1: could this pass without the goal being reached? No, the diff shows Ordo's `docs/adr/` equals the template and the ruling A sentence is read in both.
+- Step 2: could this pass without the goal being reached? No, each new case fails on the unchanged tree and passes only with the check in place.
+- Step 3: could this pass without the goal being reached? Partly. The effort an agent runs at cannot be observed from outside it; the check proves the mechanism the Claude Code documentation describes (a definition's `effort` overrides the session level, and `CLAUDE_CODE_EFFORT_LEVEL` is unset), not the level itself.
+- Step 4: could this pass without the goal being reached? No, Axel's reading of the page is the check.
+- Step 5: could this pass without the goal being reached? No, Axel's reading of each page is the check.
+- Step 6: could this pass without the goal being reached? No, Axel's reading of the page is the check.
+- Step 7: could this pass without the goal being reached? No, the run on a scratch repository shows which pages were installed and listed.
+- Step 8: could this pass without the goal being reached? The grep alone could; the check therefore also reads the four rewritten texts.
+- Step 9: could this pass without the goal being reached? No, each sentence is read in place.
+- Step 10: could this pass without the goal being reached? No, the grep and `pin.sh` show the new name is the only one in use.
+- Step 11: could this pass without the goal being reached? No, each change is read in place and `/plan`'s copy of the rulings file is shown on a scratch case.
+- Step 12: could this pass without the goal being reached? No, Axel reads the skill against `docs/dev/skill-layout.md`.
+- Step 12a: could this pass without the goal being reached? No, Axel reads each figure against the skills' Stops tables.
+- Step 13: could this pass without the goal being reached? No, the rulings and glossary terms are on disk and Axel reviews them.
+- Step 14: could this pass without the goal being reached? No, the protocol hides which side is which and Axel judges.
+- Step 15: could this pass without the goal being reached? No, `check_config.py` passes in each repository only with the key present.
+
+## Steps, in execution order
+
+- 1 Ordo's own `docs/adr/`, copied from `repo-setup`'s templates, and the ADR test of ruling A written into `skills/repo-setup/templates/docs/adr/README.md`; check: `diff` of Ordo's README against the template, and the ruling A sentence read in both (1 commit) (approved)
+- 2 The `plan.yaml` settings `adr` (a folder when present, default `docs/adr`), `design_bar` (`industry`, `state-of-the-art`, `novel`; default `industry`), `design_references` (a list of text), `worker_effort` and `reviewer_effort` (`low`, `medium`, `high`, `xhigh`, `max`; default `high`) in `check_config.py`, both `plan.yaml` templates and `/ordo-init`'s draft; check: `check_config.test.sh` with a case for each wrong value, each failing on the unchanged tree (1 commit) (approved)
+- 3 Effort agents: `agents/ordo-low.md` to `agents/ordo-max.md`, each setting `effort` and no model, linked into `~/.claude/agents` by `utils/pin.sh`; plan-orchestration launches builders through `ordo-<worker_effort>`, and `/refute` and the brief check through `ordo-<reviewer_effort>`; check: `pin.test.sh`, one real launch through `ordo-high` that runs a tool, and a read of whether a definition without `tools` gets every tool (1 commit) (approved)
+- 4 `skills/repo-setup/templates/docs/dev/design-principles.md` and `coding-standards/common.md`, as "The default standards pages" below says; check: read and approved by Axel (1 commit) (approved)
+- 5 `coding-standards/cpp.md`, `python.md` and `typescript.md`, as "The default standards pages" below says; check: read and approved by Axel (1 commit) (approved)
+- 6 `ui-standard.md`, as "The default standards pages" below says; check: read and approved by Axel (1 commit) (approved)
+- 7 `repo-setup` question 6 installs the pages adapted to the repository (design-principles and common always, the language pages for the tracked file types, the UI page when Axel says the repository has a UI) and lists them under `standards`; its rule at `SKILL.md:156` becomes "the rules are Ordo's shipped defaults or the user's; the skill adds no other rule"; `/ordo-init` lists the pages; the sentence "A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it." goes into the brief template and the head of `design-principles.md`; check: a real run on a scratch repository holding C++ and TypeScript files lists the right pages, and the changed texts are read (1 commit) (approved)
+- 8 The revert rule rewritten in `docs/dev/change-standard.md:39`, its `repo-setup` template copy, `skills/spec/templates/brief.md:60` and `skills/refute/SKILL.md:102`: a new or changed test is run once on the unchanged tree and fails there, the report quotes that failure, no revert is named per test, and `/refute` finds by reading a test that cannot fail; check: `git grep -n "names the revert"` prints nothing, and the four texts are read (1 commit) (approved)
+- 9 Two rule sentences: an open item lists every later approval its option triggers, so one ruling covers them (the open-item form of `plan-orchestration` and `spec`); a roadmap goal names no project, and a project name appears only where the entry reads or changes that project, as a path (the `roadmap` skill's Rules); check: each sentence read in place (1 commit) (approved)
+- 10 `plan-help` renamed `ordo-help` (ruling H); check: `git grep -n plan-help` finds only the rename's own record, and `pin.sh` links `ordo-help` (1 commit) (approved)
+- 11 The ADR readers (rulings B, C and F): `/spec`'s premise check and brief check, and `/refute`, read the ADRs in the configured `adr` folder that the step touches, a contradiction being a rule clash that stops; `/plan` copies `.scratch/rulings/<entry slug>.md` into a new plan's Rulings and removes it, and names at its approval stop the design decisions that lack an ADR or a ruling; check: each change read in place, and one scratch case for `/plan`'s copy (1 commit) (approved)
+- 12 The `grill` skill: the rounds and the Dn decision form (ruling G), `libraries` (G1), `design_bar` (G2), the rules, standards pages and ADRs (G3), `design_references` (G4), the sentence of step 7, rulings written as they settle (ruling B), the glossary, the PROPOSED ADR on Axel's yes, and its place in `ordo-help`'s sequence between `/roadmap add` and `/plan` (ruling F); check: the skill read by Axel against `docs/dev/skill-layout.md` (1 commit) (approved)
+- 12a Figures in the form of research-hub's `tools/figures/plan-loop.svg`: the pipeline from `/repo-setup` to the closing, and the plan loop per step, each marking where Axel is in the loop and whether that point is required or optional, taken from every skill's Stops table; shown in `README.md`; check: each figure read by Axel against the Stops tables (1 commit) (ruling Figures)
+- 13 The real run: `grill` redrafts roadmap entry 3 from its sources; check: its glossary terms and rulings on disk when the interview ends, reviewed by Axel (1 commit; orchestrator, no agent) (approved)
+- 14 The blind comparison against mattpocock's `grill-with-docs` (github.com/mattpocock/skills at d81f3a1) on entry 3, as `docs/dev/blind-comparison.md` says; check: `grill` wins or ties (1 commit; orchestrator, no agent) (approved)
+- 15 `libraries: check` added to game-engine's and cathedra's `.agents/plan.yaml`; check: `check_config.py` passes in each repository; the edit is left for Axel to commit there (orchestrator, no agent) (approved)
+- 16 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.E`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless the configuration block allows more.
+
+- 4, 5, 6, 8 and 9 with anything after 1.
+- 10 before 12 and 12a, which name `ordo-help`.
+- 12 after 2, 7 and 11, whose settings, pages and readers it uses; 12a after 12; 13 and 14 after 12.
+
+## The default standards pages (ruling O2)
+
+Each page is written generically, states each rule in the concrete form it takes in code, and names the tool that enforces it where the language has one. The pages live under `skills/repo-setup/templates/docs/dev/`.
+
+- `design-principles.md`, independent of language, its own file. It covers single responsibility, separation of concerns, open/closed, substitutability, interface segregation, dependency inversion, DRY, KISS and YAGNI; high cohesion and low coupling; no globals, with dependencies passed explicitly; layer boundaries. Sources: cathedra's "Design principles" (`docs/dev/standards/coding-standards.md` line 58), game-engine's (`docs/dev/coding-standards.md` line 47), and oculus (`research-hub/tools/oculus/.scratch/migration/agents/spec.md:74`, "SOLID, DRY, KISS, YAGNI, separation of concerns, high cohesion and low coupling", and the three layers in `DESIGN.md`). A repository-specific form becomes its general form: "through `Context&`" becomes "dependencies passed as an explicit context parameter". It opens with the sentence of step 7.
+- `coding-standards/common.md`, the conventions that hold in every language: a file size limit; a limit on items per folder; comments say why, never history; ASCII; no hard wrapping. Sources: oculus `DESIGN.md:243-245` and Ordo's rules pages.
+- `coding-standards/cpp.md`. Sources: game-engine's sections (formatting, no globals, the header wall, errors instead of exceptions, determinism, naming, API design, design principles, struct vs class, members and accessors, containers, allocator-aware memory, types and enums, includes, documentation comments) and cathedra's (language, naming and layout, member access and accessor names, API design, design principles, containers). Tooling: clang-format and clang-tidy.
+- `coding-standards/python.md`: ruff, pyright in standard mode, Python 3.10 or newer (from roadmap entry 11), plus naming, errors, typing and module layout.
+- `coding-standards/typescript.md`. Source: oculus: eslint `strictTypeChecked`; `type` preferred over `interface`; Prettier with four spaces; strict tsc; component size limits; Svelte-specific rules in a clearly separate section.
+- `ui-standard.md`. Source: oculus's eslint rules and tests: colours only from tokens; contrast at least 4.5:1 (WCAG 2.2 AA); shared controls instead of raw elements in views; keyboard reachability. It works with `design_references` (ruling G4).
+
+Existing repositories keep their own pages: game-engine's and cathedra's are more specific than the defaults. research-hub is read only.
+
+## Rulings (2026-09-29)
+
+- A: the ADR test is "a record per decision that is not obvious from the code, that binds work after the plan that made it closes, with the alternatives rejected"; everything else stays a plan ruling; written into `skills/repo-setup/templates/docs/adr/README.md` (the user).
+- B: every settled grill answer goes to the plan's Rulings, or to `.scratch/rulings/<entry slug>.md` when no plan is open; `/plan` copies that file into a new plan's Rulings and removes it; an answer passing A's test becomes "record as ADR?" in the next round and is written on Axel's yes (the user).
+- C (b): `/spec`'s premise check, its brief check and `/refute` read the ADRs the step touches; a contradiction is a rule clash that stops (the user).
+- D: Ordo gets its own `docs/adr/` from the repo-setup templates; backfilling ADRs for past decisions is not in 2.E (the user).
+- E (b): a changed decision is superseded by a new ADR; a refinement edits the ADR to its current state with no dated note; git and the booking hold the history (the user).
+- F (a): `/grill <entry>` is named in the sequence between `/roadmap add` and `/plan`, not required; `/plan` says at its approval stop when design decisions lack an ADR or ruling (the user).
+- G: the decision form is game-engine's Dn form: options with pros and cons, a verified reference line with its source read in the session, a recommendation with the lazy option named, answers as "Dn => ..."; the ADR is written as PROPOSED in the same turn (the user).
+- G1: `grill` honours `libraries`: under `avoid` an option adding a dependency is not offered; under `check` each candidate is an option with the facts `/spec` records; the pick is a ruling naming the capability (the user).
+- G2: `design_bar: industry | state-of-the-art | novel`, default `industry`, overridden per interview by `/grill <entry> --bar <value>`; the reference line is always there, and the bar sets what it cites; `check_config.py` validates the value, with a test case (the user).
+- G3 and O1 (a): `grill` reads the rules page, every standards page and the ADRs before drawing up options; an option that breaks one is not offered, and one that needs an ADR changed is offered as reopening it; an optional `adr:` setting, default `docs/adr`, checked to be a folder when present (the user).
+- G4 (a): a `design_references:` setting lists the published standards a design is held to; `check_config.py` accepts it as a list of text (the user).
+- H (a): `plan-help` is renamed `ordo-help` (the user).
+- Configuration finding (a), in 2.E: Ordo accepts `worker_effort`; game-engine and cathedra each add `libraries: check` (the user).
+- O2 (a): the default standards pages as "The default standards pages" says, the `repo-setup` and `/ordo-init` changes, and the sentence of step 7 (the user).
+- O3 (a): the standards are steps of 2.E before `grill`; entry 19 shrinks to the `codebase-design` skill; the roadmap changes were committed in c830ed3, 4c74cdd and 9230459 (the user).
+- O4 (a): the effort agents as step 3 says, `worker_effort` and `reviewer_effort` defaulting to `high` (the user).
+- O5: the revert rule (a), step 8; ruling Y stays (a) after the count of 2.C's and 2.D's stops (26 stops, 4 from ruling Y); the worktree-removal permission is Axel's to set in his settings; the one-ruling sentence, step 9 (the user).
+- O6 (a): a project name appears in a roadmap entry only where the entry reads or changes that project, as a path; the rule sentence is step 9 (the user).
+- Figures: figures in the form of research-hub's `tools/figures/plan-loop.svg`, marking where Axel is in the loop and whether that point is required or optional (the user).
+
+## Blocked, and by what
+
+- 12a: whether the figures are drawn by a generator script, whose computation Axel approves, or written by hand; open item A in `orchestrator-state.md`.
