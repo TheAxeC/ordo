@@ -60,6 +60,7 @@ dispatch:
   launched: 2026-09-29 22:00
   session_id: afb733385e80a6b22
   report: .scratch/2-e-grill/agents/reviews/3s-report.md
+  builder_usage: 322209 tokens, 118 tool uses, 1805 s
   landing: not-started
   round: 0
 ```
@@ -102,7 +103,7 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1, 2, 4 and 5 are on main.
-- Roadmap entry 11's goal is changed as ruling B (a) says (cb92d65).
-- Step 3, the effort agents: prepared (44caaf6); built twice under the ruling "Sonnet trial", by Opus in `.agents/worktrees/2e-3` and by Sonnet 5.5 in `.agents/worktrees/2e-3s`; each build gets its own Opus reviewer, then Axel rules which lands.
-- Open on Axel's side: nothing.
+- 2026-09-29. Steps 1, 2, 4 and 5 are on main; roadmap entry 11's goal changed as ruling B (a) says (cb92d65).
+- Step 3: built twice under the ruling "Sonnet trial": Opus in `.agents/worktrees/2e-3` (reviewed, `3-refuter.md`) and Sonnet 5.5 in `.agents/worktrees/2e-3s` (built, `3s-report.md`, not yet reviewed). Paused at Axel's request for a restart, with no agent running.
+- Next on resume: a fresh Opus reviewer of the Sonnet build (`/refute`, the same instructions as the Opus build's, report saved as `3s-refuter.md`); then the comparison goes to Axel; the winning build gets its repair round and lands, and the other worktree and branch are removed.
+- Open on Axel's side: nothing yet; the trial's comparison comes to him after the second review.
