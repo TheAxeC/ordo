@@ -37,19 +37,6 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 
 ```yaml
 dispatch:
-- step: 4
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2e-4
-  base: 2381288820ce3015bbbd68fd2987b7e786065e04
-  launched: 2026-09-29 20:44
-  session_id: ab59f62dd9e66f9e7
-  report: .scratch/2-e-grill/agents/reviews/4-report.md
-  builder_usage: 96874 tokens, 14 tool uses, 186 s; round 1: 131510 tokens, 12 tool uses, 257 s
-  brief_check: .scratch/2-e-grill/agents/reviews/4-brief-check.md (112374 tokens, 25 tool uses, 242 s)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/4-refuter.md (122792 tokens, 20 tool uses, 323 s; round 1: 113579 tokens, 19 tool uses, 283 s)
-  landing: not-started
-  round: 1
 - step: 5
   executor: agent
   worker: claude:opus
@@ -58,18 +45,20 @@ dispatch:
   launched: 2026-09-29 20:49
   session_id: a875f9d0a947f6cda
   report: .scratch/2-e-grill/agents/reviews/5-report.md
-  builder_usage: 142808 tokens, 33 tool uses, 437 s
+  builder_usage: 142808 tokens, 33 tool uses, 437 s; round 1: 176911 tokens, 13 tool uses, 257 s
   brief_check: .scratch/2-e-grill/agents/reviews/5-brief-check.md (144932 tokens, 33 tool uses, 416 s)
   landing: not-started
-  reviewer_report: .scratch/2-e-grill/agents/reviews/5-refuter.md (150395 tokens, 34 tool uses, 329 s)
+  reviewer_report: .scratch/2-e-grill/agents/reviews/5-refuter.md (150395 tokens, 34 tool uses, 329 s; round 1: 116266 tokens, 25 tool uses, 315 s)
   round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- C (2026-09-29). Steps 4 and 5 are checked by Axel's reading (their lines: "read and approved by Axel"), so neither lands before he has read its pages. Step 4 is built, reviewed twice and fixed; its pages are `.agents/worktrees/2e-4/skills/repo-setup/templates/docs/dev/design-principles.md` and `.../coding-standards/common.md`. Step 5's pages follow when its run over round 1 is done. Options: (a) Axel reads the pages and says "approved", or names what to change; each change is made in the step's worktree and the step then lands; (b) the steps land now and his reading follows, a change becoming a new step by his ruling. Recommendation: (a), since the step's check is his reading and a landing before it would book a check that has not happened. (b) is the lazy option: it books the step done before its check.
+- C (2026-09-29). Step 5 is checked by Axel's reading (its line: "read and approved by Axel"), so it does not land before he has read its pages. Step 5 is built, reviewed twice and fixed; its pages are `.agents/worktrees/2e-5/skills/repo-setup/templates/docs/dev/coding-standards/cpp.md`, `python.md` and `typescript.md`. One default on `cpp.md` is his to choose: whether the default `.clang-tidy` makes every warning an error (`WarningsAsErrors: '*'`), which the page leaves out, since no brief item names it and the documented defaults of `bugprone-easily-swappable-parameters`, `readability-identifier-length` and `readability-magic-numbers` would then fail code the page prescribes, such as `dot(a, b)`. Options: (a) Axel reads the pages and says "approved", or names what to change; each change is made in the step's worktree and the step then lands; (b) the step lands now and his reading follows, a change becoming a new step by his ruling. Recommendation: (a), since the step's check is his reading. (b) is the lazy option: it books the step done before its check.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- C, for step 4 (2026-09-29): Axel: "Open item C: => Approved", on step 4's two pages as printed to him; step 4 landed with them.
 
 - B (2026-09-29, found by step 5's brief check). Roadmap entry 11's goal (`docs/roadmap.md:108`) names "the Python standard (ruff, pyright in standard mode, Python 3.10 or newer) and the C++ standard", which step 5 of this plan delivers as `coding-standards/python.md` and `cpp.md`. After step 5 lands, entry 11 names work already done. Entry 11's gate does not check the standards, so only its goal is affected. Options: (a) at step 5's landing, change entry 11's goal to "`repo-setup` renamed to `scaffold`, with the `library` and `research-project` profiles, hub-specific config, and Ordo's own `CLAUDE.md`." through `/roadmap`, in one commit, the approval of this option being the approval of that diff; (b) make the same change at 2.E's closing step; (c) leave entry 11 as it is. Recommendation: (a), since the entry is wrong from the moment step 5 lands and the change is one line. (b) leaves the roadmap wrong for the rest of the plan; (c) is the lazy option, leaving a roadmap entry that asks for work that exists. Step 5 does not wait on this ruling. Ruled (2026-09-29): (a).
 
@@ -97,8 +86,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Steps 1 and 2 are on main (step 2 in be98a0d).
-- Step 4: built, refuted, round 1 refuted; three wording fixes from the run over round 1 made in its worktree. It waits on open item C, Axel's reading, before it lands.
-- Step 5: round 1 under review; after that it waits on open item C too.
+- 2026-09-29. Steps 1, 2 and 4 are on main.
+- Step 5: built, refuted, round 1 refuted; four fixes from the run over round 1 made in its worktree. It waits on open item C, Axel's reading, before it lands.
 - Next step: step 3, the effort agents, which step 2's keys unblock.
-- Open on Axel's side: open item C.
+- Open on Axel's side: open item C (step 5).

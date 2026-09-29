@@ -64,3 +64,55 @@ none; no skill installs the pages yet.
 - Open item B: Axel's.
 
 Reviewer usage: 150395 tokens, 34 tool uses, 5.5 minutes (329 s), claude:opus, a fresh agent (from its completion notice).
+
+## Repair round 1, refuted
+
+Reviewer: a fresh agent, read-only, over the three pages as they stand against the round-0 text, read against the whole step. Saved by the orchestrator from the reviewer's final message, condensed.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md
+... every line PASS or ok ...
+checks: 8 commands passed
+exit 0
+Project-name, ASCII and dash-aside commands of Cases: exit 0 each
+Svelte command: heading at 38, hits at 38, 40, 42-45, 47-49, none before 38
+wc -l: 77 cpp.md, 43 python.md, 49 typescript.md
+grep -c ';': 0, 0, 0
+grep -c -E ', never|, not ': 0, 0, 1
+grep -n -w -E 'flags?|reports?|refuses?|requires|rewrites?': only python.md:7 (`requires-python`)
+Relative paths, "case", double blank lines: none
+Longest sentence: cpp.md 25 words, python.md 23, typescript.md 22
+ruff 0.16.5 probe: N999 on pkg/BadMod.py; I001, UP006, UP045, N802, N801, ANN001, ANN201, ANN401, E722, PTH118, PTH123, S602, E402 reported; SIM105 on try/except Exception/pass, nothing for contextlib.suppress
+BLE001 reported on: except Exception: pass | log.error("failed") | log.warning("failed %s", e) | print to stderr and sys.exit(1)
+BLE001 not reported on: raise | log.exception("failed") | log.error("failed", exc_info=True)
+typescript-eslint 8.70.0: strict-type-checked.js:42 no-floating-promises error, :86 only-throw-error error; only-throw-error defaults allowRethrowing, allowThrowingAny, allowThrowingUnknown all true; no-floating-promises accepts .catch or .then with a rejection handler
+```
+
+Rulings 1 to 12 of `agents/briefs/5-round-1.md`: each closure reproduces.
+
+### Verdicts
+
+- Items 1, 2, 3: hold. Cases: all met.
+
+### Findings
+
+- Spec 1, cpp.md:10: "The `.clang-tidy` sets `WarningsAsErrors: '*'`" is a configuration default named by no brief item, decision, ruling or source. With it, the documented defaults of `bugprone-easily-swappable-parameters`, `readability-identifier-length` and `readability-magic-numbers` fail code the page prescribes, such as `dot(a, b)`.
+- Spec 2, cpp.md:36: "A drifted declaration then fails at compile time, before the link" is false for a free function defined unqualified inside a `namespace` block, whose drifted parameter list compiles as a new overload and fails at the link.
+- Proof 1, python.md:29: "re-raises or logs ... BLE001 fails one that swallows it". BLE001 also fails a handler that logs with `log.error` or `log.warning`, and the stderr-and-exit handler python.md:31 prescribes when it catches `Exception`. It passes a re-raise, `log.exception` and `exc_info=True`.
+- Proof 2, typescript.md:28-29: "fails any other promise" and "fails any other thrown value". no-floating-promises passes a promise ended by `.catch` or `.then` with a rejection handler. only-throw-error, with its defaults, passes a thrown `any` or `unknown` value and a rethrow.
+
+### Declined to judge
+
+- Whether clang-tidy's checks behave as described: clang-tidy is not installed.
+- Whether each rule, and `WarningsAsErrors` itself, is the right default: Axel's reading.
+- Open item B: Axel's.
+
+Reviewer usage over round 1: 116266 tokens, 25 tool uses, 5.2 minutes (315 s), claude:opus, a fresh agent (from its completion notice).
+
+## Closed
+
+- Round 0, Spec 1 to 3, Proof 1 and 2, Standards 1 to 7: closed in repair round 1 by rulings 1 to 12 of `agents/briefs/5-round-1.md`; the run over the round reproduced each closure.
+- Round 1, Spec 1, `WarningsAsErrors: '*'`: fixed in the step's worktree by the orchestrator before the landing. The bullet is removed, since no brief item or decision names it, and the two clang-tidy sentences say "warns on" (`cpp.md:43`, `cpp.md:61`), since without it a clang-tidy check warns. Whether the default `.clang-tidy` makes warnings errors is put to Axel with his reading of the page.
+- Round 1, Spec 2, a drifted declaration: fixed in the step's worktree before the landing. `cpp.md:36` now requires an exported function to be defined by its qualified name (`<name>::parseConfig`). Checked with clang++ -std=c++20 -c: a drifted parameter list defined inside `namespace ns { ... }` compiles, and the same drift defined as `ns::parseConfig` fails with "out-of-line definition of 'parseConfig' does not match any declaration in namespace 'ns'".
+- Round 1, Proof 1: fixed in the step's worktree before the landing. `python.md:29` reads "re-raises the failure, or logs it with `log.exception` or `exc_info=True`. ruff's `BLE001` fails any other `except Exception`.", the wording the reviewer's probe supports; `python.md:31` has a command-line script catch the exception classes it expects, which BLE001 passes.
+- Round 1, Proof 2: fixed in the step's worktree before the landing. `typescript.md:28` says no-floating-promises fails a promise left with no handler and that one ended by `.catch` passes and is checked by reading; `typescript.md:29` says a thrown `any` or `unknown` value passes only-throw-error and is checked by reading.
