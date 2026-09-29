@@ -92,7 +92,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The response letter for a real submission round, from the referee comments and the revision's apply report.
-- Gate: every referee point has a response and a pointer to its change; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
+- Gate: every referee point has a response and a pointer to its change; each referee point has a verdict, judged by reading the response and the manuscript: addressed, partly, not, or cannot be checked from the manuscript; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
 - Waits on: 5, for the apply report; 6, for the point table.
 
 ## 8. grant
