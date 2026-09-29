@@ -67,7 +67,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 7 done: `docs/roadmap.md` has the "Not yet specified" section, every blind-comparison gate cites `docs/dev/blind-comparison.md` and needs a win or a tie, and entries 7, 9 and 10 carry their ruled additions.
-- Verified: `grep -n 'blind-comparison.md' docs/roadmap.md` prints the gates of entries 2.E, 2.F, 9, 5, 6, 7, 10, 17, 19, 20 and 22; `grep -c 'protocol of 2.D' docs/roadmap.md` prints 0.
-- Next step: step 8, tag v2.4.0 and run `utils/pin.sh v2.4.0`, both on Axel's yes.
-- Open on Axel's side: the yes for step 8's tag and pin.
+- 2026-09-29. Step 8 done: main tagged v2.4.0 at 5be7e73 and the installed skills pinned to it.
+- Verified: `git -C ~/.local/share/ordo-stable describe --tags` printed `v2.4.0`.
+- Next step: step 9, the glossary, prepared, built and refuted under the v2.4.0 skills.
+- Open on Axel's side: nothing.
