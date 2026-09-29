@@ -17,7 +17,7 @@ metadata:
 - `description` is one paragraph: what the skill does, what it produces, then `Triggers on:` and the phrases. It names no neighbouring skill; that is the Use instead section's job.
 - `description` is at most 1,024 characters, counted as the length of its YAML value once parsed: `python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/SKILL.md"))]'` prints each skill's count.
 - The first words of `description` name what the skill does, in the phrase a reader or a model matches a request on.
-- `Triggers on:` lists one phrase for each case the skill is for.
+- `Triggers on:` lists at least one phrase for each case the skill is for, and may list several phrasings of one case, so a request worded differently still finds the skill.
 - A phrase for a case a neighbouring skill is for goes in that skill's `Triggers on:`, not in this one.
 - The version lives in `metadata.version` only. The text of the skill carries no version, date or change history.
 

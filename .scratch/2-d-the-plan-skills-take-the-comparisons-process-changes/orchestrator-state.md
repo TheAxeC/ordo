@@ -41,15 +41,17 @@ dispatch:
   landing: not-started
   round: 0
   session_id: a3a51b6bc43a624b1
+  builder_usage: first run 128585 tokens, 23 tool uses, 403 s
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- A (2026-09-29, step 1): what "one trigger per case" means in `docs/dev/skill-layout.md`, Frontmatter. The ruling says "a description is a trigger (front-load the leading word, one trigger per case)". Step 1 wrote "`Triggers on:` lists one phrase for each case the skill is for.", and `/spec`'s description keeps four phrases for its one case (`spec <entry> <step>, brief <step>, prepare step <n>, write the brief`). Options: (a) each case the skill is for has at least one trigger phrase, and several phrasings of one case are allowed; the page sentence says so; pro: every case is covered and a request worded differently still matches; con: longer lists, and the line between a case and a phrasing is judged by reading. (b) exactly one phrase per case; `/spec` keeps one of its four and the other skills are brought in line by roadmap entry 23; pro: short lists; con: a request worded as "write the brief" or "prepare step 3" no longer matches its phrase. Recommendation: (a), since the purpose of the trigger list is that each case is found, and the other phrasings are how a request worded differently is found. (a) is also the cheaper option, since no description changes; it is recommended for the matching, not the cost.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-09-29: the step list: approved by the user as drafted.
+- 2026-09-29: open item A (one trigger per case): ruled (a) by the user, at least one phrase per case and several phrasings allowed; applied on main in `docs/dev/skill-layout.md`, Frontmatter.
 
 ## The standing demands (from Axel, in force)
 
@@ -75,4 +77,4 @@ dispatch:
 - 2026-09-29. Step 1 landed: the writing rules for skill text in `docs/dev/skill-layout.md`, `/spec`'s description at 999 characters.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
 - In flight: step 2, `/refute` takes the verdict form; its builder runs in `.agents/worktrees/2d-2`.
-- Open on Axel's side: open item A.
+- Open on Axel's side: nothing.

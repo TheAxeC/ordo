@@ -33,6 +33,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 ## Rulings (2026-09-29)
 
 - The step list: approved as drafted, with its choices (the glossary as the last code step; the diffs read at the closing; `docs/dev/blind-comparison.md`; v2.4.0 before step 9 and v2.5.0 at the closing) (the user).
+- Open item A: "one trigger per case" means at least one `Triggers on:` phrase for each case, several phrasings of one case allowed; applied in `docs/dev/skill-layout.md`, Frontmatter (the user).
 
 ## Blocked, and by what
 
