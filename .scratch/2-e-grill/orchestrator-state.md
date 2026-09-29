@@ -37,6 +37,17 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 
 ```yaml
 dispatch:
+- step: 3
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2e-3
+  base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
+  launched: 2026-09-29 21:44
+  session_id: a4e5bce8772d0d657
+  report: .scratch/2-e-grill/agents/reviews/3-report.md
+  brief_check: .scratch/2-e-grill/agents/reviews/3-brief-check.md (173243 tokens, 33 tool uses, 520 s)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -77,5 +88,5 @@ none
 
 - 2026-09-29. Steps 1, 2, 4 and 5 are on main.
 - Roadmap entry 11's goal is changed as ruling B (a) says (cb92d65).
-- Next step: step 3, the effort agents, which step 2's keys unblock.
+- Step 3, the effort agents: prepared (44caaf6), its builder launched in `.agents/worktrees/2e-3`.
 - Open on Axel's side: nothing.
