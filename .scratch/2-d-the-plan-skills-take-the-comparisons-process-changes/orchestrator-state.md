@@ -30,7 +30,17 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 5
+  executor: agent
+  worker: claude:opus
+  worktree: .agents/worktrees/2d-5
+  base: 3024434d6647ce2965e0784508d4464a048a3f00
+  launched: 2026-09-29
+  report: .scratch/2-d-the-plan-skills-take-the-comparisons-process-changes/agents/reviews/5-report.md
+  landing: not-started
+  round: 0
+  session_id: aeee2edf205848c83
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -66,5 +76,5 @@ None.
 
 - 2026-09-29. Step 4 landed: `/roadmap add` and `/plan` ask "could this pass without the goal being reached?" of every gate and step check, and `/roadmap` has the "Not yet specified" section, which `/plan` refuses.
 - Verified: `sh skills/land/templates/checks.sh` on this state file on main, `checks: 7 commands passed`, exit 0.
-- Next step: 5, the brief check at `/spec`; its brief check also asks the question of every step's check, so a step a ruling adds is covered (step 4's booking).
+- In flight: step 5, the brief check at `/spec`; its builder runs in `.agents/worktrees/2d-5`.
 - Open on Axel's side: nothing.
