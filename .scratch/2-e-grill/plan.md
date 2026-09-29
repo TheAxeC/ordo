@@ -30,7 +30,7 @@ The skill follows `docs/dev/skill-layout.md`, read by Axel; one real run that re
 
 ## Steps, in execution order
 
-- 1 Ordo's own `docs/adr/`, copied from `repo-setup`'s templates, and the ADR test of ruling A written into `skills/repo-setup/templates/docs/adr/README.md`; check: `diff` of Ordo's README against the template, and the ruling A sentence read in both (1 commit) (approved)
+- ✅ 1 Ordo's own `docs/adr/`, copied from `repo-setup`'s templates, and the ADR test of ruling A written into `skills/repo-setup/templates/docs/adr/README.md`; check: `diff` of Ordo's README against the template, and the ruling A sentence read in both (1 commit) (approved)
 - 2 The `plan.yaml` settings `adr` (a folder when present, default `docs/adr`), `design_bar` (`industry`, `state-of-the-art`, `novel`; default `industry`), `design_references` (a list of text), `worker_effort` and `reviewer_effort` (`low`, `medium`, `high`, `xhigh`, `max`; default `high`) in `check_config.py`, both `plan.yaml` templates and `/ordo-init`'s draft; check: `check_config.test.sh` with a case for each wrong value, each failing on the unchanged tree (1 commit) (approved)
 - 3 Effort agents: `agents/ordo-low.md` to `agents/ordo-max.md`, each setting `effort` and no model, linked into `~/.claude/agents` by `utils/pin.sh`; plan-orchestration launches builders through `ordo-<worker_effort>`, and `/refute` and the brief check through `ordo-<reviewer_effort>`; check: `pin.test.sh`, one real launch through `ordo-high` that runs a tool, and a read of whether a definition without `tools` gets every tool (1 commit) (approved)
 - 4 `skills/repo-setup/templates/docs/dev/design-principles.md` and `coding-standards/common.md`, as "The default standards pages" below says; check: read and approved by Axel (1 commit) (approved)
@@ -95,3 +95,13 @@ Existing repositories keep their own pages: game-engine's and cathedra's are mor
 ## Blocked, and by what
 
 - Nothing is blocked.
+
+### Step 1, Ordo's ADR folder and the ADR test (landed 2026-09-29)
+
+- Landed: `skills/repo-setup/templates/docs/adr/README.md`, its first paragraph replaced by two: the ADR test of ruling A (a record per decision not obvious from the code that binds work after its plan closes, with the reasoning and the alternatives rejected; every other decision the user rules on stays a plan ruling) and the change rule of ruling E (a changed decision gets a superseding ADR, a refinement edits the ADR in place with no dated note); Ordo's own `docs/adr/README.md` and `docs/adr/template.md`, byte-for-byte copies of the templates, the table empty (ruling D); `skills/repo-setup/templates/CLAUDE.md` line 21 now names `docs/adr/` as "the decisions that bind work after the plan that made them closes".
+- Premise corrections (at /spec, from the brief check): the template README has 8 lines with a heading, not 7; `skills/repo-setup/templates/CLAUDE.md:21` contradicted the new README and was added to the step's paths; the dictated paragraph was split in two to meet the prose standard's paragraph and sentence length rules; two cases added to pin the unchanged parts.
+- Repair round 1 (`agents/briefs/1-round-1.md`): one Standards finding, "Every other decision stays a ruling" used "ruling" outside the glossary's sense; narrowed to "Every other decision the user rules on stays a ruling of the plan that made it"; the run over the round found nothing.
+- Fixes at landing: none. The builder's first report did not pass the bar: its one finding needed a repair round.
+- Verification on main: `sh skills/land/templates/land.sh .scratch/2-e-grill/orchestrator-state.md 2e-1 1645496e2c768df9e3889c3de25ca1da2898b31c` printed the six `PASS:` lines, `ok: the plan-terms block equals the template` and `checks: 8 commands passed`, exit 0; staged `docs/adr/README.md`, `docs/adr/template.md`, `skills/repo-setup/templates/CLAUDE.md`, `skills/repo-setup/templates/docs/adr/README.md` (4 files, 33 insertions, 2 deletions).
+- A/B: none (`bench: []`). Look: none (`look:` empty).
+- Usage: brief check claude:opus 98196 tokens, 13 tool uses, 155 s; builder claude:opus 88121 tokens, 16 tool uses, 140 s (round 0) and 93569 tokens, 3 tool uses, 62 s (round 1); reviewer claude:opus 109566 tokens, 19 tool uses, 166 s, and over round 1 68949 tokens, 11 tool uses, 111 s (from the completion notices).

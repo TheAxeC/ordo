@@ -31,20 +31,7 @@ bench: []                    # no A/B.
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2e-1
-  base: 1645496e2c768df9e3889c3de25ca1da2898b31c
-  launched: 2026-09-29 20:04
-  session_id: a7e2d8da2f7e6b429
-  report: .scratch/2-e-grill/agents/reviews/1-report.md
-  builder_usage: 88121 tokens, 16 tool uses, 140 s
-  brief_check: .scratch/2-e-grill/agents/reviews/1-brief-check.md (98196 tokens, 13 tool uses, 155 s)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/1-refuter.md (109566 tokens, 19 tool uses, 166 s)
-  landing: not-started
-  round: 1 (sent at the tree state of the builder's first report; agents/briefs/1-round-1.md)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -77,7 +64,7 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Plan opened; the roadmap changes of rulings O3 and O6 are on main (c830ed3, 4c74cdd, 9230459).
-- Step 1 in flight: brief and brief check committed (1645496), builder launched.
-- Next step: 2 after step 1 lands.
+- 2026-09-29. Step 1 landed: Ordo's `docs/adr/` and the ADR test in the template (this commit).
+- Verified: `land.sh` on main printed `checks: 8 commands passed`, exit 0.
+- Next step: 2, the `plan.yaml` settings, because it is the next in the list and nothing blocks it.
 - Open on Axel's side: nothing.

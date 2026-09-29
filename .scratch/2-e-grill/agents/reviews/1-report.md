@@ -121,3 +121,38 @@ None. The README text is the brief's item 1 verbatim; read against the prose sta
 ## Wrong or impossible in the brief
 
 Nothing.
+
+## Repair round 1
+
+Finding 1 (standards) is closed as ruled. In `skills/repo-setup/templates/docs/adr/README.md` and `docs/adr/README.md`, the sentence "Every other decision stays a ruling of the plan that made it." is replaced by "Every other decision the user rules on stays a ruling of the plan that made it." Nothing else in either file changed. The template diff and the reading of line 3 quoted earlier in this report are superseded by this section.
+
+New line 3 of both files, `sed -n 3p skills/repo-setup/templates/docs/adr/README.md`:
+
+```
+A record is kept per decision that is not obvious from the code and binds work after its plan closes. It holds the reasoning and the alternatives rejected. Every other decision the user rules on stays a ruling of the plan that made it. A choice is justified from this repository's goals, never from what another project does.
+```
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-e-grill/orchestrator-state.md`, exit 0:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+```
+
+- `diff docs/adr/README.md skills/repo-setup/templates/docs/adr/README.md` printed nothing, exit 0.
+- `diff docs/adr/template.md skills/repo-setup/templates/docs/adr/template.md` printed nothing, exit 0.
+- `LC_ALL=C grep -n '[^ -~]' docs/adr/README.md docs/adr/template.md skills/repo-setup/templates/docs/adr/README.md skills/repo-setup/templates/CLAUDE.md` printed nothing, exit 1.

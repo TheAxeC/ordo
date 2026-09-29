@@ -85,3 +85,51 @@ none
 - Passive voice in "A record is kept per decision": allowed by the prose standard's "Sentence shapes" where the actor is irrelevant, and dictated by the brief.
 
 Reviewer usage: 109566 tokens, 19 tool uses, 2.8 minutes (166 s), claude:opus, a fresh agent (from its completion notice). Saved by the orchestrator from the reviewer's final message.
+
+## Repair round 1, refuted
+
+Reviewer: a fresh agent, read-only, over the round's delta (line 3 of both READMEs) read against the whole diff since 1645496.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md   (rc=0)
+PASS: land.sh scratch tests
+PASS: checks.sh scratch tests
+PASS: check_config.py scratch tests
+PASS: sync_rules.py scratch tests
+ok: the plan-terms block equals the template
+PASS: pin.sh scratch tests
+PASS: check_coverage.py scratch tests
+checks: 8 commands passed
+
+diff docs/adr/README.md skills/repo-setup/templates/docs/adr/README.md        -> no output, rc=0
+diff docs/adr/template.md skills/repo-setup/templates/docs/adr/template.md    -> no output, rc=0
+LC_ALL=C grep -n '[^ -~]' (the four files)                                   -> no output, rc=1
+cmp docs/adr/README.md skills/repo-setup/templates/docs/adr/README.md         -> rc=0
+wc -c docs/adr/README.md -> 815 (first review: 797; +18 = " the user rules on")
+git diff 1645496 -> CLAUDE.md line 21 only; the template README's old line 3 replaced by the new line 3, a blank line and line 5; nothing else
+git grep -n -i -E 'rules on|ruled on' -- skills docs utils README.md CLAUDE.md -> no hit made false by the new line 3
+```
+
+### Verdicts
+
+- Items 1 to 4: hold (line 3 is the brief's first paragraph with the round's sentence; the copies are byte-equal; `template.md` unchanged; `CLAUDE.md` line 21 as item 4 gives it).
+- Cases: all met.
+
+### Findings
+
+none
+
+The round removed no check; the delta matches the ruling word for word; the closure reproduces.
+
+Reviewer usage over round 1: 68949 tokens, 11 tool uses, 111 s, claude:opus, a fresh agent (from its completion notice).
+
+### Declined to judge
+
+- Where an orchestrator's ruling that is not an ADR is kept: the sentence does not claim to cover it.
+- Whether the user's approval of a step list counts as a decision "the user rules on": the user's call.
+- The builder's report keeps the old wording in its first sections, which its Repair round 1 section marks as superseded.
+- The delta was measured against the first review's quoted text and byte count, since the round's start tree is not a commit.
+
+## Closed
+
+- Round 0, Standards, "Every other decision stays a ruling of the plan that made it": closed in repair round 1 by the builder, as ruled in `agents/briefs/1-round-1.md`; the run over the round found nothing.
