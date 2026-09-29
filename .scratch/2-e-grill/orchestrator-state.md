@@ -40,9 +40,11 @@ dispatch:
   launched: 2026-09-29 20:04
   session_id: a7e2d8da2f7e6b429
   report: .scratch/2-e-grill/agents/reviews/1-report.md
+  builder_usage: 88121 tokens, 16 tool uses, 140 s
   brief_check: .scratch/2-e-grill/agents/reviews/1-brief-check.md (98196 tokens, 13 tool uses, 155 s)
+  reviewer_report: .scratch/2-e-grill/agents/reviews/1-refuter.md (109566 tokens, 19 tool uses, 166 s)
   landing: not-started
-  round: 0
+  round: 1 (sent at the tree state of the builder's first report; agents/briefs/1-round-1.md)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
