@@ -154,3 +154,307 @@ No other path is written; `git status --short` lists the seven files above.
 ## Anything in the brief that was wrong or impossible
 
 Nothing found wrong in the brief's cases or rules.
+
+# Repair round 1
+
+All five points are done. The reading case of real run 1 is met: every installed sentence of the five pages was read whole, and none states a condition that does not hold or a name nobody chose.
+
+## Changes, old beside new
+
+1. Steps 3 of `skills/repo-setup/SKILL.md`, new sub-bullet before the "A check the repository does not have yet" bullet. Old: none. New: "A rule whose condition is a choice placeholder (`<yes or no>`, or a value `or none`) is kept when the answer is yes or a value, with the parenthesis that held the choice removed, and is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none."
+2. "The tree". Old: the four page lines with no condition. New: each of the four lines ends "when question 6 gave the defaults" (the UI line: "when question 6 gave the defaults and the repository has a user interface"), and a new line `<the pages question 6 names>     the pages copied from a sibling repository or written from the user's rules, at the paths the answer gives, in place of the default pages above`.
+3. Question 6, new second sub-bullet. Old: none. New: "A language with no template page (any kind other than C++, Python and TypeScript) gets no language page from the defaults; the draft at Steps 4 says so, and the user may give that language's rules under the third answer."
+4. Anti-patterns row, first cell. Old: "A coding rule the user did not state". New: "A coding rule that is neither in Ordo's shipped pages nor stated by the user".
+5. Steps 8 bullet. Old: "The `standards` key it drafts lists every standards page written at Steps 5." New: "The `standards` key it drafts lists every standards page written at Steps 5 except the change standard, which is the `rules` key."
+
+## Checks runner (full output)
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+exit 0
+```
+
+## Grep cases and description lengths
+
+```
+$ git grep -n docs/dev/coding-standards\.md ...
+exit 1
+$ grep -n "never invents a coding rule" SKILL.md
+exit 1
+$ grep -c -F rules-line
+1
+$ grep -c -F brief sentence
+1
+$ grep -c -F design-principles ordo-init
+1
+$ sync_rules
+ok: the plan-terms block equals the template
+$ description lengths
+726 skills/land/SKILL.md
+632 skills/ordo-init/SKILL.md
+386 skills/plan-help/SKILL.md
+788 skills/plan-orchestration/SKILL.md
+616 skills/plan-retro/SKILL.md
+477 skills/plan/SKILL.md
+951 skills/refute/SKILL.md
+776 skills/repo-setup/SKILL.md
+997 skills/roadmap/SKILL.md
+1022 skills/spec/SKILL.md
+```
+
+## Real run 2 (with web/c.svelte)
+
+```
+$ ls docs/dev docs/dev/coding-standards
+docs/dev:
+change-standard.md
+coding-standards
+design-principles.md
+prose-standard.md
+ui-standard.md
+
+docs/dev/coding-standards:
+common.md
+cpp.md
+typescript.md
+$ grep -c Svelte typescript.md
+2
+38:## Svelte and SvelteKit
+$ placeholder grep (filtered)
+exit 1
+$ conditional cpp.md lines
+exit 1
+standards line: [docs/dev/design-principles.md, docs/dev/coding-standards/common.md, docs/dev/coding-standards/cpp.md, docs/dev/coding-standards/typescript.md, docs/dev/ui-standard.md, docs/dev/prose-standard.md, docs/glossary.md]
+```
+The change standard is not in the line, as Steps 8 now says.
+
+## Real run 3 (Svelte named, no files)
+
+```
+$ ls docs/dev docs/dev/coding-standards
+docs/dev:
+change-standard.md
+coding-standards
+design-principles.md
+prose-standard.md
+ui-standard.md
+
+docs/dev/coding-standards:
+common.md
+typescript.md
+ls: docs/dev/coding-standards/cpp.md: No such file or directory
+ls: docs/dev/coding-standards/python.md: No such file or directory
+38:## Svelte and SvelteKit
+$ placeholder grep (filtered)
+exit 1
+```
+
+## Real run 1 (C++ and TypeScript, no user interface), rerun on the changed text
+
+Choices answered no, the fixed-width aliases answered none. The five conditional rules of `cpp.md` (`-fno-exceptions` with its sub-list, `-fno-rtti`, two-phase setup with `<the context type>`, fixed-width aliases, allocator-aware with its sub-list) are left out of the installed page, and `<src>` and the context type went with them. `Namespace` `scratch7`, folders `src` and `lib`, other values as in the first report.
+
+```
+$ ls docs/dev docs/dev/coding-standards
+docs/dev:
+change-standard.md
+coding-standards
+design-principles.md
+prose-standard.md
+
+docs/dev/coding-standards:
+common.md
+cpp.md
+typescript.md
+$ grep -c Svelte typescript.md
+0
+$ placeholder grep (filtered)
+exit 1
+$ placeholder grep (unfiltered)
+docs/dev/coding-standards/cpp.md:57:<const T>
+$ grep conditional lines in cpp.md
+exit 1
+standards line: [docs/dev/design-principles.md, docs/dev/coding-standards/common.md, docs/dev/coding-standards/cpp.md, docs/dev/coding-standards/typescript.md, docs/dev/prose-standard.md, docs/glossary.md]
+```
+
+### The pages as installed
+
+#### docs/dev/design-principles.md
+
+````markdown
+# Design principles
+
+A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it. A principle without a concrete form is a slogan. The concrete form below is the rule, and a check enforces it where one exists.
+
+- **Single responsibility.** One module owns one subject, and a class keeps one invariant. A file holds one subject. A member reaches another subject's state through that subject's interface.
+- **Separation of concerns, high cohesion, low coupling.** The code is layered, and a layer sees only the layers below it: `app`, then `lib`. A module reaches only the modules it declares as dependencies. A forwarder, a member whose whole body is a call to the same member elsewhere, is deleted.
+- **Open for extension, closed for modification.** A new view, backend, key or command is registered at an extension point, such as a registry or an interface. The code that consumes it is left unchanged.
+- **Substitutability.** Every implementation of an interface honours the whole contract. No member is defaulted to a silent no-op. A failure is reported as `docs/dev/coding-standards/common.md` says, never through a flag that means two things.
+- **Interface segregation.** Each subject has one small interface. A caller depends on the interface it uses. An interface holds only members that a production caller uses.
+- **Dependency inversion.** A module depends on interfaces that the layers below it declare, and names no concrete type of a layer above it. Collaborators are passed in explicitly, as a context parameter, a constructor argument or a function parameter.
+- **No globals.** The code has no singleton, no global logger, no `getInstance()` and no mutable state at module or class level. An exception is an ADR the user rules on, and it sets no precedent for another.
+- **Do not repeat yourself.** Each rule has one body. A computation written twice is folded to one home, and the other place calls it. A table the build can derive is generated. A rule in prose is stated once and cited from everywhere else. The comment rule, for one, is the change standard's rule "No history in code or comments" (`docs/dev/change-standard.md`).
+- **Keep it simple.** The plain shape comes first: a value type over a builder, and a plain function over a generic one. A direct call is preferred over an indirect one where the callee is known. A mechanism is justified from the repository's own goals (a readable and maintainable scratch repository), never from what another project does.
+- **You are not going to need it.** Nothing is added for a caller that does not exist. A member, parameter, option or file whose only user is a test is deleted with its test. A public member exists because a caller calls it, and it is documented where that caller reads. A future need is recorded as a roadmap entry, and no code is written for it.
+
+No check of the repository enforces a principle yet: each is checked by reading at review.
+````
+
+#### docs/dev/coding-standards/common.md
+
+````markdown
+# Coding standards: every language
+
+The language pages in `docs/dev/coding-standards/` add to this page and never repeat it. Two pages installed beside it hold rules this page relies on: the change standard, `docs/dev/change-standard.md`, and the prose standard, `docs/dev/prose-standard.md`.
+
+- **File size.** A source file stays under 1000 lines, checked by reading at review. A file approaching the limit is split by subject, never by line count.
+- **Folder size.** A source, test or tool folder holds at most ten items, checked by reading at review.
+- **Formatting.** Each language has one formatter, with its configuration pinned in the repository. The formatting is checked by reading at review. A failing format is fixed by running the formatter.
+- **Comments.** The change standard's rule "No history in code or comments" says what a comment carries and what it never carries.
+- **Character set.** Every authored file is ASCII, source code included, with the one exception the prose standard's section B allows: accented letters in names. A file whose format requires another character set is exempt. The rule is checked by reading at review.
+- **Markdown and YAML.** Each paragraph and each bullet is one line, as the prose standard's section F sets for source formatting.
+- **Names.** A name says what the thing is in the repository's vocabulary, whose terms `docs/glossary.md` holds. One concept keeps one name, the rule "No synonym cycling" of the prose standard's section D.
+- **Errors.** A failure is reported through the language's error mechanism, with what failed and why. Nothing fails silently, and no catch-all handler hides a failure.
+- **Tests.** A test proves behaviour whose failure costs something, under the change standard's section "Scripts compute facts; judgment is read". Its rule "A test proves the change by failing without it, and the report quotes the red" sets how the proof is shown.
+````
+
+#### docs/dev/coding-standards/cpp.md
+
+````markdown
+# Coding standards: C++
+
+This page adds to `docs/dev/coding-standards/common.md` and `docs/dev/design-principles.md`, and repeats neither.
+
+## Language and tooling
+
+- The language standard is C++20.
+- clang-format formats every source file from a `.clang-format` in the repository. It sets a 4-space indent, braces on the same line, left-aligned pointers (`T* p`) and a column limit of 120.
+- clang-tidy runs from a `.clang-tidy` with the groups `bugprone-*`, `modernize-*`, `performance-*` and `readability-*`.
+- The `.clang-tidy` turns off `modernize-use-trailing-return-type`, since the code declares return types in front.
+- The `.clang-tidy` sets `readability-identifier-naming` to the naming styles under "Naming".
+
+## Errors
+
+- Errors are values. A fallible function returns a result type marked `[[nodiscard]]`, and the caller branches on it.
+
+## Construction
+
+- A constructor establishes the class's invariant from its arguments, and the destructor releases what the class owns (RAII).
+
+## Headers and includes
+
+- A public header lives under `include/lib/` and ends `.hpp`. Every other header ends `.h`.
+- A public header names no third-party type. It hides one behind PIMPL or an opaque handle.
+- A public header names no private header of another library.
+- Every header opens with `#pragma once`.
+- A `.cpp` includes its own header first, then the standard library, then third-party headers, then the project's own.
+- A `.cpp` that exports a symbol declares it in a header it includes itself.
+- A `.cpp` defines an exported function by its qualified name (`scratch7::parseConfig`). A definition that drifts from its declaration then fails at compile time.
+- File names are lowercase.
+
+## Naming
+
+- The project has one namespace, `scratch7`. A nested namespace exists only to avoid a real collision.
+- A free function carries its module in a compound name (`parseConfig`), so the name stays flat and still says where it belongs.
+- Types are `PascalCase`, and functions, methods and variables are `lowerCamelCase`. Members are `m_name`. Namespace- and file-scope `constexpr` constants are `SCREAMING_CASE`. clang-tidy's `readability-identifier-naming` warns on a name in another naming style.
+- Enumerations are `enum class`. The underlying type is explicit when the value is serialised, sizes an array or crosses an ABI.
+
+## API shape
+
+- A stateful type is constructed by a static factory on the type (`Window::create(config)`). An operation on it is a member (`window.resize(size)`).
+- A free function stays in two places: math on a passive value type (`dot(a, b)` on plain aggregates), and a file-local helper with internal linkage.
+
+## `struct` and `class`
+
+- A passive aggregate with public members and no invariant is a `struct`.
+- A type that keeps an invariant is a `class` with private state.
+
+## Members and accessors
+
+- Member access carries no `this->`, since the `m_` prefix already marks a member.
+- An accessor takes no `get` prefix (`size()`, `width()`). A mutator keeps a verb (`setWidth()`).
+- An accessor is `[[nodiscard]]`, and clang-tidy's `modernize-use-nodiscard` warns on one without it.
+
+## Containers and memory
+
+- A sequence crosses a function boundary as `std::span` (`std::span<const T>` when it is read-only), and text as `std::string_view`.
+- A map or a set on a hot path is a flat open-addressing table. The node-based `std::map`, `std::unordered_map`, `std::set` and `std::unordered_set` stay off hot paths.
+- A value type with many instances on a hot path lives in an index or a pool, with no heap allocation per instance.
+
+## Documentation comments
+
+- A public declaration carries a Doxygen `///` brief. `@param` and `@return` appear only where they add what the signature does not say.
+- Every other comment is plain `//`, since Doxygen attaches a `///` to the next declaration.
+````
+
+#### docs/dev/coding-standards/typescript.md
+
+````markdown
+# Coding standards: TypeScript
+
+This page adds to `docs/dev/coding-standards/common.md` and `docs/dev/design-principles.md`, and repeats neither.
+
+## Language and tooling
+
+- `tsconfig.json` sets `"strict": true`.
+- ESLint runs from a flat config with `@eslint/js` recommended and typescript-eslint's `strictTypeChecked` and `stylisticTypeChecked`. It has type information through `projectService: true`.
+- The config sets `reportUnusedDisableDirectives: 'error'`, which fails an unused disable comment.
+- A rule turned off in the config names why beside it.
+- A disable comment at a site names its reason.
+- Prettier formats every source file from a `.prettierrc` with `tabWidth: 4`, `useTabs: false`, `singleQuote: true`, `trailingComma: "none"` and a `printWidth` of 100.
+
+## Types
+
+- A shape is declared with `type`. `@typescript-eslint/consistent-type-definitions`, set to `type`, fails an `interface`.
+- An `interface` stays only where declaration merging needs one, with a disable comment saying so.
+- A value parsed from outside is `unknown` and is narrowed before use. `@typescript-eslint/no-explicit-any` fails an `any`.
+- `@typescript-eslint/no-non-null-assertion` fails a non-null assertion `!`.
+
+## Names and unused values
+
+- Types are `PascalCase`, functions and variables `camelCase`, and constants camelCase.
+- A binding the syntax needs and the code does not read is named with a leading `_`. The config sets `@typescript-eslint/no-unused-vars` with `argsIgnorePattern: '^_'` and `varsIgnorePattern: '^_'`. That rule passes such a name and fails every other unused binding.
+
+## Errors and promises
+
+- Every promise is awaited, returned or marked `void`. `@typescript-eslint/no-floating-promises` fails a promise left with no handler. A promise ended by `.catch` passes it and is checked by reading.
+- A thrown value is an `Error` or a subclass of it. `@typescript-eslint/only-throw-error` fails a thrown value of another type. A thrown `any` or `unknown` value passes it and is checked by reading.
+- A `catch` block handles the failure it catches. Core `no-empty` fails an empty one.
+
+## Modules
+
+- The code is ES modules only. `no-var` fails a `var`.
+- A module exports named values. A default export stays only where a named one cannot serve.
+- The module graph has no import cycle, checked by reading at review.
+````
+
+#### CLAUDE.md, "Read before you act"
+
+````markdown
+## Read before you act
+
+- `docs/dev/building.md`: how to build and test, and what the green check is. Read it before running or reporting any build.
+- `docs/dev/change-standard.md`: how a change is made and reported. Every brief points here first.
+- `docs/dev/design-principles.md` and the pages under `docs/dev/coding-standards/`: how code is designed and written.
+- `docs/dev/prose-standard.md`: how every comment, page and message is written.
+- `docs/roadmap.md`: what is open and in what order. Answer "what is left?" from this file, never from memory.
+- `docs/glossary.md`: the terms this repository and the skills it is set up with use in a sense of their own, each defined once.
+- `docs/adr/`: the decisions that bind work after the plan that made them closes, with the alternatives rejected. A change that contradicts an ADR is a rule clash.
+
+````
+
+Read whole: no installed sentence states a condition that does not hold or a name nobody chose. Scratch folders removed; `ls $TMPDIR | grep -E "run[0-9]|first7"` prints nothing.

@@ -64,7 +64,8 @@ Run from the repository root.
    - `avoid` means a step adds no new dependency.
 7. Leave each optional key out, so its default applies, unless the repository gives a reason.
    - A key that is written names that reason in its comment.
-   - `standards` lists the coding, layout or prose standard pages the repository has, and `docs/glossary.md` when the repository has one, so every brief names it.
+   - `standards` lists every standards page the repository has, wherever it is (design principles, coding standards, a UI standard, a layout or prose standard), and `docs/glossary.md` when the repository has one, so every brief names them.
+     - The paths `/repo-setup` installs by default are `docs/dev/design-principles.md`, the pages under `docs/dev/coding-standards/` and `docs/dev/ui-standard.md`.
    - `worktree_paths` is the project's directory in the `projects:` form.
    - `bench` and `look` are left out unless the user names binaries or a view.
    - `adr` is written only when the repository keeps its decision records (a folder of `NNNN-*.md` records) in a folder other than `docs/adr`, and it names that folder.

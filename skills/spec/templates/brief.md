@@ -2,6 +2,8 @@
 
 Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. Then, in full: <the standards the configuration lists>.
 
+A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it.
+
 ## What is on the tree (read on main at <commit>)
 
 - <each fact the step rests on: the file, the count, the name, the line number in code or the section of a page, and the command that checked it>.

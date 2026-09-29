@@ -1,6 +1,6 @@
 ---
 name: repo-setup
-description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
+description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
 metadata:
   version: "1.2.1"
 ---
@@ -27,8 +27,11 @@ metadata:
 
 1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
 2. The user's answers to "The questions".
-3. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
-4. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
+3. The names of the files the folder holds, for the languages of question 6.
+   - The language of a file is read from its extension: C++ from `.cpp`, `.cc`, `.cxx`, `.h`, `.hpp`, `.hh`; Python from `.py`; TypeScript from `.ts`, `.tsx`, `.svelte`.
+   - Files under `.git/` are left out.
+4. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
+5. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
 
 ## Steps
 
@@ -38,6 +41,16 @@ metadata:
 3. Draft "The tree", every file with its full text.
    - The plan-terms block of `docs/glossary.md` is filled from `templates/plan-terms.md`, as the shared-rules block of `CLAUDE.md` is from `templates/shared-rules.md`.
    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
+   - Every placeholder of an installed standards page is filled from the answers, from the files written before, or with the value the template writes inside it when that is a default value (`<1000>` becomes `1000`).
+     - A placeholder is a `<...>` that names what fills it, inside inline code or not (`include/<lib>/`).
+     - A language's own angle brackets in code (`std::get<>`, `std::span<const T>`) are code and stay as they are.
+     - A placeholder none of these fills is listed with the draft at Steps 4, and the user gives its value.
+     - A rule whose condition is a choice placeholder (`<yes or no>`, or a value `or none`) is kept when the answer is yes or a value, with the parenthesis removed when the answer is yes and holding the value when the answer is a value, and is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none.
+     - A check the repository does not have yet is written as "checked by reading at review" in place of the placeholder's sentence part, so the page states nothing nobody filled in.
+   - `coding-standards/typescript.md` keeps its section "Svelte and SvelteKit" only when the repository uses Svelte or SvelteKit (a `.svelte` file, or the answer to question 3).
+     - Otherwise the section, its heading included, is left out of the installed page.
+     - A repository that uses Svelte or SvelteKit has a user interface, so with question 6's defaults it gets `docs/dev/ui-standard.md`.
+     - The draft shows the answer to question 7 as yes, with the file or the answer that made it so.
    - A placeholder inside an HTML comment that shows an entry's form, as in the roadmap's and the glossary's, is written as it is, since it is the form and not a value.
    - Any other placeholder with no answer is shown to the user.
      - It is never written as `<...>`.
@@ -48,6 +61,7 @@ metadata:
 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
 8. Run `/ordo-init`, with its own draft and approval: it writes `.agents/plan.yaml` and `docs/dev/building.md`.
    - Its check passes.
+   - The `standards` key it drafts lists every standards page written at Steps 5 except the change standard, which is the `rules` key.
    - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
 9. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
 10. Run the checks:
@@ -97,9 +111,12 @@ metadata:
 4. The license [MIT] and its holder.
    - MIT is written from `templates/LICENSE-MIT`; another license is written from the text the user gives or from its SPDX name's official text, fetched and shown.
 5. The commit rule for this repository [commit only when told].
-6. The coding standard: copied from a sibling repository the user names (its page read whole and adapted to this repository's names), written from rules the user states, or none yet.
-7. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
-8. Rules that belong to this repository only, for the Project rules section.
+6. The standards pages: Ordo's defaults [the defaults], or pages copied from a sibling repository the user names (each read whole and adapted to this repository's names), or pages written from rules the user states.
+   - The defaults are `docs/dev/design-principles.md` and `docs/dev/coding-standards/common.md` always, a language page under `docs/dev/coding-standards/` for each language of question 2 and each language whose files the folder holds, and `docs/dev/ui-standard.md` when the user says the repository has a user interface.
+   - A language with no template page (any kind other than C++, Python and TypeScript) gets no language page from the defaults; the draft at Steps 4 says so, and the user may give that language's rules under the third answer.
+7. Does the repository have a user interface a reader sees and operates? [no]
+8. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
+9. Rules that belong to this repository only, for the Project rules section.
 
 ## The tree
 
@@ -111,7 +128,11 @@ LICENSE
 skills-lock.json                 written by the skills CLI when the project skills are installed
 docs/dev/change-standard.md      templates/docs/dev/change-standard.md, its placeholders filled
 docs/dev/prose-standard.md       templates/docs/dev/prose-standard.md
-docs/dev/coding-standards.md     only when question 6 gave one
+docs/dev/design-principles.md    templates/docs/dev/design-principles.md, its placeholders filled, when question 6 gave the defaults
+docs/dev/coding-standards/common.md   templates/docs/dev/coding-standards/common.md, its placeholders filled, when question 6 gave the defaults
+docs/dev/coding-standards/<language>.md   templates/docs/dev/coding-standards/<language>.md for each language as question 6 says, its placeholders filled, when question 6 gave the defaults
+docs/dev/ui-standard.md          templates/docs/dev/ui-standard.md, its placeholders filled, when question 6 gave the defaults and the repository has a user interface
+<the pages question 6 names>     the pages copied from a sibling repository or written from the user's rules, at the paths the answer gives, in place of the default pages above, or beside them for a language with no template page
 docs/dev/building.md             written by /ordo-init from the build files
 docs/roadmap.md                  the roadmap skill's templates/roadmap.md
 docs/glossary.md                 templates/docs/glossary.md, the plan-terms block filled from templates/plan-terms.md
@@ -126,8 +147,8 @@ utils/                           scripts the build and the checks run
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The questions | Every setup, at Steps 2 | The eight questions, each with its default | The user's answers |
-| The draft | Every setup, at Steps 4 | The tree and every file's text | The user's approval or correction |
+| The questions | Every setup, at Steps 2 | The nine questions, each with its default | The user's answers |
+| The draft | Every setup, at Steps 4 | The tree, every file's text, and the placeholders that Steps 3 lists for the user's value | The user's approval or correction |
 | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
 | The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block | The change Steps / sync 4 drafts | The user's approval |
 | A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
@@ -142,7 +163,7 @@ utils/                           scripts the build and the checks run
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | A build file for something the user did not name | It fixes a choice nobody made | See Rules: build files only for what the user names |
-| A coding rule the user did not state | The repository then binds builders to something nobody decided | See Rules: the skill never invents a coding rule |
+| A coding rule that is neither in Ordo's shipped pages nor stated by the user | The repository then binds builders to something nobody decided | See Rules: the skill adds no other rule |
 | The plan skills installed per project | Two copies load, and the project's copy drifts from the user's | See Rules: the plan skills are installed per user |
 | A `<...>` placeholder written into a file, other than one inside an HTML comment that shows an entry's form | The file then states something nobody filled in | See Steps 3 |
 
@@ -151,9 +172,7 @@ utils/                           scripts the build and the checks run
 - Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it.
 - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
 - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on in `sync`.
-- A page it writes states rules the user or a template gave.
-  - It never adds a rule of its own.
-- The skill never invents a coding rule.
+- The rules are Ordo's shipped defaults or the user's; the skill adds no other rule.
 - Build files are written only for what the user names; nothing is assumed.
 - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
 - Every file it writes is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say.

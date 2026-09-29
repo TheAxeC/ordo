@@ -36,21 +36,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-- step: 7
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-7
-  base: d0f912b6cb5a16a949cebcae7bf8532c91593c72
-  launched: 2026-09-30 00:48
-  session_id: aef5fa9f4f1c80805 (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
-  report: .scratch/2-e-grill/agents/reviews/7-report.md
-  builder_usage: 145032 tokens, 27 tool uses, 317 s (claude-sonnet-5-5 throughout, from its transcript)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/7-refuter.md (claude-opus-5-5; 175635 tokens, 33 tool uses, 375 s)
-  brief_check: .scratch/2-e-grill/agents/reviews/7-brief-check.md (claude-opus-5-5; 124603 tokens, 25 tool uses, 273 s)
-  landing: not-started
-  round: 1
-  round_1: brief .scratch/2-e-grill/agents/briefs/7-round-1.md; the tree when sent .scratch/2-e-grill/agents/reviews/7-round-0.diff
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -93,7 +79,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 to 5 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
-- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 6's fixes at landing.
-- Next step: 7, `repo-setup` installs the pages, since it waits only on 4, 5 and 6, all on main.
+- 2026-09-30. Steps 1 to 5 and 7 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
+- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 7's fixes at landing.
+- Next step: 8, the revert rule rewritten, since it waits on nothing; it touches the rules file, so it runs alone.
 - Open on Axel's side: the reading of step 6.

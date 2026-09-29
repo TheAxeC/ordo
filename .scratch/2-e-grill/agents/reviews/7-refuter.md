@@ -154,3 +154,181 @@ Cases of the brief's "Cases":
 - Whether question 7 should be worded as a question when the other items are noun phrases. The brief dictates its text.
 
 Agent usage: (left for the orchestrator)
+
+## Repair round 1, refuted
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+```
+(`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md` from the worktree root; exit 0.)
+
+```
+$ git grep -n 'docs/dev/coding-standards\.md' -- ':!.scratch' ':!docs/roadmap.md'
+(nothing, exit 1)
+$ grep -n 'never invents a coding rule' skills/repo-setup/SKILL.md
+(nothing, exit 1)
+$ grep -c -F "The rules are Ordo's shipped defaults or the user's; the skill adds no other rule." skills/repo-setup/SKILL.md
+1
+$ grep -c -F 'A design ruling decides what is built. It never exempts the code: ...' skills/spec/templates/brief.md
+1
+$ grep -c -F 'docs/dev/design-principles.md' skills/ordo-init/SKILL.md
+1
+$ python3 -c 'import glob,yaml; ...'   (description lengths)
+726 land, 632 ordo-init, 386 plan-help, 788 plan-orchestration, 616 plan-retro, 477 plan, 951 refute, 776 repo-setup, 997 roadmap, 1022 spec
+$ LC_ALL=C grep -n '[^ -~]' <the seven changed files>
+(nothing, exit 1)
+$ cmp <worktree 7-report.md> <main 7-report.md>
+(identical)
+On the base, through git show "${B}:<path>" and git grep <base>: grep 1 printed skills/repo-setup/SKILL.md:114 and skills/repo-setup/templates/CLAUDE.md:17; grep 2 printed lines 145 and 156; the three counts printed 0, 0 and 0.
+$ ls $TMPDIR | grep -E "run[0-9]|first7"
+(nothing, exit 1)
+```
+
+The round's delta is `diff 7-round-0.diff <git diff base>`. Only `skills/repo-setup/SKILL.md` changed, in five places: the Steps 3 conditional-rule sub-bullet, the Steps 8 `standards` bullet, the question 6 no-template bullet, the four tree lines plus the new `<the pages question 6 names>` line, and the Anti-patterns cell. Each matches the wording of the round's ruling word for word.
+
+**Real run 1**, which I reproduced by following the worktree's SKILL.md, not the builder's scripts. I used a git repository at `$TMPDIR/rv7r1.*` with `git ls-files | wc -l` giving 0 and the untracked files `src/a.cpp src/a.hpp web/b.ts` (extensions `cpp hpp ts`). The answers were the brief's: `<yes or no>` answered no and the aliases answered none. I filled the other names with my own values (`scratch7`, `include/scratch7/`).
+```
+$ ls docs/dev docs/dev/coding-standards
+docs/dev: coding-standards design-principles.md prose-standard.md
+docs/dev/coding-standards: common.md cpp.md typescript.md
+$ grep -c 'Svelte' docs/dev/coding-standards/typescript.md
+0
+$ grep -n -o '<[^>]*>' docs/dev/design-principles.md docs/dev/coding-standards/*.md | grep -v -e ':<>$' -e ':<const T>$'
+(nothing, exit 1)
+$ (unfiltered)
+docs/dev/coding-standards/cpp.md:57:<const T>
+$ grep -n -E 'fno-|two-phase|fixed-width|allocator|initialize|Context' docs/dev/coding-standards/cpp.md
+(nothing, exit 1)
+Left out by the Steps 3 sub-bullet: -fno-exceptions and its 4 sub-items, -fno-rtti, two-phase setup (with <the context type>), fixed-width aliases, allocator-aware and its 4 sub-items (with both <src>).
+CLAUDE.md "Read before you act": the design-principles/coding-standards line, no UI line.
+standards, drafted by ordo-init Steps 7 and repo-setup Steps 8: [docs/dev/design-principles.md, docs/dev/coding-standards/common.md, docs/dev/coding-standards/cpp.md, docs/dev/coding-standards/typescript.md, docs/dev/prose-standard.md, docs/glossary.md]
+```
+The page set, the Svelte count, both placeholder greps, the five rules left out, the CLAUDE.md lines and the `standards` line match the report. I read every installed page whole. I found no sentence stating a condition that does not hold, and no name other than the ones the run's answers gave.
+
+**Real run 2**, same repository with `web/c.svelte` added (extensions `cpp hpp svelte ts`) and question 7 left at its default:
+```
+$ ls docs/dev docs/dev/coding-standards
+docs/dev: coding-standards design-principles.md prose-standard.md ui-standard.md
+docs/dev/coding-standards: common.md cpp.md typescript.md
+$ grep -c 'Svelte' docs/dev/coding-standards/typescript.md
+2      (38:## Svelte and SvelteKit)
+$ placeholder grep over design-principles, coding-standards/*.md and ui-standard.md, filtered
+(nothing, exit 1)
+$ conditional cpp.md lines
+(nothing, exit 1)
+CLAUDE.md: both group lines.
+standards: the run 1 line plus docs/dev/ui-standard.md, no change standard.
+```
+These match the report. I also read `ui-standard.md` and the kept Svelte section whole and found no false condition. Both scratch folders are removed (`ls -d ${TMPDIR}rv7*` printed "no matches found"), and the worktree's `git status --short` is as before.
+
+**The scratch scripts.** The builder's transcript (`subagents/agent-aef5fa9f4f1c80805.jsonl`) shows that it wrote `run.py` and `rest.sh` into the orchestrator's scratchpad. `run.py` was created in round 0 and changed in round 1 at 23:02:06Z. `fill7.py` is not the builder's: the first refuter wrote and ran it (`agent-ab6e40dc47138ff5d.jsonl`, 22:58Z, with `refute7.O3Cz`). Its wording "A principle is checked by reading at review." is the one `7-refuter.md` quotes under "Declined to judge".
+
+`run.py` produces pages whose set, section handling, conditional rules left out and placeholder fills are what the changed SKILL.md gives, and my own run reproduces them. It departs from the text in three ways:
+- It rewrites template words beyond a placeholder's sentence part. In `common.md`, "A failing format check" becomes "A failing format". In `design-principles.md`, two sentences become one new sentence.
+- It takes the languages and the user-interface answer as arguments (`run.py $S cpp,typescript yes yes`). The extension reading and the question 7 derivation were therefore done by the builder in its head, not by the run.
+- It never produces a draft (Steps 4).
+The breach is a finding (Standards 3).
+
+### Verdicts
+
+Items of the brief's "What to build":
+- 1: holds. Question 6, question 7, questions 8 and 9, "The nine questions", "What it reads" 3, the tree, the Steps 3 bullets including the new conditional-rule bullet, the Steps 8 bullet with the change standard excluded, the one Rules line, the Anti-patterns row as ruled, and a description of 776 characters. Spec 1, Spec 2 and Standards 1 below concern text the round added around this item.
+- 2: holds. `skills/repo-setup/templates/CLAUDE.md` lines 17 and 18 are the two group lines in placeholder form.
+- 3: holds. `skills/ordo-init/SKILL.md` lines 67 and 68, count 1. Standards 1 concerns line 68 after the round.
+- 4: holds. `plan-terms.md` says "nine" and **standards** names the new pages, and `sync_rules.py` printed ok.
+- 5: holds. `skills/spec/templates/brief.md:5` is its own paragraph, count 1.
+- 6: holds. `README.md` lines 13 and 97 read as the item says.
+
+Cases of the brief's "Cases":
+- `docs/dev/coding-standards.md` grep prints nothing: met.
+- The `never invents` grep prints nothing and the new rule counts 1: met.
+- The brief.md sentence counts 1: met.
+- The ordo-init count is at least 1 and the line names the coding-standards pages and the UI standard: met, by the count and a reading of lines 67 and 68.
+- `sync_rules.py` prints ok and **standards** names the new pages: met.
+- The description is at most 1,024 characters: met (776).
+- Real run 1: met, by my own run following the text (above).
+- Real run 2: met, by my own run. By Steps 3's Svelte bullets, the `.svelte` file makes question 7 yes, installs the UI page, keeps the section and adds the UI page to `standards`. The builder's run reached this by passing `yes` as an argument (Standards 3).
+- Real run 3 (SvelteKit named, no files): met, by reading the text (kind typescript gives `typescript.md`; question 3 gives the Svelte section and the UI page) and by the builder's quoted `ls` output. I did not rerun it.
+- The texts of items 1 to 6 read as the items say: met.
+- The unchanged-tree claims: met (base greps above).
+
+Closures against the first report:
+- Spec 1 and Proof 1: closed. The sub-bullet is the ruled text, and my run 1 leaves out all five rules.
+- Spec 2: closed as ruled. Spec 1 and Standards 1 below are consequences.
+- Spec 3: written as ruled, but it contradicts the Spec 2 tree line (Spec 1 below).
+- Standards 1: closed as ruled.
+- Standards 2: closed as ruled.
+No closure works by removing a check, and no change reaches beyond its finding.
+
+### Findings
+
+- **Spec 1.** `skills/repo-setup/SKILL.md`, "The questions" 6, second bullet, read with "The tree", line `<the pages question 6 names>`.
+  - Quoted: "the user may give that language's rules under the third answer" and "the pages copied from a sibling repository or written from the user's rules, at the paths the answer gives, in place of the default pages above".
+  - What is wrong: question 6's three answers are alternatives, and the tree puts third-answer pages in place of the default pages. So a user who takes the defaults and adds rules for a language with no template loses the default pages. Two statements the round wrote contradict each other (`docs/dev/change-standard.md`, rule 19).
+  - Failure scenario: kind `rust`, defaults taken, Rust rules stated under the third answer. By the tree, `design-principles.md` and `common.md` are not written. Otherwise the agent invents a mixed tree that neither text states.
+  - Small fix at landing: the tree line reads "in place of the default pages above, or beside them for a language with no template page", or the question 6 bullet names that combination.
+  - Verdict: none (item 1 holds as the brief wrote it).
+- **Spec 2.** `skills/repo-setup/SKILL.md`, Steps 3, the new sub-bullet.
+  - Quoted: "is kept when the answer is yes or a value, with the parenthesis that held the choice removed".
+  - What is wrong: for `cpp.md` line 45, "Where the repository defines fixed-width aliases (<u32 and the like, or none>)", answered with a value, removing the parenthesis drops the value. The installed page then says "Where the repository defines fixed-width aliases, declarations and members use them." without naming the aliases the user gave. The builder wrote the ruled text verbatim, so this is a defect of the ruling's wording, and its disposition is the orchestrator's.
+  - Failure scenario: a user answers "`u8` to `u64`, `i8` to `i64`, `f32`, `f64`". A builder reading `cpp.md` learns only that some aliases exist, and uses `std::uint32_t`, or defines its own.
+  - Small fix at landing: "with the parenthesis removed when the answer is yes, and holding the value when the answer is a value".
+  - Verdict: none.
+- **Standards 1** (`docs/dev/change-standard.md`, rule 14, a sentence the change makes false).
+  - Where: the round made the default pages conditional ("when question 6 gave the defaults"). These texts still state them unconditionally:
+    - `skills/ordo-init/SKILL.md:68`: "The paths `/repo-setup` installs are `docs/dev/design-principles.md`, the pages under `docs/dev/coding-standards/` and `docs/dev/ui-standard.md`."
+    - `README.md:97`: "it writes ... the standards pages (the design principles, the coding standards for its languages and, with a user interface, the UI standard)".
+    - `skills/repo-setup/templates/plan-terms.md:78` and `docs/glossary.md:83`: "Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard, the design principles, the coding-standards pages and, with a user interface, the UI standard."
+    - `skills/repo-setup/SKILL.md:52`: "A repository that uses Svelte or SvelteKit has a user interface, so it gets `docs/dev/ui-standard.md`." Tree line 134 gives that page only with the defaults.
+  - Failure scenario: a user who answered question 6 with a sibling's pages reads README 97 or the glossary and expects Ordo's design-principles and UI pages. Or an agent follows line 52 and writes the default UI page beside the copied pages.
+  - Small fix at landing: "with question 6's defaults" (or "by default") in each of the five places, with the glossary synced.
+  - Verdict: none.
+- **Standards 3** (the brief's "Paths this step writes" and the rules file's "Where the work happens" and "Scripts compute facts; judgment is read").
+  - Where: `/private/tmp/claude-502/.../scratchpad/run.py` and `rest.sh`, and the leftover `$TMPDIR/rr1.md`.
+  - What is wrong:
+    - The builder wrote two scripts into the orchestrator's scratchpad. That is outside the worktree and outside `$TMPDIR`, and neither place is in the brief's paths ("The step writes these paths and nothing else").
+    - It wrote them without approval of what they compute ("A new script needs the user's approval of what it computes before it is written").
+    - Neither report mentions them. Both say the runs followed the worktree's SKILL.md.
+    - `run.py` takes the languages and the user-interface answer as arguments, so the extension reading ("What it reads" 3) and the `.svelte`-makes-yes rule were never run. The round-0 claim "the draft shows it as yes because of `web/c.svelte`" rests on an argument, not a draft.
+    - `$TMPDIR/rr1.md`, the builder's staging file, is left behind (`ls -la $TMPDIR` shows it, 01:02).
+  - Failure scenario: a regression in the extension or Svelte text would leave the builder's runs unchanged. A reader of the report believes the draft stage was exercised. The builder can also overwrite a file of the orchestrator's own in its scratchpad.
+  - The outcomes themselves reproduce in my own run, so no case verdict changes.
+  - Disposition is the orchestrator's: record it in the Closed section, and in the next brief state that scratch runs are followed by hand or by a script disclosed in the report.
+  - Verdict: none.
+- Proof: none beyond the above. Every command the round's report quotes reproduced its output.
+- Behaviour: none. The report gives old beside new for all five changes.
+
+The first refuter's Spec 1, Proof 1, Standards 1 and Standards 2 are closed. My numbering above starts again for this run.
+
+### Declined to judge
+
+- Real run 3 was not rerun. Its verdict rests on reading the text and on the builder's quoted output.
+- The exact wording that replaces a check placeholder: the builder merged two sentences, and a literal reading gives a repetitive sentence. As in the first run, this is a style call.
+- Sentences of the approved step 5 and 6 templates that describe tooling the new repository does not have yet, such as "clang-format formats every source file from a `.clang-format` in the repository". I read them as rules the defaults adopt, not as conditions. They are outside this round's text.
+- The scratch `CLAUDE.md`'s Build and Skills placeholders, and `change-standard.md`'s command block, which Steps 9 fills. These are the pre-existing order the first report already set aside.
+- Whether `rest.sh`'s README and LICENSE text matches the tree lines, since the step does not change those lines.
+
+Agent usage: claude-opus-5-5 (from its transcript), 179912 tokens, 37 tool uses, 404 s.
+## Closed
+
+The findings of the run over the last round are not sent to the builder. Each is small and inside the brief, and is fixed on main at landing by the orchestrator, except Standards 3, recorded here:
+
+- Spec 1 (third-answer pages in place of the defaults). The tree line `<the pages question 6 names>` reads "in place of the default pages above, or beside them for a language with no template page".
+- Spec 2 (a value answer dropped with its parenthesis). The Steps 3 sub-bullet reads "with the parenthesis removed when the answer is yes, and holding the value when the answer is a value".
+- Standards 1 (the default pages stated as always written). "by default" or "with question 6's defaults" is added in `skills/ordo-init/SKILL.md:68`, `README.md:97`, `skills/repo-setup/templates/plan-terms.md:78` (the glossary synced) and `skills/repo-setup/SKILL.md:52`.
+- Standards 3 (the builder's scripts in the orchestrator's scratch folder, outside its allowed places, undisclosed, and taking the languages and the user-interface answer as arguments). Recorded in the booking and the landing report; the outcomes reproduce in the reviewer's own runs by hand, so no case verdict changes. Every later builder prompt says a real run is followed by hand, or by a script written under `$TMPDIR` and disclosed in the report with what it computes, and that nothing is written outside the worktree and `$TMPDIR`.
