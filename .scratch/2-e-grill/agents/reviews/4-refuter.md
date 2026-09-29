@@ -62,3 +62,43 @@ none; no skill installs the pages yet.
 - Where each finding traced to the brief's wording is repaired: the orchestrator's ruling.
 
 Reviewer usage: 122792 tokens, 20 tool uses, 5.4 minutes (323 s), claude:opus, a fresh agent (from its completion notice).
+
+## Repair round 1, refuted
+
+Reviewer: a fresh agent, read-only, over the two pages as they stand against the round-0 text quoted above, read against the whole step. Saved by the orchestrator from the reviewer's final message, condensed.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md
+... every line PASS or ok ...
+checks: 8 commands passed
+exit 0
+Project-name, ASCII and dash-aside commands of Cases: exit 0 each
+wc -l: 16 design-principles.md, 13 coding-standards/common.md
+grep -c -E ', never|, not ': design-principles.md:2, common.md:1
+grep -c '`<': 0 and 0; ten bare placeholders
+grep -n -i -w -E 'case|cases|refusal|maintainer|template|static|build declaration|third-party|error type': no output
+Longest sentence: 22 words (design-principles.md), 24 (common.md)
+The cited rule and sections exist in the change-standard and prose-standard templates: "No history in code or comments", "Scripts compute facts; judgment is read", "A test proves the change by failing without it, ...", B "ASCII throughout", D "No synonym cycling", F "Source formatting"
+```
+
+Every closure of round 0 reproduces. The three changes beyond the numbered rulings (the Tests bullet cited, the Errors bullet kept, the character-set exception kept) hold.
+
+### Verdicts
+
+- Items 1 and 2: hold. Cases: all met.
+
+### Findings
+
+- Spec 1, common.md:8: "Comments follow the change standard's rule "No history in code or comments" ...". The closure dropped the brief's "a comment says why, never what the code already says"; the cited rule says "A comment says what the code does and why". Failure scenario: a reviewer refusing a comment that restates the code has no page to point at.
+- Spec 2, `.scratch/2-e-grill/agents/briefs/5.md` "What is on the tree": the list of what step 4's pages state names the third-party rule, "the error type", "static" and "comments say why", which the round removed or changed; step 5's `cpp.md:27` cites the removed rule and the language pages use relative paths.
+- Standards 1, design-principles.md:7: "A new kind of view, backend, key or command": "kind" is a plan term (the glossary's retro grouping sense).
+- Standards 2, design-principles.md:8 and common.md:12: the same rule, "A failure is reported through the language's error mechanism", opens a sentence on both pages, against the DRY bullet.
+- Standards 3, common.md:8, :9, :10, :11, :13: five bullets share the shape "<subject> follow(s) the <rule> of <section> of the <standard> (`<path>`)", the prose standard's repeated construction.
+
+### Declined to judge
+
+- Whether design-principles.md:10 and :14 count as contrasts (read as two conjoined rules).
+- The size pair in common.md:5 (a limit and an earlier check).
+- Which comment rule an installed repository carries (Spec 1): Axel's decision.
+
+Reviewer usage over round 1: 113579 tokens, 19 tool uses, 4.7 minutes (283 s), claude:opus, a fresh agent (from its completion notice).

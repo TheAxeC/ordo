@@ -22,6 +22,11 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
+    adr: docs/adr
+    design_bar: industry
+    design_references: []
+    worker_effort: high
+    reviewer_effort: high
   tool-b:
     roadmap: tools/tool-b/ROADMAP.md
     verification: tools/tool-b/docs/building.md
@@ -41,3 +46,8 @@ projects:
     look: ""
     workers_at_once: 1
     bench: []
+    adr: docs/adr
+    design_bar: industry
+    design_references: []
+    worker_effort: high
+    reviewer_effort: high

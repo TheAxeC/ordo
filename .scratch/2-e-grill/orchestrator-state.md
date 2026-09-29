@@ -28,23 +28,15 @@ review_minutes: 0            # no time box.
 look:                        # none: no view changes.
 workers_at_once: 3           # steps in flight at once, from .agents/plan.yaml.
 bench: []                    # no A/B.
+adr: docs/adr                # the ADR folder: grill writes the decision records into it, /plan, /spec and /refute read them.
+design_bar: industry         # what grill's options are held to: industry, state-of-the-art or novel.
+design_references: []        # the published standards a design is held to, such as WCAG 2.2 AA.
+worker_effort: high          # the effort a builder runs at: low, medium, high, xhigh or max.
+reviewer_effort: high        # the effort a reviewer and a brief-check agent run at: low, medium, high, xhigh or max.
 ```
 
 ```yaml
 dispatch:
-- step: 2
-  executor: agent
-  worker: claude:opus
-  worktree: .agents/worktrees/2e-2
-  base: 4e514c0b7de7d3b204cc53736b81e1acc81961ae
-  launched: 2026-09-29 20:23
-  session_id: aca77c40330700c5a
-  report: .scratch/2-e-grill/agents/reviews/2-report.md
-  builder_usage: 193038 tokens, 37 tool uses, 1303 s; round 1: 206243 tokens, 8 tool uses, 273 s
-  brief_check: .scratch/2-e-grill/agents/reviews/2-brief-check.md (110579 tokens, 21 tool uses, 271 s)
-  landing: not-started
-  reviewer_report: .scratch/2-e-grill/agents/reviews/2-refuter.md (148659 tokens, 32 tool uses, 407 s)
-  round: 1
 - step: 4
   executor: agent
   worker: claude:opus
@@ -56,7 +48,7 @@ dispatch:
   builder_usage: 96874 tokens, 14 tool uses, 186 s; round 1: 131510 tokens, 12 tool uses, 257 s
   brief_check: .scratch/2-e-grill/agents/reviews/4-brief-check.md (112374 tokens, 25 tool uses, 242 s)
   landing: not-started
-  reviewer_report: .scratch/2-e-grill/agents/reviews/4-refuter.md (122792 tokens, 20 tool uses, 323 s)
+  reviewer_report: .scratch/2-e-grill/agents/reviews/4-refuter.md (122792 tokens, 20 tool uses, 323 s; round 1: 113579 tokens, 19 tool uses, 283 s)
   round: 1
 - step: 5
   executor: agent
@@ -105,8 +97,8 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-29. Step 1 landed: Ordo's `docs/adr/` and the ADR test in the template (this commit).
-- Verified: `land.sh` on main printed `checks: 8 commands passed`, exit 0.
-- Step 2 in flight: brief and brief check committed (4e514c0), builder launched.
-- Next step: 3 after step 2 lands.
+- 2026-09-29. Step 2 landed: the five `plan.yaml` settings and their checks (this commit). Steps 1 and 2 are on main.
+- Verified: `land.sh` on main printed `checks: 8 commands passed`, exit 0, and again after the fix at landing.
+- In flight: step 4 (its run over round 1 is saved, to land next) and step 5 (its round 1 under review).
+- Next step: land step 4, then step 5; then step 3, which reads `worker_effort` and `reviewer_effort`.
 - Open on Axel's side: nothing.

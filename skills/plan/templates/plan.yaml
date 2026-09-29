@@ -20,3 +20,8 @@ review_minutes: 0                         # optional, default 0. The reviewer's 
 look: ""                                  # optional, default "". Where a changed view is opened at landing (a page, a command); "" means no look step.
 workers_at_once: 1                        # optional, default 1. Steps in flight at once; above 1, two of them share a file only when the orchestrator judges the merge at landing simple (plan-orchestration, "Two steps in flight").
 bench: []                                 # optional, default []. Binaries /spec stages and /land runs interleaved, base against new; [] means no A/B.
+adr: docs/adr                             # optional, default docs/adr. The folder of architecture decision records: grill writes them, /plan, /spec and /refute read them.
+design_bar: industry                      # optional, default industry. What grill's options are held to and what their reference line cites: industry (what production projects in the field ship), state-of-the-art (the best published work), novel (beyond both, with what would show it works).
+design_references: []                     # optional, default []. Published standards a design is held to, such as WCAG 2.2 AA; grill cites them per option.
+worker_effort: high                       # optional, default high. The effort a builder runs at: low, medium, high, xhigh or max.
+reviewer_effort: high                     # optional, default high. The effort a reviewer and a brief-check agent run at: low, medium, high, xhigh or max.

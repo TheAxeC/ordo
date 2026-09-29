@@ -20,6 +20,11 @@ review_minutes: 0            # the reviewer's time box in minutes; 0 is none.
 look:                        # where a changed view is opened at landing (a page, a command); empty means no look step.
 workers_at_once: 1           # steps in flight at once; above 1, two of them share a file only when the orchestrator judges the merge at landing simple (plan-orchestration, "Two steps in flight").
 bench: []                    # the binaries /spec stages and /land runs interleaved, base against new; empty means no A/B.
+adr: docs/adr                # the ADR folder: grill writes the decision records into it, /plan, /spec and /refute read them.
+design_bar: industry         # what grill's options are held to: industry, state-of-the-art or novel.
+design_references: []        # the published standards a design is held to, such as WCAG 2.2 AA.
+worker_effort: high          # the effort a builder runs at: low, medium, high, xhigh or max.
+reviewer_effort: high        # the effort a reviewer and a brief-check agent run at: low, medium, high, xhigh or max.
 ```
 
 ```yaml

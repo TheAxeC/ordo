@@ -70,3 +70,46 @@ R9 design_bar check guarded by "value is not None": FAIL: design-bar-empty: expe
 - The report cites "revert R28" and `README.md:110-112` (the text is at 107-109): no decision rests on either.
 
 Reviewer usage: 148659 tokens, 32 tool uses, 6.8 minutes (407 s), claude:opus, a fresh agent (from its completion notice).
+
+## Repair round 1, refuted
+
+Reviewer: a fresh agent, read-only, over the round's delta (`check_config.py` MERGE_TAG and the skip, the docstring lines; `check_config.test.sh` cases `adr-default-file`, `merge-key`, `merge-key-twice`; `skills/ordo-init/SKILL.md` "Checking an existing file" 2), read against the whole diff since 4e514c0. Saved by the orchestrator from the reviewer's final message, condensed.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md   (exit 0)
+... every line PASS or ok ...
+checks: 8 commands passed
+$ python3 skills/ordo-init/templates/check_config.py .   (exit 0)
+Verify 5 key counts: unchanged, 1 per key in plan.yaml, 2 in plan.projects.yaml
+Reverts on a scratch copy, each copied test exit 1:
+R1 the MERGE_TAG skip removed: FAIL: merge-key: expected a pass (ConstructorError for tag:yaml.org,2002:merge)
+R2 break at the merge key: FAIL: merge-key-twice: expected an error, got a pass
+R3 "not os.path.exists(full) and" removed: FAIL: adr-default-file: expected an error, got a pass
+R4 flatten_mapping before the scan: FAIL: merge-key: expected a pass, got: error: tool-b: key written twice: roadmap
+Merge probes: <<: [*c, *a] passes; a merged anchored mapping holding a key twice is refused where it is defined; a merged-in value is still value-checked in both projects; tool-b holding "<<: {worker_effort: low, worker_effort: max}" prints ok, exit 0.
+```
+
+### Verdicts
+
+- Items 1, 2, 4, 5, 6, 7, 8: hold. Item 3: violated, Behaviour 1 (the three findings of the first run are closed).
+- Cases: all met.
+
+### Findings
+
+- Behaviour 1, `skills/ordo-init/templates/check_config.py:59-61`: the merge key is skipped with its value, so a mapping written inline as the value of `<<` (`<<: {...}`, or a mapping inside `<<: [...]`) is never scanned for a key written twice; `flatten_mapping` splices its nodes into the outer mapping. Failure scenario: `tool-b:` holding `<<: {worker_effort: low, worker_effort: max}` prints ok and the loader keeps `max`. Verdict: item 3 violated.
+
+### Declined to judge
+
+- A merge key written twice in one mapping passes; whether a second `<<` is a key written twice is the orchestrator's call.
+- The report's rule 13 row for `merge-key` quotes the first run's traceback line; the reviewer's R1 rerun printed the same line.
+
+Reviewer usage over round 1: 102774 tokens, 18 tool uses, 4.3 minutes (256 s), claude:opus, a fresh agent (from its completion notice).
+
+## Closed
+
+- Round 0, Behaviour, the merge key crash: closed in repair round 1 (`check_config.py`, the skip of a merge key node); case `merge-key`, red under revert R1 of the run over the round.
+- Round 0, Proof, the default `docs/adr` as a file unproven: closed in repair round 1, case `adr-default-file`, red under revert R3.
+- Round 0, Standards, `keys beside projects` missing from the docstring: closed in repair round 1 (`check_config.py` docstring, `skills/ordo-init/SKILL.md` "Checking an existing file" 2).
+- Round 0, Spec, the brief's prediction for the duplicated `worker_effort` on the unchanged tree: a premise of the brief, booked in `plan.md` at step 2's landing; the builder's added case `twice-reviewer` is the silent pass.
+- Round 1, Behaviour 1, a mapping written as the value of a merge key not scanned: fixed at landing on main. `UniqueKeyLoader.scan_keys` scans the keys written in a mapping and, for a merge key, each mapping of its value; case `merge-inline-twice` (`<<: [*base, {design_bar: novel, design_bar: industry}]` in tool-b) expects `error: tool-b: key written twice: design_bar`. With the scan of the merge key's value removed on a scratch copy the test exits 1 with `FAIL: merge-inline-twice: expected an error, got a pass: note: tool-a: adr folder docs/adr does not exist yet; repo-setup or grill creates it`.
+- Round 1, declined: a merge key written twice in one mapping is left as PyYAML loads it; it is not a key written twice in the sense item 3 names, since the scan compares the keys written in a mapping and a merge key names none.
