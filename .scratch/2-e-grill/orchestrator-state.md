@@ -36,7 +36,18 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: 7
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2e-7
+  base: d0f912b6cb5a16a949cebcae7bf8532c91593c72
+  launched: 2026-09-30 00:48
+  session_id: aef5fa9f4f1c80805 (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
+  report: .scratch/2-e-grill/agents/reviews/7-report.md
+  brief_check: .scratch/2-e-grill/agents/reviews/7-brief-check.md (claude-opus-5-5; 124603 tokens, 25 tool uses, 273 s)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
