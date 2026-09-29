@@ -48,6 +48,17 @@ dispatch:
   brief_check: .scratch/2-e-grill/agents/reviews/3-brief-check.md (173243 tokens, 33 tool uses, 520 s)
   landing: not-started
   round: 0
+- step: 3s
+  trial: the Sonnet 5.5 build of step 3 under the ruling "Sonnet trial"; only one of 3 and 3s lands
+  executor: agent
+  worker: claude:sonnet (resolves to claude-sonnet-5-5)
+  worktree: .agents/worktrees/2e-3s
+  base: 44caaf6f2c34b7b25ec06d31c21ad711a0adbf01
+  launched: 2026-09-29 22:00
+  session_id: afb733385e80a6b22
+  report: .scratch/2-e-grill/agents/reviews/3s-report.md
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -55,6 +66,8 @@ dispatch:
 none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- Sonnet trial (2026-09-29): Axel ruled (a), a controlled trial of Sonnet 5.5 as builder on one step; booked in plan.md Rulings.
 
 - C, for step 5 (2026-09-29): Axel: "Approved, read", on step 5's three pages as landed; the default `.clang-tidy` stays without `WarningsAsErrors`.
 
@@ -88,5 +101,5 @@ none
 
 - 2026-09-29. Steps 1, 2, 4 and 5 are on main.
 - Roadmap entry 11's goal is changed as ruling B (a) says (cb92d65).
-- Step 3, the effort agents: prepared (44caaf6), its builder launched in `.agents/worktrees/2e-3`.
+- Step 3, the effort agents: prepared (44caaf6); built twice under the ruling "Sonnet trial", by Opus in `.agents/worktrees/2e-3` and by Sonnet 5.5 in `.agents/worktrees/2e-3s`; each build gets its own Opus reviewer, then Axel rules which lands.
 - Open on Axel's side: nothing.

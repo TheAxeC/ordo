@@ -95,6 +95,8 @@ Carried to step 7 (found by step 4's brief check): the pages form a folder `docs
 - Figures: figures in the form of research-hub's `tools/figures/plan-loop.svg`, marking where Axel is in the loop and whether that point is required or optional (the user).
 - Open item B (2026-09-29): (a). At step 5's landing, roadmap entry 11's goal becomes "`repo-setup` renamed to `scaffold`, with the `library` and `research-project` profiles, hub-specific config, and Ordo's own `CLAUDE.md`." through `/roadmap`, in one commit; this ruling approves that diff. (the user)
 
+- Sonnet trial (2026-09-29): (a). Step 3 is built twice from its brief at base 44caaf6, by an Opus builder in `.agents/worktrees/2e-3` and a Sonnet 5.5 builder (`claude-sonnet-5-5`) in `.agents/worktrees/2e-3s`; one fresh Opus reviewer reviews each build; the findings, tokens and time are compared and Axel rules from that; the better build lands and the other worktree is removed; Axel's yes to (a) also covers changing `worker:` in `.agents/plan.yaml` to Sonnet 5.5 should it win (the user).
+
 ## Blocked, and by what
 
 - Nothing is blocked.
