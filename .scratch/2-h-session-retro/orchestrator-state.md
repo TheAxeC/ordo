@@ -48,11 +48,11 @@ dispatch:
   launched: 2026-09-30 14:03
   session_id: af9906813a8c54544 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-h-session-retro/agents/reviews/3a-report.md
-  builder_usage: round 0: 202711 tokens, 50 tool uses, 475 s
-  reviewer_report: .scratch/2-h-session-retro/agents/reviews/3a-refuter.md (reviewer a1e73ec4e4e8cf564, ordo-high, opus, running)
+  builder_usage: round 0: 202711 tokens, 50 tool uses, 475 s ($1.48-3.35)
+  reviewer_report: .scratch/2-h-session-retro/agents/reviews/3a-refuter.md (reviewer a1e73ec4e4e8cf564, ordo-high, claude-opus-5-5; 210664 tokens, 31 tool uses, 418 s, $1.41-5.14)
   brief_check: .scratch/2-h-session-retro/agents/reviews/3a-brief-check.md (ordo-high, claude-opus-5-5; the check on main at 6f40399: 195649 tokens, 27 tool uses, 422 s, $1.33-4.98; the earlier stopped check: 195356 tokens, 30 tool uses, 7.6 minutes, $1.30-4.62)
   landing: not-started
-  round: 0
+  round: 1 (sent from the worktree state after round 0; brief agents/briefs/3a-round-1.md)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
