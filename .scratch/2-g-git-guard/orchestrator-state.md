@@ -38,7 +38,19 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 2
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2g-2
+  base: e29e95e8f8c8a3eb0ff120072b368174233e002c
+  launched: 2026-09-30 09:27
+  session_id: a609efe535711a48c (claude-sonnet-5-5 at the launch, from its transcript)
+  report: .scratch/2-g-git-guard/agents/reviews/2-report.md
+  brief_check: .scratch/2-g-git-guard/agents/reviews/2-brief-check.md (claude-opus-5-5; 156313 tokens, 51 tool uses, 489 s, $1.70-4.59)
+  shared_paths: README.md, skills/repo-setup/templates/plan-terms.md and docs/glossary.md are also written by 2.F step 2, in flight, at other lines (README 7, the table row after refute, the Quick start, the alt texts and the install loop; the entries booking and Step 0); a cherry-pick of both simulated by the brief check merged clean, and the glossary check on main decides the glossary.
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
