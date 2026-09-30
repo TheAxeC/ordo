@@ -101,5 +101,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
-- Step 9a is ruled ("Step 9a, how a skill is given the ruling and what the ruling must hold", (a)) and is being prepared; it is dispatched after step 3a of plan 2.H lands, since both write `skills/spec/SKILL.md`.
+- Step 9a is prepared under its three rulings and its brief has had four brief checks (`agents/reviews/9a-brief-check.md`); its builder is in flight beside step 2b of plan 2.G, which writes other lines of `skills/repo-setup/SKILL.md` and `README.md`. Before its landing, five fresh agents make the scratch runs the step's line names.
 - Next: step 9a; step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.

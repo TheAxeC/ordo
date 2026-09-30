@@ -837,3 +837,247 @@ Agent usage: claude-opus-5-5 (ordo-high), 365066 tokens, 53 tool uses, 1059 s ($
 - Section 5 finding 2: `roadmap` Steps 2 and `ordo-init` Steps 1 keep the ruled wording and replace a ruled part only where a rule of the skill gives another result (Decision 18, R3). Finding 3 and section 8 finding 2: `spec`, `ordo-help` and the entry **ruling** say "and states the change". Finding 4: the exception of `sync` stands under item 5, which carries the stop, and the cell names Steps / sync 5. Finding 5: the third condition of `repo-setup` Steps 4 counts the files the skill writes, and the next sub-bullets name their pair. Finding 6: `plan` Steps 2 copies every line under the bullet, fenced blocks included. Finding 7: `grill` makes the draft at the first write of Steps 8 (R9). Finding 8: `plan` Steps 6 names the new `plan.md` when the ruling came from the rulings file (R5).
 - Section 8 finding 1: the three bullets of `spec` stand after line 216. Finding 3: as the figure above. Finding 4: the qualifier of `plan` Steps 3 is in its condition, and that of `ordo-init` Steps 11 stands third, after the comparison. Finding 5: the sub-bullet of `grill` item 1 stands before its completion line. Finding 6: `Steps / add 3` and `Steps / sync 4` are written as the two skills write them. Finding 7: each joined bullet is split. Finding 8: the cell says "states". Finding 10: each sentence over 30 words is split, except the second sub-bullet of item 7, kept for the reason Decision 19 gives.
 - Declined to judge: the five runs stay the orchestrator's before the landing; Decisions 2, 4 and 8 stay booked for the user to overrule.
+
+# Step 9a brief check, fourth run (brief read on main at f249dc4; main at 56069bb when I finished)
+
+The brief is not ready to dispatch as it stands. Three brief-level findings change what a fresh session does, and none needs a new ruling:
+
+- **Section 5 finding 1.** `/repo-setup` has no sentence that drafts a file from the ruling's text, so a run the ruling covers still stops at Steps 4.
+- **Section 5 finding 2.** `/plan` has no sentence for the `(approved)` tag under a quoted ruling.
+- **Section 5 finding 3.** R7 and Decision 3 leave out four keys that `/ordo-init` does not derive from the tree.
+
+The other findings are smaller. Every finding below is marked "brief"; I found none that is "user".
+
+State of the run:
+- `git log --oneline f249dc4..HEAD` prints `56069bb` and `9ae8631`, both plan 2.F ledger commits. `git diff --stat f249dc4 HEAD -- skills docs README.md utils agents` prints nothing, so every file the brief reads or writes is as at f249dc4.
+- `cmp` of the brief against the copy I took at the start reports no difference.
+- `git status --short` at the end prints only ` M .scratch/2-e-grill/agents/briefs/9a.md`, which is not mine. I wrote nothing in the repository and did not read `.agents/worktrees/`.
+- The scratch folder `$TMPDIR/ordo-9a-check4` is removed: after `rm -rf`, `ls` prints `No such file or directory`.
+
+What ran on the scratch copy (`skills/`, `docs/`, `utils/`, `README.md`, the 2.E state file):
+- A script applied every item of "What to build" at the anchor its item names, with the text of the brief's fences. It reported `problems: 0`: every anchor was found exactly once.
+- `python3 skills/repo-setup/templates/sync_rules.py . --only glossary --write` printed `written: the plan-terms block now equals the template`, exit 0. Without `--write` it printed `ok: the plan-terms block equals the template`, exit 0.
+- `python3 docs/figures/gen_figures.py` printed `wrote docs/figures/pipeline.svg (31507 bytes)` and `wrote docs/figures/plan-loop.svg (31164 bytes)`, exit 0. The `viewBox` values are `0 0 1040 988` and `0 0 1040 911`. A second run left `pipeline.svg` byte-equal (`cmp`).
+- The `ruff check` command of "Conventions" printed `All checks passed!`. The `ruff format --check` command printed `1 file already formatted`. The longest line of the script is 100 characters (`awk`).
+- `diff -rq` against an untouched copy names fourteen files, the fourteen of "Paths this step writes" without the report.
+- Both figures were rendered with `rsvg-convert` and read. The note stands under the legend's row, inside the canvas, at baseline 972 of 988 and 880 of 911. `diff` of each SVG shows only the two size lines and the one added text line, so no box moved.
+
+## Closures of the third check
+
+- **U1 (a file from no template): closed, with a remainder.** The ruling is in `plan.md` Rulings, Decision 9 cites it, and the third condition of `repo-setup` Steps 4 matches it. The remainder is section 5 finding 1.
+- **The figure: closed.** The outputs are above.
+- **Section 1 finding 1 (shared files): not closed as worded.**
+  - Step 2b of plan 2.F has landed, and the line numbers reproduce.
+  - Step 2b of plan 2.G is still in flight: the dispatch block of `.scratch/2-g-git-guard/orchestrator-state.md` holds `step: 2b`, `launched: 2026-09-30 15:05`, `landing: not-started`.
+  - What remains is under "Shared files with step 2b of plan 2.G" below.
+- **Section 2 finding 1: closed.** Decisions 15 and 16. A new addition of the same kind is section 2 finding 1.
+- **Section 3 findings 1 to 3: closed.** `find skills/repo-setup/templates -maxdepth 1 -name 'README*'` prints nothing. `grill` item 1 is at lines 163 to 168. The `roadmap` sub-bullet is the first.
+- **Section 4 findings 1 to 4: closed.**
+  - The sub-bullet "When no commit is made, the list of files the stop shows ..." prints 2 in `repo-setup` on the copy.
+  - R10 names Steps / sync 3 and 5.
+  - The two `ruff` commands are dictated and pass.
+  - R4 holds the name that also stands outside its bullet.
+- **Section 5 finding 1 with section 6 findings 1 and 2: closed.** The shared item is fourteen lines, and each prints 1 in each of the five skills. The wording of its sixth line is section 5 finding 4.
+- **Section 5 finding 2: closed** for `roadmap` Steps 2 and `ordo-init` Steps 1.
+- **Section 5 finding 3 with section 8 finding 2: closed.** `spec`, `ordo-help` and **ruling** all carry "and states the change".
+- **Section 5 finding 4: closed.** The exception stands under "sync" 5, and the cell names Steps / sync 5.
+- **Section 5 finding 5: closed.** The remainder is section 5 finding 1.
+- **Section 5 findings 6 and 7: closed.**
+- **Section 5 finding 8: closed in the text.** It is not listed under "Decisions" (section 2 finding 1).
+- **Section 8 finding 1: closed.** The three bullets follow line 226, so "for such a ruling" keeps its referent.
+- **Section 8 findings 3 to 9: closed.**
+- **Section 8 finding 10: not closed, and newly broken.** Four dictated sentences are still over 30 words, and Decision 19 names the wrong sub-bullet (section 8 finding 1).
+
+## 1. Names
+
+Commands, on main:
+- `git grep -n -c 'quoted ruling\|--ruling' -- skills docs utils README.md agents` prints nothing, exit 1. Both names are new.
+- `git grep -n 'stay stops of their own' -- skills docs README.md utils agents` prints `plan-orchestration:302` and `spec:208` only. Both are changed.
+
+Commands, on the copy after the change:
+- `grep -rn -i 'stops of their own\|second stop\|stop of its own\|shown diff\|approval stop'` prints hits only in files of the paths.
+- `grep -rn -i 'every run\|each time'` prints no hit outside the paths that the change makes false.
+
+1. `skills/roadmap/SKILL.md` line 107, inside the paths and untouched by item 8: "- **No insertion form yet.** A stop ("Stops")."
+   - Item 8 qualifies the parallel line 103 ("with no quoted ruling that does") and the Stops cell ("and no quoted ruling states the entry's number"). Line 107 keeps the unqualified rule.
+   - Rule broken: rules file 19, a change leaves no two statements that contradict.
+   - Consequence: a session that reads "The format is the file's" at Steps 1 raises the stop for a ruled number, where R3 expects none.
+   - Replacement, one more change in item 8 and one more premise for line 107: `- **No insertion form yet.** A stop ("Stops"), unless a quoted ruling states the entry's number.` brief.
+2. No other hit is made false. The approval sentences outside the changed lines each hold under the sentences R10 names. They are `roadmap` 3, 10, 16, 17; `plan` 3, 15; `ordo-init` 3, 10, 15, Steps 12, "Checking" 5; `repo-setup` 3, 10, Steps 5, "sync" 3 and 6; the entries **sync** and **authority**; `README.md` 17, 35, 113, 117, 124; `ordo-help` 55.
+
+## 2. The step line
+
+Every part of the step line and every clause of the three rulings has an item, except the two clauses named in section 5 findings 1 and 2.
+
+1. An addition beyond option (a) that "Decisions" does not list: item 9, Steps 6, "When Steps 2 copied the ruling from the rulings file, the ledger file named is the new `plan.md`."
+   - Option (a) says "by its name and its ledger file". The brief changes which file that is for one case.
+   - Replacement, a new Decision: "20. The commit of a plan whose quoted ruling came from the entry's rulings file names the new `plan.md`, since the same commit removes the rulings file." brief.
+
+## 3. Premises
+
+Every line number, count, column and quoted sentence of "What is on the tree" was rerun with `sed -n`, `awk`, `grep -n`, `find` and `ls`. All reproduce, except the two wordings below; neither moves an item. Among those that hold:
+- `plan-orchestration` 290, 302, 332; `spec` 207, 208, 225, 226, 234; `ordo-help` 77 with its text in column 31.
+- `roadmap` 40, 46 to 50, 67 to 70, 103, 117, 118, 130, 132, 133.
+- `plan` 41, 52, 55, 60, 65, 76 to 78, 84.
+- `ordo-init` 31, 38 to 41, 46, 60 to 64, 79, 80, 85 to 87, 95 to 97, 103 to 108, 119, 124.
+- `repo-setup` 34, 40, 48, 58, 64 to 67, 83 to 88, 94 to 96, 103, 109, 158 to 163, 181.
+- `grill` column 65, 53, 103 to 112, 163 to 168, 177 to 182, 226, 247.
+- `plan-terms.md` 20, 51, 74, 75, 91, 92; `docs/glossary.md` 133; `README.md` 54, 113, 117, 124.
+- `gen_figures.py` 372, 377 to 390, 381, 410, 559. The legend width is 232.8 px, 35 characters, computed from the script's own `_badge_width`.
+- The verify list of the state file holds 11 commands.
+
+1. `plan-orchestration` bullet: "lines 301 and 302: two sub-bullets under "The stop message is plain text in the report"". That bullet has three sub-bullets, at lines 300 to 302. Replacement: "lines 301 and 302, the second and third of its three sub-bullets, the third beginning ...". brief.
+2. `roadmap` bullet: "the text after each invocation starting in column 43". Lines 18 (`move`) and 20 (`drop`) carry no text. Replacement: "the text after an invocation, where there is one, starting in column 43". brief.
+
+## 4. Cases and checks
+
+Results on the copy:
+- **Verify 2.** 203 dictated lines, each as the one line of a pattern file, `grep -c -F -f`: no mismatch. The thirteen sub-bullets and the first line of the shared item print 1 in each of the five skills. The `repo-setup` sub-bullet prints 2.
+- **Verify 3.** The glossary check exits 0, the figure script exits 0 and a second run is byte-equal. Fourteen files differ.
+- **Verify 4.** `LC_ALL=C grep -n '[^ -~]'` exits 1 with no line for each of the fourteen files.
+- **Verify 5.** `grep -rn 'stay stops of their own' skills docs` prints nothing, exit 1.
+- **Verify 6.** `ordo-help` 1, `grill` 11, `roadmap` 13, `plan` 10, `spec` 2, `plan-orchestration` 3, `ordo-init` 20, `repo-setup` 17, `plan-terms.md` 4, `docs/glossary.md` 5, `README.md` 1, `gen_figures.py` 1, each SVG 1.
+- **Verify 7.** Each added line stands at the indent the opening of "What to build" gives, read in `diff -U1`.
+- **Verify 8.** Both `ruff` commands pass, and the renders were read.
+- `sh skills/repo-setup/templates/sync_rules.test.sh | tail -1` prints `PASS: sync_rules.py scratch tests`.
+- The ASCII check of the verify list, run over the copy's files with `find` in place of `git ls-files`, prints nothing and exits 0.
+- No skill description passes 1,024 characters; the longest is `spec` at 1,022.
+
+1. Verify 2 lists "each bullet, numbered item, Quick start line, changed cell and changed sentence". It names neither the line of item 6 nor the lines of item 4.
+   - Of the call's eight lines, `canvas,` prints 30, `x,` 22, `width,` 10 and `)` 243.
+   - Consequence: a builder who reads "each dictated text" as covering the call reports red rows the brief made.
+   - Replacement, added to Verify 2: "The line of item 6 prints 1 in `ordo-help`. Of item 4, the docstring line, `y + 48,`, the two string lines and the two heights each print 1; the other lines of the call are not counted."
+   - Tested on the copy: each of those prints 1. brief.
+2. R7 against item 10: section 5 finding 3. R5 against item 9: section 5 finding 2.
+
+No case contradicts the rules file. The step is text with one script line and the cases are readings.
+
+## 5. The question
+
+Verify 1 to 8 show that the dictated lines are in the files, once, at the right indent, and that the figures draw. They pass on any tree that holds the text. The goal rests on the builder's walks of R2 to R9 and on the five runs by fresh agents, which follow `/roadmap` only. That is what option (a) ruled.
+
+Points where my walk on the copy stops a run the case expects to pass, has no rule, or meets two readings:
+
+1. Item 11, `/repo-setup`: no sentence makes Steps 3 draft a file from the ruling's text.
+   - Option (a): "It drafts from the ruling's text, applies its own rules, and compares." The third ruling: "the draft's file equals it line for line".
+   - The walk of R7's first case: Steps 3 drafts `README.md` as "The tree" says ("the name, the paragraph, how to build ..., the license line"), in the session's words. The third condition of Steps 4 then compares it with the ruling's fenced block, and it differs.
+   - The run stops at Steps 4, where R7 expects "no stop at Steps 4". `roadmap` Steps 2, `ordo-init` Steps 1, "sync" 5 and `grill` each have the drafting sentence; the setup has none.
+   - Replacement: item 11 gains "Steps 3 gains one sub-bullet, after "The git guard hook is copied byte for byte ...":" with the text `- Under a quoted ruling ("What it reads" 6), a file whose full text the ruling holds is drafted as that text.` R7 gains "Steps 3 drafts `README.md` as the ruling's text". brief.
+2. Item 9, `/plan`: no sentence says what tag a step line gets under a quoted ruling.
+   - Option (a): "The step lines end `(approved)`". Decision 2 and R5 expect it.
+   - The only text is line 66, "Each step line of the approved list ends with `(approved)`". Rules line 101 offers `(ruling <name>)` "for a step a ruling of the user added later", and **authority** says "for each ruling the step rests on".
+   - A session can write either tag. With `(ruling <name>)` the plan differs from what option (a) states.
+   - Replacement: Steps 3 gains a fourth sub-bullet, last of the new ones and right before line 66: `- A step list written under a quoted ruling is the approved list.` The item's count becomes "four sub-bullets, the first with four of its own". brief.
+3. Item 10, Steps 11, third sub-bullet, against R7 and Decision 3.
+   - The text: "Under `/repo-setup`, a key this skill derives from the tree `/repo-setup` wrote counts as stated."
+   - R7: "it stops unless the ruling also states the form and the text of each page it creates".
+   - Four required keys are not derived from that tree. `verification` names `docs/dev/building.md`, which `/ordo-init` drafts itself. `ledger_root`, `archive_root` and `worktree_root` are "the example's values" (`ordo-init` Steps 5).
+   - Read by the letter, a ruling with the form, the page text and the three asked keys still stops at Steps 11, where R7 says it does not.
+   - Replacement for R7: "... it stops unless the ruling also states the form, the keys it does not derive from that tree (`verification`, `ledger_root`, `archive_root` and `worktree_root`) and the text of each page it creates."
+   - Decision 3 gains the same four keys. The dictated sub-bullet keeps option (a)'s words. brief.
+4. The shared item, sixth line: "A draft is the ruled change when each part of it equals the sub-bullet that states it."
+   - For a part no sub-bullet states, the sentence can be read as holding vacuously. R4's last input ("no sub-bullet, or ... part of the change: the draft is not the ruled change") then passes a run it expects to stop.
+   - Cost: a number, a place or a key the user never ruled is written without the stop.
+   - Replacement, same line count: `- A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.` brief.
+5. Item 8, the Stops cell "The change": "except a draft that is the change a quoted ruling states (Steps 4)".
+   - Steps 4 keeps the stop for such a draft when the gate's answer is yes. The cell says the stop is not raised.
+   - Replacement, in the form item 9 uses: "Every change of `add`, `move`, `done` or `drop`, at Steps 3, except a draft written under a quoted ruling as Steps 4 says". brief.
+
+The other walks hold on the copy, each by the sentence named:
+- **R2.** `plan-orchestration` "Stops" sub-bullets 3 to 5; `spec` "Steps / A ruling" 2, the three new bullets, and 3, its sub-bullet; the `ordo-help` line. No sentence still says the skill's approval stop always stays.
+- **R3.** Steps 2 "The ruled wording ... is kept"; "add" 3 "is not redrafted", "keeps the stop of Steps 4" and "The stop "No gate" is not raised for it"; "add" 5 against Steps 4 "differs in anything"; Steps 5 for the commit.
+- **R4.** Each "no ruling" input by its line of the list of five; "(the user)" with or without a full stop by the fifth; the name outside its bullet by the third, which counts bullets of the Rulings section. In the four open plans `grep -n '^## \|^### Step 0'` shows every Step 0 after "## Blocked, and by what", outside the Rulings section.
+- **R5.** The four conditions; one closing step ("is dropped for the one `/plan` writes"); the rulings-file copy; Steps 6 for the commit.
+- **R6.** Steps 1, 2, 6, 10, 11 and 14; "Checking" 4 and 6; the cells. Rules 1 and 5 agree with Steps 11.
+- **R7.** The inputs that stop: a build file, a missing `README.md` text, a placeholder, eight answers.
+- **R8.** All five inputs. The input "a ruled hunk the diff does not show" matches neither new sub-bullet, and the stop of item 3's own line stands, which is the expected result.
+- **R9.** "the draft is made at the first write of Steps 8"; "gets no bullet"; "then counts as answered", so Steps 9 ends; Steps 10 lists and names.
+
+## 6. Implied inputs
+
+The script change adds one input, the note's width, which `_check_line` covers: 699.6 px of 990. Inputs the reading cases leave out, with the cost of a wrong answer:
+
+1. A page text that holds a fenced block of its own.
+   - `docs/dev/building.md` and a change standard always hold one, and they are the pages `/ordo-init` creates.
+   - Item 5 writes "a text of several lines as a fenced block indented with its sub-bullet". An inner fence of three backticks ends that block early, so the comparison "line for line with the fenced block" runs against a cut text.
+   - Cost: the run stops on every such page, or a session guesses where the block ends.
+   - Replacement for the third new bullet of item 5: `- the change the option stated is copied under that bullet as sub-bullets, a text of several lines as a fenced block indented with its sub-bullet, its fence longer than any fence inside the text;` R2 gains that input. brief.
+2. A part of the draft that no sub-bullet states: section 5 finding 4.
+3. The four keys of `/ordo-init` under `/repo-setup`: section 5 finding 3.
+
+## 7. ADRs
+
+`ls docs/adr` prints `README.md` and `template.md`. No `NNNN-*.md` record exists, as the brief says. Findings: none.
+
+## 8. Dictated text
+
+Claims about the tree, each read on the copy; all hold:
+- The seven "Stated in" places of **quoted ruling** each hold the term.
+- Its alphabetical place is between **questions, the** and **reader, of the transcripts**.
+- "the `spec` skill's "What it reads" 4" exists at `spec:44`.
+- `Steps / add 3` and `Steps / sync 4` are written as the two skills write them.
+- The new `grill` Quick start line starts its text in column 65, and the `ordo-help` line in column 31.
+
+1. Decision 19: "The second sub-bullet of item 7 stays one sentence of 44 words".
+   - The 44-word sentence is the third of the five, since the third check's split put "The option names that stop." second.
+   - Four more dictated sentences are over 30 words, by a count over the fences:
+     - the shared item's second sub-bullet, 35;
+     - item 5's first bullet, 35;
+     - item 9 Steps 2, "A quoted ruling that stands in the rulings file ...", 32;
+     - item 11 Steps 4, "Each file that is neither ...", 35.
+   - Rule: prose standard E, sentence length. Verify 9 has the builder keep dictated sentences, so the length is settled in the brief or not at all.
+   - Replacement for Decision 19: "The third sub-bullet of item 7 stays one sentence of 44 words: it holds the rule, the five skills it covers and its alternative, which the layout keeps in one bullet. Four more sentences stay between 32 and 35 words, each a rule with the list it needs: the shared item's second sub-bullet, the first bullet of item 5, the rulings-file sub-bullet of item 9 and the last-but-one sub-bullet of item 11 Steps 4." brief.
+2. Item 9, Steps 3: "A plan written under a quoted ruling holds the ruling's bullet and every line under it in its Rulings section, unless Steps 2 copied it from the rulings file."
+   - Read as written, a plan whose ruling Steps 2 copied does not hold the bullet. R5 expects it "in the new Rulings once".
+   - Replacement: `- The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.` brief.
+3. Against `docs/dev/skill-layout.md` and the glossary, I found no other break.
+   - One rule per bullet holds for each added bullet.
+   - Each exception stands in the item that carries the ("Stops") mark.
+   - Each new sub-bullet of a Steps item that has a completion line stands before it.
+   - **quoted ruling**, **ruling**, **rulings file**, **commit rule** and **stop** are used in their entries' senses.
+
+## Shared files with step 2b of plan 2.G
+
+`.scratch/2-g-git-guard/agents/briefs/2b.md` writes `skills/repo-setup/SKILL.md` lines 126-126 and `README.md` lines 13-13.
+
+- **`skills/repo-setup/SKILL.md`.** No item of 9a touches line 126 or a line next to it. Item 11 changes or adds after lines 16, 34, 40, 58, 65, 86, 96, 103, 109, 158 to 161, 163 and 181. The nearest are 109 and 158.
+- **`README.md`.** Item 3 changes line 54 only.
+- **If 2.G lands first.** That step's brief turns one sub-bullet into four, so lines 158 to 163 and 181 move down by 3, and those premises need a rerun. Every item places by quoted text, so nothing is misplaced.
+- **The path comparison.** 9a lists `repo-setup/SKILL.md` whole, so it is a shared path under `spec` Steps 5 whichever lands first.
+
+## Declined to judge
+
+- Whether 9a is prepared before or after step 2b of plan 2.G lands, and the `shared_paths:` judgment: the orchestrator's, under `spec` Steps 5 and `plan-orchestration` "Two steps in flight".
+- The step's line carries two tags, as `sed -n '46p' plan.md | grep -o '(ruling [^)]*)'` prints. The brief also builds the third ruling. Whether the line needs a third tag is the orchestrator's booking in `plan.md`.
+- Decisions 2, 4, 8 and 11: the user's, as the third check left them.
+- A quoted ruling has no rule against a second run with the same bullet, and nothing ties a ruled step list to the entry `/plan` is run on. Both are the design the user ruled.
+- Whether option (a)'s words fit every "every run" mark (`grill`'s "The end", `/roadmap done` at the closing): the user's ruled words.
+- Verify 1 was not run. It needs git state, and eight of its commands test scripts the step does not change. The glossary check, `sync_rules.test.sh` and the ASCII check ran on the copy.
+- No run as a fresh session in a scratch repository: that needs `git init` and commits. The walks are readings of the copy.
+- The five runs of option (a)'s check: the orchestrator's.
+- My tokens, tool uses and time: not visible to me (not verified).
+
+Files:
+- Brief: `/Users/axelfaes/workspace/ordo/.scratch/2-e-grill/agents/briefs/9a.md`
+- Earlier checks: `/Users/axelfaes/workspace/ordo/.scratch/2-e-grill/agents/reviews/9a-brief-check.md`
+- Rulings: `/Users/axelfaes/workspace/ordo/.scratch/2-e-grill/plan.md`
+- The other step's brief: `/Users/axelfaes/workspace/ordo/.scratch/2-g-git-guard/agents/briefs/2b.md`
+
+Agent usage: claude-opus-5-5 (ordo-high), 318017 tokens, 55 tool uses, 941 s ($3.09 to $9.18).
+
+## Closed (fourth check; the session's change to the brief for every finding of it)
+
+- Section 1 finding 1: item 8 changes `roadmap` line 107 to "- **No insertion form yet.** A stop ("Stops"), unless a quoted ruling states the entry's number.", and "What is on the tree" holds the line as a premise.
+- Section 2 finding 1: Decision 20.
+- Section 3 findings 1 and 2: the `plan-orchestration` premise names the second and third of the three sub-bullets, and the `roadmap` premise says "where there is one".
+- Section 4 finding 1: Verify 2 names the line of item 6 and the six lines of item 4 that print 1, and says the other lines of the call are not counted.
+- Section 5 finding 1: item 11 gives `repo-setup` Steps 3 the sub-bullet "Under a quoted ruling ("What it reads" 6), a file whose full text the ruling holds is drafted as that text.", and R7 names it.
+- Section 5 finding 2: item 9 gives `plan` Steps 3 a fourth sub-bullet, "A step list written under a quoted ruling is the approved list."
+- Section 5 finding 3 with section 6 finding 3: R7 and Decision 3 name the four keys `verification`, `ledger_root`, `archive_root` and `worktree_root`.
+- Section 5 finding 4 with section 6 finding 2: the shared item's sixth line is "A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet."
+- Section 5 finding 5: the cell of item 8 ends "except a draft written under a quoted ruling as Steps 4 says".
+- Section 6 finding 1: item 5 writes the fenced block with "its fence longer than any fence inside the text", R2 has that input, and Decision 21 says so.
+- Section 8 finding 1: Decision 19 names the third sub-bullet and the four other sentences between 32 and 35 words.
+- Section 8 finding 2: the Rulings-copy sub-bullet of item 9 is "The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file."
+- The closure of the third check's section 1 finding 1 is replaced: the brief is prepared while step 2b of plan 2.G is in flight, and the dispatch entry carries `shared_paths` for `skills/repo-setup/SKILL.md` and `README.md`.
+- Declined to judge: the step's line in `plan.md` carries a third tag, for the ruling "Step 9a, a file of `/repo-setup`'s draft that comes from no template"; the five runs stay the orchestrator's before the landing; Decisions 2, 4, 8 and 11 stay booked for the user to overrule.
