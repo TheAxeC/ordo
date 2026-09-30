@@ -80,4 +80,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1, 2, 2a and 3 landed or run, and ticked.
-- Next: step 2b after 2.H step 3a lands (both write `skills/spec/`); step 4, the blind comparison, which ends in Axel's call.
+- Step 2b is prepared: its brief is checked and its builder is dispatched.
+- Next: step 4, the blind comparison, which ends in Axel's call.
