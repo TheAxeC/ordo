@@ -44,13 +44,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 4, who runs the two sides of the blind comparison (2026-09-30, at preparing step 4): `docs/dev/blind-comparison.md` has each side, `diagnose` and mattpocock's `diagnosing-bugs` (github.com/mattpocock/skills at d81f3a1), run "in its own fresh session with only that input and its own skill", each on its own identical copy of the input. The input is the defect of step 3: the tree of `/tmp/ordo-diagnose-3` at its first commit 9bc9bf5, where the both-folders check of `utils/pin.sh` compares the two folders as text, with the symptom in the words you gave step 3's run. The orchestrator cannot be a side, since it knows the cause, and the step is marked "orchestrator, no agent". A side that probes `utils/pin.sh` can reach the real stable folder and the skill links unless every run sets `ORDO_STABLE`, `ORDO_SKILL_DIRS` and `CLAUDE_CONFIG_DIR`.
-  - (a) Two fresh agents, one per side, each `ordo-high` on Opus, with no person present. The orchestrator fetches mattpocock's skill with `git clone https://github.com/mattpocock/skills` into a folder under `$TMPDIR` and `git checkout d81f3a1` there, which this ruling approves. Each agent gets its own copy of the tree at 9bc9bf5 under `$TMPDIR`, the symptom, and the one skill folder of its side, and is told to follow that skill alone and to set the three variables to folders under its copy in every run of `utils/pin.sh`. The `diagnose` side runs the skill as main holds it now, steps 2a and 2b included. Before and after the two runs the orchestrator lists `~/.local/share/ordo-stable` and the skill links with `ls -la` and compares the two listings, and reports a difference to you at once. Two more fresh agents judge, the second with the order swapped, and you make the call from the record `agents/reviews/4-blind-comparison.md`. Pro: both sides run under the same conditions and on the skill as it stands, and nothing waits on you until the call. Con: neither side meets the stop where a person answers the hypotheses, which step 3 already showed; an agent that drops the three variables could write to the real stable folder, which the two listings would show.
-  - (b) You run `diagnosing-bugs` by hand in a fresh session on a copy the orchestrator prepares, and step 3's run stands as the `diagnose` side. Pro: no agent runs `utils/pin.sh`, and one run less. Con: it needs a session of yours; step 3's run used the skill as it stood at 9699d1a, before steps 2a and 2b; the orchestrator must strip your reply from one side only. This is the lazy option: it reuses a run made for another purpose on an older text of the skill.
-  - (c) You run both sides by hand, each in a fresh session on its own copy. Pro: both sides meet the by-hand stops under the same conditions. Con: two sessions of yours.
-  - Recommendation: (a). The comparison asks for equal conditions and the skill as it stands, and step 3 already covers the by-hand form.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- Step 4, who runs the two sides of the blind comparison (2026-09-30): Axel ruled (a); booked in plan.md Rulings.
 
 - Step 3 reading (2026-09-30): Axel ruled (a); the run is approved and step 3 ticked.
 
@@ -84,4 +82,4 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1, 2, 2a, 2b and 3 landed or run, and ticked.
-- Next: step 4, the blind comparison, which waits on the open item on who runs its two sides and ends in Axel's call.
+- Next: step 4, the blind comparison, run by two fresh agents as the ruling "Step 4, who runs the two sides of the blind comparison" says, which ends in Axel's call.
