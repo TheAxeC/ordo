@@ -1,0 +1,86 @@
+diff --git a/utils/pin.sh b/utils/pin.sh
+index 71701af..81ff372 100755
+--- a/utils/pin.sh
++++ b/utils/pin.sh
+@@ -47,6 +47,10 @@
+ # clone and prints a line for each, and removes a link into the pinned worktree whose agent the
+ # tag lacks and prints a line for each. Every other entry of an agent folder, a user's own file or
+ # a link to anywhere else, is left as it is.
++# An agent folder is also a skill folder when the two paths name one folder, however each is
++# spelled: each is read by its resolved path when it exists, and otherwise by its parent read the
++# same way followed by its last component, so a doubled trailing slash, a trailing /., a symbolic
++# link to the folder and a folder not yet created are all refused.
+ # Check mode, and the check after linking, report an agent of the pinned worktree not linked from
+ # an agent folder, every link into the live clone, and every link into the pinned worktree whose
+ # agent the pinned worktree lacks.
+@@ -141,6 +145,19 @@ agent_name() {
+     esac
+ }
+ 
++# Prints the folder the absolute path $1 names, so that two spellings of one folder print the same
++# line: its resolved path when it is a folder that exists, and otherwise its parent read the same
++# way followed by its last component, a last component of . or .. applied to the parent.
++folder_named() {
++    (CDPATH= cd "$1" 2>/dev/null && pwd -P) && return
++    named_parent=$(folder_named "$(dirname "$1")")
++    case "$(basename "$1")" in
++        .) printf '%s\n' "$named_parent" ;;
++        ..) dirname "$named_parent" ;;
++        *) printf '%s\n' "${named_parent%/}/$(basename "$1")" ;;
++    esac
++}
++
+ # Succeeds when the list $1, one name per line, holds the name $2; an empty name is in no list.
+ in_list() {
+     [ -n "$2" ] || return 1
+@@ -313,8 +330,10 @@ if [ -e "$stable" ]; then
+     stable=$(CDPATH= cd "$stable" && pwd -P)
+ fi
+ while IFS= read -r agent_dir <&3; do
++    agent_folder=$(folder_named "$agent_dir")
+     while IFS= read -r dir <&4; do
+-        [ "${dir%/}" = "$agent_dir" ] && fail "$agent_dir is both a skill folder and an agent folder"
++        [ "$(folder_named "$dir")" = "$agent_folder" ] &&
++            fail "$agent_dir is both a skill folder and an agent folder"
+     done 4<<EOF
+ $skill_dirs
+ EOF
+diff --git a/utils/pin.test.sh b/utils/pin.test.sh
+index 7240449..b114ee6 100755
+--- a/utils/pin.test.sh
++++ b/utils/pin.test.sh
+@@ -9,7 +9,7 @@
+ # A tag whose skills are top-level folders pins, and so does the move back to a skills/ tag.
+ # The agents: pin mode links every agent of the tag (a file agents/<name>.md) into the agents folder beside each skill folder, creating it, from ORDO_SKILL_DIRS and from the default folders with CLAUDE_CONFIG_DIR set, and prints the agents line after an unchanged skills line; a file not ending .md, a file in a subfolder and a hidden file are neither linked nor counted; two skill folders under one parent give one agents folder, linked once and named once.
+ # Pin mode replaces an agent link into the live clone, removes the links of an agent the tag drops and of every agent when the tag has no agents/ folder, and leaves a user's own agent file and a link outside Ordo under a name the tag does not hold.
+-# Pin mode refuses, before the worktree or a link changes, an agent link into the live clone for an agent the tag lacks, an entry for an agent of the tag that is a real file, a link outside Ordo or a directory, an agent folder path that is a file, and a folder that is both a skill folder and an agent folder; it fails when the check after linking finds an agent link it could not make.
++# Pin mode refuses, before the worktree or a link changes, an agent link into the live clone for an agent the tag lacks, an entry for an agent of the tag that is a real file, a link outside Ordo or a directory, an agent folder path that is a file, and a folder that is both a skill folder and an agent folder, whether the list names it as the agent folder is derived, with a doubled trailing slash, with a trailing /., through a symbolic link, or before it exists; it fails when the check after linking finds an agent link it could not make.
+ # Check mode prints the agents line, fails naming a missing agent link, an agent link into the live clone and a link to an agent the pinned tag lacks, and with no agent folder and no agents passes without creating the folder.
+ 
+ set -u
+@@ -562,6 +562,25 @@ run_pin v3
+ expect_refused v4 "a pin with a folder that is both a skill folder and an agent folder"
+ expect_in "$err" "pin: $a1 is both a skill folder and an agent folder" \
+     "the folder that is both was not refused with its message"
++
++# The same refusal when the list names the agent folder in another spelling: a doubled trailing slash, a trailing /. and a symbolic link to it. Red when the refusal compares the two paths as text: the pin moves the worktree and then fails the check after linking.
++ln -s "$a1" "$test_root/linked-agents"
++for spelling in "$a1//" "$a1/." "$test_root/linked-agents"; do
++    export ORDO_SKILL_DIRS="$d1$nl$spelling"
++    run_pin v3
++    expect_refused v4 "a pin with the agent folder named $spelling as a skill folder"
++    expect_in "$err" "pin: $a1 is both a skill folder and an agent folder" \
++        "the agent folder named $spelling as a skill folder was not refused with its message"
++done
++rm "$test_root/linked-agents"
++
++# The same refusal for an agent folder that does not exist yet, named with a doubled trailing slash; the refused run does not create it. Red when the refusal resolves only folders that exist.
++export ORDO_SKILL_DIRS="$test_root/fresh/agents//"
++run_pin v3
++expect_refused v4 "a pin with an agent folder not yet created named as a skill folder"
++expect_in "$err" "pin: $test_root/fresh/agents is both a skill folder and an agent folder" \
++    "the agent folder not yet created was not refused with its message"
++[ ! -e "$test_root/fresh" ] || fail "a refused pin created $test_root/fresh"
+ export ORDO_SKILL_DIRS="$d1$nl$d2"
+ 
+ # A tag with no agents/ folder pins with 0 agents and removes every agent link into the pinned worktree, leaving the user's own entries. Red when the removal reads only the agents a tag holds.

@@ -48,13 +48,24 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
 
 ## Blocked, and by what
 
-- 3: Axel's run of `/diagnose` on the scratch copy.
-- 4: needs step 3's run on the same defect.
+- 3: Axel's review of the run (open item "Step 3 reading").
+- 4: Axel's tick of step 3, then his call on the blind comparison.
 
 ### Step 0 of step 3
 
 - Step 3, who runs `/diagnose` (2026-09-30, at preparing step 3): the step runs `/diagnose` on the `utils/pin.sh` both-folders defect "in a fresh session", marked "orchestrator, no agent". The orchestrator cannot be that session, since it knows the cause (2.E step 3's `same_folder`, db9bbec), and run by hand the skill waits for your reply to its hypotheses (ruling "Step list" D2). `utils/pin.sh` also writes the stable folder and the skill links, which a scratch reproduction must redirect with `ORDO_STABLE`, `ORDO_SKILL_DIRS` and `CLAUDE_CONFIG_DIR`. Options: (a) you run `/diagnose` in a fresh Claude Code session on a scratch copy of the tree at db9bbec's parent, answering its hypotheses stop, and the orchestrator then books the run; pros: the run is the by-hand form the skill was built for, and nothing outside Ordo is at risk; cons: it waits for you. (b) A fresh Opus agent runs it overnight, told to go on at the hypotheses stop as under `plan-orchestration`; pros: done by morning; cons: the by-hand stop is skipped, and an agent free to probe `utils/pin.sh` can reach the real stable folder and skill links. Recommendation (a). The lazy option is (b), which tests a different form of the skill than the step asks.
 - The scratch copy (2026-09-30, ruling "Step 3, who runs /diagnose"): `/tmp/ordo-diagnose-3`, a git repository of its own with two commits and no history of Ordo: the tree at 44caaf6 (the preparation of 2.E step 3) with that step's round-0 build applied from `.scratch/2-e-grill/agents/reviews/3-round-0.diff`, the ledger left out, so the both-folders check stands as `[ "${dir%/}" = "$agent_dir" ]` at `utils/pin.sh:317`; and `.claude/skills/diagnose` copied from main at 9699d1a as a project skill, since the installed skills (v2.5.0) hold no `diagnose`. Every run of `utils/pin.sh` there sets `ORDO_STABLE`, `ORDO_SKILL_DIRS` and `CLAUDE_CONFIG_DIR` to folders under `/tmp`.
+
+### Step 3, the real run (run 2026-09-30, Axel's review pending)
+
+- Run: Axel ran `/diagnose` with the doubled-slash symptom in a fresh session on the scratch copy `/tmp/ordo-diagnose-3`, and answered its stop before the first probe with "The ranking stands. Option B." The record is `agents/reviews/3-diagnosis.md`, the two messages of the session verbatim; the fix it left is `agents/reviews/3-diagnose-fix.diff`.
+- Red command: a script in the session's scratchpad that builds a scratch repository with the tags v1 and v2, pins v1, then runs `pin.sh v2` with `<config>/skills` and `<config>/agents//` in `ORDO_SKILL_DIRS`, every folder under a fresh `/tmp/diagnose-red.XXXXXX`; red on three runs in a row, ending `RED: every part of the symptom shows`. The shrunk case is `ORDO_SKILL_DIRS=<config>/agents//` alone on a tag with one skill.
+- Hypotheses: 1, one trailing slash removed at `utils/pin.sh:317` against every slash removed at line 112; 2, the two paths compared as text. Both probed, each probe undone before the next: 1 is green on `//` and leaves `/.` red; 2 is green on `//`, `/.`, a symbolic link and a folder not yet created.
+- Cause reached: the refusal compared the two folders as text after removing one trailing slash. It is the cause the ledger books for 2.E step 3 (db9bbec, `same_folder`).
+- Fix and red test: `folder_named` in `utils/pin.sh` and four cases in `utils/pin.test.sh`, each quoted red without the fix with "the pinned worktree moved"; after the fix `PASS: pin.sh scratch tests`.
+- Against main: the run's spellings `/.` and a folder not yet created with `//`, added one at a time to a copy of main's test, are refused by main's `same_folder` (`PASS: pin.sh scratch tests` each). Main takes no change.
+- Not ticked: the step's check ends "reviewed by Axel"; it is the open item "Step 3 reading".
+- Usage: the session is Axel's, on claude-opus-5-5 (every `"model"` in its transcript); no agent of the orchestrator ran.
 
 ### Step 1, the `diagnose` skill (landed 2026-09-30)
 
