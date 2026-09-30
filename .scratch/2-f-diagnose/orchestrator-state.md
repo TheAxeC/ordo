@@ -38,7 +38,18 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 2a
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2f-2a
+  base: 22878c5dc5d1e2c11ebe1a3e86cf158663bcc76e
+  launched: 2026-09-30 13:20
+  session_id: aaf2a244958131899 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
+  report: .scratch/2-f-diagnose/agents/reviews/2a-report.md
+  brief_check: .scratch/2-f-diagnose/agents/reviews/2a-brief-check.md (ordo-high, claude-opus-5-5; 170502 tokens, 19 tool uses, 491 s, $0.92-3.78)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -80,4 +91,4 @@ none
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
 - Steps 1, 2 and 3 ticked.
-- Next: steps 2a and 2b; step 4, the blind comparison.
+- Step 2a is in flight, its builder launched. Next: step 2b after 2.H step 3a (both write `skills/spec/`); step 4, the blind comparison.
