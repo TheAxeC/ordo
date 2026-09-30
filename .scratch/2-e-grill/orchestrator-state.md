@@ -43,7 +43,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- None.
+- Step 14, the judges' standard (2026-09-30, from the two verdicts in `agents/reviews/14-blind-comparison.md`): both judges chose the `grill` output (judge 1 A, judge 2 B, the order swapped), but both read `skills/grill/SKILL.md` from the input clone and took its decision form as the standard, so the missing reference lines, answer form and `D<n>` headings of the `grill-with-docs` output decided both verdicts. On content the judges found: `grill` misstates your D2 ruling and overstates the em-dash count, and leaves out the goal's history words and word counts per section; `grill-with-docs` has accurate facts and asks about both, but cites no outside practice and uses emoji.
+  - (a) Two fresh judges again, their clone of the input without `skills/grill/`, told to judge each round by what the entry and the user need, as `docs/dev/blind-comparison.md` item 2 allows for a mark of which side made an output. Pro: a verdict that does not measure `grill` against its own text. Con: two more agents, about ten minutes.
+  - (b) Your call now on the two verdicts as they stand. Pro: no more work. Con: the verdicts measure conformance to the new skill's own form. The lazy option.
+  - (c) Your call from reading both outputs yourself, the verdicts set aside. Pro: your reading is the result the gate reads in any case. Con: no independent reading beside yours.
+  - Recommendation: (a), then your call on all four verdicts.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
