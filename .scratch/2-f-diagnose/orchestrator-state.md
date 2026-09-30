@@ -36,24 +36,12 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-- step: 1
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2f-1
-  base: 3145b85c3800e79c9fdba4d87f3cb1b57327010b
-  launched: 2026-09-30 05:04
-  session_id: a3f22d22a0a9ce902 (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
-  report: .scratch/2-f-diagnose/agents/reviews/1-report.md
-  builder_usage: round 0 163309 tokens, 36 tool uses, 450 s ($1.20-2.67)
-  reviewer_report: .scratch/2-f-diagnose/agents/reviews/1-refuter.md (claude-opus-5-5; 179275 tokens, 39 tool uses, 519 s)
-  brief_check: .scratch/2-f-diagnose/agents/reviews/1-brief-check.md (claude-opus-5-5; 148959 tokens, 40 tool uses, 429 s)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
+- Step 1 reading (2026-09-30): step 1, the `diagnose` skill, landed unticked, since its check is your reading of `skills/diagnose/SKILL.md` and `templates/diagnosis.md` against `docs/dev/skill-layout.md` and the Goal's six parts (ruling "Overnight work applies to this plan"). Options: (a) you read it and tick step 1, or name what is wrong; (b) tick it unread. Recommendation (a). The lazy option is (b).
 - A script for the person-driven red command (2026-09-30, step 1's review): `diagnosing-bugs` ships `scripts/hitl-loop.template.sh`, a loop that prints each action for the user and reads back what they saw; `diagnose` describes that red command in words only, and the review names it as a point `diagnosing-bugs` would win in step 4's blind comparison. Options: (a) a template script `skills/diagnose/templates/person-driven.sh` that computes only this: it prints each action of a list given to it, reads the user's line of observation after each, and writes the actions and observations into a file for the record; pros: the point is covered and the loop is the same each time; cons: a new script and its test. (b) The words only; pros: nothing to maintain; cons: the comparison point stays open. Recommendation (a). The lazy option is (b). A yes adds it to step 2, whose paths widen to the script and its test.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
@@ -81,6 +69,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. The plan is opened from the step list Axel approved (`.scratch/plan-drafts/`); nothing has landed.
-- Next step: 1, since steps 1 and 2 wait on 2.E's step 10 only for the `ordo-help` name that step 2 edits, and step 1 writes a new folder.
-- Open on Axel's side: none.
+- 2026-09-30. Step 1 of 5, the `diagnose` skill, landed unticked, its reading pending (`agents/reviews/1-landing.md`).
+- Next step: 2, the wiring, widened to `skills/land/SKILL.md` Steps 9 by the ruling "Step 1, where a diagnosis is booked". It is prepared after 2.G step 1 lands, since that step touches the rules file and runs alone.
+- Open on Axel's side: the open items above.
