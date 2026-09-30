@@ -583,6 +583,7 @@ def plan_loop_svg() -> str:
                         "A user-visible choice",
                         "A brief check finding the brief cannot absorb",
                         model_stop,
+                        "A step that does not converge",
                     ),
                 ),
             ),

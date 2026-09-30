@@ -21,6 +21,8 @@
 <text x="43" y="256" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">the brief cannot absorb</text>
 <text x="35" y="270" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the</text>
 <text x="43" y="284" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">configured one</text>
+<text x="35" y="298" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A step that does not</text>
+<text x="43" y="312" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">converge</text>
 <rect x="233" y="42" width="110" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
 <line x1="241" y1="42" x2="335" y2="42" stroke="#4f46e5" stroke-width="3"/>
 <text x="243" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">build it</text>
