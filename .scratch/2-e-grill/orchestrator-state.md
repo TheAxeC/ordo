@@ -39,18 +39,30 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 
 ```yaml
 dispatch:
-  step: 14b
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-14b
-  base: 50e3844336505b61fd71fb645979f2d7a25abf18
-  launched: 2026-09-30
-  session_id: a12869b0c03367f5b (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-e-grill/agents/reviews/14b-report.md
-  builder_usage: claude-sonnet-5-5, 112867 tokens, 22 tool uses, 266 s (round 0, from its completion notice)
-  brief_check: .scratch/2-e-grill/agents/reviews/14b-brief-check.md (ordo-high, claude-opus-5-5, 129145 tokens, 43 tool uses, 384 s; run on the brief before the stop)
-  landing: not-started
-  round: 0
+  - step: 14b
+    executor: agent
+    worker: claude:sonnet
+    worktree: .agents/worktrees/2e-14b
+    base: 50e3844336505b61fd71fb645979f2d7a25abf18
+    launched: 2026-09-30
+    session_id: a12869b0c03367f5b (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
+    report: .scratch/2-e-grill/agents/reviews/14b-report.md
+    reviewer_report: pending (a fresh ordo-high reviewer on claude-opus-5-5, running)
+    builder_usage: claude-sonnet-5-5, 112867 tokens, 22 tool uses, 266 s (round 0, from its completion notice)
+    brief_check: .scratch/2-e-grill/agents/reviews/14b-brief-check.md (ordo-high, claude-opus-5-5, 129145 tokens, 43 tool uses, 384 s; run on the brief before the stop)
+    landing: not-started
+    round: 0
+  - step: 14c
+    executor: agent
+    worker: claude:sonnet
+    worktree: .agents/worktrees/2e-14c
+    base: e403a796007171fe3b93b2491577e26c8c18089b
+    launched: 2026-09-30
+    session_id: a23f99bf273bb8deb (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
+    report: .scratch/2-e-grill/agents/reviews/14c-report.md
+    brief_check: .scratch/2-e-grill/agents/reviews/14c-brief-check.md (ordo-high, claude-opus-5-5, 153480 tokens, 34 tool uses, 432 s)
+    landing: not-started
+    round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
