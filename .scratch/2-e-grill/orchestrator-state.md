@@ -47,7 +47,7 @@ dispatch:
   launched: 2026-09-30
   session_id: a9e8d4ac4aea212dc (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-e-grill/agents/reviews/9a-report.md
-  builder_usage: claude-sonnet-5-5, 243201 tokens, 132 tool uses, 2226 s (round 0, from its completion notice)
+  builder_usage: claude-sonnet-5-5, 243201 tokens, 132 tool uses, 2226 s (round 0, from its completion notice); 288483 tokens, 14 tool uses, 321 s (round 1)
   brief_check: .scratch/2-e-grill/agents/reviews/9a-brief-check.md (ordo-high, claude-opus-5-5, 258965 tokens, 34 tool uses, 683 s)
   reviewer_report: .scratch/2-e-grill/agents/reviews/9a-refuter.md (ordo-high, claude-opus-5-5, 291216 tokens, 54 tool uses, 880 s; items 1 to 13 hold; R9 and R11 partial; findings Standards 1 to 3)
   landing: not-started
@@ -111,5 +111,5 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
-- Step 9a: prepared at f14ad59 (the ruling on "Step 9a, the two rulings the revert removed" booked, the brief written to option (a), every brief-check finding closed under "Closed" in `agents/reviews/9a-brief-check.md`); the builder runs in `.agents/worktrees/2e-9a`. Step 13 is in progress: `/grill 3` with Axel, D1 to D11 in `.scratch/rulings/3-the-writing-base.md`, D11 replacing D5.
-- Next: step 9a, the build, /refute, one repair round and /land, with the five scratch runs by fresh agents before the landing; step 13, `/grill 3` round 2; step 14 after 13; step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
+- Step 9a: prepared at f14ad59 (the ruling on "Step 9a, the two rulings the revert removed" booked, the brief written to option (a), every brief-check finding closed under "Closed" in `agents/reviews/9a-brief-check.md`); repair round 1 sent at 833e2e8 and returned, its report saved; the reviewer over round 1 runs. Step 13 done and ticked: D1 to D24 in `.scratch/rulings/3-the-writing-base.md`, ADRs 0001 to 0003 and entry 3 rewritten, committed in 7e984dd.
+- Next: step 9a, the build, /refute, one repair round and /land, with the five scratch runs by fresh agents before the landing; step 14, the blind comparison on entry 3, now unblocked; step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).

@@ -2578,3 +2578,407 @@ Each holds:
 - `gen_figures.py`: the head comment (lines 1 to 12 printed above) says the script writes the two SVG files and that every box, arrow and label is written in the file; the note is one more label written in the file, and the head comment's list of errors ("a caption, a note or the legend that does not fit one line") covers it. The docstring of `draw_legend` is the dictated one ("The three marks and the dashed box with what each says, on one row, and a note under it."); the other docstrings describe functions the diff does not change.
 - `README.md` alt texts (lines 56 and 60): they describe the boxes and the stops marked every run, only when or optional; the figures still show exactly those, with one more note under the legend that the alt text does not need to name.
 
+## Repair round 1
+
+Everything the round names is done, and the one sentence of `grill` Steps 4 that stands in tension with the round's new sub-bullet is left as the round has it and named at the end of this section.
+
+Line numbers in parts 3 to 12 above are those of the tree as the first build left it. This round changes five files (`grill`, `roadmap`, `ordo-init`, `plan` and `repo-setup`), and the lines it moves or adds sit at other numbers now. The end state of those lines is the one this section prints.
+
+### Ruling 1, `grill` with no decision to ask (standards finding 1)
+
+Before: a roadmap diff a quoted ruling states was held out of every round, and no sentence said what `grill` does when it is the only open decision. After: `grill` Steps 4 has a new sub-bullet after "A decision that depends on another decision still open waits for a later round."; Steps 6 has a new sub-bullet after "The round ends the turn and waits for the answers ("Stops")."; and Steps 6's completion line reads "The step is done when the message is sent and the turn has ended, or no decision was left to ask and the skill has gone on to Steps 8." The three texts are in the diff below and counted in check 2.
+
+### Ruling 2, the exceptions moved under their rules (standards finding 2)
+
+Before: each exception stood as a sibling bullet of the rule it changes. After: each is a sub-bullet of its rule, two spaces further in, in the five places the round names: `roadmap` "Steps / add" 3, `ordo-init` Steps 2, `plan` Steps 2, `plan` Steps 3 and `grill` "Steps / Writing what settled" 3. In `plan` Steps 3 the four things moved two spaces further in with their parent, and "Each step line of the approved list ends with `(approved)`, the authority "Rules" describes." now stands directly after the "Write `plan.md`" bullet and its sub-bullets, with "A step list written under a quoted ruling is the approved list." under it. In `roadmap` add 3 the line `The stop "No gate" is not raised for it.` now reads `The stop "No gate" is not raised for a quoted ruling's gate.`, under the goal bullet it qualifies. The diff below shows each move.
+
+### Ruling 3, the shared item's comparison sentence (standards finding 3)
+
+Before, in `roadmap`, `plan`, `ordo-init`, `repo-setup` and `grill`: "A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet." After: "A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.", and under it, two spaces further in, "What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared." In `grill`, whose item 11 has a two-digit numeral, the two bullets stand at four and six spaces.
+
+### The diff of the round
+
+The diff between the tree at the end of the first build and the tree now, with two lines of context (`diff -U2`, run on the five changed files against the first build's tree, which is `git archive HEAD` with the first build's diff applied under `$TMPDIR/9a-build/r0`; the five files are the only files that differ):
+
+```
+--- /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//9a-build/r0/skills/grill/SKILL.md  2026-09-30 20:22:19
++++ skills/grill/SKILL.md  2026-09-30 20:21:26
+@@ -58,5 +58,6 @@
+     - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+     - It is matched against the bullet's text as written, a quotation mark in it included.
+-    - A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
++    - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
++      - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+     - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+     - There is no ruling in any of these cases.
+@@ -89,4 +90,5 @@
+    - A decision that needs a fact has that fact looked up ("Steps / Looking up a fact"), and a decision waiting on a running lookup is in the frontier and not yet asked.
+    - A decision that depends on another decision still open waits for a later round.
++   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is in no round: it is made at the first write of Steps 8.
+    - The step is done when each decision of the frontier is in the round, or waits on a named lookup.
+ 5. Draw each decision of the round in the decision form ("The decision form"), its worked example in `references/decision-form.md`.
+@@ -103,5 +105,6 @@
+    - The message ends with the answer form: `D<n> => <letter or text>` one line per decision, `D<n> Agree` to take the recommendation, and `D<a>-<b> Agree` to take it for each decision of a range.
+    - The round ends the turn and waits for the answers ("Stops").
+-   - The step is done when the message is sent and the turn has ended.
++   - When the frontier holds no decision to ask, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.
++   - The step is done when the message is sent and the turn has ended, or no decision was left to ask and the skill has gone on to Steps 8.
+ 7. Read the answers.
+    - The user may answer part of a round, and the decisions left open stay in the frontier.
+@@ -197,10 +200,10 @@
+    - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says, and the answer with its reason goes in the diff and never in the entry.
+    - The draft is shown as a diff in the next round, as a decision of its own, and written on the user's yes.
+-   - Under a quoted ruling ("What it reads" 11) whose sub-bullets hold the entry's changed text, the draft is made at the first write of Steps 8.
+-   - It takes the ruled text.
+-   - The rules of this item are worked on it.
+-   - A draft that is still the ruled text is written at once, unless it changes the gate and the changed gate could pass without the goal.
+-   - The roadmap diff decision then counts as answered.
+-   - A draft that differs from the ruled text, or a changed gate that could pass without the goal, is shown as the decision.
++     - Under a quoted ruling ("What it reads" 11) whose sub-bullets hold the entry's changed text, the draft is made at the first write of Steps 8.
++     - It takes the ruled text.
++     - The rules of this item are worked on it.
++     - A draft that is still the ruled text is written at once, unless it changes the gate and the changed gate could pass without the goal.
++     - The roadmap diff decision then counts as answered.
++     - A draft that differs from the ruled text, or a changed gate that could pass without the goal, is shown as the decision.
+    - An entry under "Not yet specified" is not moved and has no gate drafted into it, since such an entry states its goal and what must be known and no gate: a changed goal or "what must be known" is drafted into it as above, and the settled gate is its Rulings bullet of item 1, which the end prints (Steps 10).
+    - The item is done when the diff is a decision of the next round, or, after the yes or under a quoted ruling, the entry read back holds the change.
+--- /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//9a-build/r0/skills/ordo-init/SKILL.md  2026-09-30 20:22:19
++++ skills/ordo-init/SKILL.md  2026-09-30 20:21:26
+@@ -38,5 +38,6 @@
+    - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+    - It is matched against the bullet's text as written, a quotation mark in it included.
+-   - A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
++   - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
++     - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+    - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+    - There is no ruling in any of these cases.
+@@ -64,6 +65,6 @@
+    - The draft names the map in the key's comment.
+    - Several candidates are a stop ("Stops").
+-   - Under a quoted ruling that states `roadmap`, the key is the ruling's.
+-   - The stop of several candidates is then not raised.
++     - Under a quoted ruling that states `roadmap`, the key is the ruling's.
++     - The stop of several candidates is then not raised.
+    - None: the skill offers to write `docs/roadmap.md` from the `roadmap` skill's `templates/roadmap.md` (in the `roadmap` folder beside this skill's folder), with no entries; `/roadmap add` fills it.
+    - The step is done when the draft names the roadmap file, offers `docs/roadmap.md`, or the stop of several candidates stands.
+--- /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//9a-build/r0/skills/plan/SKILL.md  2026-09-30 20:22:19
++++ skills/plan/SKILL.md  2026-09-30 20:21:26
+@@ -46,5 +46,6 @@
+    - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+    - It is matched against the bullet's text as written, a quotation mark in it included.
+-   - A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
++   - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
++     - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+    - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+    - There is no ruling in any of these cases.
+@@ -70,7 +71,7 @@
+    - A copied gate that could pass without the goal is kept as the roadmap has it, and its answer and reason go to the user at Steps 3, since the gate is the roadmap's and the user's.
+    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
+-   - Under a quoted ruling ("What it reads" 6), the step list is the ruling's, each step with its check.
+-   - The rest of this step is worked on that list.
+-   - A closing step in the ruled list is dropped for the one `/plan` writes.
++     - Under a quoted ruling ("What it reads" 6), the step list is the ruling's, each step with its check.
++     - The rest of this step is worked on that list.
++     - A closing step in the ruled list is dropped for the one `/plan` writes.
+    - The session asks the same question of each step's check, "the goal" there being the part of the goal the step delivers, and writes the answer with its reason in "## Gate", one line per step, as the template gives it.
+    - The answer stands only in "## Gate", and each step line keeps the shape the template gives it.
+@@ -85,13 +86,13 @@
+    - `/grill <entry>` settles such decisions before the plan opens. It is not required: the user may approve the list with them unsettled.
+    - Write `plan.md` once the user has approved or corrected it.
+-   - Under a quoted ruling, the draft is written without the stop only when four things hold.
+-     - Each step and its check are the ruling's, the closing step `/plan` writes itself left out of the comparison.
+-     - Every answer in "## Gate" is no.
+-     - No design decision is named as unsettled.
+-     - No line of the rulings file is left to place.
+-   - Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
+-   - The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
+-   - A step list written under a quoted ruling is the approved list.
++     - Under a quoted ruling, the draft is written without the stop only when four things hold.
++       - Each step and its check are the ruling's, the closing step `/plan` writes itself left out of the comparison.
++       - Every answer in "## Gate" is no.
++       - No design decision is named as unsettled.
++       - No line of the rulings file is left to place.
++     - Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
++     - The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
+    - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
++     - A step list written under a quoted ruling is the approved list.
+    - The step is done when `plan.md` is written, or the draft is shown and the stop stands.
+ 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
+--- /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//9a-build/r0/skills/repo-setup/SKILL.md  2026-09-30 20:22:19
++++ skills/repo-setup/SKILL.md  2026-09-30 20:21:26
+@@ -39,5 +39,6 @@
+    - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+    - It is matched against the bullet's text as written, a quotation mark in it included.
+-   - A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
++   - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
++     - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+    - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+    - There is no ruling in any of these cases.
+--- /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//9a-build/r0/skills/roadmap/SKILL.md  2026-09-30 20:22:19
++++ skills/roadmap/SKILL.md  2026-09-30 20:21:26
+@@ -45,5 +45,6 @@
+    - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+    - It is matched against the bullet's text as written, a quotation mark in it included.
+-   - A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
++   - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
++     - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+    - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+    - There is no ruling in any of these cases.
+@@ -95,9 +96,9 @@
+ 3. Ask of the drafted gate "could this pass without the goal being reached?" and write the answer with its reason in the draft that Steps / add 6 shows, never in the roadmap entry.
+    - A gate that could (a file that exists without saying what the goal asks, a command that exits 0 on an empty result, a count with no content behind it) is redrafted and asked again, at most twice.
++     - Under a quoted ruling the ruled gate is not redrafted.
++       - Its answer and its reason stand in the draft.
++       - A ruled gate that could pass without the goal keeps the stop of Steps 4.
+    - A goal whose gate could still pass after the second redraft is a goal whose gate cannot be named (Steps / add 2).
+-   - Under a quoted ruling the ruled gate is not redrafted.
+-   - Its answer and its reason stand in the draft.
+-   - A ruled gate that could pass without the goal keeps the stop of Steps 4.
+-   - The stop "No gate" is not raised for it.
++     - The stop "No gate" is not raised for a quoted ruling's gate.
+    - The step is done when the answer with its reason stands in the draft, and the gate's answer is no or the gate is a quoted ruling's.
+ 4. Draft what it waits on: the entries (open or done) the work depends on, found from the goal and the entries' text, each with the reason.
+```
+
+### Check 1, the land runner
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-e-grill/orchestrator-state.md
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+[exit 0]
+```
+
+### Check 2, each new or changed text once
+
+`r1_checks.py` (disclosed below) counts each text with `grep -c -F -f` (the text as the one line of a scratch file) in its file: the three texts of ruling 1, the moved and reworded bullets of ruling 2, and the two shared sub-bullets in each of the five skills. The first block prints each count with the expected 1; the second counts the replaced texts in the files that held them, expected 0. The last block gives the indent of each moved or added bullet with the indent of its rule and the indent it should have (the rule's indent plus two, or plus the numeral's width plus two under a numbered item); the last column is `OK` when they agree.
+
+```
+Each text of the round, counted in its file (expected 1):
+1  skills/grill/SKILL.md  A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is in no round: it is made at the first write of Steps 8.
+1  skills/grill/SKILL.md  When the frontier holds no decision to ask, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.
+1  skills/grill/SKILL.md  The step is done when the message is sent and the turn has ended, or no decision was left to ask and the skill has gone on to Steps 8.
+1  skills/roadmap/SKILL.md  Under a quoted ruling the ruled gate is not redrafted.
+1  skills/roadmap/SKILL.md  Its answer and its reason stand in the draft.
+1  skills/roadmap/SKILL.md  A ruled gate that could pass without the goal keeps the stop of Steps 4.
+1  skills/roadmap/SKILL.md  The stop "No gate" is not raised for a quoted ruling's gate.
+1  skills/ordo-init/SKILL.md  Under a quoted ruling that states `roadmap`, the key is the ruling's.
+1  skills/ordo-init/SKILL.md  The stop of several candidates is then not raised.
+1  skills/plan/SKILL.md  Under a quoted ruling ("What it reads" 6), the step list is the ruling's, each step with its check.
+1  skills/plan/SKILL.md  The rest of this step is worked on that list.
+1  skills/plan/SKILL.md  A closing step in the ruled list is dropped for the one `/plan` writes.
+1  skills/plan/SKILL.md  Under a quoted ruling, the draft is written without the stop only when four things hold.
+1  skills/plan/SKILL.md  Each step and its check are the ruling's, the closing step `/plan` writes itself left out of the comparison.
+1  skills/plan/SKILL.md  Every answer in "## Gate" is no.
+1  skills/plan/SKILL.md  No design decision is named as unsettled.
+1  skills/plan/SKILL.md  No line of the rulings file is left to place.
+1  skills/plan/SKILL.md  Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
+1  skills/plan/SKILL.md  The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
+1  skills/plan/SKILL.md  A step list written under a quoted ruling is the approved list.
+1  skills/plan/SKILL.md  Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
+1  skills/grill/SKILL.md  Under a quoted ruling ("What it reads" 11) whose sub-bullets hold the entry's changed text, the draft is made at the first write of Steps 8.
+1  skills/grill/SKILL.md  It takes the ruled text.
+1  skills/grill/SKILL.md  The rules of this item are worked on it.
+1  skills/grill/SKILL.md  A draft that is still the ruled text is written at once, unless it changes the gate and the changed gate could pass without the goal.
+1  skills/grill/SKILL.md  The roadmap diff decision then counts as answered.
+1  skills/grill/SKILL.md  A draft that differs from the ruled text, or a changed gate that could pass without the goal, is shown as the decision.
+1  skills/roadmap/SKILL.md  A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+1  skills/roadmap/SKILL.md  What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+1  skills/plan/SKILL.md  A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+1  skills/plan/SKILL.md  What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+1  skills/ordo-init/SKILL.md  A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+1  skills/ordo-init/SKILL.md  What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+1  skills/repo-setup/SKILL.md  A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+1  skills/repo-setup/SKILL.md  What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+1  skills/grill/SKILL.md  A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+1  skills/grill/SKILL.md  What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+
+Texts the round replaced, counted in the files that held them (expected 0):
+0  skills/grill/SKILL.md  The step is done when the message is sent and the turn has ended.
+0  skills/roadmap/SKILL.md  The stop "No gate" is not raised for it.
+0  skills/roadmap/SKILL.md  A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
+0  skills/plan/SKILL.md  A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
+0  skills/ordo-init/SKILL.md  A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
+0  skills/repo-setup/SKILL.md  A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
+0  skills/grill/SKILL.md  A draft is the ruled change when each part of it has a sub-bullet that states it and equals that sub-bullet.
+
+Indent of each moved or added bullet and of its rule (the nearest bullet or numbered item above with a smaller indent):
+skills/grill/SKILL.md:92 indent 3; rule at line 89 indent 0; expected 3; OK
+skills/grill/SKILL.md:107 indent 3; rule at line 102 indent 0; expected 3; OK
+skills/grill/SKILL.md:108 indent 3; rule at line 102 indent 0; expected 3; OK
+skills/roadmap/SKILL.md:98 indent 5; rule at line 97 indent 3; expected 5; OK
+skills/roadmap/SKILL.md:99 indent 7; rule at line 98 indent 5; expected 7; OK
+skills/roadmap/SKILL.md:100 indent 7; rule at line 98 indent 5; expected 7; OK
+skills/roadmap/SKILL.md:102 indent 5; rule at line 101 indent 3; expected 5; OK
+skills/ordo-init/SKILL.md:67 indent 5; rule at line 66 indent 3; expected 5; OK
+skills/ordo-init/SKILL.md:68 indent 5; rule at line 66 indent 3; expected 5; OK
+skills/plan/SKILL.md:73 indent 5; rule at line 72 indent 3; expected 5; OK
+skills/plan/SKILL.md:74 indent 5; rule at line 72 indent 3; expected 5; OK
+skills/plan/SKILL.md:75 indent 5; rule at line 72 indent 3; expected 5; OK
+skills/plan/SKILL.md:88 indent 5; rule at line 87 indent 3; expected 5; OK
+skills/plan/SKILL.md:89 indent 7; rule at line 88 indent 5; expected 7; OK
+skills/plan/SKILL.md:90 indent 7; rule at line 88 indent 5; expected 7; OK
+skills/plan/SKILL.md:91 indent 7; rule at line 88 indent 5; expected 7; OK
+skills/plan/SKILL.md:92 indent 7; rule at line 88 indent 5; expected 7; OK
+skills/plan/SKILL.md:93 indent 5; rule at line 87 indent 3; expected 5; OK
+skills/plan/SKILL.md:94 indent 5; rule at line 87 indent 3; expected 5; OK
+skills/plan/SKILL.md:96 indent 5; rule at line 95 indent 3; expected 5; OK
+skills/plan/SKILL.md:95 indent 3; rule at line 83 indent 0; expected 3; OK
+skills/grill/SKILL.md:202 indent 5; rule at line 201 indent 3; expected 5; OK
+skills/grill/SKILL.md:203 indent 5; rule at line 201 indent 3; expected 5; OK
+skills/grill/SKILL.md:204 indent 5; rule at line 201 indent 3; expected 5; OK
+skills/grill/SKILL.md:205 indent 5; rule at line 201 indent 3; expected 5; OK
+skills/grill/SKILL.md:206 indent 5; rule at line 201 indent 3; expected 5; OK
+skills/grill/SKILL.md:207 indent 5; rule at line 201 indent 3; expected 5; OK
+skills/roadmap/SKILL.md:47 indent 3; rule at line 42 indent 0; expected 3; OK
+skills/roadmap/SKILL.md:48 indent 5; rule at line 47 indent 3; expected 5; OK
+skills/plan/SKILL.md:48 indent 3; rule at line 43 indent 0; expected 3; OK
+skills/plan/SKILL.md:49 indent 5; rule at line 48 indent 3; expected 5; OK
+skills/ordo-init/SKILL.md:40 indent 3; rule at line 35 indent 0; expected 3; OK
+skills/ordo-init/SKILL.md:41 indent 5; rule at line 40 indent 3; expected 5; OK
+skills/repo-setup/SKILL.md:41 indent 3; rule at line 36 indent 0; expected 3; OK
+skills/repo-setup/SKILL.md:42 indent 5; rule at line 41 indent 3; expected 5; OK
+skills/grill/SKILL.md:60 indent 4; rule at line 55 indent 0; expected 4; OK
+skills/grill/SKILL.md:61 indent 6; rule at line 60 indent 4; expected 6; OK
+```
+
+### Check 3, each moved bullet under its rule, each completion line last
+
+The diff above shows every move; the indent lines of check 2 give the rule's indent plus two for each moved bullet, and all print `OK`. The first and last line of each item the round touches:
+
+```
+skills/grill/SKILL.md ## Steps item 4.
+    first, line 89: 4. Compute the frontier: every decision whose prerequisites are settled, the roadmap diff and "record as ADR?"
+    last,  line 93:    - The step is done when each decision of the frontier is in the round, or waits on a named lookup.
+skills/grill/SKILL.md ## Steps item 6.
+    first, line 102: 6. Ask the round: every decision of the frontier that waits on no lookup, in one message, numbered `D<n>`.
+    last,  line 108:    - The step is done when the message is sent and the turn has ended, or no decision was left to ask and the skill has gone on to Steps 8.
+skills/grill/SKILL.md ### Writing what settled item 3.
+    first, line 198: 3. Draft the change to the roadmap entry.
+    last,  line 209:    - The item is done when the diff is a decision of the next round, or, after the yes or under a quoted ruling, the entry read back holds the change.
+skills/roadmap/SKILL.md ### add item 3.
+    first, line 96: 3. Ask of the drafted gate "could this pass without the goal being reached?" and write the answer with its rea
+    last,  line 103:    - The step is done when the answer with its reason stands in the draft, and the gate's answer is no or the gate is a quoted ruling's.
+skills/ordo-init/SKILL.md ## Steps item 2.
+    first, line 62: 2. Draft `roadmap`: the tracked file that lists the open work, one entry per piece of it.
+    last,  line 70:    - The step is done when the draft names the roadmap file, offers `docs/roadmap.md`, or the stop of several candidates stands.
+skills/plan/SKILL.md ## Steps item 2.
+    first, line 65: 2. Draft `plan.md` from `templates/plan.md`.
+    last,  line 82:    - The step is done when the draft holds the goal, the gate, the answers of "## Gate", the Rulings and the step list with the closing step last.
+skills/plan/SKILL.md ## Steps item 3.
+    first, line 83: 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step'
+    last,  line 97:    - The step is done when `plan.md` is written, or the draft is shown and the stop stands.
+```
+
+Each item ends with its completion line at the item's own sub-bullet indent.
+
+### Check 4, ASCII
+
+```
+$ LC_ALL=C grep -n '[^ -~]' README.md docs/figures/gen_figures.py docs/figures/pipeline.svg docs/figures/plan-loop.svg docs/glossary.md skills/grill/SKILL.md skills/ordo-help/SKILL.md skills/ordo-init/SKILL.md skills/plan-orchestration/SKILL.md skills/plan/SKILL.md skills/repo-setup/SKILL.md skills/repo-setup/templates/plan-terms.md skills/roadmap/SKILL.md skills/spec/SKILL.md 
+[exit 1]
+```
+
+### Check 5, the walk of R9 when the quoted ruling's roadmap diff is the only open decision
+
+Each step names the sentence of `grill` it follows, as `grep -n -F` prints it (`r1_walk.py` stops when a needle matches other than one line).
+
+The invocation is recognised:
+       18:/grill <entry> --ruling <ledger file> "<name>"                  the same, under a quoted ruling: a roadmap diff that is the ruled text is written without its decision
+
+The item reads the ruling, and the shared rule says a draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals it:
+       55:11. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
+
+       60:    - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+
+What the skill shows beside the change is not compared:
+       61:      - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+
+Steps 4 computes the frontier, which holds the roadmap diff decision:
+       89:4. Compute the frontier: every decision whose prerequisites are settled, the roadmap diff and "record as ADR?" decisions included.
+
+The diff the ruling states is in no round and is made at the first write of Steps 8:
+       92:   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is in no round: it is made at the first write of Steps 8.
+
+Steps 5 draws the decisions of the round; with the diff in no round and no other decision, it has none to draw:
+       94:5. Draw each decision of the round in the decision form ("The decision form"), its worked example in `references/decision-form.md`.
+
+Steps 6 finds no decision to ask, sends no round, does not end the turn and goes on to Steps 8:
+       102:6. Ask the round: every decision of the frontier that waits on no lookup, in one message, numbered `D<n>`.
+
+       107:   - When the frontier holds no decision to ask, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.
+
+Steps 6 is done by the second alternative of its completion line:
+       108:   - The step is done when the message is sent and the turn has ended, or no decision was left to ask and the skill has gone on to Steps 8.
+
+Steps 7 is not reached. Steps 8 writes what settled as "Steps / Writing what settled" says:
+       116:8. Write each settled answer as "Steps / Writing what settled" says, at the time "Rules" gives.
+
+Its item 3 makes the draft at this first write of Steps 8 under the ruling, and the draft takes the ruled text:
+       202:     - Under a quoted ruling ("What it reads" 11) whose sub-bullets hold the entry's changed text, the draft is made at the first write of Steps 8.
+
+       203:     - It takes the ruled text.
+
+       204:     - The rules of this item are worked on it.
+
+A draft that is still the ruled text, with no change to the gate that could pass, is written at once:
+       205:     - A draft that is still the ruled text is written at once, unless it changes the gate and the changed gate could pass without the goal.
+
+The diff decision counts as answered:
+       206:     - The roadmap diff decision then counts as answered.
+
+"Writing what settled" 1 writes no bullet for it:
+       188:   - A roadmap diff written under a quoted ruling gets no bullet, since the quoted ruling is its ruling.
+
+Steps 8's completion line is met once the answers of the round have their lines written; with no round, nothing more is owed:
+       118:   - The step is done when every answer of the round has its lines written and read back.
+
+Steps 9 goes back to Steps 3 and ends when a pass finds the frontier empty and the diff answered:
+       119:9. Go back to Steps 3, until the frontier is empty and the roadmap diff and "record as ADR?" decisions are answered.
+
+       120:   - The step is done when a pass of Steps 3 to 4 finds no open decision.
+
+Steps 10 closes the interview; its list names the entry with the ruling and its ledger file:
+       121:10. Close the interview.
+
+       123:    - An entry changed under a quoted ruling is listed with the ruling's name and its ledger file.
+
+and the commit message names the ruling:
+       129:    - The commit message names a quoted ruling an entry was changed under, by its name and its ledger file.
+
+The interview closed when the confirmation and the commit question are answered:
+       132:    - The step is done when the user has answered the confirmation and the commit question, and the files are committed or listed.
+
+Result: the walk ends with the entry written at the first write of Steps 8 (lines 202 to 206), no Rulings bullet for it (line 188), Steps 9 ended by a pass that finds no open decision (lines 119 and 120), and the interview closed at Steps 10 (lines 121 to 132), the entry listed with the ruling's name and its ledger file and the commit message naming it.
+
+### Scripts of this round
+
+- `apply_r1.py`: writes the three rulings into the five files; each anchor is a whole line that must occur exactly once, and nothing is written when one does not.
+- `r1_checks.py`: counts each text with `grep -c -F -f` and prints the indent of each moved or added bullet with the indent of its rule.
+- `r1_last.py`: prints the first and last line of each item the round touches.
+- `r1_walk.py`: prints each step of the walk (description written by hand) with the `grep -n -F` line of `grill` it names.
+- `build_r1_report.py`: appends this section from the outputs above.
+
+No git command that changes state was run, no agent was started, no skill was run and no scratch repository was made. The first build's tree for the diff was a file copy (`cp -R` of the `git archive HEAD` export, patched with `patch`), not a repository.
+
+### Not done, and the one sentence in tension
+
+Nothing the round names is undone. One point the round does not name, left as it stands: `grill` Steps 4 (line 93) says "The step is done when each decision of the frontier is in the round, or waits on a named lookup." The new Steps 4 sub-bullet (line 92) puts a roadmap diff a quoted ruling states in no round, and Steps 4's first line keeps that diff in the frontier, so the completion line read by its letter cannot be met while the frontier holds such a diff. The diff is neither in the round nor waiting on a lookup. A clause after "a named lookup", such as "or is a roadmap diff a quoted ruling states", would remove the tension. I did not add it, since the round changes nothing it does not name and dictates the texts; the orchestrator can rule on it.
