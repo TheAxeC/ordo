@@ -84,6 +84,8 @@ Independent of each other; the standing rule of one agent at a time still serial
 
 - 9 to 12: the steps they read run first.
 - 3: its brief also takes the glossary **reviewer** term (`docs/glossary.md:93`, `skills/repo-setup/templates/plan-terms.md:88`), which says every refutation runs on `reviewer:`, beside the `reviewer:` sentences of `refute` Steps 1 and `plan-orchestration` "The two tiers, and the models"; step 1's `repair_reviewer` makes them incomplete (step 1's refuter report, Standards 2).
+- 5: it also writes the id and role list of each plan run in part before step 2 landed (the open plans 2.F, 2.G and 2.H) into its `plan.md`'s Agents section, and of the lookup agents of entry 3's `/grill`, read from their `meta.json`, into `.scratch/rulings/3-the-writing-base.md`'s Agents section, as ADR 0006's consequence says of a plan run before the change (step 2's brief, Decision 7).
+- 9: its `/grill` and `/plan` runs are also read for the Agents bullets: a lookup agent of its `/grill` in the rulings file's or the plan's Agents section, and carried by `/plan` into the new plan's (step 2's brief check, "The question" 1).
 
 ### Step 1, the keys `self_rule`, `next_entry` and `repair_reviewer` (landed 2026-10-01)
 
