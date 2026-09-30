@@ -132,5 +132,171 @@ none. The report gives each visible change with its before and after: the eighth
 - The reviewer's own change of rule 13: not applicable, the step has no script and no test.
 - The A/B and the look: none configured. No ADR record exists (`ls docs/adr` prints README.md and template.md).
 
-Reviewer usage: not known to the reviewer; the orchestrator fills it from the completion notice.
+Reviewer usage: claude-opus-5-5 (ordo-high), 210664 tokens, 31 tool uses, 7.0 minutes ($1.41 to $5.14).
 
+## Repair round 1, refuted
+
+Place numbers are those of the worktree `/Users/axelfaes/workspace/ordo/.agents/worktrees/2h-3a` after the round. The round's delta was read as the round brief lists it, against `git diff 7e3dbc2 -- . ':!.scratch'`.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-h-session-retro/orchestrator-state.md
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
+PASS: person-driven.sh scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 11 commands passed
+(exit status 0)
+
+Round check 2. Each text taken from the round brief's own lines (3a-round-1.md lines 8, 14, 20, 26, 27, 35, 36, 37, 44, 50, 51, 57, and the row cell), written as the one line of a file under $TMPDIR, then grep -c -F -f <file> <target>:
+n1 (rule 13, fourth bullet): docs/dev/change-standard.md 1; skills/repo-setup/templates/docs/dev/change-standard.md 1
+n2 (rule 13, fifth bullet, added sentence): 1; 1
+n3 (brief.md "Cases" bullet): 1 (with -x: 1)
+n4a, n4b (spec SKILL.md bullet and sub-bullet): 1, 1
+n5a, n5b, n5c (brief.md "Report" 4, 5, 7): 1, 1, 1 (with -x: 1 each)
+old parts 7 to 11 of the brief renumbered 8 to 12, words unchanged: 1 each of five (with -x: 1 each)
+n6a, n6b, n6c, n6d, n6e (refute SKILL.md): 1, 1, 1, 1, 1
+The replaced texts: o1 (old rule 13 sentence) 0 and 0; o3 (old "Cases" bullet) 0; o4 (the three sentences in one bullet) 0; o5a, o5b (old parts 4 and 5) 0, 0; o6a ("that the report's terms part does not name") 0; o6d ("found by reading it or by a change of the reviewer's own") 0; o6e (old row cell) 0.
+Indents: skills/spec/SKILL.md:246 three spaces, :247 five; skills/refute/SKILL.md:62 and :63 three, :117 and :125 two.
+
+Round check 3. $ git diff --stat
+ docs/dev/change-standard.md                          |  6 +++---
+ skills/refute/SKILL.md                               | 10 +++++++---
+ .../repo-setup/templates/docs/dev/change-standard.md |  6 +++---
+ skills/spec/SKILL.md                                 |  2 ++
+ skills/spec/templates/brief-check.md                 |  7 +++++++
+ skills/spec/templates/brief.md                       | 20 ++++++++++++++++++--
+ 6 files changed, 40 insertions(+), 11 deletions(-)
+$ git diff -U0 <each change standard> | grep '^[-+]' | grep -v '^+++\|^---' | md5
+eb4cc39a2ba922c1dda0d022806263ff
+eb4cc39a2ba922c1dda0d022806263ff
+(3 removed and 3 added lines in each)
+$ git status --short
+ M on the six files, ?? .scratch/2-h-session-retro/agents/reviews/3a-report.md, nothing else.
+
+Round check 4. $ LC_ALL=C grep -n '[^ -~]' <the six files>
+(prints nothing, exit status 1)
+
+Round check 5. $ git grep -n "reviewer's own\|change of its own\|scratch copy" -- skills docs README.md utils
+26 lines, as the report says: 10 that speak of the reviewer (docs/dev/change-standard.md:43, its template copy :43, skills/refute/SKILL.md:62, :63, :84, :101, :114, :117, :172, :182) and 16 on the scratch copies of `diagnose`, of two roadmap gates, of `ordo-help`, of `plan-orchestration` and of the git guard test. Read: rule 13 (both copies), refute :62, :63, :117 and :172 agree that the reviewer's change is made, per case of a code step, on a scratch copy outside the worktree and the main checkout.
+
+Round check 6, reading: "Report" of brief.md has twelve parts numbered 1 to 12 (lines 72 to 83); eight check bullets at skills/spec/SKILL.md 239 to 246 and eight headings `## 1.` to `## 8.` in brief-check.md; the three lists of "The four headings" end with a period at refute :106, :117 and :128; Steps 5 of `refute` is judged under Standards 2 below.
+
+Brief's Verify 5. $ grep -n -i 'glossary\|prose standard\|skill-layout\|docs/' <the three spec files>
+hits at SKILL.md:50, :245, :246, brief.md:77, brief-check.md:43, :49, the six the report quotes.
+Brief's Verify 6. $ git grep -n 'names no revert\|finds such a test by reading it' -- skills docs README.md utils
+(prints nothing, exit status 1)
+
+Commands the report quotes:
+$ wc -l of the six files and the report: 89, 71, 298, 83, 62, 185, 274. As the report says.
+Glossary headwords over the added lines of `git diff -U0 7e3dbc2` (each headword matched as a whole word, the hits read): base, brief, builder, case, Closed, Doc text, finding, landing, ledger, open item, orchestrator, part, place, plan, premise, reviewer, rules file, ruling, standards, state file, step, worktree. The report's "The terms" names each of them, the three it sets aside as other senses (Closed, place, part) included.
+$ git grep -n -i 'read-only\|changes nothing\|without changing anything\|An edit to any file' -- skills docs README.md utils .agents/plan.yaml
+No hit calls the reviewer read-only; the "read-only" hits are the brief-check agent (README.md:18, glossary :16, plan-terms.md:11, plan-orchestration :137), `grill`'s lookup, `diagnose` and `spec` :112. The hits that say the reviewer changes nothing are README.md:5, docs/figures/gen_figures.py:599, the glossary's **reviewer** entry in both copies, and refute :3 and :10.
+$ ls docs/adr
+README.md template.md
+The main checkout's report and the worktree's copy: `cmp` exits 0.
+Option (a) of the ruling, word for word: the five reworded strings of rewordings 1, 2, 4, 5 and 6 each print 1 with `grep -c -F` in their files (rewording 1 with the round's added words "with that change made"; rewording 2 beside the round's "and, when the script refuses the input,"), and rewording 3 is the third sentence as a sub-bullet, its words unchanged.
+```
+
+### Verdicts
+
+Items of the brief's "What to build", as the round changed them, for the whole diff since `7e3dbc2`:
+
+- 1: holds, skills/spec/SKILL.md:246 and :247, the bullet with its third sentence as a sub-bullet, after **ADRs** and before "The checks are done" (n4a and n4b print 1, o4 prints 0).
+- 2: holds, brief-check.md lines 47 to 52, not touched by the round; its two bullets match the bullet and the sub-bullet of item 1.
+- 3: holds, brief.md:19 is the round's text (n3 prints 1 with -x); line 18 is not in the diff.
+- 4: holds, brief.md:25, the last paragraph of "Cases", not touched by the round.
+- 5: holds, brief.md:66, not touched by the round.
+- 6: holds, brief.md lines 70 to 83, the opening line and twelve parts: parts 4, 5 and 7 as the round gives them, parts 8 to 12 the old 7 to 11 with their words unchanged (each prints 1 with -x).
+- 7: holds, the three changed lines of rule 13 in each copy, the two filtered diffs equal by md5, no other line of either file in the diff; the fourth bullet is the round's two sentences, the fifth has the round's added sentence.
+- 8: holds, skills/refute/SKILL.md:105, :106 (Spec), :117 (Proof), :125 (Standards), :172 (the row's first cell, its other two cells unchanged), and :62, :63 (the round's two sub-bullets of Steps 5).
+
+Cases of the brief's "Cases":
+
+- R1: met, eight check bullets at skills/spec/SKILL.md 239 to 246, **Dictated text** the last before "The checks are done".
+- R2: met, `## 8. Dictated text` before `## Declined to judge`; eight checks and eight headings in the same order.
+- R3: met, brief.md:19 is the round's text, and line 18 is unchanged.
+- R4: met, the paragraph of item 4 is the last of "Cases".
+- R5: met, five items, the fifth as item 5 gives it.
+- R6: met as the round changed it: the opening line and twelve parts, each part of the old paragraph among them.
+- R7: met, identical in the two files, no other line changed, the grep prints nothing.
+- R8: met, the Spec list has eleven bullets (96 to 106), the Proof list ten (108 to 117), the Standards list ten (119 to 128), each ending with a period on its last bullet; the parenthesis follows "taken out of the code"; the row's first cell is the round's.
+- R9: met for the hits the case names: no hit of the two greps outside the step's paths is made false by the round. The sentences "without changing anything" and "who changes nothing" are under "Declined to judge".
+
+Closures claimed, per item of the round brief and per finding of the first review:
+
+- Round item 1 (rewording 1, and the first review's note on "the test's failing line"): holds. The text is option (a)'s plus "with that change made", which is the round's named addition.
+- Round item 2 (first review, Standards 4): holds for a case whose test can run on the unchanged tree. What it leaves is Standards 4 below.
+- Round item 3 (rewording 2, and Standards 6): holds. "case" is no longer used for a situation, and the error line is asked only "when the script refuses the input".
+- Round item 4 (rewording 3): holds. The builder's point on the indent is judged under "The builder's two points" below.
+- Round item 5 (rewordings 4 and 5, and Standards 5): holds, the named sentences now have part 7. What the new part 7 gets wrong is Standards 1 below.
+- Round item 6 (rewording 6, and Standards 1, 2 and 3): holds. Rule 13 and `refute` now both say "and"; Steps 5 says when the change is made, how the copy is made, where, and that it is removed; the row forbids every edit outside the scratch copy, which keeps the old limit. No finding was closed by removing what it guarded. What Steps 5 leaves is Standards 2 and 3 below.
+- Round item 7 (Proof 1): holds. My own headword run over the added lines gives no term the report's list leaves out.
+- No fix reaches beyond its finding: every changed line of the diff is a text of the brief or of the round brief, read line by line against both.
+
+### Findings
+
+Spec: none. No line of the six files is changed that neither the brief nor the round brief asks for, and no dictated text differs from its source by a character.
+
+Proof: none. Every count, path and command output the report gives for the round reproduces.
+
+Standards:
+
+- 1. skills/spec/templates/brief.md, "Report" 7: "Each sentence that item 5 of "Verify before you report" names as longer than the standards allow, with its reason." What is wrong: the part names the reading item by a fixed number, and the template's "Verify before you report" is a list whose length each brief sets (items 2 and 3 are placeholders for the step's own commands). This step's own brief shows it: its "Verify before you report" has 7 items and the reading item is number 7. The rules file's rule 19 (no two statements that contradict each other) is what a brief written from the template then breaks. Failure scenario: a brief with four commands of its own has the reading item at 7; its "Report" part 7, copied from the template, points at item 5, a command, and the builder lists nothing under the part or the reviewer looks for the sentences under the wrong item. Small enough to fix at landing, one sentence: "7. Each sentence that the reading item of "Verify before you report" names as longer than the standards allow, with its reason." The words are the orchestrator's, not one of the six the user ruled.
+
+- 2. skills/refute/SKILL.md, Steps 5, the second sub-bullet: "The change is made on a scratch copy of the files the test runs, copied with `cp` into a folder under `$TMPDIR`, never in the worktree or the main checkout, and the folder is removed before the report is written." What is wrong, two rules of `docs/dev/skill-layout.md`. "Lists and tables": where the change is made and the removal of the folder are two requirements that can each be broken while the other holds, joined by "and", which the standard makes two bullets; it is the defect rewording 3 ended in the **Dictated text** bullet. "Writing for an agent": "Each item of Steps ends on its completion criterion"; the criterion of Steps 5 ("until every item ... and every case ... has a verdict") stands in its first line and the item now ends on the removal of a folder. Failure scenario: a reviewer checking a later diff of this skill cannot tell where one rule ends, and a reader who takes the item's last line as its end state has no criterion there; the same diff placed the **Dictated text** bullet before "The checks are done when ..." to keep that item's end. Fixable at landing by moving words, no new rule: line 61 ends at "gives the verdicts "The verdicts" lists."; the second sub-bullet ends at "never in the worktree or the main checkout."; a third reads "The folder is removed before the report is written."; a last reads "Steps 5 is done when every item of the brief's "What to build" and every case of its "Cases" has a verdict." That touches line 61, which neither brief lists, so the orchestrator decides.
+
+- 3. skills/refute/SKILL.md, Steps 5, the first sub-bullet, against Steps 6 and `templates/report.md`: "it makes one change of its own that takes the case's behaviour out and runs the test against that change." What is wrong: nothing says where the report gives that change and what the test printed. Steps 6 lists the report's parts (the verification lines, the verdicts, the findings, "Declined to judge", the usage), and the template's verification block holds "each command of the brief's verification list" and "each command the report quotes as evidence". A change that shows the test to be a proof gives no finding, so it leaves no line. The rules file's closing sentence of "Commands and their filters" ("A claim about behaviour ... names the command that produced it") is what the report then cannot meet. Failure scenario: a reviewer skips the change, and its report reads the same as one from a reviewer who made it; the orchestrator cannot tell whether the check rule 13 asks of the reviewer was made. Fixable at landing with one sub-bullet of Steps 5: "The report's verification lines give each such change and the line the test printed with it made." The matching line of `templates/report.md` is outside the step's paths; whether to widen them is the orchestrator's call.
+
+- 4. docs/dev/change-standard.md and skills/repo-setup/templates/docs/dev/change-standard.md, rule 13, fifth bullet, against its second bullet: "A case of a behaviour the change preserves has a row too, with its passing run on the unchanged tree in place of the failing line quoted for it." The second bullet: "passes on the unchanged tree in the form it had there, or, for a new test, whenever it can run there". What is wrong: a new test of a preserved behaviour that cannot run on the unchanged tree has no passing run there, and the new sentence asks for one without the condition. Rule 19 of the same page is broken. Failure scenario: a builder whose new test needs a file the step adds leaves the cell empty or invents a run, and the reviewer reports the row as incomplete. Small enough to fix at landing, in both copies: "A case of a behaviour the change preserves has a row too, with its passing run on the unchanged tree, or after the change when the test cannot run there, in place of the failing line quoted for it."
+
+Behaviour:
+
+- 1. The builder's report, "Visible changes, before and after (this round)". What is wrong: the rewritten report gives the before and after of the round's changes only. The visible changes of the first build (the eighth check and section 8 of the brief check, the paragraph on one small change in "Cases", item 5 of "Verify before you report", "Report" as a numbered list, "names no revert" gone from rule 13, the new Spec bullet of `refute`) are no longer in it, though the round brief asked for the report "for the tree as it is after this round". They stand in the first report, which `git show aca844c:.scratch/2-h-session-retro/agents/reviews/3a-report.md` prints under "Visible changes, before and after". The round's list also leaves out the "Cases" rewording from "the case where the program reading its output closes it" to "its output closed by the program reading it". Failure scenario: the landing report and the booking take the step's visible changes from the builder's report and state four of them. Not a fix in the tree: the orchestrator takes the first report's four bullets with the round's four at landing.
+
+The builder's two points under "Anything wrong or impossible":
+
+- The indent of the sub-bullet in skills/spec/SKILL.md: five spaces is right and nothing changes. The round brief's sentence "three spaces more" disagrees with its own fence, which shows two more. In the file every sub-bullet under a three-space bullet stands at five spaces (33 lines at five spaces, none at six).
+- Steps 5 of `refute` and its completion criterion: the point holds, and it is Standards 2 above.
+
+### Declined to judge
+
+- Whether "Review a built step without changing anything" (refute, description), "dispatches one reviewer, who changes nothing" (refute, opening paragraph), the glossary's **reviewer** entry in both copies, README.md:5 and docs/figures/gen_figures.py:599 still hold now that Steps 5 of the same skill says the reviewer "makes one change of its own": the brief's "What is on the tree" rules that they do, since the change is on a scratch copy, and the round makes the two sentences stand in one file. The user's call, as in the first review.
+- "and for a script its output closed by the program reading it before the script ends" stands in a parenthesis that lists inputs, and an output closed early is not an input: the words are rewording 2 as the user ruled it.
+- Whether "found by reading it and by the reviewer's own change of Steps 5" (refute, Proof, last bullet) means a finding needs both to show it: the "and" follows rule 13 as ruled, and a careful reader could take it either way.
+- Whether a reviewer of a compiled product can run a test on "a scratch copy of the files the test runs" without a second build: not checkable in this repository, which has scripts only. The "Anti-patterns" row on an unchecked point gives such a reviewer "Declined to judge".
+- The word counts under "Sentences longer than the prose standard allows": not recounted, no decision rests on them.
+- The reviewer's own change of rule 13 and of Steps 5: not applicable, the step has no script and no test.
+- The A/B and the look: none configured. No ADR record exists (`ls docs/adr` prints README.md and template.md).
+
+Reviewer usage: claude-opus-5-5 (ordo-high), 188651 tokens, 32 tool uses, 5.9 minutes ($1.15 to $4.40).
+
+## Closed
+
+- Proof 1 (the report's terms list incomplete): closed in the round, item 7 of `agents/briefs/3a-round-1.md`; the round's reviewer ran the glossary's headwords over the added lines and found no term left out.
+- Standards 1, 2 and 3 (the reviewer's own change: "or" against rule 13, no step that says how, the Anti-patterns row): closed in the round, item 6; `skills/refute/SKILL.md` Steps 5, Proof's last bullet and the row's first cell.
+- Standards 4 (a case of a preserved behaviour has no failing line): closed in the round, item 2, rule 13's fifth bullet in both copies.
+- Standards 5 (the named sentences had no part of the report): closed in the round, item 5, "Report" 7 of `skills/spec/templates/brief.md`.
+- Standards 6 (an accepted input has no error line): closed in the round, item 3, the second bullet of "Cases".
+- Round 1, Standards 1 ("Report" 7 names item 5 by number): fixed at landing, the part reads "the reading item of "Verify before you report"".
+- Round 1, Standards 2 (two requirements in one sub-bullet, and Steps 5 not ending on its completion criterion): fixed at landing, `skills/refute/SKILL.md` Steps 5: the removal of the folder is a sub-bullet of its own and the last sub-bullet is "Steps 5 is done when ...".
+- Round 1, Standards 3 (nothing says where the report gives the reviewer's change): fixed at landing, a sub-bullet of Steps 5 and a line of the verification block of `skills/refute/templates/report.md`, which joined the step's paths.
+- Round 1, Standards 4 (a new test of a preserved behaviour that cannot run on the unchanged tree): fixed at landing in both change standards, "or after the change when the test cannot run there".
+- Round 1, Behaviour 1 (the rewritten report gives the round's visible changes only): closed with no change to the tree; the booking and the landing report state the visible changes of the first build, from the report at commit aca844c, with the round's.
+- The builder's point on the indent of the sub-bullet in `skills/spec/SKILL.md`: five spaces is right, as its neighbours, and nothing changes.
