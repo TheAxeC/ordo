@@ -47,6 +47,8 @@ none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- The pin at v2.6.0 (2026-09-30): Axel ruled (a) and ran the pin; 13 skills and 5 agents linked at v2.6.0 (ca8ae3e), booked in plan.md Rulings.
+
 - Approval stops under a ruling (2026-09-30): Axel ruled (a); step 9a added after step 12a, booked in plan.md Rulings.
 
 - Old rule 13 in game-engine and cathedra (2026-09-30): Axel ruled (a); step 15 rewrites rule 13 in both repositories.
