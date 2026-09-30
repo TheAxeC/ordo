@@ -495,3 +495,411 @@ I found none. Every citation I checked resolves and says what A claims. A does h
 ## The user's call
 
 - Not yet made.
+
+
+# Step 14, the second run, after steps 14a to 14c
+
+As `docs/dev/blind-comparison.md` says, with item 4 as step 14b landed it.
+
+## The input, second run
+
+- Roadmap entry 3 of `docs/roadmap.md`, "The writing base", with the request to be interviewed until its design decisions are settled, in a clone of this repository at 833e2e8, the commit before step 13's interview, with `skills/grill/` replaced by the skill as landed at 32a0107 (version 1.2.0).
+
+## The key, second run
+
+In `14-blind-comparison-key.md`, section "Second run".
+
+## The order, second run
+
+- `python3 -c 'import random; print(random.choice(["new is A", "old is A"]))'` printed `new is A`.
+- Judge 5: A is side-1, B is side-2. Judge 6, the order swapped: A is side-2, B is side-1.
+
+## The judge's copy (item 4)
+
+- Paths removed: `skills/grill/`; `.scratch/2-e-grill/`, the ledger of plan 2.E, which builds `grill` (it holds `agents/reviews/9a-round-0.diff` and `12-round-0.diff`, the only diffs under `.scratch/` that change `skills/grill/`, by `grep -rln "^+++ b/skills/grill"`); the copy's `.git`.
+- Kept in the ledger's place: `.scratch/2-e-grill/plan.md` holding the one Rulings bullet of the plan that names entry 3, "Entry 3 and step 13", on its line 125, every other line of the file left empty so that the line numbers the outputs cite hold.
+- Lines removed: `docs/roadmap.md:25`, the gate of entry 2.E, which names the comparison and "wins or ties", left as an empty line. No other line of the copy names `grill-with-docs` outside the removed ledger except `.scratch/comparison-2026-09-28/rulings.md:51`, which describes the skills and names no comparison, and was kept.
+- Copied in: the three files of the entry's `rebuild: writing` rows (`docs/academic-coverage.md:76`, `:100`, `:101`), from `research-hub/.agents/skills/academic-paper/references/` to `_sources/research-hub/.agents/skills/academic-paper/references/`: `academic_writing_style.md`, `writing_judgment_framework.md`, `writing_quality_check.md`.
+- Pages saved: the 16 URLs the outputs cite, each fetched with `curl -sL`, the three APA pages through the Wayback Machine as side-1 cites them, all HTTP 200, in `_cited-urls/01` to `16` with `_cited-urls/index.md`. None is a file of either skill.
+- Not copied: the research-hub folders side-2 names as medical manuscripts (`projects/manuscripts/meseret-cirrhosis`, `bttn-incident-af`, `fed-multicellular-immune`), folders and not files an output cites; judge 6 says the last two could not be checked.
+- Marks removed from the outputs: side-1's "Round 1 of `/grill 3`, roadmap entry 3" became "Round 1 of the interview on roadmap entry 3"; each side's closing "Files written" line became "Files written: none (`git status --short` printed nothing)."
+
+## The judges, second run
+
+- Judge 5: `claude -p --disable-slash-commands --model opus --output-format stream-json --verbose < prompt-1.txt`, started in its own copy `bc14r/judge-1`. Served model (`init`): claude-opus-5-5; skills: none. `modelUsage`: claude-opus-5-5 (10974 output tokens), no other key; 21 turns; permission denials: Bash three times; cost 0.90 USD. Global instruction files loaded: ~/.claude/CLAUDE.md and the five files of ~/.claude/rules/ (no-claim-without-a-command.md, never-take-the-lazy-option.md, no-quick-answers.md, scripts-compute-facts.md, answers-reach-axel-in-full.md).
+- Judge 6: the same command with `prompt-2.txt`, in `bc14r/judge-2`. Served model (`init`): claude-opus-5-5; skills: none. `modelUsage`: claude-opus-5-5 (13291 output tokens), no other key; 25 turns; permission denials: Bash six times; cost 0.98 USD. Global instruction files loaded: the same six.
+- Each was told to judge each output by what the input and its user need, and that no skill's text, wherever the input quotes it, is the standard.
+
+## The outputs as judged, second run
+
+Each character outside ASCII is written as `<U+XXXX>`, its code point.
+
+### side-1
+
+    Round 1 of the interview on roadmap entry 3, "The writing base" (`docs/roadmap.md:56`). The design bar is `industry`, since `.agents/plan.yaml` sets no `design_bar`. `libraries` is `avoid`, so no option adds a dependency, and Vale and proselint appear below only as evidence. No ADR is in force: `docs/adr/` holds only `README.md` and `template.md`. No plan is open for entry 3, and `.scratch/rulings/3-the-writing-base.md` does not exist, so the numbers start at D1. The D1 and D2 quoted in the carried rulings further down are the decisions of the draft `.scratch/plan-drafts/3-the-writing-base.md`, not the decisions of this round. The repository's goals come from the opening of `README.md`, since `docs/dev/design-principles.md` does not exist. `README.md:3` says the skills "carry no project name and no path" and that everything specific to a repository comes from its `.agents/plan.yaml`. The goal that entry 3 serves is entry 16's: "The new writing skills replace the installed academic skills" (`docs/roadmap.md:157`).
+
+    ## D1. The form of the writing base (goal part: "A `writing` skill folder the writing skills share")
+
+    - **A. A skill `skills/writing/` with its own review.** `/writing <file>` reads a draft against the rules and reports each violation with its line quoted and its rule named, and the user decides on each one. Its `references/` holds the pages that `literature`, `paper`, `paper-review`, `grant` and `project-docs` read, named as "the `writing` skill's `references/<file>`" (`docs/dev/skill-layout.md:74`). *Pro:* the rules and the one review that applies them stay in one place. The consuming skills call that review and write no review of their own. The gate can run the review on a real draft before any consuming skill exists. *Con:* one more skill to maintain.
+    - **B. A skill folder of reference pages only.** `SKILL.md` says which page applies to which kind of text, and the folder has no review of its own. *Pro:* less to build now. *Con:* each of the five consuming skills writes its own review of prose. Entry 3 also comes before all of them (`docs/roadmap.md` lines 75 to 122), so until they exist nothing runs the rules on a real draft.
+    - **C. No skill.** The academic rules are added to the prose standard template. *Pro:* no new folder. *Con:* the prose standard binds "every prose surface" of every repository `repo-setup` sets up (`skills/repo-setup/templates/docs/dev/prose-standard.md:3`). A C++ repository's docs would then carry rules on tense per section and hedging.
+
+    **Industry:** Vale shares a style as a package that each project names: "Update the package, run `vale sync` again, and every project that names it has the new rules" (https://docs.vale.sh/keys/packages.md, fetched in this session). Its review reports "the line and column, the level, the message, and the rule that fired" (https://docs.vale.sh/topics/cli.md, fetched in this session). vercel-labs/writing-guidelines ships its rules as `AGENTS.md`, for agents to apply while writing, and as `command.md`, "a self-contained review prompt that reads files and outputs findings in a terse `file:line` format" (https://raw.githubusercontent.com/vercel-labs/writing-guidelines/main/README.md, fetched in this session).
+
+    **Recommend A.** The consuming skills then share one set of rules and one review, as the entry's goal of a folder "the writing skills share" asks. The gate is then run on a real draft now, not after entries 5 to 12.
+
+    Lazy option: B. It costs less now, and leaves the review to be written five times later.
+
+    ## D2. Where the prose standard stands (goal part: "the prose standard")
+
+    - **A. One page, named and not copied.** The base names `repo-setup`'s `templates/docs/dev/prose-standard.md` as the prose standard. When a repository has its own `docs/dev/prose-standard.md`, the base uses that page instead. `skills/writing/` holds no copy. *Pro:* "One meaning has one place" (`docs/dev/skill-layout.md:59`). It also keeps the ruling of plan 2.C, Decision A (`.scratch/archive/2-c-scripts-compute-facts-and-writing-is-removed/plan.md:31`). A repository with no page of its own, such as research-hub (`ls` finds no `docs/dev/` there), gets Ordo's page. *Con:* the `writing` skill reads a file of another skill.
+    - **B. Moved into `skills/writing/references/prose-standard.md`,** with `repo-setup` copying from there. *Pro:* the page sits with the skill that reads it. *Con:* this reopens 2.C Decision A: "(a), the prose standard goes back to `skills/repo-setup/templates/docs/dev/prose-standard.md` with its v2.0.0 content, and the paths in `.agents/plan.yaml` and `skills/repo-setup/SKILL.md` follow it (the user)". It needs a new ruling that names Decision A as the ruling it replaces.
+    - **C. A copy in both places.** *Pro:* each skill reads a file of its own. *Con:* the two copies drift apart (`docs/dev/skill-layout.md:88`).
+
+    **Industry:** Vale reads a package's configuration "before your own, so its settings are the base yours sit on" (https://docs.vale.sh/keys/packages.md, fetched in this session). A project turns a rule off or on by name in its own `.vale.ini` (https://docs.vale.sh/topics/.vale.ini.md, fetched in this session). The Google developer documentation style guide says to "Refer to project-specific guidelines first, then this guide" (https://developers.google.com/style, fetched in this session).
+
+    **Recommend A.** Everything specific to a repository comes from that repository (`README.md:3`), and one page with a local override is what the reference line shows production tools doing.
+
+    Lazy option: none. A costs the least and leaves no work undone. C costs one copy now and leaves two copies to keep equal by hand.
+
+    ## D3. The anti-pattern table (goal part: "the anti-pattern table")
+
+    - **A. Dropped as a part of its own.** Sections 0 and A to F of the prose standard are the anti-pattern list. The items of `writing_quality_check.md` that the prose standard lacks are settled in D5 and D6. *Pro:* each rule has one place. *Con:* a reviewer looks up a rule in the page's sections rather than in one table.
+    - **B. Kept as `skills/writing/references/anti-patterns.md`,** one row per pattern (the pattern, why it fails, what to do instead), taken from the prose standard and the sources. *Pro:* the reviewer scans a single table. *Con:* the prose standard's rules are stated a second time, and the two copies drift apart.
+    - **C. Kept as a table of AI tells that are signs, not rules,** which the review names beside a violation. *Pro:* the review uses the vocabulary that published lists use. *Con:* a sign that is not a rule decides nothing, and every tell the review could act on is already a rule of the prose standard.
+
+    **Industry:** vercel-labs/writing-guidelines names six "AI-generated tells" as rules inside its rules file and its review prompt, not in a separate table. An example: "NEVER: Summary-style transitions recapping the previous paragraph" (https://raw.githubusercontent.com/vercel-labs/writing-guidelines/main/AGENTS.md, fetched in this session). Wikipedia's list says it "is descriptive, not prescriptive; it consists of observations, not rules" and that the patterns "are also only potential signs of a problem, not the problem itself" (https://en.wikipedia.org/w/index.php?title=Wikipedia:Signs_of_AI_writing&action=raw, fetched in this session).
+
+    **Recommend A.** The prose standard already takes its tells from vercel-labs as rules (`prose-standard.md:5`), and a second table would repeat them.
+
+    Lazy option: none. A costs the least and leaves nothing undone.
+
+    ## D4. The rules the goal's checks named: dash asides, history words and word counts per section (goal part: "the checks for non-ASCII, dash asides, history words and word counts per section", beyond what the carried ruling settles)
+
+    The carried ruling below settles that no counting script is built, that the review reads, and that the ASCII rule uses `LC_ALL=C grep -n '[^ -~]'`. What stays open is whether these three rules are rules of the writing base.
+
+    - **A. Dash asides stay; history words and word counts per section go to the entries that own them.** Dash asides stay as the prose standard's hard rule, which the review reads for (`prose-standard.md:13`). History words leave the base: they are rule 10 of the change standard for code and comments (`docs/dev/change-standard.md:36`) and part of entry 4's goal, "no history" (`docs/roadmap.md:66`). Word counts per section leave the base: a limit is a funder's or a venue's, which is entry 8's goal ("page limits", `docs/roadmap.md:101`) and entry 13's venue files (`docs/roadmap.md:129`). *Pro:* each rule sits in the entry whose text it governs. *Con:* the review of a grant section does not report a limit before entry 8 exists.
+    - **B. All three stay as rules of the base.** The review reads for dash asides and history words, and it takes a word limit per section that the user gives for each run. *Pro:* one review covers all three. *Con:* a history rule for a manuscript has no source among the three `rebuild: writing` files. A limit typed by hand for each run repeats what entries 8 and 13 hold per funder and venue.
+
+    **Industry:** Vale counts in a script where the author chooses to: "`occurrence` enforces the maximum or minimum number of times a particular token can appear in a given scope" (https://docs.vale.sh/checks/occurrence.md, fetched in this session). Here, a count shown as a finding is ruled out by `docs/dev/change-standard.md:16` and by the carried ruling.
+
+    **Recommend A.** Each rule is kept, in the entry that owns the text it governs, and nothing is dropped.
+
+    Lazy option: none. The rules that A moves already stand in the goals of entries 4 and 8.
+
+    ## D5. What the base takes from the three `rebuild: writing` sources
+
+    The sources are research-hub's `academic-paper/references/academic_writing_style.md` (188 lines), `writing_judgment_framework.md` (59 lines) and `writing_quality_check.md` (173 lines), read in full in this session. The coverage rows for them are `docs/academic-coverage.md:76`, `:100` and `:101`.
+
+    - **A. The rules the prose standard lacks, each reconciled with it.** The base takes these:
+      - terms defined at first use;
+      - clear antecedents;
+      - the hedging scale, with when to hedge and when not to;
+      - tense per section;
+      - the Engineering and CS register;
+      - full forms, not contractions;
+      - the paragraph-removal clarity test;
+      - the reader's four questions;
+      - the "so what" per section.
+
+      It leaves out the following, each for the reason given:
+      - the zh-TW conventions and the other five registers, as coverage row 76 says;
+      - the lists of transition words, which name no rule a sentence can be held to;
+      - the TEEL paragraph, whose fixed four parts are the mirror structure the prose standard bans (`prose-standard.md:52`);
+      - the wordiness and vague-language tables, which prose standard sections A and C already hold;
+      - the burstiness targets per section, whose rule prose standard E already states;
+      - the "third person" advice, since APA says the opposite (see the reference line);
+      - the revision decision matrix, which goes to `rebuttal` (coverage row 100);
+      - the instruction to "fix the issues silently" (`writing_quality_check.md:173`), since the review reports each violation.
+
+      *Pro:* no rule of the base contradicts the prose standard, and each record the gate asks for can show where each rule of the source went. *Con:* reconciling the sources takes more reading now.
+    - **B. A, plus the Sciences, Social Sciences, Humanities, Education and Medicine/Health registers.** *Pro:* a paper outside Engineering and CS gets its register. *Con:* this goes beyond the approved coverage row, which keeps "Engineering and CS".
+    - **C. The three files copied into `references/` as they are, minus zh-TW.** *Pro:* nothing of the sources is lost. *Con:* the base then contradicts the prose standard. For example, "<U+2264> 3 per paper" em dashes (`writing_quality_check.md:60`) against zero (`prose-standard.md:13`), and "fix silently" against a review that reports.
+
+    **Industry:** APA gives tense per section: the past or present perfect for the literature review and the method, the past for results, and the present for "Discussion of implications of results" (Wayback copy of https://apastyle.apa.org/style-grammar-guidelines/grammar/verb-tense, fetched in this session). APA says: "Use first-person pronouns in APA Style to describe your work" (Wayback copy of .../grammar/first-person-pronouns, fetched in this session). Widom: "all 'variables' (terminology and notation) in the paper should be defined before being used, and should be defined only once" (http://infolab.stanford.edu/~widom/paper-writing.html, fetched in this session). The Manchester Academic Phrasebank calls "devices for lessening the strength of a statement or claim ... hedging devices" (https://www.phrasebank.manchester.ac.uk/using-cautious-language/, fetched in this session).
+
+    **Recommend A.** The goal is a base that the writing skills share without contradiction, and A keeps every rule of the sources that a review can hold a draft to.
+
+    Lazy option: C. It costs one copy now, and leaves every contradiction with the prose standard for the review to meet on each run.
+
+    ## D6. The exceptions to the prose standard for a manuscript
+
+    - **A. Two exceptions, stated in the base for a manuscript only.** Text quoted from a cited source keeps its wording and punctuation. The Introduction may close with an outline of the paper's sections. Every other rule holds, ASCII included, with a symbol written in the source format's ASCII form (a LaTeX command such as `$\kappa$`). Ordo's own pages stay under the prose standard whole. *Pro:* a quotation stays exact, and the rest of the standard binds the manuscript. *Con:* two exceptions for the review to apply.
+    - **B. A, and the ASCII rule does not bind a manuscript,** so symbols and typographic quotes are written as the venue prints them. *Pro:* a `.docx` grant keeps its typography. *Con:* the manuscript's source is no longer read cleanly in a terminal, a diff or a grep (`prose-standard.md:5`), and Springer Nature asks for TeX code in any case.
+    - **C. No exceptions.** *Pro:* one rule set with no cases. *Con:* a quotation stripped of its em dash no longer matches its source, and the rule that a quoted violation "is fixed at its source" (`prose-standard.md:75`) cannot be followed for a published paper.
+
+    **Industry:** APA says a quotation "must match the wording, spelling, and interior punctuation of the original source, even if the source is incorrect" (Wayback copy of .../citations/quotations/errors, fetched in this session). Widom's introduction ends with the contributions list, which "doubles as an outline of the rest of the paper" (http://infolab.stanford.edu/~widom/paper-writing.html, fetched in this session). The IEEE Editorial Style Manual says nothing about such an outline (https://journals.ieeeauthorcenter.ieee.org/wp-content/uploads/sites/7/IEEE-Editorial-Style-Manual-for-Authors.pdf, fetched in this session). Springer Nature: "All special characters must be converted into the appropriate TeX code" (https://www.springernature.com/gp/authors/campaigns/latex-author-support, fetched in this session). Google (https://developers.google.com/style/dashes) and IEEE both allow em dashes. The prose standard departs from them on purpose (`prose-standard.md:5`).
+
+    **Recommend A.** It makes only the two exceptions that the sources and APA show a manuscript needs. It keeps the ASCII rule, which Springer's TeX requirement already asks for.
+
+    Lazy option: C. It costs nothing now, and leaves every quotation and Introduction outline to fail the review.
+
+    Answer as `D<n> => <letter or text>`, one line per decision; `D<n> Agree` takes the recommendation; `D<a>-<b> Agree` takes it for a range.
+
+    ### Settled by carried rulings
+
+    - The checks become the review, and the ASCII rule is one command (goal part 4, in part). ".. settled: D1 (b), no counting script, the review reads, and `LC_ALL=C grep -n '[^ -~]'` is named for the ASCII rule", `.scratch/2-e-grill/plan.md:125`.
+    - What entry 4 waits on 3 for: "D2 (a), entry 4 is redrafted after entry 3 is approved, waiting on 3 for the prose rules only", `.scratch/2-e-grill/plan.md:125`.
+    - Whether the old `/writing` of plan 3 is reused: "everything of `/writing` is thrown out rather than repaired; roadmap entry 3 is redone from its sources after this entry", `.scratch/archive/2-c-scripts-compute-facts-and-writing-is-removed/plan.md:30`.
+    - The sample file and the real run in the gate (gate parts "the checks run on one sample file holding one planted violation per check, flag each of them, and flag nothing in a clean file" and "the checks run on a real draft of yours, and you review what they flag"): "entries 3 and 4 keep one sample file with a planted violation per check plus the real run", `.scratch/archive/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/plan.md:136`. What "per check" means once the checks are the review is still open, and waits on D1.
+
+    No archived plan of entry 3 exists: plan 3's ledger was deleted, not archived. So no archived plan is listed as set aside.
+
+    ### Decisions for a later round
+
+    These wait on this round:
+    - the review's output, and whether it edits the draft (waits on D1);
+    - what "one planted violation per check" means now (waits on D1 and D5);
+    - the gate parts "the skill follows `docs/dev/skill-layout.md`" and the per-row records of `skills/writing/` (wait on D1 and D5);
+    - the glossary terms "writing base" and "writing skills" (waits on D1);
+    - the roadmap diff of entry 3, and "record as ADR?" for the answers that pass the ADR test.
+
+    Files written: none (`git status --short` printed nothing).
+
+### side-2
+
+    <U+2753> **Q1** - **What the `writing` skill is**: Entry 3 needs a skill folder that `literature`, `paper`, `paper-review` and `grant` wait on (`docs/roadmap.md` lines 75, 82, 89 and 103). Plan 2.C removed the old `/writing` because it was built around `check_prose.py`, an 817-line script. The ruling that removed it says "everything of `/writing` is thrown out rather than repaired" (`.scratch/archive/2-c-scripts-compute-facts-and-writing-is-removed/plan.md:30`). Your ruling D1 (b) settles that there is no counting script this time. What is left to decide is what the folder does:
+
+    - (a) **References only.** A `skills/writing/references/` folder that the other skills read. There is no command. Pros: nothing to invoke or maintain beyond the pages. Cons: you cannot check a draft on its own, and the entry's gate has nothing to run on a real draft except through a later skill.
+    - (b) **References plus a read-only `/writing <file>` review.** The review reads the draft section by section against the rules. It reports each violation with its line quoted and its rule named, and you decide on each one. It changes nothing in the file. This is the redraft in `.scratch/plan-drafts/3-the-writing-base.md`. Pros: it can be gated now on a real draft, and later skills can call the same review. Cons: one more skill surface, and it is close in name to the removed command.
+    - (c) **A review that also rewrites.** Like (b), but it applies the fixes you accept. Pros: fewer manual edits. Cons: rewriting manuscript text belongs with `paper` (entry 5), and it would make this entry wait on decisions that entry makes.
+
+    The lazy option is (a): it has the least to build and leaves the gate without a real run.
+
+    <U+27A1><U+FE0F> (b). It is the only option whose gate is judged by you reading a real draft, it is what the redraft already proposes, and it respects D1 (b) because the reading is done by the model.
+
+    ---
+
+    <U+2753> **Q2** - **Where the prose standard lives relative to the `writing` skill**: The prose standard exists once, as `skills/repo-setup/templates/docs/dev/prose-standard.md`. Your Decision A in plan 2.C put it back there (`plan.md:31`), and `.agents/plan.yaml:12` names that path under `standards`. Ordo has no `docs/dev/prose-standard.md` of its own (`ls` reports no such file). Plan 3 had moved the page into `skills/writing/references/`.
+
+    - (a) **Point to it, do not copy it.** The `writing` skill's pages name the `repo-setup` skill's `templates/docs/dev/prose-standard.md` as the base, the way `skills/repo-setup/SKILL.md:33` already names files of `ordo-init` and `roadmap`. The skill's own pages state only what the academic rules add or change. Pros: one copy, which `docs/dev/skill-layout.md:59` and `:88` require. Cons: `writing` works only where `repo-setup` is installed too. `utils/pin.sh` links every skill, so this holds on your machine, but a per-project `npx skills add writing` alone would miss the page.
+    - (b) **Copy it into `skills/writing/references/`.** Pros: the folder stands alone. Cons: two copies that drift, which is the anti-pattern at `skill-layout.md:88`, and `sync_rules.py` does not compare this page, so nothing would catch the drift.
+    - (c) **Move it into `skills/writing/` again** and point `repo-setup` and `plan.yaml` at the new place. Pros: one copy, owned by the skill about prose. Cons: it reverses your Decision A of 2.C, and `repo-setup` would then depend on `writing`.
+
+    The lazy option is (b): a copy costs nothing now and leaves the drift for later.
+
+    <U+27A1><U+FE0F> (a). It keeps one copy and keeps Decision A.
+
+    ---
+
+    <U+2753> **Q3** - **Which rule holds when the prose standard and the academic sources disagree**: The prose standard was written for "every prose surface in this tree" (line 3), and its rules were written for a repository read in a terminal (line 5). Read against the three sources, several of its rules misfire on a LaTeX manuscript:
+
+    - **Passive voice.** Prose standard line 63 says to rewrite it. `academic_writing_style.md:56` and `:72` say passive voice is normal in methods.
+    - **Dashes.** Line 13 bans `--` as an aside. LaTeX types number ranges as `--` (pp. 1--10) and paired names as `Bose--Einstein`, and the ASCII grep also hits `$a - b$`.
+    - **Sentence length.** Line 64 asks for under 20 words. `writing_quality_check.md:153` allows low length variation in methods.
+    - **Meta-commentary.** Line 41 bans describing what the page will do. `writing_quality_check.md:103` keeps roadmap sentences in the introduction.
+    - **Vague qualifiers.** Line 26 bans "significantly", which has a statistical meaning. Line 24 bans "simple", which appears in "simple linear regression".
+    - **Restating closes and paragraph length.** Lines 60 and 48 cut restating closes and cap paragraphs at about four sentences. These clash with abstracts, TEEL paragraphs (`academic_writing_style.md:122-126`) and one-sentence contribution statements (`writing_judgment_framework.md:47`).
+    - **"Worth noting".** Line 15 bans it. `academic_writing_style.md:179` recommends it, in the zh-TW table, which is dropped anyway.
+
+    The options:
+
+    - (a) **The prose standard is the base, with named exceptions.** The `writing` skill's academic page lists each prose-standard rule that does not hold in a manuscript and says what holds instead, one line each, settled in the next round. Pros: every exception is explicit and yours. Cons: one more page to keep aligned with the prose standard.
+    - (b) **The prose standard applies whole to manuscripts.** Pros: one standard, no exceptions. Cons: it would flag correct academic conventions such as passive methods and statistical "significantly", so you would overrule the same flags on every paper.
+    - (c) **The academic sources win for manuscripts.** The prose standard does not apply to `.tex` at all. Pros: no conflicts. Cons: you lose the stricter rules the prose standard has and the sources lack, such as em dash zero and the recap-opener ban.
+
+    The lazy option is (b), because it needs no exception list.
+
+    <U+27A1><U+FE0F> (a). The exact list of exceptions comes as the next round's questions, one per conflict.
+
+    ---
+
+    <U+2753> **Q4** - **What the academic page takes from the three sources**: `docs/academic-coverage.md` rows 76, 100 and 101 already rule three things: keep the Engineering and CS register and drop zh-TW, send the revision decision matrix to `rebuttal`, and treat the anti-pattern checks as belonging to this entry. What is left is which of the sources' other rules come in:
+
+    - **Proposed to take:**
+      - terms defined at first use
+      - clear antecedents, beyond the prose standard's "cold opens"
+      - the hedging scale, with when to hedge and when not (`academic_writing_style.md:80-95`)
+      - tense per section (`:156-164`)
+      - "cite the source or remove" for vague claims (`:150-154`)
+      - the clarity test (`writing_judgment_framework.md:7-13`)
+      - the reader's four questions (`:17-24`)
+      - the "so what" per section (`:40-47`)
+    - **Proposed to drop:**
+      - the scoring tiers 0 / 1-3 / 4+ (`writing_quality_check.md:167-171`). They contradict "judged per instance" and the rule that a count is never a finding.
+      - the recommended transition list (moreover, furthermore, additionally), since the prose standard's vocabulary rules conflict with it.
+      - TEEL as a fixed paragraph shape, since it conflicts with "no mirror structure" (prose standard line 52).
+    - **Open point on the register:** the fact search found medical manuscripts among your drafts, for example `projects/manuscripts/meseret-cirrhosis`, `bttn-incident-af` and `fed-multicellular-immune` in research-hub. The coverage row keeps only the Engineering and CS register, but `academic_writing_style.md` also has a Medicine register (lines 29-75).
+
+    The options:
+
+    - (a) Take and drop as listed, and add the Medicine register.
+    - (b) Take and drop as listed, with Engineering and CS only, as the coverage row says.
+    - (c) Take every general rule of the three sources, including TEEL, the transitions and the scoring tiers.
+
+    The lazy option is (b) if the medical papers are yours to review: it keeps the approved row and leaves those papers without their register.
+
+    <U+27A1><U+FE0F> (a), provided the medical manuscripts are ones this skill will review. If they are not, (b).
+
+    ---
+
+    <U+2753> **Q5** - **The names**: Three names now overlap:
+
+    - The roadmap entry is titled "The writing base".
+    - The skill is named `writing`.
+    - The coverage page and the entries say "the writing skills" for `literature`, `paper`, `paper-review`, `grant` and `rebuttal`.
+
+    "The writing skills" also reads as "the `writing` skill", so a sentence like "the writing skills read it" is ambiguous. The options:
+
+    - (a) Canonical **`writing` skill** for this folder. **Manuscript skills** for the group that reads it. Avoid "writing base" and "writing skills". The entry's title becomes "3. writing", in the style of "4. code-comments".
+    - (b) Keep **writing base** for this folder and **writing skills** for the group.
+    - (c) Canonical **`writing` skill**, and keep "writing skills" for the group.
+
+    The lazy option is (b), since it renames nothing.
+
+    <U+27A1><U+FE0F> (a). The glossary term is written as soon as you rule.
+
+    ---
+
+    Already settled and not asked again (2.E ruling "Entry 3 and step 13", `.scratch/2-e-grill/plan.md:125`): D1 (b), no counting script, with `LC_ALL=C grep -n '[^ -~]'` named for the ASCII rule; and D2 (a), entry 4 is redrafted after entry 3 is approved.
+
+    Waiting for the next round, because they depend on Q1 to Q4:
+
+    - the gate, including which real draft it runs on and whether it adds a blind comparison against `academic-paper`'s writing check
+    - how `literature`, `paper`, `paper-review` and `grant` use the skill
+    - which file types the review reads
+    - each exception under Q3
+
+    Files written: none (`git status --short` printed nothing).
+
+## The verdicts, second run
+
+### Judge 5 (A is side-1)
+
+    ## Critical failures of A
+
+    1. **D5 and D6 say the manuscript base does not conflict with the prose standard. The files show several conflicts that A does not list.**
+       - D5 recommends taking "the Engineering and CS register". That register says "Voice: Passive common for methods" (`academic_writing_style.md:56`).
+       - D5's Pro then says "no rule of the base contradicts the prose standard".
+       - D6 recommends two exceptions only and says "Every other rule holds, ASCII included".
+       - Against that, the prose standard says:
+         - "Passive voice: rewrite unless the actor is irrelevant" (`prose-standard.md:63`).
+         - "Paragraphs <U+2026> stay under roughly four sentences" (`:48`).
+         - "significantly" is a banned vague qualifier (`:26`), although in a results section it usually has a statistical meaning.
+         - Sentences stay "under roughly 20 words" (`:64`), while `writing_quality_check.md:153` accepts uniform sentence length in methods.
+       - The user is asked to rule on D6 with an option list that leaves these conflicts out, so the recommendation "only the two exceptions that the sources and APA show a manuscript needs" rests on an incomplete reading. The passive-voice conflict can be argued away, because methods sentences often have an irrelevant actor. The paragraph cap and "significantly" cannot.
+
+    I found no other critical failure in A.
+    - Every line reference I checked matches: `roadmap.md:56/66/75/101/122/129/157`, `skill-layout.md:59/74/88`, `change-standard.md:16/36`, `academic-coverage.md:76/100/101`, `README.md:3`, `.scratch/2-e-grill/plan.md:125`, `2-c plan.md:30-31` and `2-b plan.md:136`.
+    - The source line counts (188, 59 and 173) match `wc -l`.
+    - Every quotation from a cited page is present in the saved copy:
+      - Vale packages, `.vale.ini`, CLI and occurrence pages;
+      - the vercel README and AGENTS.md;
+      - both Wikipedia sentences, found at line 10 of 11.html in wiki markup;
+      - APA on verb tense, first-person pronouns and quotation errors;
+      - Google's "Refer to project-specific guidelines first";
+      - Springer's TeX sentence;
+      - Widom's "defined before being used" and "doubles as an outline";
+      - the Phrasebank's "hedging devices".
+    - A covers every part of the entry's goal: the form of the base (D1), the prose standard (D2), the anti-pattern table (D3), the named checks (D4), what is taken from the sources (D5) and the exceptions (D6). It also lists the carried rulings with their lines.
+
+    ## Critical failures of B
+
+    1. **B leaves out three parts of the entry's goal.** The goal is "the prose standard, the anti-pattern table, and the checks for non-ASCII, dash asides, history words and word counts per section" (`docs/roadmap.md` entry 3).
+       - None of Q1 to Q5 asks about the anti-pattern table, the history-words check or the word counts per section.
+       - None of the three appears under "Already settled" or under "Waiting for the next round".
+       - The carried ruling B cites (`2-e-grill/plan.md:125`) settles only "no counting script". It does not settle whether these three stay part of the base.
+       - The user asked to be interviewed until the entry's design decisions are settled, so this is a missing part the input asks for.
+    2. **Part of Q3's premise is false.**
+       - "the ASCII grep also hits `$a - b$`": `LC_ALL=C grep -n '[^ -~]'` matches only characters outside the printable ASCII range from space to tilde. `-` and `$` are inside that range, so the command does not flag `$a - b$`.
+       - "Line 13 bans `--` as an aside. LaTeX types number ranges as `--` (pp. 1--10)": line 13 bans `--` only "as an aside" and says "a hyphen inside a compound word or a number range is not a dash". A LaTeX range is therefore not in conflict with it.
+       - This makes the "Dashes" item in Q3's list of conflicts largely spurious.
+    3. **Minor, not critical:** "a Medicine register (lines 29-75)" cites the span of all six registers. The Medicine register is lines 69 to 75.
+
+    B's other claims check out:
+    - `plan.yaml:12` names the path.
+    - `check_prose.py` had 817 lines (`2-c <U+2026>/1-report.md:157`: "0 / 817 | deleted").
+    - `sync_rules.py` compares only the shared-rules and plan-terms blocks.
+    - `repo-setup/SKILL.md:33` names files of other skills.
+    - The medical manuscript is named in `2-b <U+2026>/14-rows.md:11` (`meseret-cirrhosis`).
+
+    B's Q3 and Q4 raise two real questions that A lacks: which prose-standard rules misfire on a manuscript (passive voice, "significantly", paragraph length), and whether the user's medical papers need the Medicine register. Its naming question (Q5) is also useful.
+
+    ## Verdict: A
+
+    1. **A covers the whole entry and B does not.** A puts a decision to the user on each part of the goal, D1 to D6. B's failure 1 leaves the anti-pattern table, the history-words check and the word counts per section out entirely, so a user who answered all of B's questions would still have those parts of entry 3 unsettled.
+    2. **A's claims and citations hold up; B has a false technical claim.** Every file line and saved page A cites says what A says it does. B's claim about the ASCII command and its number-range dash conflict are contradicted by `prose-standard.md:13` and by what the command matches (B failure 2).
+    3. **B does better on one point, and it does not outweigh the above.** B's Q3 sees the conflicts between the prose standard and manuscript conventions more clearly, and A's D6 misses most of them (A failure 1). That gap in A can be closed within A's own structure: add options to D6 in the next round. B's gaps are missing decisions and a premise that has to be corrected.
+    4. **A's reasons are more complete.** A gives a "Lazy option" line for every decision and grounds each decision in a documented practice (Vale, vercel-labs, APA, Springer). B gives no outside evidence for its options, and it makes its register recommendation conditional on a fact it could have put to the user as a question.
+
+### Judge 6 (A is side-2)
+
+    ## Critical failures of A
+
+    1. **Two goal parts of entry 3 get no question.** Entry 3's goal names four parts (`docs/roadmap.md:59`): "the prose standard, the anti-pattern table, and the checks for non-ASCII, dash asides, history words and word counts per section."
+       - The carried ruling at `.scratch/2-e-grill/plan.md:125` settles only one of these checks: there is no counting script, and the ASCII rule is one `grep` command.
+       - That leaves open what happens to the history-words check and the word-counts-per-section check. A does not ask about either one, and its list of later questions does not name them.
+       - A also asks nothing about the anti-pattern table as a thing of its own (a separate page, or folded into the prose standard). It mentions only that coverage row 101 assigns "the anti-pattern checks" to this entry.
+       - The user asked to be interviewed until the entry's design decisions are settled. With these parts missing, A's rounds cannot reach that point unless the user raises them.
+    2. **One factual claim in Q3 is false.** The Dashes bullet says: "and the ASCII grep also hits `$a - b$`."
+       - The ASCII check is `LC_ALL=C grep -n '[^ -~]'` (prose standard line 75, and the carried ruling). It matches only characters outside the printable ASCII range.
+       - `$a - b$` is plain ASCII, so the grep does not match it. The spaced-dash scan might, but A names the ASCII grep.
+       - Q3 uses this claim as evidence that a rule misfires on manuscripts, so a wrong fact goes into a question the user is asked to rule on.
+
+    Lesser problems, not critical:
+    - In Q4, A cites the Medicine register as `academic_writing_style.md` "lines 29-75". Those lines hold all six registers; Medicine is lines 69-75.
+    - The same Q3 bullet counts LaTeX number ranges (`pp. 1--10`) as a rule that misfires. Prose standard line 13 already says "a hyphen inside a compound word or a number range is not a dash."
+    - In Q4, A recommends adding the Medicine register, which goes beyond the approved coverage row 76. A says so openly and makes the recommendation conditional, so this is a proposal, not an error.
+
+    The rest of A's citations hold when checked:
+    - The roadmap's "Waits on: 3" lines are 75, 82, 89 and 103.
+    - `2-c .../plan.md:30` and `:31` hold the two quoted rulings.
+    - `plan.yaml:12`, `skill-layout.md:59` and `:88`, and `repo-setup/SKILL.md:33` say what A says.
+    - Prose standard lines 13, 15, 24, 26, 41, 48, 52, 60, 63 and 64 say what A says.
+    - The source lines cited in Q3 and Q4 are correct: `academic_writing_style.md` 56, 72, 80-95, 122-126, 150-154, 156-164 and 179; `writing_quality_check.md` 103, 153 and 167-171; `writing_judgment_framework.md` 7-13, 17-24, 40-47 and 47.
+    - `pin.sh` loops over every `*/SKILL.md`, and `sync_rules.py` compares only the shared-rules and plan-terms blocks.
+    - `meseret-cirrhosis` appears in the archived 2-B reviews as a medical thesis. The other two manuscript names A gives (`bttn-incident-af`, `fed-multicellular-immune`) cannot be checked inside this folder.
+
+    ## Critical failures of B
+
+    None found.
+
+    Checks run:
+    - **Repository claims.** Each one holds:
+      - `README.md:3` says what B quotes.
+      - `docs/dev/design-principles.md` does not exist.
+      - `docs/adr/` holds only `README.md` and `template.md`.
+      - `.scratch/rulings` does not exist.
+      - `skill-layout.md:59`, `:74` and `:88`, `change-standard.md:16` and `:36`, and roadmap lines 66, 101, 129 and 157 say what B says.
+      - Prose standard lines 3, 5, 13, 52 and 75 say what B says.
+      - `writing_quality_check.md:60` ("<U+2264> 3 per paper") and `:173` ("fix the issues silently") are correct.
+      - The quoted ruling at `2-b .../plan.md:136` is on that line.
+      - The line counts 188, 59 and 173 are correct.
+    - **Quotations from web pages.** Each quote was searched for in its saved page under `_cited-urls/`, and each one is there:
+      - Vale's packages page, its CLI page and its `occurrence` check page.
+      - The vercel-labs README and `AGENTS.md`.
+      - Wikipedia's "descriptive, not prescriptive" and "only potential signs of a problem, not the problem itself" (both present, with wiki markup around the words).
+      - Google's "project-specific guidelines first".
+      - APA on quotations ("must match the wording"), on first-person pronouns, and on tense ("Discussion of implications of results").
+      - Widom's "defined before being used" and "doubles as an outline" (split across a line break in the saved page).
+      - Manchester Phrasebank's "hedging devices".
+      - Springer Nature's "converted into the appropriate TeX".
+    - **Not verified.** B's two IEEE claims (the manual "says nothing about such an outline", and IEEE allows em dashes) were not checked, because the PDF was not converted to text in this session. B's remark that research-hub has no `docs/dev/` agrees with the copy here, which holds only `.agents`, but the copy may not be complete.
+
+    B's weakness, which is not a critical failure:
+    - D6 (a) makes two exceptions, then says "Every other rule holds." D5 (a) takes the Engineering and CS register, which says "Passive common for methods" (`academic_writing_style.md:56`). The prose standard says to rewrite passive voice "unless the actor is irrelevant" (line 63).
+    - D5 claims that "no rule of the base contradicts the prose standard". That holds only if methods passives count as cases where the actor is irrelevant.
+    - B also does not raise the statistical sense of "significantly", which A raises. A's catalogue of conflicts in Q3 is more complete here.
+    - The question stays open for the user to answer, so this weakens B's recommendation without making the output unfit for its purpose.
+
+    ## Verdict: B
+
+    1. **Coverage of the entry.** B has a decision for each part of the entry's goal: the form of the skill (D1), the prose standard (D2), the anti-pattern table (D3), the named checks (D4), what the base takes from the sources (D5) and the exceptions for manuscripts (D6). A leaves out the anti-pattern table and the history-words and word-counts checks (A's failure 1). For an interview that is meant to settle the entry's decisions, this is the deciding difference.
+    2. **What B does with the checks the ruling left open.** Its D4 gives each unsettled check a home, with the owning entries cited:
+       - history words go to entry 4 (`roadmap.md:66`, `change-standard.md:36`);
+       - word limits go to the entries for funders and venues (`roadmap.md:101` and `:129`);
+       - the dash-aside rule stays with the prose standard.
+
+       B also records the carried ruling that entry 4 waits on 3 "for the prose rules only", so its D4 is consistent with that ruling.
+    3. **Accuracy.** Every citation in B that was checked holds. A has one false technical claim inside a question the user is asked to rule on (A's failure 2), plus a line range that is too wide.
+    4. **Reasons behind the recommendations.** B backs each recommendation with the repository files and with saved outside references that were checked (Vale, APA, Widom, Springer Nature). A argues from the repository alone, which is adequate but gives the user less to judge each option by.
+    5. **Where A is better.** A's Q3 list of conflicts between the prose standard and the sources is more complete than B's D6. A also puts the ambiguous naming ("writing skills" against the `writing` skill) to the user in this round; B defers the glossary terms to a later round. These strengths do not make up for the missing goal parts.
+
+### The result read through the key, second run
+
+- Judge 5 chose A, side-1, `grill`. Judge 6 chose B, side-1, `grill`. The two agree: the result is `grill`.
+- Checked by the orchestrator against the outputs (`grep -c -i`): side-2 names "history" 0 times and "word count" 0 times, side-1 3 and 2 times; side-2's Q3 says "the ASCII grep also hits `$a - b$`", which `[^ -~]` does not match; `prose-standard.md:13` says "a hyphen inside a compound word or a number range is not a dash". Side-1 names "significantly" 0 times, and its D6 lists two exceptions, where both judges name the passive voice of methods, the paragraph cap and the statistical "significantly" as conflicts it leaves out.
+
+## The user's call, second run
+
+- Not yet made.
