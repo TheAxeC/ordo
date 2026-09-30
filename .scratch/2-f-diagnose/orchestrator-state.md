@@ -43,9 +43,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 3 reading (2026-09-30): your `/diagnose` run on the scratch copy is booked (`plan.md`, "Step 3, the real run") with its record at `agents/reviews/3-diagnosis.md` and its fix at `agents/reviews/3-diagnose-fix.diff`. The run reached the cause the ledger books for 2.E step 3: the refusal compared the two folders as text. The step's check ends "reviewed by Axel". Options: (a) approve the run as the step's proof, and step 3 is ticked; pro: the record quotes the red command, the two hypotheses, the probes, the fix and four red tests, and the cause matches db9bbec; con: none found. (b) ask for a second run on another defect before the tick; pro: a second case; con: the gate asks for one real run, and step 4 compares on this same defect. Recommendation (a). Neither is the lazy option: (a) is the step's check as written.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- Step 3 reading (2026-09-30): Axel ruled (a); the run is approved and step 3 ticked.
 
 - Step 1 reading (2026-09-30): approved by Axel; step 1 ticked.
 
@@ -77,5 +79,5 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
-- Step 3 is run and booked, not ticked: open item "Step 3 reading".
-- Next: steps 2a and 2b; step 4 after step 3 is ticked.
+- Steps 1, 2 and 3 ticked.
+- Next: steps 2a and 2b; step 4, the blind comparison.
