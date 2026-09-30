@@ -174,3 +174,86 @@ Not covered by these results: nothing here judges whether the new prose is good;
 
 - The two "as shipped" cases cannot fail on the unchanged tree. The orchestrator ruled on it in round 0, and the ruling is carried out (see "The cases' first run").
 - Nothing else found.
+
+## Repair round 1
+
+Everything in the round's three rulings is done. Where the numbers below differ from the sections above, these are the ones after the round: `check_config.test.sh` has 570 lines and `check_config.py` 240; 37 cases of the test file fail on the unchanged tree (36 before, plus `self-rule-mixed`); `git diff --stat` shows 11 files, 284 insertions, 19 deletions.
+
+### Ruling 1: the quoted-text message is for the six spellings YAML reads as a boolean
+
+- Evidence of the YAML reading: `yaml.safe_load('a: <value>')` gives `True` for `on`, `On`, `ON`, `yes`, `Yes`, `YES`, `true`, `True`, `TRUE`; `False` for `off`, `Off`, `OFF`, `no`, `No`, `NO`, `false`, `False`, `FALSE`; and the text `'oN'`, `'OFf'`, `'yEs'`, `'tRUE'`, `'fALSE'` for the mixed spellings.
+- New case `self-rule-mixed`: `self_rule: oN` unquoted, expecting the one error line `error: self_rule is neither on nor off: 'oN'`.
+- Run before this round's change to `check_config.py` (the code of the first build, which lowercased the value): `sh skills/ordo-init/templates/check_config.test.sh 2>&1 | head -3` printed
+  `FAIL: self-rule-mixed: missing the line [error: self_rule is neither on nor off: 'oN'] in: error: self_rule is the text 'oN' in quotes; write on or off without quotes`.
+- Run on the unchanged tree (the base files read from HEAD, the final test file, the continuing copy `cont.sh`): `FAIL: self-rule-mixed: missing the line [error: self_rule is neither on nor off: 'oN'] in: error: unknown key: self_rule`; 37 cases fail there in all.
+- After the change: `sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1` prints `PASS: check_config.py scratch tests`.
+- The change in `check_config.py`: a constant `QUOTED_SWITCH_WORDS = ("on", "On", "ON", "off", "Off", "OFF")`, and `check_switch` gives the quotes message only for a text value in it (`value in QUOTED_SWITCH_WORDS` in place of `value.lower() in ("on", "off")`); every other non-boolean value gets `<key> is neither on nor off: <value!r>`. The docstring of `check_switch` names the six spellings. The module docstring, line 17, now reads: "self_rule or next_entry is not a boolean, which YAML reads from on, off, yes, no, true and false written in lower case, with a capital first letter or in all upper case (oN and tRUE stay text): the text on, On, ON, off, Off or OFF in quotes has its own message, and any other value, nothing included, is neither on nor off;". Before: "... in any capitalisation: the text on or off in quotes has its own message, ...".
+- The head comment of `check_config.test.sh` (line 3) now says "a spelling YAML reads as text such as oN, or on, On, ON, off, Off or OFF in quotes, which has its own message".
+- Not covered: `yes`, `no`, `true` and `false` written in quotes (for example `self_rule: "yes"`) get `neither on nor off: 'yes'`, since the ruling names six spellings for the quotes message; no case holds them.
+
+### Ruling 2: comments of the test file say what a case checks and when it is red, with no reference to a change
+
+- Changed comments, before and after:
+  - Line 4 (head comment): "Two guards, passing before and after the change, show that ..." became "Two guards show that ..."; "... are refused as before." became "... are refused."
+  - Guard of the one-project example: "# Guard, passing before and after the change: the one-project example as shipped passes with none of the three keys' not-set notes. After the change it is red when the example drops one of the keys (its not-set note is printed); ..." became "# Guard: the one-project example as shipped passes with none of the three keys' not-set notes; red when the example drops one of the keys (its not-set note is printed). The removed-keys case below is its control, and the probe below proves the example holds each key."
+  - Guard of the projects example: "# Guard, passing before and after the change: ... After the change it is red when a project drops a key; ..." became "# Guard: the several-projects example as shipped passes with none of the three notes for tool-a or tool-b; red when a project drops a key. The control removes repair_reviewer from tool-b and the note names the reviewer's value, and the probe below proves each project holds each key."
+  - Twice-written keys: "... is refused with its name, before any value is read. Preserved: the duplicate scan runs on the file as written." became "... before any value is read. Red when the duplicate scan stops running on the file as written."
+  - Beside projects: "... is a key beside projects. Preserved: the keys of a project are not accepted beside projects:." became "... is a key beside projects. Red when the keys of a project are accepted beside projects:."
+- Evidence: `grep -n "as before\|Preserved\|before and after\|before the change\|after the change" skills/ordo-init/templates/check_config.test.sh | wc -l` prints `0`. The suite still ends `PASS: check_config.py scratch tests`.
+
+### Ruling 3: sentences about a changed file as a whole, each with the line that shows it still holds (rule 14)
+
+Each was reread against the file after the change.
+
+| Sentence | Line that shows it still holds |
+|---|---|
+| `README.md:139`: "The example `plan.yaml` describes every key." | `skills/plan/templates/plan.yaml:28-30` holds `self_rule`, `next_entry` and `repair_reviewer`, so the example describes every key the check knows; `README.md:141` says a key left out takes the default its comment gives, and the three comments give theirs |
+| `skills/plan/SKILL.md:33-34`: "Its keys, which of them are required and the default of each optional one are in `templates/plan.yaml` ... and `templates/plan.projects.yaml` ..." and "An optional key missing takes the default the example file gives it." | `plan.yaml:28-30` and `plan.projects.yaml:30-32` and `57-59` hold the three keys with their defaults; for `repair_reviewer` the default the example gives is "the reviewer value", which `skills/plan/SKILL.md:100` says is written into the block |
+| `check_config.py:6`: "The keys, which of them are required and each optional key's default come from the plan skill's templates/plan.yaml ...; the default of repair_reviewer is the configured reviewer." | `example_keys` reads the keys and defaults from `plan.yaml`; `default_note` gives the reviewer's value for `repair_reviewer` |
+| `check_config.test.sh:2`: "each case one configuration it must refuse or pass." | every new case is written through `expect_pass`, `expect_error` or `expect_refusal`, one configuration each |
+| `check_config.test.sh:3`: "each refusal of those eight keys, and of a key written twice, is the one error line." | the eight keys are `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer`; each of their cases uses `expect_refusal`, which counts one error line |
+| `check_config.py:21` (the sentence on value-checked keys): "the value check above replaces the kind check, so a wrong value gives one error" | `VALUE_CHECKED` at line 37 holds the eight keys, so the kind check skips each |
+| `skills/plan/templates/plan.projects.yaml:2`: "Each project takes the keys of plan.yaml, with the same required keys and the same defaults." | each project holds the three keys with the values of `plan.yaml`, lines 30-32 and 57-59 |
+| `skills/ordo-init/SKILL.md:29`: "the keys, which are required, each optional key's default, and the comment that says what the key is" | the three keys carry their comment in `plan.yaml:28-30` |
+| `skills/ordo-init/SKILL.md:98` and `:132-133`, the list of keys left out and of errors and notes | `check_config.py` reports each error and note those lines name (the test cases above) |
+| `README.md:141`: "Every other key is optional." | the three keys are optional (`# optional, default ...` in `plan.yaml:28-30`) |
+
+I found no other sentence about a changed file as a whole: `grep -rn "check_config" docs README.md skills` shows the pages that name the script (`docs/dev/building.md:8`, `README.md:129`, `skills/repo-setup/SKILL.md:34,107`), and none of them states a key list or a count.
+
+### Verify before you report, run again
+
+1. `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` exited 0; it printed `$ <command>` and the output of each of the ten commands, each test ending `PASS: <name> scratch tests`, the glossary check `ok: the plan-terms block equals the template`, the ASCII check with no output, and then `checks: 10 commands passed`.
+
+   Landing note: the lines `checks.sh` printed for the repaired tree, from the landing's run on main after the cherry-pick of `67428df..2ea-1`:
+
+   ```
+   $ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+   PASS: land.sh scratch tests
+   $ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+   PASS: checks.sh scratch tests
+   $ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+   PASS: check_config.py scratch tests
+   $ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+   PASS: sync_rules.py scratch tests
+   $ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+   PASS: git_guard.py scratch tests
+   $ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+   PASS: transcript_window.py scratch tests
+   $ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+   ok: the plan-terms block equals the template
+   $ sh utils/pin.test.sh 2>&1 | tail -1
+   PASS: pin.sh scratch tests
+   $ sh utils/check_coverage.test.sh 2>&1 | tail -1
+   PASS: check_coverage.py scratch tests
+   $ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+   checks: 10 commands passed
+   ```
+
+2. `python3 skills/ordo-init/templates/check_config.py . | grep -c '^error:'` printed `0`; its last line is `ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists`.
+3. `sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1` printed `PASS: check_config.py scratch tests`.
+4. `grep -n '^repair_reviewer: claude:sonnet' .agents/plan.yaml` printed one line, `11:repair_reviewer: claude:sonnet ...`.
+5. `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`.
+6. `git diff | grep -c '^[+-].*version:'` printed `0`.
+7. The table of "The cases' first run" holds, with `self-rule-mixed` added as above; the cases that pass on the unchanged tree are the two guards, the four cases this step adds for the preserved behaviour (`twice-self_rule`, `twice-next_entry`, `twice-repair_reviewer`, `projects-beside`), and the cases of the file at the base.
+
+Files changed this round: `skills/ordo-init/templates/check_config.py`, `skills/ordo-init/templates/check_config.test.sh` and this report.

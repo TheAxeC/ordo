@@ -95,7 +95,7 @@ Run from the repository root.
    - `worktree_paths` is the project's directory in the `projects:` form.
    - `bench` and `look` are left out unless the user names binaries or a view.
    - `adr` is written only when the repository keeps its decision records (a folder of `NNNN-*.md` records) in a folder other than `docs/adr`, and it names that folder.
-   - `design_bar`, `design_references`, `worker_effort` and `reviewer_effort` are left out unless the user gives a value.
+   - `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer` are left out unless the user gives a value.
 8. Give every key written the example's comment for it, without the required/optional marker, in the example's order.
 9. Draft the ignore rules.
    - The worktree root must be ignored: `git check-ignore -q --no-index <worktree_root>/probe` exits 0.
@@ -129,8 +129,9 @@ Run from the repository root.
 
 1. With `.agents/plan.yaml` present, write nothing.
    - Run `templates/check_config.py`.
-2. It reports: a key written twice; a key beside `projects:` in the `projects:` form; a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>`, `review` neither `every` nor `earned`, `libraries` neither `check` nor `avoid`, `adr` not naming a folder under the repository root, `design_bar` outside `industry`, `state-of-the-art` and `novel`, `design_references` not a list of text, `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
-3. Optional keys left out are listed as notes with the default that applies, as is the default ADR folder `docs/adr` when `adr` names it and the folder does not exist yet.
+2. It reports: a key written twice; a key beside `projects:` in the `projects:` form; a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>` or written with no value, `repair_reviewer` not `claude:<model>`, `self_rule` or `next_entry` neither `on` nor `off`, `review` neither `every` nor `earned`, `libraries` neither `check` nor `avoid`, `adr` not naming a folder under the repository root, `design_bar` outside `industry`, `state-of-the-art` and `novel`, `design_references` not a list of text, `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
+3. Optional keys left out are listed as notes with the default that applies, which for `repair_reviewer` is the `reviewer` value, as is the default ADR folder `docs/adr` when `adr` names it and the folder does not exist yet.
+   - `next_entry` on while `self_rule` is off or left out is noted as acting only under self-rule, and not noted when `self_rule` has an error.
 4. For each error, propose the fix ("Stops").
    - A fix a quoted ruling states is made without the stop.
    - A fix the skill proposes that differs from the ruled fix is shown with the difference, and the stop stands.

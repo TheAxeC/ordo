@@ -27,6 +27,9 @@ projects:
     design_references: []
     worker_effort: high
     reviewer_effort: high
+    self_rule: off
+    next_entry: off
+    repair_reviewer: claude:opus
   tool-b:
     roadmap: tools/tool-b/ROADMAP.md
     verification: tools/tool-b/docs/building.md
@@ -51,3 +54,6 @@ projects:
     design_references: []
     worker_effort: high
     reviewer_effort: high
+    self_rule: off
+    next_entry: off
+    repair_reviewer: claude:opus

@@ -1,7 +1,7 @@
 #!/bin/sh
 # Exercise check_config.py on scratch repositories, each case one configuration it must refuse or pass.
-# A configuration is refused, with the line that names its error, when it misses a required key (reviewer; worker in the projects: form, named with its project), holds an unknown key, names a page that does not exist, leaves the worktree root not ignored, has .agents/plan.yaml ignored by git, sets worker to a model with no harness or to a harness other than claude, gives repair_rounds a value of the wrong kind, sets libraries to a value other than check or avoid (a word, a boolean, or nothing), writes a key twice (worker_effort or reviewer, and in a project of the projects: form with its name, a project that also holds a merge key included, and a mapping written as the value of a merge key), sets adr to a folder that does not exist or to a file (the default docs/adr as a file included), to a value that is not a non-empty string (nothing, '', a number) or to a path outside the repository root (absolute, or through ..), sets design_bar to a value other than industry, state-of-the-art or novel (a word, another capital, nothing), sets design_references to something other than a list of text (a string, a list holding a number, nothing), or sets worker_effort or reviewer_effort to a value other than low, medium, high, xhigh or max (a word, a boolean, a number, another capital, nothing); each refusal of the five keys, and of a key written twice, is the one error line.
-# The example configuration of each form passes, as does .agents/* with !.agents/plan.yaml after it, and libraries: avoid. The examples write adr, design_bar, design_references, worker_effort and reviewer_effort in each project; the one-project example notes that the default ADR folder docs/adr does not exist yet, and passes with no such note once it does; with the five keys removed it notes each default. adr: docs/decisions with that folder, adr: docs/adr/, design_bar: novel or state-of-the-art, design_references: [WCAG 2.2 AA], worker_effort: max and reviewer_effort: xhigh pass, as does a project that takes another's keys through a merge key (<<: *base) and overrides one of them.
+# A configuration is refused, with the line that names its error, when it misses a required key (reviewer; worker in the projects: form, named with its project), holds an unknown key, names a page that does not exist, leaves the worktree root not ignored, has .agents/plan.yaml ignored by git, sets worker to a model with no harness or to a harness other than claude, gives repair_rounds a value of the wrong kind, sets libraries to a value other than check or avoid (a word, a boolean, or nothing), writes a key twice (worker_effort or reviewer, and in a project of the projects: form with its name, a project that also holds a merge key included, and a mapping written as the value of a merge key), sets adr to a folder that does not exist or to a file (the default docs/adr as a file included), to a value that is not a non-empty string (nothing, '', a number) or to a path outside the repository root (absolute, or through ..), sets design_bar to a value other than industry, state-of-the-art or novel (a word, another capital, nothing), sets design_references to something other than a list of text (a string, a list holding a number, nothing), or sets worker_effort or reviewer_effort to a value other than low, medium, high, xhigh or max (a word, a boolean, a number, another capital, nothing), sets self_rule or next_entry to a value that is not a boolean (a word, a number, nothing, a spelling YAML reads as text such as oN, or on, On, ON, off, Off or OFF in quotes, which has its own message), sets repair_reviewer to a value other than claude:<model> (a word, a list, a number, nothing), or writes worker or reviewer with no value; each refusal of those eight keys, and of a key written twice, is the one error line.
+# The example configuration of each form passes, as does .agents/* with !.agents/plan.yaml after it, and libraries: avoid. The examples write adr, design_bar, design_references, worker_effort and reviewer_effort in each project; the one-project example notes that the default ADR folder docs/adr does not exist yet, and passes with no such note once it does; with the five keys removed it notes each default. adr: docs/decisions with that folder, adr: docs/adr/, design_bar: novel or state-of-the-art, design_references: [WCAG 2.2 AA], worker_effort: max and reviewer_effort: xhigh pass, as does a project that takes another's keys through a merge key (<<: *base) and overrides one of them. The examples also write self_rule, next_entry and repair_reviewer in each project. Two guards show that the shipped examples print none of the three not-set notes; nine probes show that each example, and each project of the projects: example, holds each of the three keys, since a second copy of the key is a key written twice. With the three keys removed each default is noted: off for self_rule and next_entry, the configured reviewer for repair_reviewer (another reviewer, and a missing or invalid one, which names no value). self_rule: on, yes, true and On pass, next_entry: on passes with no note under self_rule: on, and with self_rule off or removed it passes with the note that it acts only under self-rule (with the project's name in the projects: form), a note not printed when self_rule has an error. repair_reviewer: claude:sonnet passes, and a written repair_reviewer is not compared with a missing reviewer. Each of the three keys written twice, and repair_reviewer beside projects:, is refused.
 
 set -u
 
@@ -350,5 +350,221 @@ make_merge_repo merge-inline-twice
 file=$test_root/merge-inline-twice/.agents/plan.yaml
 sed -e 's/^    <<: \*base$/    <<: [*base, {design_bar: novel, design_bar: industry}]/' "$file" >"$file.new" && mv "$file.new" "$file"
 expect_refusal merge-inline-twice "tool-b: key written twice: design_bar"
+
+# Output of check_config.py on $1 does not hold the text $2 anywhere.
+lacks_text() {
+    case "$output" in
+        *"$2"*) fail "$1: unexpected text [$2] in: $output" ;;
+    esac
+}
+
+# One-project form: remove key $2 from $1's configuration.
+remove_key() {
+    sed -i.bak "/^$2:/d" "$test_root/$1/.agents/plan.yaml"
+}
+
+# Several-projects form: remove key $3 of project $2 from $1's configuration.
+remove_project_key() {
+    file=$test_root/$1/.agents/plan.yaml
+    awk -v project="  $2:" -v key="    $3:" '
+        /^  [^ ]/ { in_project = ($0 == project) }
+        !(in_project && index($0, key) == 1)' "$file" >"$file.new" && mv "$file.new" "$file"
+}
+
+self_rule_note="self_rule not set, default off applies"
+next_entry_note="next_entry not set, default off applies"
+repair_note="repair_reviewer not set, the reviewer's value 'claude:opus' applies"
+three_notes="$self_rule_note
+$next_entry_note
+$repair_note"
+
+# Guard: the one-project example as shipped passes with none of the three keys' not-set notes; red when the example drops one of the keys (its not-set note is printed). The removed-keys case below is its control, and the probe below proves the example holds each key.
+make_repo three-keys
+expect_pass three-keys
+printf '%s\n' "$three_notes" | while IFS= read -r note; do
+    lacks_line three-keys "note: $note"
+done || exit 1
+
+# Guard: the several-projects example as shipped passes with none of the three notes for tool-a or tool-b; red when a project drops a key. The control removes repair_reviewer from tool-b and the note names the reviewer's value, and the probe below proves each project holds each key.
+make_projects_repo projects-three
+expect_pass projects-three
+for project in tool-a tool-b; do
+    printf '%s\n' "$three_notes" | while IFS= read -r note; do
+        lacks_line projects-three "note: $project: $note"
+    done || exit 1
+done
+make_projects_repo projects-three-control
+remove_project_key projects-three-control tool-b repair_reviewer
+expect_pass projects-three-control
+has_line projects-three-control "note: tool-b: repair_reviewer not set, the reviewer's value 'claude:opus' applies"
+
+# The shipped one-project example holds each of the three keys: a second copy of the key appended to it is a key written twice. Red when the example lacks the key, since the appended line is then its only one and the error is an unknown key.
+for case in "self_rule:off" "next_entry:off" "repair_reviewer:claude:opus"; do
+    key=${case%%:*}
+    make_repo "holds-$key"
+    printf '%s: %s\n' "$key" "${case#*:}" >>"$test_root/holds-$key/.agents/plan.yaml"
+    expect_refusal "holds-$key" "key written twice: $key"
+done
+
+# The shipped several-projects example holds each of the three keys in tool-a and in tool-b, proved the same way, with the project's name in the error. Red when a project lacks the key.
+add_project_key() {
+    file=$test_root/$1/.agents/plan.yaml
+    awk -v project="  $2:" -v line="    $3: $4" '
+        /^  [^ ]/ { in_project = ($0 == project) }
+        { print }
+        in_project && index($0, "    reviewer_effort:") == 1 { print line }' "$file" >"$file.new" && mv "$file.new" "$file"
+}
+for project in tool-a tool-b; do
+    for case in "self_rule:off" "next_entry:off" "repair_reviewer:claude:opus"; do
+        key=${case%%:*}
+        make_projects_repo "holds-$project-$key"
+        add_project_key "holds-$project-$key" "$project" "$key" "${case#*:}"
+        expect_refusal "holds-$project-$key" "$project: key written twice: $key"
+    done
+done
+
+# With the three keys removed the example passes and each default is named: off for the two switches, the configured reviewer for repair_reviewer. Red when a key is missing from the example's comments, or the repair_reviewer note is the generic one.
+make_repo three-keys-removed
+for key in self_rule next_entry repair_reviewer; do
+    remove_key three-keys-removed "$key"
+done
+expect_pass three-keys-removed
+printf '%s\n' "$three_notes" | while IFS= read -r note; do
+    has_line three-keys-removed "note: $note"
+done || exit 1
+
+# repair_reviewer left out names the configured reviewer, whatever it is. Red when the note names a fixed model or the default text of the example.
+make_repo repair-default-haiku
+set_key repair-default-haiku reviewer claude:haiku
+remove_key repair-default-haiku repair_reviewer
+expect_pass repair-default-haiku
+has_line repair-default-haiku "note: repair_reviewer not set, the reviewer's value 'claude:haiku' applies"
+
+# With reviewer missing or wrong, the repair_reviewer note does not name a value, and the reviewer's own error stands alone. Red when the note names a missing or invalid reviewer.
+make_repo repair-default-no-reviewer
+remove_key repair-default-no-reviewer reviewer
+remove_key repair-default-no-reviewer repair_reviewer
+expect_refusal repair-default-no-reviewer "required key missing: reviewer"
+has_line repair-default-no-reviewer "note: repair_reviewer not set, the reviewer's value applies"
+make_repo repair-default-bad-reviewer
+set_key repair-default-bad-reviewer reviewer opus
+remove_key repair-default-bad-reviewer repair_reviewer
+expect_refusal repair-default-bad-reviewer "reviewer is not claude:<model>: 'opus'"
+has_line repair-default-bad-reviewer "note: repair_reviewer not set, the reviewer's value applies"
+
+# A written repair_reviewer is not compared with the reviewer, so a missing reviewer gives its one error line. Red when the unknown-key error or the kind check reports repair_reviewer as well.
+make_repo repair-set-no-reviewer
+remove_key repair-set-no-reviewer reviewer
+set_key repair-set-no-reviewer repair_reviewer claude:sonnet
+expect_refusal repair-set-no-reviewer "required key missing: reviewer"
+
+# self_rule and next_entry take on and off, which YAML reads as booleans; next_entry on under self_rule on has no note naming next_entry. Red when the keys are unknown or a boolean is refused.
+make_repo self-rule-on
+set_key self-rule-on self_rule on
+set_key self-rule-on next_entry on
+expect_pass self-rule-on
+lacks_text self-rule-on "next_entry"
+
+# yes, true and On are the same boolean as on. Red when the check compares the written text.
+for value in yes true On; do
+    make_repo "self-rule-$value"
+    set_key "self-rule-$value" self_rule "$value"
+    expect_pass "self-rule-$value"
+done
+
+# A word that is neither on nor off is refused with the value. Red when the value check is missing or accepts any text.
+make_repo self-rule-maybe
+set_key self-rule-maybe self_rule maybe
+expect_refusal self-rule-maybe "self_rule is neither on nor off: 'maybe'"
+
+# on or off in quotes is text, which plan-orchestration would not read as on, so the error says to write it without quotes. Red when the quoted word is refused as a generic wrong value or accepted.
+make_repo self-rule-quoted
+set_key self-rule-quoted self_rule '"on"'
+expect_refusal self-rule-quoted "self_rule is the text 'on' in quotes; write on or off without quotes"
+
+# A spelling YAML reads as text, not as a boolean (a capital in the middle), is neither on nor off and gets the generic error, not the quotes message. Red when the check lowercases the value before choosing the message.
+make_repo self-rule-mixed
+set_key self-rule-mixed self_rule oN
+expect_refusal self-rule-mixed "self_rule is neither on nor off: 'oN'"
+
+# No value, or a number, is refused with the value. Red when the value check skips a value of None or accepts a number.
+make_repo self-rule-empty
+set_key self-rule-empty self_rule ""
+expect_refusal self-rule-empty "self_rule is neither on nor off: None"
+make_repo next-entry-number
+set_key next-entry-number next_entry 1
+expect_refusal next-entry-number "next_entry is neither on nor off: 1"
+make_repo next-entry-empty
+set_key next-entry-empty next_entry ""
+expect_refusal next-entry-empty "next_entry is neither on nor off: None"
+
+# next_entry on while self_rule is off, or left out, is valid and notes that the key acts only under self-rule; self_rule left out also gets its default note. Red when the note is missing or the combination is an error.
+make_repo next-entry-self-off
+set_key next-entry-self-off next_entry on
+expect_pass next-entry-self-off
+has_line next-entry-self-off "note: next_entry is on while self_rule is off; it acts only under self-rule"
+make_repo next-entry-self-absent
+set_key next-entry-self-absent next_entry on
+remove_key next-entry-self-absent self_rule
+expect_pass next-entry-self-absent
+has_line next-entry-self-absent "note: next_entry is on while self_rule is off; it acts only under self-rule"
+has_line next-entry-self-absent "note: self_rule not set, default off applies"
+
+# The note is not printed when self_rule has an error: the one error line stands, and no note names next_entry. Red when the note is printed beside the error.
+make_repo next-entry-self-bad
+set_key next-entry-self-bad next_entry on
+set_key next-entry-self-bad self_rule maybe
+expect_refusal next-entry-self-bad "self_rule is neither on nor off: 'maybe'"
+lacks_text next-entry-self-bad "next_entry"
+
+# In the several-projects form the note names its project. Red when the prefix is missing.
+make_projects_repo projects-next-entry
+set_project_key projects-next-entry tool-b next_entry on
+set_project_key projects-next-entry tool-b self_rule off
+expect_pass projects-next-entry
+has_line projects-next-entry "note: tool-b: next_entry is on while self_rule is off; it acts only under self-rule"
+
+# repair_reviewer takes claude:<model>; any other value, a list and a number and no value included, is refused with the value. Red when the key is unchecked, skips a value of None, or accepts a list.
+make_repo repair-sonnet
+set_key repair-sonnet repair_reviewer claude:sonnet
+expect_pass repair-sonnet
+make_repo repair-opus
+set_key repair-opus repair_reviewer opus
+expect_refusal repair-opus "repair_reviewer is not claude:<model>: 'opus'"
+make_repo repair-list
+set_key repair-list repair_reviewer '[claude:opus]'
+expect_refusal repair-list "repair_reviewer is not claude:<model>: ['claude:opus']"
+make_repo repair-number
+set_key repair-number repair_reviewer 5
+expect_refusal repair-number "repair_reviewer is not claude:<model>: 5"
+make_repo repair-empty
+set_key repair-empty repair_reviewer ""
+expect_refusal repair-empty "repair_reviewer is not claude:<model>: None"
+
+# In the several-projects form the error names its project. Red when the prefix is missing.
+make_projects_repo projects-repair
+set_project_key projects-repair tool-a repair_reviewer opus
+expect_refusal projects-repair "tool-a: repair_reviewer is not claude:<model>: 'opus'"
+
+# worker or reviewer written with no value is refused with None, not skipped. Red when the model check skips a value of None.
+make_repo worker-empty
+set_key worker-empty worker ""
+expect_refusal worker-empty "worker is not claude:<model>: None"
+make_repo reviewer-empty
+set_key reviewer-empty reviewer ""
+expect_refusal reviewer-empty "reviewer is not claude:<model>: None"
+
+# Each of the three keys written twice is refused with its name, before any value is read. Red when the duplicate scan stops running on the file as written.
+for key in self_rule next_entry repair_reviewer; do
+    make_repo "twice-$key"
+    remove_key "twice-$key" "$key"
+    printf '%s: claude:opus\n%s: claude:sonnet\n' "$key" "$key" >>"$test_root/twice-$key/.agents/plan.yaml"
+    expect_refusal "twice-$key" "key written twice: $key"
+done
+
+# repair_reviewer at the top of the several-projects form is a key beside projects. Red when the keys of a project are accepted beside projects:.
+make_projects_repo projects-beside
+printf 'repair_reviewer: claude:sonnet\n' >>"$test_root/projects-beside/.agents/plan.yaml"
+expect_refusal projects-beside "keys beside projects: ['repair_reviewer']"
 
 printf 'PASS: check_config.py scratch tests\n'

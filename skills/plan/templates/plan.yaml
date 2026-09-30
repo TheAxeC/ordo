@@ -1,6 +1,6 @@
 # Example .agents/plan.yaml for a repository with one project. Copy it to .agents/plan.yaml and replace the paths.
 # Every path is relative to the repository root. A required key that is missing stops the skill that needs it, and the refusal names the key.
-# An optional key that is missing takes the value written here.
+# An optional key that is missing takes the default its comment gives.
 
 roadmap: docs/roadmap.md                  # required. The source of truth for what is open; a plan is one entry of it.
 verification: docs/dev/building.md        # required. The page that defines the green check; /plan copies its commands into the ledger.
@@ -25,3 +25,6 @@ design_bar: industry                      # optional, default industry. What gri
 design_references: []                     # optional, default []. Published standards a design is held to, such as WCAG 2.2 AA; grill cites them per option.
 worker_effort: high                       # optional, default high. The effort a builder runs at: low, medium, high, xhigh or max.
 reviewer_effort: high                     # optional, default high. The effort a reviewer, a brief-check agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
+self_rule: off                            # optional, default off. on: plan-orchestration runs the plan under self-rule; off: every open item waits for the user.
+next_entry: off                           # optional, default off. on, with self_rule on: after a plan closes, the orchestrator takes the next open roadmap entry; off: it stops at the closing.
+repair_reviewer: claude:opus              # optional, default the reviewer value. claude:<model> the run of /refute over a repair round runs on, at reviewer_effort.

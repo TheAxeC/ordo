@@ -138,7 +138,7 @@ cp <skills>/plan/templates/plan.projects.yaml .agents/plan.yaml   # several proj
 
 The example `plan.yaml` describes every key. Nine are required: `roadmap`, `verification`, `rules`, `ledger_root`, `archive_root`, `worktree_root`, `worker`, `reviewer` and `libraries`. A skill that needs a missing required key stops and names it.
 
-Every other key is optional. A key left out takes the default written beside it in the example `plan.yaml`. For example, a missing `worktree_paths` means the whole tree, and a missing `look` means that no changed view is opened at landing.
+Every other key is optional. A key left out takes the default the comment beside it in the example `plan.yaml` gives. For example, a missing `worktree_paths` means the whole tree, and a missing `look` means that no changed view is opened at landing.
 
 Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
 

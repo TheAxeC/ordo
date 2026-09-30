@@ -96,7 +96,8 @@ metadata:
      - A step list written under a quoted ruling is the approved list.
    - The step is done when `plan.md` is written, or the draft is shown and the stop stands.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
-   - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`.
+   - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry`, `repair_reviewer`.
+   - A `repair_reviewer` that `plan.yaml` leaves out is written with the `reviewer` value.
    - The block's `executor:` is not a project specific and is not in `plan.yaml`.
    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
    - The orchestrator chooses the executor per step over that default.
