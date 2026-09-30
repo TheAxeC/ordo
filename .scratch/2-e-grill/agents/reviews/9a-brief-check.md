@@ -247,5 +247,24 @@ Agent usage: claude-opus-5-5, 258965 tokens, 34 tool uses, 11.4 minutes (683 s).
 
 ## Closed (the session's change to the brief for every finding above, made before the preparation commit)
 
-- Check 2, Finding 1, and check 3, Finding 2 (the two rulings on step 9a that the revert 8633553 removed from `plan.md`): a stop, open item "Step 9a, the two rulings the revert removed" in the state file and under Step 0 of step 9a in `plan.md`; the brief is removed until the ruling, since the ruling decides its design.
-- Every other finding (checks 1, 3, 4 and 6): raised in the same stop, since each is closed by the design the ruling settles; the brief written after the ruling closes each and names it here.
+- Check 2, Finding 1, and check 3, Finding 2 (the two rulings the revert removed): the stop "Step 9a, the two rulings the revert removed", ruled (a) by Axel; both rulings are booked again in `plan.md`'s Rulings, and the brief is rewritten to option (a) under "Step 0 of step 9a", named in its first premise.
+- Check 1, Finding 1 (the figures' legend): item 4 adds the note "A stop marked "every run" waits each time, unless the run is under a quoted ruling that states the change." under the legend's row, both SVGs rewritten by the script; case R12 and Verify 8.
+- Check 1, Finding 2 (the approval sentences): one reading, Decision 7, which lists each sentence that stays and why; the Rules sub-bullets of items 10 to 12 say a quoted ruling is the user's approval, so Rules 1 and the descriptions agree; case R10 reads each hit.
+- Check 1, Finding 3 (**authority** and `(approved)`): the ruling's option (a) sets the tag, "The step lines end `(approved)`"; Decision 2 records it, and the list written under a quoted ruling is the list the user approved by that ruling.
+- Check 1, Finding 4 (`plan-orchestration` line 336): item 7 rewrites the parenthesis to name the five skills run under a quoted ruling.
+- Check 3, Finding 1 (lines 303 and 304): the premise says line 303 approves with no second stop and line 304 keeps the stop; item 7 replaces line 304 only.
+- Check 4, Finding 1 (the builder's scratch runs): the builder makes none; five fresh agents make them before the landing, as the ruling says (the brief's opening paragraph).
+- Check 4, Finding 2 (the term's place): item 1 places **quoted ruling** after **questions, the** and before **reader, of the transcripts**.
+- Check 4, Finding 3 (Quick start columns): each new line is dictated character for character, with the column rule in the opening of "What to build"; the `ordo-help` line takes the block's two-line form.
+- Check 4, Finding 4 (the double comma): every changed cell is dictated whole.
+- Check 4, Finding 5 (`/repo-setup` under a ruling): items 10 and 11, with the ruling on a file from no template (Steps 4's third condition), `worker`, `reviewer` and `libraries` stated, and `/ordo-init` inside it counting the keys it derives; case R7.
+- Check 4, Finding 6 (`/ordo-init`'s commit question): item 10's Steps 10 and 11 sub-bullets ask the commit question alone when the ruling leaves it open, and the Stops cell "The draft" says so; case R6.
+- Check 4, Finding 7 (`sync --write` block granularity): a quoted ruling covers `sync` only when its hunks are the hunks of the whole diff (item 11, "sync" 3); a diff with any hunk the ruling does not hold is shown whole and the stop stands, so no block is written alone; case R8.
+- Check 4, Finding 8 (drafting from the ruling): item 8's Steps 2 sub-bullets and item 9's Steps 2 sub-bullets take the ruling's text as the draft, a rule of the skill replacing it only where it gives another result (Decision 18).
+- Check 4, Finding 9 (`grill`'s gaps): item 12 gives the ruled path its completion line, the draft made at the first write of Steps 8, and a changed gate that could pass shown as the decision; case R9.
+- Check 4, Finding 10 (completion criteria): item 13 gives every Steps item the step extends a completion line (Decision 22).
+- Check 4, Finding 11 (a rule in Steps and in Rules): the showing, the comparison and the commit naming are each written once, in the Steps item where they apply; Rules gains only the sentence that a quoted ruling is the approval.
+- Check 4, Finding 12 (the difference named): in each skill the course for a draft that differs is a sub-bullet of its own, apart from the course for a draft that is the ruled change.
+- Check 4, Finding 13 ("aside"): no dictated text uses the form.
+- Check 6, Findings 1 to 7 (implied inputs): the shared item "the quoted ruling" gives no ruling for a bullet not ending "(the user)", a name no bullet or two bullets hold, a placeholder name, a missing file, and `--ruling` without its two arguments last; the whole bullet with its sub-bullets is the ruling (no fragment); the file is given by a path the skill can read from where it runs; one `--ruling` per invocation, since its arguments are the invocation's last two; `/plan` names the new `plan.md` when the ruling came from the rulings file (item 9, Steps 6, Decision 20); the argument boundary is `--ruling`; cases R4 and R5.
+- Check 5 (the question): the step's check is the five scratch runs by fresh agents following the changed `roadmap` skill before the landing, with the results option (a) names, and cases R3 to R9 walk each skill after the change.
