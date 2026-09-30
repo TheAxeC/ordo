@@ -44,13 +44,11 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 4, the call on the blind comparison (2026-09-30): the record is `.scratch/2-f-diagnose/agents/reviews/4-blind-comparison.md`, with the input, both outputs, both verdicts and the key. Both judges found no critical failure in either output, and both chose the output of `diagnosing-bugs`, so the result of the two judgments is that `diagnosing-bugs` wins. Their shared reason: both outputs end the reported case (`agents//`), but the `diagnose` run listed two hypotheses and fixed trailing slashes only, while the `diagnosing-bugs` run listed four, one of them that the refusal compares the paths as written, and its fix also refuses `agents/.`, `agents/x/..` and a link to the folder, which still fail under the `diagnose` run's fix. The `diagnosing-bugs` run also ran a control (a legitimate `skills//` list still pins), the second suite the change standard lists, and said first what its fix does not cover; the `diagnose` run wrote "Nothing is left open". What in the text of `diagnose` led there: Steps 7 lets the list hold fewer than three hypotheses "when the shrink and the code leave fewer than three causes standing", and the run used that sentence; no step asks which other inputs reach the cause once it is stated; Steps 19 runs the test, the red command and the original case and no control; no step has the final message say what the fix leaves uncovered. The gate reads your call: "wins or ties".
-  - (a) Your call is "loses", and the skill is changed and compared again. A new step 3a changes `skills/diagnose/SKILL.md` and `skills/diagnose/templates/diagnosis.md` in four places: Steps 7 always asks for three to five hypotheses, one of which states the cause as the rule the code breaks rather than the reported input, with other inputs it predicts are red, and the sentence that allows fewer than three is removed; a new item after Steps 15 lists the other inputs that reach the stated cause, runs each through the red command, and the fix and its test cover each one that is red; Steps 19 also runs a control, an input near the fix that must still pass, and the repository's verification commands that read the changed files; the final message and the record state what the fix does not cover. The step goes through the usual brief, brief check, Sonnet builder and Opus review. Step 4 is then run again whole on the same defect, with two new sides and two new judges, and ends in your call on the new record; this ruling approves that second run on the terms of the ruling "Step 4, who runs the two sides of the blind comparison". Pro: it ends the cause of the result in the skill, and every later diagnosis gets the wider fix. Con: one more step and one more comparison, about the cost of step 2b plus about $2.50 to $9 for the four agents; the change is written after seeing this defect, so the brief must word it for any defect and name no path or slash.
-  - (b) Your call is "ties" or "wins", from your own reading of the record, for example because the input names only the doubled slash and both outputs end it with a test that is red without the fix. Step 5 then closes the plan, and `diagnose` stays as it is. Pro: no more work. Con: the four points above stay in the skill. This is the lazy option.
-  - (c) Your call is "loses" and no step is added. The gate is not met, and entry 2.F stays open with nothing scheduled. Pro: none beyond (a). Con: the plan cannot close.
-  - Recommendation: (a). The judges agree, their reason reproduces in both judges' own runs, and the four points are changes to the skill's text that a builder can make.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- Step 4, the call on the blind comparison (2026-09-30): Axel ruled (a), "loses"; step 3a added, step 4 run again after it; booked in plan.md Rulings.
 
 - Step 4, who runs the two sides of the blind comparison (2026-09-30): Axel ruled (a); booked in plan.md Rulings.
 
@@ -86,5 +84,5 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1, 2, 2a, 2b and 3 landed or run, and ticked.
-- Step 4: the blind comparison has run and its record is `agents/reviews/4-blind-comparison.md`; both judges chose the output of `diagnosing-bugs`. It waits for Axel's call, the open item "Step 4, the call on the blind comparison".
-- Next: what the call decides, then step 5, the closing.
+- Step 4: the first blind comparison is recorded in `agents/reviews/4-blind-comparison.md`; Axel's call on it is "loses" (ruling "Step 4, the call on the blind comparison", (a)).
+- Next: step 3a, the four changes to `diagnose`; then step 4 run again whole, which ends in Axel's call; then step 5, the closing.
