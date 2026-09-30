@@ -38,6 +38,12 @@ Findings: <each one that could pass without the goal being reached, with how>. O
 
 Findings: <each implied input missing from "Cases">. Or: none.
 
+## 7. ADRs
+
+- <each `NNNN-*.md` record in the configured `adr` folder (`docs/adr` when the configuration block has none), for its part in force>: whether it touches the step, and for one that does, the sentence of its decision the step is under and whether the brief names it under "What is on the tree". Or: no record.
+
+Findings: <each part of the brief that contradicts an ADR, with the ADR's sentence; each ADR the step touches that the brief does not name>. Or: none.
+
 ## Declined to judge
 
 - <a point the agent did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.

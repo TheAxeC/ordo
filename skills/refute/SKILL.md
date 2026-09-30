@@ -37,6 +37,7 @@ metadata:
      - Where it rules a case, the diff is judged against the ruling.
 5. The diff since the base, from inside the worktree, the new files whole, and a sample of a mechanical sweep with the sample named.
    - `git diff <base>` and `git status --short`, read-only, are the only git the reviewer runs.
+   - Then the ADRs the brief names under "What is on the tree", and every other `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) whose part in force governs a file, a name, a rule or a behaviour the diff changes, in force and decision as the `spec` skill's "What it reads" 5 says.
 6. The builder's report, last.
    - No report on disk is a refusal ("Stops").
 
@@ -94,6 +95,8 @@ metadata:
   - a decision the brief reserved for the user, taken;
   - a dependency the diff adds that the brief does not name;
   - a premise in the brief's "What is on the tree" section that the reviewer's own grep does not reproduce;
+  - a change that contradicts the part in force of an ADR, with the ADR's number and the sentence of its decision quoted, and whether the brief asked for it;
+  - an ADR the diff is under that the brief's "What is on the tree" does not name;
   - a case of a code step in the brief's "Cases" that no test of the step checks;
   - a case whose first run on the unchanged tree the report does not give.
 - **Proof.** A test of behaviour whose failure costs nothing is not a Proof pass; it is a Standards finding, as the next heading says. A finding is:
@@ -138,6 +141,7 @@ metadata:
 
 - A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or raised to the user as an open item in the state file, as `plan-orchestration`'s Stops section says.
   - It becomes a step only by the user's ruling.
+- A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR. One the builder made against the brief is closed like any other finding, by a change that follows the ADR.
 - The open items hold only what the user must rule on.
 - After the last round, the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading.
 - `/land` refuses while a finding is left neither closed nor raised as an open item.

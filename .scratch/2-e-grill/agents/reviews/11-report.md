@@ -89,7 +89,7 @@ ok: the plan-terms block equals the template
 
 ### Scratch case for `/plan`'s copy
 
-Run by the script `$TMPDIR/s11/scratch.sh <folder> with|without|untracked`, in `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/s11/`. It computes nothing: it is the steps of `/plan 7` as plain file writes and the scratch repository's own git, in a folder made by `mktemp -d "$TMPDIR/s11/scratch.XXXX"`. Git commands it runs, in the scratch folder only: `git init -q`, `git config user.email`, `git config user.name`, `git add -A`, `git commit -q -m "scratch setup"`; at Steps 6 `git add -- <the four paths>`, then, when the rulings file is tracked, `git rm -q -- <rulings file>` and `git commit -q -m "Open plan 7" -- <the four paths and the rulings file>`, or, when it is not tracked, `rm <rulings file>` and `git commit -q -m "Open plan 7" -- <the four paths>`. Files it writes: `.agents/plan.yaml` (the `plan` skill's `templates/plan.yaml` with `ledger_root: .scratch`), `docs/roadmap.md` (one entry `7 Scratch entry` with a goal and a gate), `docs/dev/building.md` (one command, `sh check.sh`), `.scratch/rulings/7-scratch-entry.md` (`# Rulings for 7`, a blank line, `- G1: the scratch answer one (the user).`, `- G2: the scratch answer two (the user).`), then `.scratch/7-scratch-entry/plan.md` (template lines 1 to 28, a Rulings heading, the copied bullet lines, template lines 33 on), `.scratch/7-scratch-entry/orchestrator-state.md` (a copy of the template) and the two `.gitkeep` files. Nothing outside `$TMPDIR/s11/` and this report was written. Step 3's approval was taken as given, and Steps 4 was exercised only as a copy of the template, since this step does not change it.
+Run by the script `$TMPDIR/s11/scratch.sh <folder> with|without|untracked`, in `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/s11/`. It computes nothing and does not read `skills/plan/SKILL.md`: it encodes the builder's reading of the text as plain file writes, so the reading, not the script, is the evidence for the text; it is the steps of `/plan 7` as plain file writes and the scratch repository's own git, in a folder made by `mktemp -d "$TMPDIR/s11/scratch.XXXX"`. Git commands it runs, in the scratch folder only: `git init -q`, `git config user.email`, `git config user.name`, `git add -A`, `git commit -q -m "scratch setup"`; at Steps 6 `git add -- <the four paths>`, then, when the rulings file is tracked, `git rm -q -- <rulings file>` and `git commit -q -m "Open plan 7" -- <the four paths and the rulings file>`, or, when it is not tracked, `rm <rulings file>` and `git commit -q -m "Open plan 7" -- <the four paths>`. Files it writes: `.agents/plan.yaml` (the `plan` skill's `templates/plan.yaml` with `ledger_root: .scratch`), `docs/roadmap.md` (one entry `7 Scratch entry` with a goal and a gate), `docs/dev/building.md` (one command, `sh check.sh`), `.scratch/rulings/7-scratch-entry.md` (`# Rulings for 7`, a blank line, `- G1: the scratch answer one (the user).`, `- G2: the scratch answer two (the user).`), then `.scratch/7-scratch-entry/plan.md` (template lines 1 to 28, a Rulings heading, the copied bullet lines, template lines 33 on), `.scratch/7-scratch-entry/orchestrator-state.md` (a copy of the template) and the two `.gitkeep` files. Nothing outside `$TMPDIR/s11/` and this report was written. Step 3's approval was taken as given, and Steps 4 was exercised only as a copy of the template, since this step does not change it.
 
 Run with a rulings file (tracked):
 ```
@@ -372,3 +372,266 @@ Each is a skill or template text, before and after under "Changed lines". No scr
 - Item 8 and `skills/land/SKILL.md:118` / `plan-orchestration` Steps 8 ("Not sent back", line 106): consistent. Item 8's second sentence sends a builder-made contradiction to an ordinary repair; the first sentence covers only one the brief asked for. `git grep -n -i "closed in a repair\|sent back\|fixed at landing"` over `refute`, `land` and `plan-orchestration` shows no other statement that says otherwise.
 - A copied rulings line that does not end with "(the user)" is not a ruling that a step's `(ruling <name>)` tag can name, by `spec` "What it reads" 4 (`skills/spec/SKILL.md:44`: "a line of the Rulings section that ends with "(the user)""). Item 10 copies every bullet line as it stands and item 14's term says "one bullet line each"; nothing states that `grill` writes each with "(the user)". Step 12, which writes the file, is where that is fixed; recorded here, not decided.
 - Places the change makes stale that the brief's paths do not list: none found by `git grep -n -i -E "first four|four rows|six checks|one heading per check|reads three"` (the `spec` "first four rows" was item 5's own line; `skills/roadmap/SKILL.md:141` and `skills/repo-setup/SKILL.md:158` are about their own tables).
+
+# Repair round 1
+
+Everything in the round's brief (`.scratch/2-e-grill/agents/briefs/11-round-1.md`, points 1 to 9) is done. The refuter report `.scratch/2-e-grill/agents/reviews/11-refuter.md` was read whole first. Old text beside new text follows, each point with its lines; the delta is the diff between the tree as the round was sent (`git diff` saved to `$TMPDIR/s11/round0.diff`, applied to `HEAD` files in a scratch repository under `$TMPDIR/s11/r0`) and the tree now, by `diff -U0`, run per changed file (`-` old, `+` new).
+
+## Changed lines of the round (old beside new, verbatim)
+
+```diff
+@@ docs/adr/README.md
+-A change that contradicts an ADR is a rule clash: it stops and is ruled on. A decision that changes gets a new ADR that supersedes the old one, whose status then reads `superseded by NNNN`. A refinement that keeps the decision edits the ADR to its current state with no dated note. Git and the plan's booking hold the history.
++A step that contradicts an ADR is a rule clash: it stops and is ruled on. A decision that changes gets a new ADR that supersedes the old one, whose status then reads `superseded by NNNN`. A refinement that keeps the decision edits the ADR to its current state with no dated note. Git and the plan's booking hold the history.
+@@ docs/glossary.md
+-- **ADR**: an architecture decision record, a file `NNNN-<decision-as-a-phrase>.md` in the folder `.agents/plan.yaml`'s `adr` names (`docs/adr` by default), holding a decision that binds work after the plan that made it closes. A record is in force, `proposed` or `accepted`, until its status reads `superseded by NNNN`. A record touches a step when its Decision governs a file, a name, a rule or a behaviour the step changes. Stated in: `spec`, "What it reads" 5, Steps 2 and "Steps / The brief check"; `refute`, "What it reads" 5, "The four headings" and "Finding dispositions"; `plan`, "What it reads" 5 and Steps 3.
++- **ADR**: an architecture decision record, a file `NNNN-<decision-as-a-phrase>.md` in the folder `.agents/plan.yaml`'s `adr` names (`docs/adr` by default), holding a decision that binds work after the plan that made it closes. A record is in force, `proposed` or `accepted`, until its status or its opening lines say it is superseded by another record, in whatever form the repository writes it, such as `Status: superseded by NNNN` or a quoted line `Superseded by ADR NNNN`. A record touches a step when its Decision governs a file, a name, a rule or a behaviour the step changes. Stated in: `spec`, "What it reads" 5, Steps 2 and "Steps / The brief check"; `refute`, "What it reads" 5, "The four headings" and "Finding dispositions"; `plan`, "What it reads" 5 and Steps 3.
+@@ docs/glossary.md
+-- **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2 and Stops; `refute`, "The four headings" and "Finding dispositions".
++- **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+@@ skills/plan/SKILL.md
+-5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record whose status does not read `superseded by NNNN`.
++5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record whose status, or whose opening lines, do not say it is superseded by another record.
+@@ skills/plan/SKILL.md
+-   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line; the file's other lines, such as a heading or a blank line, are not copied.
++   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line; the file's other lines, such as a heading or a blank line, are not copied. Any other line, such as a wrapped continuation or an indented sub-bullet, is shown with the draft at Steps 3, so the user places it before the file is removed.
+@@ skills/plan/SKILL.md
+-   - The commit also removes the rulings file copied at Steps 2: `git rm -q -- <path>` when git tracks it, its path named in the commit with the others, or the file deleted before the commit when git does not.
++   - The commit also removes the rulings file copied at Steps 2: when git tracks it, `git rm -q -f -- <path>`, and its path named in the commit with the others; when git does not, the file deleted before the commit. The `-f` removes a copy with uncommitted changes, whose bullet lines Steps 2 has already copied.
+@@ skills/refute/SKILL.md
+-   - Then the ADRs the brief names under "What is on the tree", and every other `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none), whose status does not read `superseded by NNNN` and whose Decision governs a file, a name, a rule or a behaviour the diff changes.
++   - Then the ADRs the brief names under "What is on the tree", and every other `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none), whose status, or whose opening lines, do not say it is superseded by another record and whose Decision governs a file, a name, a rule or a behaviour the diff changes.
+@@ skills/repo-setup/templates/CLAUDE.md
+-- `docs/adr/`: the decisions that bind work after the plan that made them closes, with the alternatives rejected. A change that contradicts an ADR is a rule clash.
++- `docs/adr/`: the decisions that bind work after the plan that made them closes, with the alternatives rejected. A step that contradicts an ADR is a rule clash.
+@@ skills/repo-setup/templates/docs/adr/README.md
+-A change that contradicts an ADR is a rule clash: it stops and is ruled on. A decision that changes gets a new ADR that supersedes the old one, whose status then reads `superseded by NNNN`. A refinement that keeps the decision edits the ADR to its current state with no dated note. Git and the plan's booking hold the history.
++A step that contradicts an ADR is a rule clash: it stops and is ruled on. A decision that changes gets a new ADR that supersedes the old one, whose status then reads `superseded by NNNN`. A refinement that keeps the decision edits the ADR to its current state with no dated note. Git and the plan's booking hold the history.
+@@ skills/repo-setup/templates/plan-terms.md
+-- **ADR**: an architecture decision record, a file `NNNN-<decision-as-a-phrase>.md` in the folder `.agents/plan.yaml`'s `adr` names (`docs/adr` by default), holding a decision that binds work after the plan that made it closes. A record is in force, `proposed` or `accepted`, until its status reads `superseded by NNNN`. A record touches a step when its Decision governs a file, a name, a rule or a behaviour the step changes. Stated in: `spec`, "What it reads" 5, Steps 2 and "Steps / The brief check"; `refute`, "What it reads" 5, "The four headings" and "Finding dispositions"; `plan`, "What it reads" 5 and Steps 3.
++- **ADR**: an architecture decision record, a file `NNNN-<decision-as-a-phrase>.md` in the folder `.agents/plan.yaml`'s `adr` names (`docs/adr` by default), holding a decision that binds work after the plan that made it closes. A record is in force, `proposed` or `accepted`, until its status or its opening lines say it is superseded by another record, in whatever form the repository writes it, such as `Status: superseded by NNNN` or a quoted line `Superseded by ADR NNNN`. A record touches a step when its Decision governs a file, a name, a rule or a behaviour the step changes. Stated in: `spec`, "What it reads" 5, Steps 2 and "Steps / The brief check"; `refute`, "What it reads" 5, "The four headings" and "Finding dispositions"; `plan`, "What it reads" 5 and Steps 3.
+@@ skills/repo-setup/templates/plan-terms.md
+-- **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2 and Stops; `refute`, "The four headings" and "Finding dispositions".
++- **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+@@ skills/spec/SKILL.md
+-   - The ADRs in the folder the configuration block's `adr` names (`docs/adr` when the block has none): each `NNNN-*.md` file in the folder, listed in its `README.md` or not, and the Decision of each record whose status does not read `superseded by NNNN`. A record touches the step when its Decision governs a file, a name, a rule or a behaviour the step's text changes.
++   - The ADRs in the folder the configuration block's `adr` names (`docs/adr` when the block has none): each `NNNN-*.md` file in the folder, listed in its `README.md` or not, and the Decision of each record whose status, or whose opening lines, do not say it is superseded by another record. A record touches the step when its Decision governs a file, a name, a rule or a behaviour the step's text changes.
+@@ skills/spec/SKILL.md
++   - The ADRs the step touches, as Steps 2 names them.
+@@ skills/spec/SKILL.md
++   - a ruling that answers a rule clash with a new ADR is carried out before `/spec` runs again: the session writes the new record from the ADR folder's `template.md` with the ruled decision and status `proposed`, sets the old record's status to `superseded by NNNN`, and adds the new record's row to the folder's `README.md`; the three files go into the next preparation commit;
+@@ skills/spec/SKILL.md
+-   - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names whose status does not read `superseded by NNNN` is read. Each one the step touches is named with the sentence of its Decision the step is under. A part of the brief that contradicts one is named, and so is an ADR the step touches that the brief's "What is on the tree" does not name.
++   - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) whose status, or whose opening lines, do not say it is superseded by another record is read. Each one the step touches is named with the sentence of its Decision the step is under. A part of the brief that contradicts one is named, and so is an ADR the step touches that the brief's "What is on the tree" does not name.
+@@ skills/spec/templates/brief-check.md
+-- <each `NNNN-*.md` record in the configured `adr` folder whose status does not read `superseded by NNNN`>: whether it touches the step, and for one that does, the sentence of its Decision the step is under and whether the brief names it under "What is on the tree". Or: no record.
++- <each `NNNN-*.md` record in the configured `adr` folder (`docs/adr` when the configuration block has none) whose status, or whose opening lines, do not say it is superseded by another record>: whether it touches the step, and for one that does, the sentence of its Decision the step is under and whether the brief names it under "What is on the tree". Or: no record.
+@@ skills/spec/templates/brief.md
++- <each ADR the step touches: its number, its title and the sentence of its Decision the step is under; or that no ADR touches the step>.
+```
+
+## Points
+
+1. Status test: the words "whose status does not read `superseded by NNNN`" are replaced by "whose status, or whose opening lines, do not say it is superseded by another record" in `skills/spec/SKILL.md` (lines 50 and 241, 2 replacements), `skills/refute/SKILL.md:40`, `skills/plan/SKILL.md:40` and `skills/spec/templates/brief-check.md:43`. The term **ADR** in `plan-terms.md` now reads "until its status or its opening lines say it is superseded by another record, in whatever form the repository writes it, such as `Status: superseded by NNNN` or a quoted line `Superseded by ADR NNNN`." spec:86, spec:262 and refute:98 keep their words (not in the delta).
+2. The default folder: spec:241 and brief-check.md:43 gain "(`docs/adr` when the block has none)" and "(`docs/adr` when the configuration block has none)".
+3. `skills/spec/SKILL.md` "Steps / A ruling" item 2 gains the bullet on a ruling that answers a rule clash with a new ADR, after the bullet "a ruling that sets a public shape ...", at the same indentation.
+4. `skills/plan/SKILL.md` Steps 6 bullet is replaced by the dictated `git rm -q -f -- <path>` text.
+5. `skills/plan/SKILL.md` Steps 2 copy bullet gains the sentence on other lines shown at Steps 3.
+6. `skills/spec/templates/brief.md` gains the bullet for each ADR the step touches after the "each fact the step rests on" bullet; `skills/spec/SKILL.md` Steps 4 gains "The ADRs the step touches, as Steps 2 names them." after the premises bullet.
+7. The term **rule clash** "Stated in:" ends "; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions"." in `plan-terms.md`; `sync_rules.py . --only glossary --write` printed `written: the plan-terms block now equals the template` and the check then printed `ok: the plan-terms block equals the template`.
+8. "A change that contradicts an ADR is a rule clash" became "A step that contradicts an ADR is a rule clash" in `docs/adr/README.md:5`, `skills/repo-setup/templates/docs/adr/README.md:5` and `skills/repo-setup/templates/CLAUDE.md:22`, nothing else on those lines. `diff docs/adr/README.md skills/repo-setup/templates/docs/adr/README.md` printed nothing, rc=0.
+9. Proof: the scratch section above now says the script does not read `skills/plan/SKILL.md` and encodes the builder's reading, so the reading is the evidence for the text. The scratch script gained a fourth mode, `modified`, and `git rm -q -f` at the tracked branch. Output below.
+
+## Commands after the round
+
+`git grep -n "superseded by NNNN" -- skills docs` (cut at 130):
+```
+docs/adr/README.md:5:A step that contradicts an ADR is a rule clash: it stops and is ruled on. A decision that changes gets a new 
+docs/adr/template.md:3:Status: <proposed | accepted | superseded by NNNN>
+docs/glossary.md:10:- **ADR**: an architecture decision record, a file `NNNN-<decision-as-a-phrase>.md` in the folder `.agents/pla
+skills/repo-setup/templates/docs/adr/README.md:5:A step that contradicts an ADR is a rule clash: it stops and is ruled on. A decis
+skills/repo-setup/templates/docs/adr/template.md:3:Status: <proposed | accepted | superseded by NNNN>
+skills/repo-setup/templates/plan-terms.md:5:- **ADR**: an architecture decision record, a file `NNNN-<decision-as-a-phrase>.md` in
+skills/spec/SKILL.md:218:   - a ruling that answers a rule clash with a new ADR is carried out before `/spec` runs again: the sess
+```
+Each hit: `docs/adr/README.md:5` and `skills/repo-setup/templates/docs/adr/README.md:5` (the README sentence), the two `template.md:3` `Status:` examples, `skills/spec/SKILL.md:218` ("Steps / A ruling"'s new bullet), `plan-terms.md:5` and `docs/glossary.md:10` (the term's example). Nothing else, so the test's literal string no longer stands in the readers.
+
+`git grep -n "A change that contradicts an ADR" -- skills docs README.md`:
+```
+rc=1
+```
+
+`python3 skills/repo-setup/templates/sync_rules.py . --only glossary`:
+```
+ok: the plan-terms block equals the template
+```
+
+`diff docs/adr/README.md skills/repo-setup/templates/docs/adr/README.md; echo rc=$?`:
+```
+rc=0
+```
+
+`git diff --name-only | xargs env LC_ALL=C grep -n "[^ -~]"`:
+```
+rc=1 (grep no-match status)
+```
+
+`git diff --stat`:
+```
+ docs/adr/README.md                             |  2 +-
+ docs/glossary.md                               |  4 +++-
+ skills/ordo-help/SKILL.md                      |  4 ++--
+ skills/plan-orchestration/SKILL.md             |  4 ++--
+ skills/plan/SKILL.md                           | 10 ++++++++--
+ skills/refute/SKILL.md                         |  4 ++++
+ skills/repo-setup/templates/CLAUDE.md          |  2 +-
+ skills/repo-setup/templates/docs/adr/README.md |  2 +-
+ skills/repo-setup/templates/plan-terms.md      |  4 +++-
+ skills/spec/SKILL.md                           | 10 +++++++++-
+ skills/spec/templates/brief-check.md           |  6 ++++++
+ skills/spec/templates/brief.md                 |  3 ++-
+ 12 files changed, 42 insertions(+), 13 deletions(-)
+```
+
+## Scratch case, four modes
+
+Mode `with` (`sh $TMPDIR/s11/scratch.sh <fresh mktemp -d folder> with`, script rc printed after):
+```
+== Step 1: slug
+7-scratch-entry
+folder does not exist
+== Step 2: draft plan.md from the template, with the rulings copy
+== Step 4: orchestrator-state.md
+== Step 5: .gitkeep
+== Step 6: commit by path
+== after
+ls: .scratch/rulings/7-scratch-entry.md: No such file or directory
+Open plan 7
+
+A  .scratch/7-scratch-entry/agents/briefs/.gitkeep
+A  .scratch/7-scratch-entry/agents/reviews/.gitkeep
+A  .scratch/7-scratch-entry/orchestrator-state.md
+A  .scratch/7-scratch-entry/plan.md
+D  .scratch/rulings/7-scratch-entry.md
+== Rulings section
+## Rulings (2026-09-30)
+
+- G1: the scratch answer one (the user).
+- G2: the scratch answer two (the user).
+
+## Blocked, and by what
+script rc=0
+```
+
+Mode `untracked` (`sh $TMPDIR/s11/scratch.sh <fresh mktemp -d folder> untracked`, script rc printed after):
+```
+== Step 1: slug
+7-scratch-entry
+folder does not exist
+== Step 2: draft plan.md from the template, with the rulings copy
+== Step 4: orchestrator-state.md
+== Step 5: .gitkeep
+== Step 6: commit by path
+== after
+ls: .scratch/rulings/7-scratch-entry.md: No such file or directory
+Open plan 7
+
+A  .scratch/7-scratch-entry/agents/briefs/.gitkeep
+A  .scratch/7-scratch-entry/agents/reviews/.gitkeep
+A  .scratch/7-scratch-entry/orchestrator-state.md
+A  .scratch/7-scratch-entry/plan.md
+== Rulings section
+## Rulings (2026-09-30)
+
+- G1: the scratch answer one (the user).
+- G2: the scratch answer two (the user).
+
+## Blocked, and by what
+script rc=0
+```
+
+Mode `modified` (`sh $TMPDIR/s11/scratch.sh <fresh mktemp -d folder> modified`, script rc printed after):
+```
+== Step 1: slug
+7-scratch-entry
+folder does not exist
+== Step 2: draft plan.md from the template, with the rulings copy
+== Step 4: orchestrator-state.md
+== Step 5: .gitkeep
+== Step 6: commit by path
+== after
+ls: .scratch/rulings/7-scratch-entry.md: No such file or directory
+Open plan 7
+
+A  .scratch/7-scratch-entry/agents/briefs/.gitkeep
+A  .scratch/7-scratch-entry/agents/reviews/.gitkeep
+A  .scratch/7-scratch-entry/orchestrator-state.md
+A  .scratch/7-scratch-entry/plan.md
+D  .scratch/rulings/7-scratch-entry.md
+== Rulings section
+## Rulings (2026-09-30)
+
+- G1: the scratch answer one (the user).
+- G2: the scratch answer two (the user).
+- G3: the scratch answer three (the user).
+
+## Blocked, and by what
+script rc=0
+```
+
+Mode `without` (`sh $TMPDIR/s11/scratch.sh <fresh mktemp -d folder> without`, script rc printed after):
+```
+== Step 1: slug
+7-scratch-entry
+folder does not exist
+== Step 2: draft plan.md from the template, with the rulings copy
+== Step 4: orchestrator-state.md
+== Step 5: .gitkeep
+== Step 6: commit by path
+== after
+ls: .scratch/rulings/7-scratch-entry.md: No such file or directory
+Open plan 7
+
+A  .scratch/7-scratch-entry/agents/briefs/.gitkeep
+A  .scratch/7-scratch-entry/agents/reviews/.gitkeep
+A  .scratch/7-scratch-entry/orchestrator-state.md
+A  .scratch/7-scratch-entry/plan.md
+== Rulings section
+## Rulings (2026-09-30)
+
+- Open item <L> (<date>): <the user's decision in one line, and what it unblocks> (the user).
+
+## Blocked, and by what
+script rc=0
+```
+
+In the `modified` mode the script runs under `set -e`, so `git rm -q -f -- <path>` exiting 0 is what lets the commit line run; the commit lists `D .scratch/rulings/7-scratch-entry.md`, `ls` of the file fails, and the Rulings section holds G1, G2 and G3.
+
+## Verify list, run from the worktree root
+
+`env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md; echo "rc=$?"`
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+rc=0
+```
+
+## Readings over the new text
+
+1. A cathedra-style record, `$TMPDIR/s11/adr-scratch/docs/adr/0010-old-dispatch.md`, whose first lines are `# 0010 Old dispatch`, a blank line and `> **Superseded by ADR 0033**`, with no Status line. Read: `skills/spec/SKILL.md:50` and `:241`, `skills/refute/SKILL.md:40`, `skills/plan/SKILL.md:40` and `skills/spec/templates/brief-check.md:43` ("whose status, or whose opening lines, do not say it is superseded by another record") against the record. Its opening lines say it is superseded by ADR 0033, so the record fails the test at all five places and no reader counts it, and the term **ADR** (`plan-terms.md:5`, "in whatever form the repository writes it, such as ... a quoted line `Superseded by ADR NNNN`") agrees. A record with no Status line and no such line stays in force, as before. Holds for all readers.
+2. `Ruled: new ADR supersedes 0001`, then `/spec` again. Read: `skills/spec/SKILL.md` "Steps / A ruling" item 2, the new bullet at line 218, then item 3 ("Then `/spec <entry> <step>` is typed again"), then "What it reads" 5 (line 50) and Steps 2 (lines 85-86), on the scratch ADR `0001-the-ledger-is-ascii.md` (status `proposed`). The bullet has the session, before `/spec` runs again, write `0002` from the folder's `template.md` with the ruled decision and status `proposed`, set 0001's status to `superseded by 0002`, and add 0002's row to `README.md`, all three going into the next preparation commit. On the next run line 50 finds 0001 with status `superseded by 0002`, so it fails the status test and is not read; 0002 is read, and step A's arrow is judged against 0002's Decision, which the ruling made. So `/spec` no longer stops on 0001. Holds. The ruling's decision (what 0002 says) comes from the user's ruling text, and the bullet does not choose it.
+3. The term **rule clash** (`plan-terms.md`, synced in `docs/glossary.md`) against each place its "Stated in" names: `plan-orchestration` "Stops" (the row "A rule clash", "rules or decisions, an ADR among them"); `repo-setup` `templates/shared-rules.md` "Surface rule clashes"; `spec` Steps 2 (`skills/spec/SKILL.md:86`, "is a rule clash, a stop"); `spec` "Steps / The brief check" (`:250`, the stop "A rule clash with an ADR", as Steps 2 says, and its sentence that a clash in the brief's wording is closed by a change to the brief); `spec` Stops (row at `:264`, "A rule clash with an ADR"); `refute` "Finding dispositions" (`refute:144`, "is a rule clash"). Each states the term in the glossary's sense, a contradiction between rules or decisions that stops for the user's ruling, or, at spec:250, the route by which one found in the brief's wording is not the stop. `refute` "The four headings" is no longer named, since refute:98 is a finding and not a statement of the term.

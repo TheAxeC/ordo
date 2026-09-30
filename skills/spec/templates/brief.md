@@ -1,12 +1,13 @@
 # Brief: <step>, <what it delivers in one line>
 
-Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. Then, in full: <the standards the configuration lists>.
+Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. Then, in full: <the standards the configuration lists>, and the ADRs this brief names under "What is on the tree".
 
 A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it.
 
 ## What is on the tree (read on main at <commit>)
 
 - <each fact the step rests on: the file, the count, the name, the line number in code or the section of a page, and the command that checked it>.
+- <each ADR the step touches: its number, its title and the sentence of its decision the step is under; or that no ADR touches the step>.
 
 ## What to build
 

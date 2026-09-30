@@ -36,6 +36,8 @@ metadata:
      - No match is a stop ("Stops").
      - An entry that stands under the roadmap's "Not yet specified" section is a refusal that names `/roadmap add <entry>`, which names its gate ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
+4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the user's settled design answers for the entry, written while no plan was open.
+5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record for its part in force, as the `spec` skill's "What it reads" 5 says.
 
 ## Steps
 
@@ -46,6 +48,7 @@ metadata:
 2. Draft `plan.md` from `templates/plan.md`.
    - It opens with `# Plan: <entry>`, which is how every other skill finds it.
    - The entry's goal and its gate are copied in.
+   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line; the file's other lines, such as a heading or a blank line, are not copied. Any other line, such as a wrapped continuation or an indented sub-bullet, is shown with the draft at Steps 3; the user places it, and a line the user leaves unplaced is copied below the bullet line it follows, as it stands, so nothing of the file is lost when Steps 6 removes it.
    - The session asks of the copied gate "could this pass without the goal being reached?" and writes the answer with its reason in the section "## Gate", on the line the template gives the gate.
    - A copied gate that could pass without the goal is kept as the roadmap has it, and its answer and reason go to the user at Steps 3, since the gate is the roadmap's and the user's.
    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
@@ -55,6 +58,9 @@ metadata:
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).
+   - With the draft, name each design decision the drafted steps rest on that no ADR in force and no line of the Rulings section settles: a public shape, a wire format, a config key, a vocabulary, a format or a rule the builder applies across the tree, or a library choice. The list is shown, not written into `plan.md`.
+   - With the draft, show each line of the rulings file that Steps 2 did not copy as a bullet line, for the user to place.
+   - `/grill <entry>` settles such decisions before the plan opens. It is not required: the user may approve the list with them unsettled.
    - Write `plan.md` once the user has approved or corrected it.
    - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
@@ -68,17 +74,18 @@ metadata:
 5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
 6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files by path as the plan's opening commit.
    - Its subject holds the roadmap entry's number.
+   - The commit also removes the rulings file copied at Steps 2: when the last commit holds it (`git cat-file -e HEAD:<path>` exits 0), `git rm -q -f -- <path>`, and its path named in the commit with the others; otherwise, `git rm -q -f --cached -- <path>` when git lists it as staged, and the file deleted before the commit, its path not named. The `-f` removes a copy with uncommitted changes, whose bullet lines Steps 2 has already copied.
 
 ## Stops
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The drafted step list | Every plan, after Steps 2: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check | The user's approval or correction |
+| The drafted step list | Every plan, after Steps 2: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
 | Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate to draft steps from | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
-| The plan exists | The ledger folder is already there: a plan is opened once | The folder | Nothing |
+| The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove | Nothing |
 
 ## Anti-patterns
 

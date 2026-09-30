@@ -36,20 +36,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-- step: 11
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-11
-  base: acb79f6f2e85ffefe34480767e2692ee55c7e280
-  launched: 2026-09-30 02:57
-  session_id: ae449ee78f0bf9ddf (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
-  report: .scratch/2-e-grill/agents/reviews/11-report.md
-  builder_usage: 128707 tokens, 30 tool uses, 305 s (claude-sonnet-5-5, 53 model lines in its transcript; cost estimate $0.75-1.85)
-  brief_check: .scratch/2-e-grill/agents/reviews/11-brief-check.md (claude-opus-5-5; 172226 tokens, 33 tool uses, 387 s)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/11-refuter.md (claude-opus-5-5; 190050 tokens, 44 tool uses, 519 s)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -95,8 +82,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 to 5 and 7 to 10 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
-- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 10's fixes at landing.
-- Next step: 11, the ADR readers (rulings B, C and F). Unblocked by step 10: 2.F steps 1 and 2 and 2.H step 3.
+- 2026-09-30. Steps 1 to 5 and 7 to 11 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
+- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 11's fixes at landing.
+- Next step: 12, the `grill` skill; it lands unticked, its check being Axel's reading (ruling "Overnight work" 2). Unblocked by step 10: 2.F steps 1 and 2 and 2.H step 3.
 - Carried to step 12's brief: a "Use instead" row in `skills/plan/SKILL.md` naming `/grill <entry>` for design decisions of the entry not yet settled (step 11's brief check, Decision 6 of brief 11). Also carried: `grill` writes each line of the rulings file and of a plan's Rulings as a bullet ending "(the user).", so a step's `(ruling <name>)` tag can name it (step 11's builder report, point 3).
 - Open on Axel's side: the reading of step 6; the old rule 13 in game-engine and cathedra; approval stops under a ruling; the old skill name in other repositories.

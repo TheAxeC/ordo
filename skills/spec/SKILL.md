@@ -47,6 +47,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - For a step taken back out of main, the failure its landing recorded under the step's Step 0.
 5. The tree, on main at its head, for every count, path, name, line number and claim the step's text makes.
    - Each is checked with a grep or a probe, never taken from the plan's text.
+   - The ADRs in the folder the configuration block's `adr` names (`docs/adr` when the block has none): each `NNNN-*.md` file in the folder, listed in its `README.md` or not, and the decision of each record in force. A record is in force except for the part its own opening lines, or a later record, say is superseded, in whatever words the repository uses. Its decision is its Decision section, or, in a record without one, the text that states what was decided. A record touches the step when its decision governs a file, a name, a rule or a behaviour the step's text changes.
 6. The brief check's report, the final message of the agent that "Steps / The brief check" starts.
 
 ## Steps
@@ -81,6 +82,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - That correction goes into the preparation commit (Steps 6).
    - The brief records the correction beside the premise.
    - A premise found false that the plan cannot absorb is a stop ("Stops"): its correction would change the step's scope, or make a choice the user would see.
+   - Read the ADRs the step touches, as "What it reads" 5 says. The brief names each under "What is on the tree", with its number, its title and the sentence of its decision the step is under, or says that no ADR touches the step.
+   - A step's text that contradicts the part in force of an ADR is a rule clash, a stop ("Stops"). The open item names the ADR and quotes the step's words that contradict it. Its options are the step changed to follow the ADR, or a new ADR that supersedes it, as the ADR folder's `README.md` says.
 3. Look for libraries, as `.agents/plan.yaml`'s `libraries` says, before the brief is written.
    - Under `libraries: check`, the session looks for existing libraries for every capability the step builds.
    - A candidate that could replace code the step would write by hand is a stop ("A user-visible choice", "Stops").
@@ -93,6 +96,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
 4. Write `agents/briefs/<step>.md` from `templates/brief.md`.
    - The first line points at the rules file the configuration names, and at the standards it lists.
    - The premises as checked, with the command that checked each.
+   - The ADRs the step touches, as Steps 2 names them.
    - The fix text, in the brief's own words, not a pointer.
    - The verification commands from the configuration block plus the step's own gate, each with the directory it runs from and the output that counts as a pass.
    - The report shape, with the cases' first run before the result table.
@@ -211,6 +215,11 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user).";
    - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line;
    - a ruling that sets a public shape, a vocabulary, a rule or a library choice is also written where the plan keeps its rulings, so later premise checks and the library search of Steps 3 read it;
+   - a ruling that answers a rule clash with a new ADR, raised by `/spec` or by `/refute`, is carried out before the step goes on:
+     - the session writes the new record, numbered after the folder's highest, in the form of the folder's `template.md` or, with none, of its latest record, with status `proposed`;
+     - its decision is the ruled option in the open item's words, its context the facts the open item gives, its alternatives rejected the old record's decision and each other option with the con the open item gave it, and its consequences what the open item says follows;
+     - the old record is marked superseded in the words the folder uses (`superseded by NNNN` under the template), and the new record gets its row in the folder's index when there is one;
+     - the session shows the user the new record and commits these files by path at once, a resume point, so that `/spec` or `/land` in any session reads them;
    - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6).
 3. Then `/spec <entry> <step>` is typed again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
 
@@ -233,6 +242,7 @@ Steps 5 says when this runs.
    - **Cases and checks.** Every case of "Cases" is read against the rules file and the standards, and a case inconsistent with them is named.
    - **The question.** Each case, the check on the step's line and the check of each item of "What to build" is asked "could this pass without the goal being reached?", "the goal" being the part of the plan's goal the step delivers, and the answer is given with its reason.
    - **Implied inputs.** For a code step (a script, or a product's code), the inputs the step implies but never states are listed under "Cases", as `templates/brief.md`'s "Cases" asks, and each one missing is named with its expected result.
+   - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is read for its part in force, as "What it reads" 5 says. Each one the step touches is named with the sentence of its decision the step is under. A part of the brief that contradicts one is named, and so is an ADR the step touches that the brief's "What is on the tree" does not name.
    - The checks are done when each has its findings, or "none".
 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
    - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's served model (item 1) and its tokens, tool uses and time from its completion notice.
@@ -241,6 +251,7 @@ Steps 5 says when this runs.
    - Each change is named under the report's "Closed" heading, beside its finding.
    - The check runs once per `/spec` run: the brief as changed goes to the builder without a second run.
    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
+   - A contradiction the **ADRs** check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says. One found only in the brief's own wording is closed by a change to the brief that follows the ADR.
    - At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
    - At such a stop the report is among the ledger files the stop commits.
    - This item is done when every finding has its change under "Closed", or the step has stopped.
@@ -249,11 +260,12 @@ Steps 5 says when this runs.
 
 ## Stops
 
-The first four rows are stops, which leave an open item as "Steps / A stop" says. The rest are refusals. A refusal names its cause and leaves nothing beyond what "Steps / A step taken back out of main" has already done.
+The first five rows are stops, which leave an open item as "Steps / A stop" says. The rest are refusals. A refusal names its cause and leaves nothing beyond what "Steps / A step taken back out of main" has already done.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | A false premise the plan cannot absorb | A premise the step's text makes is false on the tree, and its correction would change the step's scope or make a choice the user would see (Steps 2); the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
+| A rule clash with an ADR | The step's text contradicts the part in force of an ADR the step touches (Steps 2, or the **ADRs** check of "Steps / The brief check") | The open item, booked in the open items, naming the ADR and quoting the step's words that contradict it | A ruling |
 | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary, or, under `libraries: check`, a library could replace code the step would write by hand (Steps 3) | The open item, booked in the open items | A ruling |
 | A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
 | A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
