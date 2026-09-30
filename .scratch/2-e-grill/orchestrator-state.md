@@ -43,7 +43,8 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- None.
+- Step 16, the closing (2026-09-30): the roadmap diff of `/roadmap done 2.E`, with the approval of `skills/grill/SKILL.md`'s changes since Axel's reading at step 12 (`git diff ff656b6 HEAD -- skills/grill/SKILL.md`, steps 9a, 14a and 14c), then the tag and the pin, which are Axel's. The draft is in the orchestrator's report of 2026-09-30 and in `agents/reviews/16-closing-draft.md`.
+- The self-rule entry (2026-09-30): the `/roadmap add` draft, its number and its place against plan 2.F, which is open and whose steps 2a to 2c change `skills/plan-orchestration/SKILL.md` and `skills/spec/SKILL.md`, as self-rule does. The draft is in `agents/reviews/16-closing-draft.md`.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -125,4 +126,4 @@ dispatch: none
 - Step 14 run again: two fresh sides running on entry 3 (clones of 833e2e8 with `skills/grill` as landed at 32a0107, in the session's scratch folder `bc14r/side-1` and `bc14r/side-2`, the same prompts as the first run); the judges run after, as `claude -p` processes under item 4 of `docs/dev/blind-comparison.md`.
 - Step 14 run again: both judges chose `grill`; the record is in `agents/reviews/14-blind-comparison.md`, "Step 14, the second run".
 - Step 14 ticked (2026-09-30): Axel's call (a), `grill` wins.
-- Next: step 16, the closing; then the self-rule entry through `/roadmap add`, placed right after 2.E. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
+- Next: step 16, the closing, waiting on Axel's approval of the roadmap diff (open item); the self-rule entry's draft with it. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
