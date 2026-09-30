@@ -136,3 +136,145 @@ Agent usage: claude-opus-5-5 (ordo-high), 219616 tokens, 29 tool uses, 16.7 minu
 - Section 5 findings 1 to 4 and section 6 findings 1 to 4: the subtree prefixes from one letter, the subcommand in any case, `--`, the words that end early, `git switch -Cfix` and the checkout controls are cases. Finding 5: Decision 7, the user's call named. Finding 6: the "Not seen" list names the path form (Decision 10).
 - Section 6 finding 5: "Verify" 2 runs the test under `/usr/bin/python3`.
 - Section 8 findings 1, 2 and 7: the README sentence keeps its order, the head comment's words for the switch bullet name `f` before `c` or `C`, and the items cite each page by its section.
+
+---
+
+# Step 2b brief check, second run (on main at 8595fad)
+
+`git rev-parse --short HEAD` printed `f5692d6` at the start and `8595fad` at the end: the commit `8595fad Make the six changes of the recurring findings` (step 3a of plan 2.H) landed while the check ran. `git diff --stat 6f40399 HEAD -- skills/repo-setup/templates/hooks skills/repo-setup/SKILL.md README.md docs/dev/building.md` prints nothing, so the five files the brief changes are as the brief read them. The brief did not change during the check (`md5 -q` gave `91f78b91923e7e1e337e07b3c52662b3`, 157 lines, modified 14:27:55). `git status --short` at the end shows only `M .scratch/2-g-git-guard/agents/briefs/2b.md` and two untracked briefs of other plans; I changed no file of the repository. The scratch folder `$TMPDIR/ordo-2b-check2` is removed (`ls -d` prints "No such file or directory"). git is 2.49.0 on APFS; `python3` is 3.13.4 (pyenv) and `/usr/bin/python3` is 3.9.6.
+
+Method for sections 4 to 6. A scratch copy of the guard with items 1 to 6 of "What it must do" written literally ("the prototype"), the unchanged guard, and five copies of the prototype with one behaviour changed each. Every case line was fed to them as a hook event from a file. A scratch copy of `git_guard.test.sh` with the 85 case lines of B1 to B9 and the seven `expect_line` calls of B10 added was run with `GIT_GUARD` at each. git itself was probed in a scratch repository under a scratch `HOME`.
+
+## 1. Names
+
+Commands: `grep -rn -i 'whole tree\|whole-tree\|reset --hard' skills utils docs README.md` (guard files left out) prints the lists of blocked commands at `skills/repo-setup/SKILL.md:126`, `README.md:13` and `docs/roadmap.md:38` and no other; `docs/dev/building.md:10` holds the fourth. `cat skills/repo-setup/templates/hooks/git_guard.settings.json` holds no list. `README.md:64` and `:113` name the guard and no command. `docs/roadmap.md:38` names the five operations of the goal and stays true, as the brief says. Outside "Paths this step writes" no place is made false.
+
+Every name the brief gives exists as stated (`grep -n` over the guard and the test): `_CHECKS` 1193, `_check_git` 983, `_rule_push` 1077 to `_rule_restore` ending 1125, the four rule constants 173 to 176, the option tables 165 to 169, `_take_options` 833, `_options` 1038, `_is_long` 1049, `_is_short` 1054, the head comment 1 to 61 with lines 28 to 37, 39 to 44 and 54 to 55 as quoted, `write_request`, `run_guard`, `expect_line` at 420 to 429, `GIT_GUARD` at test line 20, `allow git stash list` at 194, the labels of test lines 3 to 5, rules 13 and 14 of the change standard, `skills/land/templates/checks.sh`, the four standards pages, "The questions" 10, the `repo-setup` row, the comment of `building.md`'s git guard line.
+
+Findings:
+
+1. "What is on the tree", sixth bullet: "`block <command>` or `allow <command>` (lines 62 to 399)". `sed -n 60,66p git_guard.test.sh` shows line 62 is the `}` that closes `expect_line`, line 64 the comment on the case file, line 65 `cat >"$cases" <<'CASES'`, and line 399 `CASES`. Smallest change: "(lines 65 to 399)".
+2. The heading "What is on the tree (read on main at 6f40399)". Main is at 8595fad. The step's own files are unchanged since 6f40399, but `git diff --stat 6f40399 HEAD -- skills docs utils README.md` now lists seven files, among them `docs/dev/change-standard.md` (rule 13) and `skills/spec/templates/brief.md`, which the brief relies on in their new form. Smallest change: the heading names the commit the worktree is made at.
+
+## 2. The step line
+
+The line: "The five further blocks of the ruling "Other commands that discard work"; check: the test with each form blocked, the forced `git checkout` and `git switch` among them, each new case failing on the unchanged tree, and the grep of the skills for `checkout -f` quoted (1 commit)", with the rulings "Other commands that discard work" and "Step 2b, the forced checkout and switch".
+
+- The five blocks: "What to build" 1 and "What it must do" 1 to 4.
+- The forced checkout and the forced switch, with the two ruled messages: "What it must do" 4 and 5; the texts equal the ruling's word for word.
+- The test with each form blocked: "What to build" 2, cases B1 to B10.
+- Each new case failing on the unchanged tree: "Verify" 5. See section 4, finding 1.
+- The grep of the skills for `checkout -f`, quoted: "Verify" 8.
+- The pages ("What to build" 3 to 5) are not on the step line; rules 5 and 14 of the change standard require them, and Decisions 12 and 13 list the choices made in them.
+- Beyond the line and the rulings, listed under "Decisions": 1 to 13, which cover the seven choices of the plan's ruling "Step 2b, the brief's choices".
+
+Findings:
+
+1. "What it must do" 7: "says "discard it" in place of "destroy it"". This change to line 28 of the head comment is on no step line and in no ruling, and "Decisions" does not list it. It is right by the prose standard D ("No synonym cycling"). Smallest change: one line under "Decisions" naming it.
+2. A change of behaviour the brief does not state. An inline alias named as one of the four new subcommands is no longer expanded, since the subcommand now has a rule. Evidence, each fed as a hook event to the unchanged guard and to the prototype: `git -c alias.stash=push stash` exits 2 and then 0; `git -c alias.switch=push switch` exits 2 and then 0. For the built-in commands the new result is right: `git -c alias.switch=version switch` prints "fatal: missing branch or commit argument" and `git -c alias.send-pack=version send-pack` prints send-pack's usage, so git ignores the alias. A reviewer who meets it unannounced reads it as a lost block. Smallest change: one line under "Decisions" saying so for `stash`, `switch` and `send-pack`. For `subtree` it is not right; see section 5, finding 1.
+
+No user-visible choice is left unruled other than the text of question 10, which is the open item of the state file.
+
+## 3. Premises
+
+Every command of "What is on the tree" was rerun. As the brief states: `wc -l` 1230 and 507; `sed -n 54,55p` the quoted paragraph; `grep -n -i five` over the two files prints only `git_guard.py:54`; `grep -n checkout git_guard.test.sh | grep -E ' -[a-zA-Z]*f|--f'` prints only line 4; `grep -n 'send-pack\|subtree\|switch' git_guard.test.sh` prints nothing (exit 1); `git grep -n -E checkout -- skills utils ':!skills/repo-setup/templates/hooks' | grep -E ' -[A-Za-z]*f[A-Za-z]*( |$)| --f[a-z-]*'` prints one line, `skills/diagnose/SKILL.md:176`; `git grep -n 'git switch\|[a-z"] switch ' -- skills utils ':!skills/repo-setup/templates/hooks'` prints nothing; `ruff 0.16.5`; `pyright 1.1.414`; `ls docs/adr` prints `README.md` and `template.md`; `sed -n '/^OPTS_SPEC/,/^"/p' "$(git --exec-path)/git-subtree"` gives `P,prefix=`, `annotate=`, `b,branch!=`, `onto=`, `m,message!=` with a value and `h,help!`, `q,quiet!`, `d,debug!`, `ignore-joins`, `rejoin`, `squash` without.
+
+The git probes, each on a tree with `f` and `g` modified, two stashes, or an empty bare remote:
+
+- switch: `--discard-changes other`, `--discard other`, `--di other`, `-f other`, `--force other`, `-qf other` each ended on `other` with `f=b`. `--d other` exit 129 "ambiguous option: d (could be --discard-changes or --detach)"; `--forc`, `--fo`, `--f` exit 129 "(could be --force-create or --force)". `-fc new` and `-f -c new` created `new` with `f=changed`; `-fc new other` gave `f=b`; `-Cfix` and `-cfix` created `fix` with `f=changed`; `-C new` and `--force-create new` kept the changes, and with the start point `other` git refused ("would be overwritten").
+- stash: `drop`, `drop -q`, `drop stash@{0}` left 1 of 2 stashes, `clear` left 0; `-q drop` and `dro` exit 128 "subcommand wasn't specified"; `STASH drop` and `SWITCH -f other` exit 128 "cannot handle ... as a builtin".
+- subtree: the five forms of the third probe bullet, `--p sub push`, `--pr sub push`, `-P sub -- push`, `SUBTREE -P sub push` and `Subtree push -P sub` each left `refs/heads/main` in the remote; with a folder `push` committed, `git subtree --p push split` printed a split commit.
+- send-pack: with the path and `main` the remote held `refs/heads/main`; with `--dry-run` it printed ` * [new branch]      main -> main` and the remote held no ref; `send-pack origin main` exit 128.
+- checkout: `-f other`, `--force other`, `--forc other`, `--fo other`, `--f other`, `-qf other`, `other -f` ended on `other` with `f=b`; `-f` alone, `-fb new` and `-f -b new` gave `f=a g=a`; `-f -- f` and `-f f` gave `f=a g=changed`; `-bfix`, `-Bfix`, `-bf` created `fix`, `fix`, `f` with both files changed; `--no-force other` was refused with the changes kept.
+
+Findings: none beyond the two of section 1. Rule 13's table has the five columns the brief names on main at 8595fad (`grep -n '^13\. ' -A5 docs/dev/change-standard.md`, fifth bullet: "the behaviour, the case, the failing line quoted for it, the small change that takes the behaviour out, and the test's failing line with that change made").
+
+## 4. Cases and checks
+
+The prototype gives the brief's expected result for all 86 case lines, under 3.13.4 and under `/usr/bin/python3` 3.9.6. The scratch copy of the test with the cases added printed `FAIL: block git send-pack ../remote.git main: expected exit 2, got 0:` with `GIT_GUARD` at the unchanged guard, and `PASS: git_guard.py scratch tests` with the prototype under both Pythons, so the seven lines of B10 are what the dictated rules print, word for word. The expected results agree with the git probes of section 3: each blocked form does what its cost line says, except `git switch -f -c new`, which Decision 7 states.
+
+Each "Verify" command runs as written on this machine, on the unchanged tree: check 1 printed eleven `$ <command>` lines, each with its pass line, then `checks: 11 commands passed`, exit 0; `sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1` and the same under `PATH=/usr/bin:$PATH` each printed `PASS: git_guard.py scratch tests`; `ruff check ...` printed `All checks passed!`, `ruff format --check ...` printed `1 file already formatted`, `pyright ...` printed `0 errors, 0 warnings, 0 informations`; the ASCII grep printed nothing, exit 1; the grep of check 7 prints `git_guard.py:28`, `:54` and `:55`; the three greps of check 8 print `SKILL.md:126`, `README.md:13` and `building.md:10`. In the main checkout `/usr/bin/grep` adds "Binary file skills/repo-setup/templates/hooks/__pycache__/git_guard.cpython-313.pyc matches" to check 7; the folder is ignored (`.gitignore:5`) and a fresh worktree has none.
+
+Findings:
+
+1. "Cases", the paragraph after B11: "Each blocked case B1, B2, B4, B6, B8, B9 and B10 fails on the unchanged tree", and "Verify" 5: "each blocked case of B1, B2, B4, B6, B8, B9 and B10 is shown to fail there". Two blocked cases pass on the unchanged tree. Fed to the unchanged guard: `git subtree -P; git push` (B2) exits 2 with `git-guard: blocked: git push (git push is run by the user by hand)`, and `git checkout -f .` (B10) exits 2 with the whole-tree rule's line. B10 says so itself ("as `git checkout .` does today"). Failure scenario: the builder cannot meet "Verify" 5 for these two, and either stops under "a case the brief's own rules get wrong" or reports a failure that did not happen. Smallest change: both sentences name these two as cases of a behaviour the change preserves, which pass on the unchanged tree and have their row with that passing run, as rule 13's fifth bullet gives.
+2. "Verify before you report" and "Report" against `skills/spec/templates/brief.md` on main at 8595fad. The template's "Verify" item 5 ("Each bullet, list item and sentence the diff adds or changes in a page or a skill is read against the standards' rules on lists and on sentence length. A sentence longer than they allow is named in the report with the reason its content needs the length.") and its "Report" part 7 are in neither section of the brief. The step changes three sub-bullets of a skill and a sentence of `README.md`. Smallest change: the item added to "Verify before you report" and the part to "Report".
+
+## 5. The question
+
+Could the builder follow the brief, pass every check, and leave the step's purpose unmet? Yes, by the routes below. Each was run through the prototype or a copy of it with one behaviour changed; all 86 case lines pass in every copy named.
+
+1. The brief's own rule for `subtree` lets through a push that the guard blocks today. "What it must do" 2: "`_check_git` finds this rule for the subcommand in any mix of case", and the rule returns None when no `push` is found, after which no alias is looked up. Fed as hook events: `git -c alias.subtree=push subtree origin main` and `git -c alias.subtree=push SUBTREE origin main` each exit 2 on the unchanged guard and 0 on the prototype. git runs that alias wherever it finds no program `git-subtree`: with `--exec-path` set to an empty folder, `git -c alias.subtree=version subtree origin main` and the same with `SUBTREE` each print `git version 2.49.0`, and `git subtree` prints "'subtree' is not a git command". On this machine, with the program present, `git -c alias.subtree=version subtree` prints subtree's usage. So the miss needs a machine without the `git-subtree` program, or the upper-case spelling on a file system that distinguishes case; the second was not probed (see "Declined to judge"). Smallest change: item 2 gains "When the rule gives None and the inline configuration holds an alias named `subtree`, the alias is expanded as for a subcommand without a rule", and "Cases" gains `block git -c alias.subtree=push subtree origin main` and `block git -c alias.subtree=push SUBTREE origin main`, both cases of a preserved behaviour.
+2. "What it must do" 2: "`-P`, `-b` and `-m` take the rest of their word as the value". The only case with a value in the word is B2's `git subtree push -Psub origin main`, where `push` stands first. A copy of the prototype that always takes the next word passes all 86 lines and exits 0 on `git subtree -Psub push origin main`, which git runs as a push (probed: the remote held `refs/heads/main`). Smallest change: that line added to B2 as blocked, and `git subtree -Ppush split` to B3 as allowed.
+3. "What it must do" 2: "the other rules are matched as written". No case holds it. A copy that looks every rule up in lower case passes all 86 lines and exits 0 on `git -c alias.stash=push Stash` and on `git -c alias.switch=push SWITCH origin main`, which the unchanged guard and the prototype block. On APFS git refuses both commands ("cannot handle Stash as a builtin"); where the file system distinguishes case git finds no command and runs the alias (`git -c alias.foo=version FOO` prints `git version 2.49.0` here, so the alias name is compared without case). Smallest change: `block git -c alias.stash=push Stash` added to "Cases" as a case of a preserved behaviour.
+4. "What it must do" 4 and 5: "one of the words before `--` that start with a dash". No case has a force option after `--`. Copies that read every word pass all 86 lines and block `git checkout main -- -f`, which restores a file named `-f` (git: "pathspec '-f' did not match any file(s)" here). The cost is a refused command for a file of that name, so it is small. Smallest change: `allow git checkout main -- -f` added to B8a.
+5. No cost found: a copy without the sentence "After a word `--`, the next word is the subtree command" passes all 86 lines; it differs only on `git subtree -P sub -- -q push origin main`, which git refuses ("unknown command '-q'").
+
+Probed and right under the dictated rules. Blocked, and git runs them: `git subtree --no-prefix -P sub push`, `--no-p -P sub push`, `--no-annotate -P sub push`, `--no-onto -P sub push`, `-d -P sub push`, `-P sub --no-rejoin push`; `git checkout -lf other`, `-df other`, `-b new -f`, `--orphan o -f`, `-fB new other`; `git switch -f --orphan new`, `--no-force -f other`; `git stash drop` before a newline, `echo 'stash drop' | xargs git`, `bash -c 'git stash clear'`, a `!` alias to `git stash drop`, `git -c alias.x='subtree -P sub' x push origin main`. Allowed: `git checkout -Bf other`, `git switch -Cf other`, `git switch -qcf` (each names a branch `f`), `git SWITCH -f main`, `git STASH drop`, `git log --grep 'stash drop'`, `git commit -m "git stash drop"`, `git worktree add -f ../w other`, `git worktree remove --force ../w`, `git branch -f other main`.
+
+## 6. Implied inputs
+
+Listed under "Cases": a wrapper (`sudo`, `env`), `-C`, `-c`, an inline alias to each new block and to an allowed command, an option after the branch, a word of several short options, an option value equal to a command word (`-P push`, `--prefix=push`, `-m drop`, `branch clear`), a quoted word (`'stash@{0}'`), `--`, a subcommand in another case, the words ending after `subtree`, after `-P` and after `--`.
+
+Findings:
+
+1. The words ending after a long option that takes a value, or after a word of several short options that ends in one: `git subtree --prefix` and `git subtree -qP`. B3 has only `git subtree -P`. The prototype exits 0 on both. A builder's code that reads the next word without a bound ends in a traceback here. I did not verify how the running Claude Code treats a hook that exits 1; the first check states that it does not block. Smallest change: `allow git subtree --prefix` and `allow git subtree -qP` added to B3.
+2. An empty word after each new subcommand: `git subtree ''`, `git stash ''`, `git switch ''`. Rule 15 of the change standard names "an empty value". The prototype exits 0 on each; code that reads `word[0]` would not. Smallest change: `allow git subtree ''` and `allow git stash ''` added to the controls.
+3. A value inside the word of `-P` in front of the subtree command: section 5, finding 2.
+
+## 7. ADRs
+
+`ls docs/adr` prints `README.md` and `template.md`. No `NNNN-*.md` record exists, so none touches the step, and the brief says so ("No ADR touches this step", "No ADR record exists").
+
+Findings: none.
+
+## 8. Dictated text
+
+Read against the change standard, the skill layout, the prose standard and the glossary:
+
+- The five rule texts ("What it must do" 1 to 5, B10): the two ruled ones equal the ruling word for word; the three others follow the four that exist. Their claims hold by the probes: send-pack and subtree push publish; `stash drop` and `stash clear` remove stashes; the switch and checkout forms discard the change.
+- The seven lines of B10: equal to what the prototype prints.
+- Question 10's three sub-bullets ("What to build" 3): equal to the text of the open item in the state file and in `plan.md`, "Step 0 of step 2b". The list names every block of items 1 to 5. No glossary term is used in a new sense (`grep -n -i 'guard\|hook' docs/glossary.md` prints only the entry "questions, the").
+- The README sentence ("What to build" 4): the old sentence it quotes equals `README.md:13`; the new one keeps its order.
+- The `building.md` comment ("What to build" 5): the old words equal line 10.
+- The head comment's words ("What it must do" 7): "Not blocked: git switch -C and --force-create, which move a branch and keep the changes in the tree, and git stash pop, which applies the stash before it drops it." holds: `git switch -C new` and `--force-create new` kept `f=changed`, and with a start point that differs git refused; `git stash pop` left `f=changed2` and one stash fewer. "a git program run by its own path, such as .../git-core/git-push" holds: `/opt/homebrew/opt/git/libexec/git-core/git-send-pack ../remote.git main` exits 0 on the unchanged guard and on the prototype. The words for the switch and checkout bullets agree with items 4 and 5. The paragraph has no semicolon.
+
+Findings:
+
+1. "What to build" 3, third sub-bullet: "The hook is copied into `.claude/hooks/`, which `.gitignore` ignores, so each clone installs it itself, and it needs `python3` 3.9 or later." Decision 12 says "three sub-bullets, one requirement each, as the skill layout standard asks". The bullet holds two requirements joined by "and": where the hook is copied, and the Python it needs. `docs/dev/skill-layout.md`, "Lists and tables": "two requirements that can each be broken while the other holds, joined by 'and' ... are two bullets". Smallest change: the bullet split in two ("The hook is copied into `.claude/hooks/`, which `.gitignore` ignores, so each clone installs it itself." and "It needs `python3` 3.9 or later."), with Decision 12 saying four, and the same text carried to the open item in the state file and in `plan.md`, since that text is what Axel reads.
+
+## Closures of the first check
+
+- Section 2 finding 1, section 8 findings 3, 4, 5 and 8: holds. "What it must do" 5 builds the forced checkout with `f` before any `b` or `B`; B8, B8a and B10 carry the cases and the fifth rule text; "What to build" 3 and 5 name `git checkout --force`; item 7 has the new "Not blocked" paragraph without the checkout clause and without a semicolon.
+- Section 2 finding 2 and section 3 finding 1: holds. The premise bullet "No skill and no script under `utils/` ..." and "Verify" 8 use the wider grep, and it prints the one line the brief says.
+- Section 2 finding 3: holds. Decisions 7 to 13 list the additions; the five columns equal rule 13 on main at 8595fad; the open item is in the state file and under "Step 0 of step 2b". Two smaller additions are still unlisted (section 2, findings 1 and 2 above).
+- Section 3 findings 2 to 5: holds. The dry run ("printed the new branch and pushed nothing"), the ranges 1077 to 1125, 420 to 429 and 165 to 176, the prefixes from one letter, and the second ruling are in "What is on the tree" and "Read". One range is still off (section 1, finding 1 above).
+- Section 1 findings 1 to 3 and section 8 finding 6: holds. "What it must do" 8 gives the four subcommands a labelled line; item 7 changes line 28 to "discard it"; "Verify" 7 has `checkout --force\|checkout -f`.
+- Section 4 finding 1: holds ("in a scratch copy of the finished guard under `$TMPDIR`, runs the test against that copy through `GIT_GUARD`"). Finding 2: holds for the three forms named; B1 uses a path, and the two `-m` and `--annotate` forms of B2 and `git switch -fc new other` of B6 each ran in the probes. B6 still holds `git switch -f -c new` under the cost "work in the tree discarded", which Decision 7 states.
+- Section 5 findings 1 to 4 and section 6 findings 1 to 4: holds. B2 and B3 carry the one- and two-letter prefixes, both spellings in another case, `--`, and the three lines whose words end early; B7 has `git switch -Cfix`; B8a has `-bfix` and `-Bfix`. Finding 5: holds (Decision 7). Finding 6: holds (Decision 10 and item 7).
+- Section 6 finding 5: holds ("Verify" 2, which passes on the unchanged tree under 3.9.6).
+- Section 8 findings 1, 2 and 7: holds. The README sentence keeps its order; item 7's words for the switch bullet name `f` before `c` or `C`; "What to build" 3 to 5 and the roadmap bullet cite each page by its section, and line numbers remain only for code and under "Paths this step writes".
+
+## Declined to judge
+
+- A file system that distinguishes case, and a machine without the `git-subtree` program: not available here. The second was simulated with `--exec-path` at an empty folder; the first rests on git's alias lookup ignoring case, probed only for a name that is no command.
+- What the running Claude Code does with a hook that exits 1: not verified.
+- The text of question 10 as Axel will read it: his call, the open item.
+- Whether `git switch -f -c new`, `git checkout -f -- <path>` and the forms git refuses that the rules block (`git switch -tf other`, `git checkout -tf other`) should be narrowed: the ruling's wording blocks them; Decision 7 leaves it to the user.
+- Commands outside the two rulings that publish or remove work (`git stash pop`, `git reflog expire`, `git update-ref -d refs/stash`, other transport programs): not probed in this run; the user's call.
+- A shared path with a step of another plan: the untracked brief `.scratch/2-e-grill/agents/briefs/9a.md` lists `skills/repo-setup/SKILL.md` whole and `README.md` lines 54-54 under its paths, and all three other state files say `dispatch: none`. The comparison is the orchestrator's under the `spec` skill.
+- Whether the verify list still has 11 commands when the step is dispatched: it has 11 now (`grep -c` over the block, and the run of `checks.sh`).
+- The guard's output closed by its reader before the guard ends, which the new template names for a script: `main()` is not changed by this step, and I did not probe it.
+- git versions other than 2.49.0.
+- The builder's code: the prototype shows that the dictated rules give the expected results, and the five changed copies show which behaviours no case holds; neither says what the builder will write.
+
+Agent usage: claude-opus-5-5 (ordo-high), 237113 tokens, 39 tool uses, 17.2 minutes ($1.90 to $6.07).
+
+## Closed (second run; the session's change to the brief for every finding of it, made before the preparation commit)
+
+- Section 1 findings 1 and 2: the range reads "lines 65 to 399", and the heading names 8595fad.
+- Section 2 finding 1: Decision 14. Finding 2: Decision 15, and the ruling line "Step 2b, the brief's choices", point 8.
+- Section 4 finding 1: "Cases" and "Verify" 5 name the five preserved lines, which pass on the unchanged tree and have a row with that run. Finding 2: "Verify" 10 and the matching part of "Report".
+- Section 5 finding 1: "What it must do" 2 expands an inline alias named `subtree` when the rule gives None, with two lines in B2. Findings 2 to 4: `git subtree -Psub push origin main` in B2, `git subtree -Ppush split` in B3, `git -c alias.stash=push Stash` in B9, `git checkout main -- -f` in B8a. Finding 5: no change, no cost found.
+- Section 6 findings 1 and 2: `git subtree --prefix`, `git subtree -qP`, `git subtree ''` in B3 and `git stash ''` in B5. Finding 3: as section 5 finding 2.
+- Section 8 finding 1: the third sub-bullet of question 10 is two, Decision 12 says four, and the open item in the state file and in `plan.md` holds the four.
