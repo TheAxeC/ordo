@@ -173,3 +173,79 @@ Nothing. The `--session` measurement, 38245 lines and 7054879 bytes at the first
 ## Cleanup
 
 The reader outputs and scratch folders under `$TMPDIR` are removed; `ls -d ${TMPDIR}sr-* ${TMPDIR}session-retro.*` finds none.
+
+## Repair round 1
+
+Everything in the round's brief is done. Files changed: `skills/session-retro/SKILL.md` (now 194 lines), `skills/session-retro/templates/sessions.md` (now 39 lines), and this report.
+
+### Changes, old beside new
+
+1. Spec 1, variables across steps.
+   - Old: Steps 3 `work=$(mktemp -d ...)`, Steps 4 `cat "$work"/*.out | wc -c`, Steps 5 `report=...` used by Steps 11, Steps 12 `rm -r "$work"`, `ls "$work"`, and `"$projects"` in Steps 2's session command.
+   - New: Steps 3 runs `mktemp -d "${TMPDIR:-/tmp}/session-retro.XXXXXX"` and takes the printed path as `<work>`; Steps 4 `cat <work>/*.out | wc -c`; Steps 5's loop ends in `echo "$report"` and the printed path is `<report>`; Steps 11 and 12 use `<report>` and `<work>`; Steps 2 prints `<projects>` on the first line of its output. Steps 5 records `<work>` and `<report>` in the report, and `templates/sessions.md` has the lines `- Working folder, `<work>`: `<path>`` and `- Report, `<report>`: `<path>``. Rules has the bullet "A command names the paths `<projects>`, `<work>` and `<report>` as placeholders and is run with the literal path substituted, since each Bash call starts a fresh shell and keeps no variable of an earlier call." The variables left in the file (`projects`, `name`, `prefix`, `day`, `n`, `report` inside the loop) are each set and used in one command block.
+   - Rerun, Steps 4's size in one Bash call with the literal path: `cat /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//session-retro.dA1mhB/*.out | wc -c` printed `730556` (the folder was made by `mktemp -d` in a separate call, and the reader's output written in another).
+   - Rerun, Steps 12's removal in another call with the literal path: `rm -r /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//session-retro.dA1mhB; echo rc=$?` printed `rc=0`, and `ls` of that path in a further call printed `ls: /var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T//session-retro.dA1mhB: No such file or directory`.
+2. Spec 2, the working folder at the stop.
+   - Old: Stops row "A large output", What resumes it: "... or a narrower window given as `/session-retro <start> <end>`, which ends this run".
+   - New: "... which ends this run after the working folder is removed"; the bullets under the table gain "A narrower window at "A large output" ends the run after the working folder is removed."
+3. Spec 3, a run from a step worktree.
+   - Old: `repo=$(cd "$(git rev-parse --show-toplevel)" && pwd -P)`.
+   - New: `repo=$(cd "$(git worktree list --porcelain | sed -n '1s/^worktree //p')" && pwd -P)`, with a bullet saying the repository is the main worktree.
+   - Rerun from the worktree root `/Users/axelfaes/workspace/ordo/.agents/worktrees/2h-2` printed `repo=/Users/axelfaes/workspace/ordo` and the folders `-Users-axelfaes-workspace-ordo`, `-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7`, `-Users-axelfaes-workspace-ordo--agents-worktrees-2b-7a`.
+   - Rerun from the main checkout `/Users/axelfaes/workspace/ordo` printed `repo=/Users/axelfaes/workspace/ordo` and the same three folders.
+4. Spec 4, the order of a proposal.
+   - Old: "It gives the sentence to add, or the sentence as it stands beside the sentence it becomes, in this order:" and the three cases.
+   - New: "The proposal is the first of these three that applies:" and the three cases, then the bullet ""Not written" is decided by grepping for the rule in the rules file, the standards pages, the user's rules files (`~/.claude/CLAUDE.md` and `~/.claude/rules/`) and the skill's text."
+5. Spec 5, reading a part.
+   - Old: "A part is printed with `sed -n '<first>,<last>p' ...`".
+   - New: "A part is read with Claude Code's Read tool on the output file, from line `<first>` for `<last> - <first> + 1` lines, since Claude Code keeps only a 2 KB preview of a large Bash output." The `sed -n '<n>p' <work>/<folder>.out | fold -w 2000` line for a cut line is kept.
+6. Spec 6, the entry.
+   - Old: Steps 1 took the first word of the title, less a trailing full stop; What it reads 2 said the title "opens with `# Plan: <entry>`".
+   - New: What it reads 2 says the title after `# Plan: ` equals `<entry>` or starts with `<entry>` and a space, a full stop after a number allowed (the number, or the number and title); Steps 1's loop is `awk -v entry='<entry>' 'index($0, "# Plan: ") == 1 { title = substr($0, 9); if (title == entry || index(title, entry " ") == 1 || index(title, entry ". ") == 1) found = 1 } END { exit !found }'`.
+   - Rerun of the loop over `.scratch/*/plan.md` and `.scratch/archive/*/plan.md`, quoted as printed:
+     - `entry [2.H]:` printed `.scratch/2-h-session-retro/plan.md`
+     - `entry [2.H session-retro]:` printed `.scratch/2-h-session-retro/plan.md`
+     - `entry [2]:` printed `.scratch/archive/2-coverage-inventory-of-the-academic-skills/plan.md`
+     - `entry [2.C]:` printed `.scratch/archive/2-c-scripts-compute-facts-and-writing-is-removed/plan.md`
+     - `entry [2.C Scripts compute facts, and /writing is removed]:` printed `.scratch/archive/2-c-scripts-compute-facts-and-writing-is-removed/plan.md`
+7. Standards 1, one rule per bullet.
+   - Steps 3's refusal bullet is now three bullets (exit status 1, exit status 2, no item).
+   - Steps 10's decision bullet is now three bullets (the values of a decision, where it is written, that it is written before the next proposal).
+   - Steps 1's first bullet is now two: "For `<entry>`, find the plan's folder, whose name is `<slug>`:" with the loop, and "The loop matches `<entry>` as "What it reads" 2 says."
+
+### Verify list, description count, ASCII
+
+Command: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-h-session-retro/orchestrator-state.md`, rc=0. Its lines, the ASCII perl command's own line left out of this copy and passing as the last command of the count:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+checks: 10 commands passed
+```
+
+- Description count, `python3 -c 'import glob,yaml; ...' | grep session-retro`: `779 skills/session-retro/SKILL.md`.
+- `LC_ALL=C grep -n '[^ -~]' skills/session-retro/SKILL.md skills/session-retro/templates/sessions.md skills/plan-retro/SKILL.md; echo rc=$?`: no line, `rc=1`.
+- The reader output and the scratch folders under `$TMPDIR` are removed.
+
+### Judgment calls
+
+- `<report>` is recorded in `templates/sessions.md` as a line of the Window section, since the brief asks the report to record it and the template is a path this step writes.
+- The placeholders `<projects>`, `<work>` and `<report>` are stated once, in Rules, and each step names the command whose output gives the path.
+- The rule "A command names the paths ... as placeholders" is a Rules bullet because it holds throughout the skill.
+- "Matches" in Steps 1's second bullet points at "What it reads" 2 and does not restate the rule.

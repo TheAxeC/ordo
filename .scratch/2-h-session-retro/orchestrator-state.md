@@ -38,26 +38,12 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2h-2
-  base: e9714ddf0a692563db27823e2e30d89227e25836
-  launched: 2026-09-30 09:42
-  session_id: a27f84a753259fcf8 (claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-h-session-retro/agents/reviews/2-report.md
-  brief_check: .scratch/2-h-session-retro/agents/reviews/2-brief-check.md (claude-opus-5-5; 120502 tokens, 33 tool uses, 402 s, $0.98-2.88)
-  builder_usage: round 0 163696 tokens, 39 tool uses, 649 s ($1.08-2.53)
-  reviewer_report: .scratch/2-h-session-retro/agents/reviews/2-refuter.md (claude-opus-5-5; 147982 tokens, 42 tool uses, 436 s, $1.51-4.36)
-  landing: not-started
-  round: 1
-  round_1_sent_at: the tree of 2-round-0.diff
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-none
+- Step 2 reading (2026-09-30): step 2, the `session-retro` skill, landed unticked, since its check is your reading of `skills/session-retro/SKILL.md` and `templates/sessions.md` against `docs/dev/skill-layout.md` and the Goal (ruling "Overnight work applies to this plan"). Options: (a) you read it and tick step 2, or name what is wrong; (b) tick it unread. Recommendation (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -84,6 +70,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Step 1 of 4, the transcript reader, landed and ticked (`agents/reviews/1-landing.md`).
-- Next step: 2, the `session-retro` skill.
-- Open on Axel's side: none.
+- 2026-09-30. Step 2 of 4, the `session-retro` skill, landed unticked, its reading pending (`agents/reviews/2-landing.md`); step 1 is landed and ticked.
+- Next step: 3, the skill wired in.
+- Open on Axel's side: the open items above.

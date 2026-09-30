@@ -28,7 +28,7 @@ metadata:
 1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them: `ledger_root`, `archive_root`, `rules`, `standards`, `verification`.
    - A required key missing is a refusal ("Stops").
 2. Every refuter report under `<ledger_root>/` and `<archive_root>/`, each `agents/reviews/<step>-refuter.md`, leaving out the runs the previous retro lists under "Reports read" (Steps 1).
-3. The newest file under `<ledger_root>/retros/`, the previous retro, for its "Reports read" list. With no previous retro, every run is read.
+3. The newest file under `<ledger_root>/retros/` named `<YYYY-MM-DD>.md`, the previous retro, for its "Reports read" list. With no previous retro, every run is read.
 4. The rules page, every page in `standards`, and the verification page, whole.
 5. For a finding whose kind is unclear from its text, the report it came from and the brief of its step.
 
