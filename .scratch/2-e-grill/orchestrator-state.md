@@ -85,4 +85,5 @@ dispatch: none
 - 2026-09-30. Steps 1 to 5 and 7 to 10 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
 - Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 10's fixes at landing.
 - Next step: 11, the ADR readers (rulings B, C and F). Unblocked by step 10: 2.F steps 1 and 2 and 2.H step 3.
+- Carried to step 12's brief: a "Use instead" row in `skills/plan/SKILL.md` naming `/grill <entry>` for design decisions of the entry not yet settled (step 11's brief check, Decision 6 of brief 11).
 - Open on Axel's side: the reading of step 6; the old rule 13 in game-engine and cathedra; approval stops under a ruling; the old skill name in other repositories.
