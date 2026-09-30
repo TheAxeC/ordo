@@ -44,7 +44,12 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-none
+- Step 2b, the offer's text in question 10, for your reading (2026-09-30, raised at /spec of step 2b; the step is built meanwhile and is not landed before you answer): you approved the text of `repo-setup`'s question 10 by reading it ("Step 2 reading"), and step 2b changes it, since it lists what the guard refuses. The new text, three sub-bullets under "10. Install the git guard? [no]":
+  - "It is a hook that refuses, in an agent's commands, the git commands that publish work or discard it: `git push`, `git send-pack`, `git subtree push`, `git reset --hard`, `git clean` with force, `git checkout` or `git restore` of the whole tree, `git checkout --force`, `git switch --discard-changes`, `git stash drop` and `git stash clear`."
+  - "The user runs these by hand."
+  - "The hook is copied into `.claude/hooks/`, which `.gitignore` ignores, so each clone installs it itself, and it needs `python3` 3.9 or later."
+  - (a) The text as above. (b) The text with your correction, given in your answer. There is no lazy option: both are a reading.
+  - Recommendation (a): it is the text you approved with the six commands added and its three requirements in a bullet each.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -83,5 +88,5 @@ none
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
 - Step 2a is ruled ("Step 2a, what the alias lookup reads", (a)) and is prepared after step 2b lands, since both write `git_guard.py`.
-- Step 2b is ruled ("Step 2b, the forced checkout and switch", (a)); its brief is being changed to the ruling and checked.
+- Step 2b is ruled ("Step 2b, the forced checkout and switch", (a)); its brief holds the ruling and the brief check's findings, and it is dispatched after step 3a of plan 2.H lands. It is not landed before the open item above is answered.
 - Next: step 2b, then step 2a, then 2c alone, then step 3, the closing.
