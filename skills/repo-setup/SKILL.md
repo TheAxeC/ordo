@@ -105,7 +105,8 @@ metadata:
 7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names. A no-single-block line of the same run is still drafted, as step 4 says.
    - Show the line with the file it names ("Stops").
    - The file named in the line is fixed first, by the user or with the user's approval.
-8. After a written draft or a fixed file: run the check again, until it exits 0.
+8. After a written draft or a fixed file: run the check again, at most twice, following steps 2 to 7 on its exit status each time.
+   - A check that does not exit 0 on the second of those runs is a stop ("Stops").
 9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
 
 ## The questions
@@ -160,10 +161,11 @@ utils/                           scripts the build and the checks run
 | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
 | The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block | The change Steps / sync 4 drafts | The user's approval |
 | A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
+| The check still fails | The check run again after the change does not exit 0 on its second run (Steps / sync 8) | The check's output | The user's decision, then `/repo-setup sync` again |
 | No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 12 or Steps / sync 9 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
 | Tracked files | The folder for a new repository holds tracked files | A refusal that names `/repo-setup sync` and `/ordo-init` | One of those, or a folder with no tracked file |
 
-- The first six rows are stops: each waits on the user.
+- The first seven rows are stops: each waits on the user.
 - The last row is a refusal: it names its cause and changes nothing.
 
 ## Anti-patterns

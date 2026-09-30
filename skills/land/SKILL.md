@@ -78,6 +78,7 @@ metadata:
    - The step keeps its line and its tag.
      - It is worked again as that step, with no new ruling.
    - The failure goes to the user as an open item only when only the user can decide what to do.
+   - A step is taken back out of main and prepared again at most once: a second failure of its landing always goes to the user as an open item, and the step waits for the ruling.
    - The state file and `plan.md` are then committed by path, a resume point.
      - The commit also holds the other ledger records the session wrote since the last one.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
@@ -187,7 +188,7 @@ metadata:
   - Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item.
 - A refusal names its cause and leaves nothing.
 - A red line recorded in the step's Step 0 is not a stop: the step is out of main and keeps its line and its tag.
-- It is worked again as that step, with no new ruling, through `/spec`. `/spec` saves its work as a patch and prepares it again from main's head (the `spec` skill's "Steps / A step taken back out of main").
+- It is worked again as that step, with no new ruling, through `/spec`, once (Steps 6). `/spec` saves its work as a patch and prepares it again from main's head (the `spec` skill's "Steps / A step taken back out of main").
 
 ## Anti-patterns
 

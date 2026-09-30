@@ -65,8 +65,8 @@ metadata:
    - A goal whose gate cannot be named is a stop ("Stops", row "No gate").
    - At that stop the user may put the entry under "Not yet specified": it is drafted in the form of "The format is the file's", bullet "Not yet specified", and the draft goes to Steps / add 6 without Steps / add 3 to 5.
 3. Ask of the drafted gate "could this pass without the goal being reached?" and write the answer with its reason in the draft that Steps / add 6 shows, never in the roadmap entry.
-   - A gate that could (a file that exists without saying what the goal asks, a command that exits 0 on an empty result, a count with no content behind it) is redrafted and asked again.
-   - A goal for which every gate drafted could pass without it is a goal whose gate cannot be named (Steps / add 2).
+   - A gate that could (a file that exists without saying what the goal asks, a command that exits 0 on an empty result, a count with no content behind it) is redrafted and asked again, at most twice.
+   - A goal whose gate could still pass after the second redraft is a goal whose gate cannot be named (Steps / add 2).
    - The step is done when the gate's answer is no and the answer with its reason stands in the draft.
 4. Draft what it waits on: the entries (open or done) the work depends on, found from the goal and the entries' text, each with the reason.
    - A dependency the roadmap does not hold is a stop ("Stops").

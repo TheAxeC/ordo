@@ -168,7 +168,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
 
 ### A step taken back out of main
 
-A step whose dispatch entry reads `landing: backed-out` has its old worktree and branches kept by `/land` (the `land` skill's Steps 6). The session, which may run git, saves its work and removes them from the repository root on main, before Steps 2:
+A step whose dispatch entry reads `landing: backed-out` has its old worktree and branches kept by `/land` (the `land` skill's Steps 6). The session, which may run git, saves its work and removes them from the repository root on main, before Steps 2. A step whose Step 0 records a second landing failure waits for the user's ruling, as the `land` skill's Steps 6 says, and is not prepared again before it:
 
 1. Read the entry's `base` and `worktree`.
    - The branch is the worktree folder's name, and `<branch>-land` beside it.
@@ -195,11 +195,15 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
 
 1. Leave three things and nothing else.
    - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
+     - An option adds a step to the plan only when the work fits no step already in the list.
      - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling then approves them too.
      - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, and the approval stop of a skill the option runs, such as `/roadmap`'s shown diff, stay stops of their own, and the option names each of them.
    - The same text under the step's Step 0 in `plan.md` or the part file it names.
    - The ledger files the session wrote, committed by path as a resume point, so the stop survives the session.
 2. No brief, no worktree and no dispatch block exist for the stopped step.
+3. A step stops at most twice before its build, counted as the open items under its Step 0.
+   - A run that finds a third choice for the user is the stop "A step that does not converge" ("Stops"): the step is booked under `plan.md`'s "Blocked, and by what" with every choice left.
+   - `/spec` refuses the step from then on, until a ruling of the user rewrites, splits or removes it.
 
 ### A ruling
 
@@ -253,10 +257,9 @@ Steps 5 says when this runs.
    - Each change is named under the report's "Closed" heading, beside its finding.
    - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
    - The check runs once per step: the brief as changed goes to the builder without a second run, and a `/spec` run after a stop or a ruling does not check the step again.
-   - When the findings cannot be closed by changes to the brief as written, the session writes the brief again once, from the step's line, the rulings and the report, and that brief goes to the builder without a check.
-   - A brief that still cannot be written is the stop "A brief check finding the brief cannot absorb" ("Stops"), raised once with every finding left.
    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
    - Every such finding of the report is raised in that one stop, so the user rules on all of them in one reply.
+   - A finding the session cannot close by a change to the brief is raised in the same stop.
    - A contradiction the **ADRs** check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says. One found only in the brief's own wording is closed by a change to the brief that follows the ADR.
    - At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
    - At such a stop the report is among the ledger files the stop commits.
@@ -266,15 +269,16 @@ Steps 5 says when this runs.
 
 ## Stops
 
-The first five rows are stops, which leave an open item as "Steps / A stop" says. The rest are refusals. A refusal names its cause and leaves nothing beyond what "Steps / A step taken back out of main" has already done.
+The first six rows are stops, which leave an open item as "Steps / A stop" says. The rest are refusals. A refusal names its cause and leaves nothing beyond what "Steps / A step taken back out of main" has already done.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | A false premise the plan cannot absorb | A premise the step's text makes is false on the tree, and its correction would change the step's scope or make a choice the user would see (Steps 2); the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
 | A rule clash with an ADR | The step's text contradicts the part in force of an ADR the step touches (Steps 2, or the **ADRs** check of "Steps / The brief check") | The open item, booked in the open items, naming the ADR and quoting the step's words that contradict it | A ruling |
 | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary, or, under `libraries: check`, a library could replace code the step would write by hand (Steps 3) | The open item, booked in the open items | A ruling |
-| A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see, or a brief the session cannot write from the report in one rewrite ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
+| A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
 | A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
+| A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
 | A step without the user's authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling of the user in the Rulings section, or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | The user's ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |
 | A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on the ledger's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |

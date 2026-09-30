@@ -47,6 +47,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Before any dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and the loop dispatches nothing.
 2. Pick the next step that nothing blocks.
+   - A session runs one plan at a time. With several plans open, it takes them in the roadmap's order and starts the next plan only when the one before it has no step left that can move without the user.
    - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
 3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
    - Before dispatching the builder, read the brief check's report and the changes to the brief its "Closed" heading names.
@@ -114,8 +115,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - A red line the orchestrator cannot fix at landing takes the step back out of main.
      - Its failure is recorded in the step's Step 0 in `plan.md`.
    - The step keeps its line and its tag.
-     - It is worked again as that step, with no new ruling.
+     - It is worked again as that step, with no new ruling, once.
    - The failure goes to the user as an open item only when only the user can decide what to do, by "Stops".
+   - A second failure of the step's landing always goes to the user, as the `land` skill's Steps 6 says.
    - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
 10. Continue with step 2.
@@ -171,7 +173,7 @@ On resumption with a dispatch block present:
 - A step at `landing: backed-out` was taken back out of main by a red line at its landing.
   - Its worktree and its branches are kept.
   - It stays unticked in `plan.md`.
-  - It is worked again as that step, its line keeping its tag, with no new ruling.
+  - It is worked again as that step, its line keeping its tag, with no new ruling, unless its Step 0 records a second landing failure.
   - Its failure is in its Step 0 in `plan.md`.
 - `/spec` of such a step saves its work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
 - A builder is dead when the runner's agent listing no longer shows it and no completion notification with a report arrived.
@@ -324,7 +326,7 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
   - The models it names are those in "The two tiers, and the models".
 - A fix of a defect in delivered work needs no yes.
 - The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing. A new finding of a review never earns that round, and the user's yes never extends the cap.
-- Nothing in the loop repeats without a count: a step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round.
+- Nothing in the loop repeats without a count: a step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round, two stops before its build (the `spec` skill's "Steps / A stop" 3) and one return out of main (the `land` skill's Steps 6).
   - A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.
 - After its last round a step lands.
   - Its small findings, the last review's included, are fixed at landing.

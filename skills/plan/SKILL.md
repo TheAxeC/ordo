@@ -55,7 +55,8 @@ metadata:
    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
    - The session asks the same question of each step's check, "the goal" there being the part of the goal the step delivers, and writes the answer with its reason in "## Gate", one line per step, as the template gives it.
    - The answer stands only in "## Gate", and each step line keeps the shape the template gives it.
-   - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again before the draft is shown.
+   - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again, at most twice, before the draft is shown.
+   - A check that could still pass after the second redraft is kept as drafted, and its answer and reason go to the user at Steps 3.
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).

@@ -60,6 +60,9 @@ No other `##` heading appears outside the place row 6 gives it.
 - A term that `docs/glossary.md` defines is used only in a sense it defines there. A skill that needs a new term, or a term in a new sense, adds or changes its entry in `skills/repo-setup/templates/plan-terms.md` first, and `docs/glossary.md`'s block is synced from it.
 - A sentence stays only when it changes what the reader does from what they would do without it. A sentence that restates a default, praises, or explains what the reader already knows is cut.
 - Each item of Steps ends on its completion criterion: what is true, or what exists, when the step is done.
+- Every repeat a skill asks for states its count and what happens when the count is reached: the work goes on as it is, or the skill stops for the user. A repeat that ends only when a condition holds, such as "until it passes" or "asked again", is given a count.
+  - A repeat the work itself bounds, one pass per item of a list or per part removed, needs no count.
+  - A repeat the user ends by answering, such as the rounds of an interview, needs no count.
 - Material a step needs only in some runs (a long format, a table of cases, a protocol) goes in a file `references/<name>.md` beside `SKILL.md`, named by its path from the step that reads it. Reference material goes in `references/`, never in `templates/`, which holds the files a skill copies into a repository or runs from its own folder.
 - A reference section of row 6 of "Sections, in order" holds only material every run reads.
 - The rules of this section apply to a skill's text when it is written or rewritten. Roadmap entry 23, the pruning pass, applies them to every existing skill.
@@ -83,6 +86,7 @@ No other `##` heading appears outside the place row 6 gives it.
 |---|---|---|
 | A rule folded into a table cell until its exception is gone | The skill then allows what the rule forbade | Keep the rule whole in a list item and point the cell at it |
 | The same rule written in two sections | The two copies drift, and a reader cannot tell which one holds | Write it once and name its section from the other place |
+| A repeat with no count ("run again until it exits 0") | A run that does not converge never ends, and each pass works on the output of the last | State the count and what happens at it, as "Writing for an agent" says |
 | A paragraph holding several rules | A reader, and a reviewer checking a diff, cannot tell where one rule ends | One rule per bullet |
 | History in the skill: a version tag in a heading, "added in", a date | It tells the reader nothing about what to do now | The version in `metadata.version`; the history in the commit log |
 | A heading that is a sentence or a slogan | It hides what the section holds | A noun-phrase label |
