@@ -38,20 +38,7 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 ```
 
 ```yaml
-dispatch:
-  - step: 14c
-    executor: agent
-    worker: claude:sonnet
-    worktree: .agents/worktrees/2e-14c
-    base: e403a796007171fe3b93b2491577e26c8c18089b
-    launched: 2026-09-30
-    session_id: a23f99bf273bb8deb (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-    report: .scratch/2-e-grill/agents/reviews/14c-report.md
-    builder_usage: claude-sonnet-5-5, 142904 tokens, 35 tool uses, 434 s (round 0, from its completion notice); 189621 tokens, 15 tool uses, 298 s (round 1, from its completion notice)
-    brief_check: .scratch/2-e-grill/agents/reviews/14c-brief-check.md (ordo-high, claude-opus-5-5, 153480 tokens, 34 tool uses, 432 s)
-    reviewer_report: .scratch/2-e-grill/agents/reviews/14c-refuter.md (ordo-high, claude-opus-5-5, 187381 tokens, 39 tool uses, 603 s; items 1 to 5 hold; K3 to K5 and K8 to K10 met, K1 and K7 partial, K2 and K6 unmet; findings Spec 1 and 2, Proof 1, Standards 1 to 6, Behaviour 1)
-    landing: not-started
-    round: 1 (sent 2026-09-30: brief agents/briefs/14c-round-1.md, the diff before it agents/reviews/14c-round-0.diff); builder done; round-1 reviewer running (ordo-high, claude-opus-5-5 at the launch, from its transcript)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -128,4 +115,5 @@ dispatch:
 - Step 9a landed and ticked (2026-09-30), with 2 fixes at landing in `skills/grill/SKILL.md`; the scratch runs booked in its booking. Step 13 done and ticked: D1 to D24 in `.scratch/rulings/3-the-writing-base.md`, ADRs 0001 to 0003 and entry 3 rewritten, committed in 7e984dd.
 - Step 14a landed and ticked (2026-09-30), with 4 fixes at landing in `skills/grill/SKILL.md`; one finding of the run over its round raised as an open item.
 - Step 14b landed and ticked (2026-09-30), with 4 fixes at landing in `docs/dev/blind-comparison.md`.
-- Next: step 14c (ruling "Step 14a, an archived plan the entry has since set aside"), then step 14 run again, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
+- Step 14c landed and ticked (2026-09-30), with 2 fixes at landing in `skills/grill/SKILL.md`.
+- Next: step 14 run again, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
