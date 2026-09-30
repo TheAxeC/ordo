@@ -9,7 +9,6 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
-- sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
@@ -44,26 +43,9 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 3a, what `spec` carries from a diagnosis into a brief (2026-09-30, raised at /spec of step 3a from its second brief check, finding G7): the brief has `diagnose` write the cases it found red and the cases under "Not covered" into the step's Step 0, for a red line and for `premise`. `spec` Steps 4 then writes the step's brief, and its three sentences name only the cause, the fix, the red command and the record's path: "The found cause, its fix and the diagnosis record's path", "The diagnosis's red command" as a check, and, for a step taken back out of main, "the cause, the fix and the diagnosis record's path". `skills/spec/SKILL.md` is outside step 3a's paths, and step 9a of plan 2.E, in flight, changes other lines of it.
-  - (a) Step 3a's paths widen by those three sentences of `skills/spec/SKILL.md` Steps 4. Each gains the cases: the item of the brief holds "the found cause, its fix, the cases the diagnosis found red, the cases its "Not covered" section names and the diagnosis record's path"; the check is "the diagnosis's red command, run on the shrunk case and on each case it found red that "Not covered" does not name"; the brief of a step taken back out of main carries "the cause, the fix, the cases the diagnosis found red, the cases under "Not covered" and the diagnosis record's path". The exact lines are dictated in the brief from the tree and checked by a third brief check before dispatch. The file is recorded as shared with step 9a, whose lines are 207 to 240 against 110 to 127 here. Pro: the builder's fix is held to every red case, which is what your ruling on the comparison asks for inside a plan. Con: one more file, and one more brief check before dispatch.
-  - (b) `spec` stays as it is: the cases stand in Step 0, which `spec` reads, and in the record. Pro: no further file. Con: a brief can leave the cases out, and the builder's fix is then checked on the shrunk case alone. This is the lazy option.
-  - Recommendation: (a).
-- Step 3a, the verification commands for a brief-check finding (2026-09-30, raised at /spec of step 3a from its second brief check, finding G21): under your ruling (b) the run after the fix runs every verification command. For a brief-check finding the fix is a change to the brief, written on main, and the scratch copy the diagnosis runs on holds no fix. The whole list then runs on an unchanged copy and shows nothing about the fix.
-  - (a) No exception: the list runs for a brief-check finding too. Pro: one rule with no exception. Con: the time of the whole list for a result that says nothing about the fix.
-  - (b) One sub-bullet in Steps 20 of `diagnose`: "For a brief-check finding no verification command is run, and the record says so." Pro: no run that shows nothing. Con: one exception to your ruling (b).
-  - Recommendation: (b). Neither option is lazy in the sense of leaving work undone; (a) costs time and buys nothing.
+- Step 3 reading (2026-09-30): your `/diagnose` run on the scratch copy is booked (`plan.md`, "Step 3, the real run") with its record at `agents/reviews/3-diagnosis.md` and its fix at `agents/reviews/3-diagnose-fix.diff`. The run reached the cause the ledger books for 2.E step 3: the refusal compared the two folders as text. The step's check ends "reviewed by Axel". Options: (a) approve the run as the step's proof, and step 3 is ticked; pro: the record quotes the red command, the two hypotheses, the probes, the fix and four red tests, and the cause matches db9bbec; con: none found. (b) ask for a second run on another defect before the tick; pro: a second case; con: the gate asks for one real run, and step 4 compares on this same defect. Recommendation (a). Neither is the lazy option: (a) is the step's check as written.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
-
-- Step 3a, which verification commands the run after the fix runs (2026-09-30): Axel ruled (b), all of them; booked in plan.md Rulings.
-
-- Step 3a, the booking of what a fix does not cover (2026-09-30): Axel ruled (a), `land` Steps 9 names it; booked in plan.md Rulings.
-
-- Step 4, the call on the blind comparison (2026-09-30): Axel ruled (a), "loses"; step 3a added, step 4 run again after it; booked in plan.md Rulings.
-
-- Step 4, who runs the two sides of the blind comparison (2026-09-30): Axel ruled (a); booked in plan.md Rulings.
-
-- Step 3 reading (2026-09-30): Axel ruled (a); the run is approved and step 3 ticked.
 
 - Step 1 reading (2026-09-30): approved by Axel; step 1 ticked.
 
@@ -94,7 +76,6 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1, 2, 2a, 2b and 3 landed or run, and ticked.
-- Step 4: the first blind comparison is recorded in `agents/reviews/4-blind-comparison.md`; Axel's call on it is "loses" (ruling "Step 4, the call on the blind comparison", (a)).
-- Step 3a: its brief is written and checked once (`agents/reviews/3a-brief-check.md`), every finding closed in the brief, the two that were Axel's by his rulings (b) and (a). The second brief check reported 23 findings; 20 are closed in the brief, one is booked as the orchestrator's choices for Axel to overrule, and two are the open items "Step 3a, what `spec` carries from a diagnosis into a brief" and "Step 3a, the verification commands for a brief-check finding". The step is dispatched after the two rulings and a third brief check.
-- Next: step 3a, the four changes to `diagnose`; then step 4 run again whole, which ends in Axel's call; then step 5, the closing.
+- 2026-09-30. Steps 1 and 2 landed and ticked.
+- Step 3 is run and booked, not ticked: open item "Step 3 reading".
+- Next: steps 2a and 2b; step 4 after step 3 is ticked.

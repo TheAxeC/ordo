@@ -9,7 +9,6 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
-- sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
@@ -39,21 +38,7 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 ```
 
 ```yaml
-dispatch:
-  step: 9a
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-9a
-  base: 9f85c25167de344c56879d5dcefb63456848df11
-  launched: 2026-09-30 16:02
-  session_id: a931b2d1ac6c7e98d (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-e-grill/agents/reviews/9a-report.md
-  builder_usage: claude-sonnet-5-5, 48769 tokens as its completion notice gives them, 190 tool uses, 3460 s, $10.34-21.03
-  brief_check: .scratch/2-e-grill/agents/reviews/9a-brief-check.md (ordo-high, claude-opus-5-5; first run 231093 tokens, 34 tool uses, 12.1 minutes, $1.81-6.08; second run 301182 tokens, 46 tool uses, 18.1 minutes, $2.58-7.82; third run 365066 tokens, 53 tool uses, 1059 s, $3.41-10.02; fourth run 318017 tokens, 55 tool uses, 941 s, $3.09-9.18)
-  shared_paths: skills/repo-setup/SKILL.md (step 2b of plan 2.G changes line 126 only; this step's nearest lines are 109 and 158, each placed by quoted text, so the cherry-pick merges with nothing to do by hand); README.md (step 2b of plan 2.G changes line 13, this step line 54)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/9a-refuter.md (ordo-high, claude-opus-5-5, 344198 tokens, 49 tool uses, 983 s, $2.97-9.27; twelve items hold; findings Spec 1 to 3 and Standards 1 to 6)
-  landing: not-started
-  round: 1 (sent 2026-09-30: brief agents/briefs/9a-round-1.md, the diff before it agents/reviews/9a-round-0.diff)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -62,15 +47,9 @@ none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- Step 9a, the sentence on stops marked "every run" (2026-09-30): withdrawn as an open item; the orchestrator took (b), booked in plan.md Rulings under "Step 9a, the round's choices" (6), a fix at the landing of step 9a.
-
-- Step 9a, a file of `/repo-setup`'s draft that comes from no template (2026-09-30): Axel ruled (a); booked in plan.md Rulings.
-
 - The pin at v2.6.0 (2026-09-30): Axel ruled (a) and ran the pin; 13 skills and 5 agents linked at v2.6.0 (ca8ae3e), booked in plan.md Rulings.
 
 - Approval stops under a ruling (2026-09-30): Axel ruled (a); step 9a added after step 12a, booked in plan.md Rulings.
-
-- Step 9a, how a skill is given the ruling and what the ruling must hold (2026-09-30): Axel ruled (a); the text is under "Step 0 of step 9a" in `plan.md`.
 
 - Old rule 13 in game-engine and cathedra (2026-09-30): Axel ruled (a); step 15 rewrites rule 13 in both repositories.
 
@@ -117,5 +96,4 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
-- Step 9a is prepared under its three rulings and its brief has had four brief checks (`agents/reviews/9a-brief-check.md`); it is built and reviewed (`agents/reviews/9a-refuter.md`), and repair round 1 is sent to its builder, the one round the plan allows; the sentence on stops marked "every run" is changed at the landing, as choice (6) of "Step 9a, the round's choices" says. The step is in flight beside step 2b of plan 2.G, which writes other lines of `skills/repo-setup/SKILL.md` and `README.md`. Before its landing, five fresh agents make the scratch runs the step's line names.
-- Next: step 9a; step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.
+- Next: step 9a (approval stops under a ruling); step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.

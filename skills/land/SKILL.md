@@ -90,7 +90,7 @@ metadata:
    - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
    - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`.
    - It states whether the builder's first report passed its bar, and the fixes at landing.
-   - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as, or with "false premise".
+   - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as.
    - Tick the step.
 10. Read the step's `worktree` from its dispatch entry, for Steps 13.
     - Then rewrite the state file: the step's dispatch entry removed, the position line, the open items as they stand.

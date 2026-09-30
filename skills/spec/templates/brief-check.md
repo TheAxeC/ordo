@@ -44,13 +44,6 @@ Findings: <each implied input missing from "Cases">. Or: none.
 
 Findings: <each part of the brief that contradicts an ADR, with the ADR's sentence; each ADR the step touches that the brief does not name>. Or: none.
 
-## 8. Dictated text
-
-- <each text the brief gives word for word (a sentence, a row, a glossary entry, a layout, a message a script prints)>: consistent with the rules file and the standards, or the rule it breaks, named with its file and section. Or: no text given word for word.
-- <each claim a dictated text makes about the tree>: `<its command>`, what it printed now, and whether that matches the claim. Or: no claim.
-
-Findings: <each dictated text that breaks the rules file or a standard, with the rule; each claim of a dictated text that differs from the command's output, with both>. Or: none.
-
 ## Declined to judge
 
 - <a point the agent did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.

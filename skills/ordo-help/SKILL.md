@@ -57,8 +57,6 @@ metadata:
 then, for every step:
 
 /spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
-/diagnose <entry> <step> premise
-                              when the step's text asks for a cause to be found: /spec runs it while it writes the brief, or you run it first; the cause goes to the step's Step 0 and into the brief
 /diagnose <entry> <step> brief check <n>
                               when a finding of the brief check has a cause not known: finds the cause on a scratch copy before the finding is closed in the brief
 "build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
@@ -73,7 +71,7 @@ read the delta                when plan.yaml says refute_after_repair: no: the o
 
 when a command stops:
 
-/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, a choice is yours, the step contradicts an ADR (a rule clash), the cause its text asks for was not found and it has nothing else to build, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
+/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, a choice is yours, the step contradicts an ADR (a rule clash), or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
 /spec <entry> <step>          again; it now writes the brief
 /spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise

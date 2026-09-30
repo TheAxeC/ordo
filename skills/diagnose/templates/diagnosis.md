@@ -1,10 +1,10 @@
 # Diagnosis: <the symptom in a few words>
 
-Every quoted command output carries `<REDACTED>` in place of the value of a secret in it, as the rules file's rule on secrets in quoted command output says. A diagnosis of the same step later is appended below under its own heading, which names its finding or quotes the part of the step's text it is for.
+Every quoted command output carries `<REDACTED>` in place of the value of a secret in it, as the rules file's rule on secrets in quoted command output says. A diagnosis of the same step later is appended below under its own heading, which names its finding.
 
 ## Symptom
 
-<the symptom, quoted exactly: the user's words, or the failure scenario of the finding in the report that holds it, with the report's path and the finding's name, or for `premise` what the step's text says happens, with the part of the step's text that asks for the cause quoted and the path of `plan.md`>
+<the symptom, quoted exactly: the user's words, or the failure scenario of the finding in the report that holds it, with the report's path and the finding's name>
 
 ## Where the probes run
 
@@ -32,12 +32,6 @@ Runs, with the output of each quoted:
 ```
 
 <for a symptom seen only sometimes: the failure rate and the number of runs it was measured over; for a slow symptom: the baseline with its mean and spread, and the threshold red is defined as; for a defect in text: the quoted text beside the line of the run or transcript that shows the wrong behaviour it led to>
-
-<for a red command a person drives: the observations file of each run quoted whole, and which observation is the red>
-
-```
-<the observations file of each run>
-```
 
 Runs after the tightening, with the output of each quoted:
 
@@ -75,7 +69,7 @@ The second list, when every hypothesis was falsified, in the same form: <the hyp
 
 ## Cause
 
-<the hypothesis the probes left standing, with the probe that shows it: the red command green with the change and red without it; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found; or for `premise` "false premise", with the green runs above>
+<the hypothesis the probes left standing, with the probe that shows it: the red command green with the change and red without it; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found>
 
 ## Fix and test
 
@@ -109,4 +103,4 @@ No test reaches it: <the reason no test can reach the defect as it occurs, or "n
 <the grep of the tag over the tree the probes ran in, and its empty output>
 ```
 
-<the scratch copy and each throwaway file removed, a credential or .env file copied into `$TMPDIR` among them; the red command run again on the original case and its output, or "carried by the round as its check", or for `premise` "carried by the brief as its check">
+<the scratch copy and each throwaway file removed, a credential or .env file copied into `$TMPDIR` among them; the red command run again on the original case and its output, or "carried by the round as its check">

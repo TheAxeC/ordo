@@ -58,12 +58,7 @@ metadata:
 4. The reviewer runs every command the report quotes as evidence, in the same form, and compares the output with what the report claims.
    - Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so.
      - It reproduces what it can from the one build.
-5. The reviewer looks for the findings "The four headings" lists and gives the verdicts "The verdicts" lists.
-   - For each case of a code step, the reviewer checks that the case's test is a proof, as the rules file's rule on tests says: it reads the test, and it makes one change of its own that takes the case's behaviour out and runs the test against that change.
-   - The change is made on a scratch copy of the files the test runs, copied with `cp` into a folder under `$TMPDIR`, never in the worktree or the main checkout.
-   - The folder is removed before the report is written.
-   - The report's verification lines give each such change and the line the test printed with it made.
-   - Steps 5 is done when every item of the brief's "What to build" and every case of its "Cases" has a verdict.
+5. The reviewer looks for the findings "The four headings" lists and gives the verdicts "The verdicts" lists, until every item of the brief's "What to build" and every case of its "Cases" has a verdict.
 6. The reviewer writes the report from `templates/report.md`.
    - The verification lines first, verbatim.
    - Then the verdicts, as "The verdicts" says: one per item of the brief's "What to build", then one per case of its "Cases".
@@ -105,8 +100,7 @@ metadata:
   - a change that contradicts the part in force of an ADR, with the ADR's number and the sentence of its decision quoted, and whether the brief asked for it;
   - an ADR the diff is under that the brief's "What is on the tree" does not name;
   - a case of a code step in the brief's "Cases" that no test of the step checks;
-  - a case whose first run on the unchanged tree the report does not give;
-  - a case of a code step for which the report gives no change that takes its behaviour out.
+  - a case whose first run on the unchanged tree the report does not give.
 - **Proof.** A test of behaviour whose failure costs nothing is not a Proof pass; it is a Standards finding, as the next heading says. A finding is:
   - a "seen failing first" claim with no quoted failing check;
   - a test that asserts a known defect as the expected result;
@@ -117,7 +111,7 @@ metadata:
   - a count, a path or a measurement in the report that the reviewer's own run does not reproduce, when a decision rests on it, and the finding names that decision;
   - a new or changed test of a behaviour the change adds or changes with no failure on the unchanged tree quoted for it in the form it has after the change;
   - a new or changed test of a behaviour the change preserves with no passing run quoted for it after the change, or on the unchanged tree where it could run there;
-  - a test that would still pass with the behaviour it is written for taken out of the code (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs), found by reading it and by the reviewer's own change of Steps 5.
+  - a test that would still pass with the behaviour it is written for taken out of the code, found by reading it (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs).
 - **Standards.** A finding is:
   - a documented standard the diff breaks, citing the standard's file and rule;
   - a comment that carries history (a step or item number, a date, what the code did before);
@@ -125,7 +119,6 @@ metadata:
   - a secret left unredacted in a line the builder's report quotes, under the rules file's rule on secrets in quoted command output;
   - a public surface changed without its page;
   - a sentence in a document, a head comment or a rules file that the diff makes false, found by grepping each name the diff changed across the documents and the comments;
-  - a term of the glossary the diff uses outside its entry's sense, or an entry the diff makes false, whether or not the report's terms part names it;
   - a file over the size limit;
   - a rule of the repository's checks that the diff satisfies only because the check does not read that path yet;
   - a test of behaviour whose failure costs nothing (neither lost work, nor a broken installation, nor a wrong configuration accepted), under the rules file's rule that a test exists only for behaviour whose failure costs something.
@@ -172,7 +165,7 @@ The first row is a stop, a decision for the user: it leaves an open item, booked
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | Praise, or a summary of what the step did | The report is read for what is wrong, and anything else hides it | Steps 6 |
-| An edit to any file outside the reviewer's scratch copy, by the reviewer | The step under review is no longer the step that was built | Report the finding; the builder or the landing fixes it |
+| An edit to any file, anywhere, by the reviewer | The step under review is no longer the step that was built | Report the finding; the builder or the landing fixes it |
 | A background shell, or polling, the brief does not list | It outlasts the review | Run each command in the foreground and wait for it |
 | A benchmark suite or a sanitizer run the brief does not list | It measures what the brief did not ask about | Steps 3 and 4 |
 | An unchecked point reported as a finding or as a pass | The report then claims what nobody checked | Name it under "Declined to judge" with the reason, as Steps 6 says |

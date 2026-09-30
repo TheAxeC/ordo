@@ -9,7 +9,6 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
-- sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
@@ -39,20 +38,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 2b
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2g-2b
-  base: 93cdcb74b6c578b574e47327903564a40974cfc1
-  launched: 2026-09-30 15:05
-  session_id: a64c3043b141e586e (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-g-git-guard/agents/reviews/2b-report.md
-  builder_usage: claude-sonnet-5-5, 390587 tokens, 99 tool uses, 4418 s, $5.36-10.94
-  brief_check: .scratch/2-g-git-guard/agents/reviews/2b-brief-check.md (ordo-high, claude-opus-5-5; first run 219616 tokens, 29 tool uses, 1004 s, $1.63-5.38; second run 237113 tokens, 39 tool uses, 1031 s, $1.90-6.07)
-  reviewer_report: .scratch/2-g-git-guard/agents/reviews/2b-refuter.md (ordo-high, claude-opus-5-5, 321512 tokens, 66 tool uses, 4176 s, $6.76-24.07; four findings, none under Spec or Behaviour)
-  landing: not-started
-  round: 1 (sent 2026-09-30: brief agents/briefs/2b-round-1.md, the diff before it agents/reviews/2b-round-0.diff)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -65,15 +51,9 @@ none
 
 - Other commands that discard work (2026-09-30): Axel agreed with the recommendation; step 2b.
 
-- Step 2b, the offer's text in question 10 (2026-09-30): Axel ruled (a), the four sub-bullets as the brief of step 2b gives them.
-
 - pyright for Python templates (2026-09-30): Axel ruled (a), the orchestrator installing pyright; step 2c.
 
 - Step 2 reading (2026-09-30): approved by Axel; step 2 ticked.
-
-- Step 2a, what the alias lookup reads (2026-09-30): Axel ruled (a); the text is under "Step 0 of step 2a" in `plan.md`.
-
-- Step 2b, the forced checkout and switch (2026-09-30): Axel ruled (a); `git checkout -f` and `--force` are blocked with the forced `git switch`.
 
 ## The standing demands (from Axel, in force)
 
@@ -97,6 +77,4 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
-- Step 2a is ruled ("Step 2a, what the alias lookup reads", (a)) and is prepared after step 2b lands, since both write `git_guard.py`.
-- Step 2b is ruled ("Step 2b, the forced checkout and switch", (a)); its brief is checked twice and its builder is dispatched. Axel has read the text of question 10 (ruling "Step 2b, the offer's text in question 10", (a)).
-- Next: step 2b, then step 2a, then 2c alone, then step 3, the closing.
+- Next: steps 2a, 2b and 2c, then step 3, the closing.

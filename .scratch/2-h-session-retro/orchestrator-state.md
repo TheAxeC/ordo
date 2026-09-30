@@ -9,7 +9,6 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
-- sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
@@ -52,10 +51,6 @@ none
 
 - Recurring findings (2026-09-30): Axel ruled (a) for each of the six proposals; step 3a.
 
-- Step 3a, the words of the six changes (2026-09-30): Axel ruled (a); the texts are under "Step 0 of step 3a" in `plan.md`.
-
-- Step 3a, six ruled sentences the brief check would reword (2026-09-30): Axel ruled (a); the six go to the builder in repair round 1.
-
 ## The standing demands (from Axel, in force)
 
 - `~/.claude/CLAUDE.md` and the rules under `~/.claude/rules/`. The ones that bite here: work runs through the skills' agents, never inline; scripts compute facts, judgment is read; no claim about state without a command in the same turn; report the end state only; plain prose, ASCII, no hard wraps and no em dashes; open items as plain text with options, pros and cons, one recommendation and the lazy option named; never the lazy option.
@@ -77,5 +72,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1, 2, 3 and 3a landed and ticked.
-- Next: step 4, the real run over 2.C's sessions with Axel, before 2026-10-28. Step 5, the closing, follows it.
+- 2026-09-30. Steps 1, 2 and 3 landed and ticked.
+- Next: step 3a (the six changes to `spec`); step 4, the real run over 2.C's sessions with Axel, before 2026-10-28.

@@ -7,7 +7,6 @@ A page this report cites (the rules file, a standard, a skill's text) is named w
 ```
 <each command of the brief's verification list, and its summary line, verbatim>
 <each command the report quotes as evidence, and what it printed>
-<for each case of a code step, the reviewer's own change and the line the test printed with it made>
 ```
 
 ## Verdicts
