@@ -1,0 +1,1017 @@
+diff --git a/README.md b/README.md
+index 9821666..3489d41 100644
+--- a/README.md
++++ b/README.md
+@@ -45,6 +45,14 @@ for every step:
+ 
+ `/ordo-help` prints the full sequence, including what to do when a command stops.
+ 
++The pipeline of one roadmap entry, marked where you are asked: "every run" for a stop each time the skill runs, "only when" for a stop in a named case, "optional" for a skill you may skip.
++
++![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
++
++The loop of one step and the /plan-orchestration band that runs it unattended, with the same marks: "only when" is a stop in a named case.
++
++![The loop of one step as boxes in order: /spec, build it, /refute, close them, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, and the /plan-orchestration band. Each box lists the stops where you are asked, marked only when.](docs/figures/plan-loop.svg)
++
+ ## Requirements
+ 
+ - git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/checks.sh`, also needs `bash`.
+diff --git a/docs/dev/building.md b/docs/dev/building.md
+index e230dba..9ea25d5 100644
+--- a/docs/dev/building.md
++++ b/docs/dev/building.md
+@@ -25,4 +25,6 @@ Each command in a verify list exits non-zero when it fails, as written. A comman
+ 
+ The last command is the ASCII check over every tracked file and every untracked file git does not ignore: it prints each line holding a character outside printable ASCII (an em or en dash, a curly quote, an arrow, an emoji, a tab) with its file and line number, and exits 0 only when it prints nothing. A file that is not valid UTF-8 makes it exit non-zero: perl either stops with its `Malformed UTF-8 character (fatal)` error or prints the line. The green checkmark is allowed in Markdown files, where the plan ledgers use it as their status marker, and nowhere else.
+ 
+-This page is the list of tests and checks; a new script under a skill's `templates/` or under `utils/` adds its test here and to the command block of `docs/dev/change-standard.md`.
++The figures under `docs/figures/` are written by `python3 docs/figures/gen_figures.py` and committed. A change to a skill's Stops table, to the sequence or to a skill name changes the labels in that script, which is then run again; the script is not part of the verify list.
++
++This page is the list of tests and checks, and says how the committed figures are made; a new script under a skill's `templates/` or under `utils/` adds its test here and to the command block of `docs/dev/change-standard.md`.
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 5589aee..a84e2d9 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -114,5 +114,6 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **coverage list**: the list a rewrite of text keeps, one row per rule of the old text, each naming the place in the new text that states that rule whole. Stated in: `docs/dev/change-standard.md`, rule 18. Also the Markdown file `utils/check_coverage.py` checks, which lists every file of the named skill folders once with a mark (`rebuild: <skill>`, `rebuild later: <skill>` or `drop`) and a reason. Stated in: `utils/check_coverage.py`, its head comment.
+ - **critical failure**: a failure that makes an output of a blind comparison unfit for the purpose the input sets, such as a claim the input contradicts, a missing part the input asks for, or a citation that does not resolve. Stated in: `docs/dev/blind-comparison.md`, steps 1 and 5.
+ - **loop, in the README**: the path every step of a plan takes, from its brief through its build in a worktree and its review to its cherry-pick onto main. Stated in: `README.md`, the introduction.
++- **mark, of a figure**: the label a box of the README's figures carries where the user is asked, each drawn with its own shape and word: "every run", a stop that waits on the user each time the skill runs; "only when", a stop that waits on the user only when its condition occurs; and "optional", a skill the user may run or skip, drawn as a dashed box. Stated in: `README.md`, the figures.
+ - **pin**: the installed skills and agents held at a tag while Ordo is changed: `utils/pin.sh <tag>` puts the pinned worktree `~/.local/share/ordo-stable` at that tag and links every skill and every agent from it, and `utils/pin.sh` with no tag checks the links. Stated in: `README.md`, "Working on Ordo"; `utils/pin.sh`, its head comment.
+ - **verdict, of a blind comparison**: a judge's A, B or tie with its reasons; the two verdicts, read through the key, give the result when they agree and a tie when they differ. Stated in: `docs/dev/blind-comparison.md`, steps 6 and 7.
+diff --git a/docs/figures/gen_figures.py b/docs/figures/gen_figures.py
+new file mode 100644
+index 0000000..8b48873
+--- /dev/null
++++ b/docs/figures/gen_figures.py
+@@ -0,0 +1,685 @@
++"""Write the two SVG figures of the README: the pipeline of one roadmap entry and the plan loop.
++
++Writes, beside this file:
++
++- pipeline.svg: /repo-setup or /ordo-init, /roadmap add, /grill, /plan, every step, the closing,
++  with /plan-retro and /ordo-help beside them.
++- plan-loop.svg: /spec, build it, /refute, close them, /refute over the round, /land, the return
++  for a further round, the stops and refusals, and the /plan-orchestration band.
++
++Every box, arrow and label is written in this file, taken from each skill's Stops table and from
++the sequence /ordo-help prints; the script reads no skill file. A change to a Stops table, to the
++sequence or to a skill name is made in the labels below, and the script is run again.
++
++Run, from any directory: python3 docs/figures/gen_figures.py
++
++Every byte written is ASCII. The figures carry their own light panel, so they read the same on a
++light or a dark page. Each box shows where the user is asked with a mark that differs by shape and
++by a word: a filled square "every run", an outlined square "only when", a dashed pill "optional".
++
++Errors, each printed to stderr as "error: <message>":
++
++- a label that does not fit its box or its line: the message names the figure,
++  the box and the label;
++- a word longer than a line of its box: the same message;
++- a body that holds a non-ASCII character: the message names the file;
++- a file that cannot be written or read back: the message names the file and the cause;
++- a file whose text read back differs from the body written: the message names the file.
++
++The label and ASCII errors stop the run before any file is written.
++
++Exit status: 0 both files written and verified, 1 an error above.
++"""
++
++import sys
++from dataclasses import dataclass
++from html import escape
++from itertools import pairwise
++from pathlib import Path
++from typing import NamedTuple
++
++HERE = Path(__file__).resolve().parent
++ROOT = HERE.parent.parent
++
++INK = "#0f172a"
++MUTED = "#475569"
++EDGE = "#64748b"
++PANEL = "#f8fafc"
++CARD = "#ffffff"
++ACCENT = "#4f46e5"
++STOP = "#b45309"
++FONT = "ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
++
++REGULAR_EM = 0.6
++BOLD_EM = 0.68
++CAPS_EM = 0.78
++PAD_X = 10
++TITLE_SIZE = 14
++BODY_SIZE = 11.5
++NAME_SIZE = 11
++BADGE_SIZE = 10
++CAPTION_SIZE = 10
++BODY_LEADING = 15
++NAME_LEADING = 14
++BADGE_HEIGHT = 16
++
++EVERY_RUN = "every run"
++ONLY_WHEN = "only when"
++OPTIONAL = "optional"
++
++
++class FigureError(Exception):
++    """A label that does not fit, or a file that is not what was asked."""
++
++
++@dataclass(frozen=True)
++class Group:
++    """The stops a box carries under one mark; an empty mark is a plain note."""
++
++    mark: str
++    names: tuple[str, ...] = ()
++
++
++class Rect(NamedTuple):
++    """The position and size of a box, in pixels."""
++
++    x: float
++    y: float
++    w: float
++    h: float
++
++
++@dataclass(frozen=True)
++class Box:
++    """A card with a title, a body, the groups of stops and an optional closing note."""
++
++    area: Rect
++    title: str
++    body: str = ""
++    groups: tuple[Group, ...] = ()
++    note: str = ""
++    dashed: bool = False
++    columns: int = 1
++    accent: str = ACCENT
++
++    @property
++    def x(self) -> float:
++        return self.area.x
++
++    @property
++    def y(self) -> float:
++        return self.area.y
++
++    @property
++    def w(self) -> float:
++        return self.area.w
++
++    @property
++    def h(self) -> float:
++        return self.area.h
++
++
++def _num(value: float) -> str:
++    return f"{value:.1f}".rstrip("0").rstrip(".")
++
++
++def _em(bold: bool, caps: bool = False) -> float:
++    if caps:
++        return CAPS_EM
++    return BOLD_EM if bold else REGULAR_EM
++
++
++def _wrap(
++    figure: str, where: str, label: str, width: float, size: float, bold: bool = False
++) -> list[str]:
++    """Wrap a label greedily to the character budget of a width, conservative per character."""
++    budget = int(width / (size * _em(bold)))
++    lines: list[str] = []
++    current = ""
++    for word in label.split():
++        if len(word) > budget:
++            raise FigureError(
++                f"{figure}: {where}: the word {word!r} of the label {label!r} is longer than a line"
++            )
++        if current and len(current) + 1 + len(word) > budget:
++            lines.append(current)
++            current = word
++        else:
++            current = f"{current} {word}".strip()
++    if current:
++        lines.append(current)
++    return lines
++
++
++def _check_line(
++    figure: str,
++    where: str,
++    label: str,
++    width: float,
++    size: float,
++    bold: bool = False,
++    caps: bool = False,
++) -> None:
++    """A label drawn on one line must fit the width."""
++    if len(label) * size * _em(bold, caps) > width:
++        raise FigureError(
++            f"{figure}: {where}: the label {label!r} does not fit one line of {_num(width)} px"
++        )
++
++
++class Canvas:
++    """The SVG fragments of one figure, written in order."""
++
++    def __init__(self, name: str, width: int, height: int, label: str) -> None:
++        self.name = name
++        self.width = width
++        self.height = height
++        self.label = label
++        self.parts: list[str] = []
++
++    def text(
++        self,
++        x: float,
++        y: float,
++        label: str,
++        size: float,
++        fill: str = INK,
++        weight: str = "400",
++        anchor: str = "start",
++    ) -> None:
++        self.parts.append(
++            f'<text x="{_num(x)}" y="{_num(y)}" font-family="{FONT}" font-size="{_num(size)}" '
++            f'fill="{fill}" font-weight="{weight}" text-anchor="{anchor}">'
++            f"{escape(label, quote=False)}</text>"
++        )
++
++    def line(
++        self,
++        x1: float,
++        y1: float,
++        x2: float,
++        y2: float,
++        colour: str,
++        width: float,
++        arrow: bool = False,
++    ) -> None:
++        marker_attr = ' marker-end="url(#arrow)"' if arrow else ""
++        self.parts.append(
++            f'<line x1="{_num(x1)}" y1="{_num(y1)}" x2="{_num(x2)}" y2="{_num(y2)}" '
++            f'stroke="{colour}" stroke-width="{_num(width)}"{marker_attr}/>'
++        )
++
++    def path(
++        self,
++        points: list[tuple[float, float]],
++        colour: str,
++        width: float,
++        dash: str = "",
++        arrow: bool = False,
++    ) -> None:
++        d = "M" + " L".join(f"{_num(px)},{_num(py)}" for px, py in points)
++        dash_attr = f' stroke-dasharray="{dash}"' if dash else ""
++        marker_attr = ' marker-end="url(#arrow)"' if arrow else ""
++        self.parts.append(
++            f'<path d="{d}" fill="none" stroke="{colour}" stroke-width="{_num(width)}"'
++            f'{dash_attr}{marker_attr} stroke-linejoin="round"/>'
++        )
++
++    def rect(
++        self,
++        x: float,
++        y: float,
++        w: float,
++        h: float,
++        radius: float,
++        fill: str,
++        stroke: str,
++        stroke_width: float = 1.5,
++        dash: str = "",
++    ) -> None:
++        dash_attr = f' stroke-dasharray="{dash}"' if dash else ""
++        self.parts.append(
++            f'<rect x="{_num(x)}" y="{_num(y)}" width="{_num(w)}" height="{_num(h)}" '
++            f'rx="{_num(radius)}" fill="{fill}" stroke="{stroke}" '
++            f'stroke-width="{_num(stroke_width)}"{dash_attr}/>'
++        )
++
++    def render(self) -> str:
++        head = (
++            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {self.width} {self.height}" '
++            f'width="{self.width}" height="{self.height}" role="img" '
++            f'aria-label="{escape(self.label)}">'
++        )
++        marker = (
++            '<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" '
++            'markerHeight="7" orient="auto">'
++            f'<path d="M0,0 L10,5 L0,10 z" fill="{ACCENT}"/></marker>'
++        )
++        panel = (
++            f'<rect x="0" y="0" width="{self.width}" height="{self.height}" rx="10" '
++            f'fill="{PANEL}" stroke="{EDGE}"/>'
++        )
++        title = f"<title>{escape(self.label, quote=False)}</title>"
++        return (
++            "\n".join([head, title, f"<defs>{marker}</defs>", panel, *self.parts, "</svg>"]) + "\n"
++        )
++
++
++def _badge_width(mark: str) -> float:
++    return len(mark) * BADGE_SIZE * BOLD_EM + 14
++
++
++def draw_badge(canvas: Canvas, x: float, baseline: float, mark: str) -> float:
++    """Draw a mark with its word and return its width."""
++    width = _badge_width(mark)
++    top = baseline - 12
++    if mark == EVERY_RUN:
++        canvas.rect(x, top, width, BADGE_HEIGHT, 2, ACCENT, ACCENT, 1.5)
++        fill = CARD
++    elif mark == ONLY_WHEN:
++        canvas.rect(x, top, width, BADGE_HEIGHT, 2, CARD, ACCENT, 1.5)
++        fill = INK
++    else:
++        canvas.rect(x, top, width, BADGE_HEIGHT, BADGE_HEIGHT / 2, CARD, ACCENT, 1.5, "3 2")
++        fill = INK
++    canvas.text(x + width / 2, baseline, mark, BADGE_SIZE, fill, "700", "middle")
++    return width
++
++
++class _Put:
++    """Checks that a baseline stays inside a box, naming the label that would leave it."""
++
++    def __init__(self, canvas: Canvas, box: Box) -> None:
++        self.canvas = canvas
++        self.box = box
++
++    def check(self, baseline: float, label: str) -> None:
++        if baseline > self.box.y + self.box.h - 8:
++            raise FigureError(
++                f"{self.canvas.name}: box {self.box.title!r}: "
++                f"the label {label!r} does not fit the box"
++            )
++
++
++def _draw_names(canvas: Canvas, box: Box, group: Group, cursor: float, put: _Put) -> float:
++    """Draw the names of a group in the box's columns; return the baseline for the next line."""
++    inner = box.w - 2 * PAD_X
++    column_width = inner / box.columns
++    names = list(group.names)
++    for start in range(0, len(names), box.columns):
++        row = names[start : start + box.columns]
++        wrapped = [
++            _wrap(canvas.name, f"box {box.title!r}", "- " + name, column_width - 6, NAME_SIZE)
++            for name in row
++        ]
++        height = max(len(lines) for lines in wrapped)
++        for line_index in range(height):
++            put.check(cursor + line_index * NAME_LEADING, ", ".join(row))
++        for column, lines in enumerate(wrapped):
++            for line_index, line in enumerate(lines):
++                indent = 0 if line_index == 0 else 8
++                canvas.text(
++                    box.x + PAD_X + column * column_width + indent,
++                    cursor + line_index * NAME_LEADING,
++                    line,
++                    NAME_SIZE,
++                )
++        cursor += height * NAME_LEADING
++    return cursor
++
++
++def draw_box(canvas: Canvas, box: Box) -> None:
++    """Draw a card: rule, title, body, the groups of stops with their marks, and the note."""
++    figure = canvas.name
++    put = _Put(canvas, box)
++    inner = box.w - 2 * PAD_X
++    canvas.rect(box.x, box.y, box.w, box.h, 8, CARD, EDGE, 1.5, "6 4" if box.dashed else "")
++    canvas.line(box.x + 8, box.y, box.x + box.w - 8, box.y, box.accent, 3)
++    _check_line(figure, f"box {box.title!r}", box.title, inner, TITLE_SIZE, bold=True)
++    cursor = box.y + 24
++    put.check(cursor, box.title)
++    canvas.text(box.x + PAD_X, cursor, box.title, TITLE_SIZE, INK, "700")
++    cursor += 20
++    for line in _wrap(figure, f"box {box.title!r}", box.body, inner, BODY_SIZE):
++        put.check(cursor, line)
++        canvas.text(box.x + PAD_X, cursor, line, BODY_SIZE)
++        cursor += BODY_LEADING
++    for group in box.groups:
++        cursor += 6
++        if group.mark:
++            put.check(cursor + 4, group.mark)
++            draw_badge(canvas, box.x + PAD_X, cursor, group.mark)
++            cursor += 20
++            cursor = _draw_names(canvas, box, group, cursor, put)
++        else:
++            for name in group.names:
++                for line in _wrap(figure, f"box {box.title!r}", name, inner, NAME_SIZE):
++                    put.check(cursor, line)
++                    canvas.text(box.x + PAD_X, cursor, line, NAME_SIZE, MUTED)
++                    cursor += NAME_LEADING
++    if box.note:
++        cursor += 6
++        for line in _wrap(figure, f"box {box.title!r}", box.note, inner, NAME_SIZE):
++            put.check(cursor, line)
++            canvas.text(box.x + PAD_X, cursor, line, NAME_SIZE, MUTED)
++            cursor += NAME_LEADING
++
++
++def draw_caption(canvas: Canvas, x: float, y: float, label: str, width: float) -> None:
++    _check_line(canvas.name, "a caption", label, width, CAPTION_SIZE, bold=True, caps=True)
++    canvas.text(x, y, label, CAPTION_SIZE, MUTED, "700")
++
++
++def draw_note(canvas: Canvas, x: float, y: float, label: str, width: float) -> None:
++    _check_line(canvas.name, "a note", label, width, NAME_SIZE)
++    canvas.text(x, y, label, NAME_SIZE, MUTED)
++
++
++def draw_legend(canvas: Canvas, x: float, y: float, width: float) -> None:
++    """The three marks and the dashed box, each with what it says, on one row."""
++    draw_caption(canvas, x, y, "HOW TO READ THE MARKS", width)
++    items = (
++        (EVERY_RUN, "it waits on you each time it runs"),
++        (ONLY_WHEN, "it waits on you in the named case"),
++        (OPTIONAL, "you may skip it; the box is dashed"),
++    )
++    step = width / len(items)
++    for index, (mark, meaning) in enumerate(items):
++        left = x + index * step
++        badge = draw_badge(canvas, left, y + 26, mark)
++        _check_line(canvas.name, "the legend", meaning, step - badge - 22, NAME_SIZE)
++        canvas.text(left + badge + 8, y + 26, meaning, NAME_SIZE)
++
++
++def pipeline_svg() -> str:
++    """The pipeline of one roadmap entry, from the repository's setup to the closing."""
++    canvas = Canvas(
++        "pipeline.svg",
++        1040,
++        860,
++        "The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an "
++        "existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and "
++        "the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you "
++        "are asked.",
++    )
++    draw_caption(canvas, 25, 30, "SET THE REPOSITORY UP, ONCE: ONE OF THE TWO", 600)
++    setup = Box(
++        Rect(25, 42, 330, 214),
++        "/repo-setup",
++        "For a new repository: the tree, the shared rules, the standards, then /ordo-init.",
++        (
++            Group(EVERY_RUN, ("The questions", "The draft")),
++            Group(ONLY_WHEN, ("No commit allowed",)),
++        ),
++        note="The stops of its sync form are left out: sync is not on this path.",
++    )
++    init = Box(
++        Rect(395, 42, 330, 214),
++        "/ordo-init",
++        "For an existing repository: writes .agents/plan.yaml, or checks the one there.",
++        (
++            Group(EVERY_RUN, ("The draft", "Worker, reviewer and libraries")),
++            Group(
++                ONLY_WHEN,
++                (
++                    "Several roadmaps",
++                    "A failing command",
++                    "A fix in the check",
++                    "No commit allowed",
++                ),
++            ),
++        ),
++    )
++    draw_box(canvas, setup)
++    draw_box(canvas, init)
++    canvas.text(375, 150, "or", 12, MUTED, "700", "middle")
++
++    draw_caption(canvas, 140, 314, "FOR EACH ROADMAP ENTRY, IN ORDER", 600)
++    top, height, width, gap = 326, 258, 178, 25
++    columns = [Rect(25 + i * (width + gap), top, width, height) for i in range(5)]
++    boxes = (
++        Box(
++            columns[0],
++            "/roadmap add",
++            "With <goal>: an entry with its goal, gate and place. "
++            "With <entry>: an entry not yet specified gets its gate and place.",
++            (
++                Group(EVERY_RUN, ("The change",)),
++                Group(
++                    ONLY_WHEN,
++                    ("No gate", "The level", "The insertion form", "A missing dependency"),
++                ),
++            ),
++        ),
++        Box(
++            columns[1],
++            "/grill <entry>",
++            "An interview in rounds that settles the entry's design decisions.",
++            (
++                Group(OPTIONAL),
++                Group(EVERY_RUN, ("A round", "The end")),
++                Group(ONLY_WHEN, ("A lookup agent served another model",)),
++            ),
++            dashed=True,
++        ),
++        Box(
++            columns[2],
++            "/plan <entry>",
++            "Once per entry: opens the plan and shows the step list for approval.",
++            (Group(EVERY_RUN, ("The drafted step list",)),),
++        ),
++        Box(
++            columns[3],
++            "every step",
++            "The plan loop of the next figure: /spec, build it, /refute, close them, /refute, "
++            "/land. /plan-orchestration runs it unattended.",
++            (Group("", ("Its stops are marked in the plan-loop figure.",)),),
++        ),
++        Box(
++            columns[4],
++            "the closing",
++            "/roadmap done <entry> ticks the entry with the gate's output. "
++            "The ledger folder moves to the archive.",
++            (Group(EVERY_RUN, ("The roadmap diff",)),),
++        ),
++    )
++    for box in boxes:
++        draw_box(canvas, box)
++    for left, right in pairwise(boxes):
++        canvas.line(left.x + left.w, top + 20, right.x - 1, top + 20, ACCENT, 2, arrow=True)
++    join_y, target_x = 292, boxes[0].x + boxes[0].w / 2
++    for source in (setup, init):
++        centre = source.x + source.w / 2
++        route = [(centre, source.y + source.h), (centre, join_y), (target_x, join_y)]
++        canvas.path([*route, (target_x, top - 1)], ACCENT, 2, arrow=True)
++
++    draw_caption(canvas, 25, 630, "AFTER PLANS HAVE RUN", 300)
++    draw_caption(canvas, 395, 630, "AT ANY POINT", 300)
++    retro = Box(
++        Rect(25, 642, 330, 150),
++        "/plan-retro",
++        "The findings the reviews keep making, and the change that stops each.",
++        (Group(OPTIONAL), Group(ONLY_WHEN, ("The proposals",))),
++        dashed=True,
++    )
++    help_box = Box(
++        Rect(395, 642, 330, 150),
++        "/ordo-help",
++        "Prints the sequence and, for a named plan, where it stands and the next command.",
++        (Group(OPTIONAL), Group("", ("No stop.",))),
++        dashed=True,
++    )
++    draw_box(canvas, retro)
++    draw_box(canvas, help_box)
++    draw_legend(canvas, 25, 818, 990)
++    return canvas.render()
++
++
++def plan_loop_svg() -> str:
++    """The loop of one step, and the /plan-orchestration band that runs the row unattended."""
++    canvas = Canvas(
++        "plan-loop.svg",
++        1040,
++        720,
++        "The plan loop of one step: /spec, build it, /refute, close them, /refute over the round "
++        "or the orchestrator reading the delta, and /land, with a return for a further round, the "
++        "stops and refusals, and the /plan-orchestration band that runs the row unattended. Each "
++        "box marks where you are asked.",
++    )
++    caption = "FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW"
++    draw_caption(canvas, 25, 30, caption, 900)
++    top, height, gap = 42, 262, 18
++    widths = (190, 110, 140, 120, 165, 175)
++    lefts = [25 + sum(widths[:i]) + i * gap for i in range(len(widths))]
++    areas = [Rect(left, top, width, height) for left, width in zip(lefts, widths, strict=True)]
++    model_stop = "A model other than the configured one"
++    boxes = (
++        Box(
++            areas[0],
++            "/spec",
++            "Writes the brief, has a fresh agent check it against the tree, makes the worktree.",
++            (
++                Group(
++                    ONLY_WHEN,
++                    (
++                        "A false premise the plan cannot absorb",
++                        "A rule clash with an ADR",
++                        "A user-visible choice",
++                        "A brief check finding the brief cannot absorb",
++                        model_stop,
++                    ),
++                ),
++            ),
++        ),
++        Box(
++            areas[1],
++            "build it",
++            "The step is built in the worktree, the checks run, the report written.",
++            (Group("", ("No stop of its own.",)),),
++        ),
++        Box(
++            areas[2],
++            "/refute",
++            "A fresh reviewer changes nothing, reruns the checks, writes findings.",
++            (Group(ONLY_WHEN, (model_stop,)),),
++        ),
++        Box(
++            areas[3],
++            "close them",
++            "A repair round: fix the findings, rerun, rewrite the report.",
++            (Group("", ("No stop of its own.",)),),
++        ),
++        Box(
++            areas[4],
++            "/refute",
++            "Over the round, when refute_after_repair: yes. "
++            'When refute_after_repair: no, "read the delta", by the orchestrator.',
++            (Group(ONLY_WHEN, (model_stop,)),),
++        ),
++        Box(
++            areas[5],
++            "/land",
++            "Onto main, the checks there, the booking, the commit; the worktree is removed.",
++            (
++                Group(
++                    ONLY_WHEN,
++                    ("A red line for the user", "A lock held", "A worktree that cannot be removed"),
++                ),
++            ),
++        ),
++    )
++    for box in boxes:
++        draw_box(canvas, box)
++    for left, right in pairwise(boxes):
++        canvas.line(left.x + left.w, top + 20, right.x - 1, top + 20, ACCENT, 2, arrow=True)
++
++    close, again = boxes[3], boxes[4]
++    bottom = top + height
++    loop_y = bottom + 24
++    close_x, again_x = close.x + close.w / 2, again.x + again.w / 2
++    route = [(again_x, bottom), (again_x, loop_y), (close_x, loop_y), (close_x, bottom + 1)]
++    canvas.path(route, ACCENT, 2, "5 4", True)
++    draw_note(canvas, close_x + 8, loop_y + 15, "a further round, within repair_rounds", 300)
++
++    cards_y, cards_h = bottom + 60, 120
++    stop_card = Box(
++        Rect(25, cards_y, 470, cards_h),
++        "when it stops",
++        "The command waits on a decision or an action of yours, named in its Stops table. "
++        "A decision leaves an open item with its options and one recommendation; you answer "
++        "Ruled: <the choice> as plain text, or remove the lock or the path it names, and run "
++        "the command again.",
++        accent=STOP,
++    )
++    refusal_card = Box(
++        Rect(525, cards_y, 490, cards_h),
++        "when it refuses",
++        "The command names its cause and changes nothing more, such as a required key missing, "
++        "no ledger folder, the step not ready or main not clean. A refusal carries no mark: "
++        "fix the cause and run the command again.",
++        accent=STOP,
++    )
++    draw_box(canvas, stop_card)
++    draw_box(canvas, refusal_card)
++    draw_caption(canvas, 25, cards_y - 12, "WHEN ANY COMMAND OF THE ROW HALTS", 400)
++
++    band_y = cards_y + cards_h + 24
++    band = Box(
++        Rect(25, band_y, 990, 128),
++        "/plan-orchestration <entry>",
++        "Runs the row above for every step, unattended, with the executor the plan names at "
++        "build it and close them. Under /plan-orchestration only the stops marked here reach you.",
++        (
++            Group(
++                ONLY_WHEN,
++                (
++                    "A shape nobody named",
++                    "A wrong premise",
++                    "A red check",
++                    "A rule clash",
++                    "A finding that is the user's",
++                    model_stop,
++                ),
++            ),
++        ),
++        dashed=True,
++        columns=3,
++    )
++    draw_box(canvas, band)
++    draw_legend(canvas, 25, band_y + 152, 990)
++    return canvas.render()
++
++
++def write_figures(figures: tuple[tuple[str, str], ...]) -> list[str]:
++    """Check every body, then write each file and read it back; return one line per file."""
++    for name, body in figures:
++        if not body.isascii():
++            raise FigureError(f"{name}: the body holds a character that is not ASCII")
++    lines: list[str] = []
++    for name, body in figures:
++        path = HERE / name
++        try:
++            path.write_text(body, encoding="utf-8", newline="\n")
++            written = path.read_text(encoding="utf-8")
++        except OSError as error:
++            raise FigureError(f"{name}: {error}") from error
++        if written != body:
++            raise FigureError(f"{name}: the text read back differs from the body written")
++        lines.append(f"wrote {path.relative_to(ROOT).as_posix()} ({len(body)} bytes)")
++    return lines
++
++
++def main() -> int:
++    try:
++        figures = (("pipeline.svg", pipeline_svg()), ("plan-loop.svg", plan_loop_svg()))
++        lines = write_figures(figures)
++    except FigureError as error:
++        print(f"error: {error}", file=sys.stderr)
++        return 1
++    for line in lines:
++        print(line)
++    return 0
++
++
++if __name__ == "__main__":
++    sys.exit(main())
+diff --git a/docs/figures/pipeline.svg b/docs/figures/pipeline.svg
+new file mode 100644
+index 0000000..f4de848
+--- /dev/null
++++ b/docs/figures/pipeline.svg
+@@ -0,0 +1,141 @@
++<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 860" width="1040" height="860" role="img" aria-label="The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you are asked.">
++<title>The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you are asked.</title>
++<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
++<rect x="0" y="0" width="1040" height="860" rx="10" fill="#f8fafc" stroke="#64748b"/>
++<text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">SET THE REPOSITORY UP, ONCE: ONE OF THE TWO</text>
++<rect x="25" y="42" width="330" height="214" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="33" y1="42" x2="347" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="35" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/repo-setup</text>
++<text x="35" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">For a new repository: the tree, the shared</text>
++<text x="35" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">rules, the standards, then /ordo-init.</text>
++<rect x="35" y="110" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="122" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="35" y="142" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The questions</text>
++<text x="35" y="156" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The draft</text>
++<rect x="35" y="164" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="35" y="196" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- No commit allowed</text>
++<text x="35" y="216" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">The stops of its sync form are left out: sync</text>
++<text x="35" y="230" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">is not on this path.</text>
++<rect x="395" y="42" width="330" height="214" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="403" y1="42" x2="717" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="405" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/ordo-init</text>
++<text x="405" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">For an existing repository: writes</text>
++<text x="405" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">.agents/plan.yaml, or checks the one there.</text>
++<rect x="405" y="110" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="442.6" y="122" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="405" y="142" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The draft</text>
++<text x="405" y="156" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- Worker, reviewer and libraries</text>
++<rect x="405" y="164" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="442.6" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="405" y="196" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- Several roadmaps</text>
++<text x="405" y="210" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A failing command</text>
++<text x="405" y="224" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A fix in the check</text>
++<text x="405" y="238" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- No commit allowed</text>
++<text x="375" y="150" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="12" fill="#475569" font-weight="700" text-anchor="middle">or</text>
++<text x="140" y="314" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">FOR EACH ROADMAP ENTRY, IN ORDER</text>
++<rect x="25" y="326" width="178" height="258" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="33" y1="326" x2="195" y2="326" stroke="#4f46e5" stroke-width="3"/>
++<text x="35" y="350" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/roadmap add</text>
++<text x="35" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">With &lt;goal&gt;: an entry</text>
++<text x="35" y="385" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">with its goal, gate</text>
++<text x="35" y="400" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">and place. With</text>
++<text x="35" y="415" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">&lt;entry&gt;: an entry not</text>
++<text x="35" y="430" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">yet specified gets its</text>
++<text x="35" y="445" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">gate and place.</text>
++<rect x="35" y="454" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="466" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="35" y="486" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The change</text>
++<rect x="35" y="494" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="506" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="35" y="526" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- No gate</text>
++<text x="35" y="540" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The level</text>
++<text x="35" y="554" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The insertion form</text>
++<text x="35" y="568" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A missing dependency</text>
++<rect x="228" y="326" width="178" height="258" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="236" y1="326" x2="398" y2="326" stroke="#4f46e5" stroke-width="3"/>
++<text x="238" y="350" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/grill &lt;entry&gt;</text>
++<text x="238" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">An interview in rounds</text>
++<text x="238" y="385" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">that settles the</text>
++<text x="238" y="400" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">entry's design</text>
++<text x="238" y="415" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">decisions.</text>
++<rect x="238" y="424" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="272.2" y="436" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<rect x="238" y="450" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="275.6" y="462" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="238" y="482" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A round</text>
++<text x="238" y="496" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The end</text>
++<rect x="238" y="504" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="275.6" y="516" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="238" y="536" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A lookup agent served</text>
++<text x="246" y="550" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">another model</text>
++<rect x="431" y="326" width="178" height="258" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="439" y1="326" x2="601" y2="326" stroke="#4f46e5" stroke-width="3"/>
++<text x="441" y="350" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/plan &lt;entry&gt;</text>
++<text x="441" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Once per entry: opens</text>
++<text x="441" y="385" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the plan and shows the</text>
++<text x="441" y="400" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">step list for</text>
++<text x="441" y="415" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">approval.</text>
++<rect x="441" y="424" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="478.6" y="436" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="441" y="456" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The drafted step list</text>
++<rect x="634" y="326" width="178" height="258" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="642" y1="326" x2="804" y2="326" stroke="#4f46e5" stroke-width="3"/>
++<text x="644" y="350" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">every step</text>
++<text x="644" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The plan loop of the</text>
++<text x="644" y="385" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">next figure: /spec,</text>
++<text x="644" y="400" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">build it, /refute,</text>
++<text x="644" y="415" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">close them, /refute,</text>
++<text x="644" y="430" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">/land.</text>
++<text x="644" y="445" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">/plan-orchestration</text>
++<text x="644" y="460" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">runs it unattended.</text>
++<text x="644" y="481" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">Its stops are marked in</text>
++<text x="644" y="495" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">the plan-loop figure.</text>
++<rect x="837" y="326" width="178" height="258" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="845" y1="326" x2="1007" y2="326" stroke="#4f46e5" stroke-width="3"/>
++<text x="847" y="350" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">the closing</text>
++<text x="847" y="370" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">/roadmap done &lt;entry&gt;</text>
++<text x="847" y="385" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">ticks the entry with</text>
++<text x="847" y="400" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the gate's output. The</text>
++<text x="847" y="415" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">ledger folder moves to</text>
++<text x="847" y="430" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the archive.</text>
++<rect x="847" y="439" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="884.6" y="451" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="847" y="471" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The roadmap diff</text>
++<line x1="203" y1="346" x2="227" y2="346" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<line x1="406" y1="346" x2="430" y2="346" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<line x1="609" y1="346" x2="633" y2="346" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<line x1="812" y1="346" x2="836" y2="346" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<path d="M190,256 L190,292 L114,292 L114,325" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
++<path d="M560,256 L560,292 L114,292 L114,325" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)" stroke-linejoin="round"/>
++<text x="25" y="630" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">AFTER PLANS HAVE RUN</text>
++<text x="395" y="630" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">AT ANY POINT</text>
++<rect x="25" y="642" width="330" height="150" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="33" y1="642" x2="347" y2="642" stroke="#4f46e5" stroke-width="3"/>
++<text x="35" y="666" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/plan-retro</text>
++<text x="35" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The findings the reviews keep making, and</text>
++<text x="35" y="701" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the change that stops each.</text>
++<rect x="35" y="710" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="69.2" y="722" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<rect x="35" y="736" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="748" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="35" y="768" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The proposals</text>
++<rect x="395" y="642" width="330" height="150" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="403" y1="642" x2="717" y2="642" stroke="#4f46e5" stroke-width="3"/>
++<text x="405" y="666" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/ordo-help</text>
++<text x="405" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Prints the sequence and, for a named plan,</text>
++<text x="405" y="701" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">where it stands and the next command.</text>
++<rect x="405" y="710" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="439.2" y="722" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<text x="405" y="748" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop.</text>
++<text x="25" y="818" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
++<rect x="25" y="832" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="62.6" y="844" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="108.2" y="844" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
++<rect x="355" y="832" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="392.6" y="844" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="438.2" y="844" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
++<rect x="685" y="832" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="719.2" y="844" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<text x="761.4" y="844" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
++</svg>
+diff --git a/docs/figures/plan-loop.svg b/docs/figures/plan-loop.svg
+new file mode 100644
+index 0000000..f9ce0a5
+--- /dev/null
++++ b/docs/figures/plan-loop.svg
+@@ -0,0 +1,131 @@
++<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 720" width="1040" height="720" role="img" aria-label="The plan loop of one step: /spec, build it, /refute, close them, /refute over the round or the orchestrator reading the delta, and /land, with a return for a further round, the stops and refusals, and the /plan-orchestration band that runs the row unattended. Each box marks where you are asked.">
++<title>The plan loop of one step: /spec, build it, /refute, close them, /refute over the round or the orchestrator reading the delta, and /land, with a return for a further round, the stops and refusals, and the /plan-orchestration band that runs the row unattended. Each box marks where you are asked.</title>
++<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
++<rect x="0" y="0" width="1040" height="720" rx="10" fill="#f8fafc" stroke="#64748b"/>
++<text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW</text>
++<rect x="25" y="42" width="190" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="33" y1="42" x2="207" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="35" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/spec</text>
++<text x="35" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Writes the brief, has a</text>
++<text x="35" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">fresh agent check it</text>
++<text x="35" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">against the tree, makes</text>
++<text x="35" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the worktree.</text>
++<rect x="35" y="140" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="152" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="35" y="172" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A false premise the</text>
++<text x="43" y="186" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">plan cannot absorb</text>
++<text x="35" y="200" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A rule clash with an</text>
++<text x="43" y="214" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">ADR</text>
++<text x="35" y="228" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A user-visible choice</text>
++<text x="35" y="242" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A brief check finding</text>
++<text x="43" y="256" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">the brief cannot absorb</text>
++<text x="35" y="270" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the</text>
++<text x="43" y="284" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">configured one</text>
++<rect x="233" y="42" width="110" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="241" y1="42" x2="335" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="243" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">build it</text>
++<text x="243" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The step is</text>
++<text x="243" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">built in the</text>
++<text x="243" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">worktree, the</text>
++<text x="243" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">checks run,</text>
++<text x="243" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the report</text>
++<text x="243" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">written.</text>
++<text x="243" y="182" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop of</text>
++<text x="243" y="196" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">its own.</text>
++<rect x="361" y="42" width="140" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="369" y1="42" x2="493" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="371" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/refute</text>
++<text x="371" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">A fresh reviewer</text>
++<text x="371" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">changes nothing,</text>
++<text x="371" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">reruns the</text>
++<text x="371" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">checks, writes</text>
++<text x="371" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">findings.</text>
++<rect x="371" y="155" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="408.6" y="167" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="371" y="187" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other</text>
++<text x="379" y="201" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">than the</text>
++<text x="379" y="215" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">configured one</text>
++<rect x="519" y="42" width="120" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="527" y1="42" x2="631" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="529" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">close them</text>
++<text x="529" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">A repair</text>
++<text x="529" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">round: fix the</text>
++<text x="529" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">findings,</text>
++<text x="529" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">rerun, rewrite</text>
++<text x="529" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the report.</text>
++<text x="529" y="167" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop of its</text>
++<text x="529" y="181" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">own.</text>
++<rect x="657" y="42" width="165" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="665" y1="42" x2="814" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="667" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/refute</text>
++<text x="667" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Over the round, when</text>
++<text x="667" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">refute_after_repair:</text>
++<text x="667" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">yes. When</text>
++<text x="667" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">refute_after_repair:</text>
++<text x="667" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">no, "read the delta",</text>
++<text x="667" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">by the orchestrator.</text>
++<rect x="667" y="170" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="704.6" y="182" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="667" y="202" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than</text>
++<text x="675" y="216" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">the configured one</text>
++<rect x="840" y="42" width="175" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="848" y1="42" x2="1007" y2="42" stroke="#4f46e5" stroke-width="3"/>
++<text x="850" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/land</text>
++<text x="850" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Onto main, the checks</text>
++<text x="850" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">there, the booking,</text>
++<text x="850" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the commit; the</text>
++<text x="850" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">worktree is removed.</text>
++<rect x="850" y="140" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="887.6" y="152" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="850" y="172" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A red line for the</text>
++<text x="858" y="186" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">user</text>
++<text x="850" y="200" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A lock held</text>
++<text x="850" y="214" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A worktree that</text>
++<text x="858" y="228" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">cannot be removed</text>
++<line x1="215" y1="62" x2="232" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<line x1="343" y1="62" x2="360" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<line x1="501" y1="62" x2="518" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<line x1="639" y1="62" x2="656" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<line x1="822" y1="62" x2="839" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
++<path d="M739.5,304 L739.5,328 L579,328 L579,305" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
++<text x="587" y="343" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">a further round, within repair_rounds</text>
++<rect x="25" y="364" width="470" height="120" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="33" y1="364" x2="487" y2="364" stroke="#b45309" stroke-width="3"/>
++<text x="35" y="388" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it stops</text>
++<text x="35" y="408" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command waits on a decision or an action of yours, named in</text>
++<text x="35" y="423" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">its Stops table. A decision leaves an open item with its options</text>
++<text x="35" y="438" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">and one recommendation; you answer Ruled: &lt;the choice&gt; as plain</text>
++<text x="35" y="453" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">text, or remove the lock or the path it names, and run the</text>
++<text x="35" y="468" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">command again.</text>
++<rect x="525" y="364" width="490" height="120" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="533" y1="364" x2="1007" y2="364" stroke="#b45309" stroke-width="3"/>
++<text x="535" y="388" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it refuses</text>
++<text x="535" y="408" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command names its cause and changes nothing more, such as a</text>
++<text x="535" y="423" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">required key missing, no ledger folder, the step not ready or main</text>
++<text x="535" y="438" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">not clean. A refusal carries no mark: fix the cause and run the</text>
++<text x="535" y="453" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">command again.</text>
++<text x="25" y="352" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">WHEN ANY COMMAND OF THE ROW HALTS</text>
++<rect x="25" y="508" width="990" height="128" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="33" y1="508" x2="1007" y2="508" stroke="#4f46e5" stroke-width="3"/>
++<text x="35" y="532" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/plan-orchestration &lt;entry&gt;</text>
++<text x="35" y="552" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Runs the row above for every step, unattended, with the executor the plan names at build it and close them. Under /plan-orchestration only</text>
++<text x="35" y="567" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the stops marked here reach you.</text>
++<rect x="35" y="576" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="588" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="35" y="608" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A shape nobody named</text>
++<text x="358.3" y="608" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A wrong premise</text>
++<text x="681.7" y="608" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A red check</text>
++<text x="35" y="622" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A rule clash</text>
++<text x="358.3" y="622" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A finding that is the user's</text>
++<text x="681.7" y="622" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the configured one</text>
++<text x="25" y="660" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
++<rect x="25" y="674" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="62.6" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="108.2" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
++<rect x="355" y="674" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="392.6" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="438.2" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
++<rect x="685" y="674" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="719.2" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<text x="761.4" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
++</svg>
