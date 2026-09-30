@@ -25,6 +25,7 @@ metadata:
 
 | When | Use |
 |---|---|
+| An entry's design decisions are to be settled before its plan | `/grill <entry>` |
 | An entry is ready to be opened as a plan | `/plan <entry>` |
 | Where an open plan stands | `/ordo-help <entry>` |
 

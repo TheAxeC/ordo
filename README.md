@@ -4,7 +4,7 @@ Ordo is a set of agent skills for Claude Code that run a multi-step change as a 
 
 One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
 
-Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, and `plan-retro` turns what the reviewers keep finding into rules.
+Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, and `plan-retro` turns what the reviewers keep finding into rules.
 
 ## The skills
 
@@ -13,6 +13,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, the standards pages, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
 | `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
 | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
+| `grill` | Interviews the user about one roadmap entry, in rounds. Each round asks every decision whose prerequisites are settled, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, while agents look up the facts. It writes each answer as it settles into the plan's Rulings or the entry's rulings file, the roadmap entry and the glossary, and on the user's yes a proposed ADR |
 | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
 | `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
 | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
@@ -28,6 +29,7 @@ The order of use, shortened from what `/ordo-help` prints:
 /ordo-init                    once per existing repository: writes .agents/plan.yaml, or checks the one there
 /roadmap add <goal>           an entry with its goal, gate and place in the order
 /roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan opens it
+/grill <entry>                optional: an interview in rounds that settles the entry's design decisions, written as they settle
 /plan <entry>                 once per entry: opens the plan, shows the step list for approval
 
 for every step:
@@ -81,7 +83,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
+    for skill in grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
     agents=$(dirname "$dir")/agents

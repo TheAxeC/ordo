@@ -22,6 +22,7 @@ metadata:
 |---|---|
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
 | The roadmap has no entry for the work yet | `/roadmap add <goal>` |
+| The entry's design decisions are not settled | `/grill <entry>` |
 | The plan is open and a step is due | `/spec <entry> <step>`, or `/plan-orchestration <entry>` for every step |
 | Where an open plan stands | `/ordo-help <entry>` |
 

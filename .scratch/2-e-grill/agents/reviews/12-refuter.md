@@ -148,3 +148,152 @@ Cases of the brief's "Cases":
 
 Reviewer usage: claude-opus-5-5 (served model, from its transcript); 193419 tokens, 42 tool uses, 526 s (completion notice); $1.78-5.38 at Opus rates.
 
+
+## Repair round 1, refuted
+
+Reviewed in /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-12 against base 37b0d80444953d83f44e76716f048fa1998f9b5d. The round's delta is the diff since the base compared with `.scratch/2-e-grill/agents/reviews/12-round-0.diff`. `git status --short` lists `.agents/plan.yaml`, `README.md`, `docs/glossary.md`, `skills/ordo-help/SKILL.md`, `skills/plan/SKILL.md`, `skills/plan/templates/orchestrator-state.md`, `skills/plan/templates/plan.yaml`, `skills/repo-setup/templates/docs/glossary.md`, `skills/repo-setup/templates/plan-terms.md` and `skills/roadmap/SKILL.md` as modified, and `.scratch/2-e-grill/agents/reviews/12-report.md` and `skills/grill/` as untracked. Every path is in the brief's list or in the list the round widened it to.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md; echo "rc=$?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+rc=0
+```
+
+The commands the round's report section quotes, and the brief's cases, rerun:
+
+```
+$ git grep -n "ruling E" -- skills; echo "rc=$?"
+rc=1
+$ grep -n -w -o round skills/grill/SKILL.md | wc -l
+      31
+$ ls skills/grill/SKILL.md skills/grill/references/decision-form.md
+skills/grill/references/decision-form.md
+skills/grill/SKILL.md
+$ python3 -c 'import glob,yaml; [print(len(yaml.safe_load(open(f).read().split("---")[1])["description"]), f) for f in sorted(glob.glob("skills/*/SKILL.md"))]'
+748 skills/grill/SKILL.md
+(the other ten counts: land 726, ordo-help 386, ordo-init 632, plan-orchestration 788, plan-retro 616, plan 477, refute 951, repo-setup 776, roadmap 997, spec 1022)
+$ git grep --untracked -n "/grill" -- skills README.md docs
+README.md:32, skills/grill/SKILL.md:10, :15, :16, :17, :218, :219, :220, :221, skills/ordo-help/SKILL.md:52, skills/plan/SKILL.md:25, :64, skills/plan/templates/orchestrator-state.md:14, :27, skills/plan/templates/plan.yaml:12, :27, skills/roadmap/SKILL.md:28
+$ git grep -n -w grill -- README.md   (also run with --untracked, same output)
+README.md:7, README.md:16, README.md:32, README.md:86 (for skill in grill land ordo-help ...)
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ LC_ALL=C grep -n '[^ -~]' <the twelve changed and new files and 12-report.md>; echo "rc=$?"
+rc=1 (no output)
+$ grep -n -i comment skills/ordo-init/templates/check_config.py
+(nothing)
+$ grep -n "#" skills/ordo-init/templates/check_config.py   (relevant line)
+92:        m = re.match(r"^([a-z_]+):\s*(.*?)\s+#\s*(required\.|optional, default (.*?)\.\s)", line)
+$ awk over SKILL.md: every numbered item between "## Steps" and "## The decision form", checking each for "done when"
+24 items, each "ok"
+$ grep -rl "ordo:plan-terms" /Users/axelfaes/workspace/{game-engine,cathedra,research-hub} --include='*.md' (build, .git, node_modules excluded)
+(nothing for any of the three)
+$ ls /Users/axelfaes/workspace/game-engine/docs/glossary.md /Users/axelfaes/workspace/cathedra/docs/glossary.md
+No such file or directory (both)
+```
+
+### Per-point closures (round brief `12-round-1.md`)
+
+1. Effort checks: closed as the point says. "Steps / Looking up a fact" 1 (`SKILL.md:113-115`) holds both checks, and a failing check means the session makes the lookups with its own reads and the next round gives the cause. There is no Stops row, which is correct because nothing waits on the user. The rewrite of old item 2 goes beyond the point (Spec 1).
+2. Plan-terms clash: closed. `SKILL.md:163-164` says no copy of `templates/plan-terms.md` is changed, the answer is written as a Rulings bullet, and Steps 10 (`:103`) lists the change for the Ordo repository.
+3. Repository-page decisions: closed in `SKILL.md`. `:191`, `:198` and `:202` say it, and the example's D6 carries `**Rule:**`. The glossary entry **reference line** was not carried (Standards 1), and the label departs from a plan ruling (Spec 4).
+4. Not yet specified: closed for the gate (`SKILL.md:167`, `:170`, `:104`). The narrowing to "an entry with a gate" also stops goal and text changes on such an entry (Spec 2).
+5. Open plan, goal and gate: closed (`SKILL.md:149-150`, `:102`).
+6. Resuming: closed as the point words it (`SKILL.md:68`, `:92`). The residual case is Spec 3.
+7. Report sections: present ("Judgment calls", and "The host-visible effect of the plan-terms change"). The host-visible section's premise does not reproduce (Proof 2).
+8. Completion criteria: closed. The awk rerun shows all 24 items carry "done when", and the separate "The step is done when" items are gone. The fix merged two pairs of items into one each (Standards 3).
+9. **round, of an interview**: closed. The entry text is as given, the sync prints ok, `Stated in: grill, Steps 6` points at "Ask the round", and there are 31 bare uses. The new wording makes README and `ordo-help` uses false (Standards 4) and conflicts with point 17 (Standards 2).
+10. "ruling E (b)": closed. `git grep -n "ruling E" -- skills` gives rc=1. Both places name the ADR folder's `README.md`, whose second paragraph states the supersede rule (read in `skills/repo-setup/templates/docs/adr/README.md`). That README is not in "What it reads" (Standards 5).
+11. The reason at Steps 6: closed (`SKILL.md:84`).
+12. Bold: closed. `grep -n '\*\*' skills/grill/SKILL.md` finds only the five list labels (`:189-193`) and a code span (`:161`).
+13. Restated rules: closed. Steps 8 (`:95`) names "Rules", and old "Looking up a fact" 1 is gone.
+14. Every answer writes its bullet: closed (`SKILL.md:154`, and `decision-form.md:74-78` gives D6's bullet before the record). The consequences are concrete (`decision-form.md:80`). The example's alternatives rejected do not follow the goals it states (Standards 6).
+15. Reasons from the repository's goals: closed in the text (`SKILL.md:179`, `:192`, `:197`). Nothing the skill reads names where the goals are stated (Standards 5), and the example breaks the rule (Standards 6).
+16. Comments and glossary entries: the text is closed at all seven places. The report's claim that `check_config.py` reads no comment text is false (Proof 1).
+17. **frontier**: the entry and Steps 4 (`SKILL.md:71`) agree. Not closed across the skill: Steps 6 and the **round, of an interview** entry still say a round asks "the whole frontier" (Standards 2).
+
+### Verdicts (whole diff since the base)
+
+Items of "What to build":
+
+- 1: violated. Spec 1: the session's own reads were dropped as a normal way to look up a fact. Spec 2: a goal change to an entry under "Not yet specified" is written nowhere. Standards 2: Steps 6 contradicts Steps 4 on the frontier. Standards 5: inputs the steps rely on are missing from "What it reads". Standards 3: merged items. Every other requirement of item 1 has its place in `skills/grill/SKILL.md`, read line by line. The step-7 sentence is verbatim at `:238`, `metadata.version: "1.0.0"` is set, and the description is 748 characters.
+- 2: holds. `skills/grill/references/decision-form.md` has a round of two (D4, D5), the answers, three Rulings bullets (D4, D5, D6), a glossary line and the next round's D6 with a "Rule:" line. The example is neutral (`tally`), and `SKILL.md:74` names the file by path. Standards 6 and Standards 7 are text defects inside it and give no verdict.
+- 3: violated, Standards 1. **reference line** does not define the "Rule:" sense the skill uses. The other entries are in alphabetical place and the sync prints ok.
+- 4: holds. README lines 7, 16, 32 and 86, `ordo-help:52`, `plan:25`, `roadmap:28` and `templates/docs/glossary.md:3` are as the brief gives them. The comments of point 16 are at `plan.yaml:12` and `:27`, `orchestrator-state.md:14` and `:27`, and `.agents/plan.yaml:10`.
+
+Cases:
+
+- `ls` of the two new files: met. Both are present now, and the report's first run shows both failing.
+- Description length: met, `748 skills/grill/SKILL.md`.
+- `git grep --untracked -n "/grill"`: met. Every expected hit is listed. The extra hits are the intro line, the refusal rows, and the four template comment lines.
+- `sync_rules.py --only glossary` prints ok: met.
+- Reading, the skill against `docs/dev/skill-layout.md`: partial, Standards 3 (two items that each carry two actions).
+- Reading, the skill against each requirement of item 1: partial, Spec 1, Spec 2 and Standards 2. The report's reading was not redone for this round (Proof 3).
+- `git grep -n -w grill -- README.md`: met, lines 7, 16, 32 and 86.
+- Reading, the dry run on entry 3: partial, Proof 3. The report's dry run follows the round-0 text. Its D5 to D7 carry "Industry:" where the text now requires "Rule:", and its answers to D5 to D7 write no Rulings bullets, which `SKILL.md:154` now requires.
+- Reading, `references/decision-form.md` against item 1: met. Heading, options, reference line, recommendation, lazy option, both answer forms, the bullets, the glossary line and the "record as ADR?" decision are each present.
+- Reading, every term against `docs/glossary.md`: partial. Standards 1 (reference line), Standards 2 (frontier and round) and Standards 4 (the bare "round" outside `grill`).
+
+### 1. Spec
+
+1. `skills/grill/SKILL.md:116`: "2. Start each lookup agent as the `spec` skill's brief-check agent is launched: the effort agent `ordo-<reviewer_effort>`, on the model `reviewer` names." Round 0 read "A lookup is made by the session's own reads, or by an agent the skill starts". What is wrong: the rewrite for point 1 dropped the session's own reads as a normal way to look up a fact. They now appear only when an effort check fails (`:114`). Item 2 is also unconditional, so it does not say to skip the agent when item 1's checks failed. The brief's item 1 reads "has it looked up by an agent the skill starts ... or by the session's own reads". This is a fix that reaches beyond its point. Failure scenario: a decision needs one line of a file the session read at Steps 2. The agent following item 2 starts a lookup agent for it and holds the decision out of the round until the agent finishes. Alternatively, after a failed check, the agent reaches item 2 and starts the agent anyway. Verdict: item 1 violated; case "the skill against each requirement of item 1" partial.
+
+2. `skills/grill/SKILL.md:167`: "An answer that changes the goal, gate or text of an entry with a gate is drafted into the entry ..." with `:170`: "An entry under "Not yet specified" is not moved and has no gate drafted into it". What is wrong: round point 4 excluded only the gate. The words "of an entry with a gate" also exclude a changed goal, and a changed "what must be known", of an entry under "Not yet specified". Such an answer is then written only as a Rulings bullet. Steps 10 prints only the gate. The brief's item 1 requires the entry's goal to be drafted. The `roadmap` skill's "Steps / add" takes "the title and the goal" of such an entry from the entry itself (`skills/roadmap/SKILL.md:61`). Failure scenario: `/grill 7` narrows entry 7's goal. The user types `/roadmap add 7` as the end says, `roadmap` drafts the gate against the old goal, and `/plan 7` copies the old goal into "## Goal". Verdict: item 1 violated; case "the skill against each requirement of item 1" partial.
+
+3. `skills/grill/SKILL.md:67-68` and `:83`: "A decision shown before and not answered is asked again under a new number." and "The numbers continue ... after every number shown in this interview." What is wrong: this is the residual of first-round Spec 6. Nothing written records which numbers were shown, so after a new session or a compaction the skill cannot follow either sentence. The new rule at `:92` rejects only numbers this session has not shown. Failure scenario: round 2 showed D7 to D9, and the session compacts. The new session redraws and shows D7 to D9 for other decisions. The user then types "D8 => B", meant for the old D8. The number was shown in this session, so the answer is read against the new D8 and written. Point 6 is closed as worded, so the remaining gap is the orchestrator's to take up. No verdict.
+
+4. `skills/grill/SKILL.md:198`: "their reference line is labelled "Rule:" ... and the design bar and `design_references` do not apply to them." It is set against `.scratch/2-e-grill/plan.md` Rulings. "Step 12, the reference line's label" reads "the reference line of `grill`'s decision form is labelled by the bar, "Industry:", "State of the art:" or "Novel:"". Ruling G2, the user's, reads "the reference line is always there, and the bar sets what it cites". What is wrong: the round brief carved out four kinds of decision from both rulings, and neither ruling was amended. The round brief asked for this, so the builder followed it. The orchestrator either amends its own ruling "Step 12, the reference line's label" or takes G2's scope to Axel. Failure scenario: a reader of plan.md's Rulings, Axel at his reading included, holds the skill to "labelled by the bar" and finds "Rule:" unexplained. No verdict.
+
+### 2. Proof
+
+1. Report, "Repair round 1", point 16: "`grep -n -i comment skills/ordo-init/templates/check_config.py` printed nothing, so `check_config.py` and its test read no comment text." What the rerun shows: the grep does print nothing, but the conclusion is false. `skills/ordo-init/templates/check_config.py:92` parses the comment of every key in `skills/plan/templates/plan.yaml`, using `#\s*(required\.|optional, default (.*?)\.\s)` to learn which keys are required and their defaults. The decision that rests on it is whether the comment edits of point 16 can change what `check_config.py` accepts. The edits keep the `required.` and `optional, default high.` prefixes, and `check_config.test.sh` passes, so the change itself is safe. Failure scenario: an orchestrator or a later builder trusts the report's sentence and rewords a comment's prefix, and `check_config.py` then stops treating that key as required or loses its default. No verdict.
+
+2. Report, "The host-visible effect of the plan-terms change": "The next `/repo-setup sync` in every repository with the plan-terms block (game-engine, cathedra) rewrites its `docs/glossary.md` block ...". The same premise is in round brief point 7. What the rerun shows: neither `/Users/axelfaes/workspace/game-engine/docs/glossary.md` nor `/Users/axelfaes/workspace/cathedra/docs/glossary.md` exists, and `grep -rl "ordo:plan-terms"` finds no file with the block in game-engine, cathedra or research-hub. The decision that rests on it is the disposition of first-round Behaviour 1, meaning which repositories see a glossary diff after the next pin. The only glossary with the block found is Ordo's own `docs/glossary.md`, which this step syncs. Failure scenario: the orchestrator books or tells Axel that game-engine's and cathedra's glossaries change at the next sync, when they have no block to change. No verdict.
+
+3. Report, "Reading: the skill against each requirement of item 1" and "Dry run on paper": both still describe the round-0 text, and the round brief asked for the brief's cases to be rerun. The item-1 reading cites round-0 line numbers ("Facts looked up: ... lines 108-119") and quotes a line that no longer exists ("since the glossary's **question, the** is another thing"). The dry run's D5 to D7 carry "**Industry:**" and write no Rulings bullets. The round section redoes only the layout reading (point 8). Failure scenario: Axel, reading the report for his check, takes the dry run as the skill's output and sees an "Industry:" line for a roadmap diff that the skill now forbids. Verdict: case "the dry run" partial; case "the skill against each requirement of item 1" partial.
+
+### 3. Standards
+
+1. `skills/repo-setup/templates/plan-terms.md:67` (and `docs/glossary.md`, synced): "**reference line**: the line of a decision that cites, for the options, what the design bar sets, labelled "Industry:", "State of the art:" or "Novel:" ...". It is set against `skills/grill/SKILL.md:198`, where the roadmap diff, "record as ADR?", rule-clash and term decisions have a reference line labelled "Rule:" that the design bar does not govern. What is wrong: point 3 made the entry false. `docs/dev/skill-layout.md` "Writing for an agent" says a term is used only in a sense the glossary defines, and a term in a new sense changes its entry first. Change standard rule 14 applies as well. Failure scenario: an agent drawing D6 "Record D5 as an ADR" follows the glossary and labels its line "Industry:", as the round-0 dry run did. Verdict: item 3 violated; case "every term against `docs/glossary.md`" partial.
+
+2. `skills/grill/SKILL.md:82`: "6. Ask the round: the whole frontier in one message". Also `plan-terms.md:76`: "**round, of an interview**: one message in which `grill` asks the whole frontier". Both are set against `SKILL.md:71` and `plan-terms.md:34`: "a decision waiting on a running lookup is in the frontier and not yet asked". What is wrong: point 17 widened the frontier to include decisions that are not asked, and the two statements that a round asks the whole frontier were left unchanged. Change standard rule 19 applies. Failure scenario: an agent at Steps 6 puts into the round a decision whose fact is still being looked up, because Steps 6 says the whole frontier. Verdict: item 1 violated; case "every term against `docs/glossary.md`" partial.
+
+3. `skills/grill/SKILL.md:129-130` reads "1. A term the user uses ... is sharpened by a decision of its own, and a relationship between terms is tested in that decision with a concrete scenario. - The item is done when the term is a decision of the next round." `SKILL.md:147-148` reads "1. An answer that changes the text of an approved step ... is written as its Rulings bullet, and the step's change is listed at the end ... - The item is done when the end's list holds the change." What is wrong: to give each item one criterion, point 8 merged items that round 0 kept separate. `docs/dev/skill-layout.md` "Sections, in order" row 5 asks for one action per item, and "Lists and tables" asks for one rule per bullet. Each merged item now has a completion criterion that covers only one of its two actions. `SKILL.md:164` also joins three requirements in one bullet (put to the user, written as a bullet, listed at the end). Failure scenario: an agent marks item 1 of "A plan already open" done when the end's list holds the step change, without having written the Rulings bullet. Or it marks the term item done with no concrete scenario in the decision. Verdict: case "the skill against `docs/dev/skill-layout.md`" partial.
+
+4. `README.md:16`: "Interviews the user about one roadmap entry, in rounds. Each round asks every decision ...". Also `README.md:32` and `skills/ordo-help/SKILL.md:52`: "an interview in rounds". These are set against the entry at `plan-terms.md:76`: "Inside `grill` the bare "round" means this; elsewhere it is a repair round." What is wrong: the glossary covers the README and the skills (`docs/glossary.md:3`), and these three places use the bare word in the interview sense outside `grill`. Change standard rule 14 applies (a sentence made false). Failure scenario: a reviewer holding README and `ordo-help` to the glossary reads "Each round asks every decision" as a repair round and files a finding, or the reader is left unsure which sense applies. No verdict.
+
+5. `skills/grill/SKILL.md:29-50` ("What it reads"), set against `:141`, `:179`, `:181`, `:192` and `:198`. These name "the ADR folder's `README.md`" as the governing text for superseding, for the goals and for the "Rule:" line, and require reasons "argued from this repository's goals". What is wrong: "What it reads" lists neither the ADR folder's own `README.md` (item 8 reads only the `repo-setup` template, and only when creating files) nor any page that states the repository's goals. Round brief point 15 names "the design-principles page" as a source, and that page is read only if `standards` happens to list it. `docs/dev/skill-layout.md` row 4 asks for one input per item. Failure scenario: in a repository whose `standards` omits `docs/dev/design-principles.md`, the agent writes "argued from this repository's goals" with goals of its own making. Verdict: item 1 violated.
+
+6. `skills/grill/references/decision-form.md:80`: "its alternatives rejected argued from the goals of `tally` (A counts text in a script without spaces as one word per line, and C leaves that count wrong until later work)". It is set against `:3`: "The goals of `tally` are counts a user can check against `wc -w`, settings a person edits by hand, and one meaning for each setting". What is wrong: neither reason comes from a stated goal. The first goal argues for A, as D5's own recommendation says (`:28`). The worked example therefore labels as goal-argued a rejection that is not. This contradicts `SKILL.md:179` (change standard rule 19). Failure scenario: an agent copying the example writes a record whose "alternatives rejected" cite a reason that is not among the repository's goals, and calls it goal-argued, which the ADR folder's README forbids. No verdict.
+
+7. `skills/grill/references/decision-form.md:16` and `:28`: "The reference line is the evidence for that, not the reason." is the same sentence in both recommendations. What is wrong: the prose standard, "0. Hard rules", says "No repeated construction", and "D. Structure" caps "not X, Y" at twice per page. The sentence also states a rule of the skill (`SKILL.md:197`) inside the user-facing round. Failure scenario: an agent copying the example appends this sentence to every recommendation it writes. No verdict.
+
+### 4. Behaviour
+
+1. Report, "Repair round 1", point 16: "Comments now: `skills/plan/templates/plan.yaml:12` ...; `:27` ...". Only the new comment text is given. What is wrong: `ordo-init` shows these comments as what each key means, so the comments of `reviewer` and `reviewer_effort` in `plan.yaml` and `orchestrator-state.md` change what a user sees. The round brief asked for old beside new, and the report gives no before. The host-visible section also names the wrong repositories (Proof 2). Failure scenario: Axel, reading the report, cannot see from it that `/ordo-init`'s description of `reviewer_effort` changes in every repository after the pin. No verdict.
+
+### Declined to judge
+
+- The URLs in `references/decision-form.md` (peps.python.org, toml.io, pubs.opengroup.org, unicode.org) and in the report's dry run, with their quoted text: not verified here, because this review fetched no web page.
+- The `sync_rules.py --only glossary` result on the unchanged tree: not rerun, because the base is not checked out and this review runs no git command beyond those its brief allows and those the report quotes.
+- What `/repo-setup sync` does to a glossary that has no plan-terms block (whether it adds the block): not verified. It decides whether any repository besides Ordo sees the new entries.
+- The main checkout's state file configuration block still carries the old comments for `reviewer` and `reviewer_effort`: that file is the orchestrator's, so it is not a finding against the step.
+- Whether G2 covers the "Rule:" carve-out (Spec 4): the user's call.
+- The skill as Axel reads it against `docs/dev/skill-layout.md`: that is the step's own check, and it is his.
+
+Reviewer usage: claude-opus-5-5 (served model, from its transcript); 178724 tokens, 34 tool uses, 375 s (completion notice); $1.54-4.85 at Opus rates.

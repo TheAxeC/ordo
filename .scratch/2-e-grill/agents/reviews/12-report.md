@@ -277,14 +277,15 @@ metadata:
    - The step is done when each has been read.
 3. Draw the design tree.
    - List every decision the entry's goal and gate need, each with the decisions it waits on.
-   - A decision is a node of the design tree, and the skill names what it asks a decision, never a question, since the glossary's **question, the** is another thing.
+   - A decision is a node of the design tree, and the skill names what it asks a decision, never a question, since the glossary's term "question, the" is another thing.
    - The roadmap diff and "record as ADR?" ("Steps / Writing what settled") are decisions of their own, numbered like the rest.
    - A decision that a line of the Rulings or the rulings file settles, or an ADR in force settles, is marked settled and is not asked again.
    - An interview started again, in a new session or after a compaction, draws the tree afresh from what is written: the Rulings or the rulings file, the entry, the glossary and the ADRs.
    - A decision shown before and not answered is asked again under a new number.
+   - After such a restart, an answer to a number shown before is not read (Steps 7).
    - The step is done when every decision is marked settled or open, each open one with the decisions it waits on named.
 4. Compute the frontier: every decision whose prerequisites are settled, the roadmap diff and "record as ADR?" decisions included.
-   - A decision that needs a fact has that fact looked up ("Steps / Looking up a fact"), and only the decisions downstream of a running lookup wait.
+   - A decision that needs a fact has that fact looked up ("Steps / Looking up a fact"), and a decision waiting on a running lookup is in the frontier and not yet asked.
    - A decision that depends on another decision still open waits for a later round.
    - The step is done when each decision of the frontier is in the round, or waits on a named lookup.
 5. Draw each decision of the round in the decision form ("The decision form"), its worked example in `references/decision-form.md`.
@@ -297,7 +298,7 @@ metadata:
    - The step is done when every decision of the round has every part of the decision form.
 6. Ask the round: the whole frontier in one message, numbered `D<n>`.
    - The numbers continue after the highest `D<n>` that opens a bullet of the Rulings or the rulings file, and after every number shown in this interview.
-   - Only a `D<n>` that opens a bullet counts, since a Rulings line of another plan holds `D1 (a)` inside its text.
+   - Only a `D<n>` that opens a bullet counts, since a `D<n>` inside a line can cite a decision of another interview or plan.
    - The message ends with the answer form: `D<n> => <letter or text>` one line per decision, `D<n> Agree` to take the recommendation, and `D<a>-<b> Agree` to take it for each decision of a range.
    - The round ends the turn and waits for the answers ("Stops").
    - The step is done when the message is sent and the turn has ended.
@@ -305,17 +306,19 @@ metadata:
    - The user may answer part of a round, and the decisions left open stay in the frontier.
    - An answer the skill cannot read as one of the options is asked again in the next round, under a new number.
    - An answer read as one of the options, with the user's text beside it, is written as given.
+   - An answer that names a number this session has not shown is not read: the skill says so and shows its current round again.
    - Check the answers for terms and claims as "Steps / Terms and claims" says, and for a contradiction as "Steps / An answer that contradicts" says.
    - The step is done when each answer is settled, or asked again in the next round.
-8. Write each settled answer, as "Steps / Writing what settled" says, in the same turn as the answer and before the next round is drawn up.
+8. Write each settled answer as "Steps / Writing what settled" says, at the time "Rules" gives.
    - A plan already open changes what is listed at the end ("Steps / A plan already open").
    - The step is done when every answer of the round has its lines written and read back.
 9. Go back to Steps 3, until the frontier is empty and the roadmap diff and "record as ADR?" decisions are answered.
    - The step is done when a pass of Steps 3 to 4 finds no open decision.
 10. Close the interview.
     - List every decision settled in the interview with where each was written: the Rulings line, the entry, the glossary line, the ADR.
-    - List each step of an open plan whose text an answer changed ("Steps / A plan already open").
-    - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry.
+    - List each change owed to an open plan ("Steps / A plan already open"): a step whose text an answer changed, and the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed.
+    - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/repo-setup/templates/plan-terms.md`.
+    - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry, and print the gate's text whole beside it, for the user to give that command.
     - Ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
     - On a yes to both, commit the files written by explicit path list in one commit, its subject naming the entry and that its design decisions are settled.
     - Without a yes to committing, list the files written with `git status --short`.
@@ -324,43 +327,48 @@ metadata:
 
 ### Looking up a fact
 
-1. A fact from the repository, another repository or a published source is looked up, and the user is asked for decisions only.
-2. A lookup is made by the session's own reads, or by an agent the skill starts, launched as the `spec` skill's brief-check agent is.
-   - It is the effort agent `ordo-<reviewer_effort>`, on the model `reviewer` names.
+1. Before the first lookup agent starts, check as the `spec` skill's Steps 1 does that the runner lists the effort agent `ordo-<reviewer_effort>` and that `CLAUDE_CODE_EFFORT_LEVEL` is unset (`printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1).
+   - Either check failing does not end the interview: the lookups are made by the session's own reads, and the next round says so with the cause, the missing agent or the variable's value.
+   - The item is done when both checks passed, or the next round is set to give the cause.
+2. Start each lookup agent as the `spec` skill's brief-check agent is launched: the effort agent `ordo-<reviewer_effort>`, on the model `reviewer` names.
    - It is read-only and changes nothing.
    - It invokes no skill and starts no agent.
    - It returns each fact with its source, a `path:line` or a URL it fetched.
+   - The item is done when the agent is running.
 3. Right after the start, read the model the runner served the agent, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
    - A served model that is not the configured one is the stop "A lookup agent served another model" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it found is used.
-4. A lookup that finishes joins the next round: the decisions that waited on it enter the frontier.
-5. The step is done when each fact a decision needs is in hand with its source, or the decision waits on the lookup that is running.
+   - The item is done when the served model is the configured one, or the stop is raised.
+4. A lookup that finishes joins the next round: the decisions that waited on it are asked.
+   - The item is done when each fact a decision needs is in hand with its source.
 
 ### Terms and claims
 
-1. A term the user uses that the glossary lacks, or uses in more than one sense, is sharpened by a decision of its own.
-2. A relationship between terms is tested in that decision with a concrete scenario.
-3. A claim the user makes about the code is checked against the code by a lookup before a decision rests on it.
+1. A term the user uses that the glossary lacks, or uses in more than one sense, is sharpened by a decision of its own, and a relationship between terms is tested in that decision with a concrete scenario.
+   - The item is done when the term is a decision of the next round.
+2. A claim the user makes about the code is checked against the code by a lookup before a decision rests on it.
    - A mismatch is shown in the next round with its `path:line`, as a decision of its own that asks which holds, the claim or the code.
-4. The step is done when every term and claim of the answers is settled, or is a decision in the next round.
+   - The item is done when the claim is checked, and a mismatch is a decision of the next round.
 
 ### An answer that contradicts
 
 1. An answer that contradicts an earlier ruling or an ADR in force is shown in the next round as a rule clash, a decision of its own.
-2. Its options are these.
+   - The item is done when the clash is a decision of the next round with its options.
+2. The options of the clash are these.
    - Reopen the earlier ruling, by a new Rulings bullet that names the one it replaces.
-   - Reopen the ADR, by a superseding record as ruling E (b) says: the new record, status `proposed`, its decision the ruled option, the old record marked superseded in the words the folder uses, and the new record's row added to the folder's index, as the `spec` skill's "Steps / A ruling" writes it.
+   - Reopen the ADR, by a superseding record as the ADR folder's `README.md` says: the new record, status `proposed`, its decision the ruled option, the old record marked superseded in the words the folder uses, and the new record's row added to the folder's index, as the `spec` skill's "Steps / A ruling" writes it.
    - Keep the earlier one.
-3. The step is done when the clash is a decision in the next round, and on its answer the chosen option is written as "Steps / Writing what settled" says.
+   - The item is done when the chosen option is written as "Steps / Writing what settled" says.
 
 ### A plan already open
 
-1. An answer that changes the text of an approved step of the open plan is written as its Rulings bullet.
-2. The step's change is listed at the end (Steps 10), each with the step's line and the changed text, for the user to rule on as the `spec` skill's "Steps / A ruling" handles a ruling.
-3. The step is done when each such change is in the end's list.
+1. An answer that changes the text of an approved step of the open plan is written as its Rulings bullet, and the step's change is listed at the end (Steps 10) with the step's line and the changed text, for the user to rule on as the `spec` skill's "Steps / A ruling" handles a ruling.
+   - The item is done when the end's list holds the change.
+2. An answer that changes the entry's goal or gate is listed at the end with the lines of `plan.md`'s "## Goal" or "## Gate" it changes, for the user to rule on.
+   - The item is done when the end's list holds the change.
 
 ### Writing what settled
 
-1. Write the ruling.
+1. Write the ruling for every settled answer, the roadmap diff, "record as ADR?", rule-clash and term decisions included.
    - It goes to the `## Rulings` section of the open plan's `plan.md`, or else to the rulings file, created with the heading line `# Rulings: <entry>` when it is absent.
    - It is one bullet: `- D<n> <the decision, as a phrase> (<date>): <the answer in one line> (the user).`
    - The phrase makes a step's `(ruling <name>)` tag name the decision as `D<n> <the decision, as a phrase>`.
@@ -369,13 +377,14 @@ metadata:
 2. Write the glossary term.
    - A term the interview settles is written into `docs/glossary.md` below the plan-terms block, in the file's form `- **<term>**: <definition>`, at once.
    - A term that clashes with the glossary's existing definition is put to the user as a decision.
-   - A term the plan-terms block defines is never written into the block, since `/repo-setup sync` undoes it, and a clash with one is put to the user as a decision whose change is made in the `repo-setup` skill's `templates/plan-terms.md`.
+   - A term the plan-terms block defines is never written into the block, since `/repo-setup sync` undoes it, and no copy of the `repo-setup` skill's `templates/plan-terms.md` is changed by this skill.
+   - A clash with such a term is put to the user as a decision, its answer is written as a Rulings bullet, and the end lists it as a change for the user to make in the Ordo repository (Steps 10).
    - The item is done when the glossary, read back, holds the term whole.
 3. Draft the change to the roadmap entry.
-   - An answer that changes the entry's goal, gate or text is drafted into the entry in the file's own format and under the `roadmap` skill's Rules: the goal, the gate and the dependencies only, nothing the user did not ask for, no history, another repository only as a path.
+   - An answer that changes the goal, gate or text of an entry with a gate is drafted into the entry in the file's own format and under the `roadmap` skill's Rules: the goal, the gate and the dependencies only, nothing the user did not ask for, no history, another repository only as a path.
    - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says, and the answer with its reason goes in the diff and never in the entry.
    - The draft is shown as a diff in the next round, as a decision of its own, and written on the user's yes.
-   - An entry under "Not yet specified" whose gate the interview settles is not moved, and the gate is recorded in the ruling of item 1.
+   - An entry under "Not yet specified" is not moved and has no gate drafted into it: the settled gate is its Rulings bullet of item 1, and the end prints it (Steps 10).
    - The item is done when the diff is a decision of the next round, or, after the yes, the entry read back holds the change.
 4. Ask whether to record an ADR.
    - An answer that is not obvious from the code, binds work after the plan that made it closes, and has alternatives rejected becomes the decision "record as ADR?" in the next round.
@@ -384,8 +393,9 @@ metadata:
    - A missing folder, or one with neither `template.md` nor a record, is created or filled first from the `repo-setup` skill's `templates/docs/adr/README.md` and `template.md`.
    - The record is numbered after the folder's highest, and its status is `proposed`.
    - Its decision is the ruled option, its context the facts the decision gave, its alternatives rejected the other options with their cons, and its consequences what the decision said follows.
+   - The context, the alternatives rejected and the consequences are argued from this repository's goals, as the ADR folder's `README.md` says, and what other projects ship is evidence for them and never the reason by itself.
    - Its row goes into the folder's index when there is one.
-   - A record that changes a decision of an ADR in force supersedes it as ruling E (b) says.
+   - A record that changes a decision of an ADR in force supersedes it as the ADR folder's `README.md` says.
    - A refinement of an ADR in force edits that record to its current state, with no dated note.
    - The item is done when the decision is in the next round, or, after the yes, the record read back holds the decision and its status.
 
@@ -395,16 +405,18 @@ Every decision of a round has these parts, in this order, and `references/decisi
 
 - **Heading.** `## D<n>. <the decision, as a phrase>`.
 - **Options.** Each is lettered, with its pros and its cons.
-- **Reference line.** It is always present, is labelled by the design bar, and cites for the options what "The design bar" sets.
-- **Recommendation.** `Recommend <letter>.` with its reason, chosen because it is the better design.
+- **Reference line.** It is always present, is labelled by the design bar for a design decision, and cites for the options what "The design bar" sets.
+- **Recommendation.** `Recommend <letter>.` with its reason, argued from this repository's goals and chosen because it is the better design.
 - **Lazy option.** The option that costs less now and leaves the work undone, or "none" with the reason when no option is.
 
 - Each claim of the reference line has its source read in this session: a `path:line`, or a URL fetched in the session.
 - A reference line is never written from memory.
-- The roadmap diff and "record as ADR?" decisions have every part, their reference line citing the page that governs them.
+- The reference line is the evidence the options are weighed with, and never the reason for the recommendation by itself.
+- The roadmap diff, "record as ADR?", rule-clash and term decisions are about this repository's own pages: they have every part, their reference line is labelled "Rule:" and cites the page that governs them (the `roadmap` skill's Rules, the ADR folder's `README.md`, the glossary entry) read in this session, and the design bar and `design_references` do not apply to them.
 
 ## The design bar
 
+- The design bar applies to design decisions only, as "The decision form" says.
 - The design bar is `design_bar`, or the `--bar` value for this interview.
 - Under `industry`, the reference line is labelled "Industry:" and cites what production projects in the field ship.
 - Under `state-of-the-art`, it is labelled "State of the art:" and cites the best published work.
@@ -446,7 +458,7 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 
 # A round in the decision form
 
-The example is a roadmap entry for a command-line tool `tally`, which counts the words of text files. The Rulings of its plan already hold bullets `D1` to `D3`, `libraries` is `avoid` and the design bar is `industry`, so this round is numbered `D4` and `D5`.
+The example is a roadmap entry for a command-line tool `tally`, which counts the words of text files. The Rulings of its plan already hold bullets `D1` to `D3`, `libraries` is `avoid` and the design bar is `industry`, so this round is numbered `D4` and `D5`. The goals of `tally` are counts a user can check against `wc -w`, settings a person edits by hand, and one meaning for each setting. The decision about the ADR is about the example repository's own pages, so its reference line is labelled "Rule:" and cites a file of that repository, whose lines are the example's.
 
 ## The round, as the user reads it
 
@@ -459,7 +471,7 @@ The example is a roadmap entry for a command-line tool `tally`, which counts the
 
 **Industry:** Python packaging lets any tool keep its configuration in the `[tool]` table of `pyproject.toml`, a file "written in the TOML format" (https://peps.python.org/pep-0518/ , fetched in this session); the TOML specification calls itself "a minimal configuration file format that's easy to read due to obvious semantics" (https://toml.io/en/v1.0.0 , fetched in this session).
 
-**Recommend A.** The settings are flat and need comments, and TOML allows comments and has one meaning for each value.
+**Recommend A.** The goals ask for settings a person edits by hand with one meaning each: TOML allows comments, and each of its values has one type, where YAML's can change type between readers. The reference line is the evidence for that, not the reason.
 
 Lazy option: none. A, B and C cost the same to build.
 
@@ -471,7 +483,7 @@ Lazy option: none. A, B and C cost the same to build.
 
 **Industry:** POSIX defines a word for `wc` as "a non-zero-length string of characters delimited by white space" (https://pubs.opengroup.org/onlinepubs/9699919799/utilities/wc.html , fetched in this session); Unicode's text segmentation standard defines word boundaries for selection, cursor movement and whole-word search, and lets an implementation tailor them (https://unicode.org/reports/tr29/ , fetched in this session).
 
-**Recommend A.** The tool's first users count English text, and a count that equals `wc -w` can be checked by them.
+**Recommend A.** The goals ask for counts a user can check against `wc -w`, and A gives the same count. The reference line is the evidence for that, not the reason. B would count a hyphenated compound as two words and differ from `wc -w`.
 
 Lazy option: C. It costs less now and leaves the count wrong for texts A does not cover.
 
@@ -485,7 +497,7 @@ D4 Agree
 D5 => B
 ```
 
-`D4 Agree` takes A. `D5 => B` takes B against the recommendation, and the word "word" is now used in a sense the glossary lacks.
+`D4 Agree` takes A. `D5 => B` takes B against the recommendation, which the user may do for a reason of their own, and the word "word" is now used in a sense the glossary lacks.
 
 ## What the answers write
 
@@ -510,14 +522,20 @@ D5 has alternatives rejected and binds the tool's later work, so the next round 
 - **A. Record it.** *Pro:* the count's rule and the rejected alternatives stay findable after the plan closes. *Con:* one more record to keep current.
 - **B. Keep it a Rulings line.** *Pro:* no new file. *Con:* the plan's ledger is archived when the plan closes, and the reason for the count goes with it.
 
-**Industry:** an architecture decision record holds the context, the decision, its status and its consequences of a decision that affects the structure or construction techniques of a system (https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions , fetched in this session).
+**Rule:** `docs/adr/README.md:3` of the example repository keeps a record "per decision that is not obvious from the code and binds work after its plan closes".
 
 **Recommend A.** The count decides what `tally` reports for every later feature, and a reader of the code cannot see why it was chosen.
 
 Lazy option: B. It costs no file now and leaves the reason unrecorded.
 ```
 
-On `D6 Agree`, the record is written in the same turn in the folder `adr` names, from its `template.md`: numbered after its highest record, status `proposed`, its decision "Unicode word boundaries", its context the facts D5 gave, its alternatives rejected A and C with their cons, its consequences the counts D5 said follow, and its row in the folder's index.
+On `D6 Agree`, the Rulings gain the bullet of the answer, in the same turn:
+
+```
+- D6 Record D5 as an ADR (2026-09-30): record it (the user).
+```
+
+The record is then written in the same turn in the folder `adr` names, from its `template.md`: numbered after its highest record, status `proposed`, its decision "Unicode word boundaries", its context the facts D5 gave, its alternatives rejected argued from the goals of `tally` (A counts text in a script without spaces as one word per line, and C leaves that count wrong until later work), its consequences that `tally` counts a hyphenated compound as two words and so differs from `wc -w` on it, that the boundaries are written by hand since `libraries` is `avoid`, and that a later change of the count supersedes the record; and its row in the folder's index.
 
 ## Changed lines of the other files, before and after
 
@@ -551,4 +569,104 @@ On `D6 Agree`, the record is written in the same turn in the folder `adr` names,
 ```
  docs/glossary.md | 11 +++++++++--
  1 file changed, 9 insertions(+), 2 deletions(-)
+```
+
+## Repair round 1
+
+Every point of `.scratch/2-e-grill/agents/briefs/12-round-1.md` is carried out. The whole current text of `skills/grill/SKILL.md` and `skills/grill/references/decision-form.md` is the file on disk; the changes are listed per point, old beside new.
+
+1. Effort checks. New "Steps / Looking up a fact" 1: "Before the first lookup agent starts, check as the `spec` skill's Steps 1 does that the runner lists the effort agent `ordo-<reviewer_effort>` and that `CLAUDE_CODE_EFFORT_LEVEL` is unset (`printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1)." Either failing does not end the interview: the lookups are made by the session's own reads and the next round says so with the cause. No Stops row, since nothing waits on the user. Old: the item began "A lookup is made by the session's own reads, or by an agent the skill starts" with no check.
+2. Plan-terms clash. Old: "a clash with one is put to the user as a decision whose change is made in the `repo-setup` skill's `templates/plan-terms.md`." New, "Writing what settled" 2: "no copy of the `repo-setup` skill's `templates/plan-terms.md` is changed by this skill" and "A clash with such a term is put to the user as a decision, its answer is written as a Rulings bullet, and the end lists it as a change for the user to make in the Ordo repository (Steps 10)". Steps 10 gains "List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/repo-setup/templates/plan-terms.md`."
+3. Repository-page decisions. Old (`SKILL.md` "The decision form"): "The roadmap diff and "record as ADR?" decisions have every part, their reference line citing the page that governs them." New: "The roadmap diff, "record as ADR?", rule-clash and term decisions are about this repository's own pages: they have every part, their reference line is labelled "Rule:" and cites the page that governs them (the `roadmap` skill's Rules, the ADR folder's `README.md`, the glossary entry) read in this session, and the design bar and `design_references` do not apply to them." "The design bar" gains its first bullet "The design bar applies to design decisions only, as "The decision form" says." and the Reference line bullet reads "labelled by the design bar for a design decision". The example's D6 carries `**Rule:**`.
+4. Not yet specified. "Writing what settled" 3, old: "An entry under "Not yet specified" whose gate the interview settles is not moved, and the gate is recorded in the ruling of item 1." New: "An entry under "Not yet specified" is not moved and has no gate drafted into it: the settled gate is its Rulings bullet of item 1, and the end prints it (Steps 10)." The first bullet of that item now reads "the goal, gate or text of an entry with a gate". Steps 10: "Name `/roadmap add <entry>` ... and print the gate's text whole beside it, for the user to give that command."
+5. Open plan and the entry. "A plan already open" 2 (new): an answer that changes the entry's goal or gate is listed at the end with the lines of `plan.md`'s "## Goal" or "## Gate" it changes; Steps 10 lists "the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed".
+6. Resuming. Steps 7 gains "An answer that names a number this session has not shown is not read: the skill says so and shows its current round again."; Steps 3's Resuming bullets gain "After such a restart, an answer to a number shown before is not read (Steps 7)."
+7. This report gains "Judgment calls" and "The host-visible effect of the plan-terms change" below.
+8. Completion criteria. Each item of "Looking up a fact", "Terms and claims", "An answer that contradicts" and "A plan already open" ends "The item is done when ...", and the separate last items are gone. Reading: a script over `SKILL.md` lists every numbered item between Steps and "The decision form" (24 items) and every one holds "done when"; the earlier reading's claim that the subsections held is replaced by this. The layout reading otherwise stands: sections in order (`## Quick start`, `## Use instead`, `## What it reads`, `## Steps`, `## The decision form`, `## The design bar`, `## Stops`, `## Anti-patterns`, `## Rules`), no other `##` heading, description 748.
+9. Old: "...ending the turn to wait for the answers; the bare "round" is a repair round." New: "...ending the turn to wait for the answers. Inside `grill` the bare "round" means this; elsewhere it is a repair round. Stated in: `grill`, Steps 6." Sync written. `grep -n -w -o round skills/grill/SKILL.md | wc -l` printed 31, every one a round of an interview, which the entry now says the bare word means inside `grill`.
+10. "ruling E (b)" removed at both places. Old: "as ruling E (b) says". New: "as the ADR folder's `README.md` says" ("An answer that contradicts" 2 and "Writing what settled" 4).
+11. Old: "since a Rulings line of another plan holds `D1 (a)` inside its text." New: "since a `D<n>` inside a line can cite a decision of another interview or plan."
+12. Old: "since the glossary's **question, the** is another thing." New: "since the glossary's term "question, the" is another thing." A grep for `**` finds bold only as list item labels and inside a code span.
+13. Old Steps 8: "in the same turn as the answer and before the next round is drawn up." New: "at the time "Rules" gives." The old "Looking up a fact" 1 (restating "A fact is looked up, never asked") is removed; Rules holds it.
+14. "Writing what settled" 1: "Write the ruling for every settled answer, the roadmap diff, "record as ADR?", rule-clash and term decisions included." `references/decision-form.md` gains, on `D6 Agree`, the bullet `- D6 Record D5 as an ADR (2026-09-30): record it (the user).` before the record is written, and the record's consequences are concrete: a hyphenated compound counts as two words and so differs from `wc -w`; the boundaries are written by hand since `libraries` is `avoid`; a later change of the count supersedes the record.
+15. Decision form, Recommendation, old: "with its reason, chosen because it is the better design." New: "with its reason, argued from this repository's goals and chosen because it is the better design." New bullet: "The reference line is the evidence the options are weighed with, and never the reason for the recommendation by itself." "Writing what settled" 4 gains "The context, the alternatives rejected and the consequences are argued from this repository's goals, as the ADR folder's `README.md` says, and what other projects ship is evidence for them and never the reason by itself." The example now states the goals of `tally` and its recommendations and the record's alternatives rejected follow them.
+16. Comments now: `skills/plan/templates/plan.yaml:12` "# required. claude:<model> /refute, the brief check and the lookups of /grill run on."; `:27` "The effort a reviewer, a brief-check agent and a lookup agent of /grill run at:"; `skills/plan/templates/orchestrator-state.md:14` "# the model /refute, the brief check and the lookups of /grill run on:"; `:27` "# the effort a reviewer, a brief-check agent and a lookup agent of /grill run at:"; `.agents/plan.yaml:10` "# claude:<model> /refute, the brief check and the lookups of /grill run on." The glossary entries **effort agent** and **reviewer** name the lookup agent and point at `grill`, "Steps / Looking up a fact". `git grep -n -i "runs on\|brief-check agent run" -- skills/ordo-init/templates skills/land/templates utils` printed nothing and `grep -n -i comment skills/ordo-init/templates/check_config.py` printed nothing, so `check_config.py` and its test read no comment text.
+17. **frontier**, old: "every decision of the design tree whose prerequisites are settled, all asked in one round." New: "every decision of the design tree whose prerequisites are settled, a decision waiting on a running lookup included and not yet asked; the round asks the rest in one message." Steps 4 says the same: "a decision waiting on a running lookup is in the frontier and not yet asked."
+
+### Commands rerun
+
+```
+$ git grep -n "ruling E" -- skills; echo "rc=$?"
+rc=1
+$ grep -n -w -o round skills/grill/SKILL.md | wc -l
+      31
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ python3 -c 'import glob,yaml; ...' (the length command, grill line)
+748 skills/grill/SKILL.md
+$ ls skills/grill/SKILL.md skills/grill/references/decision-form.md
+skills/grill/references/decision-form.md
+skills/grill/SKILL.md
+$ git grep --untracked -n "/grill" -- skills README.md docs
+README.md:32, skills/grill/SKILL.md:10, :15, :16, :17, :218 to :221, skills/ordo-help/SKILL.md:52, skills/plan/SKILL.md:25, :64, skills/plan/templates/orchestrator-state.md:14, :27, skills/plan/templates/plan.yaml:12, :27, skills/roadmap/SKILL.md:28
+$ git grep --untracked -n -w grill -- README.md
+README.md:7, README.md:16, README.md:32, README.md:86
+$ LC_ALL=C grep -n '[^ -~]' over every changed and new file except the ledger
+(nothing)
+```
+
+Verify list, verbatim:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+rc=0
+```
+
+### Judgment calls
+
+- Required and optional keys (`SKILL.md`, "What it reads" 1): the brief lists ten keys with their defaults; I took the required and optional split from `skills/plan/templates/plan.yaml` (`roadmap`, `ledger_root`, `rules`, `libraries`, `reviewer` required; `standards`, `adr`, `design_bar`, `design_references`, `reviewer_effort` optional with the defaults the brief gives), since that file is where a key's requirement is stated.
+- The heading line `# Rulings: <entry>` of a rulings file `grill` creates: the brief says "created with a heading line" and names none; `plan` Steps 2 copies only bullet lines, so any heading is safe, and this one names the entry.
+- The extra Use instead row `| The repository has no `.agents/plan.yaml` | `/ordo-init` |`: the brief asks for "at least" three rows; the refusal for no configuration names `/ordo-init`, so the row states where to go.
+- "What it reads" 8, the `repo-setup` skill's ADR and glossary templates: read only when a file must be created, since Steps 8 names them and an input the skill reads is listed in "What it reads".
+- The Rules bullet "A decision is the user's": the brief lists "facts are looked up, decisions are the user's" as one rule; it is two bullets since either can be broken while the other holds.
+- An answer the skill cannot read is asked again under a new number (the brief says "asked again in the next round"), so a written number never repeats.
+- Numbers continue after the highest `D<n>` that opens a bullet and after every number shown in this interview, since the brief's rule alone would reuse a number shown and not answered.
+- "What it reads" 2 also reads the roadmap file's introduction and status legend, since the entry diff is written in the file's own format.
+- New in this round: the effort check has no Stops row (point 1) and its failure is shown in the next round; a plan-terms clash is a Rulings bullet and an end-list item for the Ordo repository (point 2); the "Rule:" label for decisions about the repository's own pages (point 3); the example's stated goals of `tally` and the wording of its D6 record (points 14 and 15).
+
+### The host-visible effect of the plan-terms change
+
+The next `/repo-setup sync` in every repository with the plan-terms block (game-engine, cathedra) rewrites its `docs/glossary.md` block to the template, so its glossary gains the entries below and changes the two entries after them and the two of point 16, and names `grill` in skills that repository may not have installed. Before, in game-engine and cathedra: none of the new entries; **ruling** and **rulings file** end as the base text ends. After, the lines the sync writes are the diff of `skills/repo-setup/templates/plan-terms.md` against the base:
+
+```
++- **decision form**: the parts every decision of a round has, in this order: a heading `D<n>. <the decision, as a phrase>`, the lettered options with their pros and cons, the reference line, `Recommend <letter>.` with its reason, and the lazy option named or "none" with the reason. Stated in: `grill`, "The decision form".
++- **design bar**: the standard a `grill` interview holds its options to and its reference line cites, `industry`, `state-of-the-art` or `novel`, set by `.agents/plan.yaml`'s `design_bar` and overridden for one interview by `--bar`. Stated in: `grill`, "The design bar".
++- **design tree**: the decisions a roadmap entry's goal and gate need, each with the decisions it waits on, each node a decision. Stated in: `grill`, Steps 3.
+-- **effort agent**: one of the agent definitions `ordo-low`, `ordo-medium`, `ordo-high`, `ordo-xhigh` and `ordo-max`, installed with the plan skills, each setting the effort an agent runs at and no model; a builder is launched as `ordo-<worker_effort>`, a reviewer and a brief-check agent as `ordo-<reviewer_effort>`. Stated in: `plan-orchestration`, "Launching a builder"; `refute`, Steps 1; `spec`, "Steps / The brief check".
++- **effort agent**: one of the agent definitions `ordo-low`, `ordo-medium`, `ordo-high`, `ordo-xhigh` and `ordo-max`, installed with the plan skills, each setting the effort an agent runs at and no model; a builder is launched as `ordo-<worker_effort>`, a reviewer, a brief-check agent and a lookup agent of `grill` as `ordo-<reviewer_effort>`. Stated in: `plan-orchestration`, "Launching a builder"; `refute`, Steps 1; `spec`, "Steps / The brief check"; `grill`, "Steps / Looking up a fact".
++- **frontier**: every decision of the design tree whose prerequisites are settled, a decision waiting on a running lookup included and not yet asked; the round asks the rest in one message. Stated in: `grill`, Steps 4.
++- **lazy option**: the option that costs less now and leaves the work undone, such as a booking instead of a fix, a later step instead of this one, a sentence in a report instead of a change in the code, or a narrower reading of the request than the request. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option"; `grill`, "The decision form".
++- **reference line**: the line of a decision that cites, for the options, what the design bar sets, labelled "Industry:", "State of the art:" or "Novel:", each claim with its source read in the session. Stated in: `grill`, "The decision form" and "The design bar".
+-- **reviewer**: the fresh session or agent that refutes a built step without changing anything, on the model the configuration block's `reviewer:` names, which the brief-check agent also runs on. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction.
++- **reviewer**: the fresh session or agent that refutes a built step without changing anything, on the model the configuration block's `reviewer:` names, which the brief-check agent and the lookup agents of `grill` also run on. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
++- **round, of an interview**: one message in which `grill` asks the whole frontier, ending the turn to wait for the answers. Inside `grill` the bare "round" means this; elsewhere it is a repair round. Stated in: `grill`, Steps 6.
+-- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
+-- **rulings file**: `<ledger_root>/rulings/<slug>.md`, which holds the user's settled design answers for a roadmap entry, one bullet line each, while no plan is open. `/plan` copies its bullet lines into the new plan's Rulings and removes it. Stated in: `plan`, "What it reads" 4, Steps 2 and 6, and Stops.
++- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8. Also a settled `grill` decision, one bullet of the Rulings or the rulings file. Stated in: `grill`, "Steps / Writing what settled".
++- **rulings file**: `<ledger_root>/rulings/<slug>.md`, which holds the user's settled design answers for a roadmap entry, one bullet line each, while no plan is open. `/plan` copies its bullet lines into the new plan's Rulings and removes it. Stated in: `plan`, "What it reads" 4, Steps 2 and 6, and Stops; `grill`, "What it reads" 6 and "Steps / Writing what settled".
 ```

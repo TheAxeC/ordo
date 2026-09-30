@@ -49,6 +49,7 @@ metadata:
 /ordo-init                    once per repository: writes .agents/plan.yaml, or checks the one there
 /roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
 /roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan can open it
+/grill <entry>                optional: an interview in rounds that settles the entry's design decisions, written as they settle
 /plan <entry>                 once: opens the plan, shows the step list for approval
 
 then, for every step:
