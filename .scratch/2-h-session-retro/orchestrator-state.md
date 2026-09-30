@@ -38,28 +38,12 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 3
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2h-3
-  base: 4b32a7a2bcb7b0a0b255e19f4322330dd69cd7c4
-  launched: 2026-09-30 10:28
-  session_id: a79c87e7558835577 (claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-h-session-retro/agents/reviews/3-report.md
-  brief_check: .scratch/2-h-session-retro/agents/reviews/3-brief-check.md (claude-opus-5-5; 150427 tokens, 35 tool uses, 395 s, $1.34-3.86)
-  builder_usage: round 0 hand-backs 83850 tokens, 13 tool uses, 69 s; 91819 tokens, 20 tool uses, 135 s; report 117739 tokens, 34 tool uses, 317 s
-  cases_ruling: .scratch/2-h-session-retro/agents/briefs/3-cases.md
-  reviewer_report: .scratch/2-h-session-retro/agents/reviews/3-refuter.md (claude-opus-5-5; 142223 tokens, 36 tool uses, 333 s, $1.27-3.65)
-  landing: not-started
-  round: 1
-  round_0_sent_at: 5ce3f7c
-  round_1_sent_at: 2026-09-30 10:44, the tree in agents/reviews/3-round-0.diff
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 2 reading (2026-09-30): step 2, the `session-retro` skill, landed unticked, since its check is your reading of `skills/session-retro/SKILL.md` and `templates/sessions.md` against `docs/dev/skill-layout.md` and the Goal (ruling "Overnight work applies to this plan"). Options: (a) you read it and tick step 2, or name what is wrong; (b) tick it unread. Recommendation (a). The lazy option is (b).
+- Step 2 reading (2026-09-30): step 2, the `session-retro` skill, landed unticked, since its check is your reading of `skills/session-retro/SKILL.md` and `templates/sessions.md` against `docs/dev/skill-layout.md` and the Goal (ruling "Overnight work applies to this plan"). Step 3's round reviewer found one sentence to correct in it: the opening sentence of "The reader" says the script prints the transcripts "with each secret replaced by `<REDACTED>`", while the same section says a YAML value on the line after its name is not redacted; the correction is "with the secrets of the forms it knows replaced by `<REDACTED>`", which the glossary's **reader, of the transcripts** already says. Options: (a) you read it and tick step 2, or name what is wrong, the sentence above corrected as a fix of step 2; (b) tick it unread. Recommendation (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -86,6 +70,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Step 2 of 4, the `session-retro` skill, landed unticked, its reading pending (`agents/reviews/2-landing.md`); step 1 is landed and ticked.
-- Next step: 3, the skill wired in.
+- 2026-09-30. Step 3 of 5, the skill wired in, landed and ticked (`agents/reviews/3-landing.md`); step 2 is landed unticked, its reading pending; step 1 is landed and ticked.
+- Next step: 4, the real run over plan 2.C's sessions, before 2026-10-28; it needs Axel for the decisions on each proposal.
 - Open on Axel's side: the open items above.

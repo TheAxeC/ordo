@@ -22,6 +22,7 @@ metadata:
 |---|---|
 | One step's findings, before it lands | `/refute <entry> <step>`, then `/land` |
 | The recurring findings of the plan that is running | `plan-orchestration`'s recurring-findings pass |
+| What went well and what went wrong in the Claude Code sessions, from their transcripts | `/session-retro` |
 
 ## What it reads
 

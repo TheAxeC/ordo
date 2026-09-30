@@ -24,6 +24,7 @@ metadata:
 | No plan is open for the entry yet | `/plan <entry>` |
 | A defect whose cause is not known | `/diagnose <symptom>`, or inside a plan `/diagnose <entry> <step> <finding>` |
 | What the reviews keep finding across plans | `/plan-retro` |
+| What went well and what went wrong in Claude Code sessions | `/session-retro <entry>` |
 
 ## What it reads
 
@@ -82,6 +83,7 @@ when a command stops:
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
 
 /plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
+/session-retro <entry>        for a plan, open or closed: what went well and what went wrong in its Claude Code sessions, each with a proposed change
 /diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
 ```
 

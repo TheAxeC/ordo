@@ -24,6 +24,7 @@ metadata:
 | The findings are closed or raised as open items and the step is ready for main | `/land <entry> <step>` |
 | Every step of the plan, unattended, the reviews included | `/plan-orchestration <entry>` |
 | What the reviews keep finding across plans | `/plan-retro` |
+| What went well and what went wrong in the Claude Code sessions of a plan | `/session-retro <entry>` |
 
 ## What it reads
 

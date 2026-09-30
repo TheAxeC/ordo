@@ -27,6 +27,7 @@ continue the plan                    resume from the state file, after a compact
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
 | A finding, a red line or a brief-check finding whose cause is not known, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line` or `brief check <n>` |
 | What the reviews keep finding across plans | `/plan-retro` |
+| What went well and what went wrong in the Claude Code sessions of a plan | `/session-retro <entry>` |
 
 ## What it reads
 

@@ -14,7 +14,6 @@ Open items of 2.H's state file, verbatim:
 - Descriptions, the skill-layout command: `396 skills/ordo-help/SKILL.md`, `616 skills/plan-retro/SKILL.md`, `951 skills/refute/SKILL.md`, `788 skills/plan-orchestration/SKILL.md`; all at most 1,024 (holds). Its other lines: 905 diagnose, 748 grill, 726 land, 632 ordo-init, 477 plan, 861 repo-setup, 997 roadmap, 779 session-retro, 1022 spec.
 - ASCII, `LC_ALL=C grep -n '[^ -~]'` over the ten changed files: prints nothing, rc=1 (holds).
 
-
 ## DONE / NOT DONE
 
 | Item | State | Proof |
@@ -90,3 +89,65 @@ Command: `grep -rn "session-retro" skills docs utils README.md`, without `skills
 - Item 6 placed **point, of a sessions report** and **window, of the transcripts** out of alphabetical order; ruled as above.
 - Item 2's height 180 is refused by the generator with the brief's stops (`error: pipeline.svg: box '/session-retro': the label 'only when' does not fit the box`); ruled as 210.
 - Definitions: the seven were read against `skills/session-retro/SKILL.md`, `templates/sessions.md` and `templates/transcript_window.py` ("start <= its timestamp < end"); none is false.
+
+## Repair round 1
+
+Everything in the round's brief is done.
+
+### Changes, old beside new
+
+- Point 1: `skills/repo-setup/templates/plan-terms.md` gains two entries word for word from the brief, **part, of an output** after **part file** and **reader, the** before **recurring finding**; `docs/glossary.md` is synced. Before: no entry for either term. After: each headword counts 1 in both files.
+- Point 2, `README.md` line 7. Before: "..., and `plan-retro` turns what the reviewers keep finding into rules" was followed, in the same sentence, by "and `session-retro` reads ...". After: "..., inside a plan's loop or on its own, and `plan-retro` turns what the reviewers keep finding into rules. `session-retro` reads the transcripts of Claude Code sessions and proposes a change to a named rule, skill or brief for what went well and for what went wrong."
+- Point 2, `README.md` table row 25. Before: one sentence "Reads the transcripts of a plan's Claude Code sessions, one session, or a time window, and reports what went well, to keep, and what went wrong, to change, each point with its place quoted and a proposed change to a rule, skill or brief, which the user decides on". After: "Reads the transcripts of a plan's Claude Code sessions, of one session or of a time window. It reports what went well, to keep, and what went wrong, to change. Each point quotes its place and proposes a change to a rule, skill or brief, which the user decides on".
+- Point 3: the double blank line before "## DONE / NOT DONE" in this report is one blank line; `awk 'prev=="" && $0=="" {print "double blank at " NR} {prev=$0}'` prints nothing.
+
+### Checks
+
+Glossary counts, `grep -c '^- \*\*<headword>\*\*:'` in `skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md`: change point 1 1, keep point 1 1, place, of a point 1 1, point, of a sessions report 1 1, sessions report 1 1, window, of the transcripts 1 1, working folder 1 1, part, of an output 1 1, reader, the 1 1.
+
+Sort check, `grep "^- \*\*" skills/repo-setup/templates/plan-terms.md | sed 's/^- \*\*//; s/\*\*:.*//' | tr -d '`' | LC_ALL=C sort -f -c; echo sortrc=$?`: prints `sortrc=0`.
+
+Sync: `python3 skills/repo-setup/templates/sync_rules.py . --only glossary --write` prints `written: the plan-terms block now equals the template`; without `--write` it prints `ok: the plan-terms block equals the template`.
+
+README grep, `grep -n "session-retro" README.md | cut -c1-40`:
+
+```
+7:Around that loop, `repo-setup` and `or
+25:| `session-retro` | Reads the transcr
+48:/session-retro <entry>        for a p
+56:![The pipeline of one roadmap entry a
+100:    for skill in diagnose grill land
+```
+
+The verify list, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh <state file>; echo "rc=$?"`, printed:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+rc=0
+```
+
+ASCII, `LC_ALL=C grep -n '[^ -~]' README.md skills/repo-setup/templates/plan-terms.md docs/glossary.md` and this report: prints nothing (`asciirc=1`).
+
+### Judgment calls
+
+- The clause "one line `<id> <line> <timestamp> <label>: <text>` for each item" of **reader, the** is kept as the brief gives it. In "The reader" a text of several lines continues on lines indented by two spaces, so the line named is the first line of each item; the clause holds for that line.
+- Each clause of the two entries was read against Steps 6 and "The reader": the 30,000-byte limit, the one longer line on its own, the Read tool, the record as read in the report, the two forms (a window, `--session`), the line format and `<REDACTED>` are all stated there; no clause is false.

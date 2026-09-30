@@ -3,7 +3,7 @@
 Writes, beside this file:
 
 - pipeline.svg: /repo-setup or /ordo-init, /roadmap add, /grill, /plan, every step, the closing,
-  with /plan-retro, /diagnose and /ordo-help beside them.
+  with /plan-retro, /session-retro, /diagnose and /ordo-help beside them.
 - plan-loop.svg: /spec, build it, /refute, close them, /refute over the round, /land, the return
   for a further round, the stops and refusals, and the /plan-orchestration band.
 
@@ -403,14 +403,16 @@ def pipeline_svg() -> str:
     join_y = setup_top + setup_h + 36
     top, height, width, gap = join_y + 34, 258, 178, 25
     side_top = top + height + 56
+    side_h = 210
     canvas = Canvas(
         "pipeline.svg",
         1040,
-        side_top + 150 + 68,
+        side_top + side_h + 68,
         "The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or "
         "/ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and "
-        "the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each "
-        "box lists the stops where you are asked, marked every run, only when or optional.",
+        "the closing, with the optional /plan-retro, /session-retro, /diagnose and /ordo-help "
+        "beside them. Each box lists the stops where you are asked, marked every run, only when "
+        "or optional.",
     )
     draw_caption(canvas, 25, 30, "SET THE REPOSITORY UP, ONCE: ONE OF THE TWO", 600)
     setup = Box(
@@ -503,33 +505,45 @@ def pipeline_svg() -> str:
         route = [(centre, source.area.y + source.area.h), (centre, join_y), (target_x, join_y)]
         canvas.path([*route, (target_x, top - 1)], ACCENT, 2, arrow=True)
 
-    draw_caption(canvas, 25, side_top - 12, "AFTER PLANS HAVE RUN", 300)
-    draw_caption(canvas, 395, side_top - 12, "AT ANY POINT", 620)
+    draw_caption(canvas, 25, side_top - 12, "AFTER PLANS HAVE RUN", 228)
+    draw_caption(canvas, 279, side_top - 12, "AT ANY POINT", 736)
     retro = Box(
-        Rect(25, side_top, 330, 150),
+        Rect(25, side_top, 228, side_h),
         "/plan-retro",
         "The findings the reviews keep making, and the change that stops each.",
         (Group(OPTIONAL), Group(ONLY_WHEN, ("The proposals",))),
         dashed=True,
     )
+    session_box = Box(
+        Rect(279, side_top, 228, side_h),
+        "/session-retro",
+        "What went well and what went wrong in the Claude Code sessions, and the change for each.",
+        (
+            Group(OPTIONAL),
+            Group(EVERY_RUN, ("The proposals",)),
+            Group(ONLY_WHEN, ("A large output",)),
+        ),
+        dashed=True,
+    )
     help_box = Box(
-        Rect(395, side_top, 300, 150),
+        Rect(533, side_top, 228, side_h),
         "/ordo-help",
         "Prints the sequence and, for a named plan, where it stands and the next command.",
         (Group(OPTIONAL), Group("", ("No stop.",))),
         dashed=True,
     )
     diagnose_box = Box(
-        Rect(715, side_top, 300, 150),
+        Rect(787, side_top, 228, side_h),
         "/diagnose",
         "The cause of a defect, from a command red on it, before any fix.",
         (Group(OPTIONAL), Group(ONLY_WHEN, ("The hypotheses", "The cause not found"))),
         dashed=True,
     )
     draw_box(canvas, retro)
+    draw_box(canvas, session_box)
     draw_box(canvas, help_box)
     draw_box(canvas, diagnose_box)
-    draw_legend(canvas, 25, side_top + 176, 990)
+    draw_legend(canvas, 25, side_top + side_h + 26, 990)
     return canvas.render()
 
 
