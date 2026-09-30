@@ -25,4 +25,6 @@ Each command in a verify list exits non-zero when it fails, as written. A comman
 
 The last command is the ASCII check over every tracked file and every untracked file git does not ignore: it prints each line holding a character outside printable ASCII (an em or en dash, a curly quote, an arrow, an emoji, a tab) with its file and line number, and exits 0 only when it prints nothing. A file that is not valid UTF-8 makes it exit non-zero: perl either stops with its `Malformed UTF-8 character (fatal)` error or prints the line. The green checkmark is allowed in Markdown files, where the plan ledgers use it as their status marker, and nowhere else.
 
-This page is the list of tests and checks; a new script under a skill's `templates/` or under `utils/` adds its test here and to the command block of `docs/dev/change-standard.md`.
+The figures under `docs/figures/` are written by `python3 docs/figures/gen_figures.py` and committed. A change to a skill's Stops table, to the sequence or to a skill name changes the labels in that script, which is then run again; the script is not part of the verify list.
+
+This page is the list of tests and checks, and says how the committed figures are made; a new script under a skill's `templates/` or under `utils/` adds its test here and to the command block of `docs/dev/change-standard.md`.

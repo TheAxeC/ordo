@@ -36,20 +36,7 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 ```
 
 ```yaml
-dispatch:
-- step: 12a
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-12a
-  base: ef5d3a9a46dc06898c1a09544142a1c740de6eb8
-  launched: 2026-09-30 04:27
-  session_id: ac6b1b3f4e4cf034e (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
-  report: .scratch/2-e-grill/agents/reviews/12a-report.md
-  builder_usage: round 0 186727 tokens, 57 tool uses, 605 s ($1.83-3.57)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/12a-refuter.md (claude-opus-5-5; 174560 tokens, 41 tool uses, 468 s)
-  brief_check: .scratch/2-e-grill/agents/reviews/12a-brief-check.md (claude-opus-5-5; 132593 tokens, 26 tool uses, 287 s)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -59,6 +46,7 @@ dispatch:
 - The old skill name in other repositories (2026-09-30, raised at step 10's review): after the next pin `/plan-help` no longer exists, and these files still name it (`grep -rIl -i plan-help`, `.git` and `.scratch` left out): `game-engine/.agents/plan.yaml:1` and `cathedra/.agents/plan.yaml:1` (the comment listing the plan skills); `research-hub/.agents/plan.yaml:1`, `research-hub/CLAUDE.md:33` (read by every session there), `research-hub/docs/AGENT-APPROACH.md`, `research-hub/tools/figures/gen_figures.py` and `plan-loop.svg`. research-hub is read only, and changing another repository waits for Axel under ruling "Overnight work" 5. Options: (a) step 15, which already edits game-engine's and cathedra's `.agents/plan.yaml` and leaves the edit for Axel to commit, also changes their line 1 to `/ordo-help`; Axel changes research-hub's files himself, or rules that a step of a later plan does. Pros: the pin at 2.E's closing leaves no repository pointing at a missing skill; no extra commit in each repository. Cons: step 15 grows by one line per repository. Approving (a) also approves adding "and line 1's `/plan-help` becomes `/ordo-help`" to step 15's line in plan.md. (b) leave them: the lazy option, since a session in research-hub reads CLAUDE.md's list and types a skill that no longer exists. Recommendation: (a).
 - Step 6 reading (2026-09-30): step 6 landed with its check, Axel's reading of `skills/repo-setup/templates/docs/dev/ui-standard.md`, pending (ruling "Overnight work" 2); it stays unticked until he approves. Points for his reading: the three rules beyond the plan's four (colour never the only carrier, styling a shared component, text from the catalog) and the added thresholds (the brief's decision 3); the AA criteria not cited (1.4.4, 1.4.10, 2.5.8, 4.1.2), bound by the opening; 2.4.7 stated for keyboard focus in every mode, stricter than the criterion's "a mode of operation"; large text without the CJK clause of WCAG's definition. Options: (a) approve as landed; (b) name the changes, made on top of what landed as a correction. Recommendation: (a), after reading the page, which is 11 lines.
 - Step 12 reading (2026-09-30): step 12 landed with its check, Axel's reading of `skills/grill/SKILL.md` against `docs/dev/skill-layout.md`, pending (ruling "Overnight work" 2); it stays unticked until he approves. Points for his reading: the five rulings decided overnight for it (plan.md Rulings, "Step 12, ..."), the "Rule:" reference line for decisions about the repository's own pages, which narrows G2's "the bar sets what it cites" to design decisions; a lookup agent whose effort cannot apply leaves the lookups to the session instead of stopping; the resumed interview, which reads an answer only against the last round shown; the builder's dry run on roadmap entry 3 (`12-report.md`), which predates repair round 1 (its D5 to D7 would now carry "Rule:" and write Rulings bullets). Options: (a) approve as landed; (b) name the changes, made on top of what landed. Recommendation: (a) once read. The lazy option is approving unread.
+- Step 12a reading (2026-09-30): step 12a landed with its check, Axel's reading of `docs/figures/pipeline.svg` and `docs/figures/plan-loop.svg` against the skills' Stops tables, pending (ruling "Overnight work" 2); it stays unticked until he approves. Points for his reading: the three marks (ruling "Step 12a, the three marks"); the rows marked from outside the Stops tables, "A contradiction of an ADR the brief asked for" on close them and "A finding left after the last round" on `/refute` over the round (from `refute` "Finding dispositions" and `ordo-help`'s sequence); the `/plan-orchestration` band drawn optional; whether `/repo-setup` shows `/ordo-init`'s stops when it runs it, which the figure does not mark; how the SVGs render on GitHub, which was not seen (only `rsvg-convert`).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -96,7 +84,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 to 5 and 7 to 11 landed and ticked; steps 6 and 12 landed unticked, their reading by Axel pending (open items "Step 6 reading" and "Step 12 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
-- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 12's fixes at landing.
-- In flight: step 12a, figures in the form of research-hub's (after 12); it lands unticked, its check being Axel's reading (ruling "Overnight work" 2). Unblocked: 2.F steps 1 and 2 and 2.H step 3.
-- Open on Axel's side: the readings of steps 6 and 12; the old rule 13 in game-engine and cathedra; approval stops under a ruling; the old skill name in other repositories.
+- 2026-09-30. Steps 1 to 5 and 7 to 11 landed and ticked; steps 6, 12 and 12a landed unticked, their reading by Axel pending (open items "Step 6 reading", "Step 12 reading" and "Step 12a reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
+- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 12a's fixes at landing.
+- In flight: none. Next: steps 13 to 16 need Axel (the interview, the blind comparison, other repositories, the closing).
+- Open on Axel's side: the readings of steps 6, 12 and 12a; the old rule 13 in game-engine and cathedra; approval stops under a ruling; the old skill name in other repositories.

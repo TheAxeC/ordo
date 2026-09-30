@@ -23,7 +23,7 @@ Everything in the brief is done.
 
 | Item | Command or reading that proves it | Result |
 |---|---|---|
-| 1 `docs/figures/gen_figures.py` | `wc -l docs/figures/gen_figures.py`; `python3 docs/figures/gen_figures.py` | DONE. 685 lines, standard library only; prints `wrote docs/figures/pipeline.svg (25245 bytes)` and `wrote docs/figures/plan-loop.svg (24252 bytes)`, exit 0 |
+| 1 `docs/figures/gen_figures.py` | `wc -l docs/figures/gen_figures.py`; `python3 docs/figures/gen_figures.py` | DONE. 708 lines, standard library only; prints `wrote docs/figures/pipeline.svg (25910 bytes)` and `wrote docs/figures/plan-loop.svg (28067 bytes)`, exit 0 |
 | 1 the two SVG files | `ls docs/figures` | DONE. `gen_figures.py pipeline.svg plan-loop.svg` |
 | 2 `README.md`, both figures after line 46 | `git diff -U0 README.md` | DONE. 8 lines added after line 46 |
 | 3 `docs/dev/building.md` line | `git diff -U0 docs/dev/building.md` | DONE, quoted below |
@@ -33,8 +33,8 @@ Everything in the brief is done.
 | Case: runs the same from any directory | `cd / && python3 /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-12a/docs/figures/gen_figures.py` | DONE. exit 0, same two `wrote docs/figures/...` lines |
 | Case: ASCII | `LC_ALL=C grep -n '[^ -~]' docs/figures/* README.md docs/dev/building.md docs/glossary.md; echo "asciirc=$?"` | DONE. prints nothing, `asciirc=1` (grep found no match) |
 | Case: no plan-help | `git grep --untracked -n -i -E "plan-help|plan help" -- . ':!.scratch'` | DONE. prints nothing |
-| Case: ruff | `ruff check --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 --line-length 100 docs/figures/gen_figures.py` | DONE. `All checks passed!`; `ruff format --check --line-length 100` prints `1 file already formatted` |
-| Case: too-long label | scratch copy under `$TMPDIR/err/docs/figures/` with the closing box's label repeated four times | DONE. exit 1, stderr `error: pipeline.svg: box 'the closing': the label 'The roadmap diff of the closing step, ...' does not fit the box`, and `ls $TMPDIR/err/docs/figures` lists only the copied `gen_figures.py`: nothing written. A second scratch copy with an accented letter in a label: `error: pipeline.svg: the body holds a character that is not ASCII`, rc=1 |
+| Case: ruff | `ruff check --target-version py39 --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 --line-length 100 docs/figures/gen_figures.py` (the target version set by round point 10; without it ruff 0.16.5 applies B905 to the two plain `zip` calls) | DONE. `All checks passed!`; `ruff format --check --target-version py39 --line-length 100` prints `1 file already formatted` |
+| Case: too-long label | scratch copy under `$TMPDIR` with words added to the closing box's body | DONE. exit 1, stderr `error: pipeline.svg: box 'the closing': the label "/roadmap done <entry> ticks the entry with the gate's output. ..." does not fit the box` (the whole body, as landed), and the copy's folder lists only `gen_figures.py`: nothing written. A second scratch copy with an accented letter in a label: `error: pipeline.svg: the body holds a character that is not ASCII`, rc=1 |
 | Case: well-formed XML | `python3 -c "import xml.dom.minidom,sys; ..." docs/figures/*.svg; echo xmlrc=$?` | DONE. `xmlrc=0` |
 | Case: renders read | `rsvg-convert -z 1.5 docs/figures/<name>.svg -o $TMPDIR/figs/<name>.png`, both images opened with Read | DONE, see "What was seen" |
 | Case: each box against its Stops table | table "Boxes against the Stops tables" below | DONE |
@@ -46,7 +46,7 @@ Everything in the brief is done.
 
 No item is NOT DONE.
 
-## The verify list, verbatim (rc from the run, with the checks runner's own last line)
+## The verify list, verbatim (after repair round 1)
 
 ```
 $ sh skills/land/templates/land.test.sh 2>&1 | tail -1
@@ -68,7 +68,7 @@ checks: 8 commands passed
 rc=0
 ```
 
-## The script, whole (`docs/figures/gen_figures.py`, 685 lines)
+## The script, whole (`docs/figures/gen_figures.py`, 708 lines)
 
 ```python
 """Write the two SVG figures of the README: the pipeline of one roadmap entry and the plan loop.
@@ -84,7 +84,9 @@ Every box, arrow and label is written in this file, taken from each skill's Stop
 the sequence /ordo-help prints; the script reads no skill file. A change to a Stops table, to the
 sequence or to a skill name is made in the labels below, and the script is run again.
 
-Run, from any directory: python3 docs/figures/gen_figures.py
+Run, from the repository root: python3 docs/figures/gen_figures.py
+The script finds its files from its own location, so it also runs from any other directory when
+given the path to the script.
 
 Every byte written is ASCII. The figures carry their own light panel, so they read the same on a
 light or a dark page. Each box shows where the user is asked with a mark that differs by shape and
@@ -92,9 +94,13 @@ by a word: a filled square "every run", an outlined square "only when", a dashed
 
 Errors, each printed to stderr as "error: <message>":
 
-- a label that does not fit its box or its line: the message names the figure,
-  the box and the label;
-- a word longer than a line of its box: the same message;
+- a label that does not fit its box: the message names the figure, the box and the label;
+- a title that does not fit one line of its box: the message names the figure, the box, the label
+  and the width in pixels;
+- a word longer than a line of its box: the message names the figure, the box, the word and the
+  label;
+- a caption, a note or the legend that does not fit one line: the message names the figure, "a
+  caption", "a note" or "the legend", the label and the width in pixels;
 - a body that holds a non-ASCII character: the message names the file;
 - a file that cannot be written or read back: the message names the file and the cause;
 - a file whose text read back differs from the body written: the message names the file.
@@ -107,7 +113,6 @@ Exit status: 0 both files written and verified, 1 an error above.
 import sys
 from dataclasses import dataclass
 from html import escape
-from itertools import pairwise
 from pathlib import Path
 from typing import NamedTuple
 
@@ -174,22 +179,6 @@ class Box:
     dashed: bool = False
     columns: int = 1
     accent: str = ACCENT
-
-    @property
-    def x(self) -> float:
-        return self.area.x
-
-    @property
-    def y(self) -> float:
-        return self.area.y
-
-    @property
-    def w(self) -> float:
-        return self.area.w
-
-    @property
-    def h(self) -> float:
-        return self.area.h
 
 
 def _num(value: float) -> str:
@@ -367,7 +356,7 @@ class _Put:
         self.box = box
 
     def check(self, baseline: float, label: str) -> None:
-        if baseline > self.box.y + self.box.h - 8:
+        if baseline > self.box.area.y + self.box.area.h - 8:
             raise FigureError(
                 f"{self.canvas.name}: box {self.box.title!r}: "
                 f"the label {label!r} does not fit the box"
@@ -376,7 +365,7 @@ class _Put:
 
 def _draw_names(canvas: Canvas, box: Box, group: Group, cursor: float, put: _Put) -> float:
     """Draw the names of a group in the box's columns; return the baseline for the next line."""
-    inner = box.w - 2 * PAD_X
+    inner = box.area.w - 2 * PAD_X
     column_width = inner / box.columns
     names = list(group.names)
     for start in range(0, len(names), box.columns):
@@ -392,7 +381,7 @@ def _draw_names(canvas: Canvas, box: Box, group: Group, cursor: float, put: _Put
             for line_index, line in enumerate(lines):
                 indent = 0 if line_index == 0 else 8
                 canvas.text(
-                    box.x + PAD_X + column * column_width + indent,
+                    box.area.x + PAD_X + column * column_width + indent,
                     cursor + line_index * NAME_LEADING,
                     line,
                     NAME_SIZE,
@@ -405,36 +394,46 @@ def draw_box(canvas: Canvas, box: Box) -> None:
     """Draw a card: rule, title, body, the groups of stops with their marks, and the note."""
     figure = canvas.name
     put = _Put(canvas, box)
-    inner = box.w - 2 * PAD_X
-    canvas.rect(box.x, box.y, box.w, box.h, 8, CARD, EDGE, 1.5, "6 4" if box.dashed else "")
-    canvas.line(box.x + 8, box.y, box.x + box.w - 8, box.y, box.accent, 3)
+    inner = box.area.w - 2 * PAD_X
+    canvas.rect(
+        box.area.x,
+        box.area.y,
+        box.area.w,
+        box.area.h,
+        8,
+        CARD,
+        EDGE,
+        1.5,
+        "6 4" if box.dashed else "",
+    )
+    canvas.line(box.area.x + 8, box.area.y, box.area.x + box.area.w - 8, box.area.y, box.accent, 3)
     _check_line(figure, f"box {box.title!r}", box.title, inner, TITLE_SIZE, bold=True)
-    cursor = box.y + 24
+    cursor = box.area.y + 24
     put.check(cursor, box.title)
-    canvas.text(box.x + PAD_X, cursor, box.title, TITLE_SIZE, INK, "700")
+    canvas.text(box.area.x + PAD_X, cursor, box.title, TITLE_SIZE, INK, "700")
     cursor += 20
     for line in _wrap(figure, f"box {box.title!r}", box.body, inner, BODY_SIZE):
         put.check(cursor, line)
-        canvas.text(box.x + PAD_X, cursor, line, BODY_SIZE)
+        canvas.text(box.area.x + PAD_X, cursor, line, BODY_SIZE)
         cursor += BODY_LEADING
     for group in box.groups:
         cursor += 6
         if group.mark:
             put.check(cursor + 4, group.mark)
-            draw_badge(canvas, box.x + PAD_X, cursor, group.mark)
+            draw_badge(canvas, box.area.x + PAD_X, cursor, group.mark)
             cursor += 20
             cursor = _draw_names(canvas, box, group, cursor, put)
         else:
             for name in group.names:
                 for line in _wrap(figure, f"box {box.title!r}", name, inner, NAME_SIZE):
                     put.check(cursor, line)
-                    canvas.text(box.x + PAD_X, cursor, line, NAME_SIZE, MUTED)
+                    canvas.text(box.area.x + PAD_X, cursor, line, NAME_SIZE, MUTED)
                     cursor += NAME_LEADING
     if box.note:
         cursor += 6
         for line in _wrap(figure, f"box {box.title!r}", box.note, inner, NAME_SIZE):
             put.check(cursor, line)
-            canvas.text(box.x + PAD_X, cursor, line, NAME_SIZE, MUTED)
+            canvas.text(box.area.x + PAD_X, cursor, line, NAME_SIZE, MUTED)
             cursor += NAME_LEADING
 
 
@@ -464,12 +463,23 @@ def draw_legend(canvas: Canvas, x: float, y: float, width: float) -> None:
         canvas.text(left + badge + 8, y + 26, meaning, NAME_SIZE)
 
 
+def draw_row_arrows(canvas: Canvas, boxes: tuple[Box, ...]) -> None:
+    """Draw an arrow from each box of a row to the next, level with the titles."""
+    for left, right in zip(boxes, boxes[1:]):
+        y = left.area.y + 20
+        canvas.line(left.area.x + left.area.w, y, right.area.x - 1, y, ACCENT, 2, arrow=True)
+
+
 def pipeline_svg() -> str:
     """The pipeline of one roadmap entry, from the repository's setup to the closing."""
+    setup_top, setup_h = 42, 262
+    join_y = setup_top + setup_h + 36
+    top, height, width, gap = join_y + 34, 258, 178, 25
+    side_top = top + height + 56
     canvas = Canvas(
         "pipeline.svg",
         1040,
-        860,
+        side_top + 150 + 68,
         "The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an "
         "existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and "
         "the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you "
@@ -477,7 +487,7 @@ def pipeline_svg() -> str:
     )
     draw_caption(canvas, 25, 30, "SET THE REPOSITORY UP, ONCE: ONE OF THE TWO", 600)
     setup = Box(
-        Rect(25, 42, 330, 214),
+        Rect(25, setup_top, 330, setup_h),
         "/repo-setup",
         "For a new repository: the tree, the shared rules, the standards, then /ordo-init.",
         (
@@ -487,9 +497,9 @@ def pipeline_svg() -> str:
         note="The stops of its sync form are left out: sync is not on this path.",
     )
     init = Box(
-        Rect(395, 42, 330, 214),
+        Rect(395, setup_top, 330, setup_h),
         "/ordo-init",
-        "For an existing repository: writes .agents/plan.yaml, or checks the one there.",
+        "For an existing repository: writes .agents/plan.yaml.",
         (
             Group(EVERY_RUN, ("The draft", "Worker, reviewer and libraries")),
             Group(
@@ -502,13 +512,14 @@ def pipeline_svg() -> str:
                 ),
             ),
         ),
+        note="With .agents/plan.yaml present it checks the file instead and writes nothing; "
+        "its only stop is then A fix in the check.",
     )
     draw_box(canvas, setup)
     draw_box(canvas, init)
-    canvas.text(375, 150, "or", 12, MUTED, "700", "middle")
+    canvas.text(375, setup_top + 108, "or", 12, MUTED, "700", "middle")
 
-    draw_caption(canvas, 140, 314, "FOR EACH ROADMAP ENTRY, IN ORDER", 600)
-    top, height, width, gap = 326, 258, 178, 25
+    draw_caption(canvas, 140, join_y + 22, "FOR EACH ROADMAP ENTRY, IN ORDER", 600)
     columns = [Rect(25 + i * (width + gap), top, width, height) for i in range(5)]
     boxes = (
         Box(
@@ -558,25 +569,24 @@ def pipeline_svg() -> str:
     )
     for box in boxes:
         draw_box(canvas, box)
-    for left, right in pairwise(boxes):
-        canvas.line(left.x + left.w, top + 20, right.x - 1, top + 20, ACCENT, 2, arrow=True)
-    join_y, target_x = 292, boxes[0].x + boxes[0].w / 2
+    draw_row_arrows(canvas, boxes)
+    target_x = boxes[0].area.x + boxes[0].area.w / 2
     for source in (setup, init):
-        centre = source.x + source.w / 2
-        route = [(centre, source.y + source.h), (centre, join_y), (target_x, join_y)]
+        centre = source.area.x + source.area.w / 2
+        route = [(centre, source.area.y + source.area.h), (centre, join_y), (target_x, join_y)]
         canvas.path([*route, (target_x, top - 1)], ACCENT, 2, arrow=True)
 
-    draw_caption(canvas, 25, 630, "AFTER PLANS HAVE RUN", 300)
-    draw_caption(canvas, 395, 630, "AT ANY POINT", 300)
+    draw_caption(canvas, 25, side_top - 12, "AFTER PLANS HAVE RUN", 300)
+    draw_caption(canvas, 395, side_top - 12, "AT ANY POINT", 300)
     retro = Box(
-        Rect(25, 642, 330, 150),
+        Rect(25, side_top, 330, 150),
         "/plan-retro",
         "The findings the reviews keep making, and the change that stops each.",
         (Group(OPTIONAL), Group(ONLY_WHEN, ("The proposals",))),
         dashed=True,
     )
     help_box = Box(
-        Rect(395, 642, 330, 150),
+        Rect(395, side_top, 330, 150),
         "/ordo-help",
         "Prints the sequence and, for a named plan, where it stands and the next command.",
         (Group(OPTIONAL), Group("", ("No stop.",))),
@@ -584,27 +594,30 @@ def pipeline_svg() -> str:
     )
     draw_box(canvas, retro)
     draw_box(canvas, help_box)
-    draw_legend(canvas, 25, 818, 990)
+    draw_legend(canvas, 25, side_top + 176, 990)
     return canvas.render()
 
 
 def plan_loop_svg() -> str:
     """The loop of one step, and the /plan-orchestration band that runs the row unattended."""
+    top, height, gap = 42, 262, 18
+    bottom = top + height
+    cards_y, cards_h = bottom + 76, 160
+    band_y, band_h = cards_y + cards_h + 24, 176
     canvas = Canvas(
         "plan-loop.svg",
         1040,
-        720,
+        band_y + band_h + 81,
         "The plan loop of one step: /spec, build it, /refute, close them, /refute over the round "
         "or the orchestrator reading the delta, and /land, with a return for a further round, the "
-        "stops and refusals, and the /plan-orchestration band that runs the row unattended. Each "
-        "box marks where you are asked.",
+        "stops and refusals, the optional /ordo-help, and the optional /plan-orchestration band "
+        "that runs the row unattended. Each box marks where you are asked.",
     )
     caption = "FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW"
     draw_caption(canvas, 25, 30, caption, 900)
-    top, height, gap = 42, 262, 18
-    widths = (190, 110, 140, 120, 165, 175)
+    widths = (190, 110, 130, 140, 165, 165)
     lefts = [25 + sum(widths[:i]) + i * gap for i in range(len(widths))]
-    areas = [Rect(left, top, width, height) for left, width in zip(lefts, widths, strict=True)]
+    areas = [Rect(left, top, width, height) for left, width in zip(lefts, widths)]
     model_stop = "A model other than the configured one"
     boxes = (
         Box(
@@ -640,14 +653,14 @@ def plan_loop_svg() -> str:
             areas[3],
             "close them",
             "A repair round: fix the findings, rerun, rewrite the report.",
-            (Group("", ("No stop of its own.",)),),
+            (Group(ONLY_WHEN, ("A contradiction of an ADR the brief asked for",)),),
         ),
         Box(
             areas[4],
             "/refute",
             "Over the round, when refute_after_repair: yes. "
             'When refute_after_repair: no, "read the delta", by the orchestrator.',
-            (Group(ONLY_WHEN, (model_stop,)),),
+            (Group(ONLY_WHEN, (model_stop, "A finding left after the last round")),),
         ),
         Box(
             areas[5],
@@ -663,20 +676,20 @@ def plan_loop_svg() -> str:
     )
     for box in boxes:
         draw_box(canvas, box)
-    for left, right in pairwise(boxes):
-        canvas.line(left.x + left.w, top + 20, right.x - 1, top + 20, ACCENT, 2, arrow=True)
+    draw_row_arrows(canvas, boxes)
 
     close, again = boxes[3], boxes[4]
-    bottom = top + height
     loop_y = bottom + 24
-    close_x, again_x = close.x + close.w / 2, again.x + again.w / 2
+    close_x = close.area.x + close.area.w / 2
+    again_x = again.area.x + again.area.w / 2
     route = [(again_x, bottom), (again_x, loop_y), (close_x, loop_y), (close_x, bottom + 1)]
     canvas.path(route, ACCENT, 2, "5 4", True)
     draw_note(canvas, close_x + 8, loop_y + 15, "a further round, within repair_rounds", 300)
 
-    cards_y, cards_h = bottom + 60, 120
+    draw_caption(canvas, 25, cards_y - 12, "WHEN ANY COMMAND OF THE ROW HALTS", 340)
+    draw_caption(canvas, 725, cards_y - 12, "AT ANY POINT", 290)
     stop_card = Box(
-        Rect(25, cards_y, 470, cards_h),
+        Rect(25, cards_y, 340, cards_h),
         "when it stops",
         "The command waits on a decision or an action of yours, named in its Stops table. "
         "A decision leaves an open item with its options and one recommendation; you answer "
@@ -685,24 +698,32 @@ def plan_loop_svg() -> str:
         accent=STOP,
     )
     refusal_card = Box(
-        Rect(525, cards_y, 490, cards_h),
+        Rect(375, cards_y, 340, cards_h),
         "when it refuses",
         "The command names its cause and changes nothing more, such as a required key missing, "
         "no ledger folder, the step not ready or main not clean. A refusal carries no mark: "
         "fix the cause and run the command again.",
         accent=STOP,
     )
+    help_card = Box(
+        Rect(725, cards_y, 290, cards_h),
+        "/ordo-help <entry>",
+        "Prints where the plan stands and the next command to type.",
+        (Group(OPTIONAL), Group("", ("No stop.",))),
+        dashed=True,
+    )
     draw_box(canvas, stop_card)
     draw_box(canvas, refusal_card)
-    draw_caption(canvas, 25, cards_y - 12, "WHEN ANY COMMAND OF THE ROW HALTS", 400)
+    draw_box(canvas, help_card)
 
-    band_y = cards_y + cards_h + 24
     band = Box(
-        Rect(25, band_y, 990, 128),
+        Rect(25, band_y, 990, band_h),
         "/plan-orchestration <entry>",
         "Runs the row above for every step, unattended, with the executor the plan names at "
-        "build it and close them. Under /plan-orchestration only the stops marked here reach you.",
+        "build it and close them; you may run the row by hand instead. Only the stops marked "
+        "in these two figures reach you, and the rest of the row runs without asking.",
         (
+            Group(OPTIONAL),
             Group(
                 ONLY_WHEN,
                 (
@@ -712,6 +733,7 @@ def plan_loop_svg() -> str:
                     "A rule clash",
                     "A finding that is the user's",
                     model_stop,
+                    "The roadmap diff, at the closing",
                 ),
             ),
         ),
@@ -719,7 +741,7 @@ def plan_loop_svg() -> str:
         columns=3,
     )
     draw_box(canvas, band)
-    draw_legend(canvas, 25, band_y + 152, 990)
+    draw_legend(canvas, 25, band_y + band_h + 24, 990)
     return canvas.render()
 
 
@@ -732,7 +754,8 @@ def write_figures(figures: tuple[tuple[str, str], ...]) -> list[str]:
     for name, body in figures:
         path = HERE / name
         try:
-            path.write_text(body, encoding="utf-8", newline="\n")
+            with path.open("w", encoding="utf-8", newline="\n") as handle:
+                handle.write(body)
             written = path.read_text(encoding="utf-8")
         except OSError as error:
             raise FigureError(f"{name}: {error}") from error
@@ -763,11 +786,11 @@ if __name__ == "__main__":
 README.md, after line 46 ("`/ordo-help` prints the full sequence, including what to do when a command stops."); before: line 47 was blank and line 48 the heading "## Requirements". After, added lines 47-54:
 
 ```
-The pipeline of one roadmap entry, marked where you are asked: "every run" for a stop each time the skill runs, "only when" for a stop in a named case, "optional" for a skill you may skip.
+This figure shows the pipeline of one roadmap entry and where each skill asks you. A stop marked "every run" waits on you each time and one marked "only when" waits on you in a named case. A skill marked "optional" may be skipped.
 
 ![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
 
-The loop of one step and the /plan-orchestration band that runs it unattended, with the same marks: "only when" is a stop in a named case.
+This figure shows the loop of one step and the band that runs it unattended, with the same marks.
 
 ![The loop of one step as boxes in order: /spec, build it, /refute, close them, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, and the /plan-orchestration band. Each box lists the stops where you are asked, marked only when.](docs/figures/plan-loop.svg)
 
@@ -803,7 +826,7 @@ Marks: E = every run, O = only when, P = optional (dashed box).
 | Box | Rows drawn (words of the table) | Table and what it says |
 |---|---|---|
 | `/repo-setup` (pipeline) | E: The questions, The draft. O: No commit allowed. Note: sync stops left out | `repo-setup` Stops: rows 1-6 are stops; "A hunk to rule on", "The drafted sync change", "A file sync cannot use" are `sync` only, left out with the note on the box; "Tracked files" is a refusal, no mark |
-| `/ordo-init` | E: The draft, Worker, reviewer and libraries. O: Several roadmaps, A failing command, A fix in the check, No commit allowed | `ordo-init` Stops: all six rows are stops; "The draft" and "Worker, reviewer and libraries" say "Every setup" |
+| `/ordo-init` | E: The draft, Worker, reviewer and libraries. O: Several roadmaps, A failing command, A fix in the check, No commit allowed. Note: with the file present it checks and its only stop is A fix in the check | `ordo-init` Stops: all six rows are stops; "The draft" and "Worker, reviewer and libraries" say "Every setup" |
 | `/roadmap add` | E: The change. O: No gate, The level, The insertion form, A missing dependency | `roadmap` Stops: first five rows are stops; the rest (No configuration, A required key missing, A place too early, Not yet specified, No gate output, An open plan) are refusals, unmarked; "A place too early", "Not yet specified", "No gate output" and "An open plan" belong to `move`, `done` and `drop`, not `add` |
 | `/grill <entry>` | P. E: A round, The end. O: A lookup agent served another model | `grill` Stops: first three rows are stops; the last four are refusals |
 | `/plan <entry>` | E: The drafted step list | `plan` Stops: one stop, "Every plan"; the rest are refusals |
@@ -812,12 +835,15 @@ Marks: E = every run, O = only when, P = optional (dashed box).
 | `/plan-retro` | P. O: The proposals | `plan-retro` Stops: "The proposals", "Every retro with a recurring kind" (so only when); the other two rows are refusals |
 | `/ordo-help` | P. plain note: No stop. | `ordo-help` Stops: "No stop"; the rest are refusals |
 | `/spec` (plan loop) | O: A false premise the plan cannot absorb, A rule clash with an ADR, A user-visible choice, A brief check finding the brief cannot absorb, A model other than the configured one | `spec` Stops: first five rows are stops; the other nine rows are refusals, unmarked (among them "A step without the user's authority") |
-| `/refute` (both boxes) | O: A model other than the configured one | `refute` Stops: first row is the stop; the rest refusals |
+| `/refute` (over the round) | O: A model other than the configured one, A finding left after the last round | the same row, and the sequence: what the last refutation or the read of the delta leaves is raised to the user as an open item |
+| `/refute` (first box) | O: A model other than the configured one | `refute` Stops: first row is the stop; the rest refusals |
 | `/land` | O: A red line for the user, A lock held, A worktree that cannot be removed | `land` Stops: rows 1, 2 and the last are stops; the rows between are refusals |
-| build it, close them | plain note: No stop of its own | not skills; no Stops table |
-| `/plan-orchestration` band | O: A shape nobody named, A wrong premise, A red check, A rule clash, A finding that is the user's, A model other than the configured one | `plan-orchestration` Stops: seven kinds of stop and one refusal; "The roadmap diff" is on the closing box; "The configured effort cannot apply" is the refusal, unmarked |
+| build it | plain note: No stop of its own. | not a skill; no Stops table |
+| close them | O: A contradiction of an ADR the brief asked for | `refute` "Finding dispositions" and `/ordo-help`'s "close them" line: raised to the user as an open item |
+| `/ordo-help <entry>` card (plan loop) | P. plain note: No stop. | `ordo-help` Stops: "No stop" |
+| `/plan-orchestration` band | P. O: A shape nobody named, A wrong premise, A red check, A rule clash, A finding that is the user's, A model other than the configured one, The roadmap diff, at the closing | `plan-orchestration` Stops: seven kinds of stop and one refusal; "The roadmap diff" is on the closing box; "The configured effort cannot apply" is the refusal, unmarked |
 
-Every stop row of the eleven tables is either marked on a box above or named here as left out (the three `sync` rows of `repo-setup`; "The roadmap diff" appears on the closing box rather than the band). The refusals appear only on the plan loop's "when it refuses" card, in general terms.
+Every stop row of the eleven tables is either marked on a box above or named here as left out (the three `sync` rows of `repo-setup`; "The roadmap diff" is marked on the closing box of the pipeline and on the band). The refusals appear only on the plan loop's "when it refuses" card, in general terms.
 
 ## Contrast (WCAG relative luminance, computed with the formula in a scratch Python snippet)
 
@@ -842,16 +868,16 @@ The marks differ by shape and word (a filled square "every run", an outlined squ
 
 Renderer: `/opt/homebrew/bin/rsvg-convert -z 1.5`. Images: `$TMPDIR/figs/pipeline.png` and `$TMPDIR/figs/plan-loop.png` (`$TMPDIR` is `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/`).
 
-- pipeline: the two setup boxes side by side with "or" between them, both feeding one elbow arrow that meets the top of `/roadmap add`; the five boxes of the entry in a row, four arrows each meeting the next box; `/plan-retro` and `/ordo-help` dashed under their captions; the legend at the bottom. Every label legible, no text over another text, a box edge or an arrow.
-- plan-loop: six boxes in a row with five arrows, the dashed return arrow from the second `/refute` up into "close them" with its label under it, the two halt cards, the dashed `/plan-orchestration` band with its six stops in three columns, the legend. Every label legible, no overlap.
+- pipeline: the two setup boxes side by side with "or" between them, both feeding one elbow arrow that meets the top of `/roadmap add`; the `/ordo-init` note under its stops; the five boxes of the entry in a row, four arrows each meeting the next box; `/plan-retro` and `/ordo-help` dashed under their captions; the legend at the bottom. Every label legible, no text over another text, a box edge or an arrow.
+- plan-loop: six boxes in a row with five arrows, the dashed return arrow from the second `/refute` up into "close them" with its label under it, the two halt cards and the dashed `/ordo-help <entry>` card under "AT ANY POINT", the dashed `/plan-orchestration` band with the "optional" and "only when" marks and seven stops in three columns, the legend. Every label legible, no overlap.
 - The renderer draws its own default sans-serif; the character budgets of the script are conservative, so lines end earlier than the box edge.
 
 ## Judgment calls the brief left open
 
-- Layout: the figures are 1040 wide; the pipeline is two rows (setup alternatives above, the entry's boxes below) with the two side items and the legend under them; the plan loop is one row of six boxes of widths 190, 110, 140, 120, 165 and 175, then the halt cards, then the band. The brief leaves the layout to the builder.
+- Layout: the figures are 1040 wide; the pipeline is two rows (setup alternatives above, the entry's boxes below) with the two side items and the legend under them; the plan loop is one row of six boxes of widths 190, 110, 130, 140, 165 and 165, then the halt cards, then the band. The brief leaves the layout to the builder.
 - Marks: a filled square, an outlined square and a dashed pill, each with its word; the box of an optional skill is also dashed.
-- The plan loop's sentence on who types what reads "RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW" in the caption and "Under /plan-orchestration only the stops marked here reach you." in the band. The brief says "only the marked stops reach the user"; I placed the marks of the six orchestration stops on the band, so "marked here" is that band's marks. The orchestrator may prefer other words.
-- Text I added to boxes beyond the rows the brief lists, each from the sequence `/ordo-help` prints or the skills' descriptions: a one-line description under each title, "Its stops are marked in the plan-loop figure." on the "every step" box, "No stop of its own." on build it and close them, "No stop." on `/ordo-help`, the "when it stops" and "when it refuses" cards (the wording of the stop card follows the "Stops" tables' "What resumes it" column: a decision leaves an open item and is answered "Ruled: <the choice>", a lock or a path is removed), and the caption "WHEN ANY COMMAND OF THE ROW HALTS". The two halt cards carry no arrows from `/spec` and `/land`, since every command of the row can halt, and `/land` has stops as well as refusals.
+- The plan loop's sentence on who types what reads "RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW" in the caption, and the band says "Only the stops marked in these two figures reach you, and the rest of the row runs without asking."
+- Text I added to boxes beyond the rows the brief lists, each from the sequence `/ordo-help` prints or the skills' descriptions: a one-line description under each title, "Its stops are marked in the plan-loop figure." on the "every step" box, "No stop of its own." on build it, "No stop." on `/ordo-help`, the "when it stops" and "when it refuses" cards (the wording of the stop card follows the "Stops" tables' "What resumes it" column: a decision leaves an open item and is answered "Ruled: <the choice>", a lock or a path is removed), and the caption "WHEN ANY COMMAND OF THE ROW HALTS". The two halt cards carry no arrows from `/spec` and `/land`, since every command of the row can halt, and `/land` has stops as well as refusals.
 - The "every step" box also names `/plan-orchestration` as running it unattended.
 - Script structure: a `Rect`, `Group` and `Box` dataclass, a `Canvas` class that collects the fragments of one figure, and one function per figure; the fit check runs while drawing, so the error names the figure, the box and the label.
 
@@ -867,15 +893,92 @@ Renderer: `/opt/homebrew/bin/rsvg-convert -z 1.5`. Images: `$TMPDIR/figs/pipelin
 README.md:50:![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the option
 README.md:54:![The loop of one step as boxes in order: /spec, build it, /refute, close them, /refute over the round, and /land, with a return for a further roun
 docs/dev/building.md:28:The figures under `docs/figures/` are written by `python3 docs/figures/gen_figures.py` and committed. A change to a skill's Stops table,
-docs/figures/gen_figures.py:14:Run, from any directory: python3 docs/figures/gen_figures.py
+docs/figures/gen_figures.py:14:Run, from the repository root: python3 docs/figures/gen_figures.py
 
 No other page found that should show or name the figures; none was changed. `skills/ordo-help/SKILL.md` prints the sequence in its own terms and holds the same sequence the figure draws; it is not changed, since a figure is not part of what the skill prints.
 
 ## In the brief that turned out wrong or open
 
-- The sequence `/ordo-help` prints says of "close them" that "a contradiction of an ADR the brief asked for is raised to you as an open item instead", which is a point where the user is asked, while no skill's Stops table lists it and the brief gives "close them" no stop. The figure follows the brief and the tables ("No stop of its own."). The orchestrator may want either the sequence line or the figure's note to change.
+- The sequence `/ordo-help` prints says of "close them" that a contradiction of an ADR the brief asked for is raised to the user as an open item, which no Stops table lists; the figure marks it on "close them" as an "only when" row.
 - Nothing else in the brief was wrong or impossible.
 
 ## Reading of the README sentences and alt texts against the prose standard
 
-Read against the standard's sections 0 and A to F: each introducing sentence is one sentence; no em dash, no aside, no arrow, no filler word from section A, no rule of three padded, the quoted marks are in straight quotes; the sentences are 37 and 26 words (`sed -n 48p README.md | wc -w`, `sed -n 52p README.md | wc -w`), longer than the roughly 20 of section E, kept because the first lists the three marks and the second names the band and the marks it reuses; the second sentence's colon defines the one mark it uses. Each alt text states what the figure shows and lists the boxes in order.
+Read against the standard's sections 0 and A to F, as landed: README line 48 is three sentences of 13, 22 and 7 words and line 52 one sentence of 19 words, each with a main verb, in straight quotes, with no dash, aside, arrow or filler word; the two lines open differently ("The pipeline below marks ...", "The loop of one step carries ..."), and the reader is the actor ("You may skip a skill marked "optional"."). The plan-loop alt text names the optional /ordo-help card and band and all three marks.
+
+## Repair round 1
+
+All eleven changes are made; the first line of this report ("Everything in the brief is done.") and the DONE / NOT DONE table above hold for the tree as it stands after them, and the sections above were brought to the end state (the script, the row counts, the box table, the images seen, the verify list).
+
+### Each change, old beside new
+
+1. Spec 1 (`/ordo-help` named in `plan-loop.svg`). Old: `grep -c ordo-help docs/figures/plan-loop.svg` printed 0. New: a dashed card `/ordo-help <entry>` with the "optional" mark, "Prints where the plan stands and the next command to type." and "No stop.", placed at the right of the halt cards under the caption "AT ANY POINT" (`plan_loop_svg`, `help_card`). The halt cards are narrowed to 340 px each to make room.
+2. Spec 2 (band "optional" by word). Old: band `dashed=True` with only a "only when" group. New: `Group(OPTIONAL)` first in the band's groups; the band's body says "you may run the row by hand instead".
+3. Spec 3 (band stops and sentence). Old: six stops and "Under /plan-orchestration only the stops marked here reach you." New: seven stops, the seventh "The roadmap diff, at the closing", marked "only when"; the sentence reads "Only the stops marked in these two figures reach you, and the rest of the row runs without asking." The `/land` rows are marked on the `/land` box of the same figure.
+4. Spec 4 (`/ordo-init` box). Old body: "For an existing repository: writes .agents/plan.yaml, or checks the one there." New body: "For an existing repository: writes .agents/plan.yaml." and a note under its stops: "With .agents/plan.yaml present it checks the file instead and writes nothing; its only stop is then A fix in the check." (`ordo-init` "Steps / Checking an existing file": "With `.agents/plan.yaml` present, write nothing", then the fix proposed at "Stops".) Both setup boxes are 262 px high now, and everything under them moved down with a computed offset.
+5. Spec 5 (stops of "close them" and the second `/refute`). Old: "close them" carried "No stop of its own."; the second `/refute` carried "A model other than the configured one" only. New: "close them" carries an "only when" row "A contradiction of an ADR the brief asked for"; the second `/refute` carries "A model other than the configured one" and "A finding left after the last round"; "build it" keeps "No stop of its own."
+6. Standards 1 (forwarders). Old: `Box` had properties `x`, `y`, `w`, `h` returning `self.area.x` and so on. New: the four properties are deleted; the code reads `box.area.x`, `box.area.y`, `box.area.w`, `box.area.h`.
+7. Standards 2 (row arrows). Old: the `for left, right in pairwise(boxes): canvas.line(...)` loop written in both figures. New: one function `draw_row_arrows(canvas, boxes)` that both figures call.
+8. Standards 3 (docstring). Old: "Run, from any directory: python3 docs/figures/gen_figures.py" and an error list without the caption, note and legend forms. New: "Run, from the repository root: python3 docs/figures/gen_figures.py" with "The script finds its files from its own location, so it also runs from any other directory when given the path to the script.", and the list of errors: a label that does not fit its box (figure, box, label); a title that does not fit one line (figure, box, label, width in pixels); a word longer than a line (figure, box, word, label); a caption, a note or the legend that does not fit one line (figure, "a caption", "a note" or "the legend", label, width in pixels); non-ASCII body (file); a file that cannot be written or read back (file and cause); a read-back that differs (file).
+9. Standards 4 (README introductions). Old line 48 (37 words, no main verb): "The pipeline of one roadmap entry, marked where you are asked: ...". New line 48: "This figure shows the pipeline of one roadmap entry and where each skill asks you. A stop marked "every run" waits on you each time and one marked "only when" waits on you in a named case. A skill marked "optional" may be skipped." Old line 52 (a fragment). New line 52: "This figure shows the loop of one step and the band that runs it unattended, with the same marks."
+10. Behaviour 1 (Python 3.9). Old: `from itertools import pairwise`, `zip(..., strict=True)` and `Path.write_text(..., newline=...)` (3.10). New: `zip(boxes, boxes[1:])` inside `draw_row_arrows`, plain `zip(lefts, widths)`, and the file written through `path.open("w", encoding="utf-8", newline="\n")`. `/usr/bin/python3` is 3.9.6 and runs the script.
+11. Proof 1. The first line and the table are true for the tree after the changes, as this section and the commands below show.
+
+### Commands, verbatim
+
+```
+$ /usr/bin/python3 --version
+Python 3.9.6
+$ /usr/bin/python3 docs/figures/gen_figures.py
+wrote docs/figures/pipeline.svg (25910 bytes)
+wrote docs/figures/plan-loop.svg (28067 bytes)
+rc=0
+$ cd / && python3 /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-12a/docs/figures/gen_figures.py
+wrote docs/figures/pipeline.svg (25910 bytes)
+wrote docs/figures/plan-loop.svg (28067 bytes)
+rc=0
+$ ruff check --target-version py39 --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 --line-length 100 docs/figures/gen_figures.py
+All checks passed!
+$ ruff format --check --target-version py39 --line-length 100 docs/figures/gen_figures.py
+1 file already formatted
+$ python3 -c "import xml.dom.minidom,sys; [xml.dom.minidom.parse(f) for f in sys.argv[1:]]" docs/figures/*.svg; echo xmlrc=$?
+xmlrc=0
+$ LC_ALL=C grep -n '[^ -~]' docs/figures/* README.md docs/dev/building.md docs/glossary.md; echo asciirc=$?
+asciirc=1
+$ git grep --untracked -n -i -E "plan-help|plan help" -- . ':!.scratch'; echo grep-rc=$?
+grep-rc=1
+$ wc -l docs/figures/gen_figures.py docs/figures/*.svg
+     708 docs/figures/gen_figures.py
+     144 docs/figures/pipeline.svg
+     151 docs/figures/plan-loop.svg
+```
+
+Two runs (copies of the SVGs taken after each run, then `git diff --no-index $TMPDIR/idem/a $TMPDIR/idem/b; echo "diffrc=$?"`): each run printed the two `wrote` lines, the diff printed nothing, `diffrc=0`.
+
+Error cases on scratch copies under `$TMPDIR/err/docs/figures/` (a directory tree with no `.git`, the folder emptied before each case; after each failing case `ls` listed only `gen_figures.py`, so nothing was written):
+
+```
+closing label repeated thirty times:
+error: pipeline.svg: box 'the closing': the label 'The roadmap diff of the closing step shown for approval, The roadmap diff ... ' does not fit the box
+rc=1
+an accented letter in "The change":
+error: pipeline.svg: the body holds a character that is not ASCII
+rc=1
+an unbreakable word in /grill's body:
+error: pipeline.svg: box '/grill <entry>': the word 'averyveryveryveryveryverylongwordthatcannotwrapatall' of the label "averyveryveryveryveryverylongwordthatcannotwrapatall An interview in rounds that settles the entry's design d... does not fit one line ... (message cut by the report's `cut`, full text printed by the script)
+rc=1
+a title too long for /plan's box:
+error: pipeline.svg: box '/plan <entry> with a title far too long for its box': the label '/plan <entry> with a title far too long for its box' does not fit one line of 158 px
+rc=1
+the legend caption repeated ten times:
+error: pipeline.svg: a caption: the label 'HOW TO READ THE MARKS HOW TO READ THE MARKS ...' does not fit one line of 990 px
+rc=1
+```
+
+The verify list is quoted in "The verify list, verbatim (after repair round 1)" above and printed `checks: 8 commands passed` with `rc=0`. The contrast pairs are unchanged: no colour was added, and the new marks and cards use the constants of the table above (ACCENT, EDGE, STOP, INK, MUTED, CARD, PANEL).
+
+### Readings
+
+- Images read from `$TMPDIR/figs/pipeline.png` and `$TMPDIR/figs/plan-loop.png` (`rsvg-convert -z 1.5`): every label legible, nothing overlapping; the `/ordo-help <entry>` card sits under "AT ANY POINT" to the right of the halt cards; the band shows "optional" and "only when" badges and three columns of stops; "close them" wraps its stop over three lines.
+- Changed boxes against their text: `/ordo-init` body and note against `ordo-init` "Steps / Checking an existing file" (write nothing, check, the fix proposed at the "A fix in the check" stop); "close them" against `refute` "Finding dispositions" and the `/ordo-help` sequence line for "close them"; the second `/refute` against the sequence lines after "close them" (what the last refutation or the read of the delta leaves is raised to the user as an open item); the band's "The roadmap diff" against the `plan-orchestration` Stops row of that name (the closing step's `/roadmap done`); the `/ordo-help <entry>` card against `ordo-help`'s "No stop" row.
+- README lines 48 and 52 against the prose standard: full sentences with a main verb of 15, 22 and 7 words on line 48 and 19 on line 52 (`sed -n 48p README.md`), straight quotes, no dash, no aside.
