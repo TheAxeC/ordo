@@ -48,15 +48,20 @@ dispatch:
   launched: 2026-09-30 16:02
   session_id: a931b2d1ac6c7e98d (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-e-grill/agents/reviews/9a-report.md
+  builder_usage: claude-sonnet-5-5, 48769 tokens as its completion notice gives them, 190 tool uses, 3460 s, $10.34-21.03
   brief_check: .scratch/2-e-grill/agents/reviews/9a-brief-check.md (ordo-high, claude-opus-5-5; first run 231093 tokens, 34 tool uses, 12.1 minutes, $1.81-6.08; second run 301182 tokens, 46 tool uses, 18.1 minutes, $2.58-7.82; third run 365066 tokens, 53 tool uses, 1059 s, $3.41-10.02; fourth run 318017 tokens, 55 tool uses, 941 s, $3.09-9.18)
   shared_paths: skills/repo-setup/SKILL.md (step 2b of plan 2.G changes line 126 only; this step's nearest lines are 109 and 158, each placed by quoted text, so the cherry-pick merges with nothing to do by hand); README.md (step 2b of plan 2.G changes line 13, this step line 54)
+  reviewer_report: .scratch/2-e-grill/agents/reviews/9a-refuter.md (ordo-high, claude-opus-5-5, 344198 tokens, 49 tool uses, 983 s, $2.97-9.27; twelve items hold; findings Spec 1 to 3 and Standards 1 to 6)
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-30: brief agents/briefs/9a-round-1.md, the diff before it agents/reviews/9a-round-0.diff)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-none
+- Step 9a, the sentence on stops marked "every run" (2026-09-30, raised from the review of step 9a, `agents/reviews/9a-refuter.md`, Standards 4): option (a) of your ruling "Step 9a, how a skill is given the ruling and what the ruling must hold" words the sentence of the README, the glossary and the stops figure as "A stop marked "every run" waits on you each time, unless the run is under a quoted ruling that states the change." The step wrote it so. Of the stops the figures mark "every run", a quoted ruling lifts those of `/plan`, `/roadmap`, `/ordo-init` and `/repo-setup`, and in `/grill` only the roadmap diff. It does not lift the rounds and the end of `/grill`, the proposals of `/session-retro`, or the roadmap diff of a plan's closing, so a reader can take the sentence to cover those too.
+  - (a) The sentence stays as you ruled it. Pro: nothing changes. Con: it reads as covering every stop marked "every run", which is false for three of them. This is the lazy option.
+  - (b) The sentence becomes two, in `README.md` line 54, in the glossary entry **mark, of a figure** (`skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md`) and in the note of the stops figure (`docs/figures/gen_figures.py`, with `pipeline.svg` and `plan-loop.svg` written again by the script, the note on two lines and the panel as much taller): "A stop marked "every run" waits on you each time. `/plan`, `/roadmap`, `/ordo-init` and `/repo-setup` write a change a quoted ruling states without it, and `/grill` a roadmap diff." The figure's note drops "on you" as it does today. The orchestrator makes the change as a fix at the landing of step 9a, since the step's one repair round is sent. Pro: the sentence says which stops a quoted ruling lifts. Con: a longer note in the figure.
+  - Recommendation: (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -113,5 +118,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
-- Step 9a is prepared under its three rulings and its brief has had four brief checks (`agents/reviews/9a-brief-check.md`); its builder is in flight beside step 2b of plan 2.G, which writes other lines of `skills/repo-setup/SKILL.md` and `README.md`. Before its landing, five fresh agents make the scratch runs the step's line names.
+- Step 9a is prepared under its three rulings and its brief has had four brief checks (`agents/reviews/9a-brief-check.md`); it is built and reviewed (`agents/reviews/9a-refuter.md`), and repair round 1 is sent to its builder, the one round the plan allows; the open item "Step 9a, the sentence on stops marked "every run"" is raised from the review and, ruled (b), is a fix at the landing. The step is in flight beside step 2b of plan 2.G, which writes other lines of `skills/repo-setup/SKILL.md` and `README.md`. Before its landing, five fresh agents make the scratch runs the step's line names.
 - Next: step 9a; step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.
