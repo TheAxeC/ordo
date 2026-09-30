@@ -68,6 +68,7 @@ sh skills/land/templates/land.test.sh 2>&1 | tail -1
 sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 sh utils/pin.test.sh 2>&1 | tail -1
 sh utils/check_coverage.test.sh 2>&1 | tail -1

@@ -7,6 +7,7 @@ sh skills/land/templates/land.test.sh                  # land.sh on a conflict, 
 sh skills/land/templates/checks.test.sh                # checks.sh on a failing list, a passing list and a state file with no yaml block
 sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
 sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules and plan-terms blocks, its --write repair, its --only glossary form and its refusals
+sh skills/repo-setup/templates/hooks/git_guard.test.sh  # git_guard.py on the commands it must block (push, reset --hard, clean --force, checkout and restore of the whole tree, reached through separators, substitutions, wrappers, shells and aliases) and on the commands it must let through
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
 sh utils/pin.test.sh                                   # pin.sh in pin and check mode under a scratch HOME, its refusals included
 sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists

@@ -8,6 +8,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+- sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
@@ -36,26 +37,15 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2g-1
-  base: 70d0bae1e67a550948d4d8c269369a16d45825a1
-  launched: 2026-09-30 05:44
-  session_id: a9bba431490a852e7 (claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-g-git-guard/agents/reviews/1-report.md
-  builder_usage: round 0 237370 tokens, 45 tool uses, 1580 s ($2.39-5.52)
-  reviewer_report: .scratch/2-g-git-guard/agents/reviews/1-refuter.md (claude-opus-5-5; 173997 tokens, 42 tool uses, 748 s, $2.16-5.21; a first reviewer, stopped on a permission prompt after 16 min and not used, cost $0.83-3.21)
-  brief_check: .scratch/2-g-git-guard/agents/reviews/1-brief-check.md (claude-opus-5-5; 139503 tokens, 37 tool uses, 439 s)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
 - Git aliases (2026-09-30, step 1): a git alias defined in a configuration file (`git config alias.p push`, then `git p`) runs a blocked operation under another name, and the guard does not see it; an alias given inline in the command (`git -c alias.p=push p`, `GIT_CONFIG_KEY_0=alias.p`) is resolved by step 1 without running git. Options: (a) the guard resolves an unknown subcommand with `git config --get alias.<name>` in the command's directory and checks the expansion (a `!` alias as a shell command); pros: every alias is covered; cons: the script runs git on each call that uses an unknown subcommand, a computation beyond the approved one that needs your approval. (b) Configuration-file aliases stay outside the guard, and the docstring and the offer say so; pros: nothing runs; cons: such an alias gets through. Recommendation (a). The lazy option is (b). Step 1 is built without it; a yes adds it as a step by your ruling.
 - Other commands that discard work (2026-09-30, step 1): `git checkout -f <branch>`, `git switch --discard-changes`, `git stash drop` and `git stash clear` discard work, and `git send-pack` and `git subtree push` push, by commands the approved list of five does not name, so the guard lets them through (the brief check's "Declined to judge"). Options: (a) a step adds them to the guard's blocks; pros: the guard covers what the five cover in effect; cons: widens the approved list, and `git checkout -f <branch>` is a form the plan skills may need. (b) The docstring and the offer name them as not blocked. Recommendation (a) for `send-pack`, `subtree push`, `stash drop`, `stash clear` and `switch --discard-changes`, with `checkout -f` left allowed after a grep of the skills. The lazy option is (b). Step 1 is built with the five only; a yes adds a step by your ruling.
+- pyright for Python templates (2026-09-30, step 1): `skills/repo-setup/templates/docs/dev/coding-standards/python.md` says pyright type-checks every module, and `git_guard.py` is Ordo's first Python template script under it, but pyright is not installed here (`which pyright` prints `pyright not found`), so neither the builder nor the reviewers ran it. Options: (a) you install pyright (`npm install -g pyright`, a download from outside Ordo), and a later step adds `pyright skills/repo-setup/templates/hooks/git_guard.py` to the verify list and fixes what it finds; pros: the standard the template sets for Python holds for Ordo's own Python; cons: a new tool on the machine and a new verify command. (b) The verify list stays without pyright; pros: nothing to install; cons: Ordo's Python is held to less than the standard it hands to other repositories. Recommendation (a). The lazy option is (b).
+
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -82,6 +72,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. The plan is opened from the step list Axel approved (`.scratch/plan-drafts/`); nothing has landed.
-- Next step: 1, which writes new files and one line of `docs/dev/building.md` and `docs/dev/change-standard.md`'s command block.
-- Open on Axel's side: the open items above ("Git aliases", "Other commands that discard work").
+- 2026-09-30. Step 1 of 3, the git guard, landed and ticked (`agents/reviews/1-landing.md`).
+- Next step: 2, the offer in `repo-setup`, blocked until 2.E's step 7 lands ("Blocked, and by what").
+- Open on Axel's side: the open items above ("Git aliases", "Other commands that discard work", "pyright for Python templates").
