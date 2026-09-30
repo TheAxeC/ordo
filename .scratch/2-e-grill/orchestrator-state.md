@@ -39,19 +39,6 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 
 ```yaml
 dispatch:
-  - step: 14b
-    executor: agent
-    worker: claude:sonnet
-    worktree: .agents/worktrees/2e-14b
-    base: 50e3844336505b61fd71fb645979f2d7a25abf18
-    launched: 2026-09-30
-    session_id: a12869b0c03367f5b (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-    report: .scratch/2-e-grill/agents/reviews/14b-report.md
-    reviewer_report: .scratch/2-e-grill/agents/reviews/14b-refuter.md (ordo-high, claude-opus-5-5, 170820 tokens, 50 tool uses, 720 s; items 1 and 2 hold; C1 to C4 and C6 met, C5 partial; findings Spec 1 to 5, Proof 1 and 2, Standards 1 and 2, Behaviour 1)
-    builder_usage: claude-sonnet-5-5, 112867 tokens, 22 tool uses, 266 s (round 0, from its completion notice); 130940 tokens, 7 tool uses, 135 s (round 1, from its completion notice)
-    brief_check: .scratch/2-e-grill/agents/reviews/14b-brief-check.md (ordo-high, claude-opus-5-5, 129145 tokens, 43 tool uses, 384 s; run on the brief before the stop)
-    landing: not-started
-    round: 1 (sent 2026-09-30: brief agents/briefs/14b-round-1.md, the diff before it agents/reviews/14b-round-0.diff); builder done; round-1 reviewer running (ordo-high, claude-opus-5-5 at the launch, from its transcript)
   - step: 14c
     executor: agent
     worker: claude:sonnet
@@ -60,11 +47,11 @@ dispatch:
     launched: 2026-09-30
     session_id: a23f99bf273bb8deb (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
     report: .scratch/2-e-grill/agents/reviews/14c-report.md
-    builder_usage: claude-sonnet-5-5, 142904 tokens, 35 tool uses, 434 s (round 0, from its completion notice)
+    builder_usage: claude-sonnet-5-5, 142904 tokens, 35 tool uses, 434 s (round 0, from its completion notice); 189621 tokens, 15 tool uses, 298 s (round 1, from its completion notice)
     brief_check: .scratch/2-e-grill/agents/reviews/14c-brief-check.md (ordo-high, claude-opus-5-5, 153480 tokens, 34 tool uses, 432 s)
     reviewer_report: .scratch/2-e-grill/agents/reviews/14c-refuter.md (ordo-high, claude-opus-5-5, 187381 tokens, 39 tool uses, 603 s; items 1 to 5 hold; K3 to K5 and K8 to K10 met, K1 and K7 partial, K2 and K6 unmet; findings Spec 1 and 2, Proof 1, Standards 1 to 6, Behaviour 1)
     landing: not-started
-    round: 1 (sent 2026-09-30: brief agents/briefs/14c-round-1.md, the diff before it agents/reviews/14c-round-0.diff)
+    round: 1 (sent 2026-09-30: brief agents/briefs/14c-round-1.md, the diff before it agents/reviews/14c-round-0.diff); builder done; round-1 reviewer running (ordo-high, claude-opus-5-5 at the launch, from its transcript)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -140,4 +127,5 @@ dispatch:
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
 - Step 9a landed and ticked (2026-09-30), with 2 fixes at landing in `skills/grill/SKILL.md`; the scratch runs booked in its booking. Step 13 done and ticked: D1 to D24 in `.scratch/rulings/3-the-writing-base.md`, ADRs 0001 to 0003 and entry 3 rewritten, committed in 7e984dd.
 - Step 14a landed and ticked (2026-09-30), with 4 fixes at landing in `skills/grill/SKILL.md`; one finding of the run over its round raised as an open item.
-- Next: step 14b (ruling "The judge's input in the blind comparison"), then step 14c (ruling "Step 14a, an archived plan the entry has since set aside"), then step 14 run again, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
+- Step 14b landed and ticked (2026-09-30), with 4 fixes at landing in `docs/dev/blind-comparison.md`.
+- Next: step 14c (ruling "Step 14a, an archived plan the entry has since set aside"), then step 14 run again, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).

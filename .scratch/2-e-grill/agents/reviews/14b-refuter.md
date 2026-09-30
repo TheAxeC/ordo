@@ -123,3 +123,180 @@ Cases of the brief's "Cases":
 - Whether `--bare` can run under the user's authentication: not probed. Only its help text is quoted.
 
 Reviewer usage: tokens not visible from inside this agent; about 50 tool uses, 5 of them `claude -p` probes on opus (probe C's JSON gives `total_cost_usd` 0.1725286; the others' costs were not read); minutes not visible.
+
+## Repair round 1, refuted
+
+Reviewed on /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-14b, base 50e3844336505b61fd71fb645979f2d7a25abf18. The round's delta is the whole of `git diff <base>` read against `.scratch/2-e-grill/agents/reviews/14b-round-0.diff`. `git status --short` shows ` M docs/dev/blind-comparison.md` and `?? .scratch/2-e-grill/agents/reviews/14b-report.md` and nothing else.
+
+```
+$ cd /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-14b && env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md; echo "exit=$?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+exit=0
+
+The dictated text against the page. The round brief's code blocks were extracted with the three-space indent of the markdown list stripped (22 lines and 3 lines):
+sed -n '9,30p' <page> | diff <ruling 1 block> -   -> printed nothing, "item4 block equals dictated"
+sed -n '37,39p' <page> | diff <ruling 3 block> -  -> printed nothing, "record block equals dictated"
+base line 11 with "A fresh agent makes" replaced by "A fresh judge process (item 4) makes", diffed against page line 33 -> printed nothing
+git show 50e3844:docs/dev/blind-comparison.md, diffed against main's copy -> printed nothing (main equals base)
+
+Round check 2: each of the 26 new or changed lines (22 + 3 + item 7's line) as the one line of a scratch file, then grep -c -F -x -f <file> docs/dev/blind-comparison.md
+1: 1 ... 26: 1   (all 26 print 1)
+The 10 lines round 0 added (from 14b-round-0.diff, lines starting '+   - '), same command:
+old 1: 1 (the kept "The judge receives no file of either skill being compared.")   old 2 to old 10: 0
+grep -c "A fresh agent makes" docs/dev/blind-comparison.md -> 0
+
+Round check 3: diff -U2 /Users/axelfaes/workspace/ordo/docs/dev/blind-comparison.md docs/dev/blind-comparison.md -> exit 1, one hunk "@@ -7,10 +7,35 @@", 26 '+' lines, 1 '-' line (item 7). Its body, from the third line on, compared with the body of the builder's quoted Check 3 -> "report's diff body equals rerun".
+
+Round check 4: LC_ALL=C grep -n '[^ -~]' docs/dev/blind-comparison.md -> nothing, exit 1. wc -l -> 44.
+
+The builder's other-pages grep, rerun: grep -rn -i -e "fresh agent" -e "fresh judge" -e "judge's copy" -e "judge process" skills utils docs README.md (outside the page) prints hits in ordo-help, spec, brief-check.md, pin.test.sh, glossary.md:130, roadmap.md:59, adr/0003, plan-loop.svg, README.md:38 and gen_figures.py:584. None is about the judge of a blind comparison. glossary.md:130 ("two fresh judges") stays true. Reproduced.
+grep -rn -i "blind" skills utils README.md docs (outside the page): no page restates item 4. Reproduced.
+
+Probes. Each ran from P=/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/14b-probe/a, which holds one file, input.txt ("probe input line one"). CLI: claude 2.1.286.
+
+(a) cd $P/a && claude -p --disable-slash-commands --allowedTools WebFetch --model opus --output-format json "Do these in order ... (1) List the names of every skill available to you, or NONE. (2) Use the WebFetch tool on https://example.com and give its first heading. (3) Use the Read tool on /Users/axelfaes/workspace/ordo/README.md and give its first line. (4) Use the Write tool to create the file out.txt in the current folder holding the word hi. (5) Use the Read tool on input.txt and give its first line."
+exit=0
+1. NONE. No skills are listed anywhere in this session's context.
+2. ... The first heading is **Example Domain**.
+3. The Read tool failed ... `Claude requested permissions to read from /Users/axelfaes/workspace/ordo/README.md, but you haven't granted it yet.`
+4. The Write tool failed ... `Claude requested permissions to write to .../14b-probe/a/out.txt, but you haven't granted it yet.` The file was not created.
+5. The Read tool on input.txt succeeded. Its first line is `probe input line one`.
+permission_denials: Read (/Users/axelfaes/workspace/ordo/README.md), Write (.../a/out.txt)
+modelUsage claude-opus-5-5 out 966 in 10
+modelUsage claude-haiku-4-5-20251001 out 14 in 214
+ls $P/a -> input.txt
+
+(a, more) Same command. The prompt asked for Bash `ls ~/.claude/skills`, Bash `echo hi > out2.txt`, Bash `curl ... https://example.com`, Glob in /Users/axelfaes/workspace/ordo, and WebSearch.
+1. `ls ~/.claude/skills` was blocked: "ls in '/Users/axelfaes/.claude/skills' was blocked. For security, Claude Code may only list files in the allowed working directories for this session: '.../14b-probe/a'."
+2. ... "Output redirection to '.../a/out2.txt' needs approval ..."
+3. The `curl` command did not run ...: "This command requires approval"
+4. ... this session has no Glob tool ...
+5. ... "Claude requested permissions to use WebSearch, but you haven't granted it yet."
+denied tools: Bash x3, WebSearch; ls $P/a -> input.txt
+
+(a, MCP) Same command, asking for PubMed search_articles and bioRxiv get_categories:
+"Claude requested permissions to use mcp__claude_ai_PubMed__search_articles, but you haven't granted it yet." and the same for mcp__claude_ai_bioRxiv__get_categories.
+
+(b) Same command, "Reply with the word ok." -> RESULT: ok; modelUsage claude-opus-5-5 {'inputTokens': 2, 'outputTokens': 4} (one key only)
+(b) Same command, "Use the WebFetch tool three times, once on each of https://docs.vale.sh/topics/styles.md, https://developers.google.com/style/dashes and https://learn.microsoft.com/en-us/style-guide/punctuation/dashes-hyphens/emes, each time with the prompt: Return the full text of the page verbatim, every paragraph. Then reply with only the word done."
+RESULT: done turns 5 denials 0
+modelUsage claude-opus-5-5 {'inputTokens': 6, 'outputTokens': 412}
+modelUsage claude-haiku-4-5-20251001 {'inputTokens': 7605, 'outputTokens': 4284}
+(The key with the most output tokens is haiku here. In probe (a), with one fetch, it is opus: 966 against 14.)
+
+(c) Same flags with --output-format stream-json --verbose, "Reply with the word ok."
+system/init keys: agents, analytics_disabled, apiKeySource, capabilities, claude_code_version, cwd, fast_mode_disabled_reason, fast_mode_state, mcp_servers, memory_paths, messaging_socket_path, model, output_style, per_turn_effort_active, permissionMode, plugins, product_feedback_disabled, session_id, skills, slash_commands, subtype, tools, type, uuid, view_mode
+  model : "claude-opus-5-5"
+  skills : []
+  memory_paths : {"auto": "/Users/axelfaes/.claude/projects/-private-tmp-claude-502--Users-...-14b-probe-a/memory/"}
+  (no key names ~/.claude/CLAUDE.md or ~/.claude/rules/)
+(c) Same flags with --output-format json --debug-file $P/c3.debug.txt, "Reply with the word ok." -> 265 debug lines. grep -E 'CLAUDE|rules' shows only
+  "$.fs.ancestors (cc-plugin-agents-md): CLAUDE.md, .claude/CLAUDE.md, CLAUDE.local.md found 0 of 8 directories"
+  and no line naming ~/.claude/CLAUDE.md or a rules file. The JSON result's keys: api_error_status, duration_api_ms, duration_ms, ..., modelUsage, num_turns, permission_denials, result, ..., session_id, ..., usage, uuid (no model key, no instruction files).
+(c) The run's session transcript, ~/.claude/projects/-private-tmp-claude-502--Users-axelfaes-workspace-ordo-3998c800-...-scratchpad-14b-probe-a/6d046895-1029-4c15-9074-c6bc2aa644ee.jsonl, line 11, attachment type "instructions", files[].path:
+  /Users/axelfaes/.claude/CLAUDE.md (type User)
+  /Users/axelfaes/.claude/rules/no-claim-without-a-command.md
+  /Users/axelfaes/.claude/rules/never-take-the-lazy-option.md
+  /Users/axelfaes/.claude/rules/no-quick-answers.md
+  /Users/axelfaes/.claude/rules/scripts-compute-facts.md
+  /Users/axelfaes/.claude/rules/answers-reach-axel-in-full.md
+  grep -c -i grill <that transcript> -> 0 (no skill text in the process's context. The debug log's line 40 "Loaded 22 unique skills (... user: 13 ...)" is the program reading the folders, and the init message lists "skills": [] and no Skill tool.)
+
+Inputs of the cases, read at 833e2e8:
+git grep -n '^+++ b/skills/grill\|^diff --git a/skills/grill' 833e2e8 -- .scratch -> only .scratch/2-e-grill/agents/reviews/12-round-0.diff and 9a-round-0.diff
+git log --format='%h %s' 833e2e8 -- skills/grill -> 1 commit, ff656b6 "Land step 12 of plan 2.E, the grill skill"
+Rulings of .scratch/2-e-grill/plan.md at 833e2e8 naming entry 3: one bullet, "Entry 3 and step 13 (2026-09-30): Axel ruled (a). Step 13 runs `/grill` on roadmap entry 3 with Axel ..."
+git show 833e2e8:.scratch/plan-drafts/3-the-writing-base.md line 14 names research-hub paths ("`academic-paper/references/academic_writing_style.md` ... `writing_judgment_framework.md` ..."), not the repository alone.
+grep of URLs in 14-blind-comparison.md: 11 distinct, among them https://raw.githubusercontent.com/vale-cli/agent-tools/main/skills/fix/SKILL.md
+```
+
+### Verdicts
+
+Items of the brief's "What to build", as the round's rulings rewrote them:
+
+- 1 (item 4's sub-bullets, round ruling 1): holds. Lines 9 to 30 equal the dictated block ("item4 block equals dictated"), each line once, line 8 unchanged. Spec 1, Spec 2, Proof 1 and Standards 1 are findings on the dictated text, not departures from it.
+- 2 (item 9's record, round ruling 3): holds. Lines 37 to 39 equal the dictated block and follow line 36 `   - the input, or its path;`.
+- Round ruling 2 (item 7): holds. Line 33 differs from the base only in "A fresh judge process (item 4) makes".
+
+Cases (C1 and C5 as the round restates them, and C7 to C9 from the round):
+
+- C1: met. `skills/grill/` is removed by line 11. `12-round-0.diff` is a file of the skill by line 10, and it goes with the ledger `.scratch/2-e-grill/` (line 12), which is the only ledger whose diffs change `grill` at 833e2e8 (git grep above). The one Rulings bullet naming entry 3, "Entry 3 and step 13", is kept by line 13. Roadmap line 25, the gate of 2.E, is removed by line 14. The record holds all of it (line 37). The brief's first C1 ("plan.md stays in the copy") is replaced by this ruling.
+- C2: met. Lines 11 and 12 remove nothing from a record, line 37 then gives "none", and lines 21, 26 and 27 hold for any input.
+- C3: met. Line 15 copies the named sources, line 18 removes both skills' files from them, and line 30 keeps the judge off the sources in place. Probe (a) shows that a read of /Users/axelfaes/workspace/ordo/README.md is refused.
+- C4: met. Probe (a): "1. NONE."; `ls ~/.claude/skills` blocked; the init message's `"skills": []`.
+- C5: partial. A cited URL is fetched: probe (b) fetched docs.vale.sh/topics/styles.md with 0 denials. A cited file outside the copy is copied (line 17). The missing part: an output that cites a file of either skill by its URL is open to the judge. That is Spec 1.
+- C6: met. Items 1 to 3, 5, 6 and 8 are unchanged, and item 7 changes by ruling 2 only. Item 2 removes marks from outputs, and lines 11 to 14 remove files and lines from the judge's copy.
+- C7: met. The draft's line 14 names paths inside research-hub, so line 16 does not make the orchestrator copy the whole repository.
+- C8: partial. Line 39 records every key, which is met. The rule in line 24 picked haiku in probe (b) (4284 against 412 output tokens). That is Proof 1.
+- C9: met. The process loads the six files (the transcript's `instructions` attachment), line 25 states it, and line 39 records them. How the orchestrator gets them is Spec 2.
+
+### Findings
+
+#### Spec
+
+1. `docs/dev/blind-comparison.md:29`, item 4: "The judge may fetch a URL an output cites, to check that it resolves and says what the output claims.", with line 22 "The judge's process may fetch a URL, and has no other permission beyond reading its copy."
+   - What is wrong: the ruling "Step 14b, what keeps a judge off the text of the skills compared" (plan.md Rulings) keeps "cited files and URLs open to the judge except the skills' files". The brief's C5 asks that "an output that cites a file of either skill: the judge does not open it". Round 0's line carried "except a file of either skill" for both files and URLs. Round 1 keeps the exception only for copied files (line 17). Line 29 lets the judge fetch any cited URL, and line 22 lets the process fetch any URL at all.
+   - The judge is told only lines 26 and 27, so it never learns line 9's rule. Nothing the orchestrator removes can reach a web page. This is a finding closed by removing a check rather than fixing what it guarded: Spec 1 of the first report needed fetches let through, and the exception went with the rewrite.
+   - Outputs do cite a skill's SKILL.md by URL: step 14's side 1 cites `https://raw.githubusercontent.com/vale-cli/agent-tools/main/skills/fix/SKILL.md`.
+   - Failure scenario: in a comparison against a skill published on GitHub (2.F against mattpocock's `diagnosing-bugs`, or 22.A's against `code-review`), an output cites the compared skill's SKILL.md by its github URL. The judge fetches it under line 29, as the probes show the command allows, and reads the text line 9 keeps from it.
+   - Verdict: C5 partial.
+2. `docs/dev/blind-comparison.md:39`, item 9: "each judge's command, every key of its `modelUsage`, and the global instruction files it loaded (item 4);"
+   - What is wrong: item 4 names where the model comes from (`modelUsage`, line 24) but names no source for the instruction files. Probe (c) shows that nothing the process prints gives them:
+     - the JSON result has no such key;
+     - the stream-json init message has only `memory_paths` with the auto-memory folder;
+     - the `--debug-file` log names only the project search ("found 0 of 8 directories").
+   - The one machine source is the run's session transcript, `~/.claude/projects/<the judge's copy path with / and . written as ->/<session_id>.jsonl`, whose attachment of type `instructions` lists `files[].path`. The `session_id` is in the JSON result.
+   - Failure scenario: the orchestrator fills the line by asking the judge's process, either in the judging run, which puts the question into the judgment, or in a second run. It then records a model's account of its own context. Or it lists `~/.claude/rules/`, which records what exists rather than what loaded. Either way the record line looks verified and no command stands behind it.
+   - Verdict: none (C9 met).
+
+#### Proof
+
+1. `docs/dev/blind-comparison.md:24`, item 4: "The judge's served model is the key of the process's `modelUsage` with the most output tokens."
+   - The builder's round-1 C8 walk says this line "gives the reviewer model as the served model when a helper model's key is also present" and marks C8 met.
+   - What is wrong: the rerun does not reproduce that. Probe (b), three fetches of long pages followed by a one-word reply, printed `claude-opus-5-5` outputTokens 412 and `claude-haiku-4-5-20251001` outputTokens 4284. The rule picks haiku. In probe (a), with one fetch, it picks opus (966 against 14), and with no fetch there is one key.
+   - The served model is given exactly elsewhere: the stream-json init message's `"model": "claude-opus-5-5"`, which the JSON result lacks.
+   - The decision that rests on it: which model item 9's record names as the judge's, and whether the orchestrator takes a judge as run on a model other than the configured one (line 23).
+   - Failure scenario: a judge that checks many citations by fetching their text (item 5's "says what the output claims") and writes a short verdict gets haiku recorded as its model. The orchestrator then either discards a valid verdict or keeps a record that says the judge ran on haiku. How often a real judgment tips this way is not measured (Declined to judge).
+   - Verdict: C8 partial.
+
+#### Standards
+
+1. `docs/dev/blind-comparison.md:15` and `:16`: "The orchestrator copies into the judge's copy each file or folder the input names as a source." / "A repository is copied whole only when the input names the repository and no path inside it." Also `:12` and `:13`: "... removes from the judge's copy the ledger of each plan that builds or changes either skill." / "... keeps, in a file of its own in that ledger's place, the bullets of its Rulings that name the input's entry."
+   - What is wrong: line 16 is a limit of line 15's rule, and line 13 an exception to line 12's. Each stands in a bullet of its own. `docs/dev/skill-layout.md`, "Lists and tables", first bullet, says "a qualifier that changes the rule (an exception, a limit, a condition) stays in the same bullet as the rule". The brief made that its rule under "Read" item 3.
+   - The builder wrote the text as dictated, so the defect is in the round brief's text.
+   - Failure scenario: an orchestrator who takes the rule from line 15 or line 12 alone, as a grep hit gives it, copies the whole 26G research-hub, or removes the plan ledger together with the Rulings bullet "Entry 3 and step 13" that the outputs are checked against.
+   - Verdict: none.
+
+#### Behaviour
+
+None.
+
+### Declined to judge
+
+- Whether a subagent that the judge's process starts through its Task tool is held to the same permissions: not probed in this run. The first report's probe C showed only that such a subagent lists no skill.
+- The Google Drive, Gmail, Calendar and Claude Docs tools connected to the judge's process (all in the init message's `mcp_servers`): not called, so that no private data of the user was read. PubMed and bioRxiv, which have the same permission status, were refused.
+- How often a real judgment gets more helper output tokens than judge output tokens: not measured. Probe (b) is a constructed prompt. A judge run over step 14's two outputs would settle it.
+- Whether the judge may be able to tell which output is `grill`: at 833e2e8 the copy keeps the glossary's "decision form" (`docs/glossary.md:29`: "a heading `D<n>. <the decision, as a phrase>` ... Stated in: `gr[ill]`") and entry 2.E's goal line, and side 1 uses `## D<n>.` headings. Line 14 removes the gate, so the judge is not told which output is expected to win. Ruling (a) chose the instruction of lines 26 and 27 for text the input quotes, so whether this is acceptable is the user's call.
+- The input of step 14's run again: at 833e2e8 it holds no output of step 13 (`git merge-base --is-ancestor 7e984dd 833e2e8` is false). Which tree the rerun uses is step 14's decision and outside this step.
+- Step 14 run again under the page: not run. It is the orchestrator's run after landing.
+
+Reviewer usage: tokens not visible from inside this agent; about 40 tool uses, 8 of them `claude -p` probes on opus (costs from their JSON: 0.1747, 0.1532, 0.1431, 0.1054, 0.2229, 0.0062, 0.0062 USD; one run exited at argument parsing before any request); minutes not visible.

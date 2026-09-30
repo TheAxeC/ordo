@@ -1,0 +1,26 @@
+# Landing of step 14b
+
+Roadmap entry 2.E grill; plan step 14b of the steps left (14b, 14c, 14 run again, 16), the judge of a blind comparison kept off the text of the skills compared; next: step 14c.
+
+## Open items
+
+- None.
+
+## The check of Steps 1
+
+The runner's agent listing (ListAgents) showed no builder or reviewer of step 14b running; the one agent listed was the reviewer of step 14c.
+
+## NOT DONE
+
+Nothing of the step. Step 14 run again under the changed page is its own step, next after 14c.
+
+## What landed, what was found, the usage
+
+- Landed: `docs/dev/blind-comparison.md` item 4 "The judge's input" says what a file of a skill is, and that the orchestrator removes both skills' files, and the ledger of each plan that builds or changes either skill, from the judge's copy of the input, keeping in its place the Rulings bullets that name the input's entry, and every other line that states the gate, names the comparison or says which output is expected to win. It copies in each named source (a repository whole only when no path inside it is named), each cited file, and the saved page of each cited URL, all without either skill's files. The judge runs as its own `claude -p` process in its copy, lists and loads no skill, fetches nothing and reads only its copy; its served model is the `model` of the process's `init` message, and its loaded global instruction files are read from the `instructions` attachment of its session transcript. The judge is told to judge by what the input and its user need, and that no skill's text is the standard. Item 7 says a fresh judge process makes each judgment; item 9's record holds the paths and lines removed, the files copied, and each judge's command, served model, `modelUsage` keys and loaded instruction files.
+- Premise corrections: at /spec, the brief check's findings led to the stop "Step 14b, what keeps a judge off the text of the skills compared", ruled (a). At landing, the ruling's "served model read from the output's `modelUsage`" is replaced by the `init` message's `model`, since the review over round 1 showed that `modelUsage` names a Haiku helper with more output tokens than the judge after three long fetches (412 against 4284), and the `init` message names the served model exactly; the ruling's "cited URLs open to the judge" is met by the saved page of each cited URL in the judge's copy, since a judge free to fetch could fetch a compared skill's SKILL.md by its URL (side 1 of step 14 cites one).
+- Review: `14b-refuter.md`, items 1 and 2 hold, C1 to C4 and C6 met, C5 partial; findings Spec 1 to 5, Proof 1 and 2, Standards 1 and 2, Behaviour 1, sent as repair round 1 (`agents/briefs/14b-round-1.md`). The run over the round: items hold; C1 to C4, C6, C7, C9 met, C5 and C8 partial; findings Spec 1 (cited URLs open to a skill's file), Spec 2 (no source named for the loaded instruction files), Proof 1 (the most-output-tokens rule picks the helper model), Standards 1 (two limits in bullets of their own).
+- Fixes at landing: 4, all in `docs/dev/blind-comparison.md` item 4 and item 9. Spec 1: the judge's process fetches nothing, the orchestrator saves each cited URL's page into the copy except a file of either skill, and the judge checks citations against the saved pages. Proof 1: the served model is the `init` message's `model`, and the example command is `claude -p --disable-slash-commands --model opus --output-format stream-json --verbose`. Spec 2: the loaded instruction files are the `files` of the `instructions` attachment in the process's session transcript, and item 9 records the served model beside the `modelUsage` keys. Standards 1: the kept Rulings bullets and the whole-repository limit are sub-bullets of their rules. Checked by a probe from a scratch folder: `claude -p --disable-slash-commands --model opus --output-format stream-json --verbose` read `input.txt` in its folder, was refused WebFetch (`permission_denials` names WebFetch), its `init` message gave `model claude-opus-5-5` and `skills []`, `modelUsage` held one key, and its transcript's `instructions` attachment listed `~/.claude/CLAUDE.md` and the five files of `~/.claude/rules/`.
+- Verification on main: `sh ~/.claude/skills/land/templates/land.sh .scratch/2-e-grill/orchestrator-state.md 2e-14b 50e3844336505b61fd71fb645979f2d7a25abf18` exited 0 with `checks: 10 commands passed` and `1 file changed, 26 insertions(+), 1 deletion(-)`; after the fixes at landing `sh skills/land/templates/checks.sh .scratch/2-e-grill/orchestrator-state.md` printed `checks: 10 commands passed`, and `LC_ALL=C grep -n '[^ -~]' docs/dev/blind-comparison.md` printed nothing.
+- A/B: none (`bench: []`). Look: none (`look:` empty).
+- Usage (models from the transcripts): brief check claude-opus-5-5 129145 tokens, 43 tool uses, 384 s; builder claude-sonnet-5-5 112867 tokens, 22 tool uses, 266 s (round 0) and 130940 tokens, 7 tool uses, 135 s (round 1); reviewer claude-opus-5-5 170820 tokens, 50 tool uses, 720 s; reviewer over round 1 claude-opus-5-5 172870 tokens, 51 tool uses, 892 s.
+- The builder's first report passed its bar on the dictated text: both items were written as dictated, and the findings were on the brief's text. Fixes at landing: 4.
