@@ -38,7 +38,18 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 14a
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2e-14a
+  base: 16c5f3702eabb6a35bd6a182ef2e94c595563d81
+  launched: 2026-09-30
+  session_id: a75765a1669931042 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
+  report: .scratch/2-e-grill/agents/reviews/14a-report.md
+  brief_check: .scratch/2-e-grill/agents/reviews/14a-brief-check.md (ordo-high, claude-opus-5-5, 176162 tokens, 40 tool uses, 524 s)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
