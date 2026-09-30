@@ -38,22 +38,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2g-2
-  base: e29e95e8f8c8a3eb0ff120072b368174233e002c
-  launched: 2026-09-30 09:27
-  session_id: a609efe535711a48c (claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-g-git-guard/agents/reviews/2-report.md
-  brief_check: .scratch/2-g-git-guard/agents/reviews/2-brief-check.md (claude-opus-5-5; 156313 tokens, 51 tool uses, 489 s, $1.70-4.59)
-  builder_usage: round 0 94135 tokens, 21 tool uses, 229 s ($0.49-1.18)
-  reviewer_report: .scratch/2-g-git-guard/agents/reviews/2-refuter.md (claude-opus-5-5; 130146 tokens, 26 tool uses, 278 s, $0.94-3.05)
-  shared_paths: README.md, skills/repo-setup/templates/plan-terms.md and docs/glossary.md are also written by 2.F step 2, in flight, at other lines (README 7, the table row after refute, the Quick start, the alt texts and the install loop; the entries booking and Step 0); a cherry-pick of both simulated by the brief check merged clean, and the glossary check on main decides the glossary.
-  landing: not-started
-  round: 1
-  round_1_sent_at: the tree of 2-round-0.diff
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -62,6 +47,7 @@ dispatch:
 - Other commands that discard work (2026-09-30, step 1): `git checkout -f <branch>`, `git switch --discard-changes`, `git stash drop` and `git stash clear` discard work, and `git send-pack` and `git subtree push` push, by commands the approved list of five does not name, so the guard lets them through (the brief check's "Declined to judge"). Options: (a) a step adds them to the guard's blocks; pros: the guard covers what the five cover in effect; cons: widens the approved list, and `git checkout -f <branch>` is a form the plan skills may need. (b) The docstring and the offer name them as not blocked. Recommendation (a) for `send-pack`, `subtree push`, `stash drop`, `stash clear` and `switch --discard-changes`, with `checkout -f` left allowed after a grep of the skills. The lazy option is (b). Step 1 is built with the five only; a yes adds a step by your ruling.
 - pyright for Python templates (2026-09-30, step 1): `skills/repo-setup/templates/docs/dev/coding-standards/python.md` says pyright type-checks every module, and `git_guard.py` is Ordo's first Python template script under it, but pyright is not installed here (`which pyright` prints `pyright not found`), so neither the builder nor the reviewers ran it. Options: (a) you install pyright (`npm install -g pyright`, a download from outside Ordo), and a later step adds `pyright skills/repo-setup/templates/hooks/git_guard.py` to the verify list and fixes what it finds; pros: the standard the template sets for Python holds for Ordo's own Python; cons: a new tool on the machine and a new verify command. (b) The verify list stays without pyright; pros: nothing to install; cons: Ordo's Python is held to less than the standard it hands to other repositories. Recommendation (a). The lazy option is (b).
 
+- Step 2 reading (2026-09-30): step 2, the git guard offered by `repo-setup`, landed unticked, since its check is your reading of the offer's text: question 10 and Steps 3, 5, 10 and 11 of `skills/repo-setup/SKILL.md`, its tree row and Rules, and `README.md` lines 13 and 111 (ruling "Overnight work applies to this plan"). One point for the reading, not verified: the hook runs the `python3` on Claude Code's PATH, and Steps 10 checks the one on the setup session's; an older one there makes the guard let every call through. Options: (a) you read it and tick step 2, or name what is wrong; (b) tick it unread. Recommendation (a). The lazy option is (b). Ordo's own settings text is in `agents/reviews/2-landing.md`, for you to add to `.claude/settings.json` or `.claude/settings.local.json` if you want the guard in Ordo.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -88,6 +74,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Step 1 of 3, the git guard, landed and ticked (`agents/reviews/1-landing.md`).
-- Next step: 2, the offer in `repo-setup`, blocked until 2.E's step 7 lands ("Blocked, and by what").
-- Open on Axel's side: the open items above ("Git aliases", "Other commands that discard work", "pyright for Python templates").
+- 2026-09-30. Step 2 of 3, the git guard offered by `repo-setup`, landed unticked, its reading pending (`agents/reviews/2-landing.md`); step 1 is landed and ticked.
+- Next step: 3, the closing, once step 2 is ticked.
+- Open on Axel's side: the open items above.

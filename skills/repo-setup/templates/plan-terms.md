@@ -66,7 +66,7 @@
 - **project skills**: the skills a repository installs with the skills CLI into `.agents/skills/`, linked under `.claude/skills/` and listed in `skills-lock.json` and in `CLAUDE.md`'s Skills section. Stated in: `repo-setup`, Steps 6 and 7.
 - **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
 - **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
-- **questions, the**: the nine questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+- **questions, the**: the ten questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
 - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
 - **red command**: the one command of a diagnosis that drives the code path of the symptom and goes red on the exact symptom, run and its output quoted before any hypothesis. Stated in: `diagnose`, Steps 4.
 - **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is a failing check of the plan's verification, wherever it runs. Stated in: `plan-orchestration`, "Stops".

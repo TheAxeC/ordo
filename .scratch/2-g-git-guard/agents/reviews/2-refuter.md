@@ -149,3 +149,144 @@ none. The user-visible changes are listed in the report with before and after: q
 - Ordo's own settings text, which the landing report prints: this is the orchestrator's at landing and is outside this diff.
 
 Reviewer usage: about 95k tokens, 17 tool uses, about 12 minutes (estimated from this session; no completion notice is available to the reviewer).
+
+## Repair round 1, refuted
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-g-git-guard/orchestrator-state.md; echo "rc=$?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+rc=0
+
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary; echo "rc=$?"
+ok: the plan-terms block equals the template
+rc=0
+
+$ LC_ALL=C grep -n '[^ -~]' README.md docs/glossary.md skills/repo-setup/SKILL.md skills/repo-setup/templates/plan-terms.md skills/repo-setup/templates/hooks/git_guard.settings.json .scratch/2-g-git-guard/agents/reviews/2-report.md; echo "ascii rc=$?"
+ascii rc=1            (no output: pass)
+
+The round's delta (diff of 2-round-0.diff against 2-round-1.diff): README.md:13 (point 2), README.md:107 (point 1), skills/repo-setup/SKILL.md:82, one added bullet (point 3). Nothing else. `git diff <base> -- . ':!.scratch'` in the worktree, index lines aside, equals 2-round-1.diff. `git status --short`: M README.md, M docs/glossary.md, M skills/repo-setup/SKILL.md, M skills/repo-setup/templates/plan-terms.md, ?? the report, ?? git_guard.settings.json. The report copy in the worktree equals the one in the main checkout, and relative to main's committed version it is 86 lines appended with none removed.
+
+Point 5 greps, rerun across skills utils docs README.md:
+"Show each check's output"  -> no output
+"Every file it writes"      -> no output
+"every file's text"         -> skills/repo-setup/SKILL.md:58, :159
+"ten questions"             -> skills/repo-setup/SKILL.md:158, skills/repo-setup/templates/plan-terms.md:69, docs/glossary.md:74
+"git guard"                 -> skills/repo-setup/SKILL.md:3, :42, :125, :186, :187; docs/roadmap.md:35 ("## 2.G git guard"); README.md:13, :58, :107
+(the same hits the report gives. Its "git guard" block is a summary of the lines and not the grep output verbatim, but the lines match.)
+
+Point 4, first run on the unchanged tree. The base SKILL.md was rebuilt in $TMPDIR by `patch -R` of `git diff <base> -- skills/repo-setup/SKILL.md`:
+178 lines
+grep -n "question 10\|git_guard" -> nothing, rc=1
+base Steps 11: "11. Show each check's output."
+base Stops row: "The nine questions, each with its default"
+base Rules: "- Every file it writes is ASCII with one paragraph per source line, ..."
+2-round-0.diff lines 96, 124 and 135 are the minus lines the report cites.
+templates/hooks in the worktree: git_guard.py, git_guard.settings.json, git_guard.test.sh, and the settings file is the diff's only addition there.
+(all match the report)
+
+Point 3: the report says the new bullet is at "line 81". It is at line 82, and line 81 is the Claude Code session bullet. No decision rests on the line number.
+
+$ python3 -c '...skill-layout description length command...' | grep repo-setup
+813 skills/repo-setup/SKILL.md
+$ grep -n "Steps 1[0-3]" skills/ordo-init/SKILL.md skills/repo-setup/SKILL.md
+skills/ordo-init/SKILL.md:31, :87 (repo-setup's Steps 12), :103 (ordo-init's own); skills/repo-setup/SKILL.md:82 ("goes on to Steps 12", the commit step), :163
+$ grep -rn "nine questions" skills docs README.md; echo "nine rc=$?"
+nine rc=1
+metadata.version: "1.2.1"
+
+Scratch run over the repaired tree ($TMPDIR/refute-2g2-rr1/scratch repo, a path with a space; push.json, status.json and read.json written with the Write tool; the copy done twice, as Steps 5 gives it; the fifth check of Steps 10; the print of Steps 11):
+before: ./settings.local.json
+after: ./hooks/git_guard.py
+./settings.local.json
+cmp rc=0
+check-ignore rc=0
+version check /usr/bin/python3 rc=0   (Python 3.9.6, no output)
+version check PATH python3 rc=0
+--- printed text: the 15-line git_guard.settings.json, matcher "*", json.tool rc=0
+From sub/dir, CLAUDE_PROJECT_DIR="<scratch>" sh -c "$command":
+git-guard: blocked: git push origin main (git push is run by the user by hand)
+push rc=2
+status rc=0
+read rc=0
+With .claude/hooks/git_guard.py moved away:
+git-guard: $TMPDIR/refute-2g2-rr1/scratch repo/.claude/hooks/git_guard.py is missing, so every tool call is refused; restore it or remove the hook from the settings
+missing rc=2
+settings files after: ./settings.local.json
+```
+
+### Verdicts
+
+Items of the brief's "What to build", over the whole diff since the base:
+
+- 1: holds. `git_guard.settings.json` is valid JSON (json.tool rc=0), ASCII, with a two-space indent, the matcher `*` and one command hook. It is unchanged in this round, and the scratch run reproduces every exit.
+- 2: holds. SKILL.md has "What it reads" 1 (line 28), the Steps 3 sub-bullet (line 42), Steps 4 (line 58) and the Stops row "The draft" (line 159), the Steps 5 copy (line 60), the Steps 10 fifth check and its done-line (lines 78-79), and Steps 11 as one action (line 80). Steps 11 now ends on its completion criterion (line 82), which closes the first report's Standards 4. It also has question 10 (lines 125-126), the tree row (line 151), "The ten questions" (line 158) and the Rules (lines 186-187). The description is 813 characters. The version is "1.2.1", and the step and question numbers are unchanged.
+- 3: holds. README.md:13 is the text of ruling 2 verbatim, and says the hook refuses an agent's commands, which closes Standards 2. README.md:107 now puts the copy after "After your approval it writes ..." and the print after "`/ordo-init` and the checks". That is the order of SKILL.md Steps 5, 8, 10 and 11, and closes Standards 1. README.md:58 names Python 3.9. See Standards 1 below for the unqualified "every file" at :107.
+- 4: holds. plan-terms.md:69 and glossary.md:74 say "ten questions", and the glossary check prints ok.
+
+Cases of the brief's "Cases":
+
+- SKILL.md question 10, Steps 3/4/5/10/11, the tree row, both Stops rows, both Rules bullets, the step references and the version: met. I read the whole file and reran the greps above.
+- `json.tool` exits 0 and the matcher is `*`: met.
+- Description at most 1,024: met, at 813.
+- Scratch run: met, reproduced above in full. The report now gives the first run on the unchanged tree, as point 4 asked, and it matches the base rebuilt by `patch -R` (Spec 1 of the first report is closed).
+- README :13, :107 and Requirements, with no "nine questions": met.
+- Glossary check prints ok: met.
+- The skill read against skill-layout.md: met. Steps 11 is one action and ends on its completion criterion. The line 82 bullet joins "done when shown" and "goes on without waiting" with a semicolon, but the second clause limits what "done" means, so skill-layout "Lists and tables" keeps it in the same bullet. The Rules bullet at line 186 states the prohibition with its do-instead and does not repeat Steps 11's detail.
+
+Closures claimed, checked against the first report:
+
+- Standards 1: closed. The rerun order matches SKILL.md, and nothing was removed to close it.
+- Standards 2: closed.
+- Standards 4: closed.
+- Spec 1: closed, reproduced.
+- Standards 5: closed. The greps and the whole-file sentences (lines 180, 181, 182, 186, 187) are quoted, and I reread each against the file: each holds.
+- Standards 3 (a git command in the worktree): not a round point. The report says no git ran this round. This cannot be verified from the tree, so it is under Declined to judge.
+- No fix reaches beyond its finding. The delta is exactly README :13, README :107 and SKILL.md :82.
+
+### Findings
+
+1. Standards. `skills/repo-setup/SKILL.md:3` (description): "Shows the whole tree and every file before writing." `README.md:107`: "It then shows the whole tree and every file."
+   - What is wrong: the diff changed what the draft shows. Steps 3 (line 42), Steps 4 (line 58) and the Stops row "The draft" (line 159) now say the git guard hook is named by its path and source, with no text shown. The two whole-file "every file" sentences above were left unqualified. Change-standard rule 14 says a sentence about the changed file as a whole ("an 'every'") is reread against the file after the change and listed with the line that shows it still holds. Round point 5's list covered only the sentences about writes, and neither report lists these two. Under rule 19 they now say more than Steps 4 does.
+   - Failure scenario: a user answers yes to question 10 and reads "shows ... every file before writing". They take their approval at the draft to cover the hook's 1230 lines. They approve without having seen the script, which the draft only names by path and source.
+   - The fix is small, inside item 2 and item 3's lines, and can be made at landing: for example "every file, the git guard hook named by its source". Otherwise the orchestrator rules that "shows every file" is read as covering a file named in the tree.
+   - Verdict: none. The items hold on the brief's own text.
+
+### Declined to judge
+
+- Whether the builder ran any git command in the worktree this round, as the report says it did not: a read of the tree and a rerun cannot settle this. The builder's transcript would.
+- Whether `npx skills add ... -a claude-code` at Steps 6 writes a Claude Code settings file, which would make the new Rules bullet at line 186 ("The skill never writes a Claude Code settings file") false: settling this means running the skills CLI, which is outside the verify list and this review. A scratch run of Steps 6 with a `find .claude -name 'settings*'` after it would settle it.
+- The wording of README.md:13 and :107 and SKILL.md:82 beyond the finding above: these are the round brief's rulings 1 to 3 applied verbatim, and I did not judge them again. One example is the long appositive in :13 and "the checks" in :107, which has no earlier mention in its paragraph. I reread them as a user setting up a repository would, and none is false or out of order.
+- The points the first report declined, which this round does not touch: the PATH of the hook's `python3` against the Steps 10 check, `CLAUDE_PROJECT_DIR` unset, the per-call cost of the matcher `*`, Axel's reading of the offer, and Ordo's own settings text at landing. The reasons are the same as in the first report.
+
+Reviewer usage: about 95k tokens, 24 tool uses, about 12 minutes (estimated in this session; no completion notice reaches the reviewer).
+
+## Closed
+
+- First run, Spec 1 (no first run of the scratch-run and skill-layout cases): closed in repair round 1 point 4; the round's reviewer rebuilt the base with `patch -R` and it matches.
+- First run, Standards 1 (README line 107 put the copy and the print before the draft): closed in round 1 point 1.
+- First run, Standards 2 (README line 13 read as refusing the user's own commands): closed in round 1 point 2.
+- First run, Standards 3 (a read-only `git diff --stat` in the worktree in round 0): closed with no change; it was disclosed and changed nothing, and the builder's round-1 Bash commands, read from its transcript with `jq`, hold no git command outside quoted strings.
+- First run, Standards 4 (Steps 11 without its completion criterion): closed in round 1 point 3.
+- First run, Standards 5 (the rule-14 greps missing from the report): closed in round 1 point 5.
+- Round 1, Standards 1 (the description and README line 111 still said the draft shows every file): fixed at landing; both now say "every file's text, the git guard hook named by its source" (`grep -c` of that phrase prints 0 on the pre-fix copies and 1 on main; the description is 861 characters).
+- Round 1, declined: whether `npx skills add ... -a claude-code` writes a settings file, which would make the Rules bullet "never writes a Claude Code settings file" false: settled by reading; neither cached version of the skills CLI (1.5.23 and 1.7.0 under `~/.npm/_npx`) holds the string `settings.json` or `settings.local.json` (`grep -rhoE` printed nothing).
+- Both runs, declined: the `python3` the hook finds against the one Steps 10 checks. Not verified here; a `python3` older than 3.9 on the hook's PATH makes the guard exit 1 at import, which Claude Code treats as letting the call through (brief, the hook contract). Raised to Axel inside the open item "Step 2 reading".

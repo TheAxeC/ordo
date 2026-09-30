@@ -1,6 +1,6 @@
 ---
 name: repo-setup
-description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
+description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml, and, on request, the git guard hook. Shows the whole tree and every file's text, the git guard hook named by its source, before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
 metadata:
   version: "1.2.1"
 ---
@@ -25,7 +25,7 @@ metadata:
 
 ## What it reads
 
-1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`.
+1. `templates/` in this skill's folder: `CLAUDE.md`, `shared-rules.md`, `plan-terms.md`, the `docs/` pages, the `gitignore/` files, `LICENSE-MIT`, `sync_rules.py`, `hooks/git_guard.py`, `hooks/git_guard.settings.json`.
 2. The user's answers to "The questions".
 3. The names of the files the folder holds, for the languages of question 6.
    - The language of a file is read from its extension: C++ from `.cpp`, `.cc`, `.cxx`, `.h`, `.hpp`, `.hh`; Python from `.py`; TypeScript from `.ts`, `.tsx`, `.svelte`.
@@ -39,6 +39,7 @@ metadata:
    - A folder with tracked files is a refusal ("Stops").
 2. Ask "The questions", together, in plain prose, each with its default in brackets ("Stops").
 3. Draft "The tree", every file with its full text.
+   - The git guard hook is copied byte for byte, so the draft names it by its path and its source and shows no text for it.
    - The plan-terms block of `docs/glossary.md` is filled from `templates/plan-terms.md`, as the shared-rules block of `CLAUDE.md` is from `templates/shared-rules.md`.
    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
    - Every placeholder of an installed standards page is filled from the answers, from the files written before, or with the value the template writes inside it when that is a default value (`<1000>` becomes `1000`).
@@ -54,8 +55,9 @@ metadata:
    - A placeholder inside an HTML comment that shows an entry's form, as in the roadmap's and the glossary's, is written as it is, since it is the form and not a value.
    - Any other placeholder with no answer is shown to the user.
      - It is never written as `<...>`.
-4. Show the draft, the tree and every file's text together ("Stops").
+4. Show the draft, the tree and every file's text, the copied hook named by its source, together ("Stops").
 5. Write the files the user approved.
+   - When the answer to question 10 is yes, `templates/hooks/git_guard.py` is copied to `.claude/hooks/git_guard.py`, that one file, the folders made as needed, over a copy already there.
 6. Install the project skills from the repository root, per source: `npx skills add <source> --skill <name> [--skill <name>...] -a claude-code -y`.
    - The CLI copies them into `.agents/skills/`, links them under `.claude/skills/`, and writes `skills-lock.json`.
 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
@@ -73,8 +75,11 @@ metadata:
     git check-ignore -q --no-index .agents/skills/probe && ! git check-ignore -q --no-index .agents/plan.yaml
     ```
 
-    - The setup is done when the first two exit 0, the scan prints nothing, and the last line exits 0.
-11. Show each check's output.
+    - When the answer to question 10 is yes, a fifth check runs: `python3 -c 'import sys; sys.exit(sys.version_info < (3, 9))'`.
+    - The setup is done when the first two exit 0, the scan prints nothing, the `git check-ignore` line exits 0, and, when the answer to question 10 is yes, the Python version check exits 0.
+11. Show the user what the setup leaves for them to act on: each check's output and, when the answer to question 10 is yes, `templates/hooks/git_guard.settings.json`, for the user to add to `.claude/settings.json` or `.claude/settings.local.json`, into its `hooks.PreToolUse` list when the file already has one.
+    - A Claude Code session started in the repository after the text is added reads it.
+    - The step is done when the outputs and, when the answer to question 10 is yes, the settings text are shown; the setup goes on to Steps 12 without waiting for the text to be added.
 12. Commit the setup's other files in one commit by explicit path list, the subject naming the repository's setup.
     - Every file written is named, except those `/ordo-init` committed at Steps 8.
     - The commit is made only when the answer to question 5 allows it.
@@ -117,6 +122,8 @@ metadata:
 7. Does the repository have a user interface a reader sees and operates? [no]
 8. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
 9. Rules that belong to this repository only, for the Project rules section.
+10. Install the git guard? [no]
+    - It is a hook that refuses `git push`, `git reset --hard`, `git clean` with force and `git checkout` or `git restore` of the whole tree in an agent's commands, which the user then runs by hand; it is copied into `.claude/hooks/`, which `.gitignore` ignores, so each clone installs it itself, and it needs `python3` 3.9 or later.
 
 ## The tree
 
@@ -141,14 +148,15 @@ docs/adr/template.md             templates/docs/adr/template.md
 src/                             the source tree, with the build files for the kind as far as question 3 fixed them
 utils/                           scripts the build and the checks run
 .agents/plan.yaml                written by /ordo-init
+.claude/hooks/git_guard.py       templates/hooks/git_guard.py when question 10 is yes, ignored by .gitignore, so it stays in this clone
 ```
 
 ## Stops
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The questions | Every setup, at Steps 2 | The nine questions, each with its default | The user's answers |
-| The draft | Every setup, at Steps 4 | The tree, every file's text, and the placeholders that Steps 3 lists for the user's value | The user's approval or correction |
+| The questions | Every setup, at Steps 2 | The ten questions, each with its default | The user's answers |
+| The draft | Every setup, at Steps 4 | The tree, every file's text with the copied hook named by its source, and the placeholders that Steps 3 lists for the user's value | The user's approval or correction |
 | A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
 | The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block | The change Steps / sync 4 drafts | The user's approval |
 | A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
@@ -175,4 +183,5 @@ utils/                           scripts the build and the checks run
 - The rules are Ordo's shipped defaults or the user's; the skill adds no other rule.
 - Build files are written only for what the user names; nothing is assumed.
 - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
-- Every file it writes is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say.
+- The skill never writes a Claude Code settings file; it prints the git guard's settings text for the user to add.
+- Every file it drafts is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say; the copied git guard hook is copied byte for byte.

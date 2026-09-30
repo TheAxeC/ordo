@@ -133,3 +133,89 @@ The printed text, whole (`skills/repo-setup/templates/hooks/git_guard.settings.j
 ## Wrong or impossible in the brief
 
 Nothing found. One deviation from the hard rules: a read-only `git diff --stat` was run once in the worktree; it changed nothing.
+
+## Repair round 1
+
+Everything in the round's brief is done. No git command was run in the worktree this round.
+
+### Point 1, README line 107
+
+- Old: "... the project skills, and whether to install the git guard. On yes it copies the guard into `.claude/hooks/`, which stays in the clone, prints its settings text for you to add, and writes no settings file. It then shows the whole tree and every file. After your approval it writes ... and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`."
+- New: "... the project skills, and whether to install the git guard. It then shows the whole tree and every file. After your approval it writes ... and `README.md`. On yes to the git guard, it also copies the guard into `.claude/hooks/`, which stays in the clone. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`. After `/ordo-init` and the checks it prints the guard's settings text for you to add; it writes no settings file."
+
+### Point 2, README line 13
+
+- Old: "It can install the git guard, a hook that refuses the git commands the user runs by hand, into `.claude/hooks/`, and prints its settings text for the user to add."
+- New: "It can install the git guard, a hook that refuses an agent's `git push`, `git reset --hard`, forced `git clean` and whole-tree `git checkout` or `git restore`, which the user runs by hand, into `.claude/hooks/`, and prints its settings text for the user to add."
+
+### Point 3, SKILL.md Steps 11
+
+- Old: the step ended on the bullet "A Claude Code session started in the repository after the text is added reads it."
+- New: that bullet stays, and a second bullet follows it (line 81): "The step is done when the outputs and, when the answer to question 10 is yes, the settings text are shown; the setup goes on to Steps 12 without waiting for the text to be added."
+
+### Point 4, first run on the unchanged tree of the scratch-run case and of the skill-layout reading
+
+- Base `ls skills/repo-setup/templates/hooks` (the two files step 1 landed; `git_guard.settings.json` is added by `2-round-0.diff` as a new file): `git_guard.py`, `git_guard.test.sh`.
+- Base `grep -n "question 10\|git_guard" skills/repo-setup/SKILL.md`: no minus line of `2-round-0.diff` holds either string, so the base prints nothing; the base has no question 10, no copy step and no settings file to print at Steps 11. The scratch run therefore fails at base at its first step (the copy of Steps 5 has no text to follow) and at the print (Steps 11 prints no settings text, and the template does not exist).
+- Reading against `docs/dev/skill-layout.md` at base: Steps 11 read "Show each check's output." (`2-round-0.diff` minus line 96); the Rules held "Every file it writes is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say." (minus line 135) and no rule about a Claude Code settings file; the Stops row read "The nine questions, each with its default" (minus line 124). The case "the skill read again against skill-layout" is met on the built tree by the reviewer's reading; at base it has nothing to read for the offer.
+
+### Point 5, greps across `skills/`, `utils/`, `docs/`, `README.md`, run after the change
+
+```
+$ grep -rn "Show each check's output" skills utils docs README.md
+(no output)
+$ grep -rn "Every file it writes" skills utils docs README.md
+(no output)
+$ grep -rn "every file's text" skills utils docs README.md
+skills/repo-setup/SKILL.md:58:4. Show the draft, the tree and every file's text, the copied hook named by its source, together ("Stops").
+skills/repo-setup/SKILL.md:159:| The draft | Every setup, at Steps 4 | The tree, every file's text with the copied hook named by its source, and the placeholders that Steps 3 lists for the user's value | ...
+$ grep -rn "ten questions" skills utils docs README.md
+skills/repo-setup/SKILL.md:158:| The questions | Every setup, at Steps 2 | The ten questions, each with its default | The user's answers |
+skills/repo-setup/templates/plan-terms.md:69:- **questions, the**: the ten questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+docs/glossary.md:74:- **questions, the**: the ten questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+$ grep -rn "git guard" skills utils docs README.md
+SKILL.md lines 3, 42, 125, 186, 187; README.md lines 13, 58, 107; docs/roadmap.md:35 (the heading "2.G git guard", not a statement about the offer)
+```
+
+The two rewritten phrases no longer present ("Show each check's output", "Every file it writes") have no other caller anywhere. The sentences of `skills/repo-setup/SKILL.md` about the skill's writes as a whole, each reread against the file after the change:
+
+- Line 180 "Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it." holds: the copied hook comes from `templates/hooks/git_guard.py` (Steps 5, line 60).
+- Line 181 "In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4)." holds: the copy is at Steps 5 (line 60), after Steps 4.
+- Line 182 "The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on in `sync`." holds: the copy goes to `.claude/hooks/` inside the repository.
+- Line 186 "The skill never writes a Claude Code settings file; it prints the git guard's settings text for the user to add." and line 187 "Every file it drafts is ASCII ...; the copied git guard hook is copied byte for byte." are the new bullets and agree with Steps 3 (line 42) and Steps 11 (line 80).
+
+### Verification, after the round
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-g-git-guard/orchestrator-state.md; echo "rc=$?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne '... (the ASCII check as printed by the runner)'
+checks: 10 commands passed
+rc=0
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ LC_ALL=C grep -n '[^ -~]' README.md docs/glossary.md skills/repo-setup/SKILL.md skills/repo-setup/templates/plan-terms.md skills/repo-setup/templates/hooks/git_guard.settings.json
+(no output)
+```
+
+### Judgment calls
+
+- Point 1: the copy sentence sits directly after the list of files written on approval (the skill copies at Steps 5), and the print sentence closes the paragraph (Steps 11), so the paragraph follows the skill's order.
+- Point 5: the report's earlier first-run block for C4 and C7 is the base reading given in Point 4, taken from `2-round-0.diff` because no git runs; the base `ls` is the two files the plan's step 1 landed, named by the diff adding only the settings template.
