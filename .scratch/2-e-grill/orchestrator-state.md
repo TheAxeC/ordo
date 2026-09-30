@@ -47,6 +47,7 @@ dispatch:
   launched: 2026-09-30
   session_id: a12869b0c03367f5b (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-e-grill/agents/reviews/14b-report.md
+  builder_usage: claude-sonnet-5-5, 112867 tokens, 22 tool uses, 266 s (round 0, from its completion notice)
   brief_check: .scratch/2-e-grill/agents/reviews/14b-brief-check.md (ordo-high, claude-opus-5-5, 129145 tokens, 43 tool uses, 384 s; run on the brief before the stop)
   landing: not-started
   round: 0
