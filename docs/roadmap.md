@@ -46,6 +46,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run over the sessions of plan 2.C, its report holding points of both kinds, each with its quoted place, reviewed by you, with your ruling written beside each proposal.
 - Waits on: 2.D, for the layout rules.
 
+## 2.I Several plans in one session
+
+- Status: [ ]
+- Goal: `plan-orchestration` runs every open plan in one session: it takes the plans in the roadmap's order, `spec` compares a step's paths with the steps in flight of every open plan, one limit on steps in flight holds across all plans, landings are one at a time across all plans, and one report lists each plan's position and open items.
+- Gate: one real run over two open plans whose next steps change the same file, with a third step in flight beside them: the run starts with the plan that comes first in the roadmap, the second plan's step waits until the first plan's step has landed, the steps in flight never exceed the one limit, no two landings overlap, and the one report lists both plans' positions and open items, reviewed by you.
+- Waits on: 2.E, 2.F and 2.H, whose open steps change `skills/spec/SKILL.md` and `skills/plan-orchestration/SKILL.md`.
+
 ## 3. The writing base
 
 - Status: [ ] (drafted again, from its sources, before it is opened)
