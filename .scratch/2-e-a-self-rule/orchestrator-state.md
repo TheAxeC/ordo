@@ -38,7 +38,18 @@ reviewer_effort: high        # the default.
 ```
 
 ```yaml
-dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with its served model, tokens, tool uses and time), landing, round. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's served model, tokens, tool uses and time) at the review. A step dispatched while another in flight names a file its brief also names carries shared_paths: each shared file and why the merge at landing is simple; with no shared file the key is left out.
+dispatch:
+- step: 1
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2ea-1
+  base: 67428df
+  launched: 2026-10-01
+  report: .scratch/2-e-a-self-rule/agents/reviews/1-report.md
+  brief_check: .scratch/2-e-a-self-rule/agents/reviews/1-brief-check.md (ordo-high, agent a392a12ca146ff975, claude-opus-5-5, 153352 tokens, 25 tool uses, 285 s)
+  landing: not-started
+  round: 0
+  session_id: a15eaa0740335c7a3 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
