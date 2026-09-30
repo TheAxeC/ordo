@@ -23,7 +23,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
 | The plan is not open yet | `/plan <entry>` |
 | Every step of the plan, unattended | `/plan-orchestration <entry>` |
 | The step is built and needs its review | `/refute <entry> <step>` |
-| Where the plan stands and which command comes next | `/plan-help <entry>` |
+| Where the plan stands and which command comes next | `/ordo-help <entry>` |
 
 ## What it reads
 

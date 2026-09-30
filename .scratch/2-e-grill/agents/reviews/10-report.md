@@ -380,3 +380,87 @@ The skill is invoked as `/ordo-help` in place of `/plan-help`, with the triggers
 
 - Nothing was wrong. The base the brief names, `983754e`, is the commit main was read at; the worktree's `HEAD` is `a34afd2`, the preparation commit, and the hit counts (33 lines, 12 files) are the same on it.
 - The perl line of the verify list prints a stderr warning for the tracked-but-moved `skills/plan-help/SKILL.md` before the landing stages the move; the runner and the pin block do not treat it as a failure. The landing sees a clean run once the move is staged.
+
+## Repair round 1
+
+Change, `README.md:93`, the last sentence, old beside new:
+
+```
+old: The loop replaces only the skill folders it copies: a skill a newer version of Ordo no longer ships is removed with `rm -rf "$dir/<skill>"` for each folder of the list.
+new: The loop replaces only the skill folders it copies: a skill a newer version of Ordo no longer ships is removed from each folder of the list by hand, such as `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`.
+```
+
+Command, `sed -n 93p README.md`:
+
+```
+The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger. The loop replaces only the skill folders it copies: a skill a newer version of Ordo no longer ships is removed from each folder of the list by hand, such as `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`.
+```
+
+Spec 1, `git grep --untracked -n -i -E "plan-help|plan help" -- . ':!.scratch'; echo "rc=$?"`:
+
+```
+rc=1
+```
+
+No other change, for each changed file other than the skill, `git show HEAD:<f> | sed s/plan-help/ordo-help/g | diff - <f>`; the skill compared as in the first case 5:
+
+```
+== .agents/plan.yaml
+== README.md
+65c65
+< This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`.
+---
+> This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`. After an update, `npx skills ls -g` lists the installed skills, and a skill a newer version of Ordo no longer ships is removed with `npx skills remove --global <skill>`.
+84c84
+<     for skill in land ordo-init plan ordo-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
+---
+>     for skill in land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
+93c93
+< The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger.
+---
+> The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger. The loop replaces only the skill folders it copies: a skill a newer version of Ordo no longer ships is removed from each folder of the list by hand, such as `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`.
+== docs/academic-coverage.md
+== docs/glossary.md
+== skills/land/SKILL.md
+== skills/ordo-init/SKILL.md
+== skills/plan-orchestration/SKILL.md
+== skills/plan/SKILL.md
+== skills/repo-setup/templates/plan-terms.md
+== skills/roadmap/SKILL.md
+== skills/spec/SKILL.md
+== skill
+rc=0
+```
+
+ASCII, `LC_ALL=C grep -n '[^ -~]' README.md; echo "rc=$?"`:
+
+```
+rc=1
+```
+
+Verify list, command: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md; echo "rc=$?"`:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+Can't open skills/plan-help/SKILL.md: No such file or directory at -e line 1.
+checks: 8 commands passed
+rc=0
+```
+
+The `Can't open skills/plan-help/SKILL.md` warning is the tracked-but-moved old path, as in the first run; the runner counts the command as passed.
+
+Reading: the new sentence against the loop above it (`for dir in ~/.claude/skills; do ... rm -rf "$dir/$skill" ...`). `rm -rf ~/.claude/skills/<skill>` removes the folder `<skill>` in the one folder the loop lists, `~/.claude/skills`, and the tilde expands in a new terminal. For a second account the section tells the user to add `$CLAUDE_CONFIG_DIR/skills` to the list, so `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"` removes the folder in that account's skills folder, and `$CLAUDE_CONFIG_DIR` is the variable the section already names for that account, set in the terminal where the user runs it. Neither command uses `$dir`, which exists only inside the loop. Not run against a real folder.

@@ -23,7 +23,7 @@ metadata:
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
 | The roadmap has no entry for the work yet | `/roadmap add <goal>` |
 | The plan is open and a step is due | `/spec <entry> <step>`, or `/plan-orchestration <entry>` for every step |
-| Where an open plan stands | `/plan-help <entry>` |
+| Where an open plan stands | `/ordo-help <entry>` |
 
 ## What it reads
 

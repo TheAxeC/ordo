@@ -21,7 +21,7 @@ metadata:
 |---|---|
 | The step has not been reviewed yet | `/refute <entry> <step>` |
 | Every step of the plan, unattended, the landings included | `/plan-orchestration <entry>` |
-| Where the plan stands and which command comes next | `/plan-help <entry>` |
+| Where the plan stands and which command comes next | `/ordo-help <entry>` |
 
 ## What it reads
 

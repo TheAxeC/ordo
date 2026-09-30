@@ -26,7 +26,7 @@ metadata:
 | When | Use |
 |---|---|
 | An entry is ready to be opened as a plan | `/plan <entry>` |
-| Where an open plan stands | `/plan-help <entry>` |
+| Where an open plan stands | `/ordo-help <entry>` |
 
 ## What it reads
 

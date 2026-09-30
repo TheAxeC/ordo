@@ -18,10 +18,10 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
 | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
-| `plan-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
+| `ordo-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
 | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
 
-The order of use, shortened from what `/plan-help` prints:
+The order of use, shortened from what `/ordo-help` prints:
 
 ```
 /repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
@@ -41,7 +41,7 @@ for every step:
 /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
 ```
 
-`/plan-help` prints the full sequence, including what to do when a command stops.
+`/ordo-help` prints the full sequence, including what to do when a command stops.
 
 ## Requirements
 
@@ -62,7 +62,7 @@ The plan skills launch their agents through five agent definitions, `agents/ordo
 npx skills add TheAxeC/ordo --skill '*' -g -a claude-code
 ```
 
-This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`.
+This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`. After an update, `npx skills ls -g` lists the installed skills, and `npx skills remove --global <skill>` removes a skill a newer version of Ordo no longer ships.
 
 The CLI installs and updates skills only. After `npx skills add`, and after each `npx skills update -g`, copy the agents from a clone:
 
@@ -81,7 +81,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
+    for skill in land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
     agents=$(dirname "$dir")/agents
@@ -90,7 +90,7 @@ for dir in ~/.claude/skills; do
 done
 ```
 
-The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger.
+The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger. The loop replaces only the skill folders it copies. Remove a skill a newer version of Ordo no longer ships from each folder of the list by hand: `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`.
 
 ## Configuring a repository
 

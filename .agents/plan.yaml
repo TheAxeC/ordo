@@ -1,4 +1,4 @@
-# The project specifics the plan skills read (/plan, /spec, /refute, /land, /plan-help, plan-orchestration).
+# The project specifics the plan skills read (/plan, /spec, /refute, /land, /ordo-help, plan-orchestration).
 # Every path is relative to the repository root. One project: the skills, their templates and utils/ are one tree with one set of checks.
 roadmap: docs/roadmap.md                  # The source of truth for what is open; a plan is one entry of it.
 verification: docs/dev/building.md        # The page that defines the green check; /plan copies its commands into the ledger.

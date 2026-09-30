@@ -36,20 +36,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-- step: 10
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-10
-  base: a34afd257712a737db47c36452d52bf23dc9bbc7
-  launched: 2026-09-30 02:25
-  session_id: ac9a7eb3cc16f546c (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
-  report: .scratch/2-e-grill/agents/reviews/10-report.md
-  builder_usage: 114615 tokens, 19 tool uses, 257 s (claude-sonnet-5-5, 34 model lines in its transcript; cost estimate $0.51-1.46)
-  brief_check: .scratch/2-e-grill/agents/reviews/10-brief-check.md (claude-opus-5-5; 119927 tokens, 24 tool uses, 311 s)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/10-refuter.md (claude-opus-5-5; 157759 tokens, 35 tool uses, 340 s)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -95,7 +82,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 to 5 and 7 to 9 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
-- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 9's fixes at landing.
-- Next step: 10, `plan-help` renamed `ordo-help` (ruling H). After it: 2.F steps 1 and 2 and 2.H step 3 unblock.
-- Open on Axel's side: the reading of step 6; the old rule 13 in game-engine and cathedra; approval stops under a ruling.
+- 2026-09-30. Steps 1 to 5 and 7 to 10 landed and ticked; step 6 landed unticked, its reading by Axel pending (open item "Step 6 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
+- Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 10's fixes at landing.
+- Next step: 11, the ADR readers (rulings B, C and F). Unblocked by step 10: 2.F steps 1 and 2 and 2.H step 3.
+- Open on Axel's side: the reading of step 6; the old rule 13 in game-engine and cathedra; approval stops under a ruling; the old skill name in other repositories.

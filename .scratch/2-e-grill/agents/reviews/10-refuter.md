@@ -192,3 +192,165 @@ The report says it did not read the CLI documentation. I read it, and it holds t
 - Whether the old skill's untracked copies in the main checkout matter. The main checkout's `.claude/` is an empty folder (`ls -la` shows only `.` and `..`), so there is nothing to check.
 
 Reviewer usage: tokens and minutes not measured from inside the session; about 30 tool uses.
+
+## Repair round 1, refuted
+
+I changed no file in the repository and nothing in the ledger. I left three scratch items outside the repository: `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/pinrun.J74yG4` (the pin run), `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/r93.a6IK2S` (the README:93 test on a scratch HOME) and `now.diff` in the session scratchpad (the tree compared with `10-round-0.diff`).
+
+The round's delta: `diff 10-round-0.diff <(git diff a34afd2; git diff --no-index /dev/null skills/ordo-help/SKILL.md)` differs in README.md only. The differences are the blob index line and line 93's last sentence, old to new. `git status --short` lists the same 12 changed paths as before the round, plus the untracked `skills/ordo-help/` and the report.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md; echo "rc=$?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+Can't open skills/plan-help/SKILL.md: No such file or directory at -e line 1.
+checks: 8 commands passed
+rc=0
+
+$ git grep --untracked -n -i -E "plan-help|plan help" -- . ':!.scratch'; echo "rc=$?"     # step line's check as plan.md:42 now states it
+rc=1
+$ git grep -n -i -E "plan-help|plan help" a34afd2 -- . ':!.scratch' | wc -l                # same check on the base
+34            (33 plan-help lines plus skills/plan-help/SKILL.md:8 "# Plan help"; line 3 holds both forms)
+$ for f in <the 11 other changed files>; do git show a34afd2:$f | sed s/plan-help/ordo-help/g | diff - $f | grep -c '^[<>]'; done
+README.md 6 (lines 65, 84, 93); every other file 0
+$ git show a34afd2:skills/plan-help/SKILL.md | diff - <(sed -e 's/ordo-help/plan-help/g' -e 's/^# Ordo help$/# Plan help/' -e 's/ordo help/plan help/' skills/ordo-help/SKILL.md); echo "rc=$?"
+rc=0
+$ line 93 against the round brief's sentence: grep -F -c of the brief's quoted sentence in README.md, and in sed -n 93p README.md
+1
+1
+$ LC_ALL=C grep -n '[^ -~]' README.md; echo "rc=$?"
+rc=1
+$ git grep --untracked -n -i "plan help" -- . ':!.scratch'; echo "rc=$?"
+rc=1
+$ git grep --untracked -n "ordo-help" -- . ':!.scratch' | wc -l ; ... -l ... | wc -l
+33
+12
+$ ls skills/ordo-help/SKILL.md; ls skills/plan-help; echo "ls rc=$?"
+skills/ordo-help/SKILL.md
+ls: skills/plan-help: No such file or directory
+ls rc=1
+$ python3 -c '<skill-layout description length command>'
+386 skills/ordo-help/SKILL.md   (all ten skills at or under 1022)
+$ the brief's scratch pin block, run from the worktree root as written (run=/private/var/folders/.../pinrun.J74yG4)
+a34afd2
+skills/land skills/ordo-help skills/ordo-init skills/plan-orchestration skills/plan-retro skills/plan skills/refute skills/repo-setup skills/roadmap skills/spec
+pinned: old (a34afd2), 10 skills linked in: <run>/home/.claude/skills
+pinned: 5 agents linked in: <run>/home/.claude/agents
+rc=0
+land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec
+pin: removed <run>/home/.claude/skills/plan-help, which the tag new does not hold
+pinned: new (c37b838), 10 skills linked in: <run>/home/.claude/skills
+pinned: 5 agents linked in: <run>/home/.claude/agents
+rc=0
+(ls -l: land, ordo-help, ordo-init, plan, plan-orchestration, plan-retro, refute, repo-setup, roadmap, spec, each -> <run>/home/.local/share/ordo-stable/skills/<name>)
+pinned: new, 10 skills linked in: <run>/home/.claude/skills
+pinned: 5 agents linked in: <run>/home/.claude/agents
+rc=0
+```
+
+The builder's round report quotes five outputs, and each one reproduced:
+- `sed -n 93p`;
+- the Spec 1 grep, rc=1;
+- the "No other change" loop: README 65c65, 84c84 and 93c93, the other ten files empty, the skill comparison empty;
+- the ASCII grep, rc=1;
+- the verify list, line for line.
+
+The `Can't open skills/plan-help/SKILL.md` stderr line is the one the first report explained. The old path is still in the index, and the landing's `git add -A` removes it.
+
+README:93, read as a user in a new terminal. I ran this under `mktemp -d` with a scratch HOME. Nothing touched `~/.claude`. The README loop ran twice (the list with `plan-help`, then the new list) over `~/.claude/skills` and `"$CLAUDE_CONFIG_DIR/skills"`, from scratch sources. The copy of the loop used `rm -rf "${dir:?}/${skill:?}"`, because this session's safety check refuses the unguarded form; the loop behaves the same when both variables are set. After the update, both folders held `land ordo-help ordo-init plan plan-help`, so the stale folder stayed, as the sentence says. Each named command, with `<skill>` replaced by `plan-help`, expanded as follows in a fresh `env -i` shell:
+- **Default account, `CLAUDE_CONFIG_DIR` unset, `sh` and `zsh -f`.** `rm -rf ~/.claude/skills/plan-help` expanded to `<T>/home/.claude/skills/plan-help`, the folder the loop's first entry wrote. With the second account's variable set in the same terminal it expanded the same way, since the loop's entry is also literally `~/.claude/skills`.
+- **Second account, variable set, `sh` and `zsh -f`.** `rm -rf "$CLAUDE_CONFIG_DIR/skills/plan-help"` expanded to `<T>/acct2/skills/plan-help`, the folder the loop's second entry wrote.
+- **Result.** After removing those two expanded paths, the default folder held `land ordo-help ordo-init plan` and the second account's folder held the same list.
+- **Second-account command with the variable unset.** It expanded to `rm -rf /skills/plan-help`, which removes nothing. The paragraph already tells the second-account user to set that account's variable before the loop, so the command assumes nothing the loop does not.
+- **`<skill>` typed literally.** `sh` gave a syntax error (rc=2) and `zsh` gave a parse error (rc=1). Nothing ran, so the placeholder cannot remove the wrong thing. README:65 uses the same `<skill>` convention.
+
+So each named command removes the stale folder the copy loop left, for both accounts. How the sentence reads against the prose standard is under Findings, item 2.
+
+### The first report's findings
+
+- **Spec 1** (the step line's check missed "plan help"): closed by the ledger change the round brief names.
+  - plan.md:42 now reads `git grep --untracked -n -i -E "plan-help|plan help" -- . ':!.scratch'`, and the ruling "Step 10, the check's reading" (plan.md:108) states the widened pattern and why.
+  - The check prints nothing on the tree (rc=1). On the base it prints 34 lines, `skills/plan-help/SKILL.md:8:# Plan help` among them, so a heading or trigger left as "Plan help" now fails it.
+- **Proof** (none): nothing to close. The round's own claims all reproduced (above).
+- **Standards 1** (README:93 `rm -rf "$dir/<skill>"` unset outside the loop): closed in the round.
+  - Line 93 now carries the round brief's sentence exactly (grep -F count 1).
+  - Neither command uses `$dir`, and both expand to the loop's folders (test above).
+  - No check was removed or loosened: the verify list and every case give the same results as before.
+- **Behaviour** (other repositories name `/plan-help`): raised to the user, as the round brief says. It is the open item "The old skill name in other repositories" at `orchestrator-state.md:59`, with options (a) and (b), (b) named the lazy option, and recommendation (a). The step does not reach other repositories, and ruling "Overnight work" 5 holds that change for Axel.
+- **Fixes beyond the findings:** none. The delta is README:93's last sentence and the appended report section, nothing else.
+
+### Verdicts
+
+The verdicts for the whole diff since a34afd2 are the following.
+
+Items:
+- 1: holds. `skills/ordo-help/SKILL.md` exists and `skills/plan-help` does not. The skill comparison with the rename undone prints nothing (rc=0), and the description length is 386.
+- 2: holds.
+  - The widened grep prints nothing.
+  - `ordo-help` gives 33 lines in the same 12 files.
+  - The per-file substitution diff is empty everywhere except README 65, 84 and 93.
+  - README:84's list is alphabetical.
+  - The glossary equals the template (`ok:` line).
+- 3: holds. README:65 carries the dictated sentence. See Findings 2 for its wording against the prose standard.
+- 4 (as the round brief replaces it): holds. README:93 carries the round brief's sentence exactly, and the scratch HOME test shows both commands remove the stale folder. See Findings 2.
+
+Cases:
+- `plan-help` grep: met (33 lines on the base, nothing now).
+- `plan help` grep: met (2 lines on the base, nothing now).
+- `ls` case: met.
+- `ordo-help` grep: met (33 lines, 12 files).
+- No other change: met (only README 65, 84 and 93 differ, and 93 is the round's sentence).
+- `sync_rules.py --only glossary`: met.
+- Description length: met (386).
+- Real `pin.sh` run: met (rev-parse a34afd2, `plan-help` linked under old, `ordo-help` under new with the `pin: removed ... plan-help` line, check mode rc=0).
+- Reading of the skill against skill-layout: met. The name, heading, description triggers and Quick start agree, and the diff with the rename undone is empty.
+- Reading of the two README sentences against the commands: met.
+  - README:65's two commands are in the skills CLI documentation, as the first report read it.
+  - README:93's two commands remove the loop's folders for each account (test above).
+
+### Findings
+
+1. **Standards (a ledger sentence the round makes false).** `.scratch/2-e-grill/plan.md:109`, ruling "Step 10, the README's removal sentences": "both install methods of `README.md` gain one sentence on removing a skill a newer version no longer ships (`npx skills remove --global <skill>`; `rm -rf "$dir/<skill>"`)".
+   - **What is wrong.** The round replaced `rm -rf "$dir/<skill>"` with `rm -rf ~/.claude/skills/<skill>` and `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`. The booked ruling still names the command that Standards 1 found wrong. It is the orchestrator's ledger text and outside the builder's paths.
+   - **Failure scenario.** Axel, reviewing the overnight rulings to overturn or keep them, reads that the README tells users `rm -rf "$dir/<skill>"`. He either judges a sentence that is no longer on the tree, or copies the unset-variable form elsewhere.
+   - **Fix.** At landing, change the parenthesis to the two commands README:93 now names.
+   - **Verdict.** None; the built tree is not affected.
+2. **Standards (prose standard, section E, "Sentence length" and "Passive voice").**
+   - **Place.** README.md:93, "The loop replaces only the skill folders it copies: a skill a newer version of Ordo no longer ships is removed from each folder of the list by hand, such as `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`." Also README.md:65, "... a skill a newer version of Ordo no longer ships is removed with `npx skills remove --global <skill>`."
+   - **What is wrong.**
+     - Line 93's sentence is 42 words. E says under roughly 20 unless the mechanism needs more, and this one could be split after "it copies".
+     - Both sentences are passive ("is removed"), and the actor is the reader who must do the removal. E says a passive sentence is rewritten unless the actor is irrelevant.
+     - Line 93's paragraph is now four sentences, and its third sentence is already 35 words.
+     - Both sentences are the orchestrator's dictated text (brief item 3, round brief item 1), and the builder wrote them exactly.
+   - **Failure scenario.** A reader who has just updated and wants to know what to do has to read a 42-word passive sentence to reach the two commands at its end. The text leads to no wrong action, since the commands are right, but it fails a pass/fail line of the prose standard the repository holds every README to.
+   - **Fix.** At landing. One possible form: "The loop replaces only the skill folders it copies. Remove a skill a newer version of Ordo no longer ships from each folder of the list by hand: `rm -rf ~/.claude/skills/<skill>`, and for a second account `rm -rf "$CLAUDE_CONFIG_DIR/skills/<skill>"`." Line 65 would become "..., and `npx skills remove --global <skill>` removes a skill a newer version of Ordo no longer ships."
+   - **Verdict.** None. Items 3 and 4 hold as briefed, and this is a defect of the dictated wording.
+
+### Declined to judge
+
+- **How a user learns which skill is stale.** Neither README sentence tells a user who updates that `plan-help` is the folder to remove. The copy method gives no listing command at all. `~/.claude/skills` can also hold skills that are not Ordo's, so "compare with the loop's list" alone does not settle it. The ruling "Step 10, the README's removal sentences" chose text that names no old skill (option (b) was rejected as history). `git ls-files` shows no changelog in the repository, and the tags run v2.1.0 to v2.5.0. Whether the name goes into release notes at 2.E's closing tag is Axel's call. Release notes for that tag, or the closing report naming the rename, would settle it.
+- **`npx skills update -g` and `npx skills remove --global`.** Whether `update` leaves a dropped skill behind, and whether `remove` clears both `~/.agents/skills` and the `$CLAUDE_CONFIG_DIR/skills` link, are not verified. The same point was declined in the first report, and it needs a CLI run on a scratch HOME against a source that dropped a skill.
+- **The old scratch folders.** The builder's and the first reviewer's scratch folders (`pinrun.e4waPD`, `pinrun.Po6EQG`) are still under `$TMPDIR`. Removing them is not the reviewer's to do.
+
+Reviewer usage: tokens and minutes not measured from inside the session; 21 tool uses.
+
+## Closed
+
+- First run, Spec 1 (the step line's check missed "plan help"): closed in the ledger before the round, plan.md step 10 and ruling "Step 10, the check's reading" widened to `-E "plan-help|plan help"`; the round's reviewer reproduced rc=1 on the tree and 34 lines on the base.
+- First run, Standards 1 (README:93 `$dir` unset outside the loop): closed in repair round 1 with the round brief's sentence; the round's reviewer tested both commands on a scratch HOME.
+- First run, Behaviour (other repositories name `/plan-help`): raised to Axel as open item "The old skill name in other repositories".
+- Round 1, Standards 1 (the Rulings line still named `rm -rf "$dir/<skill>"`): fixed at landing, the line now names the two commands of README:93.
+- Round 1, Standards 2 (README:65 and :93 passive and long): fixed at landing, both sentences active and line 93 split in two.

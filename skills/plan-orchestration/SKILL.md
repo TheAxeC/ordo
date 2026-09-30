@@ -21,9 +21,9 @@ continue the plan                    resume from the state file, after a compact
 
 | When | Use |
 |---|---|
-| One step by hand, stopping after each skill | `/spec`, then "build it", `/refute` and `/land`, the sequence `/plan-help` prints |
+| One step by hand, stopping after each skill | `/spec`, then "build it", `/refute` and `/land`, the sequence `/ordo-help` prints |
 | The plan is not open yet | `/plan <entry>` |
-| Where the plan stands and which command comes next | `/plan-help <entry>` |
+| Where the plan stands and which command comes next | `/ordo-help <entry>` |
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
 | What the reviews keep finding across plans | `/plan-retro` |
 
@@ -37,7 +37,7 @@ continue the plan                    resume from the state file, after a compact
 
 ## Steps
 
-The loop runs over a plan that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/plan-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops and the reports.
+The loop runs over a plan that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/ordo-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops and the reports.
 
 1. Read the inputs in the order "What it reads" gives them.
    - Resolve a dispatch block before anything else.
