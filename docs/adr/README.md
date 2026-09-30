@@ -8,3 +8,6 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 
 | | Decision |
 |---|---|
+| [0001](0001-the-writing-base-reads-the-prose-standard-where-it-is.md) | The writing base reads the prose standard where it is |
+| [0002](0002-the-prose-standard-holds-over-the-academic-sources.md) | The prose standard holds over the academic sources |
+| [0003](0003-a-fresh-read-only-agent-reviews-a-draft.md) | A fresh read-only agent reviews a draft |
