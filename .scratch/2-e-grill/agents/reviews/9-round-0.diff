@@ -1,0 +1,131 @@
+diff --git a/docs/glossary.md b/docs/glossary.md
+index dc44049..c0dff5c 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -46,7 +46,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `plan-help`, "The sequence, printed verbatim".
+ - **night rule**: the limit the loop keeps when the user sets a time by which no agent may run. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+ - **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
+-- **open item**: an entry of the state file's open items. It is a decision only the user can make, with its options, their pros and cons and one recommendation, closed by the user's ruling, or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
++- **open item**: an entry of the state file's open items. It is a decision only the user can make, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling, or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+ - **pause**: a halt of the loop the user asks for, which holds until the user lifts it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
+diff --git a/docs/roadmap.md b/docs/roadmap.md
+index 211e5c4..cc9517e 100644
+--- a/docs/roadmap.md
++++ b/docs/roadmap.md
+@@ -148,7 +148,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
+ 
+ - Status: [ ]
+ - Goal: The new writing skills replace the installed academic skills.
+-- Gate: with the user's explicit permission, asked for before any of it: your global `CLAUDE.md` and research-hub's `CLAUDE.md` name the new skills; the installed academic skills are removed from research-hub; `tools/manuscript` points at `paper`. Nothing of it is done without that permission.
++- Gate: with the user's explicit permission, asked for before any of it: your global `CLAUDE.md` and `research-hub/CLAUDE.md` name the new skills; the installed academic skills are removed from research-hub; `research-hub/tools/manuscript` points at `paper`. Nothing of it is done without that permission.
+ - Waits on: 5 to 10, each with its side-by-side run passed; 14, for the submission checks and the cover letter of `references/journal_submission_guide.md`; 15.A, so every later row is built before the academic skills are removed.
+ 
+ ## 17. review
+diff --git a/skills/ordo-init/SKILL.md b/skills/ordo-init/SKILL.md
+index 5a63944..29cc262 100644
+--- a/skills/ordo-init/SKILL.md
++++ b/skills/ordo-init/SKILL.md
+@@ -122,4 +122,5 @@ Run from the repository root.
+   - It cites where.
+ - The skill never overwrites an existing page or `.agents/plan.yaml`.
+ - A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
++- A change whose content the user already approved in full, by a ruling on an open item that stated it, is written without stopping for approval again, and the report names that ruling.
+ - Every path is relative to the repository root.
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index 1bdcf9e..afa3d50 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -201,7 +201,7 @@ On every resumption, with a dispatch block or without one:
+   - It is proposed only for a fact a machine computes.
+   - It comes after the rule sentence or the text change.
+   - The proposal states what it computes.
+-  - The user approves what it computes before it is written.
++  - The user's ruling on the proposal approves what it computes, before it is written.
+ - The user rules on each proposal.
+ 
+ ## Two steps in flight
+@@ -295,6 +295,7 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
+ - A stop is repeated in every report until the user has ruled.
+ - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
+   - It never goes through a question-box or multiple-choice tool.
++  - Each option states in full every approval it would need later, such as what a new script computes, a change to the configuration or the verification list, or a diff the user must see. The user's ruling on the item then approves them too, and the work goes on with no second stop.
+ - A pause the user asks for holds until they lift it.
+ 
+ ## Anti-patterns
+diff --git a/skills/plan-retro/SKILL.md b/skills/plan-retro/SKILL.md
+index d58721d..d9aeb93 100644
+--- a/skills/plan-retro/SKILL.md
++++ b/skills/plan-retro/SKILL.md
+@@ -82,7 +82,7 @@ The skill checks where the rule should have come from, in this order, and propos
+    - It quotes the findings that show how builders read the current text.
+ 4. **Whether the rule is kept is a fact a machine computes.** Only then may the proposal add a check beside the change of 3: a grep over the diff, a lint rule or a script over the tree.
+    - It states what the check computes, its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
+-   - The user approves what it computes before it is written.
++   - The user's decision on the proposal approves what it computes, before it is written.
+    - A rule whose breach is judged by reading gets no check.
+ 
+ ## Stops
+diff --git a/skills/plan/templates/orchestrator-state.md b/skills/plan/templates/orchestrator-state.md
+index 9f8f05f..2930aa5 100644
+--- a/skills/plan/templates/orchestrator-state.md
++++ b/skills/plan/templates/orchestrator-state.md
+@@ -35,7 +35,7 @@ dispatch: none               # or the block /spec writes (a list with workers_at
+ 
+ A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
+ 
+-- <a stop awaiting the user's ruling, or a proposal of the recurring-findings pass, with its options, the pros and cons of each, and one recommendation, as plan-orchestration's Stops section says; or "none">. An item is booked here the moment it is raised; it leaves only when the user has ruled, and then goes to the closed list.
++- <a stop awaiting the user's ruling, or a proposal of the recurring-findings pass, with its options, the pros and cons of each, what each would need approved later, and one recommendation, as plan-orchestration's Stops section says; or "none">. An item is booked here the moment it is raised; it leaves only when the user has ruled, and then goes to the closed list.
+ 
+ ## Closed items (the log of what was raised and how it ended; no report carries it)
+ 
+diff --git a/skills/repo-setup/SKILL.md b/skills/repo-setup/SKILL.md
+index 998ea5e..7b6bbea 100644
+--- a/skills/repo-setup/SKILL.md
++++ b/skills/repo-setup/SKILL.md
+@@ -176,3 +176,4 @@ utils/                           scripts the build and the checks run
+ - Build files are written only for what the user names; nothing is assumed.
+ - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
+ - Every file it writes is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say.
++- A change whose content the user already approved in full, by a ruling on an open item that stated it, is written without stopping for approval again, and the report names that ruling.
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index b8e5848..60dc9fa 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -41,7 +41,7 @@
+ - **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `plan-help`, "The sequence, printed verbatim".
+ - **night rule**: the limit the loop keeps when the user sets a time by which no agent may run. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+ - **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
+-- **open item**: an entry of the state file's open items. It is a decision only the user can make, with its options, their pros and cons and one recommendation, closed by the user's ruling, or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
++- **open item**: an entry of the state file's open items. It is a decision only the user can make, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling, or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+ - **pause**: a halt of the loop the user asks for, which holds until the user lifts it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
+diff --git a/skills/roadmap/SKILL.md b/skills/roadmap/SKILL.md
+index 055c374..6182497 100644
+--- a/skills/roadmap/SKILL.md
++++ b/skills/roadmap/SKILL.md
+@@ -155,4 +155,7 @@ When the roadmap's introduction links an index as the map of what the product is
+ - Nothing is added that the user did not ask for.
+ - Entry text states the goal, the gate and the dependencies, except that an entry under "Not yet specified" states the goal and what must be known, as the next rule says.
+ - Every entry this skill writes has a goal and a gate, since `/plan <entry>` matches `<entry>` against the entries by number or title and copies the entry's goal and gate into the plan; an entry under "Not yet specified" has a goal and what must be known before its gate can be named in place of a gate.
++- A goal says what the work delivers, and names another repository only where the entry reads or changes it, such as the source of a migration; the gate and the dependencies name one under the same condition, such as the target of a switch-over or the repository a gate runs on.
++- A file or folder in another repository is written as its path from the folder that holds this repository, such as `research-hub/tools/manuscript`, the one exception to the next rule.
+ - Every path is relative to the repository root.
++- A change whose content the user already approved in full, by a ruling on an open item that stated it, is written without stopping for approval again, and the report names that ruling.
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index b49d102..888ca14 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -189,7 +189,8 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
+ ### A stop
+ 
+ 1. Leave three things and nothing else.
+-   - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns, and one recommendation with its reasons.
++   - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
++     - Each option states in full every approval it would need later, such as what a new script computes, a change to the configuration or the verification list, or a diff the user must see. The user's ruling then approves them too.
+    - The same text under the step's Step 0 in `plan.md` or the part file it names.
+    - The ledger files the session wrote, committed by path as a resume point, so the stop survives the session.
+ 2. No brief, no worktree and no dispatch block exist for the stopped step.
