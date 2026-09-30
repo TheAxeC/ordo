@@ -47,6 +47,8 @@ dispatch: none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- Self-rule (2026-09-30, Axel's proposal, not a stop of this plan): a mode in which the orchestrator takes the option it recommends on an open item, closes it and books it as usual, and writes it to `choices.md` beside the state file for Axel's review. Axel ruled: the key is `self_rule: on|off` in the state file's configuration block; the items left open for him even with it on are a clash between two of his written rules or rulings, reversing a ruling he gave, anything that needs his own hands or accounts (a login, a look only he can unblock, the cluster, money), anything touching a secret or deleting data, and a choice with no clear recommendation. It is built as its own roadmap entry, placed right after 2.E, drafted at 2.E's closing through `/roadmap add` for his approval.
+
 - Step 14b, what keeps a judge off the text of the skills compared (raised 2026-09-30, stop at /spec from the brief check): closed 2026-09-30, Axel ruled (a); step 14b's line rewritten to it (plan.md Rulings).
 - Step 14a, an archived plan the entry has since set aside (raised 2026-09-30 from the run over repair round 1 of step 14a, Behaviour 3): closed 2026-09-30, Axel ruled (b); step 14c carries it (plan.md Rulings).
 - Ruled (2026-09-30): Axel ruled (a) on the open item below; step 14a added to plan.md with its ruling.
@@ -116,4 +118,5 @@ dispatch: none
 - Step 14a landed and ticked (2026-09-30), with 4 fixes at landing in `skills/grill/SKILL.md`; one finding of the run over its round raised as an open item.
 - Step 14b landed and ticked (2026-09-30), with 4 fixes at landing in `docs/dev/blind-comparison.md`.
 - Step 14c landed and ticked (2026-09-30), with 2 fixes at landing in `skills/grill/SKILL.md`.
-- Next: step 14 run again, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
+- Step 14 run again: two fresh sides running on entry 3 (clones of 833e2e8 with `skills/grill` as landed at 32a0107, in the session's scratch folder `bc14r/side-1` and `bc14r/side-2`, the same prompts as the first run); the judges run after, as `claude -p` processes under item 4 of `docs/dev/blind-comparison.md`.
+- Next: step 14's judges, then Axel's call on step 14, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
