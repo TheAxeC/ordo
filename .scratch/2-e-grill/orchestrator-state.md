@@ -44,7 +44,31 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-none
+- Step 9a, how a skill is given the ruling and what the ruling must hold (2026-09-30, stop at /spec, from the brief check `agents/reviews/9a-brief-check.md`): your ruling "Approval stops under a ruling" has the orchestrator quote the ruling and the skills skip an approval stop when the draft is the change the ruling states. The brief check walked each skill under a brief that built this with the ruling named in plain words, and found that a session would still stop, or would write what you never ruled. What it shows:
+  - A skill cannot tell a named ruling from its own argument: in `/roadmap add <goal>` everything after `add` is the goal.
+  - Most rulings have no line in a Rulings section, and the option's text is often not in `plan.md` at all (this plan's own `plan.md` has no "Step 0" heading), so the skill finds nothing to compare the draft with.
+  - A Rulings line "decided by the orchestrator" is accepted as yours unless the skill checks that the line ends "(the user)".
+  - `/roadmap` and `/plan` draft in their own words, so the draft differs from the ruled text on every run unless the skill drafts from the ruling.
+  - `/repo-setup`'s ten answers hold none of `/ordo-init`'s keys, so `/ordo-init` inside it stops anyway; files that come from no template (build files, a fetched licence, pages adapted from a sibling repository) have no rule.
+  - The README's stops figure, its sentence and the glossary's "every run" say such a stop "waits on you each time", which the change makes false.
+  - The rules file forbids a builder every git command that changes state, so the builder cannot make the scratch runs of the step's check.
+  - (a) The ruling is a bullet the skill reads, given by an option of the invocation. Your ruling on (a) approves all of the following:
+    - The invocation form. `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` and `/grill` take `--ruling <ledger file> "<name>"` as their last arguments, shown in each Quick start. The glossary gains the term **quoted ruling** for it.
+    - What a quoted ruling is. The bullet of that file's Rulings section (or of a rulings file) whose name is `<name>` and which ends "(the user)", with the sub-bullets under it. The session that books your ruling on an option that runs a skill writes that bullet, with the change the option stated copied under it as sub-bullets (`spec` "Steps / A ruling" and `plan-orchestration` "Stops" say so). A file that does not exist, a name it does not hold, or a bullet that does not end "(the user)" is no ruling: the skill says so and every stop stands.
+    - What the skill does with it. It drafts from the ruling's text, applies its own rules, and compares. A draft that is the ruled change is written with no stop. A draft that differs in anything is shown whole with each difference named, and the stop stands whole; nothing is written in part.
+    - `/roadmap`: every change of `add`, `move`, `done`, `drop`. For `add`, a ruled gate that could pass without the goal is not redrafted: it is shown with its answer, and the stop stands. The level, the insertion form and the dependencies are taken from the ruled entry.
+    - `/plan`: written with no stop only when each step and its check are the ruling's (the closing step `/plan` adds itself does not count as a difference), every answer in "## Gate" is no, no design decision is named as unsettled and no rulings-file line is left to place. The step lines end `(approved)`, and the ruling's bullet is copied into the new plan's Rulings unless the rulings file already gave it.
+    - `/ordo-init`: covered when the ruling states the form, each key with its value, the `.gitignore` change, and the full text of each page to create; a page whose text the ruling does not hold is shown and the stop stands. The stops "Several roadmaps" and "Worker, reviewer and libraries" are skipped for a key the ruling states. The commit rule is the ruling's, or the commit question alone is still asked. A fix to an existing file that the ruling states is made with no stop. Rules 5 gains the exception.
+    - `/repo-setup`: covered when the ruling answers all ten questions and states `worker`, `reviewer` and `libraries` for `/ordo-init`, and every file of the draft comes from a template and the answers. `/ordo-init` inside it takes the same ruling and the keys it derives from the tree just written count as stated. A file that comes from no template is shown and the stop stands.
+    - `/repo-setup sync`: covered when the ruling holds the hunks and the choice for each, and the diff the run shows is those hunks; otherwise the stop stands.
+    - `/grill`: the roadmap diff is written with no decision asked when it is the ruled text and the changed gate's answer is no.
+    - The record. The commit message names the ruling by its name and its ledger file; where no commit is made, the list of files written names it.
+    - The pages that say "every run". The README's sentence, the stops figure (`docs/figures/gen_figures.py` and its SVG) and the glossary's line say the stop waits each time "unless the run is under a quoted ruling that states the change". `plan-orchestration`'s rule that every skill is invoked through the runner names the five skills.
+    - The check. The builder makes no scratch run. Before the landing the orchestrator starts five fresh agents, one per run, each following the changed `roadmap` skill in a scratch repository: the ruled change is written with no stop and its commit names the ruling; a gate that could pass stops; a name the file does not hold stops; a place the skill's own rules reject stops; a bullet that does not end "(the user)" stops. Each run's result is booked.
+    - Pro: the skill has a text to read and one rule for when it may skip, and nothing is written that you did not rule. Con: a new argument on five skills, and the step writes about twelve files.
+  - (b) As (a), without the `--ruling` argument: the session names the ruling in plain words after the command. Pro: no new argument. Con: the skill cannot tell the ruling from its own argument, which the brief check showed for `/roadmap add` and `/plan`. This is the lazy option.
+  - (c) Step 9a is dropped: an approval stop always stands, and an option that runs a skill names that stop, as the skills say today. Pro: no change. Con: each such ruling of yours is followed by a second stop for the same change, which is what the ruling "Approval stops under a ruling" set out to end.
+  - Recommendation (a): it is the only one of the three in which a skill can check what you ruled before it writes.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -97,4 +121,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
-- Next: step 9a (approval stops under a ruling); step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.
+- Step 9a is stopped at /spec on the open item "Step 9a, how a skill is given the ruling and what the ruling must hold".
+- Next: step 9a once ruled; step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.
