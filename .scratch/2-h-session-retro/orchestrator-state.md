@@ -48,6 +48,8 @@ dispatch:
   launched: 2026-09-30 14:03
   session_id: af9906813a8c54544 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-h-session-retro/agents/reviews/3a-report.md
+  builder_usage: round 0: 202711 tokens, 50 tool uses, 475 s
+  reviewer_report: .scratch/2-h-session-retro/agents/reviews/3a-refuter.md (reviewer a1e73ec4e4e8cf564, ordo-high, opus, running)
   brief_check: .scratch/2-h-session-retro/agents/reviews/3a-brief-check.md (ordo-high, claude-opus-5-5; the check on main at 6f40399: 195649 tokens, 27 tool uses, 422 s, $1.33-4.98; the earlier stopped check: 195356 tokens, 30 tool uses, 7.6 minutes, $1.30-4.62)
   landing: not-started
   round: 0
@@ -55,17 +57,7 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 3a, six ruled sentences the brief check would reword (2026-09-30, from the second brief check in `agents/reviews/3a-brief-check.md`; step 3a is being built in the words you ruled, and this item does not hold it): the brief check read the ruled texts against the prose standard, the skill layout standard and the `refute` skill, and found a defect in six of them. The words are yours, so none was changed.
-  - 1. Rule 13, fourth bullet (both copies of the change standard). Ruled: "The builder shows a test is a proof by making one small change to the code under test that takes out the behaviour, and the report's table gives that change and the test's failing line; the reviewer checks it by reading the test and by a change of its own." Defect: one sentence of 50 words, it names the table one bullet before the rule gives it, and it does not say where the reviewer makes its change while `refute` says the reviewer changes nothing. Reworded: "The builder shows a test is a proof by making one small change to the code under test that takes out the behaviour and quoting the test's failing line, in the table the next bullet gives. The reviewer checks it by reading the test and by a change of its own on a scratch copy."
-  - 2. `templates/brief.md` "Cases", the second bullet. Ruled: "and for a script the case where the program reading its output closes it before the script ends". Defect: "case" is a glossary term used here for a situation. Reworded: "and for a script its output closed by the program reading it before the script ends".
-  - 3. `spec` "Steps / The brief check" 2, the **Dictated text** bullet. Ruled: three sentences in one bullet. Defect: the bullet holds two requirements that can each fail alone, which the skill layout standard splits. Reworded: the same words, with the third sentence ("Each claim a dictated text makes about the tree is checked as a premise is.") as a sub-bullet under the first two.
-  - 4. `templates/brief.md` "Report", the sentence on the table. Ruled: "For each case of a code step, the table the rules file's rule on tests asks for gives that change and the test's failing line with it made." Defect: "that change" points at a paragraph of "Cases" forty lines above. Reworded: "For each case of a code step, the table the rules file's rule on tests asks for gives the small change "Cases" asks for and the test's failing line with it made."
-  - 5. `templates/brief.md` "Report", the sentence on the DONE / NOT DONE table. Ruled: "with the checks above and their output verbatim". Defect: in the numbered list "the checks above" can be read as the parts above it in the list. Reworded: "with the checks of "Verify before you report" and their output verbatim".
-  - 6. `refute` "The four headings", the new Standards bullet. Ruled: "a term of the glossary the diff uses outside its entry's sense, or an entry the diff makes false, that the report's terms part does not name". Defect: a term the report names and misjudges is then no finding under this bullet. Reworded: "a term of the glossary the diff uses outside its entry's sense, or an entry the diff makes false, whether or not the report's terms part names it".
-  - (a) All six reworded as above. Your ruling approves each reworded text. When it arrives before step 3a lands, the six go to the step's builder in a repair round; when it arrives after, the ruling adds the step "3b. The six rewordings of the ruling "Step 3a, six ruled sentences the brief check would reword", in the same six files; check: each reworded text read in place, and `grep -c -F` of each in its file", built through the pipeline. Pro: the texts meet the standards they are checked against, and the next review does not find them. Con: you read six more sentences.
-  - (b) The ruled words stay. Pro: nothing to read. Con: each defect stays in the skill, and a review of a later step that reads these lines reports it again. This is the lazy option.
-  - (c) Some of the six, named by number, for example `Ruled: 2.H step 3a rewordings 1, 5, 6`. The others stay as ruled.
-  - Recommendation (a): each rewording keeps the meaning you ruled and ends a defect a reader would meet.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -74,6 +66,8 @@ dispatch:
 - Recurring findings (2026-09-30): Axel ruled (a) for each of the six proposals; step 3a.
 
 - Step 3a, the words of the six changes (2026-09-30): Axel ruled (a); the texts are under "Step 0 of step 3a" in `plan.md`.
+
+- Step 3a, six ruled sentences the brief check would reword (2026-09-30): Axel ruled (a); the six go to the builder in repair round 1.
 
 ## The standing demands (from Axel, in force)
 
@@ -97,5 +91,5 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1, 2 and 3 landed and ticked.
-- Step 3a is ruled ("Step 3a, the words of the six changes", (a)), its brief is checked and its builder is dispatched; it changes the rules file and runs alone, so no other step is dispatched until it lands. The open item above does not hold it.
+- Step 3a is ruled ("Step 3a, the words of the six changes", (a)), its brief is checked and its builder is dispatched; it changes the rules file and runs alone, so no other step is dispatched until it lands. The builder's first report is in; the six rewordings Axel ruled go to the builder in repair round 1 with the review's findings.
 - Next: step 4, the real run over 2.C's sessions with Axel, before 2026-10-28.

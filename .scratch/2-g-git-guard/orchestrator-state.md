@@ -44,35 +44,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 2a, what the alias lookup reads (2026-09-30, stop at /spec, from the brief check `agents/reviews/2a-brief-check.md`): your ruling "Git aliases" approved one computation: for a git subcommand the guard does not know, it runs `git config --get alias.<name>` in the command's directory (after `-C`) and checks the expansion. The brief check probed git 2.49.0 and found that this sentence, built as written, misses aliases that git runs, and that the brief added a block you have not approved. What the probes show:
-  - git compares an alias name without regard to case over the whole key: with `[alias "A.b"] c = version` in a configuration file, `git a.b.c` runs the alias and `git config --get alias.a.b.c` prints nothing.
-  - git finds its configuration through more than the directory: `--git-dir`, `-c include.path=<file>`, `--config-env`, and `GIT_DIR`, `GIT_CONFIG_GLOBAL`, `HOME` or `XDG_CONFIG_HOME` assigned in front of the command each ran an alias that the brief's lookup did not find.
-  - `git -C "$PWD" p`: the guard reads the word `$PWD` and not its value, the lookup cannot enter a folder of that name, and the brief then allowed the command, an alias of the global file included.
-  - `cd <repo> && git p` is looked up in the directory of the hook event, not in `<repo>`.
-  - A limit of 5 seconds for each lookup is no limit for a command with many subcommands: by Claude Code's hook documentation a hook that runs past 60 seconds is ignored and the command runs (the 60 seconds are not verified on the running version).
-  - An alias value that is not UTF-8 ends the guard in a traceback, which Claude Code treats as "allow".
-  - The brief blocked a command whose lookup does not end. That is a sixth kind of block with its own message, outside your ruling.
-  Options:
-  - (a) The lookup reads the configuration the command itself would read. Your ruling on (a) approves that the guard computes the following, and nothing else new:
-    - The lookup. For a git command whose subcommand is none of the operations the guard checks and is no alias given inline, the guard runs `git <options> config --null --get-regexp '^alias\.'` once and reads every alias from its output. `<options>` are the command's own `-C`, `--git-dir`, `--work-tree`, `-c` and `--config-env` options, in the order written. The process runs without a shell, from the command's directory, with its standard input closed and its standard error discarded; its output is decoded as UTF-8 with a replacement character for a byte that is not. Its environment is the guard's own, plus these variables when the command assigns them in front of `git`: `GIT_DIR`, `GIT_WORK_TREE`, `GIT_COMMON_DIR`, `GIT_CONFIG_GLOBAL`, `GIT_CONFIG_SYSTEM`, `GIT_CONFIG_NOSYSTEM`, `HOME`, `XDG_CONFIG_HOME`, `GIT_CONFIG_COUNT` with its `GIT_CONFIG_KEY_<n>` and `GIT_CONFIG_VALUE_<n>`, and `GIT_CONFIG_PARAMETERS`.
-    - The name. The subcommand is compared with the text after `alias.` of each key without regard to case, and the last value git prints for a name is the alias, as git itself chooses.
-    - The command's directory. It is the hook event's `cwd` (the guard's own directory when the event has none), changed by each `cd <dir>` or `pushd <dir>` with one literal operand that stands earlier in the same command list and is joined to the git command by `;`, a newline or `&&`, up to the `)` that closes the subshell or substitution it stands in, and by the directory option of a wrapper the guard reads (`env -C <dir>`, `sudo -D <dir>`). A `cd` in a pipeline, in the background or after `||`, `cd -`, `cd` with no operand and `popd` change nothing.
-    - A value the guard cannot read. An option value, an assigned value or a `cd` operand that the shell would expand (it holds `$`, a backtick, a substitution, a glob character or a leading `~`) is left out of the lookup, which then runs with the rest, so the global file is still read. The form is listed in the head comment under "Not seen".
-    - A `!` alias. Its text is checked from the repository's top folder, where git runs it, read with `git <options> rev-parse --show-toplevel`; when that fails, from the command's directory.
-    - The results. Exit 0 gives the aliases. Exit 1 gives none. Any other exit status (a malformed configuration file, a folder that cannot be entered) gives none and the command is allowed, since git refuses the command itself for the same reason.
-    - Two new blocks. All lookups of one run of the guard share 5 seconds. A lookup that has not ended when they are used up blocks the command with `git-guard: blocked: <command> (git config did not answer within 5 seconds, so what git <name> runs is not known; it is run by the user by hand)`. A `git` that cannot be started from the guard's `PATH` blocks it with `git-guard: blocked: <command> (git could not be started to read the aliases, so what git <name> runs is not known; it is run by the user by hand)`. Neither applies to a subcommand the guard checks, which is never looked up.
-    - An alias named as one of git's own commands (`status = push`) is expanded by the guard, though git ignores it: the guard holds no list of git's commands, and `git status` is then blocked in a repository with that alias. The head comment says so.
-    - Listed under "Not seen": an alias written to a configuration file and used in the same command (`git config alias.x push && git x`), since the lookup runs before the command and any program can write the file.
-    - Pro: the lookup finds what git would run in each form the probes found, with one process for each distinct set of options. Con: the guard follows `cd`, which needs the lexer to keep how each simple command is joined to the one before it, the largest change of the step; and a machine whose hook has no `git` on its `PATH` has every git command outside the checked operations refused until `PATH` is put right.
-  - (b) The ruled sentence as written: `git -C <directory> config --get alias.<name in lower case>`, the directory being the event's `cwd` with each literal `-C`, 5 seconds for each lookup, and a lookup that fails or does not end allows the command. Every form of the list above is named under "Not seen". Pro: the smallest change, and no new block. Con: each probed form runs its alias unchecked, among them `git -C "$PWD" <alias>`, which the plan skills' own commands resemble. This is the lazy option.
-  - (c) (a), and the guard also reads an alias written earlier in the same command: `git config [--global | --local | --worktree | --system | --file <file>] [set] alias.<name> <value>` as a simple command before the git command counts as an alias given inline. Pro: the direct form of writing and using an alias in one command is blocked. Con: a file written by `echo`, `sed` or a script is still not seen, so the cause stays, and the guard gains a second reader of `git config`'s own options.
-  - Recommendation (a). It is what the ruling asked for, a guard that knows what an aliased command runs, made true for the forms git accepts. (c) adds a reader for one way of writing a file that any program can write. Step 2b does not wait for this ruling and is built first; both steps write `git_guard.py`, so 2a is prepared after 2b lands.
-
-- Step 2b, the forced checkout and switch (2026-09-30, raised at /spec of step 2b): your ruling "Other commands that discard work" blocks `git switch --discard-changes` and leaves `git checkout -f <branch>` allowed "after a grep of the skills for it". Probes on git 2.49.0 in a scratch repository, and that grep, show three things. `git switch -f` and `git switch --force` are git's other names for `--discard-changes`: each switched branch and discarded a modified file. `git checkout -f <branch>` and `git checkout --force <branch>` (any prefix from `--f`) do the same, and `git checkout -f` with no branch discards every change in the tree, as `git checkout .` does, which the guard blocks. No skill and no script under `utils/` runs a forced checkout or any `git switch`: `git grep -n -e 'git checkout' -e 'git switch' -- skills utils` prints `land.sh` (two plain checkouts), `spec` (`git checkout --theirs -- <path>`) and `pin.sh` with its test (`checkout -q --detach`, `checkout -q -- <path>`), none with `-f` or `--force`. Options:
-  - (a) Step 2b blocks `git switch` with `--discard-changes` (or a prefix from `--di`), `-f` or `--force`, and `git checkout` with `-f` in a short-option word or `--force` (or a prefix from `--f`), with the messages `git switch --discard-changes discards work and is run by the user by hand` and `git checkout --force discards work and is run by the user by hand`. Pro: the same operation is blocked under each of its names, and no command of the skills is refused. Con: it reverses the part of your ruling that leaves `git checkout -f <branch>` allowed; an agent that must leave a modified tree for another branch asks you.
-  - (b) Step 2b blocks `git switch` with `--discard-changes`, `-f` or `--force`, and `git checkout -f` stays allowed, as ruled. Pro: the ruling stands as given. Con: `git checkout -f`, with or without a branch, discards the same work unchecked.
-  - (c) Step 2b blocks only the spelling `--discard-changes`. Con: `git switch -f` does the same and passes. This is the lazy option.
-  - Recommendation (a). Until you rule, step 2b is prepared with (b), the reading of your ruling that blocks the most without reversing it.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -83,6 +55,10 @@ dispatch: none
 - pyright for Python templates (2026-09-30): Axel ruled (a), the orchestrator installing pyright; step 2c.
 
 - Step 2 reading (2026-09-30): approved by Axel; step 2 ticked.
+
+- Step 2a, what the alias lookup reads (2026-09-30): Axel ruled (a); the text is under "Step 0 of step 2a" in `plan.md`.
+
+- Step 2b, the forced checkout and switch (2026-09-30): Axel ruled (a); `git checkout -f` and `--force` are blocked with the forced `git switch`.
 
 ## The standing demands (from Axel, in force)
 
@@ -106,5 +82,6 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
-- Step 2a is stopped at /spec on the open item "Step 2a, what the alias lookup reads".
-- Next: step 2b, then step 2a once ruled, then 2c alone, then step 3, the closing.
+- Step 2a is ruled ("Step 2a, what the alias lookup reads", (a)) and is prepared after step 2b lands, since both write `git_guard.py`.
+- Step 2b is ruled ("Step 2b, the forced checkout and switch", (a)); its brief is being changed to the ruling and checked.
+- Next: step 2b, then step 2a, then 2c alone, then step 3, the closing.
