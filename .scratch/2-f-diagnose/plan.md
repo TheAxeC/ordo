@@ -56,7 +56,19 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
 
 ## Blocked, and by what
 
+- 3a: the open items "Step 3a, which verification commands the run after the fix runs" and "Step 3a, the booking of what a fix does not cover".
 - 4: step 3a, then the second run of the comparison and Axel's call on its record.
+
+### Step 0 of step 3a
+
+- Step 3a, which verification commands the run after the fix runs (2026-09-30, raised at /spec of step 3a from its brief check, finding F21): your ruling "Step 4, the call on the blind comparison" words it as "the repository's verification commands that read the changed files". In the first comparison the `diagnose` run wrote "Not run: the other suites ... The change touches only the two pin files", and judge 2 counted the suite it skipped against it. Under the ruled wording the run decides which commands read a changed file, and can skip one again.
+  - (a) The ruled wording stays: Steps 20 of `diagnose` reads "The repository's verification commands that read a changed file are run, as its rules file or its verification page lists them, and the record says so when the repository lists none." Pro: a diagnosis in a large repository does not run every suite. Con: which commands read a changed file is a judgment of the run, and a wrong one skips a suite that would have failed. This is the lazy option.
+  - (b) All of them: the sentence reads "The repository's verification commands are run, each one its rules file or its verification page lists, and the record says so when the repository lists none.", and the record template's line reads "<the repository's verification commands, each one, and their output, or that the repository lists none>". Pro: nothing is left to a judgment, and it is what the judge counted. Con: each diagnosis takes as long as the repository's whole verification list.
+  - Recommendation: (b). The landing of a step runs the whole list anyway, and a fix that breaks another suite is found there at a higher cost.
+- Step 3a, the booking of what a fix does not cover (2026-09-30, raised at /spec of step 3a from its brief check, finding F8): the brief has `diagnose` write each case its fix does not cover into the record's "Not covered" section and into each hand-over. Inside a plan the landing's booking is where a cause is kept, and `land` Steps 9 books each diagnosis record "with its cause, or with "cause not found" and the open item it was raised as, or with "false premise"". It does not name what the fix left uncovered, and `skills/land/SKILL.md` is outside the step's paths.
+  - (a) Step 3a's paths widen by `skills/land/SKILL.md` line 93 and one sentence of `diagnose`. Line 93 of `land` becomes "It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause and each case its "Not covered" section names, or with "cause not found" and the open item it was raised as, or with "false premise"." The "Done when" of Steps 24 of `diagnose` becomes "Done when the bullet is drafted and shown or committed, or, inside a plan, when the record's path, the cause and each case of "Not covered" are written for the landing's booking." Pro: a reader of `plan.md` sees what a landed fix left open without opening the record. Con: one more file in the step.
+  - (b) `land` stays as it is: the booking names the record with its cause, and the record holds "Not covered". Pro: the step stays in the `diagnose` folder and the glossary. Con: what a fix left open is one file away from the booking, where nobody looks for it. This is the lazy option.
+  - Recommendation: (a).
 
 ### Step 0 of step 4
 
