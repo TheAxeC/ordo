@@ -45,9 +45,11 @@ dispatch:
   launched: 2026-09-30 05:44
   session_id: a9bba431490a852e7 (claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-g-git-guard/agents/reviews/1-report.md
+  builder_usage: round 0 237370 tokens, 45 tool uses, 1580 s ($2.39-5.52)
+  reviewer_report: .scratch/2-g-git-guard/agents/reviews/1-refuter.md (claude-opus-5-5; 173997 tokens, 42 tool uses, 748 s, $2.16-5.21; a first reviewer, stopped on a permission prompt after 16 min and not used, cost $0.83-3.21)
   brief_check: .scratch/2-g-git-guard/agents/reviews/1-brief-check.md (claude-opus-5-5; 139503 tokens, 37 tool uses, 439 s)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)

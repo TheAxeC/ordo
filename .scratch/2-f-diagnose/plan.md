@@ -38,6 +38,8 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
 
 - Step 1, where a diagnosis is booked (2026-09-30, decided by the orchestrator overnight, from step 1's review): inside a plan the landing's booking names each diagnosis record with its cause, and `/land`'s text says so; step 2's paths widen to `skills/land/SKILL.md` (Steps 9, the booking) beside `plan-orchestration`'s "Only known fixes". Options: (a) that; (b) `diagnose` alone tells the orchestrator to book it, `land` unchanged; (c) a new step. Recommendation (a): the booking is `land`'s, and the Goal's "the cause written in the booking" is reached only when `land` writes it. The lazy option is (b), which leaves a booking no skill that writes bookings asks for.
 
+- Step 2, the places a cause not known is met (2026-09-30, decided by the orchestrator overnight, from step 2's brief check): step 2 wires `diagnose` into every place a reader meets a cause not known or a diagnosis, beyond the step line's places: `plan-orchestration` Steps 9 and "Use instead", `land` "Use instead", `refute` "Use instead", `spec` Steps 4 and "The brief check" 4, `diagnose`'s own pointers to the changed text, the pipeline and plan-loop figures with their alt text, the glossary's **booking** and **Step 0**, and the glossary template's line naming the skills; its paths widen to those files. Options: (a) that; (b) the step line's places only. Recommendation (a): a skill wired in is reached from every neighbour where the case is met, and (b) leaves `diagnose`'s own pointers false. The lazy option is (b).
+
 ## Blocked, and by what
 
 - 2: 2.E's step 10 renames `plan-help` to `ordo-help`; step 2 edits whichever name is on main when it is prepared.
