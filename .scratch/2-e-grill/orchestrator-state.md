@@ -58,12 +58,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 9a, the sentence on stops marked "every run" (2026-09-30, raised from the review of step 9a, `agents/reviews/9a-refuter.md`, Standards 4): option (a) of your ruling "Step 9a, how a skill is given the ruling and what the ruling must hold" words the sentence of the README, the glossary and the stops figure as "A stop marked "every run" waits on you each time, unless the run is under a quoted ruling that states the change." The step wrote it so. Of the stops the figures mark "every run", a quoted ruling lifts those of `/plan`, `/roadmap`, `/ordo-init` and `/repo-setup`, and in `/grill` only the roadmap diff. It does not lift the rounds and the end of `/grill`, the proposals of `/session-retro`, or the roadmap diff of a plan's closing, so a reader can take the sentence to cover those too.
-  - (a) The sentence stays as you ruled it. Pro: nothing changes. Con: it reads as covering every stop marked "every run", which is false for three of them. This is the lazy option.
-  - (b) The sentence becomes two, in `README.md` line 54, in the glossary entry **mark, of a figure** (`skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md`) and in the note of the stops figure (`docs/figures/gen_figures.py`, with `pipeline.svg` and `plan-loop.svg` written again by the script, the note on two lines and the panel as much taller): "A stop marked "every run" waits on you each time. `/plan`, `/roadmap`, `/ordo-init` and `/repo-setup` write a change a quoted ruling states without it, and `/grill` a roadmap diff." The figure's note drops "on you" as it does today. The orchestrator makes the change as a fix at the landing of step 9a, since the step's one repair round is sent. Pro: the sentence says which stops a quoted ruling lifts. Con: a longer note in the figure.
-  - Recommendation: (b).
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- Step 9a, the sentence on stops marked "every run" (2026-09-30): withdrawn as an open item; the orchestrator took (b), booked in plan.md Rulings under "Step 9a, the round's choices" (6), a fix at the landing of step 9a.
 
 - Step 9a, a file of `/repo-setup`'s draft that comes from no template (2026-09-30): Axel ruled (a); booked in plan.md Rulings.
 
@@ -118,5 +117,5 @@ dispatch:
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
-- Step 9a is prepared under its three rulings and its brief has had four brief checks (`agents/reviews/9a-brief-check.md`); it is built and reviewed (`agents/reviews/9a-refuter.md`), and repair round 1 is sent to its builder, the one round the plan allows; the open item "Step 9a, the sentence on stops marked "every run"" is raised from the review and, ruled (b), is a fix at the landing. The step is in flight beside step 2b of plan 2.G, which writes other lines of `skills/repo-setup/SKILL.md` and `README.md`. Before its landing, five fresh agents make the scratch runs the step's line names.
+- Step 9a is prepared under its three rulings and its brief has had four brief checks (`agents/reviews/9a-brief-check.md`); it is built and reviewed (`agents/reviews/9a-refuter.md`), and repair round 1 is sent to its builder, the one round the plan allows; the sentence on stops marked "every run" is changed at the landing, as choice (6) of "Step 9a, the round's choices" says. The step is in flight beside step 2b of plan 2.G, which writes other lines of `skills/repo-setup/SKILL.md` and `README.md`. Before its landing, five fresh agents make the scratch runs the step's line names.
 - Next: step 9a; step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.
