@@ -48,8 +48,8 @@ dispatch:
   session_id: aaf2a244958131899 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-f-diagnose/agents/reviews/2a-report.md
   brief_check: .scratch/2-f-diagnose/agents/reviews/2a-brief-check.md (ordo-high, claude-opus-5-5; 170502 tokens, 19 tool uses, 491 s, $0.92-3.78)
-  builder_usage: round 0 161787 tokens, 37 tool uses, 519 s, $1.32-2.61 (claude-sonnet-5-5)
-  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2a-refuter.md (ordo-high, claude-opus-5-5; 22 tool uses; 2 Proof, 5 Standards, 2 Behaviour findings)
+  builder_usage: round 0 161787 tokens, 37 tool uses, 519 s, $1.32-2.61 (claude-sonnet-5-5); round 1 209610 tokens, 12 tool uses, 250 s
+  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2a-refuter.md (ordo-high, claude-opus-5-5; 173973 tokens, 26 tool uses, 556 s, $1.19-4.48; 2 Proof, 5 Standards, 2 Behaviour findings)
   round_brief: .scratch/2-f-diagnose/agents/briefs/2a-round-1.md
   landing: not-started
   round: 1
