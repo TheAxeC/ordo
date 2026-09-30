@@ -155,4 +155,7 @@ When the roadmap's introduction links an index as the map of what the product is
 - Nothing is added that the user did not ask for.
 - Entry text states the goal, the gate and the dependencies, except that an entry under "Not yet specified" states the goal and what must be known, as the next rule says.
 - Every entry this skill writes has a goal and a gate, since `/plan <entry>` matches `<entry>` against the entries by number or title and copies the entry's goal and gate into the plan; an entry under "Not yet specified" has a goal and what must be known before its gate can be named in place of a gate.
+- A goal names another repository only where the entry reads or changes it, such as the source of a migration.
+- A gate and a dependency name another repository only under the same condition, such as the target of a switch-over or the repository a gate runs on.
+- A file or folder in another repository is written as its path from the folder that holds this repository, such as `<other-repository>/tools/scripts`. This and a quoted command with its output, which keeps the paths it had, are the exceptions to the next rule.
 - Every path is relative to the repository root.

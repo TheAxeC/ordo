@@ -189,7 +189,9 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
 ### A stop
 
 1. Leave three things and nothing else.
-   - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns, and one recommendation with its reasons.
+   - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
+     - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling then approves them too.
+     - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, and the approval stop of a skill the option runs, such as `/roadmap`'s shown diff, stay stops of their own, and the option names each of them.
    - The same text under the step's Step 0 in `plan.md` or the part file it names.
    - The ledger files the session wrote, committed by path as a resume point, so the stop survives the session.
 2. No brief, no worktree and no dispatch block exist for the stopped step.

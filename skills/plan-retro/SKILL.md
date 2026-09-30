@@ -82,7 +82,7 @@ The skill checks where the rule should have come from, in this order, and propos
    - It quotes the findings that show how builders read the current text.
 4. **Whether the rule is kept is a fact a machine computes.** Only then may the proposal add a check beside the change of 3: a grep over the diff, a lint rule or a script over the tree.
    - It states what the check computes, its command, the output it gives on the current tree, and the line to add to the verification page so every step runs it.
-   - The user approves what it computes before it is written.
+   - The user's decision on the proposal approves what it computes, before it is written.
    - A rule whose breach is judged by reading gets no check.
 
 ## Stops

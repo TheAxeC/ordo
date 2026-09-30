@@ -141,3 +141,146 @@ none. The report states each user-visible change with its before and after.
 - Whether "a ruling on an open item" should also cover a decision Axel gives outside an open item, such as a `/grill` answer (step 12). That is a design choice for Axel.
 
 Reviewer usage: tokens and minutes not visible to me (not verified); about 25 tool uses.
+
+## Repair round 1, refuted
+
+Run on the worktree `.agents/worktrees/2e-9`, base 9f667d6d8566f9edd8f304a9391e660fa3aeb403, with the changes uncommitted. The round's delta is `git diff 9f667d6 -- . ':!.scratch'` compared with `.scratch/2-e-grill/agents/reviews/9-round-0.diff`, read with `diff`. I changed nothing.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md; echo "rc=$?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 8 commands passed
+rc=0
+
+A  git grep -n -c "already approved in full" -- skills; echo rc=$?          -> rc=1, nothing
+B  git grep -n "approved by a ruling" -- skills docs                          -> docs/glossary.md:10, plan-terms.md:5 (the term); plan/SKILL.md:58, :76; roadmap/SKILL.md:48, :129; ordo-init/SKILL.md:80, :96, :103, :107, :119; repo-setup/SKILL.md:57, :58, :99, :151, :153, :173
+   on the base: git grep -n "approved by a ruling" 9f667d6 -- skills docs README.md -> rc=1
+C  git grep -n "names another repository" -- skills                          -> skills/roadmap/SKILL.md:158 (rc=0)
+D  git grep -n "another repository" -- skills/roadmap/SKILL.md               -> :158, :159, :160; on the base, rc=1 over skills docs README.md
+E  git grep -n "research-hub" -- skills ':!skills/repo-setup/templates'      -> rc=1, nothing
+F  git grep -n -E "approval it would need later|need approved later" -- skills docs README.md -> docs/glossary.md:50, plan-orchestration/SKILL.md:298, plan/templates/orchestrator-state.md:38, repo-setup/templates/plan-terms.md:45, spec/SKILL.md:193
+G  git grep -n "The user approves what it computes" -- skills               -> rc=1
+H  grep -n -E "research-hub's|`tools/manuscript`" docs/roadmap.md            -> rc=1
+I  git diff --stat 9f667d6 -- . ':!.scratch' | tail -1                       -> 11 files changed, 31 insertions(+), 22 deletions(-)
+J  git diff --name-only 9f667d6 | while read f; do LC_ALL=C grep -n '[^ -~]' "$f"; done -> nothing
+Exact text: a python check found every text the round brief dictates, whole, in the changed files. The When cells were read in the grep B output.
+Open items: the report's "Open items of the state file, verbatim" section, compared with the state file's Open items section by diff: IDENTICAL.
+Main checkout, git status --short: " M .scratch/2-e-grill/agents/reviews/9-report.md", " M .scratch/2-e-grill/orchestrator-state.md". The saved report and the worktree copy are identical (diff).
+```
+
+Every command the builder's round section quotes printed what it quotes. Case C prints line 158, which the round brief's own dictated bullet contains. That is the round brief's error, as the builder reports, and not the builder's.
+
+### The first report's findings
+
+- **Spec 1: closed.** `plan-orchestration:298-299` and `spec:193-194` now limit the rule to an approval "whose content exists when the option is written". An approval of work not yet done, such as Axel's reading of a page a step will write, "stays a stop of its own". Take an open item whose option needs that reading: the reading stays a stop, which agrees with the ruling "Overnight work" 2.
+- **Spec 2: closed.** `/plan` Steps 3 and its Stops row "The drafted step list" now carry the exception. The exception opens a new gap, Finding 5.
+- **Spec 3: partly closed.** The term now names where the ruling goes (the commit message) and when the exception applies (the invocation quotes the ruling, and the draft is the change the ruling stated). These mechanics are written only in the glossary, which none of the skills applying them reads, so the rerun does not show a session reaching them (Finding 1). A repository whose commit rule forbids commits has no commit message for the ruling (Finding 2).
+- **Spec 4: closed.** A quoted command and its output now keep their paths. The wording that closes it leaves "the one exception" false (Finding 6).
+- **Spec 5: closed.** The two open items are quoted verbatim (the diff above), and the round section notes a first read of the reading cases on the base. The report's earlier sections still say "Everything in the brief is done" and "None from this step"; the round section says it replaces them.
+- **Standards 1: closed.** The example is now `<other-repository>/tools/scripts`, and grep E prints nothing.
+- **Standards 2: closed for each place it names.** Each "When" cell now holds its exception. With that, the notes "each waits on the user" (`roadmap:141`, `repo-setup:158`) are true again, since a row whose condition is not met does not fire. The same contradiction remains in places the finding did not list (Finding 3 and Finding 4).
+- **Standards 3: closed.** The goal and gate rule is split into bullets 158 and 159, and the item 9 bullet is gone. The clause "A goal says what the work delivers" was dropped rather than moved into a bullet of its own. No ruling or step line asks for that clause, so nothing a ruling required was lost.
+- No closure removes a check, and no change reaches beyond what the round brief dictates.
+
+### Verdicts
+
+Items of the brief's "What to build", as the round brief replaces them:
+
+- 1: holds. The round's text of point 7 is at `plan-orchestration:298-299`, after the question-box sub-bullet.
+- 2: holds. `plan-orchestration:204` is exact.
+- 3: holds. `spec:192` is exact, and `:193-194` hold the round's text of point 7.
+- 4: holds. The state template's line 38 is changed as dictated (read in the diff).
+- 5: holds. `plan-terms.md:45` is changed as dictated, the glossary is synced, and the sync prints ok.
+- 6: holds. `plan-retro:85` is exact.
+- 7: holds. `roadmap:158-160` hold the round's text of point 8. The wording of 160 is Finding 6.
+- 8: holds. `docs/roadmap.md:151` is exact.
+- 9: holds as the round's points 1 to 6 replace it. The bullet is gone from the three skills (grep A), and the term and the sixteen uses are written exactly (grep B and the python check). The contradictions still open are Findings 1 to 5.
+- Round point 9: holds (the open-items diff above).
+
+Cases:
+
+- The "approval it would need later" grep: met (grep F, five files).
+- The "The user approves what it computes" grep: met (grep G).
+- The "already approved in full" grep, with the round's expectation of nothing: met (grep A).
+- The "names another repository" grep: met under the reading of case D. The round brief's expectation of nothing is its own error.
+- The "approved by a ruling" grep: met (grep B, the term and each use).
+- The "research-hub" grep over skills: met (grep E).
+- The `research-hub's|tools/manuscript` grep on `docs/roadmap.md`: met (grep H).
+- The sync ok line: met.
+- The diff-stat case: met. The counts are 11 files, 31 insertions and 22 deletions, as the report states.
+- Reading, skill layout: partial. Each bullet holds one rule at the right indentation, and "project" is not used in the new roadmap bullets. The rules the term carries break skill layout's "Where a rule goes" (Finding 1).
+- Reading, `roadmap:156`'s "the next rule": met. It still points at 157.
+- Reading, the one-ruling sentences against the recurring-findings pass, `plan-retro` and the rules file: met.
+- Reading, rule 19 against the approval stops: partial (Findings 3 and 4).
+- Reading, the roadmap bullets against `docs/roadmap.md` 73, 151, 172, 179 and 218: met. Line 218's absolute path now falls under "a quoted command ... keep[s] the paths they had". The wording is Finding 6.
+- Round reading, each changed stop has its exception in the same row or step: met.
+- Round reading, `ordo-init` Rules 1 against Steps 11: met.
+- Round reading, the term against each place that uses it: partial (Finding 1).
+- Round reading, the two new `plan-orchestration` sub-bullets against the ruling "Overnight work" 2: met.
+
+### Findings
+
+1. **Standards (skill layout, "Where a rule goes"; plan-terms format, "Stated in").** Glossary term `plan-terms.md:5`, `docs/glossary.md:10`: "when the invocation quotes that ruling and the drafted change is the change it stated. The skill writes it without its approval stop and names the ruling in the commit message. Stated in: `plan`, Steps 3; `roadmap`, Steps 4; ..."
+   - What is wrong: the term carries three rules for one point of the work: quote the ruling in the invocation, compare the draft with the ruling, and name the ruling in the commit. None of them is written in the steps it lists under "Stated in". Those steps only use the phrase "approved by a ruling".
+   - The commit steps say nothing about naming a ruling: `roadmap` Steps 5 ("the subject naming the entry and what changed"), `ordo-init` Steps 14, `repo-setup` Steps 12 and sync 9, and `plan` Steps 6.
+   - Nothing in `plan-orchestration:298` or `spec:193` tells the orchestrator to quote the ruling when it invokes the skill.
+   - No skill's "What it reads" lists `docs/glossary.md` (`git grep -n -i glossary -- 'skills/*/SKILL.md'` finds only a mention in `ordo-init:67`).
+   - Skill layout says "A rule that says what to do at one point of the work goes in that step's item". Every other term's "Stated in" points at text that states the rule; for example, `plan`'s Rules states **authority**.
+   - `ordo-init`'s "Checking an existing file" 5, which also uses the term, is missing from its "Stated in".
+   - Failure scenario: after a ruling like "Open item B", the orchestrator runs `/roadmap` and quotes no ruling, because nothing it reads asks for that. `/roadmap` reads "or at once when it is approved by a ruling" in plain English, takes the invoker's word for it, writes a draft that may differ from the ruled text, and commits with a subject that does not name the ruling.
+   - Verdict: the skill-layout reading case and the term-uses reading case are partial.
+
+2. **Spec (the term against the commit rule).** Same term: "names the ruling in the commit message". `ordo-init` "What it reads" 3: "or, when it runs alone, the user's answer at the approval stop of Steps 11".
+   - What is wrong: when `/ordo-init` runs alone, its commit rule comes from the approval stop the ruling now skips, so the session has no commit rule.
+   - Under `/repo-setup`, and in any repository whose commit rule forbids commits (the default answer to question 5 is "commit only when told"), the skill writes no commit. It raises "No commit allowed" and the user commits, so the ruling is named nowhere.
+   - Failure scenario: `/ordo-init` is run alone under a ruling. The session then does one of three things, each wrong: it asks the commit question (a second stop), commits without a commit rule, or stops at "No commit allowed". In the last case the user's commit message carries no ruling, although the term says the skill names it.
+   - Verdict: the term-uses reading case is partial.
+
+3. **Spec (rule 19 of the change standard).** Stops the exception does not reach, which the term's "Stated in" and `plan-orchestration:298` ("with no second stop") contradict:
+   - `repo-setup` Stops "The questions" ("Every setup, at Steps 2") and `ordo-init` Stops "Worker, reviewer and libraries" ("Every setup, at Steps 6") both come before the draft. A ruling that stated the draft in full already holds those answers.
+   - `repo-setup` Steps 8, "Run `/ordo-init`, with its own draft and approval". The Tree gives `.agents/plan.yaml` and `docs/dev/building.md` to `/ordo-init`, so `/repo-setup`'s ruled draft does not hold them.
+   - `repo-setup` sync 3 and its Stops row "A hunk to rule on" (`sync` exits 1, "`--write`, after the approval"). This is the usual sync of a changed block, and the term covers only sync 6, the exit-2 path.
+   - Failure scenarios:
+     - An open item's option states a new repository's whole setup, and Axel rules it. `/repo-setup` still asks the nine questions, and then runs `/ordo-init`, which stops for its own draft: two stops after one ruling.
+     - An option states "sync the plan-terms block of repository X" with its diff, and Axel rules it. `sync` exits 1 and stops per hunk.
+   - Verdict: the rule-19 reading case is partial.
+
+4. **Standards (rule 19).** `skills/ordo-init/SKILL.md:124`, Rules 5: "A change to an existing file, `.gitignore` included, is shown as a diff and made after approval."
+   - What is wrong: the brief's rule-19 case names this line. It has no exception, while Steps 10 shows the `.gitignore` change "as Rules 5 says" and Steps 11 now skips the stop for a ruled draft. Check fixes to an existing file ("Checking an existing file" 5) fall under it too.
+   - Failure scenario: a ruled draft that adds `/.agents/worktrees/` to an existing `.gitignore`. Steps 11 says to write it at once, and Rules 5 says to show the diff and wait for approval. Depending on which one the session follows, it either stops a second time or breaks a rule of its own skill.
+   - Verdict: the rule-19 reading case is partial.
+
+5. **Spec / Behaviour.** `skills/plan/SKILL.md:58` ("or at once when the step list is approved by a ruling") and `:76`.
+   - What is wrong: the Steps 3 stop shows more than the step list. It also shows the goal, the gate, and the answer to "could this pass without the goal being reached?" for the gate and for each step's check.
+   - Steps 2 sends a weak copied gate "to the user at Steps 3, since the gate is the roadmap's and the user's".
+   - Those answers are drafted after the ruling, which makes them work not yet done when the option was written. `plan-orchestration:299` keeps such work a stop of its own, but `plan`'s exception is conditioned on the step list alone.
+   - Failure scenario: `/plan` is opened on an entry whose ruled option stated the step list. The copied roadmap gate is "the file exists", and Steps 2 answers "yes, it could pass". The session writes `plan.md` at once, and Axel never sees that the gate can pass without the goal.
+   - Verdict: the rule-19 reading case is partial.
+
+6. **Standards.** `skills/roadmap/SKILL.md:160`: "..., the one exception to the next rule; a quoted command and its output keep the paths they had."
+   - What is wrong: the added clause is a second exception to "Every path is relative to the repository root" (for example, `docs/roadmap.md:218`'s `/Users/...` path), so "the one exception" is now false. The text is dictated.
+   - Failure scenario: a session applying "the one exception" to a `done` record rewrites an absolute path inside a quoted gate command to a relative one, because it reads the path-form bullet as the only exception.
+   - Verdict: none. Item 7 holds as dictated, and the roadmap reading case is met.
+
+### Declined to judge
+
+- Open item B's change (roadmap entry 11's goal rewritten) is not an `add`, `move`, `done` or `drop`, and `/roadmap` has no command that edits an entry's goal. The skill text is not in this step's diff, so the gap predates the step.
+- Whether a ruled step list is tagged `(approved)` or `(ruling <name>)` in the new `plan.md`. Steps 3 says `(approved)`, and the Rules tie `(ruling <name>)` to a line of the new plan's own Rulings. This is Axel's design call.
+- Whether the term **open item** and the state template (`orchestrator-state.md:38`) should carry the same limit "whose content exists when the option is written". They only ask for the later approvals to be listed, so they do not contradict `plan-orchestration:299`.
+- Whether the one-ruling rule should also cover a decision Axel gives outside an open item, such as a `/grill` answer. This is Axel's design call.
+
+Reviewer usage: tokens and minutes not visible to me (not verified); 24 tool uses.
