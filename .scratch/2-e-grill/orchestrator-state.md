@@ -36,7 +36,18 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: 12a
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2e-12a
+  base: ef5d3a9a46dc06898c1a09544142a1c740de6eb8
+  launched: 2026-09-30 04:27
+  session_id: ac6b1b3f4e4cf034e (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
+  report: .scratch/2-e-grill/agents/reviews/12a-report.md
+  brief_check: .scratch/2-e-grill/agents/reviews/12a-brief-check.md (claude-opus-5-5; 132593 tokens, 26 tool uses, 287 s)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -85,5 +96,5 @@ dispatch: none
 
 - 2026-09-30. Steps 1 to 5 and 7 to 11 landed and ticked; steps 6 and 12 landed unticked, their reading by Axel pending (open items "Step 6 reading" and "Step 12 reading"). `worker: claude:sonnet` for every builder (ruling "Overnight work" 1). Plans 2.F, 2.G and 2.H are open beside this one.
 - Verified: `checks.sh` on main printed `checks: 8 commands passed` after step 12's fixes at landing.
-- Next step: 12a, figures in the form of research-hub's (after 12); it lands unticked, its check being Axel's reading (ruling "Overnight work" 2). Unblocked: 2.F steps 1 and 2 and 2.H step 3.
+- In flight: step 12a, figures in the form of research-hub's (after 12); it lands unticked, its check being Axel's reading (ruling "Overnight work" 2). Unblocked: 2.F steps 1 and 2 and 2.H step 3.
 - Open on Axel's side: the readings of steps 6 and 12; the old rule 13 in game-engine and cathedra; approval stops under a ruling; the old skill name in other repositories.
