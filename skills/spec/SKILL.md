@@ -131,7 +131,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - The patch stays in the ledger.
      - `/spec` run again prepares the step with that patch.
    - `/spec` run again redoes Steps 2 from the start, so the premise checks and their amendments are made again on the tree as it then is.
-   - A step that goes on runs "Steps / The brief check", after the path comparison and before the preparation commit.
+   - A step that goes on runs "Steps / The brief check", after the path comparison and before the preparation commit, unless the step's brief-check report already stands in the ledger.
+   - A step with such a report is not checked again: the session closes the report's findings in the brief it has written, by the rulings booked since, and goes on.
    - Steps 5 is done when every finding of the brief check is closed in the brief, or when the step waits or has stopped.
 6. Make the preparation commit, a resume point ("Rules").
    - It holds the brief, the brief check's report, the patch of a step taken back out of main, and each of the session's own records (Steps 1).
@@ -222,6 +223,7 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
      - the session shows the user the new record and commits these files by path at once, a resume point, so that `/spec` or `/land` in any session reads them;
    - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6).
 3. Then `/spec <entry> <step>` is typed again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
+   - A step whose brief check has run is not checked again (Steps 5).
 
 ### The brief check
 
@@ -246,17 +248,20 @@ Steps 5 says when this runs.
    - The checks are done when each has its findings, or "none".
 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
    - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's served model (item 1) and its tokens, tool uses and time from its completion notice.
-   - When that file already holds the report of an earlier run of the step, one that stopped, the session appends the new report below it, whole, its title line naming the commit it ran on.
+   - A step has one such report, since the check runs once per step (item 4).
 4. The session closes each finding by a change to the brief, before the preparation commit.
    - Each change is named under the report's "Closed" heading, beside its finding.
    - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
-   - The check runs once per `/spec` run: the brief as changed goes to the builder without a second run.
+   - The check runs once per step: the brief as changed goes to the builder without a second run, and a `/spec` run after a stop or a ruling does not check the step again.
+   - When the findings cannot be closed by changes to the brief as written, the session writes the brief again once, from the step's line, the rulings and the report, and that brief goes to the builder without a check.
+   - A brief that still cannot be written is the stop "A brief check finding the brief cannot absorb" ("Stops"), raised once with every finding left.
    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
+   - Every such finding of the report is raised in that one stop, so the user rules on all of them in one reply.
    - A contradiction the **ADRs** check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says. One found only in the brief's own wording is closed by a change to the brief that follows the ADR.
    - At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
    - At such a stop the report is among the ledger files the stop commits.
    - This item is done when every finding has its change under "Closed", or the step has stopped.
-5. The dispatch entry (Steps 9) records the report's path under `brief_check`, with each run's served model and its tokens, tool uses and time, an earlier run's read from its usage line in the report.
+5. The dispatch entry (Steps 9) records the report's path under `brief_check`, with the check's served model and its tokens, tool uses and time, read from the report's usage line in a later `/spec` run of the step.
    - The report is committed as Steps 6 says.
 
 ## Stops
@@ -268,7 +273,7 @@ The first five rows are stops, which leave an open item as "Steps / A stop" says
 | A false premise the plan cannot absorb | A premise the step's text makes is false on the tree, and its correction would change the step's scope or make a choice the user would see (Steps 2); the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
 | A rule clash with an ADR | The step's text contradicts the part in force of an ADR the step touches (Steps 2, or the **ADRs** check of "Steps / The brief check") | The open item, booked in the open items, naming the ADR and quoting the step's words that contradict it | A ruling |
 | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary, or, under `libraries: check`, a library could replace code the step would write by hand (Steps 3) | The open item, booked in the open items | A ruling |
-| A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
+| A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see, or a brief the session cannot write from the report in one rewrite ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
 | A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
 | A step without the user's authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling of the user in the Rulings section, or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | The user's ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |

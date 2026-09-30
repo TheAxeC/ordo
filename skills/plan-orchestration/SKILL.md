@@ -134,7 +134,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 - **Agents.** A builder, a reviewer or a brief-check agent runs on a Claude model, and never on Claude Fable.
 - **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names, at the effort `worker_effort` names, launched as "Launching a builder" says.
 - **Reviewer.** The model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
-- **Brief-check agent.** One per `/spec` run that reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+- **Brief-check agent.** One per step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
 - **Runner.** Both tiers run under Claude Code.
 - Any allowed combination is chosen per step.
 - A new combination is booked in the rulings with what decides it.
@@ -324,6 +324,8 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
   - The models it names are those in "The two tiers, and the models".
 - A fix of a defect in delivered work needs no yes.
 - The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing. A new finding of a review never earns that round, and the user's yes never extends the cap.
+- Nothing in the loop repeats without a count: a step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round.
+  - A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.
 - After its last round a step lands.
   - Its small findings, the last review's included, are fixed at landing.
 - Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops".

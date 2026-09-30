@@ -56,7 +56,7 @@ metadata:
 
 then, for every step:
 
-/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
+/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree once per step (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
 /diagnose <entry> <step> brief check <n>
                               when a finding of the brief check has a cause not known: finds the cause on a scratch copy before the finding is closed in the brief
 "build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report

@@ -35,7 +35,7 @@ The order of use, shortened from what `/ordo-help` prints:
 /plan <entry>                 once per entry: opens the plan, shows the step list for approval
 
 for every step:
-/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
+/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree once per step (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
 "build it"                    the session writes the code in the worktree, runs the checks, writes the report
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
 /diagnose <entry> <step> <finding>
