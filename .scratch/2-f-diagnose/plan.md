@@ -42,7 +42,12 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
 
 ## Blocked, and by what
 
-- 2: 2.E's step 10 renames `plan-help` to `ordo-help`; step 2 edits whichever name is on main when it is prepared.
+- 3: the open item "Step 3, who runs `/diagnose`".
+- 4: needs step 3's run on the same defect.
+
+### Step 0 of step 3
+
+- Step 3, who runs `/diagnose` (2026-09-30, at preparing step 3): the step runs `/diagnose` on the `utils/pin.sh` both-folders defect "in a fresh session", marked "orchestrator, no agent". The orchestrator cannot be that session, since it knows the cause (2.E step 3's `same_folder`, db9bbec), and run by hand the skill waits for your reply to its hypotheses (ruling "Step list" D2). `utils/pin.sh` also writes the stable folder and the skill links, which a scratch reproduction must redirect with `ORDO_STABLE`, `ORDO_SKILL_DIRS` and `CLAUDE_CONFIG_DIR`. Options: (a) you run `/diagnose` in a fresh Claude Code session on a scratch copy of the tree at db9bbec's parent, answering its hypotheses stop, and the orchestrator then books the run; pros: the run is the by-hand form the skill was built for, and nothing outside Ordo is at risk; cons: it waits for you. (b) A fresh Opus agent runs it overnight, told to go on at the hypotheses stop as under `plan-orchestration`; pros: done by morning; cons: the by-hand stop is skipped, and an agent free to probe `utils/pin.sh` can reach the real stable folder and skill links. Recommendation (a). The lazy option is (b), which tests a different form of the skill than the step asks.
 
 ### Step 1, the `diagnose` skill (landed 2026-09-30, Axel's reading pending)
 
