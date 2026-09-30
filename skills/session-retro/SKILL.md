@@ -144,7 +144,7 @@ metadata:
 
 ## The reader
 
-`templates/transcript_window.py` prints what was said and done in the transcripts of one transcript folder, with each secret replaced by `<REDACTED>`.
+`templates/transcript_window.py` prints what was said and done in the transcripts of one transcript folder, with the secrets of the forms it knows replaced by `<REDACTED>`.
 
 ```sh
 python3 <this skill's folder>/templates/transcript_window.py <transcript folder> <start> <end>

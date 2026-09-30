@@ -43,15 +43,17 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Git aliases (2026-09-30, step 1): a git alias defined in a configuration file (`git config alias.p push`, then `git p`) runs a blocked operation under another name, and the guard does not see it; an alias given inline in the command (`git -c alias.p=push p`, `GIT_CONFIG_KEY_0=alias.p`) is resolved by step 1 without running git. Options: (a) the guard resolves an unknown subcommand with `git config --get alias.<name>` in the command's directory and checks the expansion (a `!` alias as a shell command); pros: every alias is covered; cons: the script runs git on each call that uses an unknown subcommand, a computation beyond the approved one that needs your approval. (b) Configuration-file aliases stay outside the guard, and the docstring and the offer say so; pros: nothing runs; cons: such an alias gets through. Recommendation (a). The lazy option is (b). Step 1 is built without it; a yes adds it as a step by your ruling.
-- Other commands that discard work (2026-09-30, step 1): `git checkout -f <branch>`, `git switch --discard-changes`, `git stash drop` and `git stash clear` discard work, and `git send-pack` and `git subtree push` push, by commands the approved list of five does not name, so the guard lets them through (the brief check's "Declined to judge"). Options: (a) a step adds them to the guard's blocks; pros: the guard covers what the five cover in effect; cons: widens the approved list, and `git checkout -f <branch>` is a form the plan skills may need. (b) The docstring and the offer name them as not blocked. Recommendation (a) for `send-pack`, `subtree push`, `stash drop`, `stash clear` and `switch --discard-changes`, with `checkout -f` left allowed after a grep of the skills. The lazy option is (b). Step 1 is built with the five only; a yes adds a step by your ruling.
-- pyright for Python templates (2026-09-30, step 1): `skills/repo-setup/templates/docs/dev/coding-standards/python.md` says pyright type-checks every module, and `git_guard.py` is Ordo's first Python template script under it, but pyright is not installed here (`which pyright` prints `pyright not found`), so neither the builder nor the reviewers ran it. Options: (a) you install pyright (`npm install -g pyright`, a download from outside Ordo), and a later step adds `pyright skills/repo-setup/templates/hooks/git_guard.py` to the verify list and fixes what it finds; pros: the standard the template sets for Python holds for Ordo's own Python; cons: a new tool on the machine and a new verify command. (b) The verify list stays without pyright; pros: nothing to install; cons: Ordo's Python is held to less than the standard it hands to other repositories. Recommendation (a). The lazy option is (b).
-
-- Step 2 reading (2026-09-30): step 2, the git guard offered by `repo-setup`, landed unticked, since its check is your reading of the offer's text: question 10 and Steps 3, 5, 10 and 11 of `skills/repo-setup/SKILL.md`, its tree row and Rules, and `README.md` lines 13 and 111 (ruling "Overnight work applies to this plan"). One point for the reading, not verified: the hook runs the `python3` on Claude Code's PATH, and Steps 10 checks the one on the setup session's; an older one there makes the guard let every call through. Options: (a) you read it and tick step 2, or name what is wrong; (b) tick it unread. Recommendation (a). The lazy option is (b). Ordo's own settings text is in `agents/reviews/2-landing.md`, for you to add to `.claude/settings.json` or `.claude/settings.local.json` if you want the guard in Ordo.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-none
+- Git aliases (2026-09-30): Axel ruled (a), approving the `git config --get alias.<name>` computation; step 2a.
+
+- Other commands that discard work (2026-09-30): Axel agreed with the recommendation; step 2b.
+
+- pyright for Python templates (2026-09-30): Axel ruled (a), the orchestrator installing pyright; step 2c.
+
+- Step 2 reading (2026-09-30): approved by Axel; step 2 ticked.
 
 ## The standing demands (from Axel, in force)
 
@@ -74,6 +76,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Step 2 of 3, the git guard offered by `repo-setup`, landed unticked, its reading pending (`agents/reviews/2-landing.md`); step 1 is landed and ticked.
-- Next step: 3, the closing, once step 2 is ticked.
-- Open on Axel's side: the open items above.
+- 2026-09-30. Steps 1 and 2 landed and ticked.
+- Next: steps 2a, 2b and 2c, then step 3, the closing.

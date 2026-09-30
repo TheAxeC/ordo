@@ -26,3 +26,9 @@ Entry 3 says it is "drafted again, from its sources, before it is opened" (`docs
 
 - D1, a counting helper. Options: (a) a script `skills/writing/templates/counts.py` that computes only counts, shown beside the review as an indication and never as a finding: non-ASCII characters by line, em and en dashes and spaced hyphens by line, semicolons per 1000 words, words per sentence, and runs of five or more sentences whose word counts differ by at most 5; its approval of what it computes is this decision; pros: the reading is pointed at the lines where a count is high, and the counts are exact; cons: a script and its test to keep, and the pull to treat its output as a verdict. (b) No script; the review reads, and `LC_ALL=C grep -n '[^ -~]'` is named for the ASCII rule as the prose standard already does; pros: nothing to maintain, and the rule "judgment is read" holds without a boundary to police; cons: a long draft's sentence-length runs are found by reading only. Recommendation (b), since the prose standard's own "How it is applied" already names the one fact check it needs, and every other rule is judged per instance. The lazy option is none: (b) costs more reading per run.
 - D2, entry 4 (`code-comments`), which "waits on 3, for the checks": with the gate above there are no checks to wait for. Options: (a) entry 4 redrafted after entry 3 is approved, waiting on 3 for the prose rules only; (b) entry 4 redrafted now alongside. Recommendation (a), since its redraft follows from D1. The lazy option is none.
+
+## Axel's rulings (2026-09-30)
+
+- D1 (b): no counting script; the review reads, and `LC_ALL=C grep -n '[^ -~]'` is named for the ASCII rule.
+- D2 (a): entry 4 is redrafted after entry 3 is approved.
+- This draft is the input of 2.E step 13, `/grill` on entry 3 with Axel (2.E ruling "Entry 3 and step 13"); `docs/roadmap.md` changes only through that interview.
