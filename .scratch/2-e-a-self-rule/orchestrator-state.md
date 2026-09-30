@@ -50,6 +50,7 @@ dispatch:
   landing: not-started
   round: 0
   session_id: a15eaa0740335c7a3 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
+  cases: .scratch/2-e-a-self-rule/agents/briefs/1-cases.md (round 0, ruling (b))
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
