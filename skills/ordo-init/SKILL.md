@@ -13,6 +13,7 @@ metadata:
 
 ```
 /ordo-init     draft .agents/plan.yaml and the pages it lacks for approval, or check the .agents/plan.yaml that is there
+/ordo-init --ruling <ledger file> "<name>"   the same, under a quoted ruling: a draft the ruling states is written without the stop
 ```
 
 ## Use instead
@@ -29,7 +30,23 @@ metadata:
 2. `.agents/plan.yaml`, when it exists.
    - Then the skill checks instead of drafting ("Steps / Checking an existing file").
 3. The repository's commit rule: the answer to `repo-setup`'s question 5 when `/repo-setup` runs this skill, or, when it runs alone, the user's answer at the approval stop of Steps 11.
+   - When the skill runs alone under a quoted ruling that states whether it may commit, the commit rule is what the ruling states.
 4. The repository: `git ls-files`, the CI configuration (`.github/workflows/`, `.gitlab-ci.yml` and the like), the build and package files (`package.json` scripts, `Makefile`, `CMakeLists.txt` and `CMakePresets.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`), the documentation folders, `README.md`, `CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, and `.gitignore`.
+5. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
+   - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
+   - The quoted ruling is the bullet named `<name>` in that file's Rulings section, or in the file itself when it is a rulings file, with every line under it: its sub-bullets and their fenced blocks.
+   - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+   - It is matched against the bullet's text as written, a quotation mark in it included.
+   - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+     - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+   - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+   - There is no ruling in any of these cases.
+     - `--ruling` is not followed by the file and the name as the last two arguments of the invocation.
+     - The file does not exist, or is neither of those two files.
+     - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+     - The name is a placeholder in angle brackets, such as `<L>`.
+     - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+   - With no ruling, the skill says which of these it found, and every stop stands.
 
 ## Steps
 
@@ -39,12 +56,18 @@ Run from the repository root.
    - A repository whose tools each have their own build file and their own documentation under separate directories (`tools/<name>/`, `packages/<name>/`) is drafted in the `projects:` form, one project per directory, named by the directory and with `worktree_paths` set to it.
    - Otherwise the one-project form.
    - The draft says which form and why.
+   - Under a quoted ruling ("What it reads" 5), the draft takes the ruling's form, keys, `.gitignore` changes and page texts.
+   - Steps 2 to 9 replace a ruled part only where a rule of this skill gives another result.
+   - The step is done when the draft names the form and why.
 2. Draft `roadmap`: the tracked file that lists the open work, one entry per piece of it.
    - Candidates are files named `roadmap`, `ROADMAP`, `execution-order`, `TODO` or `backlog` in any documentation folder.
    - A repository can keep an ordered build plan next to a capability map (a file per feature, or an index that the ordered plan walks through): the key names the ordered file, because `/plan` matches `<entry>` against its entries.
    - The draft names the map in the key's comment.
    - Several candidates are a stop ("Stops").
+     - Under a quoted ruling that states `roadmap`, the key is the ruling's.
+     - The stop of several candidates is then not raised.
    - None: the skill offers to write `docs/roadmap.md` from the `roadmap` skill's `templates/roadmap.md` (in the `roadmap` folder beside this skill's folder), with no entries; `/roadmap add` fills it.
+   - The step is done when the draft names the roadmap file, offers `docs/roadmap.md`, or the stop of several candidates stands.
 3. Draft `verification`: the page that defines the green check, with the commands every step runs and the directory each runs from.
    - An existing page qualifies only when it states commands.
    - None: the skill offers to write `docs/dev/building.md` from the commands the CI jobs and build files run (install, build, test, lint, type check).
@@ -58,10 +81,13 @@ Run from the repository root.
    - Each rule the repository already states elsewhere is added, citing the file it came from.
 5. Draft `ledger_root`, `archive_root` and `worktree_root`: an existing folder of plans (a folder whose subfolders hold `plan.md` and `orchestrator-state.md`) or of worktrees is kept; otherwise the example's values.
 6. Ask the user for the keys the repository cannot give ("Stops").
+   - A key whose value a quoted ruling states is not asked.
+   - Its value is the ruling's.
    - `worker` and `reviewer` are asked with the example's value as the offered answer.
    - `libraries` is asked with its two values and what each means, and with no offered answer, since the example's value is only an example.
    - `check` means `/spec` looks for a library for every capability a step builds before it writes the brief.
    - `avoid` means a step adds no new dependency.
+   - The step is done when every key the repository cannot give has its value.
 7. Leave each optional key out, so its default applies, unless the repository gives a reason.
    - A key that is written names that reason in its comment.
    - `standards` lists every standards page the repository has, wherever it is (design principles, coding standards, a UI standard, a layout or prose standard), and `docs/glossary.md` when the repository has one, so every brief names them.
@@ -77,7 +103,16 @@ Run from the repository root.
    - `.agents/plan.yaml` must not be ignored: `git check-ignore -q --no-index .agents/plan.yaml` exits 1.
    - A rule that ignores the whole `.agents/` folder is drafted as `.agents/*` with `!.agents/plan.yaml` after it, since git cannot re-include a file whose parent folder is excluded.
 10. Show, in this order: the form and why; the draft `.agents/plan.yaml` in full; each page it would create, in full, with the commands' results for a verification page; the `.gitignore` changes, as Rules 5 says; and, when the skill runs alone, the question whether it may commit.
+    - The commit question is left out when a quoted ruling states whether the skill may commit.
+    - The step is done when everything this item lists is shown.
 11. Stop for the approval ("Stops").
+    - Under a quoted ruling, compare the draft Steps 10 shows with the ruling.
+    - The comparison covers the form, each key of `.agents/plan.yaml` with its value, each change to `.gitignore`, and the full text of each page to create.
+    - Under `/repo-setup`, a key this skill derives from the tree `/repo-setup` wrote counts as stated.
+    - A draft the ruling states in each of these is written without the stop.
+    - A commit question Steps 10 shows is then asked alone.
+    - A draft that differs in anything, or a page whose text the ruling does not hold, is shown whole with each difference named, and the stop stands with nothing written.
+    - The step is done when the draft is written, or it is shown and the stop stands with nothing written.
 12. Write what was approved.
 13. Run `python3 <this skill's folder>/templates/check_config.py .`.
     - Show its output.
@@ -85,6 +120,10 @@ Run from the repository root.
 14. Commit the files written by explicit path list, in one commit whose subject names the plan configuration.
     - The commit is made only when the repository's commit rule ("What it reads" 3) allows it.
     - Otherwise the skill stops ("Stops"), except under `/repo-setup`, where the setup goes on and `repo-setup`'s Steps 12 raises the one stop.
+    - A setup written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
+    - When no commit is made, the list of files written names the ruling the same way.
+    - That list is the one of the stop "No commit allowed", or under `/repo-setup` the one of `repo-setup`'s Steps 12.
+    - The step is done when the files written are in one commit, or the list of files written is shown.
 
 ### Checking an existing file
 
@@ -93,19 +132,24 @@ Run from the repository root.
 2. It reports: a key written twice; a key beside `projects:` in the `projects:` form; a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>`, `review` neither `every` nor `earned`, `libraries` neither `check` nor `avoid`, `adr` not naming a folder under the repository root, `design_bar` outside `industry`, `state-of-the-art` and `novel`, `design_references` not a list of text, `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
 3. Optional keys left out are listed as notes with the default that applies, as is the default ADR folder `docs/adr` when `adr` names it and the folder does not exist yet.
 4. For each error, propose the fix ("Stops").
+   - A fix a quoted ruling states is made without the stop.
+   - A fix the skill proposes that differs from the ruled fix is shown with the difference, and the stop stands.
+   - The item is done when each error has its fix made under a quoted ruling, or proposed at the stop.
 5. Make each fix the user approved.
 6. After the fixes, run the check again.
+   - A fix made under a quoted ruling is listed with the check's output, with the ruling's name and its ledger file.
+   - The item is done when the check's output after the fixes is shown.
 
 ## Stops
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The draft | Every setup, at Steps 11 | What Steps 10 lists | The user's approval or correction, and, when the skill runs alone, the answer to the commit question |
-| Several roadmaps | More than one roadmap candidate | The candidates | The user's pick |
-| Worker, reviewer and libraries | Every setup, at Steps 6 | The offered answer for `worker` and `reviewer`, and the two values of `libraries` with what each means, as Steps 6 names them | The user's answers |
+| The draft | Every setup, at Steps 11, except a draft a quoted ruling states as Steps 11 says, where only a commit question the ruling leaves open is asked | What Steps 10 lists | The user's approval or correction, and, when the skill runs alone, the answer to the commit question |
+| Several roadmaps | More than one roadmap candidate, and no quoted ruling states `roadmap` | The candidates | The user's pick |
+| Worker, reviewer and libraries | Every setup, at Steps 6, for each key a quoted ruling does not state | The offered answer for `worker` and `reviewer`, and the two values of `libraries` with what each means, as Steps 6 names them | The user's answers |
 | A failing command | A command meant for the verification page fails its one run | What Steps 3 shows beside it | The user's decision |
-| A fix in the check | The check reports an error in an existing file | The error and the proposed fix | The user's approval |
-| No commit allowed | The repository's commit rule does not allow the commit, at Steps 14, when the skill runs alone | The files written, and the command that shows them (`git status --short`) | The user's commit |
+| A fix in the check | The check reports an error in an existing file, and no quoted ruling states its fix | The error and the proposed fix | The user's approval |
+| No commit allowed | The repository's commit rule does not allow the commit, at Steps 14, when the skill runs alone | The files written, the quoted ruling named when the setup was written under one, and the command that shows them (`git status --short`) | The user's commit |
 
 ## Anti-patterns
 
@@ -117,9 +161,11 @@ Run from the repository root.
 ## Rules
 
 - The skill writes nothing until the user approves or corrects the draft. The one exception is Steps 3, where each verification command runs once before the draft is shown.
+  - A quoted ruling that states the draft is that approval.
 - The skill draws only from the repository and the user, for the file it drafts and for every page.
 - A page the skill writes states what the repository already does or says.
   - It cites where.
 - The skill never overwrites an existing page or `.agents/plan.yaml`.
 - A change to an existing file, `.gitignore` included, is shown as a diff and made after approval.
+  - Under a quoted ruling that states the change, it is made without being shown for approval, as Steps 11 and "Steps / Checking an existing file" 4 say.
 - Every path is relative to the repository root.

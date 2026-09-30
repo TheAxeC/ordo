@@ -14,6 +14,7 @@ metadata:
 ```
 /plan <entry>             open the plan for one roadmap entry: the ledger folder the step skills and the orchestrator run from, its step list drafted for approval
 /plan <project>/<entry>   the same, in a repository whose plan.yaml lists several projects
+/plan <entry> --ruling <ledger file> "<name>"   the same, under a quoted ruling: a step list that is the ruled one is written without the stop
 ```
 
 ## Use instead
@@ -39,6 +40,21 @@ metadata:
 3. The verification page the configuration names, for the commands every step runs.
 4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the user's settled design answers for the entry, written while no plan was open.
 5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record for its part in force, as the `spec` skill's "What it reads" 5 says.
+6. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
+   - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
+   - The quoted ruling is the bullet named `<name>` in that file's Rulings section, or in the file itself when it is a rulings file, with every line under it: its sub-bullets and their fenced blocks.
+   - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+   - It is matched against the bullet's text as written, a quotation mark in it included.
+   - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+     - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+   - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+   - There is no ruling in any of these cases.
+     - `--ruling` is not followed by the file and the name as the last two arguments of the invocation.
+     - The file does not exist, or is neither of those two files.
+     - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+     - The name is a placeholder in angle brackets, such as `<L>`.
+     - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+   - With no ruling, the skill says which of these it found, and every stop stands.
 
 ## Steps
 
@@ -50,21 +66,35 @@ metadata:
    - It opens with `# Plan: <entry>`, which is how every other skill finds it.
    - The entry's goal and its gate are copied in.
    - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line; the file's other lines, such as a heading or a blank line, are not copied. Any other line, such as a wrapped continuation or an indented sub-bullet, is shown with the draft at Steps 3; the user places it, and a line the user leaves unplaced is copied below the bullet line it follows, as it stands, so nothing of the file is lost when Steps 6 removes it.
+   - A quoted ruling that stands in the rulings file is copied with every line under it, its sub-bullets and their fenced blocks, and none of them is a line left to place.
    - The session asks of the copied gate "could this pass without the goal being reached?" and writes the answer with its reason in the section "## Gate", on the line the template gives the gate.
    - A copied gate that could pass without the goal is kept as the roadmap has it, and its answer and reason go to the user at Steps 3, since the gate is the roadmap's and the user's.
    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
+     - Under a quoted ruling ("What it reads" 6), the step list is the ruling's, each step with its check.
+     - The rest of this step is worked on that list.
+     - A closing step in the ruled list is dropped for the one `/plan` writes.
    - The session asks the same question of each step's check, "the goal" there being the part of the goal the step delivers, and writes the answer with its reason in "## Gate", one line per step, as the template gives it.
    - The answer stands only in "## Gate", and each step line keeps the shape the template gives it.
    - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again, at most twice, before the draft is shown.
    - A check that could still pass after the second redraft is kept as drafted, and its answer and reason go to the user at Steps 3.
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
+   - The step is done when the draft holds the goal, the gate, the answers of "## Gate", the Rulings and the step list with the closing step last.
 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).
    - With the draft, name each design decision the drafted steps rest on that no ADR in force and no line of the Rulings section settles: a public shape, a wire format, a config key, a vocabulary, a format or a rule the builder applies across the tree, or a library choice. The list is shown, not written into `plan.md`.
    - With the draft, show each line of the rulings file that Steps 2 did not copy as a bullet line, for the user to place.
    - `/grill <entry>` settles such decisions before the plan opens. It is not required: the user may approve the list with them unsettled.
    - Write `plan.md` once the user has approved or corrected it.
+     - Under a quoted ruling, the draft is written without the stop only when four things hold.
+       - Each step and its check are the ruling's, the closing step `/plan` writes itself left out of the comparison.
+       - Every answer in "## Gate" is no.
+       - No design decision is named as unsettled.
+       - No line of the rulings file is left to place.
+     - Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
+     - The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
    - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
+     - A step list written under a quoted ruling is the approved list.
+   - The step is done when `plan.md` is written, or the draft is shown and the stop stands.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
    - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`.
    - The block's `executor:` is not a project specific and is not in `plan.yaml`.
@@ -76,13 +106,16 @@ metadata:
 5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
 6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files by path as the plan's opening commit.
    - Its subject holds the roadmap entry's number.
+   - A plan written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
+   - When Steps 2 copied the ruling from the rulings file, the ledger file named is the new `plan.md`.
    - The commit also removes the rulings file copied at Steps 2: when the last commit holds it (`git cat-file -e HEAD:<path>` exits 0), `git rm -q -f -- <path>`, and its path named in the commit with the others; otherwise, `git rm -q -f --cached -- <path>` when git lists it as staged, and the file deleted before the commit, its path not named. The `-f` removes a copy with uncommitted changes, whose bullet lines Steps 2 has already copied.
+   - The step is done when the opening commit holds the four files, and the removal of the rulings file when there was one.
 
 ## Stops
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The drafted step list | Every plan, after Steps 2: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
+| The drafted step list | Every plan, after Steps 2, except a draft written under a quoted ruling as Steps 3 says: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |

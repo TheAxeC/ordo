@@ -197,9 +197,12 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
      - An option adds a step to the plan only when the work fits no step already in the list.
      - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling then approves them too.
-     - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, and the approval stop of a skill the option runs, such as `/roadmap`'s shown diff, stay stops of their own, and the option names each of them.
+     - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
+     - The option names that stop.
+     - An option that runs a skill with an approval stop states the change in full, or names that stop as a stop of its own, as `plan-orchestration`'s "Stops" says.
    - The same text under the step's Step 0 in `plan.md` or the part file it names.
    - The ledger files the session wrote, committed by path as a resume point, so the stop survives the session.
+   - The item is done when the open item, its text under Step 0 and the commit of the ledger files exist.
 2. No brief, no worktree and no dispatch block exist for the stopped step.
 3. A step stops at most twice before its build, counted as the open items under its Step 0.
    - A run that finds a third choice for the user is the stop "A step that does not converge" ("Stops"): the step is booked under `plan.md`'s "Blocked, and by what" with every choice left.
@@ -219,6 +222,9 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`, and its own Step 0, its carried premises with it;
    - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user).";
    - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line;
+   - a ruling on an option that runs a skill with an approval stop and states the change in full is written in the Rulings section as a bullet whose first line ends with "(the user).";
+   - that bullet is the quoted ruling the session gives the skill;
+   - the change the option stated is copied under that bullet as sub-bullets, a text of several lines as a fenced block indented with its sub-bullet, its fence longer than any fence inside the text;
    - a ruling that sets a public shape, a vocabulary, a rule or a library choice is also written where the plan keeps its rulings, so later premise checks and the library search of Steps 3 read it;
    - a ruling that answers a rule clash with a new ADR, raised by `/spec` or by `/refute`, is carried out before the step goes on:
      - the session writes the new record, numbered after the folder's highest, in the form of the folder's `template.md` or, with none, of its latest record, with status `proposed`;
@@ -228,6 +234,8 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6).
 3. Then `/spec <entry> <step>` is typed again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
    - A step whose brief check has run is not checked again (Steps 5).
+   - After a ruling on an option that runs a skill and states the change in full, that skill is run first, with `--ruling <ledger file> "<name>"`.
+   - The item is done when the skill a quoted ruling was booked for has run under it, and `/spec` has written the brief.
 
 ### The brief check
 

@@ -15,6 +15,7 @@ metadata:
 /grill <entry>                                                  interview about the entry, by number or title, including one under "Not yet specified"
 /grill <entry> --bar <industry|state-of-the-art|novel>          the same, with this design bar in place of the configured one, for this interview only
 /grill <project>/<entry>                                        the same, in a repository whose plan.yaml lists several projects
+/grill <entry> --ruling <ledger file> "<name>"                  the same, under a quoted ruling: a roadmap diff that is the ruled text is written without its decision
 ```
 
 ## Use instead
@@ -51,6 +52,21 @@ metadata:
 9. The page that states this repository's goals: `docs/dev/design-principles.md` when it exists, otherwise the opening of `README.md`.
    - A repository that states no goals in either is shown so in the first round, and its goals are asked as a decision of their own.
 10. The `repo-setup` skill's `templates/docs/adr/README.md`, `templates/docs/adr/template.md` and `templates/docs/glossary.md`, only when Steps 8 must create the ADR folder's files or the glossary.
+11. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
+    - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
+    - The quoted ruling is the bullet named `<name>` in that file's Rulings section, or in the file itself when it is a rulings file, with every line under it: its sub-bullets and their fenced blocks.
+    - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+    - It is matched against the bullet's text as written, a quotation mark in it included.
+    - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+      - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+    - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+    - There is no ruling in any of these cases.
+      - `--ruling` is not followed by the file and the name as the last two arguments of the invocation.
+      - The file does not exist, or is neither of those two files.
+      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+      - The name is a placeholder in angle brackets, such as `<L>`.
+      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+    - With no ruling, the skill says which of these it found, and every stop stands.
 
 ## Steps
 
@@ -66,6 +82,7 @@ metadata:
    - A decision is a node of the design tree, and the skill names what it asks a decision, never a question, since the glossary's term "question, the" is another thing.
    - The roadmap diff and "record as ADR?" ("Steps / Writing what settled") are decisions of their own, numbered like the rest.
    - A decision that a line of the Rulings or the rulings file settles, or an ADR in force settles, is marked settled and is not asked again.
+   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is marked settled, since the quoted ruling is the user's answer ("Rules"): it is made at the first write of Steps 8, and a draft that "Steps / Writing what settled" 3 shows as the decision is asked in the next round.
    - An interview started again, in a new session or after a compaction, draws the tree afresh from what is written: the Rulings or the rulings file, the entry, the glossary and the ADRs.
    - A decision shown before and not answered is asked again under a new number.
    - After such a restart, an answer to a number shown before is not read (Steps 7), and the redrawn round opens by saying that answers to an earlier round are to be given again against this one.
@@ -87,7 +104,8 @@ metadata:
    - Only a `D<n>` that opens a bullet counts, since a `D<n>` inside a line can cite a decision of another interview or plan.
    - The message ends with the answer form: `D<n> => <letter or text>` one line per decision, `D<n> Agree` to take the recommendation, and `D<a>-<b> Agree` to take it for each decision of a range.
    - The round ends the turn and waits for the answers ("Stops").
-   - The step is done when the message is sent and the turn has ended.
+   - When the frontier is empty, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.
+   - The step is done when the message is sent and the turn has ended, or the frontier was empty and the skill has gone on to Steps 8.
 7. Read the answers.
    - The user may answer part of a round, and the decisions left open stay in the frontier.
    - An answer the skill cannot read as one of the options is asked again in the next round, under a new number.
@@ -102,11 +120,13 @@ metadata:
    - The step is done when a pass of Steps 3 to 4 finds no open decision.
 10. Close the interview.
     - List every decision settled in the interview with where each was written: the Rulings line, the entry, the glossary line, the ADR.
+    - An entry changed under a quoted ruling is listed with the ruling's name and its ledger file.
     - List each change owed to an open plan ("Steps / A plan already open"): a step whose text an answer changed, and the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed.
     - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/repo-setup/templates/plan-terms.md`.
     - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry, and print the gate's text whole beside it, for the user to give that command.
     - Ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
     - On a yes to both, commit the files written by explicit path list in one commit, its subject naming the entry and that its design decisions are settled.
+    - The commit message names a quoted ruling an entry was changed under, by its name and its ledger file.
     - Without a yes to committing, list the files written with `git status --short`.
     - Without a confirmation of the shared understanding, go back to Steps 3 with the user's correction.
     - The step is done when the user has answered the confirmation and the commit question, and the files are committed or listed.
@@ -165,6 +185,7 @@ metadata:
    - It is one bullet: `- D<n> <the decision, as a phrase> (<date>): <the answer in one line> (the user).`
    - The phrase makes a step's `(ruling <name>)` tag name the decision as `D<n> <the decision, as a phrase>`.
    - A library pick names the capability in the phrase.
+   - A roadmap diff written under a quoted ruling gets no bullet, since the quoted ruling is its ruling.
    - The item is done when the file, read back, holds the bullet whole.
 2. Write the glossary term.
    - A term the interview settles is written into `docs/glossary.md` below the plan-terms block, in the file's form `- **<term>**: <definition>`, at once.
@@ -178,8 +199,14 @@ metadata:
    - An answer that changes the entry's goal, gate or text is drafted into the entry in the file's own format and under the `roadmap` skill's Rules: the goal, the gate and the dependencies only, nothing the user did not ask for, no history, another repository only as a path.
    - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says, and the answer with its reason goes in the diff and never in the entry.
    - The draft is shown as a diff in the next round, as a decision of its own, and written on the user's yes.
+     - Under a quoted ruling ("What it reads" 11) whose sub-bullets hold the entry's changed text, the draft is made at the first write of Steps 8.
+     - It takes the ruled text.
+     - The rules of this item are worked on it.
+     - A draft that is still the ruled text is written at once, unless it changes the gate and the changed gate could pass without the goal.
+     - The roadmap diff decision then counts as answered.
+     - A draft that differs from the ruled text, or a changed gate that could pass without the goal, is shown as the decision.
    - An entry under "Not yet specified" is not moved and has no gate drafted into it, since such an entry states its goal and what must be known and no gate: a changed goal or "what must be known" is drafted into it as above, and the settled gate is its Rulings bullet of item 1, which the end prints (Steps 10).
-   - The item is done when the diff is a decision of the next round, or, after the yes, the entry read back holds the change.
+   - The item is done when the diff is a decision of the next round, or, after the yes or under a quoted ruling, the entry read back holds the change.
 4. Ask whether to record an ADR.
    - An answer that is not obvious from the code, binds work after the plan that made it closes, and has alternatives rejected becomes the decision "record as ADR?" in the next round.
    - On the user's yes, write the record in the same turn.
@@ -223,7 +250,7 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A round | Every round, at Steps 6, the roadmap diff and "record as ADR?" decisions riding in it | The frontier as decisions in the decision form, and the answer form | The user's answers |
+| A round | Every round, at Steps 6, the "record as ADR?" decisions and each roadmap diff no quoted ruling states riding in it | The frontier as decisions in the decision form, and the answer form | The user's answers |
 | The end | Steps 10 | The decisions settled with where each was written, the step changes owed, and the question of the shared understanding and the commit | The user's confirmation and answer on the commit |
 | A lookup agent served another model | The runner served a lookup agent a model that is not the configured one ("Steps / Looking up a fact") | The configured value of `reviewer` and the served model | The user's instruction, then the lookup started again |
 | No configuration | `.agents/plan.yaml` is missing | A refusal that names `/ordo-init` | `/ordo-init`, then `/grill` again |
@@ -245,5 +272,6 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 
 - A fact is looked up, never asked.
 - A decision is the user's: nothing is written as settled without the user's answer.
+  - A quoted ruling that holds the entry's changed text is the user's answer to the roadmap diff.
 - Every answer is written in the turn it settles, before the next round is drawn up.
 - No option exempts code from the standards pages: A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it.

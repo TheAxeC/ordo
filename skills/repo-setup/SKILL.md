@@ -14,6 +14,7 @@ metadata:
 ```
 /repo-setup [<path>]          a new repository at <path> (default: the current folder, which must hold no tracked file)
 /repo-setup sync [<path>]     an existing repository: its shared-rules block and its glossary's plan-terms block against their templates
+/repo-setup ... --ruling <ledger file> "<name>"   either form, under a quoted ruling: a draft or a sync change the ruling states is written without the stop
 ```
 
 ## Use instead
@@ -32,14 +33,34 @@ metadata:
    - Files under `.git/` are left out.
 4. The `ordo-init` and `roadmap` skills beside this skill's folder: `/ordo-init`, the `ordo-init` skill's `templates/check_config.py`, and the `roadmap` skill's `templates/roadmap.md`.
 5. For `sync`, the repository's `CLAUDE.md` and `docs/glossary.md`, through `templates/sync_rules.py`, and the rules of its `CLAUDE.md` and the entries of its `docs/glossary.md` for the exit-2 draft.
+6. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
+   - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
+   - The quoted ruling is the bullet named `<name>` in that file's Rulings section, or in the file itself when it is a rulings file, with every line under it: its sub-bullets and their fenced blocks.
+   - The name is read as the `spec` skill's "What it reads" 4 reads a ruling's name.
+   - It is matched against the bullet's text as written, a quotation mark in it included.
+   - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet.
+     - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared.
+   - A text of several lines is compared line for line with the fenced block under its sub-bullet.
+   - There is no ruling in any of these cases.
+     - `--ruling` is not followed by the file and the name as the last two arguments of the invocation.
+     - The file does not exist, or is neither of those two files.
+     - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+     - The name is a placeholder in angle brackets, such as `<L>`.
+     - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+   - With no ruling, the skill says which of these it found, and every stop stands.
 
 ## Steps
 
 1. Run `git init` when the folder is not a repository.
    - A folder with tracked files is a refusal ("Stops").
 2. Ask "The questions", together, in plain prose, each with its default in brackets ("Stops").
+   - A question a quoted ruling answers ("What it reads" 6) is not asked.
+   - Its answer is the ruling's.
+   - The questions the ruling leaves open are asked together.
+   - The step is done when every question of "The questions" has its answer.
 3. Draft "The tree", every file with its full text.
    - The git guard hook is copied byte for byte, so the draft names it by its path and its source and shows no text for it.
+   - Under a quoted ruling ("What it reads" 6), a file whose full text the ruling holds is drafted as that text.
    - The plan-terms block of `docs/glossary.md` is filled from `templates/plan-terms.md`, as the shared-rules block of `CLAUDE.md` is from `templates/shared-rules.md`.
    - A placeholder in a template (`<...>`) is filled from the answers or from the files written before.
    - Every placeholder of an installed standards page is filled from the answers, from the files written before, or with the value the template writes inside it when that is a default value (`<1000>` becomes `1000`).
@@ -55,7 +76,17 @@ metadata:
    - A placeholder inside an HTML comment that shows an entry's form, as in the roadmap's and the glossary's, is written as it is, since it is the form and not a value.
    - Any other placeholder with no answer is shown to the user.
      - It is never written as `<...>`.
+   - The step is done when every file of "The tree" is drafted with its full text, the copied hook named by its source and each placeholder with no value listed.
 4. Show the draft, the tree and every file's text, the copied hook named by its source, together ("Stops").
+   - Under a quoted ruling, the draft is written without the stop only when four things hold.
+     - The ruling answers every question of "The questions".
+     - It states `worker`, `reviewer` and `libraries` for `/ordo-init`.
+     - Every file of the draft that this skill writes is a template filled from the answers, or has its full text in the ruling. The files `/ordo-init` drafts and the file the skills CLI writes are not counted.
+     - Steps 3 lists no placeholder for the user's value.
+   - Otherwise the draft is shown whole, and the stop stands.
+   - Each file that is neither a filled template nor held in the ruling is named with the draft, such as a build file, a fetched licence text or a page adapted from a sibling repository.
+   - Each placeholder Steps 3 lists is named with it.
+   - The step is done when the user has approved or corrected the draft, or a quoted ruling covers it.
 5. Write the files the user approved.
    - When the answer to question 10 is yes, `templates/hooks/git_guard.py` is copied to `.claude/hooks/git_guard.py`, that one file, the folders made as needed, over a copy already there.
 6. Install the project skills from the repository root, per source: `npx skills add <source> --skill <name> [--skill <name>...] -a claude-code -y`.
@@ -63,8 +94,11 @@ metadata:
 7. List each installed skill with its description in the Skills section of `CLAUDE.md`.
 8. Run `/ordo-init`, with its own draft and approval: it writes `.agents/plan.yaml` and `docs/dev/building.md`.
    - Its check passes.
+   - Under a quoted ruling, `/ordo-init` is run with the same `--ruling` arguments.
+   - It skips the stops the ruling covers, as its own text says.
    - The `standards` key it drafts lists every standards page written at Steps 5 except the change standard, which is the `rules` key.
    - The answer to question 5 is passed to it as the repository's commit rule, which its commit follows.
+   - The step is done when `/ordo-init` has written `.agents/plan.yaml` and its check passes.
 9. Fill the Build section of `CLAUDE.md` and the command block of `docs/dev/change-standard.md` from `docs/dev/building.md`.
 10. Run the checks:
 
@@ -84,8 +118,11 @@ metadata:
     - Every file written is named, except those `/ordo-init` committed at Steps 8.
     - The commit is made only when the answer to question 5 allows it.
     - Otherwise the skill stops ("Stops").
+    - A setup written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
+    - When no commit is made, the list of files the stop shows names the ruling the same way.
     - `.agents/skills/` and `.claude/` are ignored and not committed.
     - `skills-lock.json` is committed.
+    - The step is done when the files are committed, or the stop "No commit allowed" shows them.
 
 ### sync
 
@@ -94,6 +131,9 @@ metadata:
 3. Exit 1: a block differs; show the diff of each block that differs, for the user's ruling per hunk ("Stops").
    - The template's text goes into the repository: `--write`, after the approval.
    - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` or `templates/plan-terms.md` in this skill's folder, after which every repository set up from it differs until it is synced.
+   - Under a quoted ruling whose hunks are the hunks of the diff, each with the choice for it, the choices are applied without the stop.
+   - A diff whose hunks are not the ruling's is shown whole, and the stop stands.
+   - The item is done when each hunk has the user's ruling or the quoted ruling's choice.
 4. Exit 2 with `error: CLAUDE.md has no single shared-rules block` or `error: docs/glossary.md has no single plan-terms block`: draft the change for each block the lines name.
    - The shared-rules block inserted after the opening paragraph of `CLAUDE.md`.
    - Each rule of the existing `CLAUDE.md` that the block now states, listed for removal with the block rule that replaces it.
@@ -101,6 +141,11 @@ metadata:
    - With no `docs/glossary.md`, the file written from `templates/docs/glossary.md`, its plan-terms block filled from `templates/plan-terms.md`.
    - With a `docs/glossary.md` that has no single block, the plan-terms block inserted after its opening paragraph, and each existing entry that the block now defines listed for removal.
 5. Show the drafted change ("Stops").
+   - Under a quoted ruling that states the drafted change, the draft of Steps / sync 4 takes the ruling's text.
+   - The rules of Steps / sync 4 are worked on it.
+   - A draft that is still the ruled change is written without the stop.
+   - A draft that differs from it is shown whole with each difference named, and the stop stands.
+   - The item is done when the drafted change is shown, or written under a quoted ruling.
 6. Write it once the user approves.
 7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names. A no-single-block line of the same run is still drafted, as step 4 says.
    - Show the line with the file it names ("Stops").
@@ -108,6 +153,9 @@ metadata:
 8. After a written draft or a fixed file: run the check again, at most twice, following steps 2 to 7 on its exit status each time.
    - A check that does not exit 0 on the second of those runs is a stop ("Stops").
 9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
+   - A change written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
+   - When no commit is made, the list of files the stop shows names the ruling the same way.
+   - The item is done when the change is committed, or the stop shows the files changed.
 
 ## The questions
 
@@ -156,13 +204,13 @@ utils/                           scripts the build and the checks run
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The questions | Every setup, at Steps 2 | The ten questions, each with its default | The user's answers |
-| The draft | Every setup, at Steps 4 | The tree, every file's text with the copied hook named by its source, and the placeholders that Steps 3 lists for the user's value | The user's approval or correction |
-| A hunk to rule on | `sync` exits 1 | The diff | The user's ruling per hunk |
-| The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block | The change Steps / sync 4 drafts | The user's approval |
+| The questions | Every setup, at Steps 2, for each question a quoted ruling does not answer | The questions asked, each with its default | The user's answers |
+| The draft | Every setup, at Steps 4, except a draft a quoted ruling covers as Steps 4 says | The tree, every file's text with the copied hook named by its source, and the placeholders that Steps 3 lists for the user's value | The user's approval or correction |
+| A hunk to rule on | `sync` exits 1, except a diff whose hunks are a quoted ruling's (Steps / sync 3) | The diff | The user's ruling per hunk |
+| The drafted sync change | `sync` exits 2 with an `error:` line of Steps / sync 4, for the shared-rules block or the plan-terms block, except a change a quoted ruling states (Steps / sync 5) | The change Steps / sync 4 drafts | The user's approval |
 | A file sync cannot use | `sync` exits 2 with one of the `error:` lines of Steps / sync 7 | The `error:` line and the file it names | The file fixed, then the check again (Steps / sync 8) |
 | The check still fails | The check run again after the change does not exit 0 on its second run (Steps / sync 8) | The check's output | The user's decision, then `/repo-setup sync` again |
-| No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 12 or Steps / sync 9 | The files changed, and the command that shows them (`git status --short`) | The user's commit |
+| No commit allowed | The repository's commit rule (the answer to question 5 in a setup) does not allow the commit, at Steps 12 or Steps / sync 9 | The files changed, the quoted ruling named when they were written under one, and the command that shows them (`git status --short`) | The user's commit |
 | Tracked files | The folder for a new repository holds tracked files | A refusal that names `/repo-setup sync` and `/ordo-init` | One of those, or a folder with no tracked file |
 
 - The first seven rows are stops: each waits on the user.
@@ -181,6 +229,7 @@ utils/                           scripts the build and the checks run
 
 - Everything the skill writes comes from `templates/` in this skill's folder, from the user's answers, and from the `ordo-init` and `roadmap` skills beside it.
 - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
+  - A quoted ruling that covers the draft as Steps 4 says is that approval.
 - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on in `sync`.
 - The rules are Ordo's shipped defaults or the user's; the skill adds no other rule.
 - Build files are written only for what the user names; nothing is assumed.

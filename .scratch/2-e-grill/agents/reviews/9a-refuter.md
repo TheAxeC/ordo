@@ -213,3 +213,252 @@ On the three points of the builder's part 11:
 Reviewer usage: about 270,000 tokens (from the context counter, 15,000,000 at the start and about 14,723,000 at the end), about 60 tool uses. The time was not measured.
 
 Files referred to: /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/grill/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/roadmap/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/plan/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/ordo-init/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/repo-setup/SKILL.md, /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/.scratch/2-e-grill/agents/reviews/9a-report.md. My scratch scripts and renders are in $TMPDIR/9a-review (count.py, inline.py, indent.py, pipeline.png, plan-loop.png).
+
+## Repair round 1, refuted
+
+Step 9a of plan 2.E. Worktree: /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a. Base: f14ad594cc941a7620a09744f42b7efac1004239. I changed nothing. The only git commands I ran were `git diff` and `git status --short`.
+
+**Summary.** All three rulings are applied exactly as the round brief states them. Every check reran green and every claim of the builder reproduced. Two findings remain, both in `skills/grill/SKILL.md`, and both are small enough to fix at landing:
+- **Standards 1:** the ruled roadmap diff is still in the frontier but in no round, which contradicts Steps 4's completion line, Steps 6's item line, two glossary entries, the README and the skill's description.
+- **Standards 2:** the new Steps 6 sentence also fires when every frontier decision waits on a running lookup. The session then does not end its turn and loops from Steps 3 to 9 with no exit.
+
+Verdicts: items 1 to 13 hold. R9 and R10 are partial; every other case is met.
+
+### Verification (rerun by the reviewer)
+
+The step's verify list, run from the worktree root. The absolute ledger path worked, so no other path form was needed:
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+exit=0
+```
+
+#### The round's delta
+
+I compared `git diff f14ad594cc941a7620a09744f42b7efac1004239` (823 lines now) with `.scratch/2-e-grill/agents/reviews/9a-round-0.diff` (799 lines):
+- Only the hunks of five files changed: `skills/grill/SKILL.md`, `skills/roadmap/SKILL.md`, `skills/plan/SKILL.md`, `skills/ordo-init/SKILL.md` and `skills/repo-setup/SKILL.md`.
+- The other nine files keep their round-0 index lines unchanged.
+- `git diff --stat <base> | tail -1` prints ` 14 files changed, 252 insertions(+), 38 deletions(-)`.
+- `git diff --quiet HEAD <base>` exits 0 and `git diff --cached --quiet` exits 0: HEAD is still the base and nothing is staged.
+- `git status --short` lists the 14 files as ` M`. It also lists `?? .scratch/2-e-grill/agents/briefs/9a-round-1.md` and `?? .scratch/2-e-grill/agents/reviews/9a-report.md`. Both are byte-identical to the main checkout's copies (`cmp` exit 0). `land.sh` leaves the ledger root out of the wip commit (its head comment, lines 6 to 11), so neither file reaches main.
+
+#### The round brief's checks, rerun
+
+- **Check 1:** the output above.
+- **Check 2**, `grep -c -F -f <one-line file>` per text:
+  - Each of the 20 new or moved texts of rulings 1 and 2 prints 1 in its file.
+  - The two shared sentences of ruling 3 each print 1 in every one of `roadmap`, `plan`, `ordo-init`, `repo-setup` and `grill`.
+  - The replaced texts each print 0: "The step is done when the message is sent and the turn has ended." in `grill`, "The stop "No gate" is not raised for it." in `roadmap`, and "A draft is the ruled change when each part of it has a sub-bullet" in each of the five skills.
+- **Check 3:** the delta shows each moved bullet at its rule's indent plus two:
+  - `roadmap` 97 (3 spaces) holds 98 (5), which holds 99 and 100 (7); 101 (3) holds 102 (5).
+  - `ordo-init` 66 (3) holds 67 and 68 (5).
+  - `plan` Steps 2: the step-list bullet (3) holds its three sub-bullets (5).
+  - `plan` 87 (3) holds 88 to 94 (5), with the four conditions at 7; 95 (3) holds 96 (5).
+  - `grill` 201 (3) holds 202 to 207 (5).
+  - The shared sentence and its note sit at 3 and 5 in four skills, and at 4 and 6 in `grill`.
+  - Each touched item ends on its completion line: grill 93, 108 and 209; roadmap 103; ordo-init 70; plan 82 and 97.
+- **Check 4:** `LC_ALL=C grep -n '[^ -~]'` over the 14 files prints nothing and exits 1. `grep -c` of a literal tab prints 0 in each of the five skills.
+- **Check 5:** the R9 walk, redone by me under Standards 1.
+
+#### The builder's other evidence, rerun
+
+- `git grep -n 'stay stops of their own' -- skills docs` prints nothing and exits 1.
+- `git grep -n -c 'quoted ruling\|--ruling' -- skills docs README.md` prints: README.md:1, docs/figures/gen_figures.py:1, pipeline.svg:1, plan-loop.svg:1, docs/glossary.md:5, grill:13, ordo-help:1, ordo-init:21, plan-orchestration:3, plan:11, repo-setup:21, plan-terms.md:4, roadmap:15, spec:3. Grill (11 to 13) and roadmap (14 to 15) rose by exactly the round's new lines 92 and 107, and 102.
+- `python3 docs/figures/gen_figures.py` prints `wrote docs/figures/pipeline.svg (31507 bytes)` and `wrote docs/figures/plan-loop.svg (31160 bytes)` and exits 0. `git status --short` and the SVG shasums are identical before and after. The viewBoxes are `0 0 1040 988` and `0 0 1040 911`.
+- `ruff check ... --target-version py39` prints `All checks passed!` and `ruff format --check` prints `1 file already formatted`.
+- Every `grep -n` line the builder's walk quotes (18, 55, 60, 61, 89, 92, 94, 102, 107, 108, 116, 188, 202 to 206, 118 to 121, 123, 129, 132) matches `grep -n ''` of the current file.
+
+### Verdicts
+
+Items of the brief's "What to build", over the whole diff since the base:
+
+- 1: holds. The four `plan-terms.md` changes are unchanged since round 0, and `sync_rules.py --only glossary` prints ok.
+- 2: holds. Unchanged since round 0.
+- 3: holds. Unchanged since round 0.
+- 4: holds. The script is idempotent, the viewBoxes are 988 and 911, and ruff passes.
+- 5: holds. Unchanged since round 0.
+- 6: holds. Unchanged since round 0.
+- 7: holds. Unchanged since round 0.
+- 8: holds. The texts are present. Round 1 moved the add 3 exceptions under their rules and changed "for it" to "for a quoted ruling's gate", as ruling 2 states. The completion line 103 is last.
+- 9: holds. Steps 2 and 3 sub-bullets are nested as ruling 2 states, and "A step list written under a quoted ruling is the approved list." sits under the `(approved)` bullet at line 96.
+- 10: holds. The Steps 2 exceptions are nested at 67 and 68.
+- 11: holds. Only the shared sentence changed here, by ruling 3.
+- 12: holds. The texts are placed as items 12 and the round dictate. Standards 1 and 2 are defects in the dictated `grill` texts, not in their placement.
+- 13: holds. Each completion line is still the last line of its item, at the item's sub-bullet indent.
+
+Cases of the brief's "Cases":
+
+- R1: met. The sync check prints ok, and the entries are unchanged since round 0.
+- R2: met. Unchanged since round 0.
+- R3: met. The old Standards 3 is closed:
+  - Line 47: "A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet."
+  - Line 48 leaves the gate's answer and the lines around the place out of the comparison.
+  - So Steps 4 line 74 (written without the stop for `add` when the gate's answer is no) no longer conflicts with the shared item.
+- R4: met. Unchanged since round 0.
+- R5: met. The moves keep each rule's scope (rules file rule 17):
+  - Steps 2 line 73 governs the list.
+  - Line 74's "the rest of this step" still covers the rest of Steps 2.
+  - The four conditions and "Otherwise ..." sit under the write rule.
+- R6: met. The ruled `roadmap` key sits under the several-candidates rule.
+- R7: met.
+- R8: met.
+- R9: partial. The only-open-decision run reaches the right end through lines 92, 107, 202 to 206 and 119 to 120, but two defects remain:
+  - Steps 4's completion line (93), Steps 6's item line (102) and the glossary and README definitions of a round still say the ruled diff is asked (Standards 1).
+  - The new line 107 misroutes a frontier whose decisions all wait on a lookup (Standards 2).
+- R10: partial. These sentences are made false for a ruled roadmap diff (Standards 1):
+  - the glossary's **frontier** and **round, of an interview** (`docs/glossary.md:43`, `:94`; `plan-terms.md:38`, `:89`);
+  - `README.md:16`;
+  - `grill`'s description (line 3).
+- R11: met. The old Standards 2 is closed at the five places the round names. The other quoted-ruling sub-bullets were already nested under the item lines they qualify: ordo-init Steps 6 at 84 and 85, repo-setup sync 3 at 134 and 135, grill Writing 1 at 188.
+- R12: met. The script rerun is identical and the viewBoxes are as expected.
+
+### 1. Spec
+
+- none. The delta does what the three rulings say, at the indents they state, and makes no change outside them (compared line by line above).
+
+### 2. Proof
+
+- none. Every command and output of the builder's round-1 section that I reran reproduced:
+  - the check 1 lines;
+  - the 36 counts of 1 and the 7 counts of 0;
+  - the indent table;
+  - check 4 exiting 1;
+  - the claim that only five files differ from the first build;
+  - the walk's line numbers.
+
+### 3. Standards
+
+#### 1. The ruled roadmap diff is in the frontier and in no round
+
+**Places:**
+- `skills/grill/SKILL.md:92` against `:89`, `:93` and `:102`.
+- `docs/glossary.md:43` and `:94`, and `skills/repo-setup/templates/plan-terms.md:38` and `:89`.
+- `README.md:16`.
+- `skills/grill/SKILL.md:3`.
+
+**The quoted hunks:**
+- line 89: `4. Compute the frontier: every decision whose prerequisites are settled, the roadmap diff and "record as ADR?" decisions included.`
+- line 92: `- A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is in no round: it is made at the first write of Steps 8.`
+- line 93: `- The step is done when each decision of the frontier is in the round, or waits on a named lookup.`
+- line 102: `6. Ask the round: every decision of the frontier that waits on no lookup, in one message, numbered `D<n>`.`
+- glossary 94: "**round, of an interview**: one message in which `grill` asks every decision of the frontier that waits on no lookup, ending the turn to wait for the answers."
+- glossary 43: "... a round asks the rest in one message."
+- README 16: "Each round asks every decision whose prerequisites are settled".
+
+**What is wrong.** Line 89 keeps the ruled diff in the frontier, and line 92 puts it in no round. Six other statements say every frontier decision that waits on no lookup is in the round: line 93 (a completion line), line 102 (Steps 6's item line), the two glossary entries in both files, the README row and the description. Line 93 cannot be met by its letter while the frontier holds a ruled diff. This breaks:
+- the rules file's rule 19 (two statements that contradict);
+- rule 14 (a sentence the change makes false);
+- `docs/dev/skill-layout.md`, "Writing for an agent": "Each item of Steps ends on its completion criterion".
+
+**The builder's open point, judged.** Yes, it is a contradiction, and it is not the only one. A session that treats line 93 as the gate for leaving Steps 4, and line 102 as the definition of the round, has one literal way to satisfy both: put the ruled diff in round 1. That is the second stop the ruling "Approval stops under a ruling" set out to end. Most readers will follow line 92 as the more specific rule and reach the right result, but the text still offers the wrong course. The builder's clause ("or is a roadmap diff a quoted ruling states" after "a named lookup") closes line 93 only. Line 102, the glossary's **frontier** and **round**, README 16 and the description stay false.
+
+**The walk of R9.** The case: a quoted ruling whose roadmap diff is the only open decision, the entry's other decisions settled in its Rulings. Each step names the line it follows, as `grep -n` prints it:
+1. `18:/grill <entry> --ruling <ledger file> "<name>"   ...` recognises the invocation.
+2. `55:11. The quoted ruling, ...` and lines 56 to 69 resolve the ruling.
+3. `83:   - The roadmap diff and "record as ADR?" ... are decisions of their own, numbered like the rest.` makes the diff a decision.
+4. `84:   - A decision that a line of the Rulings or the rulings file settles ... is marked settled` does not cover it when the ruling sits in another plan's `plan.md`. That is the usual case, for example `/grill 3` run from 2.E's ledger. So the diff is open.
+5. `89:4. Compute the frontier: ... the roadmap diff ... included` puts it in the frontier.
+6. `92: ... is in no round: it is made at the first write of Steps 8.`
+7. `93: ... The step is done when each decision of the frontier is in the round, or waits on a named lookup.` is unmet by its letter. This is the contradiction.
+8. `101:` Steps 5's completion line is vacuous.
+9. `102:6. Ask the round: every decision of the frontier that waits on no lookup` includes the diff by its letter. `107: When the frontier holds no decision to ask, no round is sent and the turn does not end: the skill goes on to Steps 8` fires only if the reader has applied line 92.
+10. `108:` is met by its second clause.
+11. `116:8. Write each settled answer ...`. The ruled diff counts as an answer by `275: - A quoted ruling that holds the entry's changed text is the user's answer to the roadmap diff.`
+12. `202:` to `206:` draft, write and count the diff as answered.
+13. `188:` writes no bullet for it.
+14. `209:` is met ("under a quoted ruling, the entry read back holds the change").
+15. `118:` is vacuous.
+16. `119:9. Go back to Steps 3, until the frontier is empty and the roadmap diff ... are answered.` and `120: ... a pass of Steps 3 to 4 finds no open decision.` are met.
+17. `121:` to `132:` close the interview: the entry is listed with the ruling (123), the commit names it (129), and the stop "The end" (`254:`) waits on the confirmation and the commit question.
+
+Steps 6 and Steps 8 and 9 read consistently with the new sub-bullets once line 92 is applied. The defect is confined to line 93, line 102 and the definitions outside the skill.
+
+**Failure scenario.** Under a ruling that runs `/grill 3 --ruling .scratch/2-e-grill/plan.md "<name>"`, a fresh session checks line 93 before leaving Steps 4. It finds the ruled diff neither in the round nor waiting on a lookup. It follows line 102 and the glossary's **round**, and asks the ruled diff as D1 of round 1. Axel then gets a second stop for a change he already ruled.
+
+**Wording that closes it (recommended).** Settle the ruled diff at Steps 3, so it never enters the frontier. Every statement above then holds without being edited.
+- Remove line 92.
+- Add under Steps 3, after line 84:
+  `   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is marked settled, since the quoted ruling is the user's answer ("Rules"): it is written at the first write of Steps 8.`
+- Steps 6 line 107 becomes:
+  `   - When the frontier is empty, no round is sent and the turn does not end: the skill goes on to Steps 8, which writes a roadmap diff a quoted ruling states.`
+- Its completion line 108 becomes:
+  `   - The step is done when the message is sent and the turn has ended, or the frontier was empty and the skill has gone on to Steps 8.`
+
+This also closes Standards 2. Line 206 ("The roadmap diff decision then counts as answered.") and Steps 9 still hold.
+
+The alternative keeps the diff in the frontier. It needs the builder's clause on line 93, plus "and is not a roadmap diff a quoted ruling states" on line 102, the glossary's **frontier** and **round** in `plan-terms.md` (then synced), README 16 and the description: seven places instead of three. That is the lazy option, because it patches each consequence instead of the one sentence that causes them.
+
+**Verdict:** R9 partial, R10 partial.
+
+#### 2. The new Steps 6 sentence misroutes a frontier that only waits on lookups
+
+**Place:** `skills/grill/SKILL.md:107` and `:108`, against `:90`, `:106` and `:149`.
+
+**The quoted hunks:**
+- 107: `- When the frontier holds no decision to ask, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.`
+- 90: `... a decision waiting on a running lookup is in the frontier and not yet asked.`
+- 149: `5. A lookup that finishes joins the next round: the decisions that waited on it are asked.`
+
+**What is wrong.** Line 107's condition is not tied to a quoted ruling. A frontier whose every decision waits on a running lookup "holds no decision to ask" by line 90. Before the round, line 106 ended the turn there, which let the lookup's result arrive for the next round (149). Now the session sends nothing and does not end its turn. It goes to Steps 8, which has nothing to write. Steps 9 then sends it back to Steps 3, where the same frontier recurs.
+
+The loop has no count, and no user answer bounds it. That breaks:
+- `docs/dev/skill-layout.md`, "Writing for an agent" (a repeat states its count; only a repeat the user ends by answering needs none);
+- rule 19 against lines 106 and 149.
+
+**Failure scenario.** Take `/grill <entry>` with no ruling, whose first open decisions each need a fact from a lookup agent (Steps / Looking up a fact 3). The frontier holds only decisions waiting on lookups. The session follows line 107: it never ends its turn, cycles from Steps 3 to 9, and cannot receive the lookup agents' results. It either spins or improvises an exit that no text gives.
+
+**Wording that closes it:** tie line 107 to an empty frontier, as the recommended wording in Standards 1 does. A lookup-only frontier then falls back to line 106 as before.
+
+**Verdict:** R9 partial.
+
+### 4. Behaviour
+
+- none. The builder's round-1 section gives each ruling's before and after. The `grill` change of Steps 6 is stated there; its defect is Standards 2.
+
+### Declined to judge
+
+- **The five fresh-agent scratch runs of `/roadmap`:** I did not make them. This review starts no agent and runs no skill, and the brief gives those runs to the orchestrator before the landing.
+- **How often the lookup-only frontier of Standards 2 occurs in practice:** I judged it reachable from the text of lines 90 and 149. A scratch `/grill` run whose first decisions all need an agent lookup would show how often it happens.
+- **repo-setup "sync" 6, "Write it once the user approves.":** it sits after sync 5's write under a quoted ruling. It is outside this round's delta, and at worst it repeats a write that has already happened, so I did not raise it.
+- **The ADRs:** they govern nothing this diff changes. The worktree's `docs/adr` holds only `README.md` and `template.md`. The main checkout's untracked 0001 to 0003, all status proposed, decide the writing skills' prose standard and draft review.
+
+Reviewer usage: about 185,000 tokens (context counter from 15,000,000 to about 14,815,000), 28 tool uses. Time not measured.
+
+Files referred to:
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/grill/SKILL.md
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/repo-setup/templates/plan-terms.md
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/docs/glossary.md
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/README.md
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/roadmap/SKILL.md
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/plan/SKILL.md
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/ordo-init/SKILL.md
+- /Users/axelfaes/workspace/ordo/.agents/worktrees/2e-9a/skills/repo-setup/SKILL.md
+- /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/agents/reviews/9a-report.md (section "Repair round 1")
+
+## Closed
+
+- First run, Standards 1 (a ruled roadmap diff as the only open decision of `grill`): closed in repair round 1 (`agents/briefs/9a-round-1.md`, ruling 1).
+- First run, Standards 2 (exceptions added as sibling bullets of their rules): closed in repair round 1 (ruling 2), each exception moved under its rule in `roadmap`, `ordo-init`, `plan` and `grill`.
+- First run, Standards 3 (the shared item compared what the skill shows beside a change): closed in repair round 1 (ruling 3), in all five skills.
+- Repair round 1, Standards 1 (the ruled roadmap diff in the frontier and in no round): fixed at landing on main. `grill` Steps 3 marks a roadmap diff a quoted ruling states as settled, made at the first write of Steps 8, with a draft that "Steps / Writing what settled" 3 shows as the decision asked in the next round; the Steps 4 sub-bullet "is in no round" is removed. Steps 4's completion line, Steps 6's item line, the glossary's **frontier** and **round, of an interview**, `README.md:16` and the description hold again unchanged, since the ruled diff is never in the frontier.
+- Repair round 1, Standards 2 (the Steps 6 sentence fired on a frontier waiting only on lookups): fixed at landing on main. The sentence now reads "When the frontier is empty, no round is sent and the turn does not end: ...", and its completion line "... or the frontier was empty and the skill has gone on to Steps 8."; a frontier whose decisions all wait on a lookup ends the turn as before.

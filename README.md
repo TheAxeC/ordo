@@ -51,7 +51,7 @@ for every step:
 
 `/ordo-help` prints the full sequence, including what to do when a command stops.
 
-The pipeline below marks where each skill of a roadmap entry asks you. A stop marked "every run" waits on you each time, and one marked "only when" waits on you in a named case. You may skip a skill marked "optional".
+The pipeline below marks where each skill of a roadmap entry asks you. A stop marked "every run" waits on you each time, unless the run is under a quoted ruling that states the change. One marked "only when" waits on you in a named case. You may skip a skill marked "optional".
 
 ![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /session-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
 

@@ -301,7 +301,11 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
 - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
   - It never goes through a question-box or multiple-choice tool.
   - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling on the item then approves them too, with no second stop.
-  - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, and the approval stop of a skill the option runs, such as `/roadmap`'s shown diff, stay stops of their own, and the option names each of them.
+  - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
+  - The option names that stop.
+  - An option that runs a skill with an approval stop (`/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill`) states the change in full, as that skill's text says a quoted ruling must state it, or names that skill's approval stop as a stop of its own.
+  - After the user's ruling on an option that states the change, the session books the ruling as the `spec` skill's "Steps / A ruling" says.
+  - It then runs the skill with `--ruling <ledger file> "<name>"`.
 - A pause the user asks for holds until they lift it.
 
 ## Anti-patterns
@@ -333,4 +337,4 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
 - Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops".
   - It is never sent back to the builder.
   - It becomes a step only by the user's ruling.
-- Every skill the loop invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, and `/roadmap` at the closing) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.
+- Every skill the loop invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, and `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.

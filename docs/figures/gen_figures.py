@@ -375,7 +375,7 @@ def draw_note(canvas: Canvas, x: float, y: float, label: str, width: float) -> N
 
 
 def draw_legend(canvas: Canvas, x: float, y: float, width: float) -> None:
-    """The three marks and the dashed box, each with what it says, on one row."""
+    """The three marks and the dashed box with what each says, on one row, and a note under it."""
     draw_caption(canvas, x, y, "HOW TO READ THE MARKS", width)
     items = (
         (EVERY_RUN, "it waits on you each time it runs"),
@@ -388,6 +388,14 @@ def draw_legend(canvas: Canvas, x: float, y: float, width: float) -> None:
         badge = draw_badge(canvas, left, y + 26, mark)
         _check_line(canvas.name, "the legend", meaning, step - badge - 22, NAME_SIZE)
         canvas.text(left + badge + 8, y + 26, meaning, NAME_SIZE)
+    draw_note(
+        canvas,
+        x,
+        y + 48,
+        'A stop marked "every run" waits each time, unless the run is under a quoted ruling that '
+        "states the change.",
+        width,
+    )
 
 
 def draw_row_arrows(canvas: Canvas, boxes: tuple[Box, ...]) -> None:
@@ -407,7 +415,7 @@ def pipeline_svg() -> str:
     canvas = Canvas(
         "pipeline.svg",
         1040,
-        side_top + side_h + 68,
+        side_top + side_h + 90,
         "The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or "
         "/ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and "
         "the closing, with the optional /plan-retro, /session-retro, /diagnose and /ordo-help "
@@ -556,7 +564,7 @@ def plan_loop_svg() -> str:
     canvas = Canvas(
         "plan-loop.svg",
         1040,
-        band_y + band_h + 81,
+        band_y + band_h + 103,
         "The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends "
         "a finding whose cause is not known through /diagnose, /refute over the round, and /land, "
         "with a return for a further round, a card for when a command stops, a card for when it "
