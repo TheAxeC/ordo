@@ -38,25 +38,15 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 ```
 
 ```yaml
-dispatch:
-  step: 14a
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2e-14a
-  base: 16c5f3702eabb6a35bd6a182ef2e94c595563d81
-  launched: 2026-09-30
-  session_id: a75765a1669931042 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-e-grill/agents/reviews/14a-report.md
-  builder_usage: claude-sonnet-5-5, 171803 tokens, 33 tool uses, 472 s (round 0, from its completion notice)
-  brief_check: .scratch/2-e-grill/agents/reviews/14a-brief-check.md (ordo-high, claude-opus-5-5, 176162 tokens, 40 tool uses, 524 s)
-  reviewer_report: .scratch/2-e-grill/agents/reviews/14a-refuter.md (ordo-high, claude-opus-5-5, 186088 tokens, 46 tool uses, 556 s; items 1 to 11 hold; R1 to R17 met, R18 partial; findings Spec 1, Proof 1, Standards 1 to 3, Behaviour 1)
-  landing: not-started
-  round: 1 (sent 2026-09-30: brief agents/briefs/14a-round-1.md, the diff before it agents/reviews/14a-round-0.diff)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- None.
+- Step 14a, an archived plan the entry has since set aside (raised 2026-09-30 from the run over repair round 1, `agents/reviews/14a-refuter.md`, Behaviour 3). `skills/grill/SKILL.md` "What it reads" 6 now makes every "(the user)" bullet of an archived plan of the entry a carried ruling. When an entry whose plan closed and was archived is later redone, `/grill` would list the old plan's rulings as settled answers and ask none of them, and a new ruling that contradicts one would be shown as a rule clash on every run. This tree is not affected today: plan 3's folder was deleted, not archived (2.C `plan.md`, Decision B). Options:
+  - (a) Carry an archived plan's bullets only when the entry has neither an open plan nor a rulings file. Pro: the first `/grill` after the closing carries them, and later runs read the copies. Con: a rulings file written before this change, such as `.scratch/rulings/3-the-writing-base.md`, never gets them; an entry that gets a rulings file for any reason stops seeing its archived rulings.
+  - (b) Keep the rule, and add that a ruling that sets an archived plan of the entry aside (a bullet ending "(the user)" that says the entry is redone, or that the plan is set aside) makes that plan's bullets settle nothing; judged by reading. Pro: rulings of a closed plan still count unless you set them aside, and setting them aside is itself a ruling of yours. Con: it depends on such a ruling being written when an entry is redone.
+  - Recommend (b): it keeps your rulings in force by default and ends them only by your own ruling, which is the step's purpose. The lazy option is to leave the text as it is.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -124,4 +114,5 @@ dispatch:
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
 - Step 9a landed and ticked (2026-09-30), with 2 fixes at landing in `skills/grill/SKILL.md`; the scratch runs booked in its booking. Step 13 done and ticked: D1 to D24 in `.scratch/rulings/3-the-writing-base.md`, ADRs 0001 to 0003 and entry 3 rewritten, committed in 7e984dd.
-- Next: step 14a (ruling "Step 14, the call on the blind comparison"), then step 14b (ruling "The judge's input in the blind comparison"), then step 14 run again, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).
+- Step 14a landed and ticked (2026-09-30), with 4 fixes at landing in `skills/grill/SKILL.md`; one finding of the run over its round raised as an open item.
+- Next: step 14b (ruling "The judge's input in the blind comparison"), then step 14 run again, then step 16, the closing. Step 15 done and ticked, its edits committed in game-engine (811d6e6) and cathedra (59912eb4).

@@ -215,3 +215,99 @@ Line numbers are those of the changed `skills/grill/SKILL.md` as `grep -n` print
 - `archive_root` is listed as an optional key at line 34 (item 1), while `skills/plan/templates/plan.yaml:9` calls it required and `README.md` lists it among the nine required keys; `skills/ordo-init/templates/check_config.py` has no mention of it (`grep -n archive_root` printed nothing). The text is as the brief gives it (decision 5).
 - The bullet form of item 6 encloses the quoted words in double quotes. A carried bullet whose settling words hold a double quote, such as `.scratch/2-e-grill/plan.md:79` ("A: the ADR test is "a record per decision ..."), has no rule for the inner quotes; the two bullets R1 writes hold none.
 - Line 213 gives the date of a carried ruling from the bullet or its Rulings heading; a bullet of a rulings file that holds no date has a heading `# Rulings: <entry>` with none, and no case covers it.
+
+# Repair round 1
+
+Nothing is not done: the four rulings are applied and checks 1 to 6 hold. The line numbers of the earlier sections of this report are those before this round; the lines added here move the lines after them, and the numbers below are those of the worktree now.
+
+## Per ruling, before and after
+
+1. Standards 1, `skills/grill/SKILL.md:33` and `:34`.
+   - Before, line 33: `   - The required keys are `roadmap`, `ledger_root`, `rules`, `libraries` and `reviewer`.` After: `   - The required keys are `roadmap`, `ledger_root`, `archive_root`, `rules`, `libraries` and `reviewer`.`
+   - Before, line 34 ended `... `design_references` (default `[]`), `reviewer_effort` (default `high`) and `archive_root` (default none, which leaves no folder out), and a key left out takes its default.` After: the text of the base, `... `design_references` (default `[]`) and `reviewer_effort` (default `high`), and a key left out takes its default.` (check 2 finds it once).
+2. Standards 2, bullets that join two rules, now at five spaces.
+   - Line 91 (before: one bullet "... leaves the rest of that decision open, and the decision quotes the carried ruling beside its options.") is lines 92 and 93: `A carried ruling that settles part of a decision leaves the rest of that decision open.` and `A decision a carried ruling settles in part quotes the carried ruling beside its options.`
+   - Line 94 (before: "... settles nothing, and the later ruling is the one carried.") is lines 96 and 97: `A carried ruling that a later ruling names as the one it replaces settles nothing.` and `Of a ruling and the later ruling that names it as the one it replaces, the later ruling is the one carried.`
+   - Line 122 (before: "Without such a lookup, the round names the ones found, says that the list may not be whole, and states no total.") is lines 125 to 127: `Without such a lookup, the round names the ones found.`, `Without such a lookup, the round says that the list may not be whole.` and `Without such a lookup, the round states no total.`
+3. Standards 3, the limit of the write.
+   - Before, line 53: `A carried ruling is written into the entry's Rulings or rulings file ("Steps / Writing what settled" 1).` After, line 54: `A carried ruling is written into the entry's Rulings or rulings file for each decision it settles that the entry's Rulings or rulings file does not already settle ("Steps / Writing what settled" 1).`
+   - The term carries the limit in item 4.
+4. Behaviour 1, the archived plan's Rulings.
+   - New line 52, at five spaces after line 51 (`Such a bullet is a carried ruling.`): `In an archived `plan.md` that opens with `# Plan: <entry>`, every bullet of a section whose heading begins `## Rulings` and whose first line ends with "(the user)", with or without a full stop after it, is a carried ruling, whether or not it names the entry.`
+   - `skills/repo-setup/templates/plan-terms.md:14` and `docs/glossary.md:19`, the **carried ruling** line. Before: `- **carried ruling**: a bullet of another plan's Rulings, or of another rulings file under the ledger root, that names the entry `grill` interviews on and whose first line ends with "(the user)"; the decisions it settles are not asked again, and it is written into the entry's Rulings or rulings file with its source. Stated in: ...` After: `- **carried ruling**: a bullet whose first line ends with "(the user)", of another plan's Rulings or of another rulings file under the ledger root, that names the entry `grill` interviews on, or of the Rulings of an archived plan of that entry; the decisions it settles are not asked again, and each one the entry's Rulings or rulings file does not already settle is written there with its source. Stated in: `grill`, "What it reads" 6, Steps 3 and "Steps / Writing what settled" 1.`
+
+## Check 1
+
+Command: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md`, exit status 0. Output:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+```
+
+## Check 2
+
+Each of the 11 lines of `skills/grill/SKILL.md` the round gives (lines 33 and 34, the seven split lines, line 54 and line 52) was written as the one line of a scratch file under `$TMPDIR`, and `grep -c -F -f <that file> skills/grill/SKILL.md` printed 1 for each. The **carried ruling** line, from the round's text, printed 1 for `skills/repo-setup/templates/plan-terms.md` and 1 for `docs/glossary.md`. Line 34 is the base text: `diff <(sed -n 34p <main checkout>/skills/grill/SKILL.md) <(sed -n 34p skills/grill/SKILL.md)` printed nothing.
+
+## Check 3
+
+`diff -U2 /Users/axelfaes/workspace/ordo/<file> <file>` was run for the three files. The changed lines stand at three spaces (lines 33 and 34) and the new lines at five spaces (lines 52, 54, 92, 93, 96, 97, 125, 126 and 127) as their items state, and the completion lines stay last in their items: `skills/grill/SKILL.md` lines 111 (Steps 3), 128 (Steps 5), 161 (Steps 10) and 221 ("Steps / Writing what settled" 1), as `grep -n 'The step is done when\|The item is done when'` prints them.
+
+## Check 4
+
+```
+$ LC_ALL=C grep -n '[^ -~]' skills/grill/SKILL.md skills/repo-setup/templates/plan-terms.md docs/glossary.md
+(no output, exit status 1)
+```
+
+## Check 5
+
+```
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+```
+
+## Check 6, the walk again
+
+Line numbers are those of the changed `skills/grill/SKILL.md` as `grep -n` prints them.
+
+- R4 (the 2.C bullet "The review of Ordo").
+  1. Line 47: no open plan of entry 3, so the rulings file is the entry's Rulings.
+  2. Line 50: the archived plan's `## Rulings` is read, "an archived plan's included". The bullet names "roadmap entry 3" and its first line ends "(the user)."; by line 51 it is a carried ruling. Line 52 does not apply, since `.scratch/archive/2-c-.../plan.md` opens with `# Plan: 2.C`, not entry 3's.
+  3. Line 53: it settles no decision of the tree (it states that entry 3 is redone from its sources, no keep, change or drop of a part).
+  4. Line 54: a carried ruling is written for each decision it settles that the entry's file does not already settle, which is none, so nothing is written.
+- R11 (a rulings file of another entry that mentions entry 3 only as a dependency).
+  1. Line 50: the other rulings file is read; a bullet that names the entry by number ("waits on 3") and ends "(the user)" is a carried ruling (line 51).
+  2. Line 53: the decisions it settles are settled, judged by reading; a dependency mention settles none.
+  3. Lines 54 and 217: no decision, so no bullet is written.
+- R13 (`/grill 3` on the main checkout).
+  1. Line 47: no open plan of entry 3, so `.scratch/rulings/3-the-writing-base.md` is the Rulings.
+  2. Line 89: its D1 (file line 3) and D2 (file line 4) settle the counting-script decision and the entry-4 decision, which are marked settled.
+  3. Lines 50 and 51: the ruling "Entry 3 and step 13" (`.scratch/2-e-grill/plan.md:127`) is a carried ruling.
+  4. Lines 99 and 100: a bullet of the entry's rulings file already settles its decisions, judged by reading (D1 "(b) no counting script" and D2 "(a) after entry 3 is approved, entry 4 waiting on 3 for the prose rules only" hold what it states), so it is not written again; line 54 says the same from the write.
+  5. Line 108: after a restart the tree is drawn afresh from the rulings file and the carried rulings, with the same result.
+- R18 (`/grill 2.D` while `.scratch/archive/2-d-the-plan-skills-take-the-comparisons-process-changes/plan.md` opens with `# Plan: 2.D The plan skills take the comparison's process changes`).
+  1. Line 33: `archive_root` is a required key (`.agents/plan.yaml:7`, `archive_root: .scratch/archive`).
+  2. Line 47: that plan lies inside `archive_root`, so it is not the open plan; the entry's Rulings are the rulings file `.scratch/rulings/<slug>.md` when it exists, and line 213 sends the answers there.
+  3. Line 50: the archived plan's Rulings sections are read. The file holds one, `## Rulings (2026-09-29)` (plan line 33; `grep -n '^## '` lists Goal, Gate, Steps, Could run in parallel, Rulings, Blocked), with eight bullets at plan lines 35 to 42.
+  4. Line 52: the plan opens with `# Plan: 2.D ...`, the entry, so every bullet of that section whose first line ends with "(the user)" is a carried ruling whether or not it names the entry. The awk over the section prints `ends-the-user=yes` for plan lines 35, 36, 37, 38, 39, 40, 41 and 42, and `names-2.D=yes` for line 39 only. All eight are carried: the step list (35), open items A (36), B (37), C (38), D (39), E (40), the extended `sync_rules.py` (41) and F (42).
+  5. Lines 53 and 90: the decisions of 2.D's tree that these eight settle are settled and not asked again, judged by reading; line 91 and line 133 list them in round 1.
+  6. Lines 217 and 218: each is written to the rulings file at the first write of Steps 8, dated 2026-09-29 from the heading (plan line 33), for each decision it settles that the rulings file does not already settle (line 54).

@@ -143,3 +143,223 @@ Cases of the brief's "Cases" (walked on the changed text, line numbers as `grep 
 - A carried ruling with no date anywhere (the builder's note). No input exists on the tree: all 23 bullets of `.scratch/rulings/3-the-writing-base.md` carry a date, and every `## Rulings` heading under `.scratch` does. grill's own form at :209 writes a date, so I report no finding.
 
 Reviewer usage: tokens not visible from inside the agent (from the completion notice), about 35 tool uses, minutes not visible.
+
+## Repair round 1, refuted
+
+Reviewer: a fresh `ordo-high` agent that changed nothing. Worktree `/Users/axelfaes/workspace/ordo/.agents/worktrees/2e-14a`, base `16c5f3702eabb6a35bd6a182ef2e94c595563d81`.
+
+**How the delta was read.** I diffed `git diff <base>` against `.scratch/2-e-grill/agents/reviews/14a-round-0.diff`. The round changed these places and nothing else:
+- `skills/grill/SKILL.md`: lines 33 and 34, 52, 54, 92 and 93, 96 and 97, and 125 to 127.
+- The **carried ruling** line in `skills/repo-setup/templates/plan-terms.md:14` and `docs/glossary.md:19`.
+
+`git status --short` shows the three changed files and `?? .scratch/2-e-grill/agents/reviews/14a-report.md`, nothing else.
+
+**One command outside the brief's git limit.** I ran `git diff --stat <base> -- skills/grill/SKILL.md skills/repo-setup/templates/plan-terms.md docs/glossary.md` once from the main checkout, not from inside the worktree. It prints nothing, which shows main's copies equal the base. Check 3 compares against those copies. The command is read-only.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md   (from the worktree root)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+rc=0
+
+Round check 2 (each dictated line, extracted from 14a-round-1.md into a scratch file, `grep -c -F -x -f`):
+l00 skills/grill/SKILL.md 1   "   - The required keys are `roadmap`, `ledger_root`, `archive_root`, ..."
+l01 skills/grill/SKILL.md 1   "   - The optional keys are ... (base text of line 34)"
+l02 skills/grill/SKILL.md 1   "     - A carried ruling is written into the entry's Rulings or rulings file for each decision ..."
+l03 skills/repo-setup/templates/plan-terms.md 1 ; docs/glossary.md 1   "- **carried ruling**: a bullet whose first line ends with ..."
+l04 to l10 skills/grill/SKILL.md 1 each   (the seven split lines)
+l11 skills/grill/SKILL.md 1   "     - In an archived `plan.md` that opens with `# Plan: <entry>`, ..."
+$ diff <(sed -n 34p <main>/skills/grill/SKILL.md) <(sed -n 34p skills/grill/SKILL.md)   -> no output, rc=0
+
+Brief verify 2 over the whole diff (each '+' line of `git diff <base> -- <file>`, whole-line count):
+skills/grill/SKILL.md: 39 added lines, 0 not equal to 1
+skills/repo-setup/templates/plan-terms.md: 2 added lines, 0 not equal to 1
+docs/glossary.md: 2 added lines, 0 not equal to 1
+
+Round check 3: `diff -U2 /Users/axelfaes/workspace/ordo/<file> <file>` for the three files shows lines 33 and 34 at three spaces, the new lines 52, 54, 92, 93, 96, 97 and 125 to 127 at five, and no completion line moved.
+$ grep -n 'The step is done when\|The item is done when' skills/grill/SKILL.md (lines 80 to 222)
+81 84 111 115 128 136 143 146 148 161 167 169 174 177 179 184 186 189 194 199 204 206 208 221
+
+Round check 4:
+$ LC_ALL=C grep -n '[^ -~]' skills/grill/SKILL.md skills/repo-setup/templates/plan-terms.md docs/glossary.md
+(no output) rc=1
+
+Round check 5:
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+
+Commands the round's report section quotes, rerun:
+$ grep -n 'Entry 3 and step 13' .scratch/2-e-grill/plan.md   (main checkout)
+127:- Entry 3 and step 13 (2026-09-30): ...
+$ sed -n 7p .agents/plan.yaml
+archive_root: .scratch/archive            # Where a closed plan's folder moves.
+$ grep -n '^## ' .scratch/archive/2-d-the-plan-skills-take-the-comparisons-process-changes/plan.md
+5: ## Goal / 9: ## Gate / 13: ## Steps, in execution order / 26: ## Could run in parallel / 33: ## Rulings (2026-09-29) / 44: ## Blocked, and by what
+$ awk over that Rulings section (ending "(the user)", naming "2.D")
+35 yes no / 36 yes no / 37 yes no / 38 yes no / 39 yes yes / 40 yes no / 41 yes no / 42 yes no
+
+Greps for sentences the round makes false:
+$ grep -rn 'archive_root' README.md docs skills utils
+  README.md:139 lists it among the nine required keys. skills/plan/templates/plan.yaml:9 says "# required.".
+  plan.projects.yaml:11 and :35 give it per project.
+  roadmap:35, plan-retro:29 and session-retro:30 read it. grill:33 now agrees with all of them.
+$ grep -rn -i 'carried ruling\|carried from' README.md docs skills
+  Hits only in skills/grill/SKILL.md and the two copies of the term.
+$ grep -rn 'archived plan\|archived `plan.md`\|an archived' README.md docs skills   (grill excluded)
+  Hits only in the term and docs/roadmap.md:32 and :227, which are unrelated.
+Read in full with nothing made false: README.md:16 (the grill row), and glossary lines 98 (**ruling**) and 99 (**rulings file**).
+```
+
+### Verdicts
+
+**Items of the brief's "What to build", over the whole diff:**
+- **1: holds, as the round's ruling 1 amends it.**
+  - `SKILL.md:33` makes `archive_root` required, and `:34` is the base text again (diff rc=0).
+  - `:47` excludes the folder `archive_root` names.
+  - `:50` to `:54` are the dictated lines, each once.
+- **2: holds, as ruling 2 amends it.** `:90` to `:106` and the changed `:108`. The split lines are `:92`/`:93` and `:96`/`:97`.
+- **3: holds, as ruling 2 amends it.** `:123` to `:127` stand before the completion line `:128`.
+- **4: holds.** `:133`, at three spaces after the answer form.
+- **5: holds.** `:151`, at six spaces.
+- **6: holds.** `:217` to `:219`. Standards 5 below concerns the missing limit at `:217`.
+- **7: holds.** The `:285` cell.
+- **8: holds.** `:308` and `:310`.
+- **9: holds, as ruling 4 amends it.** `plan-terms.md:14` (**carried ruling**) and `:29` (**design tree**).
+- **10: holds.** `glossary.md:19` and `:34`, and sync_rules prints ok.
+- **11: holds.** `SKILL.md:5` reads `version: "1.1.0"`.
+
+**Cases.** Line numbers are those of the changed `SKILL.md`.
+- **R1: met.** At 833e2e8, `ledger-files.txt` has no plan or rulings file of entry 3, and no archived `plan.md` opens with `# Plan: 3`, so `:52` does not apply. By `:50`/`:51`, input `:125` is a carried ruling. By `:90`, `:91` and `:133`, round 1 lists its two decisions as settled and quoted. By `:213` and `:217`, they are written to `.scratch/rulings/3-the-writing-base.md`.
+- **R2: met.** `:101` to `:104`.
+- **R3: met.** Both `:50` and `:52` require a first line that ends "(the user)".
+- **R4: met.** The input is `.scratch/archive/2-c-.../plan.md:30`, which names "roadmap entry 3" and ends "(the user).".
+  - By `:50`/`:51` it is carried. `:52` does not apply, since that plan opens `# Plan: 2.C`.
+  - It settles no decision (`:53`).
+  - `:54` now limits the write to "each decision it settles that the entry's Rulings or rulings file does not already settle", so nothing is written. The term carries the same limit. The first report's Standards 3 is closed.
+- **R5: met.** `:98`.
+- **R6: met.** `:94` and `:95`.
+- **R7: met.** `:101`, `:103` and `:105`. `:104` applies only to an entry with a gate.
+- **R8: met.** `:86` and `:101` to `:104`.
+- **R9: met.** `:123` to `:127`: one requirement per bullet, so the first report's Standards 2 is closed for `:122`.
+- **R10: met.** `:47` and `:213`.
+- **R11: met.** Read by `:50`. Settles nothing by reading (`:53`). `:54` and `:217` write nothing.
+- **R12: met.** `ok: the plan-terms block equals the template`.
+- **R13: met.**
+  - `:47`: no open plan of entry 3. The four open plans are 2.E, 2.F, 2.G and 2.H.
+  - `:89`: D1 (file `:3`) and D2 (file `:4`) settle both decisions.
+  - `.scratch/2-e-grill/plan.md:127` is carried and is not written again (`:99`, `:54`).
+  - No archived plan opens `# Plan: 3`, so `:52` does not apply.
+  - A restart gives the same result (`:108`).
+- **R14: met.** `:96` and `:97` (D11 "replacing D5"). Spec 2 below names an input R14 does not cover.
+- **R15: met.** `:98`. See Spec 2.
+- **R16: met.** `:104`.
+- **R17: met.** `:218`.
+- **R18: met.**
+  - `:47`: the 2.D plan lies inside `archive_root`, so it is not the open plan, and answers go to the rulings file (`:213`).
+  - `:50` and `:52`: all eight bullets, `plan.md:35` to `:42`, end "(the user)", so all eight are carried. Only `:39` names 2.D.
+  - The first report's Behaviour 1 is closed on this input.
+
+### Findings
+
+**Behaviour 1: the entry test on line 52 matches another entry's archived plan.**
+- **Place:** `skills/grill/SKILL.md:52`.
+- **Quote:** "In an archived `plan.md` that opens with `# Plan: <entry>`, every bullet of a section ... is a carried ruling, whether or not it names the entry."
+- **What is wrong:** the round dropped the names-the-entry test for these bullets, so "opens with `# Plan: <entry>`" is now the only guard. It is a prefix test, and on this tree `<entry>`=`2` matches five archived headings: "# Plan: 2.A ...", "# Plan: 2.B ...", "# Plan: 2.C ...", "# Plan: 2. Coverage inventory ..." and "# Plan: 2.D ..." (a loop of `case "$h" in "# Plan: $e"*`).
+- **Pairs on the open roadmap:** 15 and 15.A (`docs/roadmap.md:140` and `:147`), and 22 and 22.A (`:196` and `:203`).
+- **`session-retro` already states the exact test** in its "What it reads" 2: "a title, after `# Plan: `, that equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed".
+- **Line 47:** it applies the same prefix test to the open plan. That text was in the base, but this step rewrote the line.
+- **Failure scenario:** once 15.A's plan is archived, `/grill 15` carries every "(the user)" bullet of 15.A's Rulings as the user's answer on entry 15. By `:90` it marks the decisions those bullets settle as settled and does not ask them. `/grill 2` does the same with 2.A to 2.D.
+- **Fix at landing:** the `session-retro` test on `:52`, and on `:47`.
+- **Verdict:** none. No case input has such a pair.
+
+**Spec 2: a ruling that replaces the entry's own bullet does not reach the carried ruling behind it.** This is in the whole diff, in the text of round 0; the first report did not raise it.
+- **Place:** `skills/grill/SKILL.md:96` and `:98`, with `:196`.
+- **Quotes:**
+  - `:96`: "A carried ruling that a later ruling names as the one it replaces settles nothing."
+  - `:98`: "A carried ruling that contradicts ... a bullet of the entry's Rulings or rulings file, neither naming the other as the one it replaces, is a rule clash".
+  - `:196`: "Reopen the earlier ruling, by a new Rulings bullet that names the one it replaces."
+- **What is wrong:** when the user reopens a decision whose bullet in the entry's own file states a carried ruling, the new bullet names that bullet, not the carried ruling's source. That bullet can be D2 of `.scratch/rulings/3-the-writing-base.md`, or a copy written by `:217` "carried from `<path>:<line>`". Nothing then lets the source settle nothing. The new `:52` extends this to every bullet of an archived plan of the entry.
+- **Failure scenario, on this tree:**
+  1. At a later `/grill 3` the user reopens D2 (`rulings/3...md:4`), and a bullet "... replacing D2 (the user)" is written.
+  2. At the next `/grill 3`, `.scratch/2-e-grill/plan.md:127` ("D2 (a), entry 4 is redrafted after entry 3 is approved, waiting on 3 for the prose rules only") is a carried ruling again.
+  3. `:96` does not apply, because the new bullet names D2, not `:127`.
+  4. By `:98`, round 1 shows a rule clash that asks the user again what they just ruled. That is the fault the step exists to end.
+- **Fix:** the orchestrator's text, for example a sub-bullet under `:96`: "A later ruling that names as the one it replaces a bullet of the entry's Rulings or rulings file that settles the same decision, a carried copy included, replaces the carried ruling too."
+- **Verdict:** none. R14 and R15 are met on their own inputs.
+
+**Behaviour 3: line 52 reads an archived plan the entry has since superseded.** This answers the orchestrator's question on supersession.
+- **Place:** `skills/grill/SKILL.md:52`, with `:90` and `:98`.
+- **What is wrong:** `:52` has no condition on the entry having an open plan or a rulings file, and no rule for an archived plan the user later set aside as a whole. `skills/plan/SKILL.md:80` moves every closed plan to `<archive_root>/`, so the earlier plan of an entry that is redone is normally archived.
+- **Where it is harmless:** an archived bullet already carried into the entry's file is not written again (`:54`, `:99`, judged by reading).
+- **Where it is not:**
+  - A bullet replaced by the entry's file through its copy gives a clash on every run (Spec 2).
+  - A plan set aside wholesale, as in the form of 2.C `plan.md:30` "roadmap entry 3 is redone from its sources", gives this: each of the old plan's "(the user)" bullets becomes a carried ruling.
+  - By `:90`, the decisions of the new tree it settles are marked settled and not asked. By `:98`, those that contradict the new rulings file are clashes on every run.
+- **Why this tree is not affected:** the user had plan 3's folder deleted rather than archived (2.C `plan.md:32`: "Decision B (2026-09-28): (a), plan 3's ledger folder is deleted from the tree, not archived (the user).").
+- **Failure scenario:** an entry whose plan closed and was archived is later redone and grilled. The first round lists the thrown-out plan's rulings as settled answers and asks none of them. The user never rules on them for the new design.
+- **Fix:** a design decision, so it is the user's call. Two options:
+  - (a) Apply `:52` only when the entry has neither an open plan nor a rulings file. The first `/grill` after the closing carries the rulings, and later runs read the copies. Con: a rulings file written by grill 1.0.0, such as `.scratch/rulings/3-the-writing-base.md`, never gets them.
+  - (b) Keep `:52`, and add that a ruling that sets an archived plan of the entry aside makes that plan's bullets settle nothing.
+- **Verdict:** none. R18 is met on its input.
+
+**Spec 4: line 52's second "whose" can attach to the section.**
+- **Place:** `skills/grill/SKILL.md:52`.
+- **Quote:** "every bullet of a section whose heading begins `## Rulings` and whose first line ends with "(the user)"".
+- **What is wrong:** the two parallel "whose" clauses read naturally as both describing "a section". A section's first line is its heading, which never ends "(the user)". Round ruling 4 means the bullet's first line.
+- **Failure scenario:** a reader takes the literal parse and carries no bullet of the 2.D plan, which loses R18's result.
+- **Fix at landing:** word order only, the text dictated: "every bullet whose first line ends with "(the user)", with or without a full stop after it, of a section whose heading begins `## Rulings`, is a carried ruling, whether or not it names the entry."
+- **Verdict:** none.
+
+**Standards 5: one limit is written in two places, with different scope, and is missing where the write happens.**
+- **Place:** `skills/grill/SKILL.md:54`, `:99` and `:217`.
+- **Quotes:**
+  - `:54`: "for each decision it settles that the entry's Rulings or rulings file does not already settle ("Steps / Writing what settled" 1)".
+  - `:99`: "A carried ruling whose decisions a bullet of the entry's Rulings or rulings file already settles is not written again".
+  - `:217`: "as one bullet for each decision it settles".
+- **What is wrong:** `docs/dev/skill-layout.md`, "Where a rule goes", says "A rule is written once. Another place that needs it names the section it is in", and its Anti-patterns row reads "The same rule written in two sections". `:54` applies the limit per decision and `:99` per ruling. `:217`, the place `:54` points at, has no limit.
+- **Failure scenario:** a carried ruling settles two decisions, and the entry's file already settles one of them. A session at Steps 8 follows `:217` and writes both bullets, one of them a duplicate. `:99` does not stop it, because not all of that ruling's decisions are settled.
+- **Fix at landing:** the text is dictated (round ruling 3 and item 2). Put the per-decision limit as a qualifier in `:217`. Have `:54` point there, and drop `:99`'s write clause or make it point there too.
+- **Verdict:** none.
+
+### Declined to judge
+
+- **Carrying every bullet of an archived plan of the entry.** Whether that is right at all was the orchestrator's ruling on the first report's Behaviour 1. I judged only its consequences (Behaviour 1, Spec 2 and Behaviour 3 above).
+- **The first report's Spec 1 and Proof 1.** They were not sent in this round, and their disposition is the orchestrator's.
+  - The builder's report still says, in "In the brief, with the evidence": "`archive_root` is listed as an optional key at line 34" and "`skills/ordo-init/templates/check_config.py` has no mention of it".
+  - The first sentence is no longer true (line 34 is the base text again, diff rc=0). The round's own section states the change, and no decision now rests on it.
+- **The first report's remaining points.**
+  - Brief decision 7 (per-part decisions as design decisions).
+  - Quoting only "the words ... that settle it" at `:217`.
+  - Whether the step 14 rerun passes.
+  - These stand as that report gave them. The round did not touch that text.
+
+Reviewer usage: tokens not visible from inside the agent (see the completion notice); about 35 tool uses; minutes not visible.
+
+## Closed
+
+- First run, Spec 1: the brief's line number corrected to `plan.md:127` in the brief.
+- First run, Proof 1: closed by repair round 1, ruling 1 (`archive_root` required).
+- First run, Standards 1, 2 and 3 and Behaviour 1: closed by repair round 1, rulings 1 to 4; the run over the round confirms each closure.
+- Run over round 1, Behaviour 1: fixed at landing, the exact title test on "What it reads" 6 and its archived-plan line.
+- Run over round 1, Spec 2: fixed at landing, a sub-bullet in Steps 3 on a ruling that replaces the entry's own bullet.
+- Run over round 1, Spec 4: fixed at landing, the archived-plan line reordered.
+- Run over round 1, Standards 5: fixed at landing, the limit moved to one sub-bullet under "Steps / Writing what settled" 1.
+- Run over round 1, Behaviour 3: raised to the user as an open item in the state file.
