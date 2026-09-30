@@ -160,3 +160,158 @@ The builder's report, part 10, point by point: point 1 is a defect (finding 1); 
 Reviewer usage: not measured by the reviewer; the completion notice carries the tokens, tool uses and time.
 
 Agent usage: claude-opus-5-5 (ordo-high), 246779 tokens, 29 tool uses, 667 s ($1.55 to $5.98).
+
+## Repair round 1, refuted
+
+Worktree `/Users/axelfaes/workspace/ordo/.agents/worktrees/2f-2b`, base `5ad43ee4fd84dd04ebfd3a4b06b6367a4829cc29`. A skill's text is cited by its section, with the line `grep -n` prints on the tree as it is now.
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/2-f-diagnose/orchestrator-state.md   (from the worktree's root, exit 0)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
+PASS: person-driven.sh scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne '...'   (the ASCII check, printed nothing)
+checks: 11 commands passed
+
+Round check 2, each dictated text as the one line of a file under $TMPDIR, grep -c -F -f <that file> <file>:
+  1 each: "The first six rows are stops" and the row "A cause not found" (skills/spec/SKILL.md); the clause "the cause its text asks for was not found and it has nothing else to build," (skills/ordo-help/SKILL.md); the four bullets of item 2, the bullets of items 6 (diagnose), 7, 8, 9 and the sentence of item 10 (skills/diagnose/SKILL.md); items 3, 5 (both texts) and 6 (both bullets) (skills/spec/SKILL.md); items 4 and 10 (both texts) (skills/diagnose/templates/diagnosis.md); item 4 (skills/land/SKILL.md); item 11 (skills/plan-orchestration/SKILL.md)
+  2: the label "A cause not found, from /diagnose", in docs/figures/gen_figures.py, lines 586 and 613
+  0 each: "The first five rows are stops" in skills/spec/SKILL.md, the old diagnose lines 108, 65, 64 and 52, the old spec line 121, "This run leaves nothing.", "quotes its part" in both files, "with that part quoted", the old end of land line 93, the old list of plan-orchestration line 332
+The brief's own check 2, for the texts the round left as they were (29 lines over the seven files): 1 each; the four replaced texts of the brief: 0 each.
+Round check 3: docs/figures copied to a folder under $TMPDIR and python3 gen_figures.py run there twice: "wrote .../pipeline.svg (31211 bytes)", "wrote .../plan-loop.svg (30868 bytes)", exit 0 both times; cmp of each written file with the worktree's: exit 0 for plan-loop.svg and for pipeline.svg. The script was not run inside the worktree, since it writes files there.
+  grep -o 'viewBox="0 0 1040 [0-9]*"' docs/figures/plan-loop.svg -> viewBox="0 0 1040 889"
+  git diff <base> --stat lists no pipeline.svg
+  diff of the base's plan-loop.svg with the worktree's: two added <text> lines ("- A cause not found," at y=298, "from /diagnose" at y=312), nothing else; the /spec box is the rect y=42 height=290, so both lines are inside it
+  rsvg-convert docs/figures/plan-loop.svg -o "$TMPDIR/refute2b.XXXXXX/plan-loop.png" exit 0; the render read: the /spec box lists six stops, the last "A cause not found, from /diagnose", inside the box; the other five boxes, the cards and the band stand where the base's render has them
+Round check 4: ruff check --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 --line-length 100 --target-version py39 docs/figures/gen_figures.py -> All checks passed!
+  ruff format --check --line-length 100 docs/figures/gen_figures.py -> 1 file already formatted
+Round check 5: git status --short -> the ten files " M" and "?? .scratch/2-f-diagnose/agents/reviews/2b-report.md"; git diff <base> --stat -- . ':!.scratch' -> 10 files changed, 52 insertions(+), 20 deletions(-)
+  LC_ALL=C grep -n '[^ -~]' over the nine text files -> nothing, exit 1
+Round check 6 and 7: read; results under the verdicts and the findings.
+
+The delta: the changed lines of 2b-round-0.diff compared with the changed lines of git diff <base> now. Every line that differs belongs to one of the round's items 1 to 11; no other line changed, and no check or test was removed or changed.
+
+Commands the builder's report quotes:
+  wc -l -> 253, 112, 309, 108, 332, 206, 118, 135, 742, 164; git diff <base> --numstat -> 23/7, 4/4, 14/3, 3/1, 2/2, 1/1, 1/1, 1/1, 1/0, 2/0, as part 7 gives them
+  description lengths -> 903 skills/diagnose/SKILL.md, 1022 skills/spec/SKILL.md
+  grep -c "step's worktree\|dispatch entry\|report\|finding\|the round\|builder" skills/diagnose/SKILL.md -> 36
+  grep -rn 'false premise' skills -> diagnose 108, 109, 110; diagnosis.md 78; land 93; spec 115, 280 (seven, as check 6 lists)
+  grep -rn 'cause not found' skills docs README.md, the svg files left out -> 21 hits, the lines check 7 lists
+  wc -w over diagnose 35, 52, 63, 64, 108, 183, 190, spec 112, 137, ordo-help 61, 76, land 93 -> 34, 35, 32, 34, 37, 30, 33, 28, 39, 36, 91, 34, as part 6 gives them
+  git diff <base> -U0 | grep -c -P '^\+.*\t' -> 0; the trailing-space grep over the added lines -> nothing, exit 1
+  R1 to R5, on the base's files rebuilt under $TMPDIR by reversing git diff <base> with patch -R: R1 0; R2 the three old lines, /diagnose at 117 and 254; R3 the /spec line, then brief check <n>, premise at line 74 only, the old row 28; R4 the old Step 0 entry, the same in both files; R5 lines 56 and 58, premise 0
+  ls docs/adr -> README.md, template.md
+One command outside the two git commands the launch allows was run: git show <base>:docs/figures/plan-loop.svg, read-only, to get the base's figure for the comparison above.
+No case is a code case, so no change of the reviewer's own was made. The scratch folder under $TMPDIR is removed.
+```
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: holds, the clause counts 1 and the old clause 0 in `skills/diagnose/SKILL.md` line 3.
+- 2: holds, line 19.
+- 3: holds, lines 35, 44, 46, 47, 53, and line 52 as round item 9 rules it.
+- 4: holds, lines 63 to 65 as round items 6, 8 and 10 rule them, 89, 108 to 111 as round item 2 rules them, 183 and 184.
+- 5: holds, line 217, the two cells at 228 and 229, the row at 230; ten rows, five stops and five refusals.
+- 6: holds, lines 3, 7 and 112 of `templates/diagnosis.md`, with round items 4 and 10.
+- 7: holds, lines 112 to 123 of `skills/spec/SKILL.md`, with round items 3 and 6.
+- 8: holds, lines 60 and 61 of `skills/ordo-help/SKILL.md`.
+- 9: holds, line 28 of `skills/plan-orchestration/SKILL.md`.
+- 10: holds for the end state, the clause counts 1 in both glossary files and the sync check prints ok.
+
+Round items 1 to 12: each closure reproduces. None closes a finding by removing a check, and none reaches beyond its finding: the delta holds only the lines the round brief dictates. Item 12: part 3 of the report quotes each output line of R2, R3 and R5 whole.
+
+Cases:
+
+- R1 to R5: met, each first read reproduces on the base's files.
+- W1: met. `diagnose` 44, 46, 52 and 53 do not refuse; record 62 with symptom 35; probes 72, 77, 89; shown and waited 125 and 129; Step 0 and no fix on main 183 and 184; `spec` 116 and 117.
+- W2: met, `diagnose` 127 and "Rules" 247.
+- W3: met, `diagnose` 53, 58 and the row at 230.
+- W4: met, `diagnose` 52, 64, 65 and 63.
+- W5: met, `diagnose` 35.
+- W6: met, `diagnose` 164, `spec` 117 and 118.
+- W7: met, `diagnose` 153 and 155, `spec` 119 to 121 and the row at 285; `spec` "Stops" has six stops and line 276 says six; `ordo-help` 76 and the figure hold the case.
+- W8: met, `diagnose` 108 to 111, `spec` 115, 81 and 84, the record's words at `diagnosis.md` 78 and the booking's at `land` 93. Steps 22 is reached, so the scratch copy is removed. `diagnose` 111 leaves Steps 23 out while 157 runs it after a cause not found; `land` "What it reads" 7 reads the record from the ledger whatever Steps 23 did, so no reader is led wrong.
+- W9: met. After a stop, "Steps / A stop" 1 commits the ledger files; after a wait, `spec` 123, 137, 138 and 139 keep the record and write the Step 0 lines into `plan.md` again, and 114 then skips the investigation. Standards 2 is about what line 137 leaves out of its list, and does not change the walk.
+- W10: met. The 36 hits were read again; lines 108 to 111 and 190 hold for `premise`, and each other hit names its forms or holds for it.
+
+### Findings
+
+#### 1. Spec
+
+- none. Each text of the round stands where its item places it, and no line outside the items changed.
+
+#### 2. Proof
+
+- none. Every count, path and output the report gives for the round reproduces. The builder's point 1 of part 10 is no defect of the tree: the label counts 2 in `docs/figures/gen_figures.py` because line 613, the "close them" box's label, stood there on the base, and line 586 is the one line the round added (the diff shows one added line in that file). The round brief's check 2 asked for a count of 1 that the file cannot give; nothing on the tree changes.
+
+#### 3. Standards
+
+1. `skills/diagnose/SKILL.md`, Steps 22 (line 190): "Inside a plan, a session run by hand that ends before the next command of the sequence commits by path each ledger file the diagnosis wrote (the record, `plan.md`, the state file)."; against Steps 2 (line 66), "Inside a plan, the record is written to disk in the main checkout and not committed on its own.", and `skills/spec/SKILL.md`, "Rules" (line 307), "A ledger record is committed only at a resume point". This is the builder's point 2 of part 10, and it is a defect of wording. What is wrong: the commit of line 190 is a handover, which the glossary and `plan-orchestration` line 158 make a resume point, but line 190 does not say so, so on its face it is the record committed on its own, outside a resume point. Change standard, rule 19. Failure scenario: a person runs `/diagnose <entry> <step> premise` and ends the session; the session holds line 66 and `spec` "Rules" against line 190, leaves the record and `plan.md` uncommitted, and the next session's `/spec` refuses with "A failed preflight" on `plan.md`. Smallest change, line 190 replaced, line 66 left as it is:
+
+   ```
+       - Inside a plan, a session run by hand that ends before the next command of the sequence commits by path each ledger file the diagnosis wrote (the record, `plan.md`, the state file), a handover as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+   ```
+
+2. `skills/spec/SKILL.md`, Steps 5 (line 137): "This run leaves only what a diagnosis of Steps 4 wrote: its record and its lines in the step's Step 0."; against `skills/diagnose/SKILL.md`, Steps 15 (line 153), "Inside a plan, a cause not found is raised to the user as an open item", and Steps 22 (line 190), which lists "the record, `plan.md`, the state file" as what a diagnosis writes. What is wrong: a step with a second item goes on after a cause not found (`spec` 119 to 121), so a run that then waits at Steps 5 also leaves the open item in the state file, which the list of line 137 leaves out. Change standard, rule 19. Failure scenario: a step with two items, one a cause not found, waits for another step to land; the session reads "leaves only ... its record and its lines in the step's Step 0" and takes the open item back out of the state file, and the user is never asked. Smallest change, the first sentence of line 137:
+
+   ```
+   This run leaves only what a diagnosis of Steps 4 wrote: its record, its lines in the step's Step 0 and the open item of a cause not found.
+   ```
+
+3. `skills/repo-setup/templates/plan-terms.md` line 16 and `docs/glossary.md` line 21, the entry **cause not found**: "the end of a diagnosis when ... or, with no person present, when no red command can be built"; against `skills/diagnose/SKILL.md`, Steps 4 (line 108), "neither the stop "No red command" nor the cause not found then applies". What is wrong: the round gives a `premise` diagnosis a third end for that state, and the entry still gives the cause not found as the end; an entry the diff makes false, `refute` "The four headings", Standards. Failure scenario: a reader who takes the end of a diagnosis from the glossary books a cause not found, with its open item, for a `premise` run whose command is green. The line is outside the brief's paths (the brief names line 104 of the template only). Smallest change, in `plan-terms.md` and then `python3 skills/repo-setup/templates/sync_rules.py . --only glossary --write`: after "or the redacted output is not enough to diagnose." add the sentence "For `premise`, a command that is green on main's head ends the diagnosis on a false premise instead.", and the entry's last words become "Stated in: `diagnose`, Steps 4 and 15 and "Stops"."
+
+4. `skills/diagnose/SKILL.md`, Steps 2 (line 64): "each part "What it reads" 5 finds whose cause does not stand in the step's Step 0 already gets a diagnosis of its own"; with "What it reads" 5 (line 53) and the Stops row "No part to investigate" (line 230). What is wrong: the round's qualifier makes a state the skill has no words for, a step whose every part already has its cause in Step 0. Line 53 and the row refuse only a text with no part, and the Done line of Steps 2 (line 68) cannot be met with no diagnosis to open. `docs/dev/skill-layout.md`, "Writing for an agent", the bullet on the completion criterion. Failure scenario, a rare one, by hand only, since `spec` line 114 does not run the form then: a person runs `/diagnose <entry> <step> premise` a second time; the session either diagnoses the part again against line 64, or appends a heading with a symptom and nothing under it. Smallest change:
+   - line 53: "For `premise`, a step's text with no such part, or with the cause of each such part in its Step 0 already, is a refusal ("Stops")."
+   - line 230, the second cell: "Inside a plan, for `premise`, the step's text holds no part that asks for a cause to be found, or the cause of each such part stands in its Step 0 already"
+
+5. `.scratch/2-f-diagnose/agents/reviews/2b-report.md`, part 5: the terms part leaves out **ruling** (`diagnose` 52, "the rulings that touch it"; `spec` 285, "A ruling"), **finding** (`diagnose` 63) and **sequence, the** (`diagnose` 190, "the next command of the sequence"), where the round brief asks for "the terms, complete". Failure scenario: a reader of the report takes the list as every term the diff uses and does not check those three. Each was read here and is used in its entry's sense, so nothing on the tree changes and no decision rests on the omission.
+
+No other sentence of `skills`, `docs` or `README.md` is made false by the delta: the hits of "false premise", "cause not found", "first six rows", "first five rows", "leaves only what a diagnosis", "leaves nothing", "Steps 21 and 22", "by path", "not committed on its own" and "the rulings that touch it" were each read. Every list of `/spec`'s stops (`spec` "Stops", `ordo-help` line 76, the `/spec` box of `gen_figures.py`) holds the new stop. Steps 2, 4 and 22 of `diagnose` and Steps 5 of `spec` each still end on their Done line. No added line is non-ASCII, holds a tab, a dash as an aside, or history.
+
+#### 4. Behaviour
+
+- none. Part 9 of the report states each visible change of the round with its before and after, and the delta holds no other.
+
+### Declined to judge
+
+- A real run of `/diagnose <entry> <step> premise`, and of `/spec` running it: not made, since the reviewer invokes no skill. Every walk is a reading.
+- Whether a command that is green on the scratch copy should end a `premise` diagnosis on a false premise when the symptom needs the real environment or a credential, or is seen only sometimes (`diagnose` line 108 against the second condition of line 105 and line 101): the round brief's item 2 rules that the false premise wins over both other ends, and `spec` Steps 2 then corrects the plan or stops for the user. Whether those symptoms should be excepted is the orchestrator's or the user's call.
+- `python3 docs/figures/gen_figures.py` inside the worktree: not run there, since it writes files; the run on a copy under `$TMPDIR` gives byte for byte the worktree's two figures.
+- The report's sentence that each dictated line "was written by a script that asserted its old text occurs once": the tree shows only the end state.
+- Decision 13 of the brief, no version change: no page states when `metadata.version` moves.
+- The installed, pinned skills and the other worktrees under `.agents/worktrees/`: not read.
+
+Reviewer usage: not measured by the reviewer; the completion notice carries the tokens, tool uses and time.
+
+Agent usage: claude-opus-5-5 (ordo-high), 230709 tokens, 34 tool uses, 595 s ($1.88 to $6.31).
+
+## Closed
+
+- First run, Standards 1 to 10: each closed by repair round 1 (`agents/briefs/2b-round-1.md`, items 1 to 12), and each closure reproduced by the reviewer over the round.
+- First run, declined, the rule of `plan-orchestration` on the skills the loop invokes: closed by the round's item 11. The other declined points: no change; each is outside what a read can settle or is Axel's.
+- Round 1, Standards 1 (the commit of Steps 22 not named a handover): fixed at landing with the reviewer's wording.
+- Round 1, Standards 2 (the open item of a cause not found left out of what a waiting run leaves): fixed at landing with the reviewer's wording.
+- Round 1, Standards 3 (the entry **cause not found**): fixed at landing in `plan-terms.md` and carried to `docs/glossary.md` by the sync.
+- Round 1, Standards 4 (a step whose every part has its cause in Step 0): fixed at landing with the reviewer's wording, in "What it reads" 5 and the Stops row.
+- Round 1, Standards 5 (three terms left out of the builder's report): no change on the tree; the reviewer read each as used in its entry's sense, and the booking says so.
+- Round 1, declined, a green command for a symptom seen only sometimes or one that needs the real environment: fixed at landing, `diagnose` Steps 4 excepts both from the false premise.
+- Round 1, the other declined points (a real run of the form, the figure script run inside the worktree, the version number): no change; each is outside what the brief asks.

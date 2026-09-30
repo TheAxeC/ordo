@@ -25,7 +25,7 @@ continue the plan                    resume from the state file, after a compact
 | The plan is not open yet | `/plan <entry>` |
 | Where the plan stands and which command comes next | `/ordo-help <entry>` |
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
-| A finding, a red line or a brief-check finding whose cause is not known, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line` or `brief check <n>` |
+| A finding, a red line or a brief-check finding whose cause is not known, or a cause a step's text asks to have found, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line`, `brief check <n>` or `premise` |
 | What the reviews keep finding across plans | `/plan-retro` |
 | What went well and what went wrong in the Claude Code sessions of a plan | `/session-retro <entry>` |
 
@@ -329,4 +329,4 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
 - Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops".
   - It is never sent back to the builder.
   - It becomes a step only by the user's ruling.
-- Every skill the loop invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, and `/roadmap` at the closing) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.
+- Every skill the loop invokes (`/spec`, `/refute`, `/land`, `/diagnose`, `academic-paper` for manuscript content, and `/roadmap` at the closing) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.

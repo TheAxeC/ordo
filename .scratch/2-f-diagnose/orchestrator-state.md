@@ -39,21 +39,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 2b
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2f-2b
-  base: 5ad43ee4fd84dd04ebfd3a4b06b6367a4829cc29
-  launched: 2026-09-30 15:20
-  session_id: a065164924d21655a (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-f-diagnose/agents/reviews/2b-report.md
-  builder_usage: round 0: 211125 tokens, 33 tool uses, 511 s ($1.26-2.93); round 1: 291176 tokens, 24 tool uses, 339 s (both rounds $2.97-7.10)
-  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2b-refuter.md (ordo-high, claude-opus-5-5; 246779 tokens, 29 tool uses, 667 s, $1.55-5.98; 10 Standards findings); round 1 reviewer a04d091169687c8c9 (ordo-high), running
-  round_brief: .scratch/2-f-diagnose/agents/briefs/2b-round-1.md
-  brief_check: .scratch/2-f-diagnose/agents/reviews/2b-brief-check.md (ordo-high, claude-opus-5-5; 196736 tokens, 21 tool uses, 489 s, $1.07-4.37)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -93,6 +79,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1, 2, 2a and 3 landed or run, and ticked.
-- Step 2b is prepared: its brief is checked and its builder is dispatched.
+- 2026-09-30. Steps 1, 2, 2a, 2b and 3 landed or run, and ticked.
 - Next: step 4, the blind comparison, which ends in Axel's call.
