@@ -71,4 +71,4 @@ none
 
 - 2026-09-30. The plan is opened from the step list Axel approved (`.scratch/plan-drafts/`); nothing has landed.
 - Next step: 1, which writes new files and one line of `docs/dev/building.md` and `docs/dev/change-standard.md`'s command block.
-- Open on Axel's side: none.
+- Open on Axel's side: the open items above ("Git aliases", "Other commands that discard work").
