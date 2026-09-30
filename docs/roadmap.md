@@ -200,6 +200,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on a topic you name over at least two sessions, the second reading the first's records and scheduling its retrieval practice, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `teach` on the same topic, wins or ties.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
+## 22.A Blind comparisons of the plan skills
+
+- Status: [ ]
+- Goal: `refute`, `plan`, `plan-orchestration` and `session-retro` each hold up against the skill that does the same job elsewhere, compared blind; a skill that loses is changed until it wins or ties.
+- Gate: four blind comparisons as `docs/dev/blind-comparison.md` says, each a win or a tie by your call: `refute` against mattpocock's `code-review` on step 9a of plan 2.E (its brief `.scratch/2-e-grill/agents/briefs/9a.md` and the diff `.scratch/2-e-grill/agents/reviews/9a-round-0.diff`); `plan` against superpowers' `writing-plans` on entry 3 on the tree at 7e984dd; `plan-orchestration` against superpowers' `subagent-driven-development` on the plan of entry 21 as `/plan` opened it, each side on its own copy of the tree at the opening commit; `session-retro` against mattpocock's `retro` on the sessions of plan 2.E.
+- Waits on: 2.E, for step 14b's judge's input; 2.H, for `session-retro`; 21, for the plan `plan-orchestration` runs on.
+
 ## 23. Pruning pass
 
 - Status: [ ]
