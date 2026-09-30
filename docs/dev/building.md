@@ -8,6 +8,7 @@ sh skills/land/templates/checks.test.sh                # checks.sh on a failing 
 sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
 sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules and plan-terms blocks, its --write repair, its --only glossary form and its refusals
 sh skills/repo-setup/templates/hooks/git_guard.test.sh  # git_guard.py on the commands it must block (push, reset --hard, clean --force, checkout and restore of the whole tree, reached through separators, substitutions, wrappers, shells and aliases) and on the commands it must let through
+sh skills/session-retro/templates/transcript_window.test.sh  # transcript_window.py on scratch transcript folders: the window and its boundaries in each time form, the main and subagent files, the order and the prefix, what counts as a user message, assistant text and tool calls, each redaction pattern, skipped lines, an unreadable file and the usage errors
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
 sh utils/pin.test.sh                                   # pin.sh in pin and check mode under a scratch HOME, its refusals included
 sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists

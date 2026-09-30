@@ -137,7 +137,7 @@ Mutation check of the test on scratch copies of the script (each changed one beh
 
 ## Files
 
-New: `skills/session-retro/templates/transcript_window.py` (385 lines) and `skills/session-retro/templates/transcript_window.test.sh` (442 lines). Changed: `docs/dev/building.md` (one line added, 10 to 11 lines in the block), `docs/dev/change-standard.md` (one line added).
+New: `skills/session-retro/templates/transcript_window.py` (475 lines) and `skills/session-retro/templates/transcript_window.test.sh` (594 lines). Changed: `docs/dev/building.md` (one line added, 10 to 11 lines in the block), `docs/dev/change-standard.md` (one line added).
 
 ### `skills/session-retro/templates/transcript_window.py`
 
@@ -167,8 +167,10 @@ session and `agent-<agent id>` for a subagent (the file name without `.jsonl`), 
 its further lines indented by two spaces. The kinds:
     user        a message the user typed: a `user` entry whose content is a string (unless the
                 entry has isMeta or isCompactSummary true, or the string starts with
-                <task-notification>); each `text` block of a `user` entry whose content is an
-                array (unless the entry has isMeta true); the prompt of an `attachment` entry
+                <task-notification>, <bash-stdout>, <bash-stderr>, <local-command-stdout> or
+                <local-command-stderr>, the output of a command the user ran); each `text`
+                block of a `user` entry whose content is an array (unless the entry has isMeta
+                true); the prompt of an `attachment` entry
                 whose type is queued_command and whose commandMode is prompt (unless
                 attachment.isMeta is true). In a subagent file the first such entry is the
                 prompt the agent was started with.
@@ -188,13 +190,16 @@ replaced by <REDACTED> (a tool input is redacted before its first line is taken)
     https://hooks.slack.com/services/ and what follows up to whitespace, AIza[0-9A-Za-z_-]{35},
     and a JWT eyJ[A-Za-z0-9_-]{10,}.[A-Za-z0-9_-]{10,}.[A-Za-z0-9_-]{10,};
     a PEM private key block, from a -----BEGIN ... PRIVATE KEY----- line to its
-    -----END ... PRIVATE KEY----- line;
+    -----END ... PRIVATE KEY----- line, or to the end of the text when there is no END line (a
+    PUBLIC KEY block is kept);
     the rest of the line after Authorization:, Proxy-Authorization:, Cookie: or Set-Cookie:, and
-    the word after `Bearer ` or `Basic `;
-    the value of a name that is, or ends in, password, passwd, secret, token, api_key, api-key,
-    apikey, access_key, access-key, private_key or credentials, written name=value, name: value,
-    "name": "value", name="value" or name='value': the value inside the quotes when quoted, and
-    otherwise up to whitespace, a comma or a quote;
+    the word after `Bearer` or `Basic` and one or more spaces or tabs;
+    the value of a name that is, or ends in, password, passwd, secret, secret_key, token, api_key,
+    api-key, apikey, access_key, access-key, private_key or credentials, written name=value,
+    name: value, "name": "value", name="value" or name='value': the value inside the quotes when
+    quoted, and otherwise up to whitespace, a comma, a quote, ), ], } or ;
+    the value of the option form of each of those names, --name value or --name=value, where the
+    name is the whole option (--tokens and --password-file are kept);
     the password of a URL scheme://user:password@host.
 Commit hashes, UUIDs, agent ids and other hex strings are not redacted.
 
@@ -215,11 +220,17 @@ file read:
     error: not a folder: <folder>   (the folder is a file)
     error: invalid session id: '<id>'   (empty, or anything but letters, digits, - and _)
     error: no session file: <folder>/<session id>.jsonl
-A file that cannot be opened or read is reported on stderr as
-`error: cannot read <file>: <reason>`; the other files are still printed and the exit status is 1.
+    error: cannot read <path>: <reason>   (the folder or the session file cannot be checked, for
+        example when a parent folder cannot be searched)
+A file that cannot be opened or read, and a session folder, its subagents folder or the
+transcript folder itself that cannot be listed, is reported on stderr as
+`error: cannot read <file or folder>: <reason>`; the other files are still printed and the exit
+status is 1.
 
-Exit statuses: 0 the output printed (an empty window prints nothing and exits 0), 1 a file could
-not be read and the output lacks it, 2 a usage error.
+Exit statuses: 0 the output printed (an empty window prints nothing and exits 0), and also when
+the reader of stdout closes it early (the script then stops writing and prints nothing on
+stderr), 1 a file could not be read or a folder could not be listed and the output lacks it,
+2 a usage error.
 
 Standard library only; runs on Python 3.9 and newer.
 """
@@ -227,7 +238,9 @@ Standard library only; runs on Python 3.9 and newer.
 from __future__ import annotations
 
 import json
+import os
 import re
+import stat
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -247,8 +260,15 @@ _ENTRY_TYPES = ("user", "assistant", "attachment")
 _REDACTED = "<REDACTED>"
 
 _NOT_AFTER = "(?<![A-Za-z0-9])"
+_NOT_TYPED = (
+    "<task-notification>",
+    "<bash-stdout>",
+    "<bash-stderr>",
+    "<local-command-stdout>",
+    "<local-command-stderr>",
+)
 _PEM_KEY = re.compile(
-    r"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?-----END [A-Z ]*PRIVATE KEY-----",
+    r"-----BEGIN [A-Z ]*PRIVATE KEY-----.*?(?:-----END [A-Z ]*PRIVATE KEY-----|\Z)",
     re.IGNORECASE | re.DOTALL,
 )
 _KEY_SHAPES = re.compile(
@@ -277,12 +297,17 @@ _KEY_SHAPES = re.compile(
 _HEADER = re.compile(
     r"((?:Proxy-)?Authorization:|(?:Set-)?Cookie:)([ \t]*)[^\s][^\n]*", re.IGNORECASE
 )
-_SCHEME_WORD = re.compile(r"\b(Bearer|Basic)( +)[^\s\"',;]+", re.IGNORECASE)
+_SCHEME_WORD = re.compile(r"\b(Bearer|Basic)([ \t]+)[^\s\"',;]+", re.IGNORECASE)
+_NAMES = (
+    r"password|passwd|secret_key|secret|token|api_key|api-key|apikey|access_key|access-key"
+    r"|private_key|credentials"
+)
+_VALUE = r"(?P<value>\"[^\"\n]*\"?|'[^'\n]*'?|[^\s,\"')\]};]+)"
 _NAMED_VALUE = re.compile(
-    r"(?P<name>password|passwd|secret|token|api_key|api-key|apikey|access_key|access-key"
-    r"|private_key|credentials)(?P<sep>[\"']?[ \t]*[:=][ \t]*)"
-    r"(?P<value>\"[^\"\n]*\"?|'[^'\n]*'?|[^\s,\"']+)",
-    re.IGNORECASE,
+    rf"(?P<name>{_NAMES})(?P<sep>[\"']?[ \t]*[:=][ \t]*){_VALUE}", re.IGNORECASE
+)
+_OPTION_VALUE = re.compile(
+    rf"(?<![A-Za-z0-9-])(?P<name>--(?:{_NAMES}))(?P<sep>=|[ \t]+){_VALUE}", re.IGNORECASE
 )
 _URL_PASSWORD = re.compile(r"(?<=://)([^\s:/@]+:)[^\s@/]+(?=@)")
 
@@ -340,6 +365,7 @@ def _redact(text: str) -> str:
     text = _KEY_SHAPES.sub(_REDACTED, text)
     text = _HEADER.sub(lambda m: m.group(1) + m.group(2) + _REDACTED, text)
     text = _SCHEME_WORD.sub(lambda m: m.group(1) + m.group(2) + _REDACTED, text)
+    text = _OPTION_VALUE.sub(_redact_value, text)
     text = _NAMED_VALUE.sub(_redact_value, text)
     return _URL_PASSWORD.sub(lambda m: m.group(1) + _REDACTED, text)
 
@@ -359,7 +385,7 @@ def _user_texts(entry: dict[str, Any]) -> list[str]:
         if (
             entry.get("isMeta") is True
             or entry.get("isCompactSummary") is True
-            or content.startswith("<task-notification>")
+            or content.startswith(_NOT_TYPED)
         ):
             return []
         return [content]
@@ -461,18 +487,22 @@ def _scan_file(path: Path, window: tuple[datetime, datetime] | None) -> tuple[li
 
 
 class _Request(NamedTuple):
-    files: list[Path]
+    folder: Path
+    session: str | None
     window: tuple[datetime, datetime] | None
 
 
+def _reason(exc: OSError) -> str:
+    return exc.strerror or str(exc)
+
+
 def _parse_args(argv: list[str]) -> _Request:
-    """The files to read and the window from the command line, or ValueError with the error."""
+    """The folder, the session id and the window from the command line, or ValueError."""
     if len(argv) >= 2 and argv[1] == "--session":
         if len(argv) != 3:
             raise ValueError(_SESSION_ERROR)
     elif len(argv) != 3:
         raise ValueError(_USAGE_ERROR)
-    folder = Path(argv[0])
     session = argv[2] if argv[1] == "--session" else None
     window = None
     if session is None:
@@ -482,47 +512,107 @@ def _parse_args(argv: list[str]) -> _Request:
         window = (start, end)
     elif _SESSION_ID.fullmatch(session) is None:
         raise ValueError(f"invalid session id: {session!r}")
-    if not folder.is_dir():
-        raise ValueError(
-            f"not a folder: {folder}" if folder.exists() else f"no such folder: {folder}"
-        )
-    if session is None:
-        files = list(folder.glob("*.jsonl")) + list(folder.glob("*/subagents/agent-*.jsonl"))
-    else:
-        main = folder / f"{session}.jsonl"
-        if not main.is_file():
-            raise ValueError(f"no session file: {main}")
-        files = [main, *(folder / session / "subagents").glob("agent-*.jsonl")]
-    return _Request(sorted(files, key=str), window)
+    return _Request(Path(argv[0]), session, window)
 
 
-def main(argv: list[str]) -> int:
+def _stat(path: Path) -> os.stat_result | None:
+    """The stat of a path, None when nothing is there; any other failure is a ValueError."""
     try:
-        request = _parse_args(argv)
-    except ValueError as exc:
-        print(f"error: {exc}", file=sys.stderr)
-        return 2
-    items: list[_Item] = []
-    notes = []
-    status = 0
-    for path in request.files:
-        try:
-            found, skipped = _scan_file(path, request.window)
-        except OSError as exc:
-            print(f"error: cannot read {path}: {exc.strerror or exc}", file=sys.stderr)
-            status = 1
-            continue
-        items.extend(found)
-        if skipped:
-            notes.append(f"skipped {skipped} lines of {path}")
-    items.sort()
+        return path.stat()
+    except (FileNotFoundError, NotADirectoryError):
+        return None
+    except OSError as exc:
+        raise ValueError(f"cannot read {path}: {_reason(exc)}") from None
+
+
+def _check_paths(request: _Request) -> None:
+    """Raise ValueError when the folder or the session file is not there or cannot be checked."""
+    info = _stat(request.folder)
+    if info is None:
+        raise ValueError(f"no such folder: {request.folder}")
+    if not stat.S_ISDIR(info.st_mode):
+        raise ValueError(f"not a folder: {request.folder}")
+    if request.session is not None:
+        main = request.folder / f"{request.session}.jsonl"
+        info = _stat(main)
+        if info is None or not stat.S_ISREG(info.st_mode):
+            raise ValueError(f"no session file: {main}")
+
+
+def _list(folder: Path, problems: list[str]) -> list[Path]:
+    """The entries of a folder; one that cannot be listed is added to problems and gives none."""
+    try:
+        return sorted(folder.iterdir())
+    except (FileNotFoundError, NotADirectoryError):
+        return []
+    except OSError as exc:
+        problems.append(f"cannot read {folder}: {_reason(exc)}")
+        return []
+
+
+def _subagent_files(session_folder: Path, problems: list[str]) -> list[Path]:
+    if not any(entry.name == "subagents" for entry in _list(session_folder, problems)):
+        return []
+    return [
+        entry
+        for entry in _list(session_folder / "subagents", problems)
+        if entry.name.startswith("agent-") and entry.name.endswith(".jsonl")
+    ]
+
+
+def _find_files(request: _Request, problems: list[str]) -> list[Path]:
+    """The files to read, sorted by path; folders that cannot be listed are added to problems."""
+    if request.session is not None:
+        main = request.folder / f"{request.session}.jsonl"
+        files = [main, *_subagent_files(request.folder / request.session, problems)]
+    else:
+        files = []
+        for entry in _list(request.folder, problems):
+            if entry.name.endswith(".jsonl"):
+                files.append(entry)
+            else:
+                files.extend(_subagent_files(entry, problems))
+    return sorted(files, key=str)
+
+
+def _write(items: list[_Item]) -> None:
     out = sys.stdout.buffer
     for item in items:
         out.write((item.text + "\n").encode("utf-8", "replace"))
     out.flush()
+
+
+def main(argv: list[str]) -> int:
+    problems: list[str] = []
+    try:
+        request = _parse_args(argv)
+        _check_paths(request)
+    except ValueError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 2
+    files = _find_files(request, problems)
+    items: list[_Item] = []
+    notes = []
+    for path in files:
+        try:
+            found, skipped = _scan_file(path, request.window)
+        except OSError as exc:
+            problems.append(f"cannot read {path}: {_reason(exc)}")
+            continue
+        items.extend(found)
+        if skipped:
+            notes.append(f"skipped {skipped} lines of {path}")
+    for problem in problems:
+        print(f"error: {problem}", file=sys.stderr)
+    items.sort()
+    try:
+        _write(items)
+    except BrokenPipeError:
+        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        return 0
     for note in notes:
         print(note, file=sys.stderr)
-    return status
+    return 1 if problems else 0
 
 
 if __name__ == "__main__":
@@ -535,14 +625,16 @@ if __name__ == "__main__":
 #!/bin/sh
 # Exercise transcript_window.py on scratch transcript folders, each case one folder and one run, checking stdout, stderr and the exit status.
 # A folder holds a main session s1.jsonl, its subagent s1/subagents/agent-a1.jsonl, a nested subagent agent-a2.jsonl in the same folder, a second main session s2.jsonl and its subagent agent-b1.jsonl.
+# Order: entries stamped 10:10:00Z and 10:10:00.500Z in two files, and one stamped 12:05:00+02:00 beside one stamped 10:06:00Z, print in time order, which differs from the order of the stamps as strings.
 # Window: entries at 10:00:00.000Z and 10:59:59.999Z are printed, entries at 09:59:59.999Z and 11:00:00.000Z are not, each boundary also checked alone; the same window written with +02:00 offsets, with and without fractions of a second, and mixed, prints the same; an entry stamped 10:30:00+00:00 is compared as a time and printed with its own stamp; an empty window prints nothing; a folder with no .jsonl file prints nothing; a folder path holding a space works.
 # Files: a subagent entry in the window prints with the prefix agent-a1 and one outside does not; the subagent file of another session and the nested subagent file print; entries of s1, agent-a1 and s2 interleave by timestamp, and equal timestamps in s1.jsonl and s2.jsonl print in path order; the prefix carries the line number of the entry; --session s1 prints every entry of s1.jsonl, agent-a1 and agent-a2 and none of s2; the script runs under /usr/bin/python3 as under python3.
-# Printed as user: a user string, a user string starting <command-name>, a text block of a user array, a queued_command attachment with commandMode prompt and humanTurn, the first user string of a subagent. Not printed: a user string with isMeta or isCompactSummary, one starting <task-notification>, a text block of a user array with isMeta, a tool_result block, a queued_command with attachment.isMeta, one with commandMode task-notification, an attachment of another type, a queue-operation entry, a thinking block.
-# Assistant entries: a text block prints as text; a Bash call prints its first command line only; a Read call its file_path; an Agent call its description; a call with input {} and a call whose first string value starts with a newline print the prefix and nothing after it; a number before the first string value is passed over; a text of three lines indents its second and third lines by two spaces; the blocks of one entry print in their order.
-# Redaction: an sk-ant key, an sk_live key, a ghp token, a glpat token, an AKIA key, a JWT, a Slack webhook URL, Authorization: Bearer and Basic, Cookie: session=, password=hunter2 unquoted and quoted, api_key= and "api_key": quoted, AWS_SECRET_ACCESS_KEY=, x-api-key:, a PEM private key block, a URL password, and the other key shapes (sk-, github_pat_, npm_, hf_, xoxb-, AIza, a Bearer word) print as <REDACTED>; a secret in a tool input is redacted before its first line is taken; a 40-character commit hash, a UUID, an agent id, max_tokens: 100 and a task- word of 20 letters print as they are.
+# Printed as user: a user string, a user string starting <command-name>, a text block of a user array, a queued_command attachment with commandMode prompt and humanTurn, the first user string of a subagent. Not printed: a user string with isMeta or isCompactSummary, one starting <task-notification>, a text block of a user array with isMeta, a tool_result block, a queued_command with attachment.isMeta, one with commandMode task-notification, an attachment of another type, a queue-operation entry, a thinking block, a user string starting <bash-stdout>, <bash-stderr>, <local-command-stdout> or <local-command-stderr>. Printed as user beside them: a user string starting <bash-input> or <command-message>.
+# Assistant entries: a text block prints as text; a Bash call prints its first command line only; a Read call its file_path; an Agent call its description; a call with input {} and a call whose first string value starts with a newline print the prefix and nothing after it; a number before the first string value is passed over; a text of three lines indents its second and third lines by two spaces; the blocks of one entry print in their order, checked with a Read call before a Bash call.
+# Redaction: an sk-ant key, an sk_live key, a ghp token, a glpat token, an AKIA key, a JWT, a Slack webhook URL, Authorization: Bearer and Basic, Cookie: session=, password=hunter2 unquoted and quoted, api_key= and "api_key": quoted, AWS_SECRET_ACCESS_KEY=, x-api-key:, a PEM private key block, a URL password, and the other key shapes (sk-, github_pat_, npm_, hf_, xoxb-, AIza, a Bearer word) print as <REDACTED>; a PEM private key block with no END line is redacted to the end of the text and a PUBLIC KEY block is kept; SECRET_KEY=abc, my_secret_key=abc and secret_key: abc are redacted and secretary: Anna is kept; --password hunter2, --api-key abc123, --token=abc123 and the option form of every name of the list are redacted and --tokens 5 and --password-file ./p are kept; a tab or several spaces after Bearer or Basic is accepted; an unquoted value ends at ), ], } and ; (def f(password: str) -> None: prints password: <REDACTED>) -> None:); a secret in a tool input is redacted; a 40-character commit hash, a UUID, an agent id, max_tokens: 100 and a task- word of 20 letters print as they are.
 # Lines skipped, each with exit 0 and the rest printed: a line that is not JSON, two such lines, a torn last line with no newline, a line with a byte that is not UTF-8, a user entry with no timestamp, and an entry with a timestamp that has no zone give skipped <n> lines of <file> on stderr; a mode and an ai-title entry with no timestamp are not counted and give no stderr line.
-# A file that cannot be read (mode 000, skipped when the test runs as root) gives error: cannot read <file> on stderr, the other files print, and the exit status is 1.
-# Errors, each exit 2 with one error: line on stderr and nothing on stdout: no arguments, a missing folder, a folder argument naming a file, a time without a zone, an unparsable time, an end equal to the start, an end before the start, --session naming no file, --session a1 (a subagent id), --session "", --session ../x, --session '*', --session s1 with two times, a fourth argument.
+# A file that cannot be read (mode 000, skipped when the test runs as root) gives error: cannot read <file> on stderr, the other files print, and the exit status is 1; so does a session folder that cannot be listed (mode 000), in window mode and with --session, and a transcript folder that cannot be listed.
+# The output closed early: the script over more than 100000 bytes of output piped into head -n 1 exits 0 with nothing on stderr and one line out.
+# Errors, each exit 2 with one error: line on stderr and nothing on stdout: no arguments, a missing folder, a folder argument naming a file, a time without a zone, an unparsable time, an end equal to the start, an end before the start, --session naming no file, --session a1 (a subagent id), --session "", --session ../x, --session '*', --session s1 with two times, a fourth argument, a folder whose parent cannot be searched (mode 000), in window mode and with --session, which gives error: cannot read <folder> and exit 2.
 
 set -u
 
@@ -629,26 +721,26 @@ attachment_line() {
 
 # The base folder: two main sessions, a subagent of each, and a nested subagent in the folder of s1.
 make_base() {
-    base=$test_root/$1
-    mkdir -p "$base/s1/subagents" "$base/s2/subagents"
+    dest=$test_root/$1
+    mkdir -p "$dest/s1/subagents" "$dest/s2/subagents"
     {
         text_line 2026-09-30T09:59:59.999Z s1 "s1 before"
         text_line 2026-09-30T10:00:00.000Z s1 "s1 at start"
         text_line 2026-09-30T10:30:00+00:00 s1 "s1 other zone form"
         text_line 2026-09-30T10:59:59.999Z s1 "s1 last"
         text_line 2026-09-30T11:00:00.000Z s1 "s1 at end"
-    } >"$base/s1.jsonl"
+    } >"$dest/s1.jsonl"
     {
         user_line 2026-09-30T10:10:00.000Z s1 "a1 prompt" ""
         text_line 2026-09-30T10:20:00.000Z s1 "a1 in"
         text_line 2026-09-30T11:30:00.000Z s1 "a1 out"
-    } >"$base/s1/subagents/agent-a1.jsonl"
-    text_line 2026-09-30T10:40:00.000Z s1 "a2 nested" >"$base/s1/subagents/agent-a2.jsonl"
+    } >"$dest/s1/subagents/agent-a1.jsonl"
+    text_line 2026-09-30T10:40:00.000Z s1 "a2 nested" >"$dest/s1/subagents/agent-a2.jsonl"
     {
         text_line 2026-09-30T10:15:00.000Z s2 "s2 first"
         text_line 2026-09-30T10:30:00.000Z s2 "s2 tie"
-    } >"$base/s2.jsonl"
-    text_line 2026-09-30T10:50:00.000Z s2 "b1 in" >"$base/s2/subagents/agent-b1.jsonl"
+    } >"$dest/s2.jsonl"
+    text_line 2026-09-30T10:50:00.000Z s2 "b1 in" >"$dest/s2/subagents/agent-b1.jsonl"
 }
 
 want_base_window() {
@@ -663,6 +755,23 @@ want_base_window() {
         "agent-b1 1 2026-09-30T10:50:00.000Z text: b1 in" \
         "s1 4 2026-09-30T10:59:59.999Z text: s1 last"
     want_err
+}
+
+# Run the fixed window over the folder named by the first argument and check the wanted stdout lines after the second (the check's name).
+window_case() {
+    dir=$1
+    name=$2
+    shift 2
+    run "$test_root/$dir" 2026-09-30T10:00:00Z 2026-09-30T11:00:00Z
+    want_out "$@"
+    want_err
+    check "$name" 0
+}
+
+# Write a folder holding the session file one.jsonl, whose lines come from stdin.
+one_case() {
+    mkdir "$test_root/$1"
+    cat >"$test_root/$1/one.jsonl"
 }
 
 make_base base
@@ -796,6 +905,35 @@ want_out \
 want_err
 check "kinds of items" 0
 
+for tag in bash-stdout bash-stderr local-command-stdout local-command-stderr; do
+    user_line 2026-09-30T10:01:00.000Z one "<$tag>output</$tag>" "" | one_case "tag-$tag"
+    window_case "tag-$tag" "not printed: a user string starting <$tag>"
+done
+for tag in bash-input command-message; do
+    user_line 2026-09-30T10:01:00.000Z one "<$tag>ls</$tag>" "" | one_case "tag-$tag"
+    window_case "tag-$tag" "printed: a user string starting <$tag>" "one 1 2026-09-30T10:01:00.000Z user: <$tag>ls</$tag>"
+done
+
+mkdir "$test_root/times"
+{
+    text_line 2026-09-30T10:10:00.500Z ta "half a second past"
+    text_line 2026-09-30T12:05:00+02:00 ta "five past, two hours ahead"
+} >"$test_root/times/ta.jsonl"
+{
+    text_line 2026-09-30T10:10:00Z tb "on the minute"
+    text_line 2026-09-30T10:06:00Z tb "six past"
+} >"$test_root/times/tb.jsonl"
+window_case times "order as a time, not as a string" \
+    "ta 2 2026-09-30T12:05:00+02:00 text: five past, two hours ahead" \
+    "tb 2 2026-09-30T10:06:00Z text: six past" \
+    "tb 1 2026-09-30T10:10:00Z text: on the minute" \
+    "ta 1 2026-09-30T10:10:00.500Z text: half a second past"
+
+assistant_line 2026-09-30T10:01:00.000Z one '{"type":"tool_use","id":"t1","name":"Read","input":{"file_path":"/a"}},{"type":"tool_use","id":"t2","name":"Bash","input":{"command":"ls"}}' | one_case blocks
+window_case blocks "the blocks of one entry in their order" \
+    "one 1 2026-09-30T10:01:00.000Z tool Read: /a" \
+    "one 1 2026-09-30T10:01:00.000Z tool Bash: ls"
+
 # Redaction: each line of the first table is planted in a text and printed as the second field says; each line of the second table is planted and printed unchanged.
 redact=$test_root/redact
 mkdir "$redact"
@@ -853,6 +991,48 @@ n=0
 run "$redact" 2026-09-30T10:00:00Z 2026-09-30T11:00:00Z
 want_err
 check "redaction" 0
+
+# One redaction case: the name, the planted text, then the printed text (each further argument is a further printed line).
+redact_case() {
+    label=$1
+    printed=$3
+    text_line 2026-09-30T10:01:00.000Z one "$2" | one_case "redact-$label"
+    shift 3
+    window_case "redact-$label" "redaction: $label" "one 1 2026-09-30T10:01:00.000Z text: $printed" "$@"
+}
+
+tab=$(printf '\t')
+redact_case pem-no-end 'key -----BEGIN PRIVATE KEY-----\nMIIabc\nmore' 'key <REDACTED>'
+redact_case pem-public-kept 'pub -----BEGIN PUBLIC KEY-----\nMIIabc\n-----END PUBLIC KEY-----' 'pub -----BEGIN PUBLIC KEY-----' '  MIIabc' '  -----END PUBLIC KEY-----'
+redact_case secret-key 'SECRET_KEY=abc end' 'SECRET_KEY=<REDACTED> end'
+redact_case secret-key-suffix 'my_secret_key=abc end' 'my_secret_key=<REDACTED> end'
+redact_case secret-key-colon 'secret_key: abc end' 'secret_key: <REDACTED> end'
+redact_case secretary-kept 'secretary: Anna end' 'secretary: Anna end'
+redact_case option-password 'run --password hunter2 now' 'run --password <REDACTED> now'
+redact_case option-api-key 'run --api-key abc123 now' 'run --api-key <REDACTED> now'
+redact_case option-token-equals 'run --token=abc123 now' 'run --token=<REDACTED> now'
+redact_case option-quoted 'run --password \"a b\" now' 'run --password "<REDACTED>" now'
+redact_case option-tokens-kept 'run --tokens 5 now' 'run --tokens 5 now'
+redact_case option-password-file-kept 'run --password-file ./p now' 'run --password-file ./p now'
+redact_case bearer-tab 'x Bearer\tabc123 y' "x Bearer$tab<REDACTED> y"
+redact_case basic-spaces 'x Basic   dXNlcjpwYXNz y' 'x Basic   <REDACTED> y'
+redact_case ends-at-paren 'def f(password: str) -> None:' 'def f(password: <REDACTED>) -> None:'
+redact_case ends-at-bracket 'a[password=abc] b' 'a[password=<REDACTED>] b'
+redact_case ends-at-brace '{token: abc} b' '{token: <REDACTED>} b'
+redact_case ends-at-semicolon 'password=abc; echo' 'password=<REDACTED>; echo'
+
+# The option form of every name of the list, one entry per name.
+mkdir "$test_root/options"
+n=0
+: >"$exp_out"
+for name in password passwd secret token api_key api-key apikey access_key access-key private_key credentials secret_key; do
+    tick
+    text_line "$ts" opt "run --$name value1 --$name=value2 end" >>"$test_root/options/opt.jsonl"
+    printf 'opt %s %s text: run --%s <REDACTED> --%s=<REDACTED> end\n' "$n" "$ts" "$name" "$name" >>"$exp_out"
+done
+run "$test_root/options" 2026-09-30T10:00:00Z 2026-09-30T11:00:00Z
+want_err
+check "redaction: the option form of every name" 0
 
 # Lines skipped: each case a folder with one session file.
 skip_case() {
@@ -927,7 +1107,69 @@ if [ "$(id -u)" -ne 0 ]; then
     want_out "ok 1 2026-09-30T10:01:00.000Z text: readable"
     want_err "error: cannot read $test_root/unreadable/no.jsonl: Permission denied"
     check "a file that cannot be read" 1
+
+    make_base unlist
+    chmod 000 "$test_root/unlist/s1"
+    run "$test_root/unlist" 2026-09-30T10:00:00Z 2026-09-30T11:00:00Z
+    chmod 755 "$test_root/unlist/s1"
+    want_out \
+        "s1 2 2026-09-30T10:00:00.000Z text: s1 at start" \
+        "s2 1 2026-09-30T10:15:00.000Z text: s2 first" \
+        "s1 3 2026-09-30T10:30:00+00:00 text: s1 other zone form" \
+        "s2 2 2026-09-30T10:30:00.000Z text: s2 tie" \
+        "agent-b1 1 2026-09-30T10:50:00.000Z text: b1 in" \
+        "s1 4 2026-09-30T10:59:59.999Z text: s1 last"
+    want_err "error: cannot read $test_root/unlist/s1: Permission denied"
+    check "a session folder that cannot be listed" 1
+
+    chmod 000 "$test_root/unlist/s1"
+    run "$test_root/unlist" --session s1
+    chmod 755 "$test_root/unlist/s1"
+    want_out \
+        "s1 1 2026-09-30T09:59:59.999Z text: s1 before" \
+        "s1 2 2026-09-30T10:00:00.000Z text: s1 at start" \
+        "s1 3 2026-09-30T10:30:00+00:00 text: s1 other zone form" \
+        "s1 4 2026-09-30T10:59:59.999Z text: s1 last" \
+        "s1 5 2026-09-30T11:00:00.000Z text: s1 at end"
+    want_err "error: cannot read $test_root/unlist/s1: Permission denied"
+    check "a session folder that cannot be listed, with --session" 1
+
+    mkdir "$test_root/nolist"
+    text_line 2026-09-30T10:01:00.000Z nl "hidden" >"$test_root/nolist/nl.jsonl"
+    chmod 000 "$test_root/nolist"
+    run "$test_root/nolist" 2026-09-30T10:00:00Z 2026-09-30T11:00:00Z
+    chmod 755 "$test_root/nolist"
+    want_out
+    want_err "error: cannot read $test_root/nolist: Permission denied"
+    check "a transcript folder that cannot be listed" 1
+
+    mkdir -p "$test_root/locked/inner"
+    chmod 000 "$test_root/locked"
+    run "$test_root/locked/inner" 2026-09-30T10:00:00Z 2026-09-30T11:00:00Z
+    want_out
+    want_err "error: cannot read $test_root/locked/inner: Permission denied"
+    check "a folder whose parent cannot be searched" 2
+    run "$test_root/locked/inner" --session s1
+    chmod 755 "$test_root/locked"
+    check "a folder whose parent cannot be searched, with --session" 2
 fi
+
+# The output closed early: the reader of stdout stops after one line.
+mkdir "$test_root/big"
+long=$(awk 'BEGIN { for (i = 0; i < 1000; i++) printf "xxxxxxxxxx" }')
+n=0
+while [ "$n" -lt 30 ]; do
+    tick
+    text_line "$ts" big "$long"
+done >"$test_root/big/big.jsonl"
+(
+    python3 "$reader" "$test_root/big" 2026-09-30T10:00:00Z 2026-09-30T11:00:00Z 2>"$err"
+    echo $? >"$test_root/pipe-status"
+) | head -n 1 >"$out"
+status=$(cat "$test_root/pipe-status")
+printf 'big 1 2026-09-30T10:01:00.000Z text: %s\n' "$long" >"$exp_out"
+want_err
+check "the output closed early" 0
 
 # Errors.
 run
@@ -1013,5 +1255,136 @@ A new command exists, `python3 skills/session-retro/templates/transcript_window.
 
 - The brief's redaction rule takes "the word after `Bearer ` or `Basic `" in any letter case, so ordinary English (`Basic setup`, `basic ...`) has its next word replaced by `<REDACTED>` as well. Over the real folder for 2026-09-29T00:00:00Z to 2026-09-30T12:00:00Z (`... | grep -ci 'basic <REDACTED>'`, `grep -ci 'bearer <REDACTED>'` over the output) 1 printed line holds `Basic <REDACTED>` and 2 hold `Bearer <REDACTED>`, out of 76 lines holding `<REDACTED>` in 13098 printed lines; whether those hits are prose or secrets is not verified, since no message text was read. The script follows the brief as written. If the reader should redact only where a scheme word is followed by a token-shaped word, the brief's rule needs a change, which is the orchestrator's to write.
 - The name-value rule redacts prose like `token: <word>` and type annotations (`token: str`), as the brief's rule says; not changed.
-- The brief's "Read" list names `docs/dev/design-principles.md`, which does not exist (the brief check found the page at `skills/repo-setup/templates/docs/dev/design-principles.md`); I read that one.
 - The typing check `python.md` names (pyright) is not run here, as the brief says; the ruff `ANN` selection passes.
+
+## Repair round 1
+
+The two files above are the end state after this round. The verification blocks and judgment calls 1 to 10 of the sections above are the round-0 record; where this section states a behaviour differently, this section holds (judgment call 9, `Bearer`/`Basic` followed by spaces only, is now spaces or tabs; the redaction and file-discovery statements below replace the round-0 ones). The point about `docs/dev/design-principles.md` is removed from "Anything in the brief that was wrong or impossible": the brief names `skills/repo-setup/templates/docs/dev/design-principles.md` at its lines 3 and 103, and that is the page I read.
+
+### The red run of each new case
+
+Each case was run on a scratch copy of the round-0 script (`$TMPDIR/round0/transcript_window.py`) with the new test in a copy of the test in which `fail` returns instead of exiting. The first `FAIL:` line of each case that goes red follows. A case of the same test that already held on the round-0 script prints no FAIL line: the `<bash-input>` and `<command-message>` cases, `--token=abc123`, `--tokens 5`, `--password-file ./p`, `secretary: Anna`, the PUBLIC KEY block and `Basic` followed by spaces are near misses kept or forms already met.
+
+```
+FAIL: not printed: a user string starting <bash-stdout>: stdout differs, got: one 1 2026-09-30T10:01:00.000Z user: <bash-stdout>output</bash-stdout>
+FAIL: not printed: a user string starting <bash-stderr>: stdout differs, got: one 1 2026-09-30T10:01:00.000Z user: <bash-stderr>output</bash-stderr>
+FAIL: not printed: a user string starting <local-command-stdout>: stdout differs, got: one 1 2026-09-30T10:01:00.000Z user: <local-command-stdout>output</local-command-stdout>
+FAIL: not printed: a user string starting <local-command-stderr>: stdout differs, got: one 1 2026-09-30T10:01:00.000Z user: <local-command-stderr>output</local-command-stderr>
+FAIL: redaction: pem-no-end: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: key -----BEGIN PRIVATE KEY-----
+FAIL: redaction: secret-key: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: SECRET_KEY=abc end
+FAIL: redaction: secret-key-suffix: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: my_secret_key=abc end
+FAIL: redaction: secret-key-colon: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: secret_key: abc end
+FAIL: redaction: option-password: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: run --password hunter2 now
+FAIL: redaction: option-api-key: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: run --api-key abc123 now
+FAIL: redaction: option-quoted: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: run --password "a b" now
+FAIL: redaction: bearer-tab: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: x Bearer<TAB>abc123 y
+FAIL: redaction: ends-at-paren: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: def f(password: <REDACTED> -> None:
+FAIL: redaction: ends-at-bracket: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: a[password=<REDACTED> b
+FAIL: redaction: ends-at-brace: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: {token: <REDACTED> b
+FAIL: redaction: ends-at-semicolon: stdout differs, got: one 1 2026-09-30T10:01:00.000Z text: password=<REDACTED> echo
+FAIL: redaction: the option form of every name: stdout differs, got: opt 1 2026-09-30T10:01:00.000Z text: run --password value1 --password=<REDACTED> end
+FAIL: a session folder that cannot be listed: exit status 0, expected 1; stderr: 
+FAIL: a session folder that cannot be listed, with --session: exit status 0, expected 1; stderr: 
+FAIL: a transcript folder that cannot be listed: exit status 0, expected 1; stderr: 
+FAIL: a folder whose parent cannot be searched: exit status 1, expected 2; stderr: Traceback (most recent call last):
+FAIL: a folder whose parent cannot be searched, with --session: exit status 1, expected 2; stderr: Traceback (most recent call last):
+FAIL: the output closed early: exit status 120, expected 0; stderr: Traceback (most recent call last):
+```
+
+Points 2 and 3 change no code, so their red run is on a scratch copy of the round-0 script with one line changed, run with the same test copy:
+
+```
+sed 's/_Item(when, str(path)/_Item(entry["timestamp"], str(path)/'   (sort by the timestamp string)
+FAIL: order as a time, not as a string: stdout differs, got: tb 2 2026-09-30T10:06:00Z text: six past
+
+sed 's/_Item(when, str(path), number, place, formatted)/_Item(when, str(path), number, 0, formatted)/'   (place set to 0)
+FAIL: the blocks of one entry in their order: stdout differs, got: one 1 2026-09-30T10:01:00.000Z tool Bash: ls
+```
+
+With the round-1 script all of these cases pass, and the whole test printed `PASS: transcript_window.py scratch tests` on five runs in a row.
+
+### Each point, old beside new
+
+1. Command output. Old: a `user` string starting `<bash-stdout>`, `<bash-stderr>`, `<local-command-stdout>` or `<local-command-stderr>` printed as `user`. New: those four are not printed (`_NOT_TYPED`, with `<task-notification>`); `<bash-input>`, `<command-name>` and `<command-message>` still print. Cases: one per tag not printed, `<bash-input>` and `<command-message>` printed. The docstring's `user` kind names the exclusion.
+2. Order as a time. Old: no case told sorting by time from sorting by the stamp string. New: case "order as a time, not as a string" (files `ta.jsonl` and `tb.jsonl`: `10:10:00.500Z` and `10:10:00Z`, `12:05:00+02:00` and `10:06:00Z`).
+3. Order of blocks. Old: one case with a `text` block before a `tool Bash` block. New: case "the blocks of one entry in their order" with `tool Read` before `tool Bash`.
+4. Head comment. Old: "a secret in a tool input is redacted before its first line is taken". New: "a secret in a tool input is redacted"; the docstring keeps its sentence.
+5. Report. The design-principles sentence is corrected as stated above and dropped from "wrong in the brief".
+6. Folder that cannot be checked. Old: `Path.is_dir` and `Path.is_file` raised `PermissionError` (traceback, exit 1). New: `_stat` turns any `OSError` other than "not there" into `error: cannot read <path>: <reason>`, exit 2, nothing on stdout; the docstring's errors list it. Cases: the folder's parent at mode 000, in window mode and with `--session`.
+7. Output closed early. Old: traceback and exit 120. New: on `BrokenPipeError` the script points fd 1 at `os.devnull`, stops writing, prints nothing more on stderr and exits 0; the docstring's exit statuses say so. Case: 30 entries of 10000 characters piped into `head -n 1`, status 0, stderr empty, one line out.
+8. Folders that cannot be listed. Old: `glob`, which hid `PermissionError`. New: `_list` uses `Path.iterdir` inside `try`, `_subagent_files` lists a session folder and then its `subagents/` folder, `_find_files` lists the transcript folder; a folder that cannot be listed adds `error: cannot read <folder>: <reason>` to stderr, the other files print, exit 1. Cases: a session folder at mode 000 in window mode and with `--session`, and the transcript folder at mode 000. Each mode-000 case is skipped when the test runs as root, with the existing mode-000 case.
+9. Redaction forms. Old: as in the round-0 docstring. New, each in the docstring's list: a PEM block with no END line redacted to the end of the text (PUBLIC KEY block kept); the name `secret_key`; the option form `--<name> <value>` and `--<name>=<value>` for every name of the list (the name is the whole option); spaces or tabs after `Bearer` or `Basic`; an unquoted value ends also at `)`, `]`, `}` and `;`. Cases: one per shape with its near miss, and one case over the option form of every name of the list. A YAML value on the line after its name is left out as ruled, and no case asserts it.
+10. This section.
+
+### Judgment calls of round 1
+
+1. The option form takes its value up to whitespace, a comma, a quote, `)`, `]`, `}` or `;` in the space form as in the `=` form, so `--password --verbose` prints `--password <REDACTED>`.
+2. `--name` is matched only when not preceded by a letter, digit or `-`, so `x--token=abc` is left to the name rule (`x--token=<REDACTED>`).
+3. Every entry of the transcript folder that does not end in `.jsonl` is listed for a `subagents/` folder (so `memory/` is listed too); one that cannot be listed gives the error line and exit 1, since the script cannot tell a session folder from another folder. A session folder is named in the error when it cannot be listed, and its `subagents/` folder when that one cannot.
+4. A folder or session file that does not exist, or lies under a non-directory, keeps the errors `no such folder` and `no session file`; every other failure to check it is `cannot read`, exit 2.
+5. After the broken pipe the script exits 0 without printing the skipped-line notes; the errors about files not read were already printed before the output.
+6. `_NOT_TYPED` also holds `<task-notification>`, so one `startswith` tests all five prefixes.
+
+### Verification after round 1
+
+V1, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-h-session-retro/orchestrator-state.md; echo "rc=$?"`, verbatim:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 9 commands passed
+rc=0
+```
+
+V2, `sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1`:
+
+```
+python3 (3.13.4):        PASS: transcript_window.py scratch tests
+/usr/bin/python3 first:  Python 3.9.6
+                         PASS: transcript_window.py scratch tests
+```
+
+V4:
+
+```
+$ ruff check --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 --line-length 100 --target-version py39 skills/session-retro/templates/transcript_window.py
+All checks passed!
+$ ruff format --check --line-length 100 --target-version py39 skills/session-retro/templates/transcript_window.py
+1 file already formatted
+```
+
+V5, `time (python3 skills/session-retro/templates/transcript_window.py ~/.claude/projects/-Users-axelfaes-workspace-ordo 2026-09-29T10:00:00Z 2026-09-29T11:00:00Z | wc -l)`:
+
+```
+     348
+( python3 ... | wc -l; )  1.44s user 0.13s system 73% cpu 2.129 total
+```
+
+V6, printed lines of kind `user` (`grep -c '^[^ ]* [0-9]* [^ ]* user: '` over the output) beside a jq count over `cat *.jsonl */subagents/agent-*.jsonl` in the transcript folder, whose selection now also excludes the four output prefixes (`startswith` on `<bash-stdout>`, `<bash-stderr>`, `<local-command-stdout>`, `<local-command-stderr>`, besides the round-0 conditions); the script's stderr was empty in each window:
+
+```
+2026-09-29T10:00:00Z..2026-09-29T11:00:00Z  printed=6    jq=6
+2026-09-30T00:00:00Z..2026-09-30T06:00:00Z  printed=31   jq=31
+2026-09-25T00:00:00Z..2026-10-01T00:00:00Z  printed=598  jq=598
+```
+
+The reviewer's count for the last window before the exclusion was 602; the four output strings it named are the difference.
+
+V7, `LC_ALL=C grep -n '[^ -~]'` over `skills/session-retro/templates/transcript_window.py`, `skills/session-retro/templates/transcript_window.test.sh`, `docs/dev/building.md` and `docs/dev/change-standard.md`: no output, `grep rc=1`.
+
+The test's head comment and the script's docstring were reread against the behaviour after the changes; the head comment lists the new cases and the docstring lists the new tags, redaction forms, error, folder-listing report and exit status.

@@ -9,6 +9,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+- sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
@@ -37,20 +38,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2h-1
-  base: d7a82aa71202a59c62cc18ffc873761de7956f2d
-  launched: 2026-09-30 08:16
-  session_id: af66dae24a3304e3e (claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-h-session-retro/agents/reviews/1-report.md
-  builder_usage: round 0 151005 tokens, 32 tool uses, 740 s ($1.30-2.54)
-  reviewer_report: .scratch/2-h-session-retro/agents/reviews/1-refuter.md (claude-opus-5-5; 172806 tokens, 47 tool uses, 784 s, $1.86-5.09)
-  brief_check: .scratch/2-h-session-retro/agents/reviews/1-brief-check.md (claude-opus-5-5; 143089 tokens, 40 tool uses, 564 s, $1.23-3.43)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -82,6 +70,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. The plan is opened from the step list Axel approved (`.scratch/plan-drafts/`); nothing has landed.
-- Next step: 1, the transcript reader, which writes new files and one line of `docs/dev/building.md` and `docs/dev/change-standard.md`'s command block.
+- 2026-09-30. Step 1 of 4, the transcript reader, landed and ticked (`agents/reviews/1-landing.md`).
+- Next step: 2, the `session-retro` skill.
 - Open on Axel's side: none.

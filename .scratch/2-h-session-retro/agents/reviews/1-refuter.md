@@ -125,3 +125,182 @@ none. The report's "User-visible changes" states the new command and the two com
 - `pyright`: not installed, as the brief states; not run.
 
 Reviewer usage: tokens not known to this agent, about 45 tool uses, time not measured. Beyond the brief's two git commands, the reviewer ran one read-only `git log --oneline -3` in the worktree; nothing was changed in the repository, and scratch files are under the session scratchpad `refute1/` folder.
+
+## Repair round 1, refuted
+
+Reviewer: a fresh agent, which did not review round 0. I read the inputs in the skill's order: plan.yaml, the state file and plan.md with its Rulings, the brief, the round brief, the first refuter report, the round-0 diff, the worktree diff since d7a82aa with `git status --short`, both new files read whole, and last the builder's report with its "Repair round 1" section. The main checkout's copy of the report is identical to the worktree's (`diff`: same). The round's delta was read against scratch copies of the round-0 script and test, extracted from `1-round-0.diff`.
+
+```
+$ (worktree root) env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-h-session-retro/orchestrator-state.md; echo "rc=$?"
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 9 commands passed
+rc=0
+
+$ python3 --version; sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+Python 3.13.4
+PASS: transcript_window.py scratch tests
+$ PATH=/usr/bin:$PATH sh -c 'python3 --version; sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1'
+Python 3.9.6
+PASS: transcript_window.py scratch tests
+
+$ ruff check --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 --line-length 100 --target-version py39 skills/session-retro/templates/transcript_window.py
+All checks passed!
+$ ruff format --check --line-length 100 --target-version py39 skills/session-retro/templates/transcript_window.py
+1 file already formatted
+
+V5: $ time (python3 skills/session-retro/templates/transcript_window.py ~/.claude/projects/-Users-axelfaes-workspace-ordo 2026-09-29T10:00:00Z 2026-09-29T11:00:00Z | wc -l)
+     348
+( python3 skills/session-retro/templates/transcript_window.py    | wc -l; )  1.41s user 0.13s system 73% cpu 2.088 total
+(report: 348 lines, 2.129 s: reproduced)
+
+V6: printed `user` items (grep -c '^[^ ]* [0-9]* [^ ]* user: ') against a jq selection the reviewer wrote independently from Decisions 2 and the two Step 1 rulings (the five excluded prefixes; `jq -R 'fromjson? // empty'` over cat *.jsonl */subagents/agent-*.jsonl; the window compared as strings, since every real stamp is in the ms-Z form):
+2026-09-29T10:00:00Z..2026-09-29T11:00:00Z jq=6 script=6 rc=0 stderr_bytes=0
+2026-09-30T00:00:00Z..2026-09-30T06:00:00Z jq=31 script=31 rc=0 stderr_bytes=0
+2026-09-25T00:00:00Z..2026-10-01T00:00:00Z jq=599 script=599 rc=0 stderr_bytes=0
+(report: 6, 31, 598. The last window reaches the live session, which grew after the builder's run, this review's own dispatch prompt included. The two counts are equal in every window. The prefix count over the last window: 3 <bash-stdout>, 1 <local-command-stdout>, 0 of the two stderr tags; the 4 excluded items account for the drop from round 0's 602.)
+Round 0 and round 1 over the fixed past window 2026-09-25T00:00:00Z..2026-09-30T06:00:00Z: 42587 and 42582 lines, 76 and 76 lines holding <REDACTED>. The only difference is 5 removed lines: 4 items prefixed `user: <bash-stdout>` or `user: <local-command-stdout>`, one of which has a continuation line. The new redaction forms change nothing in the real transcripts of that window.
+
+V7: $ LC_ALL=C grep -n '[^ -~]' transcript_window.py transcript_window.test.sh docs/dev/building.md docs/dev/change-standard.md .scratch/2-h-session-retro/agents/reviews/1-report.md; echo "grep rc=$?"
+grep rc=1
+
+git status --short (worktree): M docs/dev/building.md, M docs/dev/change-standard.md, ?? .scratch/2-h-session-retro/agents/reviews/1-report.md, ?? skills/session-retro/  (the brief's paths only)
+
+Red runs (the report's quoted evidence), rerun. The new test was run with `fail` returning, over the round-0 script:
+FAIL: not printed: a user string starting <bash-stdout> / <bash-stderr> / <local-command-stdout> / <local-command-stderr>: stdout differs
+FAIL: redaction: pem-no-end, secret-key, secret-key-suffix, secret-key-colon, option-password, option-api-key, option-quoted, bearer-tab, ends-at-paren, ends-at-bracket, ends-at-brace, ends-at-semicolon, the option form of every name: stdout differs
+FAIL: a session folder that cannot be listed (and with --session), a transcript folder that cannot be listed: exit status 0, expected 1
+FAIL: a folder whose parent cannot be searched (and with --session): exit status 1, expected 2; stderr: Traceback
+FAIL: the output closed early: exit status 120, expected 0; stderr: Traceback
+The same set as the report's red run. The near misses the report names stay green, as it says.
+Mutation, sort key = timestamp string: FAIL: order as a time, not as a string: stdout differs, got: tb 2 2026-09-30T10:06:00Z text: six past
+Mutation, place = 0: FAIL: the blocks of one entry in their order: stdout differs, got: one 1 2026-09-30T10:01:00.000Z tool Bash: ls
+(both reproduce the report's lines)
+Output closed early, 20 runs each under python3 and /usr/bin/python3, 31 entries of 10000 characters piped into head -n 1: 0 runs with a nonzero status or anything on stderr.
+```
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: violated only in the option-form redaction (Finding 1). Everything else holds:
+  - the usage forms and errors, the half-open window compared as times, and the file discovery by `iterdir` (`transcript_window.py:398-431`);
+  - the kinds, with the command-output exclusion (`:119-125`, `:244`);
+  - the first-line rule, the prefix, the order, skipped lines, `cannot read` for files and folders with exit 1, the folder-check errors with exit 2 (`:374-395`), and the closed-output handling (`:464-468`);
+  - the docstring, which lists every error and exit status the code has, except the points of Findings 3 and 4.
+- 2: holds. The test keeps the shape of `check_config.test.sh`, its head comment lists every case including the new ones, and its last line is right. Each new case goes red on the round-0 script (reproduced above). The cleanup defect of Finding 2 shows only when the case fails.
+- 3: holds. One line in each command block after the `git_guard.test.sh` line (`git diff d7a82aa`: `docs/dev/building.md` @@ -8, `docs/dev/change-standard.md` @@ -69).
+
+Cases of the brief's "Cases":
+
+- Window bounds (the four stamps): met ("window in UTC" and the four "boundary" cases).
+- The same window in +02:00, with and without fractions: met ("window with +02:00 offsets", "fractions", "mixed forms").
+- An entry stamped +00:00, compared as a time: met. The new case "order as a time, not as a string" now proves the time comparison; the string-sort mutation fails it.
+- Subagent files (agent-a1 in and out, another session's subagent, a nested subagent): met ("window in UTC").
+- Order (interleaving; equal stamps in path order): met ("window in UTC"; the time-order case).
+- Printed as `user` (string, `<command-name>`, array text block, queued prompt, the subagent's first string): met ("kinds of items"). `<bash-input>` and `<command-message>` are also printed (new cases).
+- Not printed (the ten forms): met ("kinds of items"), plus the four command-output tags (new cases).
+- Assistant text, the Bash first line, the Read path, the Agent description, `{}`, a value starting with a newline: met ("kinds of items").
+- Three-line text indented: met.
+- Prefix carries the line number: met.
+- Redaction, the planted values and the kept near misses: met ("redaction"). The ruling's additions are judged under point 9.
+- `--session s1`: met.
+- Lines skipped (the four skipped forms; mode and ai-title not counted): met (the seven skip cases).
+- A file that cannot be read: met.
+- Empty window, no .jsonl, a path holding a space: met.
+- The fourteen usage errors: met (the check_error cases).
+- Runs under /usr/bin/python3: met (the case, and the whole suite under 3.9.6).
+
+Points of the round brief:
+
+- 1 (command output): holds. The four tags are excluded at `:119-125`, `<bash-input>` and `<command-message>` still print, the docstring names the exclusion, and V6 was redone for all three windows (reproduced).
+- 2 (order as a time): holds. The case is present and goes red under the string-sort mutation.
+- 3 (block order): holds. Read before Bash, red under the place=0 mutation.
+- 4 (head comment claim): holds. The claim is removed from test.sh:9; the docstring keeps it, as allowed.
+- 5 (the design-principles sentence): holds. The report's "Repair round 1" states the brief's lines 3 and 103, and the point is dropped from "wrong in the brief".
+- 6 (folder that cannot be checked): holds. `_stat` at `:374-381` gives `error: cannot read <path>`, exit 2, with no traceback, in window mode and with --session (test cases; reviewer's probe with the folder at mode 000 under --session gives `cannot read <folder>/s1.jsonl`, rc=2). The docstring lists it.
+- 7 (output closed early): holds as ruled. The case is present, and 40 reviewer runs were clean. Finding 3 concerns the overlap with exit 1.
+- 8 (folders that cannot be listed): holds. `iterdir` inside `try` (`:398-406`), no glob.
+  - The test's cases pass: the session folder at mode 000 in window mode and with --session, and the transcript folder at mode 000.
+  - The reviewer's probes, not in the test, under both Pythons: a `subagents/` folder at mode 000 gives `error: cannot read .../s1/subagents: Permission denied` with the main file printed, rc=1, in both modes; the transcript folder at mode 300 gives rc=1 in window mode and rc=0 with --session (no listing needed).
+  - Finding 4 concerns the docstring's wording.
+- 9 (the redaction forms of the ruling): partial.
+  - Done: the PEM block without END, `secret_key`, tabs after Bearer/Basic, the closers, and the option form of the twelve listed names, each with its near miss.
+  - Missing: the option form in the space form does not reach a name that ends in a listed word (Finding 1).
+- 10 (the report section): holds. Every quoted command was rerun and reproduces, except the growth of the V6 count, explained above.
+
+### Findings
+
+- **Finding 1 (spec).**
+  - Place: `transcript_window.py:165-167`: `_OPTION_VALUE = re.compile(rf"(?<![A-Za-z0-9-])(?P<name>--(?:{_NAMES}))(?P<sep>=|[ \t]+){_VALUE}", re.IGNORECASE)`.
+  - What is wrong: the ruling "Step 1, the redaction forms added from the review" and round-brief point 9 ask for the option form "for every name of the list". The brief's list is "a name that is, or ends in, `password`, ...", and the docstring (`:57`) says "the option form of each of those names". The pattern takes only the bare listed words after `--`, so a name that ends in one of them passes in the space form. The reviewer's probe under /usr/bin/python3:
+    - `run --db-password hunter2`, `run --access-token abc123`, `run --client-secret abc123` and `run --github-token abc123` are printed unchanged;
+    - `run --auth-token=abc123` gives `run --auth-token=<REDACTED>`, only because the name-value rule catches the `=` form.
+    - The same option is therefore redacted with `=` and printed in the clear with a space. The near misses the ruling keeps (`--tokens 5`, `--password-file ./p`) would stay kept with a pattern that allows a prefix, since the name must still end at the separator.
+  - Failure scenario: a Bash call `az ad sp create --client-secret <value>` or `tool --db-password <value>` in a transcript prints its secret in the step-2 retro report.
+  - Verdict: item 1 violated, round-brief point 9 partial.
+  - Small and inside the brief: yes. The fix is `--(?:[A-Za-z0-9_-]*?)(?:{_NAMES})` in the name group, plus one test line, for example `--db-password hunter2` redacted beside the kept `--password-file ./p`.
+- **Finding 2 (standards).**
+  - Place: `transcript_window.test.sh:522-530`: `chmod 000 "$test_root/locked"` / `run ...` / `check "a folder whose parent cannot be searched" 2` / `run ... --session s1` / `chmod 755 "$test_root/locked"`.
+  - What is wrong: the mode is restored only after the first `check`. When that check fails, `fail` exits with `locked/` still at mode 000, so the trap's `rm -rf` cannot remove the scratch folder. This breaks `docs/dev/building.md`'s introduction ("Each test builds scratch ... under `$TMPDIR` and removes them"). The other mode-000 cases (`:488-490`, `:501-503`, `:515-517`) restore the mode before checking.
+  - Reproduced with a scratch copy whose `_stat` stops catching `OSError`: `sh ... 2>&1 | tail -3` ends with `rm: <S>/.../locked: Permission denied` and `rm: <S>/.../transcript-window-test.XXXX: Directory not empty`, and the scratch folder stays on disk.
+  - Failure scenario: a later regression in the folder check shows up in the verify list's `2>&1 | tail -1` as an `rm: ... Directory not empty` line in place of the `FAIL:` line, and leaves an undeletable folder in `$TMPDIR`.
+  - Verdict: none.
+  - Small and inside the brief: yes. Run both invocations, restore the mode, then check each (keep the first run's out, err and status aside, or restore the mode between the two runs as the other cases do).
+- **Finding 3 (behaviour).**
+  - Place: `transcript_window.py:464-468`: `except BrokenPipeError: os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno()); return 0`.
+  - What is wrong: when a file could not be read and the reader then closes stdout early, the script exits 0. The docstring's exit statuses (`:86-89`) give 0 for "closes it early" and 1 for "a file could not be read ... and the output lacks it", with no order between them. Reviewer's probe, a file at mode 000 beside a large session piped into `head -n 1`: rc=0, stderr `error: cannot read <S>/fold/locked.jsonl: Permission denied`. The same folder read in full gives rc=1. Round-brief point 7 says "exits 0, since the reader chose to stop"; that reason covers the pipe, not a file that was never read.
+  - Failure scenario: a caller running the reader into `head` under `set -o pipefail` (or checking PIPESTATUS) sees 0 while a transcript was skipped.
+  - Verdict: none.
+  - Small: yes, `return 1 if problems else 0` in that branch plus one docstring clause. Inside the brief: only if the orchestrator reads point 7 as ruling on the pipe alone. Otherwise it is the orchestrator's ruling. Recommendation: return 1 when a file was not read. The lazy option is to leave the overlap.
+- **Finding 4 (standards).**
+  - Place: `transcript_window.py:81-84`: "A file that cannot be opened or read, and a session folder, its subagents folder or the transcript folder itself that cannot be listed, is reported ...".
+  - What is wrong: in window mode, `_find_files` (`:426-430`) lists every entry of the transcript folder that does not end in `.jsonl`, so any other folder there (Ordo's `memory/`) that cannot be listed also gives `error: cannot read <folder>` and exit 1. Reviewer's probe: `mem/` at mode 000 gives `error: cannot read <S>/fold/mem: Permission denied`, rc=1, with every transcript printed. The report's judgment call 3 states this, but the docstring does not. The rules file, rule 14, says: "A script's head comment or docstring lists every input it reads, every error it prints and every exit status it returns".
+  - Failure scenario: a user whose `memory/` folder is unreadable gets exit 1, which the docstring defines as "the output lacks it", and looks for a missing transcript that is not missing.
+  - Verdict: none.
+  - Small and inside the brief: yes. One docstring clause, for example "every folder in the transcript folder (each is searched for a subagents folder)".
+
+### Declined to judge
+
+- The hyphen spelling `secret-key`: `--secret-key abc123` and `--secret-key=abc123` both print unchanged (probe). The ruling names only `secret_key`, while the list carries both spellings for `api-key` and `access-key`. Widening the list is the orchestrator's call under the brief's Decisions 4. Recommendation: add `secret-key`, one token in `_NAMES`. Leaving the list as it is is the lazy option.
+- A PGP private key block (`-----BEGIN PGP PRIVATE KEY BLOCK-----`) prints unchanged, because the pattern needs `PRIVATE KEY-----`. It is outside the brief's and the ruling's list, so it is the orchestrator's call under Decisions 4.
+- The PEM rule without an END marker redacts from a BEGIN marker to the end of the whole text. So prose that quotes a literal `-----BEGIN RSA PRIVATE KEY-----` loses the rest of its text. This is as ruled. Over the real window through 2026-09-30T06:00Z it changed no output (the comparison above).
+- The option form also eats a following flag (`--token --verbose` gives `--token <REDACTED>`). This is the builder's judgment call 1 and follows the ruling's value rule; not judged further.
+- Running the script with stdout closed outright (`>&-`) gives a traceback. This is outside the brief and the round brief, and no caller does it.
+- The comment on `building.md`'s new line does not list the cases added in this round (command output, folder listing, closed output). The comment is still true, so there is no finding.
+- pyright: not installed, as the brief states; not run.
+
+Reviewer usage: tokens not known to this agent, about 30 tool uses, time not measured. The only git commands run were `git status --short` and `git diff d7a82aa71202a59c62cc18ffc873761de7956f2d` in the worktree. Nothing in the repository was changed. Scratch files are under the session scratchpad `refute1r1/`, every mode restored. The transcripts were read only for counts, prefixes, file names and line numbers.
+
+## Closed
+
+The findings of the first run (Spec 1, Proof 1 to 4, Standards 1 to 3) and the redaction forms it declined to judge were each sent in repair round 1 (`agents/briefs/1-round-1.md`, points 1 to 9, with the rulings "Step 1, command output is not a user message" and "Step 1, the redaction forms added from the review"); the run over round 1 gives each point a verdict of holds except point 9, partial, which is its Finding 1. The findings of the run over round 1 are each fixed at landing on main, since each is small and inside the brief and the ruling on redaction forms; each fix has cases in `transcript_window.test.sh`, red on the landed round-1 script and green after the fix:
+
+- Finding 1: the option form takes an option that is, or ends in, a listed name (`--db-password`, `--client-secret`, `--access-token` redacted); `--tokens`, `--password-file`, `--max-tokens` and `--token-file` stay printed.
+- Finding 2: the test restores the locked folder's mode before each check, so a failing case leaves no scratch folder; with `_stat`'s `OSError` catch removed, the round-1 test left one folder in `$TMPDIR` and the fixed test leaves none.
+- Finding 3: after the reader closes stdout early, the exit status is 1 when a file could not be read, and 0 otherwise; the docstring says so. Case: a file at mode 000 beside the large session, piped into `head -n 1`, exits 1 with the error line.
+- Finding 4: the docstring names every folder of the transcript folder as listed, since each is searched for a subagents folder.
+
+The points this run declined to judge:
+
+- `secret-key`: added to the names beside `secret_key`, as the list carries both spellings for `api-key` and `access-key`, fixed at landing with cases (`secret-key=abc`, `--secret-key abc123`).
+- A PGP private key block: the PEM rule now also takes `-----BEGIN ... PRIVATE KEY BLOCK-----` and its END line, fixed at landing with a redacted case and a PGP PUBLIC KEY BLOCK kept.
+- The PEM rule without END redacting to the end of the text, and `--token --verbose`: as ruled, left.
+- Stdout closed outright (`>&-`): no caller does it and the brief does not name it, left.
+- The comment of `building.md`'s line: still true, left.
+- pyright: not installed; the 2.G open item "pyright for Python templates" covers it.
