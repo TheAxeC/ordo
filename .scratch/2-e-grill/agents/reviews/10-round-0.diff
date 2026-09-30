@@ -1,0 +1,446 @@
+diff --git a/.agents/plan.yaml b/.agents/plan.yaml
+index 99b4410..97a7dcf 100644
+--- a/.agents/plan.yaml
++++ b/.agents/plan.yaml
+@@ -1,4 +1,4 @@
+-# The project specifics the plan skills read (/plan, /spec, /refute, /land, /plan-help, plan-orchestration).
++# The project specifics the plan skills read (/plan, /spec, /refute, /land, /ordo-help, plan-orchestration).
+ # Every path is relative to the repository root. One project: the skills, their templates and utils/ are one tree with one set of checks.
+ roadmap: docs/roadmap.md                  # The source of truth for what is open; a plan is one entry of it.
+ verification: docs/dev/building.md        # The page that defines the green check; /plan copies its commands into the ledger.
+diff --git a/README.md b/README.md
+index 5878e29..b2c7900 100644
+--- a/README.md
++++ b/README.md
+@@ -18,10 +18,10 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
+ | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
+ | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
+ | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
+-| `plan-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
++| `ordo-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
+ | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
+ 
+-The order of use, shortened from what `/plan-help` prints:
++The order of use, shortened from what `/ordo-help` prints:
+ 
+ ```
+ /repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
+@@ -41,7 +41,7 @@ for every step:
+ /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
+ ```
+ 
+-`/plan-help` prints the full sequence, including what to do when a command stops.
++`/ordo-help` prints the full sequence, including what to do when a command stops.
+ 
+ ## Requirements
+ 
+@@ -62,7 +62,7 @@ The plan skills launch their agents through five agent definitions, `agents/ordo
+ npx skills add TheAxeC/ordo --skill '*' -g -a claude-code
+ ```
+ 
+-This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`.
++This copies each skill folder into `~/.agents/skills` and links it from `$CLAUDE_CONFIG_DIR/skills`, or `~/.claude/skills` when that variable is unset. For a second Claude Code account, run it again with that account's `CLAUDE_CONFIG_DIR` set. Updating is `npx skills update -g`. After an update, `npx skills ls -g` lists the installed skills, and a skill a newer version of Ordo no longer ships is removed with `npx skills remove --global <skill>`.
+ 
+ The CLI installs and updates skills only. After `npx skills add`, and after each `npx skills update -g`, copy the agents from a clone:
+ 
+@@ -81,7 +81,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
+ rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
+ for dir in ~/.claude/skills; do
+     mkdir -p "$dir"
+-    for skill in land ordo-init plan plan-help plan-orchestration plan-retro refute repo-setup roadmap spec; do
++    for skill in land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
+         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
+     done
+     agents=$(dirname "$dir")/agents
+@@ -90,7 +90,7 @@ for dir in ~/.claude/skills; do
+ done
+ ```
+ 
+-The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger.
++The loop copies the agents into the `agents` folder beside each skill folder. For a second Claude Code account, add that account's `$CLAUDE_CONFIG_DIR/skills` to the list of folders, and its agents go to `$CLAUDE_CONFIG_DIR/agents`. Updating is the same commands again: each skill folder is replaced whole, and the agents are replaced the same way, the old `ordo-*.md` removed first, so a file a newer version removes does not linger. The loop replaces only the skill folders it copies: a skill a newer version of Ordo no longer ships is removed with `rm -rf "$dir/<skill>"` for each folder of the list.
+ 
+ ## Configuring a repository
+ 
+diff --git a/docs/academic-coverage.md b/docs/academic-coverage.md
+index d92df79..a34a1d3 100644
+--- a/docs/academic-coverage.md
++++ b/docs/academic-coverage.md
+@@ -169,7 +169,7 @@ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/worksp
+ | `references/pipeline_state_machine.md` | rebuild: researcher | Review may not precede the integrity check, finalisation needs the final check, and review does not return after the second revision; each stage lists its required material and what a missing one triggers. The roadmap templates of entry 13 encode this order and these prerequisites as dependencies. The passport reset transitions end as `references/passport_as_reset_boundary.md` says. |
+ | `references/plagiarism_detection_protocol.md` | rebuild: paper | The paper skill's integrity check runs this screen at both gates: sampled sentences searched on the web and graded from original to verbatim, and a self-plagiarism check against the authors' earlier papers. Its six AI-writing indicators alert without deciding and suit the `writing` skill's style rules. |
+ | `references/process_summary_protocol.md` | drop | At the end a PDF record of the session scores the user's collaboration from 1 to 100 and adds an AI self-reflection built on concession rates. The plan ledger already records each decision and finding, each landing report states the agents' tokens, tool uses and time, and no new skill scores the user. |
+-| `references/progress_dashboard_template.md` | drop | Asked for status, the pipeline prints a box of stages with integrity and review history. The researcher's state is its roadmap and plan ledger, which `/roadmap` and `plan-help` already show. |
++| `references/progress_dashboard_template.md` | drop | Asked for status, the pipeline prints a box of stages with integrity and review history. The researcher's state is its roadmap and plan ledger, which `/roadmap` and `ordo-help` already show. |
+ | `references/reinforcement_content.md` | drop | At each stage transition one rule and one anti-pattern are repeated, such as "a gray zone is a fail". Each rule is stated in the file that owns it (`agents/integrity_verification_agent.md`, `agents/pipeline_orchestrator_agent.md`, `references/pipeline_state_machine.md`, the academic-paper and reviewer skills), and an Ordo skill loads its rules at every step. |
+ | `references/reproducibility_audit.md` | drop | This file restates the mandatory integrity checks, fixed reviewer roles and explicit pass criteria, then prints an audit trail at the end. `SKILL.md` and the agents state the guarantees, and the trail goes with `agents/state_tracker_agent.md` to the researcher. |
+ | `references/score_trajectory_protocol.md` | rebuild: paper-review | Re-review compares each rubric dimension with the first review: a drop of more than three points out of 100 stops for the user, and an overall gain under three with no blocking issue suggests stopping. The re-review mode named in roadmap entry 6 takes these rules. |
+diff --git a/docs/glossary.md b/docs/glossary.md
+index c0dff5c..74dd3de 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -43,7 +43,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
+ - **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`. It is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
+ - **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state. Stated in: `land`, "The look".
+-- **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **night rule**: the limit the loop keeps when the user sets a time by which no agent may run. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+ - **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
+ - **open item**: an entry of the state file's open items. It is a decision only the user can make, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling, or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
+@@ -52,7 +52,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **pause**: a halt of the loop the user asks for, which holds until the user lifts it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
+ - **plan**: the work of one roadmap entry, opened by `/plan` as a ledger folder whose `plan.md` holds the goal, the gate, the step list and the rulings. Stated in: `plan`, Steps. Also the roadmap file as the ordered build plan over a capability map. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **plan configuration**: `.agents/plan.yaml`, which holds a repository's project specifics and which every plan skill reads. `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
+-- **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `plan-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
++- **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
+ - **plan-terms block**: the text of `docs/glossary.md` between the plan-terms markers, a copy of the `repo-setup` skill's `templates/plan-terms.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
+ - **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe. Stated in: `spec`, "What it reads" 5 and Steps 2.
+@@ -75,12 +75,12 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported. Every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+ - **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
+ - **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
+-- **sequence, the**: the command sequence for running a plan by hand that `/plan-help` prints verbatim. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **sequence, the**: the command sequence for running a plan by hand that `/ordo-help` prints verbatim. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+-- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
++- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+ - **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+ - **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
+diff --git a/skills/land/SKILL.md b/skills/land/SKILL.md
+index d290c5b..40921a3 100644
+--- a/skills/land/SKILL.md
++++ b/skills/land/SKILL.md
+@@ -21,7 +21,7 @@ metadata:
+ |---|---|
+ | The step has not been reviewed yet | `/refute <entry> <step>` |
+ | Every step of the plan, unattended, the landings included | `/plan-orchestration <entry>` |
+-| Where the plan stands and which command comes next | `/plan-help <entry>` |
++| Where the plan stands and which command comes next | `/ordo-help <entry>` |
+ 
+ ## What it reads
+ 
+diff --git a/skills/ordo-init/SKILL.md b/skills/ordo-init/SKILL.md
+index 5a63944..c712cf7 100644
+--- a/skills/ordo-init/SKILL.md
++++ b/skills/ordo-init/SKILL.md
+@@ -7,7 +7,7 @@ metadata:
+ 
+ # Set a repository up for the plan skills
+ 
+-`/ordo-init` writes the one file the plan skills (`plan`, `spec`, `refute`, `land`, `plan-help`, `plan-orchestration`) need in a repository, `.agents/plan.yaml`, and the pages that file names when the repository lacks them. It leaves behind that file, the pages the user approved, the `.gitignore` lines it needed, and one commit when the repository's commit rule allows it.
++`/ordo-init` writes the one file the plan skills (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`) need in a repository, `.agents/plan.yaml`, and the pages that file names when the repository lacks them. It leaves behind that file, the pages the user approved, the `.gitignore` lines it needed, and one commit when the repository's commit rule allows it.
+ 
+ ## Quick start
+ 
+diff --git a/skills/plan-help/SKILL.md b/skills/plan-help/SKILL.md
+deleted file mode 100644
+index a493fbc..0000000
+--- a/skills/plan-help/SKILL.md
++++ /dev/null
+@@ -1,97 +0,0 @@
+----
+-name: plan-help
+-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: plan-help, plan help, what do I type next, where is the plan, how does the plan loop work."
+-metadata:
+-  version: "1.8.3"
+----
+-
+-# Plan help
+-
+-`/plan-help` prints the command sequence for running a plan step by step, and, for a named plan, where that plan stands and the command that comes next.
+-
+-## Quick start
+-
+-```
+-/plan-help            print the sequence
+-/plan-help <entry>    print the sequence, then the named plan's position and the command that comes next
+-```
+-
+-## Use instead
+-
+-| When | Use |
+-|---|---|
+-| The plan should run its steps unattended | `/plan-orchestration <entry>` |
+-| No plan is open for the entry yet | `/plan <entry>` |
+-| What the reviews keep finding across plans | `/plan-retro` |
+-
+-## What it reads
+-
+-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+-   - A required key missing is a refusal ("Stops").
+-2. For `/plan-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
+-   - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
+-   - No such folder is a refusal ("Stops").
+-3. For `/plan-help <entry>`, the folder's state file, and the brief, the report and the refuter report of the step in flight.
+-
+-## Steps
+-
+-1. Print the sequence in "The sequence, printed verbatim".
+-2. For `/plan-help <entry>`, print the named plan's position.
+-   - From the state file: the position line, the open items verbatim, and the dispatch block (a step in flight, its worktree, its base, its round).
+-   - From the ledger folder, for the step in flight: which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings.
+-3. For `/plan-help <entry>`, print one line from that position: the command that comes next, in the sequence.
+-   - An open item that waits on a ruling is printed with it, and the next line is `Ruled: ...`.
+-
+-## The sequence, printed verbatim
+-
+-```
+-/repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
+-/ordo-init                    once per repository: writes .agents/plan.yaml, or checks the one there
+-/roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
+-/roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan can open it
+-/plan <entry>                 once: opens the plan, shows the step list for approval
+-
+-then, for every step:
+-
+-/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
+-"build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
+-/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
+-"close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
+-/refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
+-                              repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
+-read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and becomes a step only by your ruling
+-/land <entry> <step>          stops the step's agents, then onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the booking, the commit
+-
+-when a command stops:
+-
+-/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, a choice is yours, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
+-"Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
+-/spec <entry> <step>          again; it now writes the brief
+-/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
+-/refute stops                 the reviewer was served a model other than the configured one: it stops the reviewer, uses nothing it wrote, and shows the configured value, the served model and the Claude Code version; rule on it, then /refute again
+-/refute refuses               it names the cause and leaves nothing, such as the configured effort that cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): install the effort agents as the plan skills are, or unset the variable, then /refute again in a new session
+-/land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the step's dispatch block: supply it, then /land again
+-/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head
+-
+-/plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
+-
+-/plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
+-```
+-
+-## Stops
+-
+-| Stop | When | What it shows | What resumes it |
+-|---|---|---|---|
+-| No stop | The skill never stops for a decision; the rows below are refusals, which name their cause and leave nothing | Nothing | Nothing |
+-| A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/plan-help` again |
+-| No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan <entry>`, or `/plan-help` with an entry that has a plan |
+-
+-## Anti-patterns
+-
+-| Anti-pattern | Why it fails | Do instead |
+-|---|---|---|
+-| Printing the sequence in other words | A reader matching what they typed against the sequence finds lines that are not there | Steps 1 |
+-
+-## Rules
+-
+-- The skill writes nothing.
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index 3b1b412..f046e56 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -21,9 +21,9 @@ continue the plan                    resume from the state file, after a compact
+ 
+ | When | Use |
+ |---|---|
+-| One step by hand, stopping after each skill | `/spec`, then "build it", `/refute` and `/land`, the sequence `/plan-help` prints |
++| One step by hand, stopping after each skill | `/spec`, then "build it", `/refute` and `/land`, the sequence `/ordo-help` prints |
+ | The plan is not open yet | `/plan <entry>` |
+-| Where the plan stands and which command comes next | `/plan-help <entry>` |
++| Where the plan stands and which command comes next | `/ordo-help <entry>` |
+ | The repository has no `.agents/plan.yaml` | `/ordo-init` |
+ | What the reviews keep finding across plans | `/plan-retro` |
+ 
+@@ -37,7 +37,7 @@ continue the plan                    resume from the state file, after a compact
+ 
+ ## Steps
+ 
+-The loop runs over a plan that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/plan-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops and the reports.
++The loop runs over a plan that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/ordo-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops and the reports.
+ 
+ 1. Read the inputs in the order "What it reads" gives them.
+    - Resolve a dispatch block before anything else.
+diff --git a/skills/plan/SKILL.md b/skills/plan/SKILL.md
+index 80384ac..a4205f5 100644
+--- a/skills/plan/SKILL.md
++++ b/skills/plan/SKILL.md
+@@ -23,7 +23,7 @@ metadata:
+ | The repository has no `.agents/plan.yaml` | `/ordo-init` |
+ | The roadmap has no entry for the work yet | `/roadmap add <goal>` |
+ | The plan is open and a step is due | `/spec <entry> <step>`, or `/plan-orchestration <entry>` for every step |
+-| Where an open plan stands | `/plan-help <entry>` |
++| Where an open plan stands | `/ordo-help <entry>` |
+ 
+ ## What it reads
+ 
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 60dc9fa..9311c6c 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -38,7 +38,7 @@
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
+ - **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`. It is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
+ - **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state. Stated in: `land`, "The look".
+-- **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **night rule**: the limit the loop keeps when the user sets a time by which no agent may run. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+ - **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
+ - **open item**: an entry of the state file's open items. It is a decision only the user can make, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling, or a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop"; `land`, "Stops".
+@@ -47,7 +47,7 @@
+ - **pause**: a halt of the loop the user asks for, which holds until the user lifts it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
+ - **plan**: the work of one roadmap entry, opened by `/plan` as a ledger folder whose `plan.md` holds the goal, the gate, the step list and the rulings. Stated in: `plan`, Steps. Also the roadmap file as the ordered build plan over a capability map. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **plan configuration**: `.agents/plan.yaml`, which holds a repository's project specifics and which every plan skill reads. `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
+-- **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `plan-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
++- **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
+ - **plan-terms block**: the text of `docs/glossary.md` between the plan-terms markers, a copy of the `repo-setup` skill's `templates/plan-terms.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
+ - **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe. Stated in: `spec`, "What it reads" 5 and Steps 2.
+@@ -70,12 +70,12 @@
+ - **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported. Every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+ - **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
+ - **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
+-- **sequence, the**: the command sequence for running a plan by hand that `/plan-help` prints verbatim. Stated in: `plan-help`, "The sequence, printed verbatim".
++- **sequence, the**: the command sequence for running a plan by hand that `/ordo-help` prints verbatim. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+-- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `plan-help`, "The sequence, printed verbatim".
++- **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+ - **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+ - **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
+diff --git a/skills/roadmap/SKILL.md b/skills/roadmap/SKILL.md
+index e2cc28f..0445649 100644
+--- a/skills/roadmap/SKILL.md
++++ b/skills/roadmap/SKILL.md
+@@ -26,7 +26,7 @@ metadata:
+ | When | Use |
+ |---|---|
+ | An entry is ready to be opened as a plan | `/plan <entry>` |
+-| Where an open plan stands | `/plan-help <entry>` |
++| Where an open plan stands | `/ordo-help <entry>` |
+ 
+ ## What it reads
+ 
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index 8e2cd4b..c1b1ccd 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -23,7 +23,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+ | The plan is not open yet | `/plan <entry>` |
+ | Every step of the plan, unattended | `/plan-orchestration <entry>` |
+ | The step is built and needs its review | `/refute <entry> <step>` |
+-| Where the plan stands and which command comes next | `/plan-help <entry>` |
++| Where the plan stands and which command comes next | `/ordo-help <entry>` |
+ 
+ ## What it reads
+ 
+diff --git a/skills/ordo-help/SKILL.md b/skills/ordo-help/SKILL.md
+new file mode 100644
+index 0000000..518d769
+--- /dev/null
++++ b/skills/ordo-help/SKILL.md
+@@ -0,0 +1,97 @@
++---
++name: ordo-help
++description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
++metadata:
++  version: "1.8.3"
++---
++
++# Ordo help
++
++`/ordo-help` prints the command sequence for running a plan step by step, and, for a named plan, where that plan stands and the command that comes next.
++
++## Quick start
++
++```
++/ordo-help            print the sequence
++/ordo-help <entry>    print the sequence, then the named plan's position and the command that comes next
++```
++
++## Use instead
++
++| When | Use |
++|---|---|
++| The plan should run its steps unattended | `/plan-orchestration <entry>` |
++| No plan is open for the entry yet | `/plan <entry>` |
++| What the reviews keep finding across plans | `/plan-retro` |
++
++## What it reads
++
++1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
++   - A required key missing is a refusal ("Stops").
++2. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
++   - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
++   - No such folder is a refusal ("Stops").
++3. For `/ordo-help <entry>`, the folder's state file, and the brief, the report and the refuter report of the step in flight.
++
++## Steps
++
++1. Print the sequence in "The sequence, printed verbatim".
++2. For `/ordo-help <entry>`, print the named plan's position.
++   - From the state file: the position line, the open items verbatim, and the dispatch block (a step in flight, its worktree, its base, its round).
++   - From the ledger folder, for the step in flight: which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings.
++3. For `/ordo-help <entry>`, print one line from that position: the command that comes next, in the sequence.
++   - An open item that waits on a ruling is printed with it, and the next line is `Ruled: ...`.
++
++## The sequence, printed verbatim
++
++```
++/repo-setup                   once, for a new repository: the tree, the shared rules, the standards, then /ordo-init
++/ordo-init                    once per repository: writes .agents/plan.yaml, or checks the one there
++/roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
++/roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan can open it
++/plan <entry>                 once: opens the plan, shows the step list for approval
++
++then, for every step:
++
++/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
++"build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
++/refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
++"close them"                  a repair round: the session fixes the findings, reruns, rewrites the report
++/refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
++                              repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
++read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and becomes a step only by your ruling
++/land <entry> <step>          stops the step's agents, then onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the booking, the commit
++
++when a command stops:
++
++/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, a choice is yours, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
++"Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
++/spec <entry> <step>          again; it now writes the brief
++/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
++/refute stops                 the reviewer was served a model other than the configured one: it stops the reviewer, uses nothing it wrote, and shows the configured value, the served model and the Claude Code version; rule on it, then /refute again
++/refute refuses               it names the cause and leaves nothing, such as the configured effort that cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): install the effort agents as the plan skills are, or unset the variable, then /refute again in a new session
++/land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the step's dispatch block: supply it, then /land again
++/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head
++
++/plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
++
++/plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
++```
++
++## Stops
++
++| Stop | When | What it shows | What resumes it |
++|---|---|---|---|
++| No stop | The skill never stops for a decision; the rows below are refusals, which name their cause and leave nothing | Nothing | Nothing |
++| A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/ordo-help` again |
++| No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan <entry>`, or `/ordo-help` with an entry that has a plan |
++
++## Anti-patterns
++
++| Anti-pattern | Why it fails | Do instead |
++|---|---|---|
++| Printing the sequence in other words | A reader matching what they typed against the sequence finds lines that are not there | Steps 1 |
++
++## Rules
++
++- The skill writes nothing.
