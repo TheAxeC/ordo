@@ -9,6 +9,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+- sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
@@ -38,21 +39,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 2a
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2f-2a
-  base: 22878c5dc5d1e2c11ebe1a3e86cf158663bcc76e
-  launched: 2026-09-30 13:20
-  session_id: aaf2a244958131899 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-f-diagnose/agents/reviews/2a-report.md
-  brief_check: .scratch/2-f-diagnose/agents/reviews/2a-brief-check.md (ordo-high, claude-opus-5-5; 170502 tokens, 19 tool uses, 491 s, $0.92-3.78)
-  builder_usage: round 0 161787 tokens, 37 tool uses, 519 s, $1.32-2.61 (claude-sonnet-5-5); round 1 209610 tokens, 12 tool uses, 250 s
-  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2a-refuter.md (ordo-high, claude-opus-5-5; 173973 tokens, 26 tool uses, 556 s, $1.19-4.48; 2 Proof, 5 Standards, 2 Behaviour findings)
-  round_brief: .scratch/2-f-diagnose/agents/briefs/2a-round-1.md
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -92,6 +79,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 and 2 landed and ticked.
-- Steps 1, 2 and 3 ticked.
-- Step 2a is in flight, its builder launched. Next: step 2b after 2.H step 3a (both write `skills/spec/`); step 4, the blind comparison.
+- 2026-09-30. Steps 1, 2, 2a and 3 landed or run, and ticked.
+- Next: step 2b after 2.H step 3a lands (both write `skills/spec/`); step 4, the blind comparison, which ends in Axel's call.
