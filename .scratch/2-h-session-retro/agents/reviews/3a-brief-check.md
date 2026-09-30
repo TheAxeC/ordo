@@ -148,3 +148,197 @@ Agent usage: claude-opus-5-5 (ordo-high), 195356 tokens, 30 tool uses, 7.6 minut
 
 - Section 2 finding 2, section 4 finding 1 and section 1 finding 1 (the ruled words depart from the open item's, and the change of kind 5 contradicts rule 13 of the change standard): a stop, the open item "Step 3a, the words of the six changes" as the state file holds it. The brief is not kept: no brief, worktree or dispatch entry exists for the step.
 - Every other finding (sections 1, 2, 3, 4, 5 and 8): carried into option (a) of that open item as the corrected wording of each change, the widened paths and the two findings for `refute`; the next `/spec 2.H 3a` writes the brief from the ruling.
+
+# Step 3a brief check (on main at 6f40399)
+
+The brief checked is `/Users/axelfaes/workspace/ordo/.scratch/2-h-session-retro/agents/briefs/3a.md` (163 lines). `git rev-parse --short HEAD` printed `6f40399` at the start and at the end. I wrote nothing in the repository; the scratch folder `$TMPDIR/bc-3a.FHQ8oP` is removed (`ls -d "$TMPDIR"/bc-3a.*` finds nothing). `git status --short` at the end prints:
+
+```
+ M .scratch/2-g-git-guard/orchestrator-state.md
+ M .scratch/2-g-git-guard/plan.md
+ M .scratch/2-h-session-retro/orchestrator-state.md
+ M .scratch/2-h-session-retro/plan.md
+?? .scratch/2-g-git-guard/agents/briefs/2b.md
+?? .scratch/2-h-session-retro/agents/briefs/3a.md
+```
+
+The three `2-g-git-guard` lines were not there at the start of this run (the start printed only the two `2-h-session-retro` modified files and `3a.md`); another session wrote them while this check ran.
+
+The two findings that matter most: the ruled words give the reviewer "a change of its own" while `refute`, the glossary and the README say the reviewer changes nothing (section 1, finding 1), and "Verify" 3 cannot hold as written (section 4, finding 1).
+
+## 1. Names
+
+Commands, all as `git grep -n -i -E '<pattern>' -- skills docs utils README.md`:
+
+- `dictated|dictates`: `docs/dev/change-standard.md:30` and `skills/repo-setup/templates/docs/dev/change-standard.md:30` (rule 4, "a rewrite of text the brief dictates ... is reported as a stop"). Not made false; the brief's sentence after item 8 rests on it.
+- `word for word`: `skills/diagnose/SKILL.md:61` (the symptom copied word for word) and `skills/repo-setup/templates/hooks/git_guard.py:571` (code). Not made false.
+- `(six|seven|eight|[0-9]) (checks|headings|parts)`: no hit. No page counts the checks, the headings or the report's parts.
+- `names no revert|by reading it|finds such a test`: `docs/dev/change-standard.md:39`, `:43`, the same two lines of the template copy, `skills/refute/SKILL.md:114` (all inside the paths), and `docs/roadmap.md:228` ("judged by reading its reports", an unrelated match). Not made false.
+- `audit, not a proof|taken out of the code|takes (the|its) behaviour out|code under test|mutat`: the rule 13 lines, `skills/refute/SKILL.md:114`, `skills/spec/templates/brief.md:63` ("Verify" item 4: "is an audit, not a proof, and this brief says which it is"; inside the paths, stays true), and `skills/repo-setup/templates/docs/dev/coding-standards/cpp.md:60` ("mutator", unrelated).
+- Rule 13 quoted or paraphrased, `rule 13|rule on tests|rule that a test` and the read of the `the report (quotes|names|lists|gives)` hits: `skills/repo-setup/templates/docs/dev/coding-standards/common.md:13` quotes rule 13's title ("Its rule "A test proves the change by failing on the unchanged tree, and the report quotes the failure" sets how the proof is shown"). The title does not change; not made false. `skills/diagnose/SKILL.md:149` and `skills/refute/SKILL.md:124` name the rule that a test exists only for behaviour whose failure costs something, which is not rule 13. `docs/dev/coding-standards` has no other quote.
+- The shape of a builder's report, `first run|first read`, `DONE / NOT DONE|NOT DONE`, `judgment call|line counts|...`, `builder's report|the report's`: `docs/dev/change-standard.md:33` and the template copy's `:33` (rule 7, identical in both by `diff`), `skills/repo-setup/templates/shared-rules.md:6`, `skills/plan-orchestration/SKILL.md:66` ("the report path and shape"), `:85`, `:255` ("A builder's report keeps the shape of the repository's change standard"), `:261`, `skills/land/SKILL.md:100`, `docs/glossary.md:19` (**case**), `:37` (**Doc text**), `:46` (**hand-back**) and the same entries of `skills/repo-setup/templates/plan-terms.md`, `skills/refute/templates/report.md:8` to `:9`, `README.md:19`. None names the terms part or rule 13's table, and none is made false: rule 7 and `plan-orchestration` `:255` already list fewer parts than the template on main (neither has the cases' first run).
+- The shape of the brief-check report, `brief.check`: `README.md:38`, `docs/figures/gen_figures.py:584`, `docs/figures/plan-loop.svg:20`, `docs/glossary.md:10`, `:16`, `:23`, `:30`, `:36`, `:38`, `:40`, `:74`, `:78`, `:91`, `:94`, `:113` and the same entries of `plan-terms.md`, `docs/roadmap.md:222`, `skills/diagnose/SKILL.md:18`, `:42`, `:47`, `:81`, `:170`, `skills/grill/SKILL.md:121`, `skills/land/SKILL.md:91`, `skills/ordo-help/SKILL.md:59` to `:61`, `:74`, `skills/plan-orchestration/SKILL.md:28`, `:51`, `:52`, `:129`, `:134`, `:137`, `:291`, `skills/plan/templates/orchestrator-state.md:14`, `:27`, `:31`, `skills/plan/templates/plan.yaml:12`, `:27`. None lists or counts the checks or the headings; none is made false. Inside the paths, `skills/spec/SKILL.md:247` ("one heading per check of item 2") holds with eight and eight.
+- The "Report" section named as a paragraph: `"Report"|report shape|shape of .*report` prints `docs/glossary.md:15` and `:37`, `plan-terms.md:10` and `:32`, `skills/spec/SKILL.md:3` and `:102`; `git grep -n -i 'paragraph' -- skills/spec skills/refute skills/plan-orchestration docs/glossary.md skills/repo-setup/templates/plan-terms.md` prints nothing. No place calls it a paragraph. **Doc text** ("the section of a builder's report ... Stated in: `spec`, `templates/brief.md`, "Report"") holds with part 8 of the new list.
+- The reviewer's own change, `changes nothing|without changing anything|edit to any file`: `README.md:5`, `docs/figures/gen_figures.py:599`, `docs/glossary.md:91`, `skills/repo-setup/templates/plan-terms.md:86`, `skills/refute/SKILL.md:3`, `:10`, `:168`, `skills/spec/SKILL.md:232` (the brief-check agent, unrelated), and hits on refusals and `utils/pin.sh` (unrelated).
+- Scripts that read a changed file: `git grep -n 'change-standard\|brief-check\.md\|brief\.md' -- '*.py' '*.sh'` prints only `skills/ordo-init/templates/check_config.test.sh:26` and `:91`, which create an empty scratch file of that name. No script reads the content of any of the six files.
+
+Findings:
+
+1. Item 7's second change and item 8's Proof change give the reviewer a change to the code ("the reviewer checks it by reading the test and by a change of its own"; "or by a change of the reviewer's own that takes the behaviour out"). These places say the reviewer changes nothing, and the brief has no item for any of them:
+   - `skills/refute/SKILL.md:3`: "Review a built step without changing anything" (inside the file the step writes, outside the items).
+   - `skills/refute/SKILL.md:10`: "dispatches one reviewer, who changes nothing".
+   - `skills/refute/SKILL.md:168`: "An edit to any file, anywhere, by the reviewer | The step under review is no longer the step that was built".
+   - `docs/glossary.md:91` and `skills/repo-setup/templates/plan-terms.md:86` (**reviewer**): "refutes a built step without changing anything" (outside the paths).
+   - `README.md:5`: "A fresh reviewer that changes nothing reviews the step"; `docs/figures/gen_figures.py:599`: "A fresh reviewer changes nothing" (outside the paths).
+   
+   The rules file's rule 19 asks that a contradicting statement be changed in the same step or reported as a stop. The practice on the tree is a change on a scratch copy: `.scratch/2-f-diagnose/agents/reviews/2a-refuter.md:53` reads "each mutation applied to a scratch copy of the script beside a copy of the test under `$TMPDIR`". A wording that would hold with every "changes nothing" sentence except `:168`: in rule 13, "the reviewer checks it by reading the test and by a change of its own on a scratch copy"; in the Proof bullet, "or by a change of the reviewer's own, made on a scratch copy outside the worktree, that takes the behaviour out"; and `:168` as "An edit to any file of the worktree or the main checkout by the reviewer". The rule 13 sentence is ruled text, so its change is the user's call; the Proof bullet and `:168` are the orchestrator's (Decision 4).
+
+## 2. The step line
+
+The step line, line 30 of `plan.md`, read with the Rulings lines 50 and 51 and "Step 0 of step 3a" option (a), lines 62 to 69.
+
+- "The six changes of the ruling "Recurring findings"": kind 1 is items 1 and 2; kind 2 is item 6, parts 3 and 5; kind 3 is item 6, part 6, and item 8's Standards bullet; kind 4 is item 5; kind 5 is item 4, item 6 part 4, item 7 and item 8's Spec and Proof bullets; kind 6 is item 3.
+- "to the `spec` skill (`SKILL.md`, `templates/brief.md`, `templates/brief-check.md`)": items 1, 3 to 6, 2. "`skills/refute/SKILL.md`": item 8. "rule 13 of both copies of the change standard": item 7.
+- "check: each changed text read in place": cases R1 to R9 and "Verify" 7. "`grep -c -F` of each new sentence in its file": "Verify" 2.
+- Ruling "Recurring findings": the dictated-text check (items 1, 2), "Report" with the first-run and verbatim wording and the terms (item 6), the reading item of "Verify before you report" (item 5), "Cases" with one change per code case and the missing, unreadable, malformed and closed-early inputs (items 4, 3). Ruling "Step 3a, the words of the six changes": rule 13 in both copies (item 7), the two findings of `refute` (item 8), section "8. Dictated text" (item 2). Every part has an item.
+- Word for word, by a script that counted each ruled text of option (a) in `plan.md` and in the brief with `str.count`: the kind 1 bullet 1 and 1; kind 2's table sentence 1 and 1; kind 3 1 and 1; kind 4 1 and 1; kind 5's "Cases" sentence 1 and 1, its "Report" sentence 1 and 1, rule 13's first new sentence 1 and 1, its fourth bullet's new sentence 1 and 1; kind 6's list of forms 1 and 1; the two `refute` findings 1 and 1 each. Kind 2's first-run sentences are in the brief with "Then the" replaced by "The". A `difflib` comparison of line 19 of `brief.md` on main with item 3's bullet shows two insertions and nothing else: ", and for a script the case where the program reading its output closes it before the script ends" and ", for a script the exit status and the error line".
+- Differences from option (a), and whether "Decisions" names each:
+  - Item 6: each leading "Then" dropped and the next word capitalised, "First line:" as "The first line:", the numbers 1 to 8. Named by Decision 1.
+  - Item 6, the opening line: "Write it to `<ledger>/agents/reviews/<step>-report.md`." gains ", with these parts in this order:". Item 6 gives it; Decision 1 does not name the added words.
+  - Item 2's bullet and Findings line: Decision 2. Item 7's fifth bullet: Decision 3. Item 8's Proof bullet: Decision 4. Item 8's Standards placement: Decision 7.
+  - Item 8's Spec bullet: the period of the bullet before it becomes a semicolon. Item 8 gives it; no Decision, and none is needed for list punctuation.
+  - Item 4's place, between the paragraph "The builder's first task" and the paragraph "When the first run finds a case": the ruling says only "in "Cases"". No Decision names the place.
+
+Findings:
+
+1. The place of item 4's paragraph is a choice the brief takes without an entry under "Decisions". Section 8, finding 5 says why the place matters.
+2. Decision 1 does not name the words ", with these parts in this order:" added to the opening line. They should be named there beside the dropped "Then".
+
+## 3. Premises
+
+- Bullet 1: `grep -n 'The agent runs these checks' -A 8 skills/spec/SKILL.md` prints line 238, the seven check bullets at 239 to 245 in the order the brief gives, and "The checks are done when each has its findings, or "none"." at 246. `grep -n 'one heading per check of item 2' skills/spec/SKILL.md` prints 247. Matches.
+- Bullet 2: `grep -n '^## ' skills/spec/templates/brief-check.md` prints 5, 11, 17, 23, 29, 35, 41, 47 and 53; `grep -n '^Agent usage'` prints 51. Matches.
+- Bullet 3: `grep -n '^- <\|^The builder.s first task\|^When the first run\|^[0-9]\. \|^Write it to' skills/spec/templates/brief.md` prints the two "Cases" bullets at 18 and 19, the paragraphs at 21 and 23, the four "Verify" items at 60 to 63, and "Write it to" at 67. A sentence split of line 67 gives 7 sentences. Matches.
+- Bullet 4: the `diff` of the two `grep '^13\. ' -A5` outputs prints nothing, exit 0; both print lines 39 to 44. `grep -c -F` of each of the three quoted sentences prints 1 in each file; line 39 ends "names no revert." and line 43 ends "by reading it.". Matches.
+- Bullet 5: `sed -n '93p;103p;104p;114p;115p;121p;125p' skills/refute/SKILL.md` prints the Spec label, "a case whose first run on the unchanged tree the report does not give.", the Proof label, the bullet ending "found by reading it (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs).", the Standards label, the bullet "a sentence in a document, a head comment or a rules file that the diff makes false, ...;", and the Behaviour bullet. Matches. The section's list has one more bullet at line 126 ("Each finding, under any of the four headings, carries its failure scenario"), which no item touches.
+- Bullet 6: `git grep -n 'names no revert\|by reading it' -- skills docs README.md utils` prints six lines: `docs/dev/change-standard.md:39`, `:43`, `docs/roadmap.md:228`, `skills/refute/SKILL.md:114`, and `:39` and `:43` of the template copy. Differs: see finding 1.
+- Bullet 7: `plan.md` line 50 ("Recurring findings ... (the user)"), line 51 ("Step 3a, the words of the six changes ... (the user)"), line 60 ("Ruled (2026-09-30): Axel ruled (a)") and lines 62 to 69 hold option (a). Matches; the word-for-word result is in section 2.
+- Bullet 8: `ls docs/adr` prints `README.md` and `template.md`. Matches.
+- The header: `git rev-parse --short HEAD` prints `6f40399`. Matches.
+- "Verify" 1's count: an `awk` count of the `- ` lines under `verify:` in `.scratch/2-h-session-retro/orchestrator-state.md` prints 11. Matches "checks: 11 commands passed".
+- "Libraries checked": `cat .agents/plan.yaml` prints `libraries: avoid`. Matches.
+
+Findings:
+
+1. Bullet 6 says the grep "prints only" the rule 13 lines and `skills/refute/SKILL.md:114`. It also prints `docs/roadmap.md:228`, where "by reading it" matches "judged by reading its reports". The bullet should name that line as an unrelated hit. "Verify" 6 uses the narrower pattern `finds such a test by reading it` and is not affected.
+
+## 4. Cases and checks
+
+- R1 to R8 against the rules file's rule 1 (a defect in text is fixed by reading, the report quotes the text before and after) and rule 17: consistent. Each is a reading of a named place before and after.
+- R8's counts, read from `sed -n 93,126p skills/refute/SKILL.md`: Spec bullets at 94 to 103 (ten), Proof at 105 to 114 (ten), Standards at 116 to 124 (nine). After item 8: eleven, ten, ten. The counts are right, and each list still ends with a period on its last bullet.
+- R9 against rule 14 and rule 19: see finding 3.
+- "Verify" 1 against "Commands and their filters": consistent. "Verify" 2, 4, 6: facts a command computes. "Verify" 5 and 7: readings. Consistent with "Scripts compute facts; judgment is read".
+- "Verify" 2, that `grep -c -F` is asked only of single lines: each bullet, numbered item, paragraph and heading of items 1 to 6 is one line, and item 2's three parts are grepped one by one. No multi-line text is asked for. The first new sentence of item 7 ("...beside the test's name.") is not a substring of the old one ("...name and names no revert."), so its count is 0 before and 1 after.
+- "Verify" 3, simulated: a script applied item 7's three replacements to copies of the two files and compared `diff -U3` of each against its original. The two diffs are not equal.
+- "Verify" 4 on the unchanged tree: `LC_ALL=C grep -n '[^ -~]'` over the six files prints nothing, exit 1. The same over the brief prints nothing, exit 1, so every dictated text is ASCII.
+- "Verify" 5 on the unchanged tree prints `skills/spec/templates/brief-check.md:43`, `skills/spec/SKILL.md:50` and `:245`, each `docs/adr`. After the change it also prints the new lines that hold "glossary"; none names a page of one repository.
+- "Verify" 6 on the unchanged tree prints the four rule 13 lines; after item 7 it prints nothing.
+
+Findings:
+
+1. "Verify" 3, "`git diff` of the two change standards is identical apart from the file names", cannot hold. The context lines after rule 13 differ between the two files: rule 14 reads "grep it across `skills/`, `utils/`, `docs/` and `README.md`" in `docs/dev/change-standard.md:45` and "grep it across <the source tree, the tests, the examples and `docs/`>" in the template copy, and rule 15 reads "For a script" against "For code" (`diff <(sed -n '36,47p' ...) <(sed -n '36,47p' ...)`). The `index` line of each diff differs as well. A check that holds: "`git diff -U0` of each of the two change standards shows the same three removed and three added lines".
+2. "Verify" 2 gives the command as `grep -c -F -- '<the text>' <file>`. Every dictated text but the heading holds an apostrophe ("brief's", "cases'", "test's"), so the text cannot stand between single quotes as written. The check should say how the text is passed, for example "the text written to a one-line file and passed as `grep -c -F -f <that file> <file>`".
+3. R9's greps ("brief check", "first run", "DONE / NOT DONE", "verbatim", "revert", "taken out of the code") reach none of the sentences of section 1, finding 1: none of those six patterns matches "changes nothing", "without changing anything" or "An edit to any file". R9 should add that grep, once the wording of finding 1 is settled.
+4. The brief's "Report" does not ask for the list rule 14 requires ("A sentence about the changed file as a whole ... is reread against the file after the change, and the report lists each one with the line that shows it still holds"). The sentences of that kind here are `skills/spec/SKILL.md:247`, the introduction of `skills/spec/templates/brief-check.md:3`, and `skills/refute/SKILL.md:3` and `:10`. R2 covers the first only. The rules file binds the builder without the brief, so this is a gap in the brief's report shape, not a contradiction.
+
+## 5. The question
+
+- R1: no. The bullet is read in its place and compared with item 1's text.
+- R2: no. The section is read in its place, and the order of eight checks and eight headings is compared.
+- R3: no. The `difflib` result of section 2 is what a reader finds: two insertions.
+- R4: yes, in one respect. It checks the paragraph "in its place", and the place lets a builder read the change as part of the first task, before the step's code exists (section 8, finding 5).
+- R5: no.
+- R6: no. Each part of the old paragraph is in the new list: `str.count` of the five kept parts prints 1 in line 67 on main and at least 1 in the brief.
+- R7: no for the three sentences. `git grep 'names no revert'` prints nothing only after the change.
+- R8: no for counts and places. Yes for the goal on kind 5: the Proof bullet as changed contradicts three sentences of the same file (section 1, finding 1), and R8 reads only "The four headings".
+- R9: yes. Section 4, finding 3.
+- The check on the step's line ("each changed text read in place, and `grep -c -F` of each new sentence"): no. "Verify" 2 greps each text whole, which fails on any changed word, and the R cases read the place.
+- Item 1: no. Kind 1's two halves (breaks a standard, is false) each have a sentence.
+- Item 2: no.
+- Item 3: no. The unreadable input and the output closed early are both named, with the exit status and the error line (kind 6).
+- Item 4 with items 6 (part 4), 7 and 8: no for the builder's side. A test that stays green under the change has no failing line for the table, and `refute`'s new Spec bullet makes a missing change a finding. Neither text says what the builder does when the test stays green; the rule that it is "an audit, not a proof" is in rule 13's fourth bullet, which is enough.
+- Item 5: yes, in a repository whose standards state no rule on lists or sentence length; there it asks nothing. In this repository no. The text is ruled.
+- Item 6, part 3 and part 5: no.
+- Item 6, part 6, with item 8's Standards bullet: yes, in one respect. The report may say of a term that its use is not "in a sense its entry gives" and leave it; the new Standards bullet covers only what "the report's terms part does not name", so a named misuse is a finding only under the general bullet "a documented standard the diff breaks". The text is ruled.
+- Item 7: no, apart from section 1, finding 1.
+- Item 8: as R8.
+- "Verify" 1, 2, 4, 5, 6, 7: no. "Verify" 3: it cannot pass at all (section 4, finding 1).
+
+Findings:
+
+1. R9 can pass while the step leaves the sentences of section 1, finding 1 in contradiction with the new rule 13 and the new Proof bullet.
+2. R4 can pass with the paragraph in a place that misleads the builder about when the change is made (section 8, finding 5).
+
+## 6. Implied inputs
+
+- This is a text step. The six files the step writes besides its report are Markdown pages (`wc -l` listed them: two `SKILL.md`, two templates, two copies of the rules file). No script reads their content: `git grep -n 'change-standard\|brief-check\.md\|brief\.md' -- '*.py' '*.sh'` prints only two lines of `check_config.test.sh` that create an empty file of that name. The brief says "This is a text step: nothing in it is a script, and it has no test", which matches.
+
+Findings: none
+
+## 7. ADRs
+
+- `ls docs/adr` prints `README.md` and `template.md`; `ls docs/adr | grep -E '^[0-9]{4}-'` prints nothing, exit 1. No record. The brief's "No ADR touches this step" and "No ADR record exists" match. The index table of `docs/adr/README.md` has no row.
+
+Findings: none
+
+## 8. Dictated text
+
+Read: every text of items 1 to 8 against the prose standard (sections 0, B, D, E), `docs/dev/skill-layout.md` ("Sections, in order", "Where a rule goes", "Lists and tables", "Writing for an agent"), the glossary, and rules 14 and 17 of the rules file.
+
+- Placement by "Sections, in order" and "Where a rule goes": item 1 is a rule for one point of the work and sits in that step's item; the list's closing bullet "The checks are done when ..." stays last, so the item still ends on its completion criterion. Item 8's bullets sit under the heading each belongs to. No new `##` heading enters a `SKILL.md`.
+- Glossary senses: "brief", "rules file", "standards" (the first sense, "the reviewer holds a diff to"), "premise", "first run", "case", "orchestrator", "ruling" (its second sense), "state file", "open items", "builder", "reviewer", "finding" are used as their entries give them, apart from finding 3. "Dictated text" has no entry (Decision 6), as "Names" and "Implied inputs" have none. "Terms part" in item 8 names part 6 of the new "Report" list, which the opening line calls a part.
+- Rule 17: item 6 keeps every part of the old paragraph (section 5, R6); the changes of meaning in parts 3 and 5 and in rule 13 are the ones the ruling asks for. Rule 13's fifth bullet keeps its last sentence ("The table covers those behaviours, not every branch ...").
+- Claims the texts make about the tree: item 6 part 4's "the table the rules file's rule on tests asks for" is borne out by rule 13's fifth bullet ("the report lists them in a table"); rule 7's table is a rule on the report, so the reference has one reading. Item 1's "as the reviewer holds a diff to them" is the glossary's **standards** entry. Item 8's "the last bullet's closing period" is line 103. Item 3's "line 19" and item 6's "line 67" are right. Item 1's "three-space indent of its neighbours" is right for lines 239 to 246.
+- Words per sentence, counted with `len(text.split())`: item 1, 42, 11, 15; item 2's bullet, 60; item 3, one placeholder of 95 (78 on main); item 4, 36; item 5, 29 and 19; item 6 part 3, 15, 23, 16; part 4, 28; part 5, 36; part 6, 36 and 31; part 7, 34; part 8, 53 (kept from main); item 7's fourth-bullet sentence, 50; item 8's Standards bullet, 27. The prose standard, "E. Sentence shapes", sets "under roughly 20 words unless the mechanism needs more". "Verify" 7 has the builder name each long sentence with its reason and not rewrite it, which is the right handling for ruled words.
+
+Findings:
+
+1. Item 7, the fourth bullet's new sentence, and item 8's Proof bullet: "a change of its own" contradicts the sentences of section 1, finding 1 (rule 19 of the rules file). Wording in that finding. The rule 13 sentence is ruled, so changing it is the user's call; the Proof bullet is the orchestrator's text (Decision 4).
+2. Item 8's Proof bullet, the place of the inserted words: "found by reading it or by a change of the reviewer's own that takes the behaviour out (an assertion over source text, over a label alone, ...)". The parenthesis lists kinds of test and now follows "takes the behaviour out", so it reads as examples of the behaviour (prose standard, "0. Hard rules", plain prose). A wording that would hold: "a test that would still pass with the behaviour it is written for taken out of the code (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs), found by reading it or by a change of the reviewer's own, made on a scratch copy, that takes the behaviour out." Not ruled text.
+3. Item 3, "and for a script the case where the program reading its output closes it before the script ends": "case" is used for a situation inside the bullet that lists the inputs which become cases; the brief's own "Conventions" says "case" is used only in its glossary sense, and `docs/dev/skill-layout.md`, "Writing for an agent", says the same of a glossary term. The item is also listed among "each input the step's text implies", and a closed output is not an input. A wording that would hold: "and for a script its output closed by the program reading it before the script ends". The text is ruled.
+4. Item 1: the bullet holds two requirements that can each be broken while the other holds (a text read against the rules file and the standards; a claim about the tree checked), joined by a further sentence, against `docs/dev/skill-layout.md`, "Lists and tables", first bullet. The file's form for this is a sub-bullet, as lines 230 to 237 use: the first two sentences as the bullet, and "Each claim a dictated text makes about the tree is checked as a premise is." as a sub-bullet under it. Its neighbour **ADRs** has the same three-sentence form on main. The text is ruled.
+5. Item 4's place. The paragraph stands between "The builder's first task, before any change, is the first run of every case ..." and "When the first run finds a case the brief's own rules get wrong, the builder stops there, before changing any code". In that place it parts two paragraphs about the first run, and a builder reads the change to the code under test as part of the first task, before the step's code and tests exist. The sentence gives no time of its own. A place that would hold: after the paragraph "When the first run finds a case ...", or the sentence opened with "After the change,". The sentence is ruled; its place is the brief's choice (section 2, finding 1).
+6. Item 6, part 4: "gives that change" has no antecedent in "Report"; "that change" is the change of the "Cases" paragraph, 40 lines above (prose standard, "E. Sentence shapes", cold opens). A wording that would hold: "For each case of a code step, the table the rules file's rule on tests asks for gives the small change "Cases" asks for and the test's failing line with it made." The text is ruled.
+7. Item 6, part 5: "the checks above" meant the section "Verify before you report" while the text was a paragraph; as item 5 of a numbered list it can be read as the parts above it in the list. A wording that would hold: "with the checks of "Verify before you report" and their output verbatim". The words are ruled; the list form that makes them ambiguous is Decision 1.
+8. Item 6, part 7 holds four parts of the report in one item (files with line counts, judgment calls, visible changes, what was wrong in the brief), while the opening line says the list gives the parts in order, and the prose standard, "D. Structure", turns three or more list-shaped items into a list. The brief's own "Report" section asks for "a section "Judgment calls"", which the template does not. Wording: four items, 7 to 10, with "Doc text" as 11. Not ruled text (Decision 1).
+9. Item 2's bullet: 60 words in one sentence holding two checks joined by "; and", and "whether the output bears it out" is a second wording for what section 3 of the same template calls "whether that matches what the brief says" (prose standard, "D. Structure", no synonym cycling). A wording that would hold, as two bullets: "- <each text the brief gives word for word (a sentence, a row, a glossary entry, a layout, a message a script prints)>: consistent with the rules file and the standards, or the rule it breaks, named with its file and section. Or: no text given word for word." and "- <each claim a dictated text makes about the tree>: `<its command>`, what it printed now, and whether that matches the claim. Or: no claim." with the Findings line as "... each claim of a dictated text that differs from the command's output, with both". Not ruled text (Decision 2).
+10. Item 7, the fourth bullet's new sentence: 50 words in two clauses joined by a semicolon, and "the report's table" names a table the rule introduces one bullet later. The fifth bullet as changed (Decision 3) then states the same two columns again. A wording that would hold for the fourth bullet: "The builder shows a test is a proof by making one small change to the code under test that takes out the behaviour and quoting the test's failing line, in the table the next bullet gives. The reviewer checks it by reading the test and by a change of its own on a scratch copy." The text is ruled.
+11. Item 8's Standards bullet: the qualifier "that the report's terms part does not name" leaves out a term the report names and misjudges, or names as used outside its sense and leaves (section 5, item 6 part 6). A wording that would hold: "a term of the glossary the diff uses outside its entry's sense, or an entry the diff makes false, whether or not the report's terms part names it;". The text is ruled.
+
+## Declined to judge
+
+- Whether the reviewer may change code at all, and where. The ruled rule 13 sentence says "by a change of its own"; whether that means a scratch copy, and whether `refute`'s "changes nothing" sentences are reworded or the ruled sentence is, is the user's call. Section 1, finding 1 gives the lines.
+- Whether each finding of section 8 on a ruled text (findings 1 for rule 13, 3, 4, 6, 7, 10, 11) is worth a change. The texts are ruled, so changing them is the user's call.
+- Whether the skills' `metadata.version` rises for `spec` (1.7.0) and `refute` (1.7.1). The brief says nothing; the plan's ruling "Step 3, the brief's choices" (2) took "no skill version changes" for step 3 since the repository sets no rule. A read does not settle it for this step.
+- Whether "Dictated text" needs a glossary entry. Decision 6 takes it; `docs/dev/skill-layout.md`, "Writing for an agent", asks for an entry for a term used in a sense of its own, and the other check labels have none. It is the orchestrator's decision as booked.
+- `sh skills/land/templates/checks.sh .scratch/2-h-session-retro/orchestrator-state.md` was not run: it runs the test suites, which create scratch folders, and this check writes nothing outside its own scratch folder. Only the count of its commands (11) was checked.
+- The brief's paths were not compared with the briefs of steps in flight. `.scratch/2-g-git-guard/agents/briefs/2b.md` appeared during this run and was not read; nothing under `.agents/worktrees/` was read.
+- The earlier brief check's findings (`.scratch/2-h-session-retro/agents/reviews/3a-brief-check.md`) were each read against the new brief and option (a). Each is answered: section 1 findings 1 and 2 by items 7 and 8; 3 asked no change; 4 by Decision 5 and R9; section 2 findings 1 and 5 by the corrected step line and ruling line in `plan.md`, 2 to 4 by the ruling on option (a); section 3's two findings by the ruled kind 3 text ("when the repository has a glossary") and the removal of the old premise; section 4 findings 1 to 5 by items 7 and 3, the new "Verify" 3, the sentence after item 8 that cites rule 4, and the ruled kind 2 text; section 5 findings 1 to 8 and section 8 findings 1 to 8 by the ruled texts, Decision 1 and "Verify" 2. Its point that a first-run sentence should keep "with its result on the unchanged tree" is answered by the ruled words "or the reading and what it found on the unchanged tree"; whether those words also bind the command's output to the unchanged tree is a reading I leave to the user, since the glossary's **case** entry defines the first run as the run on the unchanged tree.
+
+Agent usage: claude-opus-5-5 (ordo-high), 195649 tokens, 27 tool uses, 7.0 minutes ($1.33 to $4.98).
+
+## Closed (the session's change to the brief for every finding of the check on main at 6f40399, made before the preparation commit)
+
+- Section 1 finding 1 and section 8 finding 1 (the reviewer's own change against "changes nothing"): the Proof bullet of item 8 says the change is made on a scratch copy outside the worktree and the main checkout, item 8 changes the first cell of the "Anti-patterns" row, a premise bullet lists the six places, and case R9 gains their grep. The ruled rule 13 sentence is unchanged; its rewording is part 1 of the open item "Step 3a, six ruled sentences the brief check would reword".
+- Section 2 finding 1, section 5 finding 2 and section 8 finding 5 (the place of item 4's paragraph): the paragraph stands last in "Cases"; item 4, case R4 and Decision 8 say so.
+- Section 2 finding 2: Decision 1 names the words added to the opening line.
+- Section 3 finding 1: the premise bullet names `docs/roadmap.md:228` as an unrelated hit.
+- Section 4 finding 1: "Verify" 3 compares `git diff -U0` of each change standard.
+- Section 4 finding 2: "Verify" 2 passes each text in a one-line file with `grep -c -F -f`.
+- Section 4 finding 3 and section 5 finding 1: case R9 gains the grep of the "changes nothing" sentences.
+- Section 4 finding 4: "Report" asks for the sentences about each changed file as a whole, as rule 14 asks.
+- Section 8 finding 2: the Proof bullet is dictated whole, the parenthesis after "taken out of the code".
+- Section 8 finding 8: the old sentence that held four parts becomes parts 7 to 10, and "Doc text" part 11.
+- Section 8 finding 9: section "8. Dictated text" has two bullets and the Findings line in the proposed words; Decision 9.
+- Section 8 findings 3, 4, 6, 7, 10 and 11 (ruled texts): not changed in the brief; raised as the open item "Step 3a, six ruled sentences the brief check would reword", parts 2, 3, 4, 5, 1 and 6 in that order.
+- Declined to judge, the skills' versions: Decision 10, no version changes.
