@@ -1,0 +1,11 @@
+# Step 1, repair round 1
+
+The findings of `agents/reviews/1-refuter.md`, each with its ruling. Everything else in the brief and the round-0 ruling stands.
+
+1. Standards 1, `check_config.py:17` and `:143`. PyYAML reads `on`, `off`, `yes`, `no`, `true` and `false` as booleans only in lower case, with a capital first letter, or all in upper case (`oN`, `tRUE`, `OFf` stay text). Ruling: the docstring sentence says exactly that; the quoted-text message is given only for a text value that is one of `on`, `On`, `ON`, `off`, `Off`, `OFF` (the spellings YAML would have read as on or off without quotes), and every other non-boolean value, `oN` and `OFf` included, gets `<key> is neither on nor off: <value!r>`. Add the case `self_rule: oN` (unquoted), expecting the one error line `error: self_rule is neither on nor off: 'oN'`; it fails before this round's change, and the report quotes that run.
+2. Standards 3, `check_config.test.sh:4`, `:381`, `:388`, `:552`, `:560`. Ruling: each comment says what its case checks and when it is red, with no reference to a change: drop "as before", "Preserved:" and "passing before and after the change". The two guards read as guards of the shipped examples, for instance "Guard: the one-project example as shipped passes with none of the three keys' not-set notes; red when the example drops one of the keys." The report, not the comments, keeps the before-and-after runs the ruling asks for.
+3. Standards 4, the report. Ruling: add to the report the list rule 14 asks for, each sentence about a changed file as a whole with the line that shows it still holds; the reviewer's reread names `README.md:139`, `skills/plan/SKILL.md:33-34`, `check_config.py:6` and `check_config.test.sh:2`; check each yourself and add any other you find.
+
+Not sent back, and why: Standards 2 (the glossary's **reviewer** term and the `reviewer:` sentences of `refute` and `plan-orchestration`) is carried by plan step 3, whose brief takes the **reviewer** term into its paths; it lies outside this step's paths. The reviewer's declined point on this plan's own configuration block is the orchestrator's ledger, written at this step's landing.
+
+Run "Verify before you report" 1 to 7 again, and append a section "Repair round 1" to the report with each ruling's change, its evidence, and the new case's run before and after.

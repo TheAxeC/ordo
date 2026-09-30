@@ -48,9 +48,12 @@ dispatch:
   report: .scratch/2-e-a-self-rule/agents/reviews/1-report.md
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/1-brief-check.md (ordo-high, agent a392a12ca146ff975, claude-opus-5-5, 153352 tokens, 25 tool uses, 285 s)
   landing: not-started
-  round: 0
+  round: 1
+  reviewer_report: .scratch/2-e-a-self-rule/agents/reviews/1-refuter.md (ordo-high, agent ae9f3748642ce9c1e, claude-opus-5-5, 177519 tokens, 38 tool uses, 523 s; items 1 to 11 hold, every case met; findings Standards 1 to 4)
+  round_1: .scratch/2-e-a-self-rule/agents/briefs/1-round-1.md (Standards 1, 3, 4 sent; Standards 2 carried by step 3)
   session_id: a15eaa0740335c7a3 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   cases: .scratch/2-e-a-self-rule/agents/briefs/1-cases.md (round 0, ruling (b))
+  builder_usage: first run to the cases hand-back 111528 tokens, 19 tool uses, 239 s; after round 0 148751 tokens, 37 tool uses, 866 s (claude-sonnet-5-5); report saved
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
