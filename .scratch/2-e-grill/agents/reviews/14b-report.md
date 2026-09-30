@@ -150,3 +150,151 @@ None. Each text is as the brief gives it, at its indent.
 ## Anything in the brief that was wrong or impossible
 
 Nothing impossible. Points 1 to 3 of "The first read of the cases" are the places where a case and the dictated text are not fully aligned; the text stays as the brief has it and the rulings are the orchestrator's.
+
+
+# Repair round 1
+
+Nothing is left undone in the round's three rulings.
+
+## Rulings, before and after
+
+1. Item 4's sub-bullets. Before: eight sub-bullets (lines 9 to 16): "The judge receives no file of either skill being compared." to "The judge opens no other file outside its copy of the input." After: the 22 lines the round's brief gives, at three spaces, lines 9 to 30 of `docs/dev/blind-comparison.md`; the first, "The judge receives no file of either skill being compared.", is unchanged and the last reads "The judge opens no file outside its copy of the input."
+2. Item 7. Before: `A fresh agent makes each judgment, so the second judge has no memory of the first.` After: `A fresh judge process (item 4) makes each judgment, so the second judge has no memory of the first.` The rest of line 33 is unchanged (the `diff -U2` below).
+3. Item 9's record. Before: `   - each path removed from the judge's copy of the input and of its sources (item 4), or "none";` and `   - each judge's command and its served model (item 4);`. After: lines 37 to 39, the three lines the round's brief gives.
+
+## Check 1
+
+Command: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-grill/orchestrator-state.md` (exit 0). Its output:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+```
+
+## Check 2
+
+Each new or changed line (the 22 sub-bullets, the three record lines, item 7's changed line: 26 lines) written as the one line of its own scratch file, then `grep -c -F -x -f <that file> docs/dev/blind-comparison.md`:
+
+```
+1: 1
+2: 1
+3: 1
+4: 1
+5: 1
+6: 1
+7: 1
+8: 1
+9: 1
+10: 1
+11: 1
+12: 1
+13: 1
+14: 1
+15: 1
+16: 1
+17: 1
+18: 1
+19: 1
+20: 1
+21: 1
+22: 1
+23: 1
+24: 1
+25: 1
+26: 1
+```
+
+The lines replaced (the seven replaced sub-bullets of item 4, the two replaced record lines, and item 7's old sentence) each print 0 under the same command, and `grep -c "A fresh agent makes" docs/dev/blind-comparison.md` prints 0.
+
+## Check 3
+
+`diff -U2 /Users/axelfaes/workspace/ordo/docs/dev/blind-comparison.md docs/dev/blind-comparison.md` (exit 1, the files differ; the tab after each header's file name is written as a space):
+
+```
+--- /Users/axelfaes/workspace/ordo/docs/dev/blind-comparison.md 2026-09-29 15:12:25
++++ docs/dev/blind-comparison.md 2026-09-30 22:30:06
+@@ -7,10 +7,35 @@
+ 3. **Random order.** The judge sees the two outputs in random order. A command whose result the orchestrator does not choose prints which output is A, and the other is B, for example `python3 -c 'import random; print(random.choice(["new is A", "old is A"]))'`. The orchestrator keeps the command and its output with the key.
+ 4. **The judge's input.** The judge receives the two outputs with only the input, and nothing else: no skill name, no gate, no statement of which output is expected to win.
++   - The judge receives no file of either skill being compared.
++   - A file of a skill is each file of its folder, and each other file that holds the skill's text whole or in most part, such as a diff that adds it or a copy under another name.
++   - The orchestrator removes the files of both skills from the judge's copy of the input.
++   - The orchestrator removes from the judge's copy the ledger of each plan that builds or changes either skill.
++   - The orchestrator keeps, in a file of its own in that ledger's place, the bullets of its Rulings that name the input's entry.
++   - The orchestrator removes from the judge's copy every other line that states the comparison's gate, names the comparison, or says which output is expected to win.
++   - The orchestrator copies into the judge's copy each file or folder the input names as a source.
++   - A repository is copied whole only when the input names the repository and no path inside it.
++   - The orchestrator copies into the judge's copy each file an output cites that is outside the copy, except a file of either skill.
++   - The orchestrator removes the files of both skills from each copied source and cited file.
++   - The judge runs as its own process, not as an agent the orchestrator's runner starts.
++   - The judge's process starts in its copy of the input.
++   - The judge's process lists and loads no skill.
++   - The judge's process may fetch a URL, and has no other permission beyond reading its copy.
++   - The judge's process runs on the model the configuration's `reviewer` names, such as `claude -p --disable-slash-commands --allowedTools WebFetch --model opus --output-format json`.
++   - The judge's served model is the key of the process's `modelUsage` with the most output tokens.
++   - The judge's process loads the user's global instructions, which are part of what the user needs.
++   - The orchestrator tells the judge to judge each output by what the input and its user need.
++   - The orchestrator tells the judge that no skill's text, wherever the input quotes it, is the standard.
++   - Neither instruction names a skill or says which output is expected to win.
++   - The judge may fetch a URL an output cites, to check that it resolves and says what the output claims.
++   - The judge opens no file outside its copy of the input.
+ 5. **Reading.** The judge reads each output whole, and for each lists its critical failures before stating a preference. A critical failure is one that makes the output unfit for the purpose the input sets. For example, a claim the input contradicts, a missing part the input asks for and a citation that does not resolve are critical failures. The judge quotes each critical failure with its place.
+ 6. **The verdict.** The judge writes the verdict, A, B or a tie, with the reasons, each reason pointing at the failures or the passages it rests on.
+-7. **Twice, the order swapped.** The orchestrator has the comparison judged twice, the second time with the order swapped: the output that was A is given as B, and the output that was B as A. A fresh agent makes each judgment, so the second judge has no memory of the first. When the two verdicts, read through the key, differ, the disagreement is a tie; when they agree, the result is the verdict they share.
++7. **Twice, the order swapped.** The orchestrator has the comparison judged twice, the second time with the order swapped: the output that was A is given as B, and the output that was B as A. A fresh judge process (item 4) makes each judgment, so the second judge has no memory of the first. When the two verdicts, read through the key, differ, the disagreement is a tie; when they agree, the result is the verdict they share.
+ 8. **The final call.** The user reads the input, both outputs and both verdicts, and makes the final call: the new skill wins, ties or loses. The user's call is the result the gate reads, and "wins or ties" in a gate means the call is a win or a tie.
+ 9. **The record.** The orchestrator keeps the comparison in the ledger of the plan whose gate needs it, at `agents/reviews/<step>-blind-comparison.md`. The record holds:
+    - the input, or its path;
++   - each path removed from the judge's copy, and each line removed from a file of it (item 4), or "none";
++   - each file and folder copied into the judge's copy (item 4), or "none";
++   - each judge's command, every key of its `modelUsage`, and the global instruction files it loaded (item 4);
+    - the two outputs as judged;
+    - the key;
+```
+
+## Check 4
+
+`LC_ALL=C grep -n '[^ -~]' docs/dev/blind-comparison.md` printed nothing (exit 1). The file has 44 lines (`wc -l`).
+
+## Check 5, the walk of C1 to C9 on the changed page
+
+Lines as `grep -n ""` prints them on the changed file.
+
+- C1. Line 11 (`The orchestrator removes the files of both skills from the judge's copy of the input.`) removes `skills/grill/`. Line 10 (`A file of a skill is each file of its folder, and each other file that holds the skill's text whole or in most part, such as a diff that adds it or a copy under a...`) makes `12-round-0.diff` a skill file, and line 12 (`The orchestrator removes from the judge's copy the ledger of each plan that builds or changes either skill.`) removes `.scratch/2-e-grill/` with `12-report.md` and `9a-report.md`. Line 13 (`The orchestrator keeps, in a file of its own in that ledger's place, the bullets of its Rulings that name the input's entry.`) keeps the bullets naming entry 3, "Entry 3 and step 13" among them. Line 14 (`The orchestrator removes from the judge's copy every other line that states the comparison's gate, names the comparison, or says which output is expected to win.`) removes the gate line of entry 2.E in `docs/roadmap.md`. Line 21 (`The judge's process lists and loads no skill.`), lines 26 and 27 (the two instructions) and line 28 (`Neither instruction names a skill or says which output is expected to win.`) hold. Line 37 records each path and line removed. Met: the judge is not told the gate and no file of the copy holds grill's text whole. Files that quote part of it, such as the glossary's grill terms, stay, and line 27 covers them.
+- C2. A record quoting skill text, holding no skill file: line 11 removes nothing because no file is a skill's (line 10), line 12 finds no ledger of a plan that builds a skill in it, and line 37 gives "none" when line 14 removes no line. Lines 21, 26 and 27 still apply. Met.
+- C3. Sources in another repository: line 15 (`The orchestrator copies into the judge's copy each file or folder the input names as a source.`) copies them, line 18 (`The orchestrator removes the files of both skills from each copied source and cited file.`) removes `.agents/skills/grill-with-docs` from them, line 30 (`The judge opens no file outside its copy of the input.`) stops reading in place, and line 38 records the copies. Met.
+- C4. An installed copy (`~/.claude/skills/grill`): line 21 lists and loads no skill, and line 30 excludes it as outside the copy. Met. Line 29 lets the judge fetch a URL only, so it is not a route to a local file.
+- C5. Side 1 cites `https://docs.vale.sh/topics/styles.md`: line 29 (`The judge may fetch a URL an output cites, to check that it resolves and says what the output claims.`) with line 22 (`The judge's process may fetch a URL, and has no other permission beyond reading its copy.`) lets the judge fetch it. An output citing `research-hub/projects/manuscripts/bttn-incident-af/main.tex`: line 17 (`The orchestrator copies into the judge's copy each file an output cites that is outside the copy, except a file of either skill.`) copies it, and line 38 records it. A cited file of either skill is not copied (line 17) and is removed from any copy (line 18). Met.
+- C6. Items 1 to 3, 5, 6 and 8 (lines 5 to 7, 31, 32 and 34) are unchanged in the `diff -U2` above. Item 7 (line 33) changes only `A fresh agent` to `A fresh judge process (item 4)`, as ruling 2 gives. Item 2 (line 6) removes marks from outputs and lines 11 to 14 remove files and lines from the judge's copy. Met.
+- C7. Step 14's input names research-hub paths as entry 3's sources: line 15 copies those paths, and line 16 (`A repository is copied whole only when the input names the repository and no path inside it.`) does not apply, so the 26G repository is not copied. Met.
+- C8. A run that fetches a URL: line 24 (`The judge's served model is the key of the process's `modelUsage` with the most output tokens.`) gives the reviewer model as the served model when a helper model's key is also present, and line 39 (`each judge's command, every key of its `modelUsage`, and the global instruction files it loaded (item 4);`) records both keys. Met.
+- C9. Line 25 (`The judge's process loads the user's global instructions, which are part of what the user needs.`) lets `~/.claude/CLAUDE.md` and `~/.claude/rules/` load, and line 39 records the files loaded. Met.
+
+Not verified, since no `claude` process was started: the command on line 23 with `--allowedTools WebFetch`, that `modelUsage` holds a helper key once a fetch runs, and how the orchestrator learns which global instruction files the process loaded (line 39).
+
+## Other pages
+
+`grep -rn -i -e "fresh agent" -e "fresh judge" -e "judge's copy" -e "judge process" skills utils docs README.md` (outside the blind-comparison page) prints no line about the judge of a blind comparison; `docs/glossary.md:130` says "two fresh judges", still true. No other page changes.
+
+## Files changed in the round
+
+- `docs/dev/blind-comparison.md`: 29 lines before the round, 44 after (`wc -l`).
+- `.scratch/2-e-grill/agents/reviews/14b-report.md`: this section.

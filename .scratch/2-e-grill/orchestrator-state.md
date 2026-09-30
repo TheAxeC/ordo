@@ -48,10 +48,10 @@ dispatch:
     session_id: a12869b0c03367f5b (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
     report: .scratch/2-e-grill/agents/reviews/14b-report.md
     reviewer_report: .scratch/2-e-grill/agents/reviews/14b-refuter.md (ordo-high, claude-opus-5-5, 170820 tokens, 50 tool uses, 720 s; items 1 and 2 hold; C1 to C4 and C6 met, C5 partial; findings Spec 1 to 5, Proof 1 and 2, Standards 1 and 2, Behaviour 1)
-    builder_usage: claude-sonnet-5-5, 112867 tokens, 22 tool uses, 266 s (round 0, from its completion notice)
+    builder_usage: claude-sonnet-5-5, 112867 tokens, 22 tool uses, 266 s (round 0, from its completion notice); 130940 tokens, 7 tool uses, 135 s (round 1, from its completion notice)
     brief_check: .scratch/2-e-grill/agents/reviews/14b-brief-check.md (ordo-high, claude-opus-5-5, 129145 tokens, 43 tool uses, 384 s; run on the brief before the stop)
     landing: not-started
-    round: 1 (sent 2026-09-30: brief agents/briefs/14b-round-1.md, the diff before it agents/reviews/14b-round-0.diff)
+    round: 1 (sent 2026-09-30: brief agents/briefs/14b-round-1.md, the diff before it agents/reviews/14b-round-0.diff); builder done; round-1 reviewer running (ordo-high, claude-opus-5-5 at the launch, from its transcript)
   - step: 14c
     executor: agent
     worker: claude:sonnet
@@ -62,8 +62,9 @@ dispatch:
     report: .scratch/2-e-grill/agents/reviews/14c-report.md
     builder_usage: claude-sonnet-5-5, 142904 tokens, 35 tool uses, 434 s (round 0, from its completion notice)
     brief_check: .scratch/2-e-grill/agents/reviews/14c-brief-check.md (ordo-high, claude-opus-5-5, 153480 tokens, 34 tool uses, 432 s)
+    reviewer_report: .scratch/2-e-grill/agents/reviews/14c-refuter.md (ordo-high, claude-opus-5-5, 187381 tokens, 39 tool uses, 603 s; items 1 to 5 hold; K3 to K5 and K8 to K10 met, K1 and K7 partial, K2 and K6 unmet; findings Spec 1 and 2, Proof 1, Standards 1 to 6, Behaviour 1)
     landing: not-started
-    round: 0
+    round: 1 (sent 2026-09-30: brief agents/briefs/14c-round-1.md, the diff before it agents/reviews/14c-round-0.diff)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)

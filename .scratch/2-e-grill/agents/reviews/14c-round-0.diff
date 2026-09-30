@@ -1,0 +1,64 @@
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 115af75..874b5f2 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -16,7 +16,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **brief check**: the check of a brief against the tree, made once per step, by one fresh read-only agent on the reviewer's model, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+ - **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
+-- **carried ruling**: a bullet whose first line ends with "(the user)", of another plan's Rulings or of another rulings file under the ledger root, that names the entry `grill` interviews on, or of the Rulings of an archived plan of that entry; the decisions it settles are not asked again, and each one the entry's Rulings or rulings file does not already settle is written there with its source. Stated in: `grill`, "What it reads" 6, Steps 3 and "Steps / Writing what settled" 1.
++- **carried ruling**: a bullet whose first line ends with "(the user)", of another plan's Rulings or of another rulings file under the ledger root, that names the entry `grill` interviews on, or of the Rulings of an archived plan of that entry, and that no ruling of the user sets aside; the decisions it settles are not asked again, and each one the entry's Rulings or rulings file does not already settle is written there with its source. Stated in: `grill`, "What it reads" 6, Steps 3 and "Steps / Writing what settled" 1.
+ - **case**: an example under a brief's "Cases", an input with its expected result, from the must-pass and must-refuse examples the step's text gives and, for a code step, the inputs it implies. The first run is the run of every case on the unchanged tree. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run. Stated in: `spec`, Steps 4.
+ - **case, of a diagnosis**: the scenario that reproduces a symptom: its input, callers, configuration, data and stages of the run. The original case is that scenario before it is shrunk. Stated in: `diagnose`, Steps 6, 7, 8, 16, 19 and 22, and "Stops".
+ - **cause not found**: the end of a diagnosis when the second list of hypotheses is falsified, when no probe separates the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose. The record says so with every probe, or every way tried in its "No red command" section. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 15 and "Stops".
+diff --git a/skills/grill/SKILL.md b/skills/grill/SKILL.md
+index 3036fca..045ce47 100644
+--- a/skills/grill/SKILL.md
++++ b/skills/grill/SKILL.md
+@@ -2,7 +2,7 @@
+ name: grill
+ description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, the roadmap entry, the glossary and, on the user's yes, a proposed ADR. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
+ metadata:
+-  version: "1.1.0"
++  version: "1.2.0"
+ ---
+ 
+ # Settle an entry's design decisions
+@@ -50,6 +50,16 @@ metadata:
+    - Every other section whose heading begins `## Rulings` in a `plan.md` under `<ledger_root>/`, an archived plan's included, and every other rulings file under `<ledger_root>/rulings/`, is read for the bullets that name the entry by its number or its title and whose first line ends with "(the user)", with or without a full stop after it.
+      - Such a bullet is a carried ruling.
+      - In an archived `plan.md` whose title, after `# Plan: `, equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed, every bullet whose first line ends with "(the user)", with or without a full stop after it, of a section whose heading begins `## Rulings`, is a carried ruling, whether or not it names the entry.
++     - A bullet of an archived plan that a ruling of the user sets aside is no carried ruling, for any entry.
++       - Such a bullet settles no decision and replaces no ruling.
++     - A ruling of the user is a bullet whose first line ends with "(the user)", with or without a full stop after it, wherever it stands under `<ledger_root>/`, the archived plan it sets aside included.
++     - A ruling sets an archived plan aside when it says that the plan is set aside, thrown out or stopped, or that the entry of the plan is redone.
++       - A ruling that says the entry is redone sets aside only a plan of the entry that stood when the ruling was given.
++       - A plan stood when the ruling was given when the first date of the plan's Rulings is before the ruling's date, or is the same date and the ruling names that plan or one of its steps.
++       - A plan opened after the ruling was given is never set aside by it.
++     - A ruling that sets aside named bullets or steps of an archived plan sets aside only those bullets, and only the bullets of those steps.
++     - A ruling that a later ruling names as the one it replaces sets no plan aside.
++     - A bullet of the entry's Rulings or rulings file that reads "carried from" a bullet now set aside settles nothing.
+      - The decisions of the design tree a carried ruling settles are settled (Steps 3).
+      - A carried ruling is written into the entry's Rulings or rulings file as "Steps / Writing what settled" 1 says.
+ 7. The entry's sources: each file, page or repository the entry and the answers name.
+@@ -131,6 +141,7 @@ metadata:
+    - Only a `D<n>` that opens a bullet counts, since a `D<n>` inside a line can cite a decision of another interview or plan.
+    - The message ends with the answer form: `D<n> => <letter or text>` one line per decision, `D<n> Agree` to take the recommendation, and `D<a>-<b> Agree` to take it for each decision of a range.
+    - The first round also lists, unnumbered and after the answer form, each decision a carried ruling settles, as Steps 3 shows it.
++   - The first round also lists each archived plan a ruling sets aside, whole or in part, with the ruling quoted as written and its `<path>:<line>`.
+    - The round ends the turn and waits for the answers ("Stops").
+    - When the frontier is empty, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.
+    - The step is done when the message is sent and the turn has ended, or the frontier was empty and the skill has gone on to Steps 8.
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 40d92b5..d1f8e1b 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -11,7 +11,7 @@
+ - **brief check**: the check of a brief against the tree, made once per step, by one fresh read-only agent on the reviewer's model, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+ - **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
+-- **carried ruling**: a bullet whose first line ends with "(the user)", of another plan's Rulings or of another rulings file under the ledger root, that names the entry `grill` interviews on, or of the Rulings of an archived plan of that entry; the decisions it settles are not asked again, and each one the entry's Rulings or rulings file does not already settle is written there with its source. Stated in: `grill`, "What it reads" 6, Steps 3 and "Steps / Writing what settled" 1.
++- **carried ruling**: a bullet whose first line ends with "(the user)", of another plan's Rulings or of another rulings file under the ledger root, that names the entry `grill` interviews on, or of the Rulings of an archived plan of that entry, and that no ruling of the user sets aside; the decisions it settles are not asked again, and each one the entry's Rulings or rulings file does not already settle is written there with its source. Stated in: `grill`, "What it reads" 6, Steps 3 and "Steps / Writing what settled" 1.
+ - **case**: an example under a brief's "Cases", an input with its expected result, from the must-pass and must-refuse examples the step's text gives and, for a code step, the inputs it implies. The first run is the run of every case on the unchanged tree. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run. Stated in: `spec`, Steps 4.
+ - **case, of a diagnosis**: the scenario that reproduces a symptom: its input, callers, configuration, data and stages of the run. The original case is that scenario before it is shrunk. Stated in: `diagnose`, Steps 6, 7, 8, 16, 19 and 22, and "Stops".
+ - **cause not found**: the end of a diagnosis when the second list of hypotheses is falsified, when no probe separates the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose. The record says so with every probe, or every way tried in its "No red command" section. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 15 and "Stops".
