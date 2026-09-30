@@ -39,7 +39,19 @@ reviewer_effort: high        # the effort a reviewer, a brief-check agent and a 
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 9a
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2e-9a
+  base: 9f85c25167de344c56879d5dcefb63456848df11
+  launched: 2026-09-30 16:02
+  session_id: a931b2d1ac6c7e98d (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
+  report: .scratch/2-e-grill/agents/reviews/9a-report.md
+  brief_check: .scratch/2-e-grill/agents/reviews/9a-brief-check.md (ordo-high, claude-opus-5-5; first run 231093 tokens, 34 tool uses, 12.1 minutes, $1.81-6.08; second run 301182 tokens, 46 tool uses, 18.1 minutes, $2.58-7.82; third run 365066 tokens, 53 tool uses, 1059 s, $3.41-10.02; fourth run 318017 tokens, 55 tool uses, 941 s, $3.09-9.18)
+  shared_paths: skills/repo-setup/SKILL.md (step 2b of plan 2.G changes line 126 only; this step's nearest lines are 109 and 158, each placed by quoted text, so the cherry-pick merges with nothing to do by hand); README.md (step 2b of plan 2.G changes line 13, this step line 54)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
