@@ -355,6 +355,143 @@ Not checked:
    These do not outweigh the missing reference lines and answer form. A fixed version of A would need those parts added throughout, while a fixed version of B needs one sentence of D2 corrected and one decision added.
 ````
 
+### The judges' standard, ruled
+
+- Judges 1 and 2 read `skills/grill/SKILL.md` from the input clone and judged both outputs by its decision form. Axel ruled (a) (2026-09-30): two fresh judges again, their clone at 833e2e8 with `skills/grill/` removed (`ls input/skills | grep -c grill` printed 0), each told to judge a round by what the entry and the user need and not to take any skill's text as the standard for the form of a round. The order drawn above was kept: judge 3 has A as side-1, judge 4 has A as side-2. Both on claude-opus-5-5 (from their transcripts).
+
+### Judge 3 (A is side-1)
+
+````
+Judgment of outputs A and B: the first round of the interview on roadmap entry 3, "The writing base"
+
+What I checked, and how. I read the entry itself (`docs/roadmap.md:56-61`), the redraft `.scratch/plan-drafts/3-the-writing-base.md` and plan 2.E's ruling at `.scratch/2-e-grill/plan.md:125`. I read `skills/plan/SKILL.md` lines 40 and 52, which cover how a rulings file is carried into a plan. I checked the cited lines of these pages with sed and grep: the prose standard (lines 3, 13, 41, 48, 63, 75), `docs/dev/change-standard.md` (lines 16, 17, 19, 21, 50, and rule 10 at line 36), `docs/academic-coverage.md` rows 76, 100 and 101, `docs/dev/skill-layout.md`, `README.md` lines 3-5 and 113, the roadmap's "Waits on" lines (68, 75, 82, 89, 103) and entries 8, 12 and 13, `skills/repo-setup/templates/shared-rules.md:23`, commit 6c41c02, and the 2.C plan's line "back where it was at v2.0.0". In `/Users/axelfaes/workspace/research-hub` I checked the source files: `writing_quality_check.md` lines 60, 63, 103 and 115, `academic_writing_style.md` lines 56 and 71-73, and `writing_judgment_framework.md` lines 28-34. I also checked two of A's draft citations: bttn-incident-af `main.tex:23` reads `\journal{Artificial Intelligence in Medicine}` and meseret-cirrhosis `main.tex:1` names Statistics in Medicine. I did not check A's count of 24 drafts (11 biomedical, 2 statistics, 7 ML), and I did not fetch any of A's web URLs (Vale, vercel-labs, Google, Microsoft, APA, ThinkSCIENCE, USC, Nature). Every other repository citation in both outputs resolved to the text it claims.
+
+## Critical failures of A
+
+1. **It re-asks two decisions the input records as settled, and misstates one of them.**
+   - The input settles both. Plan 2.E's ruling "Entry 3 and step 13" (`.scratch/2-e-grill/plan.md:125`) says this interview's input has "two of its decisions settled: D1 (b) ... D2 (a), entry 4 is redrafted after entry 3 is approved, waiting on 3 for the prose rules only (the user)". The redraft books the same thing under "Axel's rulings (2026-09-30)".
+   - A asks them anyway, as D1 and D2 (output A, line 8 and sections D1 and D2).
+   - Its reason has some basis. `/plan` copies only the rulings file (`skills/plan/SKILL.md:40,52`), so the 2.E ruling would not reach plan 3 on its own. That calls for writing the existing ruling into the rulings file. It does not call for asking the user again.
+   - The misstatement is under D2, line 39: "The earlier ruling was A. C differs from it only in that clause of line 68". Line 8 says the same: "For D2 it differs from your earlier ruling in one clause". The ruling at plan.md:125 already includes "waiting on 3 for the prose rules only", which is the substance of A's option C. So A tells the user his own ruling was narrower than it was, and asks him to re-decide on that false premise. The input contradicts this claim.
+2. **It never addresses what the current goal names that the sources do not supply.** The goal names "history words and word counts per section". A says nothing about these anywhere, and they are not in its list of deferred decisions (lines 10-18). The entry's goal has to be rewritten, so this is a decision the entry needs settled, and A leaves it out without saying so.
+
+Lesser defects, not critical:
+- A malformed "**Industry:*" at line 49.
+- It defers "where the prose standard's text lives" as depending on D3, which is only partly true.
+
+## Critical failures of B
+
+I found none that make B unfit for its purpose. Each repository and research-hub citation I checked resolves to the text claimed:
+- `roadmap.md` lines 56-61, and entries 8, 12 and 13;
+- coverage rows 76, 100 and 101;
+- prose standard lines 48 and 63;
+- `academic_writing_style.md:56` and `writing_quality_check.md:115`;
+- `shared-rules.md:23` ("every comment, page and message");
+- change-standard rule 10;
+- commit 6c41c02 deleting the 817-line `check_prose.py`;
+- the 2.C phrase "back where it was at v2.0.0";
+- the skill-layout frontmatter, which requires a description with `Triggers on:` and a required Quick start.
+
+Significant omissions, not critical:
+- **Line 13** summarises D2 (a) without the clause "waiting on 3 for the prose rules only". This is incomplete, not false.
+- **Q3 (lines 41-53)** lists passive voice, paragraph length and em dash as the points of disagreement. It leaves out the two that `writing_quality_check.md` states explicitly: direct quotations keep their punctuation (line 63), and the introduction keeps its section roadmap (line 103). Its em-dash-at-zero proposal therefore says nothing about quotations.
+- **The disagreement between rows 76 and 100** is missing. Row 76 keeps only Engineering and CS; row 100 keeps each discipline's trusted voice. This disagreement is neither asked nor listed for a later round, although the user's drafts include clinical venues. B's methods example (a centrifugation sentence) is labelled with "the Engineering/CS register".
+- **Form:** B uses emoji markers (<U+2753>, <U+27A1><U+FE0F>), which the user's standing rules for prose do not want.
+
+## Verdict: B
+
+1. **B handles the settled decisions correctly and A does not.** B reads the rulings (lines 11-13) and asks only what is open. A re-opens both (A, line 8, D1, D2), and under D2 tells the user his earlier ruling was option A (A, line 39). The input at plan.md:125 contradicts that. In a first round, a false account of the user's own prior ruling does more damage than a missing question, because it asks him to decide again on a wrong premise.
+2. **B's questions go to what the entry has to settle first.**
+   - Q1 asks what the entry delivers. It raises a constraint that A's D3 misses: under `docs/dev/skill-layout.md`, a references-only folder is not a valid skill without an exception (B, line 21, which I verified).
+   - Q2 asks where the prose standard lives, with the 2.C history verified.
+   - Q4 asks which prose the base covers, tied to entry 12's phrase "the writing base's prose standard", which I verified.
+   - Q5 asks what to do with the goal's "history words" and "word counts per section". These are the goal's own items, and A omits them entirely (A's failure 2).
+3. **A's strengths are real, but they do not outweigh this.**
+   - A's D4 names the quotation and section-outline exceptions from the sources, which I verified at lines 63 and 103.
+   - A's D5 raises the row 76 versus row 100 disagreement with evidence from the user's drafts, two of which I spot-checked. This is a decision B misses.
+   - A's industry citations are more extensive, but I did not verify them.
+   - These are the right questions for a later round, and B's framework (Q3 option (c), rule by rule) could absorb them. A's errors sit in the part of the round that concerns what the user has already decided, and its goal-rewrite gap leaves the entry's goal half unaddressed.
+4. **Each choice is put so the user can decide it.** Both give options with pros and cons, a recommendation and the lazy option named. B's Q3 includes a concrete case that shows what each option does. A asks for one answer line per decision.
+
+On balance B is the better first message: its facts hold everywhere I checked, and it has no critical failure. Its gaps (the discipline registers, and the quotation and section-outline exceptions) can be closed in the next round. A contradicts the input on the user's own ruling and omits part of the goal that has to be decided.
+````
+
+### Judge 4 (A is side-2)
+
+````
+Judgment of the two first-round messages for the interview on roadmap entry 3, "The writing base"
+
+What I checked, in the input repository (judge2/input) and in /Users/axelfaes/workspace/research-hub:
+- The entry is `docs/roadmap.md:56-61`.
+- The redraft is `.scratch/plan-drafts/3-the-writing-base.md`. Its section "Axel's rulings (2026-09-30)" settles D1 (b) and D2 (a).
+- The 2.E ruling "Entry 3 and step 13" is at `.scratch/2-e-grill/plan.md:125`. It reads: "two of its decisions are settled: D1 (b) ... D2 (a), entry 4 is redrafted after entry 3 is approved, waiting on 3 for the prose rules only".
+- The coverage rows 76, 100 and 101 exist.
+- In the prose standard, lines 3, 13, 41, 48, 63 and 75 say what both outputs quote.
+- `change-standard.md`: lines 16-17, 19, 21 and 50 (rule 19) are as B cites them, and rule 10 is the history rule, as A cites it.
+- `roadmap.md` lines 68, 75, 82, 89, 103, 101 (entry 8), 122 (entry 12) and 129 (entry 13) are as cited, and the glossary has no "writing base".
+- `skills/roadmap/SKILL.md:156-157`, `README.md:113` and `skill-layout.md:3` are as cited, `docs/dev/design-principles.md` is absent, and `docs/adr` holds only README and template.
+- Commit 6c41c02 removed `/writing`. Its parent's `check_prose.py` has 817 lines (`git show 6c41c02^:skills/writing/templates/check_prose.py | wc -l`).
+- In research-hub:
+  - `academic_writing_style.md:56` and `:71-73` are as quoted.
+  - `writing_quality_check.md:60, 63, 103, 115` are as quoted.
+  - `writing_judgment_framework.md:28-34` is the five-discipline table.
+  - `bttn-incident-af/manuscript/main.tex:23` is *Artificial Intelligence in Medicine*, and `meseret-cirrhosis` line 1 is *Statistics in Medicine*.
+  - That `main.tex` has 2 lines using `---` as a dash.
+  - `erp-signatures/manuscript/main.docx` holds 2 U+2014 characters.
+
+What I did not check:
+- B's external URLs (Vale, vercel-labs, Google, Microsoft, APA, ThinkSCIENCE, USC, Nature).
+- B's count of 24 drafts, with 11 biomedical or clinical and 7 in ML.
+- B's statement that its lookup agents ran on opus.
+
+## Critical failures of A
+
+I found none. Every citation I checked resolves and says what A claims. A does have these weaknesses:
+- It leaves out one decision the entry needs settled in an early round. Coverage rows 76 and 100 disagree on which disciplines are kept: row 76 keeps "Engineering and CS" only, and row 100 keeps "each discipline's trusted voice". The entry's gate requires a record per `rebuild: writing` row, so this conflict has to be resolved. A does not raise it, and does not list it among its later rounds.
+- Its Q3 list of conflicts between the prose standard and the sources leaves out two: the source's exception for quotations (`writing_quality_check.md:63`) and its exception for an introduction's section outline (`:103`). A does say "at least three places", so its claim is not false.
+- It treats D1 and D2 as settled, which the ruling at `plan.md:125` supports. It does not say that those two rulings are not yet in a rulings file that `/plan 3` would read.
+- Q5 (a) assumes the `/writing` review that Q1 is still deciding.
+
+## Critical failures of B
+
+1. Section "D2. When entry 4, `code-comments`, is redrafted" (lines 8, 33 and 39) misstates the user's own ruling.
+   - Line 8 says: "For D2 it differs from your earlier ruling in one clause, and D2 says why". Line 39 says: "The earlier ruling was A. C differs from it only in that clause of line 68."
+   - B's option A is "entry 4 left as it is until then", and B names it the lazy option.
+   - The ruling B cites (`.scratch/2-e-grill/plan.md:125`) contradicts this. It reads "D2 (a), entry 4 is redrafted after entry 3 is approved, waiting on 3 for the prose rules only". The redraft's option (a) likewise says "waiting on 3 for the prose rules only".
+   - So the user's earlier ruling already contains the clause B puts in option C. B tells him its recommendation departs from what he ruled when it does not, and presents a narrower reading of his ruling as the lazy option.
+2. Lines 8 and 20-41 reopen two decisions that the input records as settled ("two of its decisions are settled").
+   - B's reason is true: `/plan` carries only the entry's rulings file (`skills/plan/SKILL.md:40`).
+   - That reason calls for writing the two settled rulings into the rulings file, not for asking them again. As done, the user spends two of five answers of the round on decisions he has already made, and D2 is asked on the false premise of failure 1.
+3. Section "D4" (line 57) says: "The rules differ in three places". The sources contradict this.
+   - Passive voice differs: the prose standard (line 63) says "rewrite unless the actor is irrelevant", and `academic_writing_style.md:56` says "Passive common for methods".
+   - Paragraph length differs: the prose standard (line 48) says "under roughly four sentences", and `writing_quality_check.md:117` holds up "a 10-sentence paragraph" as good rhythm.
+   - D4's option B ("the prose standard holds whole, with no exceptions") would therefore settle points the user was never shown.
+4. There is a lesser defect at line 49: the label is written "**Industry:*", with the closing asterisks unbalanced.
+
+## Verdict: A
+
+1. A's facts and citations all hold. B contains a claim that its own cited source contradicts (failure 1), and that claim is about the user's own ruling. That is the fact the user is best placed to catch, and it costs the interview the most trust.
+2. A respects the user's recorded rulings (A lines 11-13 match `plan.md:125` and the redraft). B reopens them (failure 2), which spends the user's first round on settled ground.
+3. A's round covers the questions the entry's current text needs answered:
+   - what the entry delivers, and the term "writing base" (Q1);
+   - where the prose standard lives, which is grounded in 2.C's restoration (Q2);
+   - which rule wins where the sources and the prose standard disagree (Q3);
+   - which prose the base covers (Q4);
+   - "history words" and "word counts per section", two goal items that no source supports (Q5).
+   B never addresses Q5. B also defers the location of the prose standard and the choice of standard, although A shows those do not wait on the kind of skill.
+4. B is stronger in some places, and they are real:
+   - D5 surfaces the conflict between rows 76 and 100, with evidence from the user's drafts, which A misses.
+   - D4 finds the conflicts over quotations and section outlines.
+   - B gives external references for each design choice.
+
+   These count in B's favour, but they do not outweigh a misstated ruling and two reopened decisions. D5 is the one thing A should add to its round.
+````
+
+### The result read through the key
+
+- Judges 1 and 2 (the `grill` skill's form as the standard): both chose side-1, `grill`.
+- Judges 3 and 4 (the entry's and the user's needs as the standard): both chose side-2, `grill-with-docs`.
+
 ## The user's call
 
 - Not yet made.
