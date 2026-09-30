@@ -55,19 +55,15 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 2b, the offer's text in question 10, for your reading (2026-09-30, raised at /spec of step 2b; the step is built meanwhile and is not landed before you answer): you approved the text of `repo-setup`'s question 10 by reading it ("Step 2 reading"), and step 2b changes it, since it lists what the guard refuses. The new text, four sub-bullets under "10. Install the git guard? [no]":
-  - "It is a hook that refuses, in an agent's commands, the git commands that publish work or discard it: `git push`, `git send-pack`, `git subtree push`, `git reset --hard`, `git clean` with force, `git checkout` or `git restore` of the whole tree, `git checkout --force`, `git switch --discard-changes`, `git stash drop` and `git stash clear`."
-  - "The user runs these by hand."
-  - "The hook is copied into `.claude/hooks/`, which `.gitignore` ignores, so each clone installs it itself."
-  - "It needs `python3` 3.9 or later."
-  - (a) The text as above. (b) The text with your correction, given in your answer. There is no lazy option: both are a reading.
-  - Recommendation (a): it is the text you approved with the six commands added and its four requirements in a bullet each.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - Git aliases (2026-09-30): Axel ruled (a), approving the `git config --get alias.<name>` computation; step 2a.
 
 - Other commands that discard work (2026-09-30): Axel agreed with the recommendation; step 2b.
+
+- Step 2b, the offer's text in question 10 (2026-09-30): Axel ruled (a), the four sub-bullets as the brief of step 2b gives them.
 
 - pyright for Python templates (2026-09-30): Axel ruled (a), the orchestrator installing pyright; step 2c.
 
@@ -100,5 +96,5 @@ dispatch:
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
 - Step 2a is ruled ("Step 2a, what the alias lookup reads", (a)) and is prepared after step 2b lands, since both write `git_guard.py`.
-- Step 2b is ruled ("Step 2b, the forced checkout and switch", (a)); its brief is checked twice and its builder is dispatched. It is not landed before the open item above is answered.
+- Step 2b is ruled ("Step 2b, the forced checkout and switch", (a)); its brief is checked twice and its builder is dispatched. Axel has read the text of question 10 (ruling "Step 2b, the offer's text in question 10", (a)).
 - Next: step 2b, then step 2a, then 2c alone, then step 3, the closing.

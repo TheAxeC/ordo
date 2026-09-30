@@ -48,6 +48,8 @@ dispatch:
   launched: 2026-09-30 15:20
   session_id: a065164924d21655a (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-f-diagnose/agents/reviews/2b-report.md
+  builder_usage: round 0: 211125 tokens, 33 tool uses, 511 s ($1.26-2.93)
+  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2b-refuter.md (reviewer a56363ce0d37f4326, ordo-high, running)
   brief_check: .scratch/2-f-diagnose/agents/reviews/2b-brief-check.md (ordo-high, claude-opus-5-5; 196736 tokens, 21 tool uses, 489 s, $1.07-4.37)
   landing: not-started
   round: 0
