@@ -47,9 +47,11 @@ dispatch:
   launched: 2026-09-30
   session_id: a75765a1669931042 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-e-grill/agents/reviews/14a-report.md
+  builder_usage: claude-sonnet-5-5, 171803 tokens, 33 tool uses, 472 s (round 0, from its completion notice)
   brief_check: .scratch/2-e-grill/agents/reviews/14a-brief-check.md (ordo-high, claude-opus-5-5, 176162 tokens, 40 tool uses, 524 s)
+  reviewer_report: .scratch/2-e-grill/agents/reviews/14a-refuter.md (ordo-high, claude-opus-5-5, 186088 tokens, 46 tool uses, 556 s; items 1 to 11 hold; R1 to R17 met, R18 partial; findings Spec 1, Proof 1, Standards 1 to 3, Behaviour 1)
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-09-30: brief agents/briefs/14a-round-1.md, the diff before it agents/reviews/14a-round-0.diff)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
