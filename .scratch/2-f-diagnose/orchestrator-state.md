@@ -78,4 +78,5 @@ dispatch: none
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
 - Step 3 is run and booked, not ticked: open item "Step 3 reading".
-- Next: steps 2a, 2b and 2c; step 4 after step 3 is ticked.
+- Paused (2026-09-30, Axel's ruling on the self-rule entry, booked in plan 2.E): roadmap entry 2.E.A comes before this plan, whose steps 2a to 2c change the same skills; this plan resumes when 2.E.A lands, its steps prepared against main as it then is.
+- Next, on resuming: steps 2a, 2b and 2c; step 4 after step 3 is ticked.
