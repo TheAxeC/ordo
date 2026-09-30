@@ -11,3 +11,8 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0001](0001-the-writing-base-reads-the-prose-standard-where-it-is.md) | The writing base reads the prose standard where it is |
 | [0002](0002-the-prose-standard-holds-over-the-academic-sources.md) | The prose standard holds over the academic sources |
 | [0003](0003-a-fresh-read-only-agent-reviews-a-draft.md) | A fresh read-only agent reviews a draft |
+| [0004](0004-a-decision-taken-under-self-rule-ends-self-rule-until-the-user-agrees.md) | A decision taken under self-rule ends "(self-rule)" until the user agrees |
+| [0005](0005-the-choices-of-every-plan-go-to-one-file-at-the-ledger-root.md) | The choices of every plan go to one file at the ledger root |
+| [0006](0006-the-ledger-records-every-agent-s-id-with-its-role.md) | The ledger records every agent's id with its role |
+| [0007](0007-the-run-over-a-repair-round-runs-on-its-own-reviewer-model.md) | The run over a repair round runs on its own reviewer model |
+| [0008](0008-the-cost-script-prices-from-a-table-copied-by-hand.md) | The cost script prices from a table copied by hand |
