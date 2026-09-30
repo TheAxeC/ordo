@@ -48,9 +48,12 @@ dispatch:
   session_id: a609efe535711a48c (claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-g-git-guard/agents/reviews/2-report.md
   brief_check: .scratch/2-g-git-guard/agents/reviews/2-brief-check.md (claude-opus-5-5; 156313 tokens, 51 tool uses, 489 s, $1.70-4.59)
+  builder_usage: round 0 94135 tokens, 21 tool uses, 229 s ($0.49-1.18)
+  reviewer_report: .scratch/2-g-git-guard/agents/reviews/2-refuter.md (claude-opus-5-5; 130146 tokens, 26 tool uses, 278 s, $0.94-3.05)
   shared_paths: README.md, skills/repo-setup/templates/plan-terms.md and docs/glossary.md are also written by 2.F step 2, in flight, at other lines (README 7, the table row after refute, the Quick start, the alt texts and the install loop; the entries booking and Step 0); a cherry-pick of both simulated by the brief check merged clean, and the glossary check on main decides the glossary.
   landing: not-started
-  round: 0
+  round: 1
+  round_1_sent_at: the tree of 2-round-0.diff
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
