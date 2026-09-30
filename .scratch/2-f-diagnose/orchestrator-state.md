@@ -78,4 +78,4 @@ dispatch: none
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
 - Step 3 is run and booked, not ticked: open item "Step 3 reading".
-- Next: steps 2a and 2b; step 4 after step 3 is ticked.
+- Next: steps 2a, 2b and 2c; step 4 after step 3 is ticked.
