@@ -1,0 +1,11 @@
+.scratch/2-e-grill/plan.md
+.scratch/2-f-diagnose/plan.md
+.scratch/2-g-git-guard/plan.md
+.scratch/2-h-session-retro/plan.md
+.scratch/archive/1-one-layout-for-every-skill/inventories/plan.md
+.scratch/archive/1-one-layout-for-every-skill/plan.md
+.scratch/archive/2-a-launch-notes-for-builders-run-as-their-own-process/plan.md
+.scratch/archive/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/plan.md
+.scratch/archive/2-c-scripts-compute-facts-and-writing-is-removed/plan.md
+.scratch/archive/2-coverage-inventory-of-the-academic-skills/plan.md
+.scratch/archive/2-d-the-plan-skills-take-the-comparisons-process-changes/plan.md
