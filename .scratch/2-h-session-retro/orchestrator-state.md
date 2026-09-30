@@ -48,7 +48,7 @@ dispatch:
   session_id: a79c87e7558835577 (claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-h-session-retro/agents/reviews/3-report.md
   brief_check: .scratch/2-h-session-retro/agents/reviews/3-brief-check.md (claude-opus-5-5; 150427 tokens, 35 tool uses, 395 s, $1.34-3.86)
-  builder_usage: round 0 hand-back 83850 tokens, 13 tool uses, 69 s
+  builder_usage: round 0 hand-backs 83850 tokens, 13 tool uses, 69 s; 91819 tokens, 20 tool uses, 135 s
   cases_ruling: .scratch/2-h-session-retro/agents/briefs/3-cases.md
   landing: not-started
   round: 0
