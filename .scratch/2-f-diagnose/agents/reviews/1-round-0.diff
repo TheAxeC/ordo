@@ -1,0 +1,390 @@
+diff --git a/docs/glossary.md b/docs/glossary.md
+index a84e2d9..347fbe2 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -17,6 +17,8 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+ - **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **case**: an example under a brief's "Cases", an input with its expected result, from the must-pass and must-refuse examples the step's text gives and, for a code step, the inputs it implies. The first run is the run of every case on the unchanged tree. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run. Stated in: `spec`, Steps 4.
++- **case, of a diagnosis**: the scenario that reproduces a symptom: its input, callers, configuration, data and stages of the run. The original case is that scenario before it is shrunk. Stated in: `diagnose`, Steps 4 and 6.
++- **cause not found**: the end of a diagnosis whose second list of hypotheses is falsified, or whose probes cannot separate the hypotheses left, or under `plan-orchestration` whose red command cannot be built. The record says so with every probe. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 11 and "Stops".
+ - **Closed**: the heading of a report that holds each finding's disposition, in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+ - **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+@@ -28,6 +30,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
+ - **design bar**: the standard a `grill` interview holds its options to and its reference line cites, `industry`, `state-of-the-art` or `novel`, set by `.agents/plan.yaml`'s `design_bar` and overridden for one interview by `--bar`. Stated in: `grill`, "The design bar".
+ - **design tree**: the decisions a roadmap entry's goal and gate need, each with the decisions it waits on, each node a decision. Stated in: `grill`, Steps 3.
++- **diagnosis record**: the copy of the `diagnose` skill's `templates/diagnosis.md` that a diagnosis fills in, holding the symptom, the red command with its runs, the cuts of the shrunk case, the hypotheses, the probes, the cause and the fix with its test. Inside a plan it is `agents/reviews/<step>-diagnosis.md` in the ledger. Stated in: `diagnose`, Steps 3.
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id followed by the model the runner served it, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. `brief_check` and `reviewer_report` also carry each agent's served model. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7 and "Launching a builder"; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
+@@ -41,6 +44,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **goal**: what exists when a roadmap entry is done, copied into `plan.md`. In the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
+ - **hand-back**: a builder's stop before changing any code, returning its first run and a case the brief's rules get wrong, with the rule and the result. The orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
+ - **handover**: one session stopping and another continuing the plan from the ledger alone, a resume point at which the stopping session commits the records it wrote. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **hypothesis**: one of the three to five ranked causes of a diagnosis, written "If <cause>, then <change> turns the red command green" with the result that would falsify it. Stated in: `diagnose`, Steps 7.
+ - **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`. The configuration block's `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+ - **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+@@ -63,11 +67,13 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
+ - **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe. Stated in: `spec`, "What it reads" 5 and Steps 2.
+ - **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists. Its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
++- **probe**: a command run to check a claim about the tree. Stated in: `spec`, "What it reads" 5 and Steps 2. Also, in a diagnosis, one change tied to one hypothesis with the red command run after it. Stated in: `diagnose`, Steps 9.
+ - **project skills**: the skills a repository installs with the skills CLI into `.agents/skills/`, linked under `.claude/skills/` and listed in `skills-lock.json` and in `CLAUDE.md`'s Skills section. Stated in: `repo-setup`, Steps 6 and 7.
+ - **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
+ - **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
+ - **questions, the**: the nine questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
++- **red command**: the one command of a diagnosis that drives the code path of the symptom and goes red on the exact symptom, run and its output quoted before any hypothesis. Stated in: `diagnose`, Steps 4.
+ - **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is a failing check of the plan's verification, wherever it runs. Stated in: `plan-orchestration`, "Stops".
+ - **reference line**: the line of a decision that cites, for the options, what the design bar sets, labelled "Industry:", "State of the art:" or "Novel:", each claim with its source read in the session; a decision about the repository's own pages (a roadmap diff, "record as ADR?", a rule clash, a term) has a reference line labelled "Rule:" that cites the page that governs it. Stated in: `grill`, "The decision form" and "The design bar".
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+@@ -88,6 +94,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **shrunk case**: the case of a diagnosis after each part of it has been cut one at a time, a cut that turned the red command green put back, so that removing any remaining part turns it green. Stated in: `diagnose`, Steps 6.
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+ - **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 790681a..aee181f 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -12,6 +12,8 @@
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+ - **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **case**: an example under a brief's "Cases", an input with its expected result, from the must-pass and must-refuse examples the step's text gives and, for a code step, the inputs it implies. The first run is the run of every case on the unchanged tree. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run. Stated in: `spec`, Steps 4.
++- **case, of a diagnosis**: the scenario that reproduces a symptom: its input, callers, configuration, data and stages of the run. The original case is that scenario before it is shrunk. Stated in: `diagnose`, Steps 4 and 6.
++- **cause not found**: the end of a diagnosis whose second list of hypotheses is falsified, or whose probes cannot separate the hypotheses left, or under `plan-orchestration` whose red command cannot be built. The record says so with every probe. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 11 and "Stops".
+ - **Closed**: the heading of a report that holds each finding's disposition, in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+ - **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+@@ -23,6 +25,7 @@
+ - **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
+ - **design bar**: the standard a `grill` interview holds its options to and its reference line cites, `industry`, `state-of-the-art` or `novel`, set by `.agents/plan.yaml`'s `design_bar` and overridden for one interview by `--bar`. Stated in: `grill`, "The design bar".
+ - **design tree**: the decisions a roadmap entry's goal and gate need, each with the decisions it waits on, each node a decision. Stated in: `grill`, Steps 3.
++- **diagnosis record**: the copy of the `diagnose` skill's `templates/diagnosis.md` that a diagnosis fills in, holding the symptom, the red command with its runs, the cuts of the shrunk case, the hypotheses, the probes, the cause and the fix with its test. Inside a plan it is `agents/reviews/<step>-diagnosis.md` in the ledger. Stated in: `diagnose`, Steps 3.
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id followed by the model the runner served it, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. `brief_check` and `reviewer_report` also carry each agent's served model. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7 and "Launching a builder"; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
+@@ -36,6 +39,7 @@
+ - **goal**: what exists when a roadmap entry is done, copied into `plan.md`. In the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
+ - **hand-back**: a builder's stop before changing any code, returning its first run and a case the brief's rules get wrong, with the rule and the result. The orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
+ - **handover**: one session stopping and another continuing the plan from the ledger alone, a resume point at which the stopping session commits the records it wrote. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **hypothesis**: one of the three to five ranked causes of a diagnosis, written "If <cause>, then <change> turns the red command green" with the result that would falsify it. Stated in: `diagnose`, Steps 7.
+ - **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`. The configuration block's `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+ - **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+@@ -58,11 +62,13 @@
+ - **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
+ - **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe. Stated in: `spec`, "What it reads" 5 and Steps 2.
+ - **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists. Its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
++- **probe**: a command run to check a claim about the tree. Stated in: `spec`, "What it reads" 5 and Steps 2. Also, in a diagnosis, one change tied to one hypothesis with the red command run after it. Stated in: `diagnose`, Steps 9.
+ - **project skills**: the skills a repository installs with the skills CLI into `.agents/skills/`, linked under `.claude/skills/` and listed in `skills-lock.json` and in `CLAUDE.md`'s Skills section. Stated in: `repo-setup`, Steps 6 and 7.
+ - **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
+ - **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
+ - **questions, the**: the nine questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
++- **red command**: the one command of a diagnosis that drives the code path of the symptom and goes red on the exact symptom, run and its output quoted before any hypothesis. Stated in: `diagnose`, Steps 4.
+ - **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is a failing check of the plan's verification, wherever it runs. Stated in: `plan-orchestration`, "Stops".
+ - **reference line**: the line of a decision that cites, for the options, what the design bar sets, labelled "Industry:", "State of the art:" or "Novel:", each claim with its source read in the session; a decision about the repository's own pages (a roadmap diff, "record as ADR?", a rule clash, a term) has a reference line labelled "Rule:" that cites the page that governs it. Stated in: `grill`, "The decision form" and "The design bar".
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+@@ -83,6 +89,7 @@
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **shrunk case**: the case of a diagnosis after each part of it has been cut one at a time, a cut that turned the red command green put back, so that removing any remaining part turns it green. Stated in: `diagnose`, Steps 6.
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+ - **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+diff --git a/skills/diagnose/SKILL.md b/skills/diagnose/SKILL.md
+new file mode 100644
+index 0000000..3fa97dd
+--- /dev/null
++++ b/skills/diagnose/SKILL.md
+@@ -0,0 +1,183 @@
++---
++name: diagnose
++description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it probes on a scratch copy, leaves the step's worktree unchanged and hands the fix to the builder as the round's ruling. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, find the cause of, why does this fail, the cause is not known, diagnose the finding."
++metadata:
++  version: "1.0.0"
++---
++
++# Diagnose a defect
++
++`/diagnose` finds the cause of a symptom with a command that is red on it, before any theory. It leaves behind the cause, stated with the probe that shows it, the fix with its test, and the diagnosis record, which holds every command and result of the run.
++
++## Quick start
++
++```
++/diagnose <symptom>                        find the cause of a symptom, given in the user's words, in the checkout the skill is run in
++/diagnose <entry> <step> <finding>         find the cause of a finding of a plan's step, written as the refuter report names it, such as Spec 1
++/diagnose <entry> <step> red line          find the cause of a red line at the step's landing whose cause is not known
++/diagnose <entry> <step> brief check <n>   find the cause of finding <n> of the step's brief check
++```
++
++## Use instead
++
++| When | Use |
++|---|---|
++| A built step is to be reviewed | `/refute <entry> <step>` |
++| The cause is known and a step is to be prepared | `/spec <entry> <step>` |
++| Where a plan stands and which command comes next | `/ordo-help <entry>` |
++
++## What it reads
++
++1. The symptom, quoted exactly.
++   - For `/diagnose <symptom>`, the user's words.
++   - For a finding, the failure scenario in the report that holds it.
++2. The rules file and the standards `.agents/plan.yaml` names, `docs/glossary.md` and the ADRs in force as the `spec` skill's "What it reads" 5 says, each when the repository has it.
++   - With no rules file, "Rules" states the rules this skill needs.
++3. Inside a plan, the ledger folder and `orchestrator-state.md`, whose dispatch entry for the step names the worktree and the base.
++   - `<entry>` resolves to its folder as the `spec` skill's "What it reads" 2 says.
++   - No such folder, or no dispatch entry for the step, is a refusal ("Stops").
++4. Inside a plan, the step's brief `agents/briefs/<step>.md`.
++5. Inside a plan, the report the finding is in.
++   - For a finding written as a heading and a number, the refuter report `agents/reviews/<step>-refuter.md`.
++   - For `brief check <n>`, the brief check's report `agents/reviews/<step>-brief-check.md`.
++   - For `red line`, the failure the step's landing booked in the open items of the state file and under the step's Step 0.
++   - No such report or finding is a refusal ("Stops").
++
++## Steps
++
++1. Inside a plan, refuse when "What it reads" 3 or 5 finds an input missing.
++   - Done when every input inside a plan exists, or the refusal names the missing one.
++2. Choose where the probes run.
++   - Outside a plan, the probes run in the user's checkout or worktree.
++   - Inside a plan, the probes run on a scratch copy under `$TMPDIR` that shares no file with the step's worktree, made with these commands.
++     ```sh
++     git worktree add --detach "$tmp/tree" <base>     # from the main checkout; <base> is the dispatch entry's base
++     git diff <base>                                  # from inside the step's worktree, saved to "$tmp/step.diff"
++     git apply "$tmp/step.diff"                       # from inside "$tmp/tree"
++     git status --porcelain --untracked-files=all     # from inside the step's worktree; each file listed with ?? is copied to the same path in "$tmp/tree"
++     ```
++   - A red command that would touch the user's real home, the installed skills or the pinned checkout runs with `HOME`, `ORDO_STABLE` and `ORDO_SKILL_DIRS` set under `$TMPDIR`, as `utils/pin.test.sh` sets them.
++   - Done when the probes have a place to run, and inside a plan `git status --short` and `git diff <base>` from inside the step's worktree print what they printed before the copy was made.
++3. Open the diagnosis record with the symptom quoted in its Symptom section.
++   - Outside a plan, the record is a copy of `templates/diagnosis.md` in `$TMPDIR`, filled as the steps below run.
++   - Inside a plan, the record is `agents/reviews/<step>-diagnosis.md` beside the state file, a copy of `templates/diagnosis.md` filled as the steps below run.
++   - A later diagnosis of the same step is appended to that file under its own heading, which names its finding.
++   - Inside a plan, the record is written to disk in the main checkout and not committed on its own.
++     - The next resume-point commit carries it, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
++   - Done when the record exists and its Symptom section holds the symptom as "What it reads" 1 gives it, word for word.
++4. Build the red command: one command that drives the code path of the symptom and goes red on the exact symptom.
++   - A hypothesis formed, or code read to form one, before the command has been run red is an Anti-patterns row.
++   - The red command asserts the symptom itself, the error text or the wrong output, and never that something ran.
++   - The ways to build one are in "Ways to build a red command", in the order to try them.
++   - A symptom seen only sometimes gets a failure rate measured over a stated number of runs, raised by more runs, parallel runs or narrower timing until it is high enough to probe against.
++   - A slow symptom gets a baseline first: the known-good version or the requirement measured over repeated runs with the mean and the spread, and red is a threshold stated from them.
++   - A defect in text (a skill, a page, a rule or a brief whose instructions led to the wrong behaviour) has as its red the quoted text beside the line of a run or transcript that shows the wrong behaviour it led to.
++   - A credential the red command needs is taken from the environment, never from a file into its command line or the record.
++   - When no red command can be built by any of the ways, or the scratch copy cannot reproduce because the symptom needs the real environment or a credential the environment lacks, the skill stops ("Stops"): run by a person, it lists every way tried with what it gave and asks for what the "No red command" row names.
++   - Under `plan-orchestration`, that is the cause not found, and the record says so with every way tried (Steps 11).
++   - Done when the command has been run and its output quoted in the record, with the same verdict on three runs in a row, or the measured failure rate for a symptom seen only sometimes.
++5. Tighten the red command.
++   - It gets a faster setup, a sharper assertion on the symptom, pinned time, fixed random seeds, the file system isolated under `$TMPDIR` and the network cut, as far as the symptom allows.
++   - Done when it runs unattended in seconds where the symptom allows, and its runs after the tightening are quoted.
++6. Shrink the case: cut each part of it (an input, a caller, a configuration value, a piece of data, a stage of the run) one at a time, running the red command after each cut and putting back a cut that turns it green.
++   - Done when removing any remaining part turns the red command green, and the record's Shrunk case section lists each cut with its result.
++7. Form three to five ranked hypotheses, each written as "If <cause>, then <change> turns the red command green" and naming the result that would falsify it.
++   - Where it helps, a hypothesis adds "<another change> makes it worse".
++   - A hypothesis whose falsifying result cannot be named is sharpened or dropped.
++   - Done when the record's Hypotheses section holds three to five hypotheses in rank order, each with its falsifying result.
++8. Show the red command, its output, the shrunk case and the hypotheses.
++   - Run by a person, the skill shows them and waits for the reply before the first probe ("Stops"), then ranks, drops or adds hypotheses as the reply says.
++   - Under `plan-orchestration`, the hypotheses are written into the record, quoted in the round brief and in the landing report beside the record's path, and the skill goes on to Steps 9.
++   - Done when a person has replied, or under `plan-orchestration` when the hypotheses are quoted in both places.
++9. Probe one hypothesis at a time, in rank order.
++   - Each probe is tied to one hypothesis, named by its rank, and changes one thing.
++   - The red command is run after the probe, and the record's Probes section holds the hypothesis's rank, the one change, the run and the verdict, falsified or still standing.
++   - The change is undone before the next probe, unless it is the fix.
++   - A debugger or an interactive session is used where the language has one, and otherwise logging at the boundaries that separate the hypotheses.
++   - Every line of logging a probe adds carries one tag unique to the diagnosis, `DIAG-` and four hexadecimal digits.
++   - Logging without that tag, and logging everything to search afterwards, are Anti-patterns rows.
++   - Done when each hypothesis probed has a recorded verdict, and one is still standing or all are falsified.
++10. When every hypothesis is falsified, form a second list from what the probes showed, and show it as Steps 8 says.
++    - Done when the record holds the second list with its falsifying results, and Steps 9 has run over it.
++11. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
++    - The cause is not found when the second list is falsified too, or when no probe can separate the hypotheses left.
++    - For a cause not found, the record says so with every probe, and the skill goes to Steps 16.
++    - Inside a plan, a cause not found is raised to the user as an open item, as `plan-orchestration`'s "Only known fixes" says, and is not sent to the builder.
++    - Run by a person, a cause not found is shown and the skill stops ("Stops").
++    - Done when the record's Cause section names the cause with its probe, or says "cause not found" with every probe.
++12. For a defect in code whose failure costs something, write a test that reproduces the shrunk case at the place the defect occurs, and run it on the tree before the fix.
++    - The rules file's rule that a test exists only for behaviour whose failure costs something decides whether the failure costs something.
++    - A defect in code whose failure costs nothing gets no test.
++    - A place no test can reach the defect as it occurs is written in the record under "No test reaches it", with the reason.
++    - A defect in text is fixed by reading, with the text quoted before and after and no test.
++    - Done when the record quotes the test's failure on the unfixed tree and that failure shows the symptom, or holds the reason no test is written, or for a defect in text quotes the text before.
++13. Make the fix at the cause.
++    - Anti-patterns names the guard that is not a fix and the test written after the fix.
++    - Done when the fix is in the tree the probes ran in and the record quotes it, or for a defect in text quotes the text after.
++14. Run the test, the red command and the original, unshrunk case.
++    - Done when the test is green, the red command is green and the original case is green, each quoted in the record.
++15. Inside a plan, write the fix and its test as the ruling of the repair round, as `plan-orchestration`'s Steps 8 sends a round.
++    - The ruling quotes the cause, the fix, and both runs of the test.
++    - The red command is the round's check.
++    - The fix and the test were made on the scratch copy, and the skill does not change the step's worktree.
++    - Done when the ruling is written and the step's worktree still prints what Steps 2 recorded.
++16. Clean up.
++    - Done when the grep of the tag over the tree the probes ran in prints nothing, and the scratch copy, removed with `git worktree remove --force "$tmp/tree"` from the main checkout, and every throwaway file are gone, a credential or `.env` file copied into `$TMPDIR` among them.
++    - Run by a person outside a plan, done also when the red command run again on the original case is green.
++17. Write where the cause is kept.
++    - Outside a plan, the last bullet of the commit message states the cause, the red command and the fix's test, and the record is shown to the user whole, then its copy in `$TMPDIR` is removed.
++    - Inside a plan, the round brief quotes the cause, and the landing's booking names it.
++    - Done when the cause stands in that place.
++
++## Ways to build a red command
++
++1. A failing test at the level that reaches the defect.
++2. A command-line run on a fixture, its output compared with the expected output.
++3. An HTTP request against a running server.
++4. A headless-browser script that drives the view and asserts on what it shows.
++5. Scratch files or a scratch repository under `$TMPDIR` that reproduce the state.
++6. A replay of a captured input.
++7. A small harness that calls the code path directly.
++8. A loop over generated inputs, for a symptom that is sometimes wrong.
++9. `git bisect run` on a scratch clone, when the defect appeared between two known states.
++10. The same input through two versions, with the outputs compared.
++11. For a symptom only a person can trigger, a script that prints each action for the user to take and reads back what they observed, which is the stop "A red command a person drives".
++
++## Stops
++
++The first five rows are stops. The cause not found, inside a plan, is a decision for the user and leaves an open item, and the other stops leave none. The last four rows are refusals.
++
++| Stop | When | What it shows | What resumes it |
++|---|---|---|---|
++| The hypotheses | Run by a person, once Steps 7 has formed them, or Steps 10 a second list | The red command with its output, the shrunk case and the ranked hypotheses with their falsifying results | The user's reply, then the probes with the ranking the reply gives |
++| No red command | Run by a person, when every way in "Ways to build a red command" has been tried, or the scratch copy cannot reproduce | Every way tried with what it gave, and a request for access to where the symptom occurs, a captured artifact (redacted, with only the lines that carry the symptom), leave to add temporary instrumentation, or the credential set in the environment | What the request names, then Steps 4 again |
++| A red command a person drives | Run by a person, when only a person can trigger the symptom | The script that prints each action for the user to take | The user's actions and what they observed, read back by the script |
++| Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
++| The cause not found | The second list is falsified, or no probe can separate the hypotheses left, or under `plan-orchestration` no red command can be built or the redacted output is not enough | The record with every probe | Inside a plan, the user's ruling on the open item; run by a person, the user's next direction |
++| No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
++| No dispatch entry | Inside a plan, the state file has no dispatch entry for the step | A refusal that names the step | The step prepared with `/spec`, then `/diagnose` again |
++| No report | Inside a plan, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
++| No finding | Inside a plan, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |
++
++## Anti-patterns
++
++| Anti-pattern | Why it fails | Do instead |
++|---|---|---|
++| A hypothesis, or code read to form one, before the red command has been run red | The theory anchors on the first plausible cause while nothing shows the symptom | Build the red command first, as Steps 4 says |
++| A red command that asserts only that something ran | It goes green on a nearby failure, and the fix is then judged against another defect | Assert the error text or the wrong output of the symptom, as Steps 4 says |
++| Two changes in one probe | The verdict cannot say which change moved the result | One change per probe, as Steps 9 says |
++| A probe tied to no hypothesis | Its result falsifies nothing, so it narrows nothing | Name the rank of the hypothesis it tests, as Steps 9 says |
++| A test written after the fix | It has never failed, so nothing shows it catches the defect | Write the test and run it red on the unfixed tree, as Steps 12 says |
++| A guard for a fix | A null check, an early return or a fallback silences the symptom while the cause stays, as the rules file's rule that a guard is not a fix says | Change the code at the cause Steps 11 states |
++| Untagged logging | It survives the cleanup and reaches the commit | Tag every line with the diagnosis's one tag, as Steps 9 says |
++| Logging everything and searching afterwards | The output does not separate the hypotheses, and the search finds what the reader already expects | Log at the boundaries that separate the hypotheses, as Steps 9 says |
++
++## Rules
++
++- Who is present decides the waits: a person running the skill, by hand or inside a plan they run step by step, gets the waits of "Stops", and a session running under `plan-orchestration` gets none.
++- Inside a plan, the step's worktree is never changed and every probe runs on the scratch copy of Steps 2, so `plan-orchestration`'s rule that a finding whose cause is not known is diagnosed read-only holds.
++- The skill never runs against the user's real home, the installed skills or the pinned checkout without the user's leave, and a red command that would touch them runs with those paths redirected, as Steps 2 says.
++- Every quoted command output carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed, as the rules file's rule on secrets in quoted command output says.
++- A captured artifact is quoted only in the lines that carry the symptom.
++- With no rules file, a defect in code begins with a test that fails on the tree as it is.
++- With no rules file, a guard is not a fix: a null check, an early return or a fallback does not close a defect, and the fix reaches the code that lacks the thing it needs.
+diff --git a/skills/diagnose/templates/diagnosis.md b/skills/diagnose/templates/diagnosis.md
+new file mode 100644
+index 0000000..eae4bb2
+--- /dev/null
++++ b/skills/diagnose/templates/diagnosis.md
+@@ -0,0 +1,93 @@
++# Diagnosis: <the symptom in a few words>
++
++Every quoted command output carries `<REDACTED>` in place of the value of a secret in it, as the rules file's rule on secrets in quoted command output says. A diagnosis of the same step later is appended below under its own heading, which names its finding.
++
++## Symptom
++
++<the symptom, quoted exactly: the user's words, or the failure scenario of the finding in the report that holds it, with the report's path and the finding's name>
++
++## Red command
++
++```
++<the one command>
++```
++
++Runs, with the output of each quoted:
++
++```
++<run 1: the command and its output>
++<run 2: the command and its output>
++<run 3: the command and its output>
++```
++
++<for a symptom seen only sometimes: the failure rate and the number of runs it was measured over; for a slow symptom: the baseline with its mean and spread, and the threshold red is defined as; for a defect in text: the quoted text beside the line of the run or transcript that shows the wrong behaviour it led to>
++
++Where the probes run: <the checkout or worktree, or the scratch copy's path>. The paths redirected under `$TMPDIR`: <HOME, ORDO_STABLE, ORDO_SKILL_DIRS, or none>.
++
++Runs after the tightening, with the output of each quoted:
++
++```
++<the command and its output>
++```
++
++## Shrunk case
++
++| Cut | Result of the red command after it | Kept or put back |
++|---|---|---|
++| <the part of the case cut: an input, a caller, a configuration value, a piece of data, a stage of the run> | <the verdict and the line that shows it> | <cut, or put back because it turned the red command green> |
++
++The shrunk case, as it stands: <each part left, each one needed for the red>.
++
++## Hypotheses
++
++1. If <cause>, then <change> turns the red command green. Falsified by: <the result that would falsify it>.
++2. If <cause>, then <change> turns the red command green. Falsified by: <the result that would falsify it>.
++3. If <cause>, then <change> turns the red command green. Falsified by: <the result that would falsify it>.
++
++The reply to the hypotheses, or "none, run under `plan-orchestration`": <what the user ranked, dropped or added>.
++
++The second list, when every hypothesis was falsified, in the same form: <the hypotheses, or "not needed">.
++
++## Probes
++
++| Hypothesis rank | The one change | The run | Verdict |
++|---|---|---|---|
++| <the rank> | <the one change, and the tag `DIAG-<4 hex digits>` on any logging it adds> | <the red command's output after the change> | <falsified, or still standing> |
++
++## Cause
++
++<the hypothesis the probes left standing, with the probe that shows it: the red command green with the change and red without it; or "cause not found", with every probe above and the reason no probe separates the hypotheses left>
++
++## Fix and test
++
++Test, run on the tree before the fix:
++
++```
++<the test's command and its failing output, showing the symptom>
++```
++
++Fix:
++
++```
++<the change, as a diff>
++```
++
++Runs after the fix:
++
++```
++<the test's command and its passing output>
++<the red command and its output>
++<the original, unshrunk case and its output>
++```
++
++<for a defect in text: the text before and the text after, with no test>
++
++No test reaches it: <the reason no test can reach the defect as it occurs, or "not applicable">. No test is written: <"the failure costs nothing", or "not applicable">.
++
++## Cleanup
++
++```
++<the grep of the tag over the tree the probes ran in, and its empty output>
++```
++
++<the scratch copy and each throwaway file removed, a credential or .env file copied into `$TMPDIR` among them; the red command run again on the original case and its output, or "carried by the round as its check">
