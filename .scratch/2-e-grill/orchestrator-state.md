@@ -94,4 +94,4 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 to 12a landed and ticked. Axel's rulings of the morning are booked (plan.md Rulings, 2026-09-30, "(the user)").
-- Next: step 9a (approval stops under a ruling); step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 in game-engine, cathedra and research-hub, left for Axel to commit.
+- Next: step 9a (approval stops under a ruling); step 13, `/grill` on entry 3 with Axel, D1 (b) and D2 (a) settled; step 14 after 13; step 15 done and ticked, its edits in game-engine, cathedra and research-hub left for Axel to commit.
