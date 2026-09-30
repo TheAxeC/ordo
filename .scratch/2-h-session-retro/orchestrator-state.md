@@ -48,11 +48,13 @@ dispatch:
   session_id: a79c87e7558835577 (claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-h-session-retro/agents/reviews/3-report.md
   brief_check: .scratch/2-h-session-retro/agents/reviews/3-brief-check.md (claude-opus-5-5; 150427 tokens, 35 tool uses, 395 s, $1.34-3.86)
-  builder_usage: round 0 hand-backs 83850 tokens, 13 tool uses, 69 s; 91819 tokens, 20 tool uses, 135 s
+  builder_usage: round 0 hand-backs 83850 tokens, 13 tool uses, 69 s; 91819 tokens, 20 tool uses, 135 s; report 117739 tokens, 34 tool uses, 317 s
   cases_ruling: .scratch/2-h-session-retro/agents/briefs/3-cases.md
+  reviewer_report: .scratch/2-h-session-retro/agents/reviews/3-refuter.md (claude-opus-5-5; 142223 tokens, 36 tool uses, 333 s, $1.27-3.65)
   landing: not-started
-  round: 0
+  round: 1
   round_0_sent_at: 5ce3f7c
+  round_1_sent_at: 2026-09-30 10:44, the tree in agents/reviews/3-round-0.diff
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)

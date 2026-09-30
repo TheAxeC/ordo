@@ -1,0 +1,313 @@
+ M README.md
+ M docs/figures/gen_figures.py
+ M docs/figures/pipeline.svg
+ M docs/glossary.md
+ M skills/ordo-help/SKILL.md
+ M skills/plan-orchestration/SKILL.md
+ M skills/plan-retro/SKILL.md
+ M skills/refute/SKILL.md
+ M skills/repo-setup/templates/docs/glossary.md
+ M skills/repo-setup/templates/plan-terms.md
+?? .scratch/2-h-session-retro/agents/reviews/3-report.md
+diff --git a/README.md b/README.md
+index 26a6581..7d9a270 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,7 @@ Ordo is a set of agent skills for Claude Code that run a multi-step change as a
+ 
+ One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
+ 
+-Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, `diagnose` finds the cause of a defect, inside a plan's loop or on its own, and `plan-retro` turns what the reviewers keep finding into rules.
++Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, `diagnose` finds the cause of a defect, inside a plan's loop or on its own, `plan-retro` turns what the reviewers keep finding into rules, and `session-retro` reads the transcripts of Claude Code sessions and, for what went well and what went wrong, proposes a change to a named rule, skill or brief.
+ 
+ ## The skills
+ 
+@@ -22,6 +22,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
+ | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
+ | `ordo-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
+ | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
++| `session-retro` | Reads the transcripts of a plan's Claude Code sessions, one session, or a time window, and reports what went well, to keep, and what went wrong, to change, each point with its place quoted and a proposed change to a rule, skill or brief, which the user decides on |
+ 
+ The order of use, shortened from what `/ordo-help` prints:
+ 
+@@ -44,6 +45,7 @@ for every step:
+ 
+ /plan-orchestration <entry>   instead of the step lines: runs them for every step unattended
+ /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
++/session-retro <entry>        for a plan, open or closed: what went well and what went wrong in its Claude Code sessions, each with a proposed change
+ /diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
+ ```
+ 
+@@ -51,7 +53,7 @@ for every step:
+ 
+ The pipeline below marks where each skill of a roadmap entry asks you. A stop marked "every run" waits on you each time, and one marked "only when" waits on you in a named case. You may skip a skill marked "optional".
+ 
+-![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
++![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /session-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
+ 
+ The loop of one step carries the same marks, with the band that runs the loop unattended below it.
+ 
+@@ -95,7 +97,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
+ rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
+ for dir in ~/.claude/skills; do
+     mkdir -p "$dir"
+-    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
++    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec; do
+         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
+     done
+     agents=$(dirname "$dir")/agents
+diff --git a/docs/figures/gen_figures.py b/docs/figures/gen_figures.py
+index 2c6fb40..9fb537c 100644
+--- a/docs/figures/gen_figures.py
++++ b/docs/figures/gen_figures.py
+@@ -3,7 +3,7 @@
+ Writes, beside this file:
+ 
+ - pipeline.svg: /repo-setup or /ordo-init, /roadmap add, /grill, /plan, every step, the closing,
+-  with /plan-retro, /diagnose and /ordo-help beside them.
++  with /plan-retro, /session-retro, /diagnose and /ordo-help beside them.
+ - plan-loop.svg: /spec, build it, /refute, close them, /refute over the round, /land, the return
+   for a further round, the stops and refusals, and the /plan-orchestration band.
+ 
+@@ -403,14 +403,16 @@ def pipeline_svg() -> str:
+     join_y = setup_top + setup_h + 36
+     top, height, width, gap = join_y + 34, 258, 178, 25
+     side_top = top + height + 56
++    side_h = 210
+     canvas = Canvas(
+         "pipeline.svg",
+         1040,
+-        side_top + 150 + 68,
++        side_top + side_h + 68,
+         "The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or "
+         "/ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and "
+-        "the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each "
+-        "box lists the stops where you are asked, marked every run, only when or optional.",
++        "the closing, with the optional /plan-retro, /session-retro, /diagnose and /ordo-help "
++        "beside them. Each box lists the stops where you are asked, marked every run, only when "
++        "or optional.",
+     )
+     draw_caption(canvas, 25, 30, "SET THE REPOSITORY UP, ONCE: ONE OF THE TWO", 600)
+     setup = Box(
+@@ -503,33 +505,45 @@ def pipeline_svg() -> str:
+         route = [(centre, source.area.y + source.area.h), (centre, join_y), (target_x, join_y)]
+         canvas.path([*route, (target_x, top - 1)], ACCENT, 2, arrow=True)
+ 
+-    draw_caption(canvas, 25, side_top - 12, "AFTER PLANS HAVE RUN", 300)
+-    draw_caption(canvas, 395, side_top - 12, "AT ANY POINT", 620)
++    draw_caption(canvas, 25, side_top - 12, "AFTER PLANS HAVE RUN", 228)
++    draw_caption(canvas, 279, side_top - 12, "AT ANY POINT", 736)
+     retro = Box(
+-        Rect(25, side_top, 330, 150),
++        Rect(25, side_top, 228, side_h),
+         "/plan-retro",
+         "The findings the reviews keep making, and the change that stops each.",
+         (Group(OPTIONAL), Group(ONLY_WHEN, ("The proposals",))),
+         dashed=True,
+     )
++    session_box = Box(
++        Rect(279, side_top, 228, side_h),
++        "/session-retro",
++        "What went well and what went wrong in the Claude Code sessions, and the change for each.",
++        (
++            Group(OPTIONAL),
++            Group(EVERY_RUN, ("The proposals",)),
++            Group(ONLY_WHEN, ("A large output",)),
++        ),
++        dashed=True,
++    )
+     help_box = Box(
+-        Rect(395, side_top, 300, 150),
++        Rect(533, side_top, 228, side_h),
+         "/ordo-help",
+         "Prints the sequence and, for a named plan, where it stands and the next command.",
+         (Group(OPTIONAL), Group("", ("No stop.",))),
+         dashed=True,
+     )
+     diagnose_box = Box(
+-        Rect(715, side_top, 300, 150),
++        Rect(787, side_top, 228, side_h),
+         "/diagnose",
+         "The cause of a defect, from a command red on it, before any fix.",
+         (Group(OPTIONAL), Group(ONLY_WHEN, ("The hypotheses", "The cause not found"))),
+         dashed=True,
+     )
+     draw_box(canvas, retro)
++    draw_box(canvas, session_box)
+     draw_box(canvas, help_box)
+     draw_box(canvas, diagnose_box)
+-    draw_legend(canvas, 25, side_top + 176, 990)
++    draw_legend(canvas, 25, side_top + side_h + 26, 990)
+     return canvas.render()
+ 
+ 
+diff --git a/docs/glossary.md b/docs/glossary.md
+index c8f313a..ce08e63 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -19,6 +19,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **case**: an example under a brief's "Cases", an input with its expected result, from the must-pass and must-refuse examples the step's text gives and, for a code step, the inputs it implies. The first run is the run of every case on the unchanged tree. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run. Stated in: `spec`, Steps 4.
+ - **case, of a diagnosis**: the scenario that reproduces a symptom: its input, callers, configuration, data and stages of the run. The original case is that scenario before it is shrunk. Stated in: `diagnose`, Steps 6, 7, 8, 16, 19 and 22, and "Stops".
+ - **cause not found**: the end of a diagnosis when the second list of hypotheses is falsified, when no probe separates the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose. The record says so with every probe, or every way tried in its "No red command" section. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 15 and "Stops".
++- **change point**: a behaviour of a Claude Code session worth changing, written in a sessions report under "Change" with its places and a proposal: the sentence to add to a rule, skill or brief, where a written rule should be read, or a sharper sentence for a written rule or the text that should have prevented the behaviour. Stated in: `session-retro`, Steps 6 and 9.
+ - **Closed**: the heading of a report that holds each finding's disposition, in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+ - **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+@@ -47,6 +48,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **hypothesis**: one of the three to five ranked causes of a diagnosis (fewer, with the reason, when no more are live), written "If <cause>, then <change> turns the red command green" with the result that would falsify it. Stated in: `diagnose`, Steps 7.
+ - **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`. The configuration block's `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+ - **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
++- **keep point**: a behaviour of a Claude Code session worth repeating, written in a sessions report under "Keep" with its places and a proposal that names the text that produced the behaviour or, when no text did, gives the sentence that would make it repeat and the file and section it goes into. Stated in: `session-retro`, Steps 6 and 9.
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+ - **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
+@@ -60,10 +62,12 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+ - **pause**: a halt of the loop the user asks for, which holds until the user lifts it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
++- **place, of a point**: one line of the reader's output that shows a point, noted by the reader's id and line and written in the sessions report as `<id> <line> <timestamp>` with the line quoted, a long text cut at a sentence end and marked `...`; a point whose places all belong to a point decided in an earlier sessions report is left out. Stated in: `session-retro`, Steps 6 to 8.
+ - **plan**: the work of one roadmap entry, opened by `/plan` as a ledger folder whose `plan.md` holds the goal, the gate, the step list and the rulings. Stated in: `plan`, Steps. Also the roadmap file as the ordered build plan over a capability map. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **plan configuration**: `.agents/plan.yaml`, which holds a repository's project specifics and which every plan skill reads. `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
+ - **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
+ - **plan-terms block**: the text of `docs/glossary.md` between the plan-terms markers, a copy of the `repo-setup` skill's `templates/plan-terms.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **point, of a sessions report**: a keep point or a change point. Stated in: `session-retro`, Steps 6.
+ - **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
+ - **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe. Stated in: `spec`, "What it reads" 5 and Steps 2.
+ - **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists. Its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
+@@ -92,6 +96,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
+ - **sequence, the**: the command sequence for running a plan by hand that `/ordo-help` prints verbatim. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
++- **sessions report**: the report `/session-retro` writes at `<ledger_root>/retros/sessions-<YYYY-MM-DD>.md`, or `sessions-<YYYY-MM-DD>-2.md`, then `-3`, for a further run on the same day: the window and what it was resolved from, the folders read, the working folder, the points with their places and proposals, and the user's decision on each proposal. Stated in: `session-retro`, Steps 5 and `templates/sessions.md`.
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **shrunk case**: the case of a diagnosis after each part of it has been cut one at a time, a cut that turned the red command green put back, so that removing any remaining part turns it green. Stated in: `diagnose`, Steps 6.
+@@ -109,8 +114,10 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **verdict**: the reviewer's judgment of each item of the brief's "What to build" (holds, violated or not applicable) and of each case (met, partial, unmet or not verifiable). Stated in: `refute`, "The verdicts".
+ - **verification page**: the page `.agents/plan.yaml`'s `verification:` names, which defines the green check with the commands every step runs. `/plan` copies them into the verify list. Stated in: `plan`, "What it reads" 3 and Steps 4; `ordo-init`, Steps 3.
+ - **verify list**: the `verify:` key of the configuration block, the commands the `land` skill's `templates/checks.sh <state file>` runs. Stated in: `land`, "The landing script"; `plan`, Steps 4.
++- **window, of the transcripts**: the two times the reader takes, the start included and the end left out; for a plan, from the committer time of the commit that added its `plan.md` to one second after the latest commit that touches its folder, or to the time of the run while the plan is open. A run for one Claude Code session has none. Stated in: `session-retro`, Steps 1 and `templates/transcript_window.py`.
+ - **wip**: the commit `/land` makes in the step's worktree of everything the builder left, the ledger root left out. Stated in: `land`, Steps 3.
+ - **worker**: the configuration key `worker:`, `claude:<model>` of the builder. Stated in: `plan-orchestration`, "The two tiers, and the models"; `plan`, Steps 4. Also the builder itself, whose identity the dispatch entry records. Stated in: `spec`, Steps 9.
++- **working folder**: the folder `mktemp -d` makes under `$TMPDIR` for one run of `/session-retro`, holding the reader's outputs and error files and the long lines written folded, and removed at the run's end. Stated in: `session-retro`, Steps 3, 6 and 12.
+ - **worktree**: a step's git worktree at `<worktree_root>/<step>`, on a branch named after its folder, created from the base. It is the builder's only place to work. Stated in: `spec`, Steps 7; `land`, "Removing a step's worktree".
+ <!-- ordo:plan-terms end -->
+ 
+diff --git a/skills/ordo-help/SKILL.md b/skills/ordo-help/SKILL.md
+index 4b4e82a..ab3f2ac 100644
+--- a/skills/ordo-help/SKILL.md
++++ b/skills/ordo-help/SKILL.md
+@@ -24,6 +24,7 @@ metadata:
+ | No plan is open for the entry yet | `/plan <entry>` |
+ | A defect whose cause is not known | `/diagnose <symptom>`, or inside a plan `/diagnose <entry> <step> <finding>` |
+ | What the reviews keep finding across plans | `/plan-retro` |
++| What went well and what went wrong in Claude Code sessions | `/session-retro <entry>` |
+ 
+ ## What it reads
+ 
+@@ -82,6 +83,7 @@ when a command stops:
+ /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
+ 
+ /plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
++/session-retro <entry>        for a plan, open or closed: what went well and what went wrong in its Claude Code sessions, each with a proposed change
+ /diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
+ ```
+ 
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index 103d8f9..58d63dd 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -27,6 +27,7 @@ continue the plan                    resume from the state file, after a compact
+ | The repository has no `.agents/plan.yaml` | `/ordo-init` |
+ | A finding, a red line or a brief-check finding whose cause is not known, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line` or `brief check <n>` |
+ | What the reviews keep finding across plans | `/plan-retro` |
++| What went well and what went wrong in the Claude Code sessions of a plan | `/session-retro <entry>` |
+ 
+ ## What it reads
+ 
+diff --git a/skills/plan-retro/SKILL.md b/skills/plan-retro/SKILL.md
+index 3d4f1f3..943a4ba 100644
+--- a/skills/plan-retro/SKILL.md
++++ b/skills/plan-retro/SKILL.md
+@@ -22,6 +22,7 @@ metadata:
+ |---|---|
+ | One step's findings, before it lands | `/refute <entry> <step>`, then `/land` |
+ | The recurring findings of the plan that is running | `plan-orchestration`'s recurring-findings pass |
++| What went well and what went wrong in the Claude Code sessions, from their transcripts | `/session-retro` |
+ 
+ ## What it reads
+ 
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index bb21e0b..b183449 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -24,6 +24,7 @@ metadata:
+ | The findings are closed or raised as open items and the step is ready for main | `/land <entry> <step>` |
+ | Every step of the plan, unattended, the reviews included | `/plan-orchestration <entry>` |
+ | What the reviews keep finding across plans | `/plan-retro` |
++| What went well and what went wrong in the Claude Code sessions of a plan | `/session-retro <entry>` |
+ 
+ ## What it reads
+ 
+diff --git a/skills/repo-setup/templates/docs/glossary.md b/skills/repo-setup/templates/docs/glossary.md
+index f25ba2e..8041ce9 100644
+--- a/skills/repo-setup/templates/docs/glossary.md
++++ b/skills/repo-setup/templates/docs/glossary.md
+@@ -1,6 +1,6 @@
+ # Glossary
+ 
+-This page defines each term this project uses in a sense of its own. The terms the plan skills, `roadmap`, `grill`, `diagnose`, `plan-retro`, `repo-setup` and `ordo-init` use in a sense of their own stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only. The project's own terms follow the block, and each is used only in the sense defined here.
++This page defines each term this project uses in a sense of its own. The terms the plan skills, `roadmap`, `grill`, `diagnose`, `plan-retro`, `session-retro`, `repo-setup` and `ordo-init` use in a sense of their own stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only. The project's own terms follow the block, and each is used only in the sense defined here.
+ 
+ <!-- ordo:plan-terms begin -->
+ <!-- ordo:plan-terms end -->
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 189daf7..911851a 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -14,6 +14,7 @@
+ - **case**: an example under a brief's "Cases", an input with its expected result, from the must-pass and must-refuse examples the step's text gives and, for a code step, the inputs it implies. The first run is the run of every case on the unchanged tree. Stated in: `spec`, Steps 4; `refute`, "The verdicts". Also a real instance from the tree on which a format or rule decision of a brief is run. Stated in: `spec`, Steps 4.
+ - **case, of a diagnosis**: the scenario that reproduces a symptom: its input, callers, configuration, data and stages of the run. The original case is that scenario before it is shrunk. Stated in: `diagnose`, Steps 6, 7, 8, 16, 19 and 22, and "Stops".
+ - **cause not found**: the end of a diagnosis when the second list of hypotheses is falsified, when no probe separates the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose. The record says so with every probe, or every way tried in its "No red command" section. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 15 and "Stops".
++- **change point**: a behaviour of a Claude Code session worth changing, written in a sessions report under "Change" with its places and a proposal: the sentence to add to a rule, skill or brief, where a written rule should be read, or a sharper sentence for a written rule or the text that should have prevented the behaviour. Stated in: `session-retro`, Steps 6 and 9.
+ - **Closed**: the heading of a report that holds each finding's disposition, in a brief-check report the change to the brief that closed it, in a refuter report whether it was closed in a round, fixed at landing or raised as an open item. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+ - **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+@@ -42,6 +43,7 @@
+ - **hypothesis**: one of the three to five ranked causes of a diagnosis (fewer, with the reason, when no more are live), written "If <cause>, then <change> turns the red command green" with the result that would falsify it. Stated in: `diagnose`, Steps 7.
+ - **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`. The configuration block's `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+ - **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
++- **keep point**: a behaviour of a Claude Code session worth repeating, written in a sessions report under "Keep" with its places and a proposal that names the text that produced the behaviour or, when no text did, gives the sentence that would make it repeat and the file and section it goes into. Stated in: `session-retro`, Steps 6 and 9.
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+ - **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
+@@ -55,10 +57,12 @@
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+ - **pause**: a halt of the loop the user asks for, which holds until the user lifts it. Stated in: `plan-orchestration`, Steps 5 and "Stops".
++- **place, of a point**: one line of the reader's output that shows a point, noted by the reader's id and line and written in the sessions report as `<id> <line> <timestamp>` with the line quoted, a long text cut at a sentence end and marked `...`; a point whose places all belong to a point decided in an earlier sessions report is left out. Stated in: `session-retro`, Steps 6 to 8.
+ - **plan**: the work of one roadmap entry, opened by `/plan` as a ledger folder whose `plan.md` holds the goal, the gate, the step list and the rulings. Stated in: `plan`, Steps. Also the roadmap file as the ordered build plan over a capability map. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **plan configuration**: `.agents/plan.yaml`, which holds a repository's project specifics and which every plan skill reads. `/ordo-init` writes and checks it. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps.
+ - **plan skills**: the skills that run plans from `.agents/plan.yaml` (`plan`, `spec`, `refute`, `land`, `ordo-help`, `plan-orchestration`), installed once per user and never per project. Stated in: `ordo-init`, the introduction; `repo-setup`, Rules.
+ - **plan-terms block**: the text of `docs/glossary.md` between the plan-terms markers, a copy of the `repo-setup` skill's `templates/plan-terms.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
++- **point, of a sessions report**: a keep point or a change point. Stated in: `session-retro`, Steps 6.
+ - **position line**: the line that opens the orchestrator's reports and the landing report: "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>." Stated in: `plan-orchestration`, "Reports"; `land`, Steps 11.
+ - **premise**: a claim a step's text makes about the tree (a count, a path, a name, a line number), checked by `/spec` with a grep or a probe. Stated in: `spec`, "What it reads" 5 and Steps 2.
+ - **preparation commit**: the commit `/spec` makes of the brief, the brief check's report and its own records before the worktree exists. Its hash is the base, and it is a resume point. Stated in: `spec`, Steps 6.
+@@ -87,6 +91,7 @@
+ - **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
+ - **sequence, the**: the command sequence for running a plan by hand that `/ordo-help` prints verbatim. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
++- **sessions report**: the report `/session-retro` writes at `<ledger_root>/retros/sessions-<YYYY-MM-DD>.md`, or `sessions-<YYYY-MM-DD>-2.md`, then `-3`, for a further run on the same day: the window and what it was resolved from, the folders read, the working folder, the points with their places and proposals, and the user's decision on each proposal. Stated in: `session-retro`, Steps 5 and `templates/sessions.md`.
+ - **shared path**: a file the briefs of two steps in flight both name, which the later step's dispatch entry names under `shared_paths:`. Stated in: `spec`, Steps 5; `plan-orchestration`, "Two steps in flight".
+ - **shared-rules block**: the text of `CLAUDE.md` between the shared-rules markers, a copy of the `repo-setup` skill's `templates/shared-rules.md` that `/repo-setup sync` keeps equal to it. Stated in: `repo-setup`, Steps 3 and "Steps / sync".
+ - **shrunk case**: the case of a diagnosis after each part of it has been cut one at a time, a cut that turned the red command green put back, so that removing any remaining part turns it green. Stated in: `diagnose`, Steps 6.
+@@ -104,6 +109,8 @@
+ - **verdict**: the reviewer's judgment of each item of the brief's "What to build" (holds, violated or not applicable) and of each case (met, partial, unmet or not verifiable). Stated in: `refute`, "The verdicts".
+ - **verification page**: the page `.agents/plan.yaml`'s `verification:` names, which defines the green check with the commands every step runs. `/plan` copies them into the verify list. Stated in: `plan`, "What it reads" 3 and Steps 4; `ordo-init`, Steps 3.
+ - **verify list**: the `verify:` key of the configuration block, the commands the `land` skill's `templates/checks.sh <state file>` runs. Stated in: `land`, "The landing script"; `plan`, Steps 4.
++- **window, of the transcripts**: the two times the reader takes, the start included and the end left out; for a plan, from the committer time of the commit that added its `plan.md` to one second after the latest commit that touches its folder, or to the time of the run while the plan is open. A run for one Claude Code session has none. Stated in: `session-retro`, Steps 1 and `templates/transcript_window.py`.
+ - **wip**: the commit `/land` makes in the step's worktree of everything the builder left, the ledger root left out. Stated in: `land`, Steps 3.
+ - **worker**: the configuration key `worker:`, `claude:<model>` of the builder. Stated in: `plan-orchestration`, "The two tiers, and the models"; `plan`, Steps 4. Also the builder itself, whose identity the dispatch entry records. Stated in: `spec`, Steps 9.
++- **working folder**: the folder `mktemp -d` makes under `$TMPDIR` for one run of `/session-retro`, holding the reader's outputs and error files and the long lines written folded, and removed at the run's end. Stated in: `session-retro`, Steps 3, 6 and 12.
+ - **worktree**: a step's git worktree at `<worktree_root>/<step>`, on a branch named after its folder, created from the base. It is the builder's only place to work. Stated in: `spec`, Steps 7; `land`, "Removing a step's worktree".
