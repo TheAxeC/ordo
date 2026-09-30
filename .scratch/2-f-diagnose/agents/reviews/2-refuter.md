@@ -133,3 +133,116 @@ none. The figure title and aria-label changes (what a screen reader announces) a
 
 Reviewer usage: tokens and time not visible to me (the completion notice carries them); about 33 tool uses.
 
+
+## Repair round 1, refuted
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-f-diagnose/orchestrator-state.md; echo "rc=$?"   (from the worktree root)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+rc=0
+
+The round's delta: diff 2-round-0.diff 2-round-1.diff (main checkout) -> changes only in skills/land/SKILL.md ("Use instead" row, "What it reads" 5, Steps 9 bullet deleted), skills/ordo-help/SKILL.md:80 and skills/plan-orchestration/SKILL.md:118.
+$ git diff 48551f8c6381a546dd7eefc82e7e69d80ef73c54 (worktree) against 2-round-1.diff -> equal except the 14 `git status --short` lines the stored file opens with; the worktree is the tree the round left.
+$ git status --short -> the same 13 modified paths and ?? .scratch/2-f-diagnose/agents/reviews/2-report.md; the worktree report and the main-checkout copy: cmp printed "same".
+
+The round's evidence commands, rerun:
+$ grep -rn "item [0-9] of .What it reads\|What it reads. [0-9]" skills/land skills/*/SKILL.md
+17 lines, none in skills/land; the lines are the 17 the report prints (the report's text says "19 lines"; no decision rests on the count, the decision rests on no hit citing `land`).
+$ grep -rn 'land`, "What it reads\|land` skill.s "What it reads\|land.s "What it reads' skills docs README.md utils
+(nothing) rc=1; no citation of `land`'s "What it reads" by number exists in any form.
+$ perl column scan of the ordo-help fence, lines 49-85
+  24 31
+   3 cont 31
+   (the two long /diagnose commands on lines of their own) -- matches the report's "24 31 / 3 31".
+$ python3 -c '...description lengths...' | sort -n | tail -4
+905 skills/diagnose/SKILL.md
+951 skills/refute/SKILL.md
+997 skills/roadmap/SKILL.md
+1022 skills/spec/SKILL.md
+$ git diff <base> -- skills | grep "^[-+]description\|^[-+]  version" -> only the ordo-help description (396 characters); no version changed.
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template   rc=0
+$ LC_ALL=C grep -n '[^ -~]' <the 13 changed files and the report>
+(nothing) rc=1
+
+Whole-diff checks rerun (unchanged paths since round 0):
+$ cp docs/figures/gen_figures.py $TMPDIR/r1figs.JCEl/; python3 and /usr/bin/python3 on that copy; cmp each SVG with the worktree's
+wrote .../pipeline.svg (28161 bytes)  wrote .../plan-loop.svg (30454 bytes)  rc=0 both runs; cmp printed nothing for either file (the worktree was not written)
+$ <title> of each SVG against README lines 54 and 58 (cmp) -> pipeline-eq, planloop-eq
+$ ruff check --select E,F,W,I,B,UP,SIM,N,PTH,ANN,BLE,S602 --line-length 100 --target-version py39 docs/figures/gen_figures.py -> All checks passed! rc=0
+$ ruff format --check --line-length 100 --target-version py39 docs/figures/gen_figures.py -> 1 file already formatted rc=0
+$ grep -rn "diagnosed by the orchestrator, read-only" skills -> (nothing) rc=1
+```
+
+### Verdicts
+
+Items of the brief's "What to build", over the whole diff since the base:
+
+- 1: holds. `plan-orchestration` "Only known fixes" (:101-106) names `/diagnose <entry> <step> <finding>`, the `round <n>` form, the scratch copy, the Stops row "A finding that is the user's", points "noted at landing" at `land` Steps 9, and keeps "A round never asks the builder to find a cause"; unchanged by the round.
+- 2: holds. Steps 9 bullet at :118 now reads "once the step is out of main and before `/spec` prepares it again", as round point 2 rules; "Use instead" row as dictated.
+- 3: holds, under the round's ruling. `land` Steps 9 :92 books each diagnosis record; the bullet "A red line fixed at landing whose cause was diagnosed names its record the same way." is gone (point 3; grep for it prints nothing); "Use instead" row :24 carries "and before `/spec` prepares it again" (point 2); "What it reads" 5 names `agents/reviews/<step>-diagnosis.md` "when it exists, read at Steps 9 for the booking", numbering 1 to 6 unchanged (point 4).
+- 4: holds. `refute` "Use instead" row as dictated.
+- 5: holds. `spec` :117 and "The brief check" 4 bullet as dictated.
+- 6: holds for the three places it names (:141, Steps 23, :232). See the Standards finding below on the same file's "Stops" row.
+- 7: holds. `ordo-help` :80 now reads "... from main's head. When its cause is not known, /diagnose <entry> <step> red line finds it once the step is out of main and before /spec prepares it again, and writes it in the step's Step 0." (points 1 and 2); the column scan gives 24 lines and 3 continuations at 31.
+- 8: holds. README unchanged since round 0; alt texts equal the SVG titles (cmp).
+- 9: holds. Both Pythons regenerate the committed bytes from a copy under `$TMPDIR`; ruff passes; renders were read in the first run and the SVGs are unchanged since.
+- 10: holds for **booking**, **Step 0** and the template's line 3 (sync ok); `docs/glossary.md` line 3 not applicable, as the first run found (it names no skill).
+
+Cases of the brief's "Cases":
+
+- "Only known fixes" names `/diagnose`, `round <n>`, the Stops row, keeps the builder rule, old sentence gone: met (grep prints nothing; section read).
+- `plan-orchestration` Steps 9, `land` Steps 9 and `spec` Steps 4 carry the red-line form, the booking and the cause in Step 0; `spec` "The brief check" 4 names the brief-check form: met (read at po:118, land:92, spec:117, spec:252).
+- The places that name the changed text still hold: met for the places the case names (diagnose :141, Steps 23, :232; **booking** and **Step 0** in both copies; line 3 of the template; both titles equal the alt texts by cmp).
+- The booking rule is written once: met (`land` :92 holds it; :38 lists the input; `spec` :117 and `diagnose` Steps 23 point).
+- The five "Use instead" tables have rows a reader can tell apart: met (each read; the `land` row now also names its order against `/spec`).
+- The `ordo-help` sequence holds the four places in the given form and every other line keeps column 31: met (scan above; :80 now two separate sentences).
+- README Quick start places, table row after `refute`, `diagnose` before `grill` in the copy loop: met (unchanged since round 0).
+- The figures regenerate with exit 0, both Pythons write the same bytes, the renders show the boxes: met (bytes rerun here; renders from the first run, SVGs unchanged since).
+- sync prints `ok: the plan-terms block equals the template`: met.
+- Each changed skill read against `docs/dev/skill-layout.md`: met. `land` "What it reads" now lists the diagnosis record Steps 9 reads, which closes the first run's Standards 2.
+
+### Findings
+
+Closures claimed by the round, checked: point 1 (Standards 1) closed, :80 read and scanned; point 2 (Standards 4) closed in all three places, and `spec` "Steps / A step taken back out of main" 4 and 5 (worktree, branches and dispatch entry removed) with `diagnose` "What it reads" 3 (refusal without an entry reading `landing: backed-out`) confirm the order the new text states; point 3 (Standards 3) closed by deleting a sentence that named a case no invocation produces, not by removing a check; point 4 (Standards 2) closed; point 5 (Spec 1) closed, the false premise is in the report's "Wrong or impossible in the brief"; point 6 reproduced except the stated count (17, not 19; no decision rests on it); point 7 present. No fix reaches beyond its point: the delta touches only the three files and five lines the round names.
+
+- Standards: `skills/diagnose/SKILL.md:212`, "Stops" row "No dispatch entry": "| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | The step prepared with `/spec`, then `/diagnose` again; ..."; what is wrong: the round wrote, in `land` "Use instead", `plan-orchestration` Steps 9 and `ordo-help` :80, that `/diagnose <entry> <step> red line` runs "once the step is out of main and before `/spec` prepares it again". This row, in a file the step changes, tells the reader whose red-line diagnosis was refused to prepare the step with `/spec` and then run `/diagnose` again. After `/spec` prepares a backed-out step, its dispatch entry is new and reads `landing: not-started` (`spec` "Steps / A step taken back out of main" 6), and the kept branch is gone (same section, 4), so the rerun refuses again by this same row. Change standard rule 19 (a change leaves no two statements that contradict each other; each rule the change writes is grepped by its key terms across the changed files); the round's own grep for "before /spec" did not reach `diagnose`'s Stops. Failure scenario: a user running a plan by hand runs `/diagnose <entry> <step> red line` while the landing is still at `cherry-picking`, or after `/spec` already prepared the step again; the refusal's row sends them to `/spec` and then `/diagnose` again, which refuses a second time, and the red line's cause is never diagnosed through the red-line form. Small and inside item 6 (`diagnose`'s pointers kept true) and rule 19: fixable at landing by giving the row's "What resumes it" a red-line clause, such as "for a red line, the step taken back out of main by `/land` and `/diagnose` run before `/spec` prepares it again; once `/spec` has prepared it, `/diagnose <symptom>` with the Step 0 failure as the symptom", the wording the orchestrator's to settle; verdict: none (item 6's named places hold).
+
+### Declined to judge
+
+- The first run's Spec 2 (the report's first reading of case 8 compared only `pipeline.svg`) was not among the round's points; its disposition under "Closed" is the orchestrator's, and the round neither closed nor reopened it.
+- `land` "What it reads" 5 now names three inputs in one item, against `docs/dev/skill-layout.md` "Sections, in order" row 4 ("one input per item"); the item already held two at the base, and round point 4 dictated adding the record to item 5 and keeping the numbering, so the shape is the orchestrator's ruling, not the builder's choice.
+- The renders were not redone: the SVG bytes equal what the first run rendered and read (cmp), so a new render would show the same image.
+- Decisions 4 and 5 of the brief (plan skills membership, versions) remain the user's calls, as the first run said.
+
+Reviewer usage: tokens and time not visible to me (the completion notice carries them); 27 tool uses.
+
+## Closed
+
+- First run, Spec 1 (the brief's premise that each figure's description equalled the README alt text): closed in repair round 1 point 5; the report's "Wrong or impossible in the brief" lists it, and the booking names it as a premise correction.
+- First run, Spec 2 (the report's first reading of case 8 compared only `pipeline.svg`): closed with no change; the brief check's own run at the base regenerated both SVGs byte for byte, and the reviewer's rerun on the built tree compared both.
+- First run, Standards 1 (`ordo-help` line 80 ran two sentences together): closed in round 1 point 1.
+- First run, Standards 2 (`land` "What it reads" did not list the diagnosis record): closed in round 1 point 4, and at landing the record moved to its own item 7, since `docs/dev/skill-layout.md` "Sections, in order" row 4 gives one input per item (the round's declined point).
+- First run, Standards 3 (`land` Steps 9 named a red line fixed at landing with a diagnosis record): closed in round 1 point 3, the bullet deleted.
+- First run, Standards 4 (`/diagnose ... red line` must run before `/spec` prepares the step again): closed in round 1 point 2 in `ordo-help`, `land` and `plan-orchestration`.
+- Round 1, Standards (`diagnose` Stops row "No dispatch entry" sent a refused red-line diagnosis to `/spec` then `/diagnose` again): fixed at landing; "What resumes it" now reads, for a red line, `/diagnose` again once `/land` has taken the step back out of main and before `/spec` prepares it again, and after that `/diagnose <symptom>` with the failure in Step 0 as the symptom. `grep -c` of that clause prints 0 on the pre-fix copy and 1 on main.
+- Round 1, the report's count of the point 6 grep (19 against the reviewer's 17): no decision rests on it (no hit cites `land`), so no change.

@@ -25,6 +25,7 @@ continue the plan                    resume from the state file, after a compact
 | The plan is not open yet | `/plan <entry>` |
 | Where the plan stands and which command comes next | `/ordo-help <entry>` |
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
+| A finding, a red line or a brief-check finding whose cause is not known, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line` or `brief check <n>` |
 | What the reviews keep finding across plans | `/plan-retro` |
 
 ## What it reads
@@ -97,11 +98,11 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **Before the resume.** Write `round: n` into the dispatch block.
      - Commit it by path with the round's brief and the session's own records since the last resume point. The commit is a resume point.
    - **Only known fixes.** Each ruling says what to change.
-     - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed by the orchestrator, read-only, before the round is sent.
+     - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>), which probes read-only on a scratch copy and leaves the step's worktree unchanged.
      - The round carries the found cause's fix.
      - A cause not found is not sent.
-     - Such a cause is noted at landing.
-     - Such a cause is raised to the user as an open item, by "Stops".
+     - Such a cause is noted at landing, as the `land` skill's Steps 9 says.
+     - Such a cause is raised to the user as an open item, the row "A finding that is the user's" of "Stops".
      - A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
    - **After each reply.** Read the whole delta.
@@ -114,6 +115,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - The step keeps its line and its tag.
      - It is worked again as that step, with no new ruling.
    - The failure goes to the user as an open item only when only the user can decide what to do, by "Stops".
+   - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
 10. Continue with step 2.
     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.

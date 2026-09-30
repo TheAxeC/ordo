@@ -3,7 +3,7 @@
 Writes, beside this file:
 
 - pipeline.svg: /repo-setup or /ordo-init, /roadmap add, /grill, /plan, every step, the closing,
-  with /plan-retro and /ordo-help beside them.
+  with /plan-retro, /diagnose and /ordo-help beside them.
 - plan-loop.svg: /spec, build it, /refute, close them, /refute over the round, /land, the return
   for a further round, the stops and refusals, and the /plan-orchestration band.
 
@@ -407,10 +407,10 @@ def pipeline_svg() -> str:
         "pipeline.svg",
         1040,
         side_top + 150 + 68,
-        "The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an "
-        "existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and "
-        "the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you "
-        "are asked.",
+        "The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or "
+        "/ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and "
+        "the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each "
+        "box lists the stops where you are asked, marked every run, only when or optional.",
     )
     draw_caption(canvas, 25, 30, "SET THE REPOSITORY UP, ONCE: ONE OF THE TWO", 600)
     setup = Box(
@@ -504,7 +504,7 @@ def pipeline_svg() -> str:
         canvas.path([*route, (target_x, top - 1)], ACCENT, 2, arrow=True)
 
     draw_caption(canvas, 25, side_top - 12, "AFTER PLANS HAVE RUN", 300)
-    draw_caption(canvas, 395, side_top - 12, "AT ANY POINT", 300)
+    draw_caption(canvas, 395, side_top - 12, "AT ANY POINT", 620)
     retro = Box(
         Rect(25, side_top, 330, 150),
         "/plan-retro",
@@ -513,21 +513,29 @@ def pipeline_svg() -> str:
         dashed=True,
     )
     help_box = Box(
-        Rect(395, side_top, 330, 150),
+        Rect(395, side_top, 300, 150),
         "/ordo-help",
         "Prints the sequence and, for a named plan, where it stands and the next command.",
         (Group(OPTIONAL), Group("", ("No stop.",))),
         dashed=True,
     )
+    diagnose_box = Box(
+        Rect(715, side_top, 300, 150),
+        "/diagnose",
+        "The cause of a defect, from a command red on it, before any fix.",
+        (Group(OPTIONAL), Group(ONLY_WHEN, ("The hypotheses", "The cause not found"))),
+        dashed=True,
+    )
     draw_box(canvas, retro)
     draw_box(canvas, help_box)
+    draw_box(canvas, diagnose_box)
     draw_legend(canvas, 25, side_top + 176, 990)
     return canvas.render()
 
 
 def plan_loop_svg() -> str:
     """The loop of one step, and the /plan-orchestration band that runs the row unattended."""
-    top, height, gap = 42, 262, 18
+    top, height, gap = 42, 290, 18
     bottom = top + height
     cards_y, cards_h = bottom + 76, 160
     band_y, band_h = cards_y + cards_h + 24, 216
@@ -535,10 +543,11 @@ def plan_loop_svg() -> str:
         "plan-loop.svg",
         1040,
         band_y + band_h + 81,
-        "The plan loop of one step: /spec, build it, /refute, close them, /refute over the round "
-        "or the orchestrator reading the delta, and /land, with a return for a further round, the "
-        "stops and refusals, the optional /ordo-help, and the optional /plan-orchestration band "
-        "that runs the row unattended. Each box marks where you are asked.",
+        "The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends "
+        "a finding whose cause is not known through /diagnose, /refute over the round, and /land, "
+        "with a return for a further round, a card for when a command stops, a card for when it "
+        "refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each "
+        "box lists the stops where you are asked, marked every run, only when or optional.",
     )
     caption = "FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW"
     draw_caption(canvas, 25, 30, caption, 900)
@@ -579,8 +588,17 @@ def plan_loop_svg() -> str:
         Box(
             areas[3],
             "close them",
-            "A repair round: fix the findings, rerun, rewrite the report.",
-            (Group(ONLY_WHEN, ("A contradiction of an ADR the brief asked for",)),),
+            "A repair round: fix the findings, rerun, rewrite the report. A finding whose cause is "
+            "not known goes through /diagnose first.",
+            (
+                Group(
+                    ONLY_WHEN,
+                    (
+                        "A contradiction of an ADR the brief asked for",
+                        "A cause not found, from /diagnose",
+                    ),
+                ),
+            ),
         ),
         Box(
             areas[4],

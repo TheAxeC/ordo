@@ -114,7 +114,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - Such a cause is raised to the user as an open item.
    - A user-visible choice (a public shape, a wire format, a config key, a vocabulary) is not taken.
      - It is a stop ("Stops").
-   - For a step taken back out of main, whose Step 0 in `plan.md` records the failure its landing met, the brief carries that failure.
+   - For a step taken back out of main, whose Step 0 in `plan.md` records the failure its landing met, the brief carries that failure and, when `/diagnose` wrote them into Step 0, the cause, the fix and the diagnosis record's path.
    - The ledger may hold the step's patch `agents/reviews/<step>-backed-out.patch` ("Steps / A step taken back out of main"). The brief then names its path and says Steps 7 applies it with `git apply --3way`.
    - The brief is committed at Steps 6, before the apply.
      - Its section "The patch as applied" is added after Steps 7, as Steps 7 says.
@@ -249,6 +249,7 @@ Steps 5 says when this runs.
    - When that file already holds the report of an earlier run of the step, one that stopped, the session appends the new report below it, whole, its title line naming the commit it ran on.
 4. The session closes each finding by a change to the brief, before the preparation commit.
    - Each change is named under the report's "Closed" heading, beside its finding.
+   - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
    - The check runs once per `/spec` run: the brief as changed goes to the builder without a second run.
    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
    - A contradiction the **ADRs** check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says. One found only in the brief's own wording is closed by a change to the brief that follows the ADR.

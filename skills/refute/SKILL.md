@@ -20,6 +20,7 @@ metadata:
 | When | Use |
 |---|---|
 | The step has no brief or worktree yet | `/spec <entry> <step>` |
+| A finding whose cause is not known | `/diagnose <entry> <step> <finding>` |
 | The findings are closed or raised as open items and the step is ready for main | `/land <entry> <step>` |
 | Every step of the plan, unattended, the reviews included | `/plan-orchestration <entry>` |
 | What the reviews keep finding across plans | `/plan-retro` |

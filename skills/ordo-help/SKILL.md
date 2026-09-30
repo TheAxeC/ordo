@@ -1,6 +1,6 @@
 ---
 name: ordo-help
-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
+description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
 metadata:
   version: "1.8.3"
 ---
@@ -22,6 +22,7 @@ metadata:
 |---|---|
 | The plan should run its steps unattended | `/plan-orchestration <entry>` |
 | No plan is open for the entry yet | `/plan <entry>` |
+| A defect whose cause is not known | `/diagnose <symptom>`, or inside a plan `/diagnose <entry> <step> <finding>` |
 | What the reviews keep finding across plans | `/plan-retro` |
 
 ## What it reads
@@ -55,8 +56,12 @@ metadata:
 then, for every step:
 
 /spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
+/diagnose <entry> <step> brief check <n>
+                              when a finding of the brief check has a cause not known: finds the cause on a scratch copy before the finding is closed in the brief
 "build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
+/diagnose <entry> <step> <finding>
+                              when a finding's cause is not known: finds it on a scratch copy before "close them", its fix and test then the round's ruling; round <n> Spec 1 names a finding of the run over repair round <n>
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report; a contradiction of an ADR the brief asked for is raised to you as an open item instead
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
                               repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
@@ -72,11 +77,12 @@ when a command stops:
 /refute stops                 the reviewer was served a model other than the configured one: it stops the reviewer, uses nothing it wrote, and shows the configured value, the served model and the Claude Code version; rule on it, then /refute again
 /refute refuses               it names the cause and leaves nothing, such as the configured effort that cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): install the effort agents as the plan skills are, or unset the variable, then /refute again in a new session
 /land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the step's dispatch block: supply it, then /land again
-/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head
+/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head. When its cause is not known, /diagnose <entry> <step> red line finds it once the step is out of main and before /spec prepares it again, and writes it in the step's Step 0.
 
 /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
 
 /plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
+/diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
 ```
 
 ## Stops

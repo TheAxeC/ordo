@@ -357,3 +357,103 @@ Each block is `diff` of the copy taken before the change (`<`) against the file 
 - Item 10 and Cases 3 say `docs/glossary.md`'s line 3 "(outside the block)" names skills to which `diagnose` is added. `sed -n 3p docs/glossary.md` prints "This page defines each term that the Ordo skills, the pages under `docs/dev/` and the README use in a sense of their own. The block below is `skills/repo-setup/templates/plan-terms.md` copied whole, ... Ordo's own terms follow the block." It names no skills, so no sentence there is false and nothing was added; adding a skill list to it would be a change no brief item asks for (rule 20). The template's line 3 was the line that named the skills, and it carries `diagnose` now. The orchestrator rules whether `docs/glossary.md` line 3 should change.
 - The brief's Case 4 grep (`grep -n "diagnosis record" skills/*/SKILL.md`) also matches `diagnose`'s own three uses of the term for the record it opens; those are not the booking rule. Nothing to change.
 - The ordo-help line numbers in the brief (:47-80 fence) held on main; README line numbers moved by 4 after the row and Quick start lines were added (alt texts now at 54 and 58).
+
+- The brief's premise "each figure's description equals the README alt text" (What is on the tree, the `gen_figures.py` bullet) was false at the base for both figures: the first reading of case 3 shows `grep -o '<title>[^<]*' docs/figures/*.svg` against `sed -n '50p;54p' README.md` differing for the pipeline and for the plan loop. Item 9 made both equal.
+
+## Repair round 1
+
+Everything of the round is done; all seven points.
+
+### Changed lines, old beside new
+
+Point 1, `skills/ordo-help/SKILL.md` line 80 (end of the line):
+- Old: `... /spec saves its work as a patch and prepares it again from main's head When its cause is not known, /diagnose <entry> <step> red line finds it once the step is out of main, and writes it in the step's Step 0.`
+- New: `... /spec saves its work as a patch and prepares it again from main's head. When its cause is not known, /diagnose <entry> <step> red line finds it once the step is out of main and before /spec prepares it again, and writes it in the step's Step 0.`
+
+Point 2, `skills/land/SKILL.md` line 24:
+- Old: `| A red line whose cause is not known, once the step is taken back out of main | `/diagnose <entry> <step> red line` |`
+- New: `| A red line whose cause is not known, once the step is taken back out of main and before `/spec` prepares it again | `/diagnose <entry> <step> red line` |`
+
+Point 2, `skills/plan-orchestration/SKILL.md` line 118:
+- Old: `   - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main, and its cause goes into the step's Step 0 for `/spec`.`
+- New: `   - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.`
+
+Point 3, `skills/land/SKILL.md` Steps 9, old line 93 deleted:
+- Old: `   - A red line fixed at landing whose cause was diagnosed names its record the same way.`
+- New: (the bullet is gone; the bullet before it, "It names each diagnosis record of the step ...", books every diagnosis record)
+
+Point 4, `skills/land/SKILL.md` "What it reads" item 5 (line 38), numbering of items 1 to 6 unchanged:
+- Old: `5. `agents/reviews/<step>-report.md` and the refuter report `agents/reviews/<step>-refuter.md`, as the Stops row "The step not ready" requires them.`
+- New: `5. `agents/reviews/<step>-report.md` and the refuter report `agents/reviews/<step>-refuter.md`, as the Stops row "The step not ready" requires them, and the step's diagnosis record `agents/reviews/<step>-diagnosis.md` when it exists, read at Steps 9 for the booking.`
+
+Point 5: the false premise is now listed in "Wrong or impossible in the brief" above.
+
+### Point 6 and the checks, verbatim
+
+Grep of point 6, `grep -rn "item [0-9] of .What it reads\|What it reads. [0-9]" skills/land skills/*/SKILL.md`: 19 lines, none in `skills/land`. The `land` skill's "What it reads" is cited nowhere by number; every hit cites the `spec`, `diagnose`, `plan`, `plan-retro`, `grill`, `ordo-init`, `roadmap` or `refute` skill's own or `spec`'s items. The change adds text to `land` item 5 and renumbers nothing, so no reference is made false. Lines printed:
+
+```
+skills/diagnose/SKILL.md:34:2. The rules file and the standards `.agents/plan.yaml` names, `docs/glossary.md` and the ADRs in force as the `spec` skill's "What 
+skills/diagnose/SKILL.md:37:   - `<entry>` resolves to its folder as the `spec` skill's "What it reads" 2 says.
+skills/diagnose/SKILL.md:53:1. Inside a plan, refuse when "What it reads" 3 or 5 finds an input missing.
+skills/diagnose/SKILL.md:61:   - Done when the record exists and its Symptom section holds the symptom as "What it reads" 1 gives it, word for word.
+skills/ordo-init/SKILL.md:86:    - The commit is made only when the repository's commit rule ("What it reads" 3) allows it.
+skills/grill/SKILL.md:42:4. The ADRs in force in the folder `adr` names, as the `spec` skill's "What it reads" 5 says: which records are in force, and what each
+skills/grill/SKILL.md:59:   - Every refusal of "What it reads" 1 and 2 is made here, before anything is written.
+skills/grill/SKILL.md:61:2. Read what "What it reads" 3 to 9 lists.
+skills/plan-retro/SKILL.md:37:1. Read each report "What it reads" 2 lists, run by run: the first review, under its Spec, Proof, Standards and Behaviour headings
+skills/refute/SKILL.md:41:   - Then the ADRs the brief names under "What is on the tree", and every other `NNNN-*.md` record in the folder the configuration blo
+skills/plan/SKILL.md:41:5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record for its part in force, 
+skills/plan/SKILL.md:52:   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) is copied into the Rulings section as it stands, in its order, i
+skills/roadmap/SKILL.md:86:   - The lines are written with `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command
+skills/spec/SKILL.md:72:   - Then, before any premise check, read the step's line and the Rulings section of `plan.md`, as "What it reads" 4 says.
+skills/spec/SKILL.md:85:   - Read the ADRs the step touches, as "What it reads" 5 says. The brief names each under "What is on the tree", with its number, its t
+skills/spec/SKILL.md:216:   - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it: `<L>` for a line `- Open item <L> (<date>)
+skills/spec/SKILL.md:245:   - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is rea
+```
+
+Column scan of the `ordo-help` fence, `perl` over lines 48-90 (lines whose command fits the field) and an `awk` over the fence for continuation lines:
+
+```
+  24 31
+   3 31
+```
+
+The first line is the 24 command lines whose text starts at column 31; the second is the 3 continuation lines, each at column 31 (the `perl` scan prints `count column`).
+
+Descriptions by the layout's command, longest three: `951 skills/refute/SKILL.md`, `997 skills/roadmap/SKILL.md`, `1022 skills/spec/SKILL.md`; `ordo-help` 396, none over 1,024 (no description changed this round).
+
+`python3 skills/repo-setup/templates/sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template`.
+
+`LC_ALL=C grep -n '[^ -~]'` over `skills/ordo-help/SKILL.md skills/land/SKILL.md skills/plan-orchestration/SKILL.md`: printed nothing (rc=1).
+
+Verify list through `checks.sh`, verbatim:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+rc=0
+```
+
+### Judgment calls
+
+- Point 4: the diagnosis record is added to item 5 as a clause "when it exists", since a step with no diagnosis has no such file; the numbering is unchanged.
+- Point 2: "before `/spec` prepares it again" is written in the three places the reviewer named and in the same form each; the `ordo-help` line keeps its one-line form with no wrapped continuation.

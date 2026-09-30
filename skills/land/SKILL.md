@@ -21,6 +21,7 @@ metadata:
 |---|---|
 | The step has not been reviewed yet | `/refute <entry> <step>` |
 | Every step of the plan, unattended, the landings included | `/plan-orchestration <entry>` |
+| A red line whose cause is not known, once the step is taken back out of main and before `/spec` prepares it again | `/diagnose <entry> <step> red line` |
 | Where the plan stands and which command comes next | `/ordo-help <entry>` |
 
 ## What it reads
@@ -38,6 +39,7 @@ metadata:
 6. Main, in the state the Stops row "Main not clean" requires.
    - The user's unrelated changes are listed by path.
      - They are left alone.
+7. The step's diagnosis record `agents/reviews/<step>-diagnosis.md`, when it exists, for the booking of Steps 9.
 
 ## Steps
 
@@ -88,6 +90,7 @@ metadata:
    - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
    - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`.
    - It states whether the builder's first report passed its bar, and the fixes at landing.
+   - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as.
    - Tick the step.
 10. Read the step's `worktree` from its dispatch entry, for Steps 13.
     - Then rewrite the state file: the step's dispatch entry removed, the position line, the open items as they stand.

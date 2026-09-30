@@ -4,7 +4,7 @@ Ordo is a set of agent skills for Claude Code that run a multi-step change as a 
 
 One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
 
-Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, and `plan-retro` turns what the reviewers keep finding into rules.
+Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, `diagnose` finds the cause of a defect, inside a plan's loop or on its own, and `plan-retro` turns what the reviewers keep finding into rules.
 
 ## The skills
 
@@ -17,6 +17,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
 | `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
 | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
+| `diagnose` | Finds the cause of a defect before anything is changed. It runs one command red on the exact symptom, shrinks the case, ranks three to five hypotheses, makes one change per probe, and writes the fix with its test and a diagnosis record. Inside a plan it probes on a scratch copy and leaves the step's worktree unchanged; run by a person it waits for the reply to the hypotheses |
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
 | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
 | `ordo-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
@@ -36,22 +37,25 @@ for every step:
 /spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
 "build it"                    the session writes the code in the worktree, runs the checks, writes the report
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
+/diagnose <entry> <step> <finding>
+                              optional: when a finding's cause is not known, finds it before "close them"
 "close them"                  a repair round, up to repair_rounds times
 /land <entry> <step>          onto main, checks on main, the booking, the commit
 
 /plan-orchestration <entry>   instead of the step lines: runs them for every step unattended
 /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
+/diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
 ```
 
 `/ordo-help` prints the full sequence, including what to do when a command stops.
 
 The pipeline below marks where each skill of a roadmap entry asks you. A stop marked "every run" waits on you each time, and one marked "only when" waits on you in a named case. You may skip a skill marked "optional".
 
-![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
+![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
 
 The loop of one step carries the same marks, with the band that runs the loop unattended below it.
 
-![The loop of one step as boxes in order: /spec, build it, /refute, close them, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/plan-loop.svg)
+![The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/plan-loop.svg)
 
 ## Requirements
 
@@ -91,7 +95,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
+    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
     agents=$(dirname "$dir")/agents

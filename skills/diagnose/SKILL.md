@@ -138,7 +138,7 @@ metadata:
 15. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
     - The cause is not found when the second list is falsified too, when no probe can separate the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose.
     - For a cause not found, the record says so in its Cause section, with every probe or, when no red command could be built, a pointer to its "No red command" section, which lists every way tried.
-    - Inside a plan, a cause not found is raised to the user as an open item, as `plan-orchestration`'s "Only known fixes" says.
+    - Inside a plan, a cause not found is raised to the user as an open item, the one `plan-orchestration`'s "Stops" row "A finding that is the user's" leaves.
     - That open item quotes the hypotheses and every probe, or every way tried from the record's "No red command" section, and names the record's path.
     - A cause not found is never sent to the builder.
     - With no person present outside a plan, a cause not found is stated in the session's final message with the record's path.
@@ -178,7 +178,7 @@ metadata:
 23. Write where the cause is kept.
     - Outside a plan, the session drafts the last bullet of the commit message, which states the cause, the red command and the fix's test, and names "No test reaches it" with its reason when the record holds one.
     - Outside a plan, the session commits only as the repository's commit rule allows, and otherwise shows the bullet to the user.
-    - Inside a plan, the orchestrator's booking at the step's landing names the record's path and states its cause, or states that the cause was not found and names the open item it was raised as, as `plan-orchestration`'s "Only known fixes" says a cause is noted at landing.
+    - Inside a plan, the orchestrator books the record at the step's landing, as the `land` skill's Steps 9 says.
     - Done when the bullet is drafted and shown or committed, or, inside a plan, when the record's path and the cause are written for the landing's booking.
 24. Outside a plan, run by a person, remove the copy of the record in `$TMPDIR` once it has been shown.
     - Done when the copy is gone.
@@ -209,7 +209,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 | Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause; with no person present, Steps 15 gives it as a cause not found | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
 | The cause not found | One of the conditions Steps 15 gives | The record with every probe, or every way tried from its "No red command" section, and inside a plan the open item | Inside a plan, the user's ruling on the open item; run by a person, the user's next direction |
 | No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
-| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | The step prepared with `/spec`, then `/diagnose` again; for a step already landed, `/diagnose <symptom>` with the finding's failure scenario as the symptom |
+| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | For a finding, the step prepared with `/spec`, then `/diagnose` again; for a red line, `/diagnose` again once `/land` has taken the step back out of main, before `/spec` prepares it again, and after that `/diagnose <symptom>` with the failure in the step's Step 0 as the symptom; for a step already landed, `/diagnose <symptom>` with the finding's failure scenario as the symptom |
 | No report | Inside a plan, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
 | No finding | Inside a plan, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |
 

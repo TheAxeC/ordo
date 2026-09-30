@@ -38,21 +38,7 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2f-2
-  base: 48551f8c6381a546dd7eefc82e7e69d80ef73c54
-  launched: 2026-09-30 09:12
-  session_id: a92dbbab7da8946e3 (claude-sonnet-5-5 at the launch, from its transcript)
-  report: .scratch/2-f-diagnose/agents/reviews/2-report.md
-  builder_usage: round 0 156026 tokens, 35 tool uses, 328 s ($1.05-2.58)
-  brief_check: .scratch/2-f-diagnose/agents/reviews/2-brief-check.md (claude-opus-5-5; 163352 tokens, 49 tool uses, 420 s, $1.78-4.81)
-  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2-refuter.md (claude-opus-5-5; 188649 tokens, 42 tool uses, 448 s, $1.83-5.09)
-  landing: not-started
-  round: 1
-  round_1_sent_at: the tree of 2-round-0.diff
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -86,6 +72,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Step 1 of 5, the `diagnose` skill, landed unticked, its reading pending (`agents/reviews/1-landing.md`).
-- Next step: 2, the wiring, widened to `skills/land/SKILL.md` Steps 9 by the ruling "Step 1, where a diagnosis is booked". It is prepared after 2.G step 1 lands, since that step touches the rules file and runs alone.
+- 2026-09-30. Step 2 of 5, the skill wired in, landed and ticked (`agents/reviews/2-landing.md`); step 1 is landed unticked, its reading pending.
+- Next step: 3, the real run of `/diagnose` on the `utils/pin.sh` defect put back on a scratch copy of the tree.
 - Open on Axel's side: the open items above.

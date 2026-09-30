@@ -1,0 +1,647 @@
+ M README.md
+ M docs/figures/gen_figures.py
+ M docs/figures/pipeline.svg
+ M docs/figures/plan-loop.svg
+ M docs/glossary.md
+ M skills/diagnose/SKILL.md
+ M skills/land/SKILL.md
+ M skills/ordo-help/SKILL.md
+ M skills/plan-orchestration/SKILL.md
+ M skills/refute/SKILL.md
+ M skills/repo-setup/templates/docs/glossary.md
+ M skills/repo-setup/templates/plan-terms.md
+ M skills/spec/SKILL.md
+?? .scratch/2-f-diagnose/agents/reviews/2-report.md
+diff --git a/README.md b/README.md
+index 26e5233..a6e08c8 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,7 @@ Ordo is a set of agent skills for Claude Code that run a multi-step change as a
+ 
+ One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
+ 
+-Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, and `plan-retro` turns what the reviewers keep finding into rules.
++Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, `diagnose` finds the cause of a defect, inside a plan's loop or on its own, and `plan-retro` turns what the reviewers keep finding into rules.
+ 
+ ## The skills
+ 
+@@ -17,6 +17,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
+ | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
+ | `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
+ | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
++| `diagnose` | Finds the cause of a defect before anything is changed. It runs one command red on the exact symptom, shrinks the case, ranks three to five hypotheses, makes one change per probe, and writes the fix with its test and a diagnosis record. Inside a plan it probes on a scratch copy and leaves the step's worktree unchanged; run by a person it waits for the reply to the hypotheses |
+ | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
+ | `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user |
+ | `ordo-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
+@@ -36,22 +37,25 @@ for every step:
+ /spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
+ "build it"                    the session writes the code in the worktree, runs the checks, writes the report
+ /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
++/diagnose <entry> <step> <finding>
++                              optional: when a finding's cause is not known, finds it before "close them"
+ "close them"                  a repair round, up to repair_rounds times
+ /land <entry> <step>          onto main, checks on main, the booking, the commit
+ 
+ /plan-orchestration <entry>   instead of the step lines: runs them for every step unattended
+ /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
++/diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
+ ```
+ 
+ `/ordo-help` prints the full sequence, including what to do when a command stops.
+ 
+ The pipeline below marks where each skill of a roadmap entry asks you. A stop marked "every run" waits on you each time, and one marked "only when" waits on you in a named case. You may skip a skill marked "optional".
+ 
+-![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
++![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
+ 
+ The loop of one step carries the same marks, with the band that runs the loop unattended below it.
+ 
+-![The loop of one step as boxes in order: /spec, build it, /refute, close them, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/plan-loop.svg)
++![The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/plan-loop.svg)
+ 
+ ## Requirements
+ 
+@@ -91,7 +95,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
+ rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
+ for dir in ~/.claude/skills; do
+     mkdir -p "$dir"
+-    for skill in grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
++    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
+         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
+     done
+     agents=$(dirname "$dir")/agents
+diff --git a/docs/figures/gen_figures.py b/docs/figures/gen_figures.py
+index d4cc7d3..2c6fb40 100644
+--- a/docs/figures/gen_figures.py
++++ b/docs/figures/gen_figures.py
+@@ -3,7 +3,7 @@
+ Writes, beside this file:
+ 
+ - pipeline.svg: /repo-setup or /ordo-init, /roadmap add, /grill, /plan, every step, the closing,
+-  with /plan-retro and /ordo-help beside them.
++  with /plan-retro, /diagnose and /ordo-help beside them.
+ - plan-loop.svg: /spec, build it, /refute, close them, /refute over the round, /land, the return
+   for a further round, the stops and refusals, and the /plan-orchestration band.
+ 
+@@ -407,10 +407,10 @@ def pipeline_svg() -> str:
+         "pipeline.svg",
+         1040,
+         side_top + 150 + 68,
+-        "The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an "
+-        "existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and "
+-        "the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you "
+-        "are asked.",
++        "The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or "
++        "/ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and "
++        "the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each "
++        "box lists the stops where you are asked, marked every run, only when or optional.",
+     )
+     draw_caption(canvas, 25, 30, "SET THE REPOSITORY UP, ONCE: ONE OF THE TWO", 600)
+     setup = Box(
+@@ -504,7 +504,7 @@ def pipeline_svg() -> str:
+         canvas.path([*route, (target_x, top - 1)], ACCENT, 2, arrow=True)
+ 
+     draw_caption(canvas, 25, side_top - 12, "AFTER PLANS HAVE RUN", 300)
+-    draw_caption(canvas, 395, side_top - 12, "AT ANY POINT", 300)
++    draw_caption(canvas, 395, side_top - 12, "AT ANY POINT", 620)
+     retro = Box(
+         Rect(25, side_top, 330, 150),
+         "/plan-retro",
+@@ -513,21 +513,29 @@ def pipeline_svg() -> str:
+         dashed=True,
+     )
+     help_box = Box(
+-        Rect(395, side_top, 330, 150),
++        Rect(395, side_top, 300, 150),
+         "/ordo-help",
+         "Prints the sequence and, for a named plan, where it stands and the next command.",
+         (Group(OPTIONAL), Group("", ("No stop.",))),
+         dashed=True,
+     )
++    diagnose_box = Box(
++        Rect(715, side_top, 300, 150),
++        "/diagnose",
++        "The cause of a defect, from a command red on it, before any fix.",
++        (Group(OPTIONAL), Group(ONLY_WHEN, ("The hypotheses", "The cause not found"))),
++        dashed=True,
++    )
+     draw_box(canvas, retro)
+     draw_box(canvas, help_box)
++    draw_box(canvas, diagnose_box)
+     draw_legend(canvas, 25, side_top + 176, 990)
+     return canvas.render()
+ 
+ 
+ def plan_loop_svg() -> str:
+     """The loop of one step, and the /plan-orchestration band that runs the row unattended."""
+-    top, height, gap = 42, 262, 18
++    top, height, gap = 42, 290, 18
+     bottom = top + height
+     cards_y, cards_h = bottom + 76, 160
+     band_y, band_h = cards_y + cards_h + 24, 216
+@@ -535,10 +543,11 @@ def plan_loop_svg() -> str:
+         "plan-loop.svg",
+         1040,
+         band_y + band_h + 81,
+-        "The plan loop of one step: /spec, build it, /refute, close them, /refute over the round "
+-        "or the orchestrator reading the delta, and /land, with a return for a further round, the "
+-        "stops and refusals, the optional /ordo-help, and the optional /plan-orchestration band "
+-        "that runs the row unattended. Each box marks where you are asked.",
++        "The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends "
++        "a finding whose cause is not known through /diagnose, /refute over the round, and /land, "
++        "with a return for a further round, a card for when a command stops, a card for when it "
++        "refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each "
++        "box lists the stops where you are asked, marked every run, only when or optional.",
+     )
+     caption = "FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW"
+     draw_caption(canvas, 25, 30, caption, 900)
+@@ -579,8 +588,17 @@ def plan_loop_svg() -> str:
+         Box(
+             areas[3],
+             "close them",
+-            "A repair round: fix the findings, rerun, rewrite the report.",
+-            (Group(ONLY_WHEN, ("A contradiction of an ADR the brief asked for",)),),
++            "A repair round: fix the findings, rerun, rewrite the report. A finding whose cause is "
++            "not known goes through /diagnose first.",
++            (
++                Group(
++                    ONLY_WHEN,
++                    (
++                        "A contradiction of an ADR the brief asked for",
++                        "A cause not found, from /diagnose",
++                    ),
++                ),
++            ),
+         ),
+         Box(
+             areas[4],
+diff --git a/docs/figures/pipeline.svg b/docs/figures/pipeline.svg
+index 346d60d..af69581 100644
+--- a/docs/figures/pipeline.svg
++++ b/docs/figures/pipeline.svg
+@@ -1,5 +1,5 @@
+-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 906" width="1040" height="906" role="img" aria-label="The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you are asked.">
+-<title>The pipeline of one roadmap entry: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step of the plan loop, and the closing; /plan-retro and /ordo-help are optional beside it. Each box marks where you are asked.</title>
++<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 906" width="1040" height="906" role="img" aria-label="The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.">
++<title>The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.</title>
+ <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+ <rect x="0" y="0" width="1040" height="906" rx="10" fill="#f8fafc" stroke="#64748b"/>
+ <text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">SET THE REPOSITORY UP, ONCE: ONE OF THE TWO</text>
+@@ -123,14 +123,26 @@
+ <rect x="35" y="782" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+ <text x="72.6" y="794" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+ <text x="35" y="814" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The proposals</text>
+-<rect x="395" y="688" width="330" height="150" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+-<line x1="403" y1="688" x2="717" y2="688" stroke="#4f46e5" stroke-width="3"/>
++<rect x="395" y="688" width="300" height="150" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="403" y1="688" x2="687" y2="688" stroke="#4f46e5" stroke-width="3"/>
+ <text x="405" y="712" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/ordo-help</text>
+-<text x="405" y="732" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Prints the sequence and, for a named plan,</text>
+-<text x="405" y="747" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">where it stands and the next command.</text>
+-<rect x="405" y="756" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+-<text x="439.2" y="768" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+-<text x="405" y="794" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop.</text>
++<text x="405" y="732" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Prints the sequence and, for a named</text>
++<text x="405" y="747" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">plan, where it stands and the next</text>
++<text x="405" y="762" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">command.</text>
++<rect x="405" y="771" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="439.2" y="783" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<text x="405" y="809" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop.</text>
++<rect x="715" y="688" width="300" height="150" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="723" y1="688" x2="1007" y2="688" stroke="#4f46e5" stroke-width="3"/>
++<text x="725" y="712" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/diagnose</text>
++<text x="725" y="732" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The cause of a defect, from a command</text>
++<text x="725" y="747" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">red on it, before any fix.</text>
++<rect x="725" y="756" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="759.2" y="768" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<rect x="725" y="782" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="762.6" y="794" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="725" y="814" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The hypotheses</text>
++<text x="725" y="828" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The cause not found</text>
+ <text x="25" y="864" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
+ <rect x="25" y="878" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+ <text x="62.6" y="890" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+diff --git a/docs/figures/plan-loop.svg b/docs/figures/plan-loop.svg
+index 8679281..813d282 100644
+--- a/docs/figures/plan-loop.svg
++++ b/docs/figures/plan-loop.svg
+@@ -1,9 +1,9 @@
+-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 861" width="1040" height="861" role="img" aria-label="The plan loop of one step: /spec, build it, /refute, close them, /refute over the round or the orchestrator reading the delta, and /land, with a return for a further round, the stops and refusals, the optional /ordo-help, and the optional /plan-orchestration band that runs the row unattended. Each box marks where you are asked.">
+-<title>The plan loop of one step: /spec, build it, /refute, close them, /refute over the round or the orchestrator reading the delta, and /land, with a return for a further round, the stops and refusals, the optional /ordo-help, and the optional /plan-orchestration band that runs the row unattended. Each box marks where you are asked.</title>
++<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 889" width="1040" height="889" role="img" aria-label="The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.">
++<title>The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.</title>
+ <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+-<rect x="0" y="0" width="1040" height="861" rx="10" fill="#f8fafc" stroke="#64748b"/>
++<rect x="0" y="0" width="1040" height="889" rx="10" fill="#f8fafc" stroke="#64748b"/>
+ <text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW</text>
+-<rect x="25" y="42" width="190" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<rect x="25" y="42" width="190" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+ <line x1="33" y1="42" x2="207" y2="42" stroke="#4f46e5" stroke-width="3"/>
+ <text x="35" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/spec</text>
+ <text x="35" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Writes the brief, has a</text>
+@@ -21,7 +21,7 @@
+ <text x="43" y="256" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">the brief cannot absorb</text>
+ <text x="35" y="270" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the</text>
+ <text x="43" y="284" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">configured one</text>
+-<rect x="233" y="42" width="110" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<rect x="233" y="42" width="110" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+ <line x1="241" y1="42" x2="335" y2="42" stroke="#4f46e5" stroke-width="3"/>
+ <text x="243" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">build it</text>
+ <text x="243" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The step is</text>
+@@ -32,7 +32,7 @@
+ <text x="243" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">written.</text>
+ <text x="243" y="182" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop of</text>
+ <text x="243" y="196" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">its own.</text>
+-<rect x="361" y="42" width="130" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<rect x="361" y="42" width="130" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+ <line x1="369" y1="42" x2="483" y2="42" stroke="#4f46e5" stroke-width="3"/>
+ <text x="371" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/refute</text>
+ <text x="371" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">A fresh</text>
+@@ -47,19 +47,27 @@
+ <text x="371" y="217" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other</text>
+ <text x="379" y="231" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">than the</text>
+ <text x="379" y="245" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">configured one</text>
+-<rect x="509" y="42" width="140" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<rect x="509" y="42" width="140" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+ <line x1="517" y1="42" x2="641" y2="42" stroke="#4f46e5" stroke-width="3"/>
+ <text x="519" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">close them</text>
+ <text x="519" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">A repair round:</text>
+ <text x="519" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">fix the findings,</text>
+ <text x="519" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">rerun, rewrite</text>
+-<text x="519" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the report.</text>
+-<rect x="519" y="140" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="556.6" y="152" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+-<text x="519" y="172" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A contradiction</text>
+-<text x="527" y="186" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">of an ADR the</text>
+-<text x="527" y="200" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">brief asked for</text>
+-<rect x="667" y="42" width="165" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<text x="519" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the report. A</text>
++<text x="519" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">finding whose</text>
++<text x="519" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">cause is not</text>
++<text x="519" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">known goes</text>
++<text x="519" y="191" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">through /diagnose</text>
++<text x="519" y="206" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">first.</text>
++<rect x="519" y="215" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="556.6" y="227" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="519" y="247" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A contradiction</text>
++<text x="527" y="261" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">of an ADR the</text>
++<text x="527" y="275" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">brief asked for</text>
++<text x="519" y="289" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A cause not</text>
++<text x="527" y="303" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">found, from</text>
++<text x="527" y="317" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">/diagnose</text>
++<rect x="667" y="42" width="165" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+ <line x1="675" y1="42" x2="824" y2="42" stroke="#4f46e5" stroke-width="3"/>
+ <text x="677" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/refute</text>
+ <text x="677" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Over the round, when</text>
+@@ -74,7 +82,7 @@
+ <text x="685" y="216" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">the configured one</text>
+ <text x="677" y="230" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A finding left</text>
+ <text x="685" y="244" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">after the last round</text>
+-<rect x="850" y="42" width="165" height="262" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<rect x="850" y="42" width="165" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+ <line x1="858" y1="42" x2="1007" y2="42" stroke="#4f46e5" stroke-width="3"/>
+ <text x="860" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/land</text>
+ <text x="860" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Onto main, the checks</text>
+@@ -93,62 +101,62 @@
+ <line x1="491" y1="62" x2="508" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+ <line x1="649" y1="62" x2="666" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+ <line x1="832" y1="62" x2="849" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+-<path d="M749.5,304 L749.5,328 L579,328 L579,305" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+-<text x="587" y="343" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">a further round, within repair_rounds</text>
+-<text x="25" y="368" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">WHEN ANY COMMAND OF THE ROW HALTS</text>
+-<text x="725" y="368" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">AT ANY POINT</text>
+-<rect x="25" y="380" width="340" height="160" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+-<line x1="33" y1="380" x2="357" y2="380" stroke="#b45309" stroke-width="3"/>
+-<text x="35" y="404" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it stops</text>
+-<text x="35" y="424" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command waits on a decision or an action</text>
+-<text x="35" y="439" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">of yours, named in its Stops table. A decision</text>
+-<text x="35" y="454" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">leaves an open item with its options and one</text>
+-<text x="35" y="469" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">recommendation; you answer Ruled: &lt;the choice&gt;</text>
+-<text x="35" y="484" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">as plain text, or remove the lock or the path</text>
+-<text x="35" y="499" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">it names, and run the command again.</text>
+-<rect x="375" y="380" width="340" height="160" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+-<line x1="383" y1="380" x2="707" y2="380" stroke="#b45309" stroke-width="3"/>
+-<text x="385" y="404" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it refuses</text>
+-<text x="385" y="424" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command names its cause and changes</text>
+-<text x="385" y="439" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">nothing more, such as a required key missing,</text>
+-<text x="385" y="454" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">no ledger folder, the step not ready or main</text>
+-<text x="385" y="469" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">not clean. A refusal carries no mark: fix the</text>
+-<text x="385" y="484" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">cause and run the command again.</text>
+-<rect x="725" y="380" width="290" height="160" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+-<line x1="733" y1="380" x2="1007" y2="380" stroke="#4f46e5" stroke-width="3"/>
+-<text x="735" y="404" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/ordo-help &lt;entry&gt;</text>
+-<text x="735" y="424" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Prints where the plan stands and the</text>
+-<text x="735" y="439" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">next command to type.</text>
+-<rect x="735" y="448" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+-<text x="769.2" y="460" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+-<text x="735" y="486" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop.</text>
+-<rect x="25" y="564" width="990" height="216" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+-<line x1="33" y1="564" x2="1007" y2="564" stroke="#4f46e5" stroke-width="3"/>
+-<text x="35" y="588" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/plan-orchestration &lt;entry&gt;</text>
+-<text x="35" y="608" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Runs the row above for every step, unattended, with the executor the plan names at build it and close them; you may run the row by hand</text>
+-<text x="35" y="623" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">instead. Only the stops marked in these two figures, and the proposals of its recurring-findings pass, reach you; the rest of the row runs</text>
+-<text x="35" y="638" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">without asking.</text>
+-<rect x="35" y="647" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+-<text x="69.2" y="659" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+-<rect x="35" y="673" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="72.6" y="685" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+-<text x="35" y="705" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The roadmap diff, at the closing</text>
+-<rect x="35" y="713" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="72.6" y="725" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+-<text x="35" y="745" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A shape nobody named</text>
+-<text x="358.3" y="745" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A wrong premise</text>
+-<text x="681.7" y="745" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A red check</text>
+-<text x="35" y="759" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A rule clash</text>
+-<text x="358.3" y="759" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A finding that is the user's</text>
+-<text x="681.7" y="759" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the configured one</text>
+-<text x="25" y="804" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
+-<rect x="25" y="818" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="62.6" y="830" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+-<text x="108.2" y="830" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
+-<rect x="355" y="818" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="392.6" y="830" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+-<text x="438.2" y="830" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
+-<rect x="685" y="818" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+-<text x="719.2" y="830" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+-<text x="761.4" y="830" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
++<path d="M749.5,332 L749.5,356 L579,356 L579,333" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
++<text x="587" y="371" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">a further round, within repair_rounds</text>
++<text x="25" y="396" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">WHEN ANY COMMAND OF THE ROW HALTS</text>
++<text x="725" y="396" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">AT ANY POINT</text>
++<rect x="25" y="408" width="340" height="160" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="33" y1="408" x2="357" y2="408" stroke="#b45309" stroke-width="3"/>
++<text x="35" y="432" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it stops</text>
++<text x="35" y="452" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command waits on a decision or an action</text>
++<text x="35" y="467" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">of yours, named in its Stops table. A decision</text>
++<text x="35" y="482" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">leaves an open item with its options and one</text>
++<text x="35" y="497" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">recommendation; you answer Ruled: &lt;the choice&gt;</text>
++<text x="35" y="512" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">as plain text, or remove the lock or the path</text>
++<text x="35" y="527" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">it names, and run the command again.</text>
++<rect x="375" y="408" width="340" height="160" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
++<line x1="383" y1="408" x2="707" y2="408" stroke="#b45309" stroke-width="3"/>
++<text x="385" y="432" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it refuses</text>
++<text x="385" y="452" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command names its cause and changes</text>
++<text x="385" y="467" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">nothing more, such as a required key missing,</text>
++<text x="385" y="482" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">no ledger folder, the step not ready or main</text>
++<text x="385" y="497" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">not clean. A refusal carries no mark: fix the</text>
++<text x="385" y="512" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">cause and run the command again.</text>
++<rect x="725" y="408" width="290" height="160" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="733" y1="408" x2="1007" y2="408" stroke="#4f46e5" stroke-width="3"/>
++<text x="735" y="432" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/ordo-help &lt;entry&gt;</text>
++<text x="735" y="452" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Prints where the plan stands and the</text>
++<text x="735" y="467" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">next command to type.</text>
++<rect x="735" y="476" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="769.2" y="488" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<text x="735" y="514" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop.</text>
++<rect x="25" y="592" width="990" height="216" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<line x1="33" y1="592" x2="1007" y2="592" stroke="#4f46e5" stroke-width="3"/>
++<text x="35" y="616" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/plan-orchestration &lt;entry&gt;</text>
++<text x="35" y="636" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Runs the row above for every step, unattended, with the executor the plan names at build it and close them; you may run the row by hand</text>
++<text x="35" y="651" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">instead. Only the stops marked in these two figures, and the proposals of its recurring-findings pass, reach you; the rest of the row runs</text>
++<text x="35" y="666" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">without asking.</text>
++<rect x="35" y="675" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="69.2" y="687" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<rect x="35" y="701" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="713" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="35" y="733" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The roadmap diff, at the closing</text>
++<rect x="35" y="741" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="753" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="35" y="773" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A shape nobody named</text>
++<text x="358.3" y="773" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A wrong premise</text>
++<text x="681.7" y="773" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A red check</text>
++<text x="35" y="787" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A rule clash</text>
++<text x="358.3" y="787" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A finding that is the user's</text>
++<text x="681.7" y="787" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the configured one</text>
++<text x="25" y="832" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
++<rect x="25" y="846" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="62.6" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="108.2" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
++<rect x="355" y="846" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="392.6" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="438.2" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
++<rect x="685" y="846" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="719.2" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<text x="761.4" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
+ </svg>
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 7828c96..f28d25e 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -11,7 +11,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **authority**: the tags that end a step line of `plan.md`, `(approved)` for a step of the list the user approved when the plan opened and `(ruling <name>)` for each ruling the step rests on. Stated in: `plan`, Rules; `spec`, "What it reads" 4 and Steps 1.
+ - **bar**: the standard a builder's first report passes when its step lands with at most one fix at landing. The booking and the landing report state whether the first report passed it. Stated in: `land`, Steps 9 and 11; `plan-orchestration`, "The review, earned".
+ - **base**: the hash of a step's preparation commit, recorded in its dispatch entry. The worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it. Stated in: `spec`, Steps 6 and 7; `land`, Steps 4; `refute`, "What it reads" 5.
+-- **booking**: the record `/land` appends to `plan.md` for a landed step, holding what landed and where, the premise corrections, the findings raised as open items, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
++- **booking**: the record `/land` appends to `plan.md` for a landed step, holding what landed and where, the premise corrections, the findings raised as open items, the diagnosis records with their causes, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
+ - **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape. A repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
+ - **brief check**: the check of a brief against the tree by one fresh read-only agent on the reviewer's model, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+@@ -99,7 +99,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+ - **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+-- **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
++- **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, a red line's cause found by `/diagnose`, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6; `diagnose`, Steps 20.
+ - **stop**: a halt for a decision that is the user's, which leaves an open item in the state file and under the step's Step 0. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops". To stop an agent is also to end a running agent through the runner's stop tool. Stated in: `land`, Steps 1; `plan-orchestration`, "The pace when a deadline is set". A builder also stops when it halts its work and returns what it has to the orchestrator, as a hand-back does. Stated in: `plan-orchestration`, Steps 6; `spec`, `templates/brief.md`.
+ - **sync**: `/repo-setup sync`, which compares a repository's shared-rules block and plan-terms block with their templates and rewrites them after approval. Stated in: `repo-setup`, "Steps / sync".
+ - **taken back out of main**: what a red line no fix inside the brief closes does to a step at landing. Its changes are removed from main and its dispatch entry reads `landing: backed-out`. Stated in: `land`, Steps 6; `spec`, "Steps / A step taken back out of main".
+diff --git a/skills/diagnose/SKILL.md b/skills/diagnose/SKILL.md
+index 7501663..e9864a1 100644
+--- a/skills/diagnose/SKILL.md
++++ b/skills/diagnose/SKILL.md
+@@ -138,7 +138,7 @@ metadata:
+ 15. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
+     - The cause is not found when the second list is falsified too, when no probe can separate the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose.
+     - For a cause not found, the record says so in its Cause section, with every probe or, when no red command could be built, a pointer to its "No red command" section, which lists every way tried.
+-    - Inside a plan, a cause not found is raised to the user as an open item, as `plan-orchestration`'s "Only known fixes" says.
++    - Inside a plan, a cause not found is raised to the user as an open item, the one `plan-orchestration`'s "Stops" row "A finding that is the user's" leaves.
+     - That open item quotes the hypotheses and every probe, or every way tried from the record's "No red command" section, and names the record's path.
+     - A cause not found is never sent to the builder.
+     - With no person present outside a plan, a cause not found is stated in the session's final message with the record's path.
+@@ -178,7 +178,7 @@ metadata:
+ 23. Write where the cause is kept.
+     - Outside a plan, the session drafts the last bullet of the commit message, which states the cause, the red command and the fix's test, and names "No test reaches it" with its reason when the record holds one.
+     - Outside a plan, the session commits only as the repository's commit rule allows, and otherwise shows the bullet to the user.
+-    - Inside a plan, the orchestrator's booking at the step's landing names the record's path and states its cause, or states that the cause was not found and names the open item it was raised as, as `plan-orchestration`'s "Only known fixes" says a cause is noted at landing.
++    - Inside a plan, the orchestrator books the record at the step's landing, as the `land` skill's Steps 9 says.
+     - Done when the bullet is drafted and shown or committed, or, inside a plan, when the record's path and the cause are written for the landing's booking.
+ 24. Outside a plan, run by a person, remove the copy of the record in `$TMPDIR` once it has been shown.
+     - Done when the copy is gone.
+diff --git a/skills/land/SKILL.md b/skills/land/SKILL.md
+index 40921a3..5cd144c 100644
+--- a/skills/land/SKILL.md
++++ b/skills/land/SKILL.md
+@@ -21,6 +21,7 @@ metadata:
+ |---|---|
+ | The step has not been reviewed yet | `/refute <entry> <step>` |
+ | Every step of the plan, unattended, the landings included | `/plan-orchestration <entry>` |
++| A red line whose cause is not known, once the step is taken back out of main and before `/spec` prepares it again | `/diagnose <entry> <step> red line` |
+ | Where the plan stands and which command comes next | `/ordo-help <entry>` |
+ 
+ ## What it reads
+@@ -34,7 +35,7 @@ metadata:
+    - None is a refusal ("Stops").
+ 4. This skill's `templates/land.sh` and `templates/checks.sh`, as "The landing script" says.
+    - A `checks.sh` missing beside `land.sh` is a refusal ("Stops").
+-5. `agents/reviews/<step>-report.md` and the refuter report `agents/reviews/<step>-refuter.md`, as the Stops row "The step not ready" requires them.
++5. `agents/reviews/<step>-report.md` and the refuter report `agents/reviews/<step>-refuter.md`, as the Stops row "The step not ready" requires them, and the step's diagnosis record `agents/reviews/<step>-diagnosis.md` when it exists, read at Steps 9 for the booking.
+ 6. Main, in the state the Stops row "Main not clean" requires.
+    - The user's unrelated changes are listed by path.
+      - They are left alone.
+@@ -88,6 +89,7 @@ metadata:
+    - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
+    - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`.
+    - It states whether the builder's first report passed its bar, and the fixes at landing.
++   - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as.
+    - Tick the step.
+ 10. Read the step's `worktree` from its dispatch entry, for Steps 13.
+     - Then rewrite the state file: the step's dispatch entry removed, the position line, the open items as they stand.
+diff --git a/skills/ordo-help/SKILL.md b/skills/ordo-help/SKILL.md
+index 902e63d..4b4e82a 100644
+--- a/skills/ordo-help/SKILL.md
++++ b/skills/ordo-help/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: ordo-help
+-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
++description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
+ metadata:
+   version: "1.8.3"
+ ---
+@@ -22,6 +22,7 @@ metadata:
+ |---|---|
+ | The plan should run its steps unattended | `/plan-orchestration <entry>` |
+ | No plan is open for the entry yet | `/plan <entry>` |
++| A defect whose cause is not known | `/diagnose <symptom>`, or inside a plan `/diagnose <entry> <step> <finding>` |
+ | What the reviews keep finding across plans | `/plan-retro` |
+ 
+ ## What it reads
+@@ -55,8 +56,12 @@ metadata:
+ then, for every step:
+ 
+ /spec <entry> <step>          writes the brief, has a fresh agent check it against the tree (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
++/diagnose <entry> <step> brief check <n>
++                              when a finding of the brief check has a cause not known: finds the cause on a scratch copy before the finding is closed in the brief
+ "build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
+ /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
++/diagnose <entry> <step> <finding>
++                              when a finding's cause is not known: finds it on a scratch copy before "close them", its fix and test then the round's ruling; round <n> Spec 1 names a finding of the run over repair round <n>
+ "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report; a contradiction of an ADR the brief asked for is raised to you as an open item instead
+ /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
+                               repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
+@@ -72,11 +77,12 @@ when a command stops:
+ /refute stops                 the reviewer was served a model other than the configured one: it stops the reviewer, uses nothing it wrote, and shows the configured value, the served model and the Claude Code version; rule on it, then /refute again
+ /refute refuses               it names the cause and leaves nothing, such as the configured effort that cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): install the effort agents as the plan skills are, or unset the variable, then /refute again in a new session
+ /land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the step's dispatch block: supply it, then /land again
+-/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head
++/land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head. When its cause is not known, /diagnose <entry> <step> red line finds it once the step is out of main and before /spec prepares it again, and writes it in the step's Step 0.
+ 
+ /plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
+ 
+ /plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
++/diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
+ ```
+ 
+ ## Stops
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index d49cdf7..103d8f9 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -25,6 +25,7 @@ continue the plan                    resume from the state file, after a compact
+ | The plan is not open yet | `/plan <entry>` |
+ | Where the plan stands and which command comes next | `/ordo-help <entry>` |
+ | The repository has no `.agents/plan.yaml` | `/ordo-init` |
++| A finding, a red line or a brief-check finding whose cause is not known, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line` or `brief check <n>` |
+ | What the reviews keep finding across plans | `/plan-retro` |
+ 
+ ## What it reads
+@@ -97,11 +98,11 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+    - **Before the resume.** Write `round: n` into the dispatch block.
+      - Commit it by path with the round's brief and the session's own records since the last resume point. The commit is a resume point.
+    - **Only known fixes.** Each ruling says what to change.
+-     - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed by the orchestrator, read-only, before the round is sent.
++     - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>), which probes read-only on a scratch copy and leaves the step's worktree unchanged.
+      - The round carries the found cause's fix.
+      - A cause not found is not sent.
+-     - Such a cause is noted at landing.
+-     - Such a cause is raised to the user as an open item, by "Stops".
++     - Such a cause is noted at landing, as the `land` skill's Steps 9 says.
++     - Such a cause is raised to the user as an open item, the row "A finding that is the user's" of "Stops".
+      - A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
+    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
+    - **After each reply.** Read the whole delta.
+@@ -114,6 +115,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+    - The step keeps its line and its tag.
+      - It is worked again as that step, with no new ruling.
+    - The failure goes to the user as an open item only when only the user can decide what to do, by "Stops".
++   - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
+    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+ 10. Continue with step 2.
+     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index cc1d20c..bb21e0b 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -20,6 +20,7 @@ metadata:
+ | When | Use |
+ |---|---|
+ | The step has no brief or worktree yet | `/spec <entry> <step>` |
++| A finding whose cause is not known | `/diagnose <entry> <step> <finding>` |
+ | The findings are closed or raised as open items and the step is ready for main | `/land <entry> <step>` |
+ | Every step of the plan, unattended, the reviews included | `/plan-orchestration <entry>` |
+ | What the reviews keep finding across plans | `/plan-retro` |
+diff --git a/skills/repo-setup/templates/docs/glossary.md b/skills/repo-setup/templates/docs/glossary.md
+index c654297..f25ba2e 100644
+--- a/skills/repo-setup/templates/docs/glossary.md
++++ b/skills/repo-setup/templates/docs/glossary.md
+@@ -1,6 +1,6 @@
+ # Glossary
+ 
+-This page defines each term this project uses in a sense of its own. The terms the plan skills, `roadmap`, `grill`, `plan-retro`, `repo-setup` and `ordo-init` use in a sense of their own stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only. The project's own terms follow the block, and each is used only in the sense defined here.
++This page defines each term this project uses in a sense of its own. The terms the plan skills, `roadmap`, `grill`, `diagnose`, `plan-retro`, `repo-setup` and `ordo-init` use in a sense of their own stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only. The project's own terms follow the block, and each is used only in the sense defined here.
+ 
+ <!-- ordo:plan-terms begin -->
+ <!-- ordo:plan-terms end -->
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index d894979..822f2bb 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -6,7 +6,7 @@
+ - **authority**: the tags that end a step line of `plan.md`, `(approved)` for a step of the list the user approved when the plan opened and `(ruling <name>)` for each ruling the step rests on. Stated in: `plan`, Rules; `spec`, "What it reads" 4 and Steps 1.
+ - **bar**: the standard a builder's first report passes when its step lands with at most one fix at landing. The booking and the landing report state whether the first report passed it. Stated in: `land`, Steps 9 and 11; `plan-orchestration`, "The review, earned".
+ - **base**: the hash of a step's preparation commit, recorded in its dispatch entry. The worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it. Stated in: `spec`, Steps 6 and 7; `land`, Steps 4; `refute`, "What it reads" 5.
+-- **booking**: the record `/land` appends to `plan.md` for a landed step, holding what landed and where, the premise corrections, the findings raised as open items, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
++- **booking**: the record `/land` appends to `plan.md` for a landed step, holding what landed and where, the premise corrections, the findings raised as open items, the diagnosis records with their causes, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
+ - **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape. A repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
+ - **brief check**: the check of a brief against the tree by one fresh read-only agent on the reviewer's model, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+@@ -94,7 +94,7 @@
+ - **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+ - **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
+-- **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6.
++- **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, a red line's cause found by `/diagnose`, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6; `diagnose`, Steps 20.
+ - **stop**: a halt for a decision that is the user's, which leaves an open item in the state file and under the step's Step 0. Stated in: `plan-orchestration`, "Stops"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops". To stop an agent is also to end a running agent through the runner's stop tool. Stated in: `land`, Steps 1; `plan-orchestration`, "The pace when a deadline is set". A builder also stops when it halts its work and returns what it has to the orchestrator, as a hand-back does. Stated in: `plan-orchestration`, Steps 6; `spec`, `templates/brief.md`.
+ - **sync**: `/repo-setup sync`, which compares a repository's shared-rules block and plan-terms block with their templates and rewrites them after approval. Stated in: `repo-setup`, "Steps / sync".
+ - **taken back out of main**: what a red line no fix inside the brief closes does to a step at landing. Its changes are removed from main and its dispatch entry reads `landing: backed-out`. Stated in: `land`, Steps 6; `spec`, "Steps / A step taken back out of main".
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index a5267cc..5b4ca28 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -114,7 +114,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+      - Such a cause is raised to the user as an open item.
+    - A user-visible choice (a public shape, a wire format, a config key, a vocabulary) is not taken.
+      - It is a stop ("Stops").
+-   - For a step taken back out of main, whose Step 0 in `plan.md` records the failure its landing met, the brief carries that failure.
++   - For a step taken back out of main, whose Step 0 in `plan.md` records the failure its landing met, the brief carries that failure and, when `/diagnose` wrote them into Step 0, the cause, the fix and the diagnosis record's path.
+    - The ledger may hold the step's patch `agents/reviews/<step>-backed-out.patch` ("Steps / A step taken back out of main"). The brief then names its path and says Steps 7 applies it with `git apply --3way`.
+    - The brief is committed at Steps 6, before the apply.
+      - Its section "The patch as applied" is added after Steps 7, as Steps 7 says.
+@@ -249,6 +249,7 @@ Steps 5 says when this runs.
+    - When that file already holds the report of an earlier run of the step, one that stopped, the session appends the new report below it, whole, its title line naming the commit it ran on.
+ 4. The session closes each finding by a change to the brief, before the preparation commit.
+    - Each change is named under the report's "Closed" heading, beside its finding.
++   - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
+    - The check runs once per `/spec` run: the brief as changed goes to the builder without a second run.
+    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
+    - A contradiction the **ADRs** check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says. One found only in the brief's own wording is closed by a change to the brief that follows the ADR.
