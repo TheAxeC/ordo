@@ -1,0 +1,506 @@
+diff --git a/README.md b/README.md
+index 597ef3e..9821666 100644
+--- a/README.md
++++ b/README.md
+@@ -4,7 +4,7 @@ Ordo is a set of agent skills for Claude Code that run a multi-step change as a
+ 
+ One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
+ 
+-Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, and `plan-retro` turns what the reviewers keep finding into rules.
++Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, and `plan-retro` turns what the reviewers keep finding into rules.
+ 
+ ## The skills
+ 
+@@ -13,6 +13,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
+ | `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, the standards pages, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
+ | `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
+ | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
++| `grill` | Interviews the user about one roadmap entry, in rounds. Each round asks every decision whose prerequisites are settled, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, while agents look up the facts. It writes each answer as it settles into the plan's Rulings or the entry's rulings file, the roadmap entry and the glossary, and on the user's yes a proposed ADR |
+ | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
+ | `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
+ | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
+@@ -28,6 +29,7 @@ The order of use, shortened from what `/ordo-help` prints:
+ /ordo-init                    once per existing repository: writes .agents/plan.yaml, or checks the one there
+ /roadmap add <goal>           an entry with its goal, gate and place in the order
+ /roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan opens it
++/grill <entry>                optional: an interview in rounds that settles the entry's design decisions, written as they settle
+ /plan <entry>                 once per entry: opens the plan, shows the step list for approval
+ 
+ for every step:
+@@ -81,7 +83,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
+ rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
+ for dir in ~/.claude/skills; do
+     mkdir -p "$dir"
+-    for skill in land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
++    for skill in grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap spec; do
+         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
+     done
+     agents=$(dirname "$dir")/agents
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 2260a12..4bd9f75 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -23,8 +23,11 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **completion notice**: what the runner reports when an agent ends, its final message and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+ - **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort` and `reviewer_effort`. Stated in: `plan`, Steps 4.
+ - **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **decision form**: the parts every decision of a round has, in this order: a heading `D<n>. <the decision, as a phrase>`, the lettered options with their pros and cons, the reference line, `Recommend <letter>.` with its reason, and the lazy option named or "none" with the reason. Stated in: `grill`, "The decision form".
+ - **Declined to judge**: the section of a refuter or brief-check report that names each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason. Stated in: `refute`, Steps 6; `spec`, "Steps / The brief check".
+ - **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
++- **design bar**: the standard a `grill` interview holds its options to and its reference line cites, `industry`, `state-of-the-art` or `novel`, set by `.agents/plan.yaml`'s `design_bar` and overridden for one interview by `--bar`. Stated in: `grill`, "The design bar".
++- **design tree**: the decisions a roadmap entry's goal and gate need, each with the decisions it waits on, each node a decision. Stated in: `grill`, Steps 3.
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id followed by the model the runner served it, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. `brief_check` and `reviewer_report` also carry each agent's served model. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7 and "Launching a builder"; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
+@@ -33,6 +36,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item. A finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
+ - **fix at landing**: a fix made on main during `/land`, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
+ - **four headings**: the headings a reviewer's findings go under, Spec, Proof, Standards and Behaviour. Stated in: `refute`, "The four headings".
++- **frontier**: every decision of the design tree whose prerequisites are settled, all asked in one round. Stated in: `grill`, Steps 4.
+ - **gate**: the check that proves a roadmap entry done, a command from the verification page, a test and what it asserts, or an observable result, which `/plan` copies into `plan.md`'s "## Gate". A step's own gate is the check on its step line. Stated in: `roadmap`, "Steps / add" 2 and 3; `plan`, Steps 2; `spec`, Steps 4. Also any check that decides whether work passes. Stated in: `repo-setup`, `templates/shared-rules.md`, "Scripts compute facts; judgment is read".
+ - **goal**: what exists when a roadmap entry is done, copied into `plan.md`. In the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
+ - **hand-back**: a builder's stop before changing any code, returning its first run and a case the brief's rules get wrong, with the rule and the result. The orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
+@@ -42,6 +46,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+ - **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
++- **lazy option**: the option that costs less now and leaves the work undone, such as a booking instead of a fix, a later step instead of this one, a sentence in a report instead of a change in the code, or a narrower reading of the request than the request. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option"; `grill`, "The decision form".
+ - **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`. It is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
+ - **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state. Stated in: `land`, "The look".
+ - **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `ordo-help`, "The sequence, printed verbatim".
+@@ -64,6 +69,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **questions, the**: the nine questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+ - **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is a failing check of the plan's verification, wherever it runs. Stated in: `plan-orchestration`, "Stops".
++- **reference line**: the line of a decision that cites, for the options, what the design bar sets, labelled "Industry:", "State of the art:" or "Novel:", each claim with its source read in the session. Stated in: `grill`, "The decision form" and "The design bar".
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+ - **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`, with the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, and a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
+ - **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry. The number of rounds a step gets is the round cap. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
+@@ -72,10 +78,11 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+ - **reviewer**: the fresh session or agent that refutes a built step without changing anything, on the model the configuration block's `reviewer:` names, which the brief-check agent also runs on. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction.
+ - **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
++- **round, of an interview**: one message in which `grill` asks the whole frontier, ending the turn to wait for the answers; the bare "round" is a repair round. Stated in: `grill`, Steps 6.
+ - **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+ - **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported. Every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+-- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
+-- **rulings file**: `<ledger_root>/rulings/<slug>.md`, which holds the user's settled design answers for a roadmap entry, one bullet line each, while no plan is open. `/plan` copies its bullet lines into the new plan's Rulings and removes it. Stated in: `plan`, "What it reads" 4, Steps 2 and 6, and Stops.
++- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8. Also a settled `grill` decision, one bullet of the Rulings or the rulings file. Stated in: `grill`, "Steps / Writing what settled".
++- **rulings file**: `<ledger_root>/rulings/<slug>.md`, which holds the user's settled design answers for a roadmap entry, one bullet line each, while no plan is open. `/plan` copies its bullet lines into the new plan's Rulings and removes it. Stated in: `plan`, "What it reads" 4, Steps 2 and 6, and Stops; `grill`, "What it reads" 6 and "Steps / Writing what settled".
+ - **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
+ - **sequence, the**: the command sequence for running a plan by hand that `/ordo-help` prints verbatim. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+diff --git a/skills/ordo-help/SKILL.md b/skills/ordo-help/SKILL.md
+index b3d791c..902e63d 100644
+--- a/skills/ordo-help/SKILL.md
++++ b/skills/ordo-help/SKILL.md
+@@ -49,6 +49,7 @@ metadata:
+ /ordo-init                    once per repository: writes .agents/plan.yaml, or checks the one there
+ /roadmap add <goal>           an entry with its goal, gate and place in the order, for /plan to open
+ /roadmap add <entry>          for an entry not yet specified: its gate and place in the order, before /plan can open it
++/grill <entry>                optional: an interview in rounds that settles the entry's design decisions, written as they settle
+ /plan <entry>                 once: opens the plan, shows the step list for approval
+ 
+ then, for every step:
+diff --git a/skills/plan/SKILL.md b/skills/plan/SKILL.md
+index f75e9fb..f5dc381 100644
+--- a/skills/plan/SKILL.md
++++ b/skills/plan/SKILL.md
+@@ -22,6 +22,7 @@ metadata:
+ |---|---|
+ | The repository has no `.agents/plan.yaml` | `/ordo-init` |
+ | The roadmap has no entry for the work yet | `/roadmap add <goal>` |
++| The entry's design decisions are not settled | `/grill <entry>` |
+ | The plan is open and a step is due | `/spec <entry> <step>`, or `/plan-orchestration <entry>` for every step |
+ | Where an open plan stands | `/ordo-help <entry>` |
+ 
+diff --git a/skills/repo-setup/templates/docs/glossary.md b/skills/repo-setup/templates/docs/glossary.md
+index f3cc04f..c654297 100644
+--- a/skills/repo-setup/templates/docs/glossary.md
++++ b/skills/repo-setup/templates/docs/glossary.md
+@@ -1,6 +1,6 @@
+ # Glossary
+ 
+-This page defines each term this project uses in a sense of its own. The terms the plan skills, `roadmap`, `plan-retro`, `repo-setup` and `ordo-init` use in a sense of their own stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only. The project's own terms follow the block, and each is used only in the sense defined here.
++This page defines each term this project uses in a sense of its own. The terms the plan skills, `roadmap`, `grill`, `plan-retro`, `repo-setup` and `ordo-init` use in a sense of their own stand in the block below, which `/repo-setup sync` keeps equal to the `repo-setup` skill's template, so a change to one of them is made in that template only. The project's own terms follow the block, and each is used only in the sense defined here.
+ 
+ <!-- ordo:plan-terms begin -->
+ <!-- ordo:plan-terms end -->
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index ff739c5..98c4f1e 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -18,8 +18,11 @@
+ - **completion notice**: what the runner reports when an agent ends, its final message and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+ - **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort` and `reviewer_effort`. Stated in: `plan`, Steps 4.
+ - **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **decision form**: the parts every decision of a round has, in this order: a heading `D<n>. <the decision, as a phrase>`, the lettered options with their pros and cons, the reference line, `Recommend <letter>.` with its reason, and the lazy option named or "none" with the reason. Stated in: `grill`, "The decision form".
+ - **Declined to judge**: the section of a refuter or brief-check report that names each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason. Stated in: `refute`, Steps 6; `spec`, "Steps / The brief check".
+ - **delta**: the diff of one repair round, from the commit or tree state recorded when the round was sent, read against the whole diff since the base. Stated in: `refute`, "Steps / Over a repair round"; `plan-orchestration`, Steps 8.
++- **design bar**: the standard a `grill` interview holds its options to and its reference line cites, `industry`, `state-of-the-art` or `novel`, set by `.agents/plan.yaml`'s `design_bar` and overridden for one interview by `--bar`. Stated in: `grill`, "The design bar".
++- **design tree**: the decisions a roadmap entry's goal and gate need, each with the decisions it waits on, each node a decision. Stated in: `grill`, Steps 3.
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id followed by the model the runner served it, or `inline` or `academic-paper`), `builder_usage` and `reviewer_report`. `brief_check` and `reviewer_report` also carry each agent's served model. Stated in: `spec`, Steps 9; `plan-orchestration`, Steps 4, 6 and 7 and "Launching a builder"; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
+@@ -28,6 +31,7 @@
+ - **finding**: a defect a reviewer reports, with its place, the quoted text, what is wrong and a failure scenario, closed in a repair round or at landing or raised to the user as an open item. A finding of the brief check is closed by a change to the brief, or is a stop. Stated in: `refute`, Steps 6 and "Finding dispositions"; `spec`, "Steps / The brief check".
+ - **fix at landing**: a fix made on main during `/land`, counted and named with its cause in the booking. Stated in: `land`, Steps 6.
+ - **four headings**: the headings a reviewer's findings go under, Spec, Proof, Standards and Behaviour. Stated in: `refute`, "The four headings".
++- **frontier**: every decision of the design tree whose prerequisites are settled, all asked in one round. Stated in: `grill`, Steps 4.
+ - **gate**: the check that proves a roadmap entry done, a command from the verification page, a test and what it asserts, or an observable result, which `/plan` copies into `plan.md`'s "## Gate". A step's own gate is the check on its step line. Stated in: `roadmap`, "Steps / add" 2 and 3; `plan`, Steps 2; `spec`, Steps 4. Also any check that decides whether work passes. Stated in: `repo-setup`, `templates/shared-rules.md`, "Scripts compute facts; judgment is read".
+ - **goal**: what exists when a roadmap entry is done, copied into `plan.md`. In the question asked of a step's check, the goal is the part of it the step delivers. Stated in: `roadmap`, "Steps / add" 1; `plan`, Steps 2.
+ - **hand-back**: a builder's stop before changing any code, returning its first run and a case the brief's rules get wrong, with the rule and the result. The orchestrator reads it as a report and rules on the case. Stated in: `plan-orchestration`, Steps 6.
+@@ -37,6 +41,7 @@
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
+ - **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
++- **lazy option**: the option that costs less now and leaves the work undone, such as a booking instead of a fix, a later step instead of this one, a sentence in a report instead of a change in the code, or a narrower reading of the request than the request. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option"; `grill`, "The decision form".
+ - **ledger**: a plan's folder under `ledger_root`, holding `plan.md`, `orchestrator-state.md`, `agents/briefs/` and `agents/reviews/`. It is written on main, and a step's worktree holds a copy in which the builder writes only its report, which the orchestrator copies to main. Stated in: `plan`, Steps 1, 3, 4 and 5; `land`, Steps 5; `plan-orchestration`, Steps 4 and 6.
+ - **look**: the landing's opening of the changed views where the configuration block's `look:` says, with a screenshot of each view and state. Stated in: `land`, "The look".
+ - **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `ordo-help`, "The sequence, printed verbatim".
+@@ -59,6 +64,7 @@
+ - **questions, the**: the nine questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+ - **red line**: a verification line that fails on main after the cherry-pick. Stated in: `land`, Steps 6. A red check is a failing check of the plan's verification, wherever it runs. Stated in: `plan-orchestration`, "Stops".
++- **reference line**: the line of a decision that cites, for the options, what the design bar sets, labelled "Industry:", "State of the art:" or "Novel:", each claim with its source read in the session. Stated in: `grill`, "The decision form" and "The design bar".
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+ - **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`, with the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, and a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
+ - **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry. The number of rounds a step gets is the round cap. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
+@@ -67,10 +73,11 @@
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+ - **reviewer**: the fresh session or agent that refutes a built step without changing anything, on the model the configuration block's `reviewer:` names, which the brief-check agent also runs on. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction.
+ - **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
++- **round, of an interview**: one message in which `grill` asks the whole frontier, ending the turn to wait for the answers; the bare "round" is a repair round. Stated in: `grill`, Steps 6.
+ - **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+ - **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported. Every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+-- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8.
+-- **rulings file**: `<ledger_root>/rulings/<slug>.md`, which holds the user's settled design answers for a roadmap entry, one bullet line each, while no plan is open. `/plan` copies its bullet lines into the new plan's Rulings and removes it. Stated in: `plan`, "What it reads" 4, Steps 2 and 6, and Stops.
++- **ruling**: the user's decision on an open item, typed as `Ruled: <the choice>` and booked by the session. A ruling that adds or splits a step is also written in the Rulings section of `plan.md` as a line ending with "(the user)", which the step's `(ruling <name>)` tag names. Stated in: `spec`, "Steps / A ruling" and "What it reads" 4. Also the orchestrator's decision on a finding sent in a repair round, or on a case in a cases ruling. Stated in: `plan-orchestration`, Steps 6 and 8. Also a settled `grill` decision, one bullet of the Rulings or the rulings file. Stated in: `grill`, "Steps / Writing what settled".
++- **rulings file**: `<ledger_root>/rulings/<slug>.md`, which holds the user's settled design answers for a roadmap entry, one bullet line each, while no plan is open. `/plan` copies its bullet lines into the new plan's Rulings and removes it. Stated in: `plan`, "What it reads" 4, Steps 2 and 6, and Stops; `grill`, "What it reads" 6 and "Steps / Writing what settled".
+ - **runner**: the program that runs the sessions and agents, Claude Code, with its agent tool, message tool, stop tool and agent listing. Stated in: `plan-orchestration`, "The two tiers, and the models" and "Launching a builder".
+ - **sequence, the**: the command sequence for running a plan by hand that `/ordo-help` prints verbatim. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **session, the**: the Claude Code session that runs a skill, the orchestrator under the loop or the user's session when a skill is run by hand. Its own records are the ledger changes it made since the last resume point, such as a ruling booked or a report recorded, which its next resume-point commit carries. Stated in: `spec`, Steps 1; `plan-orchestration`, "Resuming, and handing the plan over".
+diff --git a/skills/roadmap/SKILL.md b/skills/roadmap/SKILL.md
+index 0445649..51183f0 100644
+--- a/skills/roadmap/SKILL.md
++++ b/skills/roadmap/SKILL.md
+@@ -25,6 +25,7 @@ metadata:
+ 
+ | When | Use |
+ |---|---|
++| An entry's design decisions are to be settled before its plan | `/grill <entry>` |
+ | An entry is ready to be opened as a plan | `/plan <entry>` |
+ | Where an open plan stands | `/ordo-help <entry>` |
+ 
+diff --git a/skills/grill/SKILL.md b/skills/grill/SKILL.md
+new file mode 100644
+index 0000000..b1c3403
+--- /dev/null
++++ b/skills/grill/SKILL.md
+@@ -0,0 +1,226 @@
++---
++name: grill
++description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, the roadmap entry, the glossary and, on the user's yes, a proposed ADR. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
++metadata:
++  version: "1.0.0"
++---
++
++# Settle an entry's design decisions
++
++`/grill <entry>` interviews the user, in rounds, until the design decisions of one roadmap entry are settled. It leaves behind each settled answer as a bullet of the plan's Rulings or of the entry's rulings file, the roadmap entry the answers changed, the glossary terms they settled, a proposed ADR for each decision the user chose to record, and one commit when the user allows it.
++
++## Quick start
++
++```
++/grill <entry>                                                  interview about the entry, by number or title, including one under "Not yet specified"
++/grill <entry> --bar <industry|state-of-the-art|novel>          the same, with this design bar in place of the configured one, for this interview only
++/grill <project>/<entry>                                        the same, in a repository whose plan.yaml lists several projects
++```
++
++## Use instead
++
++| When | Use |
++|---|---|
++| The repository has no `.agents/plan.yaml` | `/ordo-init` |
++| The roadmap has no entry for the work yet | `/roadmap add <goal>` |
++| The design is settled and the plan is to be opened | `/plan <entry>` |
++| Where an open plan stands | `/ordo-help <entry>` |
++
++## What it reads
++
++1. `.agents/plan.yaml` at the repository root.
++   - The required keys are `roadmap`, `ledger_root`, `rules`, `libraries` and `reviewer`.
++   - The optional keys are `standards` (default `[]`), `adr` (default `docs/adr`), `design_bar` (default `industry`), `design_references` (default `[]`) and `reviewer_effort` (default `high`), and a key left out takes its default.
++   - In the `projects:` form, the named project's keys.
++   - No file is a refusal that names `/ordo-init` ("Stops").
++   - A required key missing is a refusal that names the key ("Stops").
++   - A `design_bar` value or a `--bar` value other than `industry`, `state-of-the-art` and `novel` is a refusal that names the three ("Stops").
++2. The roadmap file `roadmap` names: its introduction and status legend, for the format a change to the entry is written in, and the entry `<entry>` names, whole.
++   - `<entry>` is matched against the entries by number or title, and an entry under "Not yet specified" is an entry.
++   - No match is a refusal that names `/roadmap add <goal>` ("Stops").
++3. The rules file `rules` names, and every page `standards` lists, each in full.
++4. The ADRs in force in the folder `adr` names, as the `spec` skill's "What it reads" 5 says: which records are in force, and what each record's decision is.
++5. `docs/glossary.md`, whole.
++   - A repository without it gets it at the first term written, created from the `repo-setup` skill's `templates/docs/glossary.md`.
++   - A glossary without the plan-terms block gets its terms after the opening paragraph.
++6. The Rulings of the open plan, when a folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>`, and otherwise the rulings file `<ledger_root>/rulings/<slug>.md` when it exists.
++   - The slug is derived as the `plan` skill's Steps 1 derives it.
++   - The Rulings are the `## Rulings` section of `plan.md`.
++7. The entry's sources: each file, page or repository the entry and the answers name.
++8. The `repo-setup` skill's `templates/docs/adr/README.md`, `templates/docs/adr/template.md` and `templates/docs/glossary.md`, only when Steps 8 must create the ADR folder's files or the glossary.
++
++## Steps
++
++1. Resolve the configuration, the design bar and the entry.
++   - The design bar is the one "The design bar" names.
++   - Every refusal of "What it reads" 1 and 2 is made here, before anything is written.
++   - The step is done when the keys, the design bar and the entry are resolved, or the skill has refused.
++2. Read what "What it reads" 3 to 7 lists.
++   - Each is read in full in this session, and none is taken from memory.
++   - The step is done when each has been read.
++3. Draw the design tree.
++   - List every decision the entry's goal and gate need, each with the decisions it waits on.
++   - A decision is a node of the design tree, and the skill names what it asks a decision, never a question, since the glossary's **question, the** is another thing.
++   - The roadmap diff and "record as ADR?" ("Steps / Writing what settled") are decisions of their own, numbered like the rest.
++   - A decision that a line of the Rulings or the rulings file settles, or an ADR in force settles, is marked settled and is not asked again.
++   - An interview started again, in a new session or after a compaction, draws the tree afresh from what is written: the Rulings or the rulings file, the entry, the glossary and the ADRs.
++   - A decision shown before and not answered is asked again under a new number.
++   - The step is done when every decision is marked settled or open, each open one with the decisions it waits on named.
++4. Compute the frontier: every decision whose prerequisites are settled, the roadmap diff and "record as ADR?" decisions included.
++   - A decision that needs a fact has that fact looked up ("Steps / Looking up a fact"), and only the decisions downstream of a running lookup wait.
++   - A decision that depends on another decision still open waits for a later round.
++   - The step is done when each decision of the frontier is in the round, or waits on a named lookup.
++5. Draw each decision of the round in the decision form ("The decision form"), its worked example in `references/decision-form.md`.
++   - Hold each option against the rules file, every standards page and every ADR in force before the options are written.
++   - An option that breaks the rules file, a standards page or an ADR in force is not offered.
++   - An option that needs an ADR in force changed is offered as reopening that ADR, naming it and the superseding record it would need.
++   - Under `libraries: avoid`, no option adds a dependency.
++   - Under `libraries: check`, each library candidate is an option with the facts the `spec` skill's Steps 3 records: version, license, maintainer, last release, compatibility with the project's dependencies, what it replaces and what stays hand-written.
++   - No option exempts code from the standards pages ("Rules").
++   - The step is done when every decision of the round has every part of the decision form.
++6. Ask the round: the whole frontier in one message, numbered `D<n>`.
++   - The numbers continue after the highest `D<n>` that opens a bullet of the Rulings or the rulings file, and after every number shown in this interview.
++   - Only a `D<n>` that opens a bullet counts, since a Rulings line of another plan holds `D1 (a)` inside its text.
++   - The message ends with the answer form: `D<n> => <letter or text>` one line per decision, `D<n> Agree` to take the recommendation, and `D<a>-<b> Agree` to take it for each decision of a range.
++   - The round ends the turn and waits for the answers ("Stops").
++   - The step is done when the message is sent and the turn has ended.
++7. Read the answers.
++   - The user may answer part of a round, and the decisions left open stay in the frontier.
++   - An answer the skill cannot read as one of the options is asked again in the next round, under a new number.
++   - An answer read as one of the options, with the user's text beside it, is written as given.
++   - Check the answers for terms and claims as "Steps / Terms and claims" says, and for a contradiction as "Steps / An answer that contradicts" says.
++   - The step is done when each answer is settled, or asked again in the next round.
++8. Write each settled answer, as "Steps / Writing what settled" says, in the same turn as the answer and before the next round is drawn up.
++   - A plan already open changes what is listed at the end ("Steps / A plan already open").
++   - The step is done when every answer of the round has its lines written and read back.
++9. Go back to Steps 3, until the frontier is empty and the roadmap diff and "record as ADR?" decisions are answered.
++   - The step is done when a pass of Steps 3 to 4 finds no open decision.
++10. Close the interview.
++    - List every decision settled in the interview with where each was written: the Rulings line, the entry, the glossary line, the ADR.
++    - List each step of an open plan whose text an answer changed ("Steps / A plan already open").
++    - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry.
++    - Ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
++    - On a yes to both, commit the files written by explicit path list in one commit, its subject naming the entry and that its design decisions are settled.
++    - Without a yes to committing, list the files written with `git status --short`.
++    - Without a confirmation of the shared understanding, go back to Steps 3 with the user's correction.
++    - The step is done when the user has answered the confirmation and the commit question, and the files are committed or listed.
++
++### Looking up a fact
++
++1. A fact from the repository, another repository or a published source is looked up, and the user is asked for decisions only.
++2. A lookup is made by the session's own reads, or by an agent the skill starts, launched as the `spec` skill's brief-check agent is.
++   - It is the effort agent `ordo-<reviewer_effort>`, on the model `reviewer` names.
++   - It is read-only and changes nothing.
++   - It invokes no skill and starts no agent.
++   - It returns each fact with its source, a `path:line` or a URL it fetched.
++3. Right after the start, read the model the runner served the agent, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
++   - A served model that is not the configured one is the stop "A lookup agent served another model" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it found is used.
++4. A lookup that finishes joins the next round: the decisions that waited on it enter the frontier.
++5. The step is done when each fact a decision needs is in hand with its source, or the decision waits on the lookup that is running.
++
++### Terms and claims
++
++1. A term the user uses that the glossary lacks, or uses in more than one sense, is sharpened by a decision of its own.
++2. A relationship between terms is tested in that decision with a concrete scenario.
++3. A claim the user makes about the code is checked against the code by a lookup before a decision rests on it.
++   - A mismatch is shown in the next round with its `path:line`, as a decision of its own that asks which holds, the claim or the code.
++4. The step is done when every term and claim of the answers is settled, or is a decision in the next round.
++
++### An answer that contradicts
++
++1. An answer that contradicts an earlier ruling or an ADR in force is shown in the next round as a rule clash, a decision of its own.
++2. Its options are these.
++   - Reopen the earlier ruling, by a new Rulings bullet that names the one it replaces.
++   - Reopen the ADR, by a superseding record as ruling E (b) says: the new record, status `proposed`, its decision the ruled option, the old record marked superseded in the words the folder uses, and the new record's row added to the folder's index, as the `spec` skill's "Steps / A ruling" writes it.
++   - Keep the earlier one.
++3. The step is done when the clash is a decision in the next round, and on its answer the chosen option is written as "Steps / Writing what settled" says.
++
++### A plan already open
++
++1. An answer that changes the text of an approved step of the open plan is written as its Rulings bullet.
++2. The step's change is listed at the end (Steps 10), each with the step's line and the changed text, for the user to rule on as the `spec` skill's "Steps / A ruling" handles a ruling.
++3. The step is done when each such change is in the end's list.
++
++### Writing what settled
++
++1. Write the ruling.
++   - It goes to the `## Rulings` section of the open plan's `plan.md`, or else to the rulings file, created with the heading line `# Rulings: <entry>` when it is absent.
++   - It is one bullet: `- D<n> <the decision, as a phrase> (<date>): <the answer in one line> (the user).`
++   - The phrase makes a step's `(ruling <name>)` tag name the decision as `D<n> <the decision, as a phrase>`.
++   - A library pick names the capability in the phrase.
++   - The item is done when the file, read back, holds the bullet whole.
++2. Write the glossary term.
++   - A term the interview settles is written into `docs/glossary.md` below the plan-terms block, in the file's form `- **<term>**: <definition>`, at once.
++   - A term that clashes with the glossary's existing definition is put to the user as a decision.
++   - A term the plan-terms block defines is never written into the block, since `/repo-setup sync` undoes it, and a clash with one is put to the user as a decision whose change is made in the `repo-setup` skill's `templates/plan-terms.md`.
++   - The item is done when the glossary, read back, holds the term whole.
++3. Draft the change to the roadmap entry.
++   - An answer that changes the entry's goal, gate or text is drafted into the entry in the file's own format and under the `roadmap` skill's Rules: the goal, the gate and the dependencies only, nothing the user did not ask for, no history, another repository only as a path.
++   - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says, and the answer with its reason goes in the diff and never in the entry.
++   - The draft is shown as a diff in the next round, as a decision of its own, and written on the user's yes.
++   - An entry under "Not yet specified" whose gate the interview settles is not moved, and the gate is recorded in the ruling of item 1.
++   - The item is done when the diff is a decision of the next round, or, after the yes, the entry read back holds the change.
++4. Ask whether to record an ADR.
++   - An answer that is not obvious from the code, binds work after the plan that made it closes, and has alternatives rejected becomes the decision "record as ADR?" in the next round.
++   - On the user's yes, write the record in the same turn.
++   - Write it in the folder `adr` names, from its `template.md`, or from the form of the folder's latest record when it has no `template.md`.
++   - A missing folder, or one with neither `template.md` nor a record, is created or filled first from the `repo-setup` skill's `templates/docs/adr/README.md` and `template.md`.
++   - The record is numbered after the folder's highest, and its status is `proposed`.
++   - Its decision is the ruled option, its context the facts the decision gave, its alternatives rejected the other options with their cons, and its consequences what the decision said follows.
++   - Its row goes into the folder's index when there is one.
++   - A record that changes a decision of an ADR in force supersedes it as ruling E (b) says.
++   - A refinement of an ADR in force edits that record to its current state, with no dated note.
++   - The item is done when the decision is in the next round, or, after the yes, the record read back holds the decision and its status.
++
++## The decision form
++
++Every decision of a round has these parts, in this order, and `references/decision-form.md` shows a round of two.
++
++- **Heading.** `## D<n>. <the decision, as a phrase>`.
++- **Options.** Each is lettered, with its pros and its cons.
++- **Reference line.** It is always present, is labelled by the design bar, and cites for the options what "The design bar" sets.
++- **Recommendation.** `Recommend <letter>.` with its reason, chosen because it is the better design.
++- **Lazy option.** The option that costs less now and leaves the work undone, or "none" with the reason when no option is.
++
++- Each claim of the reference line has its source read in this session: a `path:line`, or a URL fetched in the session.
++- A reference line is never written from memory.
++- The roadmap diff and "record as ADR?" decisions have every part, their reference line citing the page that governs them.
++
++## The design bar
++
++- The design bar is `design_bar`, or the `--bar` value for this interview.
++- Under `industry`, the reference line is labelled "Industry:" and cites what production projects in the field ship.
++- Under `state-of-the-art`, it is labelled "State of the art:" and cites the best published work.
++- Under `novel`, it is labelled "Novel:" and cites both, and each option goes beyond them and says what would show it works.
++- `design_references` are the published standards every option is held to, and each option names the clause of each one that bears on it.
++
++## Stops
++
++The first three rows are stops, which wait on the user. The rest are refusals, which name their cause and change nothing.
++
++| Stop | When | What it shows | What resumes it |
++|---|---|---|---|
++| A round | Every round, at Steps 6, the roadmap diff and "record as ADR?" decisions riding in it | The frontier as decisions in the decision form, and the answer form | The user's answers |
++| The end | Steps 10 | The decisions settled with where each was written, the step changes owed, and the question of the shared understanding and the commit | The user's confirmation and answer on the commit |
++| A lookup agent served another model | The runner served a lookup agent a model that is not the configured one ("Steps / Looking up a fact") | The configured value of `reviewer` and the served model | The user's instruction, then the lookup started again |
++| No configuration | `.agents/plan.yaml` is missing | A refusal that names `/ordo-init` | `/ordo-init`, then `/grill` again |
++| No such entry | `<entry>` matches no roadmap entry | A refusal that names `/roadmap add <goal>` | `/grill` with an entry that exists |
++| A required key missing | A required key is not in `.agents/plan.yaml` | The key | The key added, then `/grill` again |
++| An unknown bar | `design_bar` or `--bar` is not `industry`, `state-of-the-art` or `novel` | The three values | A value of the three, then `/grill` again |
++
++## Anti-patterns
++
++| Anti-pattern | Why it fails | Do instead |
++|---|---|---|
++| Asking the user for a fact the skill can look up | The user's answer is a recollection, and it costs the user's time | Look the fact up and ask only the decision that rests on it ("Steps / Looking up a fact") |
++| A decision asked while a decision it waits on is open | The user answers without the answer it depends on | Hold it for a later round (Steps 4) |
++| An option chosen or recommended for costing less | The work it leaves undone comes back as a later item | Recommend the better design and name the cheaper option as the lazy option ("The decision form") |
++| A reference line from memory | Its claim cannot be checked | Read the source in this session and cite its `path:line` or the URL fetched ("The decision form") |
++| Batching the writes to the end | A compaction loses the answers, and the next round is drawn from state that is not written | Write each answer in the turn it settles ("Steps / Writing what settled") |
++
++## Rules
++
++- A fact is looked up, never asked.
++- A decision is the user's: nothing is written as settled without the user's answer.
++- Every answer is written in the turn it settles, before the next round is drawn up.
++- No option exempts code from the standards pages: A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it.
+diff --git a/skills/grill/references/decision-form.md b/skills/grill/references/decision-form.md
+new file mode 100644
+index 0000000..7e903fe
+--- /dev/null
++++ b/skills/grill/references/decision-form.md
+@@ -0,0 +1,74 @@
++# A round in the decision form
++
++The example is a roadmap entry for a command-line tool `tally`, which counts the words of text files. The Rulings of its plan already hold bullets `D1` to `D3`, `libraries` is `avoid` and the design bar is `industry`, so this round is numbered `D4` and `D5`.
++
++## The round, as the user reads it
++
++```
++## D4. The format of the settings file
++
++- **A. TOML.** *Pro:* a small specification with obvious semantics, and Python's `pyproject.toml` is one. *Con:* deeply nested settings are verbose.
++- **B. YAML.** *Pro:* nesting is compact. *Con:* one value can parse to more than one type, so a setting can change meaning between readers.
++- **C. JSON.** *Pro:* every language reads it. *Con:* it has no comments, and a settings file needs them.
++
++**Industry:** Python packaging lets any tool keep its configuration in the `[tool]` table of `pyproject.toml`, a file "written in the TOML format" (https://peps.python.org/pep-0518/ , fetched in this session); the TOML specification calls itself "a minimal configuration file format that's easy to read due to obvious semantics" (https://toml.io/en/v1.0.0 , fetched in this session).
++
++**Recommend A.** The settings are flat and need comments, and TOML allows comments and has one meaning for each value.
++
++Lazy option: none. A, B and C cost the same to build.
++
++## D5. What counts as a word
++
++- **A. A run of characters delimited by white space.** *Pro:* one rule, the same result as `wc -w`, so a user can compare the two. *Con:* text in a script that does not separate words by spaces counts as one word per line.
++- **B. Unicode word boundaries.** *Pro:* counts words in every script. *Con:* the rules are long, and a hyphenated compound counts as two words.
++- **C. A now, boundaries for other scripts later.** *Pro:* it ships the count sooner. *Con:* the count is wrong for those scripts until the later work is done.
++
++**Industry:** POSIX defines a word for `wc` as "a non-zero-length string of characters delimited by white space" (https://pubs.opengroup.org/onlinepubs/9699919799/utilities/wc.html , fetched in this session); Unicode's text segmentation standard defines word boundaries for selection, cursor movement and whole-word search, and lets an implementation tailor them (https://unicode.org/reports/tr29/ , fetched in this session).
++
++**Recommend A.** The tool's first users count English text, and a count that equals `wc -w` can be checked by them.
++
++Lazy option: C. It costs less now and leaves the count wrong for texts A does not cover.
++
++Answer as `D<n> => <letter or text>`, one line per decision; `D<n> Agree` takes the recommendation; `D<a>-<b> Agree` takes it for a range.
++```
++
++## The answers
++
++```
++D4 Agree
++D5 => B
++```
++
++`D4 Agree` takes A. `D5 => B` takes B against the recommendation, and the word "word" is now used in a sense the glossary lacks.
++
++## What the answers write
++
++The Rulings, or the rulings file when no plan is open, gain two bullets, in the same turn as the answers:
++
++```
++- D4 The format of the settings file (2026-09-30): TOML (the user).
++- D5 What counts as a word (2026-09-30): Unicode word boundaries (the user).
++```
++
++The glossary, below the plan-terms block, gains the term the answer settled:
++
++```
++- **word**: a run of characters between two Unicode word boundaries.
++```
++
++D5 has alternatives rejected and binds the tool's later work, so the next round opens with this decision, numbered after the highest number shown:
++
++```
++## D6. Record D5 as an ADR
++
++- **A. Record it.** *Pro:* the count's rule and the rejected alternatives stay findable after the plan closes. *Con:* one more record to keep current.
++- **B. Keep it a Rulings line.** *Pro:* no new file. *Con:* the plan's ledger is archived when the plan closes, and the reason for the count goes with it.
++
++**Industry:** an architecture decision record holds the context, the decision, its status and its consequences of a decision that affects the structure or construction techniques of a system (https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions , fetched in this session).
++
++**Recommend A.** The count decides what `tally` reports for every later feature, and a reader of the code cannot see why it was chosen.
++
++Lazy option: B. It costs no file now and leaves the reason unrecorded.
++```
++
++On `D6 Agree`, the record is written in the same turn in the folder `adr` names, from its `template.md`: numbered after its highest record, status `proposed`, its decision "Unicode word boundaries", its context the facts D5 gave, its alternatives rejected A and C with their cons, its consequences the counts D5 said follow, and its row in the folder's index.

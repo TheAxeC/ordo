@@ -46,8 +46,10 @@ dispatch:
   session_id: af8ac1a436c7c2213 (claude-sonnet-5-5 at the launch, from its transcript, Claude Code 2.1.285)
   report: .scratch/2-e-grill/agents/reviews/12-report.md
   brief_check: .scratch/2-e-grill/agents/reviews/12-brief-check.md (claude-opus-5-5; 192474 tokens, 54 tool uses, 480 s)
+  builder_usage: round 0 223659 tokens, 53 tool uses, 577 s ($1.97-3.90)
+  reviewer_report: .scratch/2-e-grill/agents/reviews/12-refuter.md (claude-opus-5-5; 193419 tokens, 42 tool uses, 526 s)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
