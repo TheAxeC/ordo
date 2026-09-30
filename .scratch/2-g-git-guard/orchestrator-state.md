@@ -39,7 +39,18 @@ reviewer_effort: high        # the effort a reviewer and a brief-check agent run
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 2b
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2g-2b
+  base: 93cdcb74b6c578b574e47327903564a40974cfc1
+  launched: 2026-09-30 15:05
+  session_id: a64c3043b141e586e (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
+  report: .scratch/2-g-git-guard/agents/reviews/2b-report.md
+  brief_check: .scratch/2-g-git-guard/agents/reviews/2b-brief-check.md (ordo-high, claude-opus-5-5; first run 219616 tokens, 29 tool uses, 1004 s, $1.63-5.38; second run 237113 tokens, 39 tool uses, 1031 s, $1.90-6.07)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
