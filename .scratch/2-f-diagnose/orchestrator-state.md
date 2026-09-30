@@ -48,8 +48,11 @@ dispatch:
   session_id: aaf2a244958131899 (ordo-high, claude-sonnet-5-5 at the launch, from its transcript)
   report: .scratch/2-f-diagnose/agents/reviews/2a-report.md
   brief_check: .scratch/2-f-diagnose/agents/reviews/2a-brief-check.md (ordo-high, claude-opus-5-5; 170502 tokens, 19 tool uses, 491 s, $0.92-3.78)
+  builder_usage: round 0 161787 tokens, 37 tool uses, 519 s, $1.32-2.61 (claude-sonnet-5-5)
+  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2a-refuter.md (ordo-high, claude-opus-5-5; 22 tool uses; 2 Proof, 5 Standards, 2 Behaviour findings)
+  round_brief: .scratch/2-f-diagnose/agents/briefs/2a-round-1.md
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
