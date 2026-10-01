@@ -1,0 +1,1461 @@
+diff --git a/README.md b/README.md
+index a440c52..54c1b80 100644
+--- a/README.md
++++ b/README.md
+@@ -129,6 +129,12 @@ On a repository that already has the file, `/ordo-init` checks it. The same chec
+ python3 <skills>/ordo-init/templates/check_config.py <repository>
+ ```
+ 
++The closing step of a plan runs the cost script, which prices the usage of each agent role from the agents' transcripts, and the same script runs on its own on any ledger folder, open or archived, with `<transcript root>` defaulting to `~/.claude/projects`:
++
++```sh
++python3 <skills>/plan-orchestration/templates/plan_cost.py <ledger folder> [<transcript root>]
++```
++
+ To write the file by hand, start from one of the two example files in the plan skill's `templates/` folder:
+ 
+ ```sh
+diff --git a/docs/dev/building.md b/docs/dev/building.md
+index 41b8fa2..daa0253 100644
+--- a/docs/dev/building.md
++++ b/docs/dev/building.md
+@@ -9,6 +9,7 @@ sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on comp
+ sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules and plan-terms blocks, its --write repair, its --only glossary form and its refusals
+ sh skills/repo-setup/templates/hooks/git_guard.test.sh  # git_guard.py on the commands it must block (push, reset --hard, clean --force, checkout and restore of the whole tree, reached through separators, substitutions, wrappers, shells and aliases) and on the commands it must let through
+ sh skills/session-retro/templates/transcript_window.test.sh  # transcript_window.py on scratch transcript folders: the window and its boundaries in each time form, the main and subagent files, the order and the prefix, what counts as a user message, assistant text and tool calls, each redaction pattern, skipped lines, an unreadable file and the usage errors
++sh skills/plan-orchestration/templates/plan_cost.test.sh  # plan_cost.py on scratch ledger folders and transcript roots: the hand-computed costs of every role, a response written as several entries counted once, each price and rounding half up, the order of the agent table, both forms of the agent list, every error line and the usage errors
+ python3 skills/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
+ sh utils/pin.test.sh                                   # pin.sh in pin and check mode under a scratch HOME, its refusals included
+ sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists
+diff --git a/docs/dev/change-standard.md b/docs/dev/change-standard.md
+index b13984b..82ea95f 100644
+--- a/docs/dev/change-standard.md
++++ b/docs/dev/change-standard.md
+@@ -70,6 +70,7 @@ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
++sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ sh utils/pin.test.sh 2>&1 | tail -1
+ sh utils/check_coverage.test.sh 2>&1 | tail -1
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 195f460..9b004f2 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -23,10 +23,12 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **cause not found**: the end of a diagnosis when the second list of hypotheses is falsified, when no probe separates the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose. The record says so with every probe, or every way tried in its "No red command" section. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 15 and "Stops".
+ - **change point**: a behaviour of a Claude Code session worth changing, written in a sessions report under "Change" with its places and a proposal: the sentence to add to a rule, skill or brief, where a written rule should be read, or a sharper sentence for a written rule or the text that should have prevented the behaviour. Stated in: `session-retro`, Steps 6 and 9.
+ - **Closed**: the heading of a report that holds each finding's disposition. In a refuter report that is whether the finding was closed in a round, fixed at landing or raised as an open item. In a brief-check report it is the change to the brief that closed the finding, and the heading also holds each dictated line added to the brief after the check, with whether it holds. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+-- **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
++- **closing report**: the file `agents/reviews/closing.md` the closing step writes, holding the cost script's output for the plan. Stated in: `plan`, Steps 2; `plan-orchestration`, "Usage".
++- **closing step**: the last step of every plan, which `/plan` writes itself: the closing report written before the folder moves, the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. A non-zero exit of the cost script holds the folder where it is. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop or what a quoted ruling states on whether the skill may commit. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+ - **completion notice**: what the runner reports when an agent ends, its final message and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+ - **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer`. Stated in: `plan`, Steps 4.
++- **cost script**: the script `templates/plan_cost.py` of `plan-orchestration`, which prices each agent role of a plan from the agents' transcripts, counting each response once. Its price table, `templates/prices.txt`, is copied by hand from the pricing page. Stated in: `plan-orchestration`, "Usage".
+ - **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **decision form**: the parts every decision of a round has, in this order: a heading `D<n>. <the decision, as a phrase>`, the lettered options with their pros and cons, the reference line, `Recommend <letter>.` with its reason, and the lazy option named or "none" with the reason. Stated in: `grill`, "The decision form".
+ - **Declined to judge**: the section of a refuter or brief-check report that names each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason. Stated in: `refute`, Steps 6; `spec`, "Steps / The brief check".
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index 080f46e..4aa93f5 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -127,6 +127,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
+     - The final message opens as "Reports" says.
+       - It then lists every step landed since the loop began with the path of each report, and the open items.
++      - After the closing step, it also names the path of the closing report.
+ 
+ ## The two tiers, and the models
+ 
+@@ -272,6 +273,8 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ ## Usage
+ 
+ - The landing report states each agent's tokens, tool uses and time, from its completion notice.
++- The closing report holds the cost script's output, as the `plan` skill's Steps 2 says.
++- A person runs the cost script by hand on any ledger folder, open or archived, as `python3 <this skill's folder>/templates/plan_cost.py <ledger folder> [<transcript root>]`.
+ 
+ ## The pace when a deadline is set
+ 
+diff --git a/skills/plan/SKILL.md b/skills/plan/SKILL.md
+index 27ee58b..d810d8f 100644
+--- a/skills/plan/SKILL.md
++++ b/skills/plan/SKILL.md
+@@ -80,6 +80,10 @@ metadata:
+    - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again, at most twice, before the draft is shown.
+    - A check that could still pass after the second redraft is kept as drafted, and its answer and reason go to the user at Steps 3.
+    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
++     - Before the folder moves, the closing step runs the `plan-orchestration` skill's `templates/plan_cost.py` on the ledger folder.
++     - The closing step writes the script's output to `agents/reviews/closing.md`, the closing report.
++     - A non-zero exit of the script is the stop "A red check" of `plan-orchestration`, and the stop message holds the script's `error:` lines.
++     - The ledger folder moves only when the script exits 0.
+    - `/plan` writes the closing step itself, at the end of the drafted list.
+    - The step is done when the draft holds the goal, the gate, the answers of "## Gate", the Rulings, the Agents section and the step list with the closing step last, and when the draft, read back, holds every agent bullet of the rulings file once, in its Agents section.
+ 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).
+diff --git a/skills/plan/templates/plan.md b/skills/plan/templates/plan.md
+index 6f0eb1b..98e58d7 100644
+--- a/skills/plan/templates/plan.md
++++ b/skills/plan/templates/plan.md
+@@ -18,7 +18,7 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step of work
+ - <1> <what the step delivers, in one line; the check that proves it> (<n> commit) (approved)
+ - <2> <what the step delivers, in one line; the check that proves it> (<n> commit; orchestrator, no agent) (approved)
+ - <2a> <a step a ruling of the user added after the approval, in one line; the check that proves it> (<n> commit) (ruling <L>)
+-- <last> the closing: the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
++- <last> the closing: the cost script's output written as the closing report, the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+ 
+ ## Could run in parallel
+ 
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 479446f..1efb4b8 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -18,10 +18,12 @@
+ - **cause not found**: the end of a diagnosis when the second list of hypotheses is falsified, when no probe separates the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose. The record says so with every probe, or every way tried in its "No red command" section. Inside a plan it is raised to the user as an open item and is not sent to the builder. Stated in: `diagnose`, Steps 15 and "Stops".
+ - **change point**: a behaviour of a Claude Code session worth changing, written in a sessions report under "Change" with its places and a proposal: the sentence to add to a rule, skill or brief, where a written rule should be read, or a sharper sentence for a written rule or the text that should have prevented the behaviour. Stated in: `session-retro`, Steps 6 and 9.
+ - **Closed**: the heading of a report that holds each finding's disposition. In a refuter report that is whether the finding was closed in a round, fixed at landing or raised as an open item. In a brief-check report it is the change to the brief that closed the finding, and the heading also holds each dictated line added to the brief after the check, with whether it holds. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+-- **closing step**: the last step of every plan, which `/plan` writes itself: the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. Stated in: `plan`, Steps 2.
++- **closing report**: the file `agents/reviews/closing.md` the closing step writes, holding the cost script's output for the plan. Stated in: `plan`, Steps 2; `plan-orchestration`, "Usage".
++- **closing step**: the last step of every plan, which `/plan` writes itself: the closing report written before the folder moves, the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. A non-zero exit of the cost script holds the folder where it is. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop or what a quoted ruling states on whether the skill may commit. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+ - **completion notice**: what the runner reports when an agent ends, its final message and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+ - **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer`. Stated in: `plan`, Steps 4.
++- **cost script**: the script `templates/plan_cost.py` of `plan-orchestration`, which prices each agent role of a plan from the agents' transcripts, counting each response once. Its price table, `templates/prices.txt`, is copied by hand from the pricing page. Stated in: `plan-orchestration`, "Usage".
+ - **dead builder**: a builder the runner's agent listing no longer shows and whose report never arrived. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **decision form**: the parts every decision of a round has, in this order: a heading `D<n>. <the decision, as a phrase>`, the lettered options with their pros and cons, the reference line, `Recommend <letter>.` with its reason, and the lazy option named or "none" with the reason. Stated in: `grill`, "The decision form".
+ - **Declined to judge**: the section of a refuter or brief-check report that names each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason. Stated in: `refute`, Steps 6; `spec`, "Steps / The brief check".
+diff --git a/skills/plan-orchestration/templates/plan_cost.py b/skills/plan-orchestration/templates/plan_cost.py
+new file mode 100644
+index 0000000..ebd20e0
+--- /dev/null
++++ b/skills/plan-orchestration/templates/plan_cost.py
+@@ -0,0 +1,502 @@
++#!/usr/bin/env python3
++"""Price the usage of each agent role of a plan from the agents' transcripts.
++
++Usage: python3 plan_cost.py <ledger folder> [<transcript root>]
++
++<ledger folder> is a plan's ledger folder, open or archived, absolute or relative. <transcript root> defaults to $HOME/.claude/projects.
++
++The inputs read, and nothing else:
++    prices.txt in this script's own folder, found from the script's resolved path whatever the working folder, and printed as an absolute path. Its first line is a # comment naming the page the prices were copied from. A blank line and a # line after the first are passed over. Every other line is a row of six fields separated by spaces: a model id, then its input, 5-minute cache write, 1-hour cache write, cache read and output price in US dollars per million tokens. A price is digits with an optional fractional part. A model id is listed once.
++    <ledger folder>/plan.md. Its first line is `# Plan: <entry>`, which gives the name printed. Its agents are the bullets of its `## Agents` section, from that heading to the next `## ` heading, and no other line of it is read.
++    <ledger folder>/agents/agent-roles.md, when it exists: its agents are the bullets anywhere in the file.
++    The transcript of each agent: the one file named exactly agent-<agent id>.jsonl anywhere under <transcript root>. A main session file is never read.
++
++An agent is a bullet `- <agent id>: <role>, <served model>`. A line that is not a bullet (a paragraph, a blank line, a heading) is passed over. A line that starts, after any spaces, with `-`, `*` or `+` and then a space or the end of the line is a bullet, and a bullet that is not of that form is an error. An agent id is letters, digits, - and _ only, so an id never reaches a path as a pattern. The served model is not used: each response is priced at the model its own entry names.
++
++The role kinds, in this order: builder (`builder of step <n>`), brief check (`brief check of step <n>`), reviewer (`reviewer of step <n>`), reviewer over a round (`reviewer of step <n> over round <r>`), grill lookup (`grill lookup`). A step is a number with an optional lower-case letter, such as 6b, and a round is a number. Any other role text is an error.
++
++A response is a transcript line that is a JSON object with "type":"assistant" and a message.usage. A response written as several entries has the same message.id and requestId in each, and is counted once, with the counts of its last entry in the file. Per entry, the first of these checks that fails is its one error, and the entries after it are still read:
++    1. usage is an object, and input_tokens, cache_creation_input_tokens, cache_read_input_tokens and output_tokens are each whole numbers of 0 or more, as are cache_creation.ephemeral_5m_input_tokens and cache_creation.ephemeral_1h_input_tokens.
++    2. cache_creation_input_tokens equals the sum of the two cache writes, and is 0 when the usage has no cache_creation, absent or null.
++    3. An entry whose input, 5-minute write, 1-hour write, cache read and output counts are all 0 is passed over; the runner writes such an entry, with the model <synthetic>, for a failed request.
++    4. message.id and requestId are each a non-empty string, and message.model is a non-empty string.
++    5. usage.speed is absent, null or standard, usage.inference_geo is not us, usage.service_tier is absent, null or standard, and usage.server_tool_use, when set, is an object with no web_search_requests above 0, since prices.txt holds no price for those.
++The price of a response is each of its five counts times its column of the row for its model, divided by 1,000,000, computed with decimal.Decimal from the table's text so no rounding enters.
++
++The output, on success, is written for a person to read:
++    Plan <entry>: priced usage of its agents
++    Prices from <the table's path>:
++    the table's first comment line without its `# `
++    a blank line, then a table with one row per role kind that has agents, in the order above, with the columns Role, Agents, Input, Cache write 5m, Cache write 1h, Cache read, Output and Cost (USD), then a row Total
++    a blank line, then a table with one row per agent, with the columns Agent, Role, Model, the five counts and Cost (USD), ordered by role kind, then step number as a number and then its letter, then round as a number, then agent id
++Counts are whole numbers with no separators. Model lists each model of the agent's responses, comma-separated, in the order first met, and is - for an agent with no counted response, whose counts are 0 and cost 0.00. A cost has two decimals, rounded half up from the exact sum; the Total row is rounded from the exact total, not summed from rounded rows. Each column is padded with spaces so it lines up.
++
++The script reads every input before it prints anything. Each error is one line `error: <what>` on stderr, and stdout stays empty. An error names its file and line where it has them. The errors of the run, exit 1:
++    error: cannot read <path>: <reason>   (the table, plan.md, agent-roles.md, a transcript or a folder under the transcript root; the reason is the system's text, or "not valid UTF-8")
++    error: <table>:<line>: the first line is not a # comment
++    error: <table>:<line>: a row has <n> fields, expected 6
++    error: <table>:<line>: price '<text>' is not a number
++    error: <table>:<line>: model <model> is listed twice, first on line <n>
++    error: <plan.md>:1: the first line is not "# Plan: <entry>"
++    error: <file>:<line>: the bullet is not of the form "- <agent id>: <role>, <served model>"
++    error: <file>:<line>: invalid agent id '<id>'
++    error: agent <id> has an unknown role: <role>
++    error: agent <id> is listed twice: <file>:<line> and <file>:<line>
++    error: the ledger names no agent   (no bullet in plan.md's Agents section or in agent-roles.md)
++    error: no transcript of agent <id> under <transcript root>
++    error: agent <id> has <n> transcripts: <path>, <path>
++    error: <transcript>:<line>: not valid JSON
++    error: <transcript>:<line>: not a JSON object
++    error: <transcript>:<line>: usage is not an object
++    error: <transcript>:<line>: <field> is missing
++    error: <transcript>:<line>: <field> is not a whole number of 0 or more: <value>
++    error: <transcript>:<line>: usage.cache_creation is not an object
++    error: <transcript>:<line>: usage.cache_creation_input_tokens is <n> and usage has no cache_creation
++    error: <transcript>:<line>: usage.cache_creation_input_tokens is <n>, but the two cache writes sum to <m>
++    error: <transcript>:<line>: usage.server_tool_use is not an object
++    error: <transcript>:<line>: no message.id
++    error: <transcript>:<line>: no requestId
++    error: <transcript>:<line>: no message.model
++    error: <transcript>:<line>: <field> is <value>, which the table does not price
++    error: model <model> of agent <id> is not in <the table's path>   (one line per model and agent, whatever the number of responses that carry it)
++A table with an error prices nothing, so the model lines are left out of that run.
++
++The usage errors, each followed by the line `usage: python3 plan_cost.py <ledger folder> [<transcript root>]`, exit 2:
++    error: expected <ledger folder> and, optionally, <transcript root>   (no argument, or more than two)
++    error: no such folder: <path>   (the ledger folder or the transcript root)
++    error: not a folder: <path>   (the ledger folder or the transcript root)
++    error: no plan.md in <ledger folder>
++
++Exit statuses: 0 the output printed, 1 at least one error of the run, 2 a usage error.
++
++Standard library only; runs on Python 3.9 and newer.
++"""
++
++from __future__ import annotations
++
++import decimal
++import json
++import os
++import re
++import sys
++from decimal import Decimal
++from typing import Any, NamedTuple
++
++_USAGE = "usage: python3 plan_cost.py <ledger folder> [<transcript root>]"
++_ARGUMENTS_ERROR = "expected <ledger folder> and, optionally, <transcript root>"
++_FORM_ERROR = 'the bullet is not of the form "- <agent id>: <role>, <served model>"'
++_TABLE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "prices.txt")
++_AGENT_ID = re.compile(r"[A-Za-z0-9_-]+")
++_PLAN_LINE = re.compile(r"# Plan: +(\S.*)")
++_BULLET = re.compile(r" *[-*+](?: |$)")
++_AGENT_BULLET = re.compile(r"- ([^:]*): (.+), ([^,]+)")
++_PRICE = re.compile(r"[0-9]+(?:\.[0-9]+)?")
++_KINDS = ("builder", "brief check", "reviewer", "reviewer over a round", "grill lookup")
++_ROLES = (
++    re.compile(r"builder of step ([0-9]+)([a-z]?)"),
++    re.compile(r"brief check of step ([0-9]+)([a-z]?)"),
++    re.compile(r"reviewer of step ([0-9]+)([a-z]?)"),
++    re.compile(r"reviewer of step ([0-9]+)([a-z]?) over round ([0-9]+)"),
++    re.compile(r"grill lookup"),
++)
++_COLUMNS = ("Input", "Cache write 5m", "Cache write 1h", "Cache read", "Output")
++_EXACT = decimal.Context(prec=100)
++_MILLION = Decimal(1000000)
++_CENT = Decimal("0.01")
++
++
++class _Problem(Exception):
++    """A defect of one transcript entry, whose text is the error."""
++
++
++class _Agent(NamedTuple):
++    agent_id: str
++    role: str
++    kind: int
++    step: int
++    letter: str
++    round: int
++    where: str
++
++
++class _Result(NamedTuple):
++    agent: _Agent
++    models: list[str]
++    counts: list[int]
++    cost: Decimal
++
++
++def _read_lines(path: str, errors: list[str]) -> list[str] | None:
++    """The lines of a UTF-8 text file, or None after adding the reason to errors."""
++    try:
++        with open(path, encoding="utf-8") as handle:
++            lines = handle.read().split("\n")
++    except OSError as exc:
++        errors.append(f"cannot read {path}: {exc.strerror or exc}")
++        return None
++    except UnicodeDecodeError:
++        errors.append(f"cannot read {path}: not valid UTF-8")
++        return None
++    if lines[-1] == "":
++        lines.pop()
++    return lines
++
++
++def _read_table(errors: list[str]) -> tuple[dict[str, tuple[Decimal, ...]] | None, str]:
++    """The prices by model and the first comment line, or None for the prices after errors."""
++    lines = _read_lines(_TABLE, errors)
++    if lines is None:
++        return None, ""
++    problems = len(errors)
++    prices: dict[str, tuple[Decimal, ...]] = {}
++    listed: dict[str, int] = {}
++    if not lines or not lines[0].startswith("#"):
++        errors.append(f"{_TABLE}:1: the first line is not a # comment")
++    for number, line in enumerate(lines[1:], 2):
++        if line.startswith("#") or not line.strip():
++            continue
++        fields = line.split()
++        if len(fields) != 6:
++            errors.append(f"{_TABLE}:{number}: a row has {len(fields)} fields, expected 6")
++            continue
++        bad = [price for price in fields[1:] if _PRICE.fullmatch(price) is None]
++        if bad:
++            errors.append(f"{_TABLE}:{number}: price '{bad[0]}' is not a number")
++        elif fields[0] in listed:
++            errors.append(
++                f"{_TABLE}:{number}: model {fields[0]} is listed twice, first on line {listed[fields[0]]}"
++            )
++        else:
++            listed[fields[0]] = number
++            prices[fields[0]] = tuple(Decimal(price) for price in fields[1:])
++    if len(errors) > problems:
++        return None, ""
++    return prices, lines[0][1:].strip()
++
++
++def _role_parts(role: str) -> tuple[int, int, str, int] | None:
++    """The role kind, step number, step letter and round of a role text, or None."""
++    for kind, pattern in enumerate(_ROLES):
++        match = pattern.fullmatch(role)
++        if match is not None:
++            groups = match.groups()
++            step = int(groups[0]) if groups else 0
++            letter = groups[1] if groups else ""
++            number = int(groups[2]) if len(groups) > 2 else 0
++            return kind, step, letter, number
++    return None
++
++
++def _read_bullets(
++    path: str, numbered: list[tuple[int, str]], agents: dict[str, _Agent], errors: list[str]
++) -> int:
++    """Add the agents of the bullets among the numbered lines; return the number of bullets."""
++    bullets = 0
++    for number, line in numbered:
++        if _BULLET.match(line) is None:
++            continue
++        bullets += 1
++        where = f"{path}:{number}"
++        match = _AGENT_BULLET.fullmatch(line)
++        if match is None or not match.group(2).strip() or not match.group(3).strip():
++            errors.append(f"{where}: {_FORM_ERROR}")
++            continue
++        agent_id, role = match.group(1), match.group(2).strip()
++        if _AGENT_ID.fullmatch(agent_id) is None:
++            errors.append(f"{where}: invalid agent id '{agent_id}'")
++            continue
++        parts = _role_parts(role)
++        if parts is None:
++            errors.append(f"agent {agent_id} has an unknown role: {role}")
++        elif agent_id in agents:
++            errors.append(f"agent {agent_id} is listed twice: {agents[agent_id].where} and {where}")
++        else:
++            agents[agent_id] = _Agent(agent_id, role, *parts, where)
++    return bullets
++
++
++def _agents_section(lines: list[str]) -> list[tuple[int, str]]:
++    """The numbered lines from each `## Agents` heading to the next `## ` heading."""
++    inside = False
++    section = []
++    for number, line in enumerate(lines, 1):
++        if line.startswith("## "):
++            inside = line.rstrip() == "## Agents"
++        elif inside:
++            section.append((number, line))
++    return section
++
++
++def _read_ledger(ledger: str, errors: list[str]) -> tuple[str, list[_Agent]]:
++    """The plan's entry and its agents in print order, with the errors of the ledger added."""
++    plan = os.path.join(ledger, "plan.md")
++    roles = os.path.join(ledger, "agents", "agent-roles.md")
++    agents: dict[str, _Agent] = {}
++    entry = ""
++    bullets = 0
++    complete = True
++    lines = _read_lines(plan, errors)
++    if lines is None:
++        complete = False
++    else:
++        match = _PLAN_LINE.fullmatch(lines[0].rstrip()) if lines else None
++        if match is None:
++            errors.append(f'{plan}:1: the first line is not "# Plan: <entry>"')
++        else:
++            entry = match.group(1)
++        bullets += _read_bullets(plan, _agents_section(lines), agents, errors)
++    if os.path.exists(roles):
++        lines = _read_lines(roles, errors)
++        if lines is None:
++            complete = False
++        else:
++            bullets += _read_bullets(roles, list(enumerate(lines, 1)), agents, errors)
++    if bullets == 0 and complete:
++        errors.append("the ledger names no agent")
++    ordered = sorted(
++        agents.values(), key=lambda a: (a.kind, a.step, a.letter, a.round, a.agent_id)
++    )
++    return entry, ordered
++
++
++def _find_transcripts(root: str, errors: list[str]) -> dict[str, list[str]]:
++    """The paths of the files named agent-<agent id>.jsonl under the root, by agent id."""
++    found: dict[str, list[str]] = {}
++
++    def unreadable(exc: OSError) -> None:
++        errors.append(f"cannot read {exc.filename}: {exc.strerror or exc}")
++
++    for folder, names, files in os.walk(root, onerror=unreadable):
++        names.sort()
++        for name in sorted(files):
++            if name.startswith("agent-") and name.endswith(".jsonl"):
++                found.setdefault(name[len("agent-") : -len(".jsonl")], []).append(
++                    os.path.join(folder, name)
++                )
++    return found
++
++
++def _count(container: dict[str, Any], key: str, name: str) -> int:
++    """A count of a usage object: a whole number of 0 or more, or raise _Problem."""
++    if key not in container:
++        raise _Problem(f"{name} is missing")
++    value = container[key]
++    if type(value) is not int or value < 0:
++        raise _Problem(f"{name} is not a whole number of 0 or more: {json.dumps(value)}")
++    return value
++
++
++def _not_priced(name: str, value: object) -> _Problem:
++    return _Problem(f"{name} is {json.dumps(value)}, which the table does not price")
++
++
++def _is_text(value: object) -> bool:
++    return isinstance(value, str) and value != ""
++
++
++def _parse_response(
++    entry: dict[str, Any], message: dict[str, Any]
++) -> tuple[tuple[str, str], str, list[int]] | None:
++    """The (message id, request id), model and five counts of a response; None for a zero entry."""
++    usage = message["usage"]
++    if not isinstance(usage, dict):
++        raise _Problem("usage is not an object")
++    input_tokens = _count(usage, "input_tokens", "usage.input_tokens")
++    created = _count(usage, "cache_creation_input_tokens", "usage.cache_creation_input_tokens")
++    read = _count(usage, "cache_read_input_tokens", "usage.cache_read_input_tokens")
++    output = _count(usage, "output_tokens", "usage.output_tokens")
++    writes = usage.get("cache_creation")
++    if writes is None:
++        if created > 0:
++            raise _Problem(
++                f"usage.cache_creation_input_tokens is {created} and usage has no cache_creation"
++            )
++        write_5m = write_1h = 0
++    elif isinstance(writes, dict):
++        prefix = "usage.cache_creation."
++        write_5m = _count(writes, "ephemeral_5m_input_tokens", prefix + "ephemeral_5m_input_tokens")
++        write_1h = _count(writes, "ephemeral_1h_input_tokens", prefix + "ephemeral_1h_input_tokens")
++    else:
++        raise _Problem("usage.cache_creation is not an object")
++    if created != write_5m + write_1h:
++        raise _Problem(
++            f"usage.cache_creation_input_tokens is {created}, "
++            f"but the two cache writes sum to {write_5m + write_1h}"
++        )
++    counts = [input_tokens, write_5m, write_1h, read, output]
++    if not any(counts):
++        return None
++    if not _is_text(message.get("id")):
++        raise _Problem("no message.id")
++    if not _is_text(entry.get("requestId")):
++        raise _Problem("no requestId")
++    if not _is_text(message.get("model")):
++        raise _Problem("no message.model")
++    speed = usage.get("speed")
++    if speed is not None and speed != "standard":
++        raise _not_priced("usage.speed", speed)
++    if usage.get("inference_geo") == "us":
++        raise _not_priced("usage.inference_geo", "us")
++    tier = usage.get("service_tier")
++    if tier is not None and tier != "standard":
++        raise _not_priced("usage.service_tier", tier)
++    tool_use = usage.get("server_tool_use")
++    if tool_use is not None and not isinstance(tool_use, dict):
++        raise _Problem("usage.server_tool_use is not an object")
++    if tool_use is not None and "web_search_requests" in tool_use:
++        name = "usage.server_tool_use.web_search_requests"
++        searches = _count(tool_use, "web_search_requests", name)
++        if searches > 0:
++            raise _not_priced(name, searches)
++    return (message["id"], entry["requestId"]), message["model"], counts
++
++
++def _read_transcript(path: str, errors: list[str]) -> list[tuple[str, list[int]]]:
++    """The (model, counts) of each response of a transcript, in the order first met."""
++    responses: dict[tuple[str, str], tuple[str, list[int]]] = {}
++    try:
++        with open(path, "rb") as handle:
++            for number, raw in enumerate(handle, 1):
++                where = f"{path}:{number}"
++                try:
++                    entry = json.loads(raw.decode("utf-8"))
++                except (UnicodeDecodeError, ValueError, RecursionError):
++                    errors.append(f"{where}: not valid JSON")
++                    continue
++                if not isinstance(entry, dict):
++                    errors.append(f"{where}: not a JSON object")
++                    continue
++                message = entry.get("message")
++                if entry.get("type") != "assistant" or not isinstance(message, dict):
++                    continue
++                if "usage" not in message:
++                    continue
++                try:
++                    parsed = _parse_response(entry, message)
++                except _Problem as problem:
++                    errors.append(f"{where}: {problem}")
++                    continue
++                if parsed is not None:
++                    responses[parsed[0]] = (parsed[1], parsed[2])
++    except OSError as exc:
++        errors.append(f"cannot read {path}: {exc.strerror or exc}")
++    return list(responses.values())
++
++
++def _price_agent(
++    agent: _Agent,
++    root: str,
++    found: dict[str, list[str]],
++    prices: dict[str, tuple[Decimal, ...]] | None,
++    errors: list[str],
++) -> _Result | None:
++    """The counts and cost of one agent, or None after adding its errors."""
++    paths = sorted(found.get(agent.agent_id, []))
++    if not paths:
++        errors.append(f"no transcript of agent {agent.agent_id} under {root}")
++        return None
++    if len(paths) > 1:
++        errors.append(f"agent {agent.agent_id} has {len(paths)} transcripts: {', '.join(paths)}")
++        return None
++    responses = _read_transcript(paths[0], errors)
++    models = list(dict.fromkeys(model for model, _ in responses))
++    if prices is None:
++        return None
++    missing = [model for model in models if model not in prices]
++    for model in missing:
++        errors.append(f"model {model} of agent {agent.agent_id} is not in {_TABLE}")
++    if missing:
++        return None
++    counts = [0] * 5
++    cost = Decimal(0)
++    for model, response in responses:
++        counts = [total + count for total, count in zip(counts, response)]
++        cost += sum(Decimal(count) * price for count, price in zip(response, prices[model])) / _MILLION
++    return _Result(agent, models, counts, cost)
++
++
++def _money(value: Decimal) -> str:
++    return str(value.quantize(_CENT, rounding=decimal.ROUND_HALF_UP))
++
++
++def _table(head: list[str], rows: list[list[str]], text_columns: set[int]) -> list[str]:
++    """The rows under the head, each column padded to its widest cell, text left and numbers right."""
++    widths = [max(len(row[column]) for row in [head] + rows) for column in range(len(head))]
++    return [
++        "  ".join(
++            cell.ljust(width) if column in text_columns else cell.rjust(width)
++            for column, (cell, width) in enumerate(zip(row, widths))
++        )
++        for row in [head] + rows
++    ]
++
++
++def _report(entry: str, description: str, results: list[_Result]) -> str:
++    role_rows = []
++    total_counts = [0] * 5
++    total_cost = Decimal(0)
++    for kind, name in enumerate(_KINDS):
++        chosen = [result for result in results if result.agent.kind == kind]
++        if not chosen:
++            continue
++        counts = [sum(result.counts[column] for result in chosen) for column in range(5)]
++        cost = sum(result.cost for result in chosen)
++        role_rows.append([name, str(len(chosen))] + [str(count) for count in counts] + [_money(cost)])
++        total_counts = [total + count for total, count in zip(total_counts, counts)]
++        total_cost += cost
++    role_rows.append(
++        ["Total", str(len(results))] + [str(count) for count in total_counts] + [_money(total_cost)]
++    )
++    agent_rows = [
++        [result.agent.agent_id, result.agent.role, ", ".join(result.models) or "-"]
++        + [str(count) for count in result.counts]
++        + [_money(result.cost)]
++        for result in results
++    ]
++    lines = [
++        f"Plan {entry}: priced usage of its agents",
++        f"Prices from {_TABLE}:",
++        description,
++        "",
++    ]
++    lines += _table(["Role", "Agents", *_COLUMNS, "Cost (USD)"], role_rows, {0})
++    lines.append("")
++    lines += _table(["Agent", "Role", "Model", *_COLUMNS, "Cost (USD)"], agent_rows, {0, 1, 2})
++    return "\n".join(lines) + "\n"
++
++
++def _usage_error(text: str) -> int:
++    print(f"error: {text}", file=sys.stderr)
++    print(_USAGE, file=sys.stderr)
++    return 2
++
++
++def main(argv: list[str]) -> int:
++    if len(argv) not in (1, 2):
++        return _usage_error(_ARGUMENTS_ERROR)
++    ledger = argv[0]
++    root = argv[1] if len(argv) == 2 else os.path.join(os.path.expanduser("~"), ".claude", "projects")
++    for folder in (ledger, root):
++        if not os.path.exists(folder):
++            return _usage_error(f"no such folder: {folder}")
++        if not os.path.isdir(folder):
++            return _usage_error(f"not a folder: {folder}")
++        if folder == ledger and not os.path.isfile(os.path.join(ledger, "plan.md")):
++            return _usage_error(f"no plan.md in {ledger}")
++    errors: list[str] = []
++    prices, description = _read_table(errors)
++    entry, agents = _read_ledger(ledger, errors)
++    found = _find_transcripts(root, errors)
++    with decimal.localcontext(_EXACT):
++        results = [_price_agent(agent, root, found, prices, errors) for agent in agents]
++        if errors:
++            for error in errors:
++                print(f"error: {error}", file=sys.stderr)
++            return 1
++        report = _report(entry, description, [result for result in results if result is not None])
++    sys.stdout.write(report)
++    return 0
++
++
++if __name__ == "__main__":
++    sys.exit(main(sys.argv[1:]))
+diff --git a/skills/plan-orchestration/templates/plan_cost.test.sh b/skills/plan-orchestration/templates/plan_cost.test.sh
+new file mode 100644
+index 0000000..bc12a5e
+--- /dev/null
++++ b/skills/plan-orchestration/templates/plan_cost.test.sh
+@@ -0,0 +1,809 @@
++#!/bin/sh
++# Exercise plan_cost.py on scratch ledger folders and transcript roots, each case one fixture and one run, checking stdout, stderr and the exit status.
++# Hand-computed fixture: a ledger of five agents (a builder with a response written as two entries, a brief check, a reviewer, a reviewer over a round, a grill lookup) over a transcript root with a main session and one subagent file per agent; the whole stdout is compared with the text computed by hand, 29.02, 4.50, 14.00, 4.20 and 2.20 for the agents and 53.92 in all, the Opus 5.5 cache read at 0.20, the two entries of one response counted once with the counts of the last, the agents listed in the ledger out of order, the ledger's Steps, Rulings and booking bullets of the agent form passed over, the main session never read, and an assistant entry with no usage passed over.
++# Same stdout as the hand-computed fixture: the last agent listed in agents/agent-roles.md instead of plan.md's Agents section; HOME set with one argument; a relative ledger path run from another working folder, the table path printed absolute; a ledger and a transcript root whose paths hold a space; the script run under /usr/bin/python3 as under python3, when that exists; a copy of the script beside a copy of the table with a blank line and a third comment line in it.
++# Own fixtures: an agent whose responses are on two models, each priced at its own model and listed in the order met; responses sharing only a message id or only a request id counted apart; every row of prices.txt priced by hand from 1,000,000 of each count; rounding half up of an agent's cost (0.005 gives 0.01) and of a role's and the total's exact sum (two agents of one role and two roles of one agent each, 0.004 and 0.004, give 0.00 and 0.00 and 0.01); the agent table ordered by role kind, step as a number and then its letter, round as a number, then id; plan 2.E's form, no Agents heading and every agent in agent-roles.md with a step 14b; an agent with only a zero-count entry; agents in nested and separate session folders; standard speed, geo, tier and no web search priced; a copy of the table with a price of 0.15 on 100000 tokens, exactly 0.015, priced from the table's text as 0.02.
++# Errors, each exit 1 with nothing on stdout and the exact error: lines: a model the table lacks in three responses, one line; two missing models of one agent and one of another, one line each; an agent with no transcript and one with two; the missing model and the missing transcript in one run; an id listed twice; ids a*b and ../x; a bullet not of the form in the section and in agent-roles.md, a * bullet, an empty id; roles planner of step 1 and four near misses; no agent bullet; a plan.md whose first line is # Notes and one with an empty entry; a plan.md that is not UTF-8; agent-roles.md that is a directory; a transcript line that is not JSON, one that is not UTF-8 and one that is []; a response with no message.model, a null, a negative, a fractional, a true and a missing count, a usage, a cache_creation and a server_tool_use that are not objects; the zero-count entry with output 5 and no requestId, and an entry with counts and no message.id; cache_creation_input_tokens not the sum of the cache writes and above 0 with no cache_creation, with a valid entry beside them; fast speed, us geo, batch tier and two web searches; an unreadable folder under the transcript root and an unreadable transcript file, both skipped when the test runs as root.
++# The table, on a copy of the script beside a copy of the table, each exit 1 with the exact error: line naming the table's path and line: missing, empty, a first line that is not a comment, a row of five fields and of seven, a price abc, NaN and -4, a model listed twice, two bad rows both reported.
++# Usage errors, each exit 2 with the error: line and the usage line: no argument, three arguments, a ledger folder that does not exist, a ledger path that is a file, a ledger folder with no plan.md, a transcript root that does not exist and one that is a file.
++
++set -u
++
++fail() {
++    printf 'FAIL: %s\n' "$1" >&2
++    exit 1
++}
++
++test_root=$(mktemp -d "${TMPDIR:-/tmp}/plan-cost-test.XXXXXX") || fail "could not create scratch directory"
++trap 'chmod -R u+rwx "$test_root" 2>/dev/null; rm -rf "$test_root"' 0 1 2 3 15
++test_root=$(CDPATH= cd "$test_root" && pwd -P) || fail "could not resolve scratch directory"
++script_dir=$(CDPATH= cd "$(dirname "$0")" && pwd -P)
++tool=$script_dir/plan_cost.py
++table=$script_dir/prices.txt
++out=$test_root/out
++err=$test_root/err
++exp_out=$test_root/exp-out
++exp_err=$test_root/exp-err
++opus=claude-opus-5-5
++sonnet=claude-sonnet-5-5
++haiku=claude-haiku-4-5-20251001
++usage_line='usage: python3 plan_cost.py <ledger folder> [<transcript root>]'
++form_error='the bullet is not of the form "- <agent id>: <role>, <served model>"'
++
++# Run the script with the given arguments, keeping stdout, stderr and the exit status.
++run() {
++    python3 "$tool" "$@" >"$out" 2>"$err"
++    status=$?
++}
++
++# Write each argument as one line of the file named by the first argument; no further argument gives an empty file.
++lines() {
++    dest=$1
++    shift
++    : >"$dest"
++    for text in "$@"; do
++        printf '%s\n' "$text" >>"$dest"
++    done
++}
++
++want_err() {
++    lines "$exp_err" "$@"
++}
++
++# A run that printed the expected stdout, nothing on stderr, exit 0.
++check_ok() {
++    [ "$status" -eq 0 ] || fail "$1: exit status $status, expected 0; stderr: $(cat "$err")"
++    [ ! -s "$err" ] || fail "$1: stderr is not empty: $(cat "$err")"
++    cmp -s "$out" "$exp_out" || fail "$1: stdout differs, got: $(cat "$out")"
++}
++
++# A run that printed the expected error lines, nothing on stdout, the given exit status.
++check_error() {
++    [ "$status" -eq "$2" ] || fail "$1: exit status $status, expected $2; stderr: $(cat "$err")"
++    [ ! -s "$out" ] || fail "$1: stdout is not empty: $(cat "$out")"
++    cmp -s "$err" "$exp_err" || fail "$1: stderr differs, got: $(cat "$err")"
++}
++
++# A usage error: exit 2, the error line and the usage line.
++check_usage() {
++    want_err "$2" "$usage_line"
++    check_error "$1" 2
++}
++
++# The number of the first line of a file that equals the text.
++line_of() {
++    grep -n -x -F -- "$2" "$1" | head -n 1 | cut -d: -f1
++}
++
++# Entry builders: each prints one transcript line with the field names and nesting of a real entry.
++entry() {
++    printf '{"type":"assistant","message":{"model":"%s","id":"%s","type":"message","role":"assistant","usage":%s},"requestId":"%s","timestamp":"2026-09-30T10:00:00.000Z"}\n' "$3" "$1" "$4" "$2"
++}
++
++# usage <input> <5m write> <1h write> <read> <output> [extra usage fields, each starting with a comma]
++usage() {
++    printf '{"input_tokens":%s,"cache_creation_input_tokens":%s,"cache_read_input_tokens":%s,"output_tokens":%s,"cache_creation":{"ephemeral_5m_input_tokens":%s,"ephemeral_1h_input_tokens":%s}%s}' "$1" "$(($2 + $3))" "$4" "$5" "$2" "$3" "${6:-}"
++}
++
++# resp <message id> <request id> <model> <input> <5m write> <1h write> <read> <output> [extra usage fields]
++resp() {
++    entry "$1" "$2" "$3" "$(usage "$4" "$5" "$6" "$7" "$8" "${9:-}")"
++}
++
++# The entry the runner writes for a failed request: model <synthetic>, no requestId, every count 0.
++synthetic() {
++    printf '{"type":"assistant","message":{"model":"<synthetic>","id":"%s","type":"message","role":"assistant","usage":%s},"timestamp":"2026-09-30T10:00:00.000Z"}\n' "$1" "$(usage 0 0 0 0 0)"
++}
++
++user_entry() {
++    printf '{"type":"user","message":{"role":"user","content":"a prompt"},"timestamp":"2026-09-30T10:00:00.000Z"}\n'
++}
++
++# put <transcript root> <session folder> <agent id>: standard input becomes the agent's transcript file.
++put() {
++    mkdir -p "$1/$2/subagents" && cat >"$1/$2/subagents/agent-$3.jsonl"
++}
++
++# ledger <folder> <bullet>...: plan.md with each bullet in its Agents section, and bullets of the agent form in its Steps, Rulings and booking.
++ledger() {
++    dest=$1
++    shift
++    mkdir -p "$dest/agents"
++    {
++        printf '%s\n' '# Plan: 9.Z Fixture' '' 'The plan opens with its goal.' ''
++        printf '%s\n' '## Steps, in execution order' '' '- 1 builder of step 1 (approved)' "- ghost1: builder of step 9, $opus" ''
++        printf '%s\n' '## Rulings (2026-09-30)' '' "- ghost2: reviewer of step 9, $opus (the user)." ''
++        printf '%s\n' '## Agents' '' 'Each agent has one bullet.' ''
++        for bullet in "$@"; do
++            printf '%s\n' "$bullet"
++        done
++        printf '%s\n' '' '## Blocked, and by what' '' "- ghost3: grill lookup, $opus" ''
++        printf '%s\n' '## Booking of step 1' '' "- Usage: brief check ordo-high, agent ab1, $opus, 1 tokens"
++    } >"$dest/plan.md"
++}
++
++# roles <ledger folder> <bullet>...: agents/agent-roles.md holding the bullets.
++roles() {
++    dest=$1/agents/agent-roles.md
++    shift
++    mkdir -p "$(dirname "$dest")"
++    lines "$dest" '# Agent roles' '' 'The agents of the plan.' ''
++    for bullet in "$@"; do
++        printf '%s\n' "$bullet" >>"$dest"
++    done
++}
++
++b_ab1="- ab1: builder of step 1, $sonnet"
++b_abc="- abc: brief check of step 1, $opus"
++b_ar1="- ar1: reviewer of step 1, $opus"
++b_ar2="- ar2: reviewer of step 1 over round 1, $sonnet"
++b_ag1="- ag1: grill lookup, $opus"
++
++# The transcript root of the hand-computed fixture: a main session that is never read and one file per agent.
++main_root() {
++    root=$1
++    mkdir -p "$root/p"
++    {
++        resp m9 r9 $opus 1 1 1 1 1
++        printf 'not json\n'
++    } >"$root/p/s1.jsonl"
++    {
++        resp m1 r1 $sonnet 1000000 2000000 0 0 500000
++        printf '{"type":"assistant","message":{"role":"assistant","content":[]},"timestamp":"2026-09-30T10:00:00.000Z"}\n'
++        resp m2 r2 $sonnet 10000 0 1000000 50000000 100000
++        user_entry
++        resp m2 r2 $sonnet 10000 0 1000000 50000000 300000
++    } | put "$root" p/s1 ab1
++    resp m3 r3 $opus 500000 1000000 0 10000000 250000 | put "$root" p/s1 ar1
++    resp m4 r4 $sonnet 100000 0 500000 5000000 100000 | put "$root" p/s1 ar2
++    resp m5 r5 $opus 250000 400000 0 2500000 50000 | put "$root" p/s1 abc
++    resp m6 r6 $opus 125000 0 125000 1000000 25000 | put "$root" p/s1 ag1
++}
++
++# The hand-computed fixture in <folder>/ledger and <folder>/root, the agents listed out of order.
++main_fixture() {
++    ledger "$1/ledger" "$b_ag1" "$b_ar2" "$b_abc" "$b_ar1" "$b_ab1"
++    main_root "$1/root"
++}
++
++# The first lines of a successful run: the plan, the table's path and its first comment line, then a blank line.
++header() {
++    printf 'Plan %s: priced usage of its agents\n' "$1"
++    printf 'Prices from %s:\n' "${shown_table:-$table}"
++    printf '%s\n\n' 'Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.'
++}
++
++main_tables() {
++    cat <<'EOF'
++Role                   Agents    Input  Cache write 5m  Cache write 1h  Cache read   Output  Cost (USD)
++builder                     1  1010000         2000000         1000000    50000000   800000       29.02
++brief check                 1   250000          400000               0     2500000    50000        4.50
++reviewer                    1   500000         1000000               0    10000000   250000       14.00
++reviewer over a round       1   100000               0          500000     5000000   100000        4.20
++grill lookup                1   125000               0          125000     1000000    25000        2.20
++Total                       5  1985000         3400000         1625000    68500000  1225000       53.92
++
++Agent  Role                             Model                Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ab1    builder of step 1                claude-sonnet-5-5  1010000         2000000         1000000    50000000  800000       29.02
++abc    brief check of step 1            claude-opus-5-5     250000          400000               0     2500000   50000        4.50
++ar1    reviewer of step 1               claude-opus-5-5     500000         1000000               0    10000000  250000       14.00
++ar2    reviewer of step 1 over round 1  claude-sonnet-5-5   100000               0          500000     5000000  100000        4.20
++ag1    grill lookup                     claude-opus-5-5     125000               0          125000     1000000   25000        2.20
++EOF
++}
++
++want_main() {
++    {
++        header "9.Z Fixture"
++        main_tables
++    } >"$exp_out"
++}
++
++# ---- The hand-computed fixture ----
++
++d=$test_root/main
++main_fixture "$d"
++run "$d/ledger" "$d/root"
++want_main
++check_ok "the hand-computed fixture"
++
++d=$test_root/roles-file
++ledger "$d/ledger" "$b_ar2" "$b_abc" "$b_ar1" "$b_ab1"
++roles "$d/ledger" "$b_ag1"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_main
++check_ok "ag1 listed in agent-roles.md instead of plan.md"
++
++d=$test_root/default-root
++ledger "$d/ledger" "$b_ag1" "$b_ar2" "$b_abc" "$b_ar1" "$b_ab1"
++main_root "$d/home/.claude/projects"
++HOME="$d/home" python3 "$tool" "$d/ledger" >"$out" 2>"$err"
++status=$?
++want_main
++check_ok "the default transcript root, one argument"
++
++d=$test_root/main
++(cd "$d" && python3 "$tool" ledger root >"$out" 2>"$err")
++status=$?
++want_main
++check_ok "a relative ledger path from another working folder"
++
++d="$test_root/with space"
++main_fixture "$d"
++mv "$d/ledger" "$d/led ger"
++mv "$d/root" "$d/ro ot"
++run "$d/led ger" "$d/ro ot"
++want_main
++check_ok "a space in the ledger folder and in the transcript root"
++
++if [ -x /usr/bin/python3 ]; then
++    d=$test_root/main
++    /usr/bin/python3 "$tool" "$d/ledger" "$d/root" >"$out" 2>"$err"
++    status=$?
++    want_main
++    check_ok "/usr/bin/python3"
++fi
++
++# ---- Own fixtures ----
++
++d=$test_root/mixed
++ledger "$d/ledger" "- am1: builder of step 1, $haiku" "- am2: reviewer of step 1, $haiku"
++{
++    resp m1 r1 $opus 1000000 0 0 0 100000
++    resp m2 r2 $sonnet 1000000 0 0 0 100000
++    resp m3 r3 $opus 500000 0 0 0 0
++} | put "$d/root" p/s1 am1
++{
++    resp m4 r4 $sonnet 1000000 0 0 0 50000
++    resp m5 r5 $opus 0 0 0 5000000 0
++} | put "$d/root" p/s1 am2
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role      Agents    Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder        1  2500000               0               0           0  200000       11.00
++reviewer       1  1000000               0               0     5000000   50000        3.50
++Total          2  3500000               0               0     5000000  250000       14.50
++
++Agent  Role                Model                                 Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++am1    builder of step 1   claude-opus-5-5, claude-sonnet-5-5  2500000               0               0           0  200000       11.00
++am2    reviewer of step 1  claude-sonnet-5-5, claude-opus-5-5  1000000               0               0     5000000   50000        3.50
++EOF
++} >"$exp_out"
++check_ok "responses on two models, each priced at its own model"
++
++d=$test_root/pairs
++ledger "$d/ledger" "- ad1: grill lookup, $haiku"
++{
++    resp m1 r1 $haiku 1000000 0 0 0 0
++    resp m1 r2 $haiku 1000000 0 0 0 0
++    resp m2 r1 $haiku 1000000 0 0 0 0
++} | put "$d/root" p/s1 ad1
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role          Agents    Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++grill lookup       1  3000000               0               0           0       0        3.00
++Total              1  3000000               0               0           0       0        3.00
++
++Agent  Role          Model                        Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ad1    grill lookup  claude-haiku-4-5-20251001  3000000               0               0           0       0        3.00
++EOF
++} >"$exp_out"
++check_ok "responses sharing only a message id or only a request id are counted apart"
++
++d=$test_root/rows
++ledger "$d/ledger" "- p1: grill lookup, $opus" "- p2: grill lookup, $sonnet" "- p3: grill lookup, claude-sonnet-5" "- p4: grill lookup, $haiku"
++resp m1 r1 $opus 1000000 1000000 1000000 1000000 1000000 | put "$d/root" p/s1 p1
++resp m2 r2 $sonnet 1000000 1000000 1000000 1000000 1000000 | put "$d/root" p/s1 p2
++resp m3 r3 claude-sonnet-5 1000000 1000000 1000000 1000000 1000000 | put "$d/root" p/s1 p3
++resp m4 r4 $haiku 1000000 1000000 1000000 1000000 1000000 | put "$d/root" p/s1 p4
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role          Agents    Input  Cache write 5m  Cache write 1h  Cache read   Output  Cost (USD)
++grill lookup       4  4000000         4000000         4000000     4000000  4000000       83.95
++Total              4  4000000         4000000         4000000     4000000  4000000       83.95
++
++Agent  Role          Model                        Input  Cache write 5m  Cache write 1h  Cache read   Output  Cost (USD)
++p1     grill lookup  claude-opus-5-5            1000000         1000000         1000000     1000000  1000000       37.20
++p2     grill lookup  claude-sonnet-5-5          1000000         1000000         1000000     1000000  1000000       18.70
++p3     grill lookup  claude-sonnet-5            1000000         1000000         1000000     1000000  1000000       18.70
++p4     grill lookup  claude-haiku-4-5-20251001  1000000         1000000         1000000     1000000  1000000        9.35
++EOF
++} >"$exp_out"
++check_ok "every row of prices.txt priced from 1000000 of each count"
++
++d=$test_root/round-agent
++ledger "$d/ledger" "- ah1: grill lookup, $haiku"
++resp m1 r1 $haiku 5000 0 0 0 0 | put "$d/root" p/s1 ah1
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role          Agents  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++grill lookup       1   5000               0               0           0       0        0.01
++Total              1   5000               0               0           0       0        0.01
++
++Agent  Role          Model                      Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ah1    grill lookup  claude-haiku-4-5-20251001   5000               0               0           0       0        0.01
++EOF
++} >"$exp_out"
++check_ok "0.005 rounds half up to 0.01"
++
++d=$test_root/round-total
++ledger "$d/ledger" "- ah2: grill lookup, $haiku" "- ah3: grill lookup, $haiku"
++resp m1 r1 $haiku 4000 0 0 0 0 | put "$d/root" p/s1 ah2
++resp m2 r2 $haiku 4000 0 0 0 0 | put "$d/root" p/s1 ah3
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role          Agents  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++grill lookup       2   8000               0               0           0       0        0.01
++Total              2   8000               0               0           0       0        0.01
++
++Agent  Role          Model                      Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ah2    grill lookup  claude-haiku-4-5-20251001   4000               0               0           0       0        0.00
++ah3    grill lookup  claude-haiku-4-5-20251001   4000               0               0           0       0        0.00
++EOF
++} >"$exp_out"
++check_ok "two rows of 0.004 sum to 0.008 and print 0.01 in the role row and the total"
++
++d=$test_root/round-roles
++ledger "$d/ledger" "- ab1: builder of step 1, $haiku" "- ah3: grill lookup, $haiku"
++resp m1 r1 $haiku 4000 0 0 0 0 | put "$d/root" p/s1 ab1
++resp m2 r2 $haiku 4000 0 0 0 0 | put "$d/root" p/s1 ah3
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role          Agents  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder            1   4000               0               0           0       0        0.00
++grill lookup       1   4000               0               0           0       0        0.00
++Total              2   8000               0               0           0       0        0.01
++
++Agent  Role               Model                      Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ab1    builder of step 1  claude-haiku-4-5-20251001   4000               0               0           0       0        0.00
++ah3    grill lookup       claude-haiku-4-5-20251001   4000               0               0           0       0        0.00
++EOF
++} >"$exp_out"
++check_ok "two role rows of 0.004 print 0.00 and the total prints 0.01"
++
++d=$test_root/sorting
++ledger "$d/ledger" "- ra: reviewer of step 2 over round 10, $haiku" "- ab10: builder of step 10, $haiku" "- rz: reviewer of step 2 over round 2, $haiku" "- ab2a: builder of step 2a, $haiku" "- ab2: builder of step 2, $haiku" "- ab0: builder of step 2, $haiku"
++resp m1 r1 $haiku 1000000 0 0 0 0 | put "$d/root" p/s1 ab0
++resp m2 r2 $haiku 2000000 0 0 0 0 | put "$d/root" p/s1 ab2
++resp m3 r3 $haiku 3000000 0 0 0 0 | put "$d/root" p/s1 ab2a
++resp m4 r4 $haiku 4000000 0 0 0 0 | put "$d/root" p/s1 ab10
++resp m5 r5 $haiku 5000000 0 0 0 0 | put "$d/root" p/s1 rz
++resp m6 r6 $haiku 6000000 0 0 0 0 | put "$d/root" p/s1 ra
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role                   Agents     Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder                     4  10000000               0               0           0       0       10.00
++reviewer over a round       2  11000000               0               0           0       0       11.00
++Total                       6  21000000               0               0           0       0       21.00
++
++Agent  Role                              Model                        Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ab0    builder of step 2                 claude-haiku-4-5-20251001  1000000               0               0           0       0        1.00
++ab2    builder of step 2                 claude-haiku-4-5-20251001  2000000               0               0           0       0        2.00
++ab2a   builder of step 2a                claude-haiku-4-5-20251001  3000000               0               0           0       0        3.00
++ab10   builder of step 10                claude-haiku-4-5-20251001  4000000               0               0           0       0        4.00
++rz     reviewer of step 2 over round 2   claude-haiku-4-5-20251001  5000000               0               0           0       0        5.00
++ra     reviewer of step 2 over round 10  claude-haiku-4-5-20251001  6000000               0               0           0       0        6.00
++EOF
++} >"$exp_out"
++check_ok "the agent table ordered by kind, step as a number and then its letter, round as a number, id"
++
++d=$test_root/plan-2e
++mkdir -p "$d/ledger/agents"
++lines "$d/ledger/plan.md" '# Plan: 9.Z Fixture' '' '## Goal' '' 'A plan with no Agents section.' '' '- ghost1: builder of step 9, claude-opus-5-5'
++roles "$d/ledger" "$b_ag1" "$b_ar2" "$b_abc" "$b_ar1" "- ab1: builder of step 14b, $sonnet"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role                   Agents    Input  Cache write 5m  Cache write 1h  Cache read   Output  Cost (USD)
++builder                     1  1010000         2000000         1000000    50000000   800000       29.02
++brief check                 1   250000          400000               0     2500000    50000        4.50
++reviewer                    1   500000         1000000               0    10000000   250000       14.00
++reviewer over a round       1   100000               0          500000     5000000   100000        4.20
++grill lookup                1   125000               0          125000     1000000    25000        2.20
++Total                       5  1985000         3400000         1625000    68500000  1225000       53.92
++
++Agent  Role                             Model                Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ab1    builder of step 14b              claude-sonnet-5-5  1010000         2000000         1000000    50000000  800000       29.02
++abc    brief check of step 1            claude-opus-5-5     250000          400000               0     2500000   50000        4.50
++ar1    reviewer of step 1               claude-opus-5-5     500000         1000000               0    10000000  250000       14.00
++ar2    reviewer of step 1 over round 1  claude-sonnet-5-5   100000               0          500000     5000000  100000        4.20
++ag1    grill lookup                     claude-opus-5-5     125000               0          125000     1000000   25000        2.20
++EOF
++} >"$exp_out"
++check_ok "plan 2.E's form: no Agents heading, every agent in agent-roles.md, one of them step 14b"
++
++d=$test_root/idle
++ledger "$d/ledger" "$b_ab1"
++synthetic m1 | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role     Agents  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder       1      0               0               0           0       0        0.00
++Total         1      0               0               0           0       0        0.00
++
++Agent  Role               Model  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ab1    builder of step 1  -          0               0               0           0       0        0.00
++EOF
++} >"$exp_out"
++check_ok "an agent with only a zero-count entry"
++
++d=$test_root/nested
++ledger "$d/ledger" "- x: builder of step 1, $haiku" "- y: reviewer of step 1, $haiku" "- z: grill lookup, $haiku"
++resp m1 r1 $haiku 1000000 0 0 0 0 | put "$d/root" p/s1 x
++resp m2 r2 $haiku 2000000 0 0 0 0 | put "$d/root" q/s2 y
++mkdir -p "$d/root/r/s3/deeper/folders"
++resp m3 r3 $haiku 3000000 0 0 0 0 >"$d/root/r/s3/deeper/folders/agent-z.jsonl"
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role          Agents    Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder            1  1000000               0               0           0       0        1.00
++reviewer           1  2000000               0               0           0       0        2.00
++grill lookup       1  3000000               0               0           0       0        3.00
++Total              3  6000000               0               0           0       0        6.00
++
++Agent  Role                Model                        Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++x      builder of step 1   claude-haiku-4-5-20251001  1000000               0               0           0       0        1.00
++y      reviewer of step 1  claude-haiku-4-5-20251001  2000000               0               0           0       0        2.00
++z      grill lookup        claude-haiku-4-5-20251001  3000000               0               0           0       0        3.00
++EOF
++} >"$exp_out"
++check_ok "subagent files of separate sessions and a nested folder"
++
++d=$test_root/flags-ok
++ledger "$d/ledger" "$b_ab1"
++resp m1 r1 $haiku 1000000 0 0 0 0 ',"speed":"standard","inference_geo":"not_available","service_tier":"standard","server_tool_use":{"web_search_requests":0,"web_fetch_requests":0}' | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role     Agents    Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder       1  1000000               0               0           0       0        1.00
++Total         1  1000000               0               0           0       0        1.00
++
++Agent  Role               Model                        Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ab1    builder of step 1  claude-haiku-4-5-20251001  1000000               0               0           0       0        1.00
++EOF
++} >"$exp_out"
++check_ok "standard speed, not_available geo, standard tier and no web search are priced"
++
++# ---- Errors of the ledger ----
++
++d=$test_root/err-model
++ledger "$d/ledger" "$b_ab1"
++{
++    resp m1 r1 claude-opus-9 1 0 0 0 1
++    resp m2 r2 claude-opus-9 1 0 0 0 1
++    resp m3 r3 claude-opus-9 1 0 0 0 1
++} | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++want_err "error: model claude-opus-9 of agent ab1 is not in $table"
++check_error "a model the table lacks in three responses" 1
++
++d=$test_root/err-models
++ledger "$d/ledger" "$b_ab1" "$b_ar1"
++{
++    resp m1 r1 claude-opus-9 1 0 0 0 1
++    resp m2 r2 claude-opus-8 1 0 0 0 1
++    resp m3 r3 claude-opus-9 1 0 0 0 1
++} | put "$d/root" p/s1 ab1
++resp m4 r4 claude-opus-9 1 0 0 0 1 | put "$d/root" p/s1 ar1
++run "$d/ledger" "$d/root"
++want_err "error: model claude-opus-9 of agent ab1 is not in $table" "error: model claude-opus-8 of agent ab1 is not in $table" "error: model claude-opus-9 of agent ar1 is not in $table"
++check_error "two missing models of one agent and the same model of another, one line each" 1
++
++d=$test_root/err-transcripts
++ledger "$d/ledger" "$b_ab1" "$b_ar1"
++resp m1 r1 $opus 1 0 0 0 1 | put "$d/root" p/s1 ar1
++resp m2 r2 $opus 1 0 0 0 1 | put "$d/root" q/s2 ar1
++run "$d/ledger" "$d/root"
++want_err "error: no transcript of agent ab1 under $d/root" "error: agent ar1 has 2 transcripts: $d/root/p/s1/subagents/agent-ar1.jsonl, $d/root/q/s2/subagents/agent-ar1.jsonl"
++check_error "an agent with no transcript and one with two" 1
++
++d=$test_root/err-collected
++ledger "$d/ledger" "$b_ab1" "$b_ar1"
++resp m1 r1 claude-opus-9 1 0 0 0 1 | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++want_err "error: model claude-opus-9 of agent ab1 is not in $table" "error: no transcript of agent ar1 under $d/root"
++check_error "the missing model and the missing transcript in one run" 1
++
++d=$test_root/err-twice
++ledger "$d/ledger" "$b_ab1" "$b_ar1"
++roles "$d/ledger" "$b_ab1"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_err "error: agent ab1 is listed twice: $d/ledger/plan.md:$(line_of "$d/ledger/plan.md" "$b_ab1") and $d/ledger/agents/agent-roles.md:$(line_of "$d/ledger/agents/agent-roles.md" "$b_ab1")"
++check_error "an id listed in plan.md and in agent-roles.md" 1
++
++d=$test_root/err-ids
++ledger "$d/ledger" "- a*b: builder of step 1, $sonnet" "- ../x: builder of step 1, $sonnet" "- : builder of step 1, $sonnet"
++mkdir -p "$d/root/p/s1/subagents"
++: >"$d/root/p/s1/subagents/agent-axb.jsonl"
++: >"$d/root/x.jsonl"
++run "$d/ledger" "$d/root"
++f=$d/ledger/plan.md
++want_err "error: $f:$(line_of "$f" "- a*b: builder of step 1, $sonnet"): invalid agent id 'a*b'" "error: $f:$(line_of "$f" "- ../x: builder of step 1, $sonnet"): invalid agent id '../x'" "error: $f:$(line_of "$f" "- : builder of step 1, $sonnet"): invalid agent id ''"
++check_error "agent ids a*b, ../x and an empty id" 1
++
++d=$test_root/err-form
++ledger "$d/ledger" "$b_ab1" "- ab1 builder of step 1" "* ar1: reviewer of step 1, $opus" "- ar2: reviewer of step 1 over round 1,"
++roles "$d/ledger" "- abc brief check of step 1"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++f=$d/ledger/plan.md
++g=$d/ledger/agents/agent-roles.md
++want_err "error: $f:$(line_of "$f" '- ab1 builder of step 1'): $form_error" "error: $f:$(line_of "$f" "* ar1: reviewer of step 1, $opus"): $form_error" "error: $f:$(line_of "$f" '- ar2: reviewer of step 1 over round 1,'): $form_error" "error: $g:$(line_of "$g" '- abc brief check of step 1'): $form_error"
++check_error "a bullet not of the form, a * bullet and a bullet with no model, in the section and in agent-roles.md" 1
++
++d=$test_root/err-roles
++ledger "$d/ledger" "- ab1: planner of step 1, $sonnet" "- ab2: builder of step A, $sonnet" "- ab3: Builder of step 1, $sonnet" "- ab4: reviewer of step 1 over round, $sonnet" "- ab5: builder of step 1b2, $sonnet" "- ab6: grill lookup of step 1, $sonnet"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_err "error: agent ab1 has an unknown role: planner of step 1" "error: agent ab2 has an unknown role: builder of step A" "error: agent ab3 has an unknown role: Builder of step 1" "error: agent ab4 has an unknown role: reviewer of step 1 over round" "error: agent ab5 has an unknown role: builder of step 1b2" "error: agent ab6 has an unknown role: grill lookup of step 1"
++check_error "a role that is not a role kind, and near misses" 1
++
++d=$test_root/err-no-agent
++ledger "$d/ledger"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_err "error: the ledger names no agent"
++check_error "no agent bullet in the ledger" 1
++
++d=$test_root/err-first-line
++ledger "$d/ledger" "$b_ab1"
++sed '1s/.*/# Notes/' "$d/ledger/plan.md" >"$d/plan.md" && mv "$d/plan.md" "$d/ledger/plan.md"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_err "error: $d/ledger/plan.md:1: the first line is not \"# Plan: <entry>\""
++check_error "a plan.md whose first line is # Notes" 1
++
++d=$test_root/err-empty-entry
++ledger "$d/ledger" "$b_ab1"
++sed '1s/.*/# Plan: /' "$d/ledger/plan.md" >"$d/plan.md" && mv "$d/plan.md" "$d/ledger/plan.md"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_err "error: $d/ledger/plan.md:1: the first line is not \"# Plan: <entry>\""
++check_error "a plan.md whose first line names no entry" 1
++
++d=$test_root/err-utf8
++ledger "$d/ledger" "$b_ab1"
++printf '\377\n' >>"$d/ledger/plan.md"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_err "error: cannot read $d/ledger/plan.md: not valid UTF-8"
++check_error "a plan.md that is not UTF-8" 1
++
++d=$test_root/err-roles-dir
++ledger "$d/ledger" "$b_ab1" "$b_abc" "$b_ar1" "$b_ar2" "$b_ag1"
++mkdir -p "$d/ledger/agents/agent-roles.md"
++main_root "$d/root"
++run "$d/ledger" "$d/root"
++want_err "error: cannot read $d/ledger/agents/agent-roles.md: Is a directory"
++check_error "agent-roles.md that is a directory" 1
++
++# ---- Errors of the transcripts ----
++
++d=$test_root/err-json
++ledger "$d/ledger" "$b_ab1"
++f=$d/root/p/s1/subagents/agent-ab1.jsonl
++{
++    resp m1 r1 $sonnet 1 0 0 0 1
++    printf 'not json\n'
++    printf '[]\n'
++    printf '\377\n'
++    resp m2 r2 $sonnet 1 0 0 0 1
++} | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++want_err "error: $f:2: not valid JSON" "error: $f:3: not a JSON object" "error: $f:4: not valid JSON"
++check_error "a line that is not JSON, one that is [] and one that is not UTF-8" 1
++
++d=$test_root/err-fields
++ledger "$d/ledger" "$b_ab1"
++f=$d/root/p/s1/subagents/agent-ab1.jsonl
++{
++    resp m1 r1 $sonnet 1 0 0 0 1
++    printf '{"type":"assistant","message":{"id":"m2","usage":%s},"requestId":"r2"}\n' "$(usage 1 0 0 0 1)"
++    entry m3 r3 $sonnet "$(usage 1 0 0 0 1 | sed 's/"output_tokens":1/"output_tokens":null/')"
++    entry m4 r4 $sonnet "$(usage 1 0 0 0 1 | sed 's/"input_tokens":1,/"input_tokens":-1,/')"
++    entry m5 r5 $sonnet "$(usage 1 0 0 0 1 | sed 's/"input_tokens":1,/"input_tokens":1.5,/')"
++    entry m6 r6 $sonnet "$(usage 1 0 0 0 1 | sed 's/"output_tokens":1/"output_tokens":true/')"
++    entry m7 r7 $sonnet "$(usage 1 0 0 0 1 | sed 's/"output_tokens":1,//')"
++    entry m8 r8 $sonnet '"x"'
++    entry m9 r9 $sonnet "$(usage 1 0 0 0 1 | sed 's/"cache_creation":{[^}]*}/"cache_creation":5/')"
++    entry m10 r10 $sonnet "$(usage 1 0 0 0 1 ',"server_tool_use":5')"
++} | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++want_err "error: $f:2: no message.model" "error: $f:3: usage.output_tokens is not a whole number of 0 or more: null" "error: $f:4: usage.input_tokens is not a whole number of 0 or more: -1" "error: $f:5: usage.input_tokens is not a whole number of 0 or more: 1.5" "error: $f:6: usage.output_tokens is not a whole number of 0 or more: true" "error: $f:7: usage.output_tokens is missing" "error: $f:8: usage is not an object" "error: $f:9: usage.cache_creation is not an object" "error: $f:10: usage.server_tool_use is not an object"
++check_error "a response with no model, a null, a negative, a fractional, a true and a missing count, and a usage, a cache_creation and a server_tool_use that are not objects" 1
++
++d=$test_root/err-ids-entry
++ledger "$d/ledger" "$b_ab1"
++f=$d/root/p/s1/subagents/agent-ab1.jsonl
++{
++    resp m1 r1 $sonnet 1 0 0 0 1
++    printf '{"type":"assistant","message":{"model":"<synthetic>","id":"m2","usage":%s}}\n' "$(usage 0 0 0 0 5)"
++    printf '{"type":"assistant","message":{"model":"%s","usage":%s},"requestId":"r3"}\n' $sonnet "$(usage 1 0 0 0 1)"
++    synthetic m4
++} | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++want_err "error: $f:2: no requestId" "error: $f:3: no message.id"
++check_error "the zero-count entry with output 5 and an entry with no message.id" 1
++
++d=$test_root/err-cache
++ledger "$d/ledger" "$b_ab1"
++f=$d/root/p/s1/subagents/agent-ab1.jsonl
++{
++    resp m1 r1 $sonnet 1 0 0 0 1
++    entry m2 r2 $sonnet '{"input_tokens":1,"cache_creation_input_tokens":100,"cache_read_input_tokens":0,"output_tokens":1,"cache_creation":{"ephemeral_5m_input_tokens":60,"ephemeral_1h_input_tokens":30}}'
++    entry m3 r3 $sonnet '{"input_tokens":1,"cache_creation_input_tokens":100,"cache_read_input_tokens":0,"output_tokens":1}'
++    entry m4 r4 $sonnet '{"input_tokens":1,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":1}'
++} | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++want_err "error: $f:2: usage.cache_creation_input_tokens is 100, but the two cache writes sum to 90" "error: $f:3: usage.cache_creation_input_tokens is 100 and usage has no cache_creation"
++check_error "cache_creation_input_tokens that is not the sum, and above 0 with no cache_creation" 1
++
++d=$test_root/err-flags
++ledger "$d/ledger" "$b_ab1"
++f=$d/root/p/s1/subagents/agent-ab1.jsonl
++{
++    resp m1 r1 $sonnet 1 0 0 0 1
++    resp m2 r2 $sonnet 1 0 0 0 1 ',"speed":"fast"'
++    resp m3 r3 $sonnet 1 0 0 0 1 ',"inference_geo":"us"'
++    resp m4 r4 $sonnet 1 0 0 0 1 ',"service_tier":"batch"'
++    resp m5 r5 $sonnet 1 0 0 0 1 ',"server_tool_use":{"web_search_requests":2,"web_fetch_requests":0}'
++} | put "$d/root" p/s1 ab1
++run "$d/ledger" "$d/root"
++want_err "error: $f:2: usage.speed is \"fast\", which the table does not price" "error: $f:3: usage.inference_geo is \"us\", which the table does not price" "error: $f:4: usage.service_tier is \"batch\", which the table does not price" "error: $f:5: usage.server_tool_use.web_search_requests is 2, which the table does not price"
++check_error "fast speed, us geo, batch tier and two web searches" 1
++
++if [ "$(id -u)" -ne 0 ]; then
++    d=$test_root/err-locked
++    main_fixture "$d"
++    mkdir "$d/root/locked"
++    chmod 000 "$d/root/locked"
++    run "$d/ledger" "$d/root"
++    chmod 755 "$d/root/locked"
++    want_err "error: cannot read $d/root/locked: Permission denied"
++    check_error "a folder under the transcript root that cannot be read" 1
++
++    d=$test_root/err-unreadable
++    main_fixture "$d"
++    chmod 000 "$d/root/p/s1/subagents/agent-ar1.jsonl"
++    run "$d/ledger" "$d/root"
++    chmod 644 "$d/root/p/s1/subagents/agent-ar1.jsonl"
++    want_err "error: cannot read $d/root/p/s1/subagents/agent-ar1.jsonl: Permission denied"
++    check_error "a transcript file that cannot be read" 1
++fi
++
++# ---- The table ----
++
++tbl=$test_root/tbl
++mkdir -p "$tbl"
++cp "$tool" "$tbl/plan_cost.py"
++shown_table=$tbl/prices.txt
++d=$test_root/main
++comment_1='# Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.'
++comment_2='# Columns, separated by spaces: model, input, cache write 5m, cache write 1h, cache read, output.'
++row_opus='claude-opus-5-5 4 5 8 0.20 20'
++row_sonnet='claude-sonnet-5-5 2 2.50 4 0.20 10'
++
++# Run the copy of the script, whose table is the copy beside it.
++run_copy() {
++    python3 "$tbl/plan_cost.py" "$d/ledger" "$d/root" >"$out" 2>"$err"
++    status=$?
++}
++
++lines "$tbl/prices.txt" "$comment_1" "$comment_2" '' "$row_opus" '# a third comment line' "$row_sonnet"
++run_copy
++want_main
++check_ok "a copy of the table with a blank line and a third comment line"
++
++rm "$tbl/prices.txt"
++run_copy
++want_err "error: cannot read $tbl/prices.txt: No such file or directory"
++check_error "a missing table" 1
++
++: >"$tbl/prices.txt"
++run_copy
++want_err "error: $tbl/prices.txt:1: the first line is not a # comment"
++check_error "an empty table" 1
++
++lines "$tbl/prices.txt" "$row_opus" "$comment_2" "$row_sonnet"
++run_copy
++want_err "error: $tbl/prices.txt:1: the first line is not a # comment"
++check_error "a table whose first line is a row" 1
++
++lines "$tbl/prices.txt" "$comment_1" "$comment_2" 'claude-opus-5-5 4 5 8 0.20' "$row_sonnet"
++run_copy
++want_err "error: $tbl/prices.txt:3: a row has 5 fields, expected 6"
++check_error "a row of five fields" 1
++
++lines "$tbl/prices.txt" "$comment_1" "$comment_2" 'claude-opus-5-5 4 5 8 0.20 20 1' "$row_sonnet"
++run_copy
++want_err "error: $tbl/prices.txt:3: a row has 7 fields, expected 6"
++check_error "a row of seven fields" 1
++
++for price in abc NaN -4; do
++    lines "$tbl/prices.txt" "$comment_1" "$comment_2" "claude-opus-5-5 4 5 8 $price 20" "$row_sonnet"
++    run_copy
++    want_err "error: $tbl/prices.txt:3: price '$price' is not a number"
++    check_error "a price $price" 1
++done
++
++lines "$tbl/prices.txt" "$comment_1" "$comment_2" "$row_opus" "$row_sonnet" 'claude-opus-5-5 1 1 1 1 1'
++run_copy
++want_err "error: $tbl/prices.txt:5: model claude-opus-5-5 is listed twice, first on line 3"
++check_error "a model listed twice" 1
++
++lines "$tbl/prices.txt" "$comment_1" "$comment_2" 'claude-opus-5-5 4 5 8 0.20' 'claude-sonnet-5-5 2 2.50 4 abc 10'
++run_copy
++want_err "error: $tbl/prices.txt:3: a row has 5 fields, expected 6" "error: $tbl/prices.txt:4: price 'abc' is not a number"
++check_error "two bad rows are both reported" 1
++d=$test_root/decimal
++ledger "$d/ledger" "- ah1: grill lookup, $opus"
++resp m1 r1 $opus 100000 0 0 0 0 | put "$d/root" p/s1 ah1
++lines "$tbl/prices.txt" "$comment_1" "$comment_2" 'claude-opus-5-5 0.15 5 8 0.20 20'
++run_copy
++{
++    header "9.Z Fixture"
++    cat <<'EOF'
++Role          Agents   Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++grill lookup       1  100000               0               0           0       0        0.02
++Total              1  100000               0               0           0       0        0.02
++
++Agent  Role          Model             Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++ah1    grill lookup  claude-opus-5-5  100000               0               0           0       0        0.02
++EOF
++} >"$exp_out"
++check_ok "a price of 0.15 on 100000 tokens is exactly 0.015 and rounds up to 0.02"
++shown_table=
++
++# ---- Usage errors ----
++
++d=$test_root/usage
++mkdir -p "$d/empty"
++: >"$d/afile"
++main_fixture "$d/ok"
++
++run
++check_usage "no argument" "error: expected <ledger folder> and, optionally, <transcript root>"
++
++run "$d/ok/ledger" "$d/ok/root" extra
++check_usage "three arguments" "error: expected <ledger folder> and, optionally, <transcript root>"
++
++run "$d/nothere" "$d/ok/root"
++check_usage "a ledger folder that does not exist" "error: no such folder: $d/nothere"
++
++run "$d/afile" "$d/ok/root"
++check_usage "a ledger path that is a file" "error: not a folder: $d/afile"
++
++run "$d/empty" "$d/ok/root"
++check_usage "a ledger folder with no plan.md" "error: no plan.md in $d/empty"
++
++run "$d/ok/ledger" "$d/noroot"
++check_usage "a transcript root that does not exist" "error: no such folder: $d/noroot"
++
++run "$d/ok/ledger" "$d/afile"
++check_usage "a transcript root that is a file" "error: not a folder: $d/afile"
++
++printf 'PASS: plan_cost.py scratch tests\n'
+diff --git a/skills/plan-orchestration/templates/prices.txt b/skills/plan-orchestration/templates/prices.txt
+new file mode 100644
+index 0000000..4badec0
+--- /dev/null
++++ b/skills/plan-orchestration/templates/prices.txt
+@@ -0,0 +1,6 @@
++# Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.
++# Columns, separated by spaces: model, input, cache write 5m, cache write 1h, cache read, output.
++claude-opus-5-5            4  5     8  0.20  20
++claude-sonnet-5-5          2  2.50  4  0.20  10
++claude-sonnet-5            2  2.50  4  0.20  10
++claude-haiku-4-5-20251001  1  1.25  2  0.10  5

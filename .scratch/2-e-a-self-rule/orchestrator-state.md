@@ -51,7 +51,7 @@ dispatch:
   report: .scratch/2-e-a-self-rule/agents/reviews/4-report.md
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/4-brief-check.md (aa5bff28e5e1bed90, claude-opus-5-5 (ordo-high), 209247 tokens, 56 tool uses, 10 min 47 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: ae1c05d01d496c9b9 (claude-sonnet-5-5)
   builder_usage: 334341 tokens, 81 tool uses, 41 min 7 s
   reviewer_report:
