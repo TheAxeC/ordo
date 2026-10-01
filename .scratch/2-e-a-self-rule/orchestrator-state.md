@@ -49,7 +49,13 @@ dispatch: none
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
 
-None.
+- Open item I (2026-10-01): how step 9's run reaches the skill text of steps 6 to 8. Stop "A false premise the plan cannot absorb" of `/spec 2.E.A 9`. Kind 1: it needs the user's hands, since the installed skills are linked into the pinned worktree `~/.local/share/ordo-stable`, and `utils/pin.sh <tag>` runs only on the user's approval.
+  - What the tree shows: every skill in `~/.claude/skills` links into `~/.local/share/ordo-stable`, pinned at `v2.7.0` (`ls -la ~/.claude/skills`; `git -C ~/.local/share/ordo-stable describe --tags`). `grep -n -- '--self-rule\|Next-entry'` over the installed `grill`, `plan` and `plan-orchestration` prints nothing, and `skills/grill/SKILL.md` on main holds 25 lines with `--self-rule`. A run that invokes `/grill <entry> --self-rule` through the runner therefore loads the text before step 7, which has no such argument. The run also stops at the first entry's closing, whose `/roadmap done` diff is the user's (kind 4), as "Next-entry mode" says.
+  - Options:
+    - (a) Tag main's head `v2.8.0-rc.1` (a local tag, not pushed) and run `utils/pin.sh v2.8.0-rc.1`, so the installed skills carry steps 6 to 8. This session then runs step 9 on a scratch repository under the scratchpad through the runner: the first entry planned, run and closed, you approving its closing diff when the run stops there, then `/grill --self-rule`, `/plan --self-rule` and the loop on the second. After the run, `utils/pin.sh v2.7.0` restores the pin until the closing's own tag. Pros: the run invokes each skill through the runner, as `plan-orchestration` Rules and your skill-fidelity rule require, and proves the installed path the gate names. Cons: while the pin stands, every session on this machine, research-hub-aa included, loads the unreleased text; under the default keys (`self_rule: off`, `next_entry: off`) its behaviour differs only in the wording steps 7 and 8 changed.
+    - (b) This session runs step 9 by reading each skill's text from `skills/` on main at each invocation, in place of the runner's copy, with that stated in the run's record; the installation is unchanged. Pros: no pin and no tag; no other session is touched. Cons: the skills are not invoked through the runner, which your skill-fidelity rule allows only with your consent; the run proves the text, not the installed path.
+  - Recommendation: (a), since the gate is a run of the skills as a user installs them, and the runner is the route the rules accept for invoking a skill; the pin is restored right after the run. Lazy option: (b), which skips the tag and the pin and leaves the installed path unproven.
+  - Kind 1; it waits for you. It blocks step 9 only.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -84,6 +90,6 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8 and 6b landed; their bookings are in `plan.md`, step 8's landing report at `agents/reviews/8-landing.md`. Next: step 9, the gate's `next_entry` run on a scratch repository. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-01. Steps 1 to 8 and 6b landed; their bookings are in `plan.md`, step 8's landing report at `agents/reviews/8-landing.md`. Step 9 is stopped at Open item I (kind 1, the installed skills' pin), which waits for the user; the loop goes on with step 10. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 8's merge with step 7 and its fix at landing printed `checks: 11 commands passed`, exit 0.
 - Open items A to H ruled; C1 and C2 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence, now at `skills/repo-setup/templates/shared-rules.md:20`, is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.
