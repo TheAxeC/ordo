@@ -53,13 +53,22 @@ dispatch:
   landing: not-started
   round: 0
   session_id: ae1c05d01d496c9b9 (claude-sonnet-5-5)
+  builder_usage: 334341 tokens, 81 tool uses, 41 min 7 s
+  reviewer_report:
+  - .scratch/2-e-a-self-rule/agents/reviews/4-refuter.md (a7eae9ce124bd2bd6, claude-opus-5-5 (ordo-high), 251863 tokens, 67 tool uses, 16 min 58 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
 
-- none.
+- Open item A (2026-10-01): step 4, where the cost script takes each response's output count. Stop "A wrong premise", raised from finding Spec 1 of `agents/reviews/4-refuter.md`.
+  - What the tree shows against the step's text. The goal says the script prices each role "from the agents' transcripts", and the brief's Decision 2 takes the last entry of a `message.id` and `requestId` pair as the response's final counts. A subagent's transcript does not record the final output count of most responses. Its last entry is written mid-stream with `stop_reason` null. `agent-af948d39c18780b67.jsonl:202` (builder of step 2) is a 59,564-character tool call recorded with `output_tokens` 4. Over this plan's 15 agents, 470 of 498 responses end with a null `stop_reason`. The recorded output is 10,303 tokens ($0.17). The visible text and tool input of the same responses is about 168,544 tokens at 4 characters per token ($2.50), and 372 thinking blocks are not counted. The input and cache counts are final: over all 14,552 repeated entries of the project's subagent files, none differs in input or cache counts from the entry before it. The main session's transcript has no null `stop_reason` in its 838 responses. The Claude Code documentation (code.claude.com/docs/en/monitoring-usage) gives the exact count in the telemetry event `claude_code.api_request`, which carries `request_id`, `model`, `input_tokens`, `output_tokens`, `cache_read_tokens` and `cache_creation_tokens`. No hook input, Agent tool result or completion notice carries a token breakdown.
+  - Option A, output from telemetry. You turn on Claude Code telemetry (`CLAUDE_CODE_ENABLE_TELEMETRY=1` with a logs exporter that keeps the `claude_code.api_request` events in a file: a local OTLP collector, or `OTEL_LOG_RAW_API_BODIES=file:<dir>`, which writes every request and response body). The script then reads input and cache counts from the transcript, and each response's output from the event whose `request_id` equals the transcript's `requestId`. A response with no event is an error. Pros: exact output for every agent from the day it is on. Cons: a setting and a running exporter on your machine, outside the repository. Plan 2.E and steps 1 to 4 of this plan ran without it, so the gate's figures for plan 2.E and for this plan cannot be produced, and the gate needs rewording. The goal's "from the agents' transcripts" changes, which needs a new ADR beside 0008.
+  - Option B, transcripts only, output as a floor. The script keeps the transcript as its only source. The output column and every cost are headed as a floor. Each agent row gives the number of responses whose last entry has no stop reason. Pros: inside the repository, and it prices plan 2.E and this plan alike. Cons: the output is understated by an amount nobody knows. In this plan it is 10,303 tokens recorded against about 168,544 visible, with thinking unknown. The comparison of 2.E with 2.E.A is then a comparison of input and cache, plus a floor on output.
+  - Option C, both. The script takes output from the telemetry event where one exists, and otherwise uses the transcript's count, marked as a floor in that agent's row. You turn on telemetry as in A. Pros: exact output from now on, and every earlier agent still priced, with what is exact and what is a floor visible per row. Pros, continued: the gate keeps its plan 2.E figure. Cons: two sources in one script, and your setting as in A. The goal and ADR change as in A, with "a floor where no event exists" added.
+  - Recommendation: C. It is the only option that ends the missing count for every plan from now on while still pricing plan 2.E and the steps of this plan already run. A leaves the gate's plan 2.E figure impossible. The lazy option is B: it costs least and leaves the output count missing for every plan.
+  - Held with this ruling: the review's other four findings (an indented bullet with no case; the README sentence of 43 words and its placement; a plan number in the test's head comment; the closing bullet of `plan` against the definition of "A red check"). They go to the builder in repair round 1 together with the change the ruling makes, so the one round the cap allows carries everything. Step 5 waits on step 4. Steps 6 onwards do not.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -87,5 +96,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-10-01. Steps 1, 2 and 3 landed; step 3's booking is in `plan.md` and its landing report at `agents/reviews/3-landing.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after the fixes at landing printed `checks: 10 commands passed`.
-- Next step: 4, the cost script, its price table and its test. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet), by main's `refute` as step 3 changed it; its booking carries step 3's check ("Blocked, and by what").
-- Open on Axel's side: none.
+- Step 4 is built and refuted once (`agents/reviews/4-report.md`, `agents/reviews/4-refuter.md`) and stopped on Open item A; its builder is kept for repair round 1, which follows the ruling. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet); its booking carries step 3's check ("Blocked, and by what").
+- Next step: 6, self-rule in the loop. Step 5 waits on step 4.
+- Open on Axel's side: Open item A.
