@@ -38,7 +38,7 @@ metadata:
      - No match is a stop ("Stops").
      - An entry that stands under the roadmap's "Not yet specified" section is a refusal that names `/roadmap add <entry>`, which names its gate ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
-4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the user's settled design answers for the entry, written while no plan was open.
+4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the user's settled design answers for the entry, written while no plan was open, and, under its `## Agents` heading, the lookup agents `/grill` started while no plan was open.
 5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record for its part in force, as the `spec` skill's "What it reads" 5 says.
 6. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
    - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
@@ -65,8 +65,10 @@ metadata:
 2. Draft `plan.md` from `templates/plan.md`.
    - It opens with `# Plan: <entry>`, which is how every other skill finds it.
    - The entry's goal and its gate are copied in.
-   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line; the file's other lines, such as a heading or a blank line, are not copied. Any other line, such as a wrapped continuation or an indented sub-bullet, is shown with the draft at Steps 3; the user places it, and a line the user leaves unplaced is copied below the bullet line it follows, as it stands, so nothing of the file is lost when Steps 6 removes it.
+   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) that is not under its `## Agents` heading is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line; the file's other lines, such as a heading or a blank line, are not copied. Any other line, such as a wrapped continuation or an indented sub-bullet, is shown with the draft at Steps 3; the user places it, and a line the user leaves unplaced is copied below the bullet line it follows, as it stands, so nothing of the file is lost when Steps 6 removes it.
    - A quoted ruling that stands in the rulings file is copied with every line under it, its sub-bullets and their fenced blocks, and none of them is a line left to place.
+   - Each bullet line under the rulings file's `## Agents` heading is copied into the new plan's `## Agents` section as it stands and in its order, in place of the template's placeholder bullets, and is never copied into Rulings nor shown as a line to place.
+   - With no agent bullet in the rulings file, and with no rulings file, the `## Agents` section is written with its sentence and no bullet.
    - The session asks of the copied gate "could this pass without the goal being reached?" and writes the answer with its reason in the section "## Gate", on the line the template gives the gate.
    - A copied gate that could pass without the goal is kept as the roadmap has it, and its answer and reason go to the user at Steps 3, since the gate is the roadmap's and the user's.
    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
@@ -79,7 +81,7 @@ metadata:
    - A check that could still pass after the second redraft is kept as drafted, and its answer and reason go to the user at Steps 3.
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
-   - The step is done when the draft holds the goal, the gate, the answers of "## Gate", the Rulings and the step list with the closing step last.
+   - The step is done when the draft holds the goal, the gate, the answers of "## Gate", the Rulings, the Agents section and the step list with the closing step last, and when the draft, read back, holds every agent bullet of the rulings file once, in its Agents section.
 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).
    - With the draft, name each design decision the drafted steps rest on that no ADR in force and no line of the Rulings section settles: a public shape, a wire format, a config key, a vocabulary, a format or a rule the builder applies across the tree, or a library choice. The list is shown, not written into `plan.md`.
    - With the draft, show each line of the rulings file that Steps 2 did not copy as a bullet line, for the user to place.
@@ -121,7 +123,7 @@ metadata:
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
 | Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate to draft steps from | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
-| The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove | Nothing |
+| The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove, with its Agents bullets named when it holds any, to be copied into the open plan's Agents section before the file is removed | Nothing |
 
 ## Anti-patterns
 

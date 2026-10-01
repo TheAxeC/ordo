@@ -30,6 +30,13 @@ Independent of each other; the standing rule of one agent at a time still serial
 
 - Open item <L> (<date>): <the user's decision in one line, and what it unblocks> (the user).
 
+## Agents
+
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent stopped for another model, and `/plan` copies the bullets of a rulings file.
+
+- <agent id>: <role, such as builder of step <n>>, <served model>
+- <agent id>: grill lookup, <served model>
+
 ## Blocked, and by what
 
 - <3>: <what it waits for, and whether that is a decision the user owes or a moment that has not come>.

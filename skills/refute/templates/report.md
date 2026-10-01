@@ -39,7 +39,7 @@ Cases of the brief's "Cases":
 
 - <a point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
 
-Reviewer usage: <tokens>, <tool uses>, <minutes>.
+Reviewer usage: <agent id>, <served model>, <tokens>, <tool uses>, <minutes>.
 
 ## Repair round <n>, refuted (one section per run after a round, when the configuration block says refute_after_repair: yes)
 
@@ -60,7 +60,7 @@ Reviewer usage: <tokens>, <tool uses>, <minutes>.
 
 - <a point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
 
-Reviewer usage: <tokens>, <tool uses>, <minutes>.
+Reviewer usage: <agent id>, <served model>, <tokens>, <tool uses>, <minutes>.
 
 ## Closed (the orchestrator's disposition of every finding above, appended before /land)
 

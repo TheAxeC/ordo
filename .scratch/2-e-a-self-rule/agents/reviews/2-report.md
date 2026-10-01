@@ -316,6 +316,7 @@ Each block is `diff <the file on the unchanged tree> <the file now>`, in diff's 
 
 - The wording of each sentence that carries the brief's item is the builder's, in the form the brief gives. The recorded forms are the brief's exactly: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`, `over round <n>: <agent id>, <served model>, ...`, `<agent id> (<served model>, stopped)` and `<agent id> (<served model>, dead)`.
 - `skills/refute/SKILL.md:70` (the stopped reviewer) is placed directly after the record bullet, and the bullet that follows it now begins "The report and its record are written to disk" in place of "Both are written to disk", since "Both" would otherwise point at the stopped-reviewer bullet. The sentence means what it meant; it serves item 4.
+  - Landing note: repair round 1 moved the stopped-reviewer rule to Steps 1, so the reason above no longer holds; the landing restored "Both are written to disk", the base text, and Steps 1 now gives the stopped record in sub-bullets. `skills/refute/SKILL.md` is 181 lines at the base and 185 after the landing.
 - `skills/refute/SKILL.md:67` (Steps 6's usage bullet) names the usage line's five parts, the form of the template's line, as item 4 asks.
 - `skills/plan/SKILL.md:84` is one sentence with two requirements joined by "and when", as the brief's item 2 asks for both in the "done when" bullet.
 - The Agents bullets of a step go to `plan.md`'s Agents section also when the plan names a part file for bookings; item 7 names `plan.md`, and the **Agents section** term says `plan.md`.
@@ -428,3 +429,83 @@ README.md:153:`land.sh` reads `worktree_root` and `ledger_root` from `.agents/pl
 - `skills/roadmap/SKILL.md`, `skills/ordo-init/SKILL.md` and `skills/repo-setup/SKILL.md` ("the bullet named `<name>` in that file's Rulings section, or in the file itself when it is a rulings file"): a quoted ruling is a bullet whose first line ends "(the user)", and an agent bullet never does. Not made false.
 - `docs/adr/0005-...:16`, `skills/land/templates/land.sh`, `skills/diagnose/SKILL.md:182`, `skills/repo-setup/templates/shared-rules.md:11`, `skills/repo-setup/templates/docs/adr/README.md:5`, `skills/repo-setup/templates/docs/dev/change-standard.md:69`, `docs/adr/README.md:5`, `docs/roadmap.md:31`, `docs/figures/*`, `README.md:44` and `:153`: "booking" in the sense the glossary already gives, the `land.sh` booking data, or a ledger note; none states what the booking holds in a way the Agents bullets contradict. Not made false.
 - `## Agents`: no hit outside the paths.
+
+## Repair round 1
+
+No git command of any kind was run in this round. The changed lines are quoted from `diff <the file before the round> <the file now>`; `docs/glossary.md` line 11 carries the same text as `skills/repo-setup/templates/plan-terms.md` line 6.
+
+Rulings, each carried out:
+
+1. The record of a reviewer stopped for another model. `skills/refute/SKILL.md` Steps 7 no longer holds the sentence "A reviewer stopped for another model is recorded the same way, with `stopped` in place of its usage." The rule is in Steps 1's stop bullet (line 53): a first-run reviewer is recorded as `(<agent id>, <served model>, stopped)` and a reviewer over round `<n>` as `over round <n>: <agent id>, <served model>, stopped`, after the records before it, written to disk in the main checkout and carried by the next resume-point commit. `skills/land/SKILL.md` Steps 9 booked a stopped first-run reviewer but did not say it books a stopped reviewer over a round; line 98 now reads "Each reviewer over a round, a stopped one included". Case reread, "A first reviewer served another model, stopped, then a second first-run reviewer": met. `skills/refute/SKILL.md:53` records the stopped one as `(<agent id>, <served model>, stopped)` and a record written later follows the records before it, so the second reviewer's `<path> (<agent id>, <served model>, ...)` of line 69 follows it; `skills/land/SKILL.md:97` books each first-run reviewer, a stopped one included, as `reviewer of step <n>`.
+2. The writers of the Agents section. The sentence under `## Agents` in `skills/plan/templates/plan.md` (line 35) names `/land` at a step's booking and when it takes a step back out of main, `/grill` for its lookup agents, `/spec` for a brief-check agent stopped for another model, and `/plan` when it copies the bullets of a rulings file. The **Agents section** term adds `spec`, "Steps / The brief check" to its "Stated in", in `skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md` alike.
+3. The commit rule of a run over a round. `skills/refute/SKILL.md` "Steps / Over a repair round" 6 (line 85) records the run "after the records before it", written to disk and carried by the next resume-point commit as Steps 7 says; the form `over round <n>: ...` is unchanged.
+4. The **dispatch entry** term's "Stated in": no change, as ruled.
+
+Every changed line, before (`<`) and after (`>`):
+
+```
+### skills/refute/SKILL.md
+53c53
+<    - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
+---
+>    - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, nothing it wrote is used, and it is recorded under the dispatch block's `reviewer_report`, a first-run reviewer as `(<agent id>, <served model>, stopped)` and a reviewer over round `<n>` as `over round <n>: <agent id>, <served model>, stopped`, after the records before it, written to disk in the main checkout and carried by the next resume-point commit.
+70d69
+<    - A reviewer stopped for another model is recorded the same way, with `stopped` in place of its usage.
+86c85
+<    - It records the run in the same field, after the first record, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`.
+---
+>    - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit as Steps 7 says.
+### skills/land/SKILL.md
+98c98
+<      - Each reviewer over a round: `reviewer of step <n> over round <r>`.
+---
+>      - Each reviewer over a round, a stopped one included: `reviewer of step <n> over round <r>`.
+### skills/plan/templates/plan.md
+35c35
+< Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it; `/land` writes a step's agents at its booking, and `/grill` writes its lookup agents.
+---
+> Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent stopped for another model, and `/plan` copies the bullets of a rulings file.
+### skills/repo-setup/templates/plan-terms.md
+6c6
+< - **Agents section**: the `## Agents` section of `plan.md`, and of a rulings file, one bullet per agent a plan skill started for the entry, `- <agent id>: <role>, <served model>`. Stated in: `plan`, `templates/plan.md` and Steps 2; `land`, Steps 6 and 9; `grill`, "Steps / Looking up a fact".
+---
+> - **Agents section**: the `## Agents` section of `plan.md`, and of a rulings file, one bullet per agent a plan skill started for the entry, `- <agent id>: <role>, <served model>`. Stated in: `plan`, `templates/plan.md` and Steps 2; `land`, Steps 6 and 9; `grill`, "Steps / Looking up a fact"; `spec`, "Steps / The brief check".
+### docs/glossary.md
+11c11
+< - **Agents section**: the `## Agents` section of `plan.md`, and of a rulings file, one bullet per agent a plan skill started for the entry, `- <agent id>: <role>, <served model>`. Stated in: `plan`, `templates/plan.md` and Steps 2; `land`, Steps 6 and 9; `grill`, "Steps / Looking up a fact".
+---
+> - **Agents section**: the `## Agents` section of `plan.md`, and of a rulings file, one bullet per agent a plan skill started for the entry, `- <agent id>: <role>, <served model>`. Stated in: `plan`, `templates/plan.md` and Steps 2; `land`, Steps 6 and 9; `grill`, "Steps / Looking up a fact"; `spec`, "Steps / The brief check".
+```
+
+Verification again:
+
+1. The verify list through the runner, `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md`, exit status 0, printed (verbatim):
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+```
+
+2. `grep -c '## Agents'` over the four files of verification 2 prints 1, 4, 2 and 1; `grep -c '<agent id>, <served model>'` over the four files of verification 3 prints at least 1 for each (3, 1, 2 and 1); `grep -c 'builders_before'` over its three files prints 2, 1 and 1.
+3. `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template` (the seventh runner command above).
+4. The sorted `version:` lines of `skills/*/SKILL.md` are identical to those before the step (`diff` printed nothing).
+5. `LC_ALL=C grep -n '[^ -~]'` over the five files changed in this round printed nothing.
+6. Line references of the sections above that moved: the first-run reviewer's record is `skills/refute/SKILL.md:69`, the stopped-reviewer rule is line 53 (the former line 70 is gone), and the over-round record is line 85.

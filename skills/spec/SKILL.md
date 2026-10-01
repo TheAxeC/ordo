@@ -247,8 +247,10 @@ Steps 5 says when this runs.
    - It invokes no skill: it runs the reads and commands of item 2 itself.
    - It starts no agent: every read and every command runs in its own session.
    - It writes `<REDACTED>` in place of the value of a secret in every line it quotes, as the rules file's rule on secrets in quoted command output says.
-   - Right after the start, the session reads the model the runner served the agent, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
+   - Right after the start, the session reads the agent's id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
    - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
+   - A brief-check agent stopped for another model has no dispatch entry to be recorded in, since "Steps / A stop" 2 leaves none, so the session writes its bullet `- <agent id>: brief check of step <n>, <served model>` straight into `plan.md`'s Agents section, creating the section before `## Blocked, and by what` when `plan.md` has none, and reads the section back.
+   - The stop's commit carries `plan.md` among the ledger files it commits ("Steps / A stop" 1).
 2. The agent runs these checks and reports each with the command that shows it and that command's output:
    - **Names.** Every name the step changes (a file, a heading, a key, a function, a term) is grepped across the repository, and every hit outside the brief's "Paths this step writes" is listed, each with whether the change makes it false.
    - **The step line.** Every part of the plan's step line is present in "What to build": each item is mapped to the part of the line it serves, and a part with no item is named.
@@ -259,7 +261,7 @@ Steps 5 says when this runs.
    - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is read for its part in force, as "What it reads" 5 says. Each one the step touches is named with the sentence of its decision the step is under. A part of the brief that contradicts one is named, and so is an ADR the step touches that the brief's "What is on the tree" does not name.
    - The checks are done when each has its findings, or "none".
 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
-   - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's served model (item 1) and its tokens, tool uses and time from its completion notice.
+   - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's id, its served model (item 1) and its tokens, tool uses and time from its completion notice.
    - A step has one such report, since the check runs once per step (item 4).
 4. The session closes each finding by a change to the brief, before the preparation commit.
    - Each change is named under the report's "Closed" heading, beside its finding.
@@ -272,7 +274,7 @@ Steps 5 says when this runs.
    - At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
    - At such a stop the report is among the ledger files the stop commits.
    - This item is done when every finding has its change under "Closed", or the step has stopped.
-5. The dispatch entry (Steps 9) records the report's path under `brief_check`, with the check's served model and its tokens, tool uses and time, read from the report's usage line in a later `/spec` run of the step.
+5. The dispatch entry (Steps 9) records the report's path under `brief_check` with the agent's id, its served model, and its tokens, tool uses and time, in the form `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`, read from the report's usage line in a later `/spec` run of the step.
    - The report is committed as Steps 6 says.
 
 ## Stops

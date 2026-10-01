@@ -79,6 +79,7 @@ metadata:
      - It is worked again as that step, with no new ruling.
    - The failure goes to the user as an open item only when only the user can decide what to do.
    - A step is taken back out of main and prepared again at most once: a second failure of its landing always goes to the user as an open item, and the step waits for the ruling.
+   - The step's agents are booked in `plan.md`'s Agents section by the rules of Steps 9, written and read back before that commit, since `/spec` later removes the step's dispatch entry; the agents of its later landing are appended when it lands, those already in the section skipped.
    - The state file and `plan.md` are then committed by path, a resume point.
      - The commit also holds the other ledger records the session wrote since the last one.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
@@ -90,6 +91,15 @@ metadata:
 9. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B.
    - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
    - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`.
+   - The booking also appends to `plan.md`'s `## Agents` section one bullet per agent the step's dispatch entry names, `- <agent id>: <role>, <served model>`, with the roles below.
+     - The builder from `session_id`, and each builder under `builders_before`: `builder of step <n>`.
+     - The brief-check agent from `brief_check`: `brief check of step <n>`.
+     - Each first-run reviewer from `reviewer_report`, a stopped one included: `reviewer of step <n>`.
+     - Each reviewer over a round, a stopped one included: `reviewer of step <n> over round <r>`.
+   - An `inline` or `academic-paper` builder has no agent id and gets no bullet.
+   - An agent whose id already has a bullet in the section gets none, so a brief-check agent booked at a back-out, or at a stop of `/spec`, is not booked twice.
+   - A `plan.md` without the section gets it before `## Blocked, and by what`.
+   - The section is read back after the write, and each agent of the entry has exactly one bullet.
    - It states whether the builder's first report passed its bar, and the fixes at landing.
    - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as.
    - Tick the step.

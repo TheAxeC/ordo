@@ -48,7 +48,7 @@ Findings: <each part of the brief that contradicts an ADR, with the ADR's senten
 
 - <a point the agent did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
 
-Agent usage: <served model>, <tokens>, <tool uses>, <minutes>.
+Agent usage: <agent id>, <served model>, <tokens>, <tool uses>, <minutes>.
 
 ## Closed (the session's change to the brief for every finding above, made before the preparation commit)
 

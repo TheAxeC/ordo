@@ -49,8 +49,12 @@ metadata:
    - Before the dispatch, check that the runner lists that agent among its agent types.
    - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
-   - Right after the dispatch, the orchestrator or the session reads the model the runner served the reviewer, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
+   - Right after the dispatch, the orchestrator or the session reads the reviewer's agent id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
    - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
+   - The stopped reviewer is recorded under the dispatch block's `reviewer_report`, after the records before it.
+     - A first-run reviewer: `(<agent id>, <served model>, stopped)`.
+     - A reviewer over round `<n>`: `over round <n>: <agent id>, <served model>, stopped`.
+     - The record is written and carried as Steps 7 says.
 2. The reviewer reads the inputs in the order "What it reads" gives them.
 3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
    - The step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks (the step's worktree).
@@ -64,9 +68,9 @@ metadata:
    - Then the verdicts, as "The verdicts" says: one per item of the brief's "What to build", then one per case of its "Cases".
    - Then the four headings, each with findings, or "none", and each finding with its place (a file and a line in code, a page and its section in a page), the quoted hunk, what is wrong, its failure scenario as "The four headings" says, and the verdict it names when it has one, as "The verdicts" says.
    - Then "Declined to judge": each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason.
-   - Then the reviewer's usage.
+   - Then the reviewer's usage line: its agent id, its served model, its tokens, its tool uses and its minutes.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
-   - It records the report's path under the dispatch block's `reviewer_report` field, with the reviewer's served model (Steps 1) and its tokens, tool uses and time from its completion notice beside it.
+   - It records the report's path under the dispatch block's `reviewer_report` field, after the records before it, followed by, in parentheses, the reviewer's agent id, its served model (Steps 1), and its tokens, tool uses and time from its completion notice: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`.
    - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
@@ -82,7 +86,7 @@ metadata:
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns every verification command again.
 6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
-   - It records the run as Steps 7 says.
+   - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit as Steps 7 says.
 7. The findings of the run over the last round are never sent to the builder.
    - Each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
 8. With `refute_after_repair: no` these runs do not happen.

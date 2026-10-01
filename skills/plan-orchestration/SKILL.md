@@ -94,7 +94,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
    - Read the diff yourself while it runs.
    - Save its report.
-     - Write its path, with the reviewer's served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report`, on disk; the next resume-point commit carries them.
+     - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk; the next resume-point commit carries them.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Before the resume.** Write `round: n` into the dispatch block.
@@ -109,7 +109,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
    - **After each reply.** Read the whole delta.
      - Add the builder's tokens, tool uses and time for the round, from its completion notice, to `builder_usage` in the dispatch block, on disk.
-     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its path and its usage recorded under `reviewer_report` beside the first.
+     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
 9. Invoke `/land <entry> <step>`. Its refusals are its own.
    - A red line the orchestrator cannot fix at landing takes the step back out of main.
@@ -180,6 +180,7 @@ On resumption with a dispatch block present:
 - A builder is also dead when a later session does not find its agent id in its own listing and no report is at the dispatch block's `report` path in the worktree.
 - A dead builder is reported to the user with the worktree's `git status --short` and the builder's last message when there is one.
 - A fresh continuation builder takes over a dead builder's worktree when the user says so.
+- The dead builder's record moves to `builders_before:` as "Launching a builder" says, and `session_id` takes the continuation builder.
 
 On every resumption, with a dispatch block or without one:
 
@@ -235,6 +236,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - The orchestrator writes that model beside `session_id` in the dispatch entry, as `session_id: <agent id> (<served model>)`.
 - The same check runs when the builder is resumed for a repair round.
 - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
+- A builder that is replaced keeps its record: its agent id and served model move to the dispatch entry's `builders_before:` key, `<agent id> (<served model>, stopped)` for a builder stopped for another model and `<agent id> (<served model>, dead)` for a dead builder, one after another, and `session_id` takes the new builder.
 - It runs in the background.
   - The runner tracks it and reports when it ends.
 - A repair round resumes it with the runner's message tool on its agent id in `session_id`, as Steps 8 says.

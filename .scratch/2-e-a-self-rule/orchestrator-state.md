@@ -41,21 +41,7 @@ repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over
 ```
 
 ```yaml
-dispatch:
-- step: 2
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2ea-2
-  base: 15eb6fd
-  launched: 2026-10-01
-  report: .scratch/2-e-a-self-rule/agents/reviews/2-report.md
-  brief_check: .scratch/2-e-a-self-rule/agents/reviews/2-brief-check.md (abe95054772aeb0bc, claude-opus-5-5 (ordo-high), 217811 tokens, 40 tool uses, 465 s)
-  landing: not-started
-  round: 1
-  session_id: af948d39c18780b67 (claude-sonnet-5-5)
-  builder_usage: 320677 tokens, 50 tool uses, 976 s (claude-sonnet-5-5); report saved
-  reviewer_report: .scratch/2-e-a-self-rule/agents/reviews/2-refuter.md (aec84f54a17e39016, claude-opus-5-5, 219054 tokens, 46 tool uses, 543 s)
-  round_1: .scratch/2-e-a-self-rule/agents/briefs/2-round-1.md (Standards 1, 2, 3 and the builder's points 1 and 2 sent; point 3 ruled no change)
+dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with its served model, tokens, tool uses and time), landing, round. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's served model, tokens, tool uses and time) at the review. A step dispatched while another in flight names a file its brief also names carries shared_paths: each shared file and why the merge at landing is simple; with no shared file the key is left out.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -88,7 +74,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Step 1 landed (the keys `self_rule`, `next_entry` and `repair_reviewer`); its booking is in `plan.md` and its landing report at `agents/reviews/1-landing.md`. This plan's configuration block carries the three keys.
-- Verified: `sh skills/land/templates/land.sh .scratch/2-e-a-self-rule/orchestrator-state.md 2ea-1 67428df` printed `checks: 10 commands passed`.
-- Next step: 2, every agent's id recorded with its role, since 3, 4 and 5 read the recorded ids. Step 3's brief also takes the glossary **reviewer** term (`plan.md`, "Blocked, and by what").
+- 2026-10-01. Steps 1 and 2 landed; step 2's booking is in `plan.md` and its landing report at `agents/reviews/2-landing.md`. `plan.md` holds its Agents section, which each landing now appends to.
+- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after the fixes at landing printed `checks: 10 commands passed`.
+- Next step: 3, the run over a repair round on `repair_reviewer` and the brief check's line-by-line hold on dictated text; its brief also takes the glossary **reviewer** term ("Blocked, and by what").
 - Open on Axel's side: none.
