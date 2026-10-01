@@ -53,9 +53,10 @@ dispatch:
   landing: not-started
   round: 1
   session_id: ae1c05d01d496c9b9 (claude-sonnet-5-5)
-  builder_usage: 334341 tokens, 81 tool uses, 41 min 7 s
+  builder_usage: 334341 tokens, 81 tool uses, 41 min 7 s; round 1: 123466 tokens, 37 tool uses, 17 min 17 s
   reviewer_report:
   - .scratch/2-e-a-self-rule/agents/reviews/4-refuter.md (a7eae9ce124bd2bd6, claude-opus-5-5 (ordo-high), 251863 tokens, 67 tool uses, 16 min 58 s)
+  - .scratch/2-e-a-self-rule/agents/reviews/4-refuter.md, "Repair round 1, refuted" (a89c479922cf35964, claude-sonnet-5-5 (ordo-high), 211531 tokens, 54 tool uses, 14 min 52 s)
 - step: 6
   executor: agent
   worker: claude:sonnet
@@ -67,7 +68,9 @@ dispatch:
   landing: not-started
   round: 0
   session_id: a15fd806c8f78a9ab (claude-sonnet-5-5)
-  builder_usage: 212645 tokens, 30 tool uses, 6 min 45 s (the first run of the cases, handed back: agents/reviews/6-cases-handback.md; ruled in agents/briefs/6-cases.md)
+  builder_usage: 212645 tokens, 30 tool uses, 6 min 45 s (the first run of the cases, handed back: agents/reviews/6-cases-handback.md; ruled in agents/briefs/6-cases.md); the build after the ruling: 322159 tokens, 48 tool uses, 15 min 51 s
+  reviewer_report:
+  - .scratch/2-e-a-self-rule/agents/reviews/6-refuter.md (a90205aabc898e907, claude-opus-5-5 (ordo-high), running)
   shared_paths: skills/plan-orchestration/SKILL.md, skills/plan/SKILL.md, skills/plan/templates/plan.md, skills/repo-setup/templates/plan-terms.md, docs/glossary.md and README.md, each shared with step 4; the merge is simple, since each step changes other lines of each file (step 4: Steps 10 and "Usage", the closing's bullet, template line 21, the terms closing report, closing step and cost script, and its README paragraph; step 6: its own section and the lines its brief names, the terms quoted ruling and resume point, README lines 16-50). skills/repo-setup/templates/shared-rules.md is a template for other repositories, not a rules file Ordo's builders work under, so step 6 need not run alone.
 ```
 
@@ -75,7 +78,15 @@ dispatch:
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
 
-- none
+- Open item D (2026-10-01): the cost script does not see the body folder from a Claude Code shell. Stop "A finding that is the user's", from the review over step 4's repair round 1 (`agents/reviews/4-refuter.md`, "Repair round 1, refuted", Behaviour).
+  - What the tree shows: the script reads the folder only from `OTEL_LOG_RAW_API_BODIES` in its own environment (ADR 0009). In the orchestrator's Bash tool, `echo "[$OTEL_LOG_RAW_API_BODIES] [$CLAUDE_CODE_ENABLE_TELEMETRY]"` prints `[] [1]`, and the reviewer's subagent shell prints the same, while `~/.claude/settings.json` line 9 sets the variable and `~/.claude/api-bodies` holds 1002 files. Claude Code passes `CLAUDE_CODE_ENABLE_TELEMETRY` to a tool's shell and leaves `OTEL_LOG_RAW_API_BODIES` out.
+  - What it breaks: the closing step runs the script through the Bash tool, so it prints "Response bodies: none" and `>=` on every row although the bodies are on disk, and the gate prices 2.E.A from the partial output counts ruling A was made to replace. The script itself is right: with the variable set, the reviewer's run on four of this plan's agents priced the three with bodies exactly and passed every check.
+  - Options:
+    - (a) The script reads the folder from the variable when its environment has it, and otherwise from the key `env.OTEL_LOG_RAW_API_BODIES` of Claude Code's settings files, the first that sets it of `<repository>/.claude/settings.local.json`, `<repository>/.claude/settings.json` and `~/.claude/settings.json`, the repository being the working folder's; a settings file that is not valid JSON is an error naming it. What it computes, for your approval: the value of that one key in those three files, in that order. ADR 0009 gains that sentence, and the README and `plan-orchestration` "Usage" say the closing needs nothing set. Pros: works from any shell, the closing step stays one command, nothing for a session to remember. Cons: the script reads up to three more files and depends on where Claude Code keeps its settings; a managed or command-line setting is not seen.
+    - (b) The script takes the folder as an option, `--bodies <folder>`, before the variable; the closing step reads the value from the settings and passes it. Pros: the script reads no settings file. Cons: the session copies a value by hand at every closing, and a closing that forgets it gets lower bounds again with no error.
+    - (c) The closing step's text alone says to run the script as `OTEL_LOG_RAW_API_BODIES=<the value in the settings> python3 ...`. Pros: no change to the script. Cons: the same reliance on the session as (b), with nothing in the script to catch it.
+  - Recommendation: (a), since it ends the cause in the script that has it, and the closing then prices from the bodies in every session without a step to remember. Lazy option: (c), the cheapest, which leaves the gate depending on a session copying a value.
+  - Step 4 waits for the ruling: the fix lands with the step as a fix at landing, together with the round's small findings, so step 4 stays one commit.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -108,3 +119,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - Step 4 is built and refuted once (`agents/reviews/4-report.md`, `agents/reviews/4-refuter.md`); its builder is kept for repair round 1. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet); its booking carries step 3's check ("Blocked, and by what").
 - Open items A and B ruled. Step 4's repair round 1 is sent (ruling A and the first review's findings); step 6 is prepared under ruling B and its builder launched.
 - Open item C ruled (a) and the roadmap changed. The setting of ADR 0009 is in `~/.claude/settings.json`, from the next session on. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24. Nothing is open on Axel's side.
+- Step 4's repair round 1 is built and refuted over the round (claude-sonnet-5-5, step 3's check); it waits for Open item D, then lands with the fix and the round's small findings fixed at landing. Step 6 is built (`agents/reviews/6-report.md`) and its first review is running.

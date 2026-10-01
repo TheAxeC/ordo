@@ -113,6 +113,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 ### Step 4, the cost script: Step 0 (stopped 2026-10-01)
 
 - Open item A of the state file, as booked there: where the cost script takes each response's output count. A subagent's transcript holds a partial output count in the last entry of most responses (470 of 498 in this plan), so counting from the transcripts alone under-counts output. Options: (A) output from Claude Code telemetry's `claude_code.api_request` events, joined on `requestId`; (B) transcripts only, output marked as a floor; (C) both, telemetry where an event exists and a floor otherwise. Recommendation C; lazy option B. The builder is kept for repair round 1, which carries the ruling's change and the first review's four other findings. Ruled C by the user (2026-10-01): the Rulings line "Open item A", ADR 0009.
+- Open item D of the state file, as booked there: the cost script does not see `OTEL_LOG_RAW_API_BODIES` from a Claude Code tool shell, which leaves the variable out, so the closing would price every agent as a lower bound with the bodies on disk. Options: (a) the script falls back to the key `env.OTEL_LOG_RAW_API_BODIES` of the three Claude Code settings files; (b) an option `--bodies <folder>` the closing passes; (c) the closing's text alone sets the variable on the command. Recommendation (a); lazy option (c). Step 4 waits for the ruling and lands with the fix.
 
 ### Step 6, self-rule in the loop: Step 0 (stopped 2026-10-01)
 

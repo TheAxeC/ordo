@@ -158,3 +158,200 @@ Cases of the brief's "Cases":
 Reviewer usage: agent id not visible to me, claude-opus-5-5 (ordo-high), tokens not known to me, about 50 tool uses, minutes not measured.
 
 Usage from the completion notice: a7eae9ce124bd2bd6, claude-opus-5-5 (ordo-high), 251863 tokens, 67 tool uses, 16 min 58 s.
+
+## Repair round 1, refuted
+
+```
+$ sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md   (worktree root, exit 0)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+PASS: plan_cost.py scratch tests
+(also PASS with OTEL_LOG_RAW_API_BODIES=file:$HOME/.claude/api-bodies set in the environment)
+
+$ env -u OTEL_LOG_RAW_API_BODIES python3 skills/plan-orchestration/templates/plan_cost.py .scratch/2-e-a-self-rule   (worktree ledger; its stdout is identical to the run on the main ledger path /Users/axelfaes/workspace/ordo/.scratch/2-e-a-self-rule, checked with diff; exit 0; /usr/bin/python3 3.9.6 gives the same role rows)
+Plan 2.E.A self-rule: priced usage of its agents
+Prices from /Users/axelfaes/workspace/ordo/.agents/worktrees/2ea-4/skills/plan-orchestration/templates/prices.txt:
+Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.
+Response bodies: none, so every cost is a lower bound.
+
+Role                   Agents  No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
+builder                     3      140    288         1356686               0    20752614    3954      >=7.58
+brief check                 3       98    196          544894               0    12558955    1394      >=5.26
+reviewer                    3      121    242          551133               0    15647943    2495      >=5.94
+reviewer over a round       3       89    178          468109               0     9303738    1641      >=4.23
+grill lookup                3       50    100          251024               0     3019080     819      >=1.88
+Total                      15      498   1004         3171846               0    61282330   10303     >=24.89
+
+Agent              Role                             Model              No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
+a15eaa0740335c7a3  builder of step 1                claude-sonnet-5-5       47     98          313453               0     5384216     547      >=1.87
+af948d39c18780b67  builder of step 2                claude-sonnet-5-5       51    104          632159               0     9473075    1911      >=3.49
+aaf2cfc92bfcb1844  builder of step 3                claude-sonnet-5-5       42     86          411074               0     5895323    1496      >=2.22
+a392a12ca146ff975  brief check of step 1            claude-opus-5-5         22     44          143943               0     2237294     276      >=1.17
+abe95054772aeb0bc  brief check of step 2            claude-opus-5-5         37     74          206719               0     5303442     624      >=2.11
+a844cca8905e3bb9c  brief check of step 3            claude-opus-5-5         39     78          194232               0     5018219     494      >=1.98
+ae9f3748642ce9c1e  reviewer of step 1               claude-opus-5-5         34     68          169004               0     4142756     362      >=1.68
+aec84f54a17e39016  reviewer of step 2               claude-opus-5-5         42     84          203783               0     5774576    1494      >=2.20
+afaa4e2644e7b3e6a  reviewer of step 3               claude-opus-5-5         45     90          178346               0     5730611     639      >=2.05
+a96acd76fe31399ad  reviewer of step 1 over round 1  claude-opus-5-5         20     40          116680               0     1659065     154      >=0.92
+ae5cc0ca5a0659313  reviewer of step 2 over round 1  claude-opus-5-5         35     70          161281               0     3558528     883      >=1.54
+af5b739d11c2d60e0  reviewer of step 3 over round 1  claude-opus-5-5         34     68          190148               0     4086145     604      >=1.78
+a508428b7705f46eb  grill lookup                     claude-opus-5-5         24     48           91579               0     1560867     389      >=0.78
+aea0212a318abe908  grill lookup                     claude-opus-5-5         11     22           66447               0      463960     245      >=0.43
+af464f4a770b333a6  grill lookup                     claude-opus-5-5         15     30           92998               0      994253     185      >=0.67
+```
+
+Commands the round's report quotes, rerun in the same form:
+
+```
+New cases on the pre-round script (tree rebuilt from 4-before-round-1.patch plus the new test with fail() made non-exiting, in a scratch folder). Every new case prints FAIL, for example:
+FAIL: bodies for one response of ab1 and for ar1: their counts replace the transcript's, the rest are lower bounds: stdout differs, got: Plan 9.Z Fixture: priced usage of its agents
+FAIL: a relative body folder, read from the working folder: stdout differs ...
+FAIL: a body folder that holds no body: stdout differs ...
+FAIL: OTEL_LOG_RAW_API_BODIES set to 1 is no body folder: stdout differs ...      (and the same for the empty value)
+FAIL: a body folder that does not exist: exit status 0, expected 1; stderr:       (and the same for a body folder that is a file)
+FAIL: a body with another id, one that is not JSON, a negative count, fast speed, no model, and one that is []: exit status 0, expected 1; stderr:
+FAIL: a body with no usage, a usage that is not an object, no id, and a cache-write sum that does not match: exit status 0, expected 1; stderr:
+FAIL: a model the table lacks, named by a body: exit status 0, expected 1; stderr:
+FAIL: a requestId of ../r1 with a body beside the body folder: exit status 0, expected 1; stderr:   (and with no body folder)
+FAIL: a body that cannot be read: exit status 0, expected 1; stderr:
+FAIL: an indented bullet is read as an agent: stderr differs, got: error: <ledger>/plan.md:19: the bullet is not of the form "- <agent id>: <role>, <served model>"
+
+Probes on scratch copies of the new templates folder, each run of the copied test:
+_BULLET = re.compile(r"[-*+](?: |$)")      FAIL: an indented bullet is read as an agent: exit status 0, expected 1; stderr:
+responses[(number, parsed[0])] (verify 3)  FAIL: the hand-computed fixture: stdout differs, got: Plan 9.Z Fixture: ...
+Opus 5.5 cache read 0.40 (verify 4)         FAIL: the hand-computed fixture: stdout differs, got: Plan 9.Z Fixture: ...
+Further mutations, each killed: requestId check removed (FAIL: a requestId of ../r1 with a body beside the body folder: stderr differs, got: error: .../bodies/../r1.response.json: not valid JSON); body id check removed; ">=" marker removed; bodies ignored; model taken from the transcript when a body exists; counts taken from the transcript when a body exists; every response counted as without a body; Total "No body" not summed; role row ">=" removed; line.lstrip(" ") removed; "file:" prefix not required; folder check removed; body no-id, no-usage and priced-check removals.
+One mutation survives: os.path.lexists(body_path) changed to os.path.isfile(body_path) prints PASS: plan_cost.py scratch tests.
+
+$ grep -rn "plan-2e\|2\.E's form" skills utils docs README.md        prints nothing (exit 1)
+Scratch run, a folder req_X.response.json and a dangling link req_Y.response.json in the body folder:
+error: cannot read .../b/req_X.response.json: Is a directory
+error: cannot read .../b/req_Y.response.json: No such file or directory
+Scratch run, OTEL_LOG_RAW_API_BODIES=file: (empty folder): error: OTEL_LOG_RAW_API_BODIES names , which is not a folder   (exit 1)
+Standards 3 text: the brief's sentence is found verbatim in skills/plan/SKILL.md (python `in` test: True).
+git diff 4aa05f2 | grep '^+.*version' prints nothing; LC_ALL=C grep -n '[^ -~]' over the three new files prints nothing; tab count 0 in each.
+
+Own run against real response bodies (the folder ~/.claude/api-bodies, 639 files, set by the user's settings.json):
+$ OTEL_LOG_RAW_API_BODIES=file:$HOME/.claude/api-bodies python3 .../plan_cost.py <scratch ledger of agents ae1c05d01d496c9b9, a15fd806c8f78a9ab, a89c479922cf35964, af9f565f460044202>   exit 0
+a89c479922cf35964  ...  No body 0  44  135439  0  2326489  10250  0.91
+af9f565f460044202  ...  No body 0  18  208073  0  620594   2124   0.67
+ae1c05d01d496c9b9  ...  No body 87 228 1120897 0 19785802 27964  >=7.04
+a15fd806c8f78a9ab  ...  No body 16 132 284594  0 13568384 93202  >=4.36
+(seven agents with bodies, 1107 responses without: exit 0, no error line; the real bodies pass every check)
+$ env | grep -i -c otel      prints 0, with CLAUDE_CODE_ENABLE_TELEMETRY=1 present and OTEL_LOG_RAW_API_BODIES set in ~/.claude/settings.json line 9
+```
+
+### Verdicts
+
+Items of the brief's "What to build", over the whole diff since 4aa05f2:
+
+- 1 (prices.txt): holds. Six lines, unchanged this round, each price read by the test's priced-from-1,000,000 case.
+- 2 (plan_cost.py): holds, as amended by ruling A. The behaviour finding below concerns where the variable comes from, not what the script does with it.
+- 3 (plan_cost.test.sh): holds. 58 check sites against 45 before the round; the label diff shows only additions and one rename (the "plan 2.E's form" label); no earlier case removed; the test passes with the variable unset and with it set to a real folder.
+- 4 (the closing in `plan` Steps 2 and the template line): holds. The third sub-bullet is the round brief's sentence verbatim.
+- 5 (`plan-orchestration` Steps 10 and Usage): holds as to text; Standards 3 names the bullet's form.
+- 6 (terms): holds. The two copies are equal (sync check prints ok); the cost script term carries the round's wording.
+- 7 (building.md, change-standard.md): holds.
+- 8 (README): holds as to the sentence and block the item asks for, in the place the round brief dictated; Standards 1 and 2 name defects of that place and of the paragraph.
+- 9 (no version changes): holds.
+
+Cases of the brief's "Cases" (every cost cell now carries `>=` where a response has no body, as ruling A says, so the hand-computed fixture's expected text is the earlier figures with that mark):
+
+- ab1 29.02, ar1 14.00, ar2 4.20, abc 4.50, ag1 2.20: met, each in the hand-computed fixture's whole-stdout comparison; the 0.40 probe fails it.
+- The whole fixture, Total 53.92: met.
+- The duplicated response counted twice (44.04): met; the pairs probe fails the fixture.
+- ag1 in agent-roles.md: met.
+- Two models in one agent: met.
+- Steps, Rulings and booking bullets passed over: met.
+- Main session file never read: met.
+- Rounding 0.005 to 0.01: met.
+- Rounding of totals: met.
+- Sorting: met.
+- A ledger with no Agents heading (step 14b): met.
+- Default transcript root: met.
+- Another working folder, relative ledger path, absolute table path: met.
+- Agent with only a zero-count entry (`-`, 0, 0.00): met.
+- Model the table lacks, three responses, one line: met.
+- No transcript, and two transcripts: met.
+- Id listed twice: met.
+- Ids a*b and ../x: met.
+- A bullet not of the form, in both places: met.
+- Role planner of step 1: met.
+- No agent bullet: met.
+- First line `# Notes`: met.
+- A line not JSON and a line `[]`: met.
+- No model, null, -1, 1.5: met.
+- Synthetic entry; with output 5; no message.id: met.
+- cache_creation sum and absence: met.
+- speed, geo, tier, web search and their controls: met.
+- Errors collected: met.
+- The table cases: met.
+- Usage errors: met.
+- Paths with a space: met.
+- Nested and separate session folders: met.
+- /usr/bin/python3: met (3.9.6 exists here).
+
+Items of the round's brief:
+
+- 1.1 The folder: holds (the value `1`, empty, `file:` plus a missing path, plus a file, a relative folder; the error text is exact).
+- 1.2 Which counts: holds (the 35.02 and 14.00 figures reproduce by hand: 2.02 + 5.00 + 4.00 + 10.00 + 14.00 = 35.02; 53.92 + 6.00 = 59.92). The sentence that a zero-count entry is passed over before any body is looked up holds in a scratch run with a body present for such an entry, but no case pins it (Proof 1).
+- 1.3 The request id: holds (decoy body beside the folder; the check removed fails the case).
+- 1.4 The body's checks: holds (each error text and the model line; the shared `_check_counts` and `_check_priced` give the same texts).
+- 1.5 The lower bound: holds (column places, `>=` cells, right alignment, the header line in both forms, the Total sum).
+- 1.6 The docstring: holds (every error text the code prints is in its list; the variable, the body file, the sources of the counts, the lower bound and the column are stated).
+- 1.7 The test: holds (every listed new case exists and fails on the pre-round script).
+- 1.8 The text around the script: holds as to text; Standards 1 to 3 name defects.
+- 2.1 Proof 1: closed. The case exists, fails with `_BULLET` changed, and fails on the pre-round script.
+- 2.2 Standards 1 (README sentence length and antecedent): partly closed. The 43-word sentence is split into sentences of 21 words or fewer, but the move leaves a new cold open (Standards 1 below).
+- 2.3 Standards 2: closed (no `plan-2e`, no roadmap number in the test).
+- 2.4 Standards 3: closed (sentence verbatim).
+
+### Findings
+
+**Behaviour**
+
+- `skills/plan-orchestration/templates/plan_cost.py:571`, `value = os.environ.get(_BODIES, "")`; `README.md:141`, "The script reads the same variable from the environment of the shell that runs it."; `skills/plan/SKILL.md:83`, "the closing step runs the `plan-orchestration` skill's `templates/plan_cost.py` on the ledger folder." Wrong: the script finds the body folder only in its own environment. In this reviewer's shell (a Claude Code subagent's Bash tool), `env | grep -i -c otel` prints 0 and `echo "[$OTEL_LOG_RAW_API_BODIES]"` prints `[]`, although `CLAUDE_CODE_ENABLE_TELEMETRY=1` is present, `~/.claude/settings.json` line 9 sets `OTEL_LOG_RAW_API_BODIES` to `file:/Users/axelfaes/.claude/api-bodies`, and the runner wrote bodies for this session's own requests (agent a89c479922cf35964: 41 of 41 requestIds have a body file). So the runner writes the bodies and withholds the variable from the shell it gives a tool. Failure scenario: the closing step runs `python3 .../plan_cost.py <ledger>` in the orchestrator's Bash tool; if that shell is stripped the same way, the closing report prints `Response bodies: none, so every cost is a lower bound.` and `>=` on every row, with each body on disk unused, and the gate's comparison of plan 2.E with plan 2.E.A keeps the output counts that ruling A was made to replace. A person running the script by hand in a terminal with the settings value exported gets the exact figures; the closing does not unless it passes the value in. I did not check the orchestrator's own shell, so whether it is stripped is not verified. It is the user's or the orchestrator's: the ruling fixes the variable as the source (ADR 0009), and the options that would end the cause are the closing step passing `OTEL_LOG_RAW_API_BODIES=file:<folder>` read from the settings file, or the script taking the folder as an argument. Neither is for the builder to choose. Verdict: no item violated; it bears on the plan step's check ("one response without a body among them") and on the goal's gate. What settles it: `echo "[$OTEL_LOG_RAW_API_BODIES]"` run in the orchestrator's own Bash tool.
+
+**Standards**
+
+- `README.md:139-147`, the paragraph "The closing step of a plan runs the cost script, ..." and its `sh` block now stand between "Nine are required: `roadmap`, ... A skill that needs a missing required key stops and names it." and "Every other key is optional. A key left out takes the default ...". What is wrong: "Every other key" had the nine required keys as its antecedent in the paragraph before it; it now follows a paragraph and a code block about the cost script, against the prose standard, E "Cold opens". Failure scenario: a reader of "Every other key is optional" with the cost script command just above takes "key" for something the script reads and looks for optional keys of the cost script, or loses the link to the nine required keys. The round brief dictated the place ("after the sentence 'A skill that needs a missing required key stops and names it.'"), so the placement is the orchestrator's call; a place that keeps both key paragraphs together is after the "A plan's verify list ..." paragraphs or the last paragraph of the section. Verdict: none (item 8 holds as to its text).
+- `README.md:141`, the same paragraph: six sentences covering two ideas (how the closing counts, and running the script by hand with the shell's variable), against the prose standard, D ("Paragraphs cover one idea and stay under roughly four sentences"). Failure scenario: a reader looking for the by-hand command reads four sentences about the setting first; the one about the shell variable is the one a person running by hand needs. A fix at landing: the command and the shell-variable sentence in a paragraph of their own. Verdict: none.
+- `skills/plan-orchestration/SKILL.md:277`, "A person runs the cost script by hand on any ledger folder, open or archived, as `python3 ...`, with the environment variable `OTEL_LOG_RAW_API_BODIES` set to `file:<folder>` of the response bodies when they exist; without it the script prices from the transcripts and marks every cost as a lower bound." What is wrong: two requirements joined by a semicolon in one bullet (how to run it by hand; what the variable does and what its absence gives), about 55 words, against `docs/dev/skill-layout.md`, "Writing for an agent" bullet "One rule per bullet or item", and the prose standard E sentence length. Failure scenario: a reviewer checking the diff, or an orchestrator reading Usage, cannot tell which of the two can be broken while the other holds; the lower-bound consequence sits in a clause after a semicolon. A fix: two bullets, one for the command, one for the variable and its absence. Verdict: none (round item 1.8 holds as to text).
+- `skills/plan-orchestration/templates/plan_cost.py:19`, "The transcript records most responses' output count before the response ended". What is wrong: "most" is a vague qualifier the prose standard, A, replaces with the number or the specific claim, in a file-header docstring, which the standard covers. Failure scenario: a reader cannot tell whether the lower bound is rare or the rule. A fix at landing: "The transcript can record a response's output count before the response ended". Verdict: none.
+
+**Proof**
+
+- `skills/plan-orchestration/templates/plan_cost.py:457`, `if body_path is None or not os.path.lexists(body_path):`, with the round report's sentence "A body that has a file name but is not a readable file (a folder, a dangling link) is an error, not a missing body", and round item 1.2's sentence "A zero-count transcript entry is still passed over before any body is looked up". What is wrong: neither behaviour has a case. With `os.path.lexists` changed to `os.path.isfile` on a scratch copy the test prints `PASS: plan_cost.py scratch tests`; a scratch run shows both behaviours hold today (the `Is a directory` and `No such file or directory` errors above; a zero entry with a body present gives 0.00). Failure scenario: a later edit that tests with `isfile` turns a folder or a dangling link named `<requestId>.response.json` into a silent "no body", and the figure is marked a lower bound where an error was meant; the test stays green. The cost is small (the `>=` mark stays correct and the case needs a hand-made folder), so whether it justifies a case under the standard's "failure costs something" is the orchestrator's call. Verdict: none (items 1.2 and 1.4 hold).
+
+**Spec**: none beyond the Behaviour finding. **Closures**: no finding was closed by removing a check; no closure reaches beyond its finding (the one addition, README's sentence on the shell's variable, serves item 8); every closure the round claims reproduced on my rerun.
+
+### Declined to judge
+
+- Whether the orchestrator's own Bash shell lacks `OTEL_LOG_RAW_API_BODIES`: I can only see this subagent's shell. `echo "[$OTEL_LOG_RAW_API_BODIES]"` in the orchestrator's session settles it.
+- The first review's full mutation table (24 probes) against the new test: I reran 3 of them plus 22 of my own, listed above, not the whole table.
+- `docs/adr/0008` (its context still says "from the transcripts") and `docs/adr/README.md` (no row for 0009 in the worktree's copy): outside this step's paths; the orchestrator holds the ADRs and the main checkout's copies are the ones in force.
+- `docs/roadmap.md` entry 2.E.A's Goal sentence still says "from the agents' transcripts": it is Open item C, the user's roadmap diff.
+- The folder `skills/plan-orchestration/templates/.ruff_cache/` still exists in the worktree; git ignores it through its own `.gitignore` (`git ls-files --others --exclude-standard` lists only the report and the three template files), so it cannot reach main.
+- The reviewer's own usage: agent id not visible to me, claude-sonnet-5-5 per the dispatch entry, tokens and minutes not known to me.
+
+Reviewer usage: a89c479922cf35964, claude-sonnet-5-5 (ordo-high), 211531 tokens, 54 tool uses, 14 min 52 s.

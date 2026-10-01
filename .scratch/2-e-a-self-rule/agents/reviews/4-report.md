@@ -281,3 +281,117 @@ Rule 17: the closing step's old text is kept whole in the new (the tick through 
 ## Anything in the brief that was wrong or impossible
 
 Nothing. One difference from the brief's wording: for the usage-error cases the unchanged tree's first run exits 2, as the cases' expected status does, so those seven fail on the stderr text, not on the status.
+
+## Repair round 1
+
+The script, its test and the text around them now follow the ruling on Open item A and the four findings of the first review. Nothing of the round is left undone. Files written: `skills/plan-orchestration/templates/plan_cost.py`, `skills/plan-orchestration/templates/plan_cost.test.sh`, `README.md`, `skills/plan-orchestration/SKILL.md`, `skills/plan/SKILL.md`, `skills/repo-setup/templates/plan-terms.md`, `docs/glossary.md`, `docs/dev/building.md` and this report. `prices.txt` is unchanged. No git command was run; comparisons are against copies taken before the first change of the round.
+
+### 1. The ruling: counts from the response bodies
+
+| Item | State | How it is shown |
+|---|---|---|
+| 1. The folder | DONE | `plan_cost.py` reads `OTEL_LOG_RAW_API_BODIES`. A value starting with `file:` gives the folder (a relative path from the working folder); unset, empty, or a value without the prefix gives no folder. A folder that is not a folder is `error: OTEL_LOG_RAW_API_BODIES names <folder>, which is not a folder`, exit 1, added to the errors right after the table's. Cases: the value `1`, the empty value, `file:` plus a missing path, `file:` plus a file, a relative folder. |
+| 2. Which counts | DONE | Per response (a `message.id` and `requestId` pair counted once), when the folder holds `<requestId>.response.json`, the five counts and the model come from the body; otherwise from the pair's last transcript entry. A zero-count entry is passed over before any lookup. Case: the hand-computed fixture with bodies for ab1's `m2`/`r2` and for ar1. |
+| 3. The request id | DONE | A `requestId` with a character outside letters, digits, `-` and `_` is `error: <transcript>:<line>: invalid requestId '<id>'`, raised in the entry's checks right after "no requestId" and before any path is built. Cases: `../r1` with a decoy `r1.response.json` beside the body folder, and `../r1` with no body folder. |
+| 4. The body's checks | DONE | An unreadable body is `error: cannot read <path>: <reason>`; invalid JSON is `error: <path>: not valid JSON`; a body that is not an object is `error: <path>: not a JSON object`. The usage goes through the same counts and cache-write sum checks (`_check_counts`) and the same speed, geo, tier and web-search checks (`_check_priced`) the transcript entry uses, with the same texts, each line naming the body's path. A body with no `usage` is `error: <path>: usage is missing`; with no id, `no id`; with another id, `error: <path>: id <body id> is not the transcript's message.id <id>`; with no model string, `error: <path>: no model`. A body's model that the table lacks gives the `model <model> of agent <id> is not in <table>` line as before. |
+| 5. The lower bound | DONE | Both tables have a column `No body` (after `Model` in the agent table, after `Agents` in the role table) holding the number of responses priced from the transcript; the Total row holds the sum. A cost cell of a row with `No body` above 0 is `>=` and the cost; the column stays right-aligned. The header has a fourth line, `Response bodies from <folder>.` or `Response bodies: none, so every cost is a lower bound.` |
+| 6. The docstring | DONE | It states the variable, the body file, which counts come from where, the lower bound, the `No body` column, the header line, the new check in the entry's list, how a body is checked, and every new error text in its list. |
+| 7. The test | DONE | Every earlier case is kept with the expected text updated for the column, the `>=` cells and the header line, and runs with the variable unset (`unset OTEL_LOG_RAW_API_BODIES` at the top of the test). New cases are listed below. |
+| 8. The text around the script | DONE | See below. |
+
+Output of the hand-computed fixture with bodies, as the test compares it (the header's first lines are as before):
+
+```
+Response bodies from <folder>.
+
+Role                   Agents  No body    Input  Cache write 5m  Cache write 1h  Cache read   Output  Cost (USD)
+builder                     1        1  1010000         2000000         1000000    50000000  1400000     >=35.02
+brief check                 1        1   250000          400000               0     2500000    50000      >=4.50
+reviewer                    1        0   500000         1000000               0    10000000   250000       14.00
+reviewer over a round       1        1   100000               0          500000     5000000   100000      >=4.20
+grill lookup                1        1   125000               0          125000     1000000    25000      >=2.20
+Total                       5        4  1985000         3400000         1625000    68500000  1825000     >=59.92
+```
+
+ab1 is 35.02 with `No body` 1 and ar1 14.00 with `No body` 0, the figures the brief gives; the expected tables were produced by a scratch generator that computes the figures from exact fractions, apart from the script.
+
+New cases of the test, each written before the script changed and run on the script as it stood before the round (a scratch copy of the new test whose `fail` prints and continues, run on the pre-round script copy). The first failing line of each:
+
+| New case | Failure on the pre-round script |
+|---|---|
+| bodies for one response of ab1 and for ar1: their counts replace the transcript's, the rest are lower bounds | `FAIL: ... stdout differs`; its table has `builder 1 1010000 2000000 1000000 50000000 800000 29.02`, `Total 5 1985000 3400000 1625000 68500000 1225000 53.92` (transcript counts, no `No body` column, no `>=`) |
+| a relative body folder, read from the working folder | `FAIL: ... stdout differs` (same table, no header line) |
+| a body folder that holds no body | `FAIL: ... stdout differs` (no `No body` column, no folder line) |
+| `OTEL_LOG_RAW_API_BODIES` set to 1, and empty | `FAIL: ... stdout differs`, each (no `No body` column, no header line) |
+| a body folder that does not exist, and one that is a file | `FAIL: ... exit status 0, expected 1; stderr: `, then `stdout is not empty` and `stderr differs, got: ` |
+| a body with another id, one that is not JSON, a negative count, fast speed, no model, and one that is `[]` | `FAIL: ... exit status 0, expected 1; stderr: ` and `stderr differs, got: ` (six `error:` lines expected, none printed) |
+| a body with no usage, a usage that is not an object, no id, and a cache-write sum that does not match | `FAIL: ... exit status 0, expected 1; stderr: ` and `stderr differs, got: ` |
+| a model the table lacks, named by a body | `FAIL: ... exit status 0, expected 1; stderr: ` and `stderr differs, got: ` |
+| a requestId of `../r1` with a body beside the body folder, and with no body folder | `FAIL: ... exit status 0, expected 1; stderr: `, `stdout is not empty` and `stderr differs, got: ` (the pre-round script prices the entry) |
+| a body that cannot be read (skipped when the test runs as root) | `FAIL: ... exit status 0, expected 1; stderr: ` and `stderr differs, got: ` |
+| an indented bullet is read as an agent | `FAIL: ... stderr differs, got: error: <ledger>/plan.md:19: the bullet is not of the form "- <agent id>: <role>, <served model>"` |
+
+Every earlier case with a changed expected table also failed on the pre-round script (`stdout differs`), as it must: the table has a new column and a new header line.
+
+Mutation checks on scratch copies of the new script, each run through the whole test, each killed: the `requestId` check removed; the body id check removed; the `>=` marker removed; bodies ignored; the `file:` prefix not required; every response counted as having a body; `line.lstrip(" ")` removed; the model taken from the transcript when a body exists; the body's speed, geo, tier and web-search checks removed; the folder check removed; the counts taken from the transcript when a body exists; the body's model check removed; the body's id check for a missing id removed; the missing-usage check removed; the Total's `No body` fixed to 0; the header line for no folder changed; the role row's `>=` removed; the text of the unreadable-body error changed.
+
+#### Item 8, the text around the script
+
+- `README.md`: the cost script paragraph is no longer after the `check_config.py` block. It stands after the paragraph ending "A skill that needs a missing required key stops and names it." and before "Every other key is optional.", in short sentences: what the closing runs; where the counts come from (the response body Claude Code keeps when `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>` are set in its settings; the agents' transcripts where it kept none, marked as a lower bound); that the folder grows with every request and holds each request's prompt; that the script reads the variable from the environment of the shell that runs it; the `sh` block with the command. This closes finding Standards 1.
+- `skills/plan-orchestration/SKILL.md`, "Usage": the by-hand bullet names the variable `OTEL_LOG_RAW_API_BODIES`, set to `file:<folder>`, and says that without it the script prices from the transcripts and marks every cost as a lower bound.
+- The **cost script** term in `skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md` reads "which prices each agent role of a plan from the response bodies the runner keeps and, where it kept none, from the agents' transcripts as a lower bound, counting each response once." in both; `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` prints `ok: the plan-terms block equals the template`.
+- `docs/dev/building.md`, the line of `plan_cost.test.sh`, names the body counts and the lower bound.
+
+Error order now: table, body folder, `plan.md`, `agents/agent-roles.md`, unreadable folders under the transcript root, then each agent in print order (its transcript errors in line order, then the body errors of its responses in the order the responses were first met, then its model lines). A body is read only for a response whose last transcript entry passed its checks. A body that has a file name but is not a readable file (a folder, a dangling link) is an error, not a missing body.
+
+### 2. The findings of the first review
+
+| Finding | State | What changed |
+|---|---|---|
+| Proof 1, no case has an indented bullet | DONE | Before: the agent form was matched against the line with its leading spaces, so an indented bullet was recognised as a bullet and then failed the form check. After: the form is matched on `line.lstrip(" ")`, and the case with `  - ab9: builder of step 3, claude-opus-5-5` and no transcript of ab9 expects `error: no transcript of agent ab9 under <root>`. Failure on the pre-round script: `FAIL: an indented bullet is read as an agent: stderr differs, got: error: <ledger>/plan.md:19: the bullet is not of the form ...`. Failure with `_BULLET` changed to `[-*+](?: \|$)` on a scratch copy of the new script: `FAIL: an indented bullet is read as an agent: exit status 0, expected 1; stderr: `. |
+| Standards 1 | DONE | Closed by the README move and split above. |
+| Standards 2 | DONE | The head comment of `plan_cost.test.sh` says "a ledger with no Agents heading and every agent in agent-roles.md, one of them step 14b"; the case label says "a ledger with no Agents heading, every agent in agent-roles.md, one of them step 14b"; the fixture folder `plan-2e` is `no-agents-heading`. `grep -rn "plan-2e\|2\.E's form" skills utils docs README.md` prints nothing. |
+| Standards 3 | DONE | The third sub-bullet of the closing in `skills/plan/SKILL.md` Steps 2 is, word for word, the text of the brief: "A non-zero exit of the script that no fix within the plan covers is the stop "A red check" of `plan-orchestration`, and the stop message holds the script's `error:` lines. A model the table lacks is covered by a row copied into the table from the pricing page, committed with the closing." |
+
+### 3. The checks of the round
+
+The probes of verify 3 and 4 of the brief, run again on scratch copies of the new script and table against the new test:
+
+- Verify 3, `responses[parsed[0]]` changed to `responses[(number, parsed[0])]`: `FAIL: the hand-computed fixture: stdout differs, got: Plan 9.Z Fixture: priced usage of its agents`, with `builder 1 3 1020000 2000000 2000000 100000000 900000 >=44.04` and `Total 5 7 1995000 3400000 2625000 118500000 1325000 >=68.94`.
+- Verify 4, the `claude-opus-5-5` cache read price changed from 0.20 to 0.40: `FAIL: the hand-computed fixture: stdout differs, got: Plan 9.Z Fixture: priced usage of its agents`, with `brief check 1 1 250000 400000 0 2500000 50000 >=5.00`, `reviewer 1 1 500000 1000000 0 10000000 250000 >=16.00` and `Total 5 6 1985000 3400000 1625000 68500000 1225000 >=56.62`.
+
+`sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1`:
+
+```
+PASS: plan_cost.py scratch tests
+```
+
+`env -u OTEL_LOG_RAW_API_BODIES python3 skills/plan-orchestration/templates/plan_cost.py .scratch/2-e-a-self-rule` exits 0; its header ends `Response bodies: none, so every cost is a lower bound.`, its fifteen agents each show `>=` with `No body` equal to their response count (498 responses in the Total row), and its Total cost is `>=24.89`, the figure of the first round, now marked as a lower bound.
+
+`LC_ALL=C grep -n '[^ -~]'` over `plan_cost.py`, `plan_cost.test.sh` and `prices.txt` prints nothing; a grep for a tab prints 0 for each file. The verify list through `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md`:
+
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+```
+
+The new test is still not in the verify list (the orchestrator adds it at landing). A folder named `<requestId>.response.json` gives `error: cannot read <path>: Is a directory` and a dangling link of that name gives `error: cannot read <path>: No such file or directory`, from a scratch run of the script.
