@@ -52,9 +52,11 @@ dispatch:
   report: .scratch/2-e-a-self-rule/agents/reviews/7-report.md
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/7-brief-check.md (acf5b218dfdc17a01, claude-opus-5-5 (ordo-high), 234387 tokens, 38 tool uses, 10 min 19 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a5ab075c3677ad2d7 (claude-sonnet-5-5)
   builder_usage: 194415 tokens, 20 tool uses, 6 min 27 s (the first run of the cases, handed back: agents/reviews/7-cases-handback.md; ruled in agents/briefs/7-cases.md); the build after the ruling: 282087 tokens, 46 tool uses, 15 min 29 s
+  reviewer_report:
+  - .scratch/2-e-a-self-rule/agents/reviews/7-refuter.md (acaa1cd6ca52da97e, claude-opus-5-5 (ordo-high), 255946 tokens, 43 tool uses, 8 min 54 s)
 - step: 8
   executor: agent
   worker: claude:sonnet
