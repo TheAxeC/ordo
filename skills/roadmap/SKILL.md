@@ -53,8 +53,17 @@ metadata:
      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
      - The name is a placeholder in angle brackets, such as `<L>`.
      - The bullet's first line ends neither with "(the user)" nor, for `add` only, with "(self-rule)" on a bullet that names a finding of a running plan, each with or without a full stop after it.
-       - Such a bullet names its finding by the path of its report under the plan's `agents/reviews/` (a refuter report, a brief-check report, a landing report or a diagnosis record), the heading the finding stands under and its number there.
-       - `/roadmap` reads that report and finds the finding there.
+       - Such a bullet names its finding by the path of its report under the plan's `agents/reviews/` (a refuter report, a brief-check report, a landing report or a diagnosis record) and the heading the finding stands under, written as the report writes it.
+       - For a refuter report or a brief-check report, the bullet also gives the finding's number: its place, counted from 1, in the list of findings under that heading, as "1. Spec" and 1 name the first finding under the heading "1. Spec".
+       - For a finding of a refuter report's run over a repair round, the bullet also gives `round <n>`, as the `diagnose` skill's "What it reads" 5 names such a finding, and the reviewer's section heading where the run holds one section per reviewer.
+       - Where a run's findings stand under one heading "Findings", grouped by the labels Spec, Proof, Standards and Behaviour, the label stands for the heading.
+         - The number is counted in that label's list, as `round 1`, "Standards" and 3 name the third finding under the label "Standards" of the run over round 1.
+       - A list under "Findings" that no label groups is named by the heading "Findings" and the finding's place in that list.
+       - For a diagnosis record or a landing report the bullet gives no number, and a diagnosis record's heading is the record's title for its first diagnosis or the heading a later diagnosis is appended under.
+       - `/roadmap` reads that report and finds the finding under that heading, in the first run or in the run of `round <n>`.
+         - Where the bullet gives a reviewer's section, `/roadmap` looks inside that section only.
+         - For a refuter report or a brief-check report, it takes the finding at the bullet's number.
+         - For a diagnosis record or a landing report, the finding is the whole text under the heading.
        - `/roadmap` checks that the plan is open: its folder lies under `<ledger_root>/`, outside `<archive_root>/`.
        - `/roadmap` checks that the entry's goal is the finding's work, read against the finding's text.
        - A check that fails leaves no ruling.

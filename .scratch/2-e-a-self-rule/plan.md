@@ -41,7 +41,7 @@ one plan run with `self_rule: on`, whose every open item is either left open und
 - ✅ 11b The closing step of a plan whose ledger names no agent: `skills/plan/SKILL.md` Steps 2 runs the cost script only when the Agents section or `agents/agent-roles.md` holds an agent bullet, and with none the closing report says the plan started no agent and the folder moves; `templates/plan.md` and `plan-orchestration` "Usage" read with it; check: each changed text read in place, and `plan_cost.py` on a scratch ledger with no agent bullet still exits 1 with `error: the ledger names no agent` (1 commit) (ruling M)
 - ✅ 11c `skills/land/templates/checks.sh` runs every command of the verify list, prints each failure's line `checks: failed with exit <status>: <command>`, then `checks: <k> of <n> commands failed` and exits 1, its exit statuses and its line on a clean run unchanged; commands that depend on each other are written as one item joined with `&&`; `checks.test.sh`'s failing case reversed (two failing commands of three, the third run, both failure lines and the count printed), and the head comments of both files, `skills/land/SKILL.md` Steps 6 and "The landing script", `README.md`'s verify-list paragraph and `docs/dev/building.md`'s runner paragraph read with it; check: the reversed case of `checks.test.sh` fails on the unchanged `checks.sh` and passes after the change (1 commit) (ruling checks.sh runs every command)
 - ✅ 12 The changed skills read against `docs/dev/skill-layout.md`, the rule of Open item L (a) on when and which part of a version is raised written into its Frontmatter, the closing step of `skills/plan/SKILL.md` Steps 2 made to skip the cost script whenever the ledger names no agent as Open item M (a) says, and each changed skill's `version` raised by it; check: read by Axel (1 commit) (approved) (ruling L) (ruling N)
-- 12b `skills/roadmap/SKILL.md` "What it reads" 6 names the finding of a quoted ruling ending "(self-rule)" by its report's path and the heading it stands under, with its number there only where the report numbers its findings under that heading (a refuter report, a brief-check report), and by the heading alone for a diagnosis record or a landing report, `/roadmap` checking the finding under that heading; check: the sub-bullet and `/roadmap`'s check read in place against Open item O (a), and the plan-terms and glossary entries that state the form read with them (1 commit) (ruling O)
+- ✅ 12b `skills/roadmap/SKILL.md` "What it reads" 6 names the finding of a quoted ruling ending "(self-rule)" by its report's path and the heading it stands under, with its number there only where the report numbers its findings under that heading (a refuter report, a brief-check report), and by the heading alone for a diagnosis record or a landing report, `/roadmap` checking the finding under that heading; check: the sub-bullet and `/roadmap`'s check read in place against Open item O (a), and the plan-terms and glossary entries that state the form read with them (1 commit) (ruling O)
 - 13 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.E.A`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
 ## Could run in parallel
@@ -152,6 +152,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a1a45441fab00dcd0: reviewer of step 12, claude-opus-5-5
 - a66e5c70679decf11: reviewer of step 12 over round 1, claude-opus-5-5
 - aadacd036f0e6ee9e: reviewer of step 12 over round 1, claude-sonnet-5-5
+- aec3edbb8b9d18992: brief check of step 12b, claude-opus-5-5
+- a8ad5a883f593d085: builder of step 12b, claude-sonnet-5-5
+- af6d65d9212d1b716: reviewer of step 12b, claude-opus-5-5
+- ae3638bef5f010d8f: reviewer of step 12b over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
@@ -323,6 +327,20 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - A/B: none (`bench: []`). Look: none (`look:` empty).
 - Usage: brief check aeae0de1e8deb991b, claude-opus-5-5, 196521 tokens, 52 tool uses, 7 min 0 s; builder ae09983cdb0694a33, claude-sonnet-5-5, 179551 tokens, 24 tool uses, 3 min 33 s (the first run of the cases, handed back), 315699 tokens, 128 tool uses, 36 min 6 s (the build) and 274926 tokens, 112 tool uses, 33 min 10 s (round 1); reviewer a1a45441fab00dcd0, claude-opus-5-5, 342934 tokens, 78 tool uses, 14 min 22 s; reviewers over round 1 a66e5c70679decf11, claude-opus-5-5, 225543 tokens, 54 tool uses, 10 min 41 s, and aadacd036f0e6ee9e, claude-sonnet-5-5, 250869 tokens, 59 tool uses, 12 min 2 s.
 - The builder's first report did not pass its bar: the first review found items 1 and 2 violated (Spec 1 to 4, Proof 1 and 2, seven Standards findings, Behaviour 1 and 2).
+
+### Step 12b, how a "(self-rule)" ruling names a finding (landed 2026-10-01)
+
+- Landed: `skills/roadmap/SKILL.md` "What it reads" 6 names the finding of a "(self-rule)" `/roadmap add` bullet by its report's path and the heading as the report writes it. A refuter report or a brief-check report adds the finding's number. A run over a repair round adds `round <n>` and, with one section per reviewer, that section. A "Findings" list grouped by labels uses the label as the heading, and an ungrouped one the heading "Findings". A diagnosis record or a landing report gives the heading alone, and `/roadmap` reads the whole text under it. `skills/diagnose/SKILL.md` Steps 2 and `templates/diagnosis.md` append a later diagnosis at the level of the record's title. The term **finding** in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`, gains that sense. Versions unchanged (roadmap 1.3.0, diagnose 1.1.0, repo-setup 1.3.0, each this plan's one raise). 5 files, 15 insertions, 6 deletions.
+- Rulings on the way: Open item O (a); the round's rulings `agents/briefs/12b-round-1.md`, which widened the paths to `diagnose` and the term **finding**.
+- Brief check (`agents/reviews/12b-brief-check.md`): its findings closed in the brief, among them the form for a finding of a run over a repair round and the heading of a diagnosis record.
+- Premise corrections: the brief's count of bullets under `12-landing.md` "What was found" (five, not six) and its Verify 2 wording, both corrected in the ledger.
+- Repair round 1: eight rulings; the run over the round gives every item "holds" and every case "met", and found no report shape on the tree the text cannot name.
+- Fixes at landing: 3. The two long `roadmap` sub-bullets split into one rule per bullet; the sub-bullet for an ungrouped "Findings" list added; the builder's report's wording corrected. Each named in `agents/reviews/12b-refuter.md` "Closed".
+- The step's check: the sub-bullets read in place against Open item O (a) by the reviewer and the reviewer over the round, against the report shapes on the tree; the terms **quoted ruling** and **finding** read with them.
+- Verification on main, after the fixes at landing: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` printed the nine `PASS:` lines, `ok: the plan-terms block equals the template`, the ASCII check with no output and `checks: 11 commands passed`, exit 0.
+- A/B: none (`bench: []`). Look: none (`look:` empty).
+- Usage: brief check aec3edbb8b9d18992, claude-opus-5-5, 163475 tokens, 46 tool uses, 7 min 27 s; builder a8ad5a883f593d085, claude-sonnet-5-5, 125161 tokens, 34 tool uses, 9 min 12 s (the build) and 158649 tokens, 17 tool uses, 7 min 18 s (round 1); reviewer af6d65d9212d1b716, claude-opus-5-5, 164736 tokens, 41 tool uses, 10 min 7 s; reviewer over round 1 ae3638bef5f010d8f, claude-sonnet-5-5, 214322 tokens, 54 tool uses, 10 min 22 s.
+- The builder's first report did not pass its bar: the first review found four Spec points, one Standards point and two Proof points, each a gap of the dictated text or the report rather than of the build.
 
 ### Step 11b, the closing of a plan with no agent: Step 0 (2026-10-01)
 

@@ -55,7 +55,7 @@ metadata:
 2. Open the diagnosis record with the symptom quoted in its Symptom section.
    - Outside a plan, the record is a copy of `templates/diagnosis.md` in `$TMPDIR`, filled as the steps below run.
    - Inside a plan, the record is `agents/reviews/<step>-diagnosis.md` beside the state file, a copy of `templates/diagnosis.md` filled as the steps below run.
-   - A later diagnosis of the same step is appended to that file under its own heading, which names its finding.
+   - A later diagnosis of the same step is appended to that file under its own heading at the level of the record's title, `# Diagnosis: <the symptom in a few words>`, which names its finding.
    - Inside a plan, the record is written to disk in the main checkout and not committed on its own.
      - The next resume-point commit carries it, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
    - Done when the record exists and its Symptom section holds the symptom as "What it reads" 1 gives it, word for word.
