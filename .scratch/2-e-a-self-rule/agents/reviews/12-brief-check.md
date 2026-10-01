@@ -129,3 +129,14 @@ Findings: none against the standards pages. The value conflicts are reported und
 - Whether Claude Code's transcript cleanup can remove an agent's transcript before a plan's closing (another way to reach the C2 closing stop, "no transcript of agent"). Not verified.
 
 Agent usage: aeae0de1e8deb991b, claude-opus-5-5 (ordo-high), 196521 tokens, 52 tool uses, 7 min 0 s.
+
+## Closed
+
+Each finding is closed in the brief `agents/briefs/12.md` as written again on main at bbc7383, under ruling L of `plan.md`'s Rulings.
+
+- P1: "What is on the tree" now states that the second changed line of `diagnose` adds a way to resume its stop "The cause not found" under `self_rule: on`, which is not wording.
+- C1: Case 11 reads `diagnose` 1.0.0 to 1.1.0, the value ruling L gives, an input the stop did not accept before being the minor part.
+- C2: Decision 1 is gone. The version rule is ruling L's five bullets, which item 0 writes into `docs/dev/skill-layout.md`, Frontmatter. Its major clause names "a run that worked before is refused, or its output is changed or removed", its minor clause names "adds to its output", and its fifth bullet makes the refusal of a `worker:` with no value no run that worked before. The closing of a plan whose ledger names no agent was ended by step 11b (Open item M) before this brief. Cases 3, 7, 8 and 9 give the reasons under the rule.
+- C3: items 1 and 2 read "Writing for an agent" only against the text this plan wrote or rewrote (`git diff 9fc91dc -- skills/<name>`), and every other section of the layout page against the whole skill. A break of "Writing for an agent" in unchanged text is listed in the report under "For roadmap entry 23" and not fixed.
+- Check 5, Verify 3: the `--stat` half is dropped. Verify 3 is now `git diff --name-only` with `git status --short --untracked-files=all`, which names `docs/glossary.md` and `docs/dev/skill-layout.md` among the paths it checks.
+- Declined to judge 2 (whether the version rule is the user's): the user ruled it as Open item L, option (a).
