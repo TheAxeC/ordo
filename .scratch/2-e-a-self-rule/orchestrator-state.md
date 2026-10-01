@@ -51,8 +51,11 @@ dispatch:
   report: .scratch/2-e-a-self-rule/agents/reviews/2-report.md
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/2-brief-check.md (abe95054772aeb0bc, claude-opus-5-5 (ordo-high), 217811 tokens, 40 tool uses, 465 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: af948d39c18780b67 (claude-sonnet-5-5)
+  builder_usage: 320677 tokens, 50 tool uses, 976 s (claude-sonnet-5-5); report saved
+  reviewer_report: .scratch/2-e-a-self-rule/agents/reviews/2-refuter.md (aec84f54a17e39016, claude-opus-5-5, 219054 tokens, 46 tool uses, 543 s)
+  round_1: .scratch/2-e-a-self-rule/agents/briefs/2-round-1.md (Standards 1, 2, 3 and the builder's points 1 and 2 sent; point 3 ruled no change)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
