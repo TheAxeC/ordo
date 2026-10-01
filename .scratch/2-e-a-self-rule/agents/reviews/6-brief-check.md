@@ -193,4 +193,44 @@ Agent usage: acf87ddb30973c88b, claude-opus-5-5 (ordo-high), 239319 tokens, 43 t
 
 - The clash between self-rule and the shared rules "No silent design decisions" and "No question boxes" (Names): raised to the user as Open item B, question 1, since the shared-rules block is the user's written rules.
 - Decision 4's reading of kind 3 against case 9 and item 1.3.8 (Cases and checks, The question, and the judgment on the six kinds): raised as Open item B, question 2, since how far "the reversal of a ruling" reaches decides which items reach the user.
-- Every other finding: closed in the brief by the `/spec` run after the ruling on Open item B, which does not check the step again ("Steps / The brief check" 4); each change is named here then. The brief was removed at the stop, as "Steps / The brief check" 4 says.
+- Ruled (a) and (a) by the user on Open item B (2026-10-01): the brief's item 11 adds the ruled sentence to the shared-rules template, and item 1.2's kind 3 is ruling B (2) word for word (Decision 4).
+- Names, `plan/SKILL.md:138`, `plan/templates/plan.md:20`, `orchestrator-state.md:37-41`, `refute:151`, `land:213`, the terms **quoted ruling** and **resume point**, `README.md:18`, the figure band: items 5, 6, 7, 10, 12, 13 and 14, each path added to "Paths this step writes".
+- Names, `spec:3`, `:73`, `:75`, `:300`, `plan-orchestration:57`, `:209`, `:216`, `:258`, `:267`, `:346`, `ordo-help:69`, `:78`: items 2, 4 and 9 name each line and its new words; `spec`'s description is shortened so it stays under 1,024 characters.
+- The step line, the review flow for a `/grill` choice: the review finds a choice's bullet by its name in the plan `Booked:` names; `/grill`'s choices under `next_entry` are step 7's, which writes them in the same form.
+- Premises: `README.md` named as shared with step 4; "Steps 6's clash bullet" corrected to Steps 3; the `decision-form.md` hits listed.
+- Cases, case 9 against kind 3: closed by ruling B (2), which closes a rewrite of an approved step's text; case 9 now says so.
+- Cases, case 14 (now 15): restricted to the user's answer, and a carried ruling replaces a "(self-rule)" bullet only when dated after it (item 8).
+- Cases, case 16 (now 18): the fix step's tag is `(ruling C<n> <the decision, as a phrase>)` (Decision 10), and the case says `/spec` accepts it.
+- Cases, case 20 (now 23) against verify 3: the scratch file holds C3 to C8 with `Last number: C8`, and the next choice is C9.
+- Cases, case 18 (now 21): the kind citation removed.
+- The question, the review flow's trigger: `plan-orchestration`'s description triggers on `C<n> Agree` and `C<n> =>` (item 2, Decision 1).
+- The question, verify 2: `ordo-help` dropped from the hits it expects; `plan-terms.md` and the glossary added.
+- Implied inputs: cases 11, 17, 19, 20, 22 (no file), 24 and 26 added, with the rules in item 1 that answer each (the bullet found by its name, a tag rewritten, a choice replaced outside the review, an archived plan, a step in flight, no file, a skill's approval stop). A library candidate is closed under self-rule like any choice outside the six kinds; a recurring-findings proposal is kind 3 only for a rules sentence, a standards page or the shared rules (item 2).
+- ADRs: "(ADR 0004)" and "(ADR 0005)" removed from every dictated line; the rule against numbered ADRs in skill text is stated under "What is on the tree" and "What it must do".
+- Dictated text, the sentence labels: replaced by noun-phrase labels (item 1).
+- Dictated text, line 48 with 1.3.3: one bullet only (item 1.3.3, Decision 2).
+- Dictated text, line 68: the Closed items lines use the template's form `- <date>: <what was raised>: <how it ended>.`
+- Dictated text, line 77: moved into Steps 10's item (item 2), the literals in inline code.
+- Dictated text, line 107: replaced by a pointer, "books a choice the same way, as that section says".
+- Dictated text, line 114: removed (Decision 11).
+- Dictated text, line 119: the new `ordo-help` step has its completion criterion and covers both forms.
+- Dictated text, line 128: the README gets the two lines of item 9's block at column 31.
+- Judgments: kind 5 now reads "the reading stays an open item and blocks no step"; Decision 8 follows D23's "has landed" (a step in flight gets its fix step at its landing); Decision 9 names `spec` Steps 6 for the `Builds on it:` update (item 4); Decision 3 leaves `/roadmap add` under `next_entry` to step 7.
+
+Each dictated line added after the check, held to the standards pages:
+
+- `- Open item <L> (<date>): <the option taken, in one line, and what it unblocks> (self-rule).` (item 1.3.3), `- <date>: Open item <L>, <what was raised>: closed under self-rule, C<n>.` (1.3.4), `- <date>: C<n>: replaced by <the ruling's name>.` (1.5), `- <date>: C<n>, <the decision>: agreed by the user.` and `- <date>: C<n>, <the decision>: replaced by the user's ruling C<n>.` (1.6): hold; each uses the Closed items form the state template gives.
+- `- C<n> <the decision, as a phrase> (<date>): <text>, replacing Open item <L> (the user).` and the fix step line with `(ruling C<n> <the decision, as a phrase>)` (1.6): hold; the tag resolves under `spec` "What it reads" 4.
+- The labels **Scope**, **The six kinds left open**, **Closing an open item**, **The counts**, **The choices file**, **The review of a choice**: hold, noun phrases.
+- The kind 3 text (1.2.3): holds; it is ruling B (2) with the written rules listed.
+- The sub-bullet on `/roadmap`, `/ordo-init` and `/repo-setup` (1.2): holds.
+- The template paragraph (item 3): holds; one voice ("the user") and the literals in inline code.
+- The description trigger `C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)` (item 2): holds; in code form inside the triggers list.
+- "only by a ruling of the user or, under `self_rule: on`, a choice "Self-rule" books" (items 2 and 10): holds; one form in every place.
+- The Steps 10 sub-bullet, the resume points, the recurring-findings sentence, the Stops sub-bullet, the rule-clash exception and "What it reads" 6 (item 2): hold; each names the section it points at.
+- The `spec` lines of item 4: hold; the description shortens.
+- The `plan` lines of items 5 and 6 and the state template words of item 7: hold.
+- The `grill` sub-bullets of item 8: hold; each names the rewrite of the replaced bullet's ending.
+- The `ordo-help` step and the two sequence lines (item 9): hold; the step ends on its criterion, the lines align at column 31.
+- The `refute` and `land` words (item 10), the shared-rules sentence (item 11, ruled word for word), the two terms (item 12), the README words (item 13): hold.
+- The band sentence (item 14): holds; `self_rule: on` is written without backticks there because the figure renders plain text, as the band's other words are.
