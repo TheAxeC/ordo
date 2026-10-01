@@ -49,7 +49,13 @@ dispatch: none
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
 
-None.
+- Open item H (2026-10-01): whether the shared rule on self-rule covers `/grill` and `/plan` run with `--self-rule`. Raised by the brief check of step 7 (`agents/reviews/7-brief-check.md`, "Declined to judge"). Kind 3: a change to the shared rules and to `~/.claude/CLAUDE.md`.
+  - What the tree shows: `skills/repo-setup/templates/shared-rules.md:20` reads "Under a plan's `self_rule: on`, such a decision outside the six kinds `plan-orchestration` "Self-rule" leaves open is taken with its recommendation and written to the choices file for your review.", and `~/.claude/CLAUDE.md` holds the same sentence (ruling B). In next-entry mode `/grill <entry> --self-rule` and `/plan <entry> --self-rule` run before the next entry's plan exists, under the keys of `.agents/plan.yaml` (ruling F), so no plan's `self_rule: on` is in force while they take decisions.
+  - Options:
+    - (a) The sentence reads "Under `self_rule: on`, in a plan's configuration block or, for `/grill` and `/plan` run with `--self-rule`, in `.agents/plan.yaml`, such a decision outside the six kinds `plan-orchestration` "Self-rule" leaves open is taken with its recommendation and written to the choices file for your review."; the template change joins step 8, which changes the `repo-setup` templates, and you put the same words in `~/.claude/CLAUDE.md`. Pros: a reader of the rule finds next-entry mode covered, and the rule and the skill text say the same. Cons: a change to written rules, one of them your own file.
+    - (b) Both sentences stay; a next-entry run is read as the closing plan's run going on under its `self_rule: on`. Pros: no rule changes. Cons: the words "a plan's" do not name `/grill` and `/plan` run before the plan exists, so a session that reads the rule as written stops at each decision `/grill --self-rule` would close, and the shared rule and the skill text disagree.
+  - Recommendation: (a), since a written rule that a literal reader reads against the skill text is a clash, and the change is one sentence. Lazy option: (b), which changes nothing and leaves the clash to each reader.
+  - Kind 3; it waits for you. It blocks step 9, whose run is the first next-entry run, and no other step.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -59,6 +65,7 @@ None.
 - 2026-10-01: Open item D, the body folder a tool shell cannot see: ruled (a) by the user. The script falls back to the key `env.OTEL_LOG_RAW_API_BODIES` of the three Claude Code settings files; ADR 0009 amended; fixed at step 4's landing.
 - 2026-10-01: Open item E, `/grill` against ADR 0004 on a "(self-rule)" quoted ruling's roadmap diff: ruled (c), changed, by the user. `/grill` accepts it as ADR 0004 says, round brief item 7 undone at step 6's landing; step 7 makes `/roadmap add` accept a "(self-rule)" bullet for work a finding names; the Rulings line "Open item E".
 - 2026-10-01: Open item F, how `/grill` and `/plan` know that the loop runs them in next-entry mode: closed under self-rule, C1.
+- 2026-10-01: Open item G, how a quoted ruling ending "(self-rule)" names the finding whose work `/roadmap add` may write: closed under self-rule, C2.
 
 ## The standing demands (from Axel, in force)
 
