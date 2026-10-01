@@ -106,4 +106,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after the fixes at landing printed `checks: 10 commands passed`.
 - Step 4 is built and refuted once (`agents/reviews/4-report.md`, `agents/reviews/4-refuter.md`); its builder is kept for repair round 1. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet); its booking carries step 3's check ("Blocked, and by what").
 - Open items A and B ruled. Step 4's repair round 1 is sent (ruling A and the first review's findings); step 6 is prepared under ruling B and its builder launched.
-- Open item C ruled (a) and the roadmap changed. The setting of ADR 0009 is in `~/.claude/settings.json`, from the next session on. Open on Axel's side: the sentence of ruling B in `~/.claude/CLAUDE.md`.
+- Open item C ruled (a) and the roadmap changed. The setting of ADR 0009 is in `~/.claude/settings.json`, from the next session on. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24. Nothing is open on Axel's side.
