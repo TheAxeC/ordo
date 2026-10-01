@@ -57,6 +57,7 @@ dispatch:
   builder_usage: 212645 tokens, 30 tool uses, 6 min 45 s (the first run of the cases, handed back: agents/reviews/6-cases-handback.md; ruled in agents/briefs/6-cases.md); the build after the ruling: 322159 tokens, 48 tool uses, 15 min 51 s; repair round 1: 348847 tokens, 4 tool uses, 1 min 59 s (the points handed back, ruled in agents/briefs/6-round-1-rulings.md), then 203463 tokens, 87 tool uses, 17 min 46 s
   reviewer_report:
   - .scratch/2-e-a-self-rule/agents/reviews/6-refuter.md (a90205aabc898e907, claude-opus-5-5 (ordo-high), 253163 tokens, 56 tool uses, 13 min 31 s)
+  - over round 1: aafe40381768b8fce, claude-sonnet-5-5 (ordo-high), 235215 tokens, 49 tool uses, 11 min 4 s
   shared_paths: skills/plan-orchestration/SKILL.md, skills/plan/SKILL.md, skills/plan/templates/plan.md, skills/repo-setup/templates/plan-terms.md, docs/glossary.md and README.md, each shared with step 4; the merge is simple, since each step changes other lines of each file (step 4: Steps 10 and "Usage", the closing's bullet, template line 21, the terms closing report, closing step and cost script, and its README paragraph; step 6: its own section and the lines its brief names, the terms quoted ruling and resume point, README lines 16-50). skills/repo-setup/templates/shared-rules.md is a template for other repositories, not a rules file Ordo's builders work under, so step 6 need not run alone.
 - step: 5
   executor: inline
@@ -75,7 +76,15 @@ dispatch:
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
 
-- none
+- Open item E (2026-10-01): `/grill` no longer accepts a "(self-rule)" quoted ruling as the user's answer to a roadmap diff, which ADR 0004's decision does not allow. Stop "A rule clash", from the review over step 6's repair round 1 (`agents/reviews/6-refuter.md`, "Repair round 1, refuted", Spec 4).
+  - What the tree shows: ADR 0004 (proposed) decides "`/spec`, `/plan` and `/grill` accept it wherever they accept "(the user)"." Step 6's round brief, item 7, asked that a "(self-rule)" quoted ruling settle its decisions as the orchestrator's choice and not be the user's answer to the roadmap diff, and the builder wrote that at `skills/grill/SKILL.md:76`, `:124` and `:336` in the worktree. So `/grill` accepts a "(the user)" quoted ruling's roadmap diff and refuses a "(self-rule)" one, where the ADR says it accepts both alike. The `roadmap` skill already refuses a "(self-rule)" quoted ruling (`references/self-rule.md`, "A skill with its own approval stop"), so the grill text agrees with what `/roadmap` does.
+  - What it breaks: nothing in behaviour; the ADR and the skill text disagree, and a reader of the ADR expects `/grill` to write a roadmap diff from a self-rule bullet.
+  - Options:
+    - (a) ADR 0004's decision sentence is refined in place to "`/spec`, `/plan` and `/grill` accept it wherever they accept "(the user)", except as the user's answer to a roadmap diff, which `/grill` leaves to the user as `/roadmap` does.", as the ADR folder's README allows for a refinement that keeps the decision; step 6 lands with that edit as a fix at landing. Pros: the roadmap, which is yours, never changes on a decision you did not make; the ADR then states what both `/grill` and `/roadmap` do. Cons: the ADR's "wherever" rule gains one exception a reader must know.
+    - (b) A new ADR supersedes 0004 with the same sentence as (a). Pros: the change of the decision is a record of its own. Cons: a whole superseding record for one carve-out that keeps the decision, which the README reserves for a decision that changes.
+    - (c) `/grill` goes back to accepting a "(self-rule)" quoted ruling as the answer to the roadmap diff, as the ADR says now: round brief item 7 is undone at landing. Pros: no ADR change. Cons: a decision the orchestrator took alone can rewrite a roadmap entry through `/grill`, while `/roadmap` itself refuses the same bullet.
+  - Recommendation: (a), since it keeps the roadmap with you, matches `/roadmap`, and is the refinement the README says is edited in place. Lazy option: leave the ADR and the text as they are, which lands a contradiction.
+  - Step 6 waits for the ruling, then lands with it and with the round's other findings (Spec 1 to 3, Standards 1 to 4) fixed at landing.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 

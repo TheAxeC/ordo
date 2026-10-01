@@ -140,3 +140,123 @@ none: the report gives the before and after of every changed sentence, the templ
 - Whether Spec 3 to 5 and Standards 1 and 2 are fixed in this step or ruled as kinds: each changes which items reach the user, a reading of the goal's six kinds that the orchestrator rules on or raises to the user.
 
 Reviewer usage: a90205aabc898e907, claude-opus-5-5 (ordo-high), 253163 tokens, 56 tool uses, 13 min 31 s.
+
+## Repair round 1, refuted
+
+```
+$ cd /Users/axelfaes/workspace/ordo/.agents/worktrees/2ea-6
+$ sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-a-self-rule/orchestrator-state.md   (exit 1)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+sh: skills/plan-orchestration/templates/plan_cost.test.sh: No such file or directory
+checks: failed with exit 127: sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+
+Same runner, state file copy without the plan_cost.test.sh line (exit 0):
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1                         PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1                       PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1            PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1             PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1        PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1   PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary          ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1                                          PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1                               PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne '<the ASCII check of the verify list>'   (no output)
+checks: 10 commands passed
+
+Reproduced: the one failing command is plan_cost.test.sh, absent from the worktree (it is on main: /Users/axelfaes/workspace/ordo/skills/plan-orchestration/templates/ holds plan_cost.py, plan_cost.test.sh, prices.txt). No other command fails.
+
+Brief verify 2: grep -rn '(self-rule)' skills README.md docs/glossary.md
+ hits: land:214; grill:76, :84, :116, :124, :217, :336; plan/SKILL.md:56, :99, :139; plan/templates/plan.md:32; spec:44, :227, :229, :238, :305; plan-orchestration/SKILL.md:307; references/self-rule.md:33, :57, :71, :74, :77; plan-terms.md:77; docs/glossary.md:82. None in roadmap, ordo-init, repo-setup/SKILL.md, ordo-help, README.md.
+Brief verify 4 (scratch copy of docs/figures): python3 gen_figures.py -> wrote fig/figures/pipeline.svg (31547 bytes), wrote fig/figures/plan-loop.svg (31517 bytes), exit 0; cmp against the worktree: same gen_figures.py, same pipeline.svg, same plan-loop.svg. The report's byte counts (31547, 31517) match.
+Brief verify 5 (yaml-parsed length, the count skill-layout gives): ordo-help 472, plan-orchestration 865, spec 987 (grill 808, land 726, refute 951, roadmap 997, others lower). The report's spec 1015 before, 987 after, matches (the before value is the first refuter's 1015). The report lists roadmap as 1001; the yaml count is 997. Roadmap is not in the diff and no decision rests on it.
+Brief verify 6: ok: the plan-terms block equals the template
+Brief verify 7: LC_ALL=C grep -n '[^ -~]' over git diff 5f41763 --name-only plus templates/choices.md and references/self-rule.md: nothing. Tab and trailing-space grep (-P '\t| +$') over the same files, svgs excluded: nothing.
+Report evidence rerun: wc -l of all 15 files in the report's list matches (358, 328, 340, 142, 217, 187, 237, 43, 70, 15, 121, 138, 182, 751, 87). git diff 5f41763 | grep '^[-+].*version': nothing. self_rule: off at line 39 of the main state file. awk '/^C<n>/{print index($0,"under")}' prints 31 for both lines of ordo-help/SKILL.md and README.md. grep for '"Self-rule"' in skills docs README.md prints only the plan-orchestration SKILL.md section heading line 223, references/self-rule.md:7 and shared-rules.md:20, as the report says. grep Booked: prints references/self-rule.md:52, :53, :70, templates/choices.md:14 and docs/adr/0005:20 only. grep '(approved)' hits are true as the report says. plan_cost.test.sh absence: reproduced above.
+Delta of the round (rebuilt from 6-before-round-1.patch, diff -ruN against the worktree, svgs read separately): the svg delta is the legend note of both figures only; gen_figures.py delta is lines 395-396 only.
+```
+
+### Verdicts
+
+Brief "What to build", whole diff since the base:
+
+- 1. holds. `## Self-rule` at `skills/plan-orchestration/SKILL.md:223` keeps the scope and the pointer bullet; the six kinds, the skill-with-own-approval-stop paragraph, Closing 1-7, The counts, The choices file and The review of a choice are in `references/self-rule.md` (87 lines, labelled headings). The `Ruled:` path's gap is the round-item-2 finding, not this item.
+- 2. holds. Description trigger (865 characters), What it reads 6, Steps 3 sub-bullet and :59, Steps 9 sub-bullet at :127, Steps 10 sub-bullet at :133, resume points at :160, recurring-findings at :213 and :220-221, the Stops rows at :307-308, the Stops sub-bullet at :315, :268, :277, :357.
+- 3. holds. `templates/choices.md` equals the brief's block with the round's `Booked:` line (`(Open item <L>)`); ASCII, no tab.
+- 4. holds. spec description 987; :44-45, :221, :227, :229, :238, Stops row :305.
+- 5. holds. `plan/SKILL.md:56`, `:139`.
+- 6. holds. `plan/templates/plan.md:20`, `:32`.
+- 7. holds. `orchestrator-state.md` lines 37, 39, 41.
+- 8. holds as to its text (`grill` :84, :116, :217, lines 50/52/55 unchanged). The round's extra bullet at `grill:76` carries Standards findings 1 and 2 below.
+- 9. holds. `ordo-help` description, Quick start, What it reads 4, Steps 2, the two lines at column 31 (rerun: 31 and 31).
+- 10. holds. `refute:151`, `land:213`, `land:214` (as 6-cases.md rules it, now with the renamed pointer).
+- 11. holds. `shared-rules.md:20` ends with the item's sentence word for word; unchanged this round, and D3 keeps its `"Self-rule"` pointer.
+- 12. violated. Resume point holds; the quoted ruling term does not read as the round's item 8 dictates (Spec finding 1).
+- 13. holds. README :18 and :45-46 at column 31.
+- 14. holds. Band sentence present; the generator reproduces both svgs byte for byte.
+- 15. holds. No version line changed, `self_rule: off`, roadmap:55, ordo-init:48, repo-setup:49 unchanged.
+
+Cases of the brief (checked by reading, and by the builder's walk where noted; I did not rerun the builder's scratch walk, its script is not on disk; I walked cases 24 and 26 by reading):
+
+- 1 met. 2 met. 3 met. 4 met. 5 met (kind 3, `references/self-rule.md:15`). 6 met. 7 met. 8 met.
+- 9 met. 10 met (`references/self-rule.md:42`). 11 met (:25). 12 met (`spec:44-45`, :305). 13 met. 14 met. 15 met (`grill:116`, :217).
+- 16 met. 17 met (archived plan found by slug; `references/self-rule.md:70`). 18 met. 19 met. 20 met by reading (:81, Steps 9 :127). 21 met. 22 met (:86). 23 met (:50).
+- 24 met: the choice leaves the file and the Closed items line names the new bullet (`references/self-rule.md:57-58`). The text around it has findings Spec 2 and Spec 3.
+- 25 met. 26 met: by reading with a Rulings line shifted by one, the review takes `Open item <L>` from the `Booked:` line, finds that bullet in the Rulings section, and rewrites it, not the bullet that now stands at the stale line number.
+
+Round brief items:
+
+- R1 (Spec 1) holds. The report's walk shifted the bullet by four lines, not by one as the brief asked; the one-line shift gives the same result by reading (case 26 above).
+- R2 (Spec 2) violated in part: Spec finding 2.
+- R3 (Spec 3) holds: kind 3 sub-bullet at `references/self-rule.md:17`; `refute:152`, `ordo-help:71` and the Stops row "A rule clash" read true as written.
+- R4 (Spec 4, Standards 3) holds: `references/self-rule.md:42`; "Closing an open item" names "the stops "The counts" names"; `plan-orchestration` Steps 9 :124, Rules :351-352, `land` Steps 6 and its Stops row read true.
+- R5 (Spec 5) holds: `references/self-rule.md:18`.
+- R6 (Standards 1) holds: `plan/SKILL.md:98-99`, :139 (D2 sentence word for word).
+- R7 (Standards 2) holds as to lines 124 and 335-336; Standards findings 1 to 3 attach to this item's text.
+- R8 (Standards 4) violated: Spec finding 1; README:56, spec:3 (D1), diagnose:210, land:183 hold.
+- R9 (Standards 5) holds: the reference file in `references/`, the kept section with two bullets, pointers renamed (one deliberate exception, D3), skill-layout lines 66-67 and 73-74 read as the report says.
+- R10 (Proof 1) holds as reported: cases 9, 16 to 19, 21 to 26 each name where the name, bullet and lines came from. Case 24's walk does not exercise the retag or fix-step of a step tagged with the replaced bullet, which is where Spec finding 2 lies.
+
+### Findings
+
+**Spec**
+
+1. The quoted ruling term is not written as dictated, and still calls a "(self-rule)" bullet the user's. Place: `docs/glossary.md:82` and `skills/repo-setup/templates/plan-terms.md:77` (the two copies are equal). Hunk: "- **quoted ruling**: a ruling of the user given to a skill by the arguments `--ruling <ledger file> "<name>"`. ... whose first line ends with "(the user)", or with "(self-rule)" for `plan` and `grill`". `6-round-1.md` item 8 dictates "a ruling given to a skill by the arguments ..." (no "of the user"), with "Where a ruling below gives a sentence word for word, write it as given". The builder dropped `spec` and kept "of the user"; the report's before and after does not mention that the dictated opening was not written. Failure scenario: a reader of the glossary (or of any repository that syncs `plan-terms.md`) reads a bullet ending "(self-rule)", which no user ruled, as "a ruling of the user", the first refuter's Standards 4 finding and ADR 0004's "Every ruling says who decided it" left standing. Round item 8 and brief item 12: violated.
+2. A ruling that replaces a "(self-rule)" bullet outside a review leaves the retag form and the fix-step form of the steps resting on it undefined. Place: `skills/plan-orchestration/references/self-rule.md:59`, with :78 and :80. Hunk (:59): "The steps that rest on the replaced bullet, those whose tag or Step 0 names it, are treated as "The review of a choice" treats the steps of `Builds on it:` under `C<n> =>`." Round item 2 says the tag is rewritten to `(ruling <the new bullet's name>)`. :78 and :80 give `(ruling C<n> <the decision, as a phrase>)`, a name that exists only for a `C<n> =>` ruling. For a `Ruled:` reply the new bullet is `Open item N`, and for `/grill` it is `D<n> ...`. Failure scenario: step 7a is tagged `(ruling R)`, R ends "(self-rule)."; a `Ruled:` reply writes `- Open item N (...), replacing Open item R (the user).`; a session following :59 with :78 writes `(ruling C9 <the decision>)` (C9 being R's choice). No Rulings line has that name, so `/spec 7a` refuses it as "A step without its authority". The same gap holds for the fix step's tag at :80 and :82. The report's case 24 walk kept the step's `(approved)` tag, so it never ran this path. Round item 2 (second bullet): violated; ties to case 24's neighbours, not to its own expected result.
+3. The replaced-outside-a-review path does not carry the entry heading rule. Place: `references/self-rule.md:58`. Hunk: "its choice is removed from the file". The `Agree` path says "its entry heading with it when no choice is left under it" (:73) and the `=>` path says "as under `Agree`" (:85). Failure scenario: the replaced choice is the last under `# Entry 2.F ...`; the heading stays with no choice under it, and `ordo-help`, which prints each choice's heading under its entry's heading, is left with an empty entry heading while its count says none for it. Low severity.
+4. A change that contradicts ADR 0004, which the round brief asked for: a rule clash for the user, not closable in a round or at landing (`refute` "Finding dispositions"). Place: `skills/grill/SKILL.md:76`, `:124`, `:335-336`. ADR 0004's decision: "`/spec`, `/plan` and `/grill` accept it wherever they accept "(the user)"." The new text makes `/grill` refuse a "(self-rule)" quoted ruling as the user's answer to a roadmap diff (":336 ... settles the decisions it states as the orchestrator's choice, not as the user's answer, and its roadmap diff stays a decision for the user"), where `/grill` accepts a "(the user)" one. Round item 7 asked for it (Standards 2 of the first report). Failure scenario: none in behaviour; the text and the ADR disagree, so `/grill` is not "accepting it wherever". Options for the user: (a) amend ADR 0004's decision sentence to carve out the roadmap diff, recommended, since the carve-out is what keeps the roadmap diff with the user; (b) change `grill` back to accept it, which lets a self-rule bullet change a roadmap entry. Lazy option: leave both as they are.
+
+**Proof**
+
+none. The claims I reran reproduce (verification, figures, counts, line counts, greps). The builder's scratch walk could not be rerun (no script on disk); I read cases 24 and 26 against the text myself, with the result under Spec finding 2 and case 26.
+
+**Standards**
+
+1. `grill/SKILL.md:76` is inserted between a bullet and its sub-bullet, which changes the sub-bullet's parent. Hunk (lines 75-77 now): "    - A draft is the ruled change when each change it makes to a file has a sub-bullet that states it and equals that sub-bullet." / "    - A bullet ending "(self-rule)" settles the decisions its sub-bullets state ..." / "      - What the skill shows beside the change, such as a gate's answer with its reason or the lines around a place, is not part of what is compared." The six-space sub-bullet was under the "A draft is the ruled change" bullet; it now follows the new four-space bullet, so it reads as a sub-bullet of the "(self-rule)" bullet. Failure scenario: `/grill` compares a "(the user)" quoted ruling's draft with its sub-bullet; the exemption for text shown beside the change is now filed under the self-rule bullet, so a run can read the compare as including a gate's answer and its reason, find the draft unequal, and keep the stop standing for a ruling that should have been written without it. `skill-layout` "Lists and tables" (one rule per bullet, a qualifier under the bullet it qualifies).
+2. The same rule is written three times in `grill`. Hunks: :76 ("states no roadmap diff: wherever this skill speaks of a roadmap diff a quoted ruling states ... only a bullet ending "(the user)" is meant"), :124 ("When the bullet ends "(self-rule)", the roadmap diff stays a decision of the next round, as `/roadmap` refuses such a bullet") and :336 ("its roadmap diff stays a decision for the user"). `skill-layout` "Where a rule goes": a rule is written once and other places name the section. Failure scenario: a later change to one copy leaves the other two saying otherwise. Line 76 also goes past what the round named (lines 123 and 333-334).
+3. The sentences that restate "every run" waits are inexact against the reference. Place: `README.md:56`, `docs/glossary.md:136` (**mark, of a figure**), `docs/figures/gen_figures.py:395-396` (legend note of both svgs). Hunks: "Under `self_rule: on` such a stop waits only when it is of a kind `plan-orchestration` leaves open"; "the stop is of none of the six kinds `plan-orchestration` leaves open"; "unless a quoted ruling states the change or, under self_rule: on, the stop is of none of the six kinds". `references/self-rule.md:23-25` keeps the item open for an option that runs `/roadmap`, `/ordo-init` or `/repo-setup`, under a heading that is not one of "The six kinds left open"; the figure marks `/roadmap add` "The change" and `/ordo-init` "The draft" as "every run". Failure scenario: a user with `self_rule: on` reads the figure or the README and concludes the `/roadmap add` stop is closed by the loop because it is of none of the six kinds; the reference leaves it open. `change-standard` rule 19. The README sentence is the round brief's own wording (item 8); the glossary and legend wording are the builder's, a carry beyond the brief's list that is named under the report's judgment calls and justified by rule 14, but written inexactly.
+4. `references/self-rule.md:3` describes what the page covers: "What `plan-orchestration` does under `self_rule: on` and for the review of a choice: which open items stay with the user, how every other open item is closed, and how the choices file is kept and reviewed." `prose-standard` C: "Never describe what the page is about to do." The headings carry it. Failure scenario: none beyond the reader reading the headings twice. Low severity.
+
+**Behaviour**
+
+none. The figures' legend note changes in both svgs and is stated in the report with its before and after (judgment calls and item 8). The `Booked:` line gains `(Open item <L>)` and the report states before and after.
+
+### Declined to judge
+
+- The builder's scratch walk of verify 3 and 10 as a whole: its script is not on disk and a rerun would need a rebuilt ledger of six plan folders. I read cases 24 and 26 against the text, and checked the others only as far as the text's lines and the report's quoted lines agree.
+- `~/.claude/CLAUDE.md` carrying ruling B's sentence: the user's file, outside the worktree and the step.
+- Whether step 4's shared files merge at landing: the orchestrator's call at landing.
+- Whether Spec 4 above is closed by an ADR 0004 amendment or by a change to `grill`: it is the user's ruling, as `refute` "Finding dispositions" says.
+
+Reviewer usage: aafe40381768b8fce, claude-sonnet-5-5 (ordo-high), 235215 tokens, 49 tool uses, 11 min 4 s.
