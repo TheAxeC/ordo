@@ -1,13 +1,13 @@
 ---
 name: roadmap
-description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
+description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves or under a quoted ruling. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
   version: "1.2.0"
 ---
 
 # Keep the roadmap
 
-`/roadmap` shows, adds, moves, marks done and drops the entries of the file `.agents/plan.yaml`'s `roadmap:` key names. It leaves behind each change the user approved, committed on its own.
+`/roadmap` shows, adds, moves, marks done and drops the entries of the file `.agents/plan.yaml`'s `roadmap:` key names. It leaves behind each change written after the user's approval or under a quoted ruling, committed on its own.
 
 ## Quick start
 
@@ -52,7 +52,12 @@ metadata:
      - The file does not exist, or is neither of those two files.
      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
      - The name is a placeholder in angle brackets, such as `<L>`.
-     - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+     - The bullet's first line ends neither with "(the user)" nor, for `add` only, with "(self-rule)" on a bullet that names a finding of a running plan, each with or without a full stop after it.
+       - Such a bullet names its finding by the path of its report under the plan's `agents/reviews/` (a refuter report, a brief-check report, a landing report or a diagnosis record), the heading the finding stands under and its number there.
+       - `/roadmap` reads that report and finds the finding there.
+       - `/roadmap` checks that the plan is open: its folder lies under `<ledger_root>/`, outside `<archive_root>/`.
+       - `/roadmap` checks that the entry's goal is the finding's work, read against the finding's text.
+       - A check that fails leaves no ruling, and the skill says which check failed.
    - With no ruling, the skill says which of these it found, and every stop stands.
 
 ## Steps
@@ -180,13 +185,13 @@ When the roadmap's introduction links an index as the map of what the product is
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | Renumbering an existing entry | Entry numbers are referenced from ledgers, ADRs and commits, which then point at the wrong entry | "The format is the file's", Numbering |
-| Adding anything the user did not ask for | The roadmap then holds work nobody decided | Rules 1 |
+| Adding anything the user did not ask for and no quoted ruling ending "(self-rule)" names as a finding of a running plan | The roadmap then holds work nobody decided | Rules 1 |
 | Implementation narration, dates or history in entry text | They belong to the plan's ledger and the commits | Rules 2 |
 | Deleting a dropped entry silently | The reason it was dropped is lost | Steps / drop 2 |
 
 ## Rules
 
-- Nothing is added that the user did not ask for.
+- Nothing is added except what the user asked for, or what a quoted ruling ending "(self-rule)" names as a finding of a running plan.
 - Entry text states the goal, the gate and the dependencies, except that an entry under "Not yet specified" states the goal and what must be known, as the next rule says.
 - Every entry this skill writes has a goal and a gate, since `/plan <entry>` matches `<entry>` against the entries by number or title and copies the entry's goal and gate into the plan; an entry under "Not yet specified" has a goal and what must be known before its gate can be named in place of a gate.
 - A goal names another repository only where the entry reads or changes it, such as the source of a migration.

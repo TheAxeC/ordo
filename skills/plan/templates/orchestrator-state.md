@@ -26,7 +26,7 @@ design_references: []        # the published standards a design is held to, such
 worker_effort: high          # the effort a builder runs at: low, medium, high, xhigh or max.
 reviewer_effort: high        # the effort a reviewer, a brief-check agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
 self_rule: off               # on: the plan runs under self-rule; off: every open item waits for the user.
-next_entry: off              # on, with self_rule on: after the closing, the orchestrator takes the next open roadmap entry; off: it stops at the closing.
+next_entry: off              # copied from .agents/plan.yaml; after the closing, next-entry mode reads .agents/plan.yaml itself, as plan-orchestration's references/self-rule.md, "Next-entry mode", says.
 repair_reviewer: claude:<model>  # the model the run of /refute over a repair round runs on, at reviewer_effort; the reviewer value when plan.yaml leaves it out.
 ```
 

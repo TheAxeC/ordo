@@ -11,5 +11,5 @@ Last number: C0
 <the open item as it was raised: each option with its pros and cons, the recommendation with its reasons, and the lazy option>
 
 Taken: <the option taken>
-Booked: `<path>:<line>` (Open item <L>)
+Booked: `<path>:<line>` (<the bullet's opening words>)
 Builds on it: <the steps, comma-separated, or none>

@@ -1,20 +1,20 @@
 ---
 name: plan-orchestration
-description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
+description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after the closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
   version: "2.10.1"
 ---
 
 # Plan orchestration
 
-The unattended loop that runs an open plan's steps, one after another, until a pause or until nothing unblocked is left; a stop blocks only its own step. It leaves behind each landed step on main, its landing report in the ledger, and a state file that says where the plan stands.
+The unattended loop that runs an open plan's steps, one after another, until a pause or until nothing unblocked is left; a stop blocks only its own step. It leaves behind each landed step on main, its landing report in the ledger, and a state file that says where the plan stands. Under `self_rule: on` and `next_entry: on`, the orchestrator goes on after the closing to the next roadmap entry (`references/self-rule.md`, "Next-entry mode").
 
 ## Quick start
 
 ```
-/plan-orchestration <entry>          run the plan's steps unattended until a pause, or until nothing unblocked is left
+/plan-orchestration <entry>          run the plan's steps unattended until a pause, or until nothing unblocked is left; under self_rule: on and next_entry: on, go on to the next roadmap entry after the closing
 /plan-orchestration <entry> inline   the same, with the orchestrating session building every code step itself
-continue the plan                    resume from the state file, after a compaction or in another session
+continue the plan                    resume from the state file, after a compaction or in another session; with no plan open, under both keys, take the next roadmap entry
 ```
 
 ## Use instead
@@ -37,6 +37,7 @@ continue the plan                    resume from the state file, after a compact
 4. The builder's report, the diff since the step's base, and the refuter reports of the step.
 5. For the recurring-findings pass, the refuter reports written since the last pass.
 6. Under `self_rule: on`, and for the review of a choice, the choices file `<ledger_root>/choices.md`.
+7. Under `self_rule: on` and `next_entry: on`, after a closing: the roadmap file and the ledger folders under `<ledger_root>/` and `<archive_root>/`, for the next entry and its plan.
 
 ## Steps
 
@@ -127,7 +128,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by <name>).", for any name, the orchestrator adds its fix step, as `references/self-rule.md`, "The review of a choice", says.
 10. Continue with step 2.
     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
+    - Under `self_rule: on` and `next_entry: on`, the orchestrator goes on after the closing step as `references/self-rule.md`, "Next-entry mode", says.
     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
+    - After the closing step, the orchestrator's run ends at an end `references/self-rule.md`, "Next-entry mode", names.
     - The final message opens as "Reports" says.
       - It then lists every step landed since the loop began with the path of each report, and the open items.
       - After the closing step, it also names the path of the closing report.
@@ -223,8 +226,8 @@ On every resumption, with a dispatch block or without one:
 
 ## Self-rule
 
-- **Scope.** The section applies under `self_rule: on` in the configuration block, and with `self_rule: off`, or the key absent, every open item waits for the user, as "Stops" says.
-- **The reference.** Under `self_rule: on`, and for the review of a choice, the session reads `references/self-rule.md`, which says which open items stay with the user, how the others are closed, and how the choices file is kept and reviewed.
+- **Scope.** The section applies under `self_rule: on` in the configuration block, and to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where `.agents/plan.yaml` holds the keys, as `references/self-rule.md`, "Next-entry mode", says; otherwise, with `self_rule: off`, or the key absent, every open item waits for the user, as "Stops" says.
+- **The reference.** Under `self_rule: on`, and for the review of a choice, the session reads `references/self-rule.md`, which says which open items stay with the user, how the others are closed, how the choices file is kept and reviewed, and how next-entry mode runs.
 
 ## Two steps in flight
 
@@ -359,4 +362,4 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
 - Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops".
   - It is never sent back to the builder.
   - It becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
-- Every skill the loop invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, and `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.
+- Every skill the orchestrator invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, `/grill <entry> --self-rule` and `/plan <entry> --self-rule` in next-entry mode, and `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.

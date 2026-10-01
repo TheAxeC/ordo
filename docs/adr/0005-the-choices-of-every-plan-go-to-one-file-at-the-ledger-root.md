@@ -17,4 +17,4 @@ Every choice taken under self-rule, by the loop or by `/grill` under `next_entry
 
 ## Consequences
 
-The user reviews one file. A choice's `Booked:` path points into a plan's ledger, which moves when the plan closes, so the path is written as it stands when the choice is booked and the plan's slug finds it in the archive.
+The user reviews one file. A choice's `Booked:` path points into a plan's ledger, which moves when the plan closes, so the path is written as it stands when the choice is booked, rewritten by `/plan` to the new `plan.md` when it copies a bullet out of the rulings file, and the plan's slug finds it in the archive.

@@ -1,13 +1,13 @@
 ---
 name: grill
-description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary and, on the user's yes, a proposed ADR. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
+description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
 metadata:
   version: "1.2.0"
 ---
 
 # Settle an entry's design decisions
 
-`/grill <entry>` interviews the user, in rounds, until the design decisions of one roadmap entry are settled. It leaves behind each settled answer as a bullet of the plan's Rulings or of the entry's rulings file, each lookup agent it started as a bullet of the Agents section of the same file, the roadmap entry the answers changed, the glossary terms they settled, a proposed ADR for each decision the user chose to record, and one commit when the user allows it.
+`/grill <entry>` interviews the user, in rounds, until the design decisions of one roadmap entry are settled. It leaves behind each settled answer as a bullet of the plan's Rulings or of the entry's rulings file, each lookup agent it started as a bullet of the Agents section of the same file, the roadmap entry the answers changed, the glossary terms they settled, a proposed ADR for each decision the user chose to record, or that the orchestrator recommends recording under `--self-rule`, and one commit, made when the user allows it, or at once under `--self-rule`.
 
 ## Quick start
 
@@ -16,6 +16,7 @@ metadata:
 /grill <entry> --bar <industry|state-of-the-art|novel>          the same, with this design bar in place of the configured one, for this interview only
 /grill <project>/<entry>                                        the same, in a repository whose plan.yaml lists several projects
 /grill <entry> --ruling <ledger file> "<name>"                  the same, under a quoted ruling: a roadmap diff that is the ruled text is written without its decision
+/grill <entry> --self-rule                                      the same, run by plan-orchestration in next-entry mode: each decision outside the six kinds answered with its recommendation, as the orchestrator's choice
 ```
 
 ## Use instead
@@ -31,7 +32,7 @@ metadata:
 
 1. `.agents/plan.yaml` at the repository root.
    - The required keys are `roadmap`, `ledger_root`, `archive_root`, `rules`, `libraries` and `reviewer`.
-   - The optional keys are `standards` (default `[]`), `adr` (default `docs/adr`), `design_bar` (default `industry`), `design_references` (default `[]`) and `reviewer_effort` (default `high`), and a key left out takes its default.
+   - The optional keys are `standards` (default `[]`), `adr` (default `docs/adr`), `design_bar` (default `industry`), `design_references` (default `[]`), `reviewer_effort` (default `high`), and `self_rule` and `next_entry` (default `off`, read only for `--self-rule`), and a key left out takes its default.
    - In the `projects:` form, the named project's keys.
    - No file is a refusal that names `/ordo-init` ("Stops").
    - A required key missing is a refusal that names the key ("Stops").
@@ -82,12 +83,15 @@ metadata:
       - The name is a placeholder in angle brackets, such as `<L>`.
       - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
     - With no ruling, the skill says which of these it found, and every stop stands.
+12. The argument `--self-rule`, right after `<entry>`, before any other argument.
+    - It is refused ("Stops") unless `.agents/plan.yaml`, in the `projects:` form the project's keys, holds `self_rule: on` and `next_entry: on`.
+    - It is refused ("Stops") for an entry under "Not yet specified", since such an entry has no gate for `/plan` to draft from.
 
 ## Steps
 
 1. Resolve the configuration, the design bar and the entry.
    - The design bar is the one "The design bar" names.
-   - Every refusal of "What it reads" 1 and 2 is made here, before anything is written.
+   - Every refusal of "What it reads" 1, 2 and 12 is made here, before anything is written.
    - The step is done when the keys, the design bar and the entry are resolved, or the skill has refused.
 2. Read what "What it reads" 3 to 9 lists.
    - Each is read in full in this session, and none is taken from memory.
@@ -149,8 +153,18 @@ metadata:
    - The first round also lists, unnumbered and after the answer form, each decision a carried ruling settles, as Steps 3 shows it.
    - The first round also lists each archived plan whose bullets would otherwise be carried rulings for the entry and that a ruling sets aside, whole or in part, with each ruling that sets it aside quoted as written and its `<path>:<line>`.
    - The round ends the turn and waits for the answers ("Stops").
+   - Under `--self-rule`, the round is not sent: each decision of the frontier outside the six kinds of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open", is answered with its recommendation, as the orchestrator's choice.
+   - Under `--self-rule`, the decisions of those six kinds alone are sent to the user as a round, the stop "A round", and the turn ends.
+   - The user's answers to such a round are written as the user's, and the interview goes on under `--self-rule`.
+   - Under `--self-rule`, each decision answered with its recommendation goes through the checks of Steps 7 that read an answer ("Steps / Terms and claims" and "Steps / An answer that contradicts") before Steps 8.
+     - An answer that contradicts a ruling or an ADR in force becomes a rule-clash decision, kind 3, sent to the user as the bullets above say for the six kinds.
+     - A term the answer needs that the glossary lacks becomes a decision of its own, kind 3 where the glossary is a standards page.
    - When the frontier is empty, no round is sent and the turn does not end: the skill goes on to Steps 8, which makes a roadmap diff a quoted ruling states.
-   - The step is done when the message is sent and the turn has ended, or the frontier was empty and the skill has gone on to Steps 8.
+   - The step is done in one of these states:
+     - the message is sent and the turn has ended;
+     - the frontier was empty and the skill has gone on to Steps 8;
+     - under `--self-rule`, each decision outside the six kinds is answered, a decision of the six kinds was sent, and the turn has ended;
+     - under `--self-rule`, each decision outside the six kinds is answered, no decision of the six kinds was sent, and the skill has gone on to Steps 8 in the same turn.
 7. Read the answers.
    - The user may answer part of a round, and the decisions left open stay in the frontier.
    - An answer the skill cannot read as one of the options is asked again in the next round, under a new number.
@@ -173,12 +187,14 @@ metadata:
     - List each change owed to an open plan ("Steps / A plan already open"): a step whose text an answer changed, and the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed.
     - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/repo-setup/templates/plan-terms.md`.
     - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry, and print the gate's text whole beside it, for the user to give that command.
-    - Ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
-    - On a yes to both, commit the files written by explicit path list in one commit, its subject naming the entry and that its design decisions are settled.
+    - Without `--self-rule`, ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
+    - Under `--self-rule`, ask nothing: the commit is made as the bullet below says, and this list is the run's report.
+    - On a yes to both, or under `--self-rule`, commit the files the run wrote, the choices file among them when it wrote it, by explicit path list in one commit, its subject naming the entry and that its design decisions are settled.
+    - A run under `--self-rule` that wrote no file makes no commit and says so in its report.
     - The commit message names a quoted ruling an entry was changed under, by its name and its ledger file.
     - Without a yes to committing, list the files written with `git status --short`.
     - Without a confirmation of the shared understanding, go back to Steps 3 with the user's correction.
-    - The step is done when the user has answered the confirmation and the commit question, and the files are committed or listed.
+    - The step is done when the user has answered the confirmation and the commit question, and the files are committed or listed, or, under `--self-rule`, the files are committed or no file was written.
 
 ### Looking up a fact
 
@@ -236,6 +252,11 @@ metadata:
    - It goes to the `## Rulings` section of the open plan's `plan.md`, or else to the rulings file, created with the heading line `# Rulings: <entry>` when it is absent.
    - In a rulings file that has an `## Agents` section, a ruling bullet is written above that heading, so the rulings stay together and `/plan` reads the agents under their heading.
    - It is one bullet: `- D<n> <the decision, as a phrase> (<date>): <the answer in one line> (the user).`
+   - Under `--self-rule`, a decision answered with its recommendation is written as `- D<n> <the decision, as a phrase> (<date>): <the answer in one line> (self-rule).`
+   - Under `--self-rule`, a choice is written for it to the choices file under the entry's heading, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
+     - The choice holds the decision as drawn: its options with their pros and cons, the reference line, the recommendation and the lazy option.
+     - It holds `Taken:`, and `Booked:` naming the rulings file or the open plan's `plan.md`, the line and `D<n> <the decision, as a phrase>`.
+     - Its `Builds on it:` is `none`, or `the roadmap diff of entry <n>` for the roadmap diff decision, or `the record <path>` for a "record as ADR?" decision answered yes.
    - The phrase makes a step's `(ruling <name>)` tag name the decision as `D<n> <the decision, as a phrase>`.
    - A library pick names the capability in the phrase.
    - A carried ruling ("What it reads" 6) is written at the first write of Steps 8 as one bullet for each decision it settles, numbered as Steps 6 numbers a decision: ``- D<n> <the decision, as a phrase> (<the carried ruling's date>): "<the words of the carried ruling that settle it, quoted as written>", carried from `<path>:<line>` (the user).``
@@ -258,6 +279,7 @@ metadata:
    - An answer that changes the entry's goal, gate or text is drafted into the entry in the file's own format and under the `roadmap` skill's Rules: the goal, the gate and the dependencies only, nothing the user did not ask for, no history, another repository only as a path.
    - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says, and the answer with its reason goes in the diff and never in the entry.
    - The draft is shown as a diff in the next round, as a decision of its own, and written on the user's yes.
+     - Under `--self-rule`, the roadmap diff decision is answered with its recommendation like the rest, and the diff taken is written.
      - Under a quoted ruling ("What it reads" 11) whose sub-bullets hold the entry's changed text, the draft is made at the first write of Steps 8.
      - It takes the ruled text.
      - The rules of this item are worked on it.
@@ -269,6 +291,7 @@ metadata:
 4. Ask whether to record an ADR.
    - An answer that is not obvious from the code, binds work after the plan that made it closes, and has alternatives rejected becomes the decision "record as ADR?" in the next round.
    - On the user's yes, write the record in the same turn.
+     - Under `--self-rule`, the decision is answered with its recommendation like the rest, and a record taken is written with status `proposed`.
    - Write it in the folder `adr` names, from its `template.md`, or from the form of the folder's latest record when it has no `template.md`.
    - A missing folder, or one with neither `template.md` nor a record, is created or filled first from the `repo-setup` skill's `templates/docs/adr/README.md` and `template.md`.
    - The record is numbered after the folder's highest, and its status is `proposed`.
@@ -309,12 +332,14 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A round | Every round, at Steps 6, the "record as ADR?" decisions and each roadmap diff no quoted ruling states riding in it | The frontier as decisions in the decision form, the answer form, and in the first round the decisions carried rulings settle and the archived plans a ruling sets aside | The user's answers |
-| The end | Steps 10 | The decisions settled with where each was written, the step changes owed, and the question of the shared understanding and the commit | The user's confirmation and answer on the commit |
+| A round | Every round, at Steps 6, or under `--self-rule` a round of decisions of the six kinds; the "record as ADR?" decisions and each roadmap diff no quoted ruling states ride in it | The frontier as decisions in the decision form, the answer form, and in the first round the decisions carried rulings settle and the archived plans a ruling sets aside | The user's answers |
+| The end | Steps 10, except under `--self-rule` | The decisions settled with where each was written, the step changes owed, and the question of the shared understanding and the commit | The user's confirmation and answer on the commit |
 | A lookup agent served another model | The runner served a lookup agent a model that is not the configured one ("Steps / Looking up a fact") | The configured value of `reviewer` and the served model | The user's instruction, then the lookup started again |
 | No configuration | `.agents/plan.yaml` is missing | A refusal that names `/ordo-init` | `/ordo-init`, then `/grill` again |
 | No such entry | `<entry>` matches no roadmap entry | A refusal that names `/roadmap add <goal>` | `/grill` with an entry that exists |
 | A required key missing | A required key is not in `.agents/plan.yaml` | The key | The key added, then `/grill` again |
+| `--self-rule` without the keys | `--self-rule` is given and `.agents/plan.yaml` does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/grill` again, or `/grill` without `--self-rule` |
+| `--self-rule` for an entry under "Not yet specified" | `--self-rule` is given and `<entry>` stands under "Not yet specified" | A refusal that names the entry and `/roadmap add <entry>`, which names its gate | `/roadmap add <entry>`, then `/grill` again, or `/grill` without `--self-rule` |
 | An unknown bar | `design_bar` or `--bar` is not `industry`, `state-of-the-art` or `novel` | The three values | A value of the three, then `/grill` again |
 
 ## Anti-patterns
@@ -330,7 +355,7 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 ## Rules
 
 - A fact is looked up, never asked.
-- A decision is the user's: nothing is written as settled without the user's answer, or a quoted ruling ending "(self-rule)" that settles it as the orchestrator's choice.
+- A decision is the user's: nothing is written as settled without the user's answer, or a quoted ruling ending "(self-rule)" that settles it as the orchestrator's choice, or, under `--self-rule`, the recommendation for a decision outside the six kinds of Steps 6, as the orchestrator's choice.
   - A quoted ruling that holds the entry's changed text is the answer to the roadmap diff: the user's answer when its bullet ends "(the user)", and the orchestrator's choice when it ends "(self-rule)", which the user reviews in the choices file as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
   - A carried ruling is the user's answer to the decisions it settles.
 - Every answer is written in the turn it settles, before the next round is drawn up.

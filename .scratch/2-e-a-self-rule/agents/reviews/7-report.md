@@ -99,38 +99,39 @@ What these do not cover: they check facts (tests of the scripts, ASCII, the glos
 
 ## Files changed (lines after the change, and diff lines)
 
-`git diff --stat` before this report was written: 10 files, 135 insertions, 43 deletions.
+`git diff --stat 3c4b9c1` after repair round 1: 11 files, 146 insertions, 47 deletions.
 
 | File | Lines | Diff |
 |---|---|---|
-| `skills/plan-orchestration/references/self-rule.md` | 135 | +56 -8 (new section "Next-entry mode", "A skill with its own approval stop", "The choices file", "The review of a choice") |
-| `skills/plan-orchestration/templates/choices.md` | 15 | 1 line |
-| `skills/plan-orchestration/SKILL.md` | 364 | 16 lines |
-| `skills/plan/SKILL.md` | 163 | 29 lines |
-| `skills/grill/SKILL.md` | 356 | 38 lines |
-| `skills/roadmap/SKILL.md` | 200 | 15 lines |
+| `skills/plan-orchestration/references/self-rule.md` | 137 | +59 -9 (new section "Next-entry mode", "A skill with its own approval stop", "The choices file", "The review of a choice") |
+| `skills/plan-orchestration/templates/choices.md` | 15 | +1 -1 |
+| `skills/plan-orchestration/SKILL.md` | 364 | +10 -8 |
+| `skills/plan/SKILL.md` | 165 | +25 -6 |
+| `skills/plan/templates/orchestrator-state.md` | 70 | +1 -1 (line 29, the `next_entry` comment) |
+| `skills/grill/SKILL.md` | 359 | +32 -11 |
+| `skills/roadmap/SKILL.md` | 200 | +10 -5 |
 | `README.md` | 190 | lines 22, 48, 56 |
 | `skills/repo-setup/templates/plan-terms.md` | 124 | lines 57-58 (new term), 79 (quoted ruling) |
 | `docs/glossary.md` | 141 | the same two places |
 | `docs/adr/0005-the-choices-of-every-plan-go-to-one-file-at-the-ledger-root.md` | 20 | line 20 |
 | `.scratch/2-e-a-self-rule/agents/reviews/7-report.md` | this file | |
 
-No other file is changed (`git status --short` lists the ten files above).
+No other file is changed (`git status --short` lists the eleven files above).
 
 ## Judgment calls the brief left open
 
 - One rule per bullet: the brief's compound bullets of item 1.1 (the closing, the stops, the takeover) and of items 4.5 and 5.5 are split into a bullet with sub-bullets, each stating one rule, with the same content. The invocation order of item 1.1 is a numbered list, since order matters.
-- `references/self-rule.md`, "The review of a choice": the existing `Agree` and `C<n> =>` lines that add a Closed-items line carry "unless no plan is open for the entry", so no two statements contradict (change standard, rule 19); it serves cases 23 and 25. The reason clause for no Closed-items line is Decision 7's.
+- `references/self-rule.md`, "The review of a choice": the condition for a choice booked in a rulings file is stated once, in the bullet "A choice booked in a rulings file" (`:132-135`), which the `Agree` and `C<n> =>` lines name (round ruling 1); it serves cases 23 and 25. The reason clause for no Closed-items line is Decision 7's.
 - `references/self-rule.md` "The choices file": `Booked:` before a plan is open names the rulings file, and the rewrite on copying cites the `plan` skill's Steps 3, since the ruling moved it there.
 - `skills/plan/SKILL.md` Steps 3 and 6: the `Booked:` rewrite and the choices file in the opening commit are worded "when Steps 3 changed it" (ruling 1).
 - `skills/grill/SKILL.md` Steps 10: the bullets that depend on the question ("Without a yes to committing", "Without a confirmation") are left as they were, and the new bullet "Under `--self-rule`, ask nothing" keeps them from applying (ruling 2).
 - `skills/grill/SKILL.md` Stops row "A round": the "When" cell separates the `--self-rule` case from the riding decisions with a semicolon, so "ride in it" reads for the "record as ADR?" and roadmap diff decisions in both modes.
-- Brief item 7: README lines 22 and 48 say "under `next_entry: on`" as the brief words it; the mode also needs `self_rule: on` (`check_config.py` notes `next_entry` on with `self_rule` off as acting only under self-rule). The two keys are named together in the skills.
+- Brief item 7: README lines 22 and 48 say "under `self_rule: on` and `next_entry: on`" (round ruling 10), as the skills name the two keys together.
 - The glossary's term was added in both copies with the brief's D24 words; the ordering between **loop** and **night rule** is as the brief says.
 - Versions in `metadata.version` are not changed: no brief item asks for it.
 
 Sentences about a changed file as a whole, reread against it after the change (change standard, rule 14):
-- `skills/plan-orchestration/SKILL.md:10` (introduction) holds; it gained the sentence on next-entry mode, and `:15` and `:17` (Quick start) and the description say the same. The description is 959 characters.
+- `skills/plan-orchestration/SKILL.md:10` (introduction) holds; it gained the sentence on next-entry mode, and `:15` and `:17` (Quick start) and the description say the same. The description is 961 characters.
 - `skills/grill/SKILL.md:10` (introduction) holds with "or at once under `--self-rule`"; `:324` ("The first three rows are stops") holds, since "The end" is still a stop outside `--self-rule`; `:272` ("nothing the user did not ask for") holds, since the diff holds only what the answers change.
 - `skills/roadmap/SKILL.md:10` (introduction) and the description's last sentence say the user's approval or a quoted ruling; `:180` ("The first five rows are stops") holds, no row changed.
 - `skills/plan-orchestration/references/self-rule.md:29` ("An open item that ... do not hold") holds, since "A skill with its own approval stop" now holds only the options of its first bullet.
@@ -139,10 +140,11 @@ Sentences about a changed file as a whole, reread against it after the change (c
 ## Host- or user-visible changes, before and after
 
 - `/grill <entry> --self-rule`, new. Before: no such argument. After: refused unless `self_rule: on` and `next_entry: on` in `.agents/plan.yaml`, and refused for an entry under "Not yet specified"; otherwise each decision outside the six kinds is answered with its recommendation, written as `- D<n> ... (self-rule).` with a choice in `<ledger_root>/choices.md`, and one commit at the end.
-- `/plan <entry> --self-rule`, new. Before: no such argument; every plan stops at "The drafted step list". After: the stop is raised as `Open item A` and closed under self-rule unless a "## Gate" answer is yes or it is of the six kinds; each step line ends `(ruling A)`.
+- `/plan <entry> --self-rule`, new. Before: no such argument; every plan stops at "The drafted step list". After: the stop is raised as `Open item A`, with the options "open the plan with the list as drafted" (recommended) and "keep the draft for the user", and closed under self-rule unless a "## Gate" answer is yes, a design decision is named unsettled, or it is of the six kinds; each step line ends `(ruling A)`.
 - `/plan`, all runs: the `Booked:` line of each choice whose bullet is copied from the rulings file is rewritten to the new `plan.md` and the bullet's line when `plan.md` is written. Before: no rewrite.
 - `/roadmap add`: before, a quoted ruling counted only with "(the user)". After: it also counts with "(self-rule)" when the bullet names a finding of a running plan, with the checks of "What it reads" 6; `move`, `drop` and `done` keep "(the user)".
-- `plan-orchestration`: before, nothing followed the closing. After, under both keys the loop goes on to the next entry as `references/self-rule.md`, "Next-entry mode", says.
+- `skills/plan/templates/orchestrator-state.md:29`, the comment on `next_entry` in the state file of every plan opened later. Before: "on, with self_rule on: after the closing, the orchestrator takes the next open roadmap entry; off: it stops at the closing." After: "copied from .agents/plan.yaml; after the closing, next-entry mode reads .agents/plan.yaml itself, as plan-orchestration's references/self-rule.md, "Next-entry mode", says."
+- `plan-orchestration`: before, nothing followed the closing. After, under both keys the orchestrator goes on to the next entry as `references/self-rule.md`, "Next-entry mode", says.
 - The choices file's `Booked:` line: before ``Booked: `<path>:<line>` (Open item <L>)``; after ``Booked: `<path>:<line>` (<the bullet's name>)`` (`templates/choices.md:14`).
 - The `Ruled:` reply's bullet and the `C<n> =>` bullet: before `replacing Open item <L'>` and `replacing Open item <L>`; after `replacing <the replaced bullet's name>` and `replacing <the old bullet's name>`.
 - The review of a choice: when `Booked:` names the entry's rulings file, it reads that file, writes no Closed-items line, names the choice and the decision in its commit message, and writes the `C<n> =>` bullet to that file. A choice booked in an open or an archived `plan.md` is reviewed as before the change.
@@ -152,7 +154,7 @@ Sentences about a changed file as a whole, reread against it after the change (c
 
 ## Anything in the brief wrong or impossible
 
-- Item 4.5, the options of Open item A: the second option, "the list with each unsettled design decision settled and each line left to place placed", has no way to be carried out inside `/plan` (settling a design decision is `/grill`'s), and the Rulings bullet the brief fixes reads "the step list as drafted". A recommendation of the second option would be booked with text that does not describe it. I wrote the options and the bullet as the brief has them. The orchestrator's to rule: either the second option is dropped from the stop under `--self-rule`, or the stop is kept with the user whenever any design decision is named unsettled. Evidence: `skills/plan/SKILL.md` Steps 3, bullet "Under `--self-rule`, the stop ... is raised as `Open item A`", and the bullet "The Rulings bullet is `- Open item A (<date>): the step list as drafted ...`".
+- Item 4.5, the options of Open item A: the second option, "the list with each unsettled design decision settled and each line left to place placed", has no way to be carried out inside `/plan` (settling a design decision is `/grill`'s), and the Rulings bullet the brief fixes reads "the step list as drafted". A recommendation of the second option would be booked with text that does not describe it. Ruled by round ruling 2: the second option is replaced by "keep the draft for the user", and the stop is kept with the user whenever a design decision is named unsettled. Evidence: `skills/plan/SKILL.md` Steps 3, bullet "Under `--self-rule`, the stop ... is raised as `Open item A`", and the bullet "The Rulings bullet is `- Open item A (<date>): the step list as drafted ...`".
 - The premises, line numbers and counts of "What is on the tree" matched the tree at the base, as read with `grep -n` before the build.
 
 ## Repair round 1

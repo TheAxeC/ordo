@@ -43,20 +43,6 @@ repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over
 
 ```yaml
 dispatch:
-- step: 7
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2ea-7
-  base: 3c4b9c1
-  launched: 2026-10-01
-  report: .scratch/2-e-a-self-rule/agents/reviews/7-report.md
-  brief_check: .scratch/2-e-a-self-rule/agents/reviews/7-brief-check.md (acf5b218dfdc17a01, claude-opus-5-5 (ordo-high), 234387 tokens, 38 tool uses, 10 min 19 s)
-  landing: not-started
-  round: 1
-  session_id: a5ab075c3677ad2d7 (claude-sonnet-5-5)
-  builder_usage: 194415 tokens, 20 tool uses, 6 min 27 s (the first run of the cases, handed back: agents/reviews/7-cases-handback.md; ruled in agents/briefs/7-cases.md); the build after the ruling: 282087 tokens, 46 tool uses, 15 min 29 s; repair round 1: 343160 tokens, 16 tool uses, 4 min 28 s
-  reviewer_report:
-  - .scratch/2-e-a-self-rule/agents/reviews/7-refuter.md (acaa1cd6ca52da97e, claude-opus-5-5 (ordo-high), 255946 tokens, 43 tool uses, 8 min 54 s)
 - step: 8
   executor: agent
   worker: claude:sonnet
@@ -71,6 +57,7 @@ dispatch:
   builder_usage: 136333 tokens, 25 tool uses, 4 min 4 s; repair round 1: 161990 tokens, 10 tool uses, 2 min 27 s
   reviewer_report:
   - .scratch/2-e-a-self-rule/agents/reviews/8-refuter.md (aa9c2761143a81412, claude-opus-5-5 (ordo-high), 179218 tokens, 54 tool uses, 9 min 3 s)
+  - .scratch/2-e-a-self-rule/agents/reviews/8-refuter.md, "Repair round 1, refuted" (adeb36a8bdd6bc53b, claude-sonnet-5-5 (ordo-high), 144807 tokens, 29 tool uses, 4 min 47 s), over round 1
   shared_paths: skills/repo-setup/templates/plan-terms.md, docs/glossary.md and skills/plan-orchestration/SKILL.md, each shared with step 7; the merge is simple, since each step changes other lines of each file (step 7: the terms loop to night rule and quoted ruling, and plan-orchestration's description, intro, Quick start, "What it reads", Steps 10, "Self-rule" and Rules; step 8: the terms change point to Closed, open item, ruling to sequence and stop, and plan-orchestration Steps 9 line 123); step 8 lands after step 7, since its self-rule term names --self-rule.
 ```
 
@@ -113,6 +100,6 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 6 and 6b landed; step 6's booking and step 6b's are in `plan.md`, step 6's landing report at `agents/reviews/6-landing.md`. `self_rule: on` from step 7: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`. Next: step 7.
-- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 6's fixes at landing printed `checks: 11 commands passed`, exit 0.
-- Open items A to E ruled. The setting of ADR 0009 is in `~/.claude/settings.json`, and the cost script reads it from there when its shell lacks the variable. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24.
+- 2026-10-01. Steps 1 to 7 and 6b landed; step 7's booking is in `plan.md`, its landing report at `agents/reviews/7-landing.md`. Step 8 is refuted over its repair round 1 and lands next, on top of step 7. Then step 9. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 7's fixes at landing printed `checks: 11 commands passed`, exit 0.
+- Open items A to H ruled; C1 and C2 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.

@@ -15,6 +15,7 @@ metadata:
 /plan <entry>             open the plan for one roadmap entry: the ledger folder the step skills and the orchestrator run from, its step list drafted for approval
 /plan <project>/<entry>   the same, in a repository whose plan.yaml lists several projects
 /plan <entry> --ruling <ledger file> "<name>"   the same, under a quoted ruling: a step list that is the ruled one is written without the stop
+/plan <entry> --self-rule   the same, run by plan-orchestration in next-entry mode: the orchestrator takes the drafted step list as its choice
 ```
 
 ## Use instead
@@ -38,7 +39,7 @@ metadata:
      - No match is a stop ("Stops").
      - An entry that stands under the roadmap's "Not yet specified" section is a refusal that names `/roadmap add <entry>`, which names its gate ("Stops").
 3. The verification page the configuration names, for the commands every step runs.
-4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the user's settled design answers for the entry, written while no plan was open, and, under its `## Agents` heading, the lookup agents `/grill` started while no plan was open.
+4. The rulings file `<ledger_root>/rulings/<slug>.md`, the slug as Steps 1 derives it, when it exists: the settled design answers for the entry, the user's and those `/grill --self-rule` wrote, written while no plan was open, and, under its `## Agents` heading, the lookup agents `/grill` started while no plan was open.
 5. The ADRs in the folder the configuration's `adr` names (`docs/adr` when it has none): each `NNNN-*.md` record for its part in force, as the `spec` skill's "What it reads" 5 says.
 6. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
    - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
@@ -55,6 +56,8 @@ metadata:
      - The name is a placeholder in angle brackets, such as `<L>`.
      - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
    - With no ruling, the skill says which of these it found, and every stop stands.
+7. The argument `--self-rule`, right after `<entry>`, before any other argument.
+   - It is refused ("Stops") unless `.agents/plan.yaml`, in the `projects:` form the project's keys, holds `self_rule: on` and `next_entry: on`.
 
 ## Steps
 
@@ -98,10 +101,24 @@ metadata:
        - No line of the rulings file is left to place.
      - Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
      - The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
+   - Under `--self-rule`, the stop "The drafted step list" is raised as `Open item A` of the new plan, written in full as a stop is: the draft, the answers of "## Gate", the lines of the rulings file left to place, the options "open the plan with the list as drafted" and "keep the draft for the user", their pros and cons, the recommendation and the lazy option.
+     - The first option is the recommendation, and the second, which leaves the plan unopened, is named as the lazy option.
+     - A line of the rulings file left to place does not keep the stop: it is copied as Steps 2 says for a line the user leaves unplaced, and Open item A names it.
+     - It stays with the user, and the stop stands as without `--self-rule`, when any answer of "## Gate" is yes, since the gate is the roadmap's and a check that could pass without its goal has no recommendation the written rules rank.
+     - It also stays with the user, and the stop stands, when any design decision is named unsettled, since settling it is `/grill`'s and `/plan` has no recommendation the written rules rank.
+     - It also stays with the user, and the stop stands, when it is of one of the six kinds of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open".
+     - Otherwise it is closed by items 1 to 5 of that reference's "Closing an open item".
+       - The Rulings bullet is `- Open item A (<date>): the step list as drafted, <n> steps, which opens the plan (self-rule).`
+       - Each step line, the closing step included, ends with `(ruling A)`.
+       - Steps 4 writes the state file with the Closed items line of "Closing an open item" 4 and no open item.
+       - The choice goes to the choices file under the entry's heading, `Booked:` naming the new `plan.md` and `Open item A`, and `Builds on it:` naming every step.
+     - Open item A counts as a stop of no step, since it is raised before any step exists.
    - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
      - A step list written under a quoted ruling whose bullet ends "(the user)" is the approved list.
      - A step list written under a quoted ruling whose bullet ends "(self-rule)" has each step line end with `(ruling <name>)`, naming that bullet, never `(approved)`.
-   - The step is done when `plan.md` is written, or the draft is shown and the stop stands.
+   - When `plan.md` is written, each bullet line Steps 2 copied that ends "(self-rule)" has its choice rewritten: the choice in the choices file whose `Booked:` names the rulings file and that bullet's opening words gets `Booked:` rewritten to the new `plan.md` and the line the bullet stands on there.
+   - A stop that stands writes nothing, the choices file and the rulings file included.
+   - The step is done when `plan.md` is written and the `Booked:` lines are rewritten, or the draft is shown and the stop stands.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
    - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry`, `repair_reviewer`.
    - A `repair_reviewer` that `plan.yaml` leaves out is written with the `reviewer` value.
@@ -114,33 +131,35 @@ metadata:
 5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
 6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files by path as the plan's opening commit.
    - Its subject holds the roadmap entry's number.
+   - The opening commit also holds the choices file `<ledger_root>/choices.md` when Steps 3 changed it, as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item" 6, says.
    - A plan written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
    - When Steps 2 copied the ruling from the rulings file, the ledger file named is the new `plan.md`.
    - The commit also removes the rulings file copied at Steps 2: when the last commit holds it (`git cat-file -e HEAD:<path>` exits 0), `git rm -q -f -- <path>`, and its path named in the commit with the others; otherwise, `git rm -q -f --cached -- <path>` when git lists it as staged, and the file deleted before the commit, its path not named. The `-f` removes a copy with uncommitted changes, whose bullet lines Steps 2 has already copied.
-   - The step is done when the opening commit holds the four files, and the removal of the rulings file when there was one.
+   - The step is done when the opening commit holds the four files, the choices file when Steps 3 changed it, and the removal of the rulings file when there was one.
 
 ## Stops
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| The drafted step list | Every plan, after Steps 2, except a draft written under a quoted ruling as Steps 3 says: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
+| The drafted step list | Every plan, after Steps 2, except a draft written under a quoted ruling as Steps 3 says, or under `--self-rule` outside the cases Steps 3 keeps with the user: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
 | Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate to draft steps from | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
+| `--self-rule` without the keys | `--self-rule` is given and `.agents/plan.yaml` does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/plan` again, or `/plan` without `--self-rule` |
 | The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove, with its Agents bullets named when it holds any, to be copied into the open plan's Agents section before the file is removed | Nothing |
 
 ## Anti-patterns
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| Writing `plan.md` before the user has approved the step list | The step list is the design half, and the design half is the user's | Steps 3 |
+| Writing `plan.md` before the user has approved the step list, except as Steps 3 says under `--self-rule` | The step list is the design half, and the design half is the user's | Steps 3 |
 | Keeping a step that cannot name its proof in the step list | Nothing can show it done | Book it under "Blocked, and by what" until it can name its proof |
 
 ## Rules
 
 - A step is one deliverable and one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), with the command that proves it, except the bookkeeping steps the orchestrator does itself.
-- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a ruling added, after the approval or under a quoted ruling ending "(self-rule)", the ruling being the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.
+- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a ruling added, after the approval or under a quoted ruling ending "(self-rule)", the ruling being the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says, or `(ruling A)` for a step of a list taken under `--self-rule`, naming that run's Open item A.
 - Every path in the ledger is relative to the repository root.
 - Every command in the ledger names the directory it runs from.
 - No history: the ledger records decisions with their dates in `plan.md`'s rulings list; the templates and this file carry none.
