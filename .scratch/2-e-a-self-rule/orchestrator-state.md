@@ -52,15 +52,26 @@ dispatch:
   report: .scratch/2-e-a-self-rule/agents/reviews/12-report.md
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/12-brief-check.md (aeae0de1e8deb991b, claude-opus-5-5 (ordo-high), 196521 tokens, 52 tool uses, 7 min 0 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: ae09983cdb0694a33 (claude-sonnet-5-5)
-  builder_usage: 179551 tokens, 24 tool uses, 3 min 33 s (the first run of the cases, handed back)
+  builder_usage: 179551 tokens, 24 tool uses, 3 min 33 s (the first run of the cases, handed back); 315699 tokens, 128 tool uses, 36 min 6 s (the build after the cases ruling)
   cases: .scratch/2-e-a-self-rule/agents/briefs/12-cases.md (Open item N (a), C4)
+  reviewer_report: .scratch/2-e-a-self-rule/agents/reviews/12-refuter.md (a1a45441fab00dcd0, claude-opus-5-5, 342934 tokens, 78 tool uses, 14 min 22 s)
+  round_1: sent from the tree in agents/reviews/12-round-0.diff (git diff 3659816 at the first report); .scratch/2-e-a-self-rule/agents/briefs/12-round-1.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
+
+- Open item O (2026-10-01): how a quoted ruling ending "(self-rule)" names a finding of a diagnosis record or a landing report. Raised by step 12's builder (`agents/reviews/12-report.md`, "Anything in the brief wrong or impossible") and confirmed by its refuter (`agents/reviews/12-refuter.md`, "Declined to judge").
+  - What the tree shows: `skills/roadmap/SKILL.md` "What it reads" 6 says such a bullet names its finding by "the path of its report under the plan's `agents/reviews/` (a refuter report, a brief-check report, a landing report or a diagnosis record), the heading the finding stands under and its number there", the words of Open item G (a) at `plan.md:92`, agreed by you as C2. A diagnosis record's headings carry no number (`grep -n '^#' skills/diagnose/templates/diagnosis.md`: Symptom, Where the probes run, Red command, No red command, Shrunk case, Hypotheses, Probes, Cause, Fix and test, Cleanup), and a landing report has no template that numbers its findings (`ls skills/land/templates` lists only the two scripts and their tests), so a bullet naming such a finding cannot give "its number there", and `/roadmap add` cannot check it.
+  - Options:
+    - (a) A new step 12b, before the closing, rewrites the sub-bullet so a finding is named by its report's path and its heading, with its number where the report numbers its findings under that heading (a refuter report, a brief-check report), and with the heading alone for a diagnosis record (its "Cause" section) or a landing report; `/roadmap` checks the finding under that heading. A Rulings bullet replaces Open item G's words for that case. Pros: all four kinds of report the ruling names stay usable, and `/roadmap` can check each. Cons: one more step, and `roadmap` changes again (its version under the rule of Open item L stays the minor raise of this plan).
+    - (b) A new step 12b drops "a landing report or a diagnosis record" from the list, so only a refuter report and a brief-check report can name such a finding. Pros: the smallest text change. Cons: work a diagnosis finds or a landing raises cannot be added to the roadmap under self-rule, and waits for you.
+    - (c) Leave the text as it is. Pros: no change. Cons: a bullet naming a finding of a diagnosis record or a landing report is refused by `/roadmap add`, which the text says it accepts.
+  - Recommendation: (a), since it keeps every kind of report Open item G named and makes each one checkable. Lazy option: (c), which leaves a sentence the skill cannot follow.
+  - Kind 3: every option but (c) replaces the words of Open item G, a ruling you agreed. It blocks no step; under (a) or (b) the closing waits for step 12b.
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)

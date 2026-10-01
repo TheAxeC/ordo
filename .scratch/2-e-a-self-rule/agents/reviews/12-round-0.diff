@@ -1,0 +1,1630 @@
+diff --git a/docs/dev/skill-layout.md b/docs/dev/skill-layout.md
+index bd9badc..51ab070 100644
+--- a/docs/dev/skill-layout.md
++++ b/docs/dev/skill-layout.md
+@@ -20,6 +20,11 @@ metadata:
+ - `Triggers on:` lists at least one phrase for each case the skill is for, and may list several phrasings of one case, so a request worded differently still finds the skill.
+ - A phrase for a case a neighbouring skill is for goes in that skill's `Triggers on:`, not in this one.
+ - The version lives in `metadata.version` only. The text of the skill carries no version, date or change history.
++- A plan that changes a skill raises one part of its `metadata.version` once, and sets the parts after it to 0.
++- The major part when, under the same inputs and the default keys, a run that worked before is refused, or its output is changed or removed.
++- The minor part when the skill does something it did not do, accepts an input it did not accept, or adds to its output, and every run that worked before still works.
++- The patch part when only the wording changes and every run behaves as before.
++- A refusal of a value the skill's text already called an error is no run that worked before.
+ 
+ ## Sections, in order
+ 
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 892fd80..021122d 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -52,9 +52,10 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **handover**: one session stopping and another continuing the plan from the ledger alone, a resume point at which the stopping session commits the records it wrote. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **hypothesis**: one of the three to five ranked causes of a diagnosis (fewer, with the reason, when no more are live), written "If <cause>, then <change> turns the red command green" with the result that would falsify it. Stated in: `diagnose`, Steps 7.
+ - **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`. The configuration block's `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+-- **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
++- **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The file's format".
+ - **keep point**: a behaviour of a Claude Code session worth repeating, written in a sessions report under "Keep" with its places and a proposal that names the text that produced the behaviour or, when no text did, gives the sentence that would make it repeat and the file and section it goes into. Stated in: `session-retro`, Steps 6 and 9.
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
++- **kind, of an open item**: one of the six numbered cases that `plan-orchestration`'s `references/self-rule.md` lists under "The six kinds left open", each a decision that waits for the user under self-rule. An open item names its kind by its number. Stated in: `plan-orchestration`, `references/self-rule.md`, "The six kinds left open", and "Stops"; `grill`, Steps 6; `plan`, Steps 3; `land`, Rules.
+ - **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
+ - **lazy option**: the option that costs less now and leaves the work undone, such as a booking instead of a fix, a later step instead of this one, a sentence in a report instead of a change in the code, or a narrower reading of the request than the request. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option"; `grill`, "The decision form".
+@@ -63,7 +64,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **next-entry mode**: with `next_entry: on` and self-rule, a closed plan is followed by the next open roadmap entry, through `/grill`, `/plan` and the loop. Stated in: `plan-orchestration`, `references/self-rule.md`, "Next-entry mode".
+ - **night rule**: the limit the loop keeps when the user sets a time by which no agent may run. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+-- **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
++- **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The file's format"; `plan`, "What it reads" 2.
+ - **open item**: an entry of the state file's open items. It is a decision for the user, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling or, under self-rule, when the `plan-orchestration` skill's `references/self-rule.md` does not leave it open, by the option the orchestrator recommends. It is also a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops" and `references/self-rule.md`, "Closing an open item"; `spec`, "Steps / A stop"; `land`, "Stops".
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+@@ -96,7 +97,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+ - **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration block's `reviewer:` names, and each run over a repair round on the model `repair_reviewer:` names, the `reviewer:` value when the block has none. The brief-check agent and the lookup agents of `grill` run on `reviewer:`. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules, and "Steps / Over a repair round" 1; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
+-- **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
++- **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The file's format".
+ - **round, of an interview**: one message in which `grill` asks every decision of the frontier that waits on no lookup, ending the turn to wait for the answers. In `grill` and in text that describes `grill`, the bare "round" means this; elsewhere it is a repair round. Stated in: `grill`, Steps 6.
+ - **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+ - **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported. Every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+@@ -113,7 +114,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+ - **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+-- **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
++- **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The file's format".
+ - **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, a red line's cause found by `/diagnose`, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6; `diagnose`, Steps 20.
+ - **stop**: a halt for a decision for the user, which leaves an open item in the state file and under the step's Step 0; under self-rule the orchestrator closes it at once, unless the `plan-orchestration` skill's `references/self-rule.md` leaves it open. Stated in: `plan-orchestration`, "Stops" and `references/self-rule.md`, "Closing an open item"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops". To stop an agent is also to end a running agent through the runner's stop tool. Stated in: `land`, Steps 1; `plan-orchestration`, "The pace when a deadline is set". A builder also stops when it halts its work and returns what it has to the orchestrator, as a hand-back does. Stated in: `plan-orchestration`, Steps 6; `spec`, `templates/brief.md`.
+ - **sync**: `/repo-setup sync`, which compares a repository's shared-rules block and plan-terms block with their templates and rewrites them after approval. Stated in: `repo-setup`, "Steps / sync".
+diff --git a/skills/diagnose/SKILL.md b/skills/diagnose/SKILL.md
+index 5cd9e58..fa51269 100644
+--- a/skills/diagnose/SKILL.md
++++ b/skills/diagnose/SKILL.md
+@@ -2,7 +2,7 @@
+ name: diagnose
+ description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it probes on a scratch copy, leaves the step's worktree unchanged and hands the fix to the builder as the round's ruling. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding."
+ metadata:
+-  version: "1.0.0"
++  version: "1.1.0"
+ ---
+ 
+ # Diagnose a defect
+@@ -13,7 +13,7 @@ metadata:
+ 
+ ```
+ /diagnose <symptom>                        find the cause of a symptom, given in the user's words, in the checkout the skill is run in
+-/diagnose <entry> <step> <finding>         find the cause of a finding of a plan's step, written as the refuter report names it: Spec 1 for the first run, round 1 Spec 1 for the run over repair round 1
++/diagnose <entry> <step> <finding>         find the cause of a finding of a plan's step, written as the refuter report names it
+ /diagnose <entry> <step> red line          find the cause of a red line at the step's landing whose cause is not known
+ /diagnose <entry> <step> brief check <n>   find the cause of finding <n> of the step's brief check
+ ```
+@@ -59,11 +59,15 @@ metadata:
+    - Inside a plan, the record is written to disk in the main checkout and not committed on its own.
+      - The next resume-point commit carries it, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+    - Done when the record exists and its Symptom section holds the symptom as "What it reads" 1 gives it, word for word.
+-3. Choose where the probes run, and write into the record's "Where the probes run" section what it names.
++3. Choose where the probes run.
++   - Write into the record's "Where the probes run" section what the choice names.
+    - Outside a plan, the probes run in the user's checkout or worktree.
+-   - Outside a plan, a defect that is not on the checkout (an older commit, with or without a patch) gets a scratch copy built as the next bullets say, run by a person too: `<commit>` is that commit, and the patch, read from where the user names it, is applied with the last line of the block.
++   - Outside a plan, a defect that is not on the checkout (an older commit, with or without a patch) gets a scratch copy built as the next bullets say, run by a person too.
++     - `<commit>` is that commit.
++     - The patch, read from where the user names it, is applied with the last line of the block.
+    - Inside a plan, the probes run on a scratch copy under `$TMPDIR` that shares no file with the step's worktree.
+-   - `$tmp` is made by `mktemp -d "${TMPDIR:-/tmp}/diagnose.XXXXXX"`, and the copy is a detached worktree made from the main checkout.
++   - `$tmp` is made by `mktemp -d "${TMPDIR:-/tmp}/diagnose.XXXXXX"`.
++   - The copy is a detached worktree made from the main checkout.
+    - The commands for each source of the defect are these.
+      ```sh
+      tmp=$(mktemp -d "${TMPDIR:-/tmp}/diagnose.XXXXXX")
+@@ -75,7 +79,10 @@ metadata:
+      git apply --3way --allow-empty "$tmp/step.diff"               # a red line: from inside "$tmp/tree"
+      git apply --3way --allow-empty <patch>                        # outside a plan, a defect at an older commit with a patch: from inside "$tmp/tree"
+      ```
+-   - For a finding of a reviewer's report, `<commit>` is the dispatch entry's base, the step's diff is taken from inside the step's worktree, and each file listed with `??` is copied to the same path in the copy.
++   - For a finding of a reviewer's report:
++     - `<commit>` is the dispatch entry's base.
++     - The step's diff is taken from inside the step's worktree.
++     - Each file listed with `??` is copied to the same path in the copy.
+    - For a red line, `<commit>` is `HEAD` and the step's whole range is taken from the branch of the kept worktree, which is named after the worktree's folder as the `land` skill's "Removing a step's worktree" says.
+    - `--allow-empty` lets a step whose only changes are new files, with an empty tracked diff, be copied.
+    - For a brief-check finding, `<commit>` is `HEAD` and nothing is applied, since the brief and its report are read as they stand on disk.
+@@ -112,27 +119,31 @@ metadata:
+    - Done when the record's Hypotheses section holds three to five hypotheses in rank order, or fewer with the reason, each with its falsifying result.
+ 8. Show the red command, its output, the shrunk case and the hypotheses.
+    - Run by a person, the skill shows them to the user.
+-   - With no person present, the skill writes the hypotheses into the record and goes on to Steps 11, and Steps 9 and 10 are not run.
++   - With no person present, the skill writes the hypotheses into the record and goes on to Steps 11.
++   - With no person present, Steps 9 and 10 are not run.
+    - Done when the user has been shown them, or with no person present when the record holds them.
+ 9. Run by a person, wait for the user's reply before the first probe ("Stops").
+    - Done when the user's reply is in.
+ 10. Rank, drop or add hypotheses as the reply says.
+     - Done when the record's Hypotheses section holds the list the reply leaves, with the reply quoted.
+ 11. Make the one change of a probe: pick the next hypothesis in rank order and change one thing.
+-    - Two changes in one probe, and a probe tied to no hypothesis, are Anti-patterns rows.
++    - Two changes in one probe is an Anti-patterns row.
++    - A probe tied to no hypothesis is an Anti-patterns row.
+     - A debugger or an interactive session is used where the language has one, and otherwise logging at the boundaries that separate the hypotheses.
+     - A hypothesis a debugger or logging probe leaves standing gets one more probe, the change the hypothesis names, so that Steps 15 has the red command green with it and red without it.
+     - For a slow symptom, a probe is a measurement: a timing harness or a profiler at the boundaries, compared with the baseline of Steps 4, or `git bisect run` between two known states; a log line does not measure time.
+     - Every line of logging a probe adds carries one tag unique to the diagnosis, `DIAG-` and four hexadecimal digits.
+-    - Logging without that tag, and logging everything to search afterwards, are Anti-patterns rows.
++    - Logging without that tag is an Anti-patterns row.
++    - Logging everything to search afterwards is an Anti-patterns row.
+     - Steps 11 to 13 repeat for each hypothesis until each has a result.
+     - Done when the tree differs from what it was before the probe by that one change.
+-12. Run the red command after the probe, and record the probe.
+-    - The record's Probes section holds the hypothesis's rank, the one change as a diff, the run and the result, falsified or still standing.
++12. Run the red command after the probe.
++    - Record the probe: the record's Probes section holds the hypothesis's rank, the one change as a diff, the run and the result, falsified or still standing.
+     - Done when the row is written.
+ 13. Undo the change of the probe, the one that turned the red command green included.
+     - Done when the tree is as it was before the probe, and the change stands in the record as a diff.
+-14. When every hypothesis is falsified, form a second list from what the probes showed, and show it as Steps 8 says.
++14. When every hypothesis is falsified, form a second list from what the probes showed.
++    - Show the second list as Steps 8 says.
+     - Run by a person, the skill waits for the reply and re-ranks as Steps 9 and 10 say before the first probe of the second list.
+     - Done when the record holds the second list with its falsifying results, Steps 9 and 10 have run over it when run by a person, and Steps 11 to 13 have run over it.
+ 15. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
+@@ -142,7 +153,8 @@ metadata:
+     - That open item quotes the hypotheses and every probe, or every way tried from the record's "No red command" section, and names the record's path.
+     - A cause not found is never sent to the builder.
+     - With no person present outside a plan, a cause not found is stated in the session's final message with the record's path.
+-    - After a cause not found the skill goes to Steps 21 and 22, then inside a plan to Steps 23; outside a plan Steps 23 and 24 are not run, so the record stays in `$TMPDIR` and its path is shown.
++    - After a cause not found the skill goes to Steps 21 and 22, then inside a plan to Steps 23.
++    - After a cause not found outside a plan, Steps 23 and 24 are not run, so the record stays in `$TMPDIR` and its path is shown.
+     - Run by a person, a cause not found ends in a stop after Steps 22 ("Stops").
+     - Done when the record's Cause section names the cause with its probe, or says "cause not found".
+ 16. For a defect in code whose failure costs something, write a test that reproduces the shrunk case at the place the defect occurs.
+@@ -160,7 +172,8 @@ metadata:
+     - Done when the fix is in the tree the probes ran in and the record quotes it, or for a defect in text quotes the text after.
+ 19. Run the test, the red command and the original, unshrunk case.
+     - Done when the test is green, the red command is green and the original case is green, each quoted in the record.
+-20. Inside a plan, hand the fix over by where the defect was found, and leave the step's worktree unchanged as "Rules" says.
++20. Inside a plan, hand the fix over by where the defect was found.
++    - The step's worktree is left unchanged, as "Rules" says.
+     - A finding of the reviewer's first run: its fix and its test are the ruling of the next repair round, as `plan-orchestration`'s Steps 8 sends a round.
+       - The ruling quotes the hypotheses with their results, the cause, the fix, both runs of the test and the record's path.
+       - The red command is the round's check.
+@@ -170,7 +183,8 @@ metadata:
+     - A brief-check finding: its fix goes into the brief, as the `spec` skill's "Steps / The brief check" 4 closes a finding.
+     - Done when the fix and its test stand in the place the defect's source names, and for a reviewer's finding `git status --short` and `git diff --binary <base> | shasum` from inside the step's worktree print what the record holds.
+ 21. Run by a person, show the record whole to the user, before the cleanup.
+-    - With no person present outside a plan, the record's path is named in the session's final message instead, and Steps 24 is not run, so the record stays for whoever reads the run.
++    - With no person present outside a plan, the record's path is named in the session's final message instead.
++    - With no person present outside a plan, Steps 24 is not run, so the record stays for whoever reads the run.
+     - Done when the user has been shown the record, or the final message names its path.
+ 22. Clean up, keeping the record.
+     - Done when the grep of the tag over the tree the probes ran in prints nothing, and the scratch copy, removed with `git worktree remove --force "$tmp/tree"` from the main checkout, and every throwaway file are gone, a credential or `.env` file copied into `$TMPDIR` among them.
+@@ -209,7 +223,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
+ | Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause; with no person present, Steps 15 gives it as a cause not found | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
+ | The cause not found | One of the conditions Steps 15 gives | The record with every probe, or every way tried from its "No red command" section, and inside a plan the open item | Inside a plan, the user's ruling on the open item or, under `self_rule: on`, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; run by a person, the user's next direction |
+ | No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
+-| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | For a finding, the step prepared with `/spec`, then `/diagnose` again; for a red line, `/diagnose` again once `/land` has taken the step back out of main, before `/spec` prepares it again, and after that `/diagnose <symptom>` with the failure in the step's Step 0 as the symptom; for a step already landed, `/diagnose <symptom>` with the finding's failure scenario as the symptom |
++| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | What "Rules" gives for the kind of input: a finding, a red line or a step already landed |
+ | No report | Inside a plan, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
+ | No finding | Inside a plan, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |
+ 
+@@ -230,8 +244,14 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
+ 
+ - Who is present decides the waits: a person running the skill, by hand or inside a plan they run step by step, gets the waits of "Stops", and a session with no person present, under `plan-orchestration` or running `/diagnose <symptom>` on its own, gets none.
+ - Inside a plan, the step's worktree is never changed and every probe runs on the scratch copy of Steps 3, so `plan-orchestration`'s rule that a finding whose cause is not known is diagnosed read-only holds.
+-- The skill never runs against the user's real home, the installed skills or the pinned checkout without the user's leave, and a red command that would touch them runs with those paths redirected, as Steps 3 says.
++- The skill runs against the user's real home, the installed skills or the pinned checkout only with the user's leave.
++- A red command that would touch the user's real home, the installed skills or the pinned checkout runs with those paths redirected, as Steps 3 says.
+ - Every quoted command output carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed, as the rules file's rule on secrets in quoted command output says.
+ - A captured artifact is quoted only in the lines that carry the symptom.
+ - With no rules file, a defect in code whose failure costs something (lost work, a broken installation, a wrong configuration accepted) begins with a test that fails on the tree as it is.
+-- With no rules file, a guard is not a fix: a null check, an early return or a fallback does not close a defect, and the fix reaches the code that lacks the thing it needs.
++- With no rules file, a guard is not a fix: a null check, an early return or a fallback does not close a defect.
++- With no rules file, the fix reaches the code that lacks the thing it needs.
++- After the refusal "No dispatch entry" for a finding of a reviewer's report, the step is prepared with `/spec`, then `/diagnose` runs again.
++- After the refusal "No dispatch entry" for a red line, `/diagnose` runs again once `/land` has taken the step back out of main and before `/spec` prepares it again.
++- After `/spec` has prepared a red line's step again, `/diagnose <symptom>` runs with the failure in the step's Step 0 as the symptom.
++- After the refusal "No dispatch entry" for a step already landed, `/diagnose <symptom>` runs with the finding's failure scenario as the symptom.
+diff --git a/skills/grill/SKILL.md b/skills/grill/SKILL.md
+index 3146c54..7134dec 100644
+--- a/skills/grill/SKILL.md
++++ b/skills/grill/SKILL.md
+@@ -2,7 +2,7 @@
+ name: grill
+ description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
+ metadata:
+-  version: "1.2.0"
++  version: "1.3.0"
+ ---
+ 
+ # Settle an entry's design decisions
+@@ -16,7 +16,7 @@ metadata:
+ /grill <entry> --bar <industry|state-of-the-art|novel>          the same, with this design bar in place of the configured one, for this interview only
+ /grill <project>/<entry>                                        the same, in a repository whose plan.yaml lists several projects
+ /grill <entry> --ruling <ledger file> "<name>"                  the same, under a quoted ruling: a roadmap diff that is the ruled text is written without its decision
+-/grill <entry> --self-rule                                      the same, run by plan-orchestration in next-entry mode: each decision outside the six kinds answered with its recommendation, as the orchestrator's choice
++/grill <entry> --self-rule                                      the same, run by plan-orchestration in next-entry mode: each decision outside the six kinds takes its recommendation
+ ```
+ 
+ ## Use instead
+@@ -52,7 +52,8 @@ metadata:
+      - Such a bullet is a carried ruling.
+      - In an archived `plan.md` whose title, after `# Plan: `, equals `<entry>` or starts with `<entry>` and a space, a full stop after a number being allowed, every bullet whose first line ends with "(the user)", with or without a full stop after it, of a section whose heading begins `## Rulings`, is a carried ruling, whether or not it names the entry.
+      - A bullet of an archived plan that a ruling of the user sets aside is no carried ruling, for any entry.
+-       - Such a bullet settles no decision, and replaces no ruling except a ruling that sets its own plan aside, which it replaces as any later ruling does.
++       - Such a bullet settles no decision.
++       - Such a bullet replaces no ruling except a ruling that sets its own plan aside, which it replaces as any later ruling does.
+      - A ruling of the user is a bullet whose first line ends with "(the user)", with or without a full stop after it, of a section whose heading begins `## Rulings` in a `plan.md` under `<ledger_root>/`, or of a rulings file under `<ledger_root>/rulings/`, the archived plan it sets aside included.
+      - A ruling sets an archived plan aside when it says that the plan is set aside, thrown out or stopped, or that the entry of the plan is redone.
+        - A ruling that says the entry is redone sets aside only a plan of the entry that stood when the ruling was given.
+@@ -66,7 +67,8 @@ metadata:
+ 7. The entry's sources: each file, page or repository the entry and the answers name.
+ 8. The ADR folder's `README.md`, which states when a record is kept and how one supersedes another.
+ 9. The page that states this repository's goals: `docs/dev/design-principles.md` when it exists, otherwise the opening of `README.md`.
+-   - A repository that states no goals in either is shown so in the first round, and its goals are asked as a decision of their own.
++   - A repository that states no goals in either is shown so in the first round.
++   - The goals of such a repository are asked as a decision of their own.
+ 10. The `repo-setup` skill's `templates/docs/adr/README.md`, `templates/docs/adr/template.md` and `templates/docs/glossary.md`, only when Steps 8 must create the ADR folder's files or the glossary.
+ 11. The quoted ruling, when the invocation ends with `--ruling <ledger file> "<name>"`.
+     - `<ledger file>` is a plan's `plan.md` or a rulings file, given by a path the skill can read from where it runs.
+@@ -98,7 +100,8 @@ metadata:
+    - The step is done when each has been read.
+ 3. Draw the design tree.
+    - List every decision the entry's goal and gate need, each with the decisions it waits on.
+-   - A decision is a node of the design tree, and the skill names what it asks a decision, never a question, since the glossary's term "question, the" is another thing.
++   - A decision is a node of the design tree.
++   - The skill names what it asks a decision, never a question, since the glossary's term "question, the" is another thing.
+    - The roadmap diff and "record as ADR?" ("Steps / Writing what settled") are decisions of their own, numbered like the rest.
+    - A decision that a line of the Rulings or the rulings file settles, or an ADR in force settles, is marked settled and is not asked again.
+      - A bullet that reads "carried from" a bullet now set aside settles nothing ("What it reads" 6).
+@@ -116,7 +119,7 @@ metadata:
+        - A bullet of a set-aside plan replaces no ruling, except as "What it reads" 6 says.
+      - A carried ruling that contradicts another carried ruling, or a bullet of the entry's Rulings or rulings file, neither naming the other as the one it replaces, is a rule clash ("Steps / An answer that contradicts").
+        - A bullet that settles nothing ("What it reads" 6) makes no rule clash.
+-       - A carried ruling dated after a bullet ending "(self-rule)" that it contradicts replaces that bullet, with no rule clash: the carried bullet written for it names the old bullet as the one it replaces, and the old bullet's ending is rewritten to "(self-rule, replaced by <the carried bullet's name>)." Its choice leaves the choices file, and the Closed items of its plan gain their line, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
++       - A carried ruling dated after a bullet ending "(self-rule)" that it contradicts replaces that bullet, with no rule clash: the carried bullet written for it names the old bullet as the one it replaces, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says for the old bullet's ending, its choice and its plan's Closed items.
+      - Whether a bullet of the entry's Rulings or rulings file already settles a decision of a carried ruling is judged by reading, since the line a carried ruling stands on can move.
+    - An entry that has a goal already has one decision for each part of its current goal: the part kept, changed or dropped.
+      - Each such decision quotes its part as the entry writes it.
+@@ -124,13 +127,17 @@ metadata:
+      - An entry with a gate has one such decision for each part of its current gate, a part being each thing the gate checks.
+      - An entry under "Not yet specified" has one such decision for each part of what must be known, in place of the gate.
+      - Each such decision is a design decision ("The decision form").
+-   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is marked settled, since the quoted ruling is its answer ("Rules"): it is made at the first write of Steps 8, and a draft that "Steps / Writing what settled" 3 shows as the decision is asked in the next round.
++   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is marked settled, since the quoted ruling is its answer ("Rules").
++     - It is made at the first write of Steps 8.
++     - A draft that "Steps / Writing what settled" 3 shows as the decision is asked in the next round.
+    - An interview started again, in a new session or after a compaction, draws the tree afresh from what is written: the Rulings or the rulings file, the carried rulings, the entry, the glossary and the ADRs.
+    - A decision shown before and not answered is asked again under a new number.
+-   - After such a restart, an answer to a number shown before is not read (Steps 7), and the redrawn round opens by saying that answers to an earlier round are to be given again against this one.
++   - After such a restart, an answer to a number shown before is not read (Steps 7).
++   - After such a restart, the redrawn round opens by saying that answers to an earlier round are to be given again against this one.
+    - The step is done when every decision is marked settled or open, each open one with the decisions it waits on named.
+ 4. Compute the frontier: every decision whose prerequisites are settled, the roadmap diff and "record as ADR?" decisions included.
+-   - A decision that needs a fact has that fact looked up ("Steps / Looking up a fact"), and a decision waiting on a running lookup is in the frontier and not yet asked.
++   - A decision that needs a fact has that fact looked up ("Steps / Looking up a fact").
++   - A decision waiting on a running lookup is in the frontier and not yet asked.
+    - A decision that depends on another decision still open waits for a later round.
+    - The step is done when each decision of the frontier is in the round, or waits on a named lookup.
+ 5. Draw each decision of the round in the decision form ("The decision form"), its worked example in `references/decision-form.md`.
+@@ -154,8 +161,10 @@ metadata:
+    - The first round also lists each archived plan whose bullets would otherwise be carried rulings for the entry and that a ruling sets aside, whole or in part, with each ruling that sets it aside quoted as written and its `<path>:<line>`.
+    - The round ends the turn and waits for the answers ("Stops").
+    - Under `--self-rule`, the round is not sent: each decision of the frontier outside the six kinds of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open", is answered with its recommendation, as the orchestrator's choice.
+-   - Under `--self-rule`, the decisions of those six kinds alone are sent to the user as a round, the stop "A round", and the turn ends.
+-   - The user's answers to such a round are written as the user's, and the interview goes on under `--self-rule`.
++   - Under `--self-rule`, the decisions of those six kinds alone are sent to the user as a round, the stop "A round".
++   - Under `--self-rule`, the turn ends after a round of the six kinds.
++   - The user's answers to such a round are written as the user's.
++   - The interview goes on under `--self-rule` after the user's answers.
+    - Under `--self-rule`, each decision answered with its recommendation goes through the checks of Steps 7 that read an answer ("Steps / Terms and claims" and "Steps / An answer that contradicts") before Steps 8.
+      - An answer that contradicts a ruling or an ADR in force becomes a rule-clash decision, kind 3, sent to the user as the bullets above say for the six kinds.
+      - A term the answer needs that the glossary lacks becomes a decision of its own, kind 3 where the glossary is a standards page.
+@@ -169,7 +178,8 @@ metadata:
+    - The user may answer part of a round, and the decisions left open stay in the frontier.
+    - An answer the skill cannot read as one of the options is asked again in the next round, under a new number.
+    - An answer read as one of the options, with the user's text beside it, is written as given.
+-   - An answer is read against the last round shown; one that names a number this session has not shown is not read: the skill says so and shows its current round again.
++   - An answer is read against the last round shown.
++   - An answer that names a number this session has not shown is not read: the skill says so and shows its current round again.
+    - Check the answers for terms and claims as "Steps / Terms and claims" says, and for a contradiction as "Steps / An answer that contradicts" says.
+    - The step is done when each answer is settled, or asked again in the next round.
+ 8. Write each settled answer as "Steps / Writing what settled" says, at the time "Rules" gives.
+@@ -186,7 +196,8 @@ metadata:
+     - An entry changed under a quoted ruling is listed with the ruling's name and its ledger file.
+     - List each change owed to an open plan ("Steps / A plan already open"): a step whose text an answer changed, and the lines of `plan.md`'s "## Goal" or "## Gate" an answer changed.
+     - List each clash with a term of the plan-terms block as a change for the user to make in the Ordo repository's `skills/repo-setup/templates/plan-terms.md`.
+-    - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry, and print the gate's text whole beside it, for the user to give that command.
++    - Name `/roadmap add <entry>` when the interview settled the gate of an entry under "Not yet specified", since `grill` does not move that entry.
++    - Print that gate's text whole beside the command, for the user to give it.
+     - Without `--self-rule`, ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
+     - Under `--self-rule`, ask nothing: the commit is made as the bullet below says, and this list is the run's report.
+     - On a yes to both, or under `--self-rule`, commit the files the run wrote, the choices file among them when it wrote it, by explicit path list in one commit, its subject naming the entry and that its design decisions are settled.
+@@ -208,10 +219,13 @@ metadata:
+    - It invokes no skill and starts no agent.
+    - It returns each fact with its source, a `path:line` or a URL it fetched.
+    - The item is done when the agent is running.
+-4. Right after the start, read the agent's id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says, and write the agent as one bullet `- <agent id>: grill lookup, <served model>` to the `## Agents` section of the file the interview writes its rulings to.
++4. Right after the start, read the agent's id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
++   - Write the agent as one bullet `- <agent id>: grill lookup, <served model>` to the `## Agents` section of the file the interview writes its rulings to.
+    - That file is the open plan's `plan.md`, or else the rulings file, created with its heading line as "Steps / Writing what settled" 1 says.
+-   - A `plan.md` without the section gets it before `## Blocked, and by what`, and a rulings file without it gets it at its end.
+-   - A served model that is not the configured one is the stop "A lookup agent served another model" ("Stops"): the agent is stopped through the runner's stop tool, nothing it found is used, and its bullet is written all the same, since it ran.
++   - A `plan.md` without the section gets it before `## Blocked, and by what`.
++   - A rulings file without the section gets it at its end.
++   - A served model that is not the configured one is the stop "A lookup agent served another model" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it found is used.
++   - The bullet of a stopped agent is written all the same, since it ran.
+    - The item is done when the file, read back, holds the bullet, and the served model is the configured one or the stop is raised.
+ 5. A lookup that finishes joins the next round: the decisions that waited on it are asked.
+    - The item is done when each fact a decision needs is in hand with its source.
+@@ -229,7 +243,7 @@ metadata:
+ ### An answer that contradicts
+ 
+ 1. An answer that contradicts an earlier ruling or an ADR in force is shown in the next round as a rule clash, a decision of its own.
+-   - The user's answer that contradicts a bullet ending "(self-rule)" replaces it, with no rule clash: the new bullet names the old one as the one it replaces, and the old one's ending is rewritten to "(self-rule, replaced by D<n>)." Its choice leaves the choices file, and the Closed items of its plan gain their line, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
++   - The user's answer that contradicts a bullet ending "(self-rule)" replaces it, with no rule clash: the new bullet names the old one as the one it replaces, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says for the old bullet's ending, its choice and its plan's Closed items.
+    - The item is done when the clash is a decision of the next round with its options.
+ 2. The options of the clash are these.
+    - Reopen the earlier ruling, by a new Rulings bullet that names the one it replaces.
+@@ -270,15 +284,18 @@ metadata:
+ 2. Write the glossary term.
+    - A term the interview settles is written into `docs/glossary.md` below the plan-terms block, in the file's form `- **<term>**: <definition>`, at once.
+    - A term that clashes with the glossary's existing definition is put to the user as a decision.
+-   - A term the plan-terms block defines is never written into the block, since `/repo-setup sync` undoes it, and no copy of the `repo-setup` skill's `templates/plan-terms.md` is changed by this skill.
++   - A term the plan-terms block defines is never written into the block, since `/repo-setup sync` undoes it.
++   - No copy of the `repo-setup` skill's `templates/plan-terms.md` is changed by this skill.
+    - A clash with such a term is put to the user as a decision.
+    - Its answer is written as a Rulings bullet (item 1).
+    - The end lists it as a change for the user to make in the Ordo repository (Steps 10).
+    - The item is done when the glossary, read back, holds the term whole.
+ 3. Draft the change to the roadmap entry.
+    - An answer that changes the entry's goal, gate or text is drafted into the entry in the file's own format and under the `roadmap` skill's Rules: the goal, the gate and the dependencies only, nothing the user did not ask for, no history, another repository only as a path.
+-   - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says, and the answer with its reason goes in the diff and never in the entry.
+-   - The draft is shown as a diff in the next round, as a decision of its own, and written on the user's yes.
++   - A changed gate is asked "could this pass without the goal being reached?", as the `roadmap` skill's "Steps / add" 3 says.
++   - The answer with its reason goes in the diff and never in the entry.
++   - The draft is shown as a diff in the next round, as a decision of its own.
++   - The draft is written on the user's yes.
+      - Under `--self-rule`, the roadmap diff decision is answered with its recommendation like the rest, and the diff taken is written.
+      - Under a quoted ruling ("What it reads" 11) whose sub-bullets hold the entry's changed text, the draft is made at the first write of Steps 8.
+      - It takes the ruled text.
+@@ -286,7 +303,9 @@ metadata:
+      - A draft that is still the ruled text is written at once, unless it changes the gate and the changed gate could pass without the goal.
+      - The roadmap diff decision then counts as answered.
+      - A draft that differs from the ruled text, or a changed gate that could pass without the goal, is shown as the decision.
+-   - An entry under "Not yet specified" is not moved and has no gate drafted into it, since such an entry states its goal and what must be known and no gate: a changed goal or "what must be known" is drafted into it as above, and the settled gate is its Rulings bullet of item 1, which the end prints (Steps 10).
++   - An entry under "Not yet specified" is not moved and has no gate drafted into it, since such an entry states its goal and what must be known and no gate.
++     - A changed goal or "what must be known" is drafted into it as above.
++     - The settled gate is its Rulings bullet of item 1, which the end prints (Steps 10).
+    - The item is done when the diff is a decision of the next round, or, after the yes or under a quoted ruling, the entry read back holds the change.
+ 4. Ask whether to record an ADR.
+    - An answer that is not obvious from the code, binds work after the plan that made it closes, and has alternatives rejected becomes the decision "record as ADR?" in the next round.
+@@ -294,7 +313,8 @@ metadata:
+      - Under `--self-rule`, the decision is answered with its recommendation like the rest, and a record taken is written with status `proposed`.
+    - Write it in the folder `adr` names, from its `template.md`, or from the form of the folder's latest record when it has no `template.md`.
+    - A missing folder, or one with neither `template.md` nor a record, is created or filled first from the `repo-setup` skill's `templates/docs/adr/README.md` and `template.md`.
+-   - The record is numbered after the folder's highest, and its status is `proposed`.
++   - The record is numbered after the folder's highest.
++   - The record's status is `proposed`.
+    - Its decision is the ruled option, its context the facts the decision gave, its alternatives rejected the other options with their cons, and its consequences what the decision said follows.
+    - The context, the alternatives rejected and the consequences are argued from this repository's goals, as the ADR folder's `README.md` says, and what other projects ship is evidence for them and never the reason by itself.
+    - Its row goes into the folder's index when there is one.
+@@ -315,7 +335,10 @@ Every decision of a round has these parts, in this order, and `references/decisi
+ - Each claim of the reference line has its source read in this session: a `path:line`, or a URL fetched in the session.
+ - A reference line is never written from memory.
+ - The reference line is the evidence the options are weighed with, and never the reason for the recommendation by itself.
+-- The roadmap diff, "record as ADR?", rule-clash and term decisions are about this repository's own pages: they have every part, their reference line is labelled "Rule:" and cites the page that governs them (the `roadmap` skill's Rules, the ADR folder's `README.md`, the glossary entry) read in this session, and the design bar and `design_references` do not apply to them.
++- The roadmap diff, "record as ADR?", rule-clash and term decisions are about this repository's own pages.
++  - They have every part of the decision form.
++  - Their reference line is labelled "Rule:" and cites the page that governs them (the `roadmap` skill's Rules, the ADR folder's `README.md`, the glossary entry) read in this session.
++  - The design bar and `design_references` do not apply to them.
+ 
+ ## The design bar
+ 
+@@ -323,7 +346,8 @@ Every decision of a round has these parts, in this order, and `references/decisi
+ - The design bar is `design_bar`, or the `--bar` value for this interview.
+ - Under `industry`, the reference line is labelled "Industry:" and cites what production projects in the field ship.
+ - Under `state-of-the-art`, it is labelled "State of the art:" and cites the best published work.
+-- Under `novel`, it is labelled "Novel:" and cites both, and each option goes beyond them and says what would show it works.
++- Under `novel`, it is labelled "Novel:" and cites both.
++- Under `novel`, each option goes beyond what the reference line cites and says what would show it works.
+ - `design_references` are the published standards every option is held to, and each option names the clause of each one that bears on it.
+ 
+ ## Stops
+@@ -356,7 +380,8 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
+ 
+ - A fact is looked up, never asked.
+ - A decision is the user's: nothing is written as settled without the user's answer, or a quoted ruling ending "(self-rule)" that settles it as the orchestrator's choice, or, under `--self-rule`, the recommendation for a decision outside the six kinds of Steps 6, as the orchestrator's choice.
+-  - A quoted ruling that holds the entry's changed text is the answer to the roadmap diff: the user's answer when its bullet ends "(the user)", and the orchestrator's choice when it ends "(self-rule)", which the user reviews in the choices file as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
++  - A quoted ruling that holds the entry's changed text is the answer to the roadmap diff: the user's answer when its bullet ends "(the user)", and the orchestrator's choice when it ends "(self-rule)".
++  - The user reviews the orchestrator's choice in the choices file, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
+   - A carried ruling is the user's answer to the decisions it settles.
+ - Every answer is written in the turn it settles, before the next round is drawn up.
+   - A carried ruling, and a roadmap diff a quoted ruling states, are written at the first write of Steps 8.
+diff --git a/skills/land/SKILL.md b/skills/land/SKILL.md
+index 58376a4..a0dfe47 100644
+--- a/skills/land/SKILL.md
++++ b/skills/land/SKILL.md
+@@ -2,12 +2,12 @@
+ name: land
+ description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit by explicit path list, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
+ metadata:
+-  version: "1.8.2"
++  version: "1.9.0"
+ ---
+ 
+ # Land a step
+ 
+-`/land <entry> <step>` brings a refuted step from its worktree onto main. It leaves behind the step on main in one commit with its booking and its landing report. The state file is rewritten, and the step's worktree and branches are removed. After a red line no fix inside the brief closes, it leaves the step out of main instead. The worktree and branches are then kept for `/spec`, and the failure is recorded in the step's Step 0 in `plan.md`.
++`/land <entry> <step>` brings a refuted step from its worktree onto main. It leaves behind the step on main in one commit with its booking and its landing report, the rewritten state file, and the step's worktree and branches removed. After a red line no fix inside the brief closes, it leaves the step out of main instead, with the worktree and branches kept for `/spec` and the failure recorded in the step's Step 0 in `plan.md`.
+ 
+ ## Quick start
+ 
+@@ -79,10 +79,13 @@ metadata:
+      - It is worked again as that step, with no new ruling.
+    - The failure goes to the user as an open item only when what to do is a decision for the user.
+    - A step is taken back out of main and prepared again at most once: a second failure of its landing always goes to the user as an open item, and the step waits for the ruling.
+-   - The step's agents are booked in `plan.md`'s Agents section by the rules of Steps 9, written and read back before that commit, since `/spec` later removes the step's dispatch entry; the agents of its later landing are appended when it lands, those already in the section skipped.
++   - The step's agents are booked in `plan.md`'s Agents section by the rules of Steps 9, since `/spec` later removes the step's dispatch entry.
++     - The booking is written and read back before the commit below.
++     - The agents of its later landing are appended when it lands, those already in the section skipped.
+    - The state file and `plan.md` are then committed by path, a resume point.
+      - The commit also holds the other ledger records the session wrote since the last one.
+    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
++   - Done when every verification command has run on main and each red line is fixed on main, or the step is taken back out of main.
+ 7. Open the changed views, as "The look" says.
+ 8. Run the A/B: the benchmark commands the configuration block's `bench:` line names, the staged base binary and the new one run alternately after warm-ups, at least ten runs each.
+    - The mean, the standard deviation and the standard error of the difference are written to the scratchpad.
+@@ -103,6 +106,7 @@ metadata:
+    - It states whether the builder's first report passed its bar, and the fixes at landing.
+    - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as.
+    - Tick the step.
++   - Done when the booking is in `plan.md` and the Agents section, read back, holds each agent of the step once.
+ 10. Read the step's `worktree` from its dispatch entry, for Steps 13.
+     - Then rewrite the state file: the step's dispatch entry removed, the position line, the open items as they stand.
+ 11. Write the landing report, `agents/reviews/<step>-landing.md`, so it lands with the step and stands alone on disk.
+@@ -185,7 +189,7 @@ metadata:
+ | Stop | When | What it shows | What resumes it |
+ |---|---|---|---|
+ | A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and what to do is a decision for the user | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; the second failure of a step's landing always waits for the user |
+-| A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves: main untouched; under `templates/land.sh`, the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1 | The lock removed once no git command uses it, then `/land` again; `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start |
++| A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves, as the bullet below says | The lock removed once no git command uses it, then `/land` again, as the bullet below says |
+ | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
+ | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
+ | No dispatch block | The state file holds no dispatch block naming this step | That the block is missing | `/spec` for the step |
+@@ -193,12 +197,15 @@ metadata:
+ | The step not ready | No builder's report; or no refuter report that is either newer than the builder's report or, after the step's repair rounds (up to `repair_rounds`, or one more under plan-orchestration's exception), carrying a run over the last round when `refute_after_repair: yes` (the orchestrator's read of the round when `no`); or a run over the last round owed and missing; or a finding, the last run's included, neither closed under the refuter report's Closed heading nor raised to the user as an open item | Which of these it is | What is missing supplied, then `/land` again |
+ | Main not clean | On main something staged, a git operation in progress, or one of the step's paths carrying an unrelated change of the user's | What it saw, the user's unrelated changes listed by path | Main put right, then `/land` again |
+ | Agents still running | The check of Steps 1 fails: an agent still listed | Each one left | Each one stopped, then `/land` again |
+-| A worktree that cannot be removed | At Steps 13, the worktree holds a path outside the ledger root, or a removal command fails ("Removing a step's worktree") | The open item, booked in the state file's open items and committed by path as a resume point: the worktree path and both branches, as Steps 10 read them, and what stopped the removal (each path outside the ledger root, or the command and what it printed) | The cause put right, such as the path moved out of the worktree or removed by the user, then "Removing a step's worktree" run on the worktree and branches the open item names; the open item is then closed |
++| A worktree that cannot be removed | At Steps 13, the worktree holds a path outside the ledger root, or a removal command fails ("Removing a step's worktree") | The open item, with the worktree path and both branches, as Steps 10 read them, and what stopped the removal (each path outside the ledger root, or the command and what it printed) | The cause put right, such as the path moved out of the worktree or removed by the user, then "Removing a step's worktree" run on the worktree and branches the open item names |
+ 
+ - The first row is a stop: it leaves an open item.
+ - The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.
++  - Under `templates/land.sh`, the stop leaves the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1.
++  - `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start.
+ - The rows after those two, up to the last, are refusals: they come before main is touched.
+ - The last row is a stop after the landing's commit that leaves an open item: the step is on main, and only its worktree and branches are left, named in the open item.
++  - The open item is booked in the state file's open items and committed by path as a resume point.
+   - Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item.
+ - A refusal names its cause and leaves nothing.
+ - A red line recorded in the step's Step 0 is not a stop: the step is out of main and keeps its line and its tag.
+@@ -215,7 +222,8 @@ metadata:
+ - One step stays one implementation commit, which keeps each step traceable to its brief, its review and its booking.
+ - A landed step found short of its brief, or wrong, is raised to the user as an open item, by `plan-orchestration`'s "Stops".
+   - The step that finishes it on top of what landed enters the plan only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books.
+-- A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books when the step's authority is a bullet ending "(self-rule)" alone; the revert of a step the user approved, or one a ruling of the user added, is kind 3.
++- A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books when the step's authority is a bullet ending "(self-rule)" alone.
++  - The revert of a step the user approved, or one a ruling of the user added, is kind 3 of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open".
+   - Its preparation commit stays.
+   - Only a step so reverted is booked as reverted.
+ - The state file is rewritten before the commit, so main's head always carries a state file that describes it.
+diff --git a/skills/ordo-help/SKILL.md b/skills/ordo-help/SKILL.md
+index 1745082..126d6b2 100644
+--- a/skills/ordo-help/SKILL.md
++++ b/skills/ordo-help/SKILL.md
+@@ -1,8 +1,8 @@
+ ---
+ name: ordo-help
+-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
++description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
+ metadata:
+-  version: "1.8.3"
++  version: "1.9.0"
+ ---
+ 
+ # Ordo help
+@@ -46,8 +46,11 @@ metadata:
+ 3. For `/ordo-help <entry>`, print the named plan's position.
+    - From the state file: the position line, the open items verbatim, and the dispatch block (a step in flight, its worktree, its base, its round).
+    - From the ledger folder, for the step in flight: which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings.
++   - The step is done when the position is printed.
+ 4. For `/ordo-help <entry>`, print one line from that position: the command that comes next, in the sequence.
+-   - An open item that waits on a ruling is printed with it, and the next line is `Ruled: ...`.
++   - An open item that waits on a ruling is printed with it.
++   - The line after an open item that waits on a ruling is `Ruled: ...`.
++   - The step is done when the line is printed.
+ 
+ ## The sequence, printed verbatim
+ 
+diff --git a/skills/ordo-init/SKILL.md b/skills/ordo-init/SKILL.md
+index 7537aae..3fb216a 100644
+--- a/skills/ordo-init/SKILL.md
++++ b/skills/ordo-init/SKILL.md
+@@ -2,7 +2,7 @@
+ name: ordo-init
+ description: "Set a repository up for the plan skills: draft .agents/plan.yaml from what the repository already has (the roadmap, the page that defines the checks, the change standard, the check commands its CI and build files run, one project or several), offer the pages it lacks, make git ignore the worktree root and keep the configuration tracked, and write nothing until the user approves. On a repository that already has .agents/plan.yaml it checks the file instead: required keys, unknown keys, values, the pages it names, the ignore rules. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml."
+ metadata:
+-  version: "1.1.1"
++  version: "1.2.0"
+ ---
+ 
+ # Set a repository up for the plan skills
+@@ -46,7 +46,8 @@ metadata:
+      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+      - The name is a placeholder in angle brackets, such as `<L>`.
+      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+-   - With no ruling, the skill says which of these it found, and every stop stands.
++   - With no ruling, the skill says which of these it found.
++   - With no ruling, every stop stands.
+ 
+ ## Steps
+ 
+@@ -96,13 +97,19 @@ Run from the repository root.
+    - `bench` and `look` are left out unless the user names binaries or a view.
+    - `adr` is written only when the repository keeps its decision records (a folder of `NNNN-*.md` records) in a folder other than `docs/adr`, and it names that folder.
+    - `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer` are left out unless the user gives a value.
++   - The step is done when each optional key is left out or written with its reason in its comment.
+ 8. Give every key written the example's comment for it, without the required/optional marker, in the example's order.
+ 9. Draft the ignore rules.
+    - The worktree root must be ignored: `git check-ignore -q --no-index <worktree_root>/probe` exits 0.
+    - When it does not, the draft adds `/<worktree_root>/` to `.gitignore`.
+    - `.agents/plan.yaml` must not be ignored: `git check-ignore -q --no-index .agents/plan.yaml` exits 1.
+    - A rule that ignores the whole `.agents/` folder is drafted as `.agents/*` with `!.agents/plan.yaml` after it, since git cannot re-include a file whose parent folder is excluded.
+-10. Show, in this order: the form and why; the draft `.agents/plan.yaml` in full; each page it would create, in full, with the commands' results for a verification page; the `.gitignore` changes, as Rules 5 says; and, when the skill runs alone, the question whether it may commit.
++10. Show, in this order:
++    1. The form and why.
++    2. The draft `.agents/plan.yaml` in full.
++    3. Each page it would create, in full, with the commands' results for a verification page.
++    4. The `.gitignore` changes, as Rules 5 says.
++    5. When the skill runs alone, the question whether it may commit.
+     - The commit question is left out when a quoted ruling states whether the skill may commit.
+     - The step is done when everything this item lists is shown.
+ 11. Stop for the approval ("Stops").
+@@ -111,7 +118,8 @@ Run from the repository root.
+     - Under `/repo-setup`, a key this skill derives from the tree `/repo-setup` wrote counts as stated.
+     - A draft the ruling states in each of these is written without the stop.
+     - A commit question Steps 10 shows is then asked alone.
+-    - A draft that differs in anything, or a page whose text the ruling does not hold, is shown whole with each difference named, and the stop stands with nothing written.
++    - A draft that differs in anything, or a page whose text the ruling does not hold, is shown whole with each difference named.
++    - The stop then stands with nothing written.
+     - The step is done when the draft is written, or it is shown and the stop stands with nothing written.
+ 12. Write what was approved.
+ 13. Run `python3 <this skill's folder>/templates/check_config.py .`.
+@@ -129,12 +137,35 @@ Run from the repository root.
+ 
+ 1. With `.agents/plan.yaml` present, write nothing.
+    - Run `templates/check_config.py`.
+-2. It reports: a key written twice; a key beside `projects:` in the `projects:` form; a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>` or written with no value, `repair_reviewer` not `claude:<model>`, `self_rule` or `next_entry` neither `on` nor `off`, `review` neither `every` nor `earned`, `libraries` neither `check` nor `avoid`, `adr` not naming a folder under the repository root, `design_bar` outside `industry`, `state-of-the-art` and `novel`, `design_references` not a list of text, `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
+-3. Optional keys left out are listed as notes with the default that applies, which for `repair_reviewer` is the `reviewer` value, as is the default ADR folder `docs/adr` when `adr` names it and the folder does not exist yet.
++2. It reports each of these.
++   - A key written twice.
++   - A key beside `projects:` in the `projects:` form.
++   - A required key missing.
++   - An unknown key.
++   - A value of the wrong kind.
++     - `worker` or `reviewer` not `claude:<model>` or written with no value.
++     - `repair_reviewer` not `claude:<model>`.
++     - `self_rule` or `next_entry` neither `on` nor `off`.
++     - `review` neither `every` nor `earned`.
++     - `libraries` neither `check` nor `avoid`.
++     - `adr` not naming a folder under the repository root.
++     - `design_bar` outside `industry`, `state-of-the-art` and `novel`.
++     - `design_references` not a list of text.
++     - `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`.
++     - A value whose kind differs from its default's.
++   - A page named by `roadmap`, `verification`, `rules` or `standards` that does not exist.
++   - A `worktree_paths` entry that does not exist.
++   - A worktree root git does not ignore.
++   - A configuration file git ignores.
++   - The item is done when each of these that holds is reported.
++3. Optional keys left out are listed as notes with the default that applies, which for `repair_reviewer` is the `reviewer` value.
++   - The default ADR folder `docs/adr` is also listed as a note when `adr` names it and the folder does not exist yet.
+    - `next_entry` on while `self_rule` is off or left out is noted as acting only under self-rule, and not noted when `self_rule` has an error.
++   - The item is done when each optional key left out, and the default ADR folder where it applies, has its note.
+ 4. For each error, propose the fix ("Stops").
+    - A fix a quoted ruling states is made without the stop.
+-   - A fix the skill proposes that differs from the ruled fix is shown with the difference, and the stop stands.
++   - A fix the skill proposes that differs from the ruled fix is shown with the difference.
++   - The stop then stands.
+    - The item is done when each error has its fix made under a quoted ruling, or proposed at the stop.
+ 5. Make each fix the user approved.
+ 6. After the fixes, run the check again.
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index dadfe87..1359eb7 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -2,7 +2,7 @@
+ name: plan-orchestration
+ description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after the closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
+ metadata:
+-  version: "2.10.1"
++  version: "2.11.0"
+ ---
+ 
+ # Plan orchestration
+@@ -58,6 +58,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+    - A stop, here or at any later step, blocks its own step.
+      - The loop moves on to the next unblocked step.
+    - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step is added to the plan only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
++   - Done when `/spec` has written the brief and the dispatch block and the brief check's report is read, or the step has stopped.
+ 4. Choose the step's executor.
+    - Write it into the dispatch block.
+    - Then build by that choice.
+@@ -67,7 +68,14 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+    - **The launch commit.** Under every executor, the dispatch entry is committed once its builder's identity is in it, and the commit is a resume point.
+      - Under `agent` it comes right after the launch and the model check of "Launching a builder", since the builder's agent id exists only once it is launched; under `inline` and `academic-paper` it comes before the build starts.
+      - The paths are the state file and the session's own records since the last resume point, named in `git add -- <path> ...`.
+-   - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report, the main checkout, the user's data); the reading order (the rules file, the brief, the standards, the ADRs the brief names); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
++   - **The prompt.** It states, in its own words:
++     - The worktree, and that it is the only place to work.
++     - The no-git rule.
++     - What is never touched: the ledger beyond the builder's report, the main checkout, the user's data.
++     - The reading order: the rules file, the brief, the standards, the ADRs the brief names.
++     - Every requirement the step is judged on.
++     - That the step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes.
++     - The report path and shape.
+    - **The builder.** It never runs a git command.
+      - In the ledger it writes only its report, at the path the brief names in the worktree's copy of the ledger.
+    - **`inline`.** The orchestrating session writes `inline` as the builder's identity under `session_id`.
+@@ -90,18 +98,20 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+      - Read that hand-back the same way as a report.
+    - Rule on such a case when the fix stays inside the step's scope.
+      - Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`.
+-     - Hold the text the ruling gives the builder word for word as Steps 8's **Dictated text** says, before it is committed.
++     - Hold the text the ruling gives the builder word for word as Steps 8's "Dictated text" says, before it is committed.
+      - Commit it by path as a round sent.
+    - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`.
+      - The builder's final report carries the ruling.
+    - Such a case whose fix changes the step's scope is a stop of the kind "A finding that is the user's", by "Stops".
++   - Done when the report is saved at the `report` path, `builder_usage` is written and the whole diff is read.
+ 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
+    - Read the diff yourself while it runs.
+    - Save its report.
+      - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk; the next resume-point commit carries them.
++   - Done when the refuter report is saved and its record is under `reviewer_report`.
+ 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
+    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
+-   - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 **Dictated text** holds a brief's, since the brief check never reads those files.
++   - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 "Dictated text" holds a brief's, since the brief check never reads those files.
+    - **Before the resume.** Write `round: n` into the dispatch block.
+      - Commit it by path with the round's brief and the session's own records since the last resume point. The commit is a resume point.
+    - **Only known fixes.** Each ruling says what to change.
+@@ -116,6 +126,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+      - Add the builder's tokens, tool uses and time for the round, from its completion notice, to `builder_usage` in the dispatch block, on disk.
+      - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer on the model "The two tiers, and the models" gives the run over a repair round, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
+    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
++   - Done when each finding is closed in a round, left to landing or raised as a stop.
+ 9. Invoke `/land <entry> <step>`. Its refusals are its own.
+    - A red line the orchestrator cannot fix at landing takes the step back out of main.
+      - Its failure is recorded in the step's Step 0 in `plan.md`.
+@@ -126,15 +137,18 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+    - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
+    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+    - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by <name>).", for any name, the orchestrator adds its fix step, as `references/self-rule.md`, "The review of a choice", says.
++   - Done when the step is on main with its booking, or is taken back out of main.
+ 10. Continue with step 2.
+     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
+     - Under `self_rule: on` and `next_entry: on`, the orchestrator goes on after the closing step as `references/self-rule.md`, "Next-entry mode", says.
+     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
+-    - After the closing step, the orchestrator's run ends at an end `references/self-rule.md`, "Next-entry mode", names.
++    - Under `self_rule: on` and `next_entry: on`, the run after the closing step ends in one of the cases `references/self-rule.md`, "Next-entry mode", lists.
+     - The final message opens as "Reports" says.
+       - It then lists every step landed since the loop began with the path of each report, and the open items.
+       - After the closing step, it also names the path of the closing report.
+-      - Under `self_rule: on`, it also lists the choices taken since the loop began, by `C<n>` and heading, and says they are reviewed in `<ledger_root>/choices.md` with `C<n> Agree` or `C<n> => <ruling>`.
++      - Under `self_rule: on`, it also lists the choices taken since the loop began, by `C<n>` and heading.
++      - Under `self_rule: on`, it also says the choices are reviewed in `<ledger_root>/choices.md` with `C<n> Agree` or `C<n> => <ruling>`.
++    - Done when the final message is written, or the loop is at step 2.
+ 
+ ## The two tiers, and the models
+ 
+@@ -193,7 +207,7 @@ On resumption with a dispatch block present:
+ - A builder is also dead when a later session does not find its agent id in its own listing and no report is at the dispatch block's `report` path in the worktree.
+ - A dead builder is reported to the user with the worktree's `git status --short` and the builder's last message when there is one.
+ - A fresh continuation builder takes over a dead builder's worktree when the user says so.
+-- The dead builder's record moves to `builders_before:` as "Launching a builder" says, and `session_id` takes the continuation builder.
++- The dead builder's record moves to `builders_before:` as "Launching a builder" says.
+ 
+ On every resumption, with a dispatch block or without one:
+ 
+@@ -208,7 +222,8 @@ On every resumption, with a dispatch block or without one:
+ - The reviewer runs on a builder's first step under this rule, and when any of the builder's last three landing reports shows a first report that did not pass the bar with at most one fix at landing.
+ - Whatever the record, the reviewer runs when the step's brief touches a public surface, a server module, a state layer or a wire shape.
+ - A failed bar puts the reviewer back for the builder's next three steps.
+-- The runs over the repair rounds follow `refute_after_repair`, and under `earned` they run only on a step whose first review ran.
++- The runs over the repair rounds follow `refute_after_repair`.
++- Under `earned`, the runs over the repair rounds run only on a step whose first review ran.
+ - The landing report records which branch each step took.
+ 
+ ## The recurring-findings pass
+@@ -226,7 +241,8 @@ On every resumption, with a dispatch block or without one:
+ 
+ ## Self-rule
+ 
+-- **Scope.** The section applies under `self_rule: on` in the configuration block, and to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where `.agents/plan.yaml` holds the keys, as `references/self-rule.md`, "Next-entry mode", says; otherwise, with `self_rule: off`, or the key absent, every open item waits for the user, as "Stops" says.
++- **Scope.** The section applies under `self_rule: on` in the configuration block, and to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where `.agents/plan.yaml` holds the keys, as `references/self-rule.md`, "Next-entry mode", says.
++  - Otherwise, with `self_rule: off` or the key absent, every open item waits for the user, as "Stops" says.
+ - **The reference.** Under `self_rule: on`, and for the review of a choice, the session reads `references/self-rule.md`, which says which open items stay with the user, how the others are closed, how the choices file is kept and reviewed, and how next-entry mode runs.
+ 
+ ## Two steps in flight
+@@ -255,7 +271,10 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ - The orchestrator writes that model beside `session_id` in the dispatch entry, as `session_id: <agent id> (<served model>)`.
+ - The same check runs when the builder is resumed for a repair round.
+ - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
+-- A builder that is replaced keeps its record: its agent id and served model move to the dispatch entry's `builders_before:` key, `<agent id> (<served model>, stopped)` for a builder stopped for another model and `<agent id> (<served model>, dead)` for a dead builder, one after another, and `session_id` takes the new builder.
++- A builder that is replaced keeps its record: its agent id and served model move to the dispatch entry's `builders_before:` key, one after another.
++  - A builder stopped for another model is recorded as `<agent id> (<served model>, stopped)`.
++  - A dead builder is recorded as `<agent id> (<served model>, dead)`.
++  - `session_id` takes the new builder.
+ - It runs in the background.
+   - The runner tracks it and reports when it ends.
+ - A repair round resumes it with the runner's message tool on its agent id in `session_id`, as Steps 8 says.
+@@ -288,7 +307,8 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ - The landing report states each agent's tokens, tool uses and time, from its completion notice.
+ - The closing report holds the cost script's output, or the sentence that the plan started no agent, as the `plan` skill's Steps 2 says.
+ - A person runs the cost script by hand on any ledger folder, open or archived, as `python3 <this skill's folder>/templates/plan_cost.py <ledger folder> [<transcript root>]`.
+-- The script finds the response bodies in the folder `OTEL_LOG_RAW_API_BODIES` names, from its environment or else from the `env` key of Claude Code's settings files, as its head comment says. With no folder, it prices from the transcripts and marks every cost as a lower bound.
++- The script finds the response bodies in the folder `OTEL_LOG_RAW_API_BODIES` names, from its environment or else from the `env` key of Claude Code's settings files, as its head comment says.
++- With no such folder, the script prices from the transcripts and marks every cost as a lower bound.
+ 
+ ## The pace when a deadline is set
+ 
+@@ -325,7 +345,8 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
+ - A stop is repeated in every report until the user has ruled, or, under `self_rule: on`, until the orchestrator closes it as `references/self-rule.md`, "Closing an open item", says.
+ - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
+   - It never goes through a question-box or multiple-choice tool.
+-  - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling on the item then approves them too, with no second stop.
++  - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list.
++  - The user's ruling on the item then approves those approvals too, with no second stop.
+   - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
+   - The option names that stop.
+   - An option that runs a skill with an approval stop (`/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill`) states the change in full, as that skill's text says a quoted ruling must state it, or names that skill's approval stop as a stop of its own.
+@@ -354,7 +375,9 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
+ - The skill carries no project name, since that is in `.agents/plan.yaml` and the ledger.
+   - The models it names are those in "The two tiers, and the models".
+ - A fix of a defect in delivered work needs no yes.
+-- The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing. A new finding of a review never earns that round, and the user's yes never extends the cap.
++- The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing.
++  - A new finding of a review never earns that round.
++  - The user's yes never extends the cap.
+ - Nothing in the loop repeats without a count: a step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round, two stops before its build (the `spec` skill's "Steps / A stop" 3) and one return out of main (the `land` skill's Steps 6).
+   - A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.
+ - After its last round a step lands.
+diff --git a/skills/plan-orchestration/references/self-rule.md b/skills/plan-orchestration/references/self-rule.md
+index 93e2767..62c4666 100644
+--- a/skills/plan-orchestration/references/self-rule.md
++++ b/skills/plan-orchestration/references/self-rule.md
+@@ -6,7 +6,9 @@ The scope is the first bullet of `SKILL.md`'s section "Self-rule".
+ 
+ ## The six kinds left open
+ 
+-An open item of one of these kinds waits for the user, and the open item names its kind by its number:
++An open item of one of these kinds waits for the user.
++
++The open item names its kind by its number:
+ 
+ 1. Anything that reaches outside the repository or needs the user's hands or accounts, a model other than the configured one included.
+ 2. Anything that deletes data or touches a secret.
+@@ -15,14 +17,18 @@ An open item of one of these kinds waits for the user, and the open item names i
+    - Kind 3 also names a contradiction of an ADR in force, or an option that supersedes one.
+    - Kind 3 also names an option that adds a check, a command in the verification list or a script, since the rules file reserves to the user the approval of what a new script computes.
+ 4. The closing's roadmap diff, tag and pin.
+-5. The user's reading of a page a step writes: the reading stays an open item and blocks no step.
++5. The user's reading of a page a step writes.
++   - The reading stays an open item.
++   - The steps go on while the reading is open.
+ 6. A choice with no clear recommendation: two options or more that the written rules, the rulings and the ADRs do not rank.
+ 
+ ## A skill with its own approval stop
+ 
+-- An option that runs `/roadmap move`, `drop` or `done`, `/roadmap add` of work no finding names, `/ordo-init` or `/repo-setup` under a quoted ruling meets that skill's approval stop, since those commands take only a bullet ending "(the user)" as a quoted ruling, and the item stays open for the user.
++- An option that runs `/roadmap move`, `drop` or `done`, `/roadmap add` of work no finding names, `/ordo-init` or `/repo-setup` under a quoted ruling meets that skill's approval stop, since those commands take only a bullet ending "(the user)" as a quoted ruling.
++  - The item stays open for the user.
+ - An option that runs `/roadmap add` under a quoted ruling ending "(self-rule)" whose bullet names a finding of a running plan, as the `roadmap` skill's "What it reads" 6 says, is closed like any other, since `/roadmap add` takes such a bullet.
+-  - After `/roadmap add` commits the entry, the orchestrator adds `the roadmap entry <n>` to the choice's `Builds on it:` line and commits the choices file by path, a resume point.
++  - After `/roadmap add` commits the entry, the orchestrator adds `the roadmap entry <n>` to the choice's `Builds on it:` line.
++  - The orchestrator then commits the choices file by path, a resume point.
+ 
+ ## Closing an open item
+ 
+@@ -31,7 +37,7 @@ An open item that "The six kinds left open" and "A skill with its own approval s
+ 1. The open item is written in full first, as a stop is, with its options, the pros and cons of each, one recommendation and the lazy option named.
+ 2. The option taken is the recommended one.
+ 3. It is booked as the `spec` skill's "Steps / A ruling" 2 books a ruling, the option's text as the ruling's text, with one Rulings bullet whatever the ruling changes: `- Open item <L> (<date>): <the option taken, in one line, and what it unblocks> (self-rule).`
+-   - That bullet is the line "Steps / A ruling" 2 names for a ruling that adds or splits a step or runs a skill, so a choice has one bullet.
++   - That bullet is the line "Steps / A ruling" 2 names for a ruling that adds or splits a step or runs a skill.
+ 4. The open item moves to the Closed items as `- <date>: Open item <L>, <what was raised>: closed under self-rule, C<n>.`
+ 5. The choice is written to the choices file, as "The choices file" says.
+ 6. The open item, the step's Step 0, the Rulings bullet, the Closed items, the step text the ruling rewrote and the choices file are committed by path at once, a resume point.
+@@ -39,7 +45,7 @@ An open item that "The six kinds left open" and "A skill with its own approval s
+ 
+ ## The counts
+ 
+-- The stops a count of "Rules" raises, "A step that does not converge" and the second failure of a step's landing (the `land` skill's Steps 6), are never closed under self-rule, since each ends a step the unattended loop has not brought to an end, and closing it would let the loop run without bound.
++- The stops a count of "Rules" raises, "A step that does not converge" and the second failure of a step's landing (the `land` skill's Steps 6), stay open for the user under self-rule, since each ends a step the unattended loop has not brought to an end, and closing it would let the loop run without bound.
+ - An item closed under self-rule counts as a stop of its step (the `spec` skill's "Steps / A stop" 3).
+ 
+ ## Next-entry mode
+@@ -47,15 +53,20 @@ An open item that "The six kinds left open" and "A skill with its own approval s
+ Next-entry mode runs the next open roadmap entry after a plan's closing, under self-rule.
+ 
+ - It applies when, after a plan's closing step completes, `.agents/plan.yaml` (in the `projects:` form, the project's keys) holds `self_rule: on` and `next_entry: on`.
+-  - The orchestrator reads the file itself, since no plan is open then, and `/grill` and `/plan` check the same two keys.
++  - The orchestrator reads the file itself, since no plan is open then.
++  - `/grill` and `/plan` check the same two keys.
+ - The closing step is the same with and without next-entry mode: its `/roadmap done` diff stays with the user, as kind 4 of "The six kinds left open" says.
+   - The orchestrator takes the next entry only after the closing step has written the closing report and moved the ledger folder.
+   - A next-entry run therefore waits at every closing for the user's approval of that diff.
+-  - The user's approval resumes the closing step, after which the run goes on in the same turn.
++  - The user's approval resumes the closing step.
++  - The run then goes on in the same turn.
+ - The next entry is the first entry of the roadmap's open order, as the `roadmap` skill's "Steps / Show" prints it, which the orchestrator reads from the roadmap file.
+-  - With no entry in the open order and none under "Not yet specified", the run ends, and the final message says no open entry is left.
+-  - With no entry in the open order and one or more under "Not yet specified", the run ends at the first of them, and the final message names it with `/roadmap add <entry>`, which names its gate.
+-  - An entry that waits on an entry neither done nor dropped, other than one the run has just closed, ends the run there, and the final message names the entry it waits on.
++  - With no entry in the open order and none under "Not yet specified", the run ends.
++    - The final message says no open entry is left.
++  - With no entry in the open order and one or more under "Not yet specified", the run ends at the first of them.
++    - The final message names it with `/roadmap add <entry>`, which names its gate.
++  - An entry that waits on an entry neither done nor dropped, other than one the run has just closed, ends the run there.
++    - The final message names the entry it waits on.
+   - An entry with a plan open (a folder under `<ledger_root>/`, outside `<archive_root>/`, whose `plan.md` opens with `# Plan: <entry>`) is run by the orchestrator through the loop on that plan, with no `/grill` and no `/plan`.
+     - An open plan with no step that can move without the user is passed over, as `SKILL.md` Steps 2 says.
+ - For any other next entry, the orchestrator invokes these through the runner, in this order:
+@@ -67,39 +78,52 @@ Next-entry mode runs the next open roadmap entry after a plan's closing, under s
+   - A `/grill` round of decisions of the six kinds ends the turn.
+     - The user's answers resume `/grill`, which goes on under `--self-rule` with the next frontier.
+     - The run goes on to `/plan` when `/grill` ends.
+-  - A stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule` shows its draft and writes nothing.
++  - A stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule` shows its draft.
++    - No file is written at the stop.
+     - The user's approval or correction resumes `/plan`, which writes the plan with the step list as the user approved or corrected it, each step line ending `(approved)`.
+     - The run then goes on to the loop.
+-  - A refusal changes nothing, and the final message names it.
++  - A refusal changes nothing.
++  - The final message names the refusal.
+   - Nothing of such a stop is lost when the session ends, since a decision not yet written is drawn again by the skill that raised it when it runs again.
+ - A session that takes over reads what is written.
+   - `continue the plan` with no plan open, under both keys in `.agents/plan.yaml`, takes the next entry as this section says.
+   - An entry with a rulings file and no plan resumes at `/grill <entry> --self-rule`, which draws its tree afresh from the rulings file (the `grill` skill's Steps 3).
+   - An entry with a plan open resumes the loop on it.
+-  - A rulings file that holds the user's own bullets is read the same way: its settled decisions stand, and its open decisions are answered as `/grill --self-rule` answers them.
++  - A rulings file that holds the user's own bullets is read the same way.
++    - Its settled decisions stand.
++    - Its open decisions are answered as `/grill --self-rule` answers them.
+ 
+ ## The choices file
+ 
+-The file `<ledger_root>/choices.md` is made from this skill's `templates/choices.md` at the first choice, by copying its head and its `Last number` line, and the lines below them show the form of an entry and a choice.
++The file `<ledger_root>/choices.md` is made from this skill's `templates/choices.md` at the first choice, by copying its head and its `Last number` line.
++
++The lines of that template below those two show the form of an entry and a choice.
+ 
+ - Each roadmap entry has one heading, `# Entry <entry number> <entry title>`, made at the entry's first choice, the entries in the order of their first choice.
+-- Under it, each choice has one heading, `## C<n>. <the decision, as a phrase> (<date>)`, where `<n>` is one more than the file's line `Last number: C<m>`, which is then rewritten to `C<n>`, so no number is used twice.
++- Under it, each choice has one heading, `## C<n>. <the decision, as a phrase> (<date>)`, where `<n>` is one more than the file's line `Last number: C<m>`.
++- The line `Last number: C<m>` is then rewritten to `Last number: C<n>`, so no number is used twice.
+ - Under the heading stands the open item as it was raised: its options with the pros and cons of each, the recommendation with its reasons, and the lazy option.
+ - Then come three lines: `Taken: <the option taken>`, ``Booked: `<path>:<line>` (<the bullet's opening words>)`` and `Builds on it: <the steps, comma-separated, or none>`.
+   - `Booked:` names the Rulings bullet by its path relative to the repository root as it stands at the booking, its line, and the bullet's opening words, which the review searches by and a `replacing` clause quotes.
+   - The opening words are `Open item <L>` for a bullet "Closing an open item" books, and `D<n> <the decision, as a phrase>` for a bullet `/grill --self-rule` writes.
+-  - A step's tag names the bullet as the `spec` skill's "What it reads" 4 reads it: `<L>` for a bullet "Closing an open item" books, and `D<n> <the decision, as a phrase>` for a bullet `/grill --self-rule` writes.
++  - A step's tag names the bullet as the `spec` skill's "What it reads" 4 reads it.
+   - Before a plan is open for the entry, `Booked:` names the rulings file `<ledger_root>/rulings/<slug>.md`.
+   - When `/plan` copies the bullet into the new `plan.md`, it rewrites `Booked:` to that `plan.md` and the line the bullet stands on there, as the `plan` skill's Steps 3 says.
+   - `Builds on it:` names the step the open item stopped and each step whose line the ruling rewrote or added.
+   - `Builds on it:` also takes `the roadmap entry <n>` for an entry `/roadmap add` wrote under the choice's bullet ("A skill with its own approval stop").
+   - `Builds on it:` also takes `the record <path>` for an ADR `/grill --self-rule` wrote with status `proposed` under the choice's bullet.
+-- A `/grill` run that writes a roadmap diff under a quoted ruling ending "(self-rule)" adds `the roadmap diff of entry <entry number>` to that bullet's choice's `Builds on it:` line, and the files the run commits include it.
+-- A later `/spec` whose brief rests on the choice (its step's tag names the bullet, or the brief names the bullet) adds its step to the `Builds on it:` line, and its preparation commit carries the file, as the `spec` skill's Steps 6 says.
+-- The file is never archived, and a closed plan's choices stay in it until the user reviews them.
++- A `/grill` run that writes a roadmap diff under a quoted ruling ending "(self-rule)" adds `the roadmap diff of entry <entry number>` to that bullet's choice's `Builds on it:` line.
++  - The files the run commits include the choices file.
++- A later `/spec` whose brief rests on the choice (its step's tag names the bullet, or the brief names the bullet) adds its step to the `Builds on it:` line.
++  - Its preparation commit carries the choices file, as the `spec` skill's Steps 6 says.
++- The file stays at `<ledger_root>/choices.md` when a plan is archived.
++- A closed plan's choices stay in it until the user reviews them.
+ - A ruling of the user that replaces a bullet ending "(self-rule)" outside a review (a `Ruled:` reply, or a `/grill` answer or carried ruling) always writes a Rulings bullet of its own that names the bullet it replaces: for a `Ruled:` reply, `- Open item <L> (<date>): <the ruling's text>, replacing <the replaced bullet's opening words> (the user).`, and for `/grill`, the bullet the `grill` skill writes.
+-  - The replaced bullet's ending is rewritten to "(self-rule, replaced by <the new bullet's name>).", its choice is removed from the file, its entry heading with it when no choice is left under it, and `- <date>: C<n>: replaced by <the new bullet's name>.` is added to the Closed items of its plan.
+-  - The steps that rest on the replaced bullet, those whose tag or Step 0 names it, are treated as "The review of a choice" treats the steps of `Builds on it:` under `C<n> =>`, with the new bullet's name in each tag. The name is read as the `spec` skill's "What it reads" 4 reads it: `<L>` for a `Ruled:` reply's bullet `Open item <L>`, and the text before its first ` (` for a bullet `/grill` writes.
++  - The replaced bullet's ending is rewritten to "(self-rule, replaced by <the new bullet's name>).".
++  - Its choice is removed from the file, its entry heading with it when no choice is left under it.
++  - `- <date>: C<n>: replaced by <the new bullet's name>.` is added to the Closed items of its plan.
++  - The steps that rest on the replaced bullet, those whose tag or Step 0 names it, are treated as "The review of a choice" treats the steps of `Builds on it:` under `C<n> =>`, with the new bullet's name in each tag.
++  - The name is read as the `spec` skill's "What it reads" 4 reads it.
+ 
+ ## The review of a choice
+ 
+@@ -110,7 +134,8 @@ C<n> Agree
+ C<n> => <the user's ruling, one clause per question the open item asked>
+ ```
+ 
+-- The session finds the choice's bullet by the opening words its `Booked:` line gives, in the file that line names: the Rulings section of a plan's `plan.md` (for a closed plan, of the archived `plan.md` whose folder has the same slug under `<archive_root>/`) or the entry's rulings file `<ledger_root>/rulings/<slug>.md`, and the line number of `Booked:` is the place it looks first, since lines above the bullet may have been added or removed since the booking.
++- The session finds the choice's bullet by the opening words its `Booked:` line gives, in the file that line names: the Rulings section of a plan's `plan.md` (for a closed plan, of the archived `plan.md` whose folder has the same slug under `<archive_root>/`) or the entry's rulings file `<ledger_root>/rulings/<slug>.md`.
++  - The line number of `Booked:` is the place it looks first, since lines above the bullet may have been added or removed since the booking.
+ - A bullet with those opening words that does not end "(self-rule)" or "(self-rule)." is a refusal that names it, and nothing is written.
+ - `C<n> Agree`:
+   - The choice leaves the choices file, its entry heading with it when no choice is left under it.
+@@ -118,7 +143,8 @@ C<n> => <the user's ruling, one clause per question the open item asked>
+   - `- <date>: C<n>, <the decision>: agreed by the user.` is added to that plan's Closed items, except as the bullet "A choice booked in a rulings file" says.
+ - `C<n> => <text>`: `<text>` is booked as a ruling of the user, as the `spec` skill's "Steps / A ruling" says, with the Rulings bullet `- C<n> <the decision, as a phrase> (<date>): <text>, replacing <the old bullet's opening words> (the user).`
+   - The old bullet's ending is rewritten from "(self-rule)." to "(self-rule, replaced by C<n>).", which no skill reads as a ruling.
+-  - A step of `Builds on it:` not yet prepared has its text rewritten to the new ruling, and its tag too, to `(ruling <the new bullet's name>)`, here `(ruling C<n> <the decision, as a phrase>)`, when its tag names the old bullet.
++  - A step of `Builds on it:` not yet prepared has its text rewritten to the new ruling.
++    - Its tag is rewritten to `(ruling <the new bullet's name>)`, here `(ruling C<n> <the decision, as a phrase>)`, when its tag names the old bullet.
+   - A step tagged `(approved)` keeps its tag.
+   - When a step of `Builds on it:` has landed and the plan is open, a fix step is added before the closing, `- <k> <what changes to follow C<n>>; check: <the check> (<n> commit) (ruling <the new bullet's name>)`, here `(ruling C<n> <the decision, as a phrase>)`, with its own Step 0 naming the steps it corrects.
+   - A step of `Builds on it:` in flight at the review gets its fix step at its landing, in the same form.
+@@ -128,10 +154,11 @@ C<n> => <the user's ruling, one clause per question the open item asked>
+   - A roadmap entry of `Builds on it:` is changed by `/roadmap` (`drop`, or `add` of the corrected work) under the new bullet, at that skill's approval stop unless the bullet states the change in full.
+   - A record of `Builds on it:` is rewritten to follow the new bullet, or removed when the new bullet says no record is kept, in the review's commit.
+   - When no step of `Builds on it:` has landed or is in flight, no fix step is added.
+-  - The choice then leaves the choices file, as under `Agree`, and `- <date>: C<n>, <the decision>: replaced by the user's ruling C<n>.` is added to the Closed items, except as the bullet "A choice booked in a rulings file" says.
+-- **A choice booked in a rulings file.** When `Booked:` names the entry's rulings file, the review differs in three ways.
++  - The choice then leaves the choices file, as under `Agree`.
++  - `- <date>: C<n>, <the decision>: replaced by the user's ruling C<n>.` is added to the Closed items, except as the bullet "A choice booked in a rulings file" says.
++- **A choice booked in a rulings file.** When `Booked:` names the entry's rulings file, the review differs in two ways.
+   - Neither `Agree` nor `C<n> =>` writes a Closed-items line, since `/plan` copies each bullet line of the rulings file into the plan's Rulings and a Closed-items line there would be read as a ruling.
+-  - The review's commit message names the choice and the decision.
++    - The review's commit message names the choice and the decision in its place.
+   - The `C<n> =>` bullet is written to that rulings file, where `/plan` copies it.
+ - A `C<n>` the choices file does not hold, or no choices file, is refused: the refusal names the numbers the file holds, or says there is no file, and nothing is written.
+ - The files the review changed are committed by path at once, a resume point.
+diff --git a/skills/plan/SKILL.md b/skills/plan/SKILL.md
+index fcd8288..f80dc05 100644
+--- a/skills/plan/SKILL.md
++++ b/skills/plan/SKILL.md
+@@ -2,7 +2,7 @@
+ name: plan
+ description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
+ metadata:
+-  version: "1.10.1"
++  version: "1.11.0"
+ ---
+ 
+ # Open a plan
+@@ -55,7 +55,8 @@ metadata:
+      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+      - The name is a placeholder in angle brackets, such as `<L>`.
+      - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
+-   - With no ruling, the skill says which of these it found, and every stop stands.
++   - With no ruling, the skill says which of these it found.
++   - With no ruling, every stop stands.
+ 7. The argument `--self-rule`, right after `<entry>`, before any other argument.
+    - It is refused ("Stops") unless `.agents/plan.yaml`, in the `projects:` form the project's keys, holds `self_rule: on` and `next_entry: on`.
+ 
+@@ -68,26 +69,36 @@ metadata:
+ 2. Draft `plan.md` from `templates/plan.md`.
+    - It opens with `# Plan: <entry>`, which is how every other skill finds it.
+    - The entry's goal and its gate are copied in.
+-   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) that is not under its `## Agents` heading is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line; the file's other lines, such as a heading or a blank line, are not copied. Any other line, such as a wrapped continuation or an indented sub-bullet, is shown with the draft at Steps 3; the user places it, and a line the user leaves unplaced is copied below the bullet line it follows, as it stands, so nothing of the file is lost when Steps 6 removes it.
++   - Each bullet line (`- ...`) of the rulings file ("What it reads" 4) that is not under its `## Agents` heading is copied into the Rulings section as it stands, in its order, in place of the template's placeholder line.
++   - The file's other lines, such as a heading or a blank line, are not copied.
++   - Any other line, such as a wrapped continuation or an indented sub-bullet, is shown with the draft at Steps 3, for the user to place.
++   - A line the user leaves unplaced is copied below the bullet line it follows, as it stands, so nothing of the file is lost when Steps 6 removes it.
+    - A quoted ruling that stands in the rulings file is copied with every line under it, its sub-bullets and their fenced blocks, and none of them is a line left to place.
+    - Each bullet line under the rulings file's `## Agents` heading is copied into the new plan's `## Agents` section as it stands and in its order, in place of the template's placeholder bullets, and is never copied into Rulings nor shown as a line to place.
+    - With no agent bullet in the rulings file, and with no rulings file, the `## Agents` section is written with its sentence and no bullet.
+    - The session asks of the copied gate "could this pass without the goal being reached?" and writes the answer with its reason in the section "## Gate", on the line the template gives the gate.
+-   - A copied gate that could pass without the goal is kept as the roadmap has it, and its answer and reason go to the user at Steps 3, since the gate is the roadmap's and the user's.
++   - A copied gate that could pass without the goal is kept as the roadmap has it, since the gate is the roadmap's and the user's.
++   - The answer and reason for such a gate go to the user at Steps 3.
+    - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
+      - Under a quoted ruling ("What it reads" 6), the step list is the ruling's, each step with its check.
+      - The rest of this step is worked on that list.
+      - A closing step in the ruled list is dropped for the one `/plan` writes.
+    - The session asks the same question of each step's check, "the goal" there being the part of the goal the step delivers, and writes the answer with its reason in "## Gate", one line per step, as the template gives it.
+-   - The answer stands only in "## Gate", and each step line keeps the shape the template gives it.
++   - The answer stands only in "## Gate".
++   - Each step line keeps the shape the template gives it.
+    - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again, at most twice, before the draft is shown.
+-   - A check that could still pass after the second redraft is kept as drafted, and its answer and reason go to the user at Steps 3.
++   - A check that could still pass after the second redraft is kept as drafted.
++   - The answer and reason for such a check go to the user at Steps 3.
+    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
+-     - The closing step skips the cost script only when `plan.md` has its `## Agents` heading with no bullet under it, up to the next `## ` heading, and the ledger has no `agents/agent-roles.md`.
+-     - A closing step that skips the script writes the closing report, `agents/reviews/closing.md`, with the sentence "The plan started no agent: `plan.md`'s Agents section holds no agent bullet and the ledger has no `agents/agent-roles.md`, so the closing step did not run the cost script."
+-     - In every other case, before the folder moves, the closing step runs the `plan-orchestration` skill's `templates/plan_cost.py` on the ledger folder: a `plan.md` with no `## Agents` heading (`/plan` always writes the heading) and an `agents/agent-roles.md` that exists, read or not, both go to the script, so the closing step and the script never disagree.
++     - The closing step skips the cost script only when the ledger names no agent: no bullet line stands under a `## Agents` heading of `plan.md`, up to the next `## ` heading, and none stands in `agents/agent-roles.md`.
++     - A `plan.md` with no `## Agents` heading, and a ledger with no `agents/agent-roles.md`, hold no such bullet line.
++     - A closing step that skips the script writes the closing report, `agents/reviews/closing.md`, with the sentence "The plan started no agent: neither `plan.md`'s Agents section nor `agents/agent-roles.md` holds an agent bullet, so the closing step did not run the cost script."
++     - In every other case, before the folder moves, the closing step runs the `plan-orchestration` skill's `templates/plan_cost.py` on the ledger folder.
++     - The skip's test is the test under which the script prints `error: the ledger names no agent`, so the closing step and the script never disagree.
+      - A closing step that runs the script writes the script's output to `agents/reviews/closing.md`, the closing report.
+-     - A non-zero exit of the script that no fix within the plan covers is the stop "A red check" of `plan-orchestration`, and the stop message holds the script's `error:` lines. A model the table lacks is covered by a row copied into the table from the pricing page, committed with the closing.
++     - A non-zero exit of the script that no fix within the plan covers is the stop "A red check" of `plan-orchestration`.
++     - The stop message holds the script's `error:` lines.
++     - A model the table lacks is covered by a row copied into the table from the pricing page, committed with the closing.
+      - When the closing step has run the script, the ledger folder moves only when the script exits 0.
+      - When the closing step has skipped the script, the ledger folder moves.
+    - `/plan` writes the closing step itself, at the end of the drafted list.
+@@ -105,8 +116,10 @@ metadata:
+      - Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
+      - The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
+    - Under `--self-rule`, the stop "The drafted step list" is raised as `Open item A` of the new plan, written in full as a stop is: the draft, the answers of "## Gate", the lines of the rulings file left to place, the options "open the plan with the list as drafted" and "keep the draft for the user", their pros and cons, the recommendation and the lazy option.
+-     - The first option is the recommendation, and the second, which leaves the plan unopened, is named as the lazy option.
+-     - A line of the rulings file left to place does not keep the stop: it is copied as Steps 2 says for a line the user leaves unplaced, and Open item A names it.
++     - The first option is the recommendation.
++     - The second option, which leaves the plan unopened, is named as the lazy option.
++     - A line of the rulings file left to place does not keep the stop.
++     - Such a line is copied as Steps 2 says for a line the user leaves unplaced, and Open item A names it.
+      - It stays with the user, and the stop stands as without `--self-rule`, when any answer of "## Gate" is yes, since the gate is the roadmap's and a check that could pass without its goal has no recommendation the written rules rank.
+      - It also stays with the user, and the stop stands, when any design decision is named unsettled, since settling it is `/grill`'s and `/plan` has no recommendation the written rules rank.
+      - It also stays with the user, and the stop stands, when it is of one of the six kinds of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open".
+@@ -131,13 +144,17 @@ metadata:
+    - The dispatch block is empty.
+    - The open items are empty.
+    - The position names the first step.
++   - The step is done when the state file holds the configuration block with every key written out, the empty dispatch block, no open item and the position.
+ 5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
+ 6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files by path as the plan's opening commit.
+    - Its subject holds the roadmap entry's number.
+    - The opening commit also holds the choices file `<ledger_root>/choices.md` when Steps 3 changed it, as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item" 6, says.
+    - A plan written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
+    - When Steps 2 copied the ruling from the rulings file, the ledger file named is the new `plan.md`.
+-   - The commit also removes the rulings file copied at Steps 2: when the last commit holds it (`git cat-file -e HEAD:<path>` exits 0), `git rm -q -f -- <path>`, and its path named in the commit with the others; otherwise, `git rm -q -f --cached -- <path>` when git lists it as staged, and the file deleted before the commit, its path not named. The `-f` removes a copy with uncommitted changes, whose bullet lines Steps 2 has already copied.
++   - The commit also removes the rulings file copied at Steps 2.
++     - When the last commit holds it (`git cat-file -e HEAD:<path>` exits 0), the removal is `git rm -q -f -- <path>`, and its path is named in the commit with the others.
++     - Otherwise the removal is `git rm -q -f --cached -- <path>` when git lists the file as staged, and the file is deleted before the commit, its path not named.
++     - The `-f` removes a copy with uncommitted changes, whose bullet lines Steps 2 has already copied.
+    - The step is done when the opening commit holds the four files, the choices file when Steps 3 changed it, and the removal of the rulings file when there was one.
+ 
+ ## Stops
+@@ -150,7 +167,7 @@ metadata:
+ | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
+ | Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate to draft steps from | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
+ | `--self-rule` without the keys | `--self-rule` is given and `.agents/plan.yaml` does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/plan` again, or `/plan` without `--self-rule` |
+-| The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove, with its Agents bullets named when it holds any, to be copied into the open plan's Agents section before the file is removed | Nothing |
++| The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove, as the last Rules bullet says | Nothing |
+ 
+ ## Anti-patterns
+ 
+@@ -162,7 +179,11 @@ metadata:
+ ## Rules
+ 
+ - A step is one deliverable and one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), with the command that proves it, except the bookkeeping steps the orchestrator does itself.
+-- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a ruling added, after the approval or under a quoted ruling ending "(self-rule)", the ruling being the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says, or `(ruling A)` for a step of a list taken under `--self-rule`, naming that run's Open item A.
++- Every step line of `plan.md` ends with its authority.
++  - `(approved)` for a step of the list the user approved.
++  - `(ruling <name>)` for a step a ruling added, after the approval or under a quoted ruling ending "(self-rule)", the ruling being the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.
++  - `(ruling A)` for a step of a list taken under `--self-rule`, naming that run's Open item A.
+ - Every path in the ledger is relative to the repository root.
+ - Every command in the ledger names the directory it runs from.
+ - No history: the ledger records decisions with their dates in `plan.md`'s rulings list; the templates and this file carry none.
++- When the stop "The plan exists" finds the entry's rulings file still there, the Agents bullets it holds are named, and are copied into the open plan's Agents section before the user removes the file.
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index 1350606..3e013a5 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -2,12 +2,12 @@
+ name: refute
+ description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+ metadata:
+-  version: "1.7.1"
++  version: "1.8.0"
+ ---
+ 
+ # Refute a step
+ 
+-`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`: a verdict per item of the brief and per case, and a list of findings each with its place (a file and a line in code, a page and its section in a page) and its failure scenario, or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
++`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`: a verdict per item of the brief and per case, and a list of findings each with its place (a file and a line in code, a page and its section in a page) and its failure scenario, or "none" under a heading; the orchestrator or the session saves it, and the next resume point commits it.
+ 
+ ## Quick start
+ 
+@@ -50,11 +50,13 @@ metadata:
+    - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
+    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
+    - Right after the dispatch, the orchestrator or the session reads the reviewer's agent id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
+-   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used. The configured one is the model the configuration block's `reviewer:` names for the first run, and for a run over a repair round the model "Steps / Over a repair round" 1 gives.
++   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
++   - The configured model is the model the configuration block's `reviewer:` names for the first run, and for a run over a repair round the model "Steps / Over a repair round" 1 gives.
+    - The stopped reviewer is recorded under the dispatch block's `reviewer_report`, after the records before it.
+      - A first-run reviewer: `(<agent id>, <served model>, stopped)`.
+      - A reviewer over round `<n>`: `over round <n>: <agent id>, <served model>, stopped`.
+      - The record is written and carried as Steps 7 says.
++   - Done when the reviewer is dispatched and its agent id and served model are read, or the refusal or the stop is raised.
+ 2. The reviewer reads the inputs in the order "What it reads" gives them.
+ 3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
+    - The step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks (the step's worktree).
+@@ -69,9 +71,11 @@ metadata:
+    - Then the four headings, each with findings, or "none", and each finding with its place (a file and a line in code, a page and its section in a page), the quoted hunk, what is wrong, its failure scenario as "The four headings" says, and the verdict it names when it has one, as "The verdicts" says.
+    - Then "Declined to judge": each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason.
+    - Then the reviewer's usage line: its agent id, its served model, its tokens, its tool uses and its minutes.
++   - Done when the report holds the verification lines, a verdict for each item and case, the four headings, "Declined to judge" and the usage line.
+ 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
+    - It records the report's path under the dispatch block's `reviewer_report` field, after the records before it, followed by, in parentheses, the reviewer's agent id, its served model (Steps 1), and its tokens, tool uses and time from its completion notice: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`.
+    - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
++   - Done when the report is saved and its record is under `reviewer_report`.
+ 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
+ 
+ ### Over a repair round
+@@ -80,6 +84,7 @@ metadata:
+    - The model is the one the configuration block's `repair_reviewer:` names, or the `reviewer:` value when the block has no `repair_reviewer:` key, at the effort `reviewer_effort` names.
+    - This holds for every run over a repair round, the run over the extra round of `plan-orchestration`'s exception and a reviewer started over a round in place of one stopped for another model included.
+    - A run that finds nothing ends the rounds.
++   - Done when the reviewer of the run is dispatched on the model this item gives.
+ 2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
+ 3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
+ 4. It looks for the same four things over that delta, and for every closure the builder claims:
+@@ -89,6 +94,7 @@ metadata:
+ 5. It reruns every verification command again.
+ 6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
+    - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit as Steps 7 says.
++   - Done when the run's section is appended and its record is in `reviewer_report`.
+ 7. The findings of the run over the last round are never sent to the builder.
+    - Each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
+ 8. With `refute_after_repair: no` these runs do not happen.
+diff --git a/skills/repo-setup/SKILL.md b/skills/repo-setup/SKILL.md
+index 7f103e1..6ca11ad 100644
+--- a/skills/repo-setup/SKILL.md
++++ b/skills/repo-setup/SKILL.md
+@@ -2,7 +2,7 @@
+ name: repo-setup
+ description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml, and, on request, the git guard hook. Shows the whole tree and every file's text, the git guard hook named by its source, before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
+ metadata:
+-  version: "1.2.1"
++  version: "1.3.0"
+ ---
+ 
+ # Set up a repository
+@@ -47,7 +47,8 @@ metadata:
+      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+      - The name is a placeholder in angle brackets, such as `<L>`.
+      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+-   - With no ruling, the skill says which of these it found, and every stop stands.
++   - With no ruling, the skill says which of these it found.
++   - With no ruling, every stop stands.
+ 
+ ## Steps
+ 
+@@ -67,7 +68,10 @@ metadata:
+      - A placeholder is a `<...>` that names what fills it, inside inline code or not (`include/<lib>/`).
+      - A language's own angle brackets in code (`std::get<>`, `std::span<const T>`) are code and stay as they are.
+      - A placeholder none of these fills is listed with the draft at Steps 4, and the user gives its value.
+-     - A rule whose condition is a choice placeholder (`<yes or no>`, or a value `or none`) is kept when the answer is yes or a value, with the parenthesis removed when the answer is yes and holding the value when the answer is a value, and is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none.
++     - A rule whose condition is a choice placeholder (`<yes or no>`, or a value `or none`) is kept when the answer is yes or a value.
++       - With the answer yes, the parenthesis is removed.
++       - With a value as the answer, the rule holds the value.
++     - Such a rule is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none.
+      - A check the repository does not have yet is written as "checked by reading at review" in place of the placeholder's sentence part, so the page states nothing nobody filled in.
+    - `coding-standards/typescript.md` keeps its section "Svelte and SvelteKit" only when the repository uses Svelte or SvelteKit (a `.svelte` file, or the answer to question 3).
+      - Otherwise the section, its heading included, is left out of the installed page.
+@@ -113,7 +117,8 @@ metadata:
+     - The setup is done when the first two exit 0, the scan prints nothing, the `git check-ignore` line exits 0, and, when the answer to question 10 is yes, the Python version check exits 0.
+ 11. Show the user what the setup leaves for them to act on: each check's output and, when the answer to question 10 is yes, `templates/hooks/git_guard.settings.json`, for the user to add to `.claude/settings.json` or `.claude/settings.local.json`, into its `hooks.PreToolUse` list when the file already has one.
+     - A Claude Code session started in the repository after the text is added reads it.
+-    - The step is done when the outputs and, when the answer to question 10 is yes, the settings text are shown; the setup goes on to Steps 12 without waiting for the text to be added.
++    - The step is done when the outputs and, when the answer to question 10 is yes, the settings text are shown.
++    - The setup goes on to Steps 12 without waiting for the text to be added.
+ 12. Commit the setup's other files in one commit by explicit path list, the subject naming the repository's setup.
+     - Every file written is named, except those `/ordo-init` committed at Steps 8.
+     - The commit is made only when the answer to question 5 allows it.
+@@ -126,9 +131,10 @@ metadata:
+ 
+ ### sync
+ 
+-1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of `docs/glossary.md`; steps 2 to 9 follow its exit status and, on exit 2, its `error:` lines.
++1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of `docs/glossary.md`.
++   - Steps 2 to 9 follow its exit status and, on exit 2, its `error:` lines.
+ 2. Exit 0: both blocks equal their templates; nothing to do.
+-3. Exit 1: a block differs; show the diff of each block that differs, for the user's ruling per hunk ("Stops").
++3. Exit 1, when a block differs: show the diff of each block that differs, for the user's ruling per hunk ("Stops").
+    - The template's text goes into the repository: `--write`, after the approval.
+    - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` or `templates/plan-terms.md` in this skill's folder, after which every repository set up from it differs until it is synced.
+    - Under a quoted ruling whose hunks are the hunks of the diff, each with the choice for it, the choices are applied without the stop.
+@@ -144,15 +150,17 @@ metadata:
+    - Under a quoted ruling that states the drafted change, the draft of Steps / sync 4 takes the ruling's text.
+    - The rules of Steps / sync 4 are worked on it.
+    - A draft that is still the ruled change is written without the stop.
+-   - A draft that differs from it is shown whole with each difference named, and the stop stands.
++   - A draft that differs from it is shown whole with each difference named.
++   - The stop then stands.
+    - The item is done when the drafted change is shown, or written under a quoted ruling.
+ 6. Write it once the user approves.
+-7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names. A no-single-block line of the same run is still drafted, as step 4 says.
++7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names.
++   - A no-single-block line of the same run is still drafted, as step 4 says.
+    - Show the line with the file it names ("Stops").
+    - The file named in the line is fixed first, by the user or with the user's approval.
+ 8. After a written draft or a fixed file: run the check again, at most twice, following steps 2 to 7 on its exit status each time.
+    - A check that does not exit 0 on the second of those runs is a stop ("Stops").
+-9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
++9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it, and otherwise stop ("Stops").
+    - A change written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
+    - When no commit is made, the list of files the stop shows names the ruling the same way.
+    - The item is done when the change is committed, or the stop shows the files changed.
+@@ -235,4 +243,6 @@ utils/                           scripts the build and the checks run
+ - Build files are written only for what the user names; nothing is assumed.
+ - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
+ - The skill never writes a Claude Code settings file; it prints the git guard's settings text for the user to add.
+-- Every file it drafts is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say; the copied git guard hook is copied byte for byte.
++- Every file it drafts is ASCII with one paragraph per source line, as the prose standard says.
++- Every file it drafts carries no history, as the shared rules say.
++- The copied git guard hook is copied byte for byte.
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index af12287..acb7cb3 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -47,9 +47,10 @@
+ - **handover**: one session stopping and another continuing the plan from the ledger alone, a resume point at which the stopping session commits the records it wrote. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **hypothesis**: one of the three to five ranked causes of a diagnosis (fewer, with the reason, when no more are live), written "If <cause>, then <change> turns the red command green" with the result that would falsify it. Stated in: `diagnose`, Steps 7.
+ - **in flight**: said of a step whose dispatch entry is in the dispatch block and does not read `landing: backed-out`. The configuration block's `workers_at_once` sets how many may be in flight. Stated in: `spec`, "What it reads" 3; `plan-orchestration`, "Two steps in flight".
+-- **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The format is the file's".
++- **insertion form**: the roadmap file's numbering for an entry placed between two others, such as `37.A` or `12.5`. Stated in: `roadmap`, "The file's format".
+ - **keep point**: a behaviour of a Claude Code session worth repeating, written in a sessions report under "Keep" with its places and a proposal that names the text that produced the behaviour or, when no text did, gives the sentence that would make it repeat and the file and section it goes into. Stated in: `session-retro`, Steps 6 and 9.
+ - **kind**: a sentence that states a defect in general terms, the way a rule would forbid it, under which `/plan-retro` groups findings. A kind is recurring when its count reaches the threshold Steps 6 states, and "no defect" holds the findings that report none. Stated in: `plan-retro`, "Grouping" and Steps 6.
++- **kind, of an open item**: one of the six numbered cases that `plan-orchestration`'s `references/self-rule.md` lists under "The six kinds left open", each a decision that waits for the user under self-rule. An open item names its kind by its number. Stated in: `plan-orchestration`, `references/self-rule.md`, "The six kinds left open", and "Stops"; `grill`, Steps 6; `plan`, Steps 3; `land`, Rules.
+ - **landing**: bringing a refuted step from its worktree onto main in one commit, with its booking and its landing report. Stated in: `land`, Steps.
+ - **launch commit**: the commit of a dispatch entry once its builder's identity is in it, a resume point. Stated in: `plan-orchestration`, Steps 4.
+ - **lazy option**: the option that costs less now and leaves the work undone, such as a booking instead of a fix, a later step instead of this one, a sentence in a report instead of a change in the code, or a narrower reading of the request than the request. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option"; `grill`, "The decision form".
+@@ -58,7 +59,7 @@
+ - **loop**: the unattended run of `plan-orchestration` over an open plan's steps, one after another. Stated in: `plan-orchestration`, the introduction and Steps. The loop inside a step is the refutation and the repair round repeated within the round cap. Stated in: `ordo-help`, "The sequence, printed verbatim".
+ - **next-entry mode**: with `next_entry: on` and self-rule, a closed plan is followed by the next open roadmap entry, through `/grill`, `/plan` and the loop. Stated in: `plan-orchestration`, `references/self-rule.md`, "Next-entry mode".
+ - **night rule**: the limit the loop keeps when the user sets a time by which no agent may run. Stated in: `plan-orchestration`, "The pace when a deadline is set".
+-- **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The format is the file's"; `plan`, "What it reads" 2.
++- **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The file's format"; `plan`, "What it reads" 2.
+ - **open item**: an entry of the state file's open items. It is a decision for the user, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling or, under self-rule, when the `plan-orchestration` skill's `references/self-rule.md` does not leave it open, by the option the orchestrator recommends. It is also a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops" and `references/self-rule.md`, "Closing an open item"; `spec`, "Steps / A stop"; `land`, "Stops".
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+@@ -91,7 +92,7 @@
+ - **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+ - **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration block's `reviewer:` names, and each run over a repair round on the model `repair_reviewer:` names, the `reviewer:` value when the block has none. The brief-check agent and the lookup agents of `grill` run on `reviewer:`. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules, and "Steps / Over a repair round" 1; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
+-- **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
++- **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The file's format".
+ - **round, of an interview**: one message in which `grill` asks every decision of the frontier that waits on no lookup, ending the turn to wait for the answers. In `grill` and in text that describes `grill`, the bare "round" means this; elsewhere it is a repair round. Stated in: `grill`, Steps 6.
+ - **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+ - **rules file**: the page `.agents/plan.yaml`'s `rules:` names, which says how a change is made and reported. Every brief points at it first. Stated in: `spec`, Steps 4; `plan`, Steps 4.
+@@ -108,7 +109,7 @@
+ - **slug**: the ledger folder's name, derived from the roadmap entry, such as `38-3-one-object-per-file`. Stated in: `plan`, Steps 1.
+ - **standards**: the pages `.agents/plan.yaml`'s `standards` lists, which every brief tells the builder to read in full and the reviewer holds a diff to. Stated in: `spec`, Steps 4; `refute`, "What it reads" 4; `plan-retro`, "The proposal for a recurring kind". Also the standard pages `/repo-setup` writes into `docs/dev/`: the change standard, the prose standard and, with question 6's defaults, the design principles, the coding-standards pages and, with a user interface, the UI standard. Stated in: `repo-setup`, "The tree"; `ordo-help`, "The sequence, printed verbatim".
+ - **state file**: the plan's `orchestrator-state.md`, holding the configuration block, the dispatch block, the open items, the closed items and the current position. Stated in: `plan`, Steps 4; `plan-orchestration`, "What it reads" and "Resuming, and handing the plan over".
+-- **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The format is the file's".
++- **step**: a plan step, one deliverable and one dispatch of its executor with the command that proves it, a line of `plan.md`'s step list ending with its authority. The orchestrator does the bookkeeping steps itself. Stated in: `plan`, Rules. Also an item of a skill's Steps, cited as "Steps <n>". Stated in: each skill's Steps. Also an entry under a phase, in a roadmap whose entries stand at two levels. Stated in: `roadmap`, "The file's format".
+ - **Step 0**: the place under a step in `plan.md` that holds what the plan carries to the step: a stop's open item, the failure a red line recorded at landing, a red line's cause found by `/diagnose`, and a ruled step's carried premises. Stated in: `spec`, "Steps / A stop" and "Steps / A ruling"; `land`, Steps 6; `diagnose`, Steps 20.
+ - **stop**: a halt for a decision for the user, which leaves an open item in the state file and under the step's Step 0; under self-rule the orchestrator closes it at once, unless the `plan-orchestration` skill's `references/self-rule.md` leaves it open. Stated in: `plan-orchestration`, "Stops" and `references/self-rule.md`, "Closing an open item"; `spec`, "Steps / A stop". Also any point in a skill's Stops table where it waits on the user, such as the approval of a draft, which leaves no open item. Stated in: `repo-setup`, "Stops"; `roadmap`, "Stops"; `land`, "Stops". To stop an agent is also to end a running agent through the runner's stop tool. Stated in: `land`, Steps 1; `plan-orchestration`, "The pace when a deadline is set". A builder also stops when it halts its work and returns what it has to the orchestrator, as a hand-back does. Stated in: `plan-orchestration`, Steps 6; `spec`, `templates/brief.md`.
+ - **sync**: `/repo-setup sync`, which compares a repository's shared-rules block and plan-terms block with their templates and rewrites them after approval. Stated in: `repo-setup`, "Steps / sync".
+diff --git a/skills/roadmap/SKILL.md b/skills/roadmap/SKILL.md
+index cd05a59..54c16d6 100644
+--- a/skills/roadmap/SKILL.md
++++ b/skills/roadmap/SKILL.md
+@@ -2,7 +2,7 @@
+ name: roadmap
+ description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves or under a quoted ruling. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
+ metadata:
+-  version: "1.2.0"
++  version: "1.3.0"
+ ---
+ 
+ # Keep the roadmap
+@@ -57,12 +57,14 @@ metadata:
+        - `/roadmap` reads that report and finds the finding there.
+        - `/roadmap` checks that the plan is open: its folder lies under `<ledger_root>/`, outside `<archive_root>/`.
+        - `/roadmap` checks that the entry's goal is the finding's work, read against the finding's text.
+-       - A check that fails leaves no ruling, and the skill says which check failed.
+-   - With no ruling, the skill says which of these it found, and every stop stands.
++       - A check that fails leaves no ruling.
++       - The skill says which check failed.
++   - With no ruling, the skill says which of these it found.
++   - With no ruling, every stop stands.
+ 
+ ## Steps
+ 
+-1. Read the file's format, as "The format is the file's" says, and whether a capability map sits beside it ("A capability map beside the ordered file").
++1. Read the file's format, as "The file's format" says, and whether a capability map sits beside it ("A capability map beside the ordered file").
+    - The plain `/roadmap` then runs "Steps / Show" and ends there: it changes nothing and shows nothing for approval.
+ 2. For `add`, `move`, `done` and `drop` only, draft the change by the command's subsection below.
+    - Nothing is written yet.
+@@ -94,10 +96,11 @@ metadata:
+ 1. From the goal the user gives, draft the title, in the file's form, and the goal, in one or two sentences.
+    - When the argument matches an entry under "Not yet specified" by number or title, the title and the goal are that entry's.
+    - The draft moves that entry out of "Not yet specified" to the place of Steps / add 5, with the gate of Steps / add 2 and 3 and what it waits on.
+-   - The entry keeps its number ("The format is the file's", bullet "Numbering under Not yet specified").
++   - The entry keeps its number ("The file's format", bullet "Numbering under Not yet specified").
+ 2. Draft the gate: the check that proves the entry done, as a command from the verification page, a test named and what it asserts, or an observable result someone can check.
+    - A goal whose gate cannot be named is a stop ("Stops", row "No gate").
+-   - At that stop the user may put the entry under "Not yet specified": it is drafted in the form of "The format is the file's", bullet "Not yet specified", and the draft goes to Steps / add 6 without Steps / add 3 to 5.
++   - At that stop the user may put the entry under "Not yet specified": it is drafted in the form of "The file's format", bullet "Not yet specified".
++     - The draft goes to Steps / add 6 without Steps / add 3 to 5.
+ 3. Ask of the drafted gate "could this pass without the goal being reached?" and write the answer with its reason in the draft that Steps / add 6 shows, never in the roadmap entry.
+    - A gate that could (a file that exists without saying what the goal asks, a command that exits 0 on an empty result, a count with no content behind it) is redrafted and asked again, at most twice.
+      - Under a quoted ruling the ruled gate is not redrafted.
+@@ -131,7 +134,7 @@ metadata:
+ 1. An entry with an open plan is not dropped until the plan is closed or archived ("Stops").
+ 2. Draft the entry moved where the file's introduction says dropped work goes, with the reason.
+ 
+-## The format is the file's
++## The file's format
+ 
+ The skill writes in the format the file already uses, read from its existing entries and its introduction.
+ 
+@@ -184,8 +187,8 @@ When the roadmap's introduction links an index as the map of what the product is
+ 
+ | Anti-pattern | Why it fails | Do instead |
+ |---|---|---|
+-| Renumbering an existing entry | Entry numbers are referenced from ledgers, ADRs and commits, which then point at the wrong entry | "The format is the file's", Numbering |
+-| Adding anything the user did not ask for and no quoted ruling ending "(self-rule)" names as a finding of a running plan | The roadmap then holds work nobody decided | Rules 1 |
++| Renumbering an existing entry | Entry numbers are referenced from ledgers, ADRs and commits, which then point at the wrong entry | "The file's format", Numbering |
++| Adding anything Rules 1 does not allow | The roadmap then holds work nobody decided | Rules 1 |
+ | Implementation narration, dates or history in entry text | They belong to the plan's ledger and the commits | Rules 2 |
+ | Deleting a dropped entry silently | The reason it was dropped is lost | Steps / drop 2 |
+ 
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index f30add5..7424922 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -2,7 +2,7 @@
+ name: spec
+ description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
+ metadata:
+-  version: "1.7.0"
++  version: "1.8.0"
+ ---
+ 
+ # Prepare a step
+@@ -30,7 +30,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+ 1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+    - A required key missing is a refusal ("Stops").
+ 2. The ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
+-   - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
++   - `/plan` names a new folder by the entry's slug.
++   - An older plan keeps whatever folder it has.
+    - No such folder is a refusal ("Stops").
+ 3. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block.
+    - A step already in flight is a refusal, under the condition in "Stops".
+@@ -48,7 +49,10 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - For a step taken back out of main, the failure its landing recorded under the step's Step 0.
+ 5. The tree, on main at its head, for every count, path, name, line number and claim the step's text makes.
+    - Each is checked with a grep or a probe, never taken from the plan's text.
+-   - The ADRs in the folder the configuration block's `adr` names (`docs/adr` when the block has none): each `NNNN-*.md` file in the folder, listed in its `README.md` or not, and the decision of each record in force. A record is in force except for the part its own opening lines, or a later record, say is superseded, in whatever words the repository uses. Its decision is its Decision section, or, in a record without one, the text that states what was decided. A record touches the step when its decision governs a file, a name, a rule or a behaviour the step's text changes.
++   - The ADRs in the folder the configuration block's `adr` names (`docs/adr` when the block has none): each `NNNN-*.md` file in the folder, listed in its `README.md` or not, and the decision of each record in force.
++     - A record is in force except for the part its own opening lines, or a later record, say is superseded, in whatever words the repository uses.
++     - Its decision is its Decision section, or, in a record without one, the text that states what was decided.
++     - A record touches the step when its decision governs a file, a name, a rule or a behaviour the step's text changes.
+ 6. The brief check's report, the final message of the agent that "Steps / The brief check" starts.
+ 
+ ## Steps
+@@ -57,11 +61,11 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - Any unrelated change of the user's outside the ledger folder is listed by path.
+      - It is left alone.
+    - Every uncommitted change under the ledger folder is listed by path (`git status --short -- <ledger>`).
+-   - A change the session itself made since the last resume-point commit is one of its own records. Such a change is a ruling it booked, or a report or a reviewer it recorded.
++   - A change the session itself made since the last resume-point commit is one of its own records: a ruling it booked, or a report or a reviewer it recorded.
+    - The preparation commit carries the session's own records (Steps 6).
+    - Any other change under the ledger folder is left alone.
+      - It is never committed.
+-   - An uncommitted change on the ledger's `plan.md` or state file that the session did not make is a refusal ("Stops"), named by path. Steps 2 and 9 write those files.
++   - An uncommitted change on the ledger's `plan.md` or state file that the session did not make is a refusal ("Stops"), named by path, since Steps 2 and 9 write those files.
+    - `plan.md` is copied aside to the session's scratch folder before Steps 2.
+      - A step that waits at Steps 5 restores it with the session's own records, so a booked ruling is never lost.
+    - An uncommitted change at the brief's path `agents/briefs/<step>.md` is a refusal ("Stops"), named by path, since Steps 4 writes the brief there.
+@@ -73,23 +77,31 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - Then, before any premise check, read the step's line and the Rulings section of `plan.md`, as "What it reads" 4 says.
+    - A step whose line carries its authority goes on.
+      - The session notes the tags that give it.
+-   - A step without it is a refusal ("Stops") that names the step and the authority it lacks, and says a ruling is needed.
++   - A step without it is a refusal ("Stops") that names the step and the authority it lacks.
++     - The refusal says a ruling is needed.
+    - A `plan.md` that is missing or not UTF-8, lacks a section, or lists a step twice is a refusal ("Stops").
+    - A step not in the list is a refusal ("Stops"), with the list printed.
+    - A refusal here writes nothing.
+    - A step whose dispatch entry reads `landing: backed-out` then goes through "Steps / A step taken back out of main" before Steps 2.
++   - Steps 1 is done when the preflight and the authority check have passed, or a refusal has named its cause and written nothing.
+ 2. Check every premise the step's text makes against the tree.
+    - A premise found false that the plan can absorb is corrected in `plan.md` before the brief exists, never left for the builder to hit.
+    - That correction goes into the preparation commit (Steps 6).
+    - The brief records the correction beside the premise.
+    - A premise found false that the plan cannot absorb is a stop ("Stops"): its correction would change the step's scope, or make a choice the user would see.
+-   - Read the ADRs the step touches, as "What it reads" 5 says. The brief names each under "What is on the tree", with its number, its title and the sentence of its decision the step is under, or says that no ADR touches the step.
+-   - A step's text that contradicts the part in force of an ADR is a rule clash, a stop ("Stops"). The open item names the ADR and quotes the step's words that contradict it. Its options are the step changed to follow the ADR, or a new ADR that supersedes it, as the ADR folder's `README.md` says.
++   - Read the ADRs the step touches, as "What it reads" 5 says.
++     - The brief names each under "What is on the tree", with its number, its title and the sentence of its decision the step is under, or says that no ADR touches the step.
++   - A step's text that contradicts the part in force of an ADR is a rule clash, a stop ("Stops").
++     - The open item names the ADR and quotes the step's words that contradict it.
++     - Its options are the step changed to follow the ADR, or a new ADR that supersedes it, as the ADR folder's `README.md` says.
+ 3. Look for libraries, as `.agents/plan.yaml`'s `libraries` says, before the brief is written.
+    - Under `libraries: check`, the session looks for existing libraries for every capability the step builds.
+    - A candidate that could replace code the step would write by hand is a stop ("A user-visible choice", "Stops").
+    - The stop gives the options (each candidate, and writing it by hand), the pros and cons of each, and one recommendation.
+-   - A candidate the user has already ruled on for the capability the step builds, named with that capability by a line of `plan.md`'s Rulings section, is settled: the brief records that ruling under "Libraries checked", and the candidate does not stop `/spec` again. A ruling on the same candidate for another capability settles nothing.
++   - A candidate the user has already ruled on for the capability the step builds, named with that capability by a line of `plan.md`'s Rulings section, is settled.
++     - The brief records that ruling under "Libraries checked".
++     - `/spec` goes on past the candidate without a stop.
++   - A ruling on the same candidate for another capability settles nothing.
+    - For each candidate the brief records its version, license, maintainer, last release, compatibility with the project's dependencies, what it would replace and what stays hand-written.
+    - Bundle size is not a criterion unless the project's rules page or one of its standards pages names one.
+    - With no candidate, the brief says so.
+@@ -101,7 +113,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - The fix text, in the brief's own words, not a pointer.
+    - The verification commands from the configuration block plus the step's own gate, each with the directory it runs from and the output that counts as a pass.
+    - The report shape, with the cases' first run before the result table.
+-   - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result, and the builder's first task as the template states it: the first run of every case on the unchanged tree before any change, a case of a code step as a test and a case of a text or judgment step by reading, and a case the brief's rules get wrong handed back before any code changes.
++   - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result.
++     - The brief states the builder's first task as the template states it: the first run of every case on the unchanged tree before any change, a case of a code step as a test and a case of a text or judgment step by reading, and a case the brief's rules get wrong handed back before any code changes.
+      - For a code step (a script, or a product's code), the list also holds the inputs the step's text implies but never states, as `templates/brief.md`'s "Cases" names them, each with its expected result, found by the session writing the brief from the rules of the code the step builds or changes and from that code's callers.
+    - Under "Paths this step writes", every path the step writes, one per line, the report path included: ``- `<path>` `` for a whole file, or ``- `<path>` lines <a>-<b>` `` for a range of a shared document, numbered as on main at the base.
+    - A choice the plan leaves open is taken in the brief.
+@@ -116,18 +129,23 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - A user-visible choice (a public shape, a wire format, a config key, a vocabulary) is not taken.
+      - It is a stop ("Stops").
+    - For a step taken back out of main, whose Step 0 in `plan.md` records the failure its landing met, the brief carries that failure and, when `/diagnose` wrote them into Step 0, the cause, the fix and the diagnosis record's path.
+-   - The ledger may hold the step's patch `agents/reviews/<step>-backed-out.patch` ("Steps / A step taken back out of main"). The brief then names its path and says Steps 7 applies it with `git apply --3way`.
++   - The ledger may hold the step's patch `agents/reviews/<step>-backed-out.patch` ("Steps / A step taken back out of main").
++     - The brief then names its path.
++     - The brief says Steps 7 applies it with `git apply --3way`.
+    - The brief is committed at Steps 6, before the apply.
+      - Its section "The patch as applied" is added after Steps 7, as Steps 7 says.
+ 5. Compare the brief's "Paths this step writes" with the brief of every other step in the dispatch block, by reading them.
+    - No shared path: the step goes on.
+-   - A shared path is a file both briefs name, whatever lines each names. It is not a refusal.
+-     - It goes to the orchestrator's judgment, as `plan-orchestration`'s "Two steps in flight" says, and run by hand, the session judges.
++   - A shared path is a file both briefs name, whatever lines each names.
++     - It is not a refusal.
++     - It goes to the orchestrator's judgment, as `plan-orchestration`'s "Two steps in flight" says.
++     - Run by hand, the session judges.
+    - When the merge at landing is judged simple, the step goes on.
+      - Steps 9 writes `shared_paths:` in its dispatch entry, naming each shared file and why the merge is simple.
+    - When it is not judged simple, the step waits until the other step lands.
+-     - This run leaves nothing. The brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
+-   - `plan.md` is put back from the copy Steps 1 saved, and no commit, worktree or dispatch entry is made.
++     - This run leaves nothing: the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
++   - `plan.md` is put back from the copy Steps 1 saved.
++   - No commit, worktree or dispatch entry is made.
+    - What "Steps / A step taken back out of main" did stays done.
+      - The patch stays in the ledger.
+      - `/spec` run again prepares the step with that patch.
+@@ -142,24 +160,31 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - The paths are written out in the `git add -- <path> ...` command.
+      - A ledger change the session did not make is not among them.
+    - Its hash is the base.
++   - Steps 6 is done when the commit holds those paths and its hash is recorded as the base.
+ 7. Create the worktree from the base: `git worktree add -b <step> <worktree_root>/<step> <base>`.
+    - Then, from inside it, `git sparse-checkout set <worktree_paths>` when the block names any.
+-   - Then, for a step whose patch the ledger holds, from inside the worktree: `git apply --3way <repository root>/<ledger>/agents/reviews/<step>-backed-out.patch`. The patch is named by its path in the main checkout, since a sparse checkout may leave the ledger out.
++   - Then, for a step whose patch the ledger holds, from inside the worktree: `git apply --3way <repository root>/<ledger>/agents/reviews/<step>-backed-out.patch`.
++     - The patch is named by its path in the main checkout, since a sparse checkout may leave the ledger out.
+      - Read what it prints.
+-   - A file named in an `error:` line, such as one main deleted or renamed, makes the whole apply fail. The apply is run again with `--exclude=<path>` for each such file, until the rest applies.
++   - A file named in an `error:` line, such as one main deleted or renamed, makes the whole apply fail.
++     - The apply is run again with `--exclude=<path>` for each such file, until the rest applies.
+    - A binary file left unmerged takes the patch's copy with `git checkout --theirs -- <path>`.
+    - Before the dispatch commit, the session adds the section "The patch as applied" to the brief.
+      - The section lists the files applied clean and the files left with conflict markers, which the builder finishes from the markers.
+      - It lists the files skipped, which the builder rebuilds against main's tree from their part of the patch, named by path.
+-     - It lists the binary files given the patch's copy, which the builder checks against main's change to them. That change is the commits `git log --oneline <old base>..main -- <path>` lists, the old base being the `base` of the removed entry.
++     - It lists the binary files given the patch's copy, which the builder checks against main's change to them, the commits `git log --oneline <old base>..main -- <path>` lists, the old base being the `base` of the removed entry.
+    - Nothing is committed in the worktree: `/land`'s wip `git add -A` stages the files the builder finishes, so the builder runs no git command that changes state.
+    - Then the dependency install the project needs.
+ 8. Stage the base binaries for the landing's A/B, copied aside from the current build.
+-   - The configuration block's `bench:` line names them; none named, none staged.
++   - The configuration block's `bench:` line names them.
++   - With none named, none is staged.
+ 9. Write the dispatch block into the state file: step, executor, worker, worktree, base, launched, report path, `brief_check` ("Steps / The brief check"), `landing: not-started`, `round: 0`.
+-   - The entry takes the shape the `plan` skill's `templates/orchestrator-state.md` gives: one entry, `dispatch:` followed by its keys, when `workers_at_once` is 1; appended to the list of entries when it is above 1.
++   - The entry takes the shape the `plan` skill's `templates/orchestrator-state.md` gives.
++     - With `workers_at_once` 1, one entry, `dispatch:` followed by its keys.
++     - With `workers_at_once` above 1, the entry is appended to the list of entries.
+    - The executor is the configuration block's default, until the orchestrator chooses for the step.
+-   - A step whose brief shares a file with a step in flight, judged simple to merge at Steps 5, gets `shared_paths:` in its entry: each shared file and why the merge is simple. With no shared file the key is left out.
++   - A step whose brief shares a file with a step in flight, judged simple to merge at Steps 5, gets `shared_paths:` in its entry: each shared file and why the merge is simple.
++   - With no shared file the key is left out.
+    - The entry is not committed here.
+      - It is committed once the builder's identity is in it: under `agent` right after the launch, and under `inline` and `academic-paper` before the build starts.
+    - For a step whose patch Steps 7 applied, that commit also carries the brief with its section "The patch as applied".
+@@ -196,9 +221,10 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
+ ### A stop
+ 
+ 1. Leave three things and nothing else.
+-   - The open item in the state file. It holds the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
++   - The open item in the state file, holding the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
+      - An option adds a step to the plan only when the work fits no step already in the list.
+-     - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling then approves them too.
++     - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list.
++     - The user's ruling on such an option approves each of those approvals too.
+      - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
+      - The option names that stop.
+      - An option that runs a skill with an approval stop states the change in full, or names that stop as a stop of its own, as `plan-orchestration`'s "Stops" says.
+@@ -220,10 +246,13 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
+ 
+    Under `self_rule: on`, `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books a choice the same way, as that heading says.
+ 
++   The item is done when the message holds the ruling.
++
+ 2. On that message the session books the ruling and nothing else:
+    - the open item is closed with the ruling's text and its date;
+    - the step's text in `plan.md` is rewritten to what was ruled;
+-   - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`, and its own Step 0, its carried premises with it;
++   - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`;
++   - that step gets its own Step 0, its carried premises with it;
+    - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
+    - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line;
+    - a ruling on an option that runs a skill with an approval stop and states the change in full is written in the Rulings section as a bullet whose first line ends with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
+@@ -233,11 +262,17 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
+    - a ruling that answers a rule clash with a new ADR, raised by `/spec` or by `/refute`, is carried out before the step goes on:
+      - the session writes the new record, numbered after the folder's highest, in the form of the folder's `template.md` or, with none, of its latest record, with status `proposed`;
+      - its decision is the ruled option in the open item's words, its context the facts the open item gives, its alternatives rejected the old record's decision and each other option with the con the open item gave it, and its consequences what the open item says follows;
+-     - the old record is marked superseded in the words the folder uses (`superseded by NNNN` under the template), and the new record gets its row in the folder's index when there is one;
+-     - the session shows the user the new record and commits these files by path at once, a resume point, so that `/spec` or `/land` in any session reads them;
+-   - a ruling that replaces a bullet ending "(self-rule)" always writes a Rulings bullet of its own that names the bullet it replaces, and is booked as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says;
+-   - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6).
+-3. Then `/spec <entry> <step>` is typed again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
++     - the old record is marked superseded in the words the folder uses (`superseded by NNNN` under the template);
++     - the new record gets its row in the folder's index when there is one;
++     - the session shows the user the new record;
++     - the session commits these files by path at once, a resume point, so that `/spec` or `/land` in any session reads them;
++   - a ruling that replaces a bullet ending "(self-rule)" always writes a Rulings bullet of its own that names the bullet it replaces;
++   - that ruling is booked as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says;
++   - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6);
++   - the item is done when the ruling's changes are in the ledger files.
++3. Then `/spec <entry> <step>` is typed again.
++   - It rechecks every premise against the tree, the ruled text included.
++   - It writes the brief.
+    - A step whose brief check has run is not checked again (Steps 5).
+    - After a ruling on an option that runs a skill and states the change in full, that skill is run first, with `--ruling <ledger file> "<name>"`.
+    - The item is done when the skill a quoted ruling was booked for has run under it, and `/spec` has written the brief.
+@@ -253,9 +288,14 @@ Steps 5 says when this runs.
+    - It starts no agent: every read and every command runs in its own session.
+    - It writes `<REDACTED>` in place of the value of a secret in every line it quotes, as the rules file's rule on secrets in quoted command output says.
+    - Right after the start, the session reads the agent's id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
+-   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
+-   - A brief-check agent stopped for another model has no dispatch entry to be recorded in, since "Steps / A stop" 2 leaves none, so the session writes its bullet `- <agent id>: brief check of step <n>, <served model>` straight into `plan.md`'s Agents section, creating the section before `## Blocked, and by what` when `plan.md` has none, and reads the section back.
++   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops").
++     - The agent is stopped through the runner's stop tool.
++     - Nothing it wrote is used.
++   - A brief-check agent stopped for another model has no dispatch entry to be recorded in, since "Steps / A stop" 2 leaves none, so the session writes its bullet `- <agent id>: brief check of step <n>, <served model>` straight into `plan.md`'s Agents section.
++     - A `plan.md` with no Agents section gets it, created before `## Blocked, and by what`.
++     - The session reads the section back.
+    - The stop's commit carries `plan.md` among the ledger files it commits ("Steps / A stop" 1).
++   - Item 1 is done when the agent's id and served model are read and the model is the configured one, or the stop is raised.
+ 2. The agent runs these checks and reports each with the command that shows it and that command's output:
+    - **Names.** Every name the step changes (a file, a heading, a key, a function, a term) is grepped across the repository, and every hit outside the brief's "Paths this step writes" is listed, each with whether the change makes it false.
+    - **The step line.** Every part of the plan's step line is present in "What to build": each item is mapped to the part of the line it serves, and a part with no item is named.
+@@ -263,32 +303,43 @@ Steps 5 says when this runs.
+    - **Cases and checks.** Every case of "Cases" is read against the rules file and the standards, and a case inconsistent with them is named.
+    - **The question.** Each case, the check on the step's line and the check of each item of "What to build" is asked "could this pass without the goal being reached?", "the goal" being the part of the plan's goal the step delivers, and the answer is given with its reason.
+    - **Implied inputs.** For a code step (a script, or a product's code), the inputs the step implies but never states are listed under "Cases", as `templates/brief.md`'s "Cases" asks, and each one missing is named with its expected result.
+-   - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is read for its part in force, as "What it reads" 5 says. Each one the step touches is named with the sentence of its decision the step is under. A part of the brief that contradicts one is named, and so is an ADR the step touches that the brief's "What is on the tree" does not name.
++   - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is read for its part in force, as "What it reads" 5 says.
++     - Each one the step touches is named with the sentence of its decision the step is under.
++     - A part of the brief that contradicts one is named.
++     - An ADR the step touches that the brief's "What is on the tree" does not name is named.
+    - **Dictated text.** Every line of text the brief dictates is read line by line.
+-     - What is dictated is text whose words the brief gives for a file, whether quoted, in a fenced block, or given after a colon as the words of a named sentence, line, heading, comment, table row or term. A requirement that says what a sentence must say without giving its words is not dictated, and stays the builder's to word.
++     - What is dictated is text whose words the brief gives for a file, whether quoted, in a fenced block, or given after a colon as the words of a named sentence, line, heading, comment, table row or term.
++     - A requirement that says what a sentence must say without giving its words is not dictated, so the builder words it.
+      - Each dictated line is read against the rules file and each standards page the configuration names.
+-     - A code line (a key with its comment, a command, a placeholder line) is read whole, and its comment and any words in it are read as prose.
++     - A code line (a key with its comment, a command, a placeholder line) is read whole.
++     - The comment of a code line, and any words in it, are read as prose.
+      - The report gives each dictated line with the `grep -n` that finds it in the brief, and with "holds" or each rule it breaks, named with its page and section.
+      - A brief that dictates no text is reported as such.
+      - A dictated line whose words a ruling of the user fixes, and which breaks a rule, is a finding the session cannot close by a change to the brief, so it is the stop "A brief check finding the brief cannot absorb" ("Stops").
+    - The checks are done when each has its findings, or "none".
+ 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
+    - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's id, its served model (item 1) and its tokens, tool uses and time from its completion notice.
++   - Item 3 is done when the report stands at that path with its usage line filled.
+    - A step has one such report, since the check runs once per step (item 4).
+ 4. The session closes each finding by a change to the brief, before the preparation commit.
+    - Each change is named under the report's "Closed" heading, beside its finding.
+-   - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's **Dictated text** says before the preparation commit, and is named under "Closed".
++   - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's "Dictated text" says, before the preparation commit.
++   - That line is named under "Closed".
+    - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
+-   - The check runs once per step: the brief as changed goes to the builder without a second run, and a `/spec` run after a stop or a ruling does not check the step again.
++   - The check runs once per step.
++     - The brief as changed goes to the builder without a second run.
++     - A `/spec` run after a stop or a ruling does not check the step again.
+    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
+    - Every such finding of the report is raised in that one stop, so the user rules on all of them in one reply.
+    - A finding the session cannot close by a change to the brief is raised in the same stop.
+-   - A contradiction the **ADRs** check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says. One found only in the brief's own wording is closed by a change to the brief that follows the ADR.
++   - A contradiction the "ADRs" check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says.
++   - A contradiction found only in the brief's own wording is closed by a change to the brief that follows the ADR.
+    - At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
+    - At such a stop the report is among the ledger files the stop commits.
+    - This item is done when every finding has its change under "Closed" and each dictated line rewritten or added after the check is held and named there, or the step has stopped.
+ 5. The dispatch entry (Steps 9) records the report's path under `brief_check` with the agent's id, its served model, and its tokens, tool uses and time, in the form `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`, read from the report's usage line in a later `/spec` run of the step.
+    - The report is committed as Steps 6 says.
++   - Item 5 is done when the dispatch entry holds that form.
+ 
+ ## Stops
+ 
+@@ -297,7 +348,7 @@ The first six rows are stops, which leave an open item as "Steps / A stop" says.
+ | Stop | When | What it shows | What resumes it |
+ |---|---|---|---|
+ | A false premise the plan cannot absorb | A premise the step's text makes is false on the tree, and its correction would change the step's scope or make a choice the user would see (Steps 2); the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
+-| A rule clash with an ADR | The step's text contradicts the part in force of an ADR the step touches (Steps 2, or the **ADRs** check of "Steps / The brief check") | The open item, booked in the open items, naming the ADR and quoting the step's words that contradict it | A ruling |
++| A rule clash with an ADR | The step's text contradicts the part in force of an ADR the step touches (Steps 2, or the "ADRs" check of "Steps / The brief check") | The open item, booked in the open items, naming the ADR and quoting the step's words that contradict it | A ruling |
+ | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary, or, under `libraries: check`, a library could replace code the step would write by hand (Steps 3) | The open item, booked in the open items | A ruling |
+ | A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
+ | A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
