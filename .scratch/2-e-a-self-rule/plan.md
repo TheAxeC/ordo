@@ -34,8 +34,8 @@ one plan run with `self_rule: on`, whose every open item is either left open und
 - ✅ 7 `next_entry`: after a closing, the next open entry through `/grill` (each round answered with its recommendation, written to `choices.md`), `/plan` (its approval written to `choices.md`) and the loop, stopping at an entry under "Not yet specified", at an item of the six kinds, or when no open entry is left, and `/roadmap add` only for work a ruling or a finding names, in `plan-orchestration`, `grill`, `plan` and `roadmap`; check: each changed text read in place (1 commit) (approved) (ruling E) (ruling F) (ruling G)
 - ✅ 8 The terms of D24: **self-rule** and **choices file** added, **open item** and **ruling** amended, in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`, and the sentence of ruling H in `skills/repo-setup/templates/shared-rules.md`; check: `git diff docs/glossary.md` after `/repo-setup sync` shows the words of D24 (1 commit) (approved) (ruling H)
 - 9 The gate's `next_entry` run on a scratch repository whose roadmap holds two small entries; check: the second entry opened, grilled and planned after the first closes, each decision of its `/grill` in `choices.md`, read by Axel (1 commit; orchestrator, no agent) (approved)
-- 10 The cost figures: the script prints plan 2.E and plan 2.E.A, 2.E.A's runs over a repair round on `repair_reviewer`'s model, and the brief checks that met dictated text listed; check: read by Axel (orchestrator, no agent) (approved)
-- 11 The gate's `self_rule` run, this plan's open items after step 6b; check: at least one item closed into `choices.md` and one left open under a named kind, each read by Axel (orchestrator, no agent) (approved)
+- ✅ 10 The cost figures: the script prints plan 2.E and plan 2.E.A, 2.E.A's runs over a repair round on `repair_reviewer`'s model, and the brief checks that met dictated text listed; check: read by Axel (orchestrator, no agent) (approved)
+- ✅ 11 The gate's `self_rule` run, this plan's open items after step 6b; check: at least one item closed into `choices.md` and one left open under a named kind, each read by Axel (orchestrator, no agent) (approved)
 - 12 The changed skills read against `docs/dev/skill-layout.md`, each changed skill's `version` raised; check: read by Axel (1 commit) (approved)
 - 13 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.E.A`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
@@ -248,6 +248,16 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - A/B: none (`bench: []`). Look: none (`look:` empty).
 - Usage: brief check ad359a1df2ce3b5fe, claude-opus-5-5, 186342 tokens, 49 tool uses, 8 min 23 s; builder a8e821b5b3f0e2756, claude-sonnet-5-5, 136333 tokens, 25 tool uses, 4 min 4 s (the build) and 161990 tokens, 10 tool uses, 2 min 27 s (round 1); reviewer aa9c2761143a81412, claude-opus-5-5, 179218 tokens, 54 tool uses, 9 min 3 s; reviewer over round 1 adeb36a8bdd6bc53b, claude-sonnet-5-5, 144807 tokens, 29 tool uses, 4 min 47 s.
 - The builder's first report did not pass its bar: the first review found six findings (Spec 1, Proof 1, Standards 1 to 4).
+
+### Step 10, the cost figures (landed 2026-10-01)
+
+- Landed: `agents/reviews/10-cost.md`, for the user's reading: the output of `python3 skills/plan-orchestration/templates/plan_cost.py` for plan 2.E.A (34 agents, total >=92.18 USD) and plan 2.E (78 agents, total >=146.48 USD), each exit 0; 2.E.A's runs over a repair round from step 4 on priced on claude-sonnet-5-5, the model `repair_reviewer` names, and those of steps 1 to 3 on claude-opus-5-5, since they ran before step 3 landed the key; and the brief checks of steps 3 to 8, each with its section "8. Dictated text", listed with what each read. Orchestrator, no agent.
+- The step's check, the user's reading of the page, is kind 5 of `references/self-rule.md`: it stays open and blocks no step.
+
+### Step 11, the gate's `self_rule` run (landed 2026-10-01)
+
+- Landed: `agents/reviews/11-self-rule.md`, for the user's reading: the four open items raised since step 6b, Open items F and G closed under self-rule into `.scratch/choices.md` as C1 and C2 (both since agreed by the user), Open item H left open as kind 3 (ruled (a) by the user) and Open item I left open as kind 1 (waiting), each with the commit that booked it. Orchestrator, no agent.
+- The step's check, the user's reading of the page, is kind 5: it stays open and blocks no step.
 
 ### Step 7, `next_entry`: Step 0 (stopped 2026-10-01)
 

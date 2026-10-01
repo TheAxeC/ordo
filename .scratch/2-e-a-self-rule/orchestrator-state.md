@@ -56,6 +56,8 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
     - (b) This session runs step 9 by reading each skill's text from `skills/` on main at each invocation, in place of the runner's copy, with that stated in the run's record; the installation is unchanged. Pros: no pin and no tag; no other session is touched. Cons: the skills are not invoked through the runner, which your skill-fidelity rule allows only with your consent; the run proves the text, not the installed path.
   - Recommendation: (a), since the gate is a run of the skills as a user installs them, and the runner is the route the rules accept for invoking a skill; the pin is restored right after the run. Lazy option: (b), which skips the tag and the pin and leaves the installed path unproven.
   - Kind 1; it waits for you. It blocks step 9 only.
+- Open item J (2026-10-01): your reading of step 10's page, `.scratch/2-e-a-self-rule/agents/reviews/10-cost.md`, the priced usage of plans 2.E and 2.E.A and the brief checks that met dictated text. Kind 5; it blocks no step. Reply `Read` when it is as it should be, or name what is wrong.
+- Open item K (2026-10-01): your reading of step 11's page, `.scratch/2-e-a-self-rule/agents/reviews/11-self-rule.md`, how this plan's open items ended under self-rule. Kind 5; it blocks no step. Reply `Read` when it is as it should be, or name what is wrong.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -90,6 +92,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8 and 6b landed; their bookings are in `plan.md`, step 8's landing report at `agents/reviews/8-landing.md`. Step 9 is stopped at Open item I (kind 1, the installed skills' pin), which waits for the user; the loop goes on with step 10. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-01. Steps 1 to 8 and 6b landed; their bookings are in `plan.md`, step 8's landing report at `agents/reviews/8-landing.md`. Step 9 is stopped at Open item I (kind 1, the installed skills' pin), which waits for the user; steps 10 and 11 landed, their pages waiting for the user's reading (Open items J and K); next: step 12. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 8's merge with step 7 and its fix at landing printed `checks: 11 commands passed`, exit 0.
 - Open items A to H ruled; C1 and C2 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence, now at `skills/repo-setup/templates/shared-rules.md:20`, is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.
