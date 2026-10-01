@@ -16,3 +16,4 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0006](0006-the-ledger-records-every-agent-s-id-with-its-role.md) | The ledger records every agent's id with its role |
 | [0007](0007-the-run-over-a-repair-round-runs-on-its-own-reviewer-model.md) | The run over a repair round runs on its own reviewer model |
 | [0008](0008-the-cost-script-prices-from-a-table-copied-by-hand.md) | The cost script prices from a table copied by hand |
+| [0009](0009-the-cost-script-takes-each-response-s-counts-from-its-response-body.md) | The cost script takes each response's counts from its response body |
