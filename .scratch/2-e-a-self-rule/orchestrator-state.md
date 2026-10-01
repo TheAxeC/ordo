@@ -21,7 +21,7 @@ worktree_root: .agents/worktrees # where a step's worktree is created, relative 
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
 worker: claude:sonnet        # the default worker, from .agents/plan.yaml.
-reviewer: claude:opus        # the model /refute, the brief check and the lookups of /grill run on.
+reviewer: claude:opus        # the model the first run of /refute, the brief check and the lookups of /grill run on.
 libraries: avoid             # from .agents/plan.yaml: no new dependency.
 review: every                # every step is refuted.
 refute_after_repair: yes     # /refute runs again over each repair round.
