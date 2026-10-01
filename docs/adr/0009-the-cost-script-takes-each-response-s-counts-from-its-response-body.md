@@ -8,7 +8,7 @@ The cost script prices each agent role's usage of a plan (`docs/roadmap.md`, ent
 
 ## Decision
 
-The script takes a response's counts from its response body when the body's file exists in the folder `OTEL_LOG_RAW_API_BODIES` names, and from the last entry of its transcript otherwise. An agent with a response priced from its transcript has its row, its role's row and the total marked as a lower bound, with the number of such responses.
+The script takes a response's counts from its response body when the body's file exists in the folder `OTEL_LOG_RAW_API_BODIES` names, and from the last entry of its transcript otherwise. When the script's environment does not hold the variable, it reads the folder from the key `env.OTEL_LOG_RAW_API_BODIES` of Claude Code's settings files, the first that sets it of `<repository>/.claude/settings.local.json`, `<repository>/.claude/settings.json` and `~/.claude/settings.json`, the repository being the working folder's; a settings file that is not valid JSON is an error naming it. An agent with a response priced from its transcript has its row, its role's row and the total marked as a lower bound, with the number of such responses.
 
 ## Alternatives rejected
 
@@ -18,4 +18,4 @@ The script takes a response's counts from its response body when the body's file
 
 ## Consequences
 
-A plan run with the setting on is priced exactly. A plan run before it is priced from its transcripts, as a lower bound the output shows. The setting is the user's, in the runner's settings, and the folder grows with every request and holds each request's prompt.
+A plan run with the setting on is priced exactly. A plan run before it is priced from its transcripts, as a lower bound the output shows. The setting is the user's, in the runner's settings. Claude Code passes `CLAUDE_CODE_ENABLE_TELEMETRY` to a tool's shell and leaves `OTEL_LOG_RAW_API_BODIES` out, so the closing, run through a tool, finds the folder in the settings files. The folder grows with every request and holds each request's prompt.

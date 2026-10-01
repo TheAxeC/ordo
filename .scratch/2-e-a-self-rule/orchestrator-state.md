@@ -78,21 +78,14 @@ dispatch:
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
 
-- Open item D (2026-10-01): the cost script does not see the body folder from a Claude Code shell. Stop "A finding that is the user's", from the review over step 4's repair round 1 (`agents/reviews/4-refuter.md`, "Repair round 1, refuted", Behaviour).
-  - What the tree shows: the script reads the folder only from `OTEL_LOG_RAW_API_BODIES` in its own environment (ADR 0009). In the orchestrator's Bash tool, `echo "[$OTEL_LOG_RAW_API_BODIES] [$CLAUDE_CODE_ENABLE_TELEMETRY]"` prints `[] [1]`, and the reviewer's subagent shell prints the same, while `~/.claude/settings.json` line 9 sets the variable and `~/.claude/api-bodies` holds 1002 files. Claude Code passes `CLAUDE_CODE_ENABLE_TELEMETRY` to a tool's shell and leaves `OTEL_LOG_RAW_API_BODIES` out.
-  - What it breaks: the closing step runs the script through the Bash tool, so it prints "Response bodies: none" and `>=` on every row although the bodies are on disk, and the gate prices 2.E.A from the partial output counts ruling A was made to replace. The script itself is right: with the variable set, the reviewer's run on four of this plan's agents priced the three with bodies exactly and passed every check.
-  - Options:
-    - (a) The script reads the folder from the variable when its environment has it, and otherwise from the key `env.OTEL_LOG_RAW_API_BODIES` of Claude Code's settings files, the first that sets it of `<repository>/.claude/settings.local.json`, `<repository>/.claude/settings.json` and `~/.claude/settings.json`, the repository being the working folder's; a settings file that is not valid JSON is an error naming it. What it computes, for your approval: the value of that one key in those three files, in that order. ADR 0009 gains that sentence, and the README and `plan-orchestration` "Usage" say the closing needs nothing set. Pros: works from any shell, the closing step stays one command, nothing for a session to remember. Cons: the script reads up to three more files and depends on where Claude Code keeps its settings; a managed or command-line setting is not seen.
-    - (b) The script takes the folder as an option, `--bodies <folder>`, before the variable; the closing step reads the value from the settings and passes it. Pros: the script reads no settings file. Cons: the session copies a value by hand at every closing, and a closing that forgets it gets lower bounds again with no error.
-    - (c) The closing step's text alone says to run the script as `OTEL_LOG_RAW_API_BODIES=<the value in the settings> python3 ...`. Pros: no change to the script. Cons: the same reliance on the session as (b), with nothing in the script to catch it.
-  - Recommendation: (a), since it ends the cause in the script that has it, and the closing then prices from the bodies in every session without a step to remember. Lazy option: (c), the cheapest, which leaves the gate depending on a session copying a value.
-  - Step 4 waits for the ruling: the fix lands with the step as a fix at landing, together with the round's small findings, so step 4 stays one commit.
+- none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-01: Open item A, where the cost script takes each response's output count: ruled C by the user. Each response's counts come from its response body under `OTEL_LOG_RAW_API_BODIES` where the body exists, and from the transcript otherwise, that agent's row marked as a lower bound; ADR 0009; the user turns the setting on; the goal's sentence changes through a roadmap diff, Open item C.
 - 2026-10-01: Open item B, self-rule against the written rules and the reach of kind 3: ruled (a) and (a) by the user. An exception sentence joins the shared-rules template, and the user adds it to `~/.claude/CLAUDE.md`; kind 3 is read narrow.
 - 2026-10-01: Open item C, the roadmap diff of Open item A's ruling: ruled (a) by the user. `docs/roadmap.md` entry 2.E.A's Goal names the response bodies, and the transcripts as a lower bound; the Rulings line "Open item C".
+- 2026-10-01: Open item D, the body folder a tool shell cannot see: ruled (a) by the user. The script falls back to the key `env.OTEL_LOG_RAW_API_BODIES` of the three Claude Code settings files; ADR 0009 amended; fixed at step 4's landing.
 
 ## The standing demands (from Axel, in force)
 
@@ -119,4 +112,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - Step 4 is built and refuted once (`agents/reviews/4-report.md`, `agents/reviews/4-refuter.md`); its builder is kept for repair round 1. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet); its booking carries step 3's check ("Blocked, and by what").
 - Open items A and B ruled. Step 4's repair round 1 is sent (ruling A and the first review's findings); step 6 is prepared under ruling B and its builder launched.
 - Open item C ruled (a) and the roadmap changed. The setting of ADR 0009 is in `~/.claude/settings.json`, from the next session on. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24. Nothing is open on Axel's side.
-- Step 4's repair round 1 is built and refuted over the round (claude-sonnet-5-5, step 3's check); it waits for Open item D, then lands with the fix and the round's small findings fixed at landing. Step 6 is built (`agents/reviews/6-report.md`) and its first review is running.
+- Step 4's repair round 1 is built and refuted over the round (claude-sonnet-5-5, step 3's check); Open item D is ruled (a), and it lands with the fix and the round's small findings fixed at landing. Step 6 is built (`agents/reviews/6-report.md`) and its first review is running.
