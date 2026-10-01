@@ -298,3 +298,357 @@ Found with `grep -rn "user's ruling\|ruling of the user\|only by the user\|the u
 - `skills/refute/SKILL.md:152` (inside the range 149-153): "A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR." Under `self_rule: on`, "Self-rule" kind 3 as dictated names the user's written rules and the reversal of a Rulings bullet, and no ADR, so a rule clash with an ADR is not a kind left open and the sentence "only the user rules" would be false for it. I left the sentence as it is, since neither the brief nor `6-cases.md` decides whether such a clash is kind 3. The orchestrator rules: either an ADR clash is added to kind 3 (then `plan-orchestration` "Self-rule", the Stops row "A rule clash" and this sentence stay true as written) or the sentence at `refute:152` gets the exception.
 - The brief's item 8 puts the two `grill` sub-bullets as sub-bullets of line 113 and of "An answer that contradicts" 1; the first is a sub-bullet of the bullet at line 113 (seven spaces) and the second a sub-bullet of item 1, both as the brief and `6-cases.md` say.
 - Nothing else in the brief was impossible.
+
+## Repair round 1
+
+Everything in the round is done, with the rulings D1, D2 and D3 of `agents/briefs/6-round-1-rulings.md` and the two points the builder resolved (land's Stops row, the reference's "Scope" heading). One check cannot pass in this worktree: `sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-a-self-rule/orchestrator-state.md` exits 1 at its seventh command, `sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1`, because `skills/plan-orchestration/templates/plan_cost.test.sh` landed on main with step 4 after this worktree's base and is not in the worktree; every other command of the list passes (output below). This section holds the state after the round, and where it differs from a statement of the sections above, it holds.
+
+### The one pointer not renamed (D3)
+
+`skills/repo-setup/templates/shared-rules.md` line 20 still reads, word for word as the user ruled it, "...such a decision outside the six kinds `plan-orchestration` "Self-rule" leaves open is taken with its recommendation and written to the choices file for your review." It is the one pointer to the self-rule text that is not renamed to `references/self-rule.md` and a heading: the `## Self-rule` section of `plan-orchestration` stays and says, in its Reference bullet, where the six kinds are, so the pointer still lands on a section that exists and names the file. Every other pointer in `skills/`, `docs/` and `README.md` names `references/self-rule.md` and a heading (`grep -rn '"Self-rule"' skills docs README.md` lists only this sentence and the reference's own "Scope" line, which names `SKILL.md`'s section).
+
+### Item 1. Spec 1, the `Booked:` line names the bullet
+
+- `skills/plan-orchestration/templates/choices.md` line 14 before: ``Booked: `<path>:<line>` ``; after: ``Booked: `<path>:<line>` (Open item <L>)``.
+- `references/self-rule.md`, "The choices file", the third line of a choice reads ``Booked: `<path>:<line>` (Open item <L>)``, and its sub-bullet reads "`Booked:` names the Rulings bullet by its path relative to the repository root as it stands at the booking, its line, and its name `Open item <L>`, which the review searches by."
+- "The review of a choice", first bullet: "The session finds the choice's bullet by the name its `Booked:` line gives, in the Rulings section of the plan that line names or, for a closed plan, of the archived `plan.md` whose folder has the same slug under `<archive_root>/`, and the line number of `Booked:` is the place it looks first, since lines above the bullet may have been added or removed since the booking." Before, the review took the name from the choice's open item `<L>` and "the line number of `Booked:` is where the search starts".
+- Check that fails without the change: case 26 below, where the walk takes the name only from the `Booked:` line.
+
+### Item 2. Spec 2, a replacing ruling writes its own bullet
+
+- `references/self-rule.md`, "The choices file", last bullet: "A ruling of the user that replaces a bullet ending "(self-rule)" outside a review (a `Ruled:` reply, or a `/grill` answer or carried ruling) always writes a Rulings bullet of its own that names the bullet it replaces: for a `Ruled:` reply, `- Open item <L> (<date>): <the ruling's text>, replacing Open item <L'> (the user).`, and for `/grill`, the bullet the `grill` skill writes." Its sub-bullets: the replaced bullet's ending is rewritten to "(self-rule, replaced by <the new bullet's name>).", its choice leaves the file, `- <date>: C<n>: replaced by <the new bullet's name>.` joins the plan's Closed items, and the steps whose tag or Step 0 names the replaced bullet are treated as "The review of a choice" treats the steps of `Builds on it:` under `C<n> =>`.
+- `skills/spec/SKILL.md` "Steps / A ruling" 2, before: "a ruling that replaces a bullet ending "(self-rule)" is booked as `plan-orchestration`'s "Self-rule", "The choices file" says;" After: "a ruling that replaces a bullet ending "(self-rule)" always writes a Rulings bullet of its own that names the bullet it replaces, and is booked as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says;". Its sub-bullet before: "A line ending "(self-rule, replaced by C<n>)." is no ruling." After: "A line ending "(self-rule, replaced by <name>)." is no ruling."
+- `skills/plan-orchestration/SKILL.md` Steps 9 landing sub-bullet, before "...names a bullet ending "(self-rule, replaced by C<n>)."..." after "...names a bullet ending "(self-rule, replaced by <name>).", for any name, the orchestrator adds its fix step, as `references/self-rule.md`, "The review of a choice", says." The reference's own landing bullet matches any `<name>` too.
+- `skills/grill/SKILL.md` carried-ruling sub-bullet (line 116), before: "...replaces that bullet, with no rule clash: the bullet's ending is rewritten to "(self-rule, replaced by <the carried bullet's name>)."..." After: "...replaces that bullet, with no rule clash: the carried bullet written for it names the old bullet as the one it replaces, and the old bullet's ending is rewritten to "(self-rule, replaced by <the carried bullet's name>)."..." The user-answer sub-bullet (line 217) already named the old bullet and now points at the reference.
+- Check: case 24 below writes the new bullet naming `Open item M`, rewrites M's ending, removes C9, adds the Closed items line and treats step 7.
+
+### Item 3. Spec 3, kind 3 names an ADR contradiction or supersession
+
+- `references/self-rule.md`, "The six kinds left open", kind 3, third sub-bullet: "Kind 3 also names a contradiction of an ADR in force, or an option that supersedes one."
+- Read and true after the change: `skills/refute/SKILL.md` "Finding dispositions" second bullet ("A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR."), since kind 3 keeps such an item open under self-rule; `skills/ordo-help/SKILL.md` line 71 ("a contradiction of an ADR the brief asked for is raised to you as an open item instead"), same reason; the Stops row "A rule clash" of `plan-orchestration` (line 307, "A contradiction between two established rules or decisions, an ADR among them, except a ruling of the user that replaces a bullet ending "(self-rule)", which is no clash"), whose subject is the stop and whose kind is now named in the reference. None needed a change.
+
+### Item 4. Spec 4 and Standards 3, "The counts"
+
+- `references/self-rule.md` "The counts", before (in `SKILL.md`): "The stop "A step that does not converge" is never closed under self-rule, since each of its options rewrites, splits or removes a step the user approved." After: "The stops a count of "Rules" raises, "A step that does not converge" and the second failure of a step's landing (the `land` skill's Steps 6), are never closed under self-rule, since each ends a step the unattended loop has not brought to an end, and closing it would let the loop run without bound." Its second bullet keeps "An item closed under self-rule counts as a stop of its step (the `spec` skill's "Steps / A stop" 3)."
+- "Closing an open item" first sentence: "An open item that "The six kinds left open" and "A skill with its own approval stop" do not hold, and that is not one of the stops "The counts" names, is closed by the orchestrator the moment it is raised..." (before: "...that no bullet above leaves open, and that is not the stop "The counts" names...").
+- `plan-orchestration` Stops sub-bullet (line 315), before: "Under `self_rule: on`, a stop of a kind that "Self-rule" does not leave open is then closed as that section says." After: "Under `self_rule: on`, a stop of a kind that `references/self-rule.md`, "The six kinds left open", does not name, and that is not one of the stops its "The counts" names, is then closed as its "Closing an open item" says."
+- `skills/land/SKILL.md` Stops row "A red line for the user", What resumes it, before: "The user's ruling". After: "The user's ruling or, under `self_rule: on`, for a first failure, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; the second failure of a step's landing always waits for the user". Steps 6 line 81 ("a second failure of its landing always goes to the user as an open item, and the step waits for the ruling") agrees and is unchanged.
+- Read and true: `plan-orchestration` Steps 9 line 124 ("A second failure of the step's landing always goes to the user, as the `land` skill's Steps 6 says."), the Rules counts sentence (lines 351 and 352: "A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.", true because "The counts" keeps those stops open), `land` Steps 6 (lines 63 and 81).
+
+### Item 5. Spec 5, kind 3 names a check, a command or a script
+
+`references/self-rule.md` kind 3, fourth sub-bullet: "Kind 3 also names an option that adds a check, a command in the verification list or a script, since the rules file reserves to the user the approval of what a new script computes." The recurring-findings lines of `plan-orchestration` (220, 221) already say a check proposal is kind 3 and now point at "The six kinds left open".
+
+### Item 6. Standards 1, `/plan` under a self-rule quoted ruling
+
+`skills/plan/SKILL.md` Steps 3, before: "A step list written under a quoted ruling is the approved list." After, two bullets: "A step list written under a quoted ruling whose bullet ends "(the user)" is the approved list." and "A step list written under a quoted ruling whose bullet ends "(self-rule)" has each step line end with `(ruling <name>)`, naming that bullet, never `(approved)`." Rules (line 139), as D2 gives it: "...or `(ruling <name>)` for a step a ruling added, after the approval or under a quoted ruling ending "(self-rule)", the ruling being the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says." (before "for a step a later ruling added, the user's or one booked under self-rule"). Template line 20 of `skills/plan/templates/plan.md`, as D2 gives it: "- <2a> <a step a ruling added, in one line; the check that proves it> (<n> commit) (ruling <L>)" (before "a step a later ruling added"). The Rules sentence on `(approved)` ("`(approved)` for a step of the list the user approved") stays true: a list written under a "(self-rule)" ruling is not one the user approved. The glossary **authority** term ("`(approved)` for a step of the list the user approved when the plan opened") is true and unchanged.
+
+### Item 7. Standards 2, `/grill` under a self-rule quoted ruling
+
+- `skills/grill/SKILL.md` "What it reads" 11 gains a sub-bullet (line 76): "A bullet ending "(self-rule)" settles the decisions its sub-bullets state as the orchestrator's choice, and states no roadmap diff: wherever this skill speaks of a roadmap diff a quoted ruling states, or of a draft that is the ruled change, only a bullet ending "(the user)" is meant." It covers lines 152, 172, 178, 247, 261, 268 and 312, which speak of a roadmap diff a quoted ruling states.
+- Line 124, before: "...is marked settled, since the quoted ruling is the user's answer ("Rules"): it is made at the first write of Steps 8, and a draft that ... shows as the decision is asked in the next round." After: "...since the quoted ruling is the user's answer ("Rules"), when the quoted ruling's bullet ends "(the user)": it is made at the first write of Steps 8, and a draft that ... shows as the decision is asked in the next round. When the bullet ends "(self-rule)", the roadmap diff stays a decision of the next round, as `/roadmap` refuses such a bullet."
+- Rules lines 335 and 336, before: "A quoted ruling that holds the entry's changed text is the user's answer to the roadmap diff." After: "A quoted ruling whose bullet ends "(the user)" and holds the entry's changed text is the user's answer to the roadmap diff." and "A quoted ruling whose bullet ends "(self-rule)" settles the decisions it states as the orchestrator's choice, not as the user's answer, and its roadmap diff stays a decision for the user."
+
+### Item 8. Standards 4, sentences made false
+
+- `README.md` line 56, before: "...unless the run is under a quoted ruling that states the change. One marked "only when"..." After: "...unless the run is under a quoted ruling that states the change. Under `self_rule: on` such a stop waits only when it is of a kind `plan-orchestration` leaves open. One marked "only when"..."
+- `skills/spec/SKILL.md` line 3: the description phrase "a candidate being the user's choice, or under self-rule the orchestrator's" is in, and D1 applied: "run the brief check (a fresh read-only agent checks the brief against the tree, each finding closed in the brief)" became "run the brief check by a fresh read-only agent". Description length, the characters between the quotation marks: before 1015, after 987 (limit 1,024).
+- `skills/diagnose/SKILL.md` line 210, What resumes it, before: "Inside a plan, the user's ruling on the open item; run by a person, the user's next direction". After: "Inside a plan, the user's ruling on the open item or, under `self_rule: on`, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; run by a person, the user's next direction".
+- `skills/land/SKILL.md` line 183: item 4 above.
+- The **quoted ruling** term, `skills/repo-setup/templates/plan-terms.md` line 77 and `docs/glossary.md` line 82, before: "...or with "(self-rule)" for `plan`, `grill` and `spec`, with the sub-bullets under it." After: "...whose first line ends with "(the user)", or with "(self-rule)" for `plan` and `grill`, with the sub-bullets under it. The sub-bullets state the change in full." followed by its "Stated in:" unchanged. `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` prints `ok: the plan-terms block equals the template`.
+- Two sentences that repeat the README sentence and the same change makes false, carried with it (beyond the round brief's list): `docs/glossary.md` line 136, the term **mark, of a figure**, "every run" clause, before: "...unless the run is under a quoted ruling that states the change;" after: "...unless the run is under a quoted ruling that states the change or, under `self_rule: on`, the stop is of none of the six kinds `plan-orchestration` leaves open;"; and the legend note of both figures, `docs/figures/gen_figures.py` lines 395 and 396, before: "A stop marked "every run" waits each time, unless the run is under a quoted ruling that states the change." after: "A stop marked "every run" waits each time, unless a quoted ruling states the change or, under self_rule: on, the stop is of none of the six kinds." (a note must fit one line of 990 px, and the longer wordings did not). `docs/figures/pipeline.svg` and `docs/figures/plan-loop.svg` are rewritten by `python3 docs/figures/gen_figures.py` (exit 0), and the band sentence of the loop figure is unchanged.
+- Names the round changed, grepped across `skills`, `docs` and `README.md`: `"Self-rule"` as a pointer (none left but the shared-rules sentence and the reference's Scope line), `Booked:` (only `docs/adr/0005-...md:20`, an ADR, which describes the path as it stands at booking and stays true), `replaced by` (only `spec/SKILL.md:45`, changed), `(approved)` (`ordo-help:85`, `glossary.md:12` and `plan-terms.md:7`, all true), and the lines of `quoted ruling` that call it the user's (the `roadmap`, `ordo-init`, `repo-setup` and `plan` lines take only a "(the user)" bullet or are about the draft, and are true; `grill` is item 7). No other hit is false.
+- The `references/self-rule.md` sentence "the line number of `Booked:` is the place it looks first, since lines above the bullet may have been added or removed since the booking" replaces "is where the search starts", which would miss a bullet that moved up.
+
+### Item 9. Standards 5, the reference file
+
+- Created `skills/plan-orchestration/references/self-rule.md` (87 lines), with the headings Scope, The six kinds left open, A skill with its own approval stop, Closing an open item, The counts, The choices file, The review of a choice. Its "Scope" is one line: "The scope is the first bullet of `SKILL.md`'s section "Self-rule"." (the ruling's point).
+- `skills/plan-orchestration/SKILL.md` `## Self-rule` (line 223) holds two bullets: "Scope" ("The section applies under `self_rule: on` in the configuration block, and with `self_rule: off`, or the key absent, every open item waits for the user, as "Stops" says.") and "The reference" ("Under `self_rule: on`, and for the review of a choice, the session reads `references/self-rule.md`, which says which open items stay with the user, how the others are closed, and how the choices file is kept and reviewed."). The description is 865 characters and keeps the `C<n> Agree` and `C<n> =>` triggers. The band sentence of the figure stays.
+- Every pointer is renamed to `plan-orchestration`'s `references/self-rule.md` plus its heading: in `plan-orchestration/SKILL.md` (lines 56, 59, 127, 213, 220, 221, 226, 268, 277, 308, 315, 357), `land` (213, 214), `refute` (151), `spec` (221 and 238), `grill` (116, 217), `plan/templates/orchestrator-state.md` (37, 39, 41), `diagnose` (210), `land` (183). Within `plan-orchestration` the pointer is written `references/self-rule.md`, since it is the skill's own file, as `docs/dev/skill-layout.md` line 73 says ("A file of this skill's `references/` is named `references/<file>`"); in other skills it is named with its skill, as line 74 says.
+- `docs/dev/skill-layout.md` line 66 (material a step needs only in some runs goes in `references/<name>.md`, named by its path from the step that reads it; never in `templates/`): the file sits in `references/`, and every step that needs it names it by path. Line 67 (a reference section of row 6 holds only material every run reads): the kept `## Self-rule` section holds the scope and the pointer, which every run reads. The reference file's headings are noun-phrase labels, one rule per bullet.
+
+### Item 10. Proof 1, the walk on a scratch copy
+
+Scratch ledger under `$TMPDIR/ordo6-walk/ledger`: a copy of `.scratch/2-e-a-self-rule/` (without `agents/`), plan folders `2-f-plan`, `archive/2-d-plan` and `archive/2-c-plan` with Rulings bullets `Open item P`, `Q` and `R`, bullets `F`, `G` and `H` and steps `6c` (landed), `6d`, `6e`, `12b` added to the copy of this plan, and a `choices.md` made from the new template holding C3 to C8 with `Last number: C8`. The cases ran in the order 9, 16, 17, 18, 19, 21, 22, 24, 26, 25, 23, each followed from the lines of `references/self-rule.md` named below (the walk printed each followed line with its number, and no git command ran: "committed by path" is the paths named in the reference's last bullet). Each case lists the lines followed, where the name and the bullet came from, and the lines written (diff -u "+" and "-" lines; the choice's removed lines are shown by their heading). The scratch copy is removed after.
+
+Case 9: self_rule: on, /spec stops on a false premise of step 7; recommended option rewrites the approved step 7 text
+- Text followed: self-rule.md:29, self-rule.md:31, self-rule.md:32, self-rule.md:33, self-rule.md:35, self-rule.md:36, self-rule.md:50, self-rule.md:37, self-rule.md:38.
+- Written to <scratch>/2-e-a-self-rule/orchestrator-state.md: `- 2026-10-02: Open item M, step 7's premise: closed under self-rule, C9.`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- 7 `next_entry`: after a closing, under the key as the plan.yaml template names it, the next open entry through `/grill` (each round answered with its recommendation, written to `choices.md`), `/plan` (its approval written to `ch`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Open item M (2026-10-02): step 7's text rewritten to the key's real name, which unblocks step 7's `/spec` (self-rule).`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `### Step 7, next_entry: Step 0 (stopped 2026-10-02)`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Open item M of the state file, as booked there: the premise of step 7 that names a key the plan.yaml template lacks; closed under self-rule, C9.`
+- Written to <scratch>/choices.md: `Last number: C9`
+- Written to <scratch>/choices.md: `## C9. Step 7's premise (2026-10-02)`
+- Written to <scratch>/choices.md: `Options: (a) rewrite step 7's text; (b) add a step. Recommendation: (a), the step stays buildable. The lazy option: (b).`
+- Written to <scratch>/choices.md: `Taken: (a)`
+- Written to <scratch>/choices.md: `Booked: `ledger/2-e-a-self-rule/plan.md:91` (Open item M)`
+- Written to <scratch>/choices.md: `Builds on it: 7`
+- Removed from <scratch>/2-e-a-self-rule/orchestrator-state.md: `- Open item M (2026-10-02): step 7's premise `next_entry` names a key the plan.yaml template lacks. Options: (a) rewrite step 7's text to the key's re`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- 7 `next_entry`: after a closing, the next open entry through `/grill` (each round answered with its recommendation, written to `choices.md`), `/plan`
+- Removed from <scratch>/choices.md: `Last number: C8`
+
+Case 16: C3 Agree, C3 the only choice of entry 2.F, plan 2.F open
+- Text followed: self-rule.md:70, self-rule.md:71, self-rule.md:72, self-rule.md:73, self-rule.md:74, self-rule.md:75, self-rule.md:87.
+- name from the Booked line: "Open item P"; Booked path ledger/2-f-plan/plan.md (line 15); plan file used: <scratch>/ledger/2-f-plan/plan.md
+- bullet found at line 15 of that file: - Open item P (2026-10-01): the option for C3, in one line (self-rule).
+- Written to <scratch>/2-f-plan/orchestrator-state.md: `- 2026-10-02: C3, Decision three: agreed by the user.`
+- Written to <scratch>/2-f-plan/plan.md: `- Open item P (2026-10-01): the option for C3, in one line (the user).`
+- Removed from <scratch>/2-f-plan/plan.md: `- Open item P (2026-10-01): the option for C3, in one line (self-rule).`
+- Removed from <scratch>/choices.md: `# Entry 2.F Plan F`
+- Removed from <scratch>/choices.md: `## C3. Decision three (2026-10-01)`
+- Removed from <scratch>/choices.md: `Options: (a) a`
+- Removed from <scratch>/choices.md: `Recommendation: a`
+- Removed from <scratch>/choices.md: `The lazy option: the cheaper one.`
+- Removed from <scratch>/choices.md: `Taken: (a) a`
+- Removed from <scratch>/choices.md: `Booked: `ledger/2-f-plan/plan.md:15` (Open item P)`
+- Removed from <scratch>/choices.md: `Builds on it: none`
+
+Case 17: C4 Agree, plan 2.D closed and archived (Booked path names the folder as it was before the archive)
+- Text followed: self-rule.md:70, self-rule.md:71, self-rule.md:72, self-rule.md:73, self-rule.md:74, self-rule.md:75, self-rule.md:87.
+- name from the Booked line: "Open item Q"; Booked path ledger/2-d-plan/plan.md (line 15); plan file used: <scratch>/ledger/archive/2-d-plan/plan.md
+- bullet found at line 15 of that file: - Open item Q (2026-09-02): the option for C4, in one line (self-rule).
+- Written to <scratch>/archive/2-d-plan/orchestrator-state.md: `- 2026-10-02: C4, Decision four: agreed by the user.`
+- Written to <scratch>/archive/2-d-plan/plan.md: `- Open item Q (2026-09-02): the option for C4, in one line (the user).`
+- Removed from <scratch>/archive/2-d-plan/plan.md: `- Open item Q (2026-09-02): the option for C4, in one line (self-rule).`
+- Removed from <scratch>/choices.md: `# Entry 2.D Plan D`
+- Removed from <scratch>/choices.md: `## C4. Decision four (2026-10-01)`
+- Removed from <scratch>/choices.md: `Options: (a) a`
+- Removed from <scratch>/choices.md: `Recommendation: a`
+- Removed from <scratch>/choices.md: `The lazy option: the cheaper one.`
+- Removed from <scratch>/choices.md: `Taken: (a) a`
+- Removed from <scratch>/choices.md: `Booked: `ledger/2-d-plan/plan.md:15` (Open item Q)`
+- Removed from <scratch>/choices.md: `Builds on it: none`
+
+Case 18: C5 => text; step 6c of Builds on it: has landed, plan 2.E.A open
+- Text followed: self-rule.md:70, self-rule.md:71, self-rule.md:76, self-rule.md:77, self-rule.md:78, self-rule.md:80, self-rule.md:85, self-rule.md:87, spec/SKILL.md:44.
+- name from the Booked line: "Open item F"; Booked path ledger/2-e-a-self-rule/plan.md (line 88); plan file used: <scratch>/ledger/2-e-a-self-rule/plan.md
+- bullet found at line 88 of that file: - Open item F (2026-10-01): the option for C5, in one line (self-rule).
+- new bullet written: - C5 decision five (2026-10-02): the key keeps its old name, replacing Open item F (the user).
+- fix step written: - 12a follow C5 in the code step 6c landed; check: the diff read (1 commit) (ruling C5 decision five)
+- /spec of the fix step: reading its tag, per the spec skill
+- tag names: "C5 decision five"; Rulings line matching it by the text before its first " (": ['- C5 decision five (2026-10-02): the key keeps its old name, replacing Open item F (the user).']
+- line ends "(the user)." -> authority accepted: True
+- Written to <scratch>/2-e-a-self-rule/orchestrator-state.md: `- 2026-10-02: C5, Decision five: replaced by the user's ruling C5.`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- 12a follow C5 in the code step 6c landed; check: the diff read (1 commit) (ruling C5 decision five)`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Open item F (2026-10-01): the option for C5, in one line (self-rule, replaced by C5).`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- C5 decision five (2026-10-02): the key keeps its old name, replacing Open item F (the user).`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `### Step 12a, follow C5: Step 0 (2026-10-02)`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Corrects step 6c, which landed on Open item F before C5 replaced it.`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- Open item F (2026-10-01): the option for C5, in one line (self-rule).`
+- Removed from <scratch>/choices.md: `## C5. Decision five (2026-10-01)`
+- Removed from <scratch>/choices.md: `Options: (a) a`
+- Removed from <scratch>/choices.md: `Recommendation: a`
+- Removed from <scratch>/choices.md: `The lazy option: the cheaper one.`
+- Removed from <scratch>/choices.md: `Taken: (a) a`
+- Removed from <scratch>/choices.md: `Booked: `ledger/2-e-a-self-rule/plan.md:88` (Open item F)`
+- Removed from <scratch>/choices.md: `Builds on it: 6c`
+
+Case 19: C6 => text; 6d (tag names the old bullet) and 6e (tag (approved)) not yet prepared, none landed or in flight
+- Text followed: self-rule.md:70, self-rule.md:71, self-rule.md:76, self-rule.md:77, self-rule.md:78, self-rule.md:84, self-rule.md:85, self-rule.md:87.
+- name from the Booked line: "Open item G"; Booked path ledger/2-e-a-self-rule/plan.md (line 89); plan file used: <scratch>/ledger/2-e-a-self-rule/plan.md
+- bullet found at line 91 of that file: - Open item G (2026-10-01): the option for C6, in one line (self-rule).
+- new bullet written: - C6 decision six (2026-10-02): the key is set by the roadmap entry, replacing Open item G (the user).
+- step 6d: tag names the old bullet; text and tag rewritten
+- step 6e: tag is (approved); text rewritten, tag kept
+- Written to <scratch>/2-e-a-self-rule/orchestrator-state.md: `- 2026-10-02: C6, Decision six: replaced by the user's ruling C6.`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- 6d not yet prepared step rewritten to follow C6 (1 commit) (ruling C6 decision six)`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- 6e not yet prepared step rewritten to follow C6 (1 commit) (approved)`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Open item G (2026-10-01): the option for C6, in one line (self-rule, replaced by C6).`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- C6 decision six (2026-10-02): the key is set by the roadmap entry, replacing Open item G (the user).`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- 6d not yet prepared step built on C6 (1 commit) (ruling G)`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- 6e not yet prepared step built on C6 (1 commit) (approved)`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- Open item G (2026-10-01): the option for C6, in one line (self-rule).`
+- Removed from <scratch>/choices.md: `## C6. Decision six (2026-10-01)`
+- Removed from <scratch>/choices.md: `Options: (a) a`
+- Removed from <scratch>/choices.md: `Recommendation: a`
+- Removed from <scratch>/choices.md: `The lazy option: the cheaper one.`
+- Removed from <scratch>/choices.md: `Taken: (a) a`
+- Removed from <scratch>/choices.md: `Booked: `ledger/2-e-a-self-rule/plan.md:89` (Open item G)`
+- Removed from <scratch>/choices.md: `Builds on it: 6d, 6e`
+
+Case 21: C8 => text; step 1a of Builds on it: landed, plan 2.C closed and archived
+- Text followed: self-rule.md:70, self-rule.md:71, self-rule.md:76, self-rule.md:77, self-rule.md:78, self-rule.md:83, self-rule.md:85, self-rule.md:87.
+- name from the Booked line: "Open item R"; Booked path ledger/2-c-plan/plan.md (line 15); plan file used: <scratch>/ledger/archive/2-c-plan/plan.md
+- bullet found at line 15 of that file: - Open item R (2026-09-03): the option for C8, in one line (self-rule).
+- new bullet written: - C8 decision eight (2026-10-02): the key is named by the template, replacing Open item R (the user).
+- /roadmap add draft, shown to the user at that skill's approval stop, not written: "/roadmap add <goal that follows C8: the key is named by the template>"
+- Written to <scratch>/archive/2-c-plan/orchestrator-state.md: `- 2026-10-02: C8, Decision eight: replaced by the user's ruling C8.`
+- Written to <scratch>/archive/2-c-plan/plan.md: `- Open item R (2026-09-03): the option for C8, in one line (self-rule, replaced by C8).`
+- Written to <scratch>/archive/2-c-plan/plan.md: `- C8 decision eight (2026-10-02): the key is named by the template, replacing Open item R (the user).`
+- Removed from <scratch>/archive/2-c-plan/plan.md: `- Open item R (2026-09-03): the option for C8, in one line (self-rule).`
+- Removed from <scratch>/choices.md: `# Entry 2.C Plan C`
+- Removed from <scratch>/choices.md: `## C8. Decision eight (2026-10-01)`
+- Removed from <scratch>/choices.md: `Options: (a) a`
+- Removed from <scratch>/choices.md: `Recommendation: a`
+- Removed from <scratch>/choices.md: `The lazy option: the cheaper one.`
+- Removed from <scratch>/choices.md: `Taken: (a) a`
+- Removed from <scratch>/choices.md: `Booked: `ledger/2-c-plan/plan.md:15` (Open item R)`
+- Removed from <scratch>/choices.md: `Builds on it: 1a`
+
+Case 22: C99 Agree with no C99 in the file
+- Text followed: self-rule.md:86, self-rule.md:86.
+- REFUSED: C99 is not in the file; the file holds C7, C9; nothing written
+- (a) no choices file: the file is removed in a copy of the scratch ledger
+- REFUSED: there is no choices file at <ledger_root>/choices.md; nothing written
+
+Case 24: Ruled: reply replacing Open item M (a "(self-rule)" bullet whose choice C9 is still in the file)
+- Text followed: self-rule.md:57, self-rule.md:58, self-rule.md:59.
+- new bullet written (the ruling's own, naming the replaced one): - Open item N (2026-10-02): step 7 keeps its first text, replacing Open item M (the user).
+- step 7 rests on it (its Step 0 names it): text rewritten, tag (approved) kept
+- Written to <scratch>/2-e-a-self-rule/orchestrator-state.md: `- 2026-10-02: C9: replaced by Open item N.`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- 7 `next_entry`: after a closing, the next open entry through `/grill` (each round answered with its recommendation, written to `choices.md`), `/plan` (its approval written to `choices.md`) and the loop, stopping at an entry unde`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Open item M (2026-10-02): step 7's text rewritten to the key's real name, which unblocks step 7's `/spec` (self-rule, replaced by Open item N).`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Open item N (2026-10-02): step 7 keeps its first text, replacing Open item M (the user).`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- 7 `next_entry`: after a closing, under the key as the plan.yaml template names it, the next open entry through `/grill` (each round answered with it`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- Open item M (2026-10-02): step 7's text rewritten to the key's real name, which unblocks step 7's `/spec` (self-rule).`
+- Removed from <scratch>/choices.md: `## C9. Step 7's premise (2026-10-02)`
+- Removed from <scratch>/choices.md: `Options: (a) rewrite step 7's text; (b) add a step. Recommendation: (a), the step stays buildable. The lazy option: (b).`
+- Removed from <scratch>/choices.md: `Taken: (a)`
+- Removed from <scratch>/choices.md: `Booked: `ledger/2-e-a-self-rule/plan.md:91` (Open item M)`
+- Removed from <scratch>/choices.md: `Builds on it: 7`
+
+Case 26: the Booked line number is stale (a step line added above the Rulings); C7 Agree
+- Text followed: self-rule.md:70, self-rule.md:71, self-rule.md:72, self-rule.md:73, self-rule.md:74, self-rule.md:75, self-rule.md:87.
+- Booked line says line 90; the bullet is now at line 94
+- name from the Booked line: "Open item H"; Booked path ledger/2-e-a-self-rule/plan.md (line 90); plan file used: <scratch>/ledger/2-e-a-self-rule/plan.md
+- bullet found at line 94 of that file: - Open item H (2026-10-01): the option for C7, in one line (self-rule).
+- Written to <scratch>/2-e-a-self-rule/orchestrator-state.md: `- 2026-10-02: C7, Decision seven: agreed by the user.`
+- Written to <scratch>/2-e-a-self-rule/plan.md: `- Open item H (2026-10-01): the option for C7, in one line (the user).`
+- Removed from <scratch>/2-e-a-self-rule/plan.md: `- Open item H (2026-10-01): the option for C7, in one line (self-rule).`
+- Removed from <scratch>/choices.md: `# Entry 2.E.A Self-rule in the loop`
+- Removed from <scratch>/choices.md: `## C7. Decision seven (2026-10-01)`
+- Removed from <scratch>/choices.md: `Options: (a) a`
+- Removed from <scratch>/choices.md: `Recommendation: a`
+- Removed from <scratch>/choices.md: `The lazy option: the cheaper one.`
+- Removed from <scratch>/choices.md: `Taken: (a) a`
+- Removed from <scratch>/choices.md: `Booked: `ledger/2-e-a-self-rule/plan.md:90` (Open item H)`
+- Removed from <scratch>/choices.md: `Builds on it: 12b`
+
+Case 25: /ordo-help and /ordo-help <entry> with a choices file of two entries and three choices; then none
+- Text followed: ordo-help/SKILL.md:43, ordo-help/SKILL.md:44.
+- Printed, as `ordo-help/SKILL.md` 43 reads it: `Choices awaiting review: 3`, then `# Entry 1 Alpha` with `## C1. First decision (2026-10-01)` and `## C2. Second decision (2026-10-01)`, then `# Entry 2 Beta` with `## C3. Third decision (2026-10-01)`.
+- with no file or no choice: Choices awaiting review: none
+
+Case 23: Last number: C8 after C3 to C8 were reviewed (no choice left in the file); the next choice
+- Text followed: self-rule.md:50.
+- number used: C9
+- Written to <scratch>/choices.md: `Last number: C9`
+- Written to <scratch>/choices.md: `# Entry 2.G Plan G`
+- Written to <scratch>/choices.md: `## C9. First choice after the reviews (2026-10-02)`
+- Removed from <scratch>/choices.md: `Last number: C8`
+
+### The checks
+
+`sh skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-a-self-rule/orchestrator-state.md`, from the worktree root, exit 1:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+sh: skills/plan-orchestration/templates/plan_cost.test.sh: No such file or directory
+checks: failed with exit 127: sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+```
+
+The same runner against a copy of that state file with only the `plan_cost.test.sh` line removed (the copy was outside the worktree and is removed), exit 0; the `$ git ls-files` line is the runner's own, no git command was run by hand:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+```
+
+Verify 2, `grep -rn '(self-rule)' skills README.md docs/glossary.md` (each line cut to 110 characters here): hits in `plan-orchestration/SKILL.md`, `spec/SKILL.md`, `plan/SKILL.md`, `plan/templates/plan.md`, `grill/SKILL.md`, `plan-terms.md` and `docs/glossary.md`, and none in `skills/roadmap`, `skills/ordo-init` or `skills/repo-setup/SKILL.md` (`grep -rln '(self-rule)' skills/roadmap skills/ordo-init skills/repo-setup/SKILL.md` prints nothing). `plan`, `spec` and `plan-orchestration` accept "(self-rule)" where they read a ruling's authority; `grill` accepts it in "What it reads" 11 and rejects it for a carried ruling; `roadmap`, `ordo-init` and `repo-setup` read only "(the user)" for a quoted ruling, since `ordo-init` writes `.agents/plan.yaml`, `repo-setup` the shared rules, and `/roadmap add` under `next_entry` is step 7's.
+
+```
+skills/land/SKILL.md:214:- A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`
+skills/grill/SKILL.md:76:    - A bullet ending "(self-rule)" settles the decisions its sub-bullets state as th
+skills/grill/SKILL.md:84:      - The bullet's first line ends with neither "(the user)" nor "(self-rule)", eac
+skills/grill/SKILL.md:116:       - A carried ruling dated after a bullet ending "(self-rule)" that it contradi
+skills/grill/SKILL.md:124:   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is mar
+skills/grill/SKILL.md:217:   - The user's answer that contradicts a bullet ending "(self-rule)" replaces it, w
+skills/grill/SKILL.md:336:  - A quoted ruling whose bullet ends "(self-rule)" settles the decisions it states 
+skills/plan/SKILL.md:56:     - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each 
+skills/plan/SKILL.md:99:     - A step list written under a quoted ruling whose bullet ends "(self-rule)" has e
+skills/plan/SKILL.md:139:- Every step line of `plan.md` ends with its authority: `(approved)` for a step of th
+skills/plan/templates/plan.md:32:- Open item <L> (<date>): <the option taken under self-rule, in one line, and
+skills/spec/SKILL.md:44:   - Each ruling a tag names is a line of the Rulings section that ends with "(the use
+skills/spec/SKILL.md:227:   - a ruling that adds or splits a step is also written in the Rulings section as a 
+skills/spec/SKILL.md:229:   - a ruling on an option that runs a skill with an approval stop and states the cha
+skills/spec/SKILL.md:238:   - a ruling that replaces a bullet ending "(self-rule)" always writes a Rulings bul
+skills/spec/SKILL.md:305:| A step without its authority | The step's line ends with neither `(approved)` nor a
+skills/plan-orchestration/SKILL.md:307:| A rule clash | A contradiction between two established rules or decis
+skills/plan-orchestration/references/self-rule.md:33:3. It is booked as the `spec` skill's "Steps / A ruling" 
+skills/plan-orchestration/references/self-rule.md:57:- A ruling of the user that replaces a bullet ending "(se
+skills/plan-orchestration/references/self-rule.md:71:- A bullet of that name that does not end "(self-rule)" o
+skills/plan-orchestration/references/self-rule.md:74:  - The bullet's ending is rewritten from "(self-rule)." 
+skills/plan-orchestration/references/self-rule.md:77:  - The old bullet's ending is rewritten from "(self-rule
+skills/repo-setup/templates/plan-terms.md:77:- **quoted ruling**: a ruling of the user given to a skill by the
+docs/glossary.md:82:- **quoted ruling**: a ruling of the user given to a skill by the arguments `--ruling <led
+```
+
+Verify 4, `python3 docs/figures/gen_figures.py` prints `wrote docs/figures/pipeline.svg (31547 bytes)` and `wrote docs/figures/plan-loop.svg (31517 bytes)`, exit 0; `cmp` against the copies taken at the start of the round: both rewritten (the legend note).
+
+Verify 5, description lengths by the count `docs/dev/skill-layout.md` gives (characters between the quotation marks): spec 987, plan-orchestration 865, ordo-help 472; the other skills: diagnose 905, grill 808, land 726, ordo-init 632, plan-retro 616, plan 477, refute 951, repo-setup 861, roadmap 1001, session-retro 779.
+
+Verify 6, `python3 skills/repo-setup/templates/sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template` (also the ninth line of the second output above).
+
+Verify 7, `LC_ALL=C grep -n '[^ -~]'`, a tab grep and a trailing-space grep over every changed file (the ones in the list below plus the two figures) print nothing; the `$ git ls-files -coz ...` command in the second output above passes.
+
+### Files, with line counts (`wc -l`)
+
+```
+87 skills/plan-orchestration/references/self-rule.md
+358 skills/plan-orchestration/SKILL.md
+328 skills/spec/SKILL.md
+340 skills/grill/SKILL.md
+142 skills/plan/SKILL.md
+217 skills/land/SKILL.md
+187 skills/refute/SKILL.md
+237 skills/diagnose/SKILL.md
+43 skills/plan/templates/plan.md
+70 skills/plan/templates/orchestrator-state.md
+15 skills/plan-orchestration/templates/choices.md
+121 skills/repo-setup/templates/plan-terms.md
+138 docs/glossary.md
+182 README.md
+751 docs/figures/gen_figures.py
+3216 total
+```
+
+Also changed: `docs/figures/pipeline.svg` and `docs/figures/plan-loop.svg` (regenerated).
+
+### Judgment calls
+
+- `skills/land/SKILL.md` Stops row "A red line for the user" gets the exception for a first failure and keeps the second failure with the user, as the builder proposed and the rulings took.
+- The reference's "Scope" is one line pointing at the kept bullet of `SKILL.md`, as the builder proposed and the rulings took.
+- The legend note of the figures and the glossary term **mark, of a figure** repeat the README sentence that the change makes false, so both carry the same exception (item 8); the figure note says "none of the six kinds" because a longer sentence does not fit one line of 990 px.
+- The walk's fix step takes the number `12a`, after the last step before the closing, as `skills/plan/templates/plan.md` line 20 numbers a step a ruling added (`<2a>`); the reference's text gives `<k>` and no rule for it.
+- The walk of case 9 writes a Step 0 section for step 7, since "Closing an open item" 6 commits "the step's Step 0" and the loop's Stops book each stop there.

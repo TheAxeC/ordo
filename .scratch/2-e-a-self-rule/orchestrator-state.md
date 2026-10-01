@@ -54,7 +54,7 @@ dispatch:
   landing: not-started
   round: 1
   session_id: a15fd806c8f78a9ab (claude-sonnet-5-5)
-  builder_usage: 212645 tokens, 30 tool uses, 6 min 45 s (the first run of the cases, handed back: agents/reviews/6-cases-handback.md; ruled in agents/briefs/6-cases.md); the build after the ruling: 322159 tokens, 48 tool uses, 15 min 51 s
+  builder_usage: 212645 tokens, 30 tool uses, 6 min 45 s (the first run of the cases, handed back: agents/reviews/6-cases-handback.md; ruled in agents/briefs/6-cases.md); the build after the ruling: 322159 tokens, 48 tool uses, 15 min 51 s; repair round 1: 348847 tokens, 4 tool uses, 1 min 59 s (the points handed back, ruled in agents/briefs/6-round-1-rulings.md), then 203463 tokens, 87 tool uses, 17 min 46 s
   reviewer_report:
   - .scratch/2-e-a-self-rule/agents/reviews/6-refuter.md (a90205aabc898e907, claude-opus-5-5 (ordo-high), 253163 tokens, 56 tool uses, 13 min 31 s)
   shared_paths: skills/plan-orchestration/SKILL.md, skills/plan/SKILL.md, skills/plan/templates/plan.md, skills/repo-setup/templates/plan-terms.md, docs/glossary.md and README.md, each shared with step 4; the merge is simple, since each step changes other lines of each file (step 4: Steps 10 and "Usage", the closing's bullet, template line 21, the terms closing report, closing step and cost script, and its README paragraph; step 6: its own section and the lines its brief names, the terms quoted ruling and resume point, README lines 16-50). skills/repo-setup/templates/shared-rules.md is a template for other repositories, not a rules file Ordo's builders work under, so step 6 need not run alone.
