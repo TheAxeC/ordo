@@ -50,7 +50,7 @@ metadata:
    - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
    - Right after the dispatch, the orchestrator or the session reads the reviewer's agent id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
-   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
+   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used. The configured one is the model the configuration block's `reviewer:` names for the first run, and for a run over a repair round the model "Steps / Over a repair round" 1 gives.
    - The stopped reviewer is recorded under the dispatch block's `reviewer_report`, after the records before it.
      - A first-run reviewer: `(<agent id>, <served model>, stopped)`.
      - A reviewer over round `<n>`: `over round <n>: <agent id>, <served model>, stopped`.
@@ -76,7 +76,9 @@ metadata:
 
 ### Over a repair round
 
-1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says.
+1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says except for its model.
+   - The model is the one the configuration block's `repair_reviewer:` names, or the `reviewer:` value when the block has no `repair_reviewer:` key, at the effort `reviewer_effort` names.
+   - This holds for every run over a repair round, the run over the extra round of `plan-orchestration`'s exception and a reviewer started over a round in place of one stopped for another model included.
    - A run that finds nothing ends the rounds.
 2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
 3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
@@ -158,7 +160,7 @@ The first row is a stop, a decision for the user: it leaves an open item, booked
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A model other than the configured one | The runner served the reviewer a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | The user's ruling, then `/refute` again |
+| A model other than the configured one | The runner served the reviewer a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured model (Steps 1), the served model and the Claude Code version | The user's ruling, then `/refute` again |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/refute` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared and built |
 | No report | No builder's report on disk | The report path the builder was told to write to | The report written, then `/refute` again |

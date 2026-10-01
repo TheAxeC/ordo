@@ -44,12 +44,19 @@ Findings: <each implied input missing from "Cases">. Or: none.
 
 Findings: <each part of the brief that contradicts an ADR, with the ADR's sentence; each ADR the step touches that the brief does not name>. Or: none.
 
+## 8. Dictated text
+
+- <each line the brief dictates, quoted>: `<the grep -n that finds it in the brief>`; holds, or each rule it breaks, named with its page and section. Or: the brief dictates no text.
+
+Findings: <each line that breaks a rule, with the rules it breaks>. Or: none.
+
 ## Declined to judge
 
 - <a point the agent did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
 
 Agent usage: <agent id>, <served model>, <tokens>, <tool uses>, <minutes>.
 
-## Closed (the session's change to the brief for every finding above, made before the preparation commit)
+## Closed (the session's change to the brief for every finding above, and each dictated line added after the check, made before the preparation commit)
 
 - <finding>: <the change to the brief, with its section>; or a stop, <the open item as the state file holds it>.
+- <a dictated line added after the check, quoted>: holds, or each rule it broke and the rewrite that closed it.

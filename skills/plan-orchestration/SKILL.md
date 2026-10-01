@@ -87,6 +87,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - Read that hand-back the same way as a report.
    - Rule on such a case when the fix stays inside the step's scope.
      - Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`.
+     - Hold the text the ruling gives the builder word for word as Steps 8's **Dictated text** says, before it is committed.
      - Commit it by path as a round sent.
    - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`.
      - The builder's final report carries the ruling.
@@ -97,6 +98,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk; the next resume-point commit carries them.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
+   - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 **Dictated text** holds a brief's, since the brief check never reads those files.
    - **Before the resume.** Write `round: n` into the dispatch block.
      - Commit it by path with the round's brief and the session's own records since the last resume point. The commit is a resume point.
    - **Only known fixes.** Each ruling says what to change.
@@ -109,7 +111,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
    - **After each reply.** Read the whole delta.
      - Add the builder's tokens, tool uses and time for the round, from its completion notice, to `builder_usage` in the dispatch block, on disk.
-     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
+     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer on the model "The two tiers, and the models" gives the run over a repair round, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
 9. Invoke `/land <entry> <step>`. Its refusals are its own.
    - A red line the orchestrator cannot fix at landing takes the step back out of main.
@@ -135,8 +137,11 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
   - It never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
 - **Agents.** A builder, a reviewer or a brief-check agent runs on a Claude model, and never on Claude Fable.
 - **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names, at the effort `worker_effort` names, launched as "Launching a builder" says.
-- **Reviewer.** The model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
-- **Brief-check agent.** One per step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+- **Reviewer.** The model is set per run of `/refute`.
+  - The first run of a step runs on the model the configuration block's `reviewer:` names.
+  - Each run over a repair round runs on the model the configuration block's `repair_reviewer:` names, or on the `reviewer:` value when the block has no `repair_reviewer:` key.
+  - Every run is at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+- **Brief-check agent.** One per step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
 - **Runner.** Both tiers run under Claude Code.
 - Any allowed combination is chosen per step.
 - A new combination is booked in the rulings with what decides it.

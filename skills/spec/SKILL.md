@@ -259,12 +259,20 @@ Steps 5 says when this runs.
    - **The question.** Each case, the check on the step's line and the check of each item of "What to build" is asked "could this pass without the goal being reached?", "the goal" being the part of the plan's goal the step delivers, and the answer is given with its reason.
    - **Implied inputs.** For a code step (a script, or a product's code), the inputs the step implies but never states are listed under "Cases", as `templates/brief.md`'s "Cases" asks, and each one missing is named with its expected result.
    - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is read for its part in force, as "What it reads" 5 says. Each one the step touches is named with the sentence of its decision the step is under. A part of the brief that contradicts one is named, and so is an ADR the step touches that the brief's "What is on the tree" does not name.
+   - **Dictated text.** Every line of text the brief dictates is read line by line.
+     - What is dictated is text whose words the brief gives for a file, whether quoted, in a fenced block, or given after a colon as the words of a named sentence, line, heading, comment, table row or term. A requirement that says what a sentence must say without giving its words is not dictated, and stays the builder's to word.
+     - Each dictated line is read against the rules file and each standards page the configuration names.
+     - A code line (a key with its comment, a command, a placeholder line) is read whole, and its comment and any words in it are read as prose.
+     - The report gives each dictated line with the `grep -n` that finds it in the brief, and with "holds" or each rule it breaks, named with its page and section.
+     - A brief that dictates no text is reported as such.
+     - A dictated line whose words a ruling of the user fixes, and which breaks a rule, is a finding the session cannot close by a change to the brief, so it is the stop "A brief check finding the brief cannot absorb" ("Stops").
    - The checks are done when each has its findings, or "none".
 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
    - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's id, its served model (item 1) and its tokens, tool uses and time from its completion notice.
    - A step has one such report, since the check runs once per step (item 4).
 4. The session closes each finding by a change to the brief, before the preparation commit.
    - Each change is named under the report's "Closed" heading, beside its finding.
+   - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's **Dictated text** says before the preparation commit, and is named under "Closed".
    - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
    - The check runs once per step: the brief as changed goes to the builder without a second run, and a `/spec` run after a stop or a ruling does not check the step again.
    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
@@ -273,7 +281,7 @@ Steps 5 says when this runs.
    - A contradiction the **ADRs** check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says. One found only in the brief's own wording is closed by a change to the brief that follows the ADR.
    - At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
    - At such a stop the report is among the ledger files the stop commits.
-   - This item is done when every finding has its change under "Closed", or the step has stopped.
+   - This item is done when every finding has its change under "Closed" and each dictated line rewritten or added after the check is held and named there, or the step has stopped.
 5. The dispatch entry (Steps 9) records the report's path under `brief_check` with the agent's id, its served model, and its tokens, tool uses and time, in the form `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`, read from the report's usage line in a later `/spec` run of the step.
    - The report is committed as Steps 6 says.
 

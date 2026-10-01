@@ -146,3 +146,188 @@ none.
 - The `reviewer:` hit list of the report's "Rule 14" section leaves out five hits (`check_config.test.sh:402`, `:418`, `:567` and `plan.projects.yaml:32`, `:59`). I read each one, and none is made false. No decision rests on the list, so this is not a finding.
 
 Reviewer usage: afaa4e2644e7b3e6a, claude-opus-5-5 (ordo-high), 188262 tokens, 48 tool uses, 7 min 46 s
+
+## Repair round 1, refuted
+
+I ran every command from the worktree root `/Users/axelfaes/workspace/ordo/.agents/worktrees/2ea-3`. For the unchanged tree I used the main checkout. `git diff 2bf05e5 --stat -- . ':(exclude).scratch'` run in the main checkout printed nothing, so main equals the base outside the ledger. The round's delta is `diff 3-before-round-1.patch <(git diff 2bf05e5 -- . ':(exclude).scratch')`, and it covers exactly four places:
+- `refute` line 53 and the Stops row.
+- `plan-orchestration` Steps 8: the **Dictated text** bullet moved, and its timing changed.
+- `spec/templates/brief-check.md`: the "Closed" heading and its second bullet form.
+- The builder's report.
+
+Nothing else in the tree changed in the round.
+
+```
+$ sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md   (exit 0)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 10 commands passed
+(the worktree's state file and main's carry the same verify list: diff of the two verify blocks printed nothing)
+
+# Verify 2: grep -n 'repair_reviewer' skills/refute/SKILL.md skills/plan-orchestration/SKILL.md skills/repo-setup/templates/plan-terms.md docs/glossary.md   (lines cut)
+unchanged tree (main):
+docs/glossary.md:29:- **configuration block**: ...
+skills/repo-setup/templates/plan-terms.md:24:- **configuration block**: ...
+worktree:
+skills/repo-setup/templates/plan-terms.md:24:- **configuration block**: ...
+skills/repo-setup/templates/plan-terms.md:89:- **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration
+skills/refute/SKILL.md:80:   - The model is the one the configuration block's `repair_reviewer:` names, or the `reviewer:` value when the block has no `repair_reviewer:` key, at the effort `reviewer_e
+docs/glossary.md:29:- **configuration block**: ...
+docs/glossary.md:94:- **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration block's `reviewer:` name
+skills/plan-orchestration/SKILL.md:142:  - Each run over a repair round runs on the model the configuration block's `repair_reviewer:` names, or on the `reviewer:` value when the block has no `repair_
+(matches the round section: refute:53 no longer names the key)
+
+# Verify 3: grep -rn '/refute, the brief check' skills docs README.md utils .agents
+unchanged tree (main, --exclude-dir=worktrees): the three old comments, plan.yaml:12, orchestrator-state.md:14, .agents/plan.yaml:10
+worktree: the same three files with the new comments ("... the first run of /refute, the brief check and the lookups of /grill run on ..."), exit 0
+# The old forms: grep -rn 'claude:<model> /refute, the brief check\|model /refute, the brief check' skills docs README.md utils .agents
+worktree: no output, exit 1
+
+# Verify 4: grep -n 'Dictated text' skills/spec/SKILL.md skills/spec/templates/brief-check.md
+unchanged tree (main): no output, exit 1
+worktree:
+skills/spec/templates/brief-check.md:47:## 8. Dictated text
+skills/spec/SKILL.md:262:   - **Dictated text.** Every line of text the brief dictates is read line by line.
+skills/spec/SKILL.md:275:   - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's **Dictated text** says before the preparation commit, and is named under "Closed".
+
+# Verify 5: python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+
+# Verify 6: git diff 2bf05e5 -- . ':(exclude).scratch' | grep -n 'version:'
+no output, exit 1
+
+# The round's quoted evidence, rerun
+wc -l: refute 187, plan-orchestration 347, spec 323, brief-check.md 62, plan.yaml 30, orchestrator-state.md 70, .agents/plan.yaml 14, plan-terms.md 121, glossary.md 138 (as the report says; brief-check.md 62)
+grep -rn "before the round or the ruling is sent\|the key the run was dispatched on" skills docs README.md utils -> no output, exit 1
+LC_ALL=C grep -n '[^ -~]' over the nine changed files and 3-report.md -> no output, exit 1
+
+# Dictated text of the round's brief, compared with the files (python, exact line membership)
+ruling 1 bullet in skills/refute/SKILL.md: True
+ruling 3 heading in skills/spec/templates/brief-check.md: True
+ruling 3 second bullet form in skills/spec/templates/brief-check.md: True (it follows the first bullet form, as ruled)
+
+# Names the round changed, grepped across skills/ utils/ docs/ README.md
+"the configured model": refute/SKILL.md:163 only
+"the key the run was dispatched on": no hit
+"before the round": plan-orchestration/SKILL.md:101 (the moved bullet), :105 (the diagnose rule, "before the round is sent", unrelated, true)
+"configured value" / "configured one": ordo-help/SKILL.md:79, grill/SKILL.md:197-198 and :312, spec/SKILL.md:251 and :298, plan-orchestration/SKILL.md:243 and :300, the figures; each still holds read per key
+"Closed": plan-terms.md:20 and glossary.md:25 (the **Closed** term, see Standards 1), spec/SKILL.md:274, :275, :284 (see Standards 2), plan-orchestration/SKILL.md:53, refute/SKILL.md:154, refute/templates/report.md:65, plan/templates/orchestrator-state.md:43, land/SKILL.md:189, plan-retro/SKILL.md:71 (each still true)
+```
+
+### Verdicts
+
+These are the verdicts for the whole diff since the base.
+
+Items of the brief's "What to build":
+
+- 1: holds.
+  - Steps 1 (`refute` line 48) still dispatches on `reviewer:`.
+  - "Steps / Over a repair round" 1 (lines 79-81) takes `repair_reviewer:`. When the block has no such key it takes the `reviewer:` value. It keeps `reviewer_effort`, and it covers the extra round and a replacement reviewer.
+  - The served-model check (line 53) now says that for a run over a round, "the configured one" is the model "Steps / Over a repair round" 1 gives. That includes the default, so the contradiction of the first run's Standards 1 is gone.
+  - The Stops row (line 163) shows "the configured model (Steps 1)". Rules 1 is unchanged.
+- 2: holds.
+  - The **Reviewer** bullet has three sub-bullets (lines 141-143). The **Brief-check agent** bullet names `reviewer:` (line 144).
+  - Steps 8 "After each reply" names "The two tiers, and the models" (line 114).
+  - The **Dictated text** bullet (line 101) now comes before **Before the resume** and is timed "before the round's brief or the ruling is committed". Steps 6 (line 90) names it with the same timing.
+  - The Stops row (line 300) is unchanged.
+- 3: holds. **Dictated text** is at `spec` lines 262-268, the hold of a rewritten or added line is at line 275, and line 270 is unchanged. Standards 2 concerns item 4's completion criterion at line 284.
+- 4: holds. `## 8. Dictated text` is at template lines 47-51. The "Closed" heading and its new bullet form match the round's ruling word for word.
+- 5: holds. The **reviewer** and **brief check** terms are word for word as dictated in both files, and sync_rules prints ok. Standards 1 concerns the **Closed** term, which item 5 does not name.
+- 6: holds. The three comments are as dictated, with key, value and comment column unchanged.
+- 7: holds. Verify 6 printed no `version:` line in the diff.
+
+Cases of the brief's "Cases":
+
+- `reviewer: claude:opus`, `repair_reviewer: claude:sonnet`: first run on Opus, run over round 1 on Sonnet at `reviewer_effort`. Met (`refute` 48 and 79-80; `plan-orchestration` 141-143).
+- A block without `repair_reviewer`: met. Line 80 gives the `reviewer:` value, and line 53 now points at line 80, so the served-model check reads the same value.
+- The extra round and a replacement reviewer over a round: met (`refute` line 81).
+- `repair_reviewer` with `refute_after_repair: no`: met. Line 94 is unchanged, and no other text dispatches on the key.
+- A run over a round served Opus under `repair_reviewer: claude:sonnet`: met. Line 53 gives the model of "Steps / Over a repair round" 1, which is `claude:sonnet`. The Stops row shows the configured model.
+- A first run served Sonnet under `reviewer: claude:opus`: met (line 53, "the `reviewer:` model for the first run").
+- Brief-check and lookup agents on Opus, with the term and the bullet naming `reviewer:`: met (`spec` 244, `grill` 189, `glossary.md:17`, `plan-terms.md:12`, `plan-orchestration` 144).
+- `plan-orchestration` Steps 8 and "The two tiers, and the models" read alone, with the rule in one place: met (line 114 names the section; lines 142-143 state the rule).
+- An unquoted sentence after a colon with three list items, closed by a rewrite held again: met (`spec` 263, 264, 266, 275).
+- A dictated YAML key with its comment: met (`spec` 265).
+- A requirement given without its words, which is not dictated: met (`spec` 263, second sentence).
+- Ruled words that break a rule, which give the stop: met (`spec` 268 and the Stops row at 297).
+- A round's brief giving a sentence word for word, held before the round is sent: met. `plan-orchestration` line 101 holds it before the round's brief is committed, and that commit comes before the resume.
+- A brief that dictates no text: met (`spec` 267; template line 49).
+- (preserved) The `reviewer_report` records: met. The `refute` diff touches only lines 53, 79-81 and 163, so lines 55-57, 73 and 90 are as step 2 wrote them.
+- (preserved) `check_config.py` reads `reviewer` as required: met. `check_config.test.sh` printed PASS in the verify list.
+
+### Findings
+
+Spec: none.
+
+Proof:
+
+- `.scratch/2-e-a-self-rule/agents/reviews/3-report.md`, "Repair round 1", "Rule 14 for this round", second bullet: "the **Closed** term ... is outside the step's paths and does not list the dictated line added after the check that the template's "Closed" now holds. It is not false; ... the term is one for the user to widen if wanted, since no item of the brief or of this round changes it."
+  - **What is wrong.** The path claim does not reproduce. The brief's "Paths this step writes" lists `skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md` as whole files (`grep -n 'Paths this step writes' -A 12 agents/briefs/3.md` prints both). The brief's "What it must do" says that a sentence the change makes false is changed in the same step when its file is in the paths.
+  - **The decision that rests on it.** Whether the term is fixed in this step, or handed to the user as a later item. The builder handed back work inside its scope (rules file, rule 12).
+  - **Failure scenario.** The orchestrator reads "outside the step's paths", books the term as the user's call, and lands a template whose "Closed" heading holds entries the glossary term does not define.
+  - Verdict: none (Standards 1 is the defect itself).
+
+Standards:
+
+1. `skills/repo-setup/templates/plan-terms.md:20` and `docs/glossary.md:25`: "**Closed**: the heading of a report that holds each finding's disposition, in a brief-check report the change to the brief that closed it, ...".
+   - **What is wrong.** After the round, `skills/spec/templates/brief-check.md:59` and `:62` give the "Closed" heading a second kind of entry: "each dictated line added after the check", with the form "- <a dictated line added after the check, quoted>: holds, or each rule it broke and the rewrite that closed it." That entry is no finding's disposition. `spec` line 275 has required naming such a line under "Closed" since the first build.
+   - **The rule broken.** `docs/dev/skill-layout.md`, "Writing for an agent": "A term that `docs/glossary.md` defines is used only in a sense it defines there. A skill that needs ... a term in a new sense, adds or changes its entry in `skills/repo-setup/templates/plan-terms.md` first". Also rules file rule 14.
+   - **The fix at landing.** It is small and inside the paths. In both files, after "in a brief-check report the change to the brief that closed it", add "and each dictated line added to the brief after the check, with whether it holds". Verify 5 must still print ok after the change.
+   - **Failure scenario.** A session writing a brief-check report's "Closed" section reads the term, which describes only dispositions of findings. It leaves out a dictated line added after a ruling, because that line had no finding. The hold `spec` line 275 requires then has no record.
+   - Verdict: none.
+2. `skills/spec/SKILL.md:284`, "Steps / The brief check" 4: "This item is done when every finding has its change under "Closed", or the step has stopped."
+   - **What is wrong.** Item 4 gained the bullet at line 275, which requires each dictated line rewritten or added after the check to be held line by line and named under "Closed". The completion criterion still covers findings only, so item 4 can read as done with an added dictated line neither held nor named.
+   - **The rule broken.** `docs/dev/skill-layout.md`, "Writing for an agent": "Each item of Steps ends on its completion criterion: what is true, or what exists, when the step is done". Also rules file rule 14, for an "every" sentence the change makes incomplete.
+   - **Where it comes from.** It dates from the first build. The round's template change for the same entry makes the gap visible.
+   - **The fix at landing.** It is small and inside the paths, for example: "This item is done when every finding has its change under "Closed", each dictated line rewritten or added after the check is held and named there, or the step has stopped."
+   - **Failure scenario.** After a stop's ruling, the session adds a dictated sentence to the brief. It sees every finding closed under "Closed", reads item 4 as done, and makes the preparation commit. The added sentence reaches the builder without the hold.
+   - Verdict: none.
+
+Behaviour: none. The round changes no host- or user-visible behaviour beyond what the report's round section states before and after (the Stops cell, the bullet's place and timing, the template's heading and bullet form).
+
+Closures the builder claims, checked:
+
+- Standards 1 (`refute` line 53): closed by a fix, with no check removed. The bullet is word for word as ruled. The Stops cell took the ruled alternative, "the configured model (Steps 1)". Its reason, that "the key the run was dispatched on" names no single key when the block has no `repair_reviewer:`, holds on reading. The case "no `repair_reviewer:`, served Opus under `reviewer: claude:opus`, no stop" reads met from lines 53 and 80.
+- Standards 2 (`plan-orchestration` Steps 8): closed. The bullet now sits between **How** and **Before the resume**, with the timing ruled. Steps 6 (line 90) was not touched in the round, and it already holds the same timing.
+- Standards 3 (template "Closed"): closed for the template, word for word. The term and the completion criterion are Standards 1 and 2 above.
+- Proof 1 (report verify 4): closed. Row 4 and the "Verify 4" section say what the ruling asked, and my rerun of verify 4 printed the same three lines.
+- No fix reaches beyond its finding. The only other change in the round is to the report's earlier sections, which were updated to the current tree (cases 5 and 13, the judgment calls, the Verify 2 listing, "Changed lines"). I reread each of them against the tree, and they match.
+
+### Declined to judge
+
+- The step line's check, that step 4's run over its repair round is served claude-sonnet-5-5. That run does not exist yet. `plan.md` "Blocked, and by what" books it for step 4.
+- The dictated wording of round 1, ruling 1: "the `reviewer:` model". Elsewhere the skills write "the model the configuration block's `reviewer:` names". The orchestrator dictated these words, and holding them line by line was its job under `plan-orchestration` Steps 8 **Dictated text** before the round was committed. Whether this phrase counts as a second name under the prose standard's "D. Structure" (no synonym cycling) is a reading I leave to the orchestrator. The builder had to copy the words as given (rules file rule 4).
+- Whether "dictated text" needs a glossary entry. No item asks for one, and the builder named it as the user's call. It is a scope decision.
+- A line rewritten to close a brief-check finding is named under "Closed" in the first bullet form, which has no place for its hold result. The added-line form records one. `spec` line 275 asks only that the line be named, so I do not raise this as a finding. Whether the rewrite's hold result should also be recorded is the orchestrator's choice of form.
+- The `reviewer:` hit list in the report's "Rule 14" section leaves out `check_config.test.sh:402`, `:418`, `:567` and `plan.projects.yaml:32`, `:59`. I read each of them, and none is made false. No decision rests on the list.
+
+Reviewer usage: af5b739d11c2d60e0, claude-opus-5-5 (ordo-high), 197087 tokens, 34 tool uses, 5 min 51 s
+
+## Closed
+
+- First run, Proof 1 (verify 4 marked DONE with an output other than the brief's): closed in repair round 1; the report's row and section say the grep prints two lines for `spec` and why.
+- First run, Standards 1 (`refute` Steps 1 restating the model of a run over a round without its default): closed in repair round 1; the bullet points at "Steps / Over a repair round" 1, and the Stops row shows "the configured model (Steps 1)".
+- First run, Standards 2 (the hold of a round's brief after its commit): closed in repair round 1; `plan-orchestration` Steps 8 **Dictated text** comes before **Before the resume**, timed before the commit.
+- First run, Standards 3 (no "Closed" form for a dictated line added after the check): closed in repair round 1; the template's heading and a second bullet form.
+- Run over round 1, Proof 1 (the builder's claim that the **Closed** term is outside the paths): fixed at landing; `plan-terms.md` and `docs/glossary.md` are in the paths, and Standards 1 below changes the term. A landing note in `3-report.md` corrects the claim.
+- Run over round 1, Standards 1 (the **Closed** term describes only finding dispositions): fixed at landing; the term in `skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md` now says that in a brief-check report the heading also holds each dictated line added after the check, with whether it holds; `sync_rules.py . --only glossary` prints ok.
+- Run over round 1, Standards 2 (`spec` "Steps / The brief check" 4's completion criterion covers findings only): fixed at landing; it now reads "when every finding has its change under "Closed" and each dictated line rewritten or added after the check is held and named there, or the step has stopped."
+- Run over round 1, "Declined to judge" 2 ("the `reviewer:` model" as a second name): fixed at landing; `refute` Steps 1 now reads "the model the configuration block's `reviewer:` names for the first run", the form the skills use.
+- Run over round 1, "Declined to judge" 3 ("dictated text" as a glossary term) and 4 (no hold result for a rewritten line in the first bullet form): no change. The other check labels of "Steps / The brief check" 2 have no glossary entry, and the rewritten line is held under item 4's bullet whatever the bullet form records.

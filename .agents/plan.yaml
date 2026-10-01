@@ -7,7 +7,7 @@ ledger_root: .scratch                     # A plan lives in <ledger_root>/<slug>
 archive_root: .scratch/archive            # Where a closed plan's folder moves.
 worktree_root: .agents/worktrees          # Where a step's worktree is created; ignored by .gitignore's .agents/* line.
 worker: claude:sonnet                     # claude:<model> of the builder, for example claude:sonnet.
-reviewer: claude:opus                     # claude:<model> /refute, the brief check and the lookups of /grill run on.
+reviewer: claude:opus                     # claude:<model> the first run of /refute, the brief check and the lookups of /grill run on.
 repair_reviewer: claude:sonnet            # claude:<model> the run of /refute over a repair round runs on: Sonnet, since that run checks a narrow delta against named findings at half Opus's price per token.
 libraries: avoid                          # check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
 standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # Files every brief tells the builder to read in full, and the reviewer holds a diff to.
