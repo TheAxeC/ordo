@@ -56,6 +56,18 @@ dispatch:
   builder_usage: 334341 tokens, 81 tool uses, 41 min 7 s
   reviewer_report:
   - .scratch/2-e-a-self-rule/agents/reviews/4-refuter.md (a7eae9ce124bd2bd6, claude-opus-5-5 (ordo-high), 251863 tokens, 67 tool uses, 16 min 58 s)
+- step: 6
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2ea-6
+  base: 5f41763
+  launched: 2026-10-01
+  report: .scratch/2-e-a-self-rule/agents/reviews/6-report.md
+  brief_check: .scratch/2-e-a-self-rule/agents/reviews/6-brief-check.md (acf87ddb30973c88b, claude-opus-5-5 (ordo-high), 239319 tokens, 43 tool uses, 9 min 48 s)
+  landing: not-started
+  round: 0
+  session_id: a15fd806c8f78a9ab (claude-sonnet-5-5)
+  shared_paths: skills/plan-orchestration/SKILL.md, skills/plan/SKILL.md, skills/plan/templates/plan.md, skills/repo-setup/templates/plan-terms.md, docs/glossary.md and README.md, each shared with step 4; the merge is simple, since each step changes other lines of each file (step 4: Steps 10 and "Usage", the closing's bullet, template line 21, the terms closing report, closing step and cost script, and its README paragraph; step 6: its own section and the lines its brief names, the terms quoted ruling and resume point, README lines 16-50). skills/repo-setup/templates/shared-rules.md is a template for other repositories, not a rules file Ordo's builders work under, so step 6 need not run alone.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -97,5 +109,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-01. Steps 1, 2 and 3 landed; step 3's booking is in `plan.md` and its landing report at `agents/reviews/3-landing.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after the fixes at landing printed `checks: 10 commands passed`.
 - Step 4 is built and refuted once (`agents/reviews/4-report.md`, `agents/reviews/4-refuter.md`); its builder is kept for repair round 1. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet); its booking carries step 3's check ("Blocked, and by what").
-- Open items A and B ruled. Next: step 4's repair round 1, carrying ruling A and the first review's findings, and step 6 prepared again under ruling B.
+- Open items A and B ruled. Step 4's repair round 1 is sent (ruling A and the first review's findings); step 6 is prepared under ruling B and its builder launched.
 - Open on Axel's side: Open item C; the setting of ADR 0009 in the runner's settings; the sentence of ruling B in `~/.claude/CLAUDE.md`.
