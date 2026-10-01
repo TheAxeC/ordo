@@ -36,6 +36,7 @@ one plan run with `self_rule: on`, whose every open item is either left open und
 - 9 The gate's `next_entry` run on a scratch repository whose roadmap holds two small entries; check: the second entry opened, grilled and planned after the first closes, each decision of its `/grill` in `choices.md`, read by Axel (1 commit; orchestrator, no agent) (approved)
 - ✅ 10 The cost figures: the script prints plan 2.E and plan 2.E.A, 2.E.A's runs over a repair round on `repair_reviewer`'s model, and the brief checks that met dictated text listed; check: read by Axel (orchestrator, no agent) (approved)
 - ✅ 11 The gate's `self_rule` run, this plan's open items after step 6b; check: at least one item closed into `choices.md` and one left open under a named kind, each read by Axel (orchestrator, no agent) (approved)
+- 11b The closing step of a plan whose ledger names no agent: `skills/plan/SKILL.md` Steps 2 runs the cost script only when the Agents section or `agents/agent-roles.md` holds an agent bullet, and with none the closing report says the plan started no agent and the folder moves; `templates/plan.md` and `plan-orchestration` "Usage" read with it; check: each changed text read in place, and `plan_cost.py` on a scratch ledger with no agent bullet still exits 1 with `error: the ledger names no agent` (1 commit) (ruling M)
 - 12 The changed skills read against `docs/dev/skill-layout.md`, each changed skill's `version` raised; check: read by Axel (1 commit) (approved)
 - 13 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.E.A`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
@@ -88,6 +89,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item G (2026-10-01): option (a): a quoted ruling ending "(self-rule)" lets `/roadmap add` write work that a finding of a running plan names, the finding named by the path of its report under that plan's `agents/reviews/` (a refuter report, a brief-check report, a landing report or a diagnosis record), the heading it stands under and its number there, `/roadmap` checking that the report holds the finding, that the plan is open, and that the entry's goal is the finding's work; it unblocks step 7 (the user).
 - Open item H (2026-10-01): option (a): the sentence of `skills/repo-setup/templates/shared-rules.md:20` reads "Under `self_rule: on`, in a plan's configuration block or, for `/grill` and `/plan` run with `--self-rule`, in `.agents/plan.yaml`, such a decision outside the six kinds `plan-orchestration` "Self-rule" leaves open is taken with its recommendation and written to the choices file for your review."; the template change joins step 8, and the user puts the same words in `~/.claude/CLAUDE.md`; it unblocks step 9 (the user).
 - Kind 3 under self-rule (2026-10-01): option (a): a change to the written rules stays with the user under self-rule, and the six kinds are unchanged; the lazy option was closing such changes under self-rule (the user).
+- Open item M (2026-10-01): option (a): the closing step runs the cost script only when the ledger names an agent, and with none the closing report says the plan started no agent and the folder moves; it adds step 11b (self-rule).
 
 ## Agents
 
@@ -258,6 +260,35 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 - Landed: `agents/reviews/11-self-rule.md`, for the user's reading: the four open items raised since step 6b, Open items F and G closed under self-rule into `.scratch/choices.md` as C1 and C2 (both since agreed by the user), Open item H left open as kind 3 (ruled (a) by the user) and Open item I left open as kind 1 (waiting), each with the commit that booked it. Orchestrator, no agent.
 - The step's check, the user's reading of the page, is kind 5: it stays open and blocks no step.
+
+### Step 11b, the closing of a plan with no agent: Step 0 (2026-10-01)
+
+- Open item M (2026-10-01): the closing of a plan whose ledger names no agent. Raised by step 12's brief check (`agents/reviews/12-brief-check.md`, "Cases and checks" C2): the closing step `/plan` drafts runs `templates/plan_cost.py`, and "The ledger folder moves only when the script exits 0" (`skills/plan/SKILL.md:86-89`); the script exits 1 with `error: the ledger names no agent` on a ledger whose Agents section and `agents/agent-roles.md` hold no agent bullet (`plan_cost.py:283`), so a plan whose every step is "orchestrator, no agent" and that started no lookup agent stops at its closing.
+  - Options:
+    - (a) The closing step in `skills/plan/SKILL.md` Steps 2 runs the script only when the Agents section or `agents/agent-roles.md` holds an agent bullet; with none, the closing report says the plan started no agent, and the folder moves. A new step 11b before step 12 makes the change, the template line and `plan-orchestration` "Usage" read with it. Pros: the script and what it computes stay as approved. Cons: one more condition in the closing step, and an Agents section a skill failed to write closes with "no agent" instead of stopping.
+    - (b) `plan_cost.py` prints its tables with no agent row and a Total of 0, exit 0, for a ledger that names no agent. Pros: the closing step is unchanged. Cons: a change to what an approved script computes, which is yours (kind 3), and an Agents section left empty by a defect closes with a Total of 0 instead of stopping.
+    - (c) Leave it: such a plan stops at its closing for you. Pros: no change. Cons: every plan run only by the orchestrator meets a stop it cannot pass without a ruling.
+  - Recommendation: (a), since it ends the stop without changing what an approved script computes; both (a) and (b) let an empty Agents section close, and (a) says so in words in the closing report. Lazy option: (c).
+  - Kind: none of the six kinds; closed under self-rule as `references/self-rule.md`, "Closing an open item", says.
+
+### Step 12, the changed skills and their versions: Step 0 (stopped 2026-10-01)
+
+- Open item L (2026-10-01): when a skill's `metadata.version` is raised, and which part. Stop "A brief check finding the brief cannot absorb" of `/spec 2.E.A 12` (`agents/reviews/12-brief-check.md`, "Cases and checks" C1 and C2, and "Declined to judge" 2). Kind 3: the rule belongs in a standards page, `docs/dev/skill-layout.md`.
+  - What the tree shows: `docs/dev/skill-layout.md`, Frontmatter, says only that the version lives in `metadata.version` as `<major.minor.patch>`; no page says when or which part a change raises (`grep -rn -i 'semver\|semantic version' docs README.md` prints nothing). Plans 2.G and 2.H left versions unchanged until you rule on it (`.scratch/2-g-git-guard/plan.md:38`; `.scratch/2-h-session-retro/agents/reviews/3-brief-check.md`, "Declined to judge"). Step 12's line asks for each of the eleven skills this plan changed to have its version raised. The brief's own rule, taken in the brief, gave values the brief check showed it does not settle: `diagnose` gains a new way to resume its stop "The cause not found" under `self_rule: on`, which is more than wording; `check_config.py` now refuses a `worker:` with no value, which the base accepted though its docstring called it an error; and the closing step `/plan` drafts now stops when the cost script exits 1 on a ledger that names no agent (Open item M).
+  - Options:
+    - (a) Step 12 writes this rule into `docs/dev/skill-layout.md`, Frontmatter, after the bullet on where the version lives, and raises the eleven versions by it:
+      - "A plan that changes a skill raises one part of its `metadata.version` once, and sets the parts after it to 0."
+      - "The major part when, under the same inputs and the default keys, a run that worked before is refused, or its output is changed or removed."
+      - "The minor part when the skill does something it did not do, accepts an input it did not accept, or adds to its output, and every run that worked before still works."
+      - "The patch part when only the wording changes and every run behaves as before."
+      - "A refusal of a value the skill's text already called an error is no run that worked before."
+      - Under it, with Open item M's fix landed first: plan-orchestration 2.11.0, grill 1.3.0, plan 1.11.0, roadmap 1.3.0, refute 1.8.0, spec 1.8.0, land 1.9.0, ordo-help 1.9.0, ordo-init 1.2.0, repo-setup 1.3.0, diagnose 1.1.0.
+      - Pros: the rule stands where every later plan reads it, so the versions of each plan follow one written practice; each value above follows from it. Cons: a change to a standards page, which is yours.
+    - (b) The same rule held in step 12's brief only, the values the same. Pros: no standards page changes. Cons: the next plan has no rule again and stops where 2.G, 2.H and this plan stopped.
+    - (c) No version raised in this plan, as 2.G and 2.H did; step 12 reads the skills against the layout only. Pros: no rule to settle. Cons: step 12's line is left half done, and the installed versions say nothing about what changed.
+  - Recommendation: (a), since a rule of the layout page ends the question for every plan, and the values follow from it. Lazy option: (c), which leaves the versions and the question where they are.
+  - Kind 3; it waits for you. It blocks step 12, and so the closing.
+- Closed in the brief when it is written again: the brief check's "Cases and checks" C3, items 1 and 2 reading "Writing for an agent" against the text this plan wrote or rewrote (`git diff 9fc91dc -- skills/<name>`) and every other section of the layout page against the whole skill, a break of that section in unchanged text listed for roadmap entry 23 and not fixed; and Verify 3's `--stat` half dropped, `docs/glossary.md` added to its path check.
 
 ### Step 7, `next_entry`: Step 0 (stopped 2026-10-01)
 

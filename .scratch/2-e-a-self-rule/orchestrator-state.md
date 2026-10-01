@@ -58,6 +58,21 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
   - Kind 1; it waits for you. It blocks step 9 only.
 - Open item J (2026-10-01): your reading of step 10's page, `.scratch/2-e-a-self-rule/agents/reviews/10-cost.md`, the priced usage of plans 2.E and 2.E.A and the brief checks that met dictated text. Kind 5; it blocks no step. Reply `Read` when it is as it should be, or name what is wrong.
 - Open item K (2026-10-01): your reading of step 11's page, `.scratch/2-e-a-self-rule/agents/reviews/11-self-rule.md`, how this plan's open items ended under self-rule. Kind 5; it blocks no step. Reply `Read` when it is as it should be, or name what is wrong.
+- Open item L (2026-10-01): when a skill's `metadata.version` is raised, and which part. Stop "A brief check finding the brief cannot absorb" of `/spec 2.E.A 12` (`agents/reviews/12-brief-check.md`, "Cases and checks" C1 and C2, and "Declined to judge" 2). Kind 3: the rule belongs in a standards page, `docs/dev/skill-layout.md`.
+  - What the tree shows: `docs/dev/skill-layout.md`, Frontmatter, says only that the version lives in `metadata.version` as `<major.minor.patch>`; no page says when or which part a change raises (`grep -rn -i 'semver\|semantic version' docs README.md` prints nothing). Plans 2.G and 2.H left versions unchanged until you rule on it (`.scratch/2-g-git-guard/plan.md:38`; `.scratch/2-h-session-retro/agents/reviews/3-brief-check.md`, "Declined to judge"). Step 12's line asks for each of the eleven skills this plan changed to have its version raised. The brief's own rule, taken in the brief, gave values the brief check showed it does not settle: `diagnose` gains a new way to resume its stop "The cause not found" under `self_rule: on`, which is more than wording; `check_config.py` now refuses a `worker:` with no value, which the base accepted though its docstring called it an error; and the closing step `/plan` drafts now stops when the cost script exits 1 on a ledger that names no agent (Open item M).
+  - Options:
+    - (a) Step 12 writes this rule into `docs/dev/skill-layout.md`, Frontmatter, after the bullet on where the version lives, and raises the eleven versions by it:
+      - "A plan that changes a skill raises one part of its `metadata.version` once, and sets the parts after it to 0."
+      - "The major part when, under the same inputs and the default keys, a run that worked before is refused, or its output is changed or removed."
+      - "The minor part when the skill does something it did not do, accepts an input it did not accept, or adds to its output, and every run that worked before still works."
+      - "The patch part when only the wording changes and every run behaves as before."
+      - "A refusal of a value the skill's text already called an error is no run that worked before."
+      - Under it, with Open item M's fix landed first: plan-orchestration 2.11.0, grill 1.3.0, plan 1.11.0, roadmap 1.3.0, refute 1.8.0, spec 1.8.0, land 1.9.0, ordo-help 1.9.0, ordo-init 1.2.0, repo-setup 1.3.0, diagnose 1.1.0.
+      - Pros: the rule stands where every later plan reads it, so the versions of each plan follow one written practice; each value above follows from it. Cons: a change to a standards page, which is yours.
+    - (b) The same rule held in step 12's brief only, the values the same. Pros: no standards page changes. Cons: the next plan has no rule again and stops where 2.G, 2.H and this plan stopped.
+    - (c) No version raised in this plan, as 2.G and 2.H did; step 12 reads the skills against the layout only. Pros: no rule to settle. Cons: step 12's line is left half done, and the installed versions say nothing about what changed.
+  - Recommendation: (a), since a rule of the layout page ends the question for every plan, and the values follow from it. Lazy option: (c), which leaves the versions and the question where they are.
+  - Kind 3; it waits for you. It blocks step 12, and so the closing.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -71,6 +86,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-01: Open item H, whether the shared rule on self-rule covers `/grill` and `/plan` run with `--self-rule`: ruled (a) by the user. The template sentence joins step 8; the user puts the same words in `~/.claude/CLAUDE.md`.
 - 2026-10-01: C1, how `/grill` and `/plan` know that the loop runs them in next-entry mode: agreed by the user.
 - 2026-10-01: C2, how a quoted ruling ending "(self-rule)" names the finding whose work `/roadmap add` may write: agreed by the user.
+- 2026-10-01: Open item M, the closing of a plan whose ledger names no agent: closed under self-rule, C3.
 
 ## The standing demands (from Axel, in force)
 
@@ -92,6 +108,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8 and 6b landed; their bookings are in `plan.md`, step 8's landing report at `agents/reviews/8-landing.md`. Step 9 is stopped at Open item I (kind 1, the installed skills' pin), which waits for the user; steps 10 and 11 landed, their pages waiting for the user's reading (Open items J and K); next: step 12. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-01. Steps 1 to 8 and 6b landed; their bookings are in `plan.md`, step 8's landing report at `agents/reviews/8-landing.md`. Step 9 is stopped at Open item I (kind 1, the installed skills' pin), which waits for the user; steps 10 and 11 landed, their pages waiting for the user's reading (Open items J and K); step 11b, added by Open item M (closed under self-rule, C3), is next; step 12 is stopped at Open item L (kind 3). `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 8's merge with step 7 and its fix at landing printed `checks: 11 commands passed`, exit 0.
 - Open items A to H ruled; C1 and C2 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence, now at `skills/repo-setup/templates/shared-rules.md:20`, is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.
