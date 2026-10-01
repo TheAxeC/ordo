@@ -38,7 +38,7 @@ one plan run with `self_rule: on`, whose every open item is either left open und
 - 9 The gate's `next_entry` run on a scratch repository whose roadmap holds two small entries, run through the runner after main's head is tagged `v2.8.0-rc.1` (local, not pushed) and `utils/pin.sh v2.8.0-rc.1` pins the installed skills to it, the user approving the first entry's closing diff, and `utils/pin.sh v2.7.0` run after the run; check: the second entry opened, grilled and planned after the first closes, each decision of its `/grill` in `choices.md`, read by Axel (1 commit; orchestrator, no agent) (approved) (ruling I)
 - ✅ 10 The cost figures: the script prints plan 2.E and plan 2.E.A, 2.E.A's runs over a repair round on `repair_reviewer`'s model, and the brief checks that met dictated text listed; check: read by Axel (orchestrator, no agent) (approved)
 - ✅ 11 The gate's `self_rule` run, this plan's open items after step 6b; check: at least one item closed into `choices.md` and one left open under a named kind, each read by Axel (orchestrator, no agent) (approved)
-- 11b The closing step of a plan whose ledger names no agent: `skills/plan/SKILL.md` Steps 2 runs the cost script only when the Agents section or `agents/agent-roles.md` holds an agent bullet, and with none the closing report says the plan started no agent and the folder moves; `templates/plan.md` and `plan-orchestration` "Usage" read with it; check: each changed text read in place, and `plan_cost.py` on a scratch ledger with no agent bullet still exits 1 with `error: the ledger names no agent` (1 commit) (ruling M)
+- ✅ 11b The closing step of a plan whose ledger names no agent: `skills/plan/SKILL.md` Steps 2 runs the cost script only when the Agents section or `agents/agent-roles.md` holds an agent bullet, and with none the closing report says the plan started no agent and the folder moves; `templates/plan.md` and `plan-orchestration` "Usage" read with it; check: each changed text read in place, and `plan_cost.py` on a scratch ledger with no agent bullet still exits 1 with `error: the ledger names no agent` (1 commit) (ruling M)
 - 11c `skills/land/templates/checks.sh` runs every command of the verify list, prints each failure's line `checks: failed with exit <status>: <command>`, then `checks: <k> of <n> commands failed` and exits 1, its exit statuses and its line on a clean run unchanged; commands that depend on each other are written as one item joined with `&&`; `checks.test.sh`'s failing case reversed (two failing commands of three, the third run, both failure lines and the count printed), and the head comments of both files, `skills/land/SKILL.md` Steps 6 and "The landing script", `README.md`'s verify-list paragraph and `docs/dev/building.md`'s runner paragraph read with it; check: the reversed case of `checks.test.sh` fails on the unchanged `checks.sh` and passes after the change (1 commit) (ruling checks.sh runs every command)
 - 12 The changed skills read against `docs/dev/skill-layout.md`, the rule of Open item L (a) on when and which part of a version is raised written into its Frontmatter, and each changed skill's `version` raised by it; check: read by Axel (1 commit) (approved) (ruling L)
 - 13 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.E.A`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
@@ -135,6 +135,11 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a8e821b5b3f0e2756: builder of step 8, claude-sonnet-5-5
 - aa9c2761143a81412: reviewer of step 8, claude-opus-5-5
 - adeb36a8bdd6bc53b: reviewer of step 8 over round 1, claude-sonnet-5-5
+- aeae0de1e8deb991b: brief check of step 12, claude-opus-5-5
+- a4833282be61ec94d: brief check of step 11b, claude-opus-5-5
+- a3c9ead7c223bb0bb: builder of step 11b, claude-sonnet-5-5
+- ae0429a05481f2c42: reviewer of step 11b, claude-opus-5-5
+- abb9f0a46653f8ea9: reviewer of step 11b over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
@@ -266,6 +271,19 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 - Landed: `agents/reviews/11-self-rule.md`, for the user's reading: the four open items raised since step 6b, Open items F and G closed under self-rule into `.scratch/choices.md` as C1 and C2 (both since agreed by the user), Open item H left open as kind 3 (ruled (a) by the user) and Open item I left open as kind 1 (waiting), each with the commit that booked it. Orchestrator, no agent.
 - The step's check, the user's reading of the page, is kind 5: it stays open and blocks no step.
+
+### Step 11b, the closing of a plan with no agent (landed 2026-10-01)
+
+- Landed: `skills/plan/SKILL.md` Steps 2, the closing step skips the cost script only when `plan.md` has its `## Agents` heading with no bullet under it and the ledger has no `agents/agent-roles.md`, writes the closing report with the sentence that the plan started no agent, and moves the folder; every other ledger goes to the script as before; `skills/plan/templates/plan.md:21`, `plan-orchestration` "Usage", the terms **closing report** and **closing step** in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`, and `README.md:151` read with it; `plan_cost.py` unchanged. 6 files, 13 insertions, 10 deletions.
+- Rulings on the way: Open item M (a), under self-rule (C3); the round's rulings `agents/briefs/11b-round-1.md`.
+- Corrections of the brief, by the orchestrator: the glossary wording of item 4, false for case 6 (no `## Agents` heading), replaced by the builder's (round ruling 1); the README sentence of item 5 rewritten so its relative clause follows the cost script (round ruling 3, then the fix at landing).
+- Repair round 1 (`agents/briefs/11b-round-1.md`): three rulings; the run over the round gives every item "holds" and every case "met", and found three passages of the builder's report not brought to the round's end state.
+- Fixes at landing: 4. `README.md:151` reads "When a plan started an agent, its closing step runs the cost script, which prices the usage of each agent role.", ending the repeat of "the plan" and "a plan" the run over round 1 declined to judge; the builder's report brought to the end state (case 2 names line 92 for the move, the "after" blocks quote the text on main, case 5 and not case 4 named beside case 6). Each named in `agents/reviews/11b-refuter.md` "Closed".
+- The step's check: each changed text read in place by both reviewers; `OTEL_LOG_RAW_API_BODIES= python3 skills/plan-orchestration/templates/plan_cost.py <scratch ledger>` on a ledger with an empty Agents section prints `error: the ledger names no agent` and exits 1, on main's script and the step's, which are equal.
+- Verification on main, after the fixes at landing: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` printed the nine `PASS:` lines, `ok: the plan-terms block equals the template`, the ASCII check with no output and `checks: 11 commands passed`, exit 0.
+- A/B: none (`bench: []`). Look: none (`look:` empty).
+- Usage: brief check a4833282be61ec94d, claude-opus-5-5, 136896 tokens, 35 tool uses, 5 min 13 s; builder a3c9ead7c223bb0bb, claude-sonnet-5-5, 109507 tokens, 21 tool uses, 4 min 39 s (the build) and 126046 tokens, 8 tool uses, 2 min 47 s (round 1); reviewer ae0429a05481f2c42, claude-opus-5-5, 178338 tokens, 35 tool uses, 7 min 28 s; reviewer over round 1 abb9f0a46653f8ea9, claude-sonnet-5-5, 131465 tokens, 27 tool uses, 5 min 35 s.
+- The builder's first report did not pass its bar: the first review found two findings (Spec 1, Standards 1) and a misread sentence in the brief's own README text.
 
 ### Step 11b, the closing of a plan with no agent: Step 0 (2026-10-01)
 

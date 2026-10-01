@@ -18,7 +18,7 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step of work
 - <1> <what the step delivers, in one line; the check that proves it> (<n> commit) (approved)
 - <2> <what the step delivers, in one line; the check that proves it> (<n> commit; orchestrator, no agent) (approved)
 - <2a> <a step a ruling added, in one line; the check that proves it> (<n> commit) (ruling <L>)
-- <last> the closing: the cost script's output written as the closing report, the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+- <last> the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Could run in parallel
 

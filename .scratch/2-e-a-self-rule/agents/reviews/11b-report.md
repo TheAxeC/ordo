@@ -70,10 +70,10 @@ No test was added: the step changes skill text and the glossary only, and `plan_
 
 ## Cases read on the text after the change
 
-Each read on `skills/plan/SKILL.md` Steps 2 lines 86-91 as the closing step would follow them.
+Each read on `skills/plan/SKILL.md` Steps 2 lines 86-92 as the closing step would follow them.
 
 1. Agents section holds bullets: the skip condition (line 86) needs "no bullet", so it is false; line 88 runs the script; line 89 writes its output to `agents/reviews/closing.md`; line 91 moves the folder on exit 0.
-2. No bullet and no `agents/agent-roles.md`: line 86 holds, so the script is not run; line 87 writes the closing report with the dictated sentence and the folder moves.
+2. No bullet and no `agents/agent-roles.md`: line 86 holds, so the script is not run; line 87 writes the closing report with the dictated sentence, and line 92 moves the folder.
 3. No bullet in plan.md, `agents/agent-roles.md` holds bullets: the second half of line 86's condition is false (the file exists), so line 88 runs the script as in case 1.
 4. Agent named, transcript not found: line 88 runs the script, which exits 1 as run above; line 90 (unchanged) makes it the stop "A red check", and line 91 keeps the folder in place.
 5. `agents/agent-roles.md` exists but cannot be read: line 88 says a roles file that exists, read or not, goes to the script, which exits 1 with `error: cannot read <path>: Permission denied` (run above); line 90 is the stop and line 91 keeps the folder.
@@ -99,7 +99,7 @@ Statements about the changed files as a whole: `skills/plan/SKILL.md` line 93 ("
 
 ## Files changed, with line counts
 
-- `skills/plan/SKILL.md`: 167 lines (lines 86-91 replace the four bullets that were at 86-89; +4 net lines)
+- `skills/plan/SKILL.md`: 167 lines (lines 86-92 replace the four bullets that were at 86-89; +5 net lines)
 - `skills/plan/templates/plan.md`: 43 lines (line 21)
 - `skills/plan-orchestration/SKILL.md`: 365 lines (line 289)
 - `skills/repo-setup/templates/plan-terms.md`: 126 lines (lines 22-23)
@@ -109,10 +109,8 @@ Statements about the changed files as a whole: `skills/plan/SKILL.md` line 93 ("
 
 ## Judgment calls
 
-1. `plan-terms.md` **closing report**: the brief says the report holds the script's output "for a plan whose ledger names an agent, and otherwise the sentence that the plan started no agent". "Otherwise" would be wrong for cases 5 and 6, where the script runs, exits 1 and no closing report is written. The entry reads "holding the cost script's output, or, when the closing step did not run the script because the plan started no agent, the sentence that says so". The condition itself stays in `plan`, Steps 2 only, so it is written once.
-2. `plan-terms.md` **closing step**: the sentence "A non-zero exit of the cost script holds the folder where it is" stays, with the clause ", and the closing step skips the script only for a plan that started no agent" added, so the entry no longer implies the script always runs.
-3. `skills/plan/SKILL.md` line 88: the brief's text, "a `plan.md` with no `## Agents` heading, which `/plan` always writes (line 74)", reads as if `/plan` writes plans with no heading, and a line number is not a citation form the change standard allows. It is written "(`/plan` always writes the heading)".
-4. The four existing bullets were split by the new conditions into six bullets (86-91), one rule each: the skip condition, the skip action, the run rule, the output location, the red-check stop (text unchanged), the move condition. The first of the old two bullets ("Before the folder moves, the closing step runs...") became the "every other case" bullet, with "in every other case" added; the old "The closing step writes the script's output" and "The ledger folder moves only when the script exits 0" became conditional on the script having run, which the brief's item 1 asks for.
+1. `skills/plan/SKILL.md` line 88: the brief's text, "a `plan.md` with no `## Agents` heading, which `/plan` always writes (line 74)", reads as if `/plan` writes plans with no heading, and a line number is not a citation form the change standard allows. It is written "(`/plan` always writes the heading)".
+2. The four existing bullets were split by the new conditions into seven bullets (86-92), one rule each: the skip condition, the skip action (the report with the dictated sentence), the run rule, the output location, the red-check stop (text unchanged), the move when the script ran, the move when it was skipped. The first of the old two bullets ("Before the folder moves, the closing step runs...") became the "every other case" bullet, with "in every other case" added; the old "The closing step writes the script's output" and "The ledger folder moves only when the script exits 0" became conditional on the script having run, which the brief's item 1 asks for.
 
 ## User-visible changes, before and after
 
@@ -125,15 +123,16 @@ Statements about the changed files as a whole: `skills/plan/SKILL.md` line 93 ("
 - The ledger folder moves only when the script exits 0.
 ```
 
-after (lines 86-91):
+after (lines 86-92):
 
 ```
 - The closing step skips the cost script only when `plan.md` has its `## Agents` heading with no bullet under it, up to the next `## ` heading, and the ledger has no `agents/agent-roles.md`.
-- A closing step that skips the script writes the closing report, `agents/reviews/closing.md`, with the sentence "The plan started no agent: `plan.md`'s Agents section holds no agent bullet and the ledger has no `agents/agent-roles.md`, so the closing step did not run the cost script.", and then the ledger folder moves.
+- A closing step that skips the script writes the closing report, `agents/reviews/closing.md`, with the sentence "The plan started no agent: `plan.md`'s Agents section holds no agent bullet and the ledger has no `agents/agent-roles.md`, so the closing step did not run the cost script."
 - In every other case, before the folder moves, the closing step runs the `plan-orchestration` skill's `templates/plan_cost.py` on the ledger folder: a `plan.md` with no `## Agents` heading (`/plan` always writes the heading) and an `agents/agent-roles.md` that exists, read or not, both go to the script, so the closing step and the script never disagree.
 - A closing step that runs the script writes the script's output to `agents/reviews/closing.md`, the closing report.
 - A non-zero exit of the script that no fix within the plan covers is the stop "A red check" of `plan-orchestration`, and the stop message holds the script's `error:` lines. A model the table lacks is covered by a row copied into the table from the pricing page, committed with the closing.
 - When the closing step has run the script, the ledger folder moves only when the script exits 0.
+- When the closing step has skipped the script, the ledger folder moves.
 ```
 
 `skills/plan/templates/plan.md:21`, before: `- <last> the closing: the cost script's output written as the closing report, the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)`; after: `- <last> the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)`.
@@ -154,9 +153,55 @@ after:
 - **closing step**: ... A non-zero exit of the cost script holds the folder where it is, and the closing step skips the script only for a plan that started no agent. Stated in: `plan`, Steps 2.
 ```
 
-`README.md:151`, before: `The closing step of a plan runs the cost script, which prices the usage of each agent role.`; after: `The closing step of a plan runs the cost script when the plan started an agent, which prices the usage of each agent role.` The rest of the paragraph is unchanged.
+`README.md:151`, before: `The closing step of a plan runs the cost script, which prices the usage of each agent role.`; after: `When a plan started an agent, its closing step runs the cost script, which prices the usage of each agent role.` The rest of the paragraph is unchanged.
 
 ## Anything in the brief wrong or impossible
 
 - Nothing in the eight cases is wrong or impossible.
 - One input outside the cases: a `plan.md` whose first line is not `# Plan: <entry>`, with an empty `## Agents` section and no `agents/agent-roles.md`. On scratch ledger `c9` (plan.md `not a plan`, then `## Agents`) the unchanged script prints two errors: `<scratch>/c9/plan.md:1: the first line is not "# Plan: <entry>"` and `error: the ledger names no agent`, exit 1. Under the brief's skip condition (heading present, no bullet, no roles file) the closing step skips the script, so a malformed first line would not stop the closing there. The brief's Decision 1 limits the skip to a ledger "as `/plan` writes it", which has the correct first line; the condition as dictated does not test it. This is for the orchestrator to rule on if the first line matters at the closing; the built text follows the brief's condition and adds nothing.
+- The brief's item 4 words for the glossary, "the closing report holds the cost script's output for a plan whose ledger names an agent, and otherwise the sentence that the plan started no agent", are false for case 6 (no `## Agents` heading and no `agents/agent-roles.md`): the closing step runs the script, which exits 1, the stop "A red check" stands, and no sentence is written. Case 5 (an unreadable `agents/agent-roles.md` and an empty Agents section) is false the same way; case 4 names an agent, so the brief's first half applies to it and is true. The built **closing report** entry reads "holding the cost script's output, or, when the closing step did not run the script because the plan started no agent, the sentence that says so", with the condition written once, in `plan`, Steps 2. The built **closing step** entry keeps "A non-zero exit of the cost script holds the folder where it is" and adds ", and the closing step skips the script only for a plan that started no agent". Ruling (repair round 1, Spec 1): the built wording stays as the orchestrator's correction of the brief's item 4; no change to either file.
+- The brief's item 5 sentence for `README.md:151` is replaced by the orchestrator's correction: "When a plan started an agent, its closing step runs the cost script, which prices the usage of each agent role."
+
+## Repair round 1
+
+Rulings of `.scratch/2-e-a-self-rule/agents/briefs/11b-round-1.md`, applied in the worktree only.
+
+1. Spec 1, `skills/repo-setup/templates/plan-terms.md:22-23` and `docs/glossary.md:27-28`: no file change, as ruled. Judgment calls 1 and 2 of the first report moved under "Anything in the brief wrong or impossible" with the brief's words, case 6 and the ruling. The glossary sync still holds: `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`.
+2. Standards 1, `skills/plan/SKILL.md:87` and the new line 92: line 87 now ends after the dictated sentence and no longer carries ", and then the ledger folder moves". Line 87 now reads: `- A closing step that skips the script writes the closing report, `agents/reviews/closing.md`, with the sentence "The plan started no agent: `plan.md`'s Agents section holds no agent bullet and the ledger has no `agents/agent-roles.md`, so the closing step did not run the cost script."`. The sentence matches the brief's dictated text byte for byte: `grep -c` of the whole sentence anchored at the end of the line printed `1`. The new line 92, directly after the exit-0 move bullet (line 91), reads: `- When the closing step has skipped the script, the ledger folder moves.` Judgment call 4 is now judgment call 2 and counts seven bullets (86-92).
+3. Declined to judge 1, `README.md:151`: the sentence now reads "When the plan started an agent, the closing step of a plan runs the cost script, which prices the usage of each agent role." Before the round it read "The closing step of a plan runs the cost script when the plan started an agent, which prices the usage of each agent role." The rest of the paragraph is unchanged. On main, after a fix at landing, it reads "When a plan started an agent, its closing step runs the cost script, which prices the usage of each agent role."
+
+Sentences a fix touches, reread against `docs/dev/skill-layout.md` and the prose standard: line 87 is one rule (the report's content) with its dictated sentence; line 92 is one rule (the move after a skip), a one-sentence bullet with no qualifier left out, and its wording matches line 91's "the ledger folder moves" for the run case; README line 151 opens with its condition, keeps one idea, uses no dash, no filler word and no hard wrap. The glossary and template text are unchanged by this round. Trailing spaces in added lines: `git diff -U0 | grep '^+' | grep -n '  $'` printed nothing.
+
+Verify, run again from the worktree root:
+
+```
+$ sh /Users/axelfaes/workspace/ordo/skills/land/templates/checks.sh /Users/axelfaes/workspace/ordo/.scratch/2-e-a-self-rule/orchestrator-state.md   (exit 0)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+PASS: plan_cost.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 11 commands passed
+```
+
+- Verify 2: `OTEL_LOG_RAW_API_BODIES= python3 skills/plan-orchestration/templates/plan_cost.py <scratch>/c8 <scratch>/root` printed `error: the ledger names no agent`, `exit 1`.
+- Verify 3: `git diff --name-only` printed README.md, docs/glossary.md, skills/plan-orchestration/SKILL.md, skills/plan/SKILL.md, skills/plan/templates/plan.md, skills/repo-setup/templates/plan-terms.md; `git diff skills/plan-orchestration/templates/plan_cost.py | wc -c` printed `0`.
+- Verify 4: `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`.
+- Verify 5: `git diff -U0 | grep '^+' | LC_ALL=C grep -n '[^ -~]'` printed nothing (grep exit 1).
+- Verify 6: `grep -rn 'closing step\|closing report\|runs the cost script\|the script exits 0' skills docs README.md` lists each hit; those inside the step's paths are `skills/plan/SKILL.md:86-89, 91, 92`, `skills/plan/templates/plan.md:21`, `skills/plan-orchestration/SKILL.md:289`, `plan-terms.md:22-23`, `docs/glossary.md:27-28` and `README.md:151`, each true after the change; the others are unchanged and true as listed under "Carrying the change".

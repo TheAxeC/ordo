@@ -286,7 +286,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 ## Usage
 
 - The landing report states each agent's tokens, tool uses and time, from its completion notice.
-- The closing report holds the cost script's output, as the `plan` skill's Steps 2 says.
+- The closing report holds the cost script's output, or the sentence that the plan started no agent, as the `plan` skill's Steps 2 says.
 - A person runs the cost script by hand on any ledger folder, open or archived, as `python3 <this skill's folder>/templates/plan_cost.py <ledger folder> [<transcript root>]`.
 - The script finds the response bodies in the folder `OTEL_LOG_RAW_API_BODIES` names, from its environment or else from the `env` key of Claude Code's settings files, as its head comment says. With no folder, it prices from the transcripts and marks every cost as a lower bound.
 
