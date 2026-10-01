@@ -58,6 +58,7 @@ None.
 - 2026-10-01: Open item C, the roadmap diff of Open item A's ruling: ruled (a) by the user. `docs/roadmap.md` entry 2.E.A's Goal names the response bodies, and the transcripts as a lower bound; the Rulings line "Open item C".
 - 2026-10-01: Open item D, the body folder a tool shell cannot see: ruled (a) by the user. The script falls back to the key `env.OTEL_LOG_RAW_API_BODIES` of the three Claude Code settings files; ADR 0009 amended; fixed at step 4's landing.
 - 2026-10-01: Open item E, `/grill` against ADR 0004 on a "(self-rule)" quoted ruling's roadmap diff: ruled (c), changed, by the user. `/grill` accepts it as ADR 0004 says, round brief item 7 undone at step 6's landing; step 7 makes `/roadmap add` accept a "(self-rule)" bullet for work a finding names; the Rulings line "Open item E".
+- 2026-10-01: Open item F, how `/grill` and `/plan` know that the loop runs them in next-entry mode: closed under self-rule, C1.
 
 ## The standing demands (from Axel, in force)
 
