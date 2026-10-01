@@ -49,6 +49,28 @@ One real run over the sessions of plan 2.C, its report holding points of both ki
 - Step 2 reading (2026-09-30): Axel approved the skill as landed with the correction the open item named: the opening sentence of "The reader" says "with the secrets of the forms it knows replaced by `<REDACTED>`"; the orchestrator makes it as a fix of step 2, and step 2 is ticked (the user).
 - Recurring findings (2026-09-30): Axel ruled (a) for each of the six proposals of the open item. Step 3a makes them in the `spec` skill: the brief check's seventh check of dictated text; `templates/brief.md` "Report" with the sharper first-run and verbatim wording and the terms section; its "Verify before you report" reading item for one rule per bullet and long sentences; its "Cases" with one mutation per code case and the missing, unreadable, malformed and closed-early inputs of a script; each in the words the open item gives (the user).
 
+## Agents
+
+Each agent started for this plan has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
+
+- a6b3d05e2c122296a: brief check of step 1, claude-opus-5-5
+- af66dae24a3304e3e: builder of step 1, claude-sonnet-5-5
+- a6ceb87b4b1863638: reviewer of step 1, claude-opus-5-5
+- a3aff77b6281b67c2: reviewer of step 1 over round 1, claude-opus-5-5
+- ae7b9370da9c638cf: brief check of step 2, claude-opus-5-5
+- a27f84a753259fcf8: builder of step 2, claude-sonnet-5-5
+- a3970fbfab5ee34e0: reviewer of step 2, claude-opus-5-5
+- a0081826dba130f95: reviewer of step 2 over round 1, claude-opus-5-5
+- ae9fefd79737247b9: brief check of step 3, claude-opus-5-5
+- a79c87e7558835577: builder of step 3, claude-sonnet-5-5
+- ab77be5d56c360421: reviewer of step 3, claude-opus-5-5
+- a820569a1a43369fc: reviewer of step 3 over round 1, claude-opus-5-5
+- aa1400dfd58c76810: brief check of step 3a, claude-opus-5-5
+- a567381c0e52c792b: brief check of step 3a, claude-opus-5-5
+- af9906813a8c54544: builder of step 3a, claude-sonnet-5-5
+- a1e73ec4e4e8cf564: reviewer of step 3a, claude-opus-5-5
+- a423bdea6bbd17886: reviewer of step 3a over round 1, claude-opus-5-5
+
 ## Blocked, and by what
 
 - 4: the transcripts of 2.C last until about 2026-10-28.

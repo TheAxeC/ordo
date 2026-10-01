@@ -49,6 +49,39 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
 - Who runs /diagnose inside a plan (2026-09-30): Axel ruled (a). Inside a plan with no person present, `/diagnose` runs in a fresh agent, `ordo-<reviewer_effort>` on the `reviewer` model, started and checked as `/refute`'s reviewer is, since `plan-orchestration`'s "The two tiers, and the models" keeps step code out of the orchestrator and a fresh reader stands between a diagnosis and the fix it proposes; the orchestrator reads the record and rules on the round; by hand, `/diagnose` stays in the user's session. Step 2c carries it. The worker model was (b); keeping it inline with a sentence in "The two tiers" was the lazy option (c) (the user).
 - Reviewer trial (2026-09-30, ruled in plan 2.E): Axel ruled (a). On the first step of this plan that gets reviewed, two fresh reviewers, `ordo-high` on Opus and `ordo-high` on Sonnet 5.5, review the same diff; the orchestrator compares their findings, and if Sonnet finds what Opus finds, `reviewer:` in `.agents/plan.yaml` moves to `claude:sonnet` for the plans after. The landing uses the Opus review; switching at once was the lazy option (the user).
 
+## Agents
+
+Each agent started for this plan has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
+
+Agents in no role the cost script prices:
+
+1. a8b8bdb8d0f78214c: side one of step 4's blind comparison, claude-opus-5-5
+2. ac4cda93b1e0e00ce: side two of step 4's blind comparison, claude-opus-5-5
+3. a37b18740bd105b87: judge 1 of step 4's blind comparison, a subagent, claude-opus-5-5
+4. a1574d0248b23bd4c: judge 2 of step 4's blind comparison, a subagent, claude-opus-5-5
+
+Agents in the roles the cost script prices:
+
+- ae8069985976682a1: brief check of step 1, claude-opus-5-5
+- a3f22d22a0a9ce902: builder of step 1, claude-sonnet-5-5
+- af7e2a18c24b5e8b5: reviewer of step 1, claude-opus-5-5
+- a6d878965211568b3: reviewer of step 1 over round 1, claude-opus-5-5
+- aa8ec600489819d0b: brief check of step 2, claude-opus-5-5
+- a92dbbab7da8946e3: builder of step 2, claude-sonnet-5-5
+- a6e2f8b6509bc4fd2: reviewer of step 2, claude-opus-5-5
+- a45303ae9211bb147: reviewer of step 2 over round 1, claude-opus-5-5
+- af6b9c9b5dd7db9e4: brief check of step 2a, claude-opus-5-5
+- aaf2a244958131899: builder of step 2a, claude-sonnet-5-5
+- a737b44c11093528b: reviewer of step 2a, claude-opus-5-5
+- a5d29dfd61d79bbfc: reviewer of step 2a over round 1, claude-opus-5-5
+- ad9c2bb9acc3d0fed: brief check of step 2b, claude-opus-5-5
+- a065164924d21655a: builder of step 2b, claude-sonnet-5-5
+- a56363ce0d37f4326: reviewer of step 2b, claude-opus-5-5
+- a04d091169687c8c9: reviewer of step 2b over round 1, claude-opus-5-5
+- ad56ca9da30d15e7e: brief check of step 3a, claude-opus-5-5
+- a72228d39458b07f9: brief check of step 3a, claude-opus-5-5
+- a49118f1317517195: brief check of step 3a, claude-opus-5-5
+
 ## Blocked, and by what
 
 - 3: Axel's review of the run (open item "Step 3 reading").

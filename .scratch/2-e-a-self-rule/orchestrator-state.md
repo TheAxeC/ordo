@@ -59,19 +59,6 @@ dispatch:
   - .scratch/2-e-a-self-rule/agents/reviews/6-refuter.md (a90205aabc898e907, claude-opus-5-5 (ordo-high), 253163 tokens, 56 tool uses, 13 min 31 s)
   - over round 1: aafe40381768b8fce, claude-sonnet-5-5 (ordo-high), 235215 tokens, 49 tool uses, 11 min 4 s
   shared_paths: skills/plan-orchestration/SKILL.md, skills/plan/SKILL.md, skills/plan/templates/plan.md, skills/repo-setup/templates/plan-terms.md, docs/glossary.md and README.md, each shared with step 4; the merge is simple, since each step changes other lines of each file (step 4: Steps 10 and "Usage", the closing's bullet, template line 21, the terms closing report, closing step and cost script, and its README paragraph; step 6: its own section and the lines its brief names, the terms quoted ruling and resume point, README lines 16-50). skills/repo-setup/templates/shared-rules.md is a template for other repositories, not a rules file Ordo's builders work under, so step 6 need not run alone.
-- step: 5
-  executor: inline
-  worker: the orchestrating session
-  worktree: .agents/worktrees/2ea-5
-  base: 3c6119e
-  launched: 2026-10-01
-  report: .scratch/2-e-a-self-rule/agents/reviews/5-report.md
-  brief_check: .scratch/2-e-a-self-rule/agents/reviews/5-brief-check.md (af7f592df096cc3fb, claude-opus-5-5 (ordo-high), 243237 tokens, 75 tool uses, 13 min 28 s)
-  landing: not-started
-  round: 1
-  session_id: inline
-  reviewer_report:
-  - .scratch/2-e-a-self-rule/agents/reviews/5-refuter.md (a8ec4aa6dab9bc81e, claude-opus-5-5 (ordo-high), 241181 tokens, 65 tool uses, 12 min 29 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -115,7 +102,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 4 landed; step 4's booking is in `plan.md` and its landing report at `agents/reviews/4-landing.md`. Next: step 5.
-- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 4's fixes at landing printed `checks: 11 commands passed`.
-- Step 6 is built (`agents/reviews/6-report.md`) and refuted once (`agents/reviews/6-refuter.md`); its builder is kept for repair round 1.
+- 2026-10-01. Steps 1 to 5 landed; step 5's booking is in `plan.md` and its landing report at `agents/reviews/5-landing.md`. Next: step 6, once Open item E is ruled; then steps 6b, 7 and 8.
+- Verified: `sh skills/land/templates/land.sh .scratch/2-e-a-self-rule/orchestrator-state.md 2ea-5 3c6119e` on main printed `checks: 11 commands passed`, exit 0.
+- Step 6 is built, through repair round 1 (`agents/reviews/6-report.md`), and refuted over the round (`agents/reviews/6-refuter.md`, "Repair round 1, refuted"); it waits for Open item E, then lands with the round's findings Spec 1 to 3 and Standards 1 to 4 fixed at landing.
 - Open items A, B, C and D ruled. The setting of ADR 0009 is in `~/.claude/settings.json`, and the cost script reads it from there when its shell lacks the variable. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24.

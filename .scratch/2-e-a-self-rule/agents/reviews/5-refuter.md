@@ -110,3 +110,134 @@ none
 - Whether "every cost is a lower bound" is exact for every agent. I checked that `~/.claude/api-bodies` starts on 2026-10-01 (oldest file 13:37) and that one agent's No body count (a7e2d8da2f7e6b429, 18) is consistent with none of its responses having a body. I did not check every row.
 
 Reviewer usage: a8ec4aa6dab9bc81e, claude-opus-5-5 (ordo-high), 241181 tokens, 65 tool uses, 12 min 29 s.
+
+## Repair round 1, refuted
+
+```
+$ sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md   (main checkout root; exit 0)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+PASS: plan_cost.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = ... { $? ||= 1 if $bad }'
+checks: 11 commands passed
+
+$ python3 skills/plan-orchestration/templates/plan_cost.py <ledger>   (four runs, each exit 0, stderr empty; role tables)
+.scratch/archive/2-e-grill (91 lines)
+builder                    20     1072   2174         7657349               0   173755974  254012     >=61.89
+brief check                21      608   1216         3283877               0    71470326   17194     >=31.06
+reviewer                   20      659   1318         3186019               0    76795510   32165     >=31.94
+reviewer over a round      17      497    994         2226819               0    51199034   10594     >=21.59
+Total                      78     2836   5702        16354064               0   373220844  313965    >=146.48
+.scratch/2-f-diagnose (32 lines)
+builder 4 / brief check 7 / reviewer 4 / reviewer over a round 4 / Total 19 ... 71375641  89837  >=33.04
+.scratch/2-g-git-guard (28 lines)
+builder 3 / brief check 6 / reviewer 4 / reviewer over a round 2 / Total 15 ... 91496469  76534  >=38.22
+.scratch/2-h-session-retro (30 lines)
+builder 4 / brief check 5 / reviewer 4 / reviewer over a round 4 / Total 17 ... 67091055  47402  >=27.03
+(each run's whole output is line-for-line identical to the block the report's "Cases 1 and 2, each run whole" quotes: 91, 32, 28, 30 lines)
+
+$ python3 case4.py          (saved copy, from the main root; exit 0, 133 lines: 4 plan headers, 100 "booked", 29 "not booked")
+  identical to the report's quoted output (diff empty). Own exact re-check: 126 booked pairs, each found as a whole pair in its step's Usage line, none shared by two agents; the 128 pairs of all Usage lines are 126 tied to a bullet plus step 14's two booked rerun sides (216348/31 = a2d1285df87e5583c, 98618/15 = ad25c3abcf1869a03, numbered items 62 and 63); the role word before each pair equals the bullet's role (126, 0 differences).
+$ bash case9.sh
+checked 205 entries
+$ python3 case10.py
+records 206 in the five files 202 in 2.E.A plan.md 3 neither ['e6eaa63f-a72a-4d27-8c5a-205d10b9cdf8']
+(the code the report quotes for case4.py, case9.sh and case10.py equals the saved files)
+
+Brief verify 4 (case 8), run in bash on the five files and 2.E.A's plan.md:
+$ cat <five files> .scratch/2-e-a-self-rule/plan.md | grep -o '^- a[0-9a-f]*' | sort | uniq -d
+(no output)
+$ same over copies in $TMPDIR with "- a9a57fb6f85b48b52: grill lookup, claude-opus-5-5" appended to the rulings-file copy
+- a9a57fb6f85b48b52
+2.E.A ids (25 found in plan.md and the state file) found in the five files: []
+
+Brief verify 5:
+$ LC_ALL=C grep -n '[^ -~]' <five files>
+.scratch/2-f-diagnose/plan.md:21 and :22, .scratch/2-g-git-guard/plan.md:19 and :20, .scratch/2-h-session-retro/plan.md:27, :28 and :29 (U+2705 tick lines already on main)
+$ { git diff -U0 | grep '^+'; cat agent-roles.md; } | LC_ALL=C grep -c '[^ -~]'
+0
+tabs 0 in each file; lines 154, 130, 94, 117, 33
+
+Other reruns:
+$ git status --short  -> the six paths of the brief, nothing else; git -C .agents/worktrees/2ea-5 status --short prints nothing, head 3c6119e
+$ delta: the before-state rebuilt on copies (the four tracked files at 847807c, patch applied) against the current files
+  agent-roles.md: 66 numbered items became 69; items 4 to 69 are the old 1 to 66 word for word, renumbered; every non-numbered line is unchanged
+  2.F plan.md: the numbered list and its line moved before the bullets, the line "Agents in the roles the cost script prices:" added, paragraph unchanged
+  2.G, 2.H, rulings file: no difference
+$ order of the 78 bullets: steps 1,2,4,5,3,6,7,8,9,10,11,12,12a,9a,14a,14b,14c; within each step brief check, builder, reviewer, reviewer over round 1 (0 out of order)
+$ git log -1 --format=%cI on 9fc91dc, 39ac671, 8633553: 2026-10-01T00:31:16+02:00 (22:31:16Z), 2026-09-30T23:39:21+02:00 (21:39:21Z), 2026-09-30T17:45:29+02:00 (15:45:29Z)
+$ entrypoint of the 30 sessions in -private-tmp* folders: sdk-cli 29, cli 1; e6eaa63f-... is the cli one, in -private-tmp-ordo-diagnose-3; in the window 27 sessions = 26 sdk-cli + 1 cli
+```
+
+### Verdicts
+
+Items of the brief's "What to build", in its numbering:
+
+- 1: holds. Heading and paragraph are word for word (grep -cxF 1), 78 bullets in the order above, the numbered list has 69 items (1 to 69 consecutive), models equal the transcripts (case 9, 205 entries, 0 differences), the cost script prices 78 agents for 2.E, not 147. The three new items (below) and the two left out hold against their agents' prompts and models.
+- 2: holds. Each of the three files has `## Agents` right before `## Blocked, and by what` (2.F 52/85, 2.G 44/64, 2.H 52/74), the paragraph word for word; Totals 19, 15 and 17 equal the bullets; 2.F's list and the "priced" line are in the order the round asked.
+- 3: holds. Section appended at the end, paragraph and three `grill lookup` bullets, unchanged by the round.
+- 4: holds. Case 8 prints nothing, prints the planted id, and none of 2.E.A's ids is in the five files.
+
+Cases of the brief's "Cases":
+
+- 1: met (exit 0, four role rows, Total 78 = 78 bullets).
+- 2: met (Totals 19, 15, 17 = bullets of each file).
+- 3: met (all 128 Usage pairs are accounted for: 126 tied to a bullet by exact pair and role, 2 to step 14's booked sides; the 29 unbooked plan bullets are each placed by prompt, checked below).
+- 4: met (case4.py reproduced, plus my exact re-check above).
+- 5: met (unchanged by the round; the cost script still lists step 3's three builders and three reviewers).
+- 6: met (the cost script counts 78, so the 69 numbered items are never read).
+- 7: met (the three `/grill 3` bullets are in the rulings file only; step 14's depth-2 lookups are numbered items; 2.E.A's lookups are in none of the five files).
+- 8: met (above).
+- 9: met (205 entries, 0 differences).
+- 10: met. My own enumeration of all 458 ordo subagent records and ordo/private-tmp sessions not in the five files or in 2.E.A's ledger: in the window 2026-09-29T17:59:33Z to 2026-09-30T22:31:16Z only e6eaa63f-a72a-4d27-8c5a-205d10b9cdf8; before it only plan 1 to 2.D agents and the five design-conversation agents of 17:15 and 17:42 on 2026-09-29 (and a432f885, a87e3855, ab9ea8af, now in the file); after it only 2.E.A's own agents and a22b34da4ff11f1fa (claude-code-guide, 2026-10-01T02:35Z).
+
+Items of the round's brief:
+
+- Round 1, Spec 1: holds, as a closure of the finding. ab9ea8af2b5f1b654 (claude-code-guide, claude-haiku-4-5-20251001, 17:10Z) asks about the effort field of an agent definition, which is step 3 (effort agents, plan line 35); a432f885c9164e19d (opus 5.5, 16:30Z) analyses a game-engine design session for how design decisions were presented, which is the `grill` skill, step 12 (plan line 44); a87e3855655e33f19 (opus 5.5, 17:07Z) extracts oculus's design rules and coding standards, which is steps 4 and 5 (plan lines 36, 37). Each is a numbered item with the right model. a5f748843ab789cc0 (audit of Axel's requests over the whole session) and ae64bcf0b2ed543b4 (stop count of 2.C and 2.D) have prompts that name no step, and are named in the report as no plan's with that reason. The report's judgment call and "Records named as no plan's" are rewritten to the prompt test. Two notes are under "Declined to judge".
+- Round 1, Spec 2 and Proof 1: partial. The two scratch files are named, the whole cost-script runs, `checks.sh` lines, and case4.py, case9.sh and case10.py with outputs are quoted and reproduce. The section the round asked for ("Placement of each agent", with an evidence line for every numbered item) is not there for every numbered item. See Finding 1.
+- Round 1, Proof 2: holds. The window end 9fc91dc and the commits 39ac671 and 8633553 with their times are as the report now says; the 26 `claude -p` sessions and the one interactive session (entrypoint `cli`, `-private-tmp-ordo-diagnose-3`) reproduce, and 2.F's booking says that session is Axel's.
+- Round 1, Behaviour: holds. 2.F's section is paragraph (unchanged), "Agents in no role the cost script prices:" with items 1 to 4, "Agents in the roles the cost script prices:", then the 19 bullets; `skills/land/SKILL.md` Steps 9 appends bullets to the end of the section, which is now under the priced line; the script still reads 19. The round touched no other path.
+
+### Findings
+
+- **Proof 1.** `.scratch/2-e-a-self-rule/agents/reviews/5-report.md`, "Repair round 1" item 2: "the placement of every numbered item is in "Agents placed by their prompt or the timeline" above." (and the round brief asked for a section "Placement of each agent" listing "for every numbered item, the evidence its line in "Agents placed by their prompt or the timeline" gives"). What is wrong: the section "Agents placed by their prompt or the timeline" has no line for 15 numbered items of `agent-roles.md`: step 9a's seven scratch runs (items 22 to 28), step 14's first-run sides (46, 47), its four first-run subagent judges (54 to 57) and its two stopped rerun sides (58, 59). Only the booked rerun sides are covered, in "Judgment calls". The report's opening line for the round, "Everything in the round's brief is done", is therefore over-stated, and the round's closing of Spec 2 is weaker than asked: the placed-by-evidence list exists for the bullets ("Case 4 and the placement of each bullet", the section is named for bullets, not for every agent) and not for these numbered items. The placements are right (I checked each id's description, time and parent: 9a runs at 18:38 to 18:41Z on 2026-09-30 during step 9a; sides and judges at 18:39 to 18:56Z and 21:03Z, "Step 14 comparison side/judge/rerun" descriptions), so this is missing evidence, not wrong content. Failure scenario: at landing or at step 10, a reader who wants to check why item 22 or item 58 is in 2.E's list finds no line for it in the report and cannot tell it from an agent listed by mistake. Closable by adding one line per group (the description, the time, the parent session). Verdict: round 1 item 2 partial (Proof). No item or case of the brief is changed.
+- **Proof 2.** `5-report.md`, "Verify 1" and "Verify 4": "printed each of its 11 commands with `PASS` or `ok` and ended `checks: 11 commands passed`, exit 0", "(the head of each run; the per-agent rows follow in the script's output)", and the Case 8 block's lines "(end,        0 lines)" and "after removal:        0 lines". What is wrong: these are the body sentences the first run's Proof 1 named as paraphrases (the 11th command prints nothing, not `PASS` or `ok`; no command printed "(end, 0 lines)"). The round added the verbatim quotes after them and left the body sentences unchanged, so the report still states a command output that was not printed. Failure scenario: the landing booking quotes the body's Verify 1 sentence as what `checks.sh` printed, and a later reader who runs it gets different lines. Closable by deleting or correcting the body lines now that the round holds the quotes. Verdict: none (no decision rests on it).
+
+Spec: Finding 1 is under Proof; none under Spec, Standards or Behaviour. Closure checks that the rerun did reproduce and that found no weaker or wider fix: removal of a check instead of a fix (none), a fix reaching past its finding (the round's two extra numbered items are a ruling in the round brief, see below), a closure the rerun does not reproduce (only the "every numbered item" sentence above).
+
+### Declined to judge
+
+- Whether a432f885c9164e19d and a87e3855655e33f19 (general-purpose agents of the design conversation before the plan opened) belong in 2.E's numbered list, and whether a5f748843ab789cc0 and ae64bcf0b2ed543b4 stay out. The brief's "What is on the tree" lists none of the four, the first run's Spec 1 named only ab9ea8af2b5f1b654, and the first run declined this reading as the orchestrator's or Axel's (ADR 0006 says "every agent a plan skill starts", and none of these was started by a plan skill). The round brief rules it by the prompt test, applies it consistently to the three agents it places, and I confirmed each placement against its prompt. One reading is open: the count of ae64bcf0b2ed543b4 is quoted in 2.E's ruling O5 ("ruling Y stays (a) after the count of 2.C's and 2.D's stops", plan line 96), in a bullet that also names steps 8 and 9, but no step builds anything on ruling Y, so I took the brief's prompt test as it stands.
+- The claude-code-guide agent a22b34da4ff11f1fa (2026-10-01T02:35Z, "Find per-subagent token usage source"): in no Agents section, outside the window, and 2.E.A's files are out of this step's scope. Unchanged from the first run.
+- Whether the glossary's **Agents section** ("one bullet per agent") stays true for 2.F's numbered items: brief Decision 3 leaves the template and glossary unchanged.
+- Whether every "No body" count and lower-bound mark in the script's output is exact for every row: I compared the four runs' whole outputs to the report's blocks, not each row to the response bodies.
+
+Reviewer usage: a92eff98d2db7b840, claude-sonnet-5-5 (ordo-high), 202633 tokens, 61 tool uses, 16 min 12 s.
+
+## Closed
+
+- First run, Spec 1 (the agents of 2.E's design conversation named as no plan's by their start time): closed in repair round 1 by the prompt test of item 1. ab9ea8af2b5f1b654, a87e3855655e33f19 and a432f885c9164e19d are numbered items 1 to 3 of `agent-roles.md`; a5f748843ab789cc0 and ae64bcf0b2ed543b4 stay named as no plan's, with the reason. The run over round 1 gives round item Spec 1 "holds".
+- First run, Spec 2 (the reading ran from scratch scripts the report did not show): closed in repair round 1 and at landing. The round names `table.py` and `assign.py`, and quotes whole the cost-script runs, the `checks.sh` lines and the commands of cases 4, 9 and 10 with their output; the landing adds the evidence lines the run over round 1 found missing (round finding Proof 1, below).
+- First run, Proof 1 (paraphrased command output in the body's Verify 1 to 4): closed in repair round 1 by the verbatim quotes, and at landing by the body correction (round finding Proof 2, below).
+- First run, Proof 2 (case 10's window end and the session e6eaa63f): closed in repair round 1. The run over round 1 gives round item Proof 2 "holds".
+- First run, Behaviour (2.F's bullets appended under its numbered list): closed in repair round 1. The run over round 1 gives round item Behaviour "holds".
+- Repair round 1, Proof 1 (15 numbered items with no evidence line): fixed at landing on main. "Agents placed by their prompt or the timeline" in `5-report.md` now holds one line per group: step 9a's seven scratch runs (items 22 to 28), step 14's first-run sides (46, 47), its first-run judges (54 to 57) and its stopped rerun sides (58, 59), each with the descriptions, start times and parent session read from the subagent records, and for the stopped sides their last record, the parent's interruption at 21:07:57Z and the restart at 21:08:26Z.
+- Repair round 1, Proof 2 (body paraphrases left in Verify 1 and case 8): fixed at landing on main. The Verify 1 sentence now says the run exited 0 and ended `checks: 11 commands passed` and points at the whole output; the body's case 8 block holds only the lines the commands print; the round's case 8 block quotes the landing's rerun whole, the 2.E.A id check included (26 ids, none in the five files).
+- Declined points of both runs: none is a finding. The placement of the design-conversation agents is the round brief's ruling by the prompt test; the glossary's Agents section is left unchanged by brief Decision 3; a22b34da4ff11f1fa is 2.E.A's and outside this step's scope; the lower-bound marks follow from the response bodies starting on 2026-10-01.

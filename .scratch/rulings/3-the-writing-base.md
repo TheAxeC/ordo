@@ -23,3 +23,11 @@
 - D22 What makes each field's text credible (2026-09-30): (a) one line in each of the four kept registers names what the field's reader looks for (precision of measurement and method; transparency about limitations; reproducibility of results; adherence to reporting guidelines), and the review reports a methods or results section that leaves it out; whether a medical paper follows its reporting guideline is a check of content that `/writing` does not make; the lazy option was (c), leaving it out (the user).
 - D23 The discipline table's sentence against D18 (2026-09-30): (a) "If you're writing "We argue that..." in a physics paper ..., you've adopted the wrong voice" is not carried, since D18 holds; no option was the lazy one, both cost the same (the user).
 - D24 The roadmap diff of entry 3 (2026-09-30): (A) the entry's Status, Goal and Gate are written as drafted from D1 to D23, the Waits on line unchanged; the lazy option was (C), keeping the entry (the user).
+
+## Agents
+
+Each lookup agent `/grill 3` started has one bullet, with its agent id, its role and the model the runner served it.
+
+- a2cd8be14d77ebe85: grill lookup, claude-opus-5-5
+- a9d12b91117bb4165: grill lookup, claude-opus-5-5
+- ac071af1b2da2bf66: grill lookup, claude-opus-5-5

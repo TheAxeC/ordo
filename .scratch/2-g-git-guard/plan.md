@@ -41,6 +41,26 @@ The hook script's test runs each blocked command and expects the block, and runs
 - Other commands that discard work (2026-09-30): Axel agreed with the recommendation. Step 2b adds to the guard's blocks `git send-pack`, `git subtree push`, `git stash drop`, `git stash clear` and `git switch --discard-changes`; `git checkout -f <branch>` stays allowed after a grep of the skills for it (the user).
 - pyright for Python templates (2026-09-30): Axel ruled (a), "but you install it": the orchestrator installs pyright with `npm install -g pyright`, and step 2c adds `pyright skills/repo-setup/templates/hooks/git_guard.py` to the verify list of `docs/dev/building.md`, the change standard's command block and each open plan's state file, and fixes what it finds (the user).
 
+## Agents
+
+Each agent started for this plan has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
+
+- a87b610859b7caa16: brief check of step 1, claude-opus-5-5
+- a1ff1a7de09f656b4: brief check of step 1, claude-opus-5-5
+- a9bba431490a852e7: builder of step 1, claude-sonnet-5-5
+- a1c460a174ddbb16c: reviewer of step 1, claude-opus-5-5
+- a37c83404490fe650: reviewer of step 1, claude-opus-5-5
+- a75e0f9dff19d98cc: reviewer of step 1 over round 1, claude-opus-5-5
+- a8f74fb0fb6f2338b: brief check of step 2, claude-opus-5-5
+- a609efe535711a48c: builder of step 2, claude-sonnet-5-5
+- a26039d8e67ff072f: reviewer of step 2, claude-opus-5-5
+- a484a17ab43519cb0: reviewer of step 2 over round 1, claude-opus-5-5
+- a19f3b42d959e5119: brief check of step 2a, claude-opus-5-5
+- a9b4dbe88a7879eb1: brief check of step 2b, claude-opus-5-5
+- ab724e6a426ca4d22: brief check of step 2b, claude-opus-5-5
+- a64c3043b141e586e: builder of step 2b, claude-sonnet-5-5
+- a1b3ad4e9df60485a: reviewer of step 2b, claude-opus-5-5
+
 ## Blocked, and by what
 
 none
