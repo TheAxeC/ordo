@@ -10,6 +10,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+- sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
@@ -42,21 +43,6 @@ repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over
 
 ```yaml
 dispatch:
-- step: 4
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2ea-4
-  base: 4aa05f2
-  launched: 2026-10-01
-  report: .scratch/2-e-a-self-rule/agents/reviews/4-report.md
-  brief_check: .scratch/2-e-a-self-rule/agents/reviews/4-brief-check.md (aa5bff28e5e1bed90, claude-opus-5-5 (ordo-high), 209247 tokens, 56 tool uses, 10 min 47 s)
-  landing: not-started
-  round: 1
-  session_id: ae1c05d01d496c9b9 (claude-sonnet-5-5)
-  builder_usage: 334341 tokens, 81 tool uses, 41 min 7 s; round 1: 123466 tokens, 37 tool uses, 17 min 17 s
-  reviewer_report:
-  - .scratch/2-e-a-self-rule/agents/reviews/4-refuter.md (a7eae9ce124bd2bd6, claude-opus-5-5 (ordo-high), 251863 tokens, 67 tool uses, 16 min 58 s)
-  - .scratch/2-e-a-self-rule/agents/reviews/4-refuter.md, "Repair round 1, refuted" (a89c479922cf35964, claude-sonnet-5-5 (ordo-high), 211531 tokens, 54 tool uses, 14 min 52 s)
 - step: 6
   executor: agent
   worker: claude:sonnet
@@ -70,7 +56,7 @@ dispatch:
   session_id: a15fd806c8f78a9ab (claude-sonnet-5-5)
   builder_usage: 212645 tokens, 30 tool uses, 6 min 45 s (the first run of the cases, handed back: agents/reviews/6-cases-handback.md; ruled in agents/briefs/6-cases.md); the build after the ruling: 322159 tokens, 48 tool uses, 15 min 51 s
   reviewer_report:
-  - .scratch/2-e-a-self-rule/agents/reviews/6-refuter.md (a90205aabc898e907, claude-opus-5-5 (ordo-high), running)
+  - .scratch/2-e-a-self-rule/agents/reviews/6-refuter.md (a90205aabc898e907, claude-opus-5-5 (ordo-high), 253163 tokens, 56 tool uses, 13 min 31 s)
   shared_paths: skills/plan-orchestration/SKILL.md, skills/plan/SKILL.md, skills/plan/templates/plan.md, skills/repo-setup/templates/plan-terms.md, docs/glossary.md and README.md, each shared with step 4; the merge is simple, since each step changes other lines of each file (step 4: Steps 10 and "Usage", the closing's bullet, template line 21, the terms closing report, closing step and cost script, and its README paragraph; step 6: its own section and the lines its brief names, the terms quoted ruling and resume point, README lines 16-50). skills/repo-setup/templates/shared-rules.md is a template for other repositories, not a rules file Ordo's builders work under, so step 6 need not run alone.
 ```
 
@@ -107,9 +93,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1, 2 and 3 landed; step 3's booking is in `plan.md` and its landing report at `agents/reviews/3-landing.md`.
-- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after the fixes at landing printed `checks: 10 commands passed`.
-- Step 4 is built and refuted once (`agents/reviews/4-report.md`, `agents/reviews/4-refuter.md`); its builder is kept for repair round 1. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet); its booking carries step 3's check ("Blocked, and by what").
-- Open items A and B ruled. Step 4's repair round 1 is sent (ruling A and the first review's findings); step 6 is prepared under ruling B and its builder launched.
-- Open item C ruled (a) and the roadmap changed. The setting of ADR 0009 is in `~/.claude/settings.json`, from the next session on. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24. Nothing is open on Axel's side.
-- Step 4's repair round 1 is built and refuted over the round (claude-sonnet-5-5, step 3's check); Open item D is ruled (a), and it lands with the fix and the round's small findings fixed at landing. Step 6 is built (`agents/reviews/6-report.md`) and its first review is running.
+- 2026-10-01. Steps 1 to 4 landed; step 4's booking is in `plan.md` and its landing report at `agents/reviews/4-landing.md`. Next: step 5.
+- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 4's fixes at landing printed `checks: 11 commands passed`.
+- Step 6 is built (`agents/reviews/6-report.md`) and refuted once (`agents/reviews/6-refuter.md`); its builder is kept for repair round 1.
+- Open items A, B, C and D ruled. The setting of ADR 0009 is in `~/.claude/settings.json`, and the cost script reads it from there when its shell lacks the variable. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24.

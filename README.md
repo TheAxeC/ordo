@@ -146,6 +146,14 @@ A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of 
 
 Each command runs through `bash -o pipefail -c` and passes when it exits 0. The run stops at the first command that fails. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
 
+The closing step of a plan runs the cost script, which prices the usage of each agent role. It takes each response's counts from the response body Claude Code keeps when `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>` are set in its settings. Where it kept no body, the script takes the counts from the agents' transcripts and marks the cost as a lower bound. The folder grows with every request and holds each request's prompt.
+
+The script takes the folder from `OTEL_LOG_RAW_API_BODIES` in its environment, and otherwise from the `env` key of Claude Code's settings files, the repository's `.claude/settings.local.json` and `.claude/settings.json` and then `~/.claude/settings.json`. A Claude Code tool's shell does not receive the variable, so the closing finds it in the settings. The script runs on its own on any ledger folder, open or archived, with `<transcript root>` defaulting to `~/.claude/projects`:
+
+```sh
+python3 <skills>/plan-orchestration/templates/plan_cost.py <ledger folder> [<transcript root>]
+```
+
 ## The landing script
 
 `skills/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`. It runs from the `land` skill itself, and nothing is copied into the ledger.

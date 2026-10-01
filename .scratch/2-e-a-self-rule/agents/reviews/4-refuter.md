@@ -355,3 +355,12 @@ Items of the round's brief:
 - The reviewer's own usage: agent id not visible to me, claude-sonnet-5-5 per the dispatch entry, tokens and minutes not known to me.
 
 Reviewer usage: a89c479922cf35964, claude-sonnet-5-5 (ordo-high), 211531 tokens, 54 tool uses, 14 min 52 s.
+
+## Closed
+
+- Behaviour, the body folder a tool shell cannot see: raised to the user as Open item D, ruled (a), and fixed at landing: `plan_cost.py` `_settings_files`, `_settings_value` and `_body_folder` read the key `env.OTEL_LOG_RAW_API_BODIES` of `<repository>/.claude/settings.local.json`, `<repository>/.claude/settings.json` and `~/.claude/settings.json` when the environment lacks the variable; nine cases in `plan_cost.test.sh` under "The body folder from Claude Code's settings files", eight of which fail on the script as it stood (the ninth, the variable set empty, preserves behaviour); the test runs under a scratch HOME and outside any repository. On main, `python3 skills/plan-orchestration/templates/plan_cost.py .scratch/2-e-a-self-rule` from the Bash tool prints `Response bodies from /Users/axelfaes/.claude/api-bodies.`
+- Standards, README cold open of "Every other key": fixed at landing, the cost script's paragraphs moved after the verify-list paragraphs, at the end of the section, so "Every other key is optional" follows the nine required keys again.
+- Standards, README paragraph of six sentences: fixed at landing, split into two paragraphs (what the closing counts from; where the script finds the folder, and the command).
+- Standards, `plan-orchestration` "Usage" bullet of two rules: fixed at landing, two bullets (the command; where the folder comes from and what no folder gives).
+- Standards, "most" in the docstring: fixed at landing, "The transcript can record a response's output count before the response ended".
+- Proof, `lexists` and the zero-count entry without cases: fixed at landing, the cases "a folder with a body's name is an error, not a missing body" (fails with `os.path.isfile` in place of `os.path.lexists` on a scratch copy) and "a zero-count entry is passed over before its body is looked up" (fails with the zero-count pass-over removed on a scratch copy).

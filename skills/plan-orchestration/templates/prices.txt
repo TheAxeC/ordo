@@ -1,0 +1,6 @@
+# Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.
+# Columns, separated by spaces: model, input, cache write 5m, cache write 1h, cache read, output.
+claude-opus-5-5            4  5     8  0.20  20
+claude-sonnet-5-5          2  2.50  4  0.20  10
+claude-sonnet-5            2  2.50  4  0.20  10
+claude-haiku-4-5-20251001  1  1.25  2  0.10  5
