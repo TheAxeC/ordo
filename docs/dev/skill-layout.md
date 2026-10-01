@@ -20,6 +20,11 @@ metadata:
 - `Triggers on:` lists at least one phrase for each case the skill is for, and may list several phrasings of one case, so a request worded differently still finds the skill.
 - A phrase for a case a neighbouring skill is for goes in that skill's `Triggers on:`, not in this one.
 - The version lives in `metadata.version` only. The text of the skill carries no version, date or change history.
+- A plan that changes a skill raises one part of its `metadata.version` once, and sets the parts after it to 0.
+- The major part when, under the same inputs and the default keys, a run that worked before is refused, or its output is changed or removed.
+- The minor part when the skill does something it did not do, accepts an input it did not accept, or adds to its output, and every run that worked before still works.
+- The patch part when only the wording changes and every run behaves as before.
+- A refusal of a value the skill's text already called an error is no run that worked before.
 
 ## Sections, in order
 

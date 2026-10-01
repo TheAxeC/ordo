@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after the closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "2.10.1"
+  version: "2.11.0"
 ---
 
 # Plan orchestration
@@ -49,15 +49,18 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Before any dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and the loop dispatches nothing.
 2. Pick the next step that nothing blocks.
-   - A session runs one plan at a time. With several plans open, it takes them in the roadmap's order and starts the next plan only when the one before it has no step left that can move without the user.
+   - A session runs one plan at a time.
+     - With several plans open, it takes them in the roadmap's order.
+     - It starts the next plan only when the one before it has no step left that can move without the user.
    - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
-3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
+3. Invoke `/spec <entry> <step>`, which checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
    - Before dispatching the builder, read the brief check's report and the changes to the brief its "Closed" heading names.
    - A stop it raises goes to the user by "Stops".
      - Under `self_rule: on`, the orchestrator closes it instead, as `references/self-rule.md`, "Closing an open item", says, unless it is of a kind its "The six kinds left open" names.
    - A stop, here or at any later step, blocks its own step.
      - The loop moves on to the next unblocked step.
    - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step is added to the plan only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
+   - Done when `/spec` has written the brief and the dispatch block and the brief check's report is read, or the step has stopped.
 4. Choose the step's executor.
    - Write it into the dispatch block.
    - Then build by that choice.
@@ -65,14 +68,23 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **`agent`.** Dispatch one builder with the worktree path and the brief, by the recipe under "Launching a builder".
      - The moment it is launched, write its agent id into the dispatch block under `session_id`.
    - **The launch commit.** Under every executor, the dispatch entry is committed once its builder's identity is in it, and the commit is a resume point.
-     - Under `agent` it comes right after the launch and the model check of "Launching a builder", since the builder's agent id exists only once it is launched; under `inline` and `academic-paper` it comes before the build starts.
+     - Under `agent` it comes right after the launch and the model check of "Launching a builder", since the builder's agent id exists only once it is launched.
+     - Under `inline` and `academic-paper` it comes before the build starts.
      - The paths are the state file and the session's own records since the last resume point, named in `git add -- <path> ...`.
-   - **The prompt.** It states, in its own words: the worktree and that it is the only place to work; the no-git rule; what is never touched (the ledger beyond the builder's report, the main checkout, the user's data); the reading order (the rules file, the brief, the standards, the ADRs the brief names); every requirement the step is judged on; that the step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes; the report path and shape.
+   - **The prompt.** It states, in its own words:
+     - The worktree, and that it is the only place to work.
+     - The no-git rule.
+     - What is never touched: the ledger beyond the builder's report, the main checkout, the user's data.
+     - The reading order: the rules file, the brief, the standards, the ADRs the brief names.
+     - Every requirement the step is judged on.
+     - That the step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes.
+     - The report path and shape.
    - **The builder.** It never runs a git command.
      - In the ledger it writes only its report, at the path the brief names in the worktree's copy of the ledger.
    - **`inline`.** The orchestrating session writes `inline` as the builder's identity under `session_id`.
      - It makes the launch commit.
-     - It then builds the step itself in the worktree under the brief and the rules file. Steps 5 and 8 read "the builder" as itself.
+     - It then builds the step itself in the worktree under the brief and the rules file.
+     - Steps 5 and 8 read "the builder" as itself.
    - **`academic-paper`.** The session writes `academic-paper` as the builder's identity under `session_id`.
      - It makes the launch commit.
      - The step is then built through that skill with the brief as its input.
@@ -83,27 +95,31 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 6. On the report, save it into the main ledger at the dispatch block's `report` path, on disk and not committed on its own.
    - Then read the whole diff.
    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
-   - The builder's completion notification carries its final message. When the builder wrote no report file, the orchestrator takes the report from that message into the `report` path.
-   - The orchestrator writes the builder's tokens, tool uses and time, from its completion notice, into the dispatch block under `builder_usage`, beside `report`, on disk; the next resume-point commit carries them.
+   - When the builder wrote no report file, the orchestrator takes the report from the final message its completion notification carries, into the `report` path.
+   - The orchestrator writes the builder's tokens, tool uses and time, from its completion notice, into the dispatch block under `builder_usage`, beside `report`, on disk.
+   - The next resume-point commit carries them.
    - The report is a lead, not a fact.
    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result.
      - Read that hand-back the same way as a report.
    - Rule on such a case when the fix stays inside the step's scope.
      - Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`.
-     - Hold the text the ruling gives the builder word for word as Steps 8's **Dictated text** says, before it is committed.
+     - Hold the text the ruling gives the builder word for word as Steps 8's "Dictated text" says, before it is committed.
      - Commit it by path as a round sent.
    - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`.
      - The builder's final report carries the ruling.
    - Such a case whose fix changes the step's scope is a stop of the kind "A finding that is the user's", by "Stops".
+   - Done when the report is saved at the `report` path, `builder_usage` is written and the whole diff is read.
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
    - Read the diff yourself while it runs.
    - Save its report.
-     - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk; the next resume-point commit carries them.
+     - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk.
+     - The next resume-point commit carries them.
+   - Done when the refuter report is saved and its record is under `reviewer_report`.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
-   - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 **Dictated text** holds a brief's, since the brief check never reads those files.
+   - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 "Dictated text" holds a brief's, since the brief check never reads those files.
    - **Before the resume.** Write `round: n` into the dispatch block.
-     - Commit it by path with the round's brief and the session's own records since the last resume point. The commit is a resume point.
+     - Commit it as a resume point, by path, with the round's brief and the session's own records since the last resume point.
    - **Only known fixes.** Each ruling says what to change.
      - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>), which probes read-only on a scratch copy and leaves the step's worktree unchanged.
      - The round carries the found cause's fix.
@@ -116,7 +132,8 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - Add the builder's tokens, tool uses and time for the round, from its completion notice, to `builder_usage` in the dispatch block, on disk.
      - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer on the model "The two tiers, and the models" gives the run over a repair round, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
-9. Invoke `/land <entry> <step>`. Its refusals are its own.
+   - Done when each finding is closed in a round, left to landing or raised as a stop.
+9. Invoke `/land <entry> <step>`, whose refusals are its own.
    - A red line the orchestrator cannot fix at landing takes the step back out of main.
      - Its failure is recorded in the step's Step 0 in `plan.md`.
    - The step keeps its line and its tag.
@@ -124,17 +141,20 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - The failure goes to the user as an open item only when what to do is a decision for the user, by "Stops".
    - A second failure of the step's landing always goes to the user, as the `land` skill's Steps 6 says.
    - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
-   - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+   - `/spec` then saves the step's work as a patch and prepares it again from main's head, as the `spec` skill's "Steps / A step taken back out of main" says.
    - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by <name>).", for any name, the orchestrator adds its fix step, as `references/self-rule.md`, "The review of a choice", says.
+   - Done when the step is on main with its booking, or is taken back out of main.
 10. Continue with step 2.
     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
     - Under `self_rule: on` and `next_entry: on`, the orchestrator goes on after the closing step as `references/self-rule.md`, "Next-entry mode", says.
     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
-    - After the closing step, the orchestrator's run ends at an end `references/self-rule.md`, "Next-entry mode", names.
+    - Under `self_rule: on` and `next_entry: on`, the run after the closing step ends in one of the cases `references/self-rule.md`, "Next-entry mode", lists.
     - The final message opens as "Reports" says.
       - It then lists every step landed since the loop began with the path of each report, and the open items.
       - After the closing step, it also names the path of the closing report.
-      - Under `self_rule: on`, it also lists the choices taken since the loop began, by `C<n>` and heading, and says they are reviewed in `<ledger_root>/choices.md` with `C<n> Agree` or `C<n> => <ruling>`.
+      - Under `self_rule: on`, it also lists the choices taken since the loop began, by `C<n>` and heading.
+      - Under `self_rule: on`, it also says the choices are reviewed in `<ledger_root>/choices.md` with `C<n> Agree` or `C<n> => <ruling>`.
+    - Done when the final message is written, or the loop is at step 2.
 
 ## The two tiers, and the models
 
@@ -160,17 +180,18 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 
 The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under these rules:
 
-- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, ruling, path a step depends on, sharp edge and landing report is in the ledger folder of the main checkout.
-- A step's commits are only the points another session resumes from. They are a stop (its open item and Step 0), the preparation commit, and the dispatch entry once the builder's identity is in it. They are also a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), a choice taken under self-rule, a review of a choice, the landing, and a handover.
-- Every other ledger record is written to disk in the main checkout. Such records are a builder's report saved, the builder's usage under `builder_usage`, a refuter report saved, a reviewer recorded and a ruling booked.
+- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file: every decision, ruling, path a step depends on, sharp edge and landing report is in the ledger folder of the main checkout.
+- A step's commits are only the points another session resumes from: a stop (its open item and Step 0), the preparation commit, the dispatch entry once the builder's identity is in it, a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), a choice taken under self-rule, a review of a choice, the landing, and a handover.
+- Every other ledger record (a builder's report saved, the builder's usage under `builder_usage`, a refuter report saved, a reviewer recorded, a ruling booked) is written to disk in the main checkout.
   - It is carried by the next of those commits.
 - A resume-point commit holds only the paths the session itself wrote since the last one.
   - Each is named in the `git add -- <path> ...` command.
 - A ledger change the session did not make is listed by path.
   - It is left alone.
   - One on `plan.md` or the state file is a refusal of `/spec` (the `spec` skill's Steps 1).
-- A record not yet committed is on disk in the main checkout. A session taking over reads the ledger in the working tree as well as at main's head.
-- Handing the plan over is a resume point. A session that stops, for a handover, a pause or a stop, first commits by path the records it wrote since the last resume point.
+- A session taking over reads the ledger in the working tree as well as at main's head, since a record not yet committed is on disk in the main checkout.
+- Handing the plan over is a resume point.
+- A session that stops, for a handover, a pause or a stop, first commits by path the records it wrote since the last resume point.
 - So a session taking over finds no uncommitted record of the session before it.
   - A ledger change it did not make is listed, as the bullets above say.
     - It is left alone, as the bullets above say.
@@ -188,17 +209,18 @@ On resumption with a dispatch block present:
   - It stays unticked in `plan.md`.
   - It is worked again as that step, its line keeping its tag, with no new ruling, unless its Step 0 records a second landing failure.
   - Its failure is in its Step 0 in `plan.md`.
-- `/spec` of such a step saves its work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+- `/spec` of such a step saves its work as a patch and prepares it again from main's head, as the `spec` skill's "Steps / A step taken back out of main" says.
 - A builder is dead when the runner's agent listing no longer shows it and no completion notification with a report arrived.
 - A builder is also dead when a later session does not find its agent id in its own listing and no report is at the dispatch block's `report` path in the worktree.
 - A dead builder is reported to the user with the worktree's `git status --short` and the builder's last message when there is one.
 - A fresh continuation builder takes over a dead builder's worktree when the user says so.
-- The dead builder's record moves to `builders_before:` as "Launching a builder" says, and `session_id` takes the continuation builder.
+- The dead builder's record moves to `builders_before:` as "Launching a builder" says.
 
 On every resumption, with a dispatch block or without one:
 
 - A booking present in the working tree but not committed, with the step's files staged, is a landing interrupted before its commit, and is finished before anything else.
-- A landed step whose worktree or branches are still there is named by its open item (the `land` skill's Stops row "A worktree that cannot be removed"). The removal is run from that open item, on the worktree and branches it names, each only when it still exists.
+- A landed step whose worktree or branches are still there is named by its open item (the `land` skill's Stops row "A worktree that cannot be removed").
+- The removal is run from that open item, on the worktree and branches it names, each only when it still exists.
   - The open item is then closed.
 - After a compaction the next skill is invoked through the runner, as "Rules" says, and the compaction's summary of a skill's text never stands in for the skill.
 
@@ -208,7 +230,8 @@ On every resumption, with a dispatch block or without one:
 - The reviewer runs on a builder's first step under this rule, and when any of the builder's last three landing reports shows a first report that did not pass the bar with at most one fix at landing.
 - Whatever the record, the reviewer runs when the step's brief touches a public surface, a server module, a state layer or a wire shape.
 - A failed bar puts the reviewer back for the builder's next three steps.
-- The runs over the repair rounds follow `refute_after_repair`, and under `earned` they run only on a step whose first review ran.
+- The runs over the repair rounds follow `refute_after_repair`.
+- Under `earned`, the runs over the repair rounds run only on a step whose first review ran.
 - The landing report records which branch each step took.
 
 ## The recurring-findings pass
@@ -226,7 +249,8 @@ On every resumption, with a dispatch block or without one:
 
 ## Self-rule
 
-- **Scope.** The section applies under `self_rule: on` in the configuration block, and to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where `.agents/plan.yaml` holds the keys, as `references/self-rule.md`, "Next-entry mode", says; otherwise, with `self_rule: off`, or the key absent, every open item waits for the user, as "Stops" says.
+- **Scope.** The section applies under `self_rule: on` in the configuration block, and to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where `.agents/plan.yaml` holds the keys, as `references/self-rule.md`, "Next-entry mode", says.
+  - Otherwise, with `self_rule: off` or the key absent, every open item waits for the user, as "Stops" says.
 - **The reference.** Under `self_rule: on`, and for the review of a choice, the session reads `references/self-rule.md`, which says which open items stay with the user, how the others are closed, how the choices file is kept and reviewed, and how next-entry mode runs.
 
 ## Two steps in flight
@@ -239,8 +263,10 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - Each brief lists the paths its step writes under "Paths this step writes".
   - `/spec` compares the list with the briefs of the steps in flight by reading them (the `spec` skill's Steps 5).
 - Two steps in flight may name the same file if and only if the orchestrator judges that merging them at landing is simple.
-  - The orchestrator writes that judgment in the later step's dispatch entry as `shared_paths:`, naming each shared file and why the merge is simple; with no shared file the key is left out.
-- When the merge is not simple, the later step waits until the earlier one lands. No script checks the judgment.
+  - The orchestrator writes that judgment in the later step's dispatch entry as `shared_paths:`, naming each shared file and why the merge is simple.
+  - With no shared file the key is left out.
+- When the merge is not simple, the later step waits until the earlier one lands.
+- No script checks that judgment.
 - A step that touches a configuration file or a rule file runs alone.
 - Each step has its own worktree, base, builder, reviewer, rounds and dispatch entry.
 - A later step is dispatched only after the earlier one's launch commit (Steps 4), so its base holds the earlier brief and dispatch entry.
@@ -255,7 +281,10 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - The orchestrator writes that model beside `session_id` in the dispatch entry, as `session_id: <agent id> (<served model>)`.
 - The same check runs when the builder is resumed for a repair round.
 - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the agent is stopped through the runner's stop tool, and nothing it wrote is used.
-- A builder that is replaced keeps its record: its agent id and served model move to the dispatch entry's `builders_before:` key, `<agent id> (<served model>, stopped)` for a builder stopped for another model and `<agent id> (<served model>, dead)` for a dead builder, one after another, and `session_id` takes the new builder.
+- A builder that is replaced keeps its record: its agent id and served model move to the dispatch entry's `builders_before:` key, one after another.
+  - A builder stopped for another model is recorded as `<agent id> (<served model>, stopped)`.
+  - A dead builder is recorded as `<agent id> (<served model>, dead)`.
+  - `session_id` takes the new builder.
 - It runs in the background.
   - The runner tracks it and reports when it ends.
 - A repair round resumes it with the runner's message tool on its agent id in `session_id`, as Steps 8 says.
@@ -288,7 +317,8 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - The landing report states each agent's tokens, tool uses and time, from its completion notice.
 - The closing report holds the cost script's output, or the sentence that the plan started no agent, as the `plan` skill's Steps 2 says.
 - A person runs the cost script by hand on any ledger folder, open or archived, as `python3 <this skill's folder>/templates/plan_cost.py <ledger folder> [<transcript root>]`.
-- The script finds the response bodies in the folder `OTEL_LOG_RAW_API_BODIES` names, from its environment or else from the `env` key of Claude Code's settings files, as its head comment says. With no folder, it prices from the transcripts and marks every cost as a lower bound.
+- The script finds the response bodies in the folder `OTEL_LOG_RAW_API_BODIES` names, from its environment or else from the `env` key of Claude Code's settings files, as its head comment says.
+- With no such folder, the script prices from the transcripts and marks every cost as a lower bound.
 
 ## The pace when a deadline is set
 
@@ -325,7 +355,8 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 - A stop is repeated in every report until the user has ruled, or, under `self_rule: on`, until the orchestrator closes it as `references/self-rule.md`, "Closing an open item", says.
 - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
   - It never goes through a question-box or multiple-choice tool.
-  - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling on the item then approves them too, with no second stop.
+  - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list.
+  - The user's ruling on the item then approves those approvals too, with no second stop.
   - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
   - The option names that stop.
   - An option that runs a skill with an approval stop (`/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill`) states the change in full, as that skill's text says a quoted ruling must state it, or names that skill's approval stop as a stop of its own.
@@ -354,7 +385,9 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 - The skill carries no project name, since that is in `.agents/plan.yaml` and the ledger.
   - The models it names are those in "The two tiers, and the models".
 - A fix of a defect in delivered work needs no yes.
-- The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing. A new finding of a review never earns that round, and the user's yes never extends the cap.
+- The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing.
+  - A new finding of a review never earns that round.
+  - The user's yes never extends the cap.
 - Nothing in the loop repeats without a count: a step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round, two stops before its build (the `spec` skill's "Steps / A stop" 3) and one return out of main (the `land` skill's Steps 6).
   - A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.
 - After its last round a step lands.

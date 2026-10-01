@@ -2,7 +2,7 @@
 name: diagnose
 description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it probes on a scratch copy, leaves the step's worktree unchanged and hands the fix to the builder as the round's ruling. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Diagnose a defect
@@ -13,7 +13,7 @@ metadata:
 
 ```
 /diagnose <symptom>                        find the cause of a symptom, given in the user's words, in the checkout the skill is run in
-/diagnose <entry> <step> <finding>         find the cause of a finding of a plan's step, written as the refuter report names it: Spec 1 for the first run, round 1 Spec 1 for the run over repair round 1
+/diagnose <entry> <step> <finding>         find the cause of a finding of a plan's step, written as the refuter report names it
 /diagnose <entry> <step> red line          find the cause of a red line at the step's landing whose cause is not known
 /diagnose <entry> <step> brief check <n>   find the cause of finding <n> of the step's brief check
 ```
@@ -59,11 +59,15 @@ metadata:
    - Inside a plan, the record is written to disk in the main checkout and not committed on its own.
      - The next resume-point commit carries it, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
    - Done when the record exists and its Symptom section holds the symptom as "What it reads" 1 gives it, word for word.
-3. Choose where the probes run, and write into the record's "Where the probes run" section what it names.
+3. Choose where the probes run.
+   - Write into the record's "Where the probes run" section what the choice names.
    - Outside a plan, the probes run in the user's checkout or worktree.
-   - Outside a plan, a defect that is not on the checkout (an older commit, with or without a patch) gets a scratch copy built as the next bullets say, run by a person too: `<commit>` is that commit, and the patch, read from where the user names it, is applied with the last line of the block.
+   - Outside a plan, a defect that is not on the checkout (an older commit, with or without a patch) gets a scratch copy built as the next bullets say, run by a person too.
+     - `<commit>` is that commit.
+     - The patch, read from where the user names it, is applied with the last line of the block.
    - Inside a plan, the probes run on a scratch copy under `$TMPDIR` that shares no file with the step's worktree.
-   - `$tmp` is made by `mktemp -d "${TMPDIR:-/tmp}/diagnose.XXXXXX"`, and the copy is a detached worktree made from the main checkout.
+   - `$tmp` is made by `mktemp -d "${TMPDIR:-/tmp}/diagnose.XXXXXX"`.
+   - The copy is a detached worktree made from the main checkout.
    - The commands for each source of the defect are these.
      ```sh
      tmp=$(mktemp -d "${TMPDIR:-/tmp}/diagnose.XXXXXX")
@@ -75,7 +79,10 @@ metadata:
      git apply --3way --allow-empty "$tmp/step.diff"               # a red line: from inside "$tmp/tree"
      git apply --3way --allow-empty <patch>                        # outside a plan, a defect at an older commit with a patch: from inside "$tmp/tree"
      ```
-   - For a finding of a reviewer's report, `<commit>` is the dispatch entry's base, the step's diff is taken from inside the step's worktree, and each file listed with `??` is copied to the same path in the copy.
+   - For a finding of a reviewer's report:
+     - `<commit>` is the dispatch entry's base.
+     - The step's diff is taken from inside the step's worktree.
+     - Each file listed with `??` is copied to the same path in the copy.
    - For a red line, `<commit>` is `HEAD` and the step's whole range is taken from the branch of the kept worktree, which is named after the worktree's folder as the `land` skill's "Removing a step's worktree" says.
    - `--allow-empty` lets a step whose only changes are new files, with an empty tracked diff, be copied.
    - For a brief-check finding, `<commit>` is `HEAD` and nothing is applied, since the brief and its report are read as they stand on disk.
@@ -112,27 +119,32 @@ metadata:
    - Done when the record's Hypotheses section holds three to five hypotheses in rank order, or fewer with the reason, each with its falsifying result.
 8. Show the red command, its output, the shrunk case and the hypotheses.
    - Run by a person, the skill shows them to the user.
-   - With no person present, the skill writes the hypotheses into the record and goes on to Steps 11, and Steps 9 and 10 are not run.
+   - With no person present, the skill writes the hypotheses into the record and goes on to Steps 11.
+   - With no person present, Steps 9 and 10 are not run.
    - Done when the user has been shown them, or with no person present when the record holds them.
 9. Run by a person, wait for the user's reply before the first probe ("Stops").
    - Done when the user's reply is in.
 10. Rank, drop or add hypotheses as the reply says.
     - Done when the record's Hypotheses section holds the list the reply leaves, with the reply quoted.
 11. Make the one change of a probe: pick the next hypothesis in rank order and change one thing.
-    - Two changes in one probe, and a probe tied to no hypothesis, are Anti-patterns rows.
+    - Two changes in one probe is an Anti-patterns row.
+    - A probe tied to no hypothesis is an Anti-patterns row.
     - A debugger or an interactive session is used where the language has one, and otherwise logging at the boundaries that separate the hypotheses.
     - A hypothesis a debugger or logging probe leaves standing gets one more probe, the change the hypothesis names, so that Steps 15 has the red command green with it and red without it.
-    - For a slow symptom, a probe is a measurement: a timing harness or a profiler at the boundaries, compared with the baseline of Steps 4, or `git bisect run` between two known states; a log line does not measure time.
+    - For a slow symptom, a probe is a measurement: a timing harness or a profiler at the boundaries, compared with the baseline of Steps 4, or `git bisect run` between two known states.
+      - A log line does not measure time.
     - Every line of logging a probe adds carries one tag unique to the diagnosis, `DIAG-` and four hexadecimal digits.
-    - Logging without that tag, and logging everything to search afterwards, are Anti-patterns rows.
+    - Logging without that tag is an Anti-patterns row.
+    - Logging everything to search afterwards is an Anti-patterns row.
     - Steps 11 to 13 repeat for each hypothesis until each has a result.
     - Done when the tree differs from what it was before the probe by that one change.
-12. Run the red command after the probe, and record the probe.
-    - The record's Probes section holds the hypothesis's rank, the one change as a diff, the run and the result, falsified or still standing.
+12. Run the red command after the probe.
+    - Record the probe: the record's Probes section holds the hypothesis's rank, the one change as a diff, the run and the result, falsified or still standing.
     - Done when the row is written.
 13. Undo the change of the probe, the one that turned the red command green included.
     - Done when the tree is as it was before the probe, and the change stands in the record as a diff.
-14. When every hypothesis is falsified, form a second list from what the probes showed, and show it as Steps 8 says.
+14. When every hypothesis is falsified, form a second list from what the probes showed.
+    - Show the second list as Steps 8 says.
     - Run by a person, the skill waits for the reply and re-ranks as Steps 9 and 10 say before the first probe of the second list.
     - Done when the record holds the second list with its falsifying results, Steps 9 and 10 have run over it when run by a person, and Steps 11 to 13 have run over it.
 15. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
@@ -142,7 +154,8 @@ metadata:
     - That open item quotes the hypotheses and every probe, or every way tried from the record's "No red command" section, and names the record's path.
     - A cause not found is never sent to the builder.
     - With no person present outside a plan, a cause not found is stated in the session's final message with the record's path.
-    - After a cause not found the skill goes to Steps 21 and 22, then inside a plan to Steps 23; outside a plan Steps 23 and 24 are not run, so the record stays in `$TMPDIR` and its path is shown.
+    - After a cause not found the skill goes to Steps 21 and 22, then inside a plan to Steps 23.
+    - After a cause not found outside a plan, Steps 23 and 24 are not run, so the record stays in `$TMPDIR` and its path is shown.
     - Run by a person, a cause not found ends in a stop after Steps 22 ("Stops").
     - Done when the record's Cause section names the cause with its probe, or says "cause not found".
 16. For a defect in code whose failure costs something, write a test that reproduces the shrunk case at the place the defect occurs.
@@ -160,7 +173,8 @@ metadata:
     - Done when the fix is in the tree the probes ran in and the record quotes it, or for a defect in text quotes the text after.
 19. Run the test, the red command and the original, unshrunk case.
     - Done when the test is green, the red command is green and the original case is green, each quoted in the record.
-20. Inside a plan, hand the fix over by where the defect was found, and leave the step's worktree unchanged as "Rules" says.
+20. Inside a plan, hand the fix over by where the defect was found.
+    - The step's worktree is left unchanged, as "Rules" says.
     - A finding of the reviewer's first run: its fix and its test are the ruling of the next repair round, as `plan-orchestration`'s Steps 8 sends a round.
       - The ruling quotes the hypotheses with their results, the cause, the fix, both runs of the test and the record's path.
       - The red command is the round's check.
@@ -170,7 +184,8 @@ metadata:
     - A brief-check finding: its fix goes into the brief, as the `spec` skill's "Steps / The brief check" 4 closes a finding.
     - Done when the fix and its test stand in the place the defect's source names, and for a reviewer's finding `git status --short` and `git diff --binary <base> | shasum` from inside the step's worktree print what the record holds.
 21. Run by a person, show the record whole to the user, before the cleanup.
-    - With no person present outside a plan, the record's path is named in the session's final message instead, and Steps 24 is not run, so the record stays for whoever reads the run.
+    - With no person present outside a plan, the record's path is named in the session's final message instead.
+    - With no person present outside a plan, Steps 24 is not run, so the record stays for whoever reads the run.
     - Done when the user has been shown the record, or the final message names its path.
 22. Clean up, keeping the record.
     - Done when the grep of the tag over the tree the probes ran in prints nothing, and the scratch copy, removed with `git worktree remove --force "$tmp/tree"` from the main checkout, and every throwaway file are gone, a credential or `.env` file copied into `$TMPDIR` among them.
@@ -209,9 +224,14 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 | Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause; with no person present, Steps 15 gives it as a cause not found | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
 | The cause not found | One of the conditions Steps 15 gives | The record with every probe, or every way tried from its "No red command" section, and inside a plan the open item | Inside a plan, the user's ruling on the open item or, under `self_rule: on`, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; run by a person, the user's next direction |
 | No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
-| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | For a finding, the step prepared with `/spec`, then `/diagnose` again; for a red line, `/diagnose` again once `/land` has taken the step back out of main, before `/spec` prepares it again, and after that `/diagnose <symptom>` with the failure in the step's Step 0 as the symptom; for a step already landed, `/diagnose <symptom>` with the finding's failure scenario as the symptom |
+| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | What the bullets below give for the kind of input: a finding, a red line or a step already landed |
 | No report | Inside a plan, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
 | No finding | Inside a plan, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |
+
+- After the refusal "No dispatch entry" for a finding of a reviewer's report, the step is prepared with `/spec`, then `/diagnose` runs again.
+- After the refusal "No dispatch entry" for a red line, `/diagnose` runs again once `/land` has taken the step back out of main and before `/spec` prepares it again.
+- After `/spec` has prepared a red line's step again, `/diagnose <symptom>` runs with the failure in the step's Step 0 as the symptom.
+- After the refusal "No dispatch entry" for a step already landed, `/diagnose <symptom>` runs with the finding's failure scenario as the symptom.
 
 ## Anti-patterns
 
@@ -230,8 +250,10 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 
 - Who is present decides the waits: a person running the skill, by hand or inside a plan they run step by step, gets the waits of "Stops", and a session with no person present, under `plan-orchestration` or running `/diagnose <symptom>` on its own, gets none.
 - Inside a plan, the step's worktree is never changed and every probe runs on the scratch copy of Steps 3, so `plan-orchestration`'s rule that a finding whose cause is not known is diagnosed read-only holds.
-- The skill never runs against the user's real home, the installed skills or the pinned checkout without the user's leave, and a red command that would touch them runs with those paths redirected, as Steps 3 says.
+- The skill runs against the user's real home, the installed skills or the pinned checkout only with the user's leave.
+- A red command that would touch the user's real home, the installed skills or the pinned checkout runs with those paths redirected, as Steps 3 says.
 - Every quoted command output carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed, as the rules file's rule on secrets in quoted command output says.
 - A captured artifact is quoted only in the lines that carry the symptom.
 - With no rules file, a defect in code whose failure costs something (lost work, a broken installation, a wrong configuration accepted) begins with a test that fails on the tree as it is.
-- With no rules file, a guard is not a fix: a null check, an early return or a fallback does not close a defect, and the fix reaches the code that lacks the thing it needs.
+- With no rules file, a guard is not a fix: a null check, an early return or a fallback does not close a defect.
+- With no rules file, the fix reaches the code that lacks the thing it needs.

@@ -2,12 +2,12 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.7.1"
+  version: "1.8.0"
 ---
 
 # Refute a step
 
-`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`: a verdict per item of the brief and per case, and a list of findings each with its place (a file and a line in code, a page and its section in a page) and its failure scenario, or "none" under a heading. The orchestrator or the session saves it, and the next resume point commits it.
+`/refute <entry> <step>` dispatches one reviewer, who changes nothing. The reviewer does what a builder's report cannot do for itself: rerun the commands and reproduce the claims. It leaves behind `agents/reviews/<step>-refuter.md`: a verdict per item of the brief and per case, and a list of findings each with its place (a file and a line in code, a page and its section in a page) and its failure scenario, or "none" under a heading.
 
 ## Quick start
 
@@ -50,11 +50,13 @@ metadata:
    - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
    - Right after the dispatch, the orchestrator or the session reads the reviewer's agent id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
-   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used. The configured one is the model the configuration block's `reviewer:` names for the first run, and for a run over a repair round the model "Steps / Over a repair round" 1 gives.
+   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
+   - The configured model is the model the configuration block's `reviewer:` names for the first run, and for a run over a repair round the model "Steps / Over a repair round" 1 gives.
    - The stopped reviewer is recorded under the dispatch block's `reviewer_report`, after the records before it.
      - A first-run reviewer: `(<agent id>, <served model>, stopped)`.
      - A reviewer over round `<n>`: `over round <n>: <agent id>, <served model>, stopped`.
      - The record is written and carried as Steps 7 says.
+   - Done when the reviewer is dispatched and its agent id and served model are read, or the refusal or the stop is raised.
 2. The reviewer reads the inputs in the order "What it reads" gives them.
 3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
    - The step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks (the step's worktree).
@@ -69,9 +71,12 @@ metadata:
    - Then the four headings, each with findings, or "none", and each finding with its place (a file and a line in code, a page and its section in a page), the quoted hunk, what is wrong, its failure scenario as "The four headings" says, and the verdict it names when it has one, as "The verdicts" says.
    - Then "Declined to judge": each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason.
    - Then the reviewer's usage line: its agent id, its served model, its tokens, its tool uses and its minutes.
+   - Done when the report holds the verification lines, a verdict for each item and case, the four headings, "Declined to judge" and the usage line.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
    - It records the report's path under the dispatch block's `reviewer_report` field, after the records before it, followed by, in parentheses, the reviewer's agent id, its served model (Steps 1), and its tokens, tool uses and time from its completion notice: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`.
-   - Both are written to disk in the main checkout and not committed on their own. The next resume-point commit carries them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+   - Both are written to disk in the main checkout.
+   - The next resume-point commit carries them, and they get no commit of their own, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+   - Done when the report is saved and its record is under `reviewer_report`.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
 ### Over a repair round
@@ -80,6 +85,7 @@ metadata:
    - The model is the one the configuration block's `repair_reviewer:` names, or the `reviewer:` value when the block has no `repair_reviewer:` key, at the effort `reviewer_effort` names.
    - This holds for every run over a repair round, the run over the extra round of `plan-orchestration`'s exception and a reviewer started over a round in place of one stopped for another model included.
    - A run that finds nothing ends the rounds.
+   - Done when the reviewer of the run is dispatched on the model this item gives.
 2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
 3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
 4. It looks for the same four things over that delta, and for every closure the builder claims:
@@ -89,6 +95,7 @@ metadata:
 5. It reruns every verification command again.
 6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
    - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit as Steps 7 says.
+   - Done when the run's section is appended and its record is in `reviewer_report`.
 7. The findings of the run over the last round are never sent to the builder.
    - Each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.
 8. With `refute_after_repair: no` these runs do not happen.
@@ -107,7 +114,7 @@ metadata:
   - an ADR the diff is under that the brief's "What is on the tree" does not name;
   - a case of a code step in the brief's "Cases" that no test of the step checks;
   - a case whose first run on the unchanged tree the report does not give.
-- **Proof.** A test of behaviour whose failure costs nothing is not a Proof pass; it is a Standards finding, as the next heading says. A finding is:
+- **Proof.** A finding is:
   - a "seen failing first" claim with no quoted failing check;
   - a test that asserts a known defect as the expected result;
   - a threshold, tolerance or predicate widened;
@@ -128,6 +135,7 @@ metadata:
   - a file over the size limit;
   - a rule of the repository's checks that the diff satisfies only because the check does not read that path yet;
   - a test of behaviour whose failure costs nothing (neither lost work, nor a broken installation, nor a wrong configuration accepted), under the rules file's rule that a test exists only for behaviour whose failure costs something.
+    - Such a test is not a Proof pass.
 - **Behaviour.** A finding is a host- or user-visible change the report does not state, or states without the before and after.
 - Each finding, under any of the four headings, carries its failure scenario: the concrete input or state and the wrong result it gives, or, for a finding in text, the reader and what the text leads them to do wrong.
 
@@ -149,7 +157,8 @@ metadata:
 
 - A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or raised to the user as an open item in the state file, as `plan-orchestration`'s Stops section says.
   - It becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books.
-- A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR. One the builder made against the brief is closed like any other finding, by a change that follows the ADR.
+- A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR.
+- A contradiction of an ADR that the builder made against the brief is closed like any other finding, by a change that follows the ADR.
 - The open items hold only what the user must rule on.
 - After the last round, the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading.
 - `/land` refuses while a finding is left neither closed nor raised as an open item.

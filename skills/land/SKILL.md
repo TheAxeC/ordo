@@ -2,12 +2,12 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit by explicit path list, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "1.8.2"
+  version: "1.9.0"
 ---
 
 # Land a step
 
-`/land <entry> <step>` brings a refuted step from its worktree onto main. It leaves behind the step on main in one commit with its booking and its landing report. The state file is rewritten, and the step's worktree and branches are removed. After a red line no fix inside the brief closes, it leaves the step out of main instead. The worktree and branches are then kept for `/spec`, and the failure is recorded in the step's Step 0 in `plan.md`.
+`/land <entry> <step>` brings a refuted step from its worktree onto main. It leaves behind the step on main in one commit with its booking and its landing report, the rewritten state file, and the step's worktree and branches removed. After a red line no fix inside the brief closes, it leaves the step out of main instead, with the worktree and branches kept for `/spec` and the failure recorded in the step's Step 0 in `plan.md`.
 
 ## Quick start
 
@@ -58,8 +58,8 @@ metadata:
    - A conflict is resolved by the orchestrator or the session, never by an agent.
    - `templates/land.sh` prints the conflicting paths and exits 2 instead.
    - A range with no commit, as when the step's only output is a ledger file, has nothing to copy, and the landing goes on to Steps 6.
-5. Restore to main's copy, before anything else, a ledger file the cherry-pick deleted or rewrote; the ledger is written only on main.
-   - `templates/land.sh` leaves the ledger root out of the worktree's add, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches main; a ledger file that a commit of the range holds still does.
+5. Restore to main's copy, before anything else, a ledger file the cherry-pick deleted or rewrote, since the ledger is written only on main.
+   - `templates/land.sh` leaves the ledger root out of the worktree's add, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches main, though a ledger file that a commit of the range holds still does.
 6. Run the verification commands of the configuration block on main, in order, each through its filter.
    - `templates/land.sh` runs the step's verify list through `templates/checks.sh <state file>` from the root of the checkout it checks (main here).
    - The lines `checks.sh` prints are what the booking quotes.
@@ -79,10 +79,13 @@ metadata:
      - It is worked again as that step, with no new ruling.
    - The failure goes to the user as an open item only when what to do is a decision for the user.
    - A step is taken back out of main and prepared again at most once: a second failure of its landing always goes to the user as an open item, and the step waits for the ruling.
-   - The step's agents are booked in `plan.md`'s Agents section by the rules of Steps 9, written and read back before that commit, since `/spec` later removes the step's dispatch entry; the agents of its later landing are appended when it lands, those already in the section skipped.
+   - The step's agents are booked in `plan.md`'s Agents section by the rules of Steps 9, since `/spec` later removes the step's dispatch entry.
+     - The booking is written and read back before the commit below.
+     - The agents of its later landing are appended when it lands, those already in the section skipped.
    - The state file and `plan.md` are then committed by path, a resume point.
      - The commit also holds the other ledger records the session wrote since the last one.
-   - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+   - `/spec` then saves the step's work as a patch and prepares it again from main's head, as the `spec` skill's "Steps / A step taken back out of main" says.
+   - Done when every verification command has run on main and each red line is fixed on main, or the step is taken back out of main.
 7. Open the changed views, as "The look" says.
 8. Run the A/B: the benchmark commands the configuration block's `bench:` line names, the staged base binary and the new one run alternately after warm-ups, at least ten runs each.
    - The mean, the standard deviation and the standard error of the difference are written to the scratchpad.
@@ -103,6 +106,7 @@ metadata:
    - It states whether the builder's first report passed its bar, and the fixes at landing.
    - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as.
    - Tick the step.
+   - Done when the booking is in `plan.md`, the step is ticked, and the Agents section, read back, holds each agent of the step once.
 10. Read the step's `worktree` from its dispatch entry, for Steps 13.
     - Then rewrite the state file: the step's dispatch entry removed, the position line, the open items as they stand.
 11. Write the landing report, `agents/reviews/<step>-landing.md`, so it lands with the step and stands alone on disk.
@@ -172,11 +176,12 @@ metadata:
 1. Take the step's `worktree`: `/land` read it from the dispatch entry at Steps 10, before the state file was rewritten, and a back-out reads it from the entry.
    - The branch is the worktree folder's name, and `<branch>-land` beside it, as `land.sh` names them.
    - No path or branch is built from the step id.
-2. When the worktree still exists (`git worktree list` names it), from inside it, `git status --porcelain --untracked-files=all` lists every change, untracked files included. A worktree already gone skips steps 2 and 3.
-   - Each path must be under the ledger root, `.agents/plan.yaml`'s `ledger_root` (in the `projects:` form, the one that holds the state file's folder). The ledger is written only on main, so its copies in the worktree are records already saved there or copies the orchestrator put there.
+2. When the worktree still exists (`git worktree list` names it), from inside it, `git status --porcelain --untracked-files=all` lists every change, untracked files included.
+   - A worktree already gone skips steps 2 and 3.
+   - Each path must be under the ledger root, `.agents/plan.yaml`'s `ledger_root` (in the `projects:` form, the one that holds the state file's folder), since the ledger is written only on main and its copies in the worktree are records already saved there or copies the orchestrator put there.
    - Any other path is a stop ("Stops") that names it, and nothing is removed.
-3. Run `git worktree remove --force <worktree>`, when it still exists. Without `--force`, git refuses a worktree holding untracked or modified files, such as those ledger copies.
-4. Run `git branch -D` for `<branch>` and for `<branch>-land`, each only when it exists. `-D` deletes them whether or not they are merged into main; after a cherry-pick neither is, since the cherry-pick made new commits.
+3. Run `git worktree remove --force <worktree>`, when it still exists, since without `--force` git refuses a worktree holding untracked or modified files, such as those ledger copies.
+4. Run `git branch -D` for `<branch>` and for `<branch>-land`, each only when it exists, since after a cherry-pick neither is merged into main (the cherry-pick made new commits) and only `-D` deletes an unmerged branch.
 5. These commands run without asking the user, since the step's work is committed on main.
    - When the runner refuses one of them, the session gives the user the command to run and waits.
 
@@ -184,8 +189,8 @@ metadata:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and what to do is a decision for the user | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; the second failure of a step's landing always waits for the user |
-| A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves: main untouched; under `templates/land.sh`, the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1 | The lock removed once no git command uses it, then `/land` again; `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start |
+| A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and what to do is a decision for the user | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure only (Steps 6), the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books |
+| A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves, as the bullet below says | The lock removed once no git command uses it, then `/land` again, as the bullet below says |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
 | No dispatch block | The state file holds no dispatch block naming this step | That the block is missing | `/spec` for the step |
@@ -193,16 +198,19 @@ metadata:
 | The step not ready | No builder's report; or no refuter report that is either newer than the builder's report or, after the step's repair rounds (up to `repair_rounds`, or one more under plan-orchestration's exception), carrying a run over the last round when `refute_after_repair: yes` (the orchestrator's read of the round when `no`); or a run over the last round owed and missing; or a finding, the last run's included, neither closed under the refuter report's Closed heading nor raised to the user as an open item | Which of these it is | What is missing supplied, then `/land` again |
 | Main not clean | On main something staged, a git operation in progress, or one of the step's paths carrying an unrelated change of the user's | What it saw, the user's unrelated changes listed by path | Main put right, then `/land` again |
 | Agents still running | The check of Steps 1 fails: an agent still listed | Each one left | Each one stopped, then `/land` again |
-| A worktree that cannot be removed | At Steps 13, the worktree holds a path outside the ledger root, or a removal command fails ("Removing a step's worktree") | The open item, booked in the state file's open items and committed by path as a resume point: the worktree path and both branches, as Steps 10 read them, and what stopped the removal (each path outside the ledger root, or the command and what it printed) | The cause put right, such as the path moved out of the worktree or removed by the user, then "Removing a step's worktree" run on the worktree and branches the open item names; the open item is then closed |
+| A worktree that cannot be removed | At Steps 13, the worktree holds a path outside the ledger root, or a removal command fails ("Removing a step's worktree") | The open item, with the worktree path and both branches, as Steps 10 read them, and what stopped the removal (each path outside the ledger root, or the command and what it printed) | The cause put right, such as the path moved out of the worktree or removed by the user, then "Removing a step's worktree" run on the worktree and branches the open item names |
 
 - The first row is a stop: it leaves an open item.
 - The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.
+  - Under `templates/land.sh`, the stop leaves the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1.
+  - `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start.
 - The rows after those two, up to the last, are refusals: they come before main is touched.
 - The last row is a stop after the landing's commit that leaves an open item: the step is on main, and only its worktree and branches are left, named in the open item.
+  - The open item is booked in the state file's open items and committed by path as a resume point.
   - Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item.
 - A refusal names its cause and leaves nothing.
 - A red line recorded in the step's Step 0 is not a stop: the step is out of main and keeps its line and its tag.
-- It is worked again as that step, with no new ruling, through `/spec`, once (Steps 6). `/spec` saves its work as a patch and prepares it again from main's head (the `spec` skill's "Steps / A step taken back out of main").
+- It is worked again as that step, with no new ruling, through `/spec`, once (Steps 6).
 
 ## Anti-patterns
 
@@ -215,7 +223,8 @@ metadata:
 - One step stays one implementation commit, which keeps each step traceable to its brief, its review and its booking.
 - A landed step found short of its brief, or wrong, is raised to the user as an open item, by `plan-orchestration`'s "Stops".
   - The step that finishes it on top of what landed enters the plan only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books.
-- A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books when the step's authority is a bullet ending "(self-rule)" alone; the revert of a step the user approved, or one a ruling of the user added, is kind 3.
+- A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books when the step's authority is a bullet ending "(self-rule)" alone.
+  - The revert of a step the user approved, or one a ruling of the user added, is kind 3 of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open".
   - Its preparation commit stays.
   - Only a step so reverted is booked as reverted.
 - The state file is rewritten before the commit, so main's head always carries a state file that describes it.

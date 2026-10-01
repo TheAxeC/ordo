@@ -2,7 +2,7 @@
 name: repo-setup
 description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml, and, on request, the git guard hook. Shows the whole tree and every file's text, the git guard hook named by its source, before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
 metadata:
-  version: "1.2.1"
+  version: "1.3.0"
 ---
 
 # Set up a repository
@@ -47,7 +47,8 @@ metadata:
      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
      - The name is a placeholder in angle brackets, such as `<L>`.
      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
-   - With no ruling, the skill says which of these it found, and every stop stands.
+   - With no ruling, the skill says which of these it found.
+   - With no ruling, every stop stands.
 
 ## Steps
 
@@ -67,7 +68,10 @@ metadata:
      - A placeholder is a `<...>` that names what fills it, inside inline code or not (`include/<lib>/`).
      - A language's own angle brackets in code (`std::get<>`, `std::span<const T>`) are code and stay as they are.
      - A placeholder none of these fills is listed with the draft at Steps 4, and the user gives its value.
-     - A rule whose condition is a choice placeholder (`<yes or no>`, or a value `or none`) is kept when the answer is yes or a value, with the parenthesis removed when the answer is yes and holding the value when the answer is a value, and is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none.
+     - A rule whose condition is a choice placeholder (`<yes or no>`, or a value `or none`) is kept when the answer is yes or a value.
+       - With the answer yes, the parenthesis is removed.
+       - With a value as the answer, the rule holds the value.
+     - Such a rule is left out of the installed page, with its sub-list and the placeholders only it holds, when the answer is no or none.
      - A check the repository does not have yet is written as "checked by reading at review" in place of the placeholder's sentence part, so the page states nothing nobody filled in.
    - `coding-standards/typescript.md` keeps its section "Svelte and SvelteKit" only when the repository uses Svelte or SvelteKit (a `.svelte` file, or the answer to question 3).
      - Otherwise the section, its heading included, is left out of the installed page.
@@ -81,7 +85,7 @@ metadata:
    - Under a quoted ruling, the draft is written without the stop only when four things hold.
      - The ruling answers every question of "The questions".
      - It states `worker`, `reviewer` and `libraries` for `/ordo-init`.
-     - Every file of the draft that this skill writes is a template filled from the answers, or has its full text in the ruling. The files `/ordo-init` drafts and the file the skills CLI writes are not counted.
+     - Every file of the draft that this skill writes (not the files `/ordo-init` drafts, nor the file the skills CLI writes) is a template filled from the answers, or has its full text in the ruling.
      - Steps 3 lists no placeholder for the user's value.
    - Otherwise the draft is shown whole, and the stop stands.
    - Each file that is neither a filled template nor held in the ruling is named with the draft, such as a build file, a fetched licence text or a page adapted from a sibling repository.
@@ -113,7 +117,8 @@ metadata:
     - The setup is done when the first two exit 0, the scan prints nothing, the `git check-ignore` line exits 0, and, when the answer to question 10 is yes, the Python version check exits 0.
 11. Show the user what the setup leaves for them to act on: each check's output and, when the answer to question 10 is yes, `templates/hooks/git_guard.settings.json`, for the user to add to `.claude/settings.json` or `.claude/settings.local.json`, into its `hooks.PreToolUse` list when the file already has one.
     - A Claude Code session started in the repository after the text is added reads it.
-    - The step is done when the outputs and, when the answer to question 10 is yes, the settings text are shown; the setup goes on to Steps 12 without waiting for the text to be added.
+    - The step is done when the outputs and, when the answer to question 10 is yes, the settings text are shown.
+    - The setup goes on to Steps 12 without waiting for the text to be added.
 12. Commit the setup's other files in one commit by explicit path list, the subject naming the repository's setup.
     - Every file written is named, except those `/ordo-init` committed at Steps 8.
     - The commit is made only when the answer to question 5 allows it.
@@ -126,9 +131,10 @@ metadata:
 
 ### sync
 
-1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of `docs/glossary.md`; steps 2 to 9 follow its exit status and, on exit 2, its `error:` lines.
-2. Exit 0: both blocks equal their templates; nothing to do.
-3. Exit 1: a block differs; show the diff of each block that differs, for the user's ruling per hunk ("Stops").
+1. Run `python3 <this skill's folder>/templates/sync_rules.py <path>`, which checks the shared-rules block of `CLAUDE.md` and then the plan-terms block of `docs/glossary.md`.
+   - Steps 2 to 9 follow its exit status and, on exit 2, its `error:` lines.
+2. Exit 0: both blocks equal their templates, so nothing is to be done.
+3. Exit 1, when a block differs: show the diff of each block that differs, for the user's ruling per hunk ("Stops").
    - The template's text goes into the repository: `--write`, after the approval.
    - Or the repository's text is the wording wanted everywhere: the change goes into `templates/shared-rules.md` or `templates/plan-terms.md` in this skill's folder, after which every repository set up from it differs until it is synced.
    - Under a quoted ruling whose hunks are the hunks of the diff, each with the choice for it, the choices are applied without the stop.
@@ -144,15 +150,17 @@ metadata:
    - Under a quoted ruling that states the drafted change, the draft of Steps / sync 4 takes the ruling's text.
    - The rules of Steps / sync 4 are worked on it.
    - A draft that is still the ruled change is written without the stop.
-   - A draft that differs from it is shown whole with each difference named, and the stop stands.
+   - A draft that differs from it is shown whole with each difference named.
+   - The stop then stands.
    - The item is done when the drafted change is shown, or written under a quoted ruling.
 6. Write it once the user approves.
-7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names. A no-single-block line of the same run is still drafted, as step 4 says.
+7. Exit 2 with any other `error:` line (`no CLAUDE.md in`, `is not UTF-8`, `cannot read`, `cannot write`, `does not read back as written`): draft nothing for the file that line names.
+   - A no-single-block line of the same run is still drafted, as step 4 says.
    - Show the line with the file it names ("Stops").
    - The file named in the line is fixed first, by the user or with the user's approval.
 8. After a written draft or a fixed file: run the check again, at most twice, following steps 2 to 7 on its exit status each time.
    - A check that does not exit 0 on the second of those runs is a stop ("Stops").
-9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it; otherwise stop ("Stops").
+9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it, and otherwise stop ("Stops").
    - A change written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
    - When no commit is made, the list of files the stop shows names the ruling the same way.
    - The item is done when the change is committed, or the stop shows the files changed.
@@ -163,16 +171,21 @@ metadata:
 2. The kind, for the `.gitignore` and the build files: `cpp`, `python`, `typescript`, or another the user names (then the user gives the build system and the patterns to ignore).
 3. The build system, language standard and test harness, as far as the user fixes them now.
 4. The license [MIT] and its holder.
-   - MIT is written from `templates/LICENSE-MIT`; another license is written from the text the user gives or from its SPDX name's official text, fetched and shown.
+   - MIT is written from `templates/LICENSE-MIT`.
+   - Another license is written from the text the user gives or from its SPDX name's official text, fetched and shown.
 5. The commit rule for this repository [commit only when told].
 6. The standards pages: Ordo's defaults [the defaults], or pages copied from a sibling repository the user names (each read whole and adapted to this repository's names), or pages written from rules the user states.
    - The defaults are `docs/dev/design-principles.md` and `docs/dev/coding-standards/common.md` always, a language page under `docs/dev/coding-standards/` for each language of question 2 and each language whose files the folder holds, and `docs/dev/ui-standard.md` when the user says the repository has a user interface.
-   - A language with no template page (any kind other than C++, Python and TypeScript) gets no language page from the defaults; the draft at Steps 4 says so, and the user may give that language's rules under the third answer.
+   - A language with no template page (any kind other than C++, Python and TypeScript) gets no language page from the defaults.
+     - The draft at Steps 4 says so.
+     - The user may give that language's rules under the third answer.
 7. Does the repository have a user interface a reader sees and operates? [no]
 8. The project skills: the set in a sibling repository's `skills-lock.json` the user names, a list the user gives, or none.
 9. Rules that belong to this repository only, for the Project rules section.
 10. Install the git guard? [no]
-    - It is a hook that refuses `git push`, `git reset --hard`, `git clean` with force and `git checkout` or `git restore` of the whole tree in an agent's commands, which the user then runs by hand; it is copied into `.claude/hooks/`, which `.gitignore` ignores, so each clone installs it itself, and it needs `python3` 3.9 or later.
+    - It is a hook that refuses `git push`, `git reset --hard`, `git clean` with force and `git checkout` or `git restore` of the whole tree in an agent's commands, which the user then runs by hand.
+    - It is copied into `.claude/hooks/`, which `.gitignore` ignores, so each clone installs it itself.
+    - It needs `python3` 3.9 or later.
 
 ## The tree
 
@@ -231,8 +244,10 @@ utils/                           scripts the build and the checks run
 - In a setup, after Steps 1, nothing is written until the user approves or corrects the draft (Steps 4).
   - A quoted ruling that covers the draft as Steps 4 says is that approval.
 - The skill writes nothing outside the repository's folder, except a change to `templates/shared-rules.md` or `templates/plan-terms.md` the user rules on in `sync`.
-- The rules are Ordo's shipped defaults or the user's; the skill adds no other rule.
-- Build files are written only for what the user names; nothing is assumed.
+- The skill adds no rule other than Ordo's shipped defaults and the user's.
+- Build files are written only for what the user names.
 - The plan skills are never installed per project: they are installed per user, and one copy is loaded.
-- The skill never writes a Claude Code settings file; it prints the git guard's settings text for the user to add.
-- Every file it drafts is ASCII with one paragraph per source line, as the prose standard says, and carries no history, as the shared rules say; the copied git guard hook is copied byte for byte.
+- The skill never writes a Claude Code settings file: it shows the git guard's settings text for the user to add, as Steps 11 says.
+- Every file it drafts is ASCII with one paragraph per source line, as the prose standard says.
+- Every file it drafts carries no history, as the shared rules say.
+- The copied git guard hook is copied byte for byte.

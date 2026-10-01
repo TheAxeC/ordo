@@ -1,8 +1,8 @@
 ---
 name: ordo-help
-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
+description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
 metadata:
-  version: "1.8.3"
+  version: "1.9.0"
 ---
 
 # Ordo help
@@ -46,8 +46,11 @@ metadata:
 3. For `/ordo-help <entry>`, print the named plan's position.
    - From the state file: the position line, the open items verbatim, and the dispatch block (a step in flight, its worktree, its base, its round).
    - From the ledger folder, for the step in flight: which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings.
+   - The step is done when the position is printed.
 4. For `/ordo-help <entry>`, print one line from that position: the command that comes next, in the sequence.
-   - An open item that waits on a ruling is printed with it, and the next line is `Ruled: ...`.
+   - An open item that waits on a ruling is printed with it.
+   - The line after an open item that waits on a ruling is `Ruled: ...`.
+   - The step is done when the line is printed.
 
 ## The sequence, printed verbatim
 

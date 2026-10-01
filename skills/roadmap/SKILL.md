@@ -2,7 +2,7 @@
 name: roadmap
 description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves or under a quoted ruling. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
-  version: "1.2.0"
+  version: "1.3.0"
 ---
 
 # Keep the roadmap
@@ -15,9 +15,9 @@ metadata:
 /roadmap                                  the open entries in order: status, what each waits on, the plan open for it, the next one; then the entries not yet specified
 /roadmap add <goal>                       drafts an entry and its place in the order, writes it after approval
 /roadmap add <entry>                      for an entry under "Not yet specified": drafts its gate and its place in the order, writes it after approval
-/roadmap move <entry> before|after <entry>
+/roadmap move <entry> before|after <entry>  moves the entry to the place named, after approval
 /roadmap done <entry>                     marks it done with the gate's output; the closing step of a plan uses it
-/roadmap drop <entry> <reason>
+/roadmap drop <entry> <reason>            moves the entry to where the file keeps dropped work, with the reason, after approval
 /roadmap <project> ...                    the same, for one project of a plan.yaml in the projects: form
 /roadmap <command> ... --ruling <ledger file> "<name>"   add, move, done or drop under a quoted ruling: a draft that is the ruled change is written without the stop
 ```
@@ -57,12 +57,14 @@ metadata:
        - `/roadmap` reads that report and finds the finding there.
        - `/roadmap` checks that the plan is open: its folder lies under `<ledger_root>/`, outside `<archive_root>/`.
        - `/roadmap` checks that the entry's goal is the finding's work, read against the finding's text.
-       - A check that fails leaves no ruling, and the skill says which check failed.
-   - With no ruling, the skill says which of these it found, and every stop stands.
+       - A check that fails leaves no ruling.
+       - The skill says which check failed.
+   - With no ruling, the skill says which of these it found.
+   - With no ruling, every stop stands.
 
 ## Steps
 
-1. Read the file's format, as "The format is the file's" says, and whether a capability map sits beside it ("A capability map beside the ordered file").
+1. Read the file's format, as "The file's format" says, and whether a capability map sits beside it ("A capability map beside the ordered file").
    - The plain `/roadmap` then runs "Steps / Show" and ends there: it changes nothing and shows nothing for approval.
 2. For `add`, `move`, `done` and `drop` only, draft the change by the command's subsection below.
    - Nothing is written yet.
@@ -87,17 +89,19 @@ metadata:
 
 1. Print the open entries in order: the status of each, what it waits on, the plan open for it.
 2. Name the next one.
-3. After naming the next one, list every entry under "Not yet specified", apart from the open order, each with its title and what must be known before its gate can be named. The show is done when every entry of that section is listed.
+3. After naming the next one, list every entry under "Not yet specified", apart from the open order, each with its title and what must be known before its gate can be named.
+   - The show is done when every entry of that section is listed.
 
 ### add
 
 1. From the goal the user gives, draft the title, in the file's form, and the goal, in one or two sentences.
    - When the argument matches an entry under "Not yet specified" by number or title, the title and the goal are that entry's.
    - The draft moves that entry out of "Not yet specified" to the place of Steps / add 5, with the gate of Steps / add 2 and 3 and what it waits on.
-   - The entry keeps its number ("The format is the file's", bullet "Numbering under Not yet specified").
+   - The entry keeps its number ("The file's format", bullet "Numbering under Not yet specified").
 2. Draft the gate: the check that proves the entry done, as a command from the verification page, a test named and what it asserts, or an observable result someone can check.
    - A goal whose gate cannot be named is a stop ("Stops", row "No gate").
-   - At that stop the user may put the entry under "Not yet specified": it is drafted in the form of "The format is the file's", bullet "Not yet specified", and the draft goes to Steps / add 6 without Steps / add 3 to 5.
+   - At that stop the user may put the entry under "Not yet specified": it is drafted in the form of "The file's format", bullet "Not yet specified".
+     - The draft goes to Steps / add 6 without Steps / add 3 to 5.
 3. Ask of the drafted gate "could this pass without the goal being reached?" and write the answer with its reason in the draft that Steps / add 6 shows, never in the roadmap entry.
    - A gate that could (a file that exists without saying what the goal asks, a command that exits 0 on an empty result, a count with no content behind it) is redrafted and asked again, at most twice.
      - Under a quoted ruling the ruled gate is not redrafted.
@@ -131,7 +135,7 @@ metadata:
 1. An entry with an open plan is not dropped until the plan is closed or archived ("Stops").
 2. Draft the entry moved where the file's introduction says dropped work goes, with the reason.
 
-## The format is the file's
+## The file's format
 
 The skill writes in the format the file already uses, read from its existing entries and its introduction.
 
@@ -143,8 +147,10 @@ The skill writes in the format the file already uses, read from its existing ent
 - **The status rules.** The rules the introduction attaches to the status vocabulary bind the skill.
 - **Numbering.** A new entry between two others takes the file's own insertion form (`37.A`, `12.5`).
 - **No insertion form yet.** A stop ("Stops"), unless a quoted ruling states the entry's number.
-- **Not yet specified.** Work whose gate cannot yet be named sits in the section "Not yet specified", after the open entries and before the done ones. Each entry there has its title, its goal and what must be known before its gate can be named.
-- **Numbering under Not yet specified.** An entry put under "Not yet specified" takes the next whole number above the highest in the file, at the level it is added at, and keeps it when it moves to the open order; it never takes the insertion form of "Numbering".
+- **Not yet specified.** Work whose gate cannot yet be named sits in the section "Not yet specified", after the open entries and before the done ones.
+  - Each entry there has its title, its goal and what must be known before its gate can be named.
+- **Numbering under Not yet specified.** An entry put under "Not yet specified" takes the next whole number above the highest in the file, at the level it is added at, and never the insertion form of "Numbering".
+  - It keeps that number when it moves to the open order.
 - **No such section yet.** A roadmap without "Not yet specified" gets it, in the file's own heading form, the first time an entry goes there.
 - **No roadmap.** A repository with none gets `templates/roadmap.md`: the introduction, the legend, and the Open, Not yet specified, Done and Dropped sections, with no entries.
 
@@ -184,17 +190,17 @@ When the roadmap's introduction links an index as the map of what the product is
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| Renumbering an existing entry | Entry numbers are referenced from ledgers, ADRs and commits, which then point at the wrong entry | "The format is the file's", Numbering |
-| Adding anything the user did not ask for and no quoted ruling ending "(self-rule)" names as a finding of a running plan | The roadmap then holds work nobody decided | Rules 1 |
+| Renumbering an existing entry | Entry numbers are referenced from ledgers, ADRs and commits, which then point at the wrong entry | "The file's format", Numbering |
+| Adding anything Rules 1 does not allow | The roadmap then holds work nobody decided | Rules 1 |
 | Implementation narration, dates or history in entry text | They belong to the plan's ledger and the commits | Rules 2 |
 | Deleting a dropped entry silently | The reason it was dropped is lost | Steps / drop 2 |
 
 ## Rules
 
 - Nothing is added except what the user asked for, or what a quoted ruling ending "(self-rule)" names as a finding of a running plan.
-- Entry text states the goal, the gate and the dependencies, except that an entry under "Not yet specified" states the goal and what must be known, as the next rule says.
-- Every entry this skill writes has a goal and a gate, since `/plan <entry>` matches `<entry>` against the entries by number or title and copies the entry's goal and gate into the plan; an entry under "Not yet specified" has a goal and what must be known before its gate can be named in place of a gate.
+- Entry text states the goal, the gate and the dependencies, since `/plan <entry>` matches `<entry>` against the entries by number or title and copies the entry's goal and gate into the plan.
+  - An entry under "Not yet specified" states the goal and what must be known before its gate can be named, in place of a gate.
 - A goal names another repository only where the entry reads or changes it, such as the source of a migration.
 - A gate and a dependency name another repository only under the same condition, such as the target of a switch-over or the repository a gate runs on.
-- A file or folder in another repository is written as its path from the folder that holds this repository, such as `<other-repository>/tools/scripts`. This and a quoted command with its output, which keeps the paths it had, are the exceptions to the next rule.
-- Every path is relative to the repository root.
+- A file or folder in another repository is written as its path from the folder that holds this repository, such as `<other-repository>/tools/scripts`.
+- Every path is relative to the repository root, except a path in another repository (the rule before) and a quoted command with its output, which keeps the paths it had.

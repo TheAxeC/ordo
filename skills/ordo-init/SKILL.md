@@ -2,7 +2,7 @@
 name: ordo-init
 description: "Set a repository up for the plan skills: draft .agents/plan.yaml from what the repository already has (the roadmap, the page that defines the checks, the change standard, the check commands its CI and build files run, one project or several), offer the pages it lacks, make git ignore the worktree root and keep the configuration tracked, and write nothing until the user approves. On a repository that already has .agents/plan.yaml it checks the file instead: required keys, unknown keys, values, the pages it names, the ignore rules. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml."
 metadata:
-  version: "1.1.1"
+  version: "1.2.0"
 ---
 
 # Set a repository up for the plan skills
@@ -46,7 +46,8 @@ metadata:
      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
      - The name is a placeholder in angle brackets, such as `<L>`.
      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
-   - With no ruling, the skill says which of these it found, and every stop stands.
+   - With no ruling, the skill says which of these it found.
+   - With no ruling, every stop stands.
 
 ## Steps
 
@@ -66,7 +67,8 @@ Run from the repository root.
    - Several candidates are a stop ("Stops").
      - Under a quoted ruling that states `roadmap`, the key is the ruling's.
      - The stop of several candidates is then not raised.
-   - None: the skill offers to write `docs/roadmap.md` from the `roadmap` skill's `templates/roadmap.md` (in the `roadmap` folder beside this skill's folder), with no entries; `/roadmap add` fills it.
+   - None: the skill offers to write `docs/roadmap.md` from the `roadmap` skill's `templates/roadmap.md` (in the `roadmap` folder beside this skill's folder), with no entries.
+     - `/roadmap add` fills it.
    - The step is done when the draft names the roadmap file, offers `docs/roadmap.md`, or the stop of several candidates stands.
 3. Draft `verification`: the page that defines the green check, with the commands every step runs and the directory each runs from.
    - An existing page qualifies only when it states commands.
@@ -79,7 +81,9 @@ Run from the repository root.
    - None: the skill offers to write `docs/dev/change-standard.md` from the `repo-setup` skill's `templates/docs/dev/change-standard.md` (in the `repo-setup` folder beside this skill's folder).
    - Its placeholders are filled from this repository: the standards pages, the folders a renamed name is grepped across, the verification commands with their filters.
    - Each rule the repository already states elsewhere is added, citing the file it came from.
-5. Draft `ledger_root`, `archive_root` and `worktree_root`: an existing folder of plans (a folder whose subfolders hold `plan.md` and `orchestrator-state.md`) or of worktrees is kept; otherwise the example's values.
+5. Draft `ledger_root`, `archive_root` and `worktree_root`.
+   - An existing folder of plans (a folder whose subfolders hold `plan.md` and `orchestrator-state.md`) or of worktrees is kept.
+   - Otherwise the values are the example's.
 6. Ask the user for the keys the repository cannot give ("Stops").
    - A key whose value a quoted ruling states is not asked.
    - Its value is the ruling's.
@@ -96,13 +100,19 @@ Run from the repository root.
    - `bench` and `look` are left out unless the user names binaries or a view.
    - `adr` is written only when the repository keeps its decision records (a folder of `NNNN-*.md` records) in a folder other than `docs/adr`, and it names that folder.
    - `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer` are left out unless the user gives a value.
+   - The step is done when each optional key is left out or written with its reason in its comment.
 8. Give every key written the example's comment for it, without the required/optional marker, in the example's order.
 9. Draft the ignore rules.
    - The worktree root must be ignored: `git check-ignore -q --no-index <worktree_root>/probe` exits 0.
    - When it does not, the draft adds `/<worktree_root>/` to `.gitignore`.
    - `.agents/plan.yaml` must not be ignored: `git check-ignore -q --no-index .agents/plan.yaml` exits 1.
    - A rule that ignores the whole `.agents/` folder is drafted as `.agents/*` with `!.agents/plan.yaml` after it, since git cannot re-include a file whose parent folder is excluded.
-10. Show, in this order: the form and why; the draft `.agents/plan.yaml` in full; each page it would create, in full, with the commands' results for a verification page; the `.gitignore` changes, as Rules 5 says; and, when the skill runs alone, the question whether it may commit.
+10. Show, in this order:
+    1. The form and why.
+    2. The draft `.agents/plan.yaml` in full.
+    3. Each page it would create, in full, with the commands' results for a verification page.
+    4. The `.gitignore` changes, as Rules 5 says.
+    5. When the skill runs alone, the question whether it may commit.
     - The commit question is left out when a quoted ruling states whether the skill may commit.
     - The step is done when everything this item lists is shown.
 11. Stop for the approval ("Stops").
@@ -111,7 +121,8 @@ Run from the repository root.
     - Under `/repo-setup`, a key this skill derives from the tree `/repo-setup` wrote counts as stated.
     - A draft the ruling states in each of these is written without the stop.
     - A commit question Steps 10 shows is then asked alone.
-    - A draft that differs in anything, or a page whose text the ruling does not hold, is shown whole with each difference named, and the stop stands with nothing written.
+    - A draft that differs in anything, or a page whose text the ruling does not hold, is shown whole with each difference named.
+    - The stop then stands with nothing written.
     - The step is done when the draft is written, or it is shown and the stop stands with nothing written.
 12. Write what was approved.
 13. Run `python3 <this skill's folder>/templates/check_config.py .`.
@@ -129,12 +140,35 @@ Run from the repository root.
 
 1. With `.agents/plan.yaml` present, write nothing.
    - Run `templates/check_config.py`.
-2. It reports: a key written twice; a key beside `projects:` in the `projects:` form; a required key missing; an unknown key; a value of the wrong kind (`worker` or `reviewer` not `claude:<model>` or written with no value, `repair_reviewer` not `claude:<model>`, `self_rule` or `next_entry` neither `on` nor `off`, `review` neither `every` nor `earned`, `libraries` neither `check` nor `avoid`, `adr` not naming a folder under the repository root, `design_bar` outside `industry`, `state-of-the-art` and `novel`, `design_references` not a list of text, `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`, a value whose kind differs from its default's); a page named by `roadmap`, `verification`, `rules` or `standards` that does not exist; a `worktree_paths` entry that does not exist; a worktree root git does not ignore; a configuration file git ignores.
-3. Optional keys left out are listed as notes with the default that applies, which for `repair_reviewer` is the `reviewer` value, as is the default ADR folder `docs/adr` when `adr` names it and the folder does not exist yet.
+2. It reports each of these.
+   - A key written twice.
+   - A key beside `projects:` in the `projects:` form.
+   - A required key missing.
+   - An unknown key.
+   - A value of the wrong kind.
+     - `worker` or `reviewer` not `claude:<model>` or written with no value.
+     - `repair_reviewer` not `claude:<model>`.
+     - `self_rule` or `next_entry` neither `on` nor `off`.
+     - `review` neither `every` nor `earned`.
+     - `libraries` neither `check` nor `avoid`.
+     - `adr` not naming a folder under the repository root.
+     - `design_bar` outside `industry`, `state-of-the-art` and `novel`.
+     - `design_references` not a list of text.
+     - `worker_effort` or `reviewer_effort` outside `low`, `medium`, `high`, `xhigh` and `max`.
+     - A value whose kind differs from its default's.
+   - A page named by `roadmap`, `verification`, `rules` or `standards` that does not exist.
+   - A `worktree_paths` entry that does not exist.
+   - A worktree root git does not ignore.
+   - A configuration file git ignores.
+   - The item is done when each of these that holds is reported.
+3. Optional keys left out are listed as notes with the default that applies, which for `repair_reviewer` is the `reviewer` value.
+   - The default ADR folder `docs/adr` is also listed as a note when `adr` names it and the folder does not exist yet.
    - `next_entry` on while `self_rule` is off or left out is noted as acting only under self-rule, and not noted when `self_rule` has an error.
+   - The item is done when each optional key left out, and the default ADR folder where it applies, has its note.
 4. For each error, propose the fix ("Stops").
    - A fix a quoted ruling states is made without the stop.
-   - A fix the skill proposes that differs from the ruled fix is shown with the difference, and the stop stands.
+   - A fix the skill proposes that differs from the ruled fix is shown with the difference.
+   - The stop then stands.
    - The item is done when each error has its fix made under a quoted ruling, or proposed at the stop.
 5. Make each fix the user approved.
 6. After the fixes, run the check again.
@@ -161,7 +195,7 @@ Run from the repository root.
 
 ## Rules
 
-- The skill writes nothing until the user approves or corrects the draft. The one exception is Steps 3, where each verification command runs once before the draft is shown.
+- The skill writes nothing until the user approves or corrects the draft, except that each verification command runs once at Steps 3 before the draft is shown.
   - A quoted ruling that states the draft is that approval.
 - The skill draws only from the repository and the user, for the file it drafts and for every page.
 - A page the skill writes states what the repository already does or says.
