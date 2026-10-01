@@ -54,7 +54,7 @@ dispatch:
   landing: not-started
   round: 1
   session_id: a5ab075c3677ad2d7 (claude-sonnet-5-5)
-  builder_usage: 194415 tokens, 20 tool uses, 6 min 27 s (the first run of the cases, handed back: agents/reviews/7-cases-handback.md; ruled in agents/briefs/7-cases.md); the build after the ruling: 282087 tokens, 46 tool uses, 15 min 29 s
+  builder_usage: 194415 tokens, 20 tool uses, 6 min 27 s (the first run of the cases, handed back: agents/reviews/7-cases-handback.md; ruled in agents/briefs/7-cases.md); the build after the ruling: 282087 tokens, 46 tool uses, 15 min 29 s; repair round 1: 343160 tokens, 16 tool uses, 4 min 28 s
   reviewer_report:
   - .scratch/2-e-a-self-rule/agents/reviews/7-refuter.md (acaa1cd6ca52da97e, claude-opus-5-5 (ordo-high), 255946 tokens, 43 tool uses, 8 min 54 s)
 - step: 8
@@ -68,7 +68,7 @@ dispatch:
   landing: not-started
   round: 1
   session_id: a8e821b5b3f0e2756 (claude-sonnet-5-5)
-  builder_usage: 136333 tokens, 25 tool uses, 4 min 4 s
+  builder_usage: 136333 tokens, 25 tool uses, 4 min 4 s; repair round 1: 161990 tokens, 10 tool uses, 2 min 27 s
   reviewer_report:
   - .scratch/2-e-a-self-rule/agents/reviews/8-refuter.md (aa9c2761143a81412, claude-opus-5-5 (ordo-high), 179218 tokens, 54 tool uses, 9 min 3 s)
   shared_paths: skills/repo-setup/templates/plan-terms.md, docs/glossary.md and skills/plan-orchestration/SKILL.md, each shared with step 7; the merge is simple, since each step changes other lines of each file (step 7: the terms loop to night rule and quoted ruling, and plan-orchestration's description, intro, Quick start, "What it reads", Steps 10, "Self-rule" and Rules; step 8: the terms change point to Closed, open item, ruling to sequence and stop, and plan-orchestration Steps 9 line 123); step 8 lands after step 7, since its self-rule term names --self-rule.
@@ -90,6 +90,8 @@ None.
 - 2026-10-01: Open item F, how `/grill` and `/plan` know that the loop runs them in next-entry mode: closed under self-rule, C1.
 - 2026-10-01: Open item G, how a quoted ruling ending "(self-rule)" names the finding whose work `/roadmap add` may write: closed under self-rule, C2.
 - 2026-10-01: Open item H, whether the shared rule on self-rule covers `/grill` and `/plan` run with `--self-rule`: ruled (a) by the user. The template sentence joins step 8; the user puts the same words in `~/.claude/CLAUDE.md`.
+- 2026-10-01: C1, how `/grill` and `/plan` know that the loop runs them in next-entry mode: agreed by the user.
+- 2026-10-01: C2, how a quoted ruling ending "(self-rule)" names the finding whose work `/roadmap add` may write: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

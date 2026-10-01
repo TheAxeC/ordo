@@ -109,3 +109,73 @@ None. Every line is the brief's dictated text.
 - The **self-rule** entry's "Stated in:" names two sections of `references/self-rule.md`; the sections "A skill with its own approval stop" and "The counts", which "does not leave open" also relies on, are reached through "Closing an open item", whose first sentence names both.
 - The **self-rule** entry points at `grill` and `plan`, "What it reads" for `--self-rule`. On the base tree those sections do not yet state `--self-rule`; step 7 writes it in each ("What it reads" 12 of `grill`, "What it reads" 7 of `plan`, per its brief, items 5.2 and 4.3), and this step lands after step 7.
 - Premise corrections the brief states (the six kinds in `references/self-rule.md`, `sync_rules.py . --write --only glossary` in place of `/repo-setup sync`) were applied as written.
+
+## Repair round 1
+
+Every ruling of `agents/briefs/8-round-1.md` is carried out, the glossary is synced from the template (`written: the plan-terms block now equals the template`), and the five Verify commands hold. The state-file open items are none, as the round's ruling H closes Open item H.
+
+### The rulings
+
+1. Spec 1, ruling H: `skills/repo-setup/templates/shared-rules.md:20` now reads "... a rule clash. Under `self_rule: on`, in a plan's configuration block or, for `/grill` and `/plan` run with `--self-rule`, in `.agents/plan.yaml`, such a decision outside the six kinds `plan-orchestration` "Self-rule" leaves open is taken with its recommendation and written to the choices file for your review." The rest of the line is unchanged (it still starts "- **No question boxes.** Recommend and proceed. Stop only where the decision belongs to the user:"). The `~/.claude/CLAUDE.md` part of ruling H is the user's and outside the worktree. Before: "Under a plan's `self_rule: on`, such a decision outside ...".
+2. Proof 1 and Standards 1, `skills/plan-orchestration/SKILL.md`: line 304 reads "each for a decision for the user, and one refusal" (before "each for a decision that is the user's"); line 322 reads "- A stop is repeated in every report until the user has ruled, or, under `self_rule: on`, until the orchestrator closes it as `references/self-rule.md`, "Closing an open item", says." (before "... until the user has ruled."); line 338's reason cell reads "The builder then takes a decision for the user" (before "a decision that is the user's"). The description (line 3) is not touched.
+3. Standards 2, **self-rule** at `plan-terms.md:100`: the "Stated in:" now reads `plan-orchestration`, "Self-rule" and `references/self-rule.md`, "The six kinds left open", "Closing an open item" and "Next-entry mode"; `grill`, Steps 6 and "Steps / Writing what settled"; `plan`, Steps 3. The section "Next-entry mode" of `references/self-rule.md` is written by step 7 (`grep -n 'Next-entry mode' skills/plan-orchestration/references/self-rule.md` prints nothing in this worktree), so the pointer holds once step 7 has landed.
+4. Standards 3, **self-rule** at `plan-terms.md:100`: it now reads "in which the orchestrator closes, with the option it recommends, an open item that the `plan-orchestration` skill's `references/self-rule.md` does not leave open, books it as a ruling whose line ends "(self-rule)", and writes it to the choices file; ..." and the rest as built.
+5. Standards 4, **choices file** at `plan-terms.md:20`: "Stated in: `plan-orchestration`, `references/self-rule.md`, "The choices file" and "The review of a choice"."
+
+The glossary copies are at `docs/glossary.md:25` and `:105`, from the sync; `git diff docs/glossary.md | grep '^@@'` still prints the four hunks `@@ -22,6 +22,7 @@`, `@@ -62,7 +63,7 @@`, `@@ -98,9 +99,10 @@` and `@@ -112,7 +114,7 @@`.
+
+### Verify, rerun after the round
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+PASS: plan_cost.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 11 commands passed
+```
+
+- Verify 1: the lines above, last line `checks: 11 commands passed`, exit 0.
+- Verify 2: `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`.
+- Verify 3: the four hunk headers above, all inside the plan-terms block.
+- Verify 4: `git diff -U0 | grep '^+' | LC_ALL=C grep -n '[^ -~]'` printed nothing, exit 1.
+- Verify 5: `grep -rn 'only the user can decide' skills docs README.md` printed nothing, exit 1.
+- No tab in `shared-rules.md`, `plan-terms.md`, `docs/glossary.md` or `plan-orchestration/SKILL.md` (`grep -c` prints 0 for each). `git diff --stat | tail -1`: 6 files changed, 18 insertions(+), 14 deletions(-).
+
+### Sentences a fix touches, reread against their file
+
+- `plan-orchestration/SKILL.md:304` ("seven kinds of stop, each for a decision for the user, and one refusal") holds against the table below it, whose seven stop rows are each a decision for the user, and against the amended **stop**.
+- `:322` agrees with "Closing an open item" 4 and 6, which move a self-ruled item to the Closed items at once, and keeps the repeat until the user rules for an item the orchestrator does not close.
+- `:338` agrees with the row above it: a finding that changes scope is a decision for the user, raised as a stop.
+- `shared-rules.md:20` keeps its first three sentences, and its "outside the six kinds `plan-orchestration` "Self-rule" leaves open" is the wording of ruling H. No other copy of the old sentence is in the tree outside the ledger (`grep -rnF "Under a plan's \`self_rule: on\`" .` outside `.scratch` and `.git` printed nothing).
+- **self-rule** at `plan-terms.md:100` was reread whole: the clause order puts "with the option it recommends" after "closes", and each pointer names a place that states the rule (`grill` Steps 6 and "Steps / Writing what settled" for a decision taken under `--self-rule`, `plan` Steps 3 for the new plan's decisions, as the refuter report names them).
+
+### The grep of "only the user", "is the user's", "that is the user's" and "decision only"
+
+Command: `grep -rn "only the user\|is the user's\|that is the user's\|decision only" skills docs README.md`, with the ADRs, the roadmap and the glossary left out (the glossary is the template's copy). It prints these lines, each judged:
+
+- `skills/grill/SKILL.md:333`, "A decision is the user's: nothing is written as settled without the user's answer, or a quoted ruling ending "(self-rule)" that settles it as the orchestrator's choice." Holds: the line states the self-rule exception.
+- `skills/grill/SKILL.md:335`, "A carried ruling is the user's answer to the decisions it settles." Holds: a carried ruling ends "(the user)".
+- `skills/refute/SKILL.md:70`, `skills/refute/templates/report.md:40` and `:61`, `skills/spec/templates/brief-check.md:55`, `skills/repo-setup/templates/plan-terms.md:30` (**Declined to judge**): "declined because it is the user's call". Holds: a reviewer's declined point is a judgment the reviewer does not make, which says nothing of who closes an open item.
+- `skills/refute/SKILL.md:152`, "since only the user rules between the step and the ADR". Holds: a contradiction of an ADR is kind 3 of "The six kinds left open", which stays with the user.
+- `skills/plan/SKILL.md:137`, "the design half is the user's" (the Anti-patterns row on writing `plan.md` before the user approves the step list). Holds for a plan the user approves; the `--self-rule` case of that row is step 7's text (its brief, item 4.8), so it is not changed here.
+- `skills/plan-orchestration/SKILL.md:3`, the description: "stop only where a decision is the user's". Not changed: the description is step 7's (its round 1, ruling 14).
+- `skills/plan-orchestration/SKILL.md:59`, `:96`, `:111`, `:312`, and `skills/diagnose/SKILL.md:141`: the row name "A finding that is the user's". Holds: it is the label of a row of "Stops", and `:59` and `:312` already state the exception "or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books".
+- `docs/figures/plan-loop.svg:153` and `docs/figures/gen_figures.py:705`: the same row label in the figure. Holds, the label is unchanged.
+- `skills/plan-orchestration/SKILL.md:304` and `:338`, which the first account left out, no longer match the pattern after the round: `:304` reads "each for a decision for the user" and `:338` reads "a decision for the user".

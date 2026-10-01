@@ -145,7 +145,8 @@ Sentences about a changed file as a whole, reread against it after the change (c
 - `plan-orchestration`: before, nothing followed the closing. After, under both keys the loop goes on to the next entry as `references/self-rule.md`, "Next-entry mode", says.
 - The choices file's `Booked:` line: before ``Booked: `<path>:<line>` (Open item <L>)``; after ``Booked: `<path>:<line>` (<the bullet's name>)`` (`templates/choices.md:14`).
 - The `Ruled:` reply's bullet and the `C<n> =>` bullet: before `replacing Open item <L'>` and `replacing Open item <L>`; after `replacing <the replaced bullet's name>` and `replacing <the old bullet's name>`.
-- The review of a choice: with no plan open it reads the entry's rulings file, writes no Closed-items line, names the choice and the decision in its commit message, and writes the `C<n> =>` bullet to the rulings file.
+- The review of a choice: when `Booked:` names the entry's rulings file, it reads that file, writes no Closed-items line, names the choice and the decision in its commit message, and writes the `C<n> =>` bullet to that file. A choice booked in an open or an archived `plan.md` is reviewed as before the change.
+- `continue the plan` with no plan open: before, it resumed nothing; after, under both keys in `.agents/plan.yaml`, it takes the next roadmap entry.
 - `README.md` lines 22, 48 and 56 and the glossary terms **next-entry mode** (new) and **quoted ruling** (amended) say the same.
 - ADR 0005, Consequences: before "the path is written as it stands when the choice is booked and the plan's slug finds it in the archive"; after "the path is written as it stands when the choice is booked, rewritten by `/plan` to the new `plan.md` when it copies a bullet out of the rulings file, and the plan's slug finds it in the archive".
 
@@ -153,3 +154,85 @@ Sentences about a changed file as a whole, reread against it after the change (c
 
 - Item 4.5, the options of Open item A: the second option, "the list with each unsettled design decision settled and each line left to place placed", has no way to be carried out inside `/plan` (settling a design decision is `/grill`'s), and the Rulings bullet the brief fixes reads "the step list as drafted". A recommendation of the second option would be booked with text that does not describe it. I wrote the options and the bullet as the brief has them. The orchestrator's to rule: either the second option is dropped from the stop under `--self-rule`, or the stop is kept with the user whenever any design decision is named unsettled. Evidence: `skills/plan/SKILL.md` Steps 3, bullet "Under `--self-rule`, the stop ... is raised as `Open item A`", and the bullet "The Rulings bullet is `- Open item A (<date>): the step list as drafted ...`".
 - The premises, line numbers and counts of "What is on the tree" matched the tree at the base, as read with `grep -n` before the build.
+
+## Repair round 1
+
+Each ruling of `agents/briefs/7-round-1.md` with what changed, the file and the line after the change. Verify lines follow the list. The glossary and the other files not named below are unchanged by this round.
+
+1. Spec 1 and Standards 5, the condition written three times. `skills/plan-orchestration/references/self-rule.md:132-135`: one bullet, "**A choice booked in a rulings file.** When `Booked:` names the entry's rulings file, the review differs in three ways", with three sub-bullets (no Closed-items line and why, the commit message names the choice and the decision, the `C<n> =>` bullet written to that rulings file). `:118` and `:131` end "except as the bullet "A choice booked in a rulings file" says" in place of "unless no plan is open for the entry"; the separate "With no plan open" bullets are gone. `:113` names the file `Booked:` gives: the Rulings section of a plan's `plan.md` (the archived `plan.md` of a closed plan) or the entry's rulings file. A choice booked in an open or archived `plan.md` is reviewed as before.
+2. Spec 2, the second option of Open item A. `skills/plan/SKILL.md:104-113`: the options are "open the plan with the list as drafted" and "keep the draft for the user"; `:105` makes the first the recommendation and the second the lazy option; `:106` copies a line left to place as Steps 2 says and has Open item A name it, without keeping the stop; `:108` keeps the stop with the user when any design decision is named unsettled, since settling it is `/grill`'s; the option "the list with each unsettled design decision settled and each line left to place placed" is removed, and so is the bullet that copied lines left to place inside "Otherwise it is closed" (it is now `:106`).
+3. Spec 3, the checks of Steps 7. `skills/grill/SKILL.md:159-161`: one bullet, "each such answer goes through the checks of Steps 7 that read an answer ("Steps / Terms and claims" and "Steps / An answer that contradicts") before Steps 8", with a sub-bullet for a contradiction (a rule-clash decision, kind 3, sent as the bullets above say) and one for a missing glossary term (a decision of its own, kind 3 where the glossary is a standards page). The first `--self-rule` bullet of Steps 6 (`:156`) no longer says "goes on to Steps 8 with that answer".
+4. Spec 4, the `/plan` stops. `references/self-rule.md:66` and `:70` name "a stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule`" in place of "a `/plan` stop of the six kinds".
+5. Spec 5, the completion criterion. `skills/grill/SKILL.md:163`: under `--self-rule` the step is done when each decision outside the six kinds is answered and, when any decision of the six kinds was sent, the turn has ended, and with none sent the skill goes on to Steps 8 in the same turn.
+6. Standards 1, the name. `references/self-rule.md:88` (the `Booked:` form) and `templates/choices.md:14` read `(<the bullet's opening words>)`; `:89` says `Booked:` gives the bullet's opening words, which the review searches by and a `replacing` clause quotes; `:90` gives them as `Open item <L>` or `D<n> <the decision, as a phrase>`; `:91` says a step's tag names the bullet as the `spec` skill's "What it reads" 4 reads it, `<L>` or `D<n> <the decision, as a phrase>`; the claim that `spec` reads `Open item <L>` is gone. The `replacing` clauses (`:100`, `:119`), the review's search (`:113-114`) and `skills/plan/SKILL.md:119` say "opening words"; the `Ruled:` bullet's sentence at `:102` already reads the tag name as `<L>` and agrees.
+7. Standards 2, the Scope bullet. `skills/plan-orchestration/SKILL.md:228` also applies the section to next-entry mode and to `/grill` and `/plan` run with `--self-rule`, where `.agents/plan.yaml` holds the keys, as `references/self-rule.md`, "Next-entry mode", says.
+8. Standards 3, the state template. `skills/plan/templates/orchestrator-state.md:29` now reads `next_entry: off              # copied from .agents/plan.yaml; after the closing, next-entry mode reads .agents/plan.yaml itself, as plan-orchestration's references/self-rule.md, "Next-entry mode", says.` Only that line.
+9. Standards 4, the ADR sentence. `skills/grill/SKILL.md:3` (description) reads "and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation"; `:10` (intro) reads "a proposed ADR for each decision the user chose to record, or that the orchestrator recommends recording under `--self-rule`". The description is 877 characters.
+10. Standards 6, README. `README.md:22` and `:48` read "under `self_rule: on` and `next_entry: on`" (without backticks in the code block at `:48`).
+11. Standards 7, the verb. `references/self-rule.md:71` reads "which writes the plan with the step list as the user approved or corrected it, each step line ending `(approved)`".
+12. Standards 8, "the loop". In "Next-entry mode" (`references/self-rule.md:50`, `:52`, `:55`, `:59`, `:61`) the actor between plans is "the orchestrator", and "the loop" names only the run over a plan's steps (`:59`, `:64`, `:72`, `:78`). `skills/plan-orchestration/SKILL.md:10` (intro) and `:131` (Steps 10) say "the orchestrator goes on after the closing" so the file agrees with the glossary's **loop**.
+13. Behaviour 1 and 2, the report. The list "Host- or user-visible changes" above gains `continue the plan` with no plan open (before it resumed nothing; after, under both keys in `.agents/plan.yaml`, it takes the next roadmap entry), and its line on the review of a choice states that a choice booked in an open or archived `plan.md` is reviewed as before.
+14. Proof 1 of the step 8 refuter report. `skills/plan-orchestration/SKILL.md:3` (description) reads "stop only where a decision is for the user". The description is 961 characters.
+
+Sentences reread against the rest of their file after the fixes:
+- `references/self-rule.md:5` ("The scope is the first bullet of `SKILL.md`'s section "Self-rule"") holds with the new Scope bullet at `plan-orchestration/SKILL.md:228`.
+- `references/self-rule.md:29` ("An open item that ... do not hold") holds; the "Next-entry mode" bullets that say "the run" and "the orchestrator" no longer use "the loop" for the actor between plans.
+- `references/self-rule.md:97-98` ("A later `/spec` whose brief rests on the choice ...") and `:102` (the tag name) hold with the opening words.
+- `skills/plan/SKILL.md` Stops row "The drafted step list" (`:144`) and Rules bullet 2 (`:162`) hold: the stops it keeps with the user are the ones `:107-109` list.
+- `skills/grill/SKILL.md:163` is the only completion criterion that names `--self-rule` in Steps 6; Steps 10 (`:186-193`) is unchanged by this round.
+
+Verify, run from `/Users/axelfaes/workspace/ordo/.agents/worktrees/2ea-7` after the fixes:
+
+```
+$ sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+PASS: plan_cost.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 11 commands passed
+```
+
+(exit 0)
+
+```
+Verify 2: python3 -c 'import yaml; ...' over grill, plan, roadmap, plan-orchestration
+877 skills/grill/SKILL.md
+477 skills/plan/SKILL.md
+1022 skills/roadmap/SKILL.md
+961 skills/plan-orchestration/SKILL.md
+
+Verify 3a: grep -rn 'replacing Open item <L\|` (Open item <L>)' skills
+(no output, exit 1)
+
+Verify 3b: grep -n -- '--self-rule' on the four files
+45 lines: grill 24, plan-orchestration/SKILL.md 2, references/self-rule.md 10, plan 9
+(the lines of items 1.1, 3, 4 and 5, and now the grill description at :3)
+
+Verify 4a: git diff -U0 | grep '^+' | LC_ALL=C grep -n '[^ -~]'
+(no output, exit 1)
+
+Verify 4b: grep -c "$(printf '\t')" on each changed file
+0 for README.md, the ADR 0005, docs/glossary.md, skills/grill/SKILL.md, skills/plan-orchestration/SKILL.md, references/self-rule.md, templates/choices.md, skills/plan/SKILL.md, skills/plan/templates/orchestrator-state.md, plan-terms.md, skills/roadmap/SKILL.md
+
+Verify 5: python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+```
+
+`git status --short` lists eleven modified files (the ten of the first build and `skills/plan/templates/orchestrator-state.md`) and the report.
