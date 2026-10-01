@@ -1,0 +1,197 @@
+diff --git a/.agents/plan.yaml b/.agents/plan.yaml
+index b6dd404..39cd477 100644
+--- a/.agents/plan.yaml
++++ b/.agents/plan.yaml
+@@ -7,7 +7,7 @@ ledger_root: .scratch                     # A plan lives in <ledger_root>/<slug>
+ archive_root: .scratch/archive            # Where a closed plan's folder moves.
+ worktree_root: .agents/worktrees          # Where a step's worktree is created; ignored by .gitignore's .agents/* line.
+ worker: claude:sonnet                     # claude:<model> of the builder, for example claude:sonnet.
+-reviewer: claude:opus                     # claude:<model> /refute, the brief check and the lookups of /grill run on.
++reviewer: claude:opus                     # claude:<model> the first run of /refute, the brief check and the lookups of /grill run on.
+ repair_reviewer: claude:sonnet            # claude:<model> the run of /refute over a repair round runs on: Sonnet, since that run checks a narrow delta against named findings at half Opus's price per token.
+ libraries: avoid                          # check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
+ standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # Files every brief tells the builder to read in full, and the reviewer holds a diff to.
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 137a5a1..02ca5b4 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -14,7 +14,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **base**: the hash of a step's preparation commit, recorded in its dispatch entry. The worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it. Stated in: `spec`, Steps 6 and 7; `land`, Steps 4; `refute`, "What it reads" 5.
+ - **booking**: the record `/land` appends to `plan.md` for a landed step, holding what landed and where, the premise corrections, the findings raised as open items, the diagnosis records with their causes, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. It also copies each agent of the step, with its id, role and served model, into `plan.md`'s Agents section. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
+ - **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape. A repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
+-- **brief check**: the check of a brief against the tree, made once per step, by one fresh read-only agent on the reviewer's model, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. Stated in: `spec`, Steps 5 and "Steps / The brief check".
++- **brief check**: the check of a brief against the tree, made once per step, by one fresh read-only agent on the model the configuration block's `reviewer:` names, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. It also holds each line the brief dictates to the rules file and the standards pages. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+ - **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **carried ruling**: a bullet whose first line ends with "(the user)", of another plan's Rulings or of another rulings file under the ledger root, that names the entry `grill` interviews on, or of the Rulings of an archived plan of that entry, and that is no bullet of an archived plan a ruling of the user sets aside; the decisions it settles are not asked again, and each one the entry's Rulings or rulings file does not already settle is written there with its source. Stated in: `grill`, "What it reads" 6, Steps 3 and "Steps / Writing what settled" 1.
+@@ -91,7 +91,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+-- **reviewer**: the fresh session or agent that refutes a built step without changing anything, on the model the configuration block's `reviewer:` names, which the brief-check agent and the lookup agents of `grill` also run on. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
++- **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration block's `reviewer:` names, and each run over a repair round on the model `repair_reviewer:` names, the `reviewer:` value when the block has none. The brief-check agent and the lookup agents of `grill` run on `reviewer:`. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules, and "Steps / Over a repair round" 1; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
+ - **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
+ - **round, of an interview**: one message in which `grill` asks every decision of the frontier that waits on no lookup, ending the turn to wait for the answers. In `grill` and in text that describes `grill`, the bare "round" means this; elsewhere it is a repair round. Stated in: `grill`, Steps 6.
+ - **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index a6cd7d0..a21996e 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -87,6 +87,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+      - Read that hand-back the same way as a report.
+    - Rule on such a case when the fix stays inside the step's scope.
+      - Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`.
++     - Hold the text the ruling gives the builder word for word as Steps 8's **Dictated text** says, before it is committed.
+      - Commit it by path as a round sent.
+    - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`.
+      - The builder's final report carries the ruling.
+@@ -106,10 +107,11 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+      - Such a cause is noted at landing, as the `land` skill's Steps 9 says.
+      - Such a cause is raised to the user as an open item, the row "A finding that is the user's" of "Stops".
+      - A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
++   - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round or the ruling is sent, as the `spec` skill's "Steps / The brief check" 2 **Dictated text** holds a brief's, since the brief check never reads those files.
+    - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
+    - **After each reply.** Read the whole delta.
+      - Add the builder's tokens, tool uses and time for the round, from its completion notice, to `builder_usage` in the dispatch block, on disk.
+-     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
++     - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer on the model "The two tiers, and the models" gives the run over a repair round, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
+    - **The end of the rounds.** A refutation that finds nothing, or the last round the round cap allows ("Rules"), ends the rounds, and the loop goes to step 9.
+ 9. Invoke `/land <entry> <step>`. Its refusals are its own.
+    - A red line the orchestrator cannot fix at landing takes the step back out of main.
+@@ -135,8 +137,11 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+   - It never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
+ - **Agents.** A builder, a reviewer or a brief-check agent runs on a Claude model, and never on Claude Fable.
+ - **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names, at the effort `worker_effort` names, launched as "Launching a builder" says.
+-- **Reviewer.** The model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+-- **Brief-check agent.** One per step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the reviewer's model, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
++- **Reviewer.** The model is set per run of `/refute`.
++  - The first run of a step runs on the model the configuration block's `reviewer:` names.
++  - Each run over a repair round runs on the model the configuration block's `repair_reviewer:` names, or on the `reviewer:` value when the block has no `repair_reviewer:` key.
++  - Every run is at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
++- **Brief-check agent.** One per step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+ - **Runner.** Both tiers run under Claude Code.
+ - Any allowed combination is chosen per step.
+ - A new combination is booked in the rulings with what decides it.
+diff --git a/skills/plan/templates/orchestrator-state.md b/skills/plan/templates/orchestrator-state.md
+index 6902d04..8b96dae 100644
+--- a/skills/plan/templates/orchestrator-state.md
++++ b/skills/plan/templates/orchestrator-state.md
+@@ -11,7 +11,7 @@ worktree_root: <path>        # where a step's worktree is created, relative to t
+ worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
+ executor: agent              # the plan's default for who builds a step: agent (a builder dispatched in the worktree), inline (the orchestrating session writes the step itself), academic-paper (the step is built through that skill). Chosen per step by the orchestrator and recorded in the dispatch block; a step of manuscript content is always academic-paper.
+ worker: claude:<model>       # the default worker is claude:opus; a builder never runs on Fable.
+-reviewer: claude:<model>     # the model /refute, the brief check and the lookups of /grill run on: claude:opus by default; a reviewer never runs on Fable.
++reviewer: claude:<model>     # the model the first run of /refute, the brief check and the lookups of /grill run on: claude:opus by default; a reviewer never runs on Fable.
+ libraries: check|avoid       # the project's library policy from plan.yaml: check, /spec looks for libraries before a brief; avoid, no new dependency.
+ review: every                # every, or earned: under the loop, the reviewer runs unless the worker's record earns the skip (plan-orchestration, "The review, earned").
+ refute_after_repair: yes     # yes: /refute runs again over each repair round, its findings fixed at landing or raised as open items, never sent back; no: the orchestrator's read of the round stands in.
+diff --git a/skills/plan/templates/plan.yaml b/skills/plan/templates/plan.yaml
+index 50e6d8a..a03f64f 100644
+--- a/skills/plan/templates/plan.yaml
++++ b/skills/plan/templates/plan.yaml
+@@ -9,7 +9,7 @@ ledger_root: .scratch                     # required. A plan lives in <ledger_ro
+ archive_root: .scratch/archive            # required. Where a closed plan's folder moves.
+ worktree_root: .agents/worktrees          # required. Where a step's worktree is created; add it to .gitignore.
+ worker: claude:opus                       # required. claude:<model> of the builder.
+-reviewer: claude:opus                     # required. claude:<model> /refute, the brief check and the lookups of /grill run on.
++reviewer: claude:opus                     # required. claude:<model> the first run of /refute, the brief check and the lookups of /grill run on.
+ libraries: check                          # required. check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
+ standards: []                             # optional, default []. Files every brief tells the builder to read in full, and the reviewer holds a diff to.
+ worktree_paths: []                        # optional, default []. Sparse-checkout paths for a step's worktree; [] means the whole tree.
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index 166689b..30bff9e 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -50,7 +50,7 @@ metadata:
+    - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
+    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
+    - Right after the dispatch, the orchestrator or the session reads the reviewer's agent id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
+-   - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
++   - A served model that is not the configured one, the model the key the run was dispatched on names (`reviewer:` for the first run, `repair_reviewer:` for each run over a repair round), is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
+    - The stopped reviewer is recorded under the dispatch block's `reviewer_report`, after the records before it.
+      - A first-run reviewer: `(<agent id>, <served model>, stopped)`.
+      - A reviewer over round `<n>`: `over round <n>: <agent id>, <served model>, stopped`.
+@@ -76,7 +76,9 @@ metadata:
+ 
+ ### Over a repair round
+ 
+-1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says.
++1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says except for its model.
++   - The model is the one the configuration block's `repair_reviewer:` names, or the `reviewer:` value when the block has no `repair_reviewer:` key, at the effort `reviewer_effort` names.
++   - This holds for every run over a repair round, the run over the extra round of `plan-orchestration`'s exception and a reviewer started over a round in place of one stopped for another model included.
+    - A run that finds nothing ends the rounds.
+ 2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
+ 3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
+@@ -158,7 +160,7 @@ The first row is a stop, a decision for the user: it leaves an open item, booked
+ 
+ | Stop | When | What it shows | What resumes it |
+ |---|---|---|---|
+-| A model other than the configured one | The runner served the reviewer a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | The user's ruling, then `/refute` again |
++| A model other than the configured one | The runner served the reviewer a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list (Steps 1) | The open item, booked in the open items, with the configured value of the key the run was dispatched on (Steps 1), the served model and the Claude Code version | The user's ruling, then `/refute` again |
+ | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/refute` again |
+ | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared and built |
+ | No report | No builder's report on disk | The report path the builder was told to write to | The report written, then `/refute` again |
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index addb15f..1b7b9cf 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -9,7 +9,7 @@
+ - **base**: the hash of a step's preparation commit, recorded in its dispatch entry. The worktree is created from it, the step's diff is read against it, and `/land` cherry-picks the range from it. Stated in: `spec`, Steps 6 and 7; `land`, Steps 4; `refute`, "What it reads" 5.
+ - **booking**: the record `/land` appends to `plan.md` for a landed step, holding what landed and where, the premise corrections, the findings raised as open items, the diagnosis records with their causes, the verification lines, the A/B, each agent's usage, whether the first report passed its bar and the fixes at landing. It also copies each agent of the step, with its id, role and served model, into `plan.md`'s Agents section. Stated in: `land`, Steps 9. To book is also to record a decision in the ledger, as a ruling or a stop is booked. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops". A booking is also a later item recorded in place of doing the work now, the lazy option. Stated in: `repo-setup`, `templates/shared-rules.md`, "Never take the lazy option".
+ - **brief**: the file `agents/briefs/<step>.md` that `/spec` writes for a step's builder, holding the checked premises, what to build, the cases, the paths the step writes, the decisions taken, the verification and the report shape. A repair round adds the round's brief, and a ruled case a cases ruling `agents/briefs/<step>-cases.md`. Stated in: `spec`, Steps 4; `plan-orchestration`, Steps 6 and 8.
+-- **brief check**: the check of a brief against the tree, made once per step, by one fresh read-only agent on the reviewer's model, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. Stated in: `spec`, Steps 5 and "Steps / The brief check".
++- **brief check**: the check of a brief against the tree, made once per step, by one fresh read-only agent on the model the configuration block's `reviewer:` names, the brief-check agent, whose report is saved at `agents/reviews/<step>-brief-check.md`. It also holds each line the brief dictates to the rules file and the standards pages. Stated in: `spec`, Steps 5 and "Steps / The brief check".
+ - **builder**: the agent that builds one step in the step's worktree under the brief and the rules file. Under the executor `inline`, or when a step is built by hand, the session is the builder. Stated in: `plan-orchestration`, Steps 4 and "The two tiers, and the models"; `spec`, Steps 9.
+ - **capability map**: an index the roadmap's introduction links as the map of what the product is, one file per system with each capability's full scope, over which the roadmap is the ordered build plan. Stated in: `roadmap`, "A capability map beside the ordered file".
+ - **carried ruling**: a bullet whose first line ends with "(the user)", of another plan's Rulings or of another rulings file under the ledger root, that names the entry `grill` interviews on, or of the Rulings of an archived plan of that entry, and that is no bullet of an archived plan a ruling of the user sets aside; the decisions it settles are not asked again, and each one the entry's Rulings or rulings file does not already settle is written there with its source. Stated in: `grill`, "What it reads" 6, Steps 3 and "Steps / Writing what settled" 1.
+@@ -86,7 +86,7 @@
+ - **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+-- **reviewer**: the fresh session or agent that refutes a built step without changing anything, on the model the configuration block's `reviewer:` names, which the brief-check agent and the lookup agents of `grill` also run on. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
++- **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration block's `reviewer:` names, and each run over a repair round on the model `repair_reviewer:` names, the `reviewer:` value when the block has none. The brief-check agent and the lookup agents of `grill` run on `reviewer:`. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules, and "Steps / Over a repair round" 1; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
+ - **roadmap entry**: one piece of work in the roadmap, with its goal, its gate and what it waits on, placed in dependency order under a number. `/plan` opens it as a plan. Stated in: `roadmap`, "Steps / add" and "The format is the file's".
+ - **round, of an interview**: one message in which `grill` asks every decision of the frontier that waits on no lookup, ending the turn to wait for the answers. In `grill` and in text that describes `grill`, the bare "round" means this; elsewhere it is a repair round. Stated in: `grill`, Steps 6.
+ - **rule clash**: a contradiction between two established rules or decisions, a stop for the user's ruling. Stated in: `plan-orchestration`, "Stops"; `repo-setup`, `templates/shared-rules.md`, "Surface rule clashes"; `spec`, Steps 2, "Steps / The brief check" and Stops; `refute`, "Finding dispositions".
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index aaa0299..6ddb437 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -259,12 +259,20 @@ Steps 5 says when this runs.
+    - **The question.** Each case, the check on the step's line and the check of each item of "What to build" is asked "could this pass without the goal being reached?", "the goal" being the part of the plan's goal the step delivers, and the answer is given with its reason.
+    - **Implied inputs.** For a code step (a script, or a product's code), the inputs the step implies but never states are listed under "Cases", as `templates/brief.md`'s "Cases" asks, and each one missing is named with its expected result.
+    - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is read for its part in force, as "What it reads" 5 says. Each one the step touches is named with the sentence of its decision the step is under. A part of the brief that contradicts one is named, and so is an ADR the step touches that the brief's "What is on the tree" does not name.
++   - **Dictated text.** Every line of text the brief dictates is read line by line.
++     - What is dictated is text whose words the brief gives for a file, whether quoted, in a fenced block, or given after a colon as the words of a named sentence, line, heading, comment, table row or term. A requirement that says what a sentence must say without giving its words is not dictated, and stays the builder's to word.
++     - Each dictated line is read against the rules file and each standards page the configuration names.
++     - A code line (a key with its comment, a command, a placeholder line) is read whole, and its comment and any words in it are read as prose.
++     - The report gives each dictated line with the `grep -n` that finds it in the brief, and with "holds" or each rule it breaks, named with its page and section.
++     - A brief that dictates no text is reported as such.
++     - A dictated line whose words a ruling of the user fixes, and which breaks a rule, is a finding the session cannot close by a change to the brief, so it is the stop "A brief check finding the brief cannot absorb" ("Stops").
+    - The checks are done when each has its findings, or "none".
+ 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
+    - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's id, its served model (item 1) and its tokens, tool uses and time from its completion notice.
+    - A step has one such report, since the check runs once per step (item 4).
+ 4. The session closes each finding by a change to the brief, before the preparation commit.
+    - Each change is named under the report's "Closed" heading, beside its finding.
++   - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's **Dictated text** says before the preparation commit, and is named under "Closed".
+    - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
+    - The check runs once per step: the brief as changed goes to the builder without a second run, and a `/spec` run after a stop or a ruling does not check the step again.
+    - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
+diff --git a/skills/spec/templates/brief-check.md b/skills/spec/templates/brief-check.md
+index 1d5680a..9846c5c 100644
+--- a/skills/spec/templates/brief-check.md
++++ b/skills/spec/templates/brief-check.md
+@@ -44,6 +44,12 @@ Findings: <each implied input missing from "Cases">. Or: none.
+ 
+ Findings: <each part of the brief that contradicts an ADR, with the ADR's sentence; each ADR the step touches that the brief does not name>. Or: none.
+ 
++## 8. Dictated text
++
++- <each line the brief dictates, quoted>: `<the grep -n that finds it in the brief>`; holds, or each rule it breaks, named with its page and section. Or: the brief dictates no text.
++
++Findings: <each line that breaks a rule, with the rules it breaks>. Or: none.
++
+ ## Declined to judge
+ 
+ - <a point the agent did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.

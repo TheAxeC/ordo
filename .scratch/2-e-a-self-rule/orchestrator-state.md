@@ -49,9 +49,12 @@ dispatch:
   base: 2bf05e5
   launched: 2026-10-01
   report: .scratch/2-e-a-self-rule/agents/reviews/3-report.md
+  builder_usage: 195405 tokens, 41 tool uses, 8 min 55 s
+  reviewer_report: .scratch/2-e-a-self-rule/agents/reviews/3-refuter.md (afaa4e2644e7b3e6a, claude-opus-5-5, 188262 tokens, 48 tool uses, 7 min 46 s)
+  round_1: .scratch/2-e-a-self-rule/agents/briefs/3-round-1.md (Standards 1, 2, 3 and Proof 1 sent; the tree when sent is agents/reviews/3-before-round-1.patch)
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/3-brief-check.md (a844cca8905e3bb9c, claude-opus-5-5 (ordo-high), 204215 tokens, 41 tool uses, 8 min 15 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: aaf2cfc92bfcb1844 (claude-sonnet-5-5)
 ```
 
