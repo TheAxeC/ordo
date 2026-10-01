@@ -1,0 +1,636 @@
+diff --git a/README.md b/README.md
+index a440c52..3b8d9fe 100644
+--- a/README.md
++++ b/README.md
+@@ -15,7 +15,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
+ | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
+ | `grill` | Interviews the user about one roadmap entry, in rounds. Each round asks every decision whose prerequisites are settled, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, while agents look up the facts. It writes each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent it starts as a bullet of the Agents section of that file, the roadmap entry and the glossary, and on the user's yes a proposed ADR |
+ | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
+-| `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
++| `spec` | Prepares one step. It checks the step's authority, the user's approval or a ruling, and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
+ | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
+ | `diagnose` | Finds the cause of a defect before anything is changed. It runs one command red on the exact symptom, shrinks the case, ranks three to five hypotheses, makes one change per probe, and writes the fix with its test and a diagnosis record. Inside a plan it probes on a scratch copy and leaves the step's worktree unchanged; run by a person it waits for the reply to the hypotheses |
+ | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
+@@ -42,6 +42,8 @@ for every step:
+                               optional: when a finding's cause is not known, finds it before "close them"
+ "close them"                  a repair round, up to repair_rounds times
+ /land <entry> <step>          onto main, checks on main, the booking, the commit
++C<n> Agree                    under self-rule: you agree with a choice the orchestrator took
++C<n> => <your ruling>         under self-rule: you replace a choice with your ruling
+ 
+ /plan-orchestration <entry>   instead of the step lines: runs them for every step unattended
+ /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
+diff --git a/docs/figures/gen_figures.py b/docs/figures/gen_figures.py
+index 24fbbbc..101b63d 100644
+--- a/docs/figures/gen_figures.py
++++ b/docs/figures/gen_figures.py
+@@ -560,7 +560,7 @@ def plan_loop_svg() -> str:
+     top, height, gap = 42, 290, 18
+     bottom = top + height
+     cards_y, cards_h = bottom + 76, 160
+-    band_y, band_h = cards_y + cards_h + 24, 216
++    band_y, band_h = cards_y + cards_h + 24, 221
+     canvas = Canvas(
+         "plan-loop.svg",
+         1040,
+@@ -690,7 +690,8 @@ def plan_loop_svg() -> str:
+         "Runs the row above for every step, unattended, with the executor the plan names at "
+         "build it and close them; you may run the row by hand instead. Only the stops marked "
+         "in these two figures, and the proposals of its recurring-findings pass, reach you; the "
+-        "rest of the row runs without asking.",
++        "rest of the row runs without asking. Under self_rule: on, the orchestrator closes every "
++        "stop outside six kinds itself and writes it to choices.md for your review.",
+         (
+             Group(OPTIONAL),
+             Group(EVERY_RUN, ("The roadmap diff, at the closing",)),
+diff --git a/docs/figures/plan-loop.svg b/docs/figures/plan-loop.svg
+index 5d5e3f8..6f5768d 100644
+--- a/docs/figures/plan-loop.svg
++++ b/docs/figures/plan-loop.svg
+@@ -1,7 +1,7 @@
+-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 911" width="1040" height="911" role="img" aria-label="The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.">
++<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 916" width="1040" height="916" role="img" aria-label="The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.">
+ <title>The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.</title>
+ <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+-<rect x="0" y="0" width="1040" height="911" rx="10" fill="#f8fafc" stroke="#64748b"/>
++<rect x="0" y="0" width="1040" height="916" rx="10" fill="#f8fafc" stroke="#64748b"/>
+ <text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW</text>
+ <rect x="25" y="42" width="190" height="290" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+ <line x1="33" y1="42" x2="207" y2="42" stroke="#4f46e5" stroke-width="3"/>
+@@ -132,34 +132,35 @@
+ <rect x="735" y="476" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+ <text x="769.2" y="488" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+ <text x="735" y="514" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">No stop.</text>
+-<rect x="25" y="592" width="990" height="216" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
++<rect x="25" y="592" width="990" height="221" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+ <line x1="33" y1="592" x2="1007" y2="592" stroke="#4f46e5" stroke-width="3"/>
+ <text x="35" y="616" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">/plan-orchestration &lt;entry&gt;</text>
+ <text x="35" y="636" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Runs the row above for every step, unattended, with the executor the plan names at build it and close them; you may run the row by hand</text>
+ <text x="35" y="651" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">instead. Only the stops marked in these two figures, and the proposals of its recurring-findings pass, reach you; the rest of the row runs</text>
+-<text x="35" y="666" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">without asking.</text>
+-<rect x="35" y="675" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+-<text x="69.2" y="687" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+-<rect x="35" y="701" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="72.6" y="713" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+-<text x="35" y="733" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The roadmap diff, at the closing</text>
+-<rect x="35" y="741" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="72.6" y="753" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+-<text x="35" y="773" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A shape nobody named</text>
+-<text x="358.3" y="773" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A wrong premise</text>
+-<text x="681.7" y="773" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A red check</text>
+-<text x="35" y="787" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A rule clash</text>
+-<text x="358.3" y="787" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A finding that is the user's</text>
+-<text x="681.7" y="787" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the configured one</text>
+-<text x="25" y="832" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
+-<rect x="25" y="846" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="62.6" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+-<text x="108.2" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
+-<rect x="355" y="846" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+-<text x="392.6" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+-<text x="438.2" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
+-<rect x="685" y="846" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+-<text x="719.2" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+-<text x="761.4" y="858" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
+-<text x="25" y="880" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">A stop marked "every run" waits each time, unless the run is under a quoted ruling that states the change.</text>
++<text x="35" y="666" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">without asking. Under self_rule: on, the orchestrator closes every stop outside six kinds itself and writes it to choices.md for your</text>
++<text x="35" y="681" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">review.</text>
++<rect x="35" y="690" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="69.2" y="702" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<rect x="35" y="716" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="728" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="35" y="748" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The roadmap diff, at the closing</text>
++<rect x="35" y="756" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="72.6" y="768" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="35" y="788" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A shape nobody named</text>
++<text x="358.3" y="788" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A wrong premise</text>
++<text x="681.7" y="788" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A red check</text>
++<text x="35" y="802" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A rule clash</text>
++<text x="358.3" y="802" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A finding that is the user's</text>
++<text x="681.7" y="802" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the configured one</text>
++<text x="25" y="837" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
++<rect x="25" y="851" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="62.6" y="863" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
++<text x="108.2" y="863" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
++<rect x="355" y="851" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
++<text x="392.6" y="863" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
++<text x="438.2" y="863" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
++<rect x="685" y="851" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
++<text x="719.2" y="863" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
++<text x="761.4" y="863" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
++<text x="25" y="885" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">A stop marked "every run" waits each time, unless the run is under a quoted ruling that states the change.</text>
+ </svg>
+diff --git a/docs/glossary.md b/docs/glossary.md
+index 195f460..09da6b2 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -79,7 +79,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
+ - **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
+ - **questions, the**: the ten questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+-- **quoted ruling**: a ruling of the user given to a skill by the arguments `--ruling <ledger file> "<name>"`. The file is a plan's `plan.md` or a rulings file. The quoted ruling is the bullet of that name in it, whose first line ends with "(the user)", with the sub-bullets under it. The sub-bullets state the change in full. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops"; `plan`, "What it reads" 6; `roadmap`, "What it reads" 6; `ordo-init`, "What it reads" 5; `repo-setup`, "What it reads" 6; `grill`, "What it reads" 11.
++- **quoted ruling**: a ruling of the user given to a skill by the arguments `--ruling <ledger file> "<name>"`. The file is a plan's `plan.md` or a rulings file. The quoted ruling is the bullet of that name in it, whose first line ends with "(the user)", or with "(self-rule)" for `plan`, `grill` and `spec`, with the sub-bullets under it. The sub-bullets state the change in full. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops"; `plan`, "What it reads" 6; `roadmap`, "What it reads" 6; `ordo-init`, "What it reads" 5; `repo-setup`, "What it reads" 6; `grill`, "What it reads" 11.
+ - **reader, of the transcripts**: the script `templates/transcript_window.py` of `session-retro`, which prints what was said and done in the transcripts of one transcript folder, for a window or for one Claude Code session, each item starting on a line `<id> <line> <timestamp> <label>: <text>` and a text of several lines going on in lines indented by two spaces, with the secrets of the forms it knows replaced by `<REDACTED>` and a YAML value on the line after its name left as it is. Stated in: `session-retro`, "The reader".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+ - **red command**: the one command of a diagnosis that drives the code path of the symptom and goes red on the exact symptom, run and its output quoted before any hypothesis. Stated in: `diagnose`, Steps 4.
+@@ -88,7 +88,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+ - **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`, with the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, and a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
+ - **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry. The number of rounds a step gets is the round cap. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
+-- **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, a choice taken under self-rule and a review of a choice, the landing and a handover. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+ - **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration block's `reviewer:` names, and each run over a repair round on the model `repair_reviewer:` names, the `reviewer:` value when the block has none. The brief-check agent and the lookup agents of `grill` run on `reviewer:`. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules, and "Steps / Over a repair round" 1; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
+diff --git a/skills/grill/SKILL.md b/skills/grill/SKILL.md
+index 6483803..079765c 100644
+--- a/skills/grill/SKILL.md
++++ b/skills/grill/SKILL.md
+@@ -80,7 +80,7 @@ metadata:
+       - The file does not exist, or is neither of those two files.
+       - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+       - The name is a placeholder in angle brackets, such as `<L>`.
+-      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
++      - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
+     - With no ruling, the skill says which of these it found, and every stop stands.
+ 
+ ## Steps
+@@ -112,6 +112,7 @@ metadata:
+        - A bullet of a set-aside plan replaces no ruling, except as "What it reads" 6 says.
+      - A carried ruling that contradicts another carried ruling, or a bullet of the entry's Rulings or rulings file, neither naming the other as the one it replaces, is a rule clash ("Steps / An answer that contradicts").
+        - A bullet that settles nothing ("What it reads" 6) makes no rule clash.
++       - A carried ruling dated after a bullet ending "(self-rule)" that it contradicts replaces that bullet, with no rule clash: the bullet's ending is rewritten to "(self-rule, replaced by <the carried bullet's name>)." Its choice leaves the choices file, and the Closed items of its plan gain their line, as `plan-orchestration`'s "Self-rule", "The choices file" says.
+      - Whether a bullet of the entry's Rulings or rulings file already settles a decision of a carried ruling is judged by reading, since the line a carried ruling stands on can move.
+    - An entry that has a goal already has one decision for each part of its current goal: the part kept, changed or dropped.
+      - Each such decision quotes its part as the entry writes it.
+@@ -212,6 +213,7 @@ metadata:
+ ### An answer that contradicts
+ 
+ 1. An answer that contradicts an earlier ruling or an ADR in force is shown in the next round as a rule clash, a decision of its own.
++   - The user's answer that contradicts a bullet ending "(self-rule)" replaces it, with no rule clash: the new bullet names the old one as the one it replaces, and the old one's ending is rewritten to "(self-rule, replaced by D<n>)." Its choice leaves the choices file, and the Closed items of its plan gain their line, as `plan-orchestration`'s "Self-rule", "The choices file" says.
+    - The item is done when the clash is a decision of the next round with its options.
+ 2. The options of the clash are these.
+    - Reopen the earlier ruling, by a new Rulings bullet that names the one it replaces.
+diff --git a/skills/land/SKILL.md b/skills/land/SKILL.md
+index eabe65c..1f6abf6 100644
+--- a/skills/land/SKILL.md
++++ b/skills/land/SKILL.md
+@@ -210,8 +210,8 @@ metadata:
+ 
+ - One step stays one implementation commit, which keeps each step traceable to its brief, its review and its booking.
+ - A landed step found short of its brief, or wrong, is raised to the user as an open item, by `plan-orchestration`'s "Stops".
+-  - The step that finishes it on top of what landed enters the plan only by the user's ruling.
+-- A landed commit is reverted only on the user's ruling.
++  - The step that finishes it on top of what landed enters the plan only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s "Self-rule" books.
++- A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s "Self-rule" books when the step's authority is a bullet ending "(self-rule)" alone; the revert of a step the user approved, or one a ruling of the user added, is kind 3.
+   - Its preparation commit stays.
+   - Only a step so reverted is booked as reverted.
+ - The state file is rewritten before the commit, so main's head always carries a state file that describes it.
+diff --git a/skills/ordo-help/SKILL.md b/skills/ordo-help/SKILL.md
+index 339cdba..1745082 100644
+--- a/skills/ordo-help/SKILL.md
++++ b/skills/ordo-help/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: ordo-help
+-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step), and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
++description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work."
+ metadata:
+   version: "1.8.3"
+ ---
+@@ -12,8 +12,8 @@ metadata:
+ ## Quick start
+ 
+ ```
+-/ordo-help            print the sequence
+-/ordo-help <entry>    print the sequence, then the named plan's position and the command that comes next
++/ordo-help            print the sequence and the choices awaiting review
++/ordo-help <entry>    print the sequence and the choices awaiting review, then the named plan's position and the command that comes next
+ ```
+ 
+ ## Use instead
+@@ -34,14 +34,19 @@ metadata:
+    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
+    - No such folder is a refusal ("Stops").
+ 3. For `/ordo-help <entry>`, the folder's state file, and the brief, the report and the refuter report of the step in flight.
++4. The choices file `<ledger_root>/choices.md`, when it exists.
+ 
+ ## Steps
+ 
+ 1. Print the sequence in "The sequence, printed verbatim".
+-2. For `/ordo-help <entry>`, print the named plan's position.
++2. Print the choices awaiting review, for `/ordo-help` and for `/ordo-help <entry>`.
++   - The line `Choices awaiting review: <count>`, then each choice's `## C<n>.` heading under its entry's heading, as the choices file holds them.
++   - The line `Choices awaiting review: none` when there is no file or no choice.
++   - The step is done when the line is printed.
++3. For `/ordo-help <entry>`, print the named plan's position.
+    - From the state file: the position line, the open items verbatim, and the dispatch block (a step in flight, its worktree, its base, its round).
+    - From the ledger folder, for the step in flight: which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings.
+-3. For `/ordo-help <entry>`, print one line from that position: the command that comes next, in the sequence.
++4. For `/ordo-help <entry>`, print one line from that position: the command that comes next, in the sequence.
+    - An open item that waits on a ruling is printed with it, and the next line is `Ruled: ...`.
+ 
+ ## The sequence, printed verbatim
+@@ -66,7 +71,7 @@ then, for every step:
+ "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report; a contradiction of an ADR the brief asked for is raised to you as an open item instead
+ /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
+                               repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
+-read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and becomes a step only by your ruling
++read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and becomes a step only by your ruling, or under self-rule by a choice you review
+ /land <entry> <step>          stops the step's agents, then onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the booking, the commit
+ 
+ when a command stops:
+@@ -74,8 +79,10 @@ when a command stops:
+ /spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, a choice is yours, the step contradicts an ADR (a rule clash), the step has stopped twice already and would stop a third time, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
+ "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
+                               after a ruling on an option that runs a skill and states the change, that skill is run with --ruling <ledger file> "<name>" before /spec is typed again
++C<n> Agree                    under self-rule: you agree with a choice the orchestrator took; the session rewrites its ruling as yours and removes it from choices.md
++C<n> => <your ruling>         under self-rule: you replace a choice with your ruling; the session books it, adds a fix step when work built on the choice has landed, and removes it from choices.md
+ /spec <entry> <step>          again; it now writes the brief
+-/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
++/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours or a choice taken under self-rule), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
+ /refute stops                 the reviewer was served a model other than the configured one: it stops the reviewer, uses nothing it wrote, and shows the configured value, the served model and the Claude Code version; rule on it, then /refute again
+ /refute refuses               it names the cause and leaves nothing, such as the configured effort that cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): install the effort agents as the plan skills are, or unset the variable, then /refute again in a new session
+ /land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the step's dispatch block: supply it, then /land again
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index 080f46e..165c56d 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: plan-orchestration
+-description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
++description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
+ metadata:
+   version: "2.10.1"
+ ---
+@@ -36,6 +36,7 @@ continue the plan                    resume from the state file, after a compact
+ 3. The dispatch block in the state file, which "Resuming, and handing the plan over" reads.
+ 4. The builder's report, the diff since the step's base, and the refuter reports of the step.
+ 5. For the recurring-findings pass, the refuter reports written since the last pass.
++6. Under `self_rule: on`, and for the review of a choice, the choices file `<ledger_root>/choices.md`.
+ 
+ ## Steps
+ 
+@@ -52,9 +53,10 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+ 3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
+    - Before dispatching the builder, read the brief check's report and the changes to the brief its "Closed" heading names.
+    - A stop it raises goes to the user by "Stops".
++     - Under `self_rule: on`, the orchestrator closes it instead, as "Self-rule" says, unless it is of a kind that section leaves open.
+    - A stop, here or at any later step, blocks its own step.
+      - The loop moves on to the next unblocked step.
+-   - Its refusal of a step without the user's authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since only the user's ruling adds a step to the plan.
++   - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step is added to the plan only by a ruling of the user or, under `self_rule: on`, a choice "Self-rule" books.
+ 4. Choose the step's executor.
+    - Write it into the dispatch block.
+    - Then build by that choice.
+@@ -122,11 +124,13 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+    - A second failure of the step's landing always goes to the user, as the `land` skill's Steps 6 says.
+    - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
+    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
++   - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by C<n>).", the orchestrator adds its fix step, as "Self-rule", "The review of a choice" says.
+ 10. Continue with step 2.
+     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
+     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
+     - The final message opens as "Reports" says.
+       - It then lists every step landed since the loop began with the path of each report, and the open items.
++      - Under `self_rule: on`, it also lists the choices taken since the loop began, by `C<n>` and heading, and says they are reviewed in `<ledger_root>/choices.md` with `C<n> Agree` or `C<n> => <ruling>`.
+ 
+ ## The two tiers, and the models
+ 
+@@ -153,7 +157,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
+ The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under these rules:
+ 
+ - Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, ruling, path a step depends on, sharp edge and landing report is in the ledger folder of the main checkout.
+-- A step's commits are only the points another session resumes from. They are a stop (its open item and Step 0), the preparation commit, and the dispatch entry once the builder's identity is in it. They are also a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), the landing, and a handover.
++- A step's commits are only the points another session resumes from. They are a stop (its open item and Step 0), the preparation commit, and the dispatch entry once the builder's identity is in it. They are also a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), a choice taken under self-rule, a review of a choice, the landing, and a handover.
+ - Every other ledger record is written to disk in the main checkout. Such records are a builder's report saved, the builder's usage under `builder_usage`, a refuter report saved, a reviewer recorded and a ruling booked.
+   - It is carried by the next of those commits.
+ - A resume-point commit holds only the paths the session itself wrote since the last one.
+@@ -206,14 +210,74 @@ On every resumption, with a dispatch block or without one:
+ ## The recurring-findings pass
+ 
+ - Every tenth landed step, and at any pause, the orchestrator reads the refuter reports written since the last pass and groups their findings by cause.
+-- A cause that appears in three or more steps is booked in the open items, since the user rules on it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
++- A cause that appears in three or more steps is booked in the open items, since the user rules on it unless "Self-rule" closes it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
+ - For a rule already written that keeps being broken, what is proposed is a sharper sentence for the rule or a change to the text that should have prevented it.
+ - A check (a command in the verification list, or a script) is proposed under these limits:
+   - It is proposed only for a fact a machine computes.
+   - It comes after the rule sentence or the text change.
+   - The proposal states what it computes.
+   - The user's ruling on the proposal approves what it computes, before it is written.
+-- The user rules on each proposal.
++- The user rules on each proposal whose change is a rule sentence in the rules file, a standards page or the shared rules, or a check (a command in the verification list, or a script), since such a proposal is kind 3 of "Self-rule".
++  - Under `self_rule: on`, any other proposal is closed as "Self-rule" says.
++
++## Self-rule
++
++- **Scope.** The section applies under `self_rule: on` in the configuration block.
++  - With `self_rule: off`, or the key absent, every open item waits for the user, as "Stops" says.
++- **The six kinds left open.** An open item of one of these kinds waits for the user, and the open item names its kind by its number:
++  1. Anything that reaches outside the repository or needs the user's hands or accounts, a model other than the configured one included.
++  2. Anything that deletes data or touches a secret.
++  3. A change to the user's written rules (the rules file, the standards pages, the shared rules, `CLAUDE.md`, `.agents/plan.yaml` and the configuration block), a clash between them, or the reversal of a ruling: an option that replaces, removes or contradicts a bullet of a Rulings section, whatever its ending, removes a step the user approved, or reverts a landed step the user approved or one a ruling of the user added.
++     - Rewriting an approved step's text to absorb a found premise, and adding a step, are no reversal.
++  4. The closing's roadmap diff, tag and pin.
++  5. The user's reading of a page a step writes: the reading stays an open item and blocks no step.
++  6. A choice with no clear recommendation: two options or more that the written rules, the rulings and the ADRs do not rank.
++- **A skill with its own approval stop.** An option that runs `/roadmap`, `/ordo-init` or `/repo-setup` under a quoted ruling meets that skill's approval stop, since those skills take only a bullet ending "(the user)" as a quoted ruling, and the item stays open for the user.
++- **Closing an open item.** An open item that no bullet above leaves open, and that is not the stop "The counts" names, is closed by the orchestrator the moment it is raised, whether a skill the loop invokes raised it or the loop's own "Stops" did:
++  1. The open item is written in full first, as a stop is, with its options, the pros and cons of each, one recommendation and the lazy option named.
++  2. The option taken is the recommended one.
++  3. It is booked as the `spec` skill's "Steps / A ruling" 2 books a ruling, the option's text as the ruling's text, with one Rulings bullet whatever the ruling changes: `- Open item <L> (<date>): <the option taken, in one line, and what it unblocks> (self-rule).`
++     - That bullet is the line "Steps / A ruling" 2 names for a ruling that adds or splits a step or runs a skill, so a choice has one bullet.
++  4. The open item moves to the Closed items as `- <date>: Open item <L>, <what was raised>: closed under self-rule, C<n>.`
++  5. The choice is written to the choices file, as "The choices file" says.
++  6. The open item, the step's Step 0, the Rulings bullet, the Closed items, the step text the ruling rewrote and the choices file are committed by path at once, a resume point.
++  7. The loop goes on with the step as the ruling leaves it: `/spec` again for a step stopped before its build, the repair round or the landing for a step stopped after it.
++- **The counts.** An item closed under self-rule counts as a stop of its step (the `spec` skill's "Steps / A stop" 3).
++  - The stop "A step that does not converge" is never closed under self-rule, since each of its options rewrites, splits or removes a step the user approved.
++- **The choices file.** The file `<ledger_root>/choices.md` is made from this skill's `templates/choices.md` at the first choice, by copying its head and its `Last number` line, and the lines below them show the form of an entry and a choice.
++  - Each roadmap entry has one heading, `# Entry <entry number> <entry title>`, made at the entry's first choice, the entries in the order of their first choice.
++  - Under it, each choice has one heading, `## C<n>. <the decision, as a phrase> (<date>)`, where `<n>` is one more than the file's line `Last number: C<m>`, which is then rewritten to `C<n>`, so no number is used twice.
++  - Under the heading stands the open item as it was raised: its options with the pros and cons of each, the recommendation with its reasons, and the lazy option.
++  - Then come three lines: `Taken: <the option taken>`, ``Booked: `<path>:<line>` `` and `Builds on it: <the steps, comma-separated, or none>`.
++    - `Booked:` names the Rulings bullet, its path relative to the repository root as it stands at the booking.
++    - `Builds on it:` names the step the open item stopped and each step whose line the ruling rewrote or added.
++  - A later `/spec` whose brief rests on the choice (its step's tag names the bullet, or the brief names the bullet) adds its step to the `Builds on it:` line, and its preparation commit carries the file, as the `spec` skill's Steps 6 says.
++  - The file is never archived, and a closed plan's choices stay in it until the user reviews them.
++  - A bullet ending "(self-rule)" that a ruling of the user replaces outside a review (a `Ruled:` reply, or `/grill`) has its ending rewritten to "(self-rule, replaced by <the ruling's name>).", its choice removed from the file, and `- <date>: C<n>: replaced by <the ruling's name>.` added to the Closed items of its plan.
++- **The review of a choice.** The user types, in any session on the repository:
++
++  ```
++  C<n> Agree
++  C<n> => <the user's ruling, one clause per question the open item asked>
++  ```
++
++  - The session finds the choice's bullet by its name, `Open item <L>`, in the Rulings section of the plan `Booked:` names, or, for a closed plan, of the archived `plan.md` whose folder has the same slug under `<archive_root>/`, and the line number of `Booked:` is where the search starts.
++  - `C<n> Agree`:
++    - The choice leaves the choices file, its entry heading with it when no choice is left under it.
++    - The bullet's ending is rewritten from "(self-rule)." to "(the user)."
++    - `- <date>: C<n>, <the decision>: agreed by the user.` is added to that plan's Closed items.
++  - `C<n> => <text>`: `<text>` is booked as a ruling of the user, as the `spec` skill's "Steps / A ruling" says, with the Rulings bullet `- C<n> <the decision, as a phrase> (<date>): <text>, replacing Open item <L> (the user).`
++    - The old bullet's ending is rewritten from "(self-rule)." to "(self-rule, replaced by C<n>).", which no skill reads as a ruling.
++    - A step of `Builds on it:` not yet prepared has its text rewritten to the new ruling, and its tag too, to `(ruling C<n> <the decision, as a phrase>)`, when its tag names the old bullet.
++    - A step tagged `(approved)` keeps its tag.
++    - When a step of `Builds on it:` has landed and the plan is open, a fix step is added before the closing, `- <k> <what changes to follow C<n>>; check: <the check> (<n> commit) (ruling C<n> <the decision, as a phrase>)`, with its own Step 0 naming the steps it corrects.
++    - A step of `Builds on it:` in flight at the review gets its fix step at its landing, in the same form.
++    - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by C<n>).", the orchestrator adds that fix step.
++    - When a step of `Builds on it:` has landed and the plan is closed, the session drafts `/roadmap add <goal>` for the change, and the draft goes to the user at that skill's approval stop.
++    - When no step of `Builds on it:` has landed or is in flight, no fix step is added.
++    - The choice then leaves the choices file, as under `Agree`, and `- <date>: C<n>, <the decision>: replaced by the user's ruling C<n>.` is added to the Closed items.
++  - A `C<n>` the choices file does not hold, or no choices file, is refused: the refusal names the numbers the file holds, or says there is no file, and nothing is written.
++  - The files the review changed are committed by path at once, a resume point.
+ 
+ ## Two steps in flight
+ 
+@@ -255,7 +319,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ - A finding beyond the brief is raised to the user as an open item, by "Stops".
+ - A step's path list is a choice, not a fact: widen it rather than mint a step for what the open step exists to end.
+ - A report that asks for a step says what makes the work new, or nasty, or blocked by something in flight.
+-- A step enters the step list only by the user's ruling, as a line ending with `(ruling <name>)`.
++- A step enters the step list only by a ruling of the user or, under `self_rule: on`, a choice "Self-rule" books, as a line ending with `(ruling <name>)`.
+   - `/spec` refuses a line without its tag.
+ 
+ ## Reports
+@@ -264,7 +328,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ - A builder's report keeps the shape of the repository's change standard.
+ - The state file's open items follow the position line, verbatim.
+ - The open items hold only what the user must rule on: a stop, and a proposal of the recurring-findings pass.
+-- A finding that is neither closed in the repair rounds nor fixed at landing is an open item, since only the user's ruling makes it a step.
++- A finding that is neither closed in the repair rounds nor fixed at landing is an open item, since it becomes a step only by a ruling of the user or, under `self_rule: on`, a choice "Self-rule" books.
+ - The other list, the closed one, is the log of what was raised and how it ended.
+   - No report carries it.
+ - Then anything NOT DONE first, then the DONE / NOT DONE ledger naming the command that proves each row.
+@@ -294,14 +358,15 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
+ | A shape nobody named | A user-visible shape nothing names | The stop message, below | The user's ruling |
+ | A wrong premise | A premise found wrong that the plan cannot absorb | The stop message, below | The user's ruling |
+ | A red check | A red check no fix within the plan covers | The stop message, below | The user's ruling |
+-| A rule clash | A contradiction between two established rules or decisions, an ADR among them | The stop message, below | The user's ruling |
+-| A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by the user's ruling | The stop message, below | The user's ruling |
++| A rule clash | A contradiction between two established rules or decisions, an ADR among them, except a ruling of the user that replaces a bullet ending "(self-rule)", which is no clash | The stop message, below | The user's ruling |
++| A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by a ruling of the user or, under `self_rule: on`, a choice "Self-rule" books | The stop message, below | The user's ruling |
+ | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
+ | A model other than the configured one | The runner served a builder, a reviewer or a brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
+ | The configured effort cannot apply | A refusal (Steps 1): the runner lists no `ordo-<level>` agent for a level the configuration block names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then a new session |
+ 
+ - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
+ - A stop is booked in the state file's open items the moment it is raised, and under the step's Step 0 in `plan.md`.
++  - Under `self_rule: on`, a stop of a kind that "Self-rule" does not leave open is then closed as that section says.
+ - The ledger files the session wrote are then committed by path, a resume point, so the stop survives the session.
+ - A ruling that adds or splits a step is booked as the `spec` skill's "Steps / A ruling" says: the new line in the step list ends with `(ruling <name>)`, naming the ruling's line in the Rulings section.
+ - A stop is repeated in every report until the user has ruled.
+@@ -343,5 +408,5 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
+   - Its small findings, the last review's included, are fixed at landing.
+ - Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops".
+   - It is never sent back to the builder.
+-  - It becomes a step only by the user's ruling.
++  - It becomes a step only by a ruling of the user or, under `self_rule: on`, a choice "Self-rule" books.
+ - Every skill the loop invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, and `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.
+diff --git a/skills/plan-orchestration/templates/choices.md b/skills/plan-orchestration/templates/choices.md
+new file mode 100644
+index 0000000..8d5ae63
+--- /dev/null
++++ b/skills/plan-orchestration/templates/choices.md
+@@ -0,0 +1,15 @@
++# Choices taken under self-rule
++
++Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
++
++Last number: C0
++
++# Entry <entry number> <entry title>
++
++## C<n>. <the decision, as a phrase> (<date>)
++
++<the open item as it was raised: each option with its pros and cons, the recommendation with its reasons, and the lazy option>
++
++Taken: <the option taken>
++Booked: `<path>:<line>`
++Builds on it: <the steps, comma-separated, or none>
+diff --git a/skills/plan/SKILL.md b/skills/plan/SKILL.md
+index 27ee58b..0b92fcf 100644
+--- a/skills/plan/SKILL.md
++++ b/skills/plan/SKILL.md
+@@ -53,7 +53,7 @@ metadata:
+      - The file does not exist, or is neither of those two files.
+      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
+      - The name is a placeholder in angle brackets, such as `<L>`.
+-     - The bullet's first line does not end with "(the user)", with or without a full stop after it.
++     - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
+    - With no ruling, the skill says which of these it found, and every stop stands.
+ 
+ ## Steps
+@@ -135,7 +135,7 @@ metadata:
+ ## Rules
+ 
+ - A step is one deliverable and one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), with the command that proves it, except the bookkeeping steps the orchestrator does itself.
+-- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a ruling of the user added later, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.
++- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a later ruling added, the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.
+ - Every path in the ledger is relative to the repository root.
+ - Every command in the ledger names the directory it runs from.
+ - No history: the ledger records decisions with their dates in `plan.md`'s rulings list; the templates and this file carry none.
+diff --git a/skills/plan/templates/orchestrator-state.md b/skills/plan/templates/orchestrator-state.md
+index 8b96dae..e2710a2 100644
+--- a/skills/plan/templates/orchestrator-state.md
++++ b/skills/plan/templates/orchestrator-state.md
+@@ -34,11 +34,11 @@ repair_reviewer: claude:<model>  # the model the run of /refute over a repair ro
+ dispatch: none               # or the block /spec writes (a list with workers_at_once above 1): step, executor, worker, worktree, base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time), landing, round. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A step dispatched while another in flight names a file its brief also names carries shared_paths: each shared file and why the merge at landing is simple; with no shared file the key is left out.
+ ```
+ 
+-## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
++## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s "Self-rule" says)
+ 
+-A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
++A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s "Self-rule" books; what is settled belongs in the closed list.
+ 
+-- <a stop awaiting the user's ruling, or a proposal of the recurring-findings pass, with its options, the pros and cons of each, what each would need approved later, and one recommendation, as plan-orchestration's Stops section says; or "none">. An item is booked here the moment it is raised; it leaves only when the user has ruled, and then goes to the closed list.
++- <a stop awaiting the user's ruling, or a proposal of the recurring-findings pass, with its options, the pros and cons of each, what each would need approved later, and one recommendation, as plan-orchestration's Stops section says; or "none">. An item is booked here the moment it is raised; it leaves only when the user has ruled or, under `self_rule: on`, when the orchestrator closes it as `plan-orchestration`'s "Self-rule" says, and then goes to the closed list.
+ 
+ ## Closed items (the log of what was raised and how it ended; no report carries it)
+ 
+diff --git a/skills/plan/templates/plan.md b/skills/plan/templates/plan.md
+index 6f0eb1b..8e79764 100644
+--- a/skills/plan/templates/plan.md
++++ b/skills/plan/templates/plan.md
+@@ -17,7 +17,7 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step of work
+ 
+ - <1> <what the step delivers, in one line; the check that proves it> (<n> commit) (approved)
+ - <2> <what the step delivers, in one line; the check that proves it> (<n> commit; orchestrator, no agent) (approved)
+-- <2a> <a step a ruling of the user added after the approval, in one line; the check that proves it> (<n> commit) (ruling <L>)
++- <2a> <a step a later ruling added, in one line; the check that proves it> (<n> commit) (ruling <L>)
+ - <last> the closing: the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+ 
+ ## Could run in parallel
+@@ -29,6 +29,7 @@ Independent of each other; the standing rule of one agent at a time still serial
+ ## Rulings (<date>)
+ 
+ - Open item <L> (<date>): <the user's decision in one line, and what it unblocks> (the user).
++- Open item <L> (<date>): <the option taken under self-rule, in one line, and what it unblocks> (self-rule).
+ 
+ ## Agents
+ 
+diff --git a/skills/refute/SKILL.md b/skills/refute/SKILL.md
+index eb6ebce..3bb7738 100644
+--- a/skills/refute/SKILL.md
++++ b/skills/refute/SKILL.md
+@@ -148,7 +148,7 @@ metadata:
+ ## Finding dispositions
+ 
+ - A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or raised to the user as an open item in the state file, as `plan-orchestration`'s Stops section says.
+-  - It becomes a step only by the user's ruling.
++  - It becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s "Self-rule" books.
+ - A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR. One the builder made against the brief is closed like any other finding, by a change that follows the ADR.
+ - The open items hold only what the user must rule on.
+ - After the last round, the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading.
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 479446f..2859fa4 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -74,7 +74,7 @@
+ - **`projects:` form**: the shape of `.agents/plan.yaml` for a repository with several projects, each listed under `projects:` with its own keys, a plan then named `<project>/<entry>`. Stated in: `plan`, "What it reads" 1; `ordo-init`, Steps 1.
+ - **question, the**: "could this pass without the goal being reached?", asked of a roadmap entry's gate, of each step's check and of a brief's cases and checks, the answer written with its reason. Stated in: `roadmap`, "Steps / add" 3; `plan`, Steps 2; `spec`, "Steps / The brief check".
+ - **questions, the**: the ten questions `/repo-setup` asks before it drafts a repository, each with its default. Stated in: `repo-setup`, "The questions".
+-- **quoted ruling**: a ruling of the user given to a skill by the arguments `--ruling <ledger file> "<name>"`. The file is a plan's `plan.md` or a rulings file. The quoted ruling is the bullet of that name in it, whose first line ends with "(the user)", with the sub-bullets under it. The sub-bullets state the change in full. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops"; `plan`, "What it reads" 6; `roadmap`, "What it reads" 6; `ordo-init`, "What it reads" 5; `repo-setup`, "What it reads" 6; `grill`, "What it reads" 11.
++- **quoted ruling**: a ruling of the user given to a skill by the arguments `--ruling <ledger file> "<name>"`. The file is a plan's `plan.md` or a rulings file. The quoted ruling is the bullet of that name in it, whose first line ends with "(the user)", or with "(self-rule)" for `plan`, `grill` and `spec`, with the sub-bullets under it. The sub-bullets state the change in full. Stated in: `spec`, "Steps / A ruling"; `plan-orchestration`, "Stops"; `plan`, "What it reads" 6; `roadmap`, "What it reads" 6; `ordo-init`, "What it reads" 5; `repo-setup`, "What it reads" 6; `grill`, "What it reads" 11.
+ - **reader, of the transcripts**: the script `templates/transcript_window.py` of `session-retro`, which prints what was said and done in the transcripts of one transcript folder, for a window or for one Claude Code session, each item starting on a line `<id> <line> <timestamp> <label>: <text>` and a text of several lines going on in lines indented by two spaces, with the secrets of the forms it knows replaced by `<REDACTED>` and a YAML value on the line after its name left as it is. Stated in: `session-retro`, "The reader".
+ - **recurring finding**: a cause of findings that `plan-orchestration`'s pass finds across steps, booked as an open item with the smallest change that would end it. Stated in: `plan-orchestration`, "The recurring-findings pass".
+ - **red command**: the one command of a diagnosis that drives the code path of the symptom and goes red on the exact symptom, run and its output quoted before any hypothesis. Stated in: `diagnose`, Steps 4.
+@@ -83,7 +83,7 @@
+ - **refusal**: a skill's end without a decision for the user. It names its cause and leaves nothing, or nothing beyond what a step taken back out of main has already done. Stated in: `spec`, "Stops"; `land`, "Stops"; `refute`, "Stops".
+ - **refuter report**: the reviewer's report `agents/reviews/<step>-refuter.md`, with the verification lines, the verdicts, the findings under the four headings, "Declined to judge" and the usage, and a section appended for each run over a repair round. Stated in: `refute`, Steps 6 and 7 and "Steps / Over a repair round".
+ - **repair round**: the reviewer's findings sent back to the same builder as a numbered list with a ruling per finding, `round: n` written in the dispatch entry. The number of rounds a step gets is the round cap. Stated in: `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round".
+-- **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, the landing and a handover. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
++- **resume point**: a commit another session resumes from: a stop, the preparation commit, the launch commit, a repair round sent, a step taken back out of main, a choice taken under self-rule and a review of a choice, the landing and a handover. Stated in: `plan-orchestration`, "Resuming, and handing the plan over".
+ - **retro**: the report `/plan-retro` writes at `<ledger_root>/retros/<YYYY-MM-DD>.md`, grouping the findings of the refuter reports by kind and proposing, for each recurring kind, the change that stops it. Stated in: `plan-retro`, Steps 8.
+ - **review cadence**: the configuration block's `review:`, `every` for a refutation of every step, or `earned` for a refutation decided per step from the builder's landing reports. Stated in: `plan-orchestration`, Steps 7 and "The review, earned"; `plan`, Steps 4.
+ - **reviewer**: the fresh session or agent that refutes a built step without changing anything. Its first run of a step runs on the model the configuration block's `reviewer:` names, and each run over a repair round on the model `repair_reviewer:` names, the `reviewer:` value when the block has none. The brief-check agent and the lookup agents of `grill` run on `reviewer:`. It is also called the refuter. Stated in: `refute`, Steps 1 and Rules, and "Steps / Over a repair round" 1; `plan-orchestration`, "The two tiers, and the models"; `plan-retro`, the introduction; `grill`, "Steps / Looking up a fact".
+diff --git a/skills/repo-setup/templates/shared-rules.md b/skills/repo-setup/templates/shared-rules.md
+index eb48b66..d57e6a9 100644
+--- a/skills/repo-setup/templates/shared-rules.md
++++ b/skills/repo-setup/templates/shared-rules.md
+@@ -17,7 +17,7 @@ These rules hold in every repository set up from the same template. `/repo-setup
+ - **Proactively report problems.** After any change, list what is wrong or compromised: limitations, sharp edges, decisions left implicit, anything deferred. A limitation that breaks a common use is a defect to fix or escalate.
+ - **References are not justifications.** Prior art is a cautionary reference. A design choice is justified from this repository's own goals and decisions, citing the one it rests on.
+ - **Show code, not prose about code.** When the subject is code, lead with the smallest real snippet that shows it.
+-- **No question boxes.** Recommend and proceed. Stop only where the decision belongs to the user: a user-visible shape nothing names, a premise found wrong that the plan cannot absorb (one it can absorb is corrected in the plan), a red check no fix within the task covers, a rule clash.
++- **No question boxes.** Recommend and proceed. Stop only where the decision belongs to the user: a user-visible shape nothing names, a premise found wrong that the plan cannot absorb (one it can absorb is corrected in the plan), a red check no fix within the task covers, a rule clash. Under a plan's `self_rule: on`, such a decision outside the six kinds `plan-orchestration` "Self-rule" leaves open is taken with its recommendation and written to the choices file for your review.
+ - **Commits.** Never push. No AI or tool attribution in a commit or pull request: no `Co-Authored-By` trailer, no vendor or model name, no robot emoji; this overrides any default trailer the runner adds. Message shape: a capitalised imperative subject, a blank line, `- Verb ...` bullets. Stage by explicit path; never `git add -A`.
+ - **Plans run from a ledger.** A multi-step change runs through the plan skills (`/plan`, `/spec`, `/refute`, `/land`, `plan-orchestration`) from `.agents/plan.yaml` and its ledger folder, never from memory. After a context compaction, read the state file first, then the ledger.
+ - **Prose.** Plain prose, ASCII only, no em dashes, no quips, one paragraph per source line. The standard is `docs/dev/prose-standard.md`, and it applies to every comment, page and message.
+diff --git a/skills/spec/SKILL.md b/skills/spec/SKILL.md
+index 228a37d..21935a2 100644
+--- a/skills/spec/SKILL.md
++++ b/skills/spec/SKILL.md
+@@ -1,6 +1,6 @@
+ ---
+ name: spec
+-description: "Prepare one step of an open plan: refuse a step without the user's authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check (a fresh read-only agent checks the brief against the tree, each finding closed in the brief), create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
++description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check (a fresh read-only agent checks the brief against the tree, each finding closed in the brief), create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
+ metadata:
+   version: "1.7.0"
+ ---
+@@ -41,7 +41,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - The step list is the section `## Steps, in execution order`, and the rulings are the section `## Rulings`.
+      - A `plan.md` without either section is a refusal ("Stops").
+    - The step's authority is the tags that end its line: `(approved)` for a step of the list the user approved when the plan opened, or `(ruling <name>)` for each ruling it rests on.
+-   - Each ruling a tag names is a line of the Rulings section that ends with "(the user)", named as the tag reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line.
++   - Each ruling a tag names is a line of the Rulings section that ends with "(the user)" or "(self-rule)", each with or without a full stop after it, named as the tag reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line.
++     - A line ending "(self-rule, replaced by C<n>)." is no ruling.
+    - A step without that authority is a refusal ("Stops"), checked at Steps 1.
+    - A step not in the list is a refusal ("Stops"), with the list printed.
+    - For a step taken back out of main, the failure its landing recorded under the step's Step 0.
+@@ -70,9 +71,9 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+    - Either effort check failing is the refusal "The configured effort cannot apply" ("Stops"), and writes nothing.
+    - A preflight that fails is a refusal ("Stops").
+    - Then, before any premise check, read the step's line and the Rulings section of `plan.md`, as "What it reads" 4 says.
+-   - A step whose line carries the user's authority goes on.
++   - A step whose line carries its authority goes on.
+      - The session notes the tags that give it.
+-   - A step without it is a refusal ("Stops") that names the step and the authority it lacks, and says the user's ruling is needed.
++   - A step without it is a refusal ("Stops") that names the step and the authority it lacks, and says a ruling is needed.
+    - A `plan.md` that is missing or not UTF-8, lacks a section, or lists a step twice is a refusal ("Stops").
+    - A step not in the list is a refusal ("Stops"), with the list printed.
+    - A refusal here writes nothing.
+@@ -137,6 +138,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
+ 6. Make the preparation commit, a resume point ("Rules").
+    - It holds the brief, the brief check's report, the patch of a step taken back out of main, and each of the session's own records (Steps 1).
+    - It holds `plan.md` and the state file when this run or the session's own records changed them.
++   - It holds the choices file `<ledger_root>/choices.md` when this run changed its `Builds on it:` line.
+    - The paths are written out in the `git add -- <path> ...` command.
+      - A ledger change the session did not make is not among them.
+    - Its hash is the base.
+@@ -216,13 +218,15 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
+    Ruled: <the choice, one clause per question the open item asked>
+    ```
+ 
++   Under `self_rule: on`, `plan-orchestration`'s "Self-rule" books a choice the same way, as that section says.
++
+ 2. On that message the session books the ruling and nothing else:
+    - the open item is closed with the ruling's text and its date;
+    - the step's text in `plan.md` is rewritten to what was ruled;
+    - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`, and its own Step 0, its carried premises with it;
+-   - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user).";
++   - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
+    - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line;
+-   - a ruling on an option that runs a skill with an approval stop and states the change in full is written in the Rulings section as a bullet whose first line ends with "(the user).";
++   - a ruling on an option that runs a skill with an approval stop and states the change in full is written in the Rulings section as a bullet whose first line ends with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
+    - that bullet is the quoted ruling the session gives the skill;
+    - the change the option stated is copied under that bullet as sub-bullets, a text of several lines as a fenced block indented with its sub-bullet, its fence longer than any fence inside the text;
+    - a ruling that sets a public shape, a vocabulary, a rule or a library choice is also written where the plan keeps its rulings, so later premise checks and the library search of Steps 3 read it;
+@@ -231,6 +235,7 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
+      - its decision is the ruled option in the open item's words, its context the facts the open item gives, its alternatives rejected the old record's decision and each other option with the con the open item gave it, and its consequences what the open item says follows;
+      - the old record is marked superseded in the words the folder uses (`superseded by NNNN` under the template), and the new record gets its row in the folder's index when there is one;
+      - the session shows the user the new record and commits these files by path at once, a resume point, so that `/spec` or `/land` in any session reads them;
++   - a ruling that replaces a bullet ending "(self-rule)" is booked as `plan-orchestration`'s "Self-rule", "The choices file" says;
+    - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6).
+ 3. Then `/spec <entry> <step>` is typed again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
+    - A step whose brief check has run is not checked again (Steps 5).
+@@ -297,7 +302,7 @@ The first six rows are stops, which leave an open item as "Steps / A stop" says.
+ | A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
+ | A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
+ | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
+-| A step without the user's authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling of the user in the Rulings section, or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | The user's ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
++| A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)", or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
+ | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |
+ | A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on the ledger's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |
+ | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/spec` again |
