@@ -64,16 +64,6 @@ dispatch:
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
 
-- Open item O (2026-10-01): how a quoted ruling ending "(self-rule)" names a finding of a diagnosis record or a landing report. Raised by step 12's builder (`agents/reviews/12-report.md`, "Anything in the brief wrong or impossible") and confirmed by its refuter (`agents/reviews/12-refuter.md`, "Declined to judge").
-  - What the tree shows: `skills/roadmap/SKILL.md` "What it reads" 6 says such a bullet names its finding by "the path of its report under the plan's `agents/reviews/` (a refuter report, a brief-check report, a landing report or a diagnosis record), the heading the finding stands under and its number there", the words of Open item G (a) at `plan.md:92`, agreed by you as C2. A diagnosis record's headings carry no number (`grep -n '^#' skills/diagnose/templates/diagnosis.md`: Symptom, Where the probes run, Red command, No red command, Shrunk case, Hypotheses, Probes, Cause, Fix and test, Cleanup), and a landing report has no template that numbers its findings (`ls skills/land/templates` lists only the two scripts and their tests), so a bullet naming such a finding cannot give "its number there", and `/roadmap add` cannot check it.
-  - Options:
-    - (a) A new step 12b, before the closing, rewrites the sub-bullet so a finding is named by its report's path and its heading, with its number where the report numbers its findings under that heading (a refuter report, a brief-check report), and with the heading alone for a diagnosis record (its "Cause" section) or a landing report; `/roadmap` checks the finding under that heading. A Rulings bullet replaces Open item G's words for that case. Pros: all four kinds of report the ruling names stay usable, and `/roadmap` can check each. Cons: one more step, and `roadmap` changes again (its version under the rule of Open item L stays the minor raise of this plan).
-    - (b) A new step 12b drops "a landing report or a diagnosis record" from the list, so only a refuter report and a brief-check report can name such a finding. Pros: the smallest text change. Cons: work a diagnosis finds or a landing raises cannot be added to the roadmap under self-rule, and waits for you.
-    - (c) Leave the text as it is. Pros: no change. Cons: a bullet naming a finding of a diagnosis record or a landing report is refused by `/roadmap add`, which the text says it accepts.
-  - Recommendation: (a), since it keeps every kind of report Open item G named and makes each one checkable. Lazy option: (c), which leaves a sentence the skill cannot follow.
-  - Kind 3: every option but (c) replaces the words of Open item G, a ruling you agreed. It blocks no step; under (a) or (b) the closing waits for step 12b.
-
-
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-01: Open item A, where the cost script takes each response's output count: ruled C by the user. Each response's counts come from its response body under `OTEL_LOG_RAW_API_BODIES` where the body exists, and from the transcript otherwise, that agent's row marked as a lower bound; ADR 0009; the user turns the setting on; the goal's sentence changes through a roadmap diff, Open item C.
@@ -93,6 +83,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-01: Open item I, how step 9's run reaches the skill text of steps 6 to 8: ruled (a) by the user. Main's head is tagged `v2.8.0-rc.1` and pinned before step 9's run, and the pin restored to v2.7.0 after it.
 - 2026-10-01: Open item L, when and which part of a skill's version is raised: ruled (a) by the user. Step 12 writes the rule into `docs/dev/skill-layout.md` and raises the eleven versions by it.
 - 2026-10-01: Open item N, a closing that worked before is refused after this plan: closed under self-rule, C4.
+- 2026-10-01: Open item O, how a quoted ruling ending "(self-rule)" names a finding of a diagnosis record or a landing report: ruled (a) by the user. Step 12b names such a finding by its report's path and heading, the number only where the report numbers its findings.
 
 ## The standing demands (from Axel, in force)
 
@@ -114,6 +105,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b and 11c landed; their bookings are in `plan.md`, step 11c's landing report at `agents/reviews/11c-landing.md`. Steps 10 and 11 read by the user (Open items J and K). Next: step 12 under ruling L, then step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c and 12. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b and 11c landed; their bookings are in `plan.md`, step 11c's landing report at `agents/reviews/11c-landing.md`. Steps 10 and 11 read by the user (Open items J and K). In flight: step 12 under rulings L and N, in repair round 1. Next: step 12b under ruling O, then step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c, 12 and 12b. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 11c's fixes at landing printed `checks: 11 commands passed`, exit 0.
-- Open items A to I, L and M settled; C1, C2 and C3 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
+- Open items A to I and L to O settled; C1, C2 and C3 agreed by the user; `.scratch/choices.md` holds C4 (Open item N) for the user's review. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
