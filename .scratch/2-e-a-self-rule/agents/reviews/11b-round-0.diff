@@ -1,0 +1,89 @@
+diff --git a/README.md b/README.md
+index 04c125b..4a7cf2b 100644
+--- a/README.md
++++ b/README.md
+@@ -148,7 +148,7 @@ A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of
+ 
+ Each command runs through `bash -o pipefail -c` and passes when it exits 0. The run stops at the first command that fails. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
+ 
+-The closing step of a plan runs the cost script, which prices the usage of each agent role. It takes each response's counts from the response body Claude Code keeps when `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>` are set in its settings. Where it kept no body, the script takes the counts from the agents' transcripts and marks the cost as a lower bound. The folder grows with every request and holds each request's prompt.
++The closing step of a plan runs the cost script when the plan started an agent, which prices the usage of each agent role. It takes each response's counts from the response body Claude Code keeps when `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>` are set in its settings. Where it kept no body, the script takes the counts from the agents' transcripts and marks the cost as a lower bound. The folder grows with every request and holds each request's prompt.
+ 
+ The script takes the folder from `OTEL_LOG_RAW_API_BODIES` in its environment, and otherwise from the `env` key of Claude Code's settings files, the repository's `.claude/settings.local.json` and `.claude/settings.json` and then `~/.claude/settings.json`. A Claude Code tool's shell does not receive the variable, so the closing finds it in the settings. The script runs on its own on any ledger folder, open or archived, with `<transcript root>` defaulting to `~/.claude/projects`:
+ 
+diff --git a/docs/glossary.md b/docs/glossary.md
+index ab4397f..892fd80 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -24,8 +24,8 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **change point**: a behaviour of a Claude Code session worth changing, written in a sessions report under "Change" with its places and a proposal: the sentence to add to a rule, skill or brief, where a written rule should be read, or a sharper sentence for a written rule or the text that should have prevented the behaviour. Stated in: `session-retro`, Steps 6 and 9.
+ - **choices file**: `<ledger_root>/choices.md`, one heading per choice taken under self-rule, grouped by roadmap entry; a choice stays there until the user reviews it or a ruling of the user replaces it. Stated in: `plan-orchestration`, `references/self-rule.md`, "The choices file" and "The review of a choice".
+ - **Closed**: the heading of a report that holds each finding's disposition. In a refuter report that is whether the finding was closed in a round, fixed at landing or raised as an open item. In a brief-check report it is the change to the brief that closed the finding, and the heading also holds each dictated line added to the brief after the check, with whether it holds. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+-- **closing report**: the file `agents/reviews/closing.md` the closing step writes, holding the cost script's output for the plan. Stated in: `plan`, Steps 2; `plan-orchestration`, "Usage".
+-- **closing step**: the last step of every plan, which `/plan` writes itself: the closing report written before the folder moves, the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. A non-zero exit of the cost script holds the folder where it is. Stated in: `plan`, Steps 2.
++- **closing report**: the file `agents/reviews/closing.md` the closing step writes, holding the cost script's output, or, when the closing step did not run the script because the plan started no agent, the sentence that says so. Stated in: `plan`, Steps 2; `plan-orchestration`, "Usage".
++- **closing step**: the last step of every plan, which `/plan` writes itself: the closing report written before the folder moves, the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. A non-zero exit of the cost script holds the folder where it is, and the closing step skips the script only for a plan that started no agent. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop or what a quoted ruling states on whether the skill may commit. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+ - **completion notice**: what the runner reports when an agent ends, its final message and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+ - **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer`. Stated in: `plan`, Steps 4.
+diff --git a/skills/plan-orchestration/SKILL.md b/skills/plan-orchestration/SKILL.md
+index b1ff29f..dadfe87 100644
+--- a/skills/plan-orchestration/SKILL.md
++++ b/skills/plan-orchestration/SKILL.md
+@@ -286,7 +286,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
+ ## Usage
+ 
+ - The landing report states each agent's tokens, tool uses and time, from its completion notice.
+-- The closing report holds the cost script's output, as the `plan` skill's Steps 2 says.
++- The closing report holds the cost script's output, or the sentence that the plan started no agent, as the `plan` skill's Steps 2 says.
+ - A person runs the cost script by hand on any ledger folder, open or archived, as `python3 <this skill's folder>/templates/plan_cost.py <ledger folder> [<transcript root>]`.
+ - The script finds the response bodies in the folder `OTEL_LOG_RAW_API_BODIES` names, from its environment or else from the `env` key of Claude Code's settings files, as its head comment says. With no folder, it prices from the transcripts and marks every cost as a lower bound.
+ 
+diff --git a/skills/plan/SKILL.md b/skills/plan/SKILL.md
+index f6359cc..3ca7c7d 100644
+--- a/skills/plan/SKILL.md
++++ b/skills/plan/SKILL.md
+@@ -83,10 +83,12 @@ metadata:
+    - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again, at most twice, before the draft is shown.
+    - A check that could still pass after the second redraft is kept as drafted, and its answer and reason go to the user at Steps 3.
+    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
+-     - Before the folder moves, the closing step runs the `plan-orchestration` skill's `templates/plan_cost.py` on the ledger folder.
+-     - The closing step writes the script's output to `agents/reviews/closing.md`, the closing report.
++     - The closing step skips the cost script only when `plan.md` has its `## Agents` heading with no bullet under it, up to the next `## ` heading, and the ledger has no `agents/agent-roles.md`.
++     - A closing step that skips the script writes the closing report, `agents/reviews/closing.md`, with the sentence "The plan started no agent: `plan.md`'s Agents section holds no agent bullet and the ledger has no `agents/agent-roles.md`, so the closing step did not run the cost script.", and then the ledger folder moves.
++     - In every other case, before the folder moves, the closing step runs the `plan-orchestration` skill's `templates/plan_cost.py` on the ledger folder: a `plan.md` with no `## Agents` heading (`/plan` always writes the heading) and an `agents/agent-roles.md` that exists, read or not, both go to the script, so the closing step and the script never disagree.
++     - A closing step that runs the script writes the script's output to `agents/reviews/closing.md`, the closing report.
+      - A non-zero exit of the script that no fix within the plan covers is the stop "A red check" of `plan-orchestration`, and the stop message holds the script's `error:` lines. A model the table lacks is covered by a row copied into the table from the pricing page, committed with the closing.
+-     - The ledger folder moves only when the script exits 0.
++     - When the closing step has run the script, the ledger folder moves only when the script exits 0.
+    - `/plan` writes the closing step itself, at the end of the drafted list.
+    - The step is done when the draft holds the goal, the gate, the answers of "## Gate", the Rulings, the Agents section and the step list with the closing step last, and when the draft, read back, holds every agent bullet of the rulings file once, in its Agents section.
+ 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).
+diff --git a/skills/plan/templates/plan.md b/skills/plan/templates/plan.md
+index cadc305..c386708 100644
+--- a/skills/plan/templates/plan.md
++++ b/skills/plan/templates/plan.md
+@@ -18,7 +18,7 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step of work
+ - <1> <what the step delivers, in one line; the check that proves it> (<n> commit) (approved)
+ - <2> <what the step delivers, in one line; the check that proves it> (<n> commit; orchestrator, no agent) (approved)
+ - <2a> <a step a ruling added, in one line; the check that proves it> (<n> commit) (ruling <L>)
+-- <last> the closing: the cost script's output written as the closing report, the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
++- <last> the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+ 
+ ## Could run in parallel
+ 
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 130fb1c..af12287 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -19,8 +19,8 @@
+ - **change point**: a behaviour of a Claude Code session worth changing, written in a sessions report under "Change" with its places and a proposal: the sentence to add to a rule, skill or brief, where a written rule should be read, or a sharper sentence for a written rule or the text that should have prevented the behaviour. Stated in: `session-retro`, Steps 6 and 9.
+ - **choices file**: `<ledger_root>/choices.md`, one heading per choice taken under self-rule, grouped by roadmap entry; a choice stays there until the user reviews it or a ruling of the user replaces it. Stated in: `plan-orchestration`, `references/self-rule.md`, "The choices file" and "The review of a choice".
+ - **Closed**: the heading of a report that holds each finding's disposition. In a refuter report that is whether the finding was closed in a round, fixed at landing or raised as an open item. In a brief-check report it is the change to the brief that closed the finding, and the heading also holds each dictated line added to the brief after the check, with whether it holds. Stated in: `spec`, "Steps / The brief check"; `refute`, "Finding dispositions". The closed items of the state file are also the log of what was raised and how it ended, which no report carries. Stated in: `plan-orchestration`, "Reports".
+-- **closing report**: the file `agents/reviews/closing.md` the closing step writes, holding the cost script's output for the plan. Stated in: `plan`, Steps 2; `plan-orchestration`, "Usage".
+-- **closing step**: the last step of every plan, which `/plan` writes itself: the closing report written before the folder moves, the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. A non-zero exit of the cost script holds the folder where it is. Stated in: `plan`, Steps 2.
++- **closing report**: the file `agents/reviews/closing.md` the closing step writes, holding the cost script's output, or, when the closing step did not run the script because the plan started no agent, the sentence that says so. Stated in: `plan`, Steps 2; `plan-orchestration`, "Usage".
++- **closing step**: the last step of every plan, which `/plan` writes itself: the closing report written before the folder moves, the roadmap entry ticked with the gate's output through `/roadmap done`, and the ledger folder moved to `<archive_root>/`. A non-zero exit of the cost script holds the folder where it is, and the closing step skips the script only for a plan that started no agent. Stated in: `plan`, Steps 2.
+ - **commit rule**: whether the repository allows the skills to commit, the answer to `/repo-setup`'s question 5 or, for `/ordo-init` run alone, the user's answer at its approval stop or what a quoted ruling states on whether the skill may commit. Stated in: `repo-setup`, "The questions"; `ordo-init`, "What it reads" 3.
+ - **completion notice**: what the runner reports when an agent ends, its final message and its tokens, tool uses and time, which the dispatch entry records and the booking states. Stated in: `plan-orchestration`, Steps 6 and "Launching a builder"; `land`, Steps 9.
+ - **configuration block**: the first `yaml` block of the state file, filled by `/plan` from `.agents/plan.yaml` with every key written out: the verify list, the rules file, the standards, the worktree root and paths, the executor, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry` and `repair_reviewer`. Stated in: `plan`, Steps 4.
