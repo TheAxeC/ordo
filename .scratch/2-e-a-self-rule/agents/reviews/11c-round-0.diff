@@ -1,0 +1,198 @@
+diff --git a/README.md b/README.md
+index 9c2c7f7..db0da0a 100644
+--- a/README.md
++++ b/README.md
+@@ -146,7 +146,7 @@ Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
+ 
+ A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of its `orchestrator-state.md`. It runs through `sh <the land skill's folder>/templates/checks.sh <state file>`, from the root of the repository it checks.
+ 
+-Each command runs through `bash -o pipefail -c` and passes when it exits 0. The run stops at the first command that fails. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
++Each command runs through `bash -o pipefail -c` and passes when it exits 0. Every command runs, each failure is printed, and the run ends with the count of failures. Commands that depend on each other are written as one item joined with `&&`, so the later one runs only when the earlier one passes, since each item runs in its own `bash`. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
+ 
+ When a plan started an agent, its closing step runs the cost script, which prices the usage of each agent role. It takes each response's counts from the response body Claude Code keeps when `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>` are set in its settings. Where it kept no body, the script takes the counts from the agents' transcripts and marks the cost as a lower bound. The folder grows with every request and holds each request's prompt.
+ 
+diff --git a/docs/dev/building.md b/docs/dev/building.md
+index 4283871..9964b9d 100644
+--- a/docs/dev/building.md
++++ b/docs/dev/building.md
+@@ -18,13 +18,13 @@ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $A
+ 
+ A test that passes prints a last line starting with `PASS:` and exits 0; a failure prints a line starting with `FAIL:` and exits 1. The filter that keeps the summary line is `2>&1 | tail -1`.
+ 
+-`sh skills/land/templates/checks.sh <state file>`, the land skill's runner, runs a plan's verify list from the root of the checkout it checks and needs `python3` with PyYAML and `bash`. It runs each command in order through `bash -o pipefail -c`, prints `$ <command>` and the command's output, and stops at the first command that exits non-zero. A landing books the lines it prints. Its exit status:
++`sh skills/land/templates/checks.sh <state file>`, the land skill's runner, runs a plan's verify list from the root of the checkout it checks and needs `python3` with PyYAML and `bash`. It runs each command in order through `bash -o pipefail -c`, prints `$ <command>` and the command's output, and runs every command, whatever the exit of the one before. A landing books the lines it prints. Its exit status:
+ 
+ - `0`: every command exited 0, and it printed `checks: <n> commands passed`.
+-- `1`: a command exited non-zero, and it printed `checks: failed with exit <status>: <command>`.
++- `1`: one or more commands exited non-zero, and it printed `checks: failed with exit <status>: <command>` after each one's output and `checks: <k> of <n> commands failed` at the end.
+ - `2`: it refused before running anything: no argument or more than one, `python3`, PyYAML or `bash` missing, a state file it cannot read, no usable `yaml` block, or a `verify:` list that is missing, empty or holds an item that is not a command.
+ 
+-Each command in a verify list exits non-zero when it fails, as written. A command with long output uses its tool's quiet mode or a filter under `pipefail`, as the `2>&1 | tail -1` filter above runs, so a test that fails makes its pipeline fail.
++Each command in a verify list exits non-zero when it fails, as written. Commands that depend on each other are written as one item joined with `&&`, so the later one runs only when the earlier one passes, since each item runs in its own `bash`. A command with long output uses its tool's quiet mode or a filter under `pipefail`, as the `2>&1 | tail -1` filter above runs, so a test that fails makes its pipeline fail.
+ 
+ The last command is the ASCII check over every tracked file and every untracked file git does not ignore: it prints each line holding a character outside printable ASCII (an em or en dash, a curly quote, an arrow, an emoji, a tab) with its file and line number, and exits 0 only when it prints nothing. A file that is not valid UTF-8 makes it exit non-zero: perl either stops with its `Malformed UTF-8 character (fatal)` error or prints the line. The green checkmark is allowed in Markdown files, where the plan ledgers use it as their status marker, and nowhere else.
+ 
+diff --git a/skills/land/SKILL.md b/skills/land/SKILL.md
+index a36da21..fb0496d 100644
+--- a/skills/land/SKILL.md
++++ b/skills/land/SKILL.md
+@@ -60,7 +60,7 @@ metadata:
+    - A range with no commit, as when the step's only output is a ledger file, has nothing to copy, and the landing goes on to Steps 6.
+ 5. Restore to main's copy, before anything else, a ledger file the cherry-pick deleted or rewrote; the ledger is written only on main.
+    - `templates/land.sh` leaves the ledger root out of the worktree's add, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches main; a ledger file that a commit of the range holds still does.
+-6. Run the verification commands of the configuration block on main, in order, each through its filter, stopping at the first failure.
++6. Run the verification commands of the configuration block on main, in order, each through its filter.
+    - `templates/land.sh` runs the step's verify list through `templates/checks.sh <state file>` from the root of the checkout it checks (main here).
+    - The lines `checks.sh` prints are what the booking quotes.
+    - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here.
+@@ -153,7 +153,9 @@ metadata:
+ - It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict, and 64 when it refuses its arguments or its configuration, or with git's own status when a git step fails.
+ - `templates/checks.sh <state file>`, run from the root of the checkout it checks, runs the `verify:` list of the state file's first `yaml` block in order, each command through `bash -o pipefail -c`.
+   - Before each command it prints `$ <command>`, then the command's output.
+-  - At the first command that exits non-zero it prints `checks: failed with exit <status>: <command>` and exits 1, and the commands after it do not run.
++  - Every command runs, whatever the exit of the one before.
++  - A command that exits non-zero is followed by `checks: failed with exit <status>: <command>`, after its output.
++  - After the last command, when one or more failed, it prints `checks: <k> of <n> commands failed` and exits 1.
+   - When every command exits 0 it prints `checks: <n> commands passed` and exits 0.
+   - A list it cannot read is refused with exit 2 before anything runs, and never passes.
+ - `templates/land.test.sh` proves `land.sh` on scratch repositories: a conflict exits 2 and leaves main as it was, a ledger file left uncommitted in the worktree never reaches main, a failing check fails the landing, and a clean landing stages the step on main.
+diff --git a/skills/land/templates/checks.sh b/skills/land/templates/checks.sh
+index 3a36695..371fa42 100644
+--- a/skills/land/templates/checks.sh
++++ b/skills/land/templates/checks.sh
+@@ -6,16 +6,19 @@
+ # info word is yaml or yml (any case). Needs python3 with PyYAML, and bash.
+ #
+ # Output: each command runs in order through bash -o pipefail -c '<command>', from the directory
+-# checks.sh was started in, with standard input from /dev/null. Before each command it prints
+-# "$ <command>" on a line of its own, then the command's standard output and error together. At
+-# the first command that exits non-zero it prints "checks: failed with exit <status>: <command>"
+-# (a command ended by signal n has status 128+n), and the commands after it do not run. When every
+-# command exits 0 it prints "checks: <n> commands passed". A refusal is printed on standard error
+-# as a line starting "checks: ".
++# checks.sh was started in, with standard input from /dev/null. Every command runs, whatever the
++# exit status of the one before. Before each command it prints "$ <command>" on a line of its own,
++# then the command's standard output and error together. A command that exits non-zero is followed
++# by "checks: failed with exit <status>: <command>" (a command ended by signal n has status
++# 128+n); when its output does not end with a newline, that line continues the last line of the
++# output. After the last command it prints "checks: <n> commands passed" when none failed, and
++# "checks: <k> of <n> commands failed" when k did. A refusal is printed on standard error as a
++# line starting "checks: ". A signal that ends checks.sh itself ends the run with no count line,
++# and its exit status is 128 plus the signal's number.
+ #
+ # Exit status:
+ #   0  every command exited 0.
+-#   1  a command exited non-zero.
++#   1  one or more commands exited non-zero.
+ #   2  refused before running anything: no argument or more than one; python3, its yaml module or
+ #      bash missing; a state file that is missing, unreadable or not UTF-8; no yaml block, or a
+ #      first yaml block that is not closed or not valid YAML; no verify: key, a verify: that is not
+@@ -102,6 +105,7 @@ for number, command in enumerate(commands, 1):
+     if "\0" in command:
+         refuse(where + " holds a NUL character")
+ 
++failures = 0
+ for command in commands:
+     sys.stdout.write("$ " + command + "\n")
+     sys.stdout.flush()
+@@ -111,8 +115,12 @@ for command in commands:
+     if code != 0:
+         status = 128 - code if code < 0 else code
+         sys.stdout.write("checks: failed with exit " + str(status) + ": " + command + "\n")
+-        sys.exit(1)
++        failures += 1
+ 
++if failures:
++    sys.stdout.write("checks: " + str(failures) + " of " + str(len(commands))
++                     + " commands failed\n")
++    sys.exit(1)
+ sys.stdout.write("checks: " + str(len(commands)) + " commands passed\n")
+ '
+ 
+diff --git a/skills/land/templates/checks.test.sh b/skills/land/templates/checks.test.sh
+index 10fd0ab..c53287f 100644
+--- a/skills/land/templates/checks.test.sh
++++ b/skills/land/templates/checks.test.sh
+@@ -1,9 +1,14 @@
+ #!/bin/sh
+-# Exercise checks.sh on scratch state files: a list whose second of three commands fails exits 1,
+-# names that command and does not run the third, the failing command being a pipeline into tail
+-# whose left side fails, so the case holds only under pipefail; a list of passing commands exits 0 and prints
+-# the count; a state file with no yaml block is refused with exit 2. Each case runs checks.sh from
+-# this file's own folder, from a scratch directory under $TMPDIR.
++# Exercise checks.sh on scratch state files. Each case runs checks.sh from this file's own folder,
++# from a scratch directory under $TMPDIR. The cases prove:
++#   - a list of three commands whose first two fail, the first being a pipeline into tail whose
++#     left side fails (so it fails only under pipefail), exits 1, runs the third command, and
++#     prints each command, its output and its failure line, then the count of failures, in that
++#     order;
++#   - a command ended by a signal is a failure with status 128 plus the signal's number, and the
++#     command after it runs;
++#   - a list of passing commands exits 0 and prints the count;
++#   - a state file with no yaml block is refused with exit 2 before anything runs.
+ 
+ set -u
+ 
+@@ -44,19 +49,55 @@ run_checks() {
+     run_status=$?
+ }
+ 
+-# A failing command stops the run with exit 1 and its line; the command after it does not run.
+-# The failing command is a pipeline whose left side fails and whose right side succeeds, in the
+-# form the verify list uses, so it fails only under pipefail.
++# Fails unless the text $1 equals the text of the file $2, line for line; $3 names the case.
++assert_output_equals() {
++    printf '%s\n' "$1" >"$test_root/actual.txt"
++    diff "$2" "$test_root/actual.txt" >"$test_root/diff.txt" || {
++        cat "$test_root/diff.txt" >&2
++        fail "$3: the output differs from the expected text"
++    }
++}
++
++# A failing command does not stop the run: the commands after it run, each failure prints its line
++# after the command's output, and the run ends with the count of failures and exit 1. The first
++# command is a pipeline whose left side fails and whose right side succeeds, in the form the verify
++# list uses, so it fails only under pipefail. The last command passes, so an exit status taken
++# from the last command would be 0.
+ write_state "$test_root/failing.md" <<'EOF'
+-echo first ran
+ sh -c 'echo FAIL: x; exit 3' 2>&1 | tail -1
++exit 5
+ touch third-ran
+ EOF
++cat >"$test_root/failing.expected" <<'EOF'
++$ sh -c 'echo FAIL: x; exit 3' 2>&1 | tail -1
++FAIL: x
++checks: failed with exit 3: sh -c 'echo FAIL: x; exit 3' 2>&1 | tail -1
++$ exit 5
++checks: failed with exit 5: exit 5
++$ touch third-ran
++checks: 2 of 3 commands failed
++EOF
+ run_checks "$test_root/failing.md"
+ [ "$run_status" -eq 1 ] || { printf '%s\n' "$run_output" >&2; fail "failing list exited $run_status, expected 1"; }
+-assert_contains "$run_output" "checks: failed with exit 3: sh -c 'echo FAIL: x; exit 3' 2>&1 | tail -1" "failing list"
+-assert_contains "$run_output" '$ echo first ran' "failing list echo"
+-[ ! -e "$test_root/third-ran" ] || fail "failing list ran the command after the failed one"
++[ -e "$test_root/third-ran" ] || fail "failing list did not run the command after the failed ones"
++assert_output_equals "$run_output" "$test_root/failing.expected" "failing list"
++
++# A command ended by a signal is a failure with status 128 plus the signal's number, and the
++# command after it runs.
++write_state "$test_root/signal.md" <<'EOF'
++kill -TERM $$
++echo after
++EOF
++cat >"$test_root/signal.expected" <<'EOF'
++$ kill -TERM $$
++checks: failed with exit 143: kill -TERM $$
++$ echo after
++after
++checks: 1 of 2 commands failed
++EOF
++run_checks "$test_root/signal.md"
++[ "$run_status" -eq 1 ] || { printf '%s\n' "$run_output" >&2; fail "signal list exited $run_status, expected 1"; }
++assert_output_equals "$run_output" "$test_root/signal.expected" "signal list"
+ 
+ # A list of passing commands exits 0 and prints the count.
+ write_state "$test_root/passing.md" <<'EOF'
