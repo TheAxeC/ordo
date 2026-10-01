@@ -74,17 +74,13 @@ dispatch:
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
 
-- Open item C (2026-10-01): the roadmap diff for Open item A's ruling C. Stop "The roadmap diff" of an approval: the goal of entry 2.E.A says where the cost script takes its counts.
-  - The change, `docs/roadmap.md` line 24, one sentence of the Goal:
-    - Now: "A script computes the priced usage of each agent role of a plan from the agents' transcripts."
-    - After: "A script computes the priced usage of each agent role of a plan from the response bodies the runner keeps, and from the agents' transcripts where it kept none, marking such a figure as a lower bound."
-  - The Gate stays: "the cost script prints each role's priced usage for plan 2.E and for plan 2.E.A and passes its test". Plan 2.E and steps 1 to 4 of 2.E.A ran before the setting, so their figures are lower bounds.
-  - Options: (a) approve the diff; (b) approve it with your wording. Recommendation: (a), since it states the ruled source in the goal's own words. Lazy option: none.
+- none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-01: Open item A, where the cost script takes each response's output count: ruled C by the user. Each response's counts come from its response body under `OTEL_LOG_RAW_API_BODIES` where the body exists, and from the transcript otherwise, that agent's row marked as a lower bound; ADR 0009; the user turns the setting on; the goal's sentence changes through a roadmap diff, Open item C.
 - 2026-10-01: Open item B, self-rule against the written rules and the reach of kind 3: ruled (a) and (a) by the user. An exception sentence joins the shared-rules template, and the user adds it to `~/.claude/CLAUDE.md`; kind 3 is read narrow.
+- 2026-10-01: Open item C, the roadmap diff of Open item A's ruling: ruled (a) by the user. `docs/roadmap.md` entry 2.E.A's Goal names the response bodies, and the transcripts as a lower bound; the Rulings line "Open item C".
 
 ## The standing demands (from Axel, in force)
 
@@ -110,4 +106,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after the fixes at landing printed `checks: 10 commands passed`.
 - Step 4 is built and refuted once (`agents/reviews/4-report.md`, `agents/reviews/4-refuter.md`); its builder is kept for repair round 1. Its run over a repair round is the first dispatched on `repair_reviewer` (claude:sonnet); its booking carries step 3's check ("Blocked, and by what").
 - Open items A and B ruled. Step 4's repair round 1 is sent (ruling A and the first review's findings); step 6 is prepared under ruling B and its builder launched.
-- Open on Axel's side: Open item C; the setting of ADR 0009 in the runner's settings; the sentence of ruling B in `~/.claude/CLAUDE.md`.
+- Open item C ruled (a) and the roadmap changed. The setting of ADR 0009 is in `~/.claude/settings.json`, from the next session on. Open on Axel's side: the sentence of ruling B in `~/.claude/CLAUDE.md`.
