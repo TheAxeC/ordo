@@ -54,6 +54,8 @@ dispatch:
   landing: not-started
   round: 0
   session_id: ae09983cdb0694a33 (claude-sonnet-5-5)
+  builder_usage: 179551 tokens, 24 tool uses, 3 min 33 s (the first run of the cases, handed back)
+  cases: .scratch/2-e-a-self-rule/agents/briefs/12-cases.md (Open item N (a), C4)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -79,6 +81,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-01: Open item M, the closing of a plan whose ledger names no agent: closed under self-rule, C3.
 - 2026-10-01: Open item I, how step 9's run reaches the skill text of steps 6 to 8: ruled (a) by the user. Main's head is tagged `v2.8.0-rc.1` and pinned before step 9's run, and the pin restored to v2.7.0 after it.
 - 2026-10-01: Open item L, when and which part of a skill's version is raised: ruled (a) by the user. Step 12 writes the rule into `docs/dev/skill-layout.md` and raises the eleven versions by it.
+- 2026-10-01: Open item N, a closing that worked before is refused after this plan: closed under self-rule, C4.
 
 ## The standing demands (from Axel, in force)
 
