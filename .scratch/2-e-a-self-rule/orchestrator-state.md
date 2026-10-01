@@ -52,25 +52,16 @@ dispatch:
   report: .scratch/2-e-a-self-rule/agents/reviews/12b-report.md
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/12b-brief-check.md (aec3edbb8b9d18992, claude-opus-5-5 (ordo-high), 163475 tokens, 46 tool uses, 7 min 27 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a8ad5a883f593d085 (claude-sonnet-5-5)
+  builder_usage: 125161 tokens, 34 tool uses, 9 min 12 s (the build)
+  reviewer_report: .scratch/2-e-a-self-rule/agents/reviews/12b-refuter.md (af6d65d9212d1b716, claude-opus-5-5, 164736 tokens, 41 tool uses, 10 min 7 s)
+  round_1: sent from the tree in agents/reviews/12b-round-0.diff (git diff d8bf470 at the first report); .scratch/2-e-a-self-rule/agents/briefs/12b-round-1.md
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
-
-- Open item Q, step 12's check "read by Axel" (kind 5, the user's reading of a page). Step 12 landed. Its check is your reading of what it changed:
-  - the five bullets of the version rule in `docs/dev/skill-layout.md`, Frontmatter;
-  - the eleven versions;
-  - the closing step of `skills/plan/SKILL.md` Steps 2;
-  - the rewordings of the eleven skills, listed with their place before and after in `agents/reviews/12-report.md`, "Appendix: every change with its place, before and after".
-
-  The options:
-  - (a) Read and agree. Pros: the step's check is met. Cons: none.
-  - (b) Read and rule a change. Pros: a wording you disagree with is changed before the tag `v2.8.0-rc.1`. Cons: a further step.
-
-  Recommendation: (a) once read. Both reviewers over the round found each ruling met, and the eight fixes at landing are named in `agents/reviews/12-refuter.md`, "Closed". No option is the lazy one, since the reading is yours.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -93,6 +84,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-01: Open item N, a closing that worked before is refused after this plan: closed under self-rule, C4.
 - 2026-10-01: Open item O, how a quoted ruling ending "(self-rule)" names a finding of a diagnosis record or a landing report: ruled (a) by the user. Step 12b names such a finding by its report's path and heading, the number only where the report numbers its findings.
 - 2026-10-01: Open item P, where the reviewer trial runs: ruled (c) by the user. Step 12's round is reviewed by Opus and Sonnet blind, compared and booked; plan 2.F's trial runs on its step 2a.
+- 2026-10-01: Open item Q, step 12's check "read by Axel": ruled (a) by the user, read and agreed.
 
 ## The standing demands (from Axel, in force)
 
@@ -114,6 +106,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b, 11c and 12 landed; their bookings are in `plan.md`, step 12's landing report at `agents/reviews/12-landing.md`. Steps 10 and 11 read by the user (Open items J and K); step 12's reading is Open item Q. In flight: step 12b under ruling O. Next: step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c, 12 and 12b. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b, 11c and 12 landed; their bookings are in `plan.md`, step 12's landing report at `agents/reviews/12-landing.md`. Steps 10 and 11 read by the user (Open items J and K); step 12 read by the user (Open item Q). In flight: step 12b under ruling O, in repair round 1. Next: step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c, 12 and 12b. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 12's fixes at landing printed `checks: 11 commands passed`, exit 0.
-- Open items A to I and L to P settled, Q open; C1, C2 and C3 agreed by the user; `.scratch/choices.md` holds C4 (Open item N) for the user's review. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
+- Open items A to I and L to Q settled; C1, C2 and C3 agreed by the user; `.scratch/choices.md` holds C4 (Open item N) for the user's review. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
