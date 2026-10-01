@@ -66,9 +66,11 @@ dispatch:
   report: .scratch/2-e-a-self-rule/agents/reviews/8-report.md
   brief_check: .scratch/2-e-a-self-rule/agents/reviews/8-brief-check.md (ad359a1df2ce3b5fe, claude-opus-5-5 (ordo-high), 186342 tokens, 49 tool uses, 8 min 23 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a8e821b5b3f0e2756 (claude-sonnet-5-5)
   builder_usage: 136333 tokens, 25 tool uses, 4 min 4 s
+  reviewer_report:
+  - .scratch/2-e-a-self-rule/agents/reviews/8-refuter.md (aa9c2761143a81412, claude-opus-5-5 (ordo-high), 179218 tokens, 54 tool uses, 9 min 3 s)
   shared_paths: skills/repo-setup/templates/plan-terms.md, docs/glossary.md and skills/plan-orchestration/SKILL.md, each shared with step 7; the merge is simple, since each step changes other lines of each file (step 7: the terms loop to night rule and quoted ruling, and plan-orchestration's description, intro, Quick start, "What it reads", Steps 10, "Self-rule" and Rules; step 8: the terms change point to Closed, open item, ruling to sequence and stop, and plan-orchestration Steps 9 line 123); step 8 lands after step 7, since its self-rule term names --self-rule.
 ```
 
