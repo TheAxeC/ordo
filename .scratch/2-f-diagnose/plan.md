@@ -87,6 +87,10 @@ Agents in the roles the cost script prices:
 - 3: Axel's review of the run (open item "Step 3 reading").
 - 4: Axel's tick of step 3, then his call on the blind comparison.
 
+### Step 0 of step 2a
+
+- The reviewer trial of the ruling "Reviewer trial" runs on this step, since step 1, the first reviewed step, ran Opus reviewers only (its booking under "Step 1, the `diagnose` skill"): two fresh reviewers, `ordo-high` on Opus and `ordo-high` on Sonnet 5.5, review the same diff, the orchestrator compares their findings, and the landing uses the Opus review. Ruled by the user as Open item P (c) of plan 2.E.A (`.scratch/2-e-a-self-rule/plan.md`, Rulings).
+
 ### Step 0 of step 3
 
 - Step 3, who runs `/diagnose` (2026-09-30, at preparing step 3): the step runs `/diagnose` on the `utils/pin.sh` both-folders defect "in a fresh session", marked "orchestrator, no agent". The orchestrator cannot be that session, since it knows the cause (2.E step 3's `same_folder`, db9bbec), and run by hand the skill waits for your reply to its hypotheses (ruling "Step list" D2). `utils/pin.sh` also writes the stable folder and the skill links, which a scratch reproduction must redirect with `ORDO_STABLE`, `ORDO_SKILL_DIRS` and `CLAUDE_CONFIG_DIR`. Options: (a) you run `/diagnose` in a fresh Claude Code session on a scratch copy of the tree at db9bbec's parent, answering its hypotheses stop, and the orchestrator then books the run; pros: the run is the by-hand form the skill was built for, and nothing outside Ordo is at risk; cons: it waits for you. (b) A fresh Opus agent runs it overnight, told to go on at the hypotheses stop as under `plan-orchestration`; pros: done by morning; cons: the by-hand stop is skipped, and an agent free to probe `utils/pin.sh` can reach the real stable folder and skill links. Recommendation (a). The lazy option is (b), which tests a different form of the skill than the step asks.

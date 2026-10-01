@@ -84,6 +84,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-01: Open item L, when and which part of a skill's version is raised: ruled (a) by the user. Step 12 writes the rule into `docs/dev/skill-layout.md` and raises the eleven versions by it.
 - 2026-10-01: Open item N, a closing that worked before is refused after this plan: closed under self-rule, C4.
 - 2026-10-01: Open item O, how a quoted ruling ending "(self-rule)" names a finding of a diagnosis record or a landing report: ruled (a) by the user. Step 12b names such a finding by its report's path and heading, the number only where the report numbers its findings.
+- 2026-10-01: Open item P, where the reviewer trial runs: ruled (c) by the user. Step 12's round is reviewed by Opus and Sonnet blind, compared and booked; plan 2.F's trial runs on its step 2a.
 
 ## The standing demands (from Axel, in force)
 
@@ -107,4 +108,4 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b and 11c landed; their bookings are in `plan.md`, step 11c's landing report at `agents/reviews/11c-landing.md`. Steps 10 and 11 read by the user (Open items J and K). In flight: step 12 under rulings L and N, in repair round 1. Next: step 12b under ruling O, then step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c, 12 and 12b. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 11c's fixes at landing printed `checks: 11 commands passed`, exit 0.
-- Open items A to I and L to O settled; C1, C2 and C3 agreed by the user; `.scratch/choices.md` holds C4 (Open item N) for the user's review. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
+- Open items A to I and L to P settled; C1, C2 and C3 agreed by the user; `.scratch/choices.md` holds C4 (Open item N) for the user's review. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
