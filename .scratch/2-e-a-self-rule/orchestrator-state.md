@@ -36,7 +36,7 @@ design_bar: industry         # the default.
 design_references: []        # none.
 worker_effort: high          # the default.
 reviewer_effort: high        # the default.
-self_rule: off               # the default: every open item waits for the user; step 6b sets it on.
+self_rule: on                # step 6b: the steps after step 6 run under self-rule (D9).
 next_entry: off              # the default: the orchestrator stops at the closing.
 repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over a repair round runs on Sonnet.
 ```
@@ -45,9 +45,9 @@ repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over
 dispatch: none
 ```
 
-## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
+## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
+A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
 
 None.
 
@@ -79,6 +79,6 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 6 landed; step 6's booking is in `plan.md` and its landing report at `agents/reviews/6-landing.md`. Next: step 6b, `self_rule: on` in this state block.
+- 2026-10-01. Steps 1 to 6 and 6b landed; step 6's booking and step 6b's are in `plan.md`, step 6's landing report at `agents/reviews/6-landing.md`. `self_rule: on` from step 7: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`. Next: step 7.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 6's fixes at landing printed `checks: 11 commands passed`, exit 0.
 - Open items A to E ruled. The setting of ADR 0009 is in `~/.claude/settings.json`, and the cost script reads it from there when its shell lacks the variable. The sentence of ruling B is in `~/.claude/CLAUDE.md` line 24.
