@@ -60,8 +60,6 @@ dispatch:
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
 
-- Open item J (2026-10-01): your reading of step 10's page, `.scratch/2-e-a-self-rule/agents/reviews/10-cost.md`, the priced usage of plans 2.E and 2.E.A and the brief checks that met dictated text. Kind 5; it blocks no step. Reply `Read` when it is as it should be, or name what is wrong.
-- Open item K (2026-10-01): your reading of step 11's page, `.scratch/2-e-a-self-rule/agents/reviews/11-self-rule.md`, how this plan's open items ended under self-rule. Kind 5; it blocks no step. Reply `Read` when it is as it should be, or name what is wrong.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -75,6 +73,9 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-01: Open item H, whether the shared rule on self-rule covers `/grill` and `/plan` run with `--self-rule`: ruled (a) by the user. The template sentence joins step 8; the user puts the same words in `~/.claude/CLAUDE.md`.
 - 2026-10-01: C1, how `/grill` and `/plan` know that the loop runs them in next-entry mode: agreed by the user.
 - 2026-10-01: C2, how a quoted ruling ending "(self-rule)" names the finding whose work `/roadmap add` may write: agreed by the user.
+- 2026-10-01: Open item J, the reading of step 10's page `agents/reviews/10-cost.md`: read by the user.
+- 2026-10-01: Open item K, the reading of step 11's page `agents/reviews/11-self-rule.md`: read by the user.
+- 2026-10-01: C3, the closing of a plan whose ledger names no agent: agreed by the user.
 - 2026-10-01: Open item M, the closing of a plan whose ledger names no agent: closed under self-rule, C3.
 - 2026-10-01: Open item I, how step 9's run reaches the skill text of steps 6 to 8: ruled (a) by the user. Main's head is tagged `v2.8.0-rc.1` and pinned before step 9's run, and the pin restored to v2.7.0 after it.
 - 2026-10-01: Open item L, when and which part of a skill's version is raised: ruled (a) by the user. Step 12 writes the rule into `docs/dev/skill-layout.md` and raises the eleven versions by it.
@@ -99,6 +100,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8, 6b, 10, 11 and 11b landed; their bookings are in `plan.md`, step 11b's landing report at `agents/reviews/11b-landing.md`. Steps 10 and 11 wait for the user's reading of their pages (Open items J and K). Next: step 11c under the ruling "checks.sh runs every command", then step 12 under ruling L, then step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c and 12. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-01. Steps 1 to 8, 6b, 10, 11 and 11b landed; their bookings are in `plan.md`, step 11b's landing report at `agents/reviews/11b-landing.md`. Steps 10 and 11 read by the user (Open items J and K). Next: step 11c under the ruling "checks.sh runs every command", then step 12 under ruling L, then step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c and 12. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 11b's fixes at landing printed `checks: 11 commands passed`, exit 0.
-- Open items A to I, L and M settled; C1 and C2 agreed by the user; C3 (Open item M) in `.scratch/choices.md` waits for the user's review. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence, at `skills/repo-setup/templates/shared-rules.md:20`, is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.
+- Open items A to I, L and M settled; C1, C2 and C3 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence, at `skills/repo-setup/templates/shared-rules.md:20`, is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.
