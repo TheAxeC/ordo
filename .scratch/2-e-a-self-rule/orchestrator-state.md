@@ -42,21 +42,7 @@ repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over
 ```
 
 ```yaml
-dispatch:
-- step: 11c
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2ea-11c
-  base: dcadca2
-  launched: 2026-10-01
-  report: .scratch/2-e-a-self-rule/agents/reviews/11c-report.md
-  brief_check: .scratch/2-e-a-self-rule/agents/reviews/11c-brief-check.md (aca524bdfd236c383, claude-opus-5-5 (ordo-high), 152401 tokens, 35 tool uses, 8 min 19 s)
-  landing: not-started
-  round: 1
-  session_id: a14b9e54394253a27 (claude-sonnet-5-5)
-  builder_usage: 105654 tokens, 30 tool uses, 9 min 6 s
-  reviewer_report: .scratch/2-e-a-self-rule/agents/reviews/11c-refuter.md (a433ccdc683f799ba, claude-opus-5-5 (ordo-high), 148458 tokens, 33 tool uses, 9 min 46 s)
-  round_1: sent from the tree in agents/reviews/11c-round-0.diff (git diff dcadca2 at the first report); .scratch/2-e-a-self-rule/agents/briefs/11c-round-1.md
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -103,6 +89,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8, 6b, 10, 11 and 11b landed; their bookings are in `plan.md`, step 11b's landing report at `agents/reviews/11b-landing.md`. Steps 10 and 11 read by the user (Open items J and K). Next: step 11c under the ruling "checks.sh runs every command", then step 12 under ruling L, then step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c and 12. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
-- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 11b's fixes at landing printed `checks: 11 commands passed`, exit 0.
+- 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b and 11c landed; their bookings are in `plan.md`, step 11c's landing report at `agents/reviews/11c-landing.md`. Steps 10 and 11 read by the user (Open items J and K). Next: step 12 under ruling L, then step 9 under ruling I, so the tag `v2.8.0-rc.1` and the pin carry steps 11b, 11c and 12. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 11c's fixes at landing printed `checks: 11 commands passed`, exit 0.
 - Open items A to I, L and M settled; C1, C2 and C3 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.

@@ -60,7 +60,7 @@ metadata:
    - A range with no commit, as when the step's only output is a ledger file, has nothing to copy, and the landing goes on to Steps 6.
 5. Restore to main's copy, before anything else, a ledger file the cherry-pick deleted or rewrote; the ledger is written only on main.
    - `templates/land.sh` leaves the ledger root out of the worktree's add, so a ledger file left uncommitted in the worktree (a builder's report, any other ledger copy) never reaches main; a ledger file that a commit of the range holds still does.
-6. Run the verification commands of the configuration block on main, in order, each through its filter, stopping at the first failure.
+6. Run the verification commands of the configuration block on main, in order, each through its filter.
    - `templates/land.sh` runs the step's verify list through `templates/checks.sh <state file>` from the root of the checkout it checks (main here).
    - The lines `checks.sh` prints are what the booking quotes.
    - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here.
@@ -153,8 +153,12 @@ metadata:
 - It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict, and 64 when it refuses its arguments or its configuration, or with git's own status when a git step fails.
 - `templates/checks.sh <state file>`, run from the root of the checkout it checks, runs the `verify:` list of the state file's first `yaml` block in order, each command through `bash -o pipefail -c`.
   - Before each command it prints `$ <command>`, then the command's output.
-  - At the first command that exits non-zero it prints `checks: failed with exit <status>: <command>` and exits 1, and the commands after it do not run.
-  - When every command exits 0 it prints `checks: <n> commands passed` and exits 0.
+  - Every command runs, whatever the exit of the one before.
+  - After the output of a command that exits non-zero, it prints `checks: failed with exit <status>: <command>`.
+  - After the last command, when one or more failed, it prints `checks: <k> of <n> commands failed`.
+  - When one or more commands failed, it exits 1.
+  - When every command exits 0, it prints `checks: <n> commands passed`.
+  - When every command exits 0, it exits 0.
   - A list it cannot read is refused with exit 2 before anything runs, and never passes.
 - `templates/land.test.sh` proves `land.sh` on scratch repositories: a conflict exits 2 and leaves main as it was, a ledger file left uncommitted in the worktree never reaches main, a failing check fails the landing, and a clean landing stages the step on main.
 - `templates/checks.test.sh` proves `templates/checks.sh` on scratch state files.

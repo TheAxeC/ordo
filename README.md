@@ -146,7 +146,9 @@ Git must ignore `worktree_root` and must not ignore `.agents/plan.yaml`.
 
 A plan's verify list is the `verify:` key of the first `yaml` or `yml` block of its `orchestrator-state.md`. It runs through `sh <the land skill's folder>/templates/checks.sh <state file>`, from the root of the repository it checks.
 
-Each command runs through `bash -o pipefail -c` and passes when it exits 0. The run stops at the first command that fails. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
+Each command runs through `bash -o pipefail -c` and passes when it exits 0. Every command runs; each failure is printed after its command's output, and a run with a failure ends with the count of failures.
+
+Commands that depend on each other are written as one item joined with `&&`, so the later one runs only when the earlier one passes. Each command in the list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`. The head comment of `skills/land/templates/checks.sh` states what it prints and its exit statuses.
 
 When a plan started an agent, its closing step runs the cost script, which prices the usage of each agent role. It takes each response's counts from the response body Claude Code keeps when `CLAUDE_CODE_ENABLE_TELEMETRY=1` and `OTEL_LOG_RAW_API_BODIES=file:<folder>` are set in its settings. Where it kept no body, the script takes the counts from the agents' transcripts and marks the cost as a lower bound. The folder grows with every request and holds each request's prompt.
 

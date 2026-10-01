@@ -39,7 +39,7 @@ one plan run with `self_rule: on`, whose every open item is either left open und
 - ✅ 10 The cost figures: the script prints plan 2.E and plan 2.E.A, 2.E.A's runs over a repair round on `repair_reviewer`'s model, and the brief checks that met dictated text listed; check: read by Axel (orchestrator, no agent) (approved)
 - ✅ 11 The gate's `self_rule` run, this plan's open items after step 6b; check: at least one item closed into `choices.md` and one left open under a named kind, each read by Axel (orchestrator, no agent) (approved)
 - ✅ 11b The closing step of a plan whose ledger names no agent: `skills/plan/SKILL.md` Steps 2 runs the cost script only when the Agents section or `agents/agent-roles.md` holds an agent bullet, and with none the closing report says the plan started no agent and the folder moves; `templates/plan.md` and `plan-orchestration` "Usage" read with it; check: each changed text read in place, and `plan_cost.py` on a scratch ledger with no agent bullet still exits 1 with `error: the ledger names no agent` (1 commit) (ruling M)
-- 11c `skills/land/templates/checks.sh` runs every command of the verify list, prints each failure's line `checks: failed with exit <status>: <command>`, then `checks: <k> of <n> commands failed` and exits 1, its exit statuses and its line on a clean run unchanged; commands that depend on each other are written as one item joined with `&&`; `checks.test.sh`'s failing case reversed (two failing commands of three, the third run, both failure lines and the count printed), and the head comments of both files, `skills/land/SKILL.md` Steps 6 and "The landing script", `README.md`'s verify-list paragraph and `docs/dev/building.md`'s runner paragraph read with it; check: the reversed case of `checks.test.sh` fails on the unchanged `checks.sh` and passes after the change (1 commit) (ruling checks.sh runs every command)
+- ✅ 11c `skills/land/templates/checks.sh` runs every command of the verify list, prints each failure's line `checks: failed with exit <status>: <command>`, then `checks: <k> of <n> commands failed` and exits 1, its exit statuses and its line on a clean run unchanged; commands that depend on each other are written as one item joined with `&&`; `checks.test.sh`'s failing case reversed (two failing commands of three, the third run, both failure lines and the count printed), and the head comments of both files, `skills/land/SKILL.md` Steps 6 and "The landing script", `README.md`'s verify-list paragraph and `docs/dev/building.md`'s runner paragraph read with it; check: the reversed case of `checks.test.sh` fails on the unchanged `checks.sh` and passes after the change (1 commit) (ruling checks.sh runs every command)
 - 12 The changed skills read against `docs/dev/skill-layout.md`, the rule of Open item L (a) on when and which part of a version is raised written into its Frontmatter, and each changed skill's `version` raised by it; check: read by Axel (1 commit) (approved) (ruling L)
 - 13 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.E.A`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
@@ -140,6 +140,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a3c9ead7c223bb0bb: builder of step 11b, claude-sonnet-5-5
 - ae0429a05481f2c42: reviewer of step 11b, claude-opus-5-5
 - abb9f0a46653f8ea9: reviewer of step 11b over round 1, claude-sonnet-5-5
+- aca524bdfd236c383: brief check of step 11c, claude-opus-5-5
+- a14b9e54394253a27: builder of step 11c, claude-sonnet-5-5
+- a433ccdc683f799ba: reviewer of step 11c, claude-opus-5-5
+- afb38efb60769c41b: reviewer of step 11c over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
@@ -284,6 +288,19 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - A/B: none (`bench: []`). Look: none (`look:` empty).
 - Usage: brief check a4833282be61ec94d, claude-opus-5-5, 136896 tokens, 35 tool uses, 5 min 13 s; builder a3c9ead7c223bb0bb, claude-sonnet-5-5, 109507 tokens, 21 tool uses, 4 min 39 s (the build) and 126046 tokens, 8 tool uses, 2 min 47 s (round 1); reviewer ae0429a05481f2c42, claude-opus-5-5, 178338 tokens, 35 tool uses, 7 min 28 s; reviewer over round 1 abb9f0a46653f8ea9, claude-sonnet-5-5, 131465 tokens, 27 tool uses, 5 min 35 s.
 - The builder's first report did not pass its bar: the first review found two findings (Spec 1, Standards 1) and a misread sentence in the brief's own README text.
+
+### Step 11c, `checks.sh` runs every command (landed 2026-10-01)
+
+- Landed: `skills/land/templates/checks.sh` runs every command of the verify list, prints each failure's line after the command's output, and ends a run with a failure with `checks: <k> of <n> commands failed` and exit 1; a clean run and the refusals are unchanged; its head comment states every output and exit status, the signal statuses among them. `checks.test.sh` holds two tests that compare the whole output line for line: two failures of three commands with the last one passing, and a command ended by a signal followed by one that runs. `skills/land/SKILL.md` Steps 6 and "The landing script", `README.md`'s verify-list paragraphs and `docs/dev/building.md`'s runner paragraph read with it, with the rule that dependent commands are joined with `&&`. 5 files, 85 insertions, 27 deletions before the fixes at landing.
+- Rulings on the way: "checks.sh runs every command", the user's; the round's rulings `agents/briefs/11c-round-1.md`.
+- Brief check (`agents/reviews/11c-brief-check.md`): six findings closed in the brief before the build, the tests made to catch an exit taken from the last command and failure lines out of order, cases 9 to 15 added.
+- Repair round 1 (`agents/briefs/11c-round-1.md`): five rulings on the wording (the signal exit status in the head comment, the reason given for `&&`, one rule per bullet in `land`, active voice, the README paragraph); the run over the round gives every item "holds" and every case "met". The first review built ten wrong versions of `checks.sh`, each caught by the tests.
+- Fixes at landing: 4. The head comment's Output paragraph split into four; `docs/dev/building.md`'s exit status list given the `128+n` entry; the `&&` sentence in `README.md` and `docs/dev/building.md` shortened to "Commands that depend on each other are written as one item joined with `&&`, so the later one runs only when the earlier one passes."; the builder's report's line references brought to main. Each named in `agents/reviews/11c-refuter.md` "Closed".
+- The step's check: `checks.test.sh` beside the base `checks.sh` prints `FAIL: failing list did not run the command after the failed ones`, and on main `PASS: checks.sh scratch tests`.
+- Verification on main, after the fixes at landing, run by the new `checks.sh`: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` printed the nine `PASS:` lines, `ok: the plan-terms block equals the template`, the ASCII check with no output and `checks: 11 commands passed`, exit 0.
+- A/B: none (`bench: []`). Look: none (`look:` empty).
+- Usage: brief check aca524bdfd236c383, claude-opus-5-5, 152401 tokens, 35 tool uses, 8 min 19 s; builder a14b9e54394253a27, claude-sonnet-5-5, 105654 tokens, 30 tool uses, 9 min 6 s (the build) and 138136 tokens, 11 tool uses, 3 min 48 s (round 1); reviewer a433ccdc683f799ba, claude-opus-5-5, 148458 tokens, 33 tool uses, 9 min 46 s; reviewer over round 1 afb38efb60769c41b, claude-sonnet-5-5, 157115 tokens, 31 tool uses, 9 min 58 s.
+- The builder's first report did not pass its bar: the first review found five findings, all in wording (Standards 1 to 5), none in the code or its tests.
 
 ### Step 11b, the closing of a plan with no agent: Step 0 (2026-10-01)
 

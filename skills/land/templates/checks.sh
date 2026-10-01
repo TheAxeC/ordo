@@ -6,21 +6,31 @@
 # info word is yaml or yml (any case). Needs python3 with PyYAML, and bash.
 #
 # Output: each command runs in order through bash -o pipefail -c '<command>', from the directory
-# checks.sh was started in, with standard input from /dev/null. Before each command it prints
-# "$ <command>" on a line of its own, then the command's standard output and error together. At
-# the first command that exits non-zero it prints "checks: failed with exit <status>: <command>"
-# (a command ended by signal n has status 128+n), and the commands after it do not run. When every
-# command exits 0 it prints "checks: <n> commands passed". A refusal is printed on standard error
-# as a line starting "checks: ".
+# checks.sh was started in, with standard input from /dev/null. Every command runs, whatever the
+# exit status of the one before. Before each command it prints "$ <command>" on a line of its own,
+# then the command's standard output and error together.
+#
+# After the output of a command that exits non-zero, it prints "checks: failed with exit
+# <status>: <command>". A command ended by signal n has status 128+n. When the command's output
+# does not end with a newline, that line continues the output's last line.
+#
+# After the last command it prints "checks: <n> commands passed" when none failed, and "checks:
+# <k> of <n> commands failed" when k did. A refusal is printed on standard error as a line
+# starting "checks: ".
+#
+# A signal that ends checks.sh itself ends the run with no count line, and its exit status is 128
+# plus the signal's number. An interrupt (SIGINT, as Ctrl-C sends) also prints Python's
+# KeyboardInterrupt traceback on standard error, and its exit status is 130.
 #
 # Exit status:
 #   0  every command exited 0.
-#   1  a command exited non-zero.
+#   1  one or more commands exited non-zero.
 #   2  refused before running anything: no argument or more than one; python3, its yaml module or
 #      bash missing; a state file that is missing, unreadable or not UTF-8; no yaml block, or a
 #      first yaml block that is not closed or not valid YAML; no verify: key, a verify: that is not
 #      a list, an empty list, or an item that is not a non-empty string or that holds a NUL
 #      character.
+#   128+n  a signal n ended checks.sh itself; no count line is printed.
 
 set -u
 
@@ -102,6 +112,7 @@ for number, command in enumerate(commands, 1):
     if "\0" in command:
         refuse(where + " holds a NUL character")
 
+failures = 0
 for command in commands:
     sys.stdout.write("$ " + command + "\n")
     sys.stdout.flush()
@@ -111,8 +122,12 @@ for command in commands:
     if code != 0:
         status = 128 - code if code < 0 else code
         sys.stdout.write("checks: failed with exit " + str(status) + ": " + command + "\n")
-        sys.exit(1)
+        failures += 1
 
+if failures:
+    sys.stdout.write("checks: " + str(failures) + " of " + str(len(commands))
+                     + " commands failed\n")
+    sys.exit(1)
 sys.stdout.write("checks: " + str(len(commands)) + " commands passed\n")
 '
 

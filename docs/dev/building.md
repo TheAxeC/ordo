@@ -18,13 +18,14 @@ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $A
 
 A test that passes prints a last line starting with `PASS:` and exits 0; a failure prints a line starting with `FAIL:` and exits 1. The filter that keeps the summary line is `2>&1 | tail -1`.
 
-`sh skills/land/templates/checks.sh <state file>`, the land skill's runner, runs a plan's verify list from the root of the checkout it checks and needs `python3` with PyYAML and `bash`. It runs each command in order through `bash -o pipefail -c`, prints `$ <command>` and the command's output, and stops at the first command that exits non-zero. A landing books the lines it prints. Its exit status:
+`sh skills/land/templates/checks.sh <state file>`, the land skill's runner, runs a plan's verify list from the root of the checkout it checks and needs `python3` with PyYAML and `bash`. It runs every command in order through `bash -o pipefail -c`, whatever the exit of the one before, and prints `$ <command>` and the command's output. A landing books the lines it prints. Its exit status:
 
 - `0`: every command exited 0, and it printed `checks: <n> commands passed`.
-- `1`: a command exited non-zero, and it printed `checks: failed with exit <status>: <command>`.
+- `1`: one or more commands exited non-zero, and it printed `checks: failed with exit <status>: <command>` after each one's output and `checks: <k> of <n> commands failed` at the end.
 - `2`: it refused before running anything: no argument or more than one, `python3`, PyYAML or `bash` missing, a state file it cannot read, no usable `yaml` block, or a `verify:` list that is missing, empty or holds an item that is not a command.
+- `128+n`: a signal n ended `checks.sh` itself, and it printed no count line. An interrupt (Ctrl-C) exits 130 and also prints Python's `KeyboardInterrupt` traceback on standard error.
 
-Each command in a verify list exits non-zero when it fails, as written. A command with long output uses its tool's quiet mode or a filter under `pipefail`, as the `2>&1 | tail -1` filter above runs, so a test that fails makes its pipeline fail.
+Each command in a verify list exits non-zero when it fails, as written. Commands that depend on each other are written as one item joined with `&&`, so the later one runs only when the earlier one passes. A command with long output uses its tool's quiet mode or a filter under `pipefail`, as the `2>&1 | tail -1` filter above runs, so a test that fails makes its pipeline fail.
 
 The last command is the ASCII check over every tracked file and every untracked file git does not ignore: it prints each line holding a character outside printable ASCII (an em or en dash, a curly quote, an arrow, an emoji, a tab) with its file and line number, and exits 0 only when it prints nothing. A file that is not valid UTF-8 makes it exit non-zero: perl either stops with its `Malformed UTF-8 character (fatal)` error or prints the line. The green checkmark is allowed in Markdown files, where the plan ledgers use it as their status marker, and nowhere else.
 
