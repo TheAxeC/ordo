@@ -180,7 +180,7 @@ metadata:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and only the user can decide what to do | The failure, booked in the open items as Steps 6 says | The user's ruling |
+| A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and only the user can decide what to do | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; the second failure of a step's landing always waits for the user |
 | A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves: main untouched; under `templates/land.sh`, the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1 | The lock removed once no git command uses it, then `/land` again; `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
@@ -210,8 +210,8 @@ metadata:
 
 - One step stays one implementation commit, which keeps each step traceable to its brief, its review and its booking.
 - A landed step found short of its brief, or wrong, is raised to the user as an open item, by `plan-orchestration`'s "Stops".
-  - The step that finishes it on top of what landed enters the plan only by the user's ruling.
-- A landed commit is reverted only on the user's ruling.
+  - The step that finishes it on top of what landed enters the plan only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books.
+- A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books when the step's authority is a bullet ending "(self-rule)" alone; the revert of a step the user approved, or one a ruling of the user added, is kind 3.
   - Its preparation commit stays.
   - Only a step so reverted is booked as reverted.
 - The state file is rewritten before the commit, so main's head always carries a state file that describes it.

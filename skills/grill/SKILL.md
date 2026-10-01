@@ -80,7 +80,7 @@ metadata:
       - The file does not exist, or is neither of those two files.
       - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
       - The name is a placeholder in angle brackets, such as `<L>`.
-      - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+      - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
     - With no ruling, the skill says which of these it found, and every stop stands.
 
 ## Steps
@@ -112,6 +112,7 @@ metadata:
        - A bullet of a set-aside plan replaces no ruling, except as "What it reads" 6 says.
      - A carried ruling that contradicts another carried ruling, or a bullet of the entry's Rulings or rulings file, neither naming the other as the one it replaces, is a rule clash ("Steps / An answer that contradicts").
        - A bullet that settles nothing ("What it reads" 6) makes no rule clash.
+       - A carried ruling dated after a bullet ending "(self-rule)" that it contradicts replaces that bullet, with no rule clash: the carried bullet written for it names the old bullet as the one it replaces, and the old bullet's ending is rewritten to "(self-rule, replaced by <the carried bullet's name>)." Its choice leaves the choices file, and the Closed items of its plan gain their line, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
      - Whether a bullet of the entry's Rulings or rulings file already settles a decision of a carried ruling is judged by reading, since the line a carried ruling stands on can move.
    - An entry that has a goal already has one decision for each part of its current goal: the part kept, changed or dropped.
      - Each such decision quotes its part as the entry writes it.
@@ -119,7 +120,7 @@ metadata:
      - An entry with a gate has one such decision for each part of its current gate, a part being each thing the gate checks.
      - An entry under "Not yet specified" has one such decision for each part of what must be known, in place of the gate.
      - Each such decision is a design decision ("The decision form").
-   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is marked settled, since the quoted ruling is the user's answer ("Rules"): it is made at the first write of Steps 8, and a draft that "Steps / Writing what settled" 3 shows as the decision is asked in the next round.
+   - A roadmap diff a quoted ruling states ("Steps / Writing what settled" 3) is marked settled, since the quoted ruling is its answer ("Rules"): it is made at the first write of Steps 8, and a draft that "Steps / Writing what settled" 3 shows as the decision is asked in the next round.
    - An interview started again, in a new session or after a compaction, draws the tree afresh from what is written: the Rulings or the rulings file, the carried rulings, the entry, the glossary and the ADRs.
    - A decision shown before and not answered is asked again under a new number.
    - After such a restart, an answer to a number shown before is not read (Steps 7), and the redrawn round opens by saying that answers to an earlier round are to be given again against this one.
@@ -212,6 +213,7 @@ metadata:
 ### An answer that contradicts
 
 1. An answer that contradicts an earlier ruling or an ADR in force is shown in the next round as a rule clash, a decision of its own.
+   - The user's answer that contradicts a bullet ending "(self-rule)" replaces it, with no rule clash: the new bullet names the old one as the one it replaces, and the old one's ending is rewritten to "(self-rule, replaced by D<n>)." Its choice leaves the choices file, and the Closed items of its plan gain their line, as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
    - The item is done when the clash is a decision of the next round with its options.
 2. The options of the clash are these.
    - Reopen the earlier ruling, by a new Rulings bullet that names the one it replaces.
@@ -328,8 +330,8 @@ The first three rows are stops, which wait on the user. The rest are refusals, w
 ## Rules
 
 - A fact is looked up, never asked.
-- A decision is the user's: nothing is written as settled without the user's answer.
-  - A quoted ruling that holds the entry's changed text is the user's answer to the roadmap diff.
+- A decision is the user's: nothing is written as settled without the user's answer, or a quoted ruling ending "(self-rule)" that settles it as the orchestrator's choice.
+  - A quoted ruling that holds the entry's changed text is the answer to the roadmap diff: the user's answer when its bullet ends "(the user)", and the orchestrator's choice when it ends "(self-rule)", which the user reviews in the choices file as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says.
   - A carried ruling is the user's answer to the decisions it settles.
 - Every answer is written in the turn it settles, before the next round is drawn up.
   - A carried ruling, and a roadmap diff a quoted ruling states, are written at the first write of Steps 8.

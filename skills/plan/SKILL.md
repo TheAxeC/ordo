@@ -53,7 +53,7 @@ metadata:
      - The file does not exist, or is neither of those two files.
      - No bullet of the Rulings section, or of the rulings file, has the name, or more than one has it.
      - The name is a placeholder in angle brackets, such as `<L>`.
-     - The bullet's first line does not end with "(the user)", with or without a full stop after it.
+     - The bullet's first line ends with neither "(the user)" nor "(self-rule)", each with or without a full stop after it.
    - With no ruling, the skill says which of these it found, and every stop stands.
 
 ## Steps
@@ -99,7 +99,8 @@ metadata:
      - Otherwise the draft is shown whole with what differs, what could pass without the goal and what is unsettled, and the stop stands.
      - The ruling's bullet and every line under it are copied into the Rulings section of a plan written under a quoted ruling, unless Steps 2 copied them from the rulings file.
    - Each step line of the approved list ends with `(approved)`, the authority "Rules" describes.
-     - A step list written under a quoted ruling is the approved list.
+     - A step list written under a quoted ruling whose bullet ends "(the user)" is the approved list.
+     - A step list written under a quoted ruling whose bullet ends "(self-rule)" has each step line end with `(ruling <name>)`, naming that bullet, never `(approved)`.
    - The step is done when `plan.md` is written, or the draft is shown and the stop stands.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
    - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry`, `repair_reviewer`.
@@ -139,7 +140,7 @@ metadata:
 ## Rules
 
 - A step is one deliverable and one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), with the command that proves it, except the bookkeeping steps the orchestrator does itself.
-- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a ruling of the user added later, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.
+- Every step line of `plan.md` ends with its authority: `(approved)` for a step of the list the user approved, or `(ruling <name>)` for a step a ruling added, after the approval or under a quoted ruling ending "(self-rule)", the ruling being the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.
 - Every path in the ledger is relative to the repository root.
 - Every command in the ledger names the directory it runs from.
 - No history: the ledger records decisions with their dates in `plan.md`'s rulings list; the templates and this file carry none.

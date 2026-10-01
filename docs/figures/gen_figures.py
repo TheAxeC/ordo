@@ -392,8 +392,8 @@ def draw_legend(canvas: Canvas, x: float, y: float, width: float) -> None:
         canvas,
         x,
         y + 48,
-        'A stop marked "every run" waits each time, unless the run is under a quoted ruling that '
-        "states the change.",
+        'A stop marked "every run" waits each time, unless a quoted ruling states the change '
+        "or, under self_rule: on, plan-orchestration closes it.",
         width,
     )
 
@@ -560,7 +560,7 @@ def plan_loop_svg() -> str:
     top, height, gap = 42, 290, 18
     bottom = top + height
     cards_y, cards_h = bottom + 76, 160
-    band_y, band_h = cards_y + cards_h + 24, 216
+    band_y, band_h = cards_y + cards_h + 24, 221
     canvas = Canvas(
         "plan-loop.svg",
         1040,
@@ -690,7 +690,8 @@ def plan_loop_svg() -> str:
         "Runs the row above for every step, unattended, with the executor the plan names at "
         "build it and close them; you may run the row by hand instead. Only the stops marked "
         "in these two figures, and the proposals of its recurring-findings pass, reach you; the "
-        "rest of the row runs without asking.",
+        "rest of the row runs without asking. Under self_rule: on, the orchestrator closes every "
+        "stop outside six kinds itself and writes it to choices.md for your review.",
         (
             Group(OPTIONAL),
             Group(EVERY_RUN, ("The roadmap diff, at the closing",)),

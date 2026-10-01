@@ -15,7 +15,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
 | `grill` | Interviews the user about one roadmap entry, in rounds. Each round asks every decision whose prerequisites are settled, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, while agents look up the facts. It writes each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent it starts as a bullet of the Agents section of that file, the roadmap entry and the glossary, and on the user's yes a proposed ADR |
 | `plan` | Opens a plan for one roadmap entry: the ledger folder, `plan.md` with a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, `orchestrator-state.md`. It refuses an entry not yet specified |
-| `spec` | Prepares one step. It checks that the user approved the step and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
+| `spec` | Prepares one step. It checks the step's authority, the user's approval or a ruling, and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. A fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
 | `refute` | Reviews a built step without changing it: reruns every check and every command the builder's report quotes, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
 | `diagnose` | Finds the cause of a defect before anything is changed. It runs one command red on the exact symptom, shrinks the case, ranks three to five hypotheses, makes one change per probe, and writes the fix with its test and a diagnosis record. Inside a plan it probes on a scratch copy and leaves the step's worktree unchanged; run by a person it waits for the reply to the hypotheses |
 | `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
@@ -42,6 +42,8 @@ for every step:
                               optional: when a finding's cause is not known, finds it before "close them"
 "close them"                  a repair round, up to repair_rounds times
 /land <entry> <step>          onto main, checks on main, the booking, the commit
+C<n> Agree                    under self-rule: you agree with a choice the orchestrator took
+C<n> => <your ruling>         under self-rule: you replace a choice with your ruling
 
 /plan-orchestration <entry>   instead of the step lines: runs them for every step unattended
 /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
@@ -51,7 +53,7 @@ for every step:
 
 `/ordo-help` prints the full sequence, including what to do when a command stops.
 
-The pipeline below marks where each skill of a roadmap entry asks you. A stop marked "every run" waits on you each time, unless the run is under a quoted ruling that states the change. One marked "only when" waits on you in a named case. You may skip a skill marked "optional".
+The pipeline below marks where each skill of a roadmap entry asks you. A stop marked "every run" waits on you each time, unless the run is under a quoted ruling that states the change. Under `self_rule: on` such a stop waits only when `plan-orchestration` leaves it open: an item of one of its six kinds, or a stop of `/roadmap`, `/ordo-init` or `/repo-setup`, which take only your ruling. One marked "only when" waits on you in a named case. You may skip a skill marked "optional".
 
 ![The pipeline of one roadmap entry as boxes in order: /repo-setup for a new repository or /ordo-init for an existing one, /roadmap add, the optional /grill, /plan, every step, and the closing, with the optional /plan-retro, /session-retro, /diagnose and /ordo-help beside them. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/pipeline.svg)
 

@@ -1,6 +1,6 @@
 ---
 name: plan-orchestration
-description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan."
+description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat; stop only where a decision is the user's. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
   version: "2.10.1"
 ---
@@ -36,6 +36,7 @@ continue the plan                    resume from the state file, after a compact
 3. The dispatch block in the state file, which "Resuming, and handing the plan over" reads.
 4. The builder's report, the diff since the step's base, and the refuter reports of the step.
 5. For the recurring-findings pass, the refuter reports written since the last pass.
+6. Under `self_rule: on`, and for the review of a choice, the choices file `<ledger_root>/choices.md`.
 
 ## Steps
 
@@ -52,9 +53,10 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 3. Invoke `/spec <entry> <step>`. It checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
    - Before dispatching the builder, read the brief check's report and the changes to the brief its "Closed" heading names.
    - A stop it raises goes to the user by "Stops".
+     - Under `self_rule: on`, the orchestrator closes it instead, as `references/self-rule.md`, "Closing an open item", says, unless it is of a kind its "The six kinds left open" names.
    - A stop, here or at any later step, blocks its own step.
      - The loop moves on to the next unblocked step.
-   - Its refusal of a step without the user's authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since only the user's ruling adds a step to the plan.
+   - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step is added to the plan only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
 4. Choose the step's executor.
    - Write it into the dispatch block.
    - Then build by that choice.
@@ -122,12 +124,14 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - A second failure of the step's landing always goes to the user, as the `land` skill's Steps 6 says.
    - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
+   - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by <name>).", for any name, the orchestrator adds its fix step, as `references/self-rule.md`, "The review of a choice", says.
 10. Continue with step 2.
     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
     - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
     - The final message opens as "Reports" says.
       - It then lists every step landed since the loop began with the path of each report, and the open items.
       - After the closing step, it also names the path of the closing report.
+      - Under `self_rule: on`, it also lists the choices taken since the loop began, by `C<n>` and heading, and says they are reviewed in `<ledger_root>/choices.md` with `C<n> Agree` or `C<n> => <ruling>`.
 
 ## The two tiers, and the models
 
@@ -154,7 +158,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under these rules:
 
 - Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file. Every decision, ruling, path a step depends on, sharp edge and landing report is in the ledger folder of the main checkout.
-- A step's commits are only the points another session resumes from. They are a stop (its open item and Step 0), the preparation commit, and the dispatch entry once the builder's identity is in it. They are also a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), the landing, and a handover.
+- A step's commits are only the points another session resumes from. They are a stop (its open item and Step 0), the preparation commit, and the dispatch entry once the builder's identity is in it. They are also a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), a choice taken under self-rule, a review of a choice, the landing, and a handover.
 - Every other ledger record is written to disk in the main checkout. Such records are a builder's report saved, the builder's usage under `builder_usage`, a refuter report saved, a reviewer recorded and a ruling booked.
   - It is carried by the next of those commits.
 - A resume-point commit holds only the paths the session itself wrote since the last one.
@@ -207,14 +211,20 @@ On every resumption, with a dispatch block or without one:
 ## The recurring-findings pass
 
 - Every tenth landed step, and at any pause, the orchestrator reads the refuter reports written since the last pass and groups their findings by cause.
-- A cause that appears in three or more steps is booked in the open items, since the user rules on it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
+- A cause that appears in three or more steps is booked in the open items, since the user rules on it unless `references/self-rule.md`, "Closing an open item", closes it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
 - For a rule already written that keeps being broken, what is proposed is a sharper sentence for the rule or a change to the text that should have prevented it.
 - A check (a command in the verification list, or a script) is proposed under these limits:
   - It is proposed only for a fact a machine computes.
   - It comes after the rule sentence or the text change.
   - The proposal states what it computes.
   - The user's ruling on the proposal approves what it computes, before it is written.
-- The user rules on each proposal.
+- The user rules on each proposal whose change is a rule sentence in the rules file, a standards page or the shared rules, or a check (a command in the verification list, or a script), since such a proposal is kind 3 of `references/self-rule.md`, "The six kinds left open".
+  - Under `self_rule: on`, any other proposal is closed as `references/self-rule.md`, "Closing an open item", says.
+
+## Self-rule
+
+- **Scope.** The section applies under `self_rule: on` in the configuration block, and with `self_rule: off`, or the key absent, every open item waits for the user, as "Stops" says.
+- **The reference.** Under `self_rule: on`, and for the review of a choice, the session reads `references/self-rule.md`, which says which open items stay with the user, how the others are closed, and how the choices file is kept and reviewed.
 
 ## Two steps in flight
 
@@ -256,7 +266,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - A finding beyond the brief is raised to the user as an open item, by "Stops".
 - A step's path list is a choice, not a fact: widen it rather than mint a step for what the open step exists to end.
 - A report that asks for a step says what makes the work new, or nasty, or blocked by something in flight.
-- A step enters the step list only by the user's ruling, as a line ending with `(ruling <name>)`.
+- A step enters the step list only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books, as a line ending with `(ruling <name>)`.
   - `/spec` refuses a line without its tag.
 
 ## Reports
@@ -265,7 +275,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - A builder's report keeps the shape of the repository's change standard.
 - The state file's open items follow the position line, verbatim.
 - The open items hold only what the user must rule on: a stop, and a proposal of the recurring-findings pass.
-- A finding that is neither closed in the repair rounds nor fixed at landing is an open item, since only the user's ruling makes it a step.
+- A finding that is neither closed in the repair rounds nor fixed at landing is an open item, since it becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
 - The other list, the closed one, is the log of what was raised and how it ended.
   - No report carries it.
 - Then anything NOT DONE first, then the DONE / NOT DONE ledger naming the command that proves each row.
@@ -298,14 +308,15 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
 | A shape nobody named | A user-visible shape nothing names | The stop message, below | The user's ruling |
 | A wrong premise | A premise found wrong that the plan cannot absorb | The stop message, below | The user's ruling |
 | A red check | A red check no fix within the plan covers | The stop message, below | The user's ruling |
-| A rule clash | A contradiction between two established rules or decisions, an ADR among them | The stop message, below | The user's ruling |
-| A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by the user's ruling | The stop message, below | The user's ruling |
+| A rule clash | A contradiction between two established rules or decisions, an ADR among them, except a ruling of the user that replaces a bullet ending "(self-rule)", which is no clash | The stop message, below | The user's ruling |
+| A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books | The stop message, below | The user's ruling |
 | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
 | A model other than the configured one | The runner served a builder, a reviewer or a brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
 | The configured effort cannot apply | A refusal (Steps 1): the runner lists no `ordo-<level>` agent for a level the configuration block names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then a new session |
 
 - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
 - A stop is booked in the state file's open items the moment it is raised, and under the step's Step 0 in `plan.md`.
+  - Under `self_rule: on`, a stop of a kind that `references/self-rule.md`, "The six kinds left open", does not name, and that is not one of the stops its "The counts" names, is then closed as its "Closing an open item" says.
 - The ledger files the session wrote are then committed by path, a resume point, so the stop survives the session.
 - A ruling that adds or splits a step is booked as the `spec` skill's "Steps / A ruling" says: the new line in the step list ends with `(ruling <name>)`, naming the ruling's line in the Rulings section.
 - A stop is repeated in every report until the user has ruled.
@@ -347,5 +358,5 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
   - Its small findings, the last review's included, are fixed at landing.
 - Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops".
   - It is never sent back to the builder.
-  - It becomes a step only by the user's ruling.
+  - It becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
 - Every skill the loop invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, and `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.

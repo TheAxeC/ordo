@@ -1,6 +1,6 @@
 ---
 name: spec
-description: "Prepare one step of an open plan: refuse a step without the user's authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check (a fresh read-only agent checks the brief against the tree, each finding closed in the brief), create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
+description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
   version: "1.7.0"
 ---
@@ -41,7 +41,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - The step list is the section `## Steps, in execution order`, and the rulings are the section `## Rulings`.
      - A `plan.md` without either section is a refusal ("Stops").
    - The step's authority is the tags that end its line: `(approved)` for a step of the list the user approved when the plan opened, or `(ruling <name>)` for each ruling it rests on.
-   - Each ruling a tag names is a line of the Rulings section that ends with "(the user)", named as the tag reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line.
+   - Each ruling a tag names is a line of the Rulings section that ends with "(the user)" or "(self-rule)", each with or without a full stop after it, named as the tag reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line.
+     - A line ending "(self-rule, replaced by <name>)." is no ruling.
    - A step without that authority is a refusal ("Stops"), checked at Steps 1.
    - A step not in the list is a refusal ("Stops"), with the list printed.
    - For a step taken back out of main, the failure its landing recorded under the step's Step 0.
@@ -70,9 +71,9 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - Either effort check failing is the refusal "The configured effort cannot apply" ("Stops"), and writes nothing.
    - A preflight that fails is a refusal ("Stops").
    - Then, before any premise check, read the step's line and the Rulings section of `plan.md`, as "What it reads" 4 says.
-   - A step whose line carries the user's authority goes on.
+   - A step whose line carries its authority goes on.
      - The session notes the tags that give it.
-   - A step without it is a refusal ("Stops") that names the step and the authority it lacks, and says the user's ruling is needed.
+   - A step without it is a refusal ("Stops") that names the step and the authority it lacks, and says a ruling is needed.
    - A `plan.md` that is missing or not UTF-8, lacks a section, or lists a step twice is a refusal ("Stops").
    - A step not in the list is a refusal ("Stops"), with the list printed.
    - A refusal here writes nothing.
@@ -137,6 +138,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
 6. Make the preparation commit, a resume point ("Rules").
    - It holds the brief, the brief check's report, the patch of a step taken back out of main, and each of the session's own records (Steps 1).
    - It holds `plan.md` and the state file when this run or the session's own records changed them.
+   - It holds the choices file `<ledger_root>/choices.md` when this run changed its `Builds on it:` line.
    - The paths are written out in the `git add -- <path> ...` command.
      - A ledger change the session did not make is not among them.
    - Its hash is the base.
@@ -216,13 +218,15 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    Ruled: <the choice, one clause per question the open item asked>
    ```
 
+   Under `self_rule: on`, `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books a choice the same way, as that heading says.
+
 2. On that message the session books the ruling and nothing else:
    - the open item is closed with the ruling's text and its date;
    - the step's text in `plan.md` is rewritten to what was ruled;
    - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`, and its own Step 0, its carried premises with it;
-   - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user).";
+   - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
    - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it: `<L>` for a line `- Open item <L> (<date>): ...` or `- Open item <L>: ...`, and the text before its first ` (` for any other line;
-   - a ruling on an option that runs a skill with an approval stop and states the change in full is written in the Rulings section as a bullet whose first line ends with "(the user).";
+   - a ruling on an option that runs a skill with an approval stop and states the change in full is written in the Rulings section as a bullet whose first line ends with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
    - that bullet is the quoted ruling the session gives the skill;
    - the change the option stated is copied under that bullet as sub-bullets, a text of several lines as a fenced block indented with its sub-bullet, its fence longer than any fence inside the text;
    - a ruling that sets a public shape, a vocabulary, a rule or a library choice is also written where the plan keeps its rulings, so later premise checks and the library search of Steps 3 read it;
@@ -231,6 +235,7 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
      - its decision is the ruled option in the open item's words, its context the facts the open item gives, its alternatives rejected the old record's decision and each other option with the con the open item gave it, and its consequences what the open item says follows;
      - the old record is marked superseded in the words the folder uses (`superseded by NNNN` under the template), and the new record gets its row in the folder's index when there is one;
      - the session shows the user the new record and commits these files by path at once, a resume point, so that `/spec` or `/land` in any session reads them;
+   - a ruling that replaces a bullet ending "(self-rule)" always writes a Rulings bullet of its own that names the bullet it replaces, and is booked as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says;
    - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6).
 3. Then `/spec <entry> <step>` is typed again. It rechecks every premise against the tree, the ruled text included, and writes the brief.
    - A step whose brief check has run is not checked again (Steps 5).
@@ -297,7 +302,7 @@ The first six rows are stops, which leave an open item as "Steps / A stop" says.
 | A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
 | A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
 | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
-| A step without the user's authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling of the user in the Rulings section, or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | The user's ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
+| A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)", or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |
 | A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on the ledger's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/spec` again |
