@@ -1,0 +1,588 @@
+diff --git a/.scratch/2-f-diagnose/plan.md b/.scratch/2-f-diagnose/plan.md
+index 96d9864..ea70798 100644
+--- a/.scratch/2-f-diagnose/plan.md
++++ b/.scratch/2-f-diagnose/plan.md
+@@ -49,6 +49,37 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
+ - Who runs /diagnose inside a plan (2026-09-30): Axel ruled (a). Inside a plan with no person present, `/diagnose` runs in a fresh agent, `ordo-<reviewer_effort>` on the `reviewer` model, started and checked as `/refute`'s reviewer is, since `plan-orchestration`'s "The two tiers, and the models" keeps step code out of the orchestrator and a fresh reader stands between a diagnosis and the fix it proposes; the orchestrator reads the record and rules on the round; by hand, `/diagnose` stays in the user's session. Step 2c carries it. The worker model was (b); keeping it inline with a sentence in "The two tiers" was the lazy option (c) (the user).
+ - Reviewer trial (2026-09-30, ruled in plan 2.E): Axel ruled (a). On the first step of this plan that gets reviewed, two fresh reviewers, `ordo-high` on Opus and `ordo-high` on Sonnet 5.5, review the same diff; the orchestrator compares their findings, and if Sonnet finds what Opus finds, `reviewer:` in `.agents/plan.yaml` moves to `claude:sonnet` for the plans after. The landing uses the Opus review; switching at once was the lazy option (the user).
+ 
++## Agents
++
++Each agent started for this plan has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
++
++- ae8069985976682a1: brief check of step 1, claude-opus-5-5
++- a3f22d22a0a9ce902: builder of step 1, claude-sonnet-5-5
++- af7e2a18c24b5e8b5: reviewer of step 1, claude-opus-5-5
++- a6d878965211568b3: reviewer of step 1 over round 1, claude-opus-5-5
++- aa8ec600489819d0b: brief check of step 2, claude-opus-5-5
++- a92dbbab7da8946e3: builder of step 2, claude-sonnet-5-5
++- a6e2f8b6509bc4fd2: reviewer of step 2, claude-opus-5-5
++- a45303ae9211bb147: reviewer of step 2 over round 1, claude-opus-5-5
++- af6b9c9b5dd7db9e4: brief check of step 2a, claude-opus-5-5
++- aaf2a244958131899: builder of step 2a, claude-sonnet-5-5
++- a737b44c11093528b: reviewer of step 2a, claude-opus-5-5
++- a5d29dfd61d79bbfc: reviewer of step 2a over round 1, claude-opus-5-5
++- ad9c2bb9acc3d0fed: brief check of step 2b, claude-opus-5-5
++- a065164924d21655a: builder of step 2b, claude-sonnet-5-5
++- a56363ce0d37f4326: reviewer of step 2b, claude-opus-5-5
++- a04d091169687c8c9: reviewer of step 2b over round 1, claude-opus-5-5
++- ad56ca9da30d15e7e: brief check of step 3a, claude-opus-5-5
++- a72228d39458b07f9: brief check of step 3a, claude-opus-5-5
++- a49118f1317517195: brief check of step 3a, claude-opus-5-5
++
++Agents in no role the cost script prices:
++
++1. a8b8bdb8d0f78214c: side one of step 4's blind comparison, claude-opus-5-5
++2. ac4cda93b1e0e00ce: side two of step 4's blind comparison, claude-opus-5-5
++3. a37b18740bd105b87: judge 1 of step 4's blind comparison, a subagent, claude-opus-5-5
++4. a1574d0248b23bd4c: judge 2 of step 4's blind comparison, a subagent, claude-opus-5-5
++
+ ## Blocked, and by what
+ 
+ - 3: Axel's review of the run (open item "Step 3 reading").
+diff --git a/.scratch/2-g-git-guard/plan.md b/.scratch/2-g-git-guard/plan.md
+index 6b9f9d6..a66ba65 100644
+--- a/.scratch/2-g-git-guard/plan.md
++++ b/.scratch/2-g-git-guard/plan.md
+@@ -41,6 +41,26 @@ The hook script's test runs each blocked command and expects the block, and runs
+ - Other commands that discard work (2026-09-30): Axel agreed with the recommendation. Step 2b adds to the guard's blocks `git send-pack`, `git subtree push`, `git stash drop`, `git stash clear` and `git switch --discard-changes`; `git checkout -f <branch>` stays allowed after a grep of the skills for it (the user).
+ - pyright for Python templates (2026-09-30): Axel ruled (a), "but you install it": the orchestrator installs pyright with `npm install -g pyright`, and step 2c adds `pyright skills/repo-setup/templates/hooks/git_guard.py` to the verify list of `docs/dev/building.md`, the change standard's command block and each open plan's state file, and fixes what it finds (the user).
+ 
++## Agents
++
++Each agent started for this plan has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
++
++- a87b610859b7caa16: brief check of step 1, claude-opus-5-5
++- a1ff1a7de09f656b4: brief check of step 1, claude-opus-5-5
++- a9bba431490a852e7: builder of step 1, claude-sonnet-5-5
++- a1c460a174ddbb16c: reviewer of step 1, claude-opus-5-5
++- a37c83404490fe650: reviewer of step 1, claude-opus-5-5
++- a75e0f9dff19d98cc: reviewer of step 1 over round 1, claude-opus-5-5
++- a8f74fb0fb6f2338b: brief check of step 2, claude-opus-5-5
++- a609efe535711a48c: builder of step 2, claude-sonnet-5-5
++- a26039d8e67ff072f: reviewer of step 2, claude-opus-5-5
++- a484a17ab43519cb0: reviewer of step 2 over round 1, claude-opus-5-5
++- a19f3b42d959e5119: brief check of step 2a, claude-opus-5-5
++- a9b4dbe88a7879eb1: brief check of step 2b, claude-opus-5-5
++- ab724e6a426ca4d22: brief check of step 2b, claude-opus-5-5
++- a64c3043b141e586e: builder of step 2b, claude-sonnet-5-5
++- a1b3ad4e9df60485a: reviewer of step 2b, claude-opus-5-5
++
+ ## Blocked, and by what
+ 
+ none
+diff --git a/.scratch/2-h-session-retro/plan.md b/.scratch/2-h-session-retro/plan.md
+index 81a1ae1..39f0778 100644
+--- a/.scratch/2-h-session-retro/plan.md
++++ b/.scratch/2-h-session-retro/plan.md
+@@ -49,6 +49,28 @@ One real run over the sessions of plan 2.C, its report holding points of both ki
+ - Step 2 reading (2026-09-30): Axel approved the skill as landed with the correction the open item named: the opening sentence of "The reader" says "with the secrets of the forms it knows replaced by `<REDACTED>`"; the orchestrator makes it as a fix of step 2, and step 2 is ticked (the user).
+ - Recurring findings (2026-09-30): Axel ruled (a) for each of the six proposals of the open item. Step 3a makes them in the `spec` skill: the brief check's seventh check of dictated text; `templates/brief.md` "Report" with the sharper first-run and verbatim wording and the terms section; its "Verify before you report" reading item for one rule per bullet and long sentences; its "Cases" with one mutation per code case and the missing, unreadable, malformed and closed-early inputs of a script; each in the words the open item gives (the user).
+ 
++## Agents
++
++Each agent started for this plan has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
++
++- a6b3d05e2c122296a: brief check of step 1, claude-opus-5-5
++- af66dae24a3304e3e: builder of step 1, claude-sonnet-5-5
++- a6ceb87b4b1863638: reviewer of step 1, claude-opus-5-5
++- a3aff77b6281b67c2: reviewer of step 1 over round 1, claude-opus-5-5
++- ae7b9370da9c638cf: brief check of step 2, claude-opus-5-5
++- a27f84a753259fcf8: builder of step 2, claude-sonnet-5-5
++- a3970fbfab5ee34e0: reviewer of step 2, claude-opus-5-5
++- a0081826dba130f95: reviewer of step 2 over round 1, claude-opus-5-5
++- ae9fefd79737247b9: brief check of step 3, claude-opus-5-5
++- a79c87e7558835577: builder of step 3, claude-sonnet-5-5
++- ab77be5d56c360421: reviewer of step 3, claude-opus-5-5
++- a820569a1a43369fc: reviewer of step 3 over round 1, claude-opus-5-5
++- aa1400dfd58c76810: brief check of step 3a, claude-opus-5-5
++- a567381c0e52c792b: brief check of step 3a, claude-opus-5-5
++- af9906813a8c54544: builder of step 3a, claude-sonnet-5-5
++- a1e73ec4e4e8cf564: reviewer of step 3a, claude-opus-5-5
++- a423bdea6bbd17886: reviewer of step 3a over round 1, claude-opus-5-5
++
+ ## Blocked, and by what
+ 
+ - 4: the transcripts of 2.C last until about 2026-10-28.
+diff --git a/.scratch/rulings/3-the-writing-base.md b/.scratch/rulings/3-the-writing-base.md
+index 30b4082..7f90ced 100644
+--- a/.scratch/rulings/3-the-writing-base.md
++++ b/.scratch/rulings/3-the-writing-base.md
+@@ -23,3 +23,11 @@
+ - D22 What makes each field's text credible (2026-09-30): (a) one line in each of the four kept registers names what the field's reader looks for (precision of measurement and method; transparency about limitations; reproducibility of results; adherence to reporting guidelines), and the review reports a methods or results section that leaves it out; whether a medical paper follows its reporting guideline is a check of content that `/writing` does not make; the lazy option was (c), leaving it out (the user).
+ - D23 The discipline table's sentence against D18 (2026-09-30): (a) "If you're writing "We argue that..." in a physics paper ..., you've adopted the wrong voice" is not carried, since D18 holds; no option was the lazy one, both cost the same (the user).
+ - D24 The roadmap diff of entry 3 (2026-09-30): (A) the entry's Status, Goal and Gate are written as drafted from D1 to D23, the Waits on line unchanged; the lazy option was (C), keeping the entry (the user).
++
++## Agents
++
++Each lookup agent `/grill 3` started has one bullet, with its agent id, its role and the model the runner served it.
++
++- a2cd8be14d77ebe85: grill lookup, claude-opus-5-5
++- a9d12b91117bb4165: grill lookup, claude-opus-5-5
++- ac071af1b2da2bf66: grill lookup, claude-opus-5-5
+diff --git a/.scratch/archive/2-e-grill/agents/agent-roles.md b/.scratch/archive/2-e-grill/agents/agent-roles.md
+new file mode 100644
+index 0000000..0cc62bd
+--- /dev/null
++++ b/.scratch/archive/2-e-grill/agents/agent-roles.md
+@@ -0,0 +1,151 @@
++# Agents of plan 2.E
++
++Each agent started for plan 2.E has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
++
++- a9a57fb6f85b48b52: brief check of step 1, claude-opus-5-5
++- a7e2d8da2f7e6b429: builder of step 1, claude-opus-5-5
++- a8e14477c535e8fa7: reviewer of step 1, claude-opus-5-5
++- a4a7cc6b81613559f: reviewer of step 1 over round 1, claude-opus-5-5
++- af96ee837d1adb7c7: brief check of step 2, claude-opus-5-5
++- aca77c40330700c5a: builder of step 2, claude-opus-5-5
++- aad960981c84ce993: reviewer of step 2, claude-opus-5-5
++- a0eb27e12f5d699cc: reviewer of step 2 over round 1, claude-opus-5-5
++- a789dc55985f66723: brief check of step 4, claude-opus-5-5
++- ab59f62dd9e66f9e7: builder of step 4, claude-opus-5-5
++- a5c8dae5aa6c9ede4: reviewer of step 4, claude-opus-5-5
++- a9c0655a40ba85f12: reviewer of step 4 over round 1, claude-opus-5-5
++- a22ab0fbcb877745c: brief check of step 5, claude-opus-5-5
++- a875f9d0a947f6cda: builder of step 5, claude-opus-5-5
++- abffc5023d497db11: reviewer of step 5, claude-opus-5-5
++- ae0092694ce1afb80: reviewer of step 5 over round 1, claude-opus-5-5
++- a728eba74e934416e: brief check of step 3, claude-opus-5-5
++- a4e5bce8772d0d657: builder of step 3, claude-opus-5-5
++- afb733385e80a6b22: builder of step 3, claude-sonnet-5
++- ae2714d2e377ffba9: builder of step 3, claude-sonnet-5-5
++- a616958f65947f02b: reviewer of step 3, claude-opus-5-5
++- a9101e85531b9f6e9: reviewer of step 3, claude-opus-5-5
++- af3f8a357a2c497f3: reviewer of step 3, claude-opus-5-5
++- a3d58afa74ebc4e91: reviewer of step 3 over round 1, claude-opus-5-5
++- ad84caedae9698163: brief check of step 6, claude-opus-5-5
++- a298a7e61f0556c39: builder of step 6, claude-sonnet-5-5
++- a48841ec0c221192f: reviewer of step 6, claude-opus-5-5
++- aeb0058246f011df3: reviewer of step 6 over round 1, claude-opus-5-5
++- a7007aa25798273ed: brief check of step 7, claude-opus-5-5
++- aef5fa9f4f1c80805: builder of step 7, claude-sonnet-5-5
++- ab6e40dc47138ff5d: reviewer of step 7, claude-opus-5-5
++- ac08d005e9158bb2c: reviewer of step 7 over round 1, claude-opus-5-5
++- af4721357ea684de7: brief check of step 8, claude-opus-5-5
++- a645de77ce926447e: builder of step 8, claude-sonnet-5-5
++- a848bfe82e08a3ec9: reviewer of step 8, claude-opus-5-5
++- aea73ed60282cb9b8: reviewer of step 8 over round 1, claude-opus-5-5
++- a699640613f47d817: brief check of step 9, claude-opus-5-5
++- adbcd73f19dbe7eae: builder of step 9, claude-sonnet-5-5
++- a3a8bfb51e9648236: reviewer of step 9, claude-opus-5-5
++- aabd9379789f88aa7: reviewer of step 9 over round 1, claude-opus-5-5
++- a28e51aabff829bf9: brief check of step 10, claude-opus-5-5
++- ac9a7eb3cc16f546c: builder of step 10, claude-sonnet-5-5
++- abb5c887c9bdd2def: reviewer of step 10, claude-opus-5-5
++- a1737316019904bbd: reviewer of step 10 over round 1, claude-opus-5-5
++- aeb2528252e557bc4: brief check of step 11, claude-opus-5-5
++- ae449ee78f0bf9ddf: builder of step 11, claude-sonnet-5-5
++- ae9547ab20b63fbcf: reviewer of step 11, claude-opus-5-5
++- a3f572b6261f0ac53: reviewer of step 11 over round 1, claude-opus-5-5
++- aec1f452c11e139cf: brief check of step 12, claude-opus-5-5
++- af8ac1a436c7c2213: builder of step 12, claude-sonnet-5-5
++- a2d31217ca1dc30ac: reviewer of step 12, claude-opus-5-5
++- a8acf863141d60192: reviewer of step 12 over round 1, claude-opus-5-5
++- ae32aff2265c8e0b3: brief check of step 12a, claude-opus-5-5
++- ac6b1b3f4e4cf034e: builder of step 12a, claude-sonnet-5-5
++- a05acfd10a5295fde: reviewer of step 12a, claude-opus-5-5
++- abc32ab2475e25d69: reviewer of step 12a over round 1, claude-opus-5-5
++- ac1981f7bc7d15672: brief check of step 9a, claude-opus-5-5
++- a0efd11b092676656: brief check of step 9a, claude-opus-5-5
++- a39b4380a345c407e: brief check of step 9a, claude-opus-5-5
++- a51b44de3267fa2f1: brief check of step 9a, claude-opus-5-5
++- a20881af2c74bd1b8: brief check of step 9a, claude-opus-5-5
++- a931b2d1ac6c7e98d: builder of step 9a, claude-sonnet-5-5
++- a9e8d4ac4aea212dc: builder of step 9a, claude-sonnet-5-5
++- a829573acbc0a1734: reviewer of step 9a, claude-opus-5-5
++- a24e51727b5e7824c: reviewer of step 9a, claude-opus-5-5
++- afacbebdfc83a75a7: reviewer of step 9a over round 1, claude-opus-5-5
++- a1e387a9c8dd5a603: brief check of step 14a, claude-opus-5-5
++- a75765a1669931042: builder of step 14a, claude-sonnet-5-5
++- a129bf73e9c12ed81: reviewer of step 14a, claude-opus-5-5
++- a8118738207170d54: reviewer of step 14a over round 1, claude-opus-5-5
++- abb43dec216464426: brief check of step 14b, claude-opus-5-5
++- a12869b0c03367f5b: builder of step 14b, claude-sonnet-5-5
++- ac62ce4943bc04190: reviewer of step 14b, claude-opus-5-5
++- a4b8de56cd2a793b3: reviewer of step 14b over round 1, claude-opus-5-5
++- ae2bc9c93a6368c8a: brief check of step 14c, claude-opus-5-5
++- a23f99bf273bb8deb: builder of step 14c, claude-sonnet-5-5
++- a0dd6a3b93ed6d820: reviewer of step 14c, claude-opus-5-5
++- a8d77d92940469860: reviewer of step 14c over round 1, claude-opus-5-5
++
++Agents in no role the cost script prices:
++
++1. a8b166abc8ac4a21f: claude-code-guide lookup of the effort setting in subagent definitions, for step 3 (the effort agents), claude-haiku-4-5-20251001
++2. a147987761769ca35: probe subagent of step 3, effort per agent definition, started by a `claude -p` probe session, claude-opus-5-5
++3. aaf8ae67c54ca7b43: probe subagent of step 3, effort per agent definition, started by a `claude -p` probe session, claude-opus-5-5
++4. aaa4b1551204d73fd: probe subagent of step 3, effort per agent definition, started by a `claude -p` probe session, claude-opus-5-5
++5. a5e7b998afdf97437: probe subagent of step 3, effort per agent definition, started by a `claude -p` probe session, claude-opus-5-5
++6. ab23f4e8667806fd2: probe subagent of step 3, effort per agent definition, started by a `claude -p` probe session, claude-opus-5-5
++7. a0fa92e5559d44fee: probe subagent of step 3, effort per agent definition, started by a `claude -p` probe session, claude-opus-5-5
++8. 5c1f4d1a-4666-4f1c-87aa-b7692f110c34: `claude -p` probe session of step 3, launching the effort probe agents, claude-opus-5-5
++9. 4ab430f1-b132-421d-b253-c93ae0ab95b7: `claude -p` probe session of step 3, launching the effort probe agents, claude-opus-5-5
++10. ffb89eb1-adbe-4026-b24d-a26dd0f7a153: `claude -p` probe session of step 3, launching the effort probe agents, claude-opus-5-5
++11. d1413fbf-60d8-44e5-8233-78aa963d4469: `claude -p` probe session of step 3, launching the effort probe agents, claude-opus-5-5
++12. 487d7732-e6d0-4dde-97a9-1f9ea55798c5: `claude -p` probe session of step 3, the model the alias `sonnet` serves, claude-sonnet-5-5
++13. ceb77582-7c11-4d25-9d69-3e39a0408a73: `claude -p` probe session of step 3, the model the alias `sonnet` serves, claude-sonnet-5-5
++14. 2f5d5c06-65e4-4c38-a652-ab052bd6f9f1: `claude -p` probe session of step 3, the model an agent definition gives, claude-opus-5-5
++15. a4b0cfb695fd26ca6: probe subagent of step 3, the model an agent definition gives, started by a `claude -p` probe session, claude-sonnet-5-5
++16. a29004a4046e623a8: probe subagent of step 3, the model an agent definition gives, started by a `claude -p` probe session, claude-sonnet-5-5
++17. a14c9bd7-0e11-474a-bf63-e81f44a8ac4e: `claude -p` probe session of step 3, the tools of an `ordo-high` agent, claude-opus-5-5
++18. aefc6b5f005442645: probe subagent of step 3, the tools of an `ordo-high` agent, started by a `claude -p` probe session, claude-opus-5-5
++19. a8f478e54cbdaee48: scratch run of `/roadmap` under a quoted ruling, step 9a, claude-opus-5-5
++20. a3877407c839aeb6b: scratch run of `/roadmap` under a quoted ruling, step 9a, claude-opus-5-5
++21. af9e1fedf3b6143d3: scratch run of `/roadmap` under a quoted ruling, step 9a, claude-opus-5-5
++22. a1dd764214d342b34: scratch run of `/roadmap` under a quoted ruling, step 9a, claude-opus-5-5
++23. ab0c7b559b31d3c50: scratch run of `/roadmap` under a quoted ruling, step 9a, claude-opus-5-5
++24. a2652197169efa984: scratch run of `/roadmap` under a quoted ruling, step 9a, claude-opus-5-5
++25. afecae66ae35bbe92: scratch run of `/roadmap` under a quoted ruling, step 9a, claude-opus-5-5
++26. e2b764fb-2f0d-4820-b56c-f6160f38bfa9: `claude -p` probe session of step 14b, the skills a judge process lists, claude-opus-5-5
++27. 9e518f93-cfd4-4eb7-8435-f4c9b72e4d9e: `claude -p` probe session of step 14b, the skills a judge process lists, claude-opus-5-5
++28. be3427e4-7387-4513-9253-1ee63cf11045: `claude -p` probe session of step 14b, a judge process started, claude-opus-5-5
++29. 735ee77d-e81a-4d1a-8824-40aa8aa92db9: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++30. b9c20720-fd44-49a6-9318-55626b2967d9: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++31. ba72e3c9-564e-4d81-83b5-caa76f3d42b5: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++32. d5e36816-0e06-4c01-8a86-d31a873ac746: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++33. 5f860824-07ae-4dfa-a42c-5ade6fd11f81: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++34. ac00e4f3140387c2b: probe subagent of step 14b, the skills a subagent of a judge process lists, started by a `claude -p` probe session, claude-opus-5-5
++35. ba23813b-ab0f-426e-8388-5742c6958bd7: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++36. 8d8cf3eb-e0bd-4446-be57-2913516769e4: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++37. 47fa155f-5ab0-4183-8d38-89c0157f87f0: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++38. ffa26136-e43d-4f77-95d5-99fbb9840ed8: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++39. 5b2c2459-fc2d-4edd-9fa8-c445e762d3dd: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++40. 6d046895-1029-4c15-9074-c6bc2aa644ee: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++41. 117003ed-bae6-41d7-9066-271ac133ffaf: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++42. 38713828-8174-44f4-909c-32d5d93ad57a: `claude -p` probe session of step 14b, what a judge process can reach, claude-opus-5-5
++43. a0b741cdbabe97a3f: side 1 of step 14's blind comparison, first run, claude-opus-5-5
++44. aa1b0dfda08d592a0: side 2 of step 14's blind comparison, first run, claude-opus-5-5
++45. acd1b62d9331000e0: lookup agent started by side 1 of step 14's first run, claude-opus-5-5
++46. a057a43e1e25fb9b1: lookup agent started by side 1 of step 14's first run, claude-opus-5-5
++47. a7c88bf7079d37350: lookup agent started by side 1 of step 14's first run, claude-opus-5-5
++48. a2d94c00a6978703e: Explore agent started by side 2 of step 14's first run, claude-opus-5-5
++49. abecf05f3dd97913d: Explore agent started by side 2 of step 14's first run, claude-opus-5-5
++50. afa40a52e94cee078: Explore agent started by side 2 of step 14's first run, claude-opus-5-5
++51. ac7b56555b8c0e79b: judge 1 of step 14's first run, a subagent, claude-opus-5-5
++52. abb6c9a352153728b: judge 2 of step 14's first run, a subagent, claude-opus-5-5
++53. afb497f8e385d0af2: judge 3 of step 14's first run, a subagent, claude-opus-5-5
++54. a60182c30893dd043: judge 4 of step 14's first run, a subagent, claude-opus-5-5
++55. a2972647de3f84dc8: side 1 of step 14's rerun, stopped and started again, claude-opus-5-5
++56. ac33f0594089cb2ab: side 2 of step 14's rerun, stopped and started again, claude-opus-5-5
++57. a62c8434157c6378e: Explore agent started by the stopped side 2 of step 14's rerun, claude-opus-5-5
++58. aa9e1149a5536efd4: Explore agent started by the stopped side 2 of step 14's rerun, claude-opus-5-5
++59. a2d1285df87e5583c: side 1 of step 14's rerun, the booked side, claude-opus-5-5
++60. ad25c3abcf1869a03: side 2 of step 14's rerun, the booked side, claude-opus-5-5
++61. a15eebffdc9d21426: lookup agent started by side 1 of step 14's rerun, claude-opus-5-5
++62. a3efaf56cb0d5b60f: lookup agent started by side 1 of step 14's rerun, claude-opus-5-5
++63. a1c62a294c2aa8fec: Explore agent started by side 2 of step 14's rerun, claude-opus-5-5
++64. a3cd717c563122c6e: Explore agent started by side 2 of step 14's rerun, claude-opus-5-5
++65. c5eaa986-6efe-4ffc-a8f4-7fa8778affaa: judge 5 of step 14, a `claude -p` process in `bc14r/judge-1`, its session id, claude-opus-5-5
++66. 96f3dbfc-cfab-4281-8ca7-dfc5d6c49eba: judge 6 of step 14, a `claude -p` process in `bc14r/judge-2`, its session id, claude-opus-5-5
+diff --git a/.scratch/2-e-a-self-rule/agents/reviews/5-report.md b/.scratch/2-e-a-self-rule/agents/reviews/5-report.md
+new file mode 100644
+index 0000000..997cd64
+--- /dev/null
++++ b/.scratch/2-e-a-self-rule/agents/reviews/5-report.md
+@@ -0,0 +1,303 @@
++Everything in the brief is done. The step was built inline by the orchestrating session in the main checkout, as the brief's Decision 1 says; the worktree `.agents/worktrees/2ea-5` is unchanged at its base 3c6119e.
++
++## Open items of the state file, verbatim
++
++## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
++
++A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by the user's ruling; what is settled belongs in the closed list.
++
++- Open item E (2026-10-01): `/grill` no longer accepts a "(self-rule)" quoted ruling as the user's answer to a roadmap diff, which ADR 0004's decision does not allow. Stop "A rule clash", from the review over step 6's repair round 1 (`agents/reviews/6-refuter.md`, "Repair round 1, refuted", Spec 4).
++  - What the tree shows: ADR 0004 (proposed) decides "`/spec`, `/plan` and `/grill` accept it wherever they accept "(the user)"." Step 6's round brief, item 7, asked that a "(self-rule)" quoted ruling settle its decisions as the orchestrator's choice and not be the user's answer to the roadmap diff, and the builder wrote that at `skills/grill/SKILL.md:76`, `:124` and `:336` in the worktree. So `/grill` accepts a "(the user)" quoted ruling's roadmap diff and refuses a "(self-rule)" one, where the ADR says it accepts both alike. The `roadmap` skill already refuses a "(self-rule)" quoted ruling (`references/self-rule.md`, "A skill with its own approval stop"), so the grill text agrees with what `/roadmap` does.
++  - What it breaks: nothing in behaviour; the ADR and the skill text disagree, and a reader of the ADR expects `/grill` to write a roadmap diff from a self-rule bullet.
++  - Options:
++    - (a) ADR 0004's decision sentence is refined in place to "`/spec`, `/plan` and `/grill` accept it wherever they accept "(the user)", except as the user's answer to a roadmap diff, which `/grill` leaves to the user as `/roadmap` does.", as the ADR folder's README allows for a refinement that keeps the decision; step 6 lands with that edit as a fix at landing. Pros: the roadmap, which is yours, never changes on a decision you did not make; the ADR then states what both `/grill` and `/roadmap` do. Cons: the ADR's "wherever" rule gains one exception a reader must know.
++    - (b) A new ADR supersedes 0004 with the same sentence as (a). Pros: the change of the decision is a record of its own. Cons: a whole superseding record for one carve-out that keeps the decision, which the README reserves for a decision that changes.
++    - (c) `/grill` goes back to accepting a "(self-rule)" quoted ruling as the answer to the roadmap diff, as the ADR says now: round brief item 7 is undone at landing. Pros: no ADR change. Cons: a decision the orchestrator took alone can rewrite a roadmap entry through `/grill`, while `/roadmap` itself refuses the same bullet.
++  - Recommendation: (a), since it keeps the roadmap with you, matches `/roadmap`, and is the refinement the README says is edited in place. Lazy option: leave the ADR and the text as they are, which lands a contradiction.
++  - Step 6 waits for the ruling, then lands with it and with the round's other findings (Spec 1 to 3, Standards 1 to 4) fixed at landing.
++
++
++## The cases' first run, on the unchanged tree (main at 9bd9147)
++
++1. `python3 skills/plan-orchestration/templates/plan_cost.py .scratch/archive/2-e-grill` printed `error: the ledger names no agent`, exit 1.
++2. The same for `.scratch/2-f-diagnose`, `.scratch/2-g-git-guard` and `.scratch/2-h-session-retro`: `error: the ledger names no agent`, exit 1, each.
++3. No file held a bullet: every count of the table was 0 against the bookings' counts, so the case failed for every booked step.
++4. No bullet to match: failed.
++5. No bullet for step 3: failed.
++6. No numbered item: failed.
++7. `grep -c '^## Agents'` printed 0 for the rulings file: failed.
++8. `cat <five files> .scratch/2-e-a-self-rule/plan.md | grep -o '^- a[0-9a-f]*' | sort | uniq -d` printed nothing, since only 2.E.A's bullets existed; the planted-copy half could not run with no list to copy into.
++9. No model in the files to compare: failed.
++10. Of the 206 records of the window, only the 3 lookups of 2.E.A's `/grill` were in a ledger (2.E.A's `plan.md`): failed.
++
++## DONE / NOT DONE
++
++| Item | State | Proof |
++|---|---|---|
++| 1. `agent-roles.md` for plan 2.E | DONE | 78 bullets, 66 numbered items; case 1 below |
++| 2. Agents sections of 2.F, 2.G, 2.H | DONE | 19, 15 and 17 bullets, 4 numbered items in 2.F; case 2 below |
++| 3. Agents section of the rulings file | DONE | 3 bullets; case 7 |
++| 4. No agent in two files, no agent of 2.E.A | DONE | case 8 and the 2.E.A id check below |
++| Verify 1, the verify list | DONE | `checks: 11 commands passed` |
++| Verify 2, cases 1 and 2 | DONE | each run exits 0 |
++| Verify 3, cases 3 and 4 | DONE | table below, every row "yes" |
++| Verify 4, cases 8, 9, 10 | DONE | outputs below |
++| Verify 5, ASCII and tabs | DONE | outputs below |
++
++### Verify 1
++
++From the main checkout's root, after the files were written: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` printed each of its 11 commands with `PASS` or `ok` and ended `checks: 11 commands passed`, exit 0.
++
++### Verify 2, cases 1 and 2 (the head of each run; the per-agent rows follow in the script's output)
++
++```
++$ python3 skills/plan-orchestration/templates/plan_cost.py .scratch/archive/2-e-grill
++Plan 2.E grill: priced usage of its agents
++Prices from /Users/axelfaes/workspace/ordo/skills/plan-orchestration/templates/prices.txt:
++Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.
++Response bodies from /Users/axelfaes/.claude/api-bodies.
++
++Role                   Agents  No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder                    20     1072   2174         7657349               0   173755974  254012     >=61.89
++brief check                21      608   1216         3283877               0    71470326   17194     >=31.06
++reviewer                   20      659   1318         3186019               0    76795510   32165     >=31.94
++reviewer over a round      17      497    994         2226819               0    51199034   10594     >=21.59
++Total                      78     2836   5702        16354064               0   373220844  313965    >=146.48
++
++Agent              Role                               Model              No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++$ python3 skills/plan-orchestration/templates/plan_cost.py .scratch/2-f-diagnose
++Plan 2.F diagnose: priced usage of its agents
++Prices from /Users/axelfaes/workspace/ordo/skills/plan-orchestration/templates/prices.txt:
++Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.
++Response bodies from /Users/axelfaes/.claude/api-bodies.
++
++Role                   Agents  No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder                     4      171    350         1507639               0    23136636   79910      >=9.20
++brief check                 7      196    392         1444861               0    23574681    3450     >=12.01
++reviewer                    4      110    220          717098               0    12782912    3025      >=6.20
++reviewer over a round       4      102    204          637541               0    11881412    3452      >=5.63
++Total                      19      579   1166         4307139               0    71375641   89837     >=33.04
++
++Agent              Role                              Model              No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++$ python3 skills/plan-orchestration/templates/plan_cost.py .scratch/2-g-git-guard
++Plan 2.G git guard: priced usage of its agents
++Prices from /Users/axelfaes/workspace/ordo/skills/plan-orchestration/templates/prices.txt:
++Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.
++Response bodies from /Users/axelfaes/.claude/api-bodies.
++
++Role                   Agents  No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder                     3      251    504         2296330               0    47712869   51448     >=15.80
++brief check                 6      166    332          927568               0    18553612    4108      >=8.43
++reviewer                    4      134    268         1261775               0    19958375   19697     >=10.70
++reviewer over a round       2       52    104          442482               0     5271613    1281      >=3.29
++Total                      15      603   1208         4928155               0    91496469   76534     >=38.22
++
++Agent              Role                             Model              No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++$ python3 skills/plan-orchestration/templates/plan_cost.py .scratch/2-h-session-retro
++Plan 2.H session-retro: priced usage of its agents
++Prices from /Users/axelfaes/workspace/ordo/skills/plan-orchestration/templates/prices.txt:
++Prices in US dollars per million tokens, copied by hand from https://platform.claude.com/docs/en/about-claude/pricing.
++Response bodies from /Users/axelfaes/.claude/api-bodies.
++
++Role                   Agents  No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++builder                     4      182    376         1365678               0    24385810   33806      >=8.63
++brief check                 5      139    278          680958               0    13738395    1432      >=6.18
++reviewer                    4      135    270          611758               0    14676422    2295      >=6.04
++reviewer over a round       4      122    244          623475               0    14290428    9869      >=6.17
++Total                      17      578   1168         3281869               0    67091055   47402     >=27.03
++
++Agent              Role                              Model              No body  Input  Cache write 5m  Cache write 1h  Cache read  Output  Cost (USD)
++```
++
++Each run exits 0. The Total's Agents column equals the bullets of its file: 78 (2.E), 19 (2.F), 15 (2.G), 17 (2.H). The "No body" column is high and every cost is a lower bound (`>=`): the response bodies under `~/.claude/api-bodies` cover only the responses since the setting of ADR 0009 was turned on, after these plans ran.
++
++### Verify 3, case 3 (and case 5)
++
++"Booking" counts the agents of the role whose every completion notice's tokens and tool uses stand in the step's Usage line; "Unbooked, named" are the role's other agents of the file. A step with no booking is a step taken back out of main by the revert 8633553 (2.E's first run of 9a; 2.F 2a, 2b, 3a; 2.G 2a, 2b; 2.H 3a) or a stopped agent of a booked step (2.G step 1).
++
++Plan 2.E
++| Step | Role | Booking | Unbooked, named | File | Booking + unbooked = file |
++|---|---|---|---|---|---|
++| 1 | brief check | 1 | none | 1 | yes |
++| 1 | builder | 1 | none | 1 | yes |
++| 1 | reviewer | 1 | none | 1 | yes |
++| 1 | reviewer over round 1 | 1 | none | 1 | yes |
++| 2 | brief check | 1 | none | 1 | yes |
++| 2 | builder | 1 | none | 1 | yes |
++| 2 | reviewer | 1 | none | 1 | yes |
++| 2 | reviewer over round 1 | 1 | none | 1 | yes |
++| 4 | brief check | 1 | none | 1 | yes |
++| 4 | builder | 1 | none | 1 | yes |
++| 4 | reviewer | 1 | none | 1 | yes |
++| 4 | reviewer over round 1 | 1 | none | 1 | yes |
++| 5 | brief check | 1 | none | 1 | yes |
++| 5 | builder | 1 | none | 1 | yes |
++| 5 | reviewer | 1 | none | 1 | yes |
++| 5 | reviewer over round 1 | 1 | none | 1 | yes |
++| 3 | brief check | 1 | none | 1 | yes |
++| 3 | builder | 3 | none | 3 | yes |
++| 3 | reviewer | 3 | none | 3 | yes |
++| 3 | reviewer over round 1 | 1 | none | 1 | yes |
++| 6 | brief check | 1 | none | 1 | yes |
++| 6 | builder | 1 | none | 1 | yes |
++| 6 | reviewer | 1 | none | 1 | yes |
++| 6 | reviewer over round 1 | 1 | none | 1 | yes |
++| 7 | brief check | 1 | none | 1 | yes |
++| 7 | builder | 1 | none | 1 | yes |
++| 7 | reviewer | 1 | none | 1 | yes |
++| 7 | reviewer over round 1 | 1 | none | 1 | yes |
++| 8 | brief check | 1 | none | 1 | yes |
++| 8 | builder | 1 | none | 1 | yes |
++| 8 | reviewer | 1 | none | 1 | yes |
++| 8 | reviewer over round 1 | 1 | none | 1 | yes |
++| 9 | brief check | 1 | none | 1 | yes |
++| 9 | builder | 1 | none | 1 | yes |
++| 9 | reviewer | 1 | none | 1 | yes |
++| 9 | reviewer over round 1 | 1 | none | 1 | yes |
++| 10 | brief check | 1 | none | 1 | yes |
++| 10 | builder | 1 | none | 1 | yes |
++| 10 | reviewer | 1 | none | 1 | yes |
++| 10 | reviewer over round 1 | 1 | none | 1 | yes |
++| 11 | brief check | 1 | none | 1 | yes |
++| 11 | builder | 1 | none | 1 | yes |
++| 11 | reviewer | 1 | none | 1 | yes |
++| 11 | reviewer over round 1 | 1 | none | 1 | yes |
++| 12 | brief check | 1 | none | 1 | yes |
++| 12 | builder | 1 | none | 1 | yes |
++| 12 | reviewer | 1 | none | 1 | yes |
++| 12 | reviewer over round 1 | 1 | none | 1 | yes |
++| 12a | brief check | 1 | none | 1 | yes |
++| 12a | builder | 1 | none | 1 | yes |
++| 12a | reviewer | 1 | none | 1 | yes |
++| 12a | reviewer over round 1 | 1 | none | 1 | yes |
++| 9a | brief check | 1 | ac1981f7bc7d15672, a0efd11b092676656, a39b4380a345c407e, a51b44de3267fa2f1 | 5 | yes |
++| 9a | builder | 1 | a931b2d1ac6c7e98d | 2 | yes |
++| 9a | reviewer | 1 | a829573acbc0a1734 | 2 | yes |
++| 9a | reviewer over round 1 | 1 | none | 1 | yes |
++| 14a | brief check | 1 | none | 1 | yes |
++| 14a | builder | 1 | none | 1 | yes |
++| 14a | reviewer | 1 | none | 1 | yes |
++| 14a | reviewer over round 1 | 1 | none | 1 | yes |
++| 14b | brief check | 1 | none | 1 | yes |
++| 14b | builder | 1 | none | 1 | yes |
++| 14b | reviewer | 1 | none | 1 | yes |
++| 14b | reviewer over round 1 | 1 | none | 1 | yes |
++| 14c | brief check | 1 | none | 1 | yes |
++| 14c | builder | 1 | none | 1 | yes |
++| 14c | reviewer | 1 | none | 1 | yes |
++| 14c | reviewer over round 1 | 1 | none | 1 | yes |
++
++Plan 2.F
++| Step | Role | Booking | Unbooked, named | File | Booking + unbooked = file |
++|---|---|---|---|---|---|
++| 1 | brief check | 1 | none | 1 | yes |
++| 1 | builder | 1 | none | 1 | yes |
++| 1 | reviewer | 1 | none | 1 | yes |
++| 1 | reviewer over round 1 | 1 | none | 1 | yes |
++| 2 | brief check | 1 | none | 1 | yes |
++| 2 | builder | 1 | none | 1 | yes |
++| 2 | reviewer | 1 | none | 1 | yes |
++| 2 | reviewer over round 1 | 1 | none | 1 | yes |
++| 2a | brief check | no booking | af6b9c9b5dd7db9e4 | 1 | yes |
++| 2a | builder | no booking | aaf2a244958131899 | 1 | yes |
++| 2a | reviewer | no booking | a737b44c11093528b | 1 | yes |
++| 2a | reviewer over round 1 | no booking | a5d29dfd61d79bbfc | 1 | yes |
++| 2b | brief check | no booking | ad9c2bb9acc3d0fed | 1 | yes |
++| 2b | builder | no booking | a065164924d21655a | 1 | yes |
++| 2b | reviewer | no booking | a56363ce0d37f4326 | 1 | yes |
++| 2b | reviewer over round 1 | no booking | a04d091169687c8c9 | 1 | yes |
++| 3a | brief check | no booking | ad56ca9da30d15e7e, a72228d39458b07f9, a49118f1317517195 | 3 | yes |
++
++Plan 2.G
++| Step | Role | Booking | Unbooked, named | File | Booking + unbooked = file |
++|---|---|---|---|---|---|
++| 1 | brief check | 1 | a87b610859b7caa16 | 2 | yes |
++| 1 | builder | 1 | none | 1 | yes |
++| 1 | reviewer | 1 | a1c460a174ddbb16c | 2 | yes |
++| 1 | reviewer over round 1 | 1 | none | 1 | yes |
++| 2 | brief check | 1 | none | 1 | yes |
++| 2 | builder | 1 | none | 1 | yes |
++| 2 | reviewer | 1 | none | 1 | yes |
++| 2 | reviewer over round 1 | 1 | none | 1 | yes |
++| 2a | brief check | no booking | a19f3b42d959e5119 | 1 | yes |
++| 2b | brief check | no booking | a9b4dbe88a7879eb1, ab724e6a426ca4d22 | 2 | yes |
++| 2b | builder | no booking | a64c3043b141e586e | 1 | yes |
++| 2b | reviewer | no booking | a1b3ad4e9df60485a | 1 | yes |
++
++Plan 2.H
++| Step | Role | Booking | Unbooked, named | File | Booking + unbooked = file |
++|---|---|---|---|---|---|
++| 1 | brief check | 1 | none | 1 | yes |
++| 1 | builder | 1 | none | 1 | yes |
++| 1 | reviewer | 1 | none | 1 | yes |
++| 1 | reviewer over round 1 | 1 | none | 1 | yes |
++| 2 | brief check | 1 | none | 1 | yes |
++| 2 | builder | 1 | none | 1 | yes |
++| 2 | reviewer | 1 | none | 1 | yes |
++| 2 | reviewer over round 1 | 1 | none | 1 | yes |
++| 3 | brief check | 1 | none | 1 | yes |
++| 3 | builder | 1 | none | 1 | yes |
++| 3 | reviewer | 1 | none | 1 | yes |
++| 3 | reviewer over round 1 | 1 | none | 1 | yes |
++| 3a | brief check | no booking | aa1400dfd58c76810, a567381c0e52c792b | 2 | yes |
++| 3a | builder | no booking | af9906813a8c54544 | 1 | yes |
++| 3a | reviewer | no booking | a1e73ec4e4e8cf564 | 1 | yes |
++| 3a | reviewer over round 1 | no booking | a423bdea6bbd17886 | 1 | yes |
++
++Case 4: every bullet whose step has a booking matched its booking's figures, except the agents named in the table, each of which matches no booking figure (`python3` over `recs.json`, the records table, against each step's Usage line). Case 5: 2.E step 3 has 3 builders (a4e5bce8772d0d657, the Sonnet 5 trial afb733385e80a6b22, the Sonnet 5.5 trial ae2714d2e377ffba9) and 3 reviewers (a616958f65947f02b and the two trial reviewers a9101e85531b9f6e9 and af3f8a357a2c497f3), all booked by their figures.
++
++### Verify 4
++
++Case 8:
++
++```
++$ cat <the five files> .scratch/2-e-a-self-rule/plan.md | grep -o "^- a[0-9a-f]*" | sort | uniq -d
++(end,        0 lines)
++$ the same, with a9a57fb6f85b48b52 copied into the rulings file
++- a9a57fb6f85b48b52
++after removal:        0 lines
++$ 2.E.A ids (state file and plan.md) found in the five files:
++(end)
++```
++
++Case 9: a bash loop over the 202 bullets and numbered items of the five files read each id's transcript (`agent-<id>.jsonl`, or `<session id>.jsonl` for a `claude -p` session), took the `model` of most of its responses with `grep -o '"model":"claude[^"]*"' | sort | uniq -c | sort -rn | head -1`, and printed a line only on a difference: it printed none. No agent's transcript has two models other than `<synthetic>`.
++
++Case 10: the window runs from 2.E's opening commit bc83a4d (2026-09-29T17:59:33Z) to 2.E.A's opening commit 9fc91dc (2026-09-30T22:31:16Z), which holds 2.H's last booking. It holds 206 records: 179 subagent records under the three session folders and the scratchpad project folders, and 27 `claude -p` sessions in scratchpad project folders. 202 are in the five files, 3 are 2.E.A's `/grill` lookups in 2.E.A's `plan.md` (a508428b7705f46eb, af464f4a770b333a6, aea0212a318abe908), and 1 is no plan's: e6eaa63f-a72a-4d27-8c5a-205d10b9cdf8, the `claude -p` session in `scratchpad-mp-ordo-diagnose-3` that ran `/diagnose` for 2.F step 3, which 2.F's booking records as Axel's own session ("the session is Axel's ... no agent of the orchestrator ran", `.scratch/2-f-diagnose/plan.md:71` before this step).
++
++### Verify 5
++
++`LC_ALL=C grep -n '[^ -~]'` over the five files prints only the tick marks (U+2705) of the ticked step lines already in the three `plan.md` files (2.F lines 21-22, 2.G 19-20, 2.H 27-29); the same grep over the added lines (`git diff -U0 | grep '^+'` and the new file) prints nothing. Tab count 0 in each of the five files.
++
++## Files
++
++- `.scratch/archive/2-e-grill/agents/agent-roles.md`: new, 151 lines.
++- `.scratch/2-f-diagnose/plan.md`: 128 lines, +31 (`## Agents` before `## Blocked, and by what`).
++- `.scratch/2-g-git-guard/plan.md`: 94 lines, +20.
++- `.scratch/2-h-session-retro/plan.md`: 117 lines, +22.
++- `.scratch/rulings/3-the-writing-base.md`: 33 lines, +8.
++
++## Agents placed by their prompt or the timeline, with the evidence
++
++- Every unbooked priced agent's prompt names its plan, its step and its brief or worktree (`.scratch/2-e-grill/agents/briefs/9a.md`, `worktrees/2f-2a`, `.scratch/2-g-git-guard/agents/briefs/1.md` and so on); a51b44de3267fa2f1 ("Brief check 2.E 9a, fourth") names 2.F step 2b as well, and is placed by its description and its brief.
++- The three `/grill 3` lookups: the parent session 3998c800 invoked `Skill grill 3` at 2026-09-30T16:55:43Z, started a2cd8be14d77ebe85 and a9d12b91117bb4165 at 16:58, and ac071af1b2da2bf66 at 17:27 after "round 2 of the interview goes out once a lookup agent comes back".
++- 2.E step 3: the claude-code-guide a8b166abc8ac4a21f (19:24, "Subagent definition facts for effort", between step 5's last review and step 3's brief check); the `effort-probe-proj` sessions and their six subagents (19:28 to 19:42, agent types `probe-high`, `probe-xhigh`, `probe-max`); the two sessions in the 6266a558 scratchpad (19:59 and 21:16, "Reply with the word ok", served claude-sonnet-5-5, each just before a Sonnet trial build); `model-probe` with its two subagents (21:17); `verify7` with its `ordo-high` subagent (22:11, after step 3's review over round 1, before step 6's brief check).
++- 2.E step 14b: the `probe` sessions (20:06 to 20:10, between 14b's brief check and its builder), the `r14b-judge-a` to `-e` sessions and the subagent ac00e4f3140387c2b (20:20 to 20:24, during 14b's review), and the `14b-probe-a` sessions (20:38 to 20:51, the landing's probe, "Checked by a probe from a scratch folder" in 14b's booking).
++- 2.E step 14: judges 5 and 6 are the sessions c5eaa986-6efe-4ffc-a8f4-7fa8778affaa and 96f3dbfc-cfab-4281-8ca7-dfc5d6c49eba in `scratchpad-bc14r-judge-1` and `-judge-2`, the folders `14-blind-comparison.md` lines 529-530 name; the depth-2 agents by their `toolUseId` in the side's transcript.
++- 2.F step 4's sides and judges: by description ("Blind comparison side one" and so on) and time (13:41 to 13:50 on 2026-09-30), matching 1da8886 "Record the blind comparison of step 4 of plan 2.F".
++
++## Records named as no plan's
++
++- e6eaa63f-a72a-4d27-8c5a-205d10b9cdf8: Axel's own `/diagnose` session for 2.F step 3, as above.
++- Before 2.E opened, in the design conversation of entry 2.E (the parent session 6266a558 between 16:30 and 17:42 on 2026-09-29, ending with "Rulings noted: E (b), F (a) and H (a)" and the rulings A to H written before `plan.md` existed): a432f885c9164e19d ("Analyse the game-engine design session"), a87e3855655e33f19 ("Extract oculus design and coding rules"), ab9ea8af2b5f1b654 (claude-code-guide, "Check subagent effort settings in Claude Code"), a5f748843ab789cc0 ("Audit Axel's requests against what was done") and ae64bcf0b2ed543b4 ("Count ruling-Y stops in 2.C and 2.D"). No plan skill started them and no plan of 2.E existed, so ADR 0006's "Every agent a plan skill starts" does not reach them.
++
++## Judgment calls
++
++- ab9ea8af2b5f1b654, which the brief listed with the claude-code-guide agents of 2026-09-29: it started 48 minutes before 2.E's opening commit, in the design conversation, so it is named above as no plan's, while a8b166abc8ac4a21f, started inside the plan between two steps, is a numbered item of step 3.
++- The `claude -p` probe sessions of 2.E steps 3 and 14b (24 sessions: 8 of step 3, 16 of step 14b) are numbered items beside the probe subagents they started, since they are processes started for the step as judges 5 and 6 are; each carries its session id in place of an agent id.
++- Step 14's two booked rerun sides (a2d1285df87e5583c, ad25c3abcf1869a03) are numbered items, as every side and judge is: no priced role names a side.
++- Numbered items carry the served model of most responses; the two claude-code-guide agents ran on claude-haiku-4-5-20251001.
++
++## Anything in the brief wrong or impossible
++
++- "Every record under the three session folders" grew to 419 ordo records (409 under the main project folder, 10 in scratchpad folders) while the step ran; the window of case 10 fixes the set.
++- The brief's list of claude-code-guide agents included ab9ea8af2b5f1b654, which predates the plan (judgment call above).
