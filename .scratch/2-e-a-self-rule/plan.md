@@ -32,7 +32,7 @@ one plan run with `self_rule: on`, whose every open item is either left open und
 - ✅ 6 Self-rule in the loop (D2, D3, D4, D23, ADRs 0004 and 0005): a "Self-rule" section of `plan-orchestration` (the six kinds left open, every other item closed with its recommendation, booked "(self-rule)" and written to `<ledger_root>/choices.md` in the form of D3), the review flow of `C<n> Agree` and `C<n> => <text>`, `spec`, `plan` and `grill` accepting "(self-rule)" wherever they accept "(the user)" and `grill` carrying only "(the user)", `ordo-help` showing the choices awaiting review, a template `choices.md`, and the exception sentence of ruling B in `skills/repo-setup/templates/shared-rules.md`, kind 3 read narrow as ruling B says; check: each changed text read in place, and the flow of D23 walked on a scratch copy (1 commit) (approved) (ruling B)
 - ✅ 6b `self_rule: on` set in this plan's state block for the steps after 6 (D9); check: the block, read back (1 commit; orchestrator, no agent) (approved)
 - ✅ 7 `next_entry`: after a closing, the next open entry through `/grill` (each round answered with its recommendation, written to `choices.md`), `/plan` (its approval written to `choices.md`) and the loop, stopping at an entry under "Not yet specified", at an item of the six kinds, or when no open entry is left, and `/roadmap add` only for work a ruling or a finding names, in `plan-orchestration`, `grill`, `plan` and `roadmap`; check: each changed text read in place (1 commit) (approved) (ruling E) (ruling F) (ruling G)
-- 8 The terms of D24: **self-rule** and **choices file** added, **open item** and **ruling** amended, in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`, and the sentence of ruling H in `skills/repo-setup/templates/shared-rules.md`; check: `git diff docs/glossary.md` after `/repo-setup sync` shows the words of D24 (1 commit) (approved) (ruling H)
+- ✅ 8 The terms of D24: **self-rule** and **choices file** added, **open item** and **ruling** amended, in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`, and the sentence of ruling H in `skills/repo-setup/templates/shared-rules.md`; check: `git diff docs/glossary.md` after `/repo-setup sync` shows the words of D24 (1 commit) (approved) (ruling H)
 - 9 The gate's `next_entry` run on a scratch repository whose roadmap holds two small entries; check: the second entry opened, grilled and planned after the first closes, each decision of its `/grill` in `choices.md`, read by Axel (1 commit; orchestrator, no agent) (approved)
 - 10 The cost figures: the script prints plan 2.E and plan 2.E.A, 2.E.A's runs over a repair round on `repair_reviewer`'s model, and the brief checks that met dictated text listed; check: read by Axel (orchestrator, no agent) (approved)
 - 11 The gate's `self_rule` run, this plan's open items after step 6b; check: at least one item closed into `choices.md` and one left open under a named kind, each read by Axel (orchestrator, no agent) (approved)
@@ -123,6 +123,10 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a5ab075c3677ad2d7: builder of step 7, claude-sonnet-5-5
 - acaa1cd6ca52da97e: reviewer of step 7, claude-opus-5-5
 - ad8e8ad9c3dbbb136: reviewer of step 7 over round 1, claude-sonnet-5-5
+- ad359a1df2ce3b5fe: brief check of step 8, claude-opus-5-5
+- a8e821b5b3f0e2756: builder of step 8, claude-sonnet-5-5
+- aa9c2761143a81412: reviewer of step 8, claude-opus-5-5
+- adeb36a8bdd6bc53b: reviewer of step 8 over round 1, claude-sonnet-5-5
 
 ## Blocked, and by what
 
@@ -230,6 +234,20 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - A/B: none (`bench: []`). Look: none (`look:` empty).
 - Usage: brief check acf5b218dfdc17a01, claude-opus-5-5, 234387 tokens, 38 tool uses, 10 min 19 s; builder a5ab075c3677ad2d7, claude-sonnet-5-5, 194415 tokens, 20 tool uses, 6 min 27 s (the first run of the cases, handed back), 282087 tokens, 46 tool uses, 15 min 29 s (the build) and 343160 tokens, 16 tool uses, 4 min 28 s (round 1); reviewer acaa1cd6ca52da97e, claude-opus-5-5, 255946 tokens, 43 tool uses, 8 min 54 s; reviewer over round 1 ad8e8ad9c3dbbb136, claude-sonnet-5-5, 287831 tokens, 53 tool uses, 10 min 8 s.
 - The builder's first report did not pass its bar: the first review found fifteen findings (Spec 1 to 5, Standards 1 to 8, Behaviour 1 and 2).
+
+### Step 8, the terms of D24 (landed 2026-10-01)
+
+- Landed: the terms **self-rule** and **choices file** added, **open item**, **ruling** and **stop** amended in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`; the four sentences of `land` (Steps 6 and the Stops row), `diagnose` and `plan-orchestration` Steps 9 that said "only the user can decide" now say a decision for the user; `plan-orchestration` "Stops" and its anti-pattern lines say "a decision for the user"; ruling H's sentence in `skills/repo-setup/templates/shared-rules.md:20`. 6 files, 18 insertions, 14 deletions.
+- Rulings on the way: Open item H (a), the user's; the round's rulings `agents/briefs/8-round-1.md`.
+- Premise corrections (at /spec): **next-entry mode** moved to step 7; the step widened to the four "only the user can decide" sentences and the term **stop**, D24's words aligned with `references/self-rule.md`, as `agents/reviews/8-brief-check.md` "Closed" names.
+- Repair round 1 (`agents/briefs/8-round-1.md`): five rulings; the run over the round gives each "holds" and found one passage of the builder's report left stale.
+- Fixes at landing: 1, the builder's report brought to the end state of the round, named in `agents/reviews/8-refuter.md` "Closed".
+- Merge with step 7 at landing: `land.sh` stopped at a conflict in `skills/repo-setup/templates/plan-terms.md` and `docs/glossary.md` (step 8's **ruling** line beside step 7's **rulings file** line, both kept); the session resolved the template in the worktree, synced the glossary from it (`sync_rules.py . --only glossary --write`, then `ok`), finished its cherry-pick and staged `main..2ea-8-land` on main with `git cherry-pick -n`.
+- The step's check: each changed text read in place by the reviewers; `sync_rules.py . --only glossary` prints `ok: the plan-terms block equals the template`; `grep -rn 'only the user can decide' skills docs README.md` prints nothing.
+- Verification on main, after the merge and the fix at landing: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` printed the nine `PASS:` lines, `ok: the plan-terms block equals the template`, the ASCII check with no output and `checks: 11 commands passed`, exit 0.
+- A/B: none (`bench: []`). Look: none (`look:` empty).
+- Usage: brief check ad359a1df2ce3b5fe, claude-opus-5-5, 186342 tokens, 49 tool uses, 8 min 23 s; builder a8e821b5b3f0e2756, claude-sonnet-5-5, 136333 tokens, 25 tool uses, 4 min 4 s (the build) and 161990 tokens, 10 tool uses, 2 min 27 s (round 1); reviewer aa9c2761143a81412, claude-opus-5-5, 179218 tokens, 54 tool uses, 9 min 3 s; reviewer over round 1 adeb36a8bdd6bc53b, claude-sonnet-5-5, 144807 tokens, 29 tool uses, 4 min 47 s.
+- The builder's first report did not pass its bar: the first review found six findings (Spec 1, Proof 1, Standards 1 to 4).
 
 ### Step 7, `next_entry`: Step 0 (stopped 2026-10-01)
 

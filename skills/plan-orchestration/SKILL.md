@@ -121,7 +121,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - Its failure is recorded in the step's Step 0 in `plan.md`.
    - The step keeps its line and its tag.
      - It is worked again as that step, with no new ruling, once.
-   - The failure goes to the user as an open item only when only the user can decide what to do, by "Stops".
+   - The failure goes to the user as an open item only when what to do is a decision for the user, by "Stops".
    - A second failure of the step's landing always goes to the user, as the `land` skill's Steps 6 says.
    - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head. The `spec` skill's "Steps / A step taken back out of main" says how.
@@ -304,7 +304,7 @@ When the user sets a time by which no agent may run, the loop keeps a night rule
 
 ## Stops
 
-The table holds seven kinds of stop, each for a decision that is the user's, and one refusal, the last row, which names its cause and leaves no open item:
+The table holds seven kinds of stop, each for a decision for the user, and one refusal, the last row, which names its cause and leaves no open item:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
@@ -322,7 +322,7 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
   - Under `self_rule: on`, a stop of a kind that `references/self-rule.md`, "The six kinds left open", does not name, and that is not one of the stops its "The counts" names, is then closed as its "Closing an open item" says.
 - The ledger files the session wrote are then committed by path, a resume point, so the stop survives the session.
 - A ruling that adds or splits a step is booked as the `spec` skill's "Steps / A ruling" says: the new line in the step list ends with `(ruling <name>)`, naming the ruling's line in the Rulings section.
-- A stop is repeated in every report until the user has ruled.
+- A stop is repeated in every report until the user has ruled, or, under `self_rule: on`, until the orchestrator closes it as `references/self-rule.md`, "Closing an open item", says.
 - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
   - It never goes through a question-box or multiple-choice tool.
   - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list; the user's ruling on the item then approves them too, with no second stop.
@@ -338,7 +338,7 @@ The table holds seven kinds of stop, each for a decision that is the user's, and
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | Relaunching a dead builder silently | Its partial work in the worktree is lost without the user knowing | Report it as "Resuming, and handing the plan over" says; a continuation builder takes over the worktree when the user says so |
-| Sending a finding that changes the scope, a requirement, a public shape or an established decision back to the builder | The builder then takes a decision that is the user's | Raise it as a stop |
+| Sending a finding that changes the scope, a requirement, a public shape or an established decision back to the builder | The builder then takes a decision for the user | Raise it as a stop |
 | Handing a miss inside a brief back as a gap in a report | The work the user asked for is left undone | Close it in the repair rounds or at landing, or raise it to the user as an open item, by "Stops" |
 | Minting a step because the work is inconvenient now | The open step does not end what it exists to end | Widen the open step's path list; see "What earns a step of its own" |
 | An option that breaks a written rule, in a stop | The user is asked to weigh something that is not allowed | Leave it out; do not mention it |

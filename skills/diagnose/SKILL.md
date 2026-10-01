@@ -45,7 +45,7 @@ metadata:
    - For a finding written as a heading and a number, the refuter report `agents/reviews/<step>-refuter.md`: the finding of that name in the first run, before any heading "Repair round <n>, refuted".
    - For a finding written `round <n>` and a heading and a number, the finding of that name under the heading "Repair round <n>, refuted" of the same report.
    - For `brief check <n>`, the brief check's report `agents/reviews/<step>-brief-check.md`, read as it stands on disk.
-   - For `red line`, the failure the step's landing recorded under the step's Step 0 in `plan.md`, and the open item in the state file when the landing booked one, which `land` Steps 6 does only when only the user can decide.
+   - For `red line`, the failure the step's landing recorded under the step's Step 0 in `plan.md`, and the open item in the state file when the landing booked one, which `land` Steps 6 does only when what to do is a decision for the user.
    - No such report or finding is a refusal ("Stops").
 
 ## Steps

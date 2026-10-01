@@ -2,7 +2,7 @@
 
 Everything in the brief is done. Items 1 to 7 of "What to build" are written on the lines "Paths this step writes" names, `docs/glossary.md` is synced from the template, and the five Verify commands hold.
 
-## Open items of the state file (read in the main checkout, `.scratch/2-e-a-self-rule/orchestrator-state.md`, verbatim)
+## Open items of the state file (read in the main checkout, `.scratch/2-e-a-self-rule/orchestrator-state.md`, verbatim, at the build; Open item H has since been ruled (a) by the user, and the state file's open items read "None.")
 
 - Open item H (2026-10-01): whether the shared rule on self-rule covers `/grill` and `/plan` run with `--self-rule`. Raised by the brief check of step 7 (`agents/reviews/7-brief-check.md`, "Declined to judge"). Kind 3: a change to the shared rules and to `~/.claude/CLAUDE.md`.
   - What the tree shows: `skills/repo-setup/templates/shared-rules.md:20` reads "Under a plan's `self_rule: on`, such a decision outside the six kinds `plan-orchestration` "Self-rule" leaves open is taken with its recommendation and written to the choices file for your review.", and `~/.claude/CLAUDE.md` holds the same sentence (ruling B). In next-entry mode `/grill <entry> --self-rule` and `/plan <entry> --self-rule` run before the next entry's plan exists, under the keys of `.agents/plan.yaml` (ruling F), so no plan's `self_rule: on` is in force while they take decisions.
@@ -12,7 +12,7 @@ Everything in the brief is done. Items 1 to 7 of "What to build" are written on 
   - Recommendation: (a), since a written rule that a literal reader reads against the skill text is a clash, and the change is one sentence. Lazy option: (b), which changes nothing and leaves the clash to each reader.
   - Kind 3; it waits for you. It blocks step 9, whose run is the first next-entry run, and no other step.
 
-Item H is not in this brief, and `skills/repo-setup/templates/shared-rules.md` is unchanged.
+Item H was ruled (a) by the user after the build; its sentence is at `skills/repo-setup/templates/shared-rules.md:20`, written in repair round 1 (ruling 1).
 
 ## The cases, first run on the unchanged tree (base d3c0f00)
 
@@ -74,13 +74,14 @@ checks: 11 commands passed
 
 Cases 7 to 9 after the build: case 7 is Verify 2, case 8 is Verify 3, case 9 is Verify 5. Cases 1 to 6 were read again on the changed text, as it would be followed, and each now agrees with the sections it names, as the first-run notes above state. `grep -c "$(printf '\t')"` finds no tab in `plan-terms.md` or `docs/glossary.md`.
 
-## Files changed (lines after the change; `git diff --stat`: 5 files, 14 insertions, 10 deletions)
+## Files changed (lines after repair round 1; `git diff --stat`: 6 files, 18 insertions, 14 deletions)
 
 - `skills/repo-setup/templates/plan-terms.md`, 125 lines: the new entries at lines 20 and 100, **open item** at 61, **ruling** at 97, **stop** at 112.
 - `docs/glossary.md`, 142 lines: the same entries at 25, 66 (open item), 102 (ruling), 105 (self-rule) and 117 (stop), copied by the sync; no line outside the block changed.
 - `skills/land/SKILL.md`, 217 lines: lines 80 and 183, one line each.
 - `skills/diagnose/SKILL.md`, 237 lines: line 48.
-- `skills/plan-orchestration/SKILL.md`, 362 lines: line 123.
+- `skills/plan-orchestration/SKILL.md`, 362 lines: lines 123, 304, 322 and 338.
+- `skills/repo-setup/templates/shared-rules.md`: line 20, the sentence of ruling H.
 - `.scratch/2-e-a-self-rule/agents/reviews/8-report.md`: this report.
 
 ## A change carries to every place that names it
@@ -90,11 +91,11 @@ Cases 7 to 9 after the build: case 7 is Verify 2, case 8 is Verify 3, case 9 is 
 Sentences about the changed files as a whole, reread after the change:
 
 - `skills/repo-setup/templates/plan-terms.md` heading `## Plan terms` and the glossary page's introduction (`docs/glossary.md:3`) say the block is the template copied whole; `sync_rules.py . --only glossary` prints `ok`.
-- `skills/plan-orchestration/SKILL.md:304` ("each for a decision that is the user's") still holds under the amended **stop**, which keeps "a decision for the user" and closes the kinds `references/self-rule.md` does not leave open.
+- `skills/plan-orchestration/SKILL.md:304` reads "each for a decision for the user" after repair round 1, and holds under the amended **stop**, which keeps "a decision for the user" and closes the kinds `references/self-rule.md` does not leave open.
 
 ## Judgment calls the brief left open
 
-None. Every line is the brief's dictated text.
+None. Every line is the brief's dictated text or the text a ruling of `agents/briefs/8-round-1.md` dictates.
 
 ## User-visible changes, before and after
 

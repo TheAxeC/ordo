@@ -42,23 +42,7 @@ repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over
 ```
 
 ```yaml
-dispatch:
-- step: 8
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2ea-8
-  base: d3c0f00
-  launched: 2026-10-01
-  report: .scratch/2-e-a-self-rule/agents/reviews/8-report.md
-  brief_check: .scratch/2-e-a-self-rule/agents/reviews/8-brief-check.md (ad359a1df2ce3b5fe, claude-opus-5-5 (ordo-high), 186342 tokens, 49 tool uses, 8 min 23 s)
-  landing: not-started
-  round: 1
-  session_id: a8e821b5b3f0e2756 (claude-sonnet-5-5)
-  builder_usage: 136333 tokens, 25 tool uses, 4 min 4 s; repair round 1: 161990 tokens, 10 tool uses, 2 min 27 s
-  reviewer_report:
-  - .scratch/2-e-a-self-rule/agents/reviews/8-refuter.md (aa9c2761143a81412, claude-opus-5-5 (ordo-high), 179218 tokens, 54 tool uses, 9 min 3 s)
-  - .scratch/2-e-a-self-rule/agents/reviews/8-refuter.md, "Repair round 1, refuted" (adeb36a8bdd6bc53b, claude-sonnet-5-5 (ordo-high), 144807 tokens, 29 tool uses, 4 min 47 s), over round 1
-  shared_paths: skills/repo-setup/templates/plan-terms.md, docs/glossary.md and skills/plan-orchestration/SKILL.md, each shared with step 7; the merge is simple, since each step changes other lines of each file (step 7: the terms loop to night rule and quoted ruling, and plan-orchestration's description, intro, Quick start, "What it reads", Steps 10, "Self-rule" and Rules; step 8: the terms change point to Closed, open item, ruling to sequence and stop, and plan-orchestration Steps 9 line 123); step 8 lands after step 7, since its self-rule term names --self-rule.
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -100,6 +84,6 @@ None.
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 7 and 6b landed; step 7's booking is in `plan.md`, its landing report at `agents/reviews/7-landing.md`. Step 8 is refuted over its repair round 1 and lands next, on top of step 7. Then step 9. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
-- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 7's fixes at landing printed `checks: 11 commands passed`, exit 0.
-- Open items A to H ruled; C1 and C2 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.
+- 2026-10-01. Steps 1 to 8 and 6b landed; their bookings are in `plan.md`, step 8's landing report at `agents/reviews/8-landing.md`. Next: step 9, the gate's `next_entry` run on a scratch repository. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 8's merge with step 7 and its fix at landing printed `checks: 11 commands passed`, exit 0.
+- Open items A to H ruled; C1 and C2 agreed by the user, and `.scratch/choices.md` holds no choice. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence, now at `skills/repo-setup/templates/shared-rules.md:20`, is for the user to put in `~/.claude/CLAUDE.md`, in place of ruling B's.

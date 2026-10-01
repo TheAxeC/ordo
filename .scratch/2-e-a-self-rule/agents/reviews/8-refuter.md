@@ -235,3 +235,9 @@ No fix reaches beyond its ruling. The diff holds six files and the changed lines
 - The sentence length of the dictated shared-rules sentence and the **self-rule** line is left to the user's ruling and the orchestrator's dictation.
 
 Reviewer usage: 144807 tokens, 29 tool uses, 4 min 47 s (adeb36a8bdd6bc53b, claude-sonnet-5-5, ordo-high).
+
+## Closed
+
+- First run, Spec 1, Proof 1 and Standards 1 to 4: closed in repair round 1 by the rulings of `agents/briefs/8-round-1.md` (rulings 1 to 5); the run over round 1 gives each "closed" and each ruling "holds". Proof 1 on the `plan-orchestration` description was step 7's line, closed by step 7's round ruling 14.
+- Repair round 1, the finding on the builder's report (its sections before "Repair round 1" stating pre-round facts): fixed at landing in `agents/reviews/8-report.md`. The open-items heading says the quote is from the build and that Open item H has since been ruled (a); the note on item H names `shared-rules.md:20` and round ruling 1; "Files changed" gives 6 files, +18 -14, with `plan-orchestration/SKILL.md` lines 123, 304, 322 and 338 and `shared-rules.md:20`; the `:304` sentence quotes the line after the round; "Judgment calls" names the round's dictated text.
+- Declined points of the run over round 1: `~/.claude/CLAUDE.md` is the user's to change under ruling H; the merge with step 7 was resolved at landing (below, in `plan.md`'s booking); the **self-rule** pointer to "Next-entry mode" holds on main, where step 7 landed first (`grep -n '^## Next-entry mode' skills/plan-orchestration/references/self-rule.md` prints line 45); sentence length of dictated text is not a finding.

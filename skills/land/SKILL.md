@@ -77,7 +77,7 @@ metadata:
      - It is recorded in the step's Step 0 in `plan.md`.
    - The step keeps its line and its tag.
      - It is worked again as that step, with no new ruling.
-   - The failure goes to the user as an open item only when only the user can decide what to do.
+   - The failure goes to the user as an open item only when what to do is a decision for the user.
    - A step is taken back out of main and prepared again at most once: a second failure of its landing always goes to the user as an open item, and the step waits for the ruling.
    - The step's agents are booked in `plan.md`'s Agents section by the rules of Steps 9, written and read back before that commit, since `/spec` later removes the step's dispatch entry; the agents of its later landing are appended when it lands, those already in the section skipped.
    - The state file and `plan.md` are then committed by path, a resume point.
@@ -180,7 +180,7 @@ metadata:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and only the user can decide what to do | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; the second failure of a step's landing always waits for the user |
+| A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and what to do is a decision for the user | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; the second failure of a step's landing always waits for the user |
 | A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves: main untouched; under `templates/land.sh`, the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1 | The lock removed once no git command uses it, then `/land` again; `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
