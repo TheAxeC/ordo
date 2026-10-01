@@ -55,6 +55,18 @@ dispatch:
   round: 0
   session_id: a5ab075c3677ad2d7 (claude-sonnet-5-5)
   builder_usage: 194415 tokens, 20 tool uses, 6 min 27 s (the first run of the cases, handed back: agents/reviews/7-cases-handback.md; ruled in agents/briefs/7-cases.md)
+- step: 8
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2ea-8
+  base: d3c0f00
+  launched: 2026-10-01
+  report: .scratch/2-e-a-self-rule/agents/reviews/8-report.md
+  brief_check: .scratch/2-e-a-self-rule/agents/reviews/8-brief-check.md (ad359a1df2ce3b5fe, claude-opus-5-5 (ordo-high), 186342 tokens, 49 tool uses, 8 min 23 s)
+  landing: not-started
+  round: 0
+  session_id: a8e821b5b3f0e2756 (claude-sonnet-5-5)
+  shared_paths: skills/repo-setup/templates/plan-terms.md, docs/glossary.md and skills/plan-orchestration/SKILL.md, each shared with step 7; the merge is simple, since each step changes other lines of each file (step 7: the terms loop to night rule and quoted ruling, and plan-orchestration's description, intro, Quick start, "What it reads", Steps 10, "Self-rule" and Rules; step 8: the terms change point to Closed, open item, ruling to sequence and stop, and plan-orchestration Steps 9 line 123); step 8 lands after step 7, since its self-rule term names --self-rule.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
