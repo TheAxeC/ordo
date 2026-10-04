@@ -93,6 +93,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-04. Steps 1 to 12c and 9 landed or done; their bookings are in `plan.md`. Steps 10, 11 and 12 read by the user (Open items J, K and Q); step 9's step lists read by the user. Next: step 13, the closing: the roadmap diff, the copies in `~/.claude-work` removed and research-hub's three edits discarded in `~/.local/share/ordo-stable`, the tag `v2.8.0`, and the pin into `~/.claude` and `~/.claude-work` on Axel's yes. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-04. Plan closed: every step landed or done, entry 2.E.A marked done in `docs/roadmap.md`, this folder archived. The tag `v2.8.0` and the pin into `~/.claude` and `~/.claude-work` follow the closing commit.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 12c's fixes at landing printed `checks: 11 commands passed`, exit 0.
 - Open items A to I and L to Q settled; C1 to C4 agreed by the user; `.scratch/choices.md` holds no choice of this plan. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
