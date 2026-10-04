@@ -42,7 +42,18 @@ repair_reviewer: claude:sonnet # from .agents/plan.yaml: the run of /refute over
 ```
 
 ```yaml
-dispatch: []
+dispatch:
+- step: 12c
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/12c
+  base: a9df87f
+  launched: 2026-10-04
+  report: .scratch/2-e-a-self-rule/agents/reviews/12c-report.md
+  brief_check: .scratch/2-e-a-self-rule/agents/reviews/12c-brief-check.md (aeae5b2d7ddaabf54, claude-opus-5-5 (ordo-high), 246593 tokens, 57 tool uses, 10 min 29 s)
+  landing: not-started
+  round: 0
+  session_id: a72058491ec0de347 (claude-sonnet-5-5)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -92,6 +103,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b, 11c, 12 and 12b landed; their bookings are in `plan.md`, step 12b's landing report at `agents/reviews/12b-landing.md`. Steps 10 and 11 read by the user (Open items J and K); step 12 read by the user (Open item Q). Next: step 12c under ruling "Steps by part" (2026-10-04), then step 9 under ruling I and "Open item I, the separate install", so the tag `v2.8.0-rc.1` carries steps 11b to 12c, then step 13. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
+- 2026-10-01. Steps 1 to 8, 6b, 10, 11, 11b, 11c, 12 and 12b landed; their bookings are in `plan.md`, step 12b's landing report at `agents/reviews/12b-landing.md`. Steps 10 and 11 read by the user (Open items J and K); step 12 read by the user (Open item Q). In flight: step 12c under ruling "Steps by part" (2026-10-04). Next: step 9 under ruling I and "Open item I, the separate install", so the tag `v2.8.0-rc.1` carries steps 11b to 12c, then step 13. `self_rule: on`: an open item outside the six kinds is closed with its recommendation and written to `.scratch/choices.md`.
 - Verified: `sh skills/land/templates/checks.sh .scratch/2-e-a-self-rule/orchestrator-state.md` on main after step 12b's fixes at landing printed `checks: 11 commands passed`, exit 0.
 - Open items A to I and L to Q settled; C1, C2 and C3 agreed by the user; `.scratch/choices.md` holds C4 (Open item N) for the user's review. The setting of ADR 0009 is in `~/.claude/settings.json`. Ruling H's sentence is at `skills/repo-setup/templates/shared-rules.md:20` and, put there by the user, at `~/.claude/CLAUDE.md:24`.
