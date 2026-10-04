@@ -13,7 +13,7 @@ The open item names its kind by its number:
 1. Anything that reaches outside the repository or needs the user's hands or accounts, a model other than the configured one included.
 2. Anything that deletes data or touches a secret.
 3. A change to the user's written rules (the rules file, the standards pages, the shared rules, `CLAUDE.md`, `.agents/plan.yaml` and the configuration block), a clash between them, or the reversal of a ruling: an option that replaces, removes or contradicts a bullet of a Rulings section, whatever its ending, removes a step the user approved, or reverts a landed step the user approved or one a ruling of the user added.
-   - Rewriting an approved step's text to absorb a found premise, and adding a step, are no reversal.
+   - Rewriting an approved step's text to absorb a found premise or a ruling on a part not yet built, and adding a step, are no reversal.
    - Kind 3 also names a contradiction of an ADR in force, or an option that supersedes one.
    - Kind 3 also names an option that adds a check, a command in the verification list or a script, since the rules file reserves to the user the approval of what a new script computes.
 4. The closing's roadmap diff, tag and pin.
@@ -37,7 +37,7 @@ An open item that "The six kinds left open" and "A skill with its own approval s
 1. The open item is written in full first, as a stop is, with its options, the pros and cons of each, one recommendation and the lazy option named.
 2. The option taken is the recommended one.
 3. It is booked as the `spec` skill's "Steps / A ruling" 2 books a ruling, the option's text as the ruling's text, with one Rulings bullet whatever the ruling changes: `- Open item <L> (<date>): <the option taken, in one line, and what it unblocks> (self-rule).`
-   - That bullet is the line "Steps / A ruling" 2 names for a ruling that adds or splits a step or runs a skill.
+   - That bullet is the line "Steps / A ruling" 2 names for a ruling that adds or splits a step, rewrites the line of a step not yet built, or runs a skill.
 4. The open item moves to the Closed items as `- <date>: Open item <L>, <what was raised>: closed under self-rule, C<n>.`
 5. The choice is written to the choices file, as "The choices file" says.
 6. The open item, the step's Step 0, the Rulings bullet, the Closed items, the step text the ruling rewrote and the choices file are committed by path at once, a resume point.

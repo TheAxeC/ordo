@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "1.11.0"
+  version: "2.0.0"
 ---
 
 # Open a plan
@@ -79,7 +79,20 @@ metadata:
    - The session asks of the copied gate "could this pass without the goal being reached?" and writes the answer with its reason in the section "## Gate", on the line the template gives the gate.
    - A copied gate that could pass without the goal is kept as the roadmap has it, since the gate is the roadmap's and the user's.
    - The answer and reason for such a gate go to the user at Steps 3.
-   - The step list is drafted from the gate, one step per verifiable piece of it, each with the check that proves it.
+   - The step list is drafted from the entry's goal as its parts, each step with the check that proves its part.
+     - A step is a part that must exist and work before another part is built on it.
+     - A step is also a point where the user reads or decides before the rest goes on.
+     - A later part is built on an earlier one when it needs the earlier one's result, not only its existence.
+     - A result is a landed or tagged text, or a run or a decision on it that only the user, or a session other than the step's builder, can make.
+     - The runs and decisions of that kind that need the same step are one step of their own after it.
+       - Such as a skill the user runs in a fresh session and the blind comparison the user calls on its output.
+     - Two parts whose content is known in advance are one step even when one uses the other, such as a script and its setup text.
+     - A run the builder itself makes, read by the user, is part of the step's check.
+     - The user's reading of such a run blocks nothing after it.
+     - A gate's check runs inside the step that delivers what it checks.
+     - Wiring in, terms and documentation belong to the step that builds the thing.
+     - Bookkeeping is done in a commit the orchestrator already makes and is never drafted as a step.
+     - The number of steps follows from the parts of the entry.
      - Under a quoted ruling ("What it reads" 6), the step list is the ruling's, each step with its check.
      - The rest of this step is worked on that list.
      - A closing step in the ruled list is dropped for the one `/plan` writes.
@@ -167,7 +180,7 @@ metadata:
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |
 | No such entry | `<entry>` matches no roadmap entry | The open entries | `/plan` with an entry that exists |
-| Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate to draft steps from | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
+| Not yet specified | `<entry>` stands under the roadmap's "Not yet specified" section, so it has no gate for its steps to run | A refusal that names the entry, what must be known before its gate can be named, and `/roadmap add <entry>` | `/roadmap add <entry>`, then `/plan` again |
 | `--self-rule` without the keys | `--self-rule` is given and `.agents/plan.yaml` does not hold `self_rule: on` and `next_entry: on` | A refusal that names the two keys and their values | The two keys set to `on`, then `/plan` again, or `/plan` without `--self-rule` |
 | The plan exists | The ledger folder is already there: a plan is opened once | The folder, and the entry's rulings file when one is still there, for the user to remove, as the bullets below say | Nothing |
 
@@ -183,7 +196,9 @@ metadata:
 
 ## Rules
 
-- A step is one deliverable and one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), with the command that proves it, except the bookkeeping steps the orchestrator does itself.
+- A step is a part of its entry, as Steps 2 says, with the command that proves it.
+- A step is built by one dispatch of its executor (a builder agent by default; `inline` or `academic-paper` when chosen), or run by the orchestrator without an agent.
+- A step the orchestrator runs without an agent keeps the mark `orchestrator, no agent` on its line.
 - Every step line of `plan.md` ends with its authority.
   - `(approved)` for a step of the list the user approved.
   - `(ruling <name>)` for a step a ruling added, after the approval or under a quoted ruling ending "(self-rule)", the ruling being the user's or one booked under self-rule, naming that ruling's line in the Rulings section as the `spec` skill's "Steps / A ruling" says.

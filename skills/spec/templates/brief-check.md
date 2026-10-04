@@ -10,9 +10,9 @@ Findings: <each hit the change makes false>. Or: none.
 
 ## 2. The step line
 
-- <each part of the plan's step line>: <the item of "What to build" that serves it>; or no item.
+- <each part of the plan's step line>: <the requirement of "What to build" that serves it>; or no requirement.
 
-Findings: <each part with no item>. Or: none.
+Findings: <each part with no requirement>. Or: none.
 
 ## 3. Premises
 

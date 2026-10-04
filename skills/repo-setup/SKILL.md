@@ -2,7 +2,7 @@
 name: repo-setup
 description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml, and, on request, the git guard hook. Shows the whole tree and every file's text, the git guard hook named by its source, before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
 metadata:
-  version: "1.3.0"
+  version: "2.0.0"
 ---
 
 # Set up a repository

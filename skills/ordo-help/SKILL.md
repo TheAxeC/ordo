@@ -2,7 +2,7 @@
 name: ordo-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
 metadata:
-  version: "1.9.0"
+  version: "2.0.0"
 ---
 
 # Ordo help
@@ -74,12 +74,12 @@ then, for every step:
 "close them"                  a repair round: the session fixes the findings, reruns, rewrites the report; a contradiction of an ADR the brief asked for is raised to you as an open item instead
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
                               repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
-read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and becomes a step only by your ruling, or under self-rule by a choice you review
+read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and goes where plan-orchestration's "What earns a step of its own" says, by your ruling or under self-rule by a choice you review
 /land <entry> <step>          stops the step's agents, then onto main, checks on main, small fixes, the look where plan.yaml's look: says, the A/B, the booking, the commit
 
 when a command stops:
 
-/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the step's scope, a choice is yours, the step contradicts an ADR (a rule clash), the step has stopped twice already and would stop a third time, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
+/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the part the step builds, a choice is yours, the step contradicts an ADR (a rule clash), the step has stopped twice already and would stop a third time, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
                               after a ruling on an option that runs a skill and states the change, that skill is run with --ruling <ledger file> "<name>" before /spec is typed again
 C<n> Agree                    under self-rule: you agree with a choice the orchestrator took; the session rewrites its ruling as yours and removes it from choices.md

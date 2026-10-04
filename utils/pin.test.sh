@@ -4,13 +4,14 @@
 # Pin mode refuses, before the worktree or a link changes, a link into the live clone for a skill the tag lacks, a pinned worktree with local changes, a link to a folder outside Ordo, a pinned worktree path that is not a git worktree (a folder inside the live clone, which stays on its branch), and a skill folder that is not an absolute path or ends in whitespace.
 # Pin mode fails when the check after linking finds a link it could not make, and creates again a pinned worktree deleted by hand while another missing worktree keeps its registration.
 # Check mode fails with no pinned worktree, and fails naming a link to a skill the tag lacks, a link into the live clone, a link left in ~/.agents/skills, and a missing link in the $CLAUDE_CONFIG_DIR folder; it passes on a fresh pin.
-# The default folders are ~/.claude/skills and $CLAUDE_CONFIG_DIR/skills, not ~/.agents/skills, and ~/.agents/agents is not created with them, and ORDO_SKILL_DIRS in its space-separated form is split on spaces and tabs.
+# The default folders are ~/.claude/skills, each ~/.claude-*/skills that is a folder and $CLAUDE_CONFIG_DIR/skills, not ~/.agents/skills, and ~/.agents/agents is not created with them, and ORDO_SKILL_DIRS in its space-separated form is split on spaces and tabs.
 # In ~/.agents/skills, pin mode removes each link to the pinned worktree or the live clone or inside either, and keeps a real folder and a link to anywhere else; it leaves the folder alone when ORDO_SKILL_DIRS is set, and when the folder resolves to a folder of the list.
 # A tag whose skills are top-level folders pins, and so does the move back to a skills/ tag.
 # The agents: pin mode links every agent of the tag (a file agents/<name>.md) into the agents folder beside each skill folder, creating it, from ORDO_SKILL_DIRS and from the default folders with CLAUDE_CONFIG_DIR set, and prints the agents line after an unchanged skills line; a file not ending .md, a file in a subfolder and a hidden file are neither linked nor counted; two skill folders under one parent give one agents folder, linked once and named once.
 # Pin mode replaces an agent link into the live clone, removes the links of an agent the tag drops and of every agent when the tag has no agents/ folder, and leaves a user's own agent file and a link outside Ordo under a name the tag does not hold.
 # Pin mode refuses, before the worktree or a link changes, an agent link into the live clone for an agent the tag lacks, an entry for an agent of the tag that is a real file, a link outside Ordo or a directory, an agent folder path that is a file, and a folder that is both a skill folder and an agent folder; it fails when the check after linking finds an agent link it could not make.
 # Check mode prints the agents line, fails naming a missing agent link, an agent link into the live clone and a link to an agent the pinned tag lacks, and with no agent folder and no agents passes without creating the folder.
+# The Claude config folders: pin mode links every skill and agent into ~/.claude and into each ~/.claude-* folder that holds a skills folder, a name with a space included, creating each agents folder; it leaves alone a ~/.claude-* folder with no skills folder and a skills entry that is a regular file or a broken link; a folder reached through CLAUDE_CONFIG_DIR, the glob or a link to another folder is linked once and named once, with or without trailing slashes and before ~/.claude/skills exists; a config folder whose skills folder is a link to another folder of the list keeps its own agents folder, with every agent of the tag, also when CLAUDE_CONFIG_DIR names it; ORDO_SKILL_DIRS leaves these folders alone; check mode reads them and names a stale link, which pin mode removes; pin mode refuses, before anything changes, a real folder or a link outside Ordo for a skill and a real file for an agent in such a folder, and a ~/.claude-* folder whose skills path holds a newline.
 
 set -u
 
@@ -638,5 +639,238 @@ run_pin v3
 expect_line "$out" "pinned: 2 agents linked in: $plain_root/agents" \
     "the shared agents folder is not named once"
 export ORDO_SKILL_DIRS="$d1$nl$d2"
+
+# The Claude config folders. Without ORDO_SKILL_DIRS the skill folders are ~/.claude/skills, the skills folder of each ~/.claude-* folder that holds one, and $CLAUDE_CONFIG_DIR/skills, each folder once. The pinned worktree is at v3 from here on, which holds the skills beta and gamma and the agents ordo-a and ordo-b. Every case resets the config folders of the scratch home first.
+unset ORDO_SKILL_DIRS
+unset CLAUDE_CONFIG_DIR
+case "$HOME" in
+    "$test_root"/*) ;;
+    *) fail "HOME $HOME is outside the scratch root" ;;
+esac
+
+# Prints every path under the scratch home and each link with its target, to compare the home before and after a run.
+home_state() {
+    find "$HOME" | sort
+    find "$HOME" -type l -exec sh -c 'for link; do printf "%s -> %s\n" "$link" "$(readlink "$link")"; done' sh {} + | sort
+}
+
+# Removes every Claude config folder of the scratch home.
+reset_config_folders() {
+    rm -rf "$HOME/.claude" "$HOME"/.claude-* "$HOME/.agents"
+}
+
+# expect_pinned <config folder>: each skill and agent of v3 is a link into the pinned worktree in the folder's skills and agents folders.
+expect_pinned() {
+    for skill in beta gamma; do
+        [ "$(readlink "$1/skills/$skill")" = "$ORDO_STABLE/skills/$skill" ] ||
+            fail "$1/skills/$skill does not link into the pin"
+    done
+    for agent in ordo-a ordo-b; do
+        [ "$(readlink "$1/agents/$agent.md")" = "$ORDO_STABLE/agents/$agent.md" ] ||
+            fail "$1/agents/$agent.md does not link into the pin"
+    done
+}
+
+# expect_folders <skill folders> <agent folders>: the skills line and the agents line of the last run name exactly these folders, in this order.
+expect_folders() {
+    skills_line=$(printf '%s\n' "$out" | sed -n 's/^pinned: .*, 2 skills linked in: //p')
+    agents_line=$(printf '%s\n' "$out" | sed -n 's/^pinned: 2 agents linked in: //p')
+    [ "$skills_line" = "$1" ] || fail "the skills line names \"$skills_line\", expected \"$1\""
+    [ "$agents_line" = "$2" ] || fail "the agents line names \"$agents_line\", expected \"$2\""
+}
+
+# expect_named_once <folder>: the skills line of the last run names the folder exactly once.
+expect_named_once() {
+    skills_line=$(printf '%s\n' "$out" | sed -n 's/^pinned: .*, 2 skills linked in: //p')
+    named=$(printf '%s\n' "$skills_line" |
+        awk -F ', ' -v folder="$1" '{ for (i = 1; i <= NF; i++) if ($i == folder) n++ } END { print n + 0 }')
+    [ "$named" -eq 1 ] || fail "the skills line names $1 $named times, expected once: $skills_line"
+}
+
+# Pin mode links every skill and agent into ~/.claude and ~/.claude-work, creating both agents folders, and check mode reads the same two folders.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills"
+run_pin v3
+[ "$status" -eq 0 ] || fail "pinning with two config folders failed: $out $err"
+expect_pinned "$HOME/.claude"
+expect_pinned "$HOME/.claude-work"
+expect_folders "$HOME/.claude/skills, $HOME/.claude-work/skills" \
+    "$HOME/.claude/agents, $HOME/.claude-work/agents"
+run_pin
+[ "$status" -eq 0 ] || fail "check mode failed on a fresh pin of two config folders: $err"
+expect_folders "$HOME/.claude/skills, $HOME/.claude-work/skills" \
+    "$HOME/.claude/agents, $HOME/.claude-work/agents"
+
+# A ~/.claude-* folder with no skills folder gets nothing created in it. The control, after the silent assertion, is the ~/.claude-work folder linked beside it.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills" "$HOME/.claude-science"
+run_pin v3
+[ "$status" -eq 0 ] || fail "pinning beside a config folder with no skills folder failed: $out $err"
+[ -z "$(ls -A "$HOME/.claude-science")" ] ||
+    fail "pin.sh created $(ls -A "$HOME/.claude-science") in a config folder with no skills folder"
+expect_pinned "$HOME/.claude-work"
+
+# CLAUDE_CONFIG_DIR naming a ~/.claude-* folder that the glob also finds gives one folder, named once. The control, after the silent assertion, is ~/.claude-aux, a folder only the glob finds, linked.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills" "$HOME/.claude-aux/skills"
+export CLAUDE_CONFIG_DIR=$HOME/.claude-work
+run_pin v3
+unset CLAUDE_CONFIG_DIR
+[ "$status" -eq 0 ] || fail "pinning with CLAUDE_CONFIG_DIR a ~/.claude-* folder failed: $out $err"
+expect_named_once "$HOME/.claude-work/skills"
+expect_pinned "$HOME/.claude-work"
+expect_pinned "$HOME/.claude-aux"
+
+# A ~/.claude-* entry that is a regular file is ignored. The control, after the silent assertions, is the ~/.claude-work folder linked beside it.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills"
+printf 'not a folder\n' >"$HOME/.claude-x"
+run_pin v3
+[ "$status" -eq 0 ] || fail "pinning beside a regular file named .claude-x failed: $out $err"
+[ "$(cat "$HOME/.claude-x")" = "not a folder" ] || fail "pin.sh changed the file .claude-x"
+expect_pinned "$HOME/.claude-work"
+
+# A ~/.claude-* folder whose name holds a space is linked.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-my work/skills"
+run_pin v3
+[ "$status" -eq 0 ] || fail "pinning with a config folder whose name holds a space failed: $out $err"
+expect_pinned "$HOME/.claude-my work"
+expect_folders "$HOME/.claude/skills, $HOME/.claude-my work/skills" \
+    "$HOME/.claude/agents, $HOME/.claude-my work/agents"
+
+# A ~/.claude-*/skills that is a link to ~/.claude/skills is the same skills folder: it is named once in the skills line, and its folder keeps its own agents folder, which holds every agent of the tag and is named in the agents line. The control, after the silent assertion, is the ~/.claude-work folder linked beside it.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills" "$HOME/.claude-alt"
+ln -s "$HOME/.claude/skills" "$HOME/.claude-alt/skills"
+run_pin v3
+[ "$status" -eq 0 ] || fail "pinning with a skills folder that links to another failed: $out $err"
+expect_named_once "$HOME/.claude/skills"
+for agent in ordo-a ordo-b; do
+    [ "$(readlink "$HOME/.claude-alt/agents/$agent.md")" = "$ORDO_STABLE/agents/$agent.md" ] ||
+        fail "$HOME/.claude-alt/agents/$agent.md does not link into the pin"
+done
+expect_folders "$HOME/.claude/skills, $HOME/.claude-work/skills" \
+    "$HOME/.claude/agents, $HOME/.claude-alt/agents, $HOME/.claude-work/agents"
+expect_pinned "$HOME/.claude-work"
+
+# CLAUDE_CONFIG_DIR naming a folder outside the glob whose skills folder is a link to ~/.claude/skills: that skills folder is named once, and the folder's agents folder holds every agent of the tag. The control, after the silent assertions, is the ~/.claude-work folder linked.
+reset_config_folders
+rm -rf "$HOME/config"
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills" "$HOME/config"
+ln -s "$HOME/.claude/skills" "$HOME/config/skills"
+export CLAUDE_CONFIG_DIR=$HOME/config
+run_pin v3
+unset CLAUDE_CONFIG_DIR
+[ "$status" -eq 0 ] || fail "pinning with CLAUDE_CONFIG_DIR a folder whose skills folder links to another failed: $out $err"
+expect_named_once "$HOME/.claude/skills"
+for agent in ordo-a ordo-b; do
+    [ "$(readlink "$HOME/config/agents/$agent.md")" = "$ORDO_STABLE/agents/$agent.md" ] ||
+        fail "$HOME/config/agents/$agent.md does not link into the pin"
+done
+rm -rf "$HOME/config"
+expect_pinned "$HOME/.claude-work"
+
+# ORDO_SKILL_DIRS replaces the whole list, so a ~/.claude-* folder is left alone. The control is the folder the variable names, linked.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills"
+export ORDO_SKILL_DIRS="$HOME/.claude/skills$nl"
+run_pin v3
+unset ORDO_SKILL_DIRS
+[ "$status" -eq 0 ] || fail "pinning with ORDO_SKILL_DIRS set failed: $out $err"
+expect_pinned "$HOME/.claude"
+[ -z "$(ls -A "$HOME/.claude-work/skills")" ] ||
+    fail "pin.sh linked into a config folder ORDO_SKILL_DIRS does not name"
+[ ! -e "$HOME/.claude-work/agents" ] ||
+    fail "pin.sh created an agents folder in a config folder ORDO_SKILL_DIRS does not name"
+
+# Check mode reads a ~/.claude-* folder and names a link there to a skill the tag lacks; pin mode removes it.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills"
+run_pin v3
+[ "$status" -eq 0 ] || fail "the first pin of two config folders failed: $out $err"
+ln -s "$ORDO_STABLE/skills/alpha" "$HOME/.claude-work/skills/alpha"
+run_pin
+[ "$status" -ne 0 ] || fail "check mode passed with a stale link in a ~/.claude-* folder"
+expect_in "$err" \
+    "pin: $HOME/.claude-work/skills/alpha links to $ORDO_STABLE/skills/alpha, which the pinned tag does not have" \
+    "check mode did not name the stale link in the ~/.claude-* folder"
+run_pin v3
+[ "$status" -eq 0 ] || fail "pinning over the stale link in a ~/.claude-* folder failed: $out $err"
+[ -L "$HOME/.claude-work/skills/alpha" ] && fail "pin mode left the stale link in the ~/.claude-* folder"
+expect_line "$out" "pin: removed $HOME/.claude-work/skills/alpha, which the tag v3 does not hold" \
+    "pin mode did not report the removed link in the ~/.claude-* folder"
+
+# CLAUDE_CONFIG_DIR naming ~/.claude, with or without trailing slashes, before ~/.claude/skills exists gives that folder once. The control, after the silent assertion, is the ~/.claude-work folder linked.
+for spelling in "$HOME/.claude" "$HOME/.claude/" "$HOME/.claude//"; do
+    reset_config_folders
+    mkdir -p "$HOME/.claude-work/skills"
+    export CLAUDE_CONFIG_DIR=$spelling
+    run_pin v3
+    unset CLAUDE_CONFIG_DIR
+    [ "$status" -eq 0 ] || fail "pinning with CLAUDE_CONFIG_DIR $spelling failed: $out $err"
+    expect_named_once "$HOME/.claude/skills"
+    expect_folders "$HOME/.claude/skills, $HOME/.claude-work/skills" \
+        "$HOME/.claude/agents, $HOME/.claude-work/agents"
+    expect_pinned "$HOME/.claude"
+    expect_pinned "$HOME/.claude-work"
+done
+
+# A ~/.claude-*/skills that is a regular file or a broken link is ignored. The control, after the silent assertions, is the ~/.claude-work folder linked beside them.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills" "$HOME/.claude-work/skills" "$HOME/.claude-y" "$HOME/.claude-z"
+printf 'not a folder\n' >"$HOME/.claude-y/skills"
+ln -s "$test_root/missing" "$HOME/.claude-z/skills"
+run_pin v3
+[ "$status" -eq 0 ] || fail "pinning beside a skills file and a broken skills link failed: $out $err"
+[ "$(cat "$HOME/.claude-y/skills")" = "not a folder" ] || fail "pin.sh changed the file .claude-y/skills"
+[ "$(readlink "$HOME/.claude-z/skills")" = "$test_root/missing" ] ||
+    fail "pin.sh changed the broken link .claude-z/skills"
+[ ! -e "$HOME/.claude-y/agents" ] && [ ! -e "$HOME/.claude-z/agents" ] ||
+    fail "pin.sh created an agents folder beside an ignored skills entry"
+expect_pinned "$HOME/.claude-work"
+
+# A ~/.claude-*/skills holding, for a skill of the tag, a real folder or a link outside Ordo, and a ~/.claude-*/agents holding a real file for an agent of the tag, are each refused before anything changes, naming the entry. The pin to v4 would otherwise move the worktree and unlink ordo-b.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills"
+run_pin v3
+[ "$status" -eq 0 ] || fail "the pin before the refusals in a ~/.claude-* folder failed: $out $err"
+mkdir -p "$HOME/.claude-work/skills/beta"
+skill_links_before=$(links_state)
+agent_links_before=$(agent_links_state)
+run_pin v4
+expect_refused v3 "a pin over a real folder in a ~/.claude-* folder"
+expect_in "$err" "pin: $HOME/.claude-work/skills/beta is a real directory; move it away and run again" \
+    "the real folder in a ~/.claude-* folder was not refused with its message"
+rmdir "$HOME/.claude-work/skills/beta"
+ln -s /elsewhere/beta "$HOME/.claude-work/skills/beta"
+run_pin v4
+expect_refused v3 "a pin over a link outside Ordo in a ~/.claude-* folder"
+expect_in "$err" \
+    "pin: $HOME/.claude-work/skills/beta links to /elsewhere/beta, outside Ordo; move it away and run again" \
+    "the link outside Ordo in a ~/.claude-* folder was not refused with its message"
+rm "$HOME/.claude-work/skills/beta"
+mkdir -p "$HOME/.claude-work/agents"
+printf 'mine\n' >"$HOME/.claude-work/agents/ordo-a.md"
+run_pin v4
+expect_refused v3 "a pin over a real agent file in a ~/.claude-* folder"
+expect_in "$err" "pin: $HOME/.claude-work/agents/ordo-a.md is a real file; move it away and run again" \
+    "the real agent file in a ~/.claude-* folder was not refused with its message"
+[ "$(cat "$HOME/.claude-work/agents/ordo-a.md")" = "mine" ] || fail "a refused pin changed the agent file"
+
+# A ~/.claude-*/skills folder whose path holds a newline is refused before anything changes, naming the path with the newline written as \n: the default folders are read one per line, so such a path would split into two entries. The pin to v4 would otherwise move the worktree.
+reset_config_folders
+mkdir -p "$HOME/.claude/skills"
+run_pin v3
+[ "$status" -eq 0 ] || fail "the pin before the refusal of a newline in a folder name failed: $out $err"
+mkdir -p "$HOME/.claude-a$nl/skills"
+skill_links_before=$(links_state)
+agent_links_before=$(agent_links_state)
+home_before=$(home_state)
+run_pin v4
+expect_refused v3 "a pin with a ~/.claude-* folder whose name ends in a newline"
+expect_in "$err" "pin: '$HOME/.claude-a\\n/skills' holds a newline; move the folder or set ORDO_SKILL_DIRS" \
+    "the ~/.claude-* folder with a newline in its name was not refused with its message"
+[ "$(home_state)" = "$home_before" ] || fail "a pin refused for a newline in a folder name changed the scratch home"
 
 printf 'PASS: pin.sh scratch tests\n'

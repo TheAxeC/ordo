@@ -17,7 +17,7 @@ Items of the brief's "What to build", in its numbering:
 
 Cases of the brief's "Cases":
 
-- <the case>: met, <the test or the reading that gives the expected result>; or partial, <the missing part>, <the finding>; or unmet, <the finding>; or not verifiable, <what would settle it>.
+- <the case>: met, <the test, the run the report quotes or the reading that gives the expected result>; or partial, <the missing part>, <the finding>; or unmet, <the finding>; or not verifiable, <what would settle it>.
 
 ## 1. Spec
 

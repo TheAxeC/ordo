@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "1.8.0"
+  version: "2.0.0"
 ---
 
 # Refute a step
@@ -112,7 +112,7 @@ metadata:
   - a premise in the brief's "What is on the tree" section that the reviewer's own grep does not reproduce;
   - a change that contradicts the part in force of an ADR, with the ADR's number and the sentence of its decision quoted, and whether the brief asked for it;
   - an ADR the diff is under that the brief's "What is on the tree" does not name;
-  - a case of a code step in the brief's "Cases" that no test of the step checks;
+  - a case of a code step in the brief's "Cases" that the rules file's test rule calls a test for and no test of the step checks;
   - a case whose first run on the unchanged tree the report does not give.
 - **Proof.** A finding is:
   - a "seen failing first" claim with no quoted failing check;
@@ -146,17 +146,17 @@ metadata:
   - violated: the diff does not do what the item's text says, with the finding under its heading named;
   - not applicable: the item does not apply to this tree, with the reason.
 - **Cases.** One verdict per case of the brief's "Cases":
-  - met: the test or the reading gives the expected result;
-  - partial: the test or the reading gives part of the expected result, with the missing part named;
-  - unmet: the test or the reading does not give the expected result;
-  - not verifiable: neither a test nor a reading can settle the case here, with what would settle it.
+  - met: the test, the run the report quotes or the reading gives the expected result;
+  - partial: the test, the run or the reading gives part of the expected result, with the missing part named;
+  - unmet: the test, the run or the reading does not give the expected result;
+  - not verifiable: neither a test, a run nor a reading can settle the case here, with what would settle it.
 - A verdict of violated, partial or unmet always has a finding under one of "The four headings", and the verdict and the finding name each other.
 - Over a repair round, the reviewer gives the verdicts again for the whole diff since the base.
 
 ## Finding dispositions
 
 - A finding is closed by the builder in a repair round (at most `repair_rounds`, or one more under `plan-orchestration`'s exception), or at landing, or raised to the user as an open item in the state file, as `plan-orchestration`'s Stops section says.
-  - It becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books.
+  - It becomes a step only as `plan-orchestration`'s "What earns a step of its own" says.
 - A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR.
 - A contradiction of an ADR that the builder made against the brief is closed like any other finding, by a change that follows the ADR.
 - The open items hold only what the user must rule on.

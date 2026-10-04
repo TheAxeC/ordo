@@ -36,7 +36,7 @@ dispatch: none               # or the block /spec writes (a list with workers_at
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and becomes a step in `plan.md` only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; what is settled belongs in the closed list.
+A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
 - <a stop awaiting the user's ruling, or a proposal of the recurring-findings pass, with its options, the pros and cons of each, what each would need approved later, and one recommendation, as plan-orchestration's Stops section says; or "none">. An item is booked here the moment it is raised; it leaves only when the user has ruled or, under `self_rule: on`, when the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says, and then goes to the closed list.
 

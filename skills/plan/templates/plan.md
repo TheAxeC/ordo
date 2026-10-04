@@ -1,6 +1,6 @@
 # Plan: <roadmap entry number and title>
 
-Execution ledger for <the roadmap entry, linked>. One bullet is one step of work and one dispatch of its executor (a builder agent by default), except the bookkeeping steps the orchestrator does itself (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+Execution ledger for <the roadmap entry, linked>. One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
 
 ## Goal
 
@@ -15,9 +15,9 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step of work
 
 ## Steps, in execution order
 
-- <1> <what the step delivers, in one line; the check that proves it> (<n> commit) (approved)
-- <2> <what the step delivers, in one line; the check that proves it> (<n> commit; orchestrator, no agent) (approved)
-- <2a> <a step a ruling added, in one line; the check that proves it> (<n> commit) (ruling <L>)
+- <1> <the part the step builds, in one line; the check that proves it> (<n> commit) (approved)
+- <2> <a part the orchestrator runs with the user, such as a real run read by the user, in one line; the check that proves it> (<n> commit; orchestrator, no agent) (approved)
+- <2a> <a part a ruling added, in one line; the check that proves it> (<n> commit) (ruling <L>)
 - <last> the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ## Could run in parallel

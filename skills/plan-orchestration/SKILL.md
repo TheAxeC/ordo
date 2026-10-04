@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after the closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "2.11.0"
+  version: "3.0.0"
 ---
 
 # Plan orchestration
@@ -59,7 +59,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - Under `self_rule: on`, the orchestrator closes it instead, as `references/self-rule.md`, "Closing an open item", says, unless it is of a kind its "The six kinds left open" names.
    - A stop, here or at any later step, blocks its own step.
      - The loop moves on to the next unblocked step.
-   - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step is added to the plan only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
+   - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step enters the plan only as "What earns a step of its own" says.
    - Done when `/spec` has written the brief and the dispatch block and the brief check's report is read, or the step has stopped.
 4. Choose the step's executor.
    - Write it into the dispatch block.
@@ -101,13 +101,14 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - The report is a lead, not a fact.
    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result.
      - Read that hand-back the same way as a report.
-   - Rule on such a case when the fix stays inside the step's scope.
+   - Rule on such a case when the fix stays inside the step's part.
      - Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`.
      - Hold the text the ruling gives the builder word for word as Steps 8's "Dictated text" says, before it is committed.
      - Commit it by path as a round sent.
    - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`.
      - The builder's final report carries the ruling.
-   - Such a case whose fix changes the step's scope is a stop of the kind "A finding that is the user's", by "Stops".
+   - Such a case whose fix changes a public shape or an established decision is a stop of the kind "A finding that is the user's", by "Stops".
+   - Such a case whose fix lies outside the step's part goes where "What earns a step of its own" sends it.
    - Done when the report is saved at the `report` path, `builder_usage` is written and the whole diff is read.
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
    - Read the diff yourself while it runs.
@@ -115,7 +116,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk.
      - The next resume-point commit carries them.
    - Done when the refuter report is saved and its record is under `reviewer_report`.
-8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the brief and the written rules.
+8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the step's part and the written rules.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 "Dictated text" holds a brief's, since the brief check never reads those files.
    - **Before the resume.** Write `round: n` into the dispatch block.
@@ -127,7 +128,10 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - Such a cause is noted at landing, as the `land` skill's Steps 9 says.
      - Such a cause is raised to the user as an open item, the row "A finding that is the user's" of "Stops".
      - A round never asks the builder to find a cause, to reproduce a fault, or to measure until a condition holds.
-   - **Not sent back.** A finding that changes the scope, a requirement, a public shape or an established decision is raised as a stop, by "Stops".
+   - **Sent back.** A finding inside the step's part goes back in the repair rounds, whatever files it reaches.
+     - The round's brief widens the path list to those files.
+   - **Not sent back.** A finding that changes a public shape or an established decision is raised as a stop, by "Stops".
+   - **Outside the part.** A finding outside the step's part goes where "What earns a step of its own" sends it.
    - **After each reply.** Read the whole delta.
      - Add the builder's tokens, tool uses and time for the round, from its completion notice, to `builder_usage` in the dispatch block, on disk.
      - When the block says `refute_after_repair: yes`, invoke `/refute <entry> <step>` again over the round, a fresh reviewer on the model "The two tiers, and the models" gives the run over a repair round, its run recorded under `reviewer_report` beside the first as the `refute` skill's "Steps / Over a repair round" 6 says.
@@ -293,13 +297,20 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 
 ## What earns a step of its own
 
-- A step is a large thing: a new capability, or a defect too nasty or too wide to close where it was found.
-- Everything else is closed in the step that is open: a finding inside a brief by the repair rounds or at landing, a fix in a file another step holds at that step's landing.
-- A finding beyond the brief is raised to the user as an open item, by "Stops".
-- A step's path list is a choice, not a fact: widen it rather than mint a step for what the open step exists to end.
-- A report that asks for a step says what makes the work new, or nasty, or blocked by something in flight.
-- A step enters the step list only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books, as a line ending with `(ruling <name>)`.
-  - `/spec` refuses a line without its tag.
+- A step is a part of the entry, as the `plan` skill's Steps 2 says.
+- New work goes by its reason, listed below.
+- **A finding inside the step's part.** It is sent back in the step's repair rounds, as Steps 8 says.
+- **A fix in a file another step holds.** It is made at that step's landing.
+- **The work the last round leaves undone inside the part.**
+  - Small work is fixed at landing.
+  - Other work is an open item, and a new step for it needs a reason of this list.
+- **A ruling on a part not yet built.** It rewrites that step's line and brief, the line ending with `(ruling <name>)`, and adds no step.
+- **A part the entry needs that no step builds, or a landed part found wrong or short.** It is a new step, a line ending with `(ruling <name>)`.
+- **Work outside the entry's goal.** It is a new roadmap entry through `/roadmap add` and never a step of this plan.
+- **A finding that changes a public shape or an established decision.** It is an open item, by "Stops".
+- A new step and a new roadmap entry each need a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
+- `/spec` refuses a step line without its tag.
+- A report that asks for a step names the reason of this list that applies.
 
 ## Reports
 
@@ -307,7 +318,7 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 - A builder's report keeps the shape of the repository's change standard.
 - The state file's open items follow the position line, verbatim.
 - The open items hold only what the user must rule on: a stop, and a proposal of the recurring-findings pass.
-- A finding that is neither closed in the repair rounds nor fixed at landing is an open item, since it becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
+- A finding that is neither closed in the repair rounds nor fixed at landing is an open item, which goes where "What earns a step of its own" says.
 - The other list, the closed one, is the log of what was raised and how it ended.
   - No report carries it.
 - Then anything NOT DONE first, then the DONE / NOT DONE ledger naming the command that proves each row.
@@ -342,7 +353,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 | A wrong premise | A premise found wrong that the plan cannot absorb | The stop message, below | The user's ruling |
 | A red check | A red check no fix within the plan covers | The stop message, below | The user's ruling |
 | A rule clash | A contradiction between two established rules or decisions, an ADR among them, except a ruling of the user that replaces a bullet ending "(self-rule)", which is no clash | The stop message, below | The user's ruling |
-| A finding that is the user's | A finding that changes the scope, a requirement, a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding beyond the brief, work the last round left undone, a changed view not fixed at landing), which becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books | The stop message, below | The user's ruling |
+| A finding that is the user's | A finding that changes a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding outside the step's part, work the last round left undone, a changed view not fixed at landing), which goes where "What earns a step of its own" says, by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books | The stop message, below | The user's ruling |
 | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
 | A model other than the configured one | The runner served a builder, a reviewer or a brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
 | The configured effort cannot apply | A refusal (Steps 1): the runner lists no `ordo-<level>` agent for a level the configuration block names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then a new session |
@@ -369,8 +380,9 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
 | Relaunching a dead builder silently | Its partial work in the worktree is lost without the user knowing | Report it as "Resuming, and handing the plan over" says; a continuation builder takes over the worktree when the user says so |
-| Sending a finding that changes the scope, a requirement, a public shape or an established decision back to the builder | The builder then takes a decision for the user | Raise it as a stop |
-| Handing a miss inside a brief back as a gap in a report | The work the user asked for is left undone | Close it in the repair rounds or at landing, or raise it to the user as an open item, by "Stops" |
+| Sending a finding that changes a public shape or an established decision back to the builder | The builder then takes a decision for the user | Raise it as a stop |
+| Raising a finding inside the step's part as a stop, or as a step of its own | The part is left unfinished, and the step list grows by a step per finding | Send it back in the repair rounds, as Steps 8 says |
+| Handing a miss inside the step's part back as a gap in a report | The work the user asked for is left undone | Close it in the repair rounds or at landing, or raise it to the user as an open item, by "Stops" |
 | Minting a step because the work is inconvenient now | The open step does not end what it exists to end | Widen the open step's path list; see "What earns a step of its own" |
 | An option that breaks a written rule, in a stop | The user is asked to weigh something that is not allowed | Leave it out; do not mention it |
 | Proposing a check for a recurring cause that is a matter of judgment | A script's output then stands in for a judgment that is made by reading | Propose a rule sentence or a change to the text that should have prevented it, and a check only for a fact a machine computes, as "The recurring-findings pass" says |
@@ -392,7 +404,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
   - A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.
 - After its last round a step lands.
   - Its small findings, the last review's included, are fixed at landing.
-- Everything else that the rounds left undone, or that lies beyond the brief, is raised to the user as an open item, by "Stops".
+- Everything else that the rounds left undone, or that lies outside the step's part, is raised to the user as an open item, by "Stops".
   - It is never sent back to the builder.
-  - It becomes a step only by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books.
+  - It goes where "What earns a step of its own" says.
 - Every skill the orchestrator invokes (`/spec`, `/refute`, `/land`, `academic-paper` for manuscript content, `/roadmap` at the closing, `/grill <entry> --self-rule` and `/plan <entry> --self-rule` in next-entry mode, and `/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill` run under a quoted ruling) is invoked through the runner every time, after a compaction too, and never carried out from remembered text.

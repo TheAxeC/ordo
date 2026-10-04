@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "1.8.0"
+  version: "2.0.0"
 ---
 
 # Prepare a step
@@ -88,7 +88,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - A premise found false that the plan can absorb is corrected in `plan.md` before the brief exists, never left for the builder to hit.
    - That correction goes into the preparation commit (Steps 6).
    - The brief records the correction beside the premise.
-   - A premise found false that the plan cannot absorb is a stop ("Stops"): its correction would change the step's scope, or make a choice the user would see.
+   - A premise found false that the plan cannot absorb is a stop ("Stops"): its correction would change the part the step builds, or make a choice the user would see.
    - Read the ADRs the step touches, as "What it reads" 5 says.
      - The brief names each under "What is on the tree", with its number, its title and the sentence of its decision the step is under, or says that no ADR touches the step.
    - A step's text that contradicts the part in force of an ADR is a rule clash, a stop ("Stops").
@@ -110,11 +110,18 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - The first line points at the rules file the configuration names, and at the standards it lists.
    - The premises as checked, with the command that checked each.
    - The ADRs the step touches, as Steps 2 names them.
-   - The fix text, in the brief's own words, not a pointer.
+   - The fix text is the requirements of the step's part, in the brief's own words and not a pointer.
+     - What must hold when the part is done.
+     - Each file the part touches, with the constraint it is under.
+     - The behaviour the part has.
+   - Text is dictated word for word only where the wording itself is the requirement, such as a rule sentence the user ruled.
    - The verification commands from the configuration block plus the step's own gate, each with the directory it runs from and the output that counts as a pass.
    - The report shape, with the cases' first run before the result table.
    - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result.
-     - The brief states the builder's first task as the template states it: the first run of every case on the unchanged tree before any change, a case of a code step as a test and a case of a text or judgment step by reading, and a case the brief's rules get wrong handed back before any code changes.
+     - The brief states the builder's first task as the template states it: the first run of every case on the unchanged tree before any change.
+       - A case of a code step is a test only where the rules file's test rule calls for one, and otherwise a run the report quotes.
+       - A case of a text or judgment step is checked by reading.
+       - A case the brief's rules get wrong is handed back before any code changes.
      - For a code step (a script, or a product's code), the list also holds the inputs the step's text implies but never states, as `templates/brief.md`'s "Cases" names them, each with its expected result, found by the session writing the brief from the rules of the code the step builds or changes and from that code's callers.
    - Under "Paths this step writes", every path the step writes, one per line, the report path included: ``- `<path>` `` for a whole file, or ``- `<path>` lines <a>-<b>` `` for a range of a shared document, numbered as on main at the base.
    - A choice the plan leaves open is taken in the brief.
@@ -122,7 +129,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - Under "Libraries checked", what Steps 3 found: each candidate with its facts and the library the user ruled, "none found", or, under `libraries: avoid`, that the step adds no new dependency.
    - A choice that decides a format or a rule the builder applies across the tree (a directive shape, an anchor rule, a naming rule, a file layout) is run by the session writing the brief on at least five real cases from the tree.
      - The brief quotes each input and its output under the decision, so an unreadable or wrong result is seen before dispatch.
-   - Every item of "What to build" is a change whose content is known.
+   - Every requirement the part is judged on is known and written into the brief.
    - An item of the form "find why X happens and end it" is investigation: the session writing the brief does it first, read-only, and writes the found cause and its fix into the item.
      - A cause it cannot find is left out of the brief.
      - Such a cause is raised to the user as an open item.
@@ -222,7 +229,8 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
 
 1. Leave three things and nothing else.
    - The open item in the state file, holding the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
-     - An option adds a step to the plan only when the work fits no step already in the list.
+     - An option adds a step to the plan only for a reason `plan-orchestration`'s "What earns a step of its own" lists.
+     - An option for work outside the entry's goal is a new roadmap entry through `/roadmap add`, never a step of the plan.
      - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list.
      - The user's ruling on such an option approves each of those approvals too.
      - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
@@ -253,7 +261,10 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    - the step's text in `plan.md` is rewritten to what was ruled;
    - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`;
    - that step gets its own Step 0, its carried premises with it;
-   - a ruling that adds or splits a step is also written in the Rulings section as a line ending with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
+   - a ruling on a part not yet built rewrites that step's line, which then also ends with `(ruling <name>)`, and adds no step;
+   - a ruling that adds or splits a step, or rewrites the line of a step not yet built, is also written in the Rulings section as a line with an ending;
+     - the ending is "(the user)." for a ruling of the user;
+     - the ending is "(self-rule)." for a choice booked under self-rule;
    - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it;
    - a ruling on an option that runs a skill with an approval stop and states the change in full is written in the Rulings section as a bullet whose first line ends with "(the user)." for a ruling of the user, or "(self-rule)." for a choice booked under self-rule;
    - that bullet is the quoted ruling the session gives the skill;
@@ -298,7 +309,7 @@ Steps 5 says when this runs.
    - Item 1 is done when the agent's id and served model are read and the model is the configured one, or the stop is raised.
 2. The agent runs these checks and reports each with the command that shows it and that command's output:
    - **Names.** Every name the step changes (a file, a heading, a key, a function, a term) is grepped across the repository, and every hit outside the brief's "Paths this step writes" is listed, each with whether the change makes it false.
-   - **The step line.** Every part of the plan's step line is present in "What to build": each item is mapped to the part of the line it serves, and a part with no item is named.
+   - **The step line.** Every part of the plan's step line is present in "What to build": each requirement is mapped to the part of the line it serves, and a part with no requirement is named.
    - **Premises.** Every command of the brief's "What is on the tree" is rerun, and its output is compared with what the brief says.
    - **Cases and checks.** Every case of "Cases" is read against the rules file and the standards, and a case inconsistent with them is named.
    - **The question.** Each case, the check on the step's line and the check of each item of "What to build" is asked "could this pass without the goal being reached?", "the goal" being the part of the plan's goal the step delivers, and the answer is given with its reason.
@@ -329,7 +340,7 @@ Steps 5 says when this runs.
    - The check runs once per step.
      - The brief as changed goes to the builder without a second run.
      - A `/spec` run after a stop or a ruling does not check the step again.
-   - A finding whose fix would change the step's scope, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
+   - A finding whose fix would change the part the step builds, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
    - Every such finding of the report is raised in that one stop, so the user rules on all of them in one reply.
    - A finding the session cannot close by a change to the brief is raised in the same stop.
    - A contradiction the "ADRs" check finds in the step's text is the stop "A rule clash with an ADR", as Steps 2 says.
@@ -347,10 +358,10 @@ The first six rows are stops, which leave an open item as "Steps / A stop" says.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| A false premise the plan cannot absorb | A premise the step's text makes is false on the tree, and its correction would change the step's scope or make a choice the user would see (Steps 2); the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
+| A false premise the plan cannot absorb | A premise the step's text makes is false on the tree, and its correction would change the part the step builds or make a choice the user would see (Steps 2); the skill does not guess | The open item, booked in the open items | A ruling ("Steps / A ruling") |
 | A rule clash with an ADR | The step's text contradicts the part in force of an ADR the step touches (Steps 2, or the "ADRs" check of "Steps / The brief check") | The open item, booked in the open items, naming the ADR and quoting the step's words that contradict it | A ruling |
 | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary, or, under `libraries: check`, a library could replace code the step would write by hand (Steps 3) | The open item, booked in the open items | A ruling |
-| A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the step's scope or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
+| A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the part the step builds or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
 | A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
 | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
 | A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)", or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |

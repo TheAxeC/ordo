@@ -8,14 +8,21 @@
 # worktree of this repository. A pinned worktree deleted by hand is created again with git
 # worktree add --force: git replaces its stale record and leaves every other worktree's record as
 # it is; a locked record is still refused.
-# The skill folders are ~/.claude/skills and $CLAUDE_CONFIG_DIR/skills when that variable is set,
-# or $ORDO_SKILL_DIRS when set. $ORDO_SKILL_DIRS is split on spaces and tabs, or
-# read one folder per line when it holds a newline (the form for a folder whose path holds a
-# space); empty lines are skipped, and a value that names no folder is refused. The default
-# folders are read one per line, so a home folder holding a space needs nothing. Every skill folder
-# (from ORDO_SKILL_DIRS, the defaults or $CLAUDE_CONFIG_DIR/skills) must be an absolute path with
-# no leading or trailing whitespace, or the run is refused before anything changes. The summary
-# line names the folders joined by ", ".
+# The skill folders are $ORDO_SKILL_DIRS when set. Otherwise they are, in this order, ~/.claude/skills,
+# the skills folder of each ~/.claude-* folder that holds one (in the order the shell's glob gives;
+# a ~/.claude-*/skills that is not a folder, a file or a broken link, is ignored), and
+# $CLAUDE_CONFIG_DIR/skills when that variable is set. A folder named twice is one folder, linked
+# once and named once: two entries are one when their paths are equal with trailing slashes removed
+# or, when both exist, when their resolved paths are equal. Each entry of a skill folder stays a link
+# into the pinned worktree; no folder is linked to another. $ORDO_SKILL_DIRS is split on spaces
+# and tabs, or read one folder per line when it holds a newline (the form for a folder whose path
+# holds a space); empty lines are skipped, and a value that names no folder is refused. The default
+# folders are read one per line, so a home folder holding a space needs nothing, and a
+# ~/.claude-*/skills folder whose path holds a newline is refused before anything changes, with one
+# line that names it with the newline written as \n; the user moves the folder or sets
+# ORDO_SKILL_DIRS. Every skill folder (from ORDO_SKILL_DIRS or the defaults) must be an absolute
+# path with no leading or trailing whitespace, or the run is refused before anything changes. The
+# summary line names the folders joined by ", ".
 # A skill is a folder under skills/ in the tag that holds SKILL.md, or a top-level folder that
 # holds one in a tag from before the skills moved under skills/.
 # Check mode reports every link into the live clone, once each, and every link into the pinned
@@ -31,9 +38,13 @@
 # with its folder resolved. Pin mode removes each such link after linking and prints a line for
 # each. Every other entry of that folder, a real folder or a link to anywhere else, is left as it
 # is.
-# The agent folders are the agents folder beside each skill folder (the skill folder's parent
-# followed by /agents): ~/.claude/agents, $CLAUDE_CONFIG_DIR/agents, or the sibling of each
-# folder of $ORDO_SKILL_DIRS. Agent folders with the same path are one folder, linked once and
+# The agent folders are the agents folder beside a skill folder (the skill folder's parent followed
+# by /agents): beside each folder of $ORDO_SKILL_DIRS, or, without it, beside each default skill
+# folder found, which are ~/.claude/skills, each ~/.claude-*/skills that is a folder and
+# $CLAUDE_CONFIG_DIR/skills. They are built before a skill folder named twice is removed from the
+# list, so a config folder whose skills folder is a link to another keeps its own agents folder;
+# a ~/.claude-* folder with no skills folder gets none. Agent folders with the same path, trailing
+# slashes removed, or, when both exist, the same resolved path are one folder, linked once and
 # named once. Pin mode creates an agent folder that does not exist; check mode does not.
 # An agent is a file agents/<name>.md directly in the tag's agents/ folder, named by its file name
 # without .md; a file not ending .md, a file whose name starts with a dot and anything in a
@@ -67,7 +78,29 @@ repo=$(CDPATH= cd "$(dirname "$0")/.." && pwd -P)
 stable=${ORDO_STABLE:-$HOME/.local/share/ordo-stable}
 nl='
 '
-# The skill folders, one per line.
+# Succeeds when the folders $1 and $2 are one folder: the same path with every trailing slash
+# stripped, as the agent folders are built, or, when both exist, the same physical path.
+same_folder() {
+    same_one=$(printf '%s\n' "$1" | sed 's#//*$##')
+    same_two=$(printf '%s\n' "$2" | sed 's#//*$##')
+    [ "$same_one" = "$same_two" ] && return 0
+    same_one=$(CDPATH= cd -P "$1" 2>/dev/null && pwd -P) || return 1
+    same_two=$(CDPATH= cd -P "$2" 2>/dev/null && pwd -P) || return 1
+    [ "$same_one" = "$same_two" ]
+}
+
+# Appends the folder $1 to skill_dirs unless skill_dirs already holds that folder.
+add_skill_dir() {
+    while IFS= read -r known <&4; do
+        same_folder "$known" "$1" && return 0
+    done 4<<EOF
+$skill_dirs
+EOF
+    skill_dirs=$skill_dirs$nl$1
+}
+
+# The skill folders, one per line, and the default skill folders as found.
+default_dirs=
 if [ -n "${ORDO_SKILL_DIRS:-}" ]; then
     case "$ORDO_SKILL_DIRS" in
         *"$nl"*) skill_dirs=$ORDO_SKILL_DIRS ;;
@@ -76,10 +109,28 @@ if [ -n "${ORDO_SKILL_DIRS:-}" ]; then
     skill_dirs=$(printf '%s\n' "$skill_dirs" | sed '/^$/d')
     [ -n "$skill_dirs" ] || fail "ORDO_SKILL_DIRS names no folder"
 else
-    skill_dirs="$HOME/.claude/skills"
-    if [ -n "${CLAUDE_CONFIG_DIR:-}" ] && [ "${CLAUDE_CONFIG_DIR%/}" != "$HOME/.claude" ]; then
-        skill_dirs="$skill_dirs$nl${CLAUDE_CONFIG_DIR%/}/skills"
-    fi
+    # Every default skill folder as found, before a folder named twice is removed: the agent folders
+    # are built from this list, so a config folder whose skills folder is another folder's link
+    # keeps its own agents folder.
+    default_dirs="$HOME/.claude/skills"
+    for dir in "$HOME"/.claude-*/skills; do
+        [ -d "$dir" ] || continue
+        case "$dir" in
+            *"$nl"*)
+                shown=$(printf '%s' "$dir" | awk 'BEGIN { ORS = "" } NR > 1 { print "\\n" } { print }')
+                fail "'$shown' holds a newline; move the folder or set ORDO_SKILL_DIRS"
+                ;;
+        esac
+        default_dirs=$default_dirs$nl$dir
+    done
+    [ -z "${CLAUDE_CONFIG_DIR:-}" ] ||
+        default_dirs=$default_dirs$nl$(printf '%s\n' "$CLAUDE_CONFIG_DIR" | sed 's#//*$##')/skills
+    skill_dirs=$HOME/.claude/skills
+    while IFS= read -r dir <&3; do
+        add_skill_dir "$dir"
+    done 3<<EOF
+$default_dirs
+EOF
 fi
 # Prints ~/.agents/skills, the folder outside the list whose links into Ordo check mode reports
 # and pin mode removes; prints nothing when ORDO_SKILL_DIRS is set, or when the folder is one of
@@ -108,9 +159,24 @@ $skill_dirs
 EOF
 # The folders as the summary line names them.
 shown_dirs=$(printf '%s\n' "$skill_dirs" | awk 'NR > 1 { printf ", " } { printf "%s", $0 }')
-# The agent folders, one per line: the agents folder beside each skill folder, each path once.
-agent_dirs=$(printf '%s\n' "$skill_dirs" |
-    awk '{ sub(/\/+$/, ""); sub(/\/[^\/]*$/, ""); dir = $0 "/agents" } !seen[dir]++ { print dir }')
+# The agent folders, one per line: the agents folder beside each folder of $agent_sources, each
+# folder once. $agent_sources is $ORDO_SKILL_DIRS, or every default skill folder found.
+agent_sources=${default_dirs:-$skill_dirs}
+agent_dirs=
+add_agent_dir() {
+    while IFS= read -r known <&4; do
+        [ -n "$known" ] || continue
+        same_folder "$known" "$1" && return 0
+    done 4<<EOF
+$agent_dirs
+EOF
+    agent_dirs=${agent_dirs:+$agent_dirs$nl}$1
+}
+while IFS= read -r dir <&3; do
+    add_agent_dir "$(printf '%s\n' "$dir" | sed 's#//*$##; s#/[^/]*$##')/agents"
+done 3<<EOF
+$agent_sources
+EOF
 shown_agent_dirs=$(printf '%s\n' "$agent_dirs" | awk 'NR > 1 { printf ", " } { printf "%s", $0 }')
 
 # The folder that holds the skills in a checkout: skills/ when it exists, the top level otherwise.
@@ -140,17 +206,6 @@ agent_name() {
     case "$agent_base" in
         ?*.md) printf '%s' "${agent_base%.md}" ;;
     esac
-}
-
-# Succeeds when the folders $1 and $2 are one folder: the same path with every trailing slash
-# stripped, as the agent folders are built, or, when both exist, the same physical path.
-same_folder() {
-    same_one=$(printf '%s\n' "$1" | sed 's#//*$##')
-    same_two=$(printf '%s\n' "$2" | sed 's#//*$##')
-    [ "$same_one" = "$same_two" ] && return 0
-    same_one=$(CDPATH= cd -P "$1" 2>/dev/null && pwd -P) || return 1
-    same_two=$(CDPATH= cd -P "$2" 2>/dev/null && pwd -P) || return 1
-    [ "$same_one" = "$same_two" ]
 }
 
 # Succeeds when the list $1, one name per line, holds the name $2; an empty name is in no list.

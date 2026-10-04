@@ -222,7 +222,7 @@ metadata:
 
 - One step stays one implementation commit, which keeps each step traceable to its brief, its review and its booking.
 - A landed step found short of its brief, or wrong, is raised to the user as an open item, by `plan-orchestration`'s "Stops".
-  - The step that finishes it on top of what landed enters the plan only by a ruling of the user or, under `self_rule: on`, a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books.
+  - The step that finishes it on top of what landed enters the plan only as `plan-orchestration`'s "What earns a step of its own" says.
 - A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books when the step's authority is a bullet ending "(self-rule)" alone.
   - The revert of a step the user approved, or one a ruling of the user added, is kind 3 of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open".
   - Its preparation commit stays.
