@@ -5,6 +5,7 @@ The catch-up note for entry 2.F of `docs/roadmap.md`, diagnose. Rewritten before
 ```yaml
 verify:                      # commands run in the worktree and again on main, in order; all must pass. Copied from docs/dev/building.md by /plan, with the filters of docs/dev/change-standard.md.
 - sh skills/land/templates/land.test.sh 2>&1 | tail -1
+- sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
 - sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1

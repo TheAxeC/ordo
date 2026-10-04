@@ -42,8 +42,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 2.I Several plans in one session
 
 - Status: [ ]
-- Goal: `plan-orchestration` runs every open plan in one session: it takes the plans in the roadmap's order, `spec` compares a step's paths with the steps in flight of every open plan, one limit on steps in flight holds across all plans, landings are one at a time across all plans, and one report lists each plan's position and open items.
-- Gate: one real run over two open plans whose next steps change the same file, with a third step in flight beside them: the run starts with the plan that comes first in the roadmap, the second plan's step waits until the first plan's step has landed, the steps in flight never exceed the one limit, no two landings overlap, and the one report lists both plans' positions and open items, reviewed by you.
+- Goal: `plan-orchestration` runs every open plan in one session: it takes the plans in the roadmap's order, `spec` compares a step's paths with the steps in flight of every open plan, one limit on steps in flight holds across all plans, landings are one at a time across all plans, and one report lists each plan's position and open items; and every open plan runs the verify list the verification page holds now: a command added to the page reaches each open plan before its next step is checked or landed, never only the plan that added it.
+- Gate: one real run over two open plans whose next steps change the same file, with a third step in flight beside them: the run starts with the plan that comes first in the roadmap, the second plan's step waits until the first plan's step has landed, the steps in flight never exceed the one limit, no two landings overlap, and the one report lists both plans' positions and open items, reviewed by you; a test command added to the verification page by one plan's step is run, its line quoted, by the next landing of the other plan.
 - Waits on: 2.E, 2.F and 2.H, whose open steps change `skills/spec/SKILL.md` and `skills/plan-orchestration/SKILL.md`.
 
 ## 3. The writing base
