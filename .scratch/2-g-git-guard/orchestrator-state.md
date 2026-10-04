@@ -77,4 +77,4 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1 and 2 landed and ticked.
-- Next: steps 2a, 2b and 2c, then step 3, the closing.
+- Next: step 2a (steps 2a to 2c merged by ruling "Steps by part", 2026-10-04), then step 3, the closing.

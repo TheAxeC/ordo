@@ -73,4 +73,4 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-09-30. Steps 1, 2 and 3 landed and ticked.
-- Next: step 3a (the six changes to `spec`); step 4, the real run over 2.C's sessions with Axel, before 2026-10-28.
+- Next: step 4, the real run over 2.C's sessions with Axel, before 2026-10-28; step 3a moved to plan 2.E.A's step 12c by ruling "Steps by part" (2026-10-04).
