@@ -54,6 +54,8 @@ dispatch:
   landing: not-started
   round: 0
   session_id: a72058491ec0de347 (claude-sonnet-5-5)
+  cases: .scratch/2-e-a-self-rule/agents/briefs/12c-cases.md
+  builder_usage: 229901 tokens, 37 tool uses, 9 min 7 s (the first run of the cases, handed back)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
