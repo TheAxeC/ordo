@@ -17,3 +17,6 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0007](0007-the-run-over-a-repair-round-runs-on-its-own-reviewer-model.md) | The run over a repair round runs on its own reviewer model |
 | [0008](0008-the-cost-script-prices-from-a-table-copied-by-hand.md) | The cost script prices from a table copied by hand |
 | [0009](0009-the-cost-script-takes-each-response-s-counts-from-its-response-body.md) | The cost script takes each response's counts from its response body |
+| [0010](0010-each-plan-s-verify-list-is-kept-equal-to-the-verification-page.md) | Each plan's verify list is kept equal to the verification page |
+| [0011](0011-each-plan-keeps-its-own-dispatch-block-read-across-plans.md) | Each plan keeps its own dispatch block, read across plans |
+| [0012](0012-every-commit-on-main-names-its-paths.md) | Every commit on main names its paths |
