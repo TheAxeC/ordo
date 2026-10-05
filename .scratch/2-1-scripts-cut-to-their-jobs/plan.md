@@ -18,7 +18,7 @@ Every script of Ordo does its job and nothing more, and `docs/dev/scripts.md` li
 ## Steps, in execution order
 
 - ✅ 1 The rules in text: in `docs/dev/change-standard.md` and its template copy, the rule that code handles a case only when that case has happened or would lose work, rule 15 rewritten to match; in `/spec`'s brief template and brief check, cases that check only what the step changes and the "Implied inputs" check narrowed to the same; the builder and the reviewer running only the checks of the files the step changes and the ASCII check, the full verify list at landing on main; a step that changes only text in fewer than 20 lines getting no brief check and one review with no repair round, in `/spec`, `/refute`, `/land` and `plan-orchestration`; `/refute`'s Standards finding of code larger than its job; each changed skill's version raised; at its landing main is tagged and the user runs `utils/pin.sh <tag>`; check: each changed text read by the user in place, and `git describe --tags` in `~/.local/share/ordo-stable` prints the new tag (1 commit) (approved) (ruling A)
-- 2 The gate clauses of entries 3, 4, 7, 8 and 16 in `docs/roadmap.md`, as the user approved them when entry 2.1 was added, run as a text step of fewer than 20 lines under step 1's rules; check: the clauses read by the user, and the step's ledger shows no brief check and no repair round (1 commit) (approved) (ruling C)
+- ✅ 2 The gate clauses of entries 3, 4, 7, 8 and 16 in `docs/roadmap.md`, as the user approved them when entry 2.1 was added, run as a text step of fewer than 20 lines under step 1's rules; check: the clauses read by the user, and the step's ledger shows no brief check and no repair round (1 commit) (approved) (ruling C)
 - 3 The scripts: `docs/dev/scripts.md` listing each script as a development, user or test script with its job; the case rule of step 1 added to the bullet "Scripts compute facts; judgment is read" of `skills/repo-setup/templates/shared-rules.md`; the line in `docs/dev/change-standard.md`, "Scripts compute facts; judgment is read", that a change adding, removing or renaming a script updates `docs/dev/scripts.md`; `person-driven.sh`, its test and `skills/diagnose/references/person-driven.md`, the git guard (`git_guard.py`, its test, `git_guard.settings.json`) with `repo-setup`'s offer, every `.py` and `.sh` file under `.scratch/`, and the tests of `checks.sh`, `plan_cost.py`, `transcript_window.py` and `check_coverage.py` deleted, with every text that names them; `land.sh`, `pin.sh`, `check_config.py`, `plan_cost.py` and `transcript_window.py` cut back to their jobs; the tests of `land.sh`, `pin.sh`, `check_config.py` and `sync_rules.py --write` cut to the cases whose failure loses work, breaks the install or accepts a wrong configuration; the verify list of `docs/dev/building.md` and of each open plan's state file kept equal; check: the page compared with `git ls-files '*.py' '*.sh'`, the deleted files absent from `git ls-files`, and each kept script and test read by the user against its job with its line count before and after (1 commit) (approved) (ruling A) (ruling B)
 - 4 the closing: `.scratch/2-g-git-guard/` deleted and `/roadmap drop 2.G` run with the user's yes on its diff, the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
@@ -60,6 +60,8 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a461ff8462cc74f48: builder of step 1, claude-sonnet-5-5
 - a36aab8f6d73b9602: reviewer of step 1, claude-opus-5-5
 - a707f6f3bdfff2344: reviewer of step 1 over round 1, claude-sonnet-5-5
+- ad1ce82fc34ae13aa: builder of step 2, claude-sonnet-5-5
+- a00ca6ccb690968fe: reviewer of step 2, claude-opus-5-5
 
 ## Blocked, and by what
 
@@ -75,3 +77,14 @@ none
 - A/B: none. Look: none configured.
 - Usage: brief check claude-opus-5-5 183460 tokens, 50 tool uses, 7.7 min; builder claude-sonnet-5-5 318582 tokens, 80 tool uses, 16.8 min, and round 1 346610 tokens, 17 tool uses, 4.0 min; reviewer claude-opus-5-5 192454 tokens, 56 tool uses, 8.8 min; reviewer over round 1 claude-sonnet-5-5 177472 tokens, 41 tool uses, 9.3 min.
 - The builder's first report did not pass its bar: the first run found 6 findings, item 16 violated and C6 partial. Fixes at landing: 3 (the "close them" figure label, the cost condition in `spec` and the brief template's first placeholder, the narrated attempt in the report), plus the orchestrator's correction of this plan's own state file.
+
+### Step 2, the gate clauses (landed 2026-10-06)
+
+- Landed: in `docs/roadmap.md`, entry 3's gate loses its planted-text clauses and names each finding of the two real runs at its place (ruling C); entry 4's gate is the real run you review; entry 7's loses the check of unanswered points; entry 8's loses "the statement text"; entry 16's names the deletion of `utils/check_coverage.py`. 5 lines added and 5 removed.
+- Run as a small text step: no brief check (`brief_check: none, a small text step`), one review, no repair round.
+- Premise corrections: at `/spec`, Open item C ruled (b) by the user. At landing, the brief's case C1 counted "planted" over the whole file; line 234, entry 2.B's done record, holds the word and stays, and the five gate lines hold none.
+- Findings outside the brief: plan 3's ledger still rests on the removed clauses, raised as Open item D.
+- Verification on main: `sh skills/land/templates/land.sh .scratch/2-1-scripts-cut-to-their-jobs/orchestrator-state.md 2-1-2 132fce8` printed `checks: 1 of 12 commands failed`, the character-set check finding tabs in `2-refuter.md`, the session's saved copy of the review; the tabs were replaced with spaces, and `sh skills/land/templates/checks.sh .scratch/2-1-scripts-cut-to-their-jobs/orchestrator-state.md` then printed `checks: 12 commands passed`, exit 0.
+- A/B: none. Look: none configured.
+- Usage: builder claude-sonnet-5-5 62041 tokens, 9 tool uses, 1.0 min; reviewer claude-opus-5-5 111304 tokens, 25 tool uses, 2.9 min.
+- The builder's first report passed its bar: the five items were made as the brief gave them. Fixes at landing: 2 (the tabs in the saved review, the report's open items).

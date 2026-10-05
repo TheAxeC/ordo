@@ -57,14 +57,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: A `writing` skill folder the writing skills read from, and a `/writing <file>` review. `references/` holds the rules for academic prose that the prose standard lacks, taken from the three `rebuild: writing` sources, with the registers of Engineering and CS, Medicine and Health, the Sciences and the Social Sciences. The prose standard is read where the repository keeps it and holds wherever the two differ. `/writing` has one fresh agent that changes nothing read a whole draft: a `.tex` file with its `\input` and `\include` files, a `.md`, a `.txt` or a `.docx`. It reports the findings grouped by rule, the most consequential first, each with its place, the quoted passage and a proposed replacement. The prose standard gains two throat-clearing openers, and the term **finding** gains its sense for `/writing`.
-- Gate: `/writing` run on a real manuscript of yours whose `.tex` has `\input` files, and on a real `.docx` grant of yours, reports its findings; two fresh reviewer agents each mark each one right or wrong, on copies of the two files, and each one not marked right by both is fixed in the rules or the skill before the gate passes; `/writing` run on one text holding one planted break of each rule of `references/`, and on one clean text, names every planted break and nothing in the clean text, checked by reading its report; the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, apart from what the entry's rulings leave out, checked by reading both; the skill follows `docs/dev/skill-layout.md`; section C of the `repo-setup` skill's `templates/docs/dev/prose-standard.md` holds the openers "In today's rapidly evolving..." and "As a matter of fact...", checked by reading it; the term **finding** in the `repo-setup` skill's `templates/plan-terms.md` holds its sense for `/writing`, checked by reading it, and `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` exits 0; of the planted breaks, at least one stands in an `\input` file of a `.tex` main file and at least one in a `.docx`, and each is named at its place in the file that holds it; the report is grouped by rule, the most consequential first, checked by reading it; the run's transcript shows the review made by one fresh agent that edits no file; the planted text also holds one break of a prose standard rule and one passage where an academic rule and the prose standard differ, and the report names the first and follows the prose standard on the second; the planted text is run once as a `.md` and once as a `.txt`, with the same findings; every finding in every report quotes its passage and proposes a replacement, checked by reading the reports.
+- Gate: `/writing` run on a real manuscript of yours whose `.tex` has `\input` files, and on a real `.docx` grant of yours, reports its findings; two fresh reviewer agents each mark each one right or wrong, on copies of the two files, and each one not marked right by both is fixed in the rules or the skill before the gate passes; the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, apart from what the entry's rulings leave out, checked by reading both; the skill follows `docs/dev/skill-layout.md`; section C of the `repo-setup` skill's `templates/docs/dev/prose-standard.md` holds the openers "In today's rapidly evolving..." and "As a matter of fact...", checked by reading it; the term **finding** in the `repo-setup` skill's `templates/plan-terms.md` holds its sense for `/writing`, checked by reading it, and `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` exits 0; each finding of the two real runs is named at its place in the file that holds it, an `\input` file of the `.tex` included; the report is grouped by rule, the most consequential first, checked by reading it; the run's transcript shows the review made by one fresh agent that edits no file; every finding in every report quotes its passage and proposes a replacement, checked by reading the reports.
 - Waits on: 1, for the layout; 2, for what the base covers; 2.B, for the repaired skills and tools it is built with; 2.C, for the rules it is built under and a tree without the old `/writing`.
 
 ## 4. code-comments
 
 - Status: [ ] (drafted again, from its sources, before it is opened)
 - Goal: A skill that checks and rewrites the comments of a diff: what the code does and why, no history, no step numbers, ASCII only.
-- Gate: its check flags history words, step numbers, dates and non-ASCII in the comments of one sample diff that plants one of each, and nothing in a clean diff; one real run on a real diff that you review.
+- Gate: one real run on a real diff that you review.
 - Waits on: 3, for the checks.
 
 ## 9. literature
@@ -92,14 +92,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The response letter for a real submission round, from the referee comments and the revision's apply report.
-- Gate: every referee point has a response and a pointer to its change; each referee point has a verdict, judged by reading the response and the manuscript: addressed, partly, not, or cannot be checked from the manuscript; a check that no point is left unanswered, with a test that fails on a missing response; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
+- Gate: every referee point has a response and a pointer to its change; each referee point has a verdict, judged by reading the response and the manuscript: addressed, partly, not, or cannot be checked from the manuscript; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
 - Waits on: 5, for the apply report; 6, for the point table.
 
 ## 8. grant
 
 - Status: [ ]
 - Goal: The grant skill with per-funder config: required sections, page limits, evaluation criteria and the funding statement. It applies the `/writing` findings you accept to the grant.
-- Gate: the checks for limits, required sections and the statement text pass their tests; a side-by-side run on a section of a past application, compared with what was submitted.
+- Gate: the checks for limits and required sections pass their tests; a side-by-side run on a section of a past application, compared with what was submitted.
 - Waits on: 3, for the writing base; 2, for the coverage: no file is marked `grant`, and the funder acknowledgement text reaches it through the paper row of `references/funding_statement_guide.md`.
 
 ## 10. idea
@@ -155,7 +155,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 - Status: [ ]
 - Goal: The new writing skills replace the installed academic skills.
-- Gate: with the user's explicit permission, asked for before any of it: your global `CLAUDE.md` and `research-hub/CLAUDE.md` name the new skills; the installed academic skills are removed from research-hub; `research-hub/tools/manuscript` points at `paper`. Nothing of it is done without that permission.
+- Gate: with the user's explicit permission, asked for before any of it: your global `CLAUDE.md` and `research-hub/CLAUDE.md` name the new skills; the installed academic skills are removed from research-hub; `research-hub/tools/manuscript` points at `paper`. Nothing of it is done without that permission. `utils/check_coverage.py` and its mention in `docs/dev/scripts.md` are deleted.
 - Waits on: 5 to 10, each with its side-by-side run passed; 14, for the submission checks and the cover letter of `references/journal_submission_guide.md`; 15.A, so every later row is built before the academic skills are removed.
 
 ## 17. review

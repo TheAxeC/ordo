@@ -43,25 +43,17 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-  step: 2
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2-1-2
-  base: 132fce8
-  launched: 2026-10-05
-  report: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/2-report.md
-  brief_check: none, a small text step
-  landing: not-started
-  round: 0
-  session_id: ad1ce82fc34ae13aa (claude-sonnet-5-5)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-none
+- Open item D (2026-10-06), kind 3 (the reversal of a ruling), raised from step 2's review (`agents/reviews/2-refuter.md`, "3. Standards" 1): plan 3's ledger, `.scratch/3-the-writing-base/plan.md`, opened and not started, still copies entry 3's old gate and rests on its planted text: its "## Gate" section and the gate questions under it, step 2 ("The runs: a planted text with one break of each rule of `references/` ..."), step 3's check ("every planted break named"), and its rulings D9, Open item Gate 3 and Open item Gate 3b, which you ruled when the planted clauses were added. Step 2 of plan 2.1 removed those clauses from the roadmap by your approval of entry 2.1 and your ruling C.
+  - (a) Carry the change into plan 3's ledger now: its gate copied again from the roadmap, the gate questions rewritten to match, step 2 running `/writing` on the real manuscript and the real grant only, step 3's check reading "every finding marked right by both reviewers", and a Rulings bullet in plan 3 saying that plan 2.1's ruling C replaces the planted-text parts of D9, Gate 3 and Gate 3b. Pro: plan 3's ledger agrees with the roadmap before anything is built on it. Con: it rewrites rulings of yours in another plan's ledger.
+  - (b) Leave plan 3's ledger, and let plan 3's own `/spec` meet the difference as a false premise when it runs. Pro: no change to plan 3 now. Con: plan 3 stays in contradiction with the roadmap until then, and its `/spec` stops on it then.
+  - Recommendation: (a). The lazy option is (b). Plan 2.1 goes on: none of its steps depends on the ruling.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -91,5 +83,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Step 1 landed; main tagged v3.0.0. Next step: 2, `/spec 2.1 2` again after the ruling on Open item C. The user ran `utils/pin.sh v3.0.0`. By the user's order, plans run one at a time: 2.1 first, then 2.F.
+- Step 1 landed; main tagged v3.0.0. Step 2 landed. Next step: 3, the scripts. The user ran `utils/pin.sh v3.0.0`. By the user's order, plans run one at a time: 2.1 first, then 2.F.
 - Open on Axel's side: none.
