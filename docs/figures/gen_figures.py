@@ -557,7 +557,7 @@ def pipeline_svg() -> str:
 
 def plan_loop_svg() -> str:
     """The loop of one step, and the /plan-orchestration band that runs the row unattended."""
-    top, height, gap = 42, 290, 18
+    top, height, gap = 42, 304, 18
     bottom = top + height
     cards_y, cards_h = bottom + 76, 160
     band_y, band_h = cards_y + cards_h + 24, 221
@@ -590,6 +590,7 @@ def plan_loop_svg() -> str:
                         "A rule clash with an ADR",
                         "A user-visible choice",
                         "A brief check finding the brief cannot absorb",
+                        "A cause not found",
                         model_stop,
                         "A step that does not converge",
                     ),

@@ -33,7 +33,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 
 ## Agents
 
-Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent stopped for another model, and `/plan` copies the bullets of a rulings file.
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent in no role the cost script prices, which has a numbered item under the heading "Agents in no role the cost script prices:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent stopped for another model, the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
 
 - <agent id>: <role, such as builder of step <n>>, <served model>
 - <agent id>: grill lookup, <served model>

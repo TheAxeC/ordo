@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Prepare a step
@@ -61,16 +61,20 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - Any unrelated change of the user's outside the ledger folder is listed by path.
      - It is left alone.
    - Every uncommitted change under the ledger folder is listed by path (`git status --short -- <ledger>`).
-   - A change the session itself made since the last resume-point commit is one of its own records: a ruling it booked, or a report or a reviewer it recorded.
+   - A change the session itself made since the last resume-point commit is one of its own records:
+     - a ruling it booked;
+     - a report or a reviewer it recorded;
+     - a diagnosis record, with the text the diagnosis wrote in Step 0;
+     - the diagnosis agent's numbered item in the Agents section.
    - The preparation commit carries the session's own records (Steps 6).
    - Any other change under the ledger folder is left alone.
      - It is never committed.
    - An uncommitted change on the ledger's `plan.md` or state file that the session did not make is a refusal ("Stops"), named by path, since Steps 2 and 9 write those files.
    - `plan.md` is copied aside to the session's scratch folder before Steps 2.
-     - A step that waits at Steps 5 restores it with the session's own records, so a booked ruling is never lost.
+     - A step that waits at Steps 5 restores it with the session's own records of the list above, so a booked ruling is never lost.
    - An uncommitted change at the brief's path `agents/briefs/<step>.md` is a refusal ("Stops"), named by path, since Steps 4 writes the brief there.
    - An uncommitted change at the brief check's report path `agents/reviews/<step>-brief-check.md` is a refusal ("Stops"), named by path, since "Steps / The brief check" saves the report there.
-   - The runner lists the effort agent `ordo-<reviewer_effort>` among its agent types, the level `high` when the configuration block has no `reviewer_effort` key, since "Steps / The brief check" starts that agent.
+   - The runner lists the effort agent `ordo-<reviewer_effort>` among its agent types, the level `high` when the configuration block has no `reviewer_effort` key, since "Steps / The brief check" and the diagnosis of Steps 2 start that agent.
    - `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either effort check failing is the refusal "The configured effort cannot apply" ("Stops"), and writes nothing.
    - A preflight that fails is a refusal ("Stops").
@@ -89,6 +93,18 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - That correction goes into the preparation commit (Steps 6).
    - The brief records the correction beside the premise.
    - A premise found false that the plan cannot absorb is a stop ("Stops"): its correction would change the part the step builds, or make a choice the user would see.
+   - A part of the step's text that asks for a cause to be found ("find why X happens and end it", in whatever words) is investigated with `/diagnose <entry> <step> premise`.
+     - With no person present, the diagnosis runs in a diagnosis agent, as the `diagnose` skill's "Rules" say.
+       - Run by a person, the diagnosis runs in the person's session, with the waits of the `diagnose` skill's "Stops".
+     - A result already in the step's Step 0, written there by an earlier diagnosis, is not investigated again: a cause goes into the brief, a cause not found stays out of it with its open item, and a false premise goes to the bullets above on a false premise.
+     - The diagnosis probes on a scratch copy at main's head and changes no file of the checkout outside the ledger.
+     - The cause found or already in Step 0, its fix and the record's path are written into the item of "What to build" at Steps 4.
+     - The diagnosis's red command becomes a check of the brief's "Verify before you report", and its test, where one was written, a case with its failing run.
+     - A cause not found is left out of the brief.
+       - The open item `diagnose` Steps 15 raises is the one open item for it.
+       - A step with no other part stops there, with the stop "A cause not found" ("Stops").
+     - A red command that is green on main's head is a false premise, which the bullets above on a false premise handle.
+     - The record, what the diagnosis wrote in Step 0 and the diagnosis agent's numbered item in the Agents section are among the session's own records (Steps 1), and a step that waits at Steps 5 keeps them.
    - Read the ADRs the step touches, as "What it reads" 5 says.
      - The brief names each under "What is on the tree", with its number, its title and the sentence of its decision the step is under, or says that no ADR touches the step.
    - A step's text that contradicts the part in force of an ADR is a rule clash, a stop ("Stops").
@@ -130,9 +146,6 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - A choice that decides a format or a rule the builder applies across the tree (a directive shape, an anchor rule, a naming rule, a file layout) is run by the session writing the brief on at least five real cases from the tree.
      - The brief quotes each input and its output under the decision, so an unreadable or wrong result is seen before dispatch.
    - Every requirement the part is judged on is known and written into the brief.
-   - An item of the form "find why X happens and end it" is investigation: the session writing the brief does it first, read-only, and writes the found cause and its fix into the item.
-     - A cause it cannot find is left out of the brief.
-     - Such a cause is raised to the user as an open item.
    - A user-visible choice (a public shape, a wire format, a config key, a vocabulary) is not taken.
      - It is a stop ("Stops").
    - For a step taken back out of main, whose Step 0 in `plan.md` records the failure its landing met, the brief carries that failure and, when `/diagnose` wrote them into Step 0, the cause, the fix and the diagnosis record's path.
@@ -150,8 +163,9 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - When the merge at landing is judged simple, the step goes on.
      - Steps 9 writes `shared_paths:` in its dispatch entry, naming each shared file and why the merge is simple.
    - When it is not judged simple, the step waits until the other step lands.
-     - This run leaves nothing: the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
-     - `plan.md` is put back from the copy Steps 1 saved.
+     - This run leaves only the session's own records of Steps 1's list.
+     - The brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
+     - `plan.md` is put back from the copy Steps 1 saved, with the session's own records of Steps 1's list.
      - No commit, worktree or dispatch entry is made.
    - What "Steps / A step taken back out of main" did stays done.
      - The patch stays in the ledger.
@@ -336,7 +350,7 @@ Steps 5 says when this runs.
    - Each change is named under the report's "Closed" heading, beside its finding.
    - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's "Dictated text" says, before the preparation commit.
    - That line is named under "Closed".
-   - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>` before it is closed in the brief.
+   - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>`, which runs, with no person present, in a diagnosis agent as the `diagnose` skill's "Rules" say, before it is closed in the brief.
    - The check runs once per step.
      - The brief as changed goes to the builder without a second run.
      - A `/spec` run after a stop or a ruling does not check the step again.
@@ -354,7 +368,7 @@ Steps 5 says when this runs.
 
 ## Stops
 
-The first six rows are stops, which leave an open item as "Steps / A stop" says. The rest are refusals. A refusal names its cause and leaves nothing beyond what "Steps / A step taken back out of main" has already done.
+The first seven rows are stops, which leave an open item as "Steps / A stop" says. The rest are refusals. A refusal names its cause and leaves nothing beyond what "Steps / A step taken back out of main" has already done.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
@@ -362,7 +376,8 @@ The first six rows are stops, which leave an open item as "Steps / A stop" says.
 | A rule clash with an ADR | The step's text contradicts the part in force of an ADR the step touches (Steps 2, or the "ADRs" check of "Steps / The brief check") | The open item, booked in the open items, naming the ADR and quoting the step's words that contradict it | A ruling |
 | A user-visible choice | The brief would have to choose a public shape, a wire format, a config key or a vocabulary, or, under `libraries: check`, a library could replace code the step would write by hand (Steps 3) | The open item, booked in the open items | A ruling |
 | A brief check finding the brief cannot absorb | A finding of the brief check whose fix would change the part the step builds or make a choice the user would see, or a finding the session cannot close by a change to the brief ("Steps / The brief check") | The open item, booked in the open items, with the report's path | A ruling |
-| A model other than the configured one | The runner served the brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
+| A cause not found | A part of the step's text asks for a cause to be found and the diagnosis did not find it, and the step has no other part (Steps 2) | The open item the `diagnose` skill's Steps 15 raised, with the diagnosis record's path | A ruling |
+| A model other than the configured one | The runner served the brief-check agent or a diagnosis agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
 | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
 | A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)", or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |

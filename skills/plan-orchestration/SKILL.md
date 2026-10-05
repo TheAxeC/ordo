@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after the closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "3.0.0"
+  version: "3.1.0"
 ---
 
 # Plan orchestration
@@ -25,7 +25,7 @@ continue the plan                    resume from the state file, after a compact
 | The plan is not open yet | `/plan <entry>` |
 | Where the plan stands and which command comes next | `/ordo-help <entry>` |
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
-| A finding, a red line or a brief-check finding whose cause is not known, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line` or `brief check <n>` |
+| A finding, a red line or a brief-check finding whose cause is not known, or a cause a step's text asks to have found, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line`, `brief check <n>` or `premise` |
 | What the reviews keep finding across plans | `/plan-retro` |
 | What went well and what went wrong in the Claude Code sessions of a plan | `/session-retro <entry>` |
 
@@ -122,7 +122,12 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **Before the resume.** Write `round: n` into the dispatch block.
      - Commit it as a resume point, by path, with the round's brief and the session's own records since the last resume point.
    - **Only known fixes.** Each ruling says what to change.
-     - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>), which probes read-only on a scratch copy and leaves the step's worktree unchanged.
+     - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>).
+       - The diagnosis runs in a diagnosis agent, as the `diagnose` skill's "Rules" say.
+       - It probes read-only on a scratch copy.
+       - It leaves the step's worktree unchanged.
+     - The orchestrator saves the diagnosis agent's final message as the record and reads it as a builder's report is read, as a lead and not a fact.
+     - The orchestrator then rules on the round.
      - The round carries the found cause's fix.
      - A cause not found is not sent.
      - Such a cause is noted at landing, as the `land` skill's Steps 9 says.
@@ -144,7 +149,9 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - It is worked again as that step, with no new ruling, once.
    - The failure goes to the user as an open item only when what to do is a decision for the user, by "Stops".
    - A second failure of the step's landing always goes to the user, as the `land` skill's Steps 6 says.
-   - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line` once the step is out of main and before `/spec` prepares it again, and its cause goes into the step's Step 0 for `/spec`.
+   - A red line whose cause is not known is diagnosed with `/diagnose <entry> <step> red line`, once the step is out of main and before `/spec` prepares it again.
+     - The diagnosis runs in a diagnosis agent, as the `diagnose` skill's "Rules" say.
+   - The orchestrator writes the diagnosis's cause into the step's Step 0 for `/spec`, as the `diagnose` skill's Steps 20 says.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head, as the `spec` skill's "Steps / A step taken back out of main" says.
    - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by <name>).", for any name, the orchestrator adds its fix step, as `references/self-rule.md`, "The review of a choice", says.
    - Done when the step is on main with its booking, or is taken back out of main.
@@ -162,18 +169,20 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 
 ## The two tiers, and the models
 
-- Two tiers take part: the orchestrator, and the agents it starts (the builders, the reviewers and the brief-check agents).
+- Two tiers take part: the orchestrator, and the agents it starts (the builders, the reviewers, the brief-check agents and the diagnosis agents).
 - **Default.** The orchestrator and every agent run on Claude Opus.
 - **Orchestrator.** It may also run on Claude Fable.
   - It reads, decides, invokes the skills, lands and books.
   - It never writes step code itself beyond a fix at landing, unless the step's executor is `inline`.
-- **Agents.** A builder, a reviewer or a brief-check agent runs on a Claude model, and never on Claude Fable.
+- **Agents.** A builder, a reviewer, a brief-check agent or a diagnosis agent runs on a Claude model, and never on Claude Fable.
 - **Builder.** One per step, in the step's worktree, under the brief and the rules file, on the model the configuration block's `worker:` names, at the effort `worker_effort` names, launched as "Launching a builder" says.
 - **Reviewer.** The model is set per run of `/refute`.
   - The first run of a step runs on the model the configuration block's `reviewer:` names.
   - Each run over a repair round runs on the model the configuration block's `repair_reviewer:` names, or on the `reviewer:` value when the block has no `repair_reviewer:` key.
   - Every run is at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
 - **Brief-check agent.** One per step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+- **Diagnosis agent.** One per diagnosis run with no person present, started by the orchestrator or by the `/spec` session as the `diagnose` skill's "Rules" say, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names.
+  - It changes no file of the main checkout or of the step's worktree.
 - **Runner.** Both tiers run under Claude Code.
 - Any allowed combination is chosen per step.
 - A new combination is booked in the rulings with what decides it.
@@ -355,7 +364,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 | A rule clash | A contradiction between two established rules or decisions, an ADR among them, except a ruling of the user that replaces a bullet ending "(self-rule)", which is no clash | The stop message, below | The user's ruling |
 | A finding that is the user's | A finding that changes a public shape or an established decision; or one that neither the repair rounds nor a fix at landing close (a finding outside the step's part, work the last round left undone, a changed view not fixed at landing), which goes where "What earns a step of its own" says, by a ruling of the user or, under `self_rule: on`, a choice `references/self-rule.md`, "Closing an open item", books | The stop message, below | The user's ruling |
 | The roadmap diff | The closing step's `/roadmap done`, which shows its diff of the roadmap | The diff, in the stop message | The user's approval of the diff |
-| A model other than the configured one | The runner served a builder, a reviewer or a brief-check agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
+| A model other than the configured one | The runner served a builder, a reviewer, a brief-check agent or a diagnosis agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Launching a builder") | The stop message, below, with the configured value, the served model and the Claude Code version | The user's ruling |
 | The configured effort cannot apply | A refusal (Steps 1): the runner lists no `ordo-<level>` agent for a level the configuration block names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then a new session |
 
 - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.

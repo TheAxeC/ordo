@@ -9,7 +9,7 @@ ledger_root: .scratch                     # required. A plan lives in <ledger_ro
 archive_root: .scratch/archive            # required. Where a closed plan's folder moves.
 worktree_root: .agents/worktrees          # required. Where a step's worktree is created; add it to .gitignore.
 worker: claude:opus                       # required. claude:<model> of the builder.
-reviewer: claude:opus                     # required. claude:<model> the first run of /refute, the brief check and the lookups of /grill run on.
+reviewer: claude:opus                     # required. claude:<model> the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on.
 libraries: check                          # required. check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
 standards: []                             # optional, default []. Files every brief tells the builder to read in full, and the reviewer holds a diff to.
 worktree_paths: []                        # optional, default []. Sparse-checkout paths for a step's worktree; [] means the whole tree.
@@ -24,7 +24,7 @@ adr: docs/adr                             # optional, default docs/adr. The fold
 design_bar: industry                      # optional, default industry. What grill's options are held to and what their reference line cites: industry (what production projects in the field ship), state-of-the-art (the best published work), novel (beyond both, with what would show it works).
 design_references: []                     # optional, default []. Published standards a design is held to, such as WCAG 2.2 AA; grill cites them per option.
 worker_effort: high                       # optional, default high. The effort a builder runs at: low, medium, high, xhigh or max.
-reviewer_effort: high                     # optional, default high. The effort a reviewer, a brief-check agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
+reviewer_effort: high                     # optional, default high. The effort a reviewer, a brief-check agent, a diagnosis agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
 self_rule: off                            # optional, default off. on: plan-orchestration runs the plan under self-rule; off: every open item waits for the user.
 next_entry: off                           # optional, default off. on, with self_rule on: after a plan closes, the orchestrator takes the next open roadmap entry; off: it stops at the closing.
 repair_reviewer: claude:opus              # optional, default the reviewer value. claude:<model> the run of /refute over a repair round runs on, at reviewer_effort.

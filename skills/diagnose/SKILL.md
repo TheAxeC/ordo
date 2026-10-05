@@ -1,8 +1,8 @@
 ---
 name: diagnose
-description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it probes on a scratch copy, leaves the step's worktree unchanged and hands the fix to the builder as the round's ruling. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding."
+description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it runs in a fresh agent, probes on a scratch copy, leaves the step's worktree unchanged and hands the fix over by where the defect was found. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding, find the cause a step's text asks for."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Diagnose a defect
@@ -16,6 +16,7 @@ metadata:
 /diagnose <entry> <step> <finding>         find the cause of a finding of a plan's step, written as the refuter report names it
 /diagnose <entry> <step> red line          find the cause of a red line at the step's landing whose cause is not known
 /diagnose <entry> <step> brief check <n>   find the cause of finding <n> of the step's brief check
+/diagnose <entry> <step> premise           find the cause a step's text asks to have found, before the step's brief is written
 ```
 
 ## Use instead
@@ -31,6 +32,9 @@ metadata:
 1. The symptom, quoted exactly.
    - For `/diagnose <symptom>`, the user's words.
    - For a finding, the failure scenario in the report that holds it.
+   - For `premise`, what the step's text says happens, in each part of the text that asks for a cause to be found.
+     - The words of such a part vary, as in "find why X happens and end it" and "find the cause of X and fix it".
+     - The step's text is its line in `plan.md`'s step list, the rulings its tags name and its Step 0.
 2. The rules file and the standards `.agents/plan.yaml` names, `docs/glossary.md` and the ADRs in force as the `spec` skill's "What it reads" 5 says, each when the repository has it.
    - With no rules file, "Rules" states the rules this skill needs.
 3. Inside a plan, the ledger folder and `orchestrator-state.md`.
@@ -40,8 +44,12 @@ metadata:
    - For a red line, the entry reads `landing: backed-out`: a red line the landing could not fix on main has taken the step back out of main, as the `land` skill's Steps 6 says.
    - No dispatch entry for the step, for a reviewer's finding or a red line, or for a red line an entry that does not read `landing: backed-out`, is a refusal ("Stops").
    - A brief-check finding has no dispatch entry yet, and none is read for it.
-4. Inside a plan, the step's brief `agents/briefs/<step>.md`.
-5. Inside a plan, the report the finding is in.
+   - For `premise`, `plan.md` holds the step's text (item 1).
+     - The rulings its tags name are resolved as the `spec` skill's "What it reads" 4 resolves them, `(self-rule)` endings included.
+   - `premise` has no dispatch entry and reads no brief, since the step is not prepared yet.
+   - For `premise`, a step that is not in the step list is the refusal "No part to investigate" ("Stops").
+4. Inside a plan, for every form but `premise`, the step's brief `agents/briefs/<step>.md`.
+5. Inside a plan, for every form but `premise`, the report the finding is in.
    - For a finding written as a heading and a number, the refuter report `agents/reviews/<step>-refuter.md`: the finding of that name in the first run, before any heading "Repair round <n>, refuted".
    - For a finding written `round <n>` and a heading and a number, the finding of that name under the heading "Repair round <n>, refuted" of the same report.
    - For `brief check <n>`, the brief check's report `agents/reviews/<step>-brief-check.md`, read as it stands on disk.
@@ -51,12 +59,15 @@ metadata:
 ## Steps
 
 1. Inside a plan, refuse when "What it reads" 3 or 5 finds an input missing.
-   - Done when every input inside a plan exists, or the refusal names the missing one.
+   - For `premise`, refuse also when the step's text holds no part that asks for a cause to be found, before the record is opened.
+   - Done when every input inside a plan exists, or the refusal names the missing one, or for `premise` the step and its text.
 2. Open the diagnosis record with the symptom quoted in its Symptom section.
    - Outside a plan, the record is a copy of `templates/diagnosis.md` in `$TMPDIR`, filled as the steps below run.
    - Inside a plan, the record is `agents/reviews/<step>-diagnosis.md` beside the state file, a copy of `templates/diagnosis.md` filled as the steps below run.
-   - A later diagnosis of the same step is appended to that file under its own heading at the level of the record's title, `# Diagnosis: <the symptom in a few words>`, which names its finding.
-   - Inside a plan, the record is written to disk in the main checkout and not committed on its own.
+   - A diagnosis agent fills a copy of `templates/diagnosis.md` in `$TMPDIR`, and the session saves that record at the path above from the agent's final message ("Rules").
+   - A later diagnosis of the same step is appended to that file under its own heading at the level of the record's title, `# Diagnosis: <the symptom in a few words>`, which names its finding or quotes its part.
+   - For `premise`, each part of the step's text that asks for a cause to be found gets a diagnosis of its own, in the order of the step's text, the first filling the record as opened.
+   - Inside a plan, the record is written to disk in the main checkout and not committed on its own, except as Steps 20 says for `premise`.
      - The next resume-point commit carries it, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
    - Done when the record exists and its Symptom section holds the symptom as "What it reads" 1 gives it, word for word.
 3. Choose where the probes run.
@@ -86,6 +97,7 @@ metadata:
    - For a red line, `<commit>` is `HEAD` and the step's whole range is taken from the branch of the kept worktree, which is named after the worktree's folder as the `land` skill's "Removing a step's worktree" says.
    - `--allow-empty` lets a step whose only changes are new files, with an empty tracked diff, be copied.
    - For a brief-check finding, `<commit>` is `HEAD` and nothing is applied, since the brief and its report are read as they stand on disk.
+   - For `premise`, `<commit>` is `HEAD` and nothing is applied, since the step has no worktree and no diff.
    - Before the copy of a reviewer's finding is made, the output of `git status --short` and of `git diff --binary <base> | shasum`, run from inside the step's worktree, is written into the record.
    - A red command that would touch the user's real home, the installed skills or the pinned checkout runs with `HOME`, `ORDO_STABLE` and `ORDO_SKILL_DIRS` set under `$TMPDIR`, as `utils/pin.test.sh` sets them.
    - Done when the probes have a place to run and the record's section names it, and for a reviewer's finding the record holds the two outputs.
@@ -104,7 +116,11 @@ metadata:
    - When no red command can be built by any of the ways, or the scratch copy cannot reproduce because the symptom needs the real environment or a credential the environment lacks, the skill writes each way tried, with what it gave, into the record's "No red command" section.
    - Run by a person, that ends in the stop "No red command" ("Stops").
    - With no person present, that is the cause not found (Steps 15).
-   - Done when the command has been run and its output quoted in the record, with the same result on three runs in a row, or the measured failure rate for a symptom seen only sometimes, or the "No red command" section is written.
+   - For `premise`, a red command that is green on main's head shows a false premise: the step's text says a behaviour happens that does not happen.
+     - The false premise goes to `/spec`, which handles it as its Steps 2 handles a false premise.
+     - Run by a person outside a `/spec` run, the false premise is also written into the step's Step 0 and committed, as the `premise` bullets of Steps 20 say.
+     - The diagnosis of that part ends there, after Steps 21 and 22.
+   - Done when the command has been run and its output quoted in the record, with the same result on three runs in a row, or the measured failure rate for a symptom seen only sometimes, or the "No red command" section is written, or for `premise` the false premise is handed to `/spec`.
 5. Tighten the red command.
    - It gets a faster setup, a sharper assertion on the symptom, pinned time, fixed random seeds, the file system isolated under `$TMPDIR` and the network cut, as far as the symptom allows.
    - Done when it runs unattended in seconds where the symptom allows, and its runs after the tightening are quoted.
@@ -150,9 +166,14 @@ metadata:
 15. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
     - The cause is not found when the second list is falsified too, when no probe can separate the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose.
     - For a cause not found, the record says so in its Cause section, with every probe or, when no red command could be built, a pointer to its "No red command" section, which lists every way tried.
-    - Inside a plan, a cause not found is raised to the user as an open item, the one `plan-orchestration`'s "Stops" row "A finding that is the user's" leaves.
+    - Inside a plan, for every form but `premise`, a cause not found is raised to the user as an open item, the one `plan-orchestration`'s "Stops" row "A finding that is the user's" leaves.
     - That open item quotes the hypotheses and every probe, or every way tried from the record's "No red command" section, and names the record's path.
     - A cause not found is never sent to the builder.
+    - For `premise`, when the step's text has no other part, the open item is raised as the `spec` stop "A cause not found" ("Stops") shows it.
+    - For `premise`, when the step's text has another part, the open item is raised as `plan-orchestration`'s "Stops" row "A finding that is the user's" leaves it.
+    - For `premise`, the open item quotes the hypotheses and every probe, or every way tried, and names the record's path, as for every other form.
+    - For `premise`, that open item is the one open item for the part, and `spec`'s Steps 2 raises no second one.
+    - For `premise` run by a person outside a `/spec` run, the cause not found is also written into the step's Step 0 and committed, as the `premise` bullets of Steps 20 say.
     - With no person present outside a plan, a cause not found is stated in the session's final message with the record's path.
     - After a cause not found the skill goes to Steps 21 and 22, then inside a plan to Steps 23.
     - After a cause not found outside a plan, Steps 23 and 24 are not run, so the record stays in `$TMPDIR` and its path is shown.
@@ -174,7 +195,7 @@ metadata:
 19. Run the test, the red command and the original, unshrunk case.
     - Done when the test is green, the red command is green and the original case is green, each quoted in the record.
 20. Inside a plan, hand the fix over by where the defect was found.
-    - The step's worktree is left unchanged, as "Rules" says.
+    - For a finding and a red line, the step's worktree is left unchanged, as "Rules" says.
     - A finding of the reviewer's first run: its fix and its test are the ruling of the next repair round, as `plan-orchestration`'s Steps 8 sends a round.
       - The ruling quotes the hypotheses with their results, the cause, the fix, both runs of the test and the record's path.
       - The red command is the round's check.
@@ -182,7 +203,14 @@ metadata:
     - A red line: the step is already out of main (`landing: backed-out`), so the cause, the fix and the record's path are written in the step's Step 0 in `plan.md`, for `/spec` to carry into the step's new brief.
       - The fix is never made on main outside a landing, and never sent to the builder.
     - A brief-check finding: its fix goes into the brief, as the `spec` skill's "Steps / The brief check" 4 closes a finding.
-    - Done when the fix and its test stand in the place the defect's source names, and for a reviewer's finding `git status --short` and `git diff --binary <base> | shasum` from inside the step's worktree print what the record holds.
+    - `premise`: the cause, the fix, the red command and the record's path are written in the step's Step 0 in `plan.md`, for `/spec` to carry into the brief.
+      - The fix is never made on main, since the step's builder makes it from the brief.
+      - Run by a person outside a `/spec` run, every ending of a `premise` diagnosis writes its result into the step's Step 0: the cause and its fix, the cause not found with its open item, or the false premise with the red command's green output.
+      - The session then commits the record, `plan.md` and, for a cause not found, the state file at once, as a resume point.
+      - It stages them with `git add -- <path> ...`, since the record is a new file, then commits them with `git commit -q -m "<message>" -- <path> ...`.
+      - A `/spec` in another session then finds no uncommitted change on `plan.md` or the state file, which its Steps 1 would refuse.
+      - Under `/spec` the record and Step 0 are the session's own records, which `spec`'s preparation commit carries.
+    - Done when the fix and its test stand in the place the defect's source names, and for a reviewer's finding `git status --short` and `git diff --binary <base> | shasum` from inside the step's worktree print what the record holds, and for `premise` Step 0 holds the result of the ending, as the `premise` bullets above say.
 21. Run by a person, show the record whole to the user, before the cleanup.
     - With no person present outside a plan, the record's path is named in the session's final message instead.
     - With no person present outside a plan, Steps 24 is not run, so the record stays for whoever reads the run.
@@ -210,23 +238,24 @@ metadata:
 8. A loop over generated inputs, for a symptom that is sometimes wrong.
 9. `git bisect run` on a scratch clone, when the defect appeared between two known states.
 10. The same input through two versions, with the outputs compared.
-11. For a symptom only a person can trigger, a script that prints each action for the user to take and reads back what they observed, which is the stop "A red command a person drives".
+11. For a symptom only a person can trigger, `templates/person-driven.sh`, a script that prints each action for the user to take and reads back what they observed, run as `references/person-driven.md` says, which is the stop "A red command a person drives".
 
 ## Stops
 
-The first five rows are stops. The cause not found, inside a plan, is a decision for the user and leaves an open item, and the other stops leave none. The last four rows are refusals.
+The first five rows are stops. The cause not found, inside a plan, is a decision for the user and leaves an open item, and the other stops leave none. The last five rows are refusals.
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | The hypotheses | Run by a person, once Steps 7 has formed them, or Steps 14 a second list (Steps 9 and 10) | The red command with its output, the shrunk case and the ranked hypotheses with their falsifying results | The user's reply, then the probes with the ranking the reply gives |
 | No red command | Run by a person, when the record's "No red command" section is written | Every way tried with what it gave, and a request for access to where the symptom occurs, a captured artifact (redacted, with only the lines that carry the symptom), leave to add temporary instrumentation, or the credential set in the environment | What the request names, then Steps 4 again |
-| A red command a person drives | Run by a person, when only a person can trigger the symptom | The script that prints each action for the user to take | The user's actions and what they observed, read back by the script |
+| A red command a person drives | Run by a person, when only a person can trigger the symptom | The actions file and the command the user runs to start `templates/person-driven.sh` (`references/person-driven.md`) | The user's word that the script has ended, then the observations file read by the skill |
 | Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause; with no person present, Steps 15 gives it as a cause not found | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
 | The cause not found | One of the conditions Steps 15 gives | The record with every probe, or every way tried from its "No red command" section, and inside a plan the open item | Inside a plan, the user's ruling on the open item or, under `self_rule: on`, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; run by a person, the user's next direction |
 | No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
 | No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | What the bullets below give for the kind of input: a finding, a red line or a step already landed |
-| No report | Inside a plan, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
-| No finding | Inside a plan, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |
+| No report | Inside a plan, for a finding, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
+| No finding | Inside a plan, for a finding, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |
+| No part to investigate | Inside a plan, for `premise`, the step is not in the step list or its text holds no part that asks for a cause to be found | The step, and its text quoted | `/spec <entry> <step>`, which writes the brief with no investigation |
 
 - After the refusal "No dispatch entry" for a finding of a reviewer's report, the step is prepared with `/spec`, then `/diagnose` runs again.
 - After the refusal "No dispatch entry" for a red line, `/diagnose` runs again once `/land` has taken the step back out of main and before `/spec` prepares it again.
@@ -248,8 +277,30 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 
 ## Rules
 
-- Who is present decides the waits: a person running the skill, by hand or inside a plan they run step by step, gets the waits of "Stops", and a session with no person present, under `plan-orchestration` or running `/diagnose <symptom>` on its own, gets none.
-- Inside a plan, the step's worktree is never changed and every probe runs on the scratch copy of Steps 3, so `plan-orchestration`'s rule that a finding whose cause is not known is diagnosed read-only holds.
+- Who is present decides the waits: a person running the skill, by hand or inside a plan they run step by step, gets the waits of "Stops", and a session with no person present, a diagnosis agent or one running `/diagnose <symptom>` on its own, gets none.
+- Inside a plan with no person present, the skill runs in a fresh agent, the diagnosis agent, for every form: `<finding>` and `round <n>`, `red line`, `brief check <n>` and `premise`.
+  - Run by a person, the skill stays in the person's session.
+- The session that holds the skill, the orchestrator or the `/spec` session, starts the diagnosis agent.
+  - It starts the agent as the effort agent `ordo-<reviewer_effort>` on the model the configuration block's `reviewer:` names, and checks it as the `refute` skill's Steps 1 checks its reviewer:
+    - The runner lists the effort agent.
+    - `CLAUDE_CODE_EFFORT_LEVEL` is unset.
+    - The session reads the agent's id and served model right after the start.
+    - A served model that is not the configured one is the stop "A model other than the configured one".
+      - The agent is stopped.
+      - Nothing it wrote is used.
+- The session makes the refusals of Steps 1 before it starts the diagnosis agent.
+- The diagnosis agent changes no file of the main checkout or of the step's worktree.
+- The diagnosis agent starts no agent and invokes no skill other than reading this skill's text. Every read and every probe of the diagnosis runs in the diagnosis agent's own session.
+- The diagnosis agent's probes run on the scratch copy of Steps 3.
+- The diagnosis agent's final message is the diagnosis record whole, which the session saves at `agents/reviews/<step>-diagnosis.md`, under its own heading below an earlier diagnosis of the step.
+- The session, not the diagnosis agent, raises a cause not found as Steps 15 says.
+- The session, not the diagnosis agent, writes what Steps 20 says into the step's Step 0 for `red line` and `premise`.
+- Right after the diagnosis agent's start, the session writes the agent's numbered item into `plan.md`'s Agents section.
+  - The item reads `<n>. <agent id>: diagnosis of step <k>, <served model>`.
+  - It stands under the heading "Agents in no role the cost script prices:", which the session makes when the section has none.
+  - An agent stopped for another model is written `<n>. <agent id>: diagnosis of step <k>, <served model>, stopped`.
+- The record's head holds the agent's id, its served model, and its tokens, tool uses and time from its completion notice, which the session fills.
+- Inside a plan, the step's worktree, when the step has one, is never changed and every probe runs on the scratch copy of Steps 3, so `plan-orchestration`'s rule that a finding whose cause is not known is diagnosed read-only holds.
 - The skill runs against the user's real home, the installed skills or the pinned checkout only with the user's leave.
 - A red command that would touch the user's real home, the installed skills or the pinned checkout runs with those paths redirected, as Steps 3 says.
 - Every quoted command output carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed, as the rules file's rule on secrets in quoted command output says.

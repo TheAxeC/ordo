@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit by explicit path list, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "1.9.0"
+  version: "1.10.0"
 ---
 
 # Land a step
@@ -93,18 +93,19 @@ metadata:
    - A change past the noise band is a finding, fixed before the booking.
 9. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B.
    - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
-   - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`.
+   - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`, and each diagnosis agent's, read from the head of its diagnosis record.
    - The booking also appends to `plan.md`'s `## Agents` section one bullet per agent the step's dispatch entry names, `- <agent id>: <role>, <served model>`, with the roles below.
      - The builder from `session_id`, and each builder under `builders_before`: `builder of step <n>`.
      - The brief-check agent from `brief_check`: `brief check of step <n>`.
      - Each first-run reviewer from `reviewer_report`, a stopped one included: `reviewer of step <n>`.
      - Each reviewer over a round, a stopped one included: `reviewer of step <n> over round <r>`.
    - An `inline` or `academic-paper` builder has no agent id and gets no bullet.
-   - An agent whose id already has a bullet in the section gets none, so a brief-check agent booked at a back-out, or at a stop of `/spec`, is not booked twice.
+   - An agent whose id already has a bullet or a numbered item in the section gets none, so a brief-check agent booked at a back-out, or at a stop of `/spec`, is not booked twice.
+   - A diagnosis agent has its numbered item already, which the session wrote right after its start as the `diagnose` skill's "Rules" say, so the booking adds none.
    - A `plan.md` without the section gets it before `## Blocked, and by what`.
    - The section is read back after the write, and each agent of the entry has exactly one bullet.
    - It states whether the builder's first report passed its bar, and the fixes at landing.
-   - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause, or with "cause not found" and the open item it was raised as.
+   - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause and its diagnosis agent's usage from the record's head, or with "cause not found" and the open item it was raised as.
    - Tick the step.
    - Done when the booking is in `plan.md`, the step is ticked, and the Agents section, read back, holds each agent of the step once.
 10. Read the step's `worktree` from its dispatch entry, for Steps 13.

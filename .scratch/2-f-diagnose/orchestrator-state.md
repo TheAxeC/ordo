@@ -10,6 +10,7 @@ verify:                      # commands run in the worktree and again on main, i
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+- sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
@@ -42,25 +43,25 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 2a
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2f-2a
-  base: c5cca8fc99c74767d3078414938e822781a0bd21
-  launched: 2026-10-05
-  report: .scratch/2-f-diagnose/agents/reviews/2a-report.md
-  builder_usage: 97184 tokens, 101 tool uses, 25.1 minutes (round 0)
-  brief_check: .scratch/2-f-diagnose/agents/reviews/2a-brief-check.md (a95b4d847166098ec, claude-opus-5-5, 253095 tokens, 66 tool uses, 12.7 minutes)
-  session_id: ad451ecb7ba6e1e71 (claude-sonnet-5-5)
-  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2a-refuter.md (a4609b37e96a4c34e, claude-opus-5-5, 264422 tokens, 55 tool uses, 15.5 minutes); trial reviewer of the ruling "Reviewer trial": .scratch/2-f-diagnose/agents/reviews/2a-refuter-sonnet-trial.md (a70e4f918b4ed2894, claude-sonnet-5-5, 266542 tokens, 66 tool uses, 19.8 minutes, not used for the landing)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
 - Step 3 reading (2026-09-30): your `/diagnose` run on the scratch copy is booked (`plan.md`, "Step 3, the real run") with its record at `agents/reviews/3-diagnosis.md` and its fix at `agents/reviews/3-diagnose-fix.diff`. The run reached the cause the ledger books for 2.E step 3: the refusal compared the two folders as text. The step's check ends "reviewed by Axel". Options: (a) approve the run as the step's proof, and step 3 is ticked; pro: the record quotes the red command, the two hypotheses, the probes, the fix and four red tests, and the cause matches db9bbec; con: none found. (b) ask for a second run on another defect before the tick; pro: a second case; con: the gate asks for one real run, and step 4 compares on this same defect. Recommendation (a). Neither is the lazy option: (a) is the step's check as written.
+
+- Pricing the diagnosis agent (2026-10-05, at the landing of step 2a; kind 3 of `references/self-rule.md`, a new computation of a script, which only you approve).
+  - What is decided: whether the closing's cost script `skills/plan-orchestration/templates/plan_cost.py` prices the diagnosis agent. Today a diagnosis agent is written in `plan.md`'s Agents section as a numbered item under "Agents in no role the cost script prices:", which the script passes over, so a plan's closing cost leaves out every diagnosis agent's tokens.
+  - (a) Add the role "diagnosis of step <k>" to `plan_cost.py`, priced from the agent's transcript like a reviewer, with its test cases; the diagnosis agent becomes a bullet. Approval asked now, word for word: "plan_cost.py computes the cost of each agent whose bullet reads `<id>: diagnosis of step <k>, <model>` from that agent's transcript, as it does for a reviewer." Pro: the closing cost is complete. Con: one more script change and its tests, in a later step of this plan.
+  - (b) Leave the script as it is. Pro: no work. Con: the closing report understates a plan's cost by every diagnosis agent, and the record's head is the only place its usage is read.
+  - Recommendation: (a), since the closing's cost is meant to be the plan's whole cost. The lazy option is (b).
+  - How to answer: "Pricing (a)" or "Pricing (b)".
+- The reviewer comment in plan.yaml (2026-10-05, at the landing of step 2a; kind 3, a change to `.agents/plan.yaml` and to configuration blocks).
+  - What is decided: the comment on `reviewer:` at `.agents/plan.yaml` line 10 reads "claude:<model> the first run of /refute, the brief check and the lookups of /grill run on". Since step 2a the diagnosis agent runs on that model too, so the comment is incomplete. The configuration blocks of plans 2.I and 3 carry the same comment.
+  - (a) Change the three comments to "the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on", the words of `skills/plan/templates/plan.yaml`. No key or value changes. Pro: the file says what the model is used for. Con: none.
+  - (b) Leave them. Pro: no change to your configuration. Con: a reader of `.agents/plan.yaml` does not learn that the diagnosis agent runs on `reviewer:`.
+  - Recommendation: (a). The lazy option is (b).
+  - How to answer: "Comment (a)" or "Comment (b)".
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -93,7 +94,6 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1 and 2 landed and ticked.
-- Step 3 is run and booked, not ticked: open item "Step 3 reading".
-- Paused (2026-09-30, Axel's ruling on the self-rule entry, booked in plan 2.E): roadmap entry 2.E.A comes before this plan, whose steps 2a to 2c change the same skills; this plan resumes when 2.E.A lands, its steps prepared against main as it then is.
-- Next, on resuming: step 2a (steps 2a to 2c merged by ruling "Steps by part", 2026-10-04); step 3's blind comparison (step 4 merged into step 3 by the same ruling) after Axel's reading of its run.
+- 2026-10-05. Steps 1, 2 and 2a landed and ticked.
+- Step 3 is run and booked, not ticked: open item "Step 3 reading". Its blind comparison against mattpocock's `diagnosing-bugs` is next, run by the orchestrator, with the final call yours.
+- Open items for you: "Step 3 reading", "Pricing the diagnosis agent", "The reviewer comment in plan.yaml".

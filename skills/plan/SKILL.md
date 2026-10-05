@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Open a plan

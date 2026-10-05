@@ -2,7 +2,7 @@
 name: ordo-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Ordo help
@@ -65,6 +65,8 @@ metadata:
 then, for every step:
 
 /spec <entry> <step>          writes the brief, has a fresh agent check it against the tree once per step (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
+/diagnose <entry> <step> premise
+                              when the step's text asks for a cause to be found: /spec runs it while it writes the brief, or you run it first; the cause goes to the step's Step 0 and into the brief
 /diagnose <entry> <step> brief check <n>
                               when a finding of the brief check has a cause not known: finds the cause on a scratch copy before the finding is closed in the brief
 "build it"                    the session writes itself into the dispatch entry and commits it. It then writes the code in the worktree, runs the checks and writes the report
@@ -79,7 +81,7 @@ read the delta                when plan.yaml says refute_after_repair: no: the o
 
 when a command stops:
 
-/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the part the step builds, a choice is yours, the step contradicts an ADR (a rule clash), the step has stopped twice already and would stop a third time, or the brief-check agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
+/spec stops                   a premise of the step is wrong on the tree and the plan cannot absorb it, a finding of the brief check would change the part the step builds, a choice is yours, the step contradicts an ADR (a rule clash), the step has stopped twice already and would stop a third time, a cause the step's text asks to have found was not found by the diagnosis, or the brief-check agent or a diagnosis agent was served a model other than the configured one (shown with the configured value, the served model and the Claude Code version): it wrote an open item and no brief
 "Ruled: ..."                  you type the ruling as plain text; the session books it in the ledger, and the next /spec commits it
                               after a ruling on an option that runs a skill and states the change, that skill is run with --ruling <ledger file> "<name>" before /spec is typed again
 C<n> Agree                    under self-rule: you agree with a choice the orchestrator took; the session rewrites its ruling as yours and removes it from choices.md
