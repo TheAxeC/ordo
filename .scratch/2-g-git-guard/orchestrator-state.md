@@ -53,10 +53,12 @@ dispatch:
   report: .scratch/2-g-git-guard/agents/reviews/2a-report.md
   brief_check: .scratch/2-g-git-guard/agents/reviews/2a-brief-check.md (a995e6600f66792f5, claude-opus-5-5, 234620 tokens, 58 tool uses, 15.7 minutes)
   landing: not-started
-  round: 0
+  round: 1
   session_id: ac1c1796715ed4931 (claude-sonnet-5-5)
+  reviewer_report: .scratch/2-g-git-guard/agents/reviews/2a-refuter.md (a5e2534c2e32da49d, claude-opus-5-5, 272566 tokens, 64 tool uses, 30.5 minutes)
+  round_1_sent_from: .scratch/2-g-git-guard/agents/reviews/2a-round-0.diff (sha1 8d899a24e8a0be32ef4e0d9b455024d03578b6e7)
   cases_ruling: .scratch/2-g-git-guard/agents/briefs/2a-cases.md (round 0, sent 2026-10-05)
-  builder_usage: first run to the hand-back, 184671 tokens, 21 tool uses, 11.9 minutes
+  builder_usage: first run to the hand-back, 184671 tokens, 21 tool uses, 11.9 minutes; the build after the cases ruling, 116593 tokens, 115 tool uses, 167.2 minutes
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
