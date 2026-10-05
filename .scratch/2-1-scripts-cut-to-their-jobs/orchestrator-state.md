@@ -50,14 +50,11 @@ dispatch: none
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item A (2026-10-05), step 1, three findings of the brief check (`agents/reviews/1-brief-check.md`, "8. Dictated text") that the brief cannot settle, since each changes what the step builds:
-  - A1. The case rule's test. The goal says code handles a case only when it "has happened or would lose work". The bullet before it in the change standard counts as a cost "lost work, a broken installation, a wrong configuration accepted", and step 3 keeps tests for all three. (a) The rule reads "has happened or a wrong answer on it would cost something: lost work, a broken installation, a wrong configuration accepted". Pro: one cost test across the page and step 3; `check_config.py` may still refuse a bad configuration that has not happened yet. Con: wider than the goal's words. (b) Keep "would lose work". Pro: the goal's words. Con: it contradicts the bullet before it and step 3, and `check_config.py` and `pin.sh` could no longer guard a case that has not happened. Recommendation: (a). The lazy option is (b), which leaves the contradiction for a later fix.
-  - A2. The scripts-page line. `docs/dev/scripts.md` is written in step 3, so a line in step 1 saying every script is listed there is false on main, and in the pinned skills, until step 3 lands. (a) Move the line to step 3, which writes the page. Pro: never false. Con: changes the approved step list. (b) Keep it in step 1. Pro: the list as approved. Con: a false rule in force between the two landings. Recommendation: (a). The lazy option is (b).
-  - A3. What "fewer than 20 lines" counts. (a) Lines added plus lines removed, as `git diff --numstat` gives them. Pro: a fact a command gives. Con: a 10-line rewrite counts 20. (b) Lines changed, the larger of added and removed per file. Pro: closer to "lines changed". Con: still a count, but a less common one. Recommendation: (a), since it is the plain count of the diff; either is a full answer.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-none
+- 2026-10-05: Open item A, step 1, three brief-check findings (the case rule's cost test, the place of the scripts-page line, what "fewer than 20 lines" counts): ruled A1 (a), A2 (a), A3 (a) by the user, booked in `plan.md` Rulings.
 
 ## The standing demands (from Axel, in force)
 
@@ -81,5 +78,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Next step: 1, stopped on Open item A at `/spec`; `/spec 2.1 1` again after the ruling. By the user's order, plans run one at a time: 2.1 first, then 2.F.
+- Next step: 1, `/spec 2.1 1` again after the ruling on Open item A. By the user's order, plans run one at a time: 2.1 first, then 2.F.
 - Open on Axel's side: none.

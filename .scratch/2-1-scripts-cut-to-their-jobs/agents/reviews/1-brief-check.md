@@ -192,4 +192,21 @@ Agent usage: aefdc70d38c003911, claude-opus-5-5, 183460 tokens, 50 tool uses, 7.
 
 ## Closed (the session's change to the brief for every finding above, and each dictated line added after the check, made before the preparation commit)
 
-- Not closed yet: the step stopped on Open item A (`orchestrator-state.md`), which holds findings 8.1, 8.2 and 8.3. The other findings are closed in the brief when `/spec 2.1 1` runs again after the ruling.
+- Section 8 findings 1 to 3: ruled by the user on Open item A (A1 (a), A2 (a), A3 (a)). D1 is replaced by item 1's two bullets, `A script handles ...` in Ordo's page and `Code handles ...` in the template, whose "costs something" is the cost test of the bullet before it, and a second sentence that does not restate the first; held line by line by the session: 20 and 12 words (19 and 12 in the template), no synonym change within each page, no banned word. D2 left the step (moved to step 3). D3 is replaced by the size line `Size: <a small text step: no brief check, one review, no repair round | a full step>`, whose term the new glossary entry of item 4 defines with the count of A3 (a); held: a code line read whole, the term defined before use.
+- Section 1 finding 1: `skills/ordo-help/SKILL.md` added to the paths, item 12 and item 15 (version).
+- Section 1 finding 2: `skills/spec/templates/brief-check.md` added to the paths and item 6.
+- Section 1 finding 3: `skills/plan/templates/orchestrator-state.md` and `skills/plan/SKILL.md` line 5 added, item 13 and item 15. The ledger's own state file is the orchestrator's.
+- Section 1 finding 4: item 4 adds the entry **small text step** (and names a full step) to `plan-terms.md` and the glossary first.
+- Section 2 finding 1: item 7 makes **Cases and checks** name a case that checks a place the step does not change.
+- Section 2 finding 2: moot; the scripts-page line moved to step 3 by A2 (a).
+- Section 2 finding 3: the brief says the tag and the pin are the orchestrator's and the user's at landing.
+- Section 3 finding 1: ADR 0006 named under "What is on the tree"; Decision 1 and item 7 say `brief_check` reads `none, a small text step`.
+- Section 3 finding 2: every page is cited by its section; line numbers stay only under "Paths this step writes".
+- Section 4 finding 1: item 15 raises each skill once for the whole plan, each to its major part, so step 3 raises none of them again.
+- Section 5 finding 1: item 7 and C6, which now reads every changed file.
+- Section 5 finding 2: C4 reads the three entries and the new one.
+- Section 5 finding 3: item 8 adds the **Spec** finding that compares the size line with the built diff, and the step is then handled as a full step; item 9 follows.
+- Section 5 finding 4: items 8 and 9 give a small text step its one review under `every` and `earned` alike.
+- Section 5 finding 5: C6 reads `README.md` with the other paths.
+- Section 7 finding 1: as section 3 finding 1.
+- Declined to judge, the character-set check: items 3 and 5 name it "where the verify list holds one". The missing "What it must do" section is added.
