@@ -5,13 +5,13 @@ The catch-up note for roadmap entry 2.1, Scripts cut to their jobs. Rewritten be
 ```yaml
 verify:                      # commands run in the worktree and again on main, in order; all must pass. Copied from docs/dev/building.md by /plan, with the filters of docs/dev/change-standard.md.
 - sh skills/land/templates/land.test.sh 2>&1 | tail -1
-- sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
 - sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
 - sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
 - sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+- sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - sh utils/check_coverage.test.sh 2>&1 | tail -1
@@ -50,7 +50,10 @@ dispatch: none
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-none
+- Open item A (2026-10-05), step 1, three findings of the brief check (`agents/reviews/1-brief-check.md`, "8. Dictated text") that the brief cannot settle, since each changes what the step builds:
+  - A1. The case rule's test. The goal says code handles a case only when it "has happened or would lose work". The bullet before it in the change standard counts as a cost "lost work, a broken installation, a wrong configuration accepted", and step 3 keeps tests for all three. (a) The rule reads "has happened or a wrong answer on it would cost something: lost work, a broken installation, a wrong configuration accepted". Pro: one cost test across the page and step 3; `check_config.py` may still refuse a bad configuration that has not happened yet. Con: wider than the goal's words. (b) Keep "would lose work". Pro: the goal's words. Con: it contradicts the bullet before it and step 3, and `check_config.py` and `pin.sh` could no longer guard a case that has not happened. Recommendation: (a). The lazy option is (b), which leaves the contradiction for a later fix.
+  - A2. The scripts-page line. `docs/dev/scripts.md` is written in step 3, so a line in step 1 saying every script is listed there is false on main, and in the pinned skills, until step 3 lands. (a) Move the line to step 3, which writes the page. Pro: never false. Con: changes the approved step list. (b) Keep it in step 1. Pro: the list as approved. Con: a false rule in force between the two landings. Recommendation: (a). The lazy option is (b).
+  - A3. What "fewer than 20 lines" counts. (a) Lines added plus lines removed, as `git diff --numstat` gives them. Pro: a fact a command gives. Con: a 10-line rewrite counts 20. (b) Lines changed, the larger of added and removed per file. Pro: closer to "lines changed". Con: still a count, but a less common one. Recommendation: (a), since it is the plain count of the diff; either is a full answer.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -78,5 +81,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Next step: 1, the rules in text, because steps 2 and 3 are prepared under its rules after the user's pin. By the user's order, plans run one at a time: 2.1 first, then 2.F.
+- Next step: 1, stopped on Open item A at `/spec`; `/spec 2.1 1` again after the ruling. By the user's order, plans run one at a time: 2.1 first, then 2.F.
 - Open on Axel's side: none.
