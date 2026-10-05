@@ -63,17 +63,10 @@ dispatch: none
   - Recommendation: (a). The lazy option is (b).
   - How to answer: "Comment (a)" or "Comment (b)".
 
-- Step 3, the call on the blind comparison (2026-10-05; kind 5 of `references/self-rule.md`, your call, which the step's check names).
-  - What is decided: the result of the blind comparison of `diagnose` with mattpocock's `diagnosing-bugs` on the `utils/pin.sh` both-folders defect, which the gate reads ("`diagnose` wins or ties by Axel's call"). The record is `agents/reviews/3-blind-comparison.md`: the input, both outputs as judged, both verdicts and the key.
-  - What happened: both sides found the same cause (line 112 strips every trailing slash, the refusal at line 317 strips one). The `diagnose` side fixed only the trailing slashes, and its record notes that comparing resolved paths was "falsified as a fix in this form". The `diagnosing-bugs` side tested whether stripping slashes was enough, found that `<config>/agents/.`, `/./` and a link still get through, and fixed the comparison itself with resolved paths, with a test for each form. My run of its test on the `diagnose` side's `pin.sh` prints `FAIL: a pin with the skill folder .../my home/.claude/agents/., which is the agent folder .../my home/.claude/agents: the pinned worktree moved`. The `diagnose` side alone fixed a smaller duplicate listing from `CLAUDE_CONFIG_DIR="$HOME/.claude//"`. Both judges prefer `diagnosing-bugs`, so the result read through the key is that it wins. Your own run of `diagnose` on 2026-09-30, with you answering its stop, chose the resolved-path hypothesis and fixed `/.` and a link too.
-  - (a) Your call: `diagnose` loses this run. Step 3a is added to this plan (the reason "a finding inside the entry's goal" of "What earns a step of its own"): `diagnose` gets the step that the losing run lacked, "the cause stated at the operation that goes wrong, and each other input that reaches that operation (another spelling, a link, a path not yet made) probed against the fix, each one that still goes red being part of the same defect, fixed and tested with it", in Steps 15 to 19 and its record template; then the comparison runs again on the same defect with fresh sides and fresh judges, and goes to your call again. Pro: the gate is met by a skill that does the better job, not by a call. Con: one more build step and a second comparison run (about 1.5 million tokens, the cost of this one).
-  - (b) Your call: a tie, since both found the cause and the gate's first check (reaching the cause the ledger books) holds. Pro: the plan closes now. Con: both judges found the `diagnose` fix incomplete for the defect the user reported, and a tie called against two agreeing verdicts passes the gate without the goal being reached.
-  - (c) Your call: `diagnose` loses, and the plan stays open with its gate unmet until you rule otherwise. Pro: no work now. Con: the entry neither closes nor gets better.
-  - Recommendation: (a). The lazy options are (b) and (c).
-  - How to answer: "Call (a)", "Call (b)" or "Call (c)", or your own call with the reasons.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- Step 3, the call on the blind comparison (2026-10-05): Axel ruled (a); `diagnose` loses this run; step 3a added to plan.md, then the comparison runs again.
 - Step 1 reading (2026-09-30): approved by Axel; step 1 ticked.
 
 - A script for the person-driven red command (2026-09-30): Axel ruled (a); step 2a.
@@ -104,6 +97,6 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. Steps 1, 2 and 2a landed and ticked.
-- Step 3 is run and booked, not ticked: its real run waits on "Step 3 reading", and its blind comparison, run 2026-10-05 (`agents/reviews/3-blind-comparison.md`), waits on "Step 3, the call on the blind comparison".
-- Open items for you: "Step 3 reading", "Pricing the diagnosis agent", "The reviewer comment in plan.yaml", "Step 3, the call on the blind comparison".
-- Nothing in this plan moves without you; the loop goes on with plan 2.G.
+- Step 3 is run and booked, not ticked: its real run waits on "Step 3 reading", and its blind comparison, run 2026-10-05 (`agents/reviews/3-blind-comparison.md`), was called by Axel: `diagnose` loses this run, and step 3a (the whole defect, then the comparison again) is next for this plan.
+- Open items for you: "Step 3 reading", "Pricing the diagnosis agent", "The reviewer comment in plan.yaml".
+- Step 3a is prepared once plan 2.G's step 2a has landed, since the session runs one plan at a time.
