@@ -10,7 +10,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 
 | Skill | What it does |
 |---|---|
-| `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, the standards pages, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. It can install the git guard, a hook that refuses an agent's `git push`, `git reset --hard`, forced `git clean` and whole-tree `git checkout` or `git restore`, which the user runs by hand, into `.claude/hooks/`, and prints its settings text for the user to add. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
+| `repo-setup` | Sets up a new repository and then runs `/ordo-init`. It writes `CLAUDE.md` with the shared rules, the change and prose standards, the standards pages, a roadmap, a glossary, an ADR folder, `.gitignore` and `LICENSE`, and installs the project skills. `sync` keeps an existing repository's shared rules and its glossary's plan terms equal to their templates |
 | `ordo-init` | Sets a repository up for the other skills. It drafts `.agents/plan.yaml` from the repository, offers the pages it lacks and fixes the ignore rules. On an existing file, it checks the file |
 | `roadmap` | Keeps the roadmap that `/plan` opens entries from. It shows the open entries in order and the entries not yet specified. It adds an entry with its goal, a gate that could not pass without the goal being reached, and its place, or puts work whose gate cannot yet be named under "Not yet specified". It moves an entry, marks one done with the gate's output, and drops one. It learns the file's own format, including an ordered build plan over a capability map |
 | `grill` | Interviews the user about one roadmap entry, in rounds. Each round asks every decision whose prerequisites are settled, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, while agents look up the facts. It writes each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent it starts as a bullet of the Agents section of that file, the roadmap entry and the glossary, and a proposed ADR on the user's yes or, under `--self-rule`, on the orchestrator's recommendation |
@@ -63,7 +63,7 @@ The loop of one step carries the same marks, with the band that runs the loop un
 
 ## Requirements
 
-- git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/checks.sh`, also needs `bash`. The git guard that `repo-setup` can install needs `python3` 3.9 or later.
+- git, POSIX `sh`, and `python3` with PyYAML. The verify runner, `skills/land/templates/checks.sh`, also needs `bash`.
 - `perl`, for the ASCII check of `docs/dev/building.md` and for `sync_rules.test.sh`.
 - `node` and `npx` on `PATH`, for the skills CLI only. Both the CLI install and `repo-setup`'s project skills use that CLI.
 - Claude Code.
@@ -112,7 +112,7 @@ The loop copies the agents into the `agents` folder beside each skill folder. Fo
 
 ## Configuring a repository
 
-A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the standards pages, whether the repository has a user interface, the project skills, and whether to install the git guard. It then shows the whole tree and every file's text, the git guard hook named by its source. After your approval it writes `CLAUDE.md`, the change and prose standards, the standards pages (by default the design principles, the coding standards for its languages and, with a user interface, the UI standard), a roadmap, a glossary, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. On yes to the git guard, it also copies the guard into `.claude/hooks/`, which stays in the clone. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`. After `/ordo-init` and the checks it prints the guard's settings text for you to add; it writes no settings file.
+A new repository is set up with `/repo-setup` from an empty folder. It asks for the name, the kind, the license, the commit rule, the standards pages, whether the repository has a user interface, and the project skills. It then shows the whole tree and every file's text. After your approval it writes `CLAUDE.md`, the change and prose standards, the standards pages (by default the design principles, the coding standards for its languages and, with a user interface, the UI standard), a roadmap, a glossary, an ADR folder, `.gitignore`, `LICENSE` and `README.md`. It then installs the project skills, which writes `skills-lock.json`, and runs `/ordo-init`. It writes no Claude Code settings file.
 
 The shared rules in `CLAUDE.md` sit between `<!-- ordo:shared-rules begin -->` and `<!-- ordo:shared-rules end -->`. They are a copy of `skills/repo-setup/templates/shared-rules.md`. The plan terms in `docs/glossary.md` sit between `<!-- ordo:plan-terms begin -->` and `<!-- ordo:plan-terms end -->`. They are a copy of `skills/repo-setup/templates/plan-terms.md`, and the project's own terms follow them.
 
@@ -164,7 +164,7 @@ python3 <skills>/plan-orchestration/templates/plan_cost.py <ledger folder> [<tra
 
 `land.sh` reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`, and refuses with exit 64 when either is missing. In the `projects:` form it reads those of the project whose `ledger_root` holds the state file. After main's cherry-pick it runs the verify list through the `checks.sh` in its own folder. It then prints the data for the step's booking in the plan: the diff stat against the base and the staged paths.
 
-A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` proves `land.sh` on scratch repositories, and `checks.test.sh` proves `checks.sh` on scratch state files. The land skill's section "The landing script" in `skills/land/SKILL.md` states the rest, including the refusals and the exit statuses.
+A ledger file left uncommitted in the worktree, such as a builder's report, never reaches `main`, while one that a commit of the step holds does. `land.test.sh` proves `land.sh` on scratch repositories. The land skill's section "The landing script" in `skills/land/SKILL.md` states the rest, including the refusals and the exit statuses.
 
 ## Working on Ordo
 
@@ -177,13 +177,13 @@ utils/pin.sh v1.1.0      # the worktree ~/.local/share/ordo-stable at v1.1.0, ev
 utils/pin.sh             # checks that every link points into the pinned worktree; changes nothing
 ```
 
-`pin.sh` links the skills into `~/.claude/skills`, into the `skills` folder of each `~/.claude-*` folder that holds one, and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`, each folder once. Each entry in those folders is a link into the pinned worktree, and no folder is linked to another. `ORDO_SKILL_DIRS` replaces that list of folders. `pin.sh` links the agents into these `agents` folders, each once: `~/.claude/agents`, the `agents` folder of each `~/.claude-*` folder that holds a `skills` folder (one whose `skills` folder is a link to another skills folder included), and `$CLAUDE_CONFIG_DIR/agents` when that variable is set. With `ORDO_SKILL_DIRS` set it links the `agents` folder beside each folder the variable names instead. A `~/.claude-*` folder with no `skills` folder gets no `agents` folder, and a `~/.claude-*` folder whose `skills` path holds a newline stops pin mode and check mode before anything changes. `ORDO_STABLE` moves the pinned worktree to another path.
+`pin.sh` links the skills into `~/.claude/skills`, into the `skills` folder of each `~/.claude-*` folder that holds one, and, when `CLAUDE_CONFIG_DIR` is set, into `$CLAUDE_CONFIG_DIR/skills`, each folder once. Each entry in those folders is a link into the pinned worktree, and no folder is linked to another. `ORDO_SKILL_DIRS` replaces that list of folders. `pin.sh` links the agents into these `agents` folders, each once: `~/.claude/agents`, the `agents` folder of each `~/.claude-*` folder that holds a `skills` folder (one whose `skills` folder is a link to another skills folder included), and `$CLAUDE_CONFIG_DIR/agents` when that variable is set. With `ORDO_SKILL_DIRS` set it links the `agents` folder beside each folder the variable names instead. A `~/.claude-*` folder with no `skills` folder gets no `agents` folder. `ORDO_STABLE` moves the pinned worktree to another path.
 
 Check mode, `utils/pin.sh` with no tag, changes nothing and fails on each link into the clone and on each link into the pinned worktree for a skill or an agent the pinned tag lacks. Pin mode, `utils/pin.sh <tag>`, checks the links first and refuses, changing nothing, a link into the clone for a skill or an agent the tag lacks. It then links every skill and every agent of the tag, replaces each link into the clone, and removes each link into the pinned worktree for a skill or an agent the tag lacks.
 
 Moving to a new version is a tag on `main` and `utils/pin.sh <tag>`; going back is `utils/pin.sh <older tag>`. The pinned worktree is never edited, and `pin.sh` refuses to move one that has local changes. A pinned worktree deleted by hand is created again at the next `utils/pin.sh <tag>`, through `git worktree add --force`, which leaves the registration of every other worktree of the clone as it is.
 
-`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, folders whose path holds a space, what an agent of a tag is, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
+`pin.sh` also removes the links into Ordo that it finds in `~/.agents/skills`. The head comment of `utils/pin.sh` states the rest: the format of `ORDO_SKILL_DIRS`, what an agent of a tag is, the refusals, the rules for `~/.agents/skills` and the lines each mode prints.
 
 `docs/dev/building.md` lists the tests and checks to run before a change is committed.
 

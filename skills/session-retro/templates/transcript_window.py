@@ -69,8 +69,8 @@ without a timestamp (mode, ai-title and the rest) is not an item and is not coun
 Errors. Each is one line `error: <what>` on stderr with exit status 2, nothing on stdout, and no
 file read:
     error: expected <transcript folder> <start> <end> or <transcript folder> --session <session id>
-        (no arguments, or a number of arguments that fits neither form)
-    error: --session takes one session id and no times or further arguments
+        (no arguments, or a number of arguments that fits neither form, --session with times
+        included)
     error: time without a zone: '<time>'
     error: unparsable time: '<time>'
     error: the end is not after the start
@@ -78,18 +78,14 @@ file read:
     error: not a folder: <folder>   (the folder is a file)
     error: invalid session id: '<id>'   (empty, or anything but letters, digits, - and _)
     error: no session file: <folder>/<session id>.jsonl
-    error: cannot read <path>: <reason>   (the folder or the session file cannot be checked, for
-        example when a parent folder cannot be searched)
 A file that cannot be opened or read, and a folder that cannot be listed (the transcript folder
 itself, and in it every folder, which is searched for a subagents folder, and each subagents
 folder), is reported on stderr as
 `error: cannot read <file or folder>: <reason>`; the other files are still printed and the exit
 status is 1.
 
-Exit statuses: 0 the output printed (an empty window prints nothing and exits 0), and also when
-the reader of stdout closes it early (the script then stops writing and prints nothing more on
-stderr), 1 a file could not be read or a folder could not be listed and the output lacks it,
-whether or not the reader closed stdout early, 2 a usage error.
+Exit statuses: 0 the output printed (an empty window prints nothing and exits 0), 1 a file could
+not be read or a folder could not be listed and the output lacks it, 2 a usage error.
 
 Standard library only; runs on Python 3.9 and newer.
 """
@@ -97,9 +93,7 @@ Standard library only; runs on Python 3.9 and newer.
 from __future__ import annotations
 
 import json
-import os
 import re
-import stat
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -108,7 +102,6 @@ from typing import Any, NamedTuple
 _USAGE_ERROR = (
     "expected <transcript folder> <start> <end> or <transcript folder> --session <session id>"
 )
-_SESSION_ERROR = "--session takes one session id and no times or further arguments"
 _SESSION_ID = re.compile(r"[A-Za-z0-9_-]+")
 _TIME = re.compile(
     r"([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})"
@@ -315,7 +308,7 @@ def _parse_line(raw: bytes) -> dict[str, Any] | None:
     """The entry on one line, or None when the line is not UTF-8, not JSON or not an object."""
     try:
         entry = json.loads(raw.decode("utf-8"))
-    except (UnicodeDecodeError, ValueError, RecursionError):
+    except (UnicodeDecodeError, ValueError):
         return None
     return entry if isinstance(entry, dict) else None
 
@@ -359,10 +352,7 @@ def _reason(exc: OSError) -> str:
 
 def _parse_args(argv: list[str]) -> _Request:
     """The folder, the session id and the window from the command line, or ValueError."""
-    if len(argv) >= 2 and argv[1] == "--session":
-        if len(argv) != 3:
-            raise ValueError(_SESSION_ERROR)
-    elif len(argv) != 3:
+    if len(argv) != 3:
         raise ValueError(_USAGE_ERROR)
     session = argv[2] if argv[1] == "--session" else None
     window = None
@@ -376,27 +366,15 @@ def _parse_args(argv: list[str]) -> _Request:
     return _Request(Path(argv[0]), session, window)
 
 
-def _stat(path: Path) -> os.stat_result | None:
-    """The stat of a path, None when nothing is there; any other failure is a ValueError."""
-    try:
-        return path.stat()
-    except (FileNotFoundError, NotADirectoryError):
-        return None
-    except OSError as exc:
-        raise ValueError(f"cannot read {path}: {_reason(exc)}") from None
-
-
 def _check_paths(request: _Request) -> None:
-    """Raise ValueError when the folder or the session file is not there or cannot be checked."""
-    info = _stat(request.folder)
-    if info is None:
+    """Raise ValueError when the folder or the session file is not there."""
+    if not request.folder.exists():
         raise ValueError(f"no such folder: {request.folder}")
-    if not stat.S_ISDIR(info.st_mode):
+    if not request.folder.is_dir():
         raise ValueError(f"not a folder: {request.folder}")
     if request.session is not None:
         main = request.folder / f"{request.session}.jsonl"
-        info = _stat(main)
-        if info is None or not stat.S_ISREG(info.st_mode):
+        if not main.is_file():
             raise ValueError(f"no session file: {main}")
 
 
@@ -466,11 +444,7 @@ def main(argv: list[str]) -> int:
     for problem in problems:
         print(f"error: {problem}", file=sys.stderr)
     items.sort()
-    try:
-        _write(items)
-    except BrokenPipeError:
-        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
-        return 1 if problems else 0
+    _write(items)
     for note in notes:
         print(note, file=sys.stderr)
     return 1 if problems else 0

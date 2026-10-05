@@ -17,6 +17,7 @@ Every rule on this page that names a script, a test or a check is read under thi
 - No script output stands in for that judgment, gates it, or is shown to the user as a finding.
 - A script is never made more exact in the hope of reaching such a judgment. A wrong hit of a helper script is dropped, not raised as work.
 - A new script needs the user's approval of what it computes before it is written.
+- Every script is listed on `docs/dev/scripts.md` as a development, user or test script, with its job. A change that adds, removes or renames a script updates the page in the same change.
 - A test exists only for a script, and only for behaviour whose failure costs something: lost work, a broken installation, a wrong configuration accepted.
 - A script handles a case only when that case has happened or when a wrong answer on it costs something. No brief, case or review finding adds a case on other grounds.
 - A gate for a judgment is a review: the user's, a blind comparison, run as `docs/dev/blind-comparison.md` says, or, where the user rules so for a roadmap entry, a fresh reviewer agent's. "A script prints ok" is a gate only for a fact.
@@ -66,16 +67,10 @@ Every build, test or check command runs in the foreground with a long timeout, o
 
 ```
 sh skills/land/templates/land.test.sh 2>&1 | tail -1
-sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
-sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
-sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
-sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 sh utils/pin.test.sh 2>&1 | tail -1
-sh utils/check_coverage.test.sh 2>&1 | tail -1
 git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 ```
 
@@ -86,6 +81,6 @@ When a test is red, rerun that test without the filter and read its output. The 
 ## Rules this repository already states
 
 - The skills carry no project name and no path; everything specific to a repository comes from its `.agents/plan.yaml` (`README.md`, first paragraph).
-- Each script under a skill's `templates/` or under `utils/` has a test beside it for the behaviour whose failure costs something, run on scratch repositories or scratch files (`docs/dev/building.md`).
+- A script under a skill's `templates/` or under `utils/` has a test beside it only for behaviour whose failure costs something, as the bullet on tests in "Scripts compute facts; judgment is read" says, run on scratch repositories or scratch files (`docs/dev/building.md`).
 - The pinned worktree `~/.local/share/ordo-stable` is never edited; the installed skills and agents change only through `utils/pin.sh <tag>` (`README.md`, Working on Ordo).
 - A skill's rules state the rule; no dates, incidents or history (`skills/repo-setup/templates/shared-rules.md`, last rule).

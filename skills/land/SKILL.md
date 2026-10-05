@@ -150,7 +150,7 @@ metadata:
 - It reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`.
   - In the `projects:` form it reads them from the project whose `ledger_root` holds the state file.
   - The step's worktree is `<worktree_root>/<step>`, and the worktree's add leaves that `ledger_root` out.
-  - No `.agents/plan.yaml`, no `worktree_root`, no `ledger_root`, a state file under no project's `ledger_root`, or no `checks.sh` in `land.sh`'s own folder is refused with exit 64 before anything is touched.
+  - No `.agents/plan.yaml`, an empty one or one that is not valid YAML, no `worktree_root`, no `ledger_root`, a state file under no project's `ledger_root`, or no `checks.sh` in `land.sh`'s own folder is refused with exit 64 before anything is touched.
 - Its check on main (Steps 6) is the plan's verify list: after main's cherry-pick it runs `sh <its own folder>/checks.sh <state file>` from the repository root.
   - Its own folder is the one that holds `land.sh`, and it looks for `checks.sh` nowhere else.
   - A non-zero exit fails the landing with exit 1 and the output of `checks.sh` printed.
@@ -158,7 +158,7 @@ metadata:
   - It prints `nothing to copy: <base>..<step> holds no commit` in place of the cherry-picks' output.
   - It still runs the verify list on main (Steps 6).
 - It then prints the booking data: the diff stat against `<base>` and the paths staged on main.
-- It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict, and 64 when it refuses its arguments or its configuration, or with git's own status when a git step fails.
+- It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict, 64 when it refuses its arguments or its configuration, and 127 when `python3` is not installed, or with git's own status when a git step fails.
 - `templates/checks.sh <state file>`, run from the root of the checkout it checks, runs the `verify:` list of the state file's first `yaml` block in order, each command through `bash -o pipefail -c`.
   - Before each command it prints `$ <command>`, then the command's output.
   - Every command runs, whatever the exit of the one before.
@@ -169,7 +169,6 @@ metadata:
   - When every command exits 0, it exits 0.
   - A list it cannot read is refused with exit 2 before anything runs, and never passes.
 - `templates/land.test.sh` proves `land.sh` on scratch repositories: a conflict exits 2 and leaves main as it was, a ledger file left uncommitted in the worktree never reaches main, a failing check fails the landing, and a clean landing stages the step on main.
-- `templates/checks.test.sh` proves `templates/checks.sh` on scratch state files.
 - `land.sh`'s zero exit passes the checks on main (Steps 6).
   - It never passes the look (Steps 7), which it does not do.
 

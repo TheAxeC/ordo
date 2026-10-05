@@ -35,10 +35,10 @@ Runs, with the output of each quoted:
 
 <for a symptom seen only sometimes: the failure rate and the number of runs it was measured over; for a slow symptom: the baseline with its mean and spread, and the threshold red is defined as; for a defect in text: the quoted text beside the line of the run or transcript that shows the wrong behaviour it led to>
 
-<for a red command a person drives: each run's observations file quoted whole, which observation is the red>
+<for a red command a person drives: each run's actions with the user's observation after each, quoted whole, and which observation is the red>
 
 ```
-<the observations file of each run, quoted whole>
+<the actions of each run with the user's observation after each, quoted whole>
 ```
 
 Runs after the tightening, with the output of each quoted:

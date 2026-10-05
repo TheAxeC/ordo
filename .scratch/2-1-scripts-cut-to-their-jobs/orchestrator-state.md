@@ -5,16 +5,10 @@ The catch-up note for roadmap entry 2.1, Scripts cut to their jobs. Rewritten be
 ```yaml
 verify:                      # commands run once, at landing on main, in order; the builder and the reviewer run the checks the brief names for the files the step changes; all must pass. Copied from docs/dev/building.md by /plan, with the filters of docs/dev/change-standard.md.
 - sh skills/land/templates/land.test.sh 2>&1 | tail -1
-- sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
-- sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
-- sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
-- sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
-- sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
-- sh utils/check_coverage.test.sh 2>&1 | tail -1
 - >-
   git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
@@ -43,18 +37,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-  step: 3
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2-1-3
-  base: 1c58523
-  launched: 2026-10-06
-  report: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/3-report.md
-  brief_check: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/3-brief-check.md (a7ff33a2ab947b3a1, claude-opus-5-5, 182025 tokens, 47 tool uses, 8.8 minutes)
-  landing: not-started
-  round: 0
-  session_id: a4927c19e2b176577 (claude-sonnet-5-5)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -80,7 +63,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Verification, every step
 
-- A landing runs the `land` skill's `templates/land.sh` from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`. It commits the step's work in its worktree, cherry-picks the range onto main, runs the `verify` list on main through `templates/checks.sh` and prints the booking data. It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict and 64 on a refusal, or with git's own status when a git step fails; the `land` skill's `templates/land.test.sh` proves it.
+- A landing runs the `land` skill's `templates/land.sh` from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`. It commits the step's work in its worktree, cherry-picks the range onto main, runs the `verify` list on main through `templates/checks.sh` and prints the booking data. It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict and 64 on a refusal, 127 when `python3` is not installed, or with git's own status when a git step fails; the `land` skill's `templates/land.test.sh` proves it.
 - The `verify` list above runs through `sh skills/land/templates/checks.sh <state file>` from the root of main's checkout, once, at landing. It prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and the lines it prints are what a report or a booking quotes.
 - The step's own check, named on its line in `plan.md` and in its brief.
 - Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
@@ -94,5 +77,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Step 1 landed; main tagged v3.0.0. Step 2 landed. Next step: 3, the scripts. Step 3's landing also deletes every `.py` and `.sh` file under `.scratch/` (`git ls-files '.scratch/*.py' '.scratch/*.sh'`, eight files) and makes the verify list of each open plan's state file equal to `docs/dev/building.md`'s, since the landing script leaves the ledger out of the worktree. The user ran `utils/pin.sh v3.0.0`. By the user's order, plans run one at a time: 2.1 first, then 2.F.
+- Step 1 landed; main tagged v3.0.0. Steps 2 and 3 landed. Next step: 4, the closing.
 - Open on Axel's side: none.

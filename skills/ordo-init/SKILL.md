@@ -2,7 +2,7 @@
 name: ordo-init
 description: "Set a repository up for the plan skills: draft .agents/plan.yaml from what the repository already has (the roadmap, the page that defines the checks, the change standard, the check commands its CI and build files run, one project or several), offer the pages it lacks, make git ignore the worktree root and keep the configuration tracked, and write nothing until the user approves. On a repository that already has .agents/plan.yaml it checks the file instead: required keys, unknown keys, values, the pages it names, the ignore rules. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml."
 metadata:
-  version: "1.2.0"
+  version: "2.0.0"
 ---
 
 # Set a repository up for the plan skills

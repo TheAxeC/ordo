@@ -8,23 +8,18 @@
 # worktree of this repository. A pinned worktree deleted by hand is created again with git
 # worktree add --force: git replaces its stale record and leaves every other worktree's record as
 # it is; a locked record is still refused.
-# The skill folders are $ORDO_SKILL_DIRS when set. Otherwise they are, in this order, ~/.claude/skills,
-# the skills folder of each ~/.claude-* folder that holds one (in the order the shell's glob gives;
-# a ~/.claude-*/skills that is not a folder, a file or a broken link, is ignored), and
-# $CLAUDE_CONFIG_DIR/skills when that variable is set. A folder named twice is one folder, linked
-# once and named once: two entries are one when their paths are equal with trailing slashes removed
-# or, when both exist, when their resolved paths are equal. Each entry of a skill folder stays a link
-# into the pinned worktree; no folder is linked to another. $ORDO_SKILL_DIRS is split on spaces
-# and tabs, or read one folder per line when it holds a newline (the form for a folder whose path
-# holds a space); empty lines are skipped, and a value that names no folder is refused. The default
-# folders are read one per line, so a home folder holding a space needs nothing, and a
-# ~/.claude-*/skills folder whose path holds a newline is refused before anything changes, with one
-# line that names it with the newline written as \n; the user moves the folder or sets
-# ORDO_SKILL_DIRS. Every skill folder (from ORDO_SKILL_DIRS or the defaults) must be an absolute
-# path with no leading or trailing whitespace, or the run is refused before anything changes. The
-# summary line names the folders joined by ", ".
+# The skill folders are $ORDO_SKILL_DIRS when set, split on spaces and tabs; a value that names no
+# folder is refused. Otherwise they are, in this order, ~/.claude/skills, the skills folder of each
+# ~/.claude-* folder that holds one (in the order the shell's glob gives; a ~/.claude-*/skills that
+# is not a folder, a file or a broken link, is ignored), and $CLAUDE_CONFIG_DIR/skills when that
+# variable is set. A folder named twice is one folder, linked once and named once: two entries are
+# one when their paths are equal with trailing slashes removed or, when both exist, when their
+# resolved paths are equal. Each entry of a skill folder stays a link into the pinned worktree; no
+# folder is linked to another. The default folders are read one per line, so a home folder holding a
+# space needs nothing. Every skill folder must be an absolute path, or the run is refused before
+# anything changes. The summary line names the folders joined by ", ".
 # A skill is a folder under skills/ in the tag that holds SKILL.md, or a top-level folder that
-# holds one in a tag from before the skills moved under skills/.
+# holds one in a tag from before the skills moved under skills/ (v1.0.0).
 # Check mode reports every link into the live clone, once each, and every link into the pinned
 # worktree whose skill the tag lacks. Pin mode refuses, before anything changes, a link into the
 # live clone for a skill the tag lacks, a skill folder entry that is a real directory, and a link
@@ -33,11 +28,10 @@
 # whose skill the tag lacks and prints a line for each.
 # ~/.agents/skills is not a default folder, so a link there into Ordo is not one of the pin's
 # links. When ORDO_SKILL_DIRS is not set and no folder of the list is ~/.agents/skills (compared by
-# resolved path, so a folder of the list matches it once both exist), check mode reports each link there to the
-# pinned worktree or the live clone or inside either. The target is read as the link names it and
-# with its folder resolved. Pin mode removes each such link after linking and prints a line for
-# each. Every other entry of that folder, a real folder or a link to anywhere else, is left as it
-# is.
+# resolved path, so a folder of the list matches it once both exist), check mode reports each link
+# there to the pinned worktree or the live clone or inside either. The target is read as the link
+# names it and with its folder resolved. Pin mode removes each such link after linking and prints a line for each. Every other
+# entry of that folder, a real folder or a link to anywhere else, is left as it is.
 # The agent folders are the agents folder beside a skill folder (the skill folder's parent followed
 # by /agents): beside each folder of $ORDO_SKILL_DIRS, or, without it, beside each default skill
 # folder found, which are ~/.claude/skills, each ~/.claude-*/skills that is a folder and
@@ -53,11 +47,10 @@
 # Pin mode refuses, before anything changes, an agent folder that is also a skill folder of the
 # run (the same path with every trailing slash stripped or, when both exist, the same physical
 # path), an agent folder path that exists and is not a folder, an entry for an agent of the tag that
-# is a real file, a directory or a link to anywhere outside Ordo, and a link into the live clone
-# for an agent the tag lacks; each is left as it is. It then links <folder>/<name>.md to
-# <pinned worktree>/agents/<name>.md for every agent of the tag, replaces a link into the live
-# clone and prints a line for each, and removes a link into the pinned worktree whose agent the
-# tag lacks and prints a line for each. Every other entry of an agent folder, a user's own file or
+# is not a link or is a link to anywhere outside Ordo, and a link into the live clone for an agent
+# the tag lacks; each is left as it is. It then links <folder>/<name>.md to <pinned worktree>/agents/<name>.md for
+# every agent of the tag, replaces a link into the live clone and prints a line for each, and
+# removes a link into the pinned worktree whose agent the tag lacks and prints a line for each. Every other entry of an agent folder, a user's own file or
 # a link to anywhere else, is left as it is.
 # Check mode, and the check after linking, report an agent of the pinned worktree not linked from
 # an agent folder, every link into the live clone, and every link into the pinned worktree whose
@@ -102,11 +95,7 @@ EOF
 # The skill folders, one per line, and the default skill folders as found.
 default_dirs=
 if [ -n "${ORDO_SKILL_DIRS:-}" ]; then
-    case "$ORDO_SKILL_DIRS" in
-        *"$nl"*) skill_dirs=$ORDO_SKILL_DIRS ;;
-        *) skill_dirs=$(printf '%s\n' "$ORDO_SKILL_DIRS" | tr ' \t' '\n\n') ;;
-    esac
-    skill_dirs=$(printf '%s\n' "$skill_dirs" | sed '/^$/d')
+    skill_dirs=$(printf '%s\n' "$ORDO_SKILL_DIRS" | tr ' \t' '\n\n' | sed '/^$/d')
     [ -n "$skill_dirs" ] || fail "ORDO_SKILL_DIRS names no folder"
 else
     # Every default skill folder as found, before a folder named twice is removed: the agent folders
@@ -115,12 +104,6 @@ else
     default_dirs="$HOME/.claude/skills"
     for dir in "$HOME"/.claude-*/skills; do
         [ -d "$dir" ] || continue
-        case "$dir" in
-            *"$nl"*)
-                shown=$(printf '%s' "$dir" | awk 'BEGIN { ORS = "" } NR > 1 { print "\\n" } { print }')
-                fail "'$shown' holds a newline; move the folder or set ORDO_SKILL_DIRS"
-                ;;
-        esac
         default_dirs=$default_dirs$nl$dir
     done
     [ -z "${CLAUDE_CONFIG_DIR:-}" ] ||
@@ -150,7 +133,6 @@ EOF
 }
 while IFS= read -r dir <&3; do
     case "$dir" in
-        [[:space:]]* | *[[:space:]]) fail "'$dir' has leading or trailing whitespace" ;;
         /*) ;;
         *) fail "'$dir' is not an absolute path" ;;
     esac
@@ -397,10 +379,8 @@ EOF
                 "$stable"/*|"$repo"/*) ;;
                 *) fail "$entry links to $target, outside Ordo; move it away and run again" ;;
             esac
-        elif [ -d "$entry" ]; then
-            fail "$entry is a directory; move it away and run again"
         elif [ -e "$entry" ]; then
-            fail "$entry is a real file; move it away and run again"
+            fail "$entry is not a link; move it away and run again"
         fi
     done 4<<EOF
 $tag_agents

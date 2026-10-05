@@ -13,7 +13,7 @@ The inputs read, and nothing else:
     The response body of a response, from the folder named by OTEL_LOG_RAW_API_BODIES: its file <folder>/<requestId>.response.json, when it exists. Claude Code writes these files, for the main session and every subagent, when it runs with CLAUDE_CODE_ENABLE_TELEMETRY=1 and OTEL_LOG_RAW_API_BODIES=file:<folder>. A value that does not start with file: (or an empty value, or no value) names no folder. The folder is a path as given, a relative one from the working folder. Its index.jsonl and its <uuid>.request.json files are never read.
     The value of OTEL_LOG_RAW_API_BODIES comes from the script's environment when the environment holds the variable, even empty. Otherwise it comes from the key env.OTEL_LOG_RAW_API_BODIES of Claude Code's settings files, from the first of these that sets it: <repository>/.claude/settings.local.json, <repository>/.claude/settings.json and $HOME/.claude/settings.json. The repository is the nearest folder, from the working folder upwards, that holds a .git entry; with none, only the last file is read. A settings file that does not exist is passed over, and the files after the one that sets the key are not read. Claude Code passes its settings' CLAUDE_CODE_ENABLE_TELEMETRY to a tool's shell and leaves OTEL_LOG_RAW_API_BODIES out, so a run from a Claude Code tool finds the folder in the settings files.
 
-An agent is a bullet `- <agent id>: <role>, <served model>`. A line that is not a bullet (a paragraph, a blank line, a heading) is passed over. A line that starts, after any spaces, with `-`, `*` or `+` and then a space or the end of the line is a bullet, and a bullet that is not of that form, after its leading spaces, is an error. An agent id is letters, digits, - and _ only, so an id never reaches a path as a pattern. The served model is not used: each response is priced at the model its own entry names.
+An agent is a bullet `- <agent id>: <role>, <served model>`. A line that is not a bullet (a paragraph, a blank line, a heading) is passed over. A line that starts, after any spaces, with `-`, `*` or `+` and then a space or the end of the line is a bullet, and a bullet that is not of that form, after its leading spaces, is an error. The served model is not used: each response is priced at the model its own entry names.
 
 The role kinds, in this order: builder (`builder of step <n>`), brief check (`brief check of step <n>`), reviewer (`reviewer of step <n>`), reviewer over a round (`reviewer of step <n> over round <r>`), grill lookup (`grill lookup`). A step is a number with an optional lower-case letter, such as 6b, and a round is a number. Any other role text is an error.
 
@@ -21,9 +21,9 @@ A response is a transcript line that is a JSON object with "type":"assistant" an
     1. usage is an object, and input_tokens, cache_creation_input_tokens, cache_read_input_tokens and output_tokens are each whole numbers of 0 or more, as are cache_creation.ephemeral_5m_input_tokens and cache_creation.ephemeral_1h_input_tokens.
     2. cache_creation_input_tokens equals the sum of the two cache writes, and is 0 when the usage has no cache_creation, absent or null.
     3. An entry whose input, 5-minute write, 1-hour write, cache read and output counts are all 0 is passed over; the runner writes such an entry, with the model <synthetic>, for a failed request.
-    4. message.id and requestId are each a non-empty string, requestId is letters, digits, - and _ only, so it never reaches a path as a pattern, and message.model is a non-empty string.
+    4. requestId is a string of letters, digits, - and _ only, so it never reaches a path as a pattern.
     5. usage.speed is absent, null or standard, usage.inference_geo is not us, usage.service_tier is absent, null or standard, and usage.server_tool_use, when set, is an object with no web_search_requests above 0, since prices.txt holds no price for those.
-A response body is read only for a response whose transcript entry passed these checks. It is a JSON object with an id, a model that is a non-empty string and a usage, and its usage goes through checks 1, 2 and 5 in that order, with the same error texts, naming the body's path where a transcript error names its file and line. Its id is the message.id of the transcript entry. Its model is the model of the response.
+A response body is read only for a response whose transcript entry passed these checks. It is a JSON object whose id is the message.id of the transcript entry and whose usage goes through checks 1, 2 and 5 in that order, with the same error texts, naming the body's path where a transcript error names its file and line. Its model is the model of the response.
 The price of a response is each of its five counts times its column of the row for its model, divided by 1,000,000, computed with decimal.Decimal from the table's text so no rounding enters.
 
 The output, on success, is written for a person to read:
@@ -36,53 +36,36 @@ The output, on success, is written for a person to read:
 No body is the number of the row's responses priced from the transcript, and the Total row holds the sum. A Cost cell of a row whose No body is above 0 is written >= and then the cost, as >=1.87. Counts are whole numbers with no separators. Model lists each model of the agent's responses, comma-separated, in the order first met, and is - for an agent with no counted response, whose counts are 0 and cost 0.00. A cost has two decimals, rounded half up from the exact sum; the Total row is rounded from the exact total, not summed from rounded rows. Each column is padded with spaces so it lines up.
 
 The script reads every input before it prints anything. Each error is one line `error: <what>` on stderr, and stdout stays empty. An error names its file and line where it has them. The errors of the run, exit 1:
-    error: cannot read <path>: <reason>   (the table, plan.md, agent-roles.md, a transcript or a folder under the transcript root; the reason is the system's text, or "not valid UTF-8")
-    error: <table>:<line>: the first line is not a # comment
-    error: <table>:<line>: a row has <n> fields, expected 6
-    error: <table>:<line>: price '<text>' is not a number
+    error: cannot read <path>: <reason>   (the table, plan.md, agent-roles.md, a transcript or a body; the reason is the system's text)
+    error: <table>:<line>: a row is not a model id and five prices
     error: <table>:<line>: model <model> is listed twice, first on line <n>
     error: <plan.md>:1: the first line is not "# Plan: <entry>"
     error: cannot read <settings file>: <reason>   (as above, naming a Claude Code settings file)
-    error: <settings file>: not valid JSON
     error: <settings file>: not a JSON object
-    error: <settings file>: env is not an object
     error: <settings file>: env.OTEL_LOG_RAW_API_BODIES is not a string
     error: OTEL_LOG_RAW_API_BODIES names <folder>, which is not a folder
     error: <file>:<line>: the bullet is not of the form "- <agent id>: <role>, <served model>"
-    error: <file>:<line>: invalid agent id '<id>'
     error: agent <id> has an unknown role: <role>
     error: agent <id> is listed twice: <file>:<line> and <file>:<line>
     error: the ledger names no agent   (no bullet in plan.md's Agents section or in agent-roles.md)
     error: no transcript of agent <id> under <transcript root>
     error: agent <id> has <n> transcripts: <path>, <path>
-    error: <transcript>:<line>: not valid JSON
     error: <transcript>:<line>: not a JSON object
     error: <transcript>:<line>: usage is not an object
     error: <transcript>:<line>: <field> is missing
     error: <transcript>:<line>: <field> is not a whole number of 0 or more: <value>
-    error: <transcript>:<line>: usage.cache_creation is not an object
     error: <transcript>:<line>: usage.cache_creation_input_tokens is <n> and usage has no cache_creation
     error: <transcript>:<line>: usage.cache_creation_input_tokens is <n>, but the two cache writes sum to <m>
-    error: <transcript>:<line>: usage.server_tool_use is not an object
-    error: <transcript>:<line>: no message.id
-    error: <transcript>:<line>: no requestId
     error: <transcript>:<line>: invalid requestId '<id>'
-    error: <transcript>:<line>: no message.model
     error: <transcript>:<line>: <field> is <value>, which the table does not price
-    error: cannot read <body>   (as above, naming the response body's path)
-    error: <body>: not valid JSON
     error: <body>: not a JSON object
-    error: <body>: usage is missing
-    error: <body>: no id
     error: <body>: id <body id> is not the transcript's message.id <id>
-    error: <body>: no model
     error: <body>: <the error of check 1, 2 or 5 above, without its <transcript>:<line>:>
     error: model <model> of agent <id> is not in <the table's path>   (one line per model and agent, whatever the number of responses that carry it, from a body or a transcript)
 A table with an error prices nothing, so the model lines are left out of that run.
 
 The usage errors, each followed by the line `usage: python3 plan_cost.py <ledger folder> [<transcript root>]`, exit 2:
     error: expected <ledger folder> and, optionally, <transcript root>   (no argument, or more than two)
-    error: no such folder: <path>   (the ledger folder or the transcript root)
     error: not a folder: <path>   (the ledger folder or the transcript root)
     error: no plan.md in <ledger folder>
 
@@ -105,7 +88,6 @@ _USAGE = "usage: python3 plan_cost.py <ledger folder> [<transcript root>]"
 _ARGUMENTS_ERROR = "expected <ledger folder> and, optionally, <transcript root>"
 _FORM_ERROR = 'the bullet is not of the form "- <agent id>: <role>, <served model>"'
 _TABLE = os.path.join(os.path.dirname(os.path.realpath(__file__)), "prices.txt")
-_AGENT_ID = re.compile(r"[A-Za-z0-9_-]+")
 _REQUEST_ID = re.compile(r"[A-Za-z0-9_-]+")
 _BODIES = "OTEL_LOG_RAW_API_BODIES"
 _PLAN_LINE = re.compile(r"# Plan: +(\S.*)")
@@ -159,11 +141,8 @@ def _read_lines(path: str, errors: list[str]) -> list[str] | None:
     try:
         with open(path, encoding="utf-8") as handle:
             lines = handle.read().split("\n")
-    except OSError as exc:
-        errors.append(f"cannot read {path}: {exc.strerror or exc}")
-        return None
-    except UnicodeDecodeError:
-        errors.append(f"cannot read {path}: not valid UTF-8")
+    except (OSError, UnicodeDecodeError) as exc:
+        errors.append(f"cannot read {path}: {getattr(exc, 'strerror', None) or exc}")
         return None
     if lines[-1] == "":
         lines.pop()
@@ -178,18 +157,12 @@ def _read_table(errors: list[str]) -> tuple[dict[str, tuple[Decimal, ...]] | Non
     problems = len(errors)
     prices: dict[str, tuple[Decimal, ...]] = {}
     listed: dict[str, int] = {}
-    if not lines or not lines[0].startswith("#"):
-        errors.append(f"{_TABLE}:1: the first line is not a # comment")
     for number, line in enumerate(lines[1:], 2):
         if line.startswith("#") or not line.strip():
             continue
         fields = line.split()
-        if len(fields) != 6:
-            errors.append(f"{_TABLE}:{number}: a row has {len(fields)} fields, expected 6")
-            continue
-        bad = [price for price in fields[1:] if _PRICE.fullmatch(price) is None]
-        if bad:
-            errors.append(f"{_TABLE}:{number}: price '{bad[0]}' is not a number")
+        if len(fields) != 6 or any(_PRICE.fullmatch(price) is None for price in fields[1:]):
+            errors.append(f"{_TABLE}:{number}: a row is not a model id and five prices")
         elif fields[0] in listed:
             errors.append(
                 f"{_TABLE}:{number}: model {fields[0]} is listed twice, first on line {listed[fields[0]]}"
@@ -230,9 +203,6 @@ def _read_bullets(
             errors.append(f"{where}: {_FORM_ERROR}")
             continue
         agent_id, role = match.group(1), match.group(2).strip()
-        if _AGENT_ID.fullmatch(agent_id) is None:
-            errors.append(f"{where}: invalid agent id '{agent_id}'")
-            continue
         parts = _role_parts(role)
         if parts is None:
             errors.append(f"agent {agent_id} has an unknown role: {role}")
@@ -287,14 +257,11 @@ def _read_ledger(ledger: str, errors: list[str]) -> tuple[str, list[_Agent]]:
     return entry, ordered
 
 
-def _find_transcripts(root: str, errors: list[str]) -> dict[str, list[str]]:
+def _find_transcripts(root: str) -> dict[str, list[str]]:
     """The paths of the files named agent-<agent id>.jsonl under the root, by agent id."""
     found: dict[str, list[str]] = {}
 
-    def unreadable(exc: OSError) -> None:
-        errors.append(f"cannot read {exc.filename}: {exc.strerror or exc}")
-
-    for folder, names, files in os.walk(root, onerror=unreadable):
+    for folder, names, files in os.walk(root):
         names.sort()
         for name in sorted(files):
             if name.startswith("agent-") and name.endswith(".jsonl"):
@@ -318,10 +285,6 @@ def _not_priced(name: str, value: object) -> _Problem:
     return _Problem(f"{name} is {json.dumps(value)}, which the table does not price")
 
 
-def _is_text(value: object) -> bool:
-    return isinstance(value, str) and value != ""
-
-
 def _check_counts(usage: object) -> list[int]:
     """The input, 5-minute write, 1-hour write, cache read and output counts of a usage, or raise _Problem."""
     if not isinstance(usage, dict):
@@ -331,18 +294,16 @@ def _check_counts(usage: object) -> list[int]:
     read = _count(usage, "cache_read_input_tokens", "usage.cache_read_input_tokens")
     output = _count(usage, "output_tokens", "usage.output_tokens")
     writes = usage.get("cache_creation")
-    if writes is None:
+    if not isinstance(writes, dict):
         if created > 0:
             raise _Problem(
                 f"usage.cache_creation_input_tokens is {created} and usage has no cache_creation"
             )
         write_5m = write_1h = 0
-    elif isinstance(writes, dict):
+    else:
         prefix = "usage.cache_creation."
         write_5m = _count(writes, "ephemeral_5m_input_tokens", prefix + "ephemeral_5m_input_tokens")
         write_1h = _count(writes, "ephemeral_1h_input_tokens", prefix + "ephemeral_1h_input_tokens")
-    else:
-        raise _Problem("usage.cache_creation is not an object")
     if created != write_5m + write_1h:
         raise _Problem(
             f"usage.cache_creation_input_tokens is {created}, "
@@ -362,9 +323,7 @@ def _check_priced(usage: dict[str, Any]) -> None:
     if tier is not None and tier != "standard":
         raise _not_priced("usage.service_tier", tier)
     tool_use = usage.get("server_tool_use")
-    if tool_use is not None and not isinstance(tool_use, dict):
-        raise _Problem("usage.server_tool_use is not an object")
-    if tool_use is not None and "web_search_requests" in tool_use:
+    if isinstance(tool_use, dict) and "web_search_requests" in tool_use:
         name = "usage.server_tool_use.web_search_requests"
         searches = _count(tool_use, "web_search_requests", name)
         if searches > 0:
@@ -379,38 +338,26 @@ def _parse_response(
     counts = _check_counts(usage)
     if not any(counts):
         return None
-    if not _is_text(message.get("id")):
-        raise _Problem("no message.id")
     request_id = entry.get("requestId")
-    if not _is_text(request_id):
-        raise _Problem("no requestId")
-    if _REQUEST_ID.fullmatch(request_id) is None:
+    if not isinstance(request_id, str) or _REQUEST_ID.fullmatch(request_id) is None:
         raise _Problem(f"invalid requestId '{request_id}'")
-    if not _is_text(message.get("model")):
-        raise _Problem("no message.model")
     _check_priced(usage)
-    return (message["id"], request_id), message["model"], counts
+    return (message.get("id"), request_id), message.get("model"), counts
 
 
-def _body_response(body: object, message_id: str) -> tuple[str, list[int]]:
+def _body_response(body: object, message_id: object) -> tuple[str, list[int]]:
     """The model and five counts of a response body, or raise _Problem."""
     if not isinstance(body, dict):
         raise _Problem("not a JSON object")
-    if "usage" not in body:
-        raise _Problem("usage is missing")
-    usage = body["usage"]
+    usage = body.get("usage")
     counts = _check_counts(usage)
-    if not _is_text(body.get("id")):
-        raise _Problem("no id")
-    if body["id"] != message_id:
-        raise _Problem(f"id {body['id']} is not the transcript's message.id {message_id}")
-    if not _is_text(body.get("model")):
-        raise _Problem("no model")
+    if body.get("id") != message_id:
+        raise _Problem(f"id {body.get('id')} is not the transcript's message.id {message_id}")
     _check_priced(usage)
-    return body["model"], counts
+    return body.get("model"), counts
 
 
-def _read_body(path: str, message_id: str, errors: list[str]) -> tuple[str, list[int]] | None:
+def _read_body(path: str, message_id: object, errors: list[str]) -> tuple[str, list[int]] | None:
     """The model and counts of the response body at path, or None after adding its error."""
     try:
         with open(path, "rb") as handle:
@@ -418,9 +365,8 @@ def _read_body(path: str, message_id: str, errors: list[str]) -> tuple[str, list
     except OSError as exc:
         errors.append(f"cannot read {path}: {exc.strerror or exc}")
         return None
-    except (UnicodeDecodeError, ValueError, RecursionError):
-        errors.append(f"{path}: not valid JSON")
-        return None
+    except (UnicodeDecodeError, ValueError):
+        body = None
     try:
         return _body_response(body, message_id)
     except _Problem as problem:
@@ -437,9 +383,8 @@ def _read_transcript(path: str, bodies: str | None, errors: list[str]) -> list[_
                 where = f"{path}:{number}"
                 try:
                     entry = json.loads(raw.decode("utf-8"))
-                except (UnicodeDecodeError, ValueError, RecursionError):
-                    errors.append(f"{where}: not valid JSON")
-                    continue
+                except (UnicodeDecodeError, ValueError):
+                    entry = None
                 if not isinstance(entry, dict):
                     errors.append(f"{where}: not a JSON object")
                     continue
@@ -601,19 +546,13 @@ def _settings_value(errors: list[str]) -> str:
         except OSError as exc:
             errors.append(f"cannot read {path}: {exc.strerror or exc}")
             return ""
-        except (UnicodeDecodeError, ValueError, RecursionError):
-            errors.append(f"{path}: not valid JSON")
-            return ""
+        except (UnicodeDecodeError, ValueError):
+            settings = None
         if not isinstance(settings, dict):
             errors.append(f"{path}: not a JSON object")
             return ""
         env = settings.get("env")
-        if env is None:
-            continue
-        if not isinstance(env, dict):
-            errors.append(f"{path}: env is not an object")
-            return ""
-        if _BODIES not in env:
+        if not isinstance(env, dict) or _BODIES not in env:
             continue
         if not isinstance(env[_BODIES], str):
             errors.append(f"{path}: env.{_BODIES} is not a string")
@@ -646,8 +585,6 @@ def main(argv: list[str]) -> int:
     ledger = argv[0]
     root = argv[1] if len(argv) == 2 else os.path.join(os.path.expanduser("~"), ".claude", "projects")
     for folder in (ledger, root):
-        if not os.path.exists(folder):
-            return _usage_error(f"no such folder: {folder}")
         if not os.path.isdir(folder):
             return _usage_error(f"not a folder: {folder}")
         if folder == ledger and not os.path.isfile(os.path.join(ledger, "plan.md")):
@@ -656,7 +593,7 @@ def main(argv: list[str]) -> int:
     prices, description = _read_table(errors)
     bodies = _body_folder(errors)
     entry, agents = _read_ledger(ledger, errors)
-    found = _find_transcripts(root, errors)
+    found = _find_transcripts(root)
     with decimal.localcontext(_EXACT):
         results = [_price_agent(agent, root, found, prices, bodies, errors) for agent in agents]
         if errors:

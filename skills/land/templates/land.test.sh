@@ -101,7 +101,7 @@ make_repo ledger 'projects:
     ledger_root: tools/a/.scratch
     worktree_root: .agents/trees-a
   b:
-    ledger_root: ./tools/b/.scratch/
+    ledger_root: tools/b/.scratch
     worktree_root: .agents/trees-b' tools/b/.scratch/plan/orchestrator-state.md .agents/trees-b <<'EOF'
 true
 EOF

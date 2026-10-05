@@ -14,11 +14,11 @@ The keys, which of them are required and each optional key's default come from t
 - design_bar is not industry, state-of-the-art or novel;
 - design_references is not a list of text;
 - worker_effort or reviewer_effort is not low, medium, high, xhigh or max;
-- self_rule or next_entry is not a boolean, which YAML reads from on, off, yes, no, true and false written in lower case, with a capital first letter or in all upper case (oN and tRUE stay text): the text on, On, ON, off, Off or OFF in quotes has its own message, and any other value, nothing included, is neither on nor off;
+- self_rule or next_entry is not a boolean, which YAML reads from on, off, yes, no, true and false written in lower case, with a capital first letter or in all upper case (oN and tRUE stay text); any other value, nothing and quoted text included, is neither on nor off;
 - repair_reviewer is not claude:<model>, nothing or a list included;
 - a page the configuration names that does not exist, a worktree root git does not ignore, or a configuration file git ignores.
 
-For adr, design_bar, design_references, worker_effort, reviewer_effort, self_rule, next_entry and repair_reviewer the value check above replaces the kind check, so a wrong value gives one error. The notes: each optional key left out, with the default that applies (self_rule and next_entry name default off, repair_reviewer names the reviewer's value, or says the reviewer's value applies when reviewer is missing or invalid); next_entry on while self_rule is off or left out, which acts only under self-rule and is not noted when self_rule has an error; and the default adr folder docs/adr when it does not exist yet.
+For adr, design_bar, design_references, worker_effort, reviewer_effort, self_rule, next_entry and repair_reviewer the value check above replaces the kind check, so a wrong value gives one error. The notes: each optional key left out, with the default that applies (self_rule and next_entry name default off, repair_reviewer says the reviewer's value applies); next_entry on while self_rule is off or left out, which acts only under self-rule and is not noted when self_rule has an error; and the default adr folder docs/adr when it does not exist yet.
 """
 import os
 import re
@@ -33,7 +33,6 @@ DESIGN_BARS = ("industry", "state-of-the-art", "novel")
 EFFORTS = ("low", "medium", "high", "xhigh", "max")
 MERGE_TAG = "tag:yaml.org,2002:merge"
 SWITCHES = ("self_rule", "next_entry")
-QUOTED_SWITCH_WORDS = ("on", "On", "ON", "off", "Off", "OFF")
 VALUE_CHECKED = ("adr", "design_bar", "design_references", "worker_effort", "reviewer_effort", "self_rule", "next_entry", "repair_reviewer")
 
 
@@ -125,25 +124,18 @@ def is_model(value):
     return isinstance(value, str) and MODEL.match(value) is not None
 
 
-def default_note(prefix, key, default, config):
+def default_note(prefix, key, default):
     """The note for an optional key left out: the default that applies, which for repair_reviewer is the configured reviewer."""
     if key in SWITCHES:
         return f"{prefix}{key} not set, default {'on' if default else 'off'} applies"
     if key == "repair_reviewer":
-        reviewer = config.get("reviewer")
-        if is_model(reviewer):
-            return f"{prefix}repair_reviewer not set, the reviewer's value {reviewer!r} applies"
         return f"{prefix}repair_reviewer not set, the reviewer's value applies"
     return f"{prefix}{key} not set, default {default!r} applies"
 
 
 def check_switch(prefix, key, value, errors):
-    """Check self_rule or next_entry: a boolean, which is how YAML reads on and off; the text on, On, ON, off, Off or OFF, the spellings YAML reads as a boolean when unquoted, has its own message."""
-    if isinstance(value, bool):
-        return
-    if isinstance(value, str) and value in QUOTED_SWITCH_WORDS:
-        errors.append(f"{prefix}{key} is the text {value!r} in quotes; write on or off without quotes")
-    else:
+    """Check self_rule or next_entry: a boolean, which is how YAML reads on and off."""
+    if not isinstance(value, bool):
         errors.append(f"{prefix}{key} is neither on nor off: {value!r}")
 
 
@@ -154,7 +146,7 @@ def check_project(root, label, config, keys, errors, notes):
             if default is None:
                 errors.append(f"{prefix}required key missing: {key}")
             else:
-                notes.append(default_note(prefix, key, default, config))
+                notes.append(default_note(prefix, key, default))
     for key in config:
         if key not in keys:
             errors.append(f"{prefix}unknown key: {key}")

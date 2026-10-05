@@ -2,7 +2,7 @@
 name: session-retro
 description: "Read the transcripts of Claude Code sessions, from a plan's opening to its last commit, from one Claude Code session with its subagents, or from a time window, and report what went well, to keep and repeat, and what went wrong, to change. Each point quotes its place in the transcript by id, line and timestamp and proposes a change to a named rule, skill or brief, as a sentence to add or change, and the user decides on each proposal. Leaves behind a sessions report in the ledger's retros folder. Triggers on: session-retro, review the Claude Code sessions of a plan, review this Claude Code session, review a time window of Claude Code sessions, what went well and what went wrong in the Claude Code sessions, mine the Claude Code transcripts, read the transcripts of a plan."
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Review of Claude Code sessions
@@ -160,7 +160,7 @@ python3 <this skill's folder>/templates/transcript_window.py <transcript folder>
 - A YAML value on the line after its name is not redacted.
 - `skipped <n> lines of <file>` on stderr says that many lines of a transcript file could not be read as an entry.
 - Exit status 0 means the output is complete, and an empty window prints nothing.
-- Exit status 1 means a file or folder could not be read, with `error: cannot read <path>: <reason>` on stderr, and the output lacks it.
+- Exit status 1 means a file or folder could not be read, with `error: cannot read <path>: <reason>` on stderr, or with Python's traceback when the folder itself cannot be checked for lack of permission, and the output lacks it.
 - Exit status 2 means a usage error, with `error: <what>` on stderr and nothing on stdout.
 
 ## Stops

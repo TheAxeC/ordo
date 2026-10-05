@@ -4,16 +4,10 @@ Ordo has no build step. The green check is every command below passing, each run
 
 ```sh
 sh skills/land/templates/land.test.sh                  # land.sh on a conflict, a ledger file left in the worktree, a failing check and a clean landing
-sh skills/land/templates/checks.test.sh                # checks.sh on a failing list, a passing list and a state file with no yaml block
 sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
-sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py on matching and drifted shared-rules and plan-terms blocks, its --write repair, its --only glossary form and its refusals
-sh skills/repo-setup/templates/hooks/git_guard.test.sh  # git_guard.py on the commands it must block (push, reset --hard, clean --force, checkout and restore of the whole tree, reached through separators, substitutions, wrappers, shells and aliases) and on the commands it must let through
-sh skills/diagnose/templates/person-driven.test.sh  # person-driven.sh on scratch files: the pairs written for each action, blank lines and blank observations, text with %s, backslashes, $HOME, backquotes and end spaces, paths with spaces, a leading dash or no folder, input that ends early, an observations path that already exists, an actions file that cannot be read or holds no action, a folder that cannot be written, an append that fails, a standard output that cannot be written and a TERM while it waits
-sh skills/session-retro/templates/transcript_window.test.sh  # transcript_window.py on scratch transcript folders: the window and its boundaries in each time form, the main and subagent files, the order and the prefix, what counts as a user message, assistant text and tool calls, each redaction pattern, skipped lines, an unreadable file and the usage errors
-sh skills/plan-orchestration/templates/plan_cost.test.sh  # plan_cost.py on scratch ledger folders and transcript roots: the hand-computed costs of every role, a response written as several entries counted once, the counts of a response body from the folder OTEL_LOG_RAW_API_BODIES names, in the environment or in Claude Code's settings files, and the lower bound of a response without one, each price and rounding half up, the order of the agent table, both forms of the agent list, every error line and the usage errors
+sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py --write on drifted shared-rules and plan-terms blocks, the bytes it keeps and its refusals
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
 sh utils/pin.test.sh                                   # pin.sh in pin and check mode under a scratch HOME, its refusals included
-sh utils/check_coverage.test.sh                 # the coverage check on complete and broken coverage lists
 git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 ```
 
@@ -32,4 +26,4 @@ The last command is the ASCII check over every tracked file and every untracked 
 
 The figures under `docs/figures/` are written by `python3 docs/figures/gen_figures.py` and committed. A change to a skill's Stops table, to the sequence or to a skill name changes the labels in that script, which is then run again; the script is not part of the verify list.
 
-This page is the list of tests and checks, and says how the committed figures are made; a new script under a skill's `templates/` or under `utils/` adds its test here and to the command block of `docs/dev/change-standard.md`.
+This page is the list of tests and checks, and says how the committed figures are made; a new script is listed on `docs/dev/scripts.md`, and adds its test here and to the command block of `docs/dev/change-standard.md` only when it has one.

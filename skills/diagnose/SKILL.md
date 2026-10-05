@@ -240,7 +240,13 @@ metadata:
 8. A loop over generated inputs, for a symptom that is sometimes wrong.
 9. `git bisect run` on a scratch clone, when the defect appeared between two known states.
 10. The same input through two versions, with the outputs compared.
-11. For a symptom only a person can trigger, `templates/person-driven.sh`, a script that prints each action for the user to take and reads back what they observed, run as `references/person-driven.md` says, which is the stop "A red command a person drives".
+11. For a symptom only a person can trigger, a list of actions for the user to take, which is the stop "A red command a person drives".
+    - The session writes the list into the record, one action per line, each with what to look at after it, and shows it to the user.
+    - The user takes the actions in order and answers each with one line that says what they observed, and a longer output the user saves to a file that the line names.
+    - The record states which observation is the red before the user takes the actions.
+    - Each run of the red command that the steps ask for is one pass through the list.
+    - The session quotes each run's actions with the user's observations whole in the record's "Red command" section before the cleanup of Steps 22, a secret in them written `<REDACTED>`.
+      - The observations are the red command's own output, not a captured artifact, which "Rules" quotes only in the lines that carry the symptom.
 
 ## Stops
 
@@ -250,7 +256,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 |---|---|---|---|
 | The hypotheses | Run by a person, once Steps 7 has formed them, or Steps 14 a second list (Steps 9 and 10) | The red command with its output, the shrunk case and the ranked hypotheses with their falsifying results | The user's reply, then the probes with the ranking the reply gives |
 | No red command | Run by a person, when the record's "No red command" section is written | Every way tried with what it gave, and a request for access to where the symptom occurs, a captured artifact (redacted, with only the lines that carry the symptom), leave to add temporary instrumentation, or the credential set in the environment | What the request names, then Steps 4 again |
-| A red command a person drives | Run by a person, when only a person can trigger the symptom | The actions file and the command the user runs to start `templates/person-driven.sh` (`references/person-driven.md`) | The user's word that the script has ended, then the observations file read by the skill |
+| A red command a person drives | Run by a person, when only a person can trigger the symptom | The list of actions, one per line, each with what to look at after it | The user's observation after each action, one line each |
 | Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause; with no person present, Steps 15 gives it as a cause not found | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
 | The cause not found | One of the conditions Steps 15 gives | The record with every probe, or every way tried from its "No red command" section, and inside a plan the open item | Inside a plan, the user's ruling on the open item or, under `self_rule: on`, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; run by a person, the user's next direction |
 | No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
