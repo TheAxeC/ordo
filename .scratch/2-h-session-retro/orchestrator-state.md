@@ -43,20 +43,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-  step: 3b
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2h-3b
-  base: 0bef27a
-  launched: 2026-10-05
-  report: .scratch/2-h-session-retro/agents/reviews/3b-report.md
-  brief_check: .scratch/2-h-session-retro/agents/reviews/3b-brief-check.md (a5985b153ef87c248, claude-opus-5-5, 151177 tokens, 37 tool uses, 6.3 minutes)
-  landing: not-started
-  round: 1
-  session_id: a8796cd3e0bba578c (claude-sonnet-5-5)
-  builder_usage: 81482 tokens, 22 tool uses, 7.3 min
-  reviewer_report: .scratch/2-h-session-retro/agents/reviews/3b-refuter.md (abee8b43374164dec, claude-opus-5-5, 145791 tokens, 29 tool uses, 8.5 min)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -90,5 +77,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-09-30. Steps 1, 2 and 3 landed and ticked.
-- Next: step 4, the real run over 2.C's sessions with Axel, before 2026-10-28; step 3a moved to plan 2.E.A's step 12c by ruling "Steps by part" (2026-10-04).
+- 2026-10-05. Steps 1, 2, 3 and 3b landed and ticked.
+- Next: step 4, the real run over 2.C's sessions with Axel, before 2026-10-28. By the user's order of 2026-10-05, plan 2.H waits while plan 2.1 runs first and then 2.F.

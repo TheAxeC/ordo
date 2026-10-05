@@ -108,3 +108,17 @@ None. The new line 80 is one sentence with one semicolon, indented three spaces 
 ## Anything in the brief that was wrong or impossible
 
 Nothing found. Every line number the brief names matched the tree at the first run (the C5 quotes above).
+
+## Repair round 1
+
+Everything in the round is done.
+
+| Item | Status | Command and output |
+|---|---|---|
+| Spec 1, line 2 of `skills/repo-setup/templates/hooks/git_guard.test.sh` ends at `The test never runs git.` and line 20 reads `guard=$script_dir/git_guard.py` | DONE | `git grep -n 'GIT_GUARD' -- skills` printed nothing, exit 1 |
+| The test still passes | DONE | `sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 \| tail -1` printed `PASS: git_guard.py scratch tests` |
+| Standards 1, `skills/spec/templates/brief.md` lines 80-81 | DONE | `sed -n 80,81p skills/spec/templates/brief.md` printed `   - A test that would still pass with the behaviour it is written for taken out of the code is an audit, not a proof, and this brief says which it is.` and `   - The reviewer finds such a test by reading it.` |
+| Character set of the two files | DONE | `LC_ALL=C grep -n '[^ -~]' skills/repo-setup/templates/hooks/git_guard.test.sh skills/spec/templates/brief.md` printed nothing, exit 1 |
+| Diff against `0bef27a` | DONE | `git diff 0bef27a --stat` printed ` skills/repo-setup/templates/hooks/git_guard.test.sh \| 4 ++--`, ` skills/spec/SKILL.md                                \| 2 +-`, ` skills/spec/templates/brief.md                      \| 3 +--`, ` 3 files changed, 4 insertions(+), 5 deletions(-)` |
+
+The report's earlier sections describe the tree before this round: the "Files" section lists `skills/spec/templates/brief.md` with 1 insertion and 3 deletions, which is now 1 insertion and 2 deletions in the round's end state (lines 34-35 deleted, line 81 added, line 80 as at the base), and the new line 80 quoted in the DONE table of the first run is replaced by the two lines above. The round ran no other command and changed no other path.
