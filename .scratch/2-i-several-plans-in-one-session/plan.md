@@ -1,4 +1,32 @@
-# Rulings: 2.I Several plans in one session
+# Plan: 2.I Several plans in one session
+
+Execution ledger for roadmap entry 2.I of `docs/roadmap.md`. One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+`plan-orchestration` runs every open plan in one session: it takes the plans in the roadmap's order, `spec` compares a step's paths with the steps in flight of every open plan, one limit on steps in flight holds across all plans, landings are one at a time across all plans, and one report lists each plan's position and open items; and every open plan runs the verify list the verification page holds now: a command added to the page reaches each open plan before its next step is checked or landed, never only the plan that added it.
+
+## Gate
+
+one real run over two open plans whose next steps change the same file, with a third step in flight beside them and steps of both plans in flight at the same time: the run starts with the plan that comes first in the roadmap, the second plan's step waits until the first plan's step has landed, the steps in flight never exceed the one limit, no two landings overlap, and the one report lists both plans' positions and open items, checked by a fresh reviewer agent against the two plans' ledgers; a test command added to the verification page by one plan's step is run, its line quoted, by the next landing of the other plan.
+
+- The gate: could this pass without the goal being reached? No. A session that runs one plan at a time never has steps of both plans in flight at the same time, and each other part of the goal has its own condition: the roadmap's order, the wait on the shared file, the one limit, the landings one at a time, the one report and the test command added by one plan run by the other.
+- Step 1: could this pass without the goal being reached? No. Each changed text is read in place against the ruling it carries, and the grep shows the commit form of every commit on main; a text that reads right but does not run right is found by step 2's run.
+- Step 2: could this pass without the goal being reached? No. Each condition is read from the run's ledgers and transcript, and the report is checked against the two plans' ledgers.
+
+## Steps, in execution order
+
+- 1 Several plans in one session in the skill texts: `plan-orchestration` with `references/self-rule.md`, `spec`, `land`, `refute`, `plan` with `templates/orchestrator-state.md`, `ordo-help`, the commit command of every skill that commits on main, `skills/repo-setup/templates/plan-terms.md` synced into `docs/glossary.md`, and `README.md`, as the rulings D15 to D28 say, each skill's version raised as `docs/dev/skill-layout.md` says; check: each changed text read in place against its ruling, `git grep -n -e 'git add --' -e 'committed by path' -- skills` from the repository root read to show every commit on main in the form `git commit -m <message> -- <path> ...`, `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` from the repository root exits 0, and `sh skills/land/templates/checks.sh .scratch/2-i-several-plans-in-one-session/orchestrator-state.md` from the repository root passes (1 commit) (ruling A)
+- 2 The real run: in a scratch repository under the session's scratch folder, two open plans whose next steps change the same file, a third step in flight, and one plan's step adding a test command to the verification page; the orchestrator runs the loop of step 1's texts, read from the repository, over both plans, with nothing asked of the user; check: the run's ledgers and transcript show the run starting with the plan first in the roadmap, steps of both plans in flight at the same time, the second plan's step waiting until the first plan's step landed, the steps in flight never above the one limit, no two landings overlapping, the added test command run by the other plan's next landing with its line quoted, and the one report checked by a fresh reviewer agent against the two plans' ledgers (1 commit; orchestrator, no agent) (ruling A)
+- 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output (`/roadmap done 2.I`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (ruling A)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless the configuration block allows more.
+
+- none: step 2 runs the texts step 1 lands.
+
+## Rulings (2026-10-05)
 
 - Decision 2 (2026-10-05): in entry 2.I's gate, the one report is checked by a fresh reviewer agent against the two plans' ledgers in place of the user's review, and `docs/dev/change-standard.md`'s gate sentence allows a fresh reviewer agent's review where the user rules so for a roadmap entry (the user).
 - D1 goal part, every open plan in one session (2026-10-05): (a) kept as the entry writes it: "`plan-orchestration` runs every open plan in one session" (self-rule).
@@ -30,10 +58,15 @@
 - D28 the invocations that run several plans (2026-10-05): (a) `/plan-orchestration` with no entry, and `continue the plan`, run every open plan; `/plan-orchestration <entry>` runs that plan alone; `/ordo-help` with no entry also prints each open plan's position (self-rule).
 - D29 record as ADR? (2026-10-05): (a) three records, status `proposed`: 0010 (D16), 0011 (D17) and 0012 (D19) (self-rule).
 - D30 the roadmap diff of entry 2.I (2026-10-05): (a) the gate's "with a third step in flight beside them:" becomes "with a third step in flight beside them and steps of both plans in flight at the same time:"; the goal and the waits-on line unchanged (self-rule).
+- Open item A (2026-10-05): the step list as drafted, 3 steps, which opens the plan (self-rule).
 
 ## Agents
 
-Each lookup agent `/grill 2.I` started has one bullet, with its agent id, its role and the model the runner served it.
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent stopped for another model, and `/plan` copies the bullets of a rulings file.
 
 - a3d2aab3380f2928e: grill lookup, claude-opus-5-5
 - a8617f9a43650cc22: grill lookup, claude-opus-5-5
+
+## Blocked, and by what
+
+- 1: waits on roadmap entries 2.F and 2.H, which the roadmap's Waits on line names beside the closed 2.E; a moment that has not come.
