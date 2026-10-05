@@ -18,7 +18,7 @@ Every rule on this page that names code, a script, a test or a check is read und
 - A script is never made more exact in the hope of reaching such a judgment. A wrong hit of a helper script is dropped, not raised as work.
 - A new script needs the user's approval of what it computes before it is written.
 - A test exists only for code, and only for behaviour whose failure costs something: lost work, a broken installation, a wrong configuration accepted.
-- A gate for a judgment is a review: the user's, or a blind comparison. "A script prints ok" is a gate only for a fact.
+- A gate for a judgment is a review: the user's, a blind comparison, or, where the user rules so for a roadmap entry, a fresh reviewer agent's. "A script prints ok" is a gate only for a fact.
 - A recurring finding is answered with a rule sentence or a change to the text that should have prevented it. A check is proposed only for a fact a machine computes, with the user's approval.
 - What a skill or tool gives the user is written for a person to read, never in a machine's format.
 
