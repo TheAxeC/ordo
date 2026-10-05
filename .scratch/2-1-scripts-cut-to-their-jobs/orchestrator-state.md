@@ -53,15 +53,17 @@ dispatch:
   report: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-report.md
   brief_check: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-brief-check.md (aefdc70d38c003911, claude-opus-5-5, 183460 tokens, 50 tool uses, 7.7 minutes)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a461ff8462cc74f48 (claude-sonnet-5-5)
+  builder_usage: 318582 tokens, 80 tool uses, 16.8 minutes
+  reviewer_report: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-refuter.md (a36aab8f6d73b9602, claude-opus-5-5, 192454 tokens, 56 tool uses, 8.8 minutes)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-none
+- Open item B (2026-10-05), kind 3 (the shared rules), raised from step 1's report and refuter report ("Declined to judge"): `skills/repo-setup/templates/shared-rules.md`, the shared-rules block `/repo-setup sync` copies into every repository's `CLAUDE.md`, has the rule "Scripts compute facts; judgment is read" without the new case rule step 1 adds to the change standard. (a) Add the case rule to that bullet in step 3, which already changes the scripts' rules; pro: every repository set up from the template carries the rule, not only those that read the change standard; con: the shared rules grow by one sentence. (b) Leave the shared rules as they are; pro: no change to the shared block; con: a repository's `CLAUDE.md` states the script rule without the case rule, so a session that reads only `CLAUDE.md` does not see it. Recommendation: (a). The lazy option is (b). Step 1 goes on: no text of it depends on the ruling.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
