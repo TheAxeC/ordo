@@ -50,17 +50,11 @@ dispatch: none
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item C (2026-10-05), step 2: entry 3's gate holds three more clauses that test only the planted text, which the approved removal of "`/writing` run on one text holding one planted break of each rule of `references/`, and on one clean text, names every planted break and nothing in the clean text, checked by reading its report" leaves with nothing to refer to (`grep -n planted docs/roadmap.md`, line 60):
-  - "of the planted breaks, at least one stands in an `\input` file of a `.tex` main file and at least one in a `.docx`, and each is named at its place in the file that holds it";
-  - "the planted text also holds one break of a prose standard rule and one passage where an academic rule and the prose standard differ, and the report names the first and follows the prose standard on the second";
-  - "the planted text is run once as a `.md` and once as a `.txt`, with the same findings".
-  - (a) Remove all three with the approved clause. Pro: no clause of the gate refers to a text that is gone. Con: the gate no longer asks that a finding be named at its place inside an `\input` file.
-  - (b) Remove the second and third, and replace the first with "each finding of the two real runs is named at its place in the file that holds it, an `\input` file of the `.tex` included". Pro: the real runs still prove that `/writing` reads `\input` files and points into them, which the real manuscript with `\input` files is in the gate for. Con: a new clause you have not seen before this item.
-  - Recommendation: (b), since the gate already requires a real `.tex` with `\input` files and this clause is what makes that requirement checked. The lazy option is (a), which drops a check to avoid writing one clause.
-  - The ruling on (b) also approves its wording as written here.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-05: Open item C, step 2, entry 3's planted-text clauses: ruled (b) by the user, booked in `plan.md` Rulings.
 - 2026-10-05: Open item B, the case rule in the shared rules (`skills/repo-setup/templates/shared-rules.md`): ruled (a) by the user, step 3 adds it, booked in `plan.md` Rulings.
 - 2026-10-05: Open item A, step 1, three brief-check findings (the case rule's cost test, the place of the scripts-page line, what "fewer than 20 lines" counts): ruled A1 (a), A2 (a), A3 (a) by the user, booked in `plan.md` Rulings.
 
@@ -86,5 +80,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Step 1 landed; main tagged v3.0.0. Next step: 2, stopped on Open item C at `/spec`; `/spec 2.1 2` again after the ruling. The user ran `utils/pin.sh v3.0.0`. By the user's order, plans run one at a time: 2.1 first, then 2.F.
+- Step 1 landed; main tagged v3.0.0. Next step: 2, `/spec 2.1 2` again after the ruling on Open item C. The user ran `utils/pin.sh v3.0.0`. By the user's order, plans run one at a time: 2.1 first, then 2.F.
 - Open on Axel's side: none.
