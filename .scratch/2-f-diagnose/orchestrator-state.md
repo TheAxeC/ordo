@@ -50,10 +50,12 @@ dispatch:
   base: c5cca8fc99c74767d3078414938e822781a0bd21
   launched: 2026-10-05
   report: .scratch/2-f-diagnose/agents/reviews/2a-report.md
+  builder_usage: 97184 tokens, 101 tool uses, 25.1 minutes (round 0)
   brief_check: .scratch/2-f-diagnose/agents/reviews/2a-brief-check.md (a95b4d847166098ec, claude-opus-5-5, 253095 tokens, 66 tool uses, 12.7 minutes)
   session_id: ad451ecb7ba6e1e71 (claude-sonnet-5-5)
+  reviewer_report: .scratch/2-f-diagnose/agents/reviews/2a-refuter.md (a4609b37e96a4c34e, claude-opus-5-5, 264422 tokens, 55 tool uses, 15.5 minutes); trial reviewer of the ruling "Reviewer trial": .scratch/2-f-diagnose/agents/reviews/2a-refuter-sonnet-trial.md (a70e4f918b4ed2894, claude-sonnet-5-5, 266542 tokens, 66 tool uses, 19.8 minutes, not used for the landing)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
