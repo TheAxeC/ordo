@@ -18,6 +18,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
+## 2.1 Scripts cut to their jobs
+
+- Status: [ ]
+- Goal: Every script of Ordo does its job and nothing more, and `docs/dev/scripts.md` lists each one as a development, user or test script with its job: `person-driven.sh`, the git guard with `repo-setup`'s offer and entry 2.G with its plan folder, and every script under `.scratch/` are deleted; `land.sh`, `pin.sh`, `check_config.py`, `plan_cost.py` and `transcript_window.py` are cut back to their jobs, and tests are kept only for `land.sh`, `pin.sh`, `check_config.py` and `sync_rules.py --write`, a few cases each. The change standard and its template copy, the brief template, `/spec`'s brief check and `/refute` say that code handles a case only when that case has happened or would lose work, rule 15 of the change standard is rewritten to match, and the gates of entries 3, 4, 7 and 8 lose their slop clauses while entry 16's gate gains the deletion of `utils/check_coverage.py`.
+- Gate: `docs/dev/scripts.md` names every file `git ls-files '*.py' '*.sh'` prints, checked by comparing the two lists, and the change standard says a change that adds, removes or renames a script updates the page; `git ls-files` prints no `person-driven.sh`, no `git_guard.py` or `git_guard.test.sh`, no `.py` or `.sh` file under `.scratch/`, and no `*.test.sh` other than those of `land.sh`, `pin.sh`, `check_config.py` and `sync_rules.py`; each cut script and each kept test read by you against its job on the page, with its line count before and after; the anti-slop sentences read by you in each changed text; entry 2.G under "Dropped" with its reason; the gate clauses of entries 3, 4, 7, 8 and 16 read by you.
+- Waits on: 2.C, for the rules "scripts compute facts" and "a test exists only for behaviour whose failure costs something".
+
 ## 2.F diagnose
 
 - Status: [ ]
