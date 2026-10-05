@@ -53,8 +53,10 @@ dispatch:
   report: .scratch/2-h-session-retro/agents/reviews/3b-report.md
   brief_check: .scratch/2-h-session-retro/agents/reviews/3b-brief-check.md (a5985b153ef87c248, claude-opus-5-5, 151177 tokens, 37 tool uses, 6.3 minutes)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a8796cd3e0bba578c (claude-sonnet-5-5)
+  builder_usage: 81482 tokens, 22 tool uses, 7.3 min
+  reviewer_report: .scratch/2-h-session-retro/agents/reviews/3b-refuter.md (abee8b43374164dec, claude-opus-5-5, 145791 tokens, 29 tool uses, 8.5 min)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
