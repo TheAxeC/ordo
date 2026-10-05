@@ -55,6 +55,8 @@ dispatch:
   landing: not-started
   round: 0
   session_id: ac1c1796715ed4931 (claude-sonnet-5-5)
+  cases_ruling: .scratch/2-g-git-guard/agents/briefs/2a-cases.md (round 0, sent 2026-10-05)
+  builder_usage: first run to the hand-back, 184671 tokens, 21 tool uses, 11.9 minutes
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
