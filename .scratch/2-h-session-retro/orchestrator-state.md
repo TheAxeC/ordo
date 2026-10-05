@@ -43,7 +43,18 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 3b
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2h-3b
+  base: 0bef27a
+  launched: 2026-10-05
+  report: .scratch/2-h-session-retro/agents/reviews/3b-report.md
+  brief_check: .scratch/2-h-session-retro/agents/reviews/3b-brief-check.md (a5985b153ef87c248, claude-opus-5-5, 151177 tokens, 37 tool uses, 6.3 minutes)
+  landing: not-started
+  round: 0
+  session_id: a8796cd3e0bba578c (claude-sonnet-5-5)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
