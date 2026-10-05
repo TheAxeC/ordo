@@ -36,6 +36,9 @@ design_bar: industry         # what grill's options are held to: industry, state
 design_references: []        # the published standards a design is held to, such as WCAG 2.2 AA.
 worker_effort: high          # the effort a builder runs at: low, medium, high, xhigh or max.
 reviewer_effort: high        # the effort a reviewer and a brief-check agent run at: low, medium, high, xhigh or max.
+self_rule: on                # the plan runs under self-rule (ruling "Self-rule on").
+next_entry: on               # copied from .agents/plan.yaml; after the closing, next-entry mode reads .agents/plan.yaml itself.
+repair_reviewer: claude:sonnet  # the model the run of /refute over a repair round runs on, from .agents/plan.yaml.
 ```
 
 ```yaml
