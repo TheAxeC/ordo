@@ -25,6 +25,7 @@
 - D24 The roadmap diff of entry 3 (2026-09-30): (A) the entry's Status, Goal and Gate are written as drafted from D1 to D23, the Waits on line unchanged; the lazy option was (C), keeping the entry (the user).
 - Open item W (2026-10-05): `/writing` reports its findings, each with a proposed replacement, and applies nothing; `paper` applies the accepted ones to a manuscript and `grant` to a grant, replacing D8 What `/writing` does after the report (the user).
 - Open item V (2026-10-05): in entry 3's gate, two fresh reviewer agents each mark each finding of `/writing` on the real manuscript and grant right or wrong, on copies of the two files, and each one not marked right by both is fixed in the rules or the skill before the gate passes, in place of the user's marks (the user).
+- Open item Gate 3 (2026-10-05): (a) entry 3's gate gains three conditions: a planted break in an `\input` file and one in a `.docx`, each named at its place; the report grouped by rule, the most consequential first; the run's transcript showing the review made by one fresh agent that edits no file; the lazy option was (b), the conditions in the step checks only (the user).
 
 ## Agents
 
