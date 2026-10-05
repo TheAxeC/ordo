@@ -48,24 +48,14 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
-- Step 3 reading (2026-09-30): your `/diagnose` run on the scratch copy is booked (`plan.md`, "Step 3, the real run") with its record at `agents/reviews/3-diagnosis.md` and its fix at `agents/reviews/3-diagnose-fix.diff`. The run reached the cause the ledger books for 2.E step 3: the refusal compared the two folders as text. The step's check ends "reviewed by Axel". Options: (a) approve the run as the step's proof, and step 3 is ticked; pro: the record quotes the red command, the two hypotheses, the probes, the fix and four red tests, and the cause matches db9bbec; con: none found. (b) ask for a second run on another defect before the tick; pro: a second case; con: the gate asks for one real run, and step 4 compares on this same defect. Recommendation (a). Neither is the lazy option: (a) is the step's check as written.
 
-- Pricing the diagnosis agent (2026-10-05, at the landing of step 2a; kind 3 of `references/self-rule.md`, a new computation of a script, which only you approve).
-  - What is decided: whether the closing's cost script `skills/plan-orchestration/templates/plan_cost.py` prices the diagnosis agent. Today a diagnosis agent is written in `plan.md`'s Agents section as a numbered item under "Agents in no role the cost script prices:", which the script passes over, so a plan's closing cost leaves out every diagnosis agent's tokens.
-  - (a) Add the role "diagnosis of step <k>" to `plan_cost.py`, priced from the agent's transcript like a reviewer, with its test cases; the diagnosis agent becomes a bullet. Approval asked now, word for word: "plan_cost.py computes the cost of each agent whose bullet reads `<id>: diagnosis of step <k>, <model>` from that agent's transcript, as it does for a reviewer." Pro: the closing cost is complete. Con: one more script change and its tests, in a later step of this plan.
-  - (b) Leave the script as it is. Pro: no work. Con: the closing report understates a plan's cost by every diagnosis agent, and the record's head is the only place its usage is read.
-  - Recommendation: (a), since the closing's cost is meant to be the plan's whole cost. The lazy option is (b).
-  - How to answer: "Pricing (a)" or "Pricing (b)".
-- The reviewer comment in plan.yaml (2026-10-05, at the landing of step 2a; kind 3, a change to `.agents/plan.yaml` and to configuration blocks).
-  - What is decided: the comment on `reviewer:` at `.agents/plan.yaml` line 10 reads "claude:<model> the first run of /refute, the brief check and the lookups of /grill run on". Since step 2a the diagnosis agent runs on that model too, so the comment is incomplete. The configuration blocks of plans 2.I and 3 carry the same comment.
-  - (a) Change the three comments to "the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on", the words of `skills/plan/templates/plan.yaml`. No key or value changes. Pro: the file says what the model is used for. Con: none.
-  - (b) Leave them. Pro: no change to your configuration. Con: a reader of `.agents/plan.yaml` does not learn that the diagnosis agent runs on `reviewer:`.
-  - Recommendation: (a). The lazy option is (b).
-  - How to answer: "Comment (a)" or "Comment (b)".
-
+- none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- Step 3 reading (2026-10-05): Axel ruled (a); the real run is approved; step 3 is ticked once step 3a's comparison has his call.
+- Pricing the diagnosis agent (2026-10-05): Axel ruled (a), the computation approved word for word; step 3b added.
+- The reviewer comment in plan.yaml (2026-10-05): Axel ruled (a); the three comments changed in the same commit.
 - Step 3, the call on the blind comparison (2026-10-05): Axel ruled (a); `diagnose` loses this run; step 3a added to plan.md, then the comparison runs again.
 - Step 1 reading (2026-09-30): approved by Axel; step 1 ticked.
 
@@ -97,6 +87,6 @@ dispatch: none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. Steps 1, 2 and 2a landed and ticked.
-- Step 3 is run and booked, not ticked: its real run waits on "Step 3 reading", and its blind comparison, run 2026-10-05 (`agents/reviews/3-blind-comparison.md`), was called by Axel: `diagnose` loses this run, and step 3a (the whole defect, then the comparison again) is next for this plan.
-- Open items for you: "Step 3 reading", "Pricing the diagnosis agent", "The reviewer comment in plan.yaml".
-- Step 3a is prepared once plan 2.G's step 2a has landed, since the session runs one plan at a time.
+- Step 3 is run and booked, not ticked: its real run was approved by Axel 2026-10-05, and its blind comparison, run 2026-10-05 (`agents/reviews/3-blind-comparison.md`), was called by Axel: `diagnose` loses this run, and step 3a (the whole defect, then the comparison again) is next for this plan.
+- Open items for you: none.
+- Steps 3a and 3b are next, prepared once plan 2.G's step 2a has landed.
