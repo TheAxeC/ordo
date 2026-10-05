@@ -3,7 +3,7 @@
 The catch-up note for roadmap entry 2.1, Scripts cut to their jobs. Rewritten before every step commit. Everything here is also derivable from `plan.md`, the roadmap, the repository's instruction file and `git log`, but slower. Read this, then `plan.md`, then the tail of the transcript when there is one. Nothing needed to continue lives anywhere but this folder: another Claude Code session continues from these files alone.
 
 ```yaml
-verify:                      # commands run in the worktree and again on main, in order; all must pass. Copied from docs/dev/building.md by /plan, with the filters of docs/dev/change-standard.md.
+verify:                      # commands run once, at landing on main, in order; the builder and the reviewer run the checks the brief names for the files the step changes; all must pass. Copied from docs/dev/building.md by /plan, with the filters of docs/dev/change-standard.md.
 - sh skills/land/templates/land.test.sh 2>&1 | tail -1
 - sh skills/land/templates/checks.test.sh 2>&1 | tail -1
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
@@ -43,20 +43,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-  step: 1
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2-1-1
-  base: 2931191
-  launched: 2026-10-05
-  report: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-report.md
-  brief_check: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-brief-check.md (aefdc70d38c003911, claude-opus-5-5, 183460 tokens, 50 tool uses, 7.7 minutes)
-  landing: not-started
-  round: 1
-  session_id: a461ff8462cc74f48 (claude-sonnet-5-5)
-  builder_usage: 318582 tokens, 80 tool uses, 16.8 minutes
-  reviewer_report: .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-refuter.md (a36aab8f6d73b9602, claude-opus-5-5, 192454 tokens, 56 tool uses, 8.8 minutes)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -79,7 +66,7 @@ none
 ## Verification, every step
 
 - A landing runs the `land` skill's `templates/land.sh` from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`. It commits the step's work in its worktree, cherry-picks the range onto main, runs the `verify` list on main through `templates/checks.sh` and prints the booking data. It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict and 64 on a refusal, or with git's own status when a git step fails; the `land` skill's `templates/land.test.sh` proves it.
-- The `verify` list above runs through `sh skills/land/templates/checks.sh <state file>` from the root of the checkout it checks, the worktree and then main. It prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and the lines it prints are what a report or a booking quotes.
+- The `verify` list above runs through `sh skills/land/templates/checks.sh <state file>` from the root of main's checkout, once, at landing. It prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and the lines it prints are what a report or a booking quotes.
 - The step's own check, named on its line in `plan.md` and in its brief.
 - Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
 
@@ -92,5 +79,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Next step: 1, `/spec 2.1 1` again after the ruling on Open item A. By the user's order, plans run one at a time: 2.1 first, then 2.F.
+- Step 1 landed; main tagged v3.0.0. Next step: 2, once the user has run `utils/pin.sh v3.0.0`, so steps 2 and 3 are prepared under step 1's rules. By the user's order, plans run one at a time: 2.1 first, then 2.F.
 - Open on Axel's side: none.

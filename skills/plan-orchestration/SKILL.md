@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after the closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "3.1.0"
+  version: "4.0.0"
 ---
 
 # Plan orchestration
@@ -53,14 +53,14 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - With several plans open, it takes them in the roadmap's order.
      - It starts the next plan only when the one before it has no step left that can move without the user.
    - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
-3. Invoke `/spec <entry> <step>`, which checks the premises, writes the brief, runs the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
-   - Before dispatching the builder, read the brief check's report and the changes to the brief its "Closed" heading names.
+3. Invoke `/spec <entry> <step>`, which checks the premises, writes the brief, runs for a full step the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
+   - Before dispatching the builder of a full step, read the brief check's report and the changes to the brief its "Closed" heading names.
    - A stop it raises goes to the user by "Stops".
      - Under `self_rule: on`, the orchestrator closes it instead, as `references/self-rule.md`, "Closing an open item", says, unless it is of a kind its "The six kinds left open" names.
    - A stop, here or at any later step, blocks its own step.
      - The loop moves on to the next unblocked step.
    - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step enters the plan only as "What earns a step of its own" says.
-   - Done when `/spec` has written the brief and the dispatch block and the brief check's report is read, or the step has stopped.
+   - Done when `/spec` has written the brief and the dispatch block and, for a full step, the brief check's report is read, or the step has stopped.
 4. Choose the step's executor.
    - Write it into the dispatch block.
    - Then build by that choice.
@@ -77,7 +77,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - What is never touched: the ledger beyond the builder's report, the main checkout, the user's data.
      - The reading order: the rules file, the brief, the standards, the ADRs the brief names.
      - Every requirement the step is judged on.
-     - That the step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks, and that the lines it prints are what the report quotes.
+     - That the builder runs the checks the brief names for the files the step changes, and that the lines they print are what the report quotes.
      - The report path and shape.
    - **The builder.** It never runs a git command.
      - In the ledger it writes only its report, at the path the brief names in the worktree's copy of the ledger.
@@ -111,12 +111,16 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Such a case whose fix lies outside the step's part goes where "What earns a step of its own" sends it.
    - Done when the report is saved at the `report` path, `builder_usage` is written and the whole diff is read.
 7. Invoke `/refute <entry> <step>` when the block's `review:` calls for it on this step (`every`; or `earned`, by "The review, earned").
+   - A small text step is reviewed once under `every` and `earned` alike.
    - Read the diff yourself while it runs.
    - Save its report.
      - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk.
      - The next resume-point commit carries them.
    - Done when the refuter report is saved and its record is under `reviewer_report`.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the step's part and the written rules.
+   - **A small text step.** It has no repair round, so no finding of its review is sent back.
+     - Each finding is fixed at landing when it is small and inside the brief, or raised to the user as an open item, as the `refute` skill's "Finding dispositions" says.
+     - A review that finds the step is not a small text step (the `refute` skill's "The four headings", Spec) makes it a full step, and the bullets below apply.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 "Dictated text" holds a brief's, since the brief check never reads those files.
    - **Before the resume.** Write `round: n` into the dispatch block.
@@ -180,7 +184,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
   - The first run of a step runs on the model the configuration block's `reviewer:` names.
   - Each run over a repair round runs on the model the configuration block's `repair_reviewer:` names, or on the `reviewer:` value when the block has no `repair_reviewer:` key.
   - Every run is at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
-- **Brief-check agent.** One per step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
+- **Brief-check agent.** One per full step, in the `/spec` run that first reaches the `spec` skill's "Steps / The brief check", read-only, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names, launched as the `refute` and `spec` skills say.
 - **Diagnosis agent.** One per diagnosis run with no person present, started by the orchestrator or by the `/spec` session as the `diagnose` skill's "Rules" say, on the model the configuration block's `reviewer:` names, at the effort `reviewer_effort` names.
   - It changes no file of the main checkout or of the step's worktree.
 - **Runner.** Both tiers run under Claude Code.
@@ -240,6 +244,7 @@ On every resumption, with a dispatch block or without one:
 ## The review, earned
 
 - Under `review: earned` the reviewer stage is decided per step from the landing reports of the builder's earlier steps and the diff, never from the builder's name.
+- A small text step is reviewed once, as Steps 7 says.
 - The reviewer runs on a builder's first step under this rule, and when any of the builder's last three landing reports shows a first report that did not pass the bar with at most one fix at landing.
 - Whatever the record, the reviewer runs when the step's brief touches a public surface, a server module, a state layer or a wire shape.
 - A failed bar puts the reviewer back for the builder's next three steps.
@@ -409,8 +414,11 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 - The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing.
   - A new finding of a review never earns that round.
   - The user's yes never extends the cap.
-- Nothing in the loop repeats without a count: a step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round, two stops before its build (the `spec` skill's "Steps / A stop" 3) and one return out of main (the `land` skill's Steps 6).
-  - A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.
+- Nothing in the loop repeats without a count:
+  - a full step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round;
+  - a small text step gets one refutation, no brief check and no repair round;
+  - every step gets two stops before its build (the `spec` skill's "Steps / A stop" 3) and one return out of main (the `land` skill's Steps 6).
+- A step that cannot go on within those counts stops for the user by "Stops", and the loop moves to the next step.
 - After its last round a step lands.
   - Its small findings, the last review's included, are fixed at landing.
 - Everything else that the rounds left undone, or that lies outside the step's part, is raised to the user as an open item, by "Stops".

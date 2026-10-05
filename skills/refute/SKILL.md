@@ -1,8 +1,8 @@
 ---
 name: refute
-description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns every verification command and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
+description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns the checks the brief names and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round, and once alone for a small text step. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Refute a step
@@ -12,7 +12,7 @@ metadata:
 ## Quick start
 
 ```
-/refute <entry> <step>   a fresh reviewer reads the step's diff, reruns every check and every quoted command, and writes verdicts and findings
+/refute <entry> <step>   a fresh reviewer reads the step's diff, reruns the checks the brief's "Verify before you report" names and every quoted command, never the plan's whole verify list, and writes verdicts and findings
 ```
 
 ## Use instead
@@ -46,6 +46,8 @@ metadata:
 ## Steps
 
 1. Dispatch one reviewer as the effort agent `ordo-<reviewer_effort>` (the configuration block's `reviewer_effort`, `high` when the block has no such key), on the model the configuration block's `reviewer:` names, once per step before its first repair round.
+   - A small text step gets this one run, whatever the configuration block's `review:` says.
+   - A small text step has no run over a repair round.
    - Before the dispatch, check that the runner lists that agent among its agent types.
    - Before the dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and no reviewer is dispatched.
@@ -58,9 +60,9 @@ metadata:
      - The record is written and carried as Steps 7 says.
    - Done when the reviewer is dispatched and its agent id and served model are read, or the refusal or the stop is raised.
 2. The reviewer reads the inputs in the order "What it reads" gives them.
-3. The reviewer runs every command in the brief's verification list, from the directory each names, piped through the filter the rules file names.
-   - The step's verify list runs through the `land` skill's `templates/checks.sh <state file>` from the root of the checkout it checks (the step's worktree).
-   - The lines `checks.sh` prints are what the refuter report quotes.
+3. The reviewer runs the checks the brief's "Verify before you report" names, from the directory each names, piped through the filter the rules file names.
+   - The lines they print are what the refuter report quotes.
+   - The plan's whole verify list runs once, at landing on main.
 4. The reviewer runs every command the report quotes as evidence, in the same form, and compares the output with what the report claims.
    - Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so.
      - It reproduces what it can from the one build.
@@ -81,7 +83,7 @@ metadata:
 
 ### Over a repair round
 
-1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says except for its model.
+1. When the configuration block holds `refute_after_repair: yes`, `/refute` runs again after each of the step's repair rounds, a small text step having none (Steps 1), at most `repair_rounds`, or one more under `plan-orchestration`'s exception, on a fresh reviewer each time, as Rules 1 says, dispatched as Steps 1 says except for its model.
    - The model is the one the configuration block's `repair_reviewer:` names, or the `reviewer:` value when the block has no `repair_reviewer:` key, at the effort `reviewer_effort` names.
    - This holds for every run over a repair round, the run over the extra round of `plan-orchestration`'s exception and a reviewer started over a round in place of one stopped for another model included.
    - A run that finds nothing ends the rounds.
@@ -92,7 +94,7 @@ metadata:
    - a finding closed by removing a check rather than fixing what the check guarded;
    - a fix that reaches beyond the finding;
    - a claim of closure the reviewer's own rerun does not reproduce.
-5. It reruns every verification command again.
+5. It reruns the checks the brief's "Verify before you report" names again.
 6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
    - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit as Steps 7 says.
    - Done when the run's section is appended and its record is in `reviewer_report`.
@@ -113,7 +115,9 @@ metadata:
   - a change that contradicts the part in force of an ADR, with the ADR's number and the sentence of its decision quoted, and whether the brief asked for it;
   - an ADR the diff is under that the brief's "What is on the tree" does not name;
   - a case of a code step in the brief's "Cases" that the rules file's test rule calls a test for and no test of the step checks;
-  - a case whose first run on the unchanged tree the report does not give.
+  - a case whose first run on the unchanged tree the report does not give;
+  - a step whose brief's size line says it is a small text step and whose diff changes a script, a test or a configuration file, or 20 lines or more, counted as the glossary's entry **small text step** says.
+    - Such a step is then handled as a full step.
 - **Proof.** A finding is:
   - a "seen failing first" claim with no quoted failing check;
   - a test that asserts a known defect as the expected result;
@@ -134,8 +138,9 @@ metadata:
   - a sentence in a document, a head comment or a rules file that the diff makes false, found by grepping each name the diff changed across the documents and the comments;
   - a file over the size limit;
   - a rule of the repository's checks that the diff satisfies only because the check does not read that path yet;
-  - a test of behaviour whose failure costs nothing (neither lost work, nor a broken installation, nor a wrong configuration accepted), under the rules file's rule that a test exists only for behaviour whose failure costs something.
+  - a test of behaviour whose failure costs nothing (neither lost work, nor a broken installation, nor a wrong configuration accepted), under the rules file's rule that a test exists only for behaviour whose failure costs something;
     - Such a test is not a Proof pass.
+  - code larger than its job: a branch, an option or a case for an input that has not happened and whose wrong answer costs nothing, judged by reading.
 - **Behaviour.** A finding is a host- or user-visible change the report does not state, or states without the before and after.
 - Each finding, under any of the four headings, carries its failure scenario: the concrete input or state and the wrong result it gives, or, for a finding in text, the reader and what the text leads them to do wrong.
 
@@ -159,6 +164,8 @@ metadata:
   - It becomes a step only as `plan-orchestration`'s "What earns a step of its own" says.
 - A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR.
 - A contradiction of an ADR that the builder made against the brief is closed like any other finding, by a change that follows the ADR.
+- A finding of a small text step's review is never sent to the builder.
+  - It is fixed at landing when it is small and inside the brief, and otherwise raised to the user as an open item.
 - The open items hold only what the user must rule on.
 - After the last round, the run's findings (or, with `refute_after_repair: no`, the orchestrator's read of the delta) are appended to the report, each finding's disposition under the Closed heading.
 - `/land` refuses while a finding is left neither closed nor raised as an open item.

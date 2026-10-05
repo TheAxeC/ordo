@@ -24,7 +24,7 @@ Findings: <each premise whose output differs from the brief, with both>. Or: non
 
 - <each case of "Cases">: consistent with the rules file and the standards, or the rule it breaks, named with its file and section.
 
-Findings: <each case inconsistent with the rules file or the standards>. Or: none.
+Findings: <each case inconsistent with the rules file or the standards; each case that asks the builder to check, quote or explain a place the step does not change>. Or: none.
 
 ## 5. The question
 
@@ -34,9 +34,9 @@ Findings: <each one that could pass without the goal being reached, with how>. O
 
 ## 6. Implied inputs
 
-- <for a code step (a script, or a product's code): each input the step implies but never states, in the forms `templates/brief.md`'s "Cases" names>: listed under "Cases", or missing, with the expected result it should have. Or: not a code step.
+- <for a code step (a script, or a product's code): each input the step implies but never states that has happened or whose wrong answer would cost something>: listed under "Cases", or missing, with the expected result it should have. Or: not a code step.
 
-Findings: <each implied input missing from "Cases">. Or: none.
+Findings: <each such implied input missing from "Cases">. Or: none.
 
 ## 7. ADRs
 

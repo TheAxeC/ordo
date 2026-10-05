@@ -2,7 +2,7 @@
 name: ordo-help
 description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
 metadata:
-  version: "2.1.0"
+  version: "3.0.0"
 ---
 
 # Ordo help
@@ -64,7 +64,7 @@ metadata:
 
 then, for every step:
 
-/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree once per step (the brief check) and closes its findings in the brief, makes the worktree, stages the base binaries
+/spec <entry> <step>          writes the brief, has a fresh agent check it against the tree once per full step (the brief check; a small text step has none) and closes its findings in the brief, makes the worktree, stages the base binaries
 /diagnose <entry> <step> premise
                               when the step's text asks for a cause to be found: /spec runs it while it writes the brief, or you run it first; the cause goes to the step's Step 0 and into the brief
 /diagnose <entry> <step> brief check <n>
@@ -73,7 +73,7 @@ then, for every step:
 /refute <entry> <step>        a fresh reviewer reads the diff and reruns the checks, writes verdicts and findings
 /diagnose <entry> <step> <finding>
                               when a finding's cause is not known: finds it on a scratch copy before "close them", its fix and test then the round's ruling; round <n> Spec 1 names a finding of the run over repair round <n>
-"close them"                  a repair round: the session fixes the findings, reruns, rewrites the report; a contradiction of an ADR the brief asked for is raised to you as an open item instead
+"close them"                  a repair round (a small text step has none): the session fixes the findings, reruns, rewrites the report; a contradiction of an ADR the brief asked for is raised to you as an open item instead
 /refute <entry> <step>        again, over the repair round, when plan.yaml says refute_after_repair: yes
                               repeat these two up to repair_rounds times (plan.yaml), or once more under plan-orchestration's exception; a refutation that finds nothing ends them; what the last one finds is fixed at landing or raised to you as an open item, never sent back
 read the delta                when plan.yaml says refute_after_repair: no: the orchestrator reads the round and appends what it closed to the refuter report; what is left is raised to you as an open item, and goes where plan-orchestration's "What earns a step of its own" says, by your ruling or under self-rule by a choice you review

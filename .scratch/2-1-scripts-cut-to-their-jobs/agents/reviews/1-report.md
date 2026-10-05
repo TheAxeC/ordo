@@ -86,7 +86,7 @@ The cases after the change, as printed:
 - C2: read after the change. Rule 15 in both copies reads `15. **Each place where a supplied value reaches a command, a path or generated text is a case.** A value a user, a file or a script supplies is untrusted where it reaches a command, a path or generated text. Each such place is a case, since a wrong answer there runs a command, writes outside its folder or puts the supplied text where it was not meant to go.` No list of forms, no "empty, duplicated and colliding", no concurrent paths. The two copies' rule 15 lines are identical (`diff` of the two pages shows no difference on that line).
 - C3: read after the change. Rule 6 of both copies opens `6. **Before landing, verification runs the checks of the files the step changes.** The builder and the reviewer run the checks the brief names for the files the step changes. They also run the repository's character-set check over those files where its verify list holds one. The plan's whole verify list runs once, at landing on main.` The runner sentence of Ordo's page reads "The plan's whole verify list runs once, at landing on main, through the `land` skill's runner, `sh skills/land/templates/checks.sh <state file>`. The booking quotes the lines the runner printed, never a count. Before landing, the builder and the reviewer run the checks the brief names for the files the step changes, and the report quotes their output." The template's counterpart says the same with its own path form.
 - C4: `grep -n 'small text step' docs/glossary.md skills/repo-setup/templates/plan-terms.md` prints the new entry at `docs/glossary.md:119` and `skills/repo-setup/templates/plan-terms.md:114`, and also the lines of **brief check** (18, 13), **dispatch entry** (43, 38), **repair round** (99, 94) and **review cadence** (102, 97), which now name the term. **brief check** reads "made once per full step ... A small text step has none."; **repair round** reads "the round cap, and a small text step gets none."; **verify list** reads "runs once, at landing on main. Before landing, the builder and the reviewer run the checks the brief names for the files the step changes."
-- C5: read after the change. `skills/spec/templates/brief.md` line 3 is `Size: <a small text step: no brief check, one review, no repair round | a full step>`; "Cases" has the first placeholder with a sub-bullet "each case checks what the step changes, and no case asks the builder to quote or explain a place the step does not change", the implied-input placeholder with a sub-bullet "only an input that has happened or whose wrong answer would cost something, as the rules file's case rule says", and no placeholder for a script's missing, unreadable or malformed input; "Verify before you report" item 1 names the checks of the verify list that cover the files the step changes, the character-set check over those files where the list holds one, and says the plan's whole verify list runs once, at landing on main; the Report part names the character-set check "over the files the step changes". `brief-check.md` "6. Implied inputs" lists an input as missing only when it "has happened or whose wrong answer would cost something".
+- C5: read after the change. `skills/spec/templates/brief.md` line 3 is `Size: <a small text step: no brief check, one review, no repair round | a full step>`; "Cases" has the first placeholder with a sub-bullet "each case checks what the step changes, and no case asks the builder to quote or explain a place the step does not change", the implied-input placeholder as one bullet that carries the condition "that has happened or whose wrong answer would cost something, as the rules file's case rule says", and no placeholder for a script's missing, unreadable or malformed input; "Verify before you report" item 1 names the checks of the verify list that cover the files the step changes, the character-set check over those files where the list holds one, and says the plan's whole verify list runs once, at landing on main; the Report part names the character-set check "over the files the step changes". `brief-check.md` "6. Implied inputs" lists an input as missing only when it "has happened or whose wrong answer would cost something".
 - C6: read each path after the change. The sentences listed under C6's first run now say what their item gives them (the diff shows each). `grep -rn -E 'once per step|one brief check|brief check per step' skills utils docs README.md` prints only the `refute` lines about the reviewer ("once per step before its first repair round", true of every step) and the `plan-orchestration` Rules line that reads "a full step gets one brief check".
 - C7: `ok: the plan-terms block equals the template`.
 - C8: `skills/spec/SKILL.md:5:  version: "4.0.0"`, `skills/refute/SKILL.md:5:  version: "3.0.0"`, `skills/plan-orchestration/SKILL.md:5:  version: "4.0.0"`, `skills/land/SKILL.md:5:  version: "2.0.0"`, `skills/diagnose/SKILL.md:5:  version: "2.0.0"`, `skills/repo-setup/SKILL.md:5:  version: "3.0.0"`, `skills/ordo-help/SKILL.md:5:  version: "3.0.0"`, `skills/plan/SKILL.md:5:  version: "3.0.0"`. `git diff --numstat` shows `skills/plan/SKILL.md` and `skills/repo-setup/SKILL.md` with 1 line added and 1 removed each.
@@ -112,25 +112,25 @@ Sentences about a changed file as a whole, reread against the file after the cha
 
 Each entry, with its "Stated in" checked by `grep -n` of the term in the named section:
 
-- **small text step** (new, `docs/glossary.md:119`, `skills/repo-setup/templates/plan-terms.md:114`, placed between **slug** and **standards**). Stated in `spec`, Steps 4 (line 128), 5 (line 182) and 9 (line 212); `refute`, Steps 1 (49), "Steps / Over a repair round" (104), "The four headings" (119) and "Finding dispositions" (167); `plan-orchestration`, Steps 7 (114) and 8 (121, 123), "The review, earned" (247) and Rules (419); `land`, Steps 6 (66, 69) and 9 (99); `diagnose`, Steps 20 (202); `ordo-help`, "The sequence, printed verbatim" (67, 76). Each use reads as the entry defines it: fewer than 20 lines counted as `git diff --numstat` gives, no script, test or configuration file, no brief check, one review, no repair round, a full step otherwise.
+- **small text step** (new, `docs/glossary.md:119`, `skills/repo-setup/templates/plan-terms.md:114`, placed between **slug** and **standards**). Stated in `spec`, Steps 4 (line 128), 5 (line 182) and 9 (line 212); `refute`, Steps 1 (49, 50), "Steps / Over a repair round" (86), "The four headings" (119) and "Finding dispositions" (167); `plan-orchestration`, Steps 7 (114) and 8 (121, 123), "The review, earned" (247) and Rules (419); `land`, Steps 6 (66, 69) and 9 (99); `diagnose`, Steps 20 (202); `ordo-help`, "The sequence, printed verbatim" (67, 76). Each use reads as the entry defines it: fewer than 20 lines counted as `git diff --numstat` gives, no script, test or configuration file, no brief check, one review, no repair round, a full step otherwise.
 - **brief check** (changed): "once per full step", "A small text step has none." Stated in `spec`, Steps 5 and "Steps / The brief check": Steps 5 line 182 and "The brief check" items 3 and 4 say "full step".
-- **repair round** (changed): "a small text step gets none". Stated in `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round" item 9.
-- **verify list** (changed): "once, at landing on main" and the builder's and reviewer's checks. Stated in `land`, "The landing script"; `plan`, Steps 4; `spec`, Steps 4 (lines 137 to 140, which say "verify list"); `refute`, Steps 3 (line 64).
+- **repair round** (changed): "a small text step gets none". Stated in `plan-orchestration`, Steps 8 and Rules; `refute`, "Steps / Over a repair round" item 1 (line 86).
+- **verify list** (changed): "once, at landing on main" and the builder's and reviewer's checks. Stated in `land`, "The landing script"; `plan`, Steps 4; `spec`, Steps 4 (lines 137 to 140, which say "verify list"); `refute`, Steps 3 (line 65).
 - **dispatch entry** (changed): `brief_check` reads `none, a small text step` for such a step. Stated in `spec`, Steps 9 (line 212).
 - **review cadence** (changed): "A small text step is refuted once under either." Stated in `plan-orchestration`, Steps 7 (line 114) and "The review, earned" (line 247).
 
 ## The files with line counts
 
-Lines added and removed from `git diff --numstat`, and the file's length now:
+Lines added and removed from `git diff --numstat` against the base, and the file's length now (after repair round 1):
 
 - `docs/dev/change-standard.md`: +4 -3, 91 lines
 - `skills/repo-setup/templates/docs/dev/change-standard.md`: +4 -3, 72 lines
 - `skills/repo-setup/templates/plan-terms.md`: +6 -5, 132 lines
 - `docs/glossary.md`: +6 -5, 149 lines
-- `skills/spec/templates/brief.md`: +10 -4, 107 lines
+- `skills/spec/templates/brief.md`: +9 -4, 106 lines
 - `skills/spec/templates/brief-check.md`: +3 -3, 62 lines
 - `skills/spec/SKILL.md`: +23 -11, 419 lines
-- `skills/refute/SKILL.md`: +14 -7, 203 lines
+- `skills/refute/SKILL.md`: +17 -10, 203 lines
 - `skills/plan-orchestration/SKILL.md`: +16 -8, 427 lines
 - `skills/land/SKILL.md`: +4 -1, 234 lines
 - `skills/diagnose/SKILL.md`: +4 -2, 312 lines
@@ -138,10 +138,12 @@ Lines added and removed from `git diff --numstat`, and the file's length now:
 - `skills/plan/templates/orchestrator-state.md`: +4 -4, 70 lines
 - `skills/plan/SKILL.md`: +1 -1, 208 lines (line 5 only)
 - `skills/repo-setup/SKILL.md`: +1 -1, 253 lines (line 5 only)
-- `README.md`: +3 -3, 192 lines
+- `README.md`: +4 -4, 192 lines
+- `docs/figures/gen_figures.py`: +1 -1, 752 lines
+- `docs/figures/plan-loop.svg`: +3 -3, 167 lines
 - `.scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-report.md`: this report
 
-`git status --short` in the worktree lists the sixteen files above and the report, nothing else.
+`git status --short` in the worktree lists the eighteen files above and the report, nothing else.
 
 ## Judgment calls the brief left open
 
@@ -155,7 +157,7 @@ Lines added and removed from `git diff --numstat`, and the file's length now:
 - `skills/spec/SKILL.md` carries "for a full step" into the description, the Quick start line, the introduction, "What it reads" 6, Steps 6, "The brief check" item 5; `skills/plan-orchestration/SKILL.md` into Steps 3 and the "Brief-check agent" bullet (serves item 7 and 9).
 - `skills/plan-orchestration/SKILL.md` Rules: the bullet "Nothing in the loop repeats without a count" now has three sub-bullets (full step, small text step, every step), and "A step that cannot go on within those counts stops..." is a bullet of its own.
 - `skills/diagnose/SKILL.md` Steps 20: the first-run bullet reads "of a full step", since a small text step's finding has no repair round.
-- The implied-input placeholder in `brief.md` keeps its parenthetical examples of implied inputs, and the cost test moved to a sub-bullet; "6. Implied inputs" in `brief-check.md` keeps "in the forms `templates/brief.md`'s "Cases" names".
+- The implied-input placeholder in `brief.md` is one bullet with the cost condition in it and no list of forms; "6. Implied inputs" in `brief-check.md` no longer names forms and keeps the condition.
 - The glossary entry **verification page** ("the commands every step runs") is unchanged: each step still ends in the landing that runs them.
 
 ## Host- or user-visible changes, before and after
@@ -181,13 +183,60 @@ Departures, each with why it needs its form:
 - Glossary entries **brief check** (38 words in its first sentence), **dispatch entry** (35) and **small text step** (the sentence from "It gets no brief check" is 29): the definition form of the existing entries, where a definition states the term and its conditions in one sentence.
 - Rule 6 and rule 15: the 31- and 34-word sentences and the 30-word last sentence of rule 15 are the old rules' own sentences kept whole (rule 17 of the rules file); the new sentences are 20 words or fewer.
 - `skills/refute/SKILL.md` Spec bullet on the size line (40 words): one finding that holds two conditions of the step's diff, which a split would turn into two findings.
-- `skills/spec/templates/brief.md` implied-input placeholder (49 words, 61 before) and `brief-check.md` section 6 (47 words, 35 before): template placeholder lines that carry their examples and their forms.
+- `skills/spec/templates/brief.md` implied-input placeholder (52 words, 61 before) and `brief-check.md` section 6: template placeholder lines that carry the condition and the expected-result clause in one bullet, as "Lists and tables" asks for a qualifier.
 - `skills/spec/SKILL.md` "The brief check" item 5 (58 words, 50 before) and `skills/plan-orchestration/SKILL.md` Steps 3 (39 words, 32 before) and the "Brief-check agent" bullet (44, 42 before): existing sentences, lengthened by "of a full step" or "for a full step".
 - `skills/plan/templates/orchestrator-state.md` comments: one-line YAML comments, which the file's form keeps on one line.
 - Every other new bullet is one rule per bullet; where two requirements could each be broken alone they are two bullets.
 
 ## Anything in the brief that was wrong or impossible
 
-- Nothing in the brief was impossible and every case's rule held on the first run.
+- One premise of the brief was wrong: it placed the hand-over of a fix at `skills/diagnose/SKILL.md` Steps 17 to 19, and the hand-over is Steps 20 (`grep -n -E '^(1[5-9]|2[0-2])\. ' skills/diagnose/SKILL.md` prints Steps 17 to 19 as the test run, the fix and the rerun, and Steps 20 as "Inside a plan, hand the fix over by where the defect was found."). The step changed Steps 20, which is where the hand-over is.
+- Nothing else in the brief was impossible and every case's rule held on the first run.
 - Outside "Paths this step writes": `skills/repo-setup/templates/shared-rules.md` line 15, the "Scripts compute facts; judgment is read" rule, states "A test exists only for code, and only for behaviour whose failure costs something" and carry no rule on which cases a script handles. Item 1 puts the new case rule into the two change-standard pages only. Whether the shared rules carry it is the orchestrator's or the user's to rule; this step did not touch that file.
 - Outside the paths, `skills/plan/SKILL.md` line 41, `skills/ordo-init/SKILL.md` line 73 and `skills/plan-retro/SKILL.md` line 85 say "the commands every step runs" of the verification page. Each step still ends in the landing that runs them, so the sentences hold and are left as they are.
+
+## Repair round 1
+
+Everything in the round's brief is done. Nothing is NOT DONE.
+
+| Item | Status | Command or reading that proves it |
+|---|---|---|
+| 1 Spec 1, the diagnose premise | DONE | The part "Anything in the brief that was wrong or impossible" above now names it: the brief placed the hand-over at `skills/diagnose/SKILL.md` Steps 17 to 19 and it is Steps 20 (`grep -n -E '^(1[5-9]\|2[0-2])\. ' skills/diagnose/SKILL.md`, quoted there). |
+| 2 Standards 1, refute "reruns every check" | DONE | `skills/refute/SKILL.md` line 15 (Quick start) reads "reruns the checks the brief's "Verify before you report" names and every quoted command, never the plan's whole verify list"; the description reads "reruns the checks the brief names and every command the builder's report quotes", 989 characters by the command in `docs/dev/skill-layout.md` "Frontmatter"; "Over a repair round" 5 reads "It reruns the checks the brief's "Verify before you report" names again."; the `refute` row of `README.md` reads "reruns the checks the brief's "Verify before you report" names and every command the builder's report quotes, never the plan's whole verify list". |
+| 3 Standards 2, the figure label | DONE | `docs/figures/gen_figures.py` line 584 now reads "Writes the brief, has a fresh agent check a full step's brief, makes the worktree.". Output of `python3 docs/figures/gen_figures.py`, exit 0: `wrote docs/figures/pipeline.svg (31539 bytes)` and `wrote docs/figures/plan-loop.svg (31718 bytes)`. `git diff --stat -- docs/figures` printed ` docs/figures/gen_figures.py \| 2 +-` and ` docs/figures/plan-loop.svg  \| 6 +++---` and ` 2 files changed, 4 insertions(+), 4 deletions(-)`. The script also rewrote `docs/figures/pipeline.svg`; its content did not change, and `git status --short docs/figures` lists only the two files above. The diff of `plan-loop.svg` is the three text lines of the `/spec` label. |
+| 4 Standards 3, the implied-input placeholder | DONE | `skills/spec/templates/brief.md` "Cases" holds one bullet, `- <for a code step (a script, or a product's code), each input the step's text implies but never states that has happened or whose wrong answer would cost something, as the rules file's case rule says, such as a value that reaches a command or a path, with its expected result>.`; `skills/spec/templates/brief-check.md` "6. Implied inputs" reads "that has happened or whose wrong answer would cost something>:" with no "in the forms" clause. |
+| 5 Standards 4, one rule stated twice | DONE | `skills/plan-orchestration/SKILL.md`: Steps 7 keeps "A small text step is reviewed once under `every` and `earned` alike." (line 114) and "The review, earned" reads "A small text step is reviewed once, as Steps 7 says." (line 247). `skills/refute/SKILL.md`: Steps 1 has two bullets, "A small text step gets this one run, whatever the configuration block's `review:` says." (line 49) and "A small text step has no run over a repair round." (line 50); "Over a repair round" 9 is removed (the section ends at item 8); "Over a repair round" 1 reads "after each of the step's repair rounds, a small text step having none (Steps 1), at most `repair_rounds`". |
+| 6 Standards 5, the state template's "It" | DONE | `skills/plan/templates/orchestrator-state.md` "Verification, every step": the sentence "The builder and the reviewer run the checks the brief names for the files the step changes before landing." now follows "It prints `$ <command>` ... what the booking quotes." |
+
+The verify list rerun through `sh skills/land/templates/checks.sh .scratch/2-1-scripts-cut-to-their-jobs/orchestrator-state.md` from the worktree's root, exit 0, printed the same lines as the build's run:
+
+```
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
+PASS: person-driven.sh scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+PASS: plan_cost.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 12 commands passed
+```
+
+The ASCII check over every changed file: `LC_ALL=C grep -n '[^ -~]'` over the eighteen changed files and this report printed nothing (exit 1, no hit), and the runner's character-set check above printed nothing.
+
+Files changed in the round, with their length now: `README.md` (192), `skills/refute/SKILL.md` (203), `skills/spec/templates/brief.md` (106), `skills/spec/templates/brief-check.md` (62), `skills/plan-orchestration/SKILL.md` (427), `skills/plan/templates/orchestrator-state.md` (70), `docs/figures/gen_figures.py` (752), `docs/figures/plan-loop.svg` (167), and this report. The earlier parts of this report ("Terms", "The files with line counts", "Judgment calls", the verify-item-3 departures, "Anything in the brief that was wrong or impossible") are updated to the state after the round.

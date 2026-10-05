@@ -147,3 +147,155 @@ none
 - The tag on main and `utils/pin.sh <tag>`, which are not the builder's under the brief.
 
 Reviewer usage: a36aab8f6d73b9602, claude-opus-5-5, 192454 tokens, 56 tool uses, 8.8 minutes.
+
+## Repair round 1, refuted
+
+```
+$ sh skills/land/templates/checks.sh .scratch/2-1-scripts-cut-to-their-jobs/orchestrator-state.md   (from /Users/axelfaes/workspace/ordo/.agents/worktrees/2-1-1; my shell has CLAUDE_CONFIG_DIR set, so it was also run under the state file's env -u prefix; both runs exit 0)
+$ sh skills/land/templates/land.test.sh 2>&1 | tail -1
+PASS: land.sh scratch tests
+$ sh skills/land/templates/checks.test.sh 2>&1 | tail -1
+PASS: checks.sh scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/repo-setup/templates/hooks/git_guard.test.sh 2>&1 | tail -1
+PASS: git_guard.py scratch tests
+$ sh skills/diagnose/templates/person-driven.test.sh 2>&1 | tail -1
+PASS: person-driven.sh scratch tests
+$ sh skills/session-retro/templates/transcript_window.test.sh 2>&1 | tail -1
+PASS: transcript_window.py scratch tests
+$ sh skills/plan-orchestration/templates/plan_cost.test.sh 2>&1 | tail -1
+PASS: plan_cost.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ sh utils/check_coverage.test.sh 2>&1 | tail -1
+PASS: check_coverage.py scratch tests
+$ git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+checks: 12 commands passed
+```
+
+Commands the round's report quotes, rerun, with what each printed:
+
+```
+python3 docs/figures/gen_figures.py   (run on a copy of gen_figures.py in the scratchpad, since the script writes beside itself and I change no file)
+wrote scratchpad/fig/pipeline.svg (31539 bytes)
+wrote scratchpad/fig/plan-loop.svg (31718 bytes)
+exit=0; cmp of both outputs against docs/figures/pipeline.svg and docs/figures/plan-loop.svg in the worktree: identical
+git diff --stat -- docs/figures
+ docs/figures/gen_figures.py | 2 +-
+ docs/figures/plan-loop.svg  | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+git status --short docs/figures
+ M docs/figures/gen_figures.py
+ M docs/figures/plan-loop.svg
+python3 -c 'import glob,yaml; ...' (skill-layout "Frontmatter" command): refute 989, spec 1003, every skill at most 1022
+grep -n -E '^(1[5-9]|2[0-2])\. ' skills/diagnose/SKILL.md: 17 "Run the test on the tree without the fix", 18 "Make the fix at the cause", 19 "Run the test, the red command and the original", 20 "Inside a plan, hand the fix over by where the defect was found."
+C1 grep: docs/dev/change-standard.md:21 and skills/repo-setup/templates/docs/dev/change-standard.md:21, the bullet once in each file
+C4 grep: docs/glossary.md 18, 43, 99, 102, 119; plan-terms.md 13, 38, 94, 97, 114
+C8 grep: 4.0.0, 3.0.0, 4.0.0, 2.0.0, 2.0.0, 3.0.0, 3.0.0, 3.0.0
+Rule 14 greps (worktree and then main | again on main | run in the worktree; Edges whose | colliding | concurrent path; Verification runs the verify list | A step.s verification runs): each printed nothing, exit 1
+grep -rn -E 'once per step|one brief check|brief check per step' skills utils docs README.md: skills/refute/SKILL.md:3, skills/refute/SKILL.md:48, skills/plan-orchestration/SKILL.md:418
+git diff --numstat 2931191 and wc -l over the 18 changed files: every +/- count and length in the report's "The files with line counts" reproduced
+LC_ALL=C grep -n '[^ -~]' over the 18 changed files and 1-report.md: nothing, exit 1
+```
+
+The report says the runner ran three times, and the second table of its "Repair round 1" part says the verify list was rerun. A rerun cannot reproduce the earlier runs, and no decision rests on them.
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since 2931191:
+
+- 1: holds. Both bullets at line 21 of each copy of the change standard (C1 rerun).
+- 2: holds. Rule 15 in both copies has no list of forms, no "empty, duplicated and colliding", no concurrent paths, and keeps the untrusted-value clause (read).
+- 3: holds. Rule 6 and the runner sentence of both copies (read at docs/dev/change-standard.md rule 6 and "Commands and their filters").
+- 4: holds. The entry is in both files with the dictated content (C4 rerun); whether it was written first is under "Declined to judge".
+- 5: holds. brief.md line 3 is the size line word for word; the implied-input placeholder at line 28 is one bullet and equals the text the round dictated; "Verify before you report" item 1 and the Report part follow the item. The form of the "each case checks what the step changes" placeholder is under Standards 2.
+- 6: holds. brief-check.md "6. Implied inputs" no longer says "in the forms ... names" and keeps "that has happened or whose wrong answer would cost something".
+- 7: holds. spec SKILL.md Steps 4, 5, 9 and "The brief check" 2 and 4 say what the item gives them. The form of two bullets is under Standards 2.
+- 8: holds. refute: Steps 3 and "Over a repair round" 5 name the checks the brief's "Verify before you report" names; the Quick start line, the description (989 characters) and the README `refute` row say it; the Spec and Standards bullets are present; Steps 1 holds the small-text-step rule as two bullets (lines 49 and 50) and "Over a repair round" ends at item 8.
+- 9: holds. plan-orchestration "The prompt", Steps 7 (line 114), Steps 8, "The review, earned" (line 247, "as Steps 7 says") and Rules (lines 417 to 421).
+- 10: holds. land Steps 6 (lines 66 and 69) and Steps 9 (line 99).
+- 11: holds. diagnose Steps 20 (lines 199 to 203).
+- 12: holds. ordo-help lines 67 and 76, README lines 38 and 43.
+- 13: holds. orchestrator-state.md template: the `verify:` and `dispatch:` comments, and "Verification, every step" now reads "It prints ... what the booking quotes." before "The builder and the reviewer run the checks the brief names ...".
+- 14: holds. The three entries are changed in both files and C7 prints ok.
+- 15: holds (C8 rerun).
+- 16: violated, Standards 1. The figure box "close them" still describes a repair round with no qualification, while README line 43 and ordo-help line 76 carry "a small text step has none".
+
+Cases of the brief's "Cases":
+
+- C1: met (rerun).
+- C2: met (read).
+- C3: met (read).
+- C4: met (rerun; the three entries read after the change).
+- C5: met (read of brief.md and brief-check.md).
+- C6: partial. gen_figures.py, which this round put under the paths, still shows the repair round of "FOR EVERY STEP" with no small-text-step qualifier (Standards 1).
+- C7: met (rerun prints `ok: the plan-terms block equals the template`).
+- C8: met (rerun).
+
+Closure of the round's six items, each read and rerun:
+
+- Item 1 (the diagnose premise): closed. The report's "Anything in the brief that was wrong or impossible" names Steps 17 to 19 as the brief's premise and Steps 20 as the hand-over, and the quoted grep reproduces.
+- Item 2 (refute "reruns every check"): closed. The four places say it; the description is 989 characters. The description and "Over a repair round" 5 name the checks the brief names and omit the words "never the plan's whole verify list", which Steps 3 holds; I count that as the rule written once, not a miss.
+- Item 3 (figure label): closed. The label reads "has a fresh agent check a full step's brief"; the script reproduces both figures byte for byte; the diff holds only the two figure files that changed. Remaining figure text is Standards 1.
+- Item 4 (implied-input placeholder): closed for the placeholder and for brief-check.md section 6. The same child-bullet form remains in spec SKILL.md (Standards 2).
+- Item 5 (one rule stated twice): closed. Steps 7 keeps the sentence and "The review, earned" names it; refute Steps 1 is two bullets and "Over a repair round" 9 is gone.
+- Item 6 (state template's "It"): closed.
+
+No finding was closed by removing a check, and I found no fix that reaches beyond its finding (the round's changed places are the eight files the round names plus the report).
+
+### Findings
+
+Spec: none.
+
+Proof: none.
+
+Standards:
+
+1. docs/figures/gen_figures.py:614-616 (the "close them" box of the plan-loop figure, rendered in docs/figures/plan-loop.svg) with the caption at :574.
+   - The quoted hunk: "A repair round: fix the findings, rerun, rewrite the report. A finding whose cause is not known goes through /diagnose first." under the caption "FOR EVERY STEP, IN ORDER; RUN BY HAND, YOU TYPE EACH COMMAND OF THE ROW".
+   - What is wrong: the same sentence of the sequence is qualified in README.md:43 ("a small text step has none") and skills/ordo-help/SKILL.md:76 by item 12, and the round qualified the /spec box of this figure for the same reason. The "close them" box, and the "/refute over the round" box next to it, say every step has a repair round. Rule 14 of the rules file and Standards bullet "a sentence in a document ... that the diff makes false" apply, and the file is under the round's paths.
+   - Failure scenario: a reader of the figure on the docs page expects a repair round for a small text step and looks for round entries in its dispatch block.
+   - Verdict: item 16 violated; C6 partial.
+   - Size: one label in gen_figures.py and the regenerated plan-loop.svg, so it is small and inside the brief and can be fixed at landing; the box has a width limit that rejected a longer label in the first attempt of the /spec label, so the wording needs to fit.
+2. skills/spec/SKILL.md:149, skills/spec/SKILL.md:342 and skills/spec/templates/brief.md:27.
+   - The quoted hunks: ":148 'the list also holds the inputs the step's text implies but never states, ...' with the child bullet :149 'Only an input that has happened or whose wrong answer would cost something is listed.'"; ":341 '**Implied inputs.** ... each one missing is named with its expected result.' with the child bullet :342 'An input counts only when it has happened or a wrong answer on it would cost something.'"; "brief.md:26 '<every must-pass and must-refuse example ...>' with the child bullet :27 '<each case checks what the step changes, ...>'".
+   - What is wrong: docs/dev/skill-layout.md "Lists and tables" says a qualifier that changes the rule (an exception, a limit, a condition) stays in the same bullet as the rule. The round's item 4 moved the cost condition back into the one bullet in the brief template's placeholder and in brief-check.md. In spec SKILL.md Steps 4 and "The brief check" 2 the condition for implied inputs is still a child bullet under a parent that states the rule without it. In brief.md the sentence that the first placeholder must say (brief item 5) is a child bullet under it.
+   - Failure scenario: a `/spec` session or a brief-check agent that works from the parent bullet alone lists or demands implied inputs that have not happened and cost nothing, which is the case-hunting item 1 removes.
+   - Verdict: none (items 5 and 7 are met in their text).
+3. .scratch/2-1-scripts-cut-to-their-jobs/agents/reviews/1-report.md, "Repair round 1" table, row "3 Standards 2, the figure label".
+   - The quoted hunk: "(the longer wording "once per full step" did not fit the box and the script exited 1 with `error: plan-loop.svg: box '/spec': the label 'A step that does not converge' does not fit the box`)".
+   - What is wrong: rule 7 of the rules file says the report states the end state only, with no narration of attempts. The parenthetical describes a wording tried and given up. I did not rerun that wording; no decision rests on it.
+   - Failure scenario: a reader takes it as a signal that the label change is partial or that a wording the brief asked for was not applied.
+   - Verdict: none.
+
+Behaviour: none.
+
+### Declined to judge
+
+- Whether the **small text step** entry was written into plan-terms.md before the skills used it (brief item 4, "written first"). The worktree is uncommitted and has no order to read.
+- The plan's own state file, `.scratch/2-1-scripts-cut-to-their-jobs/orchestrator-state.md`: its `verify` comment and "Verification, every step" still carry the old sentences ("run in the worktree and again on main"). The round's brief names it as the orchestrator's, corrected at landing.
+- Whether `skills/repo-setup/templates/shared-rules.md` carries the case rule: raised to the user by the round's brief, not a finding here.
+- The wording of rule 15, left to the builder by the brief.
+- The report's statements that the runner ran three times and that the earlier parts of the report were updated after the round: the second is reproduced for the line counts, terms and greps, the first cannot be.
+- The tag on main and `utils/pin.sh <tag>`, which are not the builder's.
+
+Reviewer usage: a707f6f3bdfff2344, claude-sonnet-5-5, 177472 tokens, 41 tool uses, 9.3 minutes.
+
+## Closed
+
+- First run, Spec 1 (the diagnose premise): closed in repair round 1; the report names the premise.
+- First run, Standards 1 (refute's "reruns every check"): closed in repair round 1.
+- First run, Standards 2 (the `/spec` figure label): closed in repair round 1.
+- First run, Standards 3 (the implied-input placeholder): closed in repair round 1 for `brief.md` and `brief-check.md`; the same form in `skills/spec/SKILL.md` is round 1's Standards 2, fixed at landing.
+- First run, Standards 4 (one rule stated twice): closed in repair round 1.
+- First run, Standards 5 (the state template's "It"): closed in repair round 1.
+- First run, "Declined to judge", the shared rules: raised as Open item B, ruled (a) by the user; step 3 adds the case rule.
+- First run and round 1, "Declined to judge", the plan's own state file: its `verify:` comment and "Verification, every step" corrected by the orchestrator at landing.
+- Round 1, Standards 1 (the "close them" figure box): fixed at landing; `docs/figures/gen_figures.py` reads "A full step's repair round: ...", and `python3 docs/figures/gen_figures.py` rewrote `docs/figures/plan-loop.svg`.
+- Round 1, Standards 2 (the cost condition in a child bullet): fixed at landing; `skills/spec/SKILL.md` Steps 4 and "The brief check" 2 **Implied inputs**, and the first "Cases" placeholder of `skills/spec/templates/brief.md`, each hold the condition in the bullet it qualifies.
+- Round 1, Standards 3 (the attempt narrated in the report): fixed at landing; the parenthetical is removed from `1-report.md`.

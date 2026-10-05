@@ -1,5 +1,7 @@
 # Brief: <step>, <what it delivers in one line>
 
+Size: <a small text step: no brief check, one review, no repair round | a full step>
+
 Read `<rules file from plan.yaml>` first; its rules govern this step unchanged. Then, in full: <the standards the configuration lists>, and the ADRs this brief names under "What is on the tree".
 
 A design ruling decides what is built. It never exempts the code: every line is written to the standards pages, so that people can read, use and maintain it.
@@ -21,9 +23,8 @@ A design ruling decides what is built. It never exempts the code: every line is 
 
 ## Cases
 
-- <every must-pass and must-refuse example this brief gives, in one list: the input, then its expected result>.
-- <for a code step (a script, or a product's code), each input the step's text implies but never states (a missing or unreadable file, an empty value, a malformed line, a path with a space, a value that reaches a command or a path), with its expected result; only the inputs where a wrong answer costs something, as the rules file's rule on edges weighs them>.
-- <for a script, each input it reads that is missing, unreadable or malformed, and its output closed early, each with the exit status and the one error line expected>.
+- <every must-pass and must-refuse example this brief gives, in one list: the input, then its expected result; each case checks what the step changes, and no case asks the builder to quote or explain a place the step does not change>.
+- <for a code step (a script, or a product's code), each input the step's text implies but never states that has happened or whose wrong answer would cost something, as the rules file's case rule says, such as a value that reaches a command or a path, with its expected result>.
 
 The builder's first task, before any change, is the first run of every case above on the unchanged tree, with each case's result noted.
 
@@ -71,7 +72,10 @@ The builder adds no dependency this brief does not name. A library the builder f
 
 Run from <directory>, each must hold, each output piped through the filter the rules file names:
 
-1. The plan's verify list, run through the `land` skill's `templates/checks.sh` from the root of the checkout it checks as `sh <the land skill's folder>/templates/checks.sh <state file>`, prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and exits 0; the lines it prints are what the report quotes.
+1. The checks of the verify list that cover the files the step changes, as this brief names them: <each command, with the directory it runs from and the output that counts as a pass>.
+   - The character-set check over those files is among them where the verify list holds one.
+   - The report quotes the lines they print.
+   - The plan's whole verify list runs once, at landing on main.
 2. `<command>` prints <expected output>.
 3. `<command>`: <the threshold or the shape the output must have>.
 4. Each new or changed test is run on the unchanged tree and after the change.
@@ -89,7 +93,7 @@ Write it to `<ledger>/agents/reviews/<step>-report.md`, with these parts in this
 - The first line: anything NOT done, or "Everything in the brief is done".
 - The open items of the state file, verbatim, which hold only what the user must rule on.
 - The cases' first run: every case of "Cases" by its name, none left out, each with the command or the reading that checked it and its output as printed, and each case the brief's rules got wrong with the rule, the result and the orchestrator's ruling.
-- The DONE / NOT DONE table with the checks above and their output as printed, the character-set check's line and its exit status included when the verify list holds one.
+- The DONE / NOT DONE table with the checks above and their output as printed, the character-set check's line and its exit status included, over the files the step changes, when the verify list holds one.
   - A line shortened with "..." is not verbatim.
 - The terms: each term of `docs/glossary.md` the diff adds, changes or uses in a new place, each use read against the entry, and each changed entry's "Stated in" checked by `grep -n` of the term in the section it names.
 - The files with line counts.

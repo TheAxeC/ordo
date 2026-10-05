@@ -581,7 +581,7 @@ def plan_loop_svg() -> str:
         Box(
             areas[0],
             "/spec",
-            "Writes the brief, has a fresh agent check it against the tree, makes the worktree.",
+            "Writes the brief, has a fresh agent check a full step's brief, makes the worktree.",
             (
                 Group(
                     ONLY_WHEN,
@@ -612,8 +612,8 @@ def plan_loop_svg() -> str:
         Box(
             areas[3],
             "close them",
-            "A repair round: fix the findings, rerun, rewrite the report. A finding whose cause is "
-            "not known goes through /diagnose first.",
+            "A full step's repair round: fix the findings, rerun, rewrite the report. A finding whose "
+            "cause is not known goes through /diagnose first.",
             (
                 Group(
                     ONLY_WHEN,

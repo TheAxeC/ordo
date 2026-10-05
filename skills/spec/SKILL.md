@@ -1,18 +1,18 @@
 ---
 name: spec
-description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
+description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "3.0.0"
+  version: "4.0.0"
 ---
 
 # Prepare a step
 
-`/spec <entry> <step>` prepares one step of an open plan for its builder. It leaves behind the brief and its brief check's report in the preparation commit, and the dispatch entry written to the state file. It also leaves the step's worktree at the base, and the base binaries copied aside.
+`/spec <entry> <step>` prepares one step of an open plan for its builder. It leaves behind the brief and, for a full step, its brief check's report in the preparation commit, and the dispatch entry written to the state file. It also leaves the step's worktree at the base, and the base binaries copied aside.
 
 ## Quick start
 
 ```
-/spec <entry> <step>     write the one file a builder works from, have a fresh agent check it against the tree, and put the tree in the state the builder expects
+/spec <entry> <step>     write the one file a builder works from, have a fresh agent check it against the tree for a full step, and put the tree in the state the builder expects
 Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says; then /spec <entry> <step> again
 ```
 
@@ -53,7 +53,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - A record is in force except for the part its own opening lines, or a later record, say is superseded, in whatever words the repository uses.
      - Its decision is its Decision section, or, in a record without one, the text that states what was decided.
      - A record touches the step when its decision governs a file, a name, a rule or a behaviour the step's text changes.
-6. The brief check's report, the final message of the agent that "Steps / The brief check" starts.
+6. For a full step, the brief check's report, the final message of the agent that "Steps / The brief check" starts.
 
 ## Steps
 
@@ -124,6 +124,9 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - Under `libraries: avoid`, the brief says the step adds no new dependency.
 4. Write `agents/briefs/<step>.md` from `templates/brief.md`.
    - The first line points at the rules file the configuration names, and at the standards it lists.
+   - The line under the title is the size line, written from the step's text before the build.
+     - `Size: a small text step: no brief check, one review, no repair round` for a step that is a small text step, as the glossary's entry **small text step** says.
+     - `Size: a full step` for every other step.
    - The premises as checked, with the command that checked each.
    - The ADRs the step touches, as Steps 2 names them.
    - The fix text is the requirements of the step's part, in the brief's own words and not a pointer.
@@ -131,14 +134,18 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - Each file the part touches, with the constraint it is under.
      - The behaviour the part has.
    - Text is dictated word for word only where the wording itself is the requirement, such as a rule sentence the user ruled.
-   - The verification commands from the configuration block plus the step's own gate, each with the directory it runs from and the output that counts as a pass.
+   - Under "Verify before you report", each check of the configuration block's verify list that covers a file the step changes, then the step's own gate.
+     - Each check has the directory it runs from and the output that counts as a pass.
+     - The character-set check over those files is among the checks where the verify list holds one.
+     - The brief says the plan's whole verify list runs once, at landing on main.
    - The report shape, with the cases' first run before the result table.
    - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result.
+     - Each case checks what the step changes, and none asks the builder to quote or explain a place the step does not change.
      - The brief states the builder's first task as the template states it: the first run of every case on the unchanged tree before any change.
        - A case of a code step is a test only where the rules file's test rule calls for one, and otherwise a run the report quotes.
        - A case of a text or judgment step is checked by reading.
        - A case the brief's rules get wrong is handed back before any code changes.
-     - For a code step (a script, or a product's code), the list also holds the inputs the step's text implies but never states, as `templates/brief.md`'s "Cases" names them, each with its expected result, found by the session writing the brief from the rules of the code the step builds or changes and from that code's callers.
+     - For a code step (a script, or a product's code), the list also holds the inputs the step's text implies but never states, as `templates/brief.md`'s "Cases" names them, each with its expected result, found by the session writing the brief from the rules of the code the step builds or changes and from that code's callers, and only an input that has happened or whose wrong answer would cost something.
    - Under "Paths this step writes", every path the step writes, one per line, the report path included: ``- `<path>` `` for a whole file, or ``- `<path>` lines <a>-<b>` `` for a range of a shared document, numbered as on main at the base.
    - A choice the plan leaves open is taken in the brief.
      - It is listed under "Decisions taken in this brief", each reversible.
@@ -171,11 +178,12 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - The patch stays in the ledger.
      - `/spec` run again prepares the step with that patch.
    - `/spec` run again redoes Steps 2 from the start, so the premise checks and their amendments are made again on the tree as it then is.
-   - A step that goes on runs "Steps / The brief check", after the path comparison and before the preparation commit, unless the step's brief-check report already stands in the ledger.
+   - A small text step gets no brief check, and Steps 5 is done for it when the path comparison is done.
+   - A full step that goes on runs "Steps / The brief check", after the path comparison and before the preparation commit, unless the step's brief-check report already stands in the ledger.
    - A step with such a report is not checked again: the session closes the report's findings in the brief it has written, by the rulings booked since, and goes on.
    - Steps 5 is done when every finding of the brief check is closed in the brief, or when the step waits or has stopped.
 6. Make the preparation commit, a resume point ("Rules").
-   - It holds the brief, the brief check's report, the patch of a step taken back out of main, and each of the session's own records (Steps 1).
+   - It holds the brief, the brief check's report of a full step, the patch of a step taken back out of main, and each of the session's own records (Steps 1).
    - It holds `plan.md` and the state file when this run or the session's own records changed them.
    - It holds the choices file `<ledger_root>/choices.md` when this run changed its `Builds on it:` line.
    - The paths are written out in the `git add -- <path> ...` command.
@@ -200,6 +208,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - The configuration block's `bench:` line names them.
    - With none named, none is staged.
 9. Write the dispatch block into the state file: step, executor, worker, worktree, base, launched, report path, `brief_check` ("Steps / The brief check"), `landing: not-started`, `round: 0`.
+   - A small text step's `brief_check` reads `none, a small text step`, since no brief-check agent ran.
    - The entry takes the shape the `plan` skill's `templates/orchestrator-state.md` gives.
      - With `workers_at_once` 1, one entry, `dispatch:` followed by its keys.
      - With `workers_at_once` above 1, the entry is appended to the list of entries.
@@ -326,8 +335,9 @@ Steps 5 says when this runs.
    - **The step line.** Every part of the plan's step line is present in "What to build": each requirement is mapped to the part of the line it serves, and a part with no requirement is named.
    - **Premises.** Every command of the brief's "What is on the tree" is rerun, and its output is compared with what the brief says.
    - **Cases and checks.** Every case of "Cases" is read against the rules file and the standards, and a case inconsistent with them is named.
+     - Each case that asks the builder to check, quote or explain a place the step does not change is named too.
    - **The question.** Each case, the check on the step's line and the check of each item of "What to build" is asked "could this pass without the goal being reached?", "the goal" being the part of the plan's goal the step delivers, and the answer is given with its reason.
-   - **Implied inputs.** For a code step (a script, or a product's code), the inputs the step implies but never states are listed under "Cases", as `templates/brief.md`'s "Cases" asks, and each one missing is named with its expected result.
+   - **Implied inputs.** For a code step (a script, or a product's code), the inputs the step implies but never states are listed under "Cases", as `templates/brief.md`'s "Cases" asks, and each one missing that has happened or whose wrong answer would cost something is named with its expected result.
    - **ADRs.** Every `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) is read for its part in force, as "What it reads" 5 says.
      - Each one the step touches is named with the sentence of its decision the step is under.
      - A part of the brief that contradicts one is named.
@@ -344,14 +354,14 @@ Steps 5 says when this runs.
    - The checks are done when each has its findings, or "none".
 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
    - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's id, its served model (item 1) and its tokens, tool uses and time from its completion notice.
-   - A step has one such report, since the check runs once per step (item 4).
+   - A full step has one such report, since the check runs once per full step (item 4).
    - Item 3 is done when the report stands at that path with its usage line filled.
 4. The session closes each finding by a change to the brief, before the preparation commit.
    - Each change is named under the report's "Closed" heading, beside its finding.
    - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's "Dictated text" says, before the preparation commit.
    - That line is named under "Closed".
    - A finding whose cause is not known is diagnosed with `/diagnose <entry> <step> brief check <n>`, which runs, with no person present, in a diagnosis agent as the `diagnose` skill's "Rules" say, before it is closed in the brief.
-   - The check runs once per step.
+   - The check runs once per full step.
      - The brief as changed goes to the builder without a second run.
      - A `/spec` run after a stop or a ruling does not check the step again.
    - A finding whose fix would change the part the step builds, or make a choice the user would see, is a stop ("Stops"), left as "Steps / A stop" says.
@@ -362,7 +372,7 @@ Steps 5 says when this runs.
    - At such a stop the brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
    - At such a stop the report is among the ledger files the stop commits.
    - This item is done when every finding has its change under "Closed" and each dictated line rewritten or added after the check is held and named there, or the step has stopped.
-5. The dispatch entry (Steps 9) records the report's path under `brief_check` with the agent's id, its served model, and its tokens, tool uses and time, in the form `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`, read from the report's usage line in a later `/spec` run of the step.
+5. The dispatch entry (Steps 9) of a full step records the report's path under `brief_check` with the agent's id, its served model, and its tokens, tool uses and time, in the form `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`, read from the report's usage line in a later `/spec` run of the step.
    - The report is committed as Steps 6 says.
    - Item 5 is done when the dispatch entry holds that form.
 

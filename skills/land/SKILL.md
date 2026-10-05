@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit by explicit path list, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "1.10.0"
+  version: "2.0.0"
 ---
 
 # Land a step
@@ -63,8 +63,10 @@ metadata:
 6. Run the verification commands of the configuration block on main, in order, each through its filter.
    - `templates/land.sh` runs the step's verify list through `templates/checks.sh <state file>` from the root of the checkout it checks (main here).
    - The lines `checks.sh` prints are what the booking quotes.
+   - The plan's whole verify list runs on main for a small text step as for every other step.
    - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here.
      - It is counted and named the same way as a red line.
+   - A finding of a small text step's review that is small and inside the brief is fixed on main here the same way.
    - A red line that a fix inside the brief closes is fixed on main.
      - It is counted as a fix at landing.
      - It is named in the booking with its cause.
@@ -94,6 +96,7 @@ metadata:
 9. Append the booking to `plan.md` (or the part file the plan names): what landed and where, every premise correction, every finding outside the brief with the open item it was raised as, the verification lines, the A/B.
    - The verification lines it quotes carry `<REDACTED>` in place of the value of a secret, as the rules file's rule on secrets in quoted command output says.
    - The booking states the builder's, each reviewer's and each brief-check agent's tokens, tool uses and time, from their completion notices, read from the dispatch block's `builder_usage`, `reviewer_report` and `brief_check`, and each diagnosis agent's, read from the head of its diagnosis record.
+   - A `brief_check` that reads `none, a small text step` names no agent, and the booking states none for it.
    - The booking also appends to `plan.md`'s `## Agents` section one bullet per agent the step's dispatch entry names, `- <agent id>: <role>, <served model>`, with the roles below.
      - The builder from `session_id`, and each builder under `builders_before`: `builder of step <n>`.
      - The brief-check agent from `brief_check`: `brief check of step <n>`.

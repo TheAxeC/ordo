@@ -2,7 +2,7 @@
 name: diagnose
 description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it runs in a fresh agent, probes on a scratch copy, leaves the step's worktree unchanged and hands the fix over by where the defect was found. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding, find the cause a step's text asks for."
 metadata:
-  version: "1.2.0"
+  version: "2.0.0"
 ---
 
 # Diagnose a defect
@@ -196,9 +196,11 @@ metadata:
     - Done when the test is green, the red command is green and the original case is green, each quoted in the record.
 20. Inside a plan, hand the fix over by where the defect was found.
     - For a finding and a red line, the step's worktree is left unchanged, as "Rules" says.
-    - A finding of the reviewer's first run: its fix and its test are the ruling of the next repair round, as `plan-orchestration`'s Steps 8 sends a round.
+    - A finding of the reviewer's first run of a full step: its fix and its test are the ruling of the next repair round, as `plan-orchestration`'s Steps 8 sends a round.
       - The ruling quotes the hypotheses with their results, the cause, the fix, both runs of the test and the record's path.
       - The red command is the round's check.
+    - A finding of a small text step's review is never sent to the builder, as the `refute` skill's "Finding dispositions" says.
+      - Its fix is made at landing on main when it is small and inside the brief, and otherwise raised to the user as an open item.
     - A finding of the run over the last repair round: its fix is made at landing on main when it is small and inside the brief, and otherwise raised to the user as an open item, as the `refute` skill's "Over a repair round" 7 says, and it is never sent to the builder.
     - A red line: the step is already out of main (`landing: backed-out`), so the cause, the fix and the record's path are written in the step's Step 0 in `plan.md`, for `/spec` to carry into the step's new brief.
       - The fix is never made on main outside a landing, and never sent to the builder.
