@@ -29,6 +29,17 @@ Every script of Ordo does its job and nothing more, and `docs/dev/scripts.md` li
   - A2. The scripts-page line. `docs/dev/scripts.md` is written in step 3, so a line in step 1 saying every script is listed there is false on main, and in the pinned skills, until step 3 lands. (a) Move the line to step 3, which writes the page. Pro: never false. Con: changes the approved step list. (b) Keep it in step 1. Pro: the list as approved. Con: a false rule in force between the two landings. Recommendation: (a). The lazy option is (b).
   - A3. What "fewer than 20 lines" counts. (a) Lines added plus lines removed, as `git diff --numstat` gives them. Pro: a fact a command gives. Con: a 10-line rewrite counts 20. (b) Lines changed, the larger of added and removed per file. Pro: closer to "lines changed". Con: still a count, but a less common one. Recommendation: (a), since it is the plain count of the diff; either is a full answer.
 
+### Step 2, Step 0
+
+- Open item C (2026-10-05), step 2: entry 3's gate holds three more clauses that test only the planted text, which the approved removal of "`/writing` run on one text holding one planted break of each rule of `references/`, and on one clean text, names every planted break and nothing in the clean text, checked by reading its report" leaves with nothing to refer to (`grep -n planted docs/roadmap.md`, line 60):
+  - "of the planted breaks, at least one stands in an `\input` file of a `.tex` main file and at least one in a `.docx`, and each is named at its place in the file that holds it";
+  - "the planted text also holds one break of a prose standard rule and one passage where an academic rule and the prose standard differ, and the report names the first and follows the prose standard on the second";
+  - "the planted text is run once as a `.md` and once as a `.txt`, with the same findings".
+  - (a) Remove all three with the approved clause. Pro: no clause of the gate refers to a text that is gone. Con: the gate no longer asks that a finding be named at its place inside an `\input` file.
+  - (b) Remove the second and third, and replace the first with "each finding of the two real runs is named at its place in the file that holds it, an `\input` file of the `.tex` included". Pro: the real runs still prove that `/writing` reads `\input` files and points into them, which the real manuscript with `\input` files is in the gate for. Con: a new clause you have not seen before this item.
+  - Recommendation: (b), since the gate already requires a real `.tex` with `\input` files and this clause is what makes that requirement checked. The lazy option is (a), which drops a check to avoid writing one clause.
+  - The ruling on (b) also approves its wording as written here.
+
 ## Could run in parallel
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless the configuration block allows more.
@@ -51,7 +62,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2 and 3: the user's `utils/pin.sh v3.0.0`, so they are prepared under the new rules.
+none
 
 ### Step 1, the rules in text (landed 2026-10-05)
 
