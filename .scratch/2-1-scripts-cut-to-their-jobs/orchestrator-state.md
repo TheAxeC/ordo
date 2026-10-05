@@ -83,5 +83,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Step 1 landed; main tagged v3.0.0. Step 2 landed. Next step: 3, the scripts. The user ran `utils/pin.sh v3.0.0`. By the user's order, plans run one at a time: 2.1 first, then 2.F.
+- Step 1 landed; main tagged v3.0.0. Step 2 landed. Next step: 3, the scripts. Step 3's landing also deletes every `.py` and `.sh` file under `.scratch/` (`git ls-files '.scratch/*.py' '.scratch/*.sh'`, eight files) and makes the verify list of each open plan's state file equal to `docs/dev/building.md`'s, since the landing script leaves the ledger out of the worktree. The user ran `utils/pin.sh v3.0.0`. By the user's order, plans run one at a time: 2.1 first, then 2.F.
 - Open on Axel's side: none.
