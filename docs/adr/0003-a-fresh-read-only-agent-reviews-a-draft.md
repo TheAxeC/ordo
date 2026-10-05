@@ -8,7 +8,7 @@ Status: proposed
 
 ## Decision
 
-`/writing` starts one fresh agent that changes nothing, on the model the configuration's `reviewer` names at `reviewer_effort`, which reads the whole draft and reports only breaks of a named rule. The session shows its report to the user and applies the changes the user accepts, as the entry's rulings say.
+`/writing` starts one fresh agent that changes nothing, on the model the configuration's `reviewer` names at `reviewer_effort`, which reads the whole draft and reports only breaks of a named rule. The session shows its report to the user and changes nothing. The skill that owns the text, `paper` for a manuscript and `grant` for a grant, applies the findings the user accepts, as the entry's rulings say.
 
 ## Alternatives rejected
 
