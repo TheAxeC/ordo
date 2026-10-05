@@ -63,10 +63,11 @@ dispatch:
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item B (2026-10-05), kind 3 (the shared rules), raised from step 1's report and refuter report ("Declined to judge"): `skills/repo-setup/templates/shared-rules.md`, the shared-rules block `/repo-setup sync` copies into every repository's `CLAUDE.md`, has the rule "Scripts compute facts; judgment is read" without the new case rule step 1 adds to the change standard. (a) Add the case rule to that bullet in step 3, which already changes the scripts' rules; pro: every repository set up from the template carries the rule, not only those that read the change standard; con: the shared rules grow by one sentence. (b) Leave the shared rules as they are; pro: no change to the shared block; con: a repository's `CLAUDE.md` states the script rule without the case rule, so a session that reads only `CLAUDE.md` does not see it. Recommendation: (a). The lazy option is (b). Step 1 goes on: no text of it depends on the ruling.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-05: Open item B, the case rule in the shared rules (`skills/repo-setup/templates/shared-rules.md`): ruled (a) by the user, step 3 adds it, booked in `plan.md` Rulings.
 - 2026-10-05: Open item A, step 1, three brief-check findings (the case rule's cost test, the place of the scripts-page line, what "fewer than 20 lines" counts): ruled A1 (a), A2 (a), A3 (a) by the user, booked in `plan.md` Rulings.
 
 ## The standing demands (from Axel, in force)
