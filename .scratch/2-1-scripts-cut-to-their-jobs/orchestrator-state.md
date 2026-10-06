@@ -44,16 +44,14 @@ dispatch: none
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item D (2026-10-06), kind 3 (the reversal of a ruling), raised from step 2's review (`agents/reviews/2-refuter.md`, "3. Standards" 1): plan 3's ledger, `.scratch/3-the-writing-base/plan.md`, opened and not started, still copies entry 3's old gate and rests on its planted text: its "## Gate" section and the gate questions under it, step 2 ("The runs: a planted text with one break of each rule of `references/` ..."), step 3's check ("every planted break named"), and its rulings D9, Open item Gate 3 and Open item Gate 3b, which you ruled when the planted clauses were added. Step 2 of plan 2.1 removed those clauses from the roadmap by your approval of entry 2.1 and your ruling C.
-  - (a) Carry the change into plan 3's ledger now: its gate copied again from the roadmap, the gate questions rewritten to match, step 2 running `/writing` on the real manuscript and the real grant only, step 3's check reading "every finding marked right by both reviewers", and a Rulings bullet in plan 3 saying that plan 2.1's ruling C replaces the planted-text parts of D9, Gate 3 and Gate 3b. Pro: plan 3's ledger agrees with the roadmap before anything is built on it. Con: it rewrites rulings of yours in another plan's ledger.
-  - (b) Leave plan 3's ledger, and let plan 3's own `/spec` meet the difference as a false premise when it runs. Pro: no change to plan 3 now. Con: plan 3 stays in contradiction with the roadmap until then, and its `/spec` stops on it then.
-  - Recommendation: (a). The lazy option is (b). Plan 2.1 goes on: none of its steps depends on the ruling.
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-05: Open item C, step 2, entry 3's planted-text clauses: ruled (b) by the user, booked in `plan.md` Rulings.
 - 2026-10-05: Open item B, the case rule in the shared rules (`skills/repo-setup/templates/shared-rules.md`): ruled (a) by the user, step 3 adds it, booked in `plan.md` Rulings.
 - 2026-10-05: Open item A, step 1, three brief-check findings (the case rule's cost test, the place of the scripts-page line, what "fewer than 20 lines" counts): ruled A1 (a), A2 (a), A3 (a) by the user, booked in `plan.md` Rulings.
+- 2026-10-06: Open item D, plan 3's ledger resting on the planted text: ruled (a) by the user, booked in `plan.md` Rulings and carried into `.scratch/3-the-writing-base/plan.md`.
 
 ## The standing demands (from Axel, in force)
 
