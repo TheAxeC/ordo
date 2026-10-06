@@ -74,7 +74,7 @@ Findings:
 - `docs/dev/scripts.md` is absent. `ls docs/dev` printed `blind-comparison.md building.md change-standard.md skill-layout.md`. Matches.
 - The versions:
   - `grep -n version skills/{land,diagnose,repo-setup,plan-orchestration,plan,session-retro,ordo-init}/SKILL.md` printed land 2.0.0, diagnose 2.0.0, repo-setup 3.0.0, plan-orchestration 4.0.0, plan 3.0.0, session-retro 1.0.0 and ordo-init 1.2.0.
-  - `git show 02177bb` lists among step 1's raises "spec 4.0.0, refute 3.0.0, plan-orchestration 4.0.0, land 2.0.0, diagnose 2.0.0, repo-setup 3.0.0, ordo-help 3.0.0, plan 3.0.0".
+  - `git show d3a5b27` lists among step 1's raises "spec 4.0.0, refute 3.0.0, plan-orchestration 4.0.0, land 2.0.0, diagnose 2.0.0, repo-setup 3.0.0, ordo-help 3.0.0, plan 3.0.0".
   - `git log` of session-retro's and ordo-init's `SKILL.md` shows their last commits (9699d1a and b1af081) before the plan's opening commit 925e066.
   - The brief names four skills that step 1 raised. Step 1 raised eight, and `plan` (3.0.0), whose `SKILL.md` is in this step's paths, is not named. Item 8 repeats "The four skills step 1 raised".
 - The ADRs. The brief says "No other ADR touches the step". This is false; see section 7 (0006 and 0007).
