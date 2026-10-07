@@ -75,5 +75,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-05. The plan is opened; no step has started.
-- Step 1 landed; main tagged v3.0.0. Steps 2 and 3 landed. Next step: 4, the closing.
+- 2026-10-07. Plan closed: every step landed or done, entry 2.1 marked done and entry 2.G dropped in `docs/roadmap.md`, this folder archived. The tag `v4.0.0` and the pin into `~/.claude` and `~/.claude-work` follow the closing commit.
 - Open on Axel's side: none.
