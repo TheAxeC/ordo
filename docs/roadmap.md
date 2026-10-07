@@ -32,13 +32,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run on a defect of an archived plan whose cause the ledger books, put back on a scratch copy of the tree: the run reaches that cause, its red command and its hypotheses quoted, reviewed by you; a blind comparison as `docs/dev/blind-comparison.md` says against mattpocock's `diagnosing-bugs` on the same defect, wins or ties.
 - Waits on: 2.D, for the layout rules and the blind-comparison protocol.
 
-## 2.G git guard
-
-- Status: [ ]
-- Goal: `repo-setup` offers a PreToolUse hook that blocks `git push`, `git reset --hard`, `git clean -f`, `git checkout .` and `git restore .`, and lets `git branch -D` and `git worktree remove` through for `/land`; you install it yourself.
-- Gate: the hook script's test runs each blocked command and expects the block, and runs `git branch -D` and `git worktree remove` and expects them allowed; each block removed in a scratch copy turns the test red; `repo-setup`'s text for the offer read by you.
-- Waits on: 2.C, for the rule that the test exists because a failure loses work.
-
 ## 2.H session-retro
 
 - Status: [ ]
@@ -242,3 +235,4 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 <!-- - <n>. <title>: <the reason> -->
 
 - 3.A. Landing checks the brief and the review: dropped, since it is a script that polices the orchestrator: whether a step is ready to land is judged by reading its reports (`/land`, the Stops row "The step not ready"), and under the rule "scripts compute facts; judgment is read" no script gates that judgment.
+- 2.G. git guard: dropped, since entry 2.1 deleted the guard: its hook script, its test, its settings text and `repo-setup`'s offer of it are removed, and its plan folder with them.
