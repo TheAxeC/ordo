@@ -47,6 +47,36 @@ none
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - {DATE}: Open item A, the step list as drafted: closed under self-rule, C34.
+- 2026-10-07: C5, goal part, every open plan in one session: agreed by the user.
+- 2026-10-07: C6, goal part, the roadmap's order: agreed by the user.
+- 2026-10-07: C7, goal part, paths compared across plans: agreed by the user.
+- 2026-10-07: C8, goal part, one limit across plans: agreed by the user.
+- 2026-10-07: C9, goal part, landings one at a time across plans: agreed by the user.
+- 2026-10-07: C10, goal part, one report: agreed by the user.
+- 2026-10-07: C11, goal part, the current verify list: agreed by the user.
+- 2026-10-07: C12, gate part, one real run over two plans sharing a file: agreed by the user.
+- 2026-10-07: C13, gate part, the first plan in roadmap order starts: agreed by the user.
+- 2026-10-07: C14, gate part, the second plan's step waits: agreed by the user.
+- 2026-10-07: C15, gate part, the limit never exceeded: agreed by the user.
+- 2026-10-07: C16, gate part, no overlapping landings: agreed by the user.
+- 2026-10-07: C17, gate part, a new test command reaches the other plan: agreed by the user.
+- 2026-10-07: C18, where the limit on steps in flight is read: agreed by the user.
+- 2026-10-07: C19, how each plan's verify list stays equal to the verification page: agreed by the user.
+- 2026-10-07: C20, where the steps in flight of every plan are recorded: agreed by the user.
+- 2026-10-07: C21, worktree and branch names across plans: agreed by the user.
+- 2026-10-07: C22, commits that cannot take another plan's staged landing: agreed by the user.
+- 2026-10-07: C23, which plan's commit carries a record: agreed by the user.
+- 2026-10-07: C24, the order steps of several plans are picked in: agreed by the user.
+- 2026-10-07: C25, the rules of two steps in flight across plans: agreed by the user.
+- 2026-10-07: C26, the scope of a pause: agreed by the user.
+- 2026-10-07: C27, the shape of the one report: agreed by the user.
+- 2026-10-07: C28, what a plan's state file describes after another plan's commit: agreed by the user.
+- 2026-10-07: C29, next-entry mode while other plans are open: agreed by the user.
+- 2026-10-07: C30, the recurring-findings pass and the night rule across plans: agreed by the user.
+- 2026-10-07: C31, the invocations that run several plans: agreed by the user.
+- 2026-10-07: C32, record as ADR?: agreed by the user.
+- 2026-10-07: C33, the roadmap diff of entry 2.I: agreed by the user.
+- 2026-10-07: C34, the step list of plan 2.I as drafted: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 
