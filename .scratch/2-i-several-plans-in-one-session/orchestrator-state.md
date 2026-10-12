@@ -44,9 +44,11 @@ dispatch:
   base: 3ab3ff4
   launched: 2026-10-12
   report: .scratch/2-i-several-plans-in-one-session/agents/reviews/3-report.md
+  builder_usage: 61587 tokens, 103 tool uses, 19 min 38 s
   brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/3-brief-check.md (a6ce8870a2a7c0b32, claude-opus-5-5, 232837 tokens, 45 tool uses, 9 min 16 s)
+  reviewer_report: .scratch/2-i-several-plans-in-one-session/agents/reviews/3-refuter.md (ab30d93c9a0113445, claude-opus-5-5, 230576 tokens, 47 tool uses, 9 min 10 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a04584a0f86c68b1f (claude-sonnet-5-5)
 ```
 
