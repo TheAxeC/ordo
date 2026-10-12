@@ -45,9 +45,11 @@ dispatch:
   base: 8b93c6f
   launched: 2026-10-12
   report: .scratch/2-f-diagnose/agents/reviews/4-report.md
+  builder_usage: 196539 tokens, 40 tool uses, 6.5 minutes
   brief_check: .scratch/2-f-diagnose/agents/reviews/4-brief-check.md (a3ee1a7e4b52255d2, claude-opus-5-5, 187152 tokens, 31 tool uses, 6.1 minutes)
   landing: not-started
-  round: 0
+  reviewer_report: .scratch/2-f-diagnose/agents/reviews/4-refuter.md (a961b9fcb88f8028e, claude-opus-5-5, 186998 tokens, 35 tool uses, 9.0 minutes)
+  round: 1 (sent 2026-10-12, brief agents/briefs/4-round-1.md, worktree diff at the round's start: shasum 11fc9ca805f4)
   session_id: a8d70603c526446e1 (claude-sonnet-5-5)
 ```
 
