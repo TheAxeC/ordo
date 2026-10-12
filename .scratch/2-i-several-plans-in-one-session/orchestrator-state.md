@@ -104,7 +104,7 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Step 3 of 5 landed: the skill texts after the real run. The pin is `v6.0.0-rc.1` (ea0add9) until the tag `v6.0.0-rc.2` and its pin, which follow the landing commit.
+- 2026-10-12. Step 3 of 5 landed: the skill texts after the real run. The pin is `v6.0.0-rc.2` (61d3eab).
 - Next step: 4, the second real run, driven from the pin `v6.0.0-rc.2`; then 5, the closing.
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
 - No step in flight.
