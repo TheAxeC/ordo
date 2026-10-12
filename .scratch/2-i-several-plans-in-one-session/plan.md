@@ -104,6 +104,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - adb62eea8017b1dd4: brief check of step 2, claude-opus-5-5
 - a4f34743273779a48: reviewer of step 2, claude-opus-5-5
 - a147c0afbb4437820: reviewer of step 2 over round 1, claude-sonnet-5-5
+- a26b85029189e3c01: brief check of step 3, claude-opus-5-5, ended by an interrupt before its report
 
 The agents of step 2's scratch run, each with its role in that run; their cost is the scratch closings' cost-script output in `agents/reviews/2-report.md`:
 
