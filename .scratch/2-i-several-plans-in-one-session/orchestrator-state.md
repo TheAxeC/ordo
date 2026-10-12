@@ -46,6 +46,12 @@ dispatch: none
   - Option (b): leave the ADR as it is. Pro: your record stays word for word. Con: the ADR names a command that leaves a rename's old path out, and a reader who follows the ADR gets that defect.
   - Recommendation: (a). The lazy option is (b).
 
+- Open item Step 2, how the real run invokes step 1's texts (2026-10-12, kinds 3 and 4: your rule that a skill's work is done by invoking the skill, and a tag and a pin). Step 2's line has the orchestrator run "the loop of step 1's texts, read from the repository". The Skill tool loads the pinned install: `~/.claude-backup/skills/spec` links to `~/.local/share/ordo-stable/skills/spec`, the pinned worktree is at `v5.0.0`, and its `plan-orchestration` is version 4.0.0 and its `spec` 4.1.0, where main holds step 1's 5.0.0 of both (`grep -n 'version:'` over both copies). A run through the Skill tool today would run the texts from before step 1, and a run that reads step 1's files and follows them by hand breaks your rule. No brief is written until this is ruled.
+  - Option (a), recommended: tag main's head as `v6.0.0-rc.1` and run `utils/pin.sh v6.0.0-rc.1`; the orchestrator then runs step 2 in this session, in the scratch repository, invoking `/plan-orchestration`, `/spec`, `/refute` and `/land` through the Skill tool, which load step 1's texts from the pin. The closing tags `v6.0.0` and pins it as usual. Pro: every skill is invoked, and the run tests the install a user gets. Con: until the closing, every Claude Code session on this machine, the research-hub session included, runs the unreleased texts of the pin, and a defect step 2 finds is live there until its fix lands and is pinned.
+  - Option (b): you start a fresh Claude Code session with `CLAUDE_CONFIG_DIR` set to a scratch folder whose `skills` entries link to this repository's `skills/`, log in there, and that session runs step 2 as its orchestrator; this session books the run. Pro: the stable pin and your other sessions are untouched. Con: it needs your login and your hands, against the step's "with nothing asked of the user", and the run is not the installed path a user gets.
+  - Option (c): this session reads step 1's skill files from the repository and follows them by hand, without the Skill tool. Pro: no pin and nothing asked of you. Con: it breaks your rule that a skill's work is done by invoking the skill, and it tests texts read by hand, not the skills as installed.
+  - Recommendation: (a). The lazy option is (c).
+
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-05: Open item A, the step list as drafted: closed under self-rule, C34.
@@ -103,4 +109,5 @@ dispatch: none
 - 2026-10-12. Step 1 of 3 landed: several plans in one session in the skill texts, booked in `plan.md` with its landing report `agents/reviews/1-landing.md`.
 - Next step: 2, the real run in a scratch repository (orchestrator, no agent).
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
-- Open on Axel's side: the open item "ADR 0012, the landing commit's paths".
+- Step 2 stopped at /spec: open item "Step 2, how the real run invokes step 1's texts"; no brief, worktree or dispatch entry.
+- Open on Axel's side: the open items "ADR 0012, the landing commit's paths" and "Step 2, how the real run invokes step 1's texts".

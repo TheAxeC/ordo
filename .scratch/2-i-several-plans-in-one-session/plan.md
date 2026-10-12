@@ -74,7 +74,15 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- none.
+- Step 2: the open item "Step 2, how the real run invokes step 1's texts".
+
+### Step 0 of step 2
+
+- Open item Step 2, how the real run invokes step 1's texts (2026-10-12, kinds 3 and 4: your rule that a skill's work is done by invoking the skill, and a tag and a pin). Step 2's line has the orchestrator run "the loop of step 1's texts, read from the repository". The Skill tool loads the pinned install: `~/.claude-backup/skills/spec` links to `~/.local/share/ordo-stable/skills/spec`, the pinned worktree is at `v5.0.0`, and its `plan-orchestration` is version 4.0.0 and its `spec` 4.1.0, where main holds step 1's 5.0.0 of both (`grep -n 'version:'` over both copies). A run through the Skill tool today would run the texts from before step 1, and a run that reads step 1's files and follows them by hand breaks your rule. No brief is written until this is ruled.
+  - Option (a), recommended: tag main's head as `v6.0.0-rc.1` and run `utils/pin.sh v6.0.0-rc.1`; the orchestrator then runs step 2 in this session, in the scratch repository, invoking `/plan-orchestration`, `/spec`, `/refute` and `/land` through the Skill tool, which load step 1's texts from the pin. The closing tags `v6.0.0` and pins it as usual. Pro: every skill is invoked, and the run tests the install a user gets. Con: until the closing, every Claude Code session on this machine, the research-hub session included, runs the unreleased texts of the pin, and a defect step 2 finds is live there until its fix lands and is pinned.
+  - Option (b): you start a fresh Claude Code session with `CLAUDE_CONFIG_DIR` set to a scratch folder whose `skills` entries link to this repository's `skills/`, log in there, and that session runs step 2 as its orchestrator; this session books the run. Pro: the stable pin and your other sessions are untouched. Con: it needs your login and your hands, against the step's "with nothing asked of the user", and the run is not the installed path a user gets.
+  - Option (c): this session reads step 1's skill files from the repository and follows them by hand, without the Skill tool. Pro: no pin and nothing asked of you. Con: it breaks your rule that a skill's work is done by invoking the skill, and it tests texts read by hand, not the skills as installed.
+  - Recommendation: (a). The lazy option is (c).
 
 ### Step 1, several plans in one session in the skill texts (landed 2026-10-12)
 
