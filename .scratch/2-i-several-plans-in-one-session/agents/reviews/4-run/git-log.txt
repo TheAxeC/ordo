@@ -1,0 +1,125 @@
+82ced80 2026-10-12T23:29:01+02:00 Stop the closing of plan 3 on its roadmap diff
+
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+141a975 2026-10-12T23:28:42+02:00 Write the closing report of plan 3
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/closing.md
+6379a69 2026-10-12T23:28:22+02:00 Land step 3 of plan 3, the FAQ's test command
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/3-landing.md
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/3-refuter.md
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/3-report.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/plan.md
+M docs/faq.md
+d599ab7 2026-10-12T23:23:17+02:00 Launch step 3 of plan 3, the FAQ's test command
+
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+c1b3023 2026-10-12T23:22:49+02:00 Prepare step 3 of plan 3, the FAQ's test command
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/briefs/3.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+0cc18f5 2026-10-12T23:21:52+02:00 Stop the closing of plan 5 on its roadmap diff
+
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+b72a3a5 2026-10-12T23:21:19+02:00 Write the closing report of plan 5
+
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/closing.md
+8439f8f 2026-10-12T23:20:39+02:00 Land step 2 of plan 5, the guide's test
+
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/2-landing.md
+M .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/2-refuter.md
+M .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/2-report.md
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+M .scratch/5-the-guide-s-install-line-and-its-test/plan.md
+M docs/dev/building.md
+A tests/guide.test.sh
+9f0858e 2026-10-12T23:14:06+02:00 Send repair round 1 of step 2 of plan 5
+
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/briefs/2-round-1.md
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/2-refuter.md
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/2-report.md
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+cf5c5b6 2026-10-12T23:08:41+02:00 Land step 1 of plan 3, the usage sentence
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/1-landing.md
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/1-refuter.md
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/1-report.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/plan.md
+M docs/guide.md
+7dbe29a 2026-10-12T23:08:00+02:00 Launch step 2 of plan 5, the guide's test
+
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+52682d0 2026-10-12T23:07:40+02:00 Prepare step 2 of plan 5, the guide's test
+
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/briefs/2.md
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/2-brief-check.md
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+bb47d79 2026-10-12T23:04:24+02:00 Launch step 1 of plan 3, the usage sentence
+
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+b7d8bd2 2026-10-12T23:04:05+02:00 Prepare step 1 of plan 3, the usage sentence
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/briefs/1.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+c59dbea 2026-10-12T23:03:11+02:00 Land step 2 of plan 3, the FAQ
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/2-landing.md
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/2-refuter.md
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/2-report.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/plan.md
+A docs/faq.md
+37845b0 2026-10-12T23:00:51+02:00 Land step 1 of plan 5, the install sentence
+
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/1-landing.md
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/1-refuter.md
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/1-report.md
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+M .scratch/5-the-guide-s-install-line-and-its-test/plan.md
+M docs/guide.md
+150e6e8 2026-10-12T22:58:41+02:00 Launch step 2 of plan 3, the FAQ
+
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+23e472f 2026-10-12T22:58:18+02:00 Prepare step 2 of plan 3, the FAQ
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/briefs/2.md
+M .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+c540ae3 2026-10-12T22:57:29+02:00 Launch step 1 of plan 5, the install sentence
+
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+4bfa048 2026-10-12T22:57:01+02:00 Prepare step 1 of plan 5, the install sentence
+
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/briefs/1.md
+M .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+fce74d0 2026-10-12T22:54:56+02:00 Open the plan for entry 5, the guide's install line and its test
+
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/briefs/.gitkeep
+A .scratch/5-the-guide-s-install-line-and-its-test/agents/reviews/.gitkeep
+A .scratch/5-the-guide-s-install-line-and-its-test/orchestrator-state.md
+A .scratch/5-the-guide-s-install-line-and-its-test/plan.md
+D .scratch/rulings/5-the-guide-s-install-line-and-its-test.md
+41b86f4 2026-10-12T22:54:40+02:00 Open the plan for entry 3, the guide's usage line and its FAQ
+
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/briefs/.gitkeep
+A .scratch/3-the-guide-s-usage-line-and-its-faq/agents/reviews/.gitkeep
+A .scratch/3-the-guide-s-usage-line-and-its-faq/orchestrator-state.md
+A .scratch/3-the-guide-s-usage-line-and-its-faq/plan.md
+D .scratch/rulings/3-the-guide-s-usage-line-and-its-faq.md
+51da493 2026-10-12T22:53:26+02:00 Write the ruled gates and step checks
+
+M .scratch/rulings/3-the-guide-s-usage-line-and-its-faq.md
+M .scratch/rulings/5-the-guide-s-install-line-and-its-test.md
+M docs/roadmap.md
+50eb40d 2026-10-12T22:53:26+02:00 Set up the scratch repository
+
+A .agents/plan.yaml
+A .gitignore
+A .scratch/rulings/3-the-guide-s-usage-line-and-its-faq.md
+A .scratch/rulings/5-the-guide-s-install-line-and-its-test.md
+A docs/dev/building.md
+A docs/dev/change-standard.md
+A docs/dev/prose-standard.md
+A docs/guide.md
+A docs/roadmap.md

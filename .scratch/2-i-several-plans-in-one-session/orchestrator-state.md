@@ -46,8 +46,9 @@ dispatch:
   report: .scratch/2-i-several-plans-in-one-session/agents/reviews/4-report.md
   brief_check: ".scratch/2-i-several-plans-in-one-session/agents/reviews/4-brief-check.md (a7bbcb94c44630b82, claude-opus-5-5, 246418 tokens, 40 tool uses, 10 min 17 s)"
   landing: not-started
-  round: 0
+  round: 1
   session_id: inline
+  reviewer_report: .scratch/2-i-several-plans-in-one-session/agents/reviews/4-refuter.md (a6c40dff28725d6f6, claude-opus-5-5, 343444 tokens, 75 tool uses, 15 min 23 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
