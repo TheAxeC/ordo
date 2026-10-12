@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
 ---
 
 # Prepare a step
@@ -285,7 +285,8 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    - a step the ruling adds or splits gets its own line in the step list, ending with `(ruling <name>)`;
    - that step gets its own Step 0, its carried premises with it;
    - a ruling on a part not yet built rewrites that step's line, which then also ends with `(ruling <name>)`, and adds no step;
-   - a ruling that adds or splits a step, or rewrites the line of a step not yet built, is also written in the Rulings section as a line with an ending;
+   - a ruling that removes a step not yet built deletes the step's line, its Step 0 and its line under "Blocked, and by what", and the Rulings line records the removal;
+   - a ruling that adds, splits or removes a step, or rewrites the line of a step not yet built, is also written in the Rulings section as a line with an ending;
      - the ending is "(the user)." for a ruling of the user;
      - the ending is "(self-rule)." for a choice booked under self-rule;
    - for such a ruling, the step's tag names the Rulings line as "What it reads" 4 reads it;
@@ -389,7 +390,7 @@ The first seven rows are stops, which leave an open item as "Steps / A stop" say
 | A cause not found | A part of the step's text asks for a cause to be found and the diagnosis did not find it, and the step has no other part (Steps 2) | The open item the `diagnose` skill's Steps 15 raised, with the diagnosis record's path | A ruling |
 | A model other than the configured one | The runner served the brief-check agent or a diagnosis agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
 | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
-| A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)", or it starts with `Removed by` (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
+| A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)" (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |
 | A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on the ledger's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/spec` again |
