@@ -37,7 +37,18 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: 1
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2i-1
+  base: cc1fd7a
+  launched: 2026-10-12
+  report: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-report.md
+  brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-brief-check.md (a0a3ea2bc782eb427, claude-opus-5-5, 286488 tokens, 61 tool uses, 13 min 15 s)
+  landing: not-started
+  round: 0
+  session_id: a4fbe03371bb439ec (claude-sonnet-5-5)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -99,5 +110,6 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-12. Plan opened in edddd57; nothing landed. Roadmap entries 2.E, 2.F and 2.H, which step 1 waited on, are done.
-- Next step: 1, because it is the first and nothing blocks it.
+- Step 1 in flight: brief check closed (C39 taken), preparation commit cc1fd7a, builder a4fbe03371bb439ec dispatched in .agents/worktrees/2i-1.
+- Next step: 1, in flight.
 - Open on Axel's side: none.
