@@ -10,7 +10,7 @@ Diagnosis agent: <the agent's id, its served model, its tokens, tool uses and ti
 
 ## Where the probes run
 
-<the checkout or worktree, or the scratch copy's path with its commit and what was applied to it>. The paths redirected under `$TMPDIR`: <HOME, ORDO_STABLE, ORDO_SKILL_DIRS, or none>.
+<the checkout or worktree, or the scratch copy's path with its commit and what was applied to it>. The paths redirected under `$TMPDIR`: <each variable that names the user's home, the installed skills or the pinned checkout, with the folder it is set to; or none>.
 
 For a finding of a reviewer's report, taken before the copy was made, from inside the step's worktree:
 
@@ -22,7 +22,7 @@ For a finding of a reviewer's report, taken before the copy was made, from insid
 ## Red command
 
 ```
-<the one command>
+<the one command; when a part of the symptom was not caught and the command was changed to assert it, the command as changed>
 ```
 
 Runs, with the output of each quoted:
@@ -40,6 +40,12 @@ Runs, with the output of each quoted:
 ```
 <the actions of each run with the user's observation after each, quoted whole>
 ```
+
+Parts of the reported symptom, with whether the red command catches each:
+
+| Part of the symptom | Caught by the red command | Lines read, for a part not caught | Reproduced |
+|---|---|---|---|
+| <the part, quoted from the symptom> | <yes, with the assertion that is red on the runs; or no, with no assertion or the assertion that is green on them> | <the lines of the code that would produce the part, read along the path the red command drives, and what they show; or "not applicable"> | <yes, caught; or yes, caught once the red command was changed to assert the part where it happens, the changed command and its runs being the ones in the blocks above; or not reproduced, with why the lines read do not produce it> |
 
 Runs after the tightening, with the output of each quoted:
 
@@ -77,17 +83,24 @@ The second list, when every hypothesis was falsified, in the same form: <the hyp
 
 ## Cause
 
-<the cause at the operation that goes wrong, with its place and the rule it breaks, beside the probe that shows it: the red command green with the change and red without it, and each other input written as not fixed, or "none"; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found>
+<the cause at the operation that goes wrong, with its place and the rule it breaks stated at the kind of value, each place of the defect the fix covers, beside the probe that shows it: the red command green with the change and red without it, and each other input and each place of the defect written as not fixed, or "none"; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found>
 
 ## Operation and other inputs
 
 The operation that goes wrong: <the comparison, lookup, write or parse that gives the wrong result, with its place (the file and line, or the section of a text) and the rule it breaks; or "cause not found">.
 
-| Other input | Why it reaches the operation | Right result | Result on the tree without the fix | Result with the change of the probe that shows the cause | Class | Result after the fix |
-|---|---|---|---|---|---|---|
-| <the input, in place of the reported one> | <where the code that feeds the operation admits it> | <this input's right result> | <right or wrong, with the red command's output with this input and the line that shows it> | <the same, with the change of the probe> | <part of the defect, not part of the defect, or another defect> | <its right result; or what it gave without the fix; or left out, for another defect; or not fixed, with its result> |
+The rule, stated at the kind of value: <how a value of that kind must be read or treated>.
 
-<when the code that feeds the operation admits no input but the reported one: "none", with the reason; for a defect in text: each other situation the instruction governs, read against the text, in place of a run>
+Places of the defect:
+
+1. <the operation the cause names: its file and line, or its section for a defect in text, and how it breaks the rule>
+2. <a further place: its file and line, or its section for a defect in text, and how it breaks the rule; or "none, the operation the cause names is the only place">
+
+| Other input | Why it reaches a place of the defect | Right result | Place at which it is wrong | Result on the tree without the fix | Result with the change of the probe that shows the cause | Class | Result after the fix |
+|---|---|---|---|---|---|---|---|
+| <the input, in place of the reported one> | <where the code that feeds a place of the defect admits it> | <this input's right result, the one the rule gives at whichever place it is read> | <the place of the defect at which it is wrong, and any operation of another rule at which it is also wrong; or "none"> | <right or wrong, with the red command's output with this input and the line that shows it> | <the same, with the change of the probe> | <part of the defect, wrong at a place of the defect, also when wrong at an operation of another rule; not part of the defect, right without the fix; or another defect, wrong only at an operation of another rule> | <its right result; or what it gave without the fix; or left out, for another defect; or not fixed, with its result> |
+
+<when the code that feeds the places of the defect admits no input but the reported one: "none", with the reason; for a defect in text: each other situation the instruction and each further place govern, read against the text, in place of a run>
 
 ## Fix and test
 
@@ -96,6 +109,8 @@ Test, run on the tree without the fix:
 ```
 <the test's command and its failing output for each test case, showing the symptom>
 ```
+
+Places the fix covers: <each place of the defect with its file and line, or its section for a defect in text, and the change made there; or the one change every place shares; and each place of the defect written as not fixed, with each input wrong there and its result>.
 
 Fix:
 
@@ -120,7 +135,7 @@ Runs after the fix:
 
 <for a defect in text: the text before and the text after, with each other situation read against both and no test>
 
-No test reaches it: <the reason no test can reach the defect as it occurs, or "not applicable">. No test is written: <"the failure costs nothing", or "not applicable">.
+No test reaches it: <each place of the defect no test can reach, with the reason; or "not applicable">. No test is written: <"the failure costs nothing", or "not applicable">.
 
 ## Cleanup
 

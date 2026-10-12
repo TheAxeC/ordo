@@ -99,15 +99,25 @@ metadata:
    - For a brief-check finding, `<commit>` is `HEAD` and nothing is applied, since the brief and its report are read as they stand on disk.
    - For `premise`, `<commit>` is `HEAD` and nothing is applied, since the step has no worktree and no diff.
    - Before the copy of a reviewer's finding is made, the output of `git status --short` and of `git diff --binary <base> | shasum`, run from inside the step's worktree, is written into the record.
-   - A red command that would touch the user's real home, the installed skills or the pinned checkout runs with `HOME`, `ORDO_STABLE` and `ORDO_SKILL_DIRS` set under `$TMPDIR`, as `utils/pin.test.sh` sets them.
+   - A red command that would touch the user's real home, the installed skills or the pinned checkout runs with the variables that name those folders set to folders under `$TMPDIR`.
    - Done when the probes have a place to run and the record's section names it, and for a reviewer's finding the record holds the two outputs.
 4. Build the red command: one command that drives the code path of the symptom and goes red on the exact symptom.
    - A hypothesis formed, or code read to form one, before the command has been run red is an Anti-patterns row.
+   - Code read for a part the red command does not catch, as the bullets below say, forms no hypothesis and is not that row.
    - The red command asserts every part of the exact symptom, both halves of a two-part symptom included, so that the shrink keeps what either part needs.
    - Its output shows the result of each part: a suite that stops at its first failed assertion is run as one command per part, joined so that every one runs, so a cut that changes one part is seen.
+   - The record's Red command section lists each part of the reported symptom with whether the red command catches it.
+   - A part is caught when its assertion is red on the red command's runs.
+   - A part with no assertion, or with an assertion that is green on those runs, is not caught.
+   - Once the red command is red on the parts it catches, read the code that would produce each part it does not catch, along the path it drives.
+   - When the code produces the part on that path, the red command is changed to assert it where it happens.
+   - The assertion is on an output line, an intermediate state or a check before the run ends, since the end state can be unchanged when the run undoes its own change.
+   - The part is then red and asserted like the others.
+   - A part is called not reproduced, in the record or the session's final message, only when the code read along that path does not produce it.
+   - A part written as not reproduced carries the lines read and why they do not produce it.
    - A red command that asserts only that something ran is an Anti-patterns row.
    - The ways to build one are in "Ways to build a red command", in the order to try them.
-   - A red command of the first way, a failing test at the place the defect occurs, may be the test of Steps 16, and the record says so.
+   - A red command of the first way, a failing test of the code where the symptom occurs, may be the test of Steps 16, and the record says so.
    - Each of the three runs starts from the same state: the red command sets its state up itself, or each run gets a fresh scratch folder.
    - A symptom seen only sometimes gets a failure rate measured over a stated number of runs, raised by more runs, parallel runs or narrower timing until it is high enough to probe against.
    - A slow symptom gets a baseline first: the known-good version or the requirement measured over repeated runs with the mean and the spread, and red is a threshold stated from them.
@@ -120,7 +130,7 @@ metadata:
      - The false premise goes to `/spec`, which handles it as its Steps 2 handles a false premise.
      - Run by a person outside a `/spec` run, the false premise is also written into the step's Step 0 and committed, as the `premise` bullets of Steps 20 say.
      - The diagnosis of that part ends there, after Steps 21 and 22.
-   - Done when the command has been run and its output quoted in the record, with the same result on three runs in a row, or the measured failure rate for a symptom seen only sometimes, or the "No red command" section is written, or for `premise` the false premise is handed to `/spec`.
+   - Done when the "No red command" section is written, or for `premise` the false premise is handed to `/spec`, or the command, as changed for a part it did not catch, has been run and its output quoted in the record, with the same result on three runs in a row or the measured failure rate for a symptom seen only sometimes, and the record lists each part of the symptom with whether the command catches it and the lines read for each part it does not catch.
 5. Tighten the red command.
    - It gets a faster setup, a sharper assertion on the symptom, pinned time, fixed random seeds, the file system isolated under `$TMPDIR` and the network cut, as far as the symptom allows.
    - Done when it runs unattended in seconds where the symptom allows, and its runs after the tightening are quoted.
@@ -167,6 +177,9 @@ metadata:
 15. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
     - The cause is stated at the operation that goes wrong: the comparison, the lookup, the write or the parse that gives the wrong result.
     - The operation is given with its place (the file and line, or the section of a text) and the rule it breaks.
+    - The rule is stated at the kind of value the operation reads: how a value of that kind must be read or treated.
+    - For a path, the rule reads "a path is read as the folder it names, whatever its spelling".
+    - A rule that states only what the one operation does, such as "two spellings compare equal", is restated at the kind of value.
     - A cause stated as a property of the reported input, such as "the path has two trailing slashes", is not stated at the operation.
       - It is restated at the operation that treats that input wrongly.
     - When more than one hypothesis is left standing, the cause is the one that names what the operation gets wrong for every form of its input.
@@ -176,30 +189,46 @@ metadata:
       - The broken input is recorded as an other input, in the probe's row of the Probes section.
       - The hypothesis gets one more probe in the form of Steps 12: its change made at the operation so that it also gives that input its right result.
       - That probe's change is undone as Steps 13 says.
-    - With a cause found, list each other input that reaches the operation:
+    - With the cause stated, find every place of the defect.
+    - A place is any operation that reads a value of the kind the rule is about and breaks the rule, whether a comparison, a derivation, a lookup, a write or a parse.
+    - The operation the cause names is the first place.
+    - The record names each further place with its file and line, or its section for a defect in text, and how it breaks the rule.
+    - Search the code the red command drives and the code that feeds it.
+    - Read forward from every source where a value of the kind the rule is about is read or assembled to every operation that uses it.
+    - Every source counts: each environment variable, configuration entry and default that supplies such a value.
+    - When the cause's rule is about the values a container holds, an operation that breaks only a rule of the container, such as how a list is divided into values, is not a place of the defect.
+    - When the cause's rule is the container's own rule, every operation that breaks it is a place of the defect.
+    - With the places found, list each other input that reaches a place of the defect:
       - another spelling of the same value: repeated or trailing separators, `.` parts, letter case, an encoding;
       - another name for the same thing: a link, an alias;
       - a value not yet there: a path not yet made, an empty value;
-      - each other input the code that feeds the operation admits.
-    - Find them by reading the code or text that produces the operation's inputs, from the shrunk case back to where the inputs come from.
+      - each other input the code that feeds a place of the defect admits.
+    - Find them by reading the code or text that produces the inputs of each place of the defect, from the shrunk case back to where the inputs come from.
     - The list holds the inputs the code admits.
     - The reported input is not on the list.
     - Each other input's right result is written in the record before its runs.
+    - The right result is the one the cause's rule gives, at whichever place of the defect the input is read.
     - For a defect in code, run each other input through the red command, with that input in place of the reported one and the assertion set to that input's right result.
+    - The run observes the input's result at each place of the defect it reaches.
     - Run it on the tree without the fix and on the tree with the change of the probe that shows the cause.
     - Undo that change as Steps 13 says.
     - Record each result, right or wrong against the input's right result.
     - Put each other input in one of three classes, named in the record as written here:
-      - part of the defect: wrong on the tree without the fix, at the operation the cause names;
+      - part of the defect: wrong on the tree without the fix at a place of the defect;
       - not part of the defect: right on the tree without the fix;
-      - another defect: wrong on the tree without the fix, at another operation.
-    - An input that is part of the defect fails at the same operation as the reported input, so its failure costs what the reported input's failure costs.
+      - another defect: wrong on the tree without the fix only at an operation that breaks another rule.
+    - An input wrong at a place of the defect and at an operation of another rule is part of the defect.
+    - The record names that input's wrongness at the other operation as another defect.
+    - An input that is part of the defect is wrong at a place of the defect, so its failure costs something whenever the reported input's failure does.
     - An input of another defect is written in the record with its result.
     - An input of another defect is left for a diagnosis of its own.
     - For a defect in text, the operation is the instruction that led to the wrong behaviour.
-    - For a defect in text, the other inputs are the other situations that instruction governs.
+    - For a defect in text, the kind of value is the kind of situation the instruction governs.
+    - For a defect in text, a further place is another instruction of the same text that governs a situation of that kind against the same rule.
+    - For a defect in text, the other inputs are the other situations that the instruction and each further place govern.
       - Each is read against the text in place of a run, and put in the same three classes.
-    - Write the operation, the list, each right result and each result into the record's "Operation and other inputs" section.
+    - Write the operation, the rule stated at the kind of value, each place of the defect, the list, each right result and each result into the record's "Operation and other inputs" section.
+    - State the cause in the record's Cause section with that rule and each place of the defect.
     - The cause is not found when the second list is falsified too, when no probe can separate the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose.
     - For a cause not found, the record says so in its Cause section, with every probe or, when no red command could be built, a pointer to its "No red command" section, which lists every way tried.
     - Inside a plan, for every form but `premise`, a cause not found is raised to the user as an open item, the one `plan-orchestration`'s "Stops" row "A finding that is the user's" leaves.
@@ -214,37 +243,51 @@ metadata:
     - After a cause not found the skill goes to Steps 21 and 22, then inside a plan to Steps 23.
     - After a cause not found outside a plan, Steps 23 and 24 are not run, so the record stays in `$TMPDIR` and its path is shown.
     - Run by a person, a cause not found ends in a stop after Steps 22 ("Stops").
-    - Done when the record's Cause section names the cause at its operation with its probe and the "Operation and other inputs" section holds each other input with its class and its results before the fix, or the Cause section says "cause not found".
-16. For a defect in code whose failure costs something, write a test that reproduces the shrunk case at the place the defect occurs.
+    - Done when the record's Cause section names the cause at its operation with the rule stated at the kind of value, each place of the defect and its probe, and the "Operation and other inputs" section holds each place and each other input with its class and its results before the fix, or the Cause section says "cause not found".
+16. For a defect in code whose failure costs something, write a test that reproduces the shrunk case and reaches each place of the defect.
     - The test has one test case for the shrunk case and one for each other input that is part of the defect.
+    - One of those test cases reaches each place of the defect and asserts the right result there.
     - Each test case asserts its input's right result, whether or not the change of the probe already gave it, so a later fix that narrows again goes red.
     - The rules file's rule that a test exists only for behaviour whose failure costs something decides whether the failure costs something, and with no rules file "Rules" decides it.
     - A defect in code whose failure costs nothing gets no test, and the record says so.
-    - A place no test can reach the defect as it occurs is written in the record under "No test reaches it", with the reason.
+    - A place of the defect no test can reach is written in the record under "No test reaches it", with the reason.
     - A defect in text is fixed by reading, with the text quoted before and after and no test.
-    - Done when the test is written with its test cases, or the record holds the reason no test is written.
+    - Done when the test is written with its test cases, each place of the defect reached by one, or the record holds the reason no test is written.
 17. Run the test on the tree without the fix and quote its failure for each test case.
     - The tree is the one Steps 13 left, with every probe's change undone.
     - A test written after the fix is an Anti-patterns row.
     - Done when the record quotes, for each test case, a failure that shows the symptom, or, for a defect in text, quotes the text before.
-18. Make the fix at the operation the cause names, starting from the change of the probe that shows the cause.
-    - The fix is one change at the operation, right for the reported input and for every other input that is part of the defect.
-    - The fix is that one change, never one change per spelling.
-    - Every input not part of the defect, and every input of another defect, gives what it gave on the tree without the fix.
-    - When the change of the probe leaves an input that is part of the defect wrong, or makes an input that was right wrong, the fix is changed once more at the operation.
-    - The second change leaves every input not part of the defect as it was on the tree without the fix.
+18. Make the fix at the places of the defect, starting from the change of the probe that shows the cause.
+    - The fix covers the operation the cause names and each further place.
+    - Where the places can share one change, the fix is that change: a helper every place calls, or one written form made at every source the values come from.
+    - Otherwise the fix is one change at each place.
+    - The fix covers every source a value of the kind the rule is about comes from.
+    - The fix at a place is one change, right for the reported input and for every other input that is part of the defect there.
+    - The fix is never one change per spelling.
+    - A fix that leaves a place of the defect giving a wrong result is not done, apart from a place written as not fixed.
+    - Every input not part of the defect gives its right result, as it did on the tree without the fix.
+    - An input of another defect is left out of the result.
+    - The fix is not widened to make an input of another defect right.
+    - When the change of the probe leaves an input that is part of the defect wrong, or makes an input that was right wrong, the fix is changed once more.
+    - A place found only after the fix is made goes back through Steps 15 to 17.
+    - On the way back, the runs of Steps 15 and 17 are on the tree as the first change left it.
+    - The undoing of Steps 13 does not apply to the fix.
+    - The failure of the new place's test case on that tree is quoted in the record.
+    - The second change may widen the fix to that place.
+    - After the second change, every input not part of the defect still gives its right result.
     - An input that is part of the defect and still wrong after that second change is written in the record as not fixed, with its result.
+    - A place of the defect still giving a wrong result after the second change is written in the record as not fixed, with each input wrong there and its result.
     - The test case of an input not fixed is taken out of the test, so the test asserts no known defect.
     - The failing run of that test case is quoted in the record.
-    - The Cause section and the session's final message name each input not fixed.
+    - The Cause section and the session's final message name each input not fixed and each place not fixed.
     - A guard for a fix is an Anti-patterns row.
-    - Done when the fix is in the tree the probes ran in and the record quotes it, with each input not fixed written in the record, or for a defect in text quotes the text after.
+    - Done when the fix is in the tree the probes ran in and no place of the defect gives a wrong result, apart from a place written as not fixed, and the record quotes the fix, with each input and each place not fixed written in the record, or for a defect in text quotes the text after.
 19. Run the test, the red command, the original, unshrunk case and the red command on every other input listed.
-    - Each input that is part of the defect gives its right result, except an input written as not fixed.
-    - Each input not part of the defect gives what it gave on the tree without the fix.
+    - Each input that is part of the defect gives its right result at each place where it was wrong, except an input written as not fixed.
+    - Each input not part of the defect gives its right result, as it did on the tree without the fix.
     - Each input of another defect is left out of the result.
-    - For a defect in text, each other situation is read again against the text after the fix and quoted in place of a run.
-    - Done when the test is green, the red command is green, the original case is green and each other input gives the result its class requires, each quoted in the record, with an input written as not fixed quoted with its result.
+    - For a defect in text, each place and each other situation is read again against the text after the fix and quoted in place of a run.
+    - Done when the test is green, the red command is green, the original case is green and each other input gives the result its class requires at every place of the defect, each quoted in the record, with an input written as not fixed quoted with its result.
 20. Inside a plan, hand the fix over by where the defect was found.
     - For a finding and a red line, the step's worktree is left unchanged, as "Rules" says.
     - A finding of the reviewer's first run of a full step: its fix and its test are the ruling of the next repair round, as `plan-orchestration`'s Steps 8 sends a round.
@@ -325,7 +368,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| A hypothesis, or code read to form one, before the red command has been run red | The theory anchors on the first plausible cause while nothing shows the symptom | Build the red command first, as Steps 4 says |
+| A hypothesis, or code read to form one, before the red command has been run red | The theory anchors on the first plausible cause while nothing shows the symptom | Build the red command first, as Steps 4 says, which also says what code may be read once it is red |
 | A red command that asserts only that something ran | It goes green on a nearby failure, and the fix is then judged against another defect | Assert the error text or the wrong output of the symptom, as Steps 4 says |
 | Two changes in one probe | The result cannot say which change moved it | One change per probe, as Steps 11 says |
 | A probe tied to no hypothesis | Its result falsifies nothing, so it narrows nothing | Name the rank of the hypothesis it tests, as Steps 12 says |
@@ -364,6 +407,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 - A red command that would touch the user's real home, the installed skills or the pinned checkout runs with those paths redirected, as Steps 3 says.
 - Every quoted command output carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed, as the rules file's rule on secrets in quoted command output says.
 - A captured artifact is quoted only in the lines that carry the symptom.
+- A statement about what the code does, such as "the cache is cleared only on restart", goes in the record and the final message only with the lines it rests on, read in this run.
 - With no rules file, a defect in code whose failure costs something (lost work, a broken installation, a wrong configuration accepted) begins with a test that fails on the tree as it is.
 - With no rules file, a guard is not a fix: a null check, an early return or a fallback does not close a defect.
 - With no rules file, the fix reaches the code that lacks the thing it needs.
