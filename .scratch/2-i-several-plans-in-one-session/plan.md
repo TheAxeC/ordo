@@ -62,6 +62,16 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item Step 1, the projects form (2026-10-12): (a) in the `projects:` form, `/plan-orchestration` with no entry and `continue the plan` run every open plan of every project, the projects in the order `.agents/plan.yaml` lists them and each project's plans in its roadmap's order; the one limit on steps in flight is the smallest `workers_at_once` among the projects that have an open plan; a step's worktree and branch keep D18's `<slug>-<step>`, and `/spec` refuses a step whose worktree path or branch already exists, naming it, until the step that holds it lands; it unblocks step 1's brief (the user).
 - Open item Step 2, how the real run invokes step 1's texts (2026-10-12): (a) main's head is tagged `v6.0.0-rc.1` and pinned with `utils/pin.sh v6.0.0-rc.1`; the orchestrator runs step 2 in its own session, in the scratch repository, invoking `/plan-orchestration`, `/spec`, `/refute` and `/land` through the Skill tool from that pin; the closing tags `v6.0.0` and pins it as usual (the user).
 - Open item ADR 0012, the landing commit's paths (2026-10-12): (a) ADR 0012's sentence reads "The landing commit takes its paths from `git diff --cached --name-only --no-renames`, so a rename's old path is named too." (the user).
+- Open item The retro's text changes (2026-10-12): (b) the 13 approved proposals of `.scratch/retros/sessions-2026-10-12.md` that change Ordo's texts are a new roadmap entry 2.J, opened as its own plan after 2.I closes and before plan 3, never a step of this plan (the user).
+  - `/roadmap add` writes the entry at the level of 2.I, numbered 2.J, after `## 2.I Several plans in one session` and before `## 3. The writing base`:
+    ```
+    ## 2.J The session retro's text changes
+
+    - Status: [ ]
+    - Goal: the 13 approved proposals of `.scratch/retros/sessions-2026-10-12.md` that change Ordo's texts are in the files they name, proposal 10 worded as the orchestrator waiting for an agent to finish through the runner's completion notice, and each changed skill's version is raised as `docs/dev/skill-layout.md` says.
+    - Gate: each proposal's sentence is found in its file by `grep -n -F` of its text and read in place by a fresh reviewer agent against the proposal, each changed skill's version read against `docs/dev/skill-layout.md`, and `sh skills/land/templates/checks.sh` passes with the changed character-set check.
+    - Waits on: 2.I, whose step 2 runs `skills/plan-orchestration/SKILL.md` and `skills/land/SKILL.md`, which proposals 3, 7 and 10 to 13 change.
+    ```
 
 ## Agents
 
@@ -73,10 +83,11 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a4fbe03371bb439ec: builder of step 1, claude-sonnet-5-5
 - afa9f0216c64339f0: reviewer of step 1, claude-opus-5-5
 - a06100f8bf1b72886: reviewer of step 1 over round 1, claude-sonnet-5-5
+- adb62eea8017b1dd4: brief check of step 2, claude-opus-5-5
 
 ## Blocked, and by what
 
-- none.
+- Step 2: the open item "Step 2, what the scratch run needs approved".
 
 ### Step 0 of step 2
 
@@ -85,6 +96,20 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
   - Option (b): you start a fresh Claude Code session with `CLAUDE_CONFIG_DIR` set to a scratch folder whose `skills` entries link to this repository's `skills/`, log in there, and that session runs step 2 as its orchestrator; this session books the run. Pro: the stable pin and your other sessions are untouched. Con: it needs your login and your hands, against the step's "with nothing asked of the user", and the run is not the installed path a user gets.
   - Option (c): this session reads step 1's skill files from the repository and follows them by hand, without the Skill tool. Pro: no pin and nothing asked of you. Con: it breaks your rule that a skill's work is done by invoking the skill, and it tests texts read by hand, not the skills as installed.
   - Recommendation: (a). The lazy option is (c).
+
+- Open item Step 2, what the scratch run needs approved (2026-10-12, kind 3: an option that adds a script, a check or a command in the verification list). The brief check (`agents/reviews/2-brief-check.md`, sections 3, 4 and 5) found that the run cannot keep the step line's "with nothing asked of the user" as briefed. The gate needs one scratch plan's step to add a test command to the scratch verification page. Under self-rule that step is kind 3 of `references/self-rule.md`, "The six kinds left open", so `/plan --self-rule` keeps the scratch plan's Open item A with you, and the scratch rules page, copied from `skills/repo-setup/templates/docs/dev/change-standard.md`, reserves a new script's computation to your approval. No brief is written until this is ruled.
+  - Option (a), recommended: you approve now the scratch content below. The orchestrator writes it into the scratch repository as one rulings file per entry, each a bullet ending "(the user)" that quotes this ruling with its date and its place in this plan, and opens each scratch plan with `/plan <entry> --ruling <rulings file> "<name>"`, so each plan opens with the list below and the run asks you nothing. The scratch plans' closings stop at their roadmap diffs, which stay unruled, and the run ends there. The content:
+    - The scratch roadmap holds two open entries, in this file order. Entry 5 comes first and entry 3 second, so the roadmap's order differs from number order, folder order and opening order (`/plan 3` runs before `/plan 5`).
+    - `## 5. The guide's install line and its test`. Goal: the opening paragraph of `docs/guide.md` gains a sentence naming the install command `sh install.sh`. A test `tests/guide.test.sh` checks the guide's form, and its command is in `docs/dev/building.md`. Gate: `sh tests/guide.test.sh` prints `PASS: docs/guide.md`; `sh tests/guide.test.sh <a file whose first line is not a title>` prints a `FAIL:` line; `grep -c 'sh install.sh' docs/guide.md` prints 1; `grep -c 'guide.test.sh' docs/dev/building.md` prints 1. Waits on: nothing.
+    - `## 3. The guide's usage line and its FAQ`. Goal: the opening paragraph of `docs/guide.md` gains, right after the install sentence, a sentence naming `sh run.sh <name>` as the command to run once `sh install.sh` has run. `docs/faq.md` holds two questions about the guide. Gate: `grep -c 'sh run.sh <name>' docs/guide.md` prints 1; `head -1 docs/faq.md` prints `# FAQ`; `grep -c '^## ' docs/faq.md` prints 2. Waits on: nothing.
+    - Plan 5's steps, in order: 1, the install sentence in the opening paragraph of `docs/guide.md`; 2, `tests/guide.test.sh` and its command `sh tests/guide.test.sh 2>&1 | tail -1` added to the command block of `docs/dev/building.md`; 3, the closing. Nothing of plan 5 runs in parallel.
+    - What `tests/guide.test.sh` computes: given a file path, `docs/guide.md` when none is given, it prints `PASS: <file>` and exits 0 when the file's first line starts with `# ` and no line holds a tab; otherwise it prints `FAIL: <file>: <reason>` and exits 1.
+    - Plan 3's steps: 1, the usage sentence right after the install sentence; 2, `docs/faq.md` with the title line `# FAQ` and two questions, each a `## ` heading followed by its answer; 3, the closing. Steps 1 and 2 can run in parallel.
+    - The scratch rules page gains: "The verification page `docs/dev/building.md` is not a configuration file: a step that changes it runs beside other steps."
+    - Every scratch agent runs on Sonnet, and the scratch `.agents/plan.yaml` holds `workers_at_once: 2`, `self_rule: on` and `next_entry: off`.
+    - Pro: the run tests the loop across plans with nothing asked of you, and your approval covers each kind-3 item before the run, with its content in full. Con: the scratch rulings files carry your ruling as copied by the orchestrator, not typed there by you.
+  - Option (b): the run stops at each of these points and asks you: the scratch Open item A of plan 5 and the script's computation. Pro: each approval is typed by you where it applies. Con: step 2's line, "with nothing asked of the user", would have to be rewritten, and the run waits on you in the middle.
+  - Recommendation: (a). The lazy option would be to take the scratch kind-3 items under self-rule anyway; that breaks "The six kinds left open" and is not offered.
 
 ### Step 1, several plans in one session in the skill texts (landed 2026-10-12)
 
