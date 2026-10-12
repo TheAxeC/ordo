@@ -96,7 +96,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- none.
+- Step 2: the open item "Step 2, the scratch gates that could pass without their goals".
 
 ### Step 0 of step 2
 
@@ -119,6 +119,16 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
     - Pro: the run tests the loop across plans with nothing asked of you, and your approval covers each kind-3 item before the run, with its content in full. Con: the scratch rulings files carry your ruling as copied by the orchestrator, not typed there by you.
   - Option (b): the run stops at each of these points and asks you: the scratch Open item A of plan 5 and the script's computation. Pro: each approval is typed by you where it applies. Con: step 2's line, "with nothing asked of the user", would have to be rewritten, and the run waits on you in the middle.
   - Recommendation: (a). The lazy option would be to take the scratch kind-3 items under self-rule anyway; that breaks "The six kinds left open" and is not offered.
+
+- Open item Step 2, the scratch gates that could pass without their goals (2026-10-12, kind 3: a change to the content you ruled in "Open item Step 2, what the scratch run needs approved"). `/plan 3 --ruling .scratch/rulings/3-the-guide-s-usage-line-and-its-faq.md "A"` in the scratch repository asks of entry 3's gate "could this pass without the goal being reached?", and the answer is yes: `grep -c 'sh run.sh <name>' docs/guide.md` prints 1 for a usage sentence anywhere in the guide, not right after the install sentence, and `grep -c '^## ' docs/faq.md` prints 2 for two headings that are no questions about the guide and have no answers. Step 2's check of plan 3 has the same gap. Entry 5's gate has it too: `grep -c 'sh install.sh' docs/guide.md` passes for the sentence outside the opening paragraph, and the test's FAIL case covers only a missing title. Under a quoted ruling `/plan` writes the plan without its stop only when every answer is no, so as the ruling stands `/plan` stops for you on both plans, and the run asks you during the run. Two smaller findings come with it: the ruled step lines end `(ruling A)`, where `/plan` writes `(approved)` for a list a ruling of the user approves; and `/plan`'s quoted-ruling compare covers the steps, while "Could run in parallel" has no rule for where a ruling's line goes.
+  - Option (a), recommended: the scratch roadmap's gates and the ruled step checks become the text below, the step lines end `(approved)`, and the orchestrator writes them into the scratch repository's roadmap and rulings files as a second setup commit before `/plan` runs again; the run then asks you nothing. The text:
+    - Entry 5's gate: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh'` prints 1 (line 3 is the opening paragraph); `sh tests/guide.test.sh` prints `PASS: docs/guide.md`; `sh tests/guide.test.sh <a file whose first line is not a title>` and `sh tests/guide.test.sh <a file with a title line and a tab>` each print a `FAIL:` line; `grep -c -F 'sh tests/guide.test.sh 2>&1 | tail -1' docs/dev/building.md` prints 1.
+    - Plan 5's step 1 check: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh'` prints 1. Step 2's check: the three test runs of the gate print what the gate says, and the `grep -c -F` of the gate prints 1.
+    - Entry 3's gate: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh[^.]*\. [^.]*sh run\.sh <name>'` prints 1 (the usage sentence is the sentence right after the install sentence, in the opening paragraph); `head -1 docs/faq.md` prints `# FAQ`; `grep -c '^## .*?$' docs/faq.md` prints 2; each of the two questions, read in place, is about the guide and is followed by a paragraph that answers it.
+    - Plan 3's step 1 check: the `sed` and `grep -c` of the gate print 1. Step 2's check: the three FAQ parts of the gate.
+    - Pro: every gate and check answers no to `/plan`'s question, so both plans open under your ruling and the run asks you nothing. Con: a second change to scratch content you already ruled once.
+  - Option (b): the gates stay; `/plan` stops on both plans and you approve each draft during the run. Pro: no change to what you ruled. Con: the run asks you during the run, so condition 9 of the brief and the step line's "with nothing asked of the user" are NOT DONE.
+  - Recommendation: (a). The lazy option is (b), which keeps gates that pass without their goals.
 
 ### Step 1, several plans in one session in the skill texts (landed 2026-10-12)
 
