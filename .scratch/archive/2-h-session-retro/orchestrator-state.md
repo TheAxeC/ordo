@@ -53,6 +53,9 @@ none
 - 2026-10-12: Open item Step 4, the end of a plan's window, a later plan's commit widening the window of an archived plan: closed under self-rule, C37.
 - 2026-10-12: Open item Step 5, a later plan's commit into a plan's own files, a later plan's commit into an archived plan's `plan.md` or state file still widening its window: closed under self-rule, C38.
 - 2026-10-12: Step 6, the closing: ruled (a) by the user; the roadmap diff written (4b2f0db), tag `v5.0.0` and the pin follow the closing commit.
+- 2026-10-12: C36, the real run reads the window of plan 2.C's own commits: agreed by the user.
+- 2026-10-12: C37, a fix step for the end of a plan's window: agreed by the user.
+- 2026-10-12: C38, a plan's window ends at its own last commit: agreed by the user.
 
 ## The standing demands (from Axel, in force)
 

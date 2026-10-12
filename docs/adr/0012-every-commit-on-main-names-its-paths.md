@@ -8,7 +8,7 @@ The plan skills stage named paths with `git add -- <path> ...` and then commit t
 
 ## Decision
 
-Every commit a skill makes on main names its paths in the commit command, `git commit -m <message> -- <path> ...`. The landing commit takes its paths from `git diff --cached --name-only`. A landing runs from its cherry-pick to its commit before the session makes any other commit or starts any other skill.
+Every commit a skill makes on main names its paths in the commit command, `git commit -m <message> -- <path> ...`. The landing commit takes its paths from `git diff --cached --name-only --no-renames`, so a rename's old path is named too. A landing runs from its cherry-pick to its commit before the session makes any other commit or starts any other skill.
 
 ## Alternatives rejected
 
