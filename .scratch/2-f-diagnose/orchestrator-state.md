@@ -47,8 +47,10 @@ dispatch:
   report: .scratch/2-f-diagnose/agents/reviews/5-report.md
   brief_check: .scratch/2-f-diagnose/agents/reviews/5-brief-check.md (a0631b29a3c017df0, claude-opus-5-5, 184390 tokens, 31 tool uses, 7.0 minutes)
   landing: not-started
-  round: 0
+  round: 1 (sent 2026-10-12, brief agents/briefs/5-round-1.md, worktree diff at the round's start: shasum ebc158a1d552, saved as agents/reviews/5-round-0.diff)
   session_id: a8306465118c4b49c (claude-sonnet-5-5)
+  builder_usage: 253231 tokens, 36 tool uses, 9.7 minutes (round 0)
+  reviewer_report: .scratch/2-f-diagnose/agents/reviews/5-refuter.md (a036114524a3a76dd, claude-opus-5-5, 196646 tokens, 36 tool uses, 8.7 minutes)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
