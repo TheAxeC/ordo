@@ -73,5 +73,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Steps 1, 2, 3 and 3b landed and ticked. Step 4, the real run, is under way over the window of plan 2.C's own commits (C36); step 5 added (C37); the closing is step 6.
-- Next: step 4's sessions report, read in full, then each proposal to Axel.
+- 2026-10-12. Steps 1, 2, 3, 3b and 4 landed and ticked. Step 4's sessions report is `.scratch/retros/sessions-2026-10-12.md` (4e03a0a), each proposal ruled by Axel.
+- Next: step 5, `session-retro` ends a plan's window at the latest commit that touches its `plan.md` or `orchestrator-state.md` (`/spec 2.H 5`); then step 6, the closing.

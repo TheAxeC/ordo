@@ -28,7 +28,7 @@ One real run over the sessions of plan 2.C, its report holding points of both ki
 - ✅ 2 The `session-retro` skill, `skills/session-retro/SKILL.md`: the window from a plan's ledger (its opening and closing commits) or from a session id; the reader of step 1; points of two kinds, each quoting its place by id, line and timestamp, and each wrong point with the change it proposes to a named rule, skill or brief, as a sentence to add or change; the report at `<ledger_root>/retros/sessions-<YYYY-MM-DD>.md`; Axel's ruling written beside each proposal; check: the skill read by Axel against `docs/dev/skill-layout.md` and the goal (1 commit) (approved)
 - ✅ 3 The skill wired in: the README's skill table, Quick start and install loop; `ordo-help`'s sequence and "Use instead"; `plan-retro`'s "Use instead" (refuter reports there, transcripts here); new terms in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`; check: each changed text read in place, and `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` exits 0 (1 commit) (approved)
 - ✅ 3b No breakage testing in Ordo: `skills/spec/templates/brief.md` "Cases" loses its two bullets that ask, for each case kept as a test, for one small change to the code under test and the failing line with that change made, and no other text of `skills/`, `docs/dev/`, `README.md` or `utils/` asks for code to be broken deliberately to see a test fail; the `spec` skill's version is raised; check: `git grep -n -i -e mutation -e "small change to the code" -e "with that change made" -- skills docs/dev README.md utils` prints nothing, and each changed text read in place (1 commit) (ruling No breakage testing)
-- 4 The real run over plan 2.C's sessions, before 2026-10-28; check: the report holds points of both kinds with quoted places, reviewed by Axel, his ruling beside each proposal (1 commit; orchestrator, no agent) (approved)
+- ✅ 4 The real run over plan 2.C's sessions, before 2026-10-28; check: the report holds points of both kinds with quoted places, reviewed by Axel, his ruling beside each proposal (1 commit; orchestrator, no agent) (approved)
 - 5 `session-retro` ends a plan's window at the latest commit that touches the plan's `plan.md` or `orchestrator-state.md`, under either root, in `skills/session-retro/SKILL.md` Steps 1 and its "What it reads", so a later plan's commit into the archived folder does not widen the window; check: the skill text read in place, and the window it gives for `/session-retro 2.C` ends one second after 75c987f's committer time, 2026-09-29T12:04:42+02:00 (1 commit) (ruling Open item Step 4, the end of a plan's window)
 - 6 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.H`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
@@ -84,7 +84,7 @@ Each agent started for this plan has its agent id, its role and the model the ru
 
 ## Blocked, and by what
 
-- 4: the transcripts of 2.C last until about 2026-10-28.
+- none.
 
 ### Step 0 of step 4
 
@@ -140,3 +140,13 @@ Each agent started for this plan has its agent id, its role and the model the ru
 - A/B: none. Look: none configured.
 - Usage: brief check claude-opus-5-5 151177 tokens, 37 tool uses, 6.3 min; builder claude-sonnet-5-5 81482 tokens, 22 tool uses, 7.3 min, and round 1 8 tool uses, 1.4 min (93663 tokens for the agent in all); reviewer claude-opus-5-5 145791 tokens, 29 tool uses, 8.5 min; reviewer over round 1 claude-sonnet-5-5 105939 tokens, 21 tool uses, 4.9 min.
 - The builder's first report passed its bar: both findings were on text the brief dictated or left out. Fixes at landing: 0.
+
+### Step 4, the real run over plan 2.C's sessions (landed 2026-10-12)
+
+- Landed: `.scratch/retros/sessions-2026-10-12.md`, commit 4e03a0a "Record the sessions report 2026-10-12", from `/session-retro 2026-09-28T22:51:46+02:00 2026-09-29T12:04:42+02:00` (the window of choice C36): the folder `-Users-axelfaes-workspace-ordo` read whole, its output 3738 lines and 730556 bytes in 25 parts, each range recorded as read, and the two worktree folders of 2.C empty.
+- Ticked: the gate holds. The report holds 14 keep points and 17 change points (`grep -c "^### "` prints 31), each with its places quoted from the reader's lines and one `- Proposal:` line (`grep -c "^- Proposal:"` prints 31), and Axel's ruling beside each proposal (`grep -c "^- Decision:"` prints 31): "As recommended.", every proposal approved and the temporary-file proposal corrected as recommended, since Ordo's own skills and tests make their folders with `mktemp -d "${TMPDIR:-/tmp}/..."`. `## Approved proposals` lists the 20 that change a text, with the file each goes into; 11 keep points are approved with no change.
+- The approved proposals go into `/roadmap add` or a plan for the texts in this repository, and into `~/.claude/rules/` by Axel for the 7 that change his own rules files, as the ruling "Step 2, the skill's shape" (5) says; none is made by this step.
+- Verification: `LC_ALL=C grep -c '[^ -~]' .scratch/retros/sessions-2026-10-12.md` prints 0; `ls` of the working folder reports that it does not exist after `rm -r`.
+- Premise corrections: the window `/session-retro 2.C` resolved ran to 2026-10-06T01:10:44+02:00 and its output passed the size stop (Step 0 of step 4), closed by C36 and C37.
+- A/B: none. Look: none configured.
+- Usage: no agent; the orchestrator ran the skill (orchestrator, no agent).
