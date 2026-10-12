@@ -193,3 +193,16 @@ Findings:
 - **The installed pinned copy under `~/.local/share/ordo-stable`.** Not read. The step does not write it, and the change standard says it is never edited.
 
 Agent usage: af3f25fec9cb469d4, claude-opus-5-5, 178009 tokens, 48 tool uses, 7.7 min.
+
+## Closed
+
+- Names, `skills/session-retro/SKILL.md:172` missing from the list of references: "What is on the tree" names lines 47, 128, 172 and 173, and item 2 keeps items 1 to 7 at their numbers.
+- Names, `plan.md:46` ("Step 2, the skill's shape" (2)) still stating the folder rule: the bullet "Open item Step 5, a later plan's commit into a plan's own files" (C38) says it replaces that part.
+- The step line, the purpose clause false for plans 1, 2 and 2.A; Premises, Decisions 3 incomplete and its reason false; The question, cases 1 and 3, item 1 and the line's check passing without the goal; Implied inputs, a later plan's commit into the plan's own `plan.md`; Dictated text, item 1's why-clause made false: raised as the stop "Open item Step 5, a later plan's commit into a plan's own files" and closed under self-rule as C38 (fd444fe), option (b). The step line, item 1 and its dictated block now give each plan its own last commit; "What is on the tree" holds the table over all ten archived plans from that block; the cases add plan 1 (8becbcd), plan 2.E (its closing writes another plan's state file), plan 2.D and every archived plan; Decisions 3 is removed. The block was run in zsh over all ten folders before it was written, and printed the table's last column.
+- Cases and checks, case 1 "run on main by hand": each case now runs in the worktree.
+- Cases and checks, the report's table tied to "the checks above": the table is one row per item of "What to build", and Verify 5 (version) and 6 (`git status --short` lists only the step's paths) give items 6 and 7 a check.
+- The question, items 6 and 7 with no named check: Verify 5 and 6.
+- Dictated text, item 3's "last commit" and "state file": every text now uses one name, "its own last commit" (Decisions 4), and the Quick start keeps `plan.md` without backticks inside its code block.
+- Dictated text, item 2's sub-bullet option: item 2 is a new item 8 (Decisions 3).
+- Names and Cases, the `docs/roadmap.md` carve-out that covers nothing: removed from the grep and the cases.
+- Dictated text held line by line after the rewrite: the block of item 1 (`grep -nF 'move=$(git log --diff-filter=A' .scratch/2-h-session-retro/agents/briefs/5.md`) is ASCII, quotes every path and placeholder, and holds against `docs/dev/change-standard.md` and the standards; no other line is dictated, items 3 to 5 give what the text must say and the builder words it.
