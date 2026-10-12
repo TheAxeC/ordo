@@ -65,6 +65,7 @@ dispatch: none
 - 2026-10-12: Step 3's tick: ruled by the user, step 3 ticked and the win-or-tie condition moved to step 4, booked in `plan.md` Rulings ("Step 3 ticked").
 - 2026-10-12: Step 4, the call on the blind comparison: ruled (a) by the user, a loss; step 5 added and the closing renumbered 6, booked in `plan.md` Rulings ("Step 4, the call on the blind comparison").
 - 2026-10-12: Open item Step 4 tick, whether step 4 is ticked once its comparison is called a loss: closed under self-rule, C35.
+- 2026-10-12: C35, step 4 ticked once its comparison is called a loss: agreed by the user.
 - 2026-10-12: Step 5, the call on the blind comparison: ruled (a) by the user, a win; step 5 ticked, booked in `plan.md` Rulings ("Step 5, the call on the blind comparison").
 
 ## The standing demands (from Axel, in force)
