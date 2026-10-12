@@ -37,7 +37,18 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+  step: 5
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2-f-5
+  base: 88aa65b
+  launched: 2026-10-12
+  report: .scratch/2-f-diagnose/agents/reviews/5-report.md
+  brief_check: .scratch/2-f-diagnose/agents/reviews/5-brief-check.md (a0631b29a3c017df0, claude-opus-5-5, 184390 tokens, 31 tool uses, 7.0 minutes)
+  landing: not-started
+  round: 0
+  session_id: a8306465118c4b49c (claude-sonnet-5-5)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -84,5 +95,5 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Steps 1, 2, 2a, 3 and 4 ticked. Axel called the rerun a loss (ruling "Step 4, the call on the blind comparison"). Next: step 5, which `diagnose` must pass by winning or tying the blind comparison; then step 6, the closing.
+- 2026-10-12. Steps 1, 2, 2a, 3 and 4 ticked. Step 5 is in flight: its builder runs in `.agents/worktrees/2-f-5` from base 88aa65b. Next: its review, its landing, then the blind comparison run again for Axel's call; then step 6, the closing.
 - Open items for you: none.
