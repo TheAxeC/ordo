@@ -1,0 +1,17 @@
+# Repair round 1 of step 2: the findings of `agents/reviews/2-refuter.md`
+
+The builder is the orchestrator (executor `inline`). Each finding below is inside the step's part, the record and the report, and each has its ruling. The paths this round writes are `agents/reviews/2-report.md` and two new files under `agents/reviews/2-run/`. The verify checks of the brief's "Verify before you report" run again after the fixes, with Verify 2 in the form the report already uses.
+
+1. Spec 1. Finding 5 of "Findings of the run" is replaced: the installed `plan-orchestration` `SKILL.md` line 318 states the landing order ("Landings are one at a time across all plans, in the order the steps are verified"). The report states that plan 3's step 1 was verified at 16:02:55 and plan 5's step 2 at 16:13:53, that the orchestrator held plan 3's step 1 against that line, and that the hold was a choice booked nowhere. Condition 7's row says it holds as worded, through that hold, and that under line 318 plan 3's step 1 lands first and condition 7 is not shown. The cases' first run section says its case 5 assumed the order without checking it against line 318. "Judgment calls the brief left open" names the hold as a departure from the text, not a call the brief left open.
+2. Spec 2. The cases section gets the verdict of each case read against the run, and case 4 is partial: plan 5's step 2 was launched (9534017) beside plan 3's step 1, never beside plan 3's step 2. Row 4 of the table is unchanged, since condition 4 holds.
+3. Spec 3. "The files with line counts" gives `wc -l` of every file of the record and of the report.
+4. Spec 4. "Anything in the brief that was wrong or impossible" states that the run's one report was written as the file `run-report.md`, copied as `2-run/report.md`, and that the run's last message was a different summary.
+5. Proof 1. The scratch roadmap at 989d581 is copied into the record as `2-run/roadmap.md.txt.md`, and row 1 cites it with the line numbers of the two entry headings.
+6. Proof 2. The sentence on the first `plan 3` calls says the call at 15:42:33 was invoked again 5 s later with no tool call between them, and the second call stopped on the open item.
+7. Proof 3. Finding 5's time of plan 3's step 1 review is the reviewer's last message, 16:02:55; 16:03:40 is when the report was saved.
+8. Standards 1. The three code fences carry a language tag, `text`.
+9. Standards 2. No quoted line is shortened with "...": row 3 quotes `run-notes.txt` line 1 whole, Verify 3 gives the full path, rows 1 and 7 give full paths. The run's notes are copied into the record as `2-run/run-notes.txt.md`, so row 3's quote is in the record.
+10. Standards 3. The sentences the review names at lines 141 and 154 are split.
+11. Behaviour 1. A finding of the run is added: `spec` "What it reads" 3 and Steps 5 and `plan-orchestration` line 300 count and compare only dispatch blocks, so a step whose `/spec` is still running is invisible to another `/spec`; plan 5's step 2 was in `/spec` from 15:55:21 to 16:02:43, the orchestrator counted it by hand for plan 3's step 1, and `/spec 5 2` never compared with plan 3's step 1 brief.
+12. Behaviour 2. A finding of the run is added: `plan-orchestration` "Reports" gives no position-line form for a plan at its closing.
+13. The review's note on run finding 1: finding 1 says the orchestrator's prompt told plan 3's step 1 builder to use `printf`, and the other three builders chose it themselves.

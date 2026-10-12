@@ -45,8 +45,9 @@ dispatch:
   launched: 2026-10-12
   report: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-report.md
   brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-brief-check.md (adb62eea8017b1dd4, claude-opus-5-5, 275321 tokens, 51 tool uses, 11 min 21 s)
+  reviewer_report: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-refuter.md (a4f34743273779a48, claude-opus-5-5, 278760 tokens, 62 tool uses, 10 min 34 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: inline
 ```
 
