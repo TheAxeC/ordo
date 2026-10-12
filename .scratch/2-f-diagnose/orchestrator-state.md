@@ -43,7 +43,9 @@ dispatch: none
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
 
-- none
+- Step 4, the call on the blind comparison (raised 2026-10-12; kind 5, your call). The rerun on the landed `diagnose` 2.1.0 is recorded at `agents/reviews/4-blind-comparison.md`. Both judges prefer `diagnosing-bugs` (judge 1 chose B, judge 2 chose A; the key puts `diagnosing-bugs` on both). Both name the same two failures of the `diagnose` output: (1) its "Not reproduced" section says the pin removed no links, which `utils/pin.sh:430-438` and its own quoted stderr contradict; (2) its record saw that the agent-folder derivation at `utils/pin.sh:112` also takes a last `.` as a folder name, and its fix left that line unchanged, because the new Steps 15 classes an input wrong at another operation as "another defect" and leaves it unfixed. Both judges rate the `diagnose` side's comparison and test above the other side's.
+  - Option (a), recommended: call it a loss. Step 4 stays unticked, and a new step before the closing changes `diagnose` on the two causes, then runs the comparison again: an operation that breaks the same rule on the same value (here line 112 reading the same spelling) is part of the defect and fixed with it, and only an operation breaking another rule is another defect; a part of the symptom the red command does not show is read in the code that would produce it before the record or the message calls it not reproduced. Pro: it acts on what both judges found, which the text of 2.1.0 caused. Con: one more step and one more comparison (this one cost about $3.76 at list price for the sides and judges).
+  - Option (b): call it a tie or a win. Pro: step 4 ticks and the plan closes. Con: both judges, read through the key, chose the other side, so the record does not support it. This is the lazy option.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -82,5 +84,5 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Steps 1, 2, 2a and 3 ticked; step 4 landed on main, not ticked: the blind comparison of step 3 runs again on the landed `diagnose`, and step 4 is ticked on Axel's call that `diagnose` wins or ties. Next: that rerun, then step 5, the closing.
-- Open items for you: none.
+- 2026-10-12. Steps 1, 2, 2a and 3 ticked; step 4 landed on main, not ticked: the blind comparison of step 3 runs again on the landed `diagnose`, and step 4 is ticked on Axel's call that `diagnose` wins or ties. The rerun is recorded at `agents/reviews/4-blind-comparison.md`; both judges prefer `diagnosing-bugs`. Next: Axel's call on it.
+- Open items for you: "Step 4, the call on the blind comparison".
