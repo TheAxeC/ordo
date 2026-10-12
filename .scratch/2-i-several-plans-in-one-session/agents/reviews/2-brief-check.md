@@ -186,3 +186,39 @@ Findings:
 - Whether background agents launched from this session have Ordo as their cwd in every tool, beyond what this agent's own environment states ("cwd reset between bash calls").
 
 Usage: adb62eea8017b1dd4, claude-opus-5-5, 275321 tokens, 51 tool uses, 11 min 21 s
+
+## Closed (the session's change to the brief for every finding above, made before the preparation commit)
+
+- 2. The step line, finding 1 (no check of the Skill tool and the pin): condition 10 and Verify 4.
+- 2. The step line, finding 2 (the fresh reviewer and the removal): condition 11; the scratch repository is removed at landing, after `/refute`, and Decisions 4 names `/refute` as the gate's reviewer.
+- 3. Premises, finding 1 (Open item A kept with the user): raised as the stop "Step 2, what the scratch run needs approved", ruled (a) by the user; the plans open under quoted rulings, as "What is on the tree" now says from `plan` "What it reads" 6 and Steps 3.
+- 3. Premises, finding 2 (a line number cited): the brief cites `plan` by section.
+- 4. Cases, finding 1 ("runs alone"): the ruled sentence of the scratch change standard says the verification page is not a configuration file; plan 5's step 2 runs beside other steps.
+- 4. Cases, finding 2 ("two edits of the same sentence"): case and condition 3 rewritten; plan 3's sentence goes right after plan 5's, a dependency that forces an order, as `plan-orchestration` "Two steps in flight" names it.
+- 4. Cases, finding 3 (an independent FAQ step): the ruled step list of plan 3 says steps 1 and 2 can run in parallel.
+- 4. Cases, finding 4 (no third candidate for the limit): condition 5 and its case: after plan 5's step 1 lands, plan 5's step 2 and plan 3's step 1 are both ready for one slot.
+- 4. Cases, finding 5 (the end of the run): the plans open under quoted rulings, and each scratch gate names commands whose output `/roadmap done` quotes.
+- 4. Cases, finding 6 (the rules file's "Where the work happens"): the section "How the rules file applies to this step".
+- 4. Cases, finding 7 (rule 7's report parts): "Report" holds the files with line counts and the user-visible changes.
+- 4. Cases, finding 8 (cases reading places the step does not change): each case is now what the record must show, its first run a reading of the installed texts.
+- 4. Cases, finding 9 (the scratch rules page's script approval): the ruling "Step 2, what the scratch run needs approved" approves the script's computation and the command, copied into the scratch rulings files.
+- 5. The question, finding 1 (roadmap order): the ruled roadmap puts entry 5 before entry 3, and `/plan 3` runs first, so only the roadmap's order puts plan 5 first; condition 1.
+- 5. The question, finding 2 (the cross-plan comparison): condition 3 requires `spec` Steps 5 to read plan 5's brief and leave nothing.
+- 5. The question, finding 3 (the third step names no pair): condition 4 names plan 3's step 2 beside plan 5's step 1 while plan 3's step 1 waits.
+- 5. The question, finding 4 (the limit not exercised): condition 5.
+- 5. The question, finding 5 (ADR 0012's "or starts any other skill"): condition 6.
+- 5. The question, finding 6 (the dictated gates): the ruled gates name commands: the test's PASS and FAIL lines, and `grep -c` counts of the guide, the page and the FAQ.
+- 5. The question, finding 7 (copies after removal): condition 11.
+- 6. Implied inputs 1 (the working directory): "The run" runs `git rev-parse --show-toplevel` in the Bash call that sets the working directory before each skill.
+- 6. Implied inputs 2 (agents' paths): "The run" 2 has every prompt name the scratch repository's absolute paths.
+- 6. Implied inputs 3 (the transcript folder): "What is on the tree" names `$CLAUDE_CONFIG_DIR/projects` and its link to `~/.claude/projects`, where the cost script reads.
+- 6. Implied inputs 4 (the drafts' shape): the step lists are ruled and written under `--ruling`.
+- 6. Implied inputs 5 (where the record is written): "How the rules file applies to this step".
+- 6. Implied inputs 6 (copies read as Ordo's plans): Decisions 2, `.txt` on every copied file, and Verify 2.
+- 6. Implied inputs 7 (the run's agents in the cost record): Decisions 3.
+- 6. Implied inputs 8 (gate outputs): the ruled gates name commands.
+- 6. Implied inputs 9 (`- Status: [ ]`): the scratch roadmap entries carry it.
+- 7. ADRs, finding 1: 0004 to 0009 named with their decisions; 0001 to 0003 named as not touching the step.
+- 7. ADRs, finding 2: condition 6.
+- 8. Dictated text, finding 1 (the goals' sentence length): each scratch goal is written as two sentences, as the ruling gives them.
+- Dictated line added after the check, held against the rules file and the prose standard: "The verification page `docs/dev/building.md` is not a configuration file: a step that changes it runs beside other steps." (`grep -n -F "is not a configuration file"` over the brief): holds; one requirement, plain, ASCII, the words the user ruled.
