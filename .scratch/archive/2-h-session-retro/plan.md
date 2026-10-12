@@ -30,7 +30,7 @@ One real run over the sessions of plan 2.C, its report holding points of both ki
 - ✅ 3b No breakage testing in Ordo: `skills/spec/templates/brief.md` "Cases" loses its two bullets that ask, for each case kept as a test, for one small change to the code under test and the failing line with that change made, and no other text of `skills/`, `docs/dev/`, `README.md` or `utils/` asks for code to be broken deliberately to see a test fail; the `spec` skill's version is raised; check: `git grep -n -i -e mutation -e "small change to the code" -e "with that change made" -- skills docs/dev README.md utils` prints nothing, and each changed text read in place (1 commit) (ruling No breakage testing)
 - ✅ 4 The real run over plan 2.C's sessions, before 2026-10-28; check: the report holds points of both kinds with quoted places, reviewed by Axel, his ruling beside each proposal (1 commit; orchestrator, no agent) (approved)
 - ✅ 5 `session-retro` ends a plan's window at the plan's own last commit: the commit that added its `plan.md` under `<archive_root>`, or a later commit that touches its `plan.md` or `orchestrator-state.md` and no other plan's `plan.md` or `orchestrator-state.md`, in `skills/session-retro/SKILL.md` Steps 1 and its "What it reads", so a later plan's commit into the archived folder does not widen the window; check: the skill text read in place, and the window it gives for `/session-retro 2.C` ends one second after 75c987f's committer time, 2026-09-29T12:04:42+02:00, and for `/session-retro 1` one second after a866716's, 2026-09-23T17:11:55+02:00 (1 commit) (ruling Step 4, the end of a plan's window) (ruling Step 5, a later plan's commit into a plan's own files)
-- 6 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.H`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
+- ✅ 6 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.H`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
 ## Could run in parallel
 
@@ -171,3 +171,13 @@ Each agent started for this plan has its agent id, its role and the model the ru
 - A/B: none. Look: none configured.
 - Usage: brief check claude-opus-5-5 178009 tokens, 48 tool uses, 7.7 min; builder claude-sonnet-5-5 121052 tokens, 22 tool uses, 2.7 min (round 0) and 129478 tokens, 5 tool uses, 0.7 min (round 1); reviewer claude-opus-5-5 136654 tokens, 31 tool uses, 4.8 min; reviewer over round 1 claude-sonnet-5-5 126355 tokens, 21 tool uses, 2.5 min.
 - The builder's first report passed its bar on the brief's items and cases; the review's findings were on text the brief dictated or left open (the one-call rule, the sentence's attachment, the open-plan end) and one naming slip in the report. Fixes at landing: 4.
+
+### Step 6, the closing (2026-10-12)
+
+- The real run of step 4: `.scratch/retros/sessions-2026-10-12.md` (4e03a0a), 14 keep points and 17 change points with 146 places quoted, and Axel's ruling "As recommended." beside each of the 31 proposals (6b7d6d0).
+- Step 5 landed (3570071): a plan's window ends at its own last commit (C38).
+- The closing report `agents/reviews/closing.md`: `python3 skills/plan-orchestration/templates/plan_cost.py .scratch/2-h-session-retro`, exit 0, 25 agents, total at least 38.28 USD (1231b70).
+- The roadmap diff of `/roadmap done 2.H`, approved by Axel ("(a)"): entry 2.H moved from the open order to Done with its gate's output (4b2f0db).
+- Verification on main: `sh skills/land/templates/checks.sh .scratch/2-h-session-retro/orchestrator-state.md` printed `checks: 6 commands passed`.
+- The tag `v5.0.0` on the closing commit and `utils/pin.sh v5.0.0`, on Axel's ruling (a), follow this commit.
+- Choices C36, C37 and C38 stay in `.scratch/choices.md` for Axel's review.

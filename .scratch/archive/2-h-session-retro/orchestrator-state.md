@@ -52,6 +52,7 @@ none
 - 2026-10-12: Open item Step 4, the window of the real run, the skill's stop "A large output" over the window it resolved for 2.C: closed under self-rule, C36.
 - 2026-10-12: Open item Step 4, the end of a plan's window, a later plan's commit widening the window of an archived plan: closed under self-rule, C37.
 - 2026-10-12: Open item Step 5, a later plan's commit into a plan's own files, a later plan's commit into an archived plan's `plan.md` or state file still widening its window: closed under self-rule, C38.
+- 2026-10-12: Step 6, the closing: ruled (a) by the user; the roadmap diff written (4b2f0db), tag `v5.0.0` and the pin follow the closing commit.
 
 ## The standing demands (from Axel, in force)
 
@@ -74,5 +75,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Steps 1, 2, 3, 3b, 4 and 5 landed and ticked. Step 5 ends a plan's window at its own last commit (C38).
-- Next: step 6, the closing: `/roadmap done 2.H` with the gate's output, its diff to Axel, then the folder moved to `.scratch/archive/`, the tag and the pin to Axel.
+- 2026-10-12. Plan closed: every step landed or done, entry 2.H marked done in `docs/roadmap.md`, this folder archived. The tag `v5.0.0` and the pin follow the closing commit.
+- Open items for you: none.
