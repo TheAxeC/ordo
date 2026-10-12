@@ -178,3 +178,158 @@ Cases of the brief's "Cases":
 - **The tag and the pin.** The tag `v6.0.0-rc.2`, its pin and the `rev-parse` check are the orchestrator's work after landing, which the brief assigns there. They are not part of this diff.
 
 Reviewer usage: ab30d93c9a0113445, claude-opus-5-5, 230576 tokens, 47 tool uses, 9 min 10 s.
+
+## Repair round 1, refuted
+
+```
+$ git status --short        (from the worktree .agents/worktrees/2-i-several-plans-in-one-session-3)
+ M docs/glossary.md
+ M skills/diagnose/SKILL.md
+ M skills/land/SKILL.md
+ M skills/ordo-help/SKILL.md
+ M skills/plan-orchestration/SKILL.md
+ M skills/plan-orchestration/references/self-rule.md
+ M skills/plan/templates/orchestrator-state.md
+ M skills/plan/templates/plan.md
+ M skills/refute/SKILL.md
+ M skills/repo-setup/templates/plan-terms.md
+ M skills/spec/SKILL.md
+?? .scratch/2-i-several-plans-in-one-session/agents/reviews/3-report.md
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary; echo "exit $?"
+ok: the plan-terms block equals the template
+exit 0
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ python3 -I -c 'import yaml; yaml.safe_load("dispatch:\n- step: 2\n  landing: preparing\n  brief_check: \"running: a6ce8870a2a7c0b32\"\n")'; echo "yaml exit $?"
+yaml exit 0
+$ printf '%s\0' skills/spec/SKILL.md skills/plan-orchestration/SKILL.md skills/plan-orchestration/references/self-rule.md skills/land/SKILL.md skills/plan/templates/orchestrator-state.md skills/plan/templates/plan.md skills/ordo-help/SKILL.md skills/diagnose/SKILL.md skills/refute/SKILL.md skills/repo-setup/templates/plan-terms.md docs/glossary.md .scratch/2-i-several-plans-in-one-session/agents/reviews/3-report.md | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'; echo "exit $?"
+exit 0
+$ grep -n 'version:' skills/spec/SKILL.md skills/plan-orchestration/SKILL.md skills/land/SKILL.md skills/plan/SKILL.md skills/ordo-help/SKILL.md skills/repo-setup/SKILL.md skills/diagnose/SKILL.md skills/refute/SKILL.md
+skills/land/SKILL.md:5:  version: "3.0.0"
+skills/plan-orchestration/SKILL.md:5:  version: "5.0.0"
+skills/spec/SKILL.md:5:  version: "5.0.0"
+skills/ordo-help/SKILL.md:5:  version: "3.1.0"
+skills/diagnose/SKILL.md:5:  version: "2.1.1"
+skills/plan/SKILL.md:5:  version: "4.0.0"
+skills/refute/SKILL.md:5:  version: "3.0.1"
+skills/repo-setup/SKILL.md:5:  version: "4.0.0"
+$ git show 0158079 -- skills/refute/SKILL.md | grep -n '^[-+]  version'
+25:-  version: "3.0.0"
+26:+  version: "3.0.1"
+$ git diff 3ab3ff4 -- skills/refute/SKILL.md | grep -n 'version'     (prints nothing)
+$ grep -n 'Plan step <m> of <m>: the closing' skills/plan-orchestration/SKILL.md skills/repo-setup/templates/plan-terms.md skills/plan/templates/orchestrator-state.md | cut -c1-90
+skills/plan/templates/orchestrator-state.md:68:- Next step: <n>, because <why it is next>;
+skills/repo-setup/templates/plan-terms.md:79:- **position line**: the line of one plan tha
+skills/plan-orchestration/SKILL.md:373:  - A plan whose step being worked is the closing t
+$ git grep -n 'running: ' -- . ':!.scratch' | grep -v '"running: '       (prints nothing; 11 quoted hits in spec, plan-orchestration, orchestrator-state.md, plan-terms.md, glossary)
+$ grep -n 'preparing' <the eight files>   (file:line lists)
+spec 39 44 74 100 118 199 201 289 294 298 301 400 471 472; plan-orchestration 250 252 310 319; self-rule 151 153 161 167; orchestrator-state 33; ordo-help 54 58 99; diagnose 45 47 50 358; land 35 129 141 221; plan-terms 37
+$ grep -n 'dispatch' skills/refute/SKILL.md   (dispatch entry at 57, 78, 99; dispatch block left at 10 (no), 36, 91 as ruled)
+$ wc -l <files>: spec 494, plan-orchestration 482, self-rule 175, land 260, orchestrator-state 69, ordo-help 129, diagnose 414, plan-terms 134, glossary 151, plan.md 43, refute 203  (equal to the report's counts)
+$ python3 -c '... description lengths ...': diagnose 965, land 725, ordo-help 564, plan-orchestration 1018, spec 1003  (equal to the report, all under 1024)
+$ git diff 3ab3ff4 -U0 | grep '^+' | grep -c <tab>   (0 in each of the 11 files); no em dash or en dash in added lines
+$ git grep -n 'no worktree or base yet\|names neither' -- skills   (prints nothing)
+```
+
+Not run, not required by the brief for this step: land.test.sh, check_config.test.sh, pin.test.sh (they run at landing). The builder's report quotes the character-set check in the brief's form with the real file list, the glossary count of 151 from the base, and the read-only `git status` under "Anything in the brief wrong or impossible" 3; all three reproduce.
+
+### Verdicts
+
+Items of the brief's "What to build", over the whole diff since 3ab3ff4:
+
+- 1: holds. The `preparing` entry is written at the end of Steps 1 and counted (spec "What it reads" 3, Steps 1, `plan-orchestration` "Two steps in flight"). Steps 5 and the second comparison, Steps 9 filling the entry, the back-out, stop and wait removals, the glossary, the template comment and `diagnose` are built. `"running: <agent id>"` is quoted in all 11 places. `self-rule.md` says what a step at `preparing` takes. The removal procedure inside that rule has a gap, Standards B.
+- 2: holds. Every sentence that makes a resume-point commit carry the session's records now names the exception: `land` Steps 6 and Steps 12, `plan-orchestration` Steps 4, Steps 8, the resume-point bullet and the closing sentence, `spec` Steps 1, Steps 6, "A stop" 1, and Rules. Standards E is about the rule being restated, not about a missing exception.
+- 3: holds. See Standards D for the wording of the glossary list.
+- 4: holds. The two "Resuming" bullets, "Steps / A `/spec` taken over", and `ordo-help` Steps 3 and 4 are built. The refusal wording in `land` and `diagnose` no longer says "no worktree or base yet".
+- 5: holds. The new red-line rule is in `land` Steps 6, the exclusion is in Steps 12, and `spec` Steps 1 names the exception.
+- 6: holds. No version changed in this round. `refute` is wording only and step 1 already raised it from 3.0.0 to 3.0.1 (commit 0158079, command above), so no further raise is due and the orchestrator's check at landing has its answer. The other seven are as in the first report.
+
+Cases of the brief's "Cases":
+
+- 1: met. `spec` Steps 1 and "What it reads" 3 count the other plan's `preparing` entry and refuse with "A step in flight", which names each step with its plan and `landing` value.
+- 2: met. Steps 5 compares with "every other step in flight ... a step at `landing: preparing` included", each brief read in the main checkout, committed or not.
+- 3: met. Steps 5 skips a `preparing` step whose brief is not written, and the later run makes the compare. The second comparison before the preparation commit is in Steps 5.
+- 4: met. Steps 1 ("each refusal after the entry is written remove it") and "A stop" 2 ("the entry ... is removed before the commit of item 1").
+- 5: met. The takeover is exempt from the brief, entry, `plan.md` and report refusals, and the worktree is exempt at Steps 7. `ordo-help` Steps 4 gives `/spec <entry> <step>`. A listed agent gives the refusal "A brief check still running". An agent that ended is saved from its notice and not run again ("Steps / A `/spec` taken over" 1, "The brief check" 3). The wording residue is Standards A.
+- 6: met. `land` Steps 6 fixes a session-written record in place and names the path, Steps 12 leaves it out of the commit, and a record the session did not write takes the step back out of main with an open item that names the file.
+- 7: met. `land` Rules ("A brief-check report that arrives during a landing is saved after the landing's commit") and `spec` "The brief check" 1.
+- 8: met. `plan-orchestration` "Reports" (line 373 and the four next-part bullets).
+- 9: met. `land` Steps 12 holds `plan.md` and the state file as on disk and leaves out the waiting `/spec`'s brief and report. `spec` Steps 6 names them only when they differ from main's head.
+
+Closures, ruling by ruling (my own read or rerun):
+
+- 1: reproduces. `spec` "The brief check" 3 saves the final message from the notice and defines dead; `plan-orchestration` "Resuming" and "A `/spec` taken over" 1 point at it.
+- 2: reproduces. Steps 1 lists the Steps 5 wait's report as an own record and exempts it from the report-path refusal; Steps 5 says the next resume point carries it.
+- 3: reproduces. `land` Steps 6 and `spec` "A stop" 1 carry the exception with a pointer.
+- 4: reproduces, apart from Standards B. The three "names neither / no worktree or base yet" clauses are gone and `land` "What it reads" 3 refuses any `preparing` entry.
+- 5: reproduces as text. Standards B is a defect in a step of it.
+- 6: reproduces for `brief_check`. The sample block parses and no unquoted `running: ` remains. See Standards C for the rest of the block.
+- 7: reproduces (`plan.md` line 36).
+- 8: reproduces in `plan-terms.md` and the glossary. Standards D is about its form.
+- 9: reproduces (Stops row).
+- 10: reproduces. Steps 1 holds one pointer bullet and Rules one sentence with the pointer. The rule itself stands in "The brief check" 1. Standards E is about other places.
+- 11: reproduces. The report lists the three changes with before and after, plus two more.
+- 12: reproduces. Steps 1, Steps 7 and "Over a repair round" 6 say "dispatch entry", and the glossary citation holds (lines 57, 78, 99). "What it reads" 3 and "Over a repair round" 2 are untouched as ruled. The ruling widened the paths to this file, so no finding of reaching beyond the finding.
+- 13: reproduces (see the paragraph under the verification block).
+
+No finding was closed by removing a check, and none reaches beyond its ruling.
+
+### Findings
+
+**Spec: none.**
+
+**Proof: none.**
+
+**Standards**
+
+- A. `skills/plan-orchestration/SKILL.md` "Resuming, and handing the plan over", the bullet on `landing: preparing`, and `skills/spec/SKILL.md` Stops row "A brief check still running", column "What resumes it".
+  - Hunks: "When that agent ends, its report is saved from its completion notice and the waiting `/spec` goes on, and the agent is never booked as dead" and "The waiting `/spec` goes on when the agent ends; only a run interrupted after that is taken over by `/spec` again".
+  - What is wrong: "Resuming" is read after a compaction or a handover. "Steps / A `/spec` taken over" itself says that a compaction cuts a `/spec` off. In that state no `/spec` is waiting, so "the waiting `/spec` goes on" names nothing. The row says only a run interrupted after the agent ended is taken over, while an entry whose `/spec` was cut off before the agent ended is taken over too, once the agent is unlisted.
+  - Failure scenario: after a compaction the session waits for the listed agent, saves the report from its notice, and then waits for a `/spec` to go on. Nothing runs `/spec` again, because the "Any other step at `landing: preparing`" bullet is read at resumption and not when the agent ends. The step stays at `preparing` and counts toward the limit.
+  - Verdict: none (case 5 is met by reading the takeover rules; this is the wording that leaves out the step).
+
+- B. `skills/plan-orchestration/references/self-rule.md` "The review of a choice", with `skills/land/SKILL.md` "Removing a step's worktree" 1 and `skills/ordo-help/SKILL.md` Steps 3.
+  - Hunks: "After a preparation commit, the step's worktree and branches are removed as the `land` skill's "Removing a step's worktree" says." and "printed as in `/spec`, with its base and its worktree once they are written".
+  - What is wrong: "Removing a step's worktree" 1 takes `worktree` from the dispatch entry and says "No path or branch is built from the step id". `spec` Steps 9 writes `worktree` into the entry together with `landing: not-started`, and Steps 7 makes the worktree before that. A `preparing` entry therefore never holds `worktree`, though the worktree can exist (`spec` Steps 7, takeover item 2).
+  - Failure scenario: a ruling `C<n> =>` arrives while a `/spec` is cut off between Steps 7 and 9. The entry holds `base` and no `worktree`. The orchestrator cannot follow "Removing a step's worktree" 1 and either removes nothing or builds the path from the step id, which that section forbids. If it removes nothing, the new `/spec` is refused with "A worktree or branch that exists". `ordo-help` can never print the worktree of a `preparing` step.
+  - Verdict: none (the rule in item 1's last bullet is stated; its removal step cannot be followed).
+
+- C. `skills/spec/SKILL.md` "Steps / The brief check" 1, `skills/plan/templates/orchestrator-state.md` line 33 and the glossary entry **dispatch entry**.
+  - Hunk: "`brief_check: "running: <agent id>"`, which the session writes into this step's dispatch entry, quoted so that the block stays valid YAML".
+  - What is wrong: the quoted value is valid, but the dispatch block is still not valid YAML once any step holds forms the skills prescribe unquoted. `refute` Steps 1, Steps 7 and "Over a repair round" 6 (lines this round edits) write `over round <n>: <agent id>, ...` into `reviewer_report`. `plan-orchestration` Steps 8 and 6 add round figures to `builder_usage`. I parsed the ledger's own state file with `python3 -I`: block 0 parses, block 1 fails ("mapping values are not allowed here", line 9, column 67, at `19 min 38 s; round 1:` in `builder_usage`).
+  - Failure scenario: with `workers_at_once` above 1, one step's entry is at `preparing` with a quoted value while another step's entry carries a repair-round record. A reader that parses the block still fails on the whole block, which is the failure ruling 6 was made to end, and the sentence "so that the block stays valid YAML" is false for that block.
+  - Verdict: none. Ruling 6 covers `brief_check` only, so this is for the orchestrator to widen or leave. The pre-existing forms in `refute` and `plan-orchestration` are not edited in this round beyond ruling 12's wording.
+
+- D. `skills/repo-setup/templates/plan-terms.md` **position line** (synced into `docs/glossary.md`), `skills/repo-setup/templates/docs/dev/prose-standard.md` D.
+  - Hunk: "the next part being the closing report, the roadmap diff of `/roadmap done <n>`, for the user's approval, the tag and the pin, for the user's approval, where the plan's rulings set them, or the move of the folder to `<archive_root>/`".
+  - What is wrong: four items in paragraph form, two of them with their own commas, in one sentence of about 55 words. The prose standard D says three or more list-shaped items become a list, and E asks for sentences under about 20 words. `plan-orchestration` "Reports" gives the same four as a bullet list.
+  - Failure scenario: an orchestrator writing from the glossary reads six items, "for the user's approval" and "where the plan's rulings set them" among them, and writes "Next: for the user's approval." or splits the roadmap diff from its approval.
+  - Verdict: none.
+
+- E. `docs/glossary.md` entries **handover**, **preparation commit**, **resume point**, **session, the**, `skills/land/SKILL.md` Steps 12 and `skills/spec/SKILL.md` Steps 6, against `docs/dev/skill-layout.md` "Where a rule goes" and the Anti-patterns row "The same rule written in two sections".
+  - Hunks: "other than the brief and the brief check's report of a `/spec` waiting on its brief check" (in three entries), "which its preparation commit alone carries" (in **session, the**), "It is the only commit that carries the brief and the brief check's report of a `/spec` waiting on its brief check" (in **preparation commit**); `land` Steps 12 "`plan.md` and the state file are held as they stand on disk" and `spec` Steps 6 "since a commit of the same plan made while this run waited carries them as they stood on disk then".
+  - What is wrong: ruling 10 puts the "only its preparation commit carries them" rule in `spec` "Steps / The brief check" 1 alone. The glossary now restates it in four entries, and the entries **handover**, **resume point** and **session, the** do not cite that section in "Stated in". The companion rule, that a same-plan commit carries `plan.md` and the state file as on disk, is written in "The brief check" 1, in `spec` Steps 6 and in two `land` Steps 12 bullets, and only some of them name the section.
+  - Failure scenario: a later edit changes the rule in "The brief check" 1 (for instance to let a `/land` back-out commit carry the report) and leaves four glossary entries and two other places on the old rule. A reader of the glossary entry **resume point** is told something different from `spec`.
+  - Verdict: none.
+
+**Behaviour: none.** The three changes of ruling 11 and the two added entries are in the report's "Host and user visible changes, before and after" with before and after. I found no other host- or user-visible change in the round's diff that the report leaves out.
+
+### Declined to judge
+
+- Whether the preflight reads other plans' dispatch blocks from disk or from main's head ("What it reads" 3 does not say), and whether "the runner still lists that agent" can tell a live brief check of another running session from a dead one. Both stay as in the first report; settling them needs a ruling on the source of the count and on the number of orchestrator sessions at once.
+- Whether a brief-check report committed in a preparation commit may stand for a step whose text "The review of a choice" rewrites (Steps 5 does not run the check again for a report in the ledger). It follows the existing "runs once per full step" rule, and changing it is the user's call.
+- A preparation commit made but `base` not yet written into the entry (an interruption between Steps 6's commit and its entry write). The takeover would start at Steps 1 and write a second brief. I did not judge whether that case has happened or costs anything.
+- The tag `v6.0.0-rc.2`, its pin and the `rev-parse` check. They are the orchestrator's work after landing and are not part of this diff.
+- Whether the builder's one read-only `git status` is booked. The report discloses it (item 3), `git status --short` shows only the step's files, and booking is the orchestrator's call.
+
+Reviewer usage: a3b381607c4f71126, claude-sonnet-5-5, 221081 tokens, 41 tool uses, 5 min 47 s.
+
+## Closed
+
+- The first run's findings (Spec 1, Standards 1 to 9, Behaviour 1, and the report's own points) were sent to the builder in repair round 1, as rulings 1 to 13 of `agents/briefs/3-round-1.md`. The run over round 1 reproduces each closure.
+- The run over round 1 is the run over the last round (`repair_rounds: 1`), so its findings go to no builder (`refute` "Steps / Over a repair round" 7). Each is small and inside the brief, and is fixed at landing on main:
+  - A. `plan-orchestration` "Resuming, and handing the plan over" and the `spec` Stops row "A brief check still running" say what happens when the agent ends with no `/spec` waiting on it, as after a compaction: the session runs `/spec <entry> <step>` again, which takes the entry over and saves the report from the agent's completion notice ("Steps / A `/spec` taken over" 1).
+  - B. `spec` Steps 7 writes `worktree` into the step's dispatch entry before `git worktree add`, so a `preparing` entry names its worktree from then on, and Steps 9 no longer adds it; the template comment and the glossary entry **dispatch entry** say the same.
+  - C. The dispatch entry's values that hold `: ` (`brief_check` while its agent runs, `builder_usage` after a round, `reviewer_report` after a run over a round) are written in double quotes, as the template `skills/plan/templates/orchestrator-state.md` and the glossary entry **dispatch entry** state once, and `spec` "Steps / The brief check" 1 points at that rule. The ledger's own state file is brought to that form.
+  - D. The glossary entry **position line** names the closing's next part by pointing at `plan-orchestration` "Reports", in place of the four parts in one sentence.
+  - E. The glossary entries **handover**, **preparation commit**, **resume point** and **session, the**, `land` Steps 12 and `spec` Steps 6 keep only a pointer to `spec` "Steps / The brief check" 1 for the rule on what a `/spec` waiting on its brief check leaves out of other commits.

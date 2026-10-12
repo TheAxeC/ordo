@@ -54,7 +54,7 @@ metadata:
    - Right after the dispatch, the orchestrator or the session reads the reviewer's agent id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
    - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops"): the reviewer is stopped through the runner's stop tool, and nothing it wrote is used.
    - The configured model is the model the configuration block's `reviewer:` names for the first run, and for a run over a repair round the model "Steps / Over a repair round" 1 gives.
-   - The stopped reviewer is recorded under the dispatch block's `reviewer_report`, after the records before it.
+   - The stopped reviewer is recorded under the `reviewer_report` of the step's dispatch entry, after the records before it.
      - A first-run reviewer: `(<agent id>, <served model>, stopped)`.
      - A reviewer over round `<n>`: `over round <n>: <agent id>, <served model>, stopped`.
      - The record is written and carried as Steps 7 says.
@@ -75,7 +75,7 @@ metadata:
    - Then the reviewer's usage line: its agent id, its served model, its tokens, its tool uses and its minutes.
    - Done when the report holds the verification lines, a verdict for each item and case, the four headings, "Declined to judge" and the usage line.
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
-   - It records the report's path under the dispatch block's `reviewer_report` field, after the records before it, followed by, in parentheses, the reviewer's agent id, its served model (Steps 1), and its tokens, tool uses and time from its completion notice: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`.
+   - It records the report's path under the `reviewer_report` field of the step's dispatch entry, after the records before it, followed by, in parentheses, the reviewer's agent id, its served model (Steps 1), and its tokens, tool uses and time from its completion notice: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`.
    - Both are written to disk in the main checkout.
    - The next resume-point commit of its own plan carries them, and they get no commit of their own, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
    - Done when the report is saved and its record is under `reviewer_report`.
@@ -96,7 +96,7 @@ metadata:
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns the checks the brief's "Verify before you report" names again.
 6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
-   - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit of its own plan as Steps 7 says.
+   - It records the run in the same field of the step's dispatch entry, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit of its own plan as Steps 7 says.
    - Done when the run's section is appended and its record is in `reviewer_report`.
 7. The findings of the run over the last round are never sent to the builder.
    - Each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.

@@ -42,11 +42,12 @@ metadata:
    - No such folder is a refusal ("Stops").
    - For a finding of a reviewer's report and for a red line, the dispatch entry for the step names the worktree and the base.
    - For a red line, the entry reads `landing: backed-out`: a red line the landing could not fix on main has taken the step back out of main, as the `land` skill's Steps 6 says.
-   - No dispatch entry for the step, for a reviewer's finding or a red line, or for a red line an entry that does not read `landing: backed-out`, is a refusal ("Stops").
-   - A brief-check finding has no dispatch entry yet, and none is read for it.
+   - For a reviewer's finding or a red line, no dispatch entry for the step, or one that reads `landing: preparing`, is a refusal ("Stops").
+   - For a red line, an entry that does not read `landing: backed-out` is a refusal too.
+   - A brief-check finding is diagnosed while the step's dispatch entry reads `landing: preparing`, and no dispatch entry is read for it.
    - For `premise`, `plan.md` holds the step's text (item 1).
      - The rulings its tags name are resolved as the `spec` skill's "What it reads" 4 resolves them, `(self-rule)` endings included.
-   - `premise` has no dispatch entry and reads no brief, since the step is not prepared yet.
+   - `premise` runs while the step's dispatch entry reads `landing: preparing`, and reads no dispatch entry and no brief, since the step is not prepared yet.
    - For `premise`, a step that is not in the step list is the refusal "No part to investigate" ("Stops").
 4. Inside a plan, for every form but `premise`, the step's brief `agents/briefs/<step>.md`.
 5. Inside a plan, for every form but `premise`, the report the finding is in.
@@ -354,7 +355,7 @@ The first five rows are stops. The cause not found, inside a plan, is a decision
 | Not enough output after redaction | Run by a person, when the output with each secret written `<REDACTED>` cannot show the cause; with no person present, Steps 15 gives it as a cause not found | That the redacted output is not enough, and what else the diagnosis needs | The user's answer, then the step that was running again |
 | The cause not found | One of the conditions Steps 15 gives | The record with every probe, or every way tried from its "No red command" section, and inside a plan the open item | Inside a plan, the user's ruling on the open item or, under `self_rule: on`, the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books; run by a person, the user's next direction |
 | No ledger folder | Inside a plan, no folder holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/diagnose` again |
-| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | What the bullets below give for the kind of input: a finding, a red line or a step already landed |
+| No dispatch entry | Inside a plan, for a finding of a reviewer's report or a red line, the state file has no dispatch entry for the step or one that reads `landing: preparing`, or for a red line one that does not read `landing: backed-out` | A refusal that names the step and its landing state | What the bullets below give for the kind of input: a finding, a red line or a step already landed |
 | No report | Inside a plan, for a finding, the report the finding is in is not on disk | The path where the report is read | The report written, then `/diagnose` again |
 | No finding | Inside a plan, for a finding, the report holds no finding under the name given | A refusal that names the finding and lists the findings the report has | `/diagnose` again with a name the report holds |
 | No part to investigate | Inside a plan, for `premise`, the step is not in the step list or its text holds no part that asks for a cause to be found | The step, and its text quoted | `/spec <entry> <step>`, which writes the brief with no investigation |

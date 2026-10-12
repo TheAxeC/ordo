@@ -148,17 +148,23 @@ C<n> => <the user's ruling, one clause per question the open item asked>
   - `- <date>: C<n>, <the decision>: agreed by the user.` is added to that plan's Closed items, except as the bullet "A choice booked in a rulings file" says.
 - `C<n> => <text>`: `<text>` is booked as a ruling of the user, as the `spec` skill's "Steps / A ruling" says, with the Rulings bullet `- C<n> <the decision, as a phrase> (<date>): <text>, replacing <the old bullet's opening words> (the user).`
   - The old bullet's ending is rewritten from "(self-rule)." to "(self-rule, replaced by C<n>).", which no skill reads as a ruling.
-  - A step of `Builds on it:` not yet prepared has its text rewritten to the new ruling.
+  - A step of `Builds on it:` not yet prepared, one at `landing: preparing` included, has its text rewritten to the new ruling, and its `/spec` runs again from Steps 1.
     - Its tag is rewritten to `(ruling <the new bullet's name>)`, here `(ruling C<n> <the decision, as a phrase>)`, when its tag names the old bullet.
+  - A step of `Builds on it:` at `landing: preparing` has its `/spec` ended before its text is rewritten.
+    - A running brief-check agent is stopped through the runner's stop tool, and its Agents bullet is written as for a brief-check agent stopped for another model (the `spec` skill's "Steps / The brief check" 1).
+    - The step's uncommitted brief is restored to main's copy, or deleted when main has none.
+    - When the entry names a `worktree` (the `spec` skill's Steps 7), the step's worktree and branches are removed as the `land` skill's "Removing a step's worktree" says.
+    - Its dispatch entry is removed.
+    - The committed brief, if any, is left for the new `/spec` to write over.
   - A step tagged `(approved)` keeps its tag.
   - When a step of `Builds on it:` has landed and the plan is open, a fix step is added before the closing, `- <k> <what changes to follow C<n>>; check: <the check> (<n> commit) (ruling <the new bullet's name>)`, here `(ruling C<n> <the decision, as a phrase>)`, with its own Step 0 naming the steps it corrects.
-  - A step of `Builds on it:` in flight at the review gets its fix step at its landing, in the same form.
+  - A step of `Builds on it:` in flight at the review, one at `landing: preparing` excepted, gets its fix step at its landing, in the same form.
   - At the landing of a step whose tag or Step 0 names a bullet ending "(self-rule, replaced by <name>).", for any name, `C<n>` or another, the orchestrator adds that fix step.
   - When a step of `Builds on it:` has landed and the plan is closed, the session drafts `/roadmap add <goal>` for the change, and the draft goes to the user at that skill's approval stop.
   - A roadmap diff of `Builds on it:` is written again from the new bullet by `/grill <entry> --ruling <ledger file> "<the new bullet's name>"`, which takes it as the user's answer.
   - A roadmap entry of `Builds on it:` is changed by `/roadmap` (`drop`, or `add` of the corrected work) under the new bullet, at that skill's approval stop unless the bullet states the change in full.
   - A record of `Builds on it:` is rewritten to follow the new bullet, or removed when the new bullet says no record is kept, in the review's commit.
-  - When no step of `Builds on it:` has landed or is in flight, no fix step is added.
+  - When no step of `Builds on it:` has landed or is in flight apart from one at `landing: preparing`, no fix step is added.
   - The choice then leaves the choices file, as under `Agree`.
   - `- <date>: C<n>, <the decision>: replaced by the user's ruling C<n>.` is added to the Closed items, except as the bullet "A choice booked in a rulings file" says.
 - **A choice booked in a rulings file.** When `Booked:` names the entry's rulings file, the review differs in two ways.

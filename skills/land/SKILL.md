@@ -32,7 +32,7 @@ metadata:
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
 3. The dispatch block naming this step, with its worktree and base.
-   - None is a refusal ("Stops").
+   - None, or an entry at `landing: preparing`, whatever it names, is a refusal ("Stops").
 4. This skill's `templates/land.sh` and `templates/checks.sh`, as "The landing script" says.
    - A `checks.sh` missing beside `land.sh` is a refusal ("Stops").
 5. `agents/reviews/<step>-report.md` and the refuter report `agents/reviews/<step>-refuter.md`, as the Stops row "The step not ready" requires them.
@@ -48,7 +48,7 @@ metadata:
    - An agent is stopped through the runner's stop tool.
    - Then the runner's agent listing must show none of them left.
    - A check that fails is a refusal before main is touched ("Stops").
-2. Set `landing: cherry-picking` in the dispatch block.
+2. Set `landing: cherry-picking` in the step's dispatch entry.
    - Then compare the plan's verify list with the verification page's commands, as the `spec` skill's Steps 1 says.
    - Rewrite the list in the state file on a difference, before `templates/land.sh` runs it.
    - The booking (Steps 9) names the change.
@@ -76,6 +76,12 @@ metadata:
    - A red line that a fix inside the brief closes is fixed on main.
      - It is counted as a fix at landing.
      - It is named in the booking with its cause.
+   - A red line whose file is an uncommitted ledger record of another step of the same plan, or of another open plan, is closed by who wrote the record.
+     - A record the session wrote is fixed in place on disk, to the rules file's character set, without changing what the record says.
+       - The fix is counted as a fix at landing and named in the booking with the file's path.
+       - The fix is not part of this landing's commit: the record waits for the resume point of its own step or plan (Steps 12).
+     - A record the session did not write is not the session's to change.
+       - The red line takes the step back out of main as any other red line does, and the failure goes to the user as an open item that names the file.
    - Any other red line ends the landing there, leaving main in a state the resumption rules of `plan-orchestration` recognise.
    - It takes the step back out of main: `git restore --staged --worktree -- <paths>` for changed files, `git rm --cached` and delete for added ones, run without asking the user.
    - The dispatch block is then set to `landing: backed-out`.
@@ -91,7 +97,7 @@ metadata:
      - The booking is written and read back before the commit below.
      - The agents of its later landing are appended when it lands, those already in the section skipped.
    - The state file and `plan.md` are then committed, a resume point, in the form Steps 12 states.
-     - The commit also holds the other ledger records of this plan that the session wrote since the last one.
+     - The commit also holds the other ledger records of this plan that the session wrote since the last one, other than the brief and the brief-check report of a `/spec` waiting on its brief check (the `spec` skill's "Steps / The brief check" 1).
    - `/spec` then saves the step's work as a patch and prepares it again from main's head, as the `spec` skill's "Steps / A step taken back out of main" says.
    - Done when every verification command has run on main and each red line is fixed on main, or the step is taken back out of main.
 7. Open the changed views, as "The look" says.
@@ -120,6 +126,7 @@ metadata:
    - Done when the booking is in `plan.md`, the step is ticked, and the Agents section, read back, holds each agent of the step once.
 10. Read the step's `worktree` from its dispatch entry, for Steps 13.
     - Then rewrite this plan's state file, as "Rules" says: the step's dispatch entry removed, the position line, the open items as they stand.
+    - Every other entry of the dispatch block stays as it stands, a `preparing` entry included.
 11. Write the landing report, `agents/reviews/<step>-landing.md`, so it lands with the step and stands alone on disk.
     - It opens with the position line of its own plan: the roadmap entry with its title, the plan step as "step n of m" with its name, and the next step.
     - Then the open items, verbatim, which hold only what the user must rule on.
@@ -130,6 +137,8 @@ metadata:
     - Run by hand, it is the message that ends the turn.
 12. Commit by explicit path, a resume point: every path from `git diff --cached --name-only --no-renames`, so a rename's old path is named too.
     - The commit also holds the files of this plan's ledger that the session wrote since the last resume point, the landing report among them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+    - A `/spec` waiting on its brief check is carried as the `spec` skill's "Steps / The brief check" 1 says.
+    - Not among them either is a record that Steps 6 fixed in place.
     - It also holds the choices file when a choice of this plan changed it.
     - The paths are written out in the `git add -- <path> ...` command, never through a shell variable.
     - Deleted paths are already staged by the cherry-pick and are not re-added.
@@ -141,6 +150,7 @@ metadata:
     - Afterwards `git status --short` shows nothing of the step's and no ledger file of this plan that the session wrote.
     - Such a ledger file left modified means the commit missed the booking, and it is staged with `git add -- <path>` and the head is amended with `git commit --amend --no-edit -- <path>`.
     - A ledger file of another open plan left modified is that plan's record, which waits for that plan's next resume point.
+    - The brief and the brief-check report of a waiting `/spec`, and a record that Steps 6 fixed, left modified are not a missed booking.
 13. Remove the step's worktree and its branches, as "Removing a step's worktree" says, with the `worktree` Steps 10 read.
 
 ## The look
@@ -206,7 +216,7 @@ metadata:
 | A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves, as the bullet below says | The lock removed once no git command uses it, then `/land` again, as the bullet below says |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
-| No dispatch block | The state file holds no dispatch block naming this step | That the block is missing | `/spec` for the step |
+| No dispatch block | The state file holds no dispatch block naming this step, or its entry reads `landing: preparing` | That the block is missing, or the step's landing state | `/spec` for the step |
 | No verify runner | `templates/checks.sh` is not beside `templates/land.sh`, and `land.sh` exits 64 before anything is touched | The path it looked for | The `land` skill installed whole, then `/land` again |
 | The step not ready | No builder's report; or no refuter report that is either newer than the builder's report or, after the step's repair rounds (up to `repair_rounds`, or one more under plan-orchestration's exception), carrying a run over the last round when `refute_after_repair: yes` (the orchestrator's read of the round when `no`); or a run over the last round owed and missing; or a finding, the last run's included, neither closed under the refuter report's Closed heading nor raised to the user as an open item | Which of these it is | What is missing supplied, then `/land` again |
 | Main not clean | On main something staged, a git operation in progress, or one of the step's paths carrying an unrelated change of the user's | What it saw, the user's unrelated changes listed by path | Main put right, then `/land` again |
@@ -243,5 +253,6 @@ metadata:
   - Only a step so reverted is booked as reverted.
 - A landing runs from its cherry-pick (Steps 4) to its commit (Steps 12) before the session makes any other commit or starts any other skill; builders and reviewers already running go on.
   - The range stays staged on main until that commit.
+  - A brief-check report that arrives during a landing is saved after the landing's commit.
 - The landing rewrites its own plan's state file before the commit, and no other plan's state file.
   - The state file then describes that plan as of its own last resume point, as `plan-orchestration`'s "Resuming, and handing the plan over" says.

@@ -63,14 +63,14 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
    - With no open plan, `/plan-orchestration` with no entry and `continue the plan` take the next roadmap entry under `self_rule: on` and `next_entry: on`, as `references/self-rule.md`, "Next-entry mode", says.
      - Otherwise they say that no plan is open and name `/plan <entry>`.
    - Done when a step is picked for each free slot, or none of the plans the invocation runs has an unblocked step.
-3. Invoke `/spec <entry> <step>`, which checks the premises, writes the brief, runs for a full step the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
+3. Invoke `/spec <entry> <step>`, which writes the step's dispatch entry at the end of its preflight, checks the premises, writes the brief, runs for a full step the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and fills the dispatch entry.
    - Before dispatching the builder of a full step, read the brief check's report and the changes to the brief its "Closed" heading names.
    - A stop it raises goes to the user by "Stops".
      - Under `self_rule: on`, the orchestrator closes it instead, as `references/self-rule.md`, "Closing an open item", says, unless it is of a kind its "The six kinds left open" names.
    - A stop, here or at any later step, blocks its own step.
      - The loop moves on to the next unblocked step.
    - Its refusal of a step without its authority (the `spec` skill's Steps 1) is raised as a stop of the kind "A finding that is the user's", since a step enters the plan only as "What earns a step of its own" says.
-   - Done when `/spec` has written the brief and the dispatch block and, for a full step, the brief check's report is read, or the step has stopped.
+   - Done when `/spec` has written the brief and filled the dispatch entry and, for a full step, the brief check's report is read, or the step has stopped.
 4. Choose the step's executor.
    - Write it into the dispatch block.
    - Then build by that choice.
@@ -81,6 +81,7 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
      - Under `agent` it comes right after the launch and the model check of "Launching a builder", since the builder's agent id exists only once it is launched.
      - Under `inline` and `academic-paper` it comes before the build starts.
      - The commit is made in the form "Resuming, and handing the plan over" states, with the state file and the session's own records of the step's plan since the last resume point.
+       - The brief and the brief-check report of a `/spec` waiting on its brief check are not among those records (the `spec` skill's "Steps / The brief check" 1).
    - **The prompt.** It states, in its own words:
      - The worktree, and that it is the only place to work.
      - The no-git rule.
@@ -99,14 +100,14 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
      - It makes the launch commit.
      - The step is then built through that skill with the brief as its input.
      - That skill's output is the step's report.
-5. While the builder runs, do ledger work only: the next step's premise checks, the bookings.
+5. While the builder runs, or a `/spec` waits on its brief check, do ledger work and the skills of other steps: the next step's premise checks, the bookings, and `/spec`, `/refute` and `/land` for other steps, as "Two steps in flight" says.
    - Never dispatch beyond the limit "Two steps in flight" states.
    - Never dispatch a step of a plan a pause holds ("Stops").
 6. On the report, save it into the main ledger at the dispatch block's `report` path, on disk and not committed on its own.
    - Then read the whole diff.
    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
    - When the builder wrote no report file, the orchestrator takes the report from the final message its completion notification carries, into the `report` path.
-   - The orchestrator writes the builder's tokens, tool uses and time, from its completion notice, into the dispatch block under `builder_usage`, beside `report`, on disk.
+   - The orchestrator writes the builder's tokens, tool uses and time, from its completion notice, into the dispatch entry under `builder_usage`, beside `report`, on disk.
    - The next resume-point commit of its plan carries them.
    - The report is a lead, not a fact.
    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result.
@@ -124,7 +125,7 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
    - A small text step is reviewed once under `every` and `earned` alike.
    - Read the diff yourself while it runs.
    - Save its report.
-     - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk.
+     - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch entry under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk.
      - The next resume-point commit of its plan carries them.
    - Done when the refuter report is saved and its record is under `reviewer_report`.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the step's part and the written rules.
@@ -135,6 +136,7 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
    - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 "Dictated text" holds a brief's, since the brief check never reads those files.
    - **Before the resume.** Write `round: n` into the dispatch block.
      - Commit it as a resume point, in the form "Resuming, and handing the plan over" states, with the round's brief and the session's own records of the step's plan since the last resume point.
+       - The brief and the brief-check report of a `/spec` waiting on its brief check are not among those records (the `spec` skill's "Steps / The brief check" 1).
    - **Only known fixes.** Each ruling says what to change.
      - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>).
        - The diagnosis runs in a diagnosis agent, as the `diagnose` skill's "Rules" say.
@@ -215,16 +217,18 @@ The ledger is the whole handoff. An orchestrator may stop after any step, and an
   - The commit is `git commit -m <message> -- <path> ...`, naming every path the commit records, a deleted path included.
 - A resume-point commit carries the session's own records under its own plan's ledger folder, and the choices file when a choice of that plan changed it.
   - It holds only the paths the session itself wrote since the last one.
+    - The brief and the brief-check report of a `/spec` waiting on its brief check are not among them (the `spec` skill's "Steps / The brief check" 1).
   - Another plan's records wait for that plan's next resume point.
   - A commit that names the choices file records the whole file, every plan's changes to it included, since the file is one for every plan.
 - A ledger change the session did not make is listed by path.
   - It is left alone.
   - One on the `plan.md` or the state file of the plan a `/spec` run prepares a step of is a refusal of `/spec` (the `spec` skill's Steps 1).
+    - The records of an interrupted `/spec` of that step are no such change: the run takes them over (the `spec` skill's "Steps / A `/spec` taken over").
 - A session taking over reads the ledger in the working tree as well as at main's head, since a record not yet committed is on disk in the main checkout.
 - Handing the plan over is a resume point.
 - A session that stops, for a handover, a pause or its end, first commits the records it wrote since the last resume point, of every open plan, in the form above.
 - A stop of one step blocks its own step and does not stop the session, so its resume-point commit carries the records of its own plan only.
-- So a session taking over finds no uncommitted record of the session before it.
+- So a session taking over finds no uncommitted record of the session before it, other than the brief and the brief-check report of a waiting `/spec` (the `spec` skill's "Steps / The brief check" 1).
   - A ledger change it did not make is listed, as the bullets above say.
     - It is left alone, as the bullets above say.
 - A plan's state file is rewritten before every step commit of that plan, so it describes that plan as of its own last resume point.
@@ -243,6 +247,12 @@ For each step, a resolved block holds:
 - A builder still running is waited for.
 - A finished builder resumes at the read of its report.
 - A step at `landing: cherry-picking` is checked on main (`git status`, `git diff --cached`) before anything is applied again.
+- A step at `landing: preparing` whose `brief_check` reads `"running: <agent id>"` and whose agent the runner still lists is a live `/spec` waiting on its brief check, and is waited for.
+  - When that agent ends, its report is saved from its completion notice, and the agent is never booked as dead, as the `spec` skill's "Steps / The brief check" 3 says.
+  - When no `/spec` of the session is waiting on it, as after a compaction, the session then runs `/spec <entry> <step>` again, which takes the entry over (the `spec` skill's "Steps / A `/spec` taken over" 1).
+- Any other step at `landing: preparing` is an interrupted `/spec`, one stopped by a compaction in the same session or one a session handed over after its handover commit.
+  - It is resolved by running `/spec <entry> <step>` again, which takes over its dispatch entry.
+  - The run goes on from where the interrupted run stopped, as the `spec` skill's "Steps / A `/spec` taken over" says.
 - A step at `landing: backed-out` was taken back out of main by a red line at its landing.
   - Its worktree and its branches are kept.
   - It stays unticked in `plan.md`.
@@ -298,6 +308,7 @@ On every resumption, with a dispatch block or without one:
 The orchestrator, still one, may have as many steps running at once as the limit allows, each through steps 3 to 9 on its own, across every open plan, under these rules:
 
 - **The limit.** `.agents/plan.yaml`'s `workers_at_once` is the most steps in flight at once, read at each pick and counted over the dispatch blocks of every open plan.
+  - A step is in flight from the start of its `/spec`: its dispatch entry at `landing: preparing` counts toward the limit (the `spec` skill's Steps 1).
   - In the `projects:` form, the limit is the smallest `workers_at_once` among the projects that have an open plan.
   - A configuration block that holds a `workers_at_once` line is read as if the line were not there.
 - Every rule below holds for a pair of steps from two plans as for a pair from one plan.
@@ -306,6 +317,8 @@ The orchestrator, still one, may have as many steps running at once as the limit
 - A pair whose later landing needs more than a mechanical rerun or a hand merge of a few named functions runs in sequence.
 - Each brief lists the paths its step writes under "Paths this step writes".
   - `/spec` compares the list with the briefs of the steps in flight of every open plan by reading them (the `spec` skill's Steps 5).
+  - A step at `landing: preparing` is compared once its brief is written.
+- While a `/spec` waits on its brief check, the session may run `/land`, `/refute` and another `/spec` for other steps, under the rules of the `spec` skill's "Steps / The brief check" 1.
 - Two steps in flight may name the same file if and only if the orchestrator judges that merging them at landing is simple.
   - The orchestrator writes that judgment in the later step's dispatch entry as `shared_paths:`, naming each shared file, the other step's plan and step, and why the merge is simple.
   - With no shared file the key is left out.
@@ -358,6 +371,13 @@ The orchestrator, still one, may have as many steps running at once as the limit
 
 - A position line belongs to one plan: the roadmap entry with its title, the plan step being worked as "step n of m" with its name, and the next step, in the form "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>."
   - A plan a pause holds ends its position line with "Next: PAUSED, until <the user> says otherwise." in place of the next step.
+  - A plan whose step being worked is the closing takes the form "Roadmap entry <n> (<title>). Plan step <m> of <m>: the closing. Next: <the closing's next part>."
+    - `<the closing's next part>` is one of:
+      - the closing report;
+      - the roadmap diff of `/roadmap done <n>`, for the user's approval;
+      - the tag and the pin, for the user's approval, where the plan's rulings set them;
+      - the move of the folder to `<archive_root>/`.
+  - A plan whose folder has moved to `<archive_root>/` is not open and has no position line.
 - The orchestrator's report opens with one position line per open plan, in the roadmap's order, each followed by that plan's open items verbatim.
   - Then come the steps landed since the loop began, grouped by plan, each with the path of its landing report.
   - Under `self_rule: on`, then come the choices taken since the loop began, by `C<n>` and heading.
