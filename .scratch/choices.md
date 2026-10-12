@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C37
+Last number: C38
 
 # Entry 2.H session-retro
 
@@ -28,4 +28,17 @@ Open item Step 4, the end of a plan's window: `session-retro` Steps 1 ends a pla
 
 Taken: (a)
 Booked: `.scratch/2-h-session-retro/plan.md:57` (Open item Step 4, the end of a plan's window)
+Builds on it: 5
+
+## C38. A plan's window ends at its own last commit (2026-10-12)
+
+Open item Step 5, a later plan's commit into a plan's own files: the rule of C37 still widens the windows of plans 1, 2 and 2.A, since plan 2.B's commit 8becbcd rewrote their archived `plan.md` and `orchestrator-state.md`; `/session-retro 1` would end at 2026-09-26T04:49:18+02:00 where plan 1 closed at a866716 (2026-09-23T17:11:54+02:00).
+
+- Option (a): keep C37's rule. Pro: the command stays one `git log`. Con: three plans keep a window that runs into plan 2.B, and the step's purpose clause is false for them.
+- Option (b), recommended: the plan's own last commit, the commit that added its `plan.md` under `<archive_root>` or a later commit that touches its `plan.md` or `orchestrator-state.md` and no other plan's. Pro: each of the ten archived plans ends at its own close or its own correction. Con: a loop of a few lines in place of one command.
+- Option (c): the commit that moved the folder. Pro: one command. Con: it drops the corrections 75c987f of 2.C and 8ea1b6d of 2.D.
+- Recommendation: (b). The lazy option is (a).
+
+Taken: (b)
+Booked: `.scratch/2-h-session-retro/plan.md:58` (Open item Step 5, a later plan's commit into a plan's own files)
 Builds on it: 5

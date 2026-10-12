@@ -51,6 +51,7 @@ none
 - Recurring findings (2026-09-30): Axel ruled (a) for each of the six proposals; step 3a.
 - 2026-10-12: Open item Step 4, the window of the real run, the skill's stop "A large output" over the window it resolved for 2.C: closed under self-rule, C36.
 - 2026-10-12: Open item Step 4, the end of a plan's window, a later plan's commit widening the window of an archived plan: closed under self-rule, C37.
+- 2026-10-12: Open item Step 5, a later plan's commit into a plan's own files, a later plan's commit into an archived plan's `plan.md` or state file still widening its window: closed under self-rule, C38.
 
 ## The standing demands (from Axel, in force)
 
