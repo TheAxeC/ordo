@@ -90,6 +90,7 @@ Independent of each other; the standing rule of one agent at a time still serial
   - Plan 3's step 1 check: the `sed` and `grep -c` of the gate print 1. Step 2's check: the three FAQ parts of the gate.
 - Open item Step 2, condition 7 shown only through a hold (2026-10-12): (a) two steps before the closing, which becomes step 5: step 3 changes the skill texts as its line says and ends with the tag `v6.0.0-rc.2` and its pin; step 4 is the second real run as its line says, its scratch content the two scratch rulings of step 2 with the two changes its line names; run findings 1, 3, 6, 7 and 8 of `agents/reviews/2-report.md`, outside entry 2.I's goal, go to a new roadmap entry through `/roadmap add` under self-rule. The lazy option was (b), condition 7 counted as met through the hold (the user).
 - Open item Step 3, how a step in /spec is recorded (2026-10-12): (a) `/spec` writes the step's dispatch entry at the end of its preflight with `landing: preparing`, counted toward the limit and compared once its brief is written; Steps 9 sets `landing: not-started`; a stop or a wait removes the entry; it unblocks step 3's brief (self-rule).
+- Open item Closing 3, the run findings 2.K does not hold (2026-10-13): (a) findings 2, 3, 5, 7 and 8 of `agents/reviews/4-report.md` added to entry 2.K's goal (the user).
 
 ## Agents
 

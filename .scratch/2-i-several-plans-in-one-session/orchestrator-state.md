@@ -43,10 +43,10 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 - Open item Closing 1 (kind 4): the roadmap diff of `/roadmap done 2.I`, in `agents/reviews/roadmap-done.diff.txt`: the 2.I entry leaves the open order, and its done line is added after 2.H. Approve, or correct it.
 - Open item Closing 2 (kind 4): the tag `v6.0.0` on main's head after the roadmap commit, and `sh utils/pin.sh v6.0.0`. Approve, or name another tag.
-- Open item Closing 3 (kind 3, a change to an entry the user approved): the findings of the second run that entry 2.K does not hold, `agents/reviews/4-report.md` "Findings of the run" 2 (a reviewer's report), 3, 5, 7 and 8. Options: (a) add them to 2.K's goal and gate; (b) leave them out; (c) a new entry. Recommendation (a).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-13: Open item Closing 3, the run findings 2.K does not hold: ruled (a) by the user; findings 2, 3, 5, 7 and 8 added to entry 2.K's goal.
 - 2026-10-12: Open item Step 3, how a step in /spec is recorded, a value of the dispatch entry for a step in `/spec`: closed under self-rule, C40.
 - 2026-10-12: Open item Step 2, condition 7 shown only through a hold: ruled (a) by the user; steps 3 and 4 added before the closing, which becomes step 5.
 - 2026-10-12: Open item Step 2, the scratch gates that could pass without their goals: ruled (a) by the user.
@@ -110,4 +110,4 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - Next: the roadmap diff of `/roadmap done 2.I`, the tag `v6.0.0` and its pin, each for Axel's approval, and the run findings of `agents/reviews/4-report.md` brought to Axel with options; then the move of this folder to `.scratch/archive/`.
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
 - No step in flight.
-- Open on Axel's side: Open items Closing 1, 2 and 3.
+- Open on Axel's side: Open items Closing 1 and 2.
