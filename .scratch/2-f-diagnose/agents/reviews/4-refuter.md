@@ -224,3 +224,182 @@ Cases of the brief's "Cases":
 - Whether the version raise to 2.1.0 meets skill-layout's "A plan that changes a skill raises one part of its metadata.version once": plan 2.F raised diagnose to 1.2.0 at fa32d9d before plan 2.1 raised it to 2.0.0 (released). The brief's decision 7 rules this, and I do not reopen it.
 
 Agent usage: a961b9fcb88f8028e, claude-opus-5-5, 186998 tokens, 35 tool uses, 9.0 minutes.
+
+## Repair round 1, refuted
+
+Every command was run from /Users/axelfaes/workspace/ordo/.agents/worktrees/2-f-4 unless the main checkout is named. The worktree diff at the round's start is `4-round-0.diff` (`shasum` 11fc9ca805f4, equal to the dispatch entry). The delta below is `diff 4-round-0.diff <git diff 8b93c6f now>`, read against the whole diff since the base.
+
+```
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+$ git ls-files -coz --exclude-standard -- skills/diagnose/SKILL.md skills/diagnose/templates/diagnosis.md docs/glossary.md skills/repo-setup/templates/plan-terms.md | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+(no output)
+exit 0
+$ python3 -c 'import yaml; print(len(yaml.safe_load(open("skills/diagnose/SKILL.md").read().split("---")[1])["description"]))'
+965
+exit 0
+$ grep -o '^[0-9]*\. ' skills/diagnose/SKILL.md | tr -d '\n'
+1. 2. 3. 4. 5. 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. 22. 23. 24. 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 
+$ cmp <(git show 8b93c6f:skills/diagnose/SKILL.md | grep -o '^[0-9]*\. ' | tr -d '\n') <(grep -o '^[0-9]*\. ' skills/diagnose/SKILL.md | tr -d '\n')
+cmp exit 0
+$ grep -n 'version:' skills/diagnose/SKILL.md
+5:  version: "2.1.0"
+$ grep -n 'other input' docs/glossary.md skills/repo-setup/templates/plan-terms.md   (cut to 110 columns)
+docs/glossary.md:40:- **diagnosis record**: the copy of the `diagnose` skill's `templates/diagnosis.md` that a
+docs/glossary.md:71:- **other input**: in a diagnosis, an input other than the reported one that reaches the o
+skills/repo-setup/templates/plan-terms.md:35:- **diagnosis record**: the copy of the `diagnose` skill's `templ
+skills/repo-setup/templates/plan-terms.md:66:- **other input**: in a diagnosis, an input other than the reported one that reaches the o
+$ grep -n -i 'other input' skills/diagnose/SKILL.md | cut -d: -f1
+172 174 176 180 184 185 188 196 198 213 215 226 230 235 240
+$ grep -n '^15\. \|^20\. ' skills/diagnose/SKILL.md   (cut to 80 columns)
+166:15. State the cause: the hypothesis the probes left standing, with the probe
+241:20. Inside a plan, hand the fix over by where the defect was found.
+$ git status --short
+ M docs/glossary.md
+ M skills/diagnose/SKILL.md
+ M skills/diagnose/templates/diagnosis.md
+ M skills/repo-setup/templates/plan-terms.md
+?? .scratch/2-f-diagnose/agents/reviews/4-report.md
+$ git diff 8b93c6f --stat
+ docs/glossary.md                          |  3 +-
+ skills/diagnose/SKILL.md                  | 62 ++++++++++++++++++++++++++-----
+ skills/diagnose/templates/diagnosis.md    | 19 ++++++++--
+ skills/repo-setup/templates/plan-terms.md |  3 +-
+ 4 files changed, 72 insertions(+), 15 deletions(-)
+```
+
+The commands the round's report quotes as evidence, rerun, with the comparison:
+
+```
+$ sed -n 166,240p skills/diagnose/SKILL.md | grep -n -i 'wait\|reply'
+(no output, exit 1)                                   report: printed nothing. Reproduced.
+$ grep -n -i -w 'just\|simply\|easy\|very\|really\|often\|typically\|generally' skills/diagnose/SKILL.md
+(no output, exit 1)                                   Reproduced.
+$ sed -n 166,240p skills/diagnose/SKILL.md | grep -n -i probe
+"probe" names a hypothesis's probe or "the change of the probe" on every hit; no run of an other input is called a probe.   Reproduced.
+$ double-blank awk over SKILL.md and diagnosis.md
+(no output)                                           Reproduced.
+$ wc -l (worktree)
+362 SKILL.md / 131 diagnosis.md / 148 glossary.md / 131 plan-terms.md   Reproduced (report: 362, 131, 148, 131; 353 before the round matches the first run's count).
+$ wc -w per line, the list marker removed, lines over 20 words in 167-240
+167 24, 168 22, 169 24, 171 39, 173 31, 175 33, 181 24, 184 24, 185 31, 186 30, 192 27, 213 43, 215 49, 224 25, 226 24, 228 23, 229 33, 231 30, 234 36, 239 24, 240 42 (changed lines of the round or of round 0)   The report's table lists exactly these 21. Reproduced.
+$ wc -w template lines 76 80 84 86 88 90 121 / glossary 71 and 40
+39 67 38 40 95 38 22 / 101 and 62; the sentence 3 of glossary 71 is 40 words   Reproduced.
+$ diff of the five fenced blocks of agents/briefs/4-round-1.md against SKILL.md 167-198, 215, 225-232, 236-240, and against glossary:71 and plan-terms:66
+no difference in any of the five (the template edits of item 5 read by eye: Cause placeholder, Probes Result cell, "Right result" column and the three cells match the brief's quoted words)   Applied word for word.
+$ awk '/^## Open items/{f=1;next} /^## /{f=0} f' orchestrator-state.md   (main checkout)
+- none                                                Reproduced.
+$ grep -l -i 'diagnos\|hypothes' docs/adr/0*.md   (main checkout)
+(no output, exit 1)                                   No ADR governs the diff; ADR 0010 (verify list) and 0012 (commit paths) concern landing, not the changed text.
+$ grep -n '^## ' skills/diagnose/templates/diagnosis.md
+7 Symptom, 11 Where the probes run, 22 Red command, 50 No red command, 54 Shrunk case, 62 Hypotheses, 72 Probes, 78 Cause, 82 Operation and other inputs, 92 Fix and test, 125 Cleanup   Reproduced.
+```
+
+Commands outside the allowed list that I ran, all read-only: the brief's `git ls-files` (part of check 1), `git show 8b93c6f:skills/diagnose/SKILL.md` for the numbering comparison, `git diff 8b93c6f --stat`, and `git diff 8b93c6f | shasum`. I wrote one file under the scratchpad directory, `now.diff`, for the delta; I changed nothing in the repository or the ledger.
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: holds. The entry stands after **orchestrator** in both files (glossary:71, plan-terms:66, equal by `diff`), with "Stated in: `diagnose`, Steps 15 to 19"; every hit of the term in the skill lies at lines 172 to 240, inside Steps 15 (166) to 19 (ends 240). The entry is the round brief's text, which differs from the brief's item 1 by its sentences 2 and 3.
+- 2: violated for its last clause, "the glossary's **red command** stays true" (Standards 1). A run of an other input is called a run and the change under test is "the change of the probe that shows the cause" (lines 186, 215, 225, 229), so those clauses hold.
+- 3: holds. Lines 167 to 170 state the operation, its place, the rule and the restatement of a property of the input. Line 171 is the round's wording of the tie-break and does not choose between hypotheses 1 and 3 (Behaviour 1).
+- 4: holds. Lines 172 to 175; line 173 covers a probe stopped in its setup.
+- 5: holds. Lines 176 to 183.
+- 6: holds. Lines 184 to 192; the classes are defined against the right result (lines 189 to 191).
+- 7: holds. Line 215 gives one test case each, asserting that input's right result; line 221 and line 224 quote each failure.
+- 8: holds as worded; line 230 lets a regression land (Behaviour 2).
+- 9: holds. Lines 235 to 240; the exception for an input written as not fixed is in lines 236 and 240.
+- 10: holds. Lines 193, 194, 228, 238 and the template's Class column and "left out, for another defect" cell.
+- 11: holds. Lines 195 to 197, 219, 239; template lines 90 and 121.
+- 12: holds. `grep -i 'wait\|reply'` over 166 to 240 prints nothing and the diff adds no Stops row.
+- 13: holds. `cmp exit 0`; the Done lines of Steps 15 to 19 (213, 220, 224, 234, 240) carry the new work.
+- 14: holds. `5:  version: "2.1.0"`; `description` is 965.
+- 15: holds. `## Operation and other inputs` at template:82, between Cause (78) and Fix and test (92), with the operation line, the seven-column table and the "none, with the reason" line.
+- 16: holds. Template:80 states the cause at the operation with place and rule and names "each other input written as not fixed, or "none"".
+- 17: holds. Template:97 ("for each test case") and :118 (the red command on each other input).
+- 18: holds. glossary:40 and plan-terms:35 name "the operation with its other inputs" in the template's order.
+- 19: holds, as item 1.
+- 20: holds. `ok: the plan-terms block equals the template`; the two **other input** lines are equal.
+
+Cases of the brief's "Cases":
+
+- Case 1, the step-3 defect: partial (Behaviour 1, Behaviour 2, Behaviour 3). Followed on the step-3 record's hypotheses (1: line 317 strips one slash where line 112 strips all; 2: line 75 keeps the slashes; 3: the paths compared as written, probe 3 stopped at `setup pin v1 failed`): line 167 and 168 give the operation at `pin.sh:317` and its rule; lines 172 to 175 keep hypothesis 3 and give it one more probe; lines 176 to 179 list `agents/.`, `agents/./`, a link and an agents folder not yet made; lines 184 to 191 class `agents/.`, `agents/./`, the link and the same folder not yet made as part of the defect (wrong on the unfixed tree at line 317) and a different folder not yet made as not part of the defect (right on the unfixed tree); line 215 gives a test case to each input of the defect. Two steps do not reach the expected fix reliably: line 171 does not choose between hypotheses 1 and 3, and line 230 lets the empty-string resolution land as "not fixed".
+- Case 2, an other input green on the unfixed tree: met. `$HOME/.claude/./agents/`: right result refusal (184); line 112 derives the same spelling, so the unfixed tree refuses it; class not part of the defect (190); no test case (215); after the fix it gives what it gave (228, 237).
+- Case 3, another defect: met. `CLAUDE_CONFIG_DIR="$HOME/.claude//"` at `pin.sh:79`: class another defect (191), written in the record with its result (193), not fixed (194), left as it was (228), left out of the result (238).
+- Case 4, an input of the defect still red after the second change: met. Lines 230 (written as not fixed, with its result), 231 (its test case taken out, its failing run quoted), 232 (the Cause section and the final message name it), 236 and 240 (Done is met with the input quoted); template:80 and the "not fixed, with its result" cell.
+- Case 5, a defect in text: met. Line 195 names the instruction as the operation; lines 196 and 197 read the other situations against the text; line 239 reads them again after the fix; line 219 asks for no test.
+- Case 6, no person present: met. No Stops row is added and no step of 166 to 240 waits.
+- Case 7, the numbering: met. `cmp exit 0`.
+
+### Findings
+
+#### 1. Spec
+
+- none. The five fenced blocks are applied word for word, the delta touches only the paths and lines the round names, and nothing is added beyond the round brief. The check of a closure by removal: the "no reply" bullet and the inline definition went by the round's own ruling, and the removed test case of line 231 is the round's text; neither is the builder's removal.
+
+#### 2. Proof
+
+- 4-report.md, "Sentence and list-item rules (verify item 7)": "Each changed bullet is one rule except where a bullet holds a rule and its condition (lines 171, 173, 175, 229, 231), which skill-layout keeps in one bullet."; what is wrong: the list of over-20-word lines is complete (21 lines, reproduced), but the claim does not hold for two bullets. SKILL.md:186 "Run it on the tree without the fix and on the tree with the change of the probe that shows the cause, then undo that change as Steps 13 says." holds a run and an undo joined by "then". SKILL.md:231 "The test case of an input not fixed is taken out of the test, and its failing run is quoted in the record, so the test asserts no known defect." holds two actions joined by "and", and the second is not a condition of the first. Line 186 is not in the report's exception list; line 231 is listed as rule and condition. The decision resting on it: whether verify item 7 holds; failure scenario: the orchestrator reads the report as having held every changed bullet to "Lists and tables" and lands two bullets whose halves a later diff cannot tell apart; verdict: none on an item. The text of both bullets is the round brief's; the finding is on the report's claim, and the bullets are in Standards 2.
+
+#### 3. Standards
+
+- docs/glossary.md:93 and skills/repo-setup/templates/plan-terms.md:88 (**red command**), against SKILL.md:185, 186 and 235: glossary "the one command of a diagnosis that drives the code path of the symptom and goes red on the exact symptom"; skill "run each other input through the red command, with that input in place of the reported one and the assertion set to that input's right result."; what is wrong: the skill now uses **red command** for a command whose input and assertion change per run and that goes red on a wrong result for that input, which for an input whose right result is "not refused" is a different symptom from the reported one. The entry does not define that sense. docs/dev/skill-layout.md, "Writing for an agent": "A term that `docs/glossary.md` defines is used only in a sense it defines there. A skill that needs ... a term in a new sense, adds or changes its entry in `skills/repo-setup/templates/plan-terms.md` first." The builder's report names this (Terms, "Anything in the brief that was wrong") and leaves the entry unchanged because it is outside the step's paths (glossary lines 40 and 70, plan-terms lines 35 and 65); under change-standard "The rules" 4 that is a stop for the orchestrator. The entry is not false for the reported input; it is false as a description of the runs of lines 185, 186 and 235. Failure scenario: a reader of the glossary builds one fixed red command and reuses it unchanged for an other input whose right result is the opposite (the pair of different folders not yet made), gets red without the reported symptom, and cannot class it; or a reviewer holding the skill to the glossary finds the term used in a sense the entry lacks. Options for the orchestrator: widen the paths to the **red command** entry and its plan-terms copy so it covers a run with another input and its right result, or word the runs in the skill without the term. Verdict: item 2 violated (last clause).
+
+- skills/diagnose/SKILL.md:186, 231 and 175, and 194 and 227: "Run it on the tree without the fix and on the tree with the change of the probe that shows the cause, then undo that change as Steps 13 says." / "The test case of an input not fixed is taken out of the test, and its failing run is quoted in the record, so the test asserts no known defect." / "The hypothesis gets one more probe in the form of Steps 12: its change made at the operation so that it also gives that input its right result, undone as Steps 13 says." / "An input of another defect is not fixed in this diagnosis." / "The fix is never one change per spelling."; what is wrong: docs/dev/skill-layout.md, "Lists and tables" first bullet: two requirements "joined by 'and', 'then', a semicolon or a second sentence, are two bullets" (186 run and undo, 231 take out and quote, 175 probe and undo). "Writing for an agent" first bullet: a rule written as a prohibition names the behaviour to do instead in the same bullet or in an Anti-patterns row; 194 and 227 are bare prohibitions whose alternative (193 "written in the record with its result", 226 "one change at the operation") now stands in the previous bullet, since the round split what round 0 held in one bullet; failure scenario: a reviewer checking a later diff cannot see that one half of 186 or 231 was dropped while the other half holds; an agent reading 227 alone has a prohibition and no action; verdict: none on an item. The text is the round brief's; the orchestrator rules on the split.
+
+- skills/diagnose/SKILL.md:215 and 171: "The test has one test case for the shrunk case and one for each other input that is part of the defect, each asserting that input's right result, whether or not the change of the probe already gave it, so that a later fix that narrows again goes red." (49 words) / "When more than one hypothesis is left standing, the cause is the one that names what the operation itself does wrong (what it compares, looks up, writes or parses), over one that names a value the operation is given." (39 words); what is wrong: skills/repo-setup/templates/docs/dev/prose-standard.md, E "Sentence length": under roughly 20 words unless the mechanism needs more. The report's reasons are "the test-case rule with its purpose" and "a choice rule with the criterion in a parenthesis"; neither names a mechanism that needs the length, and the purpose clause of 215 ("so that a later fix that narrows again goes red") could be its own sentence. The Done lines (213, 234, 240) have base precedent at 54 and 35 words; 215 and 171 do not. Failure scenario: an agent parsing 215 has to hold the case set, the assertion, a condition and a purpose in one sentence; verdict: none on an item. The text is the round brief's.
+
+- skills/diagnose/SKILL.md:184, docs/glossary.md:71, skills/diagnose/templates/diagnosis.md:86 and :88: "Each other input's right result is written in the record before its runs: the result the rule the operation breaks gives for that input." / "Its right result is the result the rule the operation breaks gives for it."; what is wrong: **right result** is a new term with no entry of its own, and its meaning is written twice, in the glossary entry **other input** and at line 184 (and in the template cell). skill-layout "Writing for an agent": "One meaning has one place"; the round removed the duplicate definition of **other input** for this reason (first-run Standards 4). Failure scenario: the two copies drift; a reader who looks for "right result" in the glossary finds no entry; verdict: none on an item. The text is the round brief's.
+
+#### 4. Behaviour
+
+- skills/diagnose/SKILL.md:171: "When more than one hypothesis is left standing, the cause is the one that names what the operation itself does wrong (what it compares, looks up, writes or parses), over one that names a value the operation is given."; what is wrong: on the step-3 record, hypothesis 2 (line 75 keeps the slashes) names a value the operation is given and is set aside. Hypothesis 1 ("line 317 compares ... with only one trailing slash removed, while line 112 removes every trailing slash") and hypothesis 3 ("compares the paths as written rather than the folders they name") both name what the comparison does, and the line picks neither. The first-run Behaviour 2 is not closed; the builder's own case reading says the text "does not choose between them". Failure scenario: a diagnosis states the cause as hypothesis 1 (the one-slash strip at line 317), with probe 1 as the probe that shows it; Steps 15's Done line (213) is met; the Cause section, which `land` Steps 9 books "with its cause", says a slash strip while the fix compares folders, and case 1 expects the cause "at the refusal's comparison ... not at the slashes". Verdict: case 1 partial. The wording is the round brief's, so the tie-break is the orchestrator's to write.
+
+- skills/diagnose/SKILL.md:229-230, 236-237, 240: "When the change of the probe leaves an input that is part of the defect wrong, or makes an input that was right wrong, the fix is changed once more at the operation." / "An other input still wrong after that second change is written in the record as not fixed, with its result." / "Done when ... each other input gives the result its class requires, each quoted in the record, with an input written as not fixed quoted with its result."; what is wrong: line 230 covers any other input, including one that was right on the unfixed tree and that the second change broke, and line 237 ("Each input not part of the defect gives what it gave") has no exception, but line 240's Done accepts "an input written as not fixed quoted with its result". Failure scenario, on the step-3 defect with hypothesis 1 as the cause: probe 1's change leaves `agents/.` wrong, the agent's one second change compares resolved paths with `pwd -P`, and the pair of different agents and skills folders not yet made (right on the unfixed tree) now resolves both to an empty string and is refused. The count in 230 sends that input to "not fixed", Done at 240 is met, and the fix lands that refuses every folder not yet made, which is the behaviour case 1 says the fix must not have. The one second change has the extra probe of line 175 available only if the agent thinks to use it, since line 225 starts the fix from "the probe that shows the cause" and line 186 runs only that probe's change. The record names the regression (232), so it is disclosed, not prevented. Verdict: case 1 partial; case 4 met.
+
+- skills/diagnose/SKILL.md:184 against the pair of different folders not yet made: "the result the rule the operation breaks gives for that input."; what is wrong: the rule is that a folder that is both a skill folder and an agent folder is refused; for two different folders the rule fires on nothing, so it gives no result, and the text does not say the right result is then the operation's ordinary one (the pin proceeds). The builder's reading ("no refusal") supplies it. The class of the two folders not yet made does come out right once that is read in: the same folder (spelled `agents//` or `agents/.`) is wrong on the unfixed tree at line 317, so part of the defect, and the different folder is right on the unfixed tree, so not part of the defect, and wrong under the resolved-path probe, which is what separates empty-string resolution. Failure scenario: an agent leaves the Right result cell empty for the pair, cannot class it ("right on the tree without the fix" needs a right result), and drops it from the list, so Steps 18 and 19 no longer keep the fix from treating the pair as equal; verdict: case 1 partial.
+
+- skills/diagnose/SKILL.md:172-175 against Steps 12 and 14 (166 precedes them in the text order, but they run first): "A hypothesis whose probe broke an other input is not falsified by that input."; what is wrong: Steps 12 records "falsified or still standing" from the hypothesis's own falsifier, written at Steps 7 (hypothesis 3 of the step-3 record names "or the change breaking the setup pin"), and Steps 14 forms a second list "when every hypothesis is falsified"; the rule that a broken input does not falsify is in Steps 15, after both. The template's Probes cell says "still standing, with each other input its change broke", which Steps 12 does not tell the agent to write. Failure scenario: a defect whose only correct hypothesis has a probe that stops the red command in its setup is recorded falsified at Steps 12, and when no other hypothesis stands Steps 14 forms a second list before Steps 15 reopens it. In the step-3 run hypotheses 1 and 2 stand, so the case-1 path is unaffected; verdict: none on an item (Steps 12 and 14 are outside the brief's list of changed steps, so the orchestrator rules whether to widen).
+
+### Closure of the first-run findings
+
+- Spec 1 (rerun with a changed setup, lines 174 and 175 of round 0): closed. The text now gives the hypothesis one more probe "in the form of Steps 12", made at the operation and "undone as Steps 13 says" (lines 172 to 175); no second red command or setup change remains, and the probe is recorded in the Probes row.
+- Spec 2 (Done line against a red test case for an input not fixed): closed. Line 231 takes the case out of the test and quotes its failing run; lines 236 and 240 except an input written as not fixed. The tension with change-standard rule 9 ("no check is loosened to pass") is the orchestrator's ruling (Declined to judge).
+- Proof 1 (long lines unnamed): partly closed. The 21 over-20-word lines are named and reproduce; the claim "every changed bullet is one rule" still fails at lines 186 and 231 (Proof above).
+- Proof 2 (case 1 reading): closed. The report numbers the hypotheses as the step-3 record does (1 line 317, 2 line 75, 3 the paths as written), classes the same-folder and the different-folder agents folders not yet made from lines 189 to 191 with the lines quoted, and says line 171 does not choose between hypotheses 1 and 3.
+- Standards 1 (line 221 against 222 and 224, and the Probes caveat): closed. The old line 221 is gone, line 225 reads "starting from the change of the probe that shows the cause", and the hypothesis stays standing in its Probes row.
+- Standards 2 (several rules in a bullet; sub-lists introduced by a full stop): partly closed. Lines 173, 182, 190, 225, 229 are split and 177 and 185 now end in colons; new instances stand at 175, 186, 231, 194 and 227 (Standards above).
+- Standards 3 (line 194 and line 189): closed. Line 194 is removed and line 192 reads "so its failure costs what the reported input's failure costs".
+- Standards 4 (the entry's sentence 2 false for text; the duplicate definition): closed for both parts; the entry now says "in a defect in text it is read against the text" and the inline definition is gone. The duplicate meaning of the new term **right result** is a new finding.
+- Standards 5 (template line 80): closed. It reads "each other input written as not fixed, or "none"", matching line 232.
+- Behaviour 1 (an input whose right result is the opposite has no class): closed in the text by the right result and the classes of lines 184 to 191, with the glossary conflict in Standards 1 above.
+- Behaviour 2 (line 170 chooses between nothing): not closed (Behaviour 1 above).
+- Behaviour 3 (the changed probe behaviour not listed): closed. The report's "Host- or user-visible changes" names the broken input recorded with one more probe (its second item), the right result per other input (third item) and the removed test case with its run quoted (sixth item).
+
+### Declined to judge
+
+- Whether the unfixed `pin.sh` refuses an agents folder not yet made spelled `<x>/agents//` or `<x>/agents/.`, and does not refuse two different folders not yet made. I read both from lines 112 and 317 as `3-blind-comparison.md` quotes them and did not run `pin.sh` or the red command on the comparison's input tree; a run of the step-3 `red.sh` with each input on that tree would settle it.
+- Whether a diagnosis following the text wins or ties the rerun of the blind comparison; that is the orchestrator's comparison after landing and Axel's call.
+- Whether removing a failing test case (line 231) is the loosened check that change-standard "The rules" 9 forbids or the known defect it also forbids a test to assert; the round chose the second, and I do not reopen the ruling.
+- Whether the one-second-change count of lines 229 and 230 (brief decision 5) should stay; it is the brief's design, and it bears on Behaviour 2 above.
+- The sentence-length reasons of the Done lines 213, 234 and 240 (43, 36 and 42 words), which have base precedent; I judged only the non-Done lines 215 and 171.
+
+Agent usage: ac15089b4a5587f45, claude-sonnet-5-5, 204452 tokens, 28 tool uses, 6.9 minutes.
+
+## Closed
+
+The first run's findings were sent in repair round 1 (`agents/briefs/4-round-1.md`); the run over round 1 reads Spec 1, Spec 2, Proof 2, Standards 1, Standards 3, Standards 4, Standards 5, Behaviour 1 and Behaviour 3 as closed, and Proof 1, Standards 2 and Behaviour 2 as partly closed or open. Those three, and every finding of the run over round 1, are closed at landing on main by the orchestrator, as below. No finding is raised to the user.
+
+- First run, Proof 1, and round 1, Proof (the claim "every changed bullet is one rule"): a defect of the builder's report, not of the skill. The bullets it names (lines 175, 186 and 231 of the round's text) are split at landing (round 1, Standards 2 below), so the claim no longer has an exception left in the text.
+- First run, Standards 2, and round 1, Standards 2 (several rules in one bullet; bare prohibitions): at landing, the probe bullet of Steps 15 is split ("... gives that input its right result." / "That probe's change is undone as Steps 13 says."); the run bullet is split ("Run it on the tree without the fix and on the tree with the change of the probe that shows the cause." / "Undo that change as Steps 13 says."); the test-case bullet of Steps 18 is split ("The test case of an input not fixed is taken out of the test, so the test asserts no known defect." / "The failing run of that test case is quoted in the record."); "An input of another defect is not fixed in this diagnosis." becomes "An input of another defect is left for a diagnosis of its own."; "The fix is never one change per spelling." becomes "The fix is that one change, never one change per spelling."
+- First run, Behaviour 2, and round 1, Behaviour 1 (the tie-break chooses neither hypothesis 1 nor 3): at landing, Steps 15's tie-break becomes "When more than one hypothesis is left standing, the cause is the one that names what the operation gets wrong for every form of its input.", with the sub-bullet "A hypothesis that names how the operation treats one form of a value, such as one spelling, is set aside for the cause." On the step-3 record, hypothesis 1 (one trailing slash removed) names one form and is set aside; hypothesis 3 (the paths compared as written rather than the folders they name) is the cause.
+- Round 1, Standards 1 (**red command** used in a sense its entry lacks): at landing, the entry in `docs/glossary.md` and `plan-terms.md` gains "Run for an other input, it takes that input in place of the reported one and asserts that input's right result." and its "Stated in" reads "`diagnose`, Steps 4, 15 and 19". The glossary is in the step's paths.
+- Round 1, Standards 3 (lines 215 and 171 over 20 words): line 215 is split into "The test has one test case for the shrunk case and one for each other input that is part of the defect." and "Each test case asserts its input's right result, whether or not the change of the probe already gave it, so a later fix that narrows again goes red."; line 171 is replaced by the tie-break above (24 words, its criterion in a sub-bullet).
+- Round 1, Standards 4 (**right result** defined twice, with no entry): at landing, a glossary entry **right result, of an other input** is added after **reviewer** in both files ("the result the rule the operation that goes wrong gives for an other input, or, where that rule does not apply to the input, the result the operation gives when it works as meant. Stated in: `diagnose`, Steps 15."). Steps 15 now reads "Each other input's right result is written in the record before its runs."; the entry **other input** reads "Its right result is written before its runs."; the template's cell reads "<this input's right result>".
+- Round 1, Behaviour 2 (a second change that breaks an input not part of the defect lands as "not fixed"): at landing, Steps 18 gains "The second change leaves every input not part of the defect as it was on the tree without the fix.", and the not-fixed bullet is narrowed to "An input that is part of the defect and still wrong after that second change is written in the record as not fixed, with its result."
+- Round 1, Behaviour 3 (a rule that fires on nothing for two different folders gives no right result): closed by the entry **right result, of an other input**, whose second clause gives the operation's result when it works as meant (for two different folders not yet made: not refused).
+- Round 1, Behaviour 4 (Steps 12 records "falsified" before Steps 15 says a broken input does not falsify): at landing, Steps 12 gains "A probe that breaks an other input, as Steps 15 says, leaves its hypothesis still standing, and the row names that input." This is inside the step's part (the whole of `skills/diagnose/SKILL.md` is in its paths); the step numbering is unchanged.
+
+Checked at landing on main after these fixes: `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`; the numbering string of `grep -o '^[0-9]*\. ' skills/diagnose/SKILL.md | tr -d '\n'` equals the base's; `sh skills/land/templates/checks.sh .scratch/2-f-diagnose/orchestrator-state.md` printed `checks: 6 commands passed`.

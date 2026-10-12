@@ -73,18 +73,28 @@ The second list, when every hypothesis was falsified, in the same form: <the hyp
 
 | Hypothesis rank | The one change, as a diff | The run | Result |
 |---|---|---|---|
-| <the rank> | <the one change, with the tag `DIAG-<4 hex digits>` on any logging it adds> | <the red command's output after the change> | <falsified, or still standing> |
+| <the rank> | <the one change, with the tag `DIAG-<4 hex digits>` on any logging it adds> | <the red command's output after the change> | <falsified, or still standing, with each other input its change broke> |
 
 ## Cause
 
-<the hypothesis the probes left standing, with the probe that shows it: the red command green with the change and red without it; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found>
+<the cause at the operation that goes wrong, with its place and the rule it breaks, beside the probe that shows it: the red command green with the change and red without it, and each other input written as not fixed, or "none"; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found>
+
+## Operation and other inputs
+
+The operation that goes wrong: <the comparison, lookup, write or parse that gives the wrong result, with its place (the file and line, or the section of a text) and the rule it breaks; or "cause not found">.
+
+| Other input | Why it reaches the operation | Right result | Result on the tree without the fix | Result with the change of the probe that shows the cause | Class | Result after the fix |
+|---|---|---|---|---|---|---|
+| <the input, in place of the reported one> | <where the code that feeds the operation admits it> | <this input's right result> | <right or wrong, with the red command's output with this input and the line that shows it> | <the same, with the change of the probe> | <part of the defect, not part of the defect, or another defect> | <its right result; or what it gave without the fix; or left out, for another defect; or not fixed, with its result> |
+
+<when the code that feeds the operation admits no input but the reported one: "none", with the reason; for a defect in text: each other situation the instruction governs, read against the text, in place of a run>
 
 ## Fix and test
 
 Test, run on the tree without the fix:
 
 ```
-<the test's command and its failing output, showing the symptom>
+<the test's command and its failing output for each test case, showing the symptom>
 ```
 
 Fix:
@@ -105,9 +115,10 @@ Runs after the fix:
 <the test's command and its passing output>
 <the red command and its output>
 <the original, unshrunk case and its output>
+<the red command on each other input, in place of the reported one, and its output>
 ```
 
-<for a defect in text: the text before and the text after, with no test>
+<for a defect in text: the text before and the text after, with each other situation read against both and no test>
 
 No test reaches it: <the reason no test can reach the defect as it occurs, or "not applicable">. No test is written: <"the failure costs nothing", or "not applicable">.
 

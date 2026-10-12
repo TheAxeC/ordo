@@ -37,20 +37,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-  step: 4
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2-f-4
-  base: 8b93c6f
-  launched: 2026-10-12
-  report: .scratch/2-f-diagnose/agents/reviews/4-report.md
-  builder_usage: 196539 tokens, 40 tool uses, 6.5 minutes
-  brief_check: .scratch/2-f-diagnose/agents/reviews/4-brief-check.md (a3ee1a7e4b52255d2, claude-opus-5-5, 187152 tokens, 31 tool uses, 6.1 minutes)
-  landing: not-started
-  reviewer_report: .scratch/2-f-diagnose/agents/reviews/4-refuter.md (a961b9fcb88f8028e, claude-opus-5-5, 186998 tokens, 35 tool uses, 9.0 minutes)
-  round: 1 (sent 2026-10-12, brief agents/briefs/4-round-1.md, worktree diff at the round's start: shasum 11fc9ca805f4)
-  session_id: a8d70603c526446e1 (claude-sonnet-5-5)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -95,5 +82,5 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Steps 1, 2, 2a and 3 ticked; step 3b removed (ruling "Steps 3a and 3b"). Next step: 4, which `diagnose` must pass by winning or tying the blind comparison.
+- 2026-10-12. Steps 1, 2, 2a and 3 ticked; step 4 landed on main, not ticked: the blind comparison of step 3 runs again on the landed `diagnose`, and step 4 is ticked on Axel's call that `diagnose` wins or ties. Next: that rerun, then step 5, the closing.
 - Open items for you: none.

@@ -1,0 +1,170 @@
+diff --git a/docs/glossary.md b/docs/glossary.md
+index fdb3566..c48ac5d 100644
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -37,7 +37,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **design bar**: the standard a `grill` interview holds its options to and its reference line cites, `industry`, `state-of-the-art` or `novel`, set by `.agents/plan.yaml`'s `design_bar` and overridden for one interview by `--bar`. Stated in: `grill`, "The design bar".
+ - **design tree**: the decisions a roadmap entry's goal and gate need, each node a decision, each with the decisions it waits on; an entry that has a goal already has one decision for each part of its goal, of its gate and, under "Not yet specified", of what must be known, whether to keep, change or drop that part. Stated in: `grill`, Steps 3.
+ - **diagnosis agent**: the fresh agent that runs `/diagnose` inside a plan with no person present, the effort agent `ordo-<reviewer_effort>` on the model the configuration block's `reviewer:` names. It changes no file of the main checkout or of the step's worktree, and its final message is the diagnosis record, which the session that started it saves. Stated in: `plan-orchestration`, "The two tiers, and the models"; `diagnose`, "Rules".
+-- **diagnosis record**: the copy of the `diagnose` skill's `templates/diagnosis.md` that a diagnosis fills in, holding the symptom, the red command with its runs, the cuts of the shrunk case, the hypotheses, the probes, the cause and the fix with its test. Inside a plan it is `agents/reviews/<step>-diagnosis.md` in the ledger. Stated in: `diagnose`, Steps 2.
++- **diagnosis record**: the copy of the `diagnose` skill's `templates/diagnosis.md` that a diagnosis fills in, holding the symptom, the red command with its runs, the cuts of the shrunk case, the hypotheses, the probes, the cause, the operation with its other inputs and the fix with its test. Inside a plan it is `agents/reviews/<step>-diagnosis.md` in the ledger. Stated in: `diagnose`, Steps 2.
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id followed by the model the runner served it, or `inline` or `academic-paper`), `builders_before` (each replaced builder's id and served model), `builder_usage` and `reviewer_report`. `brief_check` and `reviewer_report` also carry each agent's id and served model, and `brief_check` reads `none, a small text step` for a small text step. A diagnosis agent has no key in it. Stated in: `spec`, Steps 9 and "Steps / The brief check" 5; `refute`, Steps 1 and 7 and "Steps / Over a repair round" 6; `plan-orchestration`, Steps 4, 6 and 7 and "Launching a builder"; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
+@@ -68,6 +68,7 @@ This page defines each term that the Ordo skills, the pages under `docs/dev/` an
+ - **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The file's format"; `plan`, "What it reads" 2.
+ - **open item**: an entry of the state file's open items. It is a decision for the user, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling or, under self-rule, when the `plan-orchestration` skill's `references/self-rule.md` does not leave it open, by the option the orchestrator recommends. It is also a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops" and `references/self-rule.md`, "Closing an open item"; `spec`, "Steps / A stop"; `land`, "Stops".
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
++- **other input**: in a diagnosis, an input other than the reported one that reaches the operation that goes wrong. Each is run through the red command with that input in place of the reported one, and is put in one of three classes: part of the defect, not part of the defect, or another defect. Stated in: `diagnose`, Steps 15 to 19.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+ - **part, of an entry**: the work one step of a plan builds, a piece of the entry's goal that must exist and work before another piece is built on it, or a point where the user reads or decides before the rest goes on. A later piece is built on an earlier one when it needs the earlier one's result, not only its existence. A brief states its step's part, so a fix inside the brief is inside the step's part. Stated in: `plan`, Steps 2; `plan-orchestration`, "What earns a step of its own"; `spec`, Steps 4.
+ - **part, of an output**: a line range of one output of the reader, at most 30,000 bytes, or one longer line on its own, which `/session-retro` reads whole with the Read tool and records in the sessions report as read. Stated in: `session-retro`, Steps 6.
+diff --git a/skills/diagnose/SKILL.md b/skills/diagnose/SKILL.md
+index 853b966..24d21dc 100644
+--- a/skills/diagnose/SKILL.md
++++ b/skills/diagnose/SKILL.md
+@@ -2,7 +2,7 @@
+ name: diagnose
+ description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it runs in a fresh agent, probes on a scratch copy, leaves the step's worktree unchanged and hands the fix over by where the defect was found. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding, find the cause a step's text asks for."
+ metadata:
+-  version: "2.0.0"
++  version: "2.1.0"
+ ---
+ 
+ # Diagnose a defect
+@@ -164,6 +164,34 @@ metadata:
+     - Run by a person, the skill waits for the reply and re-ranks as Steps 9 and 10 say before the first probe of the second list.
+     - Done when the record holds the second list with its falsifying results, Steps 9 and 10 have run over it when run by a person, and Steps 11 to 13 have run over it.
+ 15. State the cause: the hypothesis the probes left standing, with the probe that shows it, the red command green with the change and red without it.
++    - The cause is stated at the operation that goes wrong: the comparison, the lookup, the write or the parse that gives the wrong result.
++    - The operation is given with its place (the file and line, or the section of a text) and the rule it breaks.
++    - A cause stated as a property of the reported input, such as "the path has two trailing slashes", is not stated at the operation, and is restated at the operation that treats that input wrongly.
++    - When more than one probe turned the red command green, the cause is the hypothesis at the operation, and its probe is the one that shows it.
++    - An other input is an input other than the reported one that reaches the operation.
++    - A hypothesis whose probe turned the red command green but broke an other input is not falsified.
++    - The broken input is recorded as an other input, and the fix at the operation is made to handle it.
++    - A probe whose change stops the red command at an input its setup uses, before the reported input is reached, is run again with a setup that does not use that input.
++    - That input is recorded as an other input.
++    - With a cause found, list each other input that reaches the operation.
++    - Find them by reading the code or text that produces the operation's inputs, from the shrunk case back to where the inputs come from.
++      - Another spelling of the same value: repeated or trailing separators, `.` parts, letter case, an encoding.
++      - Another name for the same thing: a link, an alias.
++      - A value not yet there: a path not yet made, an empty value.
++      - Each other input the code that feeds the operation admits.
++    - The list holds the inputs the code admits, and the reported input is not on it.
++    - For a defect in code, run each other input through the red command, with that input in place of the reported one.
++    - Run it on the tree without the fix and on the tree with the change of the probe that shows the cause, undo that change, and record each result.
++    - Put each other input in one of three classes, named in the record as written here.
++      - Part of the defect: red on the tree without the fix, with the reported symptom, whether the change of the probe turns it green or not.
++      - Not part of the defect: green on the tree without the fix.
++      - Another defect: wrong on the tree without the fix, with another symptom, at another operation.
++    - An input that is part of the defect fails the way the reported input fails, so its failure costs what the defect's costs.
++    - An input of another defect is written in the record with its result and is not fixed in this diagnosis.
++    - For a defect in text, the operation is the instruction that led to the wrong behaviour.
++    - For a defect in text, the other inputs are the other situations that instruction governs, each read against the text in place of a run and put in the same three classes.
++    - Write the operation, the list and the results into the record's "Operation and other inputs" section.
++    - This work goes on without a reply, run by a person or with no person present.
+     - The cause is not found when the second list is falsified too, when no probe can separate the hypotheses left, or, with no person present, when no red command can be built or the redacted output is not enough to diagnose.
+     - For a cause not found, the record says so in its Cause section, with every probe or, when no red command could be built, a pointer to its "No red command" section, which lists every way tried.
+     - Inside a plan, for every form but `premise`, a cause not found is raised to the user as an open item, the one `plan-orchestration`'s "Stops" row "A finding that is the user's" leaves.
+@@ -178,22 +206,29 @@ metadata:
+     - After a cause not found the skill goes to Steps 21 and 22, then inside a plan to Steps 23.
+     - After a cause not found outside a plan, Steps 23 and 24 are not run, so the record stays in `$TMPDIR` and its path is shown.
+     - Run by a person, a cause not found ends in a stop after Steps 22 ("Stops").
+-    - Done when the record's Cause section names the cause with its probe, or says "cause not found".
++    - Done when the record's Cause section names the cause at its operation with its probe and the "Operation and other inputs" section holds each other input with its class and its results before the fix, or the Cause section says "cause not found".
+ 16. For a defect in code whose failure costs something, write a test that reproduces the shrunk case at the place the defect occurs.
++    - The test has one test case for the shrunk case and one for each other input that is part of the defect, whether or not the change of the probe already turned it green, so that a later fix that narrows again goes red.
+     - The rules file's rule that a test exists only for behaviour whose failure costs something decides whether the failure costs something, and with no rules file "Rules" decides it.
+     - A defect in code whose failure costs nothing gets no test, and the record says so.
+     - A place no test can reach the defect as it occurs is written in the record under "No test reaches it", with the reason.
+     - A defect in text is fixed by reading, with the text quoted before and after and no test.
+-    - Done when the test is written, or the record holds the reason no test is written.
+-17. Run the test on the tree without the fix and quote its failure.
++    - Done when the test is written with its test cases, or the record holds the reason no test is written.
++17. Run the test on the tree without the fix and quote its failure for each test case.
+     - The tree is the one Steps 13 left, with every probe's change undone.
+     - A test written after the fix is an Anti-patterns row.
+-    - Done when the record quotes a failure that shows the symptom, or, for a defect in text, quotes the text before.
++    - Done when the record quotes, for each test case, a failure that shows the symptom, or, for a defect in text, quotes the text before.
+ 18. Make the fix at the cause, which is the change Steps 13 undid.
++    - The fix is one change at the operation, right for the reported input and for every other input that is part of the defect, and never one change per spelling.
++    - Every input not part of the defect and every input of another defect stays as it was on the tree without the fix.
++    - When the change of the probe leaves an input that is part of the defect red, or breaks an input that was green, the fix is changed once more at the operation.
++    - An input still wrong after that second change is written in the record as not fixed, with its result, and the Cause section and the session's final message say the fix does not cover it.
+     - A guard for a fix is an Anti-patterns row.
+-    - Done when the fix is in the tree the probes ran in and the record quotes it, or for a defect in text quotes the text after.
+-19. Run the test, the red command and the original, unshrunk case.
+-    - Done when the test is green, the red command is green and the original case is green, each quoted in the record.
++    - Done when the fix is in the tree the probes ran in and the record quotes it, with each input not fixed written in the record, or for a defect in text quotes the text after.
++19. Run the test, the red command, the original, unshrunk case and the red command on every other input listed.
++    - Each input that is part of the defect is green, each input not part of the defect gives what it gave on the tree without the fix, and each input of another defect is left out of the result.
++    - For a defect in text, each other situation is read again against the text after the fix and quoted in place of a run.
++    - Done when the test is green, the red command is green and the original case is green, and each other input gives the result its class requires, each quoted in the record, with an input written as not fixed quoted with its result.
+ 20. Inside a plan, hand the fix over by where the defect was found.
+     - For a finding and a red line, the step's worktree is left unchanged, as "Rules" says.
+     - A finding of the reviewer's first run of a full step: its fix and its test are the ruling of the next repair round, as `plan-orchestration`'s Steps 8 sends a round.
+diff --git a/skills/diagnose/templates/diagnosis.md b/skills/diagnose/templates/diagnosis.md
+index 51f282c..56234d2 100644
+--- a/skills/diagnose/templates/diagnosis.md
++++ b/skills/diagnose/templates/diagnosis.md
+@@ -77,14 +77,24 @@ The second list, when every hypothesis was falsified, in the same form: <the hyp
+ 
+ ## Cause
+ 
+-<the hypothesis the probes left standing, with the probe that shows it: the red command green with the change and red without it; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found>
++<the cause at the operation that goes wrong, with its place and the rule it breaks, beside the probe that shows it: the red command green with the change and red without it, and each input of the defect the fix does not cover, or "none"; or "cause not found", with every probe above, or every way tried under "No red command", and the condition that makes it not found>
++
++## Operation and other inputs
++
++The operation that goes wrong: <the comparison, lookup, write or parse that gives the wrong result, with its place (the file and line, or the section of a text) and the rule it breaks; or "cause not found">.
++
++| Other input | Why it reaches the operation | Result on the tree without the fix | Result with the change of the probe that shows the cause | Class | Result after the fix |
++|---|---|---|---|---|---|
++| <the input, in place of the reported one> | <where the code that feeds the operation admits it> | <the red command's result with this input, and the line that shows it> | <the same, with the change of the probe> | <part of the defect, not part of the defect, or another defect> | <green; or what it gave without the fix; or left out, for another defect; or not fixed, with its result> |
++
++<when the code that feeds the operation admits no input but the reported one: "none", with the reason; for a defect in text: each other situation the instruction governs, read against the text, in place of a run>
+ 
+ ## Fix and test
+ 
+ Test, run on the tree without the fix:
+ 
+ ```
+-<the test's command and its failing output, showing the symptom>
++<the test's command and its failing output for each test case, showing the symptom>
+ ```
+ 
+ Fix:
+@@ -105,9 +115,10 @@ Runs after the fix:
+ <the test's command and its passing output>
+ <the red command and its output>
+ <the original, unshrunk case and its output>
++<the red command on each other input, in place of the reported one, and its output>
+ ```
+ 
+-<for a defect in text: the text before and the text after, with no test>
++<for a defect in text: the text before and the text after, with each other situation read against both and no test>
+ 
+ No test reaches it: <the reason no test can reach the defect as it occurs, or "not applicable">. No test is written: <"the failure costs nothing", or "not applicable">.
+ 
+diff --git a/skills/repo-setup/templates/plan-terms.md b/skills/repo-setup/templates/plan-terms.md
+index 1edccd2..26ed5c5 100644
+--- a/skills/repo-setup/templates/plan-terms.md
++++ b/skills/repo-setup/templates/plan-terms.md
+@@ -32,7 +32,7 @@
+ - **design bar**: the standard a `grill` interview holds its options to and its reference line cites, `industry`, `state-of-the-art` or `novel`, set by `.agents/plan.yaml`'s `design_bar` and overridden for one interview by `--bar`. Stated in: `grill`, "The design bar".
+ - **design tree**: the decisions a roadmap entry's goal and gate need, each node a decision, each with the decisions it waits on; an entry that has a goal already has one decision for each part of its goal, of its gate and, under "Not yet specified", of what must be known, whether to keep, change or drop that part. Stated in: `grill`, Steps 3.
+ - **diagnosis agent**: the fresh agent that runs `/diagnose` inside a plan with no person present, the effort agent `ordo-<reviewer_effort>` on the model the configuration block's `reviewer:` names. It changes no file of the main checkout or of the step's worktree, and its final message is the diagnosis record, which the session that started it saves. Stated in: `plan-orchestration`, "The two tiers, and the models"; `diagnose`, "Rules".
+-- **diagnosis record**: the copy of the `diagnose` skill's `templates/diagnosis.md` that a diagnosis fills in, holding the symptom, the red command with its runs, the cuts of the shrunk case, the hypotheses, the probes, the cause and the fix with its test. Inside a plan it is `agents/reviews/<step>-diagnosis.md` in the ledger. Stated in: `diagnose`, Steps 2.
++- **diagnosis record**: the copy of the `diagnose` skill's `templates/diagnosis.md` that a diagnosis fills in, holding the symptom, the red command with its runs, the cuts of the shrunk case, the hypotheses, the probes, the cause, the operation with its other inputs and the fix with its test. Inside a plan it is `agents/reviews/<step>-diagnosis.md` in the ledger. Stated in: `diagnose`, Steps 2.
+ - **dispatch block**: the second `yaml` block of the state file, `dispatch: none` or the dispatch entries of the steps in flight. Stated in: `spec`, Steps 9; `plan`, `templates/orchestrator-state.md`.
+ - **dispatch entry**: the record of one step in flight in the dispatch block: step, executor, worker, worktree, base, launched, report, `brief_check`, `landing` (`not-started`, `cherry-picking` or `backed-out`), `round`, and `shared_paths` when a file is shared. The orchestrator adds the builder's identity under `session_id` (its agent id followed by the model the runner served it, or `inline` or `academic-paper`), `builders_before` (each replaced builder's id and served model), `builder_usage` and `reviewer_report`. `brief_check` and `reviewer_report` also carry each agent's id and served model, and `brief_check` reads `none, a small text step` for a small text step. A diagnosis agent has no key in it. Stated in: `spec`, Steps 9 and "Steps / The brief check" 5; `refute`, Steps 1 and 7 and "Steps / Over a repair round" 6; `plan-orchestration`, Steps 4, 6 and 7 and "Launching a builder"; `land`, Steps 2 and 6.
+ - **Doc text**: the section of a builder's report that gives the exact lines for a shared document the brief keeps out of the step's paths, the current line as `grep -n` prints it and its replacement, applied by the orchestrator at landing. Stated in: `spec`, `templates/brief.md`, "Report".
+@@ -63,6 +63,7 @@
+ - **Not yet specified**: the roadmap section for work whose gate cannot yet be named, each entry with its goal and what must be known first. Stated in: `roadmap`, "The file's format"; `plan`, "What it reads" 2.
+ - **open item**: an entry of the state file's open items. It is a decision for the user, with its options, their pros and cons, what each option would need approved later, and one recommendation, closed by the user's ruling or, under self-rule, when the `plan-orchestration` skill's `references/self-rule.md` does not leave it open, by the option the orchestrator recommends. It is also a worktree `/land` could not remove, closed by running the removal. Stated in: `plan-orchestration`, "Stops" and `references/self-rule.md`, "Closing an open item"; `spec`, "Steps / A stop"; `land`, "Stops".
+ - **orchestrator**: the session that runs a plan, which reads, decides, invokes the skills, lands and books. Run by hand, the session takes its part. Stated in: `plan-orchestration`, "The two tiers, and the models"; `spec`, Steps 5.
++- **other input**: in a diagnosis, an input other than the reported one that reaches the operation that goes wrong. Each is run through the red command with that input in place of the reported one, and is put in one of three classes: part of the defect, not part of the defect, or another defect. Stated in: `diagnose`, Steps 15 to 19.
+ - **part file**: a file `plan.md` names to hold part of the plan, where a booking or a Step 0 is then written. Stated in: `land`, Steps 9; `spec`, "Steps / A stop".
+ - **part, of an entry**: the work one step of a plan builds, a piece of the entry's goal that must exist and work before another piece is built on it, or a point where the user reads or decides before the rest goes on. A later piece is built on an earlier one when it needs the earlier one's result, not only its existence. A brief states its step's part, so a fix inside the brief is inside the step's part. Stated in: `plan`, Steps 2; `plan-orchestration`, "What earns a step of its own"; `spec`, Steps 4.
+ - **part, of an output**: a line range of one output of the reader, at most 30,000 bytes, or one longer line on its own, which `/session-retro` reads whole with the Read tool and records in the sessions report as read. Stated in: `session-retro`, Steps 6.
