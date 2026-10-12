@@ -36,7 +36,18 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: []
+dispatch:
+- step: 3
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/2-i-several-plans-in-one-session-3
+  base: 3ab3ff4
+  launched: 2026-10-12
+  report: .scratch/2-i-several-plans-in-one-session/agents/reviews/3-report.md
+  brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/3-brief-check.md (a6ce8870a2a7c0b32, claude-opus-5-5, 232837 tokens, 45 tool uses, 9 min 16 s)
+  landing: not-started
+  round: 0
+  session_id: a04584a0f86c68b1f (claude-sonnet-5-5)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -105,7 +116,7 @@ dispatch: []
 ## Current position (rewritten before every step commit)
 
 - 2026-10-12. Step 2 of 5 landed: the real run's record and report. The pin is `v6.0.0-rc.1` (ea0add9).
-- Next step: 3, the skill texts after the real run, then 4, the second real run, then 5, the closing.
+- Next step: 3, the skill texts after the real run, in flight: its builder runs in `.agents/worktrees/2-i-several-plans-in-one-session-3` from base 3ab3ff4; then 4, the second real run, then 5, the closing.
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
 - No step in flight.
 - Open on Axel's side: nothing.
