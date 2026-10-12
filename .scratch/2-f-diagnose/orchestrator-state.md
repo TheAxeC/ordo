@@ -58,6 +58,8 @@ dispatch: none
 - The investigation of /spec and /diagnose (2026-09-30): Axel ruled (a); step 2b.
 
 - Step 3, who runs `/diagnose` (2026-09-30): Axel ruled (a): he runs it on a scratch copy the orchestrator prepares.
+- 2026-10-12: Step 3b against plan 2.1: ruled (b) by the user, step 3b removed and step 3a renumbered 4, booked in `plan.md` Rulings ("Steps 3a and 3b").
+- 2026-10-12: Step 3's tick: ruled by the user, step 3 ticked and the win-or-tie condition moved to step 4, booked in `plan.md` Rulings ("Step 3 ticked").
 
 ## The standing demands (from Axel, in force)
 
@@ -80,7 +82,5 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-05. Steps 1, 2 and 2a landed and ticked.
-- Step 3 is run and booked, not ticked: its real run was approved by Axel 2026-10-05, and its blind comparison, run 2026-10-05 (`agents/reviews/3-blind-comparison.md`), was called by Axel: `diagnose` loses this run, and step 3a (the whole defect, then the comparison again) is next for this plan.
+- 2026-10-12. Steps 1, 2, 2a and 3 ticked; step 3b removed (ruling "Steps 3a and 3b"). Next step: 4, which `diagnose` must pass by winning or tying the blind comparison.
 - Open items for you: none.
-- Steps 3a and 3b are next, prepared once plan 2.G's step 2a has landed.

@@ -21,9 +21,8 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
 - ✅ 1 The `diagnose` skill, `skills/diagnose/SKILL.md` (and a template only where a step needs one): a red command on the exact symptom, run and quoted, before any hypothesis; the case shrunk until each remaining part is needed for the red; three to five ranked hypotheses, each naming the result that would falsify it, shown to Axel, the skill waiting for his reply before the first probe when run by hand and going on under `plan-orchestration` (ruling "Step list" D2); one change per probe, each probe tied to one hypothesis; the fix with a test that is run red without the fix and quoted, where the defect's failure costs something by the rule "scripts compute facts"; the cause written in the booking; check: the skill read by Axel against `docs/dev/skill-layout.md` and the goal (1 commit) (approved)
 - ✅ 2 The skill wired in: `plan-orchestration`'s Steps 8 rule for a finding whose cause is not known points at `/diagnose`; the README's skill table, Quick start and install loop; the sequence and "Use instead" of `ordo-help`; new terms (such as **red command** and **hypothesis**) in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`; check: each changed text read in place, and `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` exits 0 (1 commit) (approved)
 - ✅ 2a The rest of the `diagnose` skill: the person-driven red command's script `skills/diagnose/templates/person-driven.sh` and its test, `diagnose` pointing at it, as the ruling "A script for the person-driven red command" says; `/diagnose <entry> <step> premise` and `spec` Steps 4 pointing at it, with `ordo-help`'s sequence and the glossary where they name the forms, as the ruling "The investigation of /spec and /diagnose" says; inside a plan with no person present, `/diagnose` run in a fresh agent as the ruling "Who runs /diagnose inside a plan" says, with `plan-orchestration`'s Steps 8 and 9, "The two tiers, and the models" and the glossary naming the diagnosis agent; briefed against `spec` and `plan-orchestration` as plan 2.E.A leaves them; check: the script's test, each case failing on the unchanged tree, and each changed text read in place against its ruling (1 commit) (ruling A script for the person-driven red command) (ruling The investigation of /spec and /diagnose) (ruling Who runs /diagnose inside a plan) (ruling Steps by part)
-- 3 The real run and the blind comparison: the defect of ruling "Step list" D1 (the `utils/pin.sh` refusal of a folder that is both a skill folder and an agent folder, as it stood before 2.E step 3's `same_folder`) put back on a scratch copy of the tree at the commit before its fix, and `/diagnose` run on it by Axel in a fresh session (ruling "Step 3, who runs /diagnose"); then the blind comparison against mattpocock's `diagnosing-bugs` (github.com/mattpocock/skills at d81f3a1, `skills/engineering/diagnosing-bugs/`) on the same defect, as `docs/dev/blind-comparison.md` says; check: the run reaches the cause the ledger books, its red command, hypotheses, fix and red test quoted, reviewed by Axel, and `diagnose` wins or ties by Axel's call (1 commit; orchestrator, no agent) (approved) (ruling Steps by part)
-- 3a `diagnose` reaches the whole defect: after the cause is stated at the operation that goes wrong, each other input that reaches that operation (another spelling, a link, a path not yet made) is probed against the fix, and each one that still goes red is part of the same defect, fixed and tested with it, in `skills/diagnose/SKILL.md` Steps 15 to 19 and its record template; then the blind comparison of step 3 run again on the same defect with fresh sides and fresh judges, recorded as `agents/reviews/3a-blind-comparison.md`; check: the skill text read for the probe and its record line, the new comparison's record with both verdicts and the key, and Axel's call (ruling Step 3, the call on the blind comparison)
-- 3b `plan_cost.py` prices the diagnosis agent, as the ruling "Pricing the diagnosis agent" approves word for word: the role `diagnosis of step <k>` priced from the agent's transcript as a reviewer is, with its test cases; the `diagnose` skill, the `spec` and `plan-orchestration` skills and the Agents section's template write a diagnosis agent as the bullet `<id>: diagnosis of step <k>, <model>` in place of the numbered item under "Agents in no role the cost script prices:"; check: `plan_cost.test.sh` with a ledger holding a diagnosis agent, its hand-computed cost, failing on the unchanged script, and the grep of the skills for "Agents in no role the cost script prices" quoted (ruling Pricing the diagnosis agent)
+- ✅ 3 The real run and the blind comparison: the defect of ruling "Step list" D1 (the `utils/pin.sh` refusal of a folder that is both a skill folder and an agent folder, as it stood before 2.E step 3's `same_folder`) put back on a scratch copy of the tree at the commit before its fix, and `/diagnose` run on it by Axel in a fresh session (ruling "Step 3, who runs /diagnose"); then the blind comparison against mattpocock's `diagnosing-bugs` (github.com/mattpocock/skills at d81f3a1, `skills/engineering/diagnosing-bugs/`) on the same defect, as `docs/dev/blind-comparison.md` says; check: the run reaches the cause the ledger books, its red command, hypotheses, fix and red test quoted, reviewed by Axel, and the comparison's record with both verdicts and Axel's call (1 commit; orchestrator, no agent) (approved) (ruling Steps by part) (ruling Step 3 ticked)
+- 4 `diagnose` reaches the whole defect: after the cause is stated at the operation that goes wrong, each other input that reaches that operation (another spelling, a link, a path not yet made) is probed against the fix, and each one that still goes red is part of the same defect, fixed and tested with it, in `skills/diagnose/SKILL.md` Steps 15 to 19 and its record template; then the blind comparison of step 3 run again on the same defect with fresh sides and fresh judges, recorded as `agents/reviews/4-blind-comparison.md`; check: the skill text read for the probe and its record line, the new comparison's record with both verdicts and the key, and `diagnose` wins or ties by Axel's call (ruling Step 3, the call on the blind comparison) (ruling Steps 3a and 3b) (ruling Step 3 ticked)
 - 5 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.F`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
 ## Could run in parallel
@@ -54,16 +53,18 @@ One real run on a defect of an archived plan whose cause the ledger books, put b
 - Step 3 reading (2026-10-05): Axel ruled (a). The real run of 2026-09-30 (`agents/reviews/3-diagnosis.md`, fix `agents/reviews/3-diagnose-fix.diff`) is approved as the proof of step 3's real run; step 3 is ticked once its comparison, rerun in step 3a, has Axel's call (the user).
 - Pricing the diagnosis agent (2026-10-05): Axel ruled (a) and approved the computation word for word: "plan_cost.py computes the cost of each agent whose bullet reads `<id>: diagnosis of step <k>, <model>` from that agent's transcript, as it does for a reviewer." Step 3b adds it; the `diagnose` skill and the plan skills then write a diagnosis agent as such a bullet in the Agents section (the user).
 - The reviewer comment in plan.yaml (2026-10-05): Axel ruled (a). The comment on `reviewer:` in `.agents/plan.yaml` and in the configuration blocks of plans 2.I and 3 reads "the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on", the words of `skills/plan/templates/plan.yaml`; no key or value changes (the user).
+- Steps 3a and 3b (2026-10-12): Axel ruled (b) on step 3b against plan 2.1, which deleted `plan_cost.test.sh` and keeps tests for four scripts only: step 3b is removed, replacing the ruling "Pricing the diagnosis agent"; a diagnosis agent stays a numbered item under "Agents in no role the cost script prices:", unpriced, and `plan_cost.py` gains the role when a diagnosis agent first runs, by the case rule of `docs/dev/change-standard.md`. Step 3a is renumbered 4, its record `agents/reviews/4-blind-comparison.md`. The lazy option was (b), the cheaper one; it is taken for the case rule, since no diagnosis agent has run in any plan (the user).
+- Step 3 ticked (2026-10-12): Axel ruled that step 3 is ticked, since its real run is approved and its blind comparison ran and has his call; the condition that `diagnose` wins or ties moves to step 4's check, replacing the part of "Step 3 reading" that held the tick until step 4's comparison (the user).
 ## Agents
 
 Each agent started for this plan has its agent id, its role and the model the runner served it, read once from the agents' `meta.json`, their transcripts and completion notices, and the plan's bookings. An agent in a role the cost script prices is a bullet; any other is a numbered item.
 
 Agents in no role the cost script prices:
 
-1. a8b8bdb8d0f78214c: side one of step 4's blind comparison, claude-opus-5-5
-2. ac4cda93b1e0e00ce: side two of step 4's blind comparison, claude-opus-5-5
-3. a37b18740bd105b87: judge 1 of step 4's blind comparison, a subagent, claude-opus-5-5
-4. a1574d0248b23bd4c: judge 2 of step 4's blind comparison, a subagent, claude-opus-5-5
+1. a8b8bdb8d0f78214c: side one of step 3's blind comparison, claude-opus-5-5
+2. ac4cda93b1e0e00ce: side two of step 3's blind comparison, claude-opus-5-5
+3. a37b18740bd105b87: judge 1 of step 3's blind comparison, a subagent, claude-opus-5-5
+4. a1574d0248b23bd4c: judge 2 of step 3's blind comparison, a subagent, claude-opus-5-5
 
 Agents in the roles the cost script prices:
 
@@ -83,9 +84,9 @@ Agents in the roles the cost script prices:
 - a065164924d21655a: builder of step 2b, claude-sonnet-5-5
 - a56363ce0d37f4326: reviewer of step 2b, claude-opus-5-5
 - a04d091169687c8c9: reviewer of step 2b over round 1, claude-opus-5-5
-- ad56ca9da30d15e7e: brief check of step 3a, claude-opus-5-5
-- a72228d39458b07f9: brief check of step 3a, claude-opus-5-5
-- a49118f1317517195: brief check of step 3a, claude-opus-5-5
+- ad56ca9da30d15e7e: brief check of step 4, claude-opus-5-5
+- a72228d39458b07f9: brief check of step 4, claude-opus-5-5
+- a49118f1317517195: brief check of step 4, claude-opus-5-5
 - a95b4d847166098ec: brief check of step 2a, claude-opus-5-5
 - ad451ecb7ba6e1e71: builder of step 2a, claude-sonnet-5-5
 - a4609b37e96a4c34e: reviewer of step 2a, claude-opus-5-5
@@ -94,7 +95,7 @@ Agents in the roles the cost script prices:
 
 ## Blocked, and by what
 
-- 3: Axel's review of the run (open item "Step 3 reading"), then his call on the blind comparison.
+none
 
 ### Step 0 of step 2a
 
@@ -105,14 +106,14 @@ Agents in the roles the cost script prices:
 - Step 3, who runs `/diagnose` (2026-09-30, at preparing step 3): the step runs `/diagnose` on the `utils/pin.sh` both-folders defect "in a fresh session", marked "orchestrator, no agent". The orchestrator cannot be that session, since it knows the cause (2.E step 3's `same_folder`, db9bbec), and run by hand the skill waits for your reply to its hypotheses (ruling "Step list" D2). `utils/pin.sh` also writes the stable folder and the skill links, which a scratch reproduction must redirect with `ORDO_STABLE`, `ORDO_SKILL_DIRS` and `CLAUDE_CONFIG_DIR`. Options: (a) you run `/diagnose` in a fresh Claude Code session on a scratch copy of the tree at db9bbec's parent, answering its hypotheses stop, and the orchestrator then books the run; pros: the run is the by-hand form the skill was built for, and nothing outside Ordo is at risk; cons: it waits for you. (b) A fresh Opus agent runs it overnight, told to go on at the hypotheses stop as under `plan-orchestration`; pros: done by morning; cons: the by-hand stop is skipped, and an agent free to probe `utils/pin.sh` can reach the real stable folder and skill links. Recommendation (a). The lazy option is (b), which tests a different form of the skill than the step asks.
 - The scratch copy (2026-09-30, ruling "Step 3, who runs /diagnose"): `/tmp/ordo-diagnose-3`, a git repository of its own with two commits and no history of Ordo: the tree at 44caaf6 (the preparation of 2.E step 3) with that step's round-0 build applied from `.scratch/2-e-grill/agents/reviews/3-round-0.diff`, the ledger left out, so the both-folders check stands as `[ "${dir%/}" = "$agent_dir" ]` at `utils/pin.sh:317`; and `.claude/skills/diagnose` copied from main at 9699d1a as a project skill, since the installed skills (v2.5.0) hold no `diagnose`. Every run of `utils/pin.sh` there sets `ORDO_STABLE`, `ORDO_SKILL_DIRS` and `CLAUDE_CONFIG_DIR` to folders under `/tmp`.
 
-### Step 3, the blind comparison (run 2026-10-05, Axel's call pending)
+### Step 3, the blind comparison (run 2026-10-05, called by Axel 2026-10-05)
 
 - Record: `agents/reviews/3-blind-comparison.md`. The two sides ran unattended as `claude -p` processes on claude-opus-5-5, each with only its own skill, on clones of the defect's tree (rebuilt from 44caaf6 and `3-round-0.diff`); two `claude -p` judges on claude-opus-5-5, the second with the order swapped (`python3 -c 'import random; ...'` printed `new is A`).
 - Verdicts: judge 1 (A new) chose B, judge 2 (A old) chose A: both prefer `diagnosing-bugs`, whose fix compares resolved paths and tests `//`, `/.`, `./agents/` and a link, where the `diagnose` side fixed the trailing slashes only.
-- Called by Axel 2026-10-05: `diagnose` loses this run (ruling "Step 3, the call on the blind comparison"); step 3a follows.
+- Called by Axel 2026-10-05: `diagnose` loses this run (ruling "Step 3, the call on the blind comparison"); step 4 follows.
 - Usage: side `diagnose` 6.3 minutes, side `diagnosing-bugs` 5.2 minutes, judges $0.59 and $0.63 at list price (modelUsage in the record).
 
-### Step 3, the real run (run 2026-09-30, Axel's review pending)
+### Step 3, the real run (run 2026-09-30, approved by Axel 2026-10-05)
 
 - Run: Axel ran `/diagnose` with the doubled-slash symptom in a fresh session on the scratch copy `/tmp/ordo-diagnose-3`, and answered its stop before the first probe with "The ranking stands. Option B." The record is `agents/reviews/3-diagnosis.md`, the two messages of the session verbatim; the fix it left is `agents/reviews/3-diagnose-fix.diff`.
 - Red command: a script in the session's scratchpad that builds a scratch repository with the tags v1 and v2, pins v1, then runs `pin.sh v2` with `<config>/skills` and `<config>/agents//` in `ORDO_SKILL_DIRS`, every folder under a fresh `/tmp/diagnose-red.XXXXXX`; red on three runs in a row, ending `RED: every part of the symptom shows`. The shrunk case is `ORDO_SKILL_DIRS=<config>/agents//` alone on a tag with one skill.
