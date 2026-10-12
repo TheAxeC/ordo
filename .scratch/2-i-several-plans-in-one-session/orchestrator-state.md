@@ -41,11 +41,13 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item Closing 1 (kind 4): the roadmap diff of `/roadmap done 2.I`, in `agents/reviews/roadmap-done.diff.txt`: the 2.I entry leaves the open order, and its done line is added after 2.H. Approve, or correct it.
-- Open item Closing 2 (kind 4): the tag `v6.0.0` on main's head after the roadmap commit, and `sh utils/pin.sh v6.0.0`. Approve, or name another tag.
+
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-13: Open item Closing 1, the roadmap diff of `/roadmap done 2.I`: approved by the user, written at 9d79ecd.
+- 2026-10-13: Open item Closing 2, the tag and the pin: approved by the user; `git tag v6.0.0` on 9d79ecd and `sh utils/pin.sh v6.0.0` printed `pinned: v6.0.0 (9d79ecd), 13 skills linked in: ...` and `pinned: 5 agents linked in: ...`, exit 0.
 - 2026-10-13: Open item Closing 3, the run findings 2.K does not hold: ruled (a) by the user; findings 2, 3, 5, 7 and 8 added to entry 2.K's goal.
 - 2026-10-12: Open item Step 3, how a step in /spec is recorded, a value of the dispatch entry for a step in `/spec`: closed under self-rule, C40.
 - 2026-10-12: Open item Step 2, condition 7 shown only through a hold: ruled (a) by the user; steps 3 and 4 added before the closing, which becomes step 5.
@@ -106,8 +108,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-13. Step 5 of 5, the closing: the closing report `agents/reviews/closing.md` is written. The pin is `v6.0.0-rc.2` (61d3eab).
-- Next: the roadmap diff of `/roadmap done 2.I`, the tag `v6.0.0` and its pin, each for Axel's approval, and the run findings of `agents/reviews/4-report.md` brought to Axel with options; then the move of this folder to `.scratch/archive/`.
-- Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
+- 2026-10-13. Step 5 of 5, the closing, done: the closing report, entry 2.I marked done at 9d79ecd, the tag `v6.0.0` pinned, and this folder moved to `.scratch/archive/`.
+- Next: entry 2.K.
 - No step in flight.
-- Open on Axel's side: Open items Closing 1 and 2.
+- Open on Axel's side: nothing.
