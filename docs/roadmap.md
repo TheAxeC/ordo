@@ -25,6 +25,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: one real run over two open plans whose next steps change the same file, with a third step in flight beside them and steps of both plans in flight at the same time: the run starts with the plan that comes first in the roadmap, the second plan's step waits until the first plan's step has landed, the steps in flight never exceed the one limit, no two landings overlap, and the one report lists both plans' positions and open items, checked by a fresh reviewer agent against the two plans' ledgers; a test command added to the verification page by one plan's step is run, its line quoted, by the next landing of the other plan.
 - Waits on: 2.E, 2.F and 2.H, whose open steps change `skills/spec/SKILL.md` and `skills/plan-orchestration/SKILL.md`.
 
+## 2.J The session retro's text changes
+
+- Status: [ ]
+- Goal: the 13 approved proposals of `.scratch/retros/sessions-2026-10-12.md` that change Ordo's texts are in the files they name, proposal 10 worded as the orchestrator waiting for an agent to finish through the runner's completion notice, and each changed skill's version is raised as `docs/dev/skill-layout.md` says.
+- Gate: each proposal's sentence is found in its file by `grep -n -F` of its text and read in place by a fresh reviewer agent against the proposal, each changed skill's version read against `docs/dev/skill-layout.md`, and `sh skills/land/templates/checks.sh` passes with the changed character-set check.
+- Waits on: 2.I, whose step 2 runs `skills/plan-orchestration/SKILL.md` and `skills/land/SKILL.md`, which proposals 3, 7 and 10 to 13 change.
+
 ## 3. The writing base
 
 - Status: [ ]
