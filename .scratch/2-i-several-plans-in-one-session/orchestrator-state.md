@@ -36,7 +36,18 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: 2
+  executor: inline
+  worker: orchestrator
+  worktree: .agents/worktrees/2-i-several-plans-in-one-session-2
+  base: c93adae
+  launched: 2026-10-12
+  report: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-report.md
+  brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-brief-check.md (adb62eea8017b1dd4, claude-opus-5-5, 275321 tokens, 51 tool uses, 11 min 21 s)
+  landing: not-started
+  round: 0
+  session_id: inline
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -101,8 +112,8 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Step 1 of 3 landed (0158079). Step 2's open item ruled (a): main's head is tagged `v6.0.0-rc.1` and pinned before step 2 is prepared.
+- 2026-10-12. Step 1 of 3 landed (0158079). The pin is `v6.0.0-rc.1` (ea0add9).
 - Next step: 2, the real run in a scratch repository (orchestrator, no agent).
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
-- Step 2's open item ruled (a); the brief check's report is `agents/reviews/2-brief-check.md`, its other findings closed in the brief when step 2 is prepared again.
+- Step 2 in flight: prepared in c93adae, run inline by the orchestrator in the scratch repository.
 - Open on Axel's side: none.
