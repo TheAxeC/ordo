@@ -45,6 +45,7 @@ dispatch: []
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-12: Open item Step 3, how a step in /spec is recorded, a value of the dispatch entry for a step in `/spec`: closed under self-rule, C40.
 - 2026-10-12: Open item Step 2, condition 7 shown only through a hold: ruled (a) by the user; steps 3 and 4 added before the closing, which becomes step 5.
 - 2026-10-12: Open item Step 2, the scratch gates that could pass without their goals: ruled (a) by the user.
 - 2026-10-12: Open item Step 2, what the scratch run needs approved: ruled (a) by the user.
