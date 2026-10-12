@@ -43,7 +43,10 @@ dispatch: none
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
 
 
-None.
+- Step 6, the closing: the diff of `/roadmap done 2.F`, the tag and the pin (raised 2026-10-12; kind 4, yours). The diff moves entry 2.F from the open order to Done with its gate's output; the draft is in the closing message. Tag `v4.1.0` on the closing commit, a minor version, since the changes since `v4.0.0` add behaviour to `diagnose` and change no public shape; then `utils/pin.sh v4.1.0`.
+  - Option (a), recommended: approve the diff as drafted, with the tag and the pin. Pro: every part of the gate has its evidence on disk and the user's reading or call. Con: none found.
+  - Option (b): correct the diff's wording first. Pro: the Done line reads as you want it. Con: one more round.
+  - The lazy option is approving without reading the Done line against the records it cites.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -86,4 +89,4 @@ None.
 ## Current position (rewritten before every step commit)
 
 - 2026-10-12. Steps 1, 2, 2a, 3, 4 and 5 ticked; `diagnose` wins the rerun of the blind comparison (`agents/reviews/5-blind-comparison.md`) by Axel's call. Next: step 6, the closing (`/roadmap done 2.F`, whose diff, tag and pin are Axel's), then this folder moved to `.scratch/archive/`.
-- Open items for you: none.
+- Open items for you: "Step 6, the closing".
