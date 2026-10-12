@@ -36,24 +36,15 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 2
-  executor: inline
-  worker: orchestrator
-  worktree: .agents/worktrees/2-i-several-plans-in-one-session-2
-  base: c93adae
-  launched: 2026-10-12
-  report: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-report.md
-  brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-brief-check.md (adb62eea8017b1dd4, claude-opus-5-5, 275321 tokens, 51 tool uses, 11 min 21 s)
-  reviewer_report: .scratch/2-i-several-plans-in-one-session/agents/reviews/2-refuter.md (a4f34743273779a48, claude-opus-5-5, 278760 tokens, 62 tool uses, 10 min 34 s)
-  landing: not-started
-  round: 1
-  session_id: inline
+dispatch: []
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Open item Step 2, condition 7 shown only through a hold (2026-10-12, kinds 3 and 4: a change to the scratch content you ruled, and a tag and a pin). Step 2 landed, and its report (`agents/reviews/2-report.md`) shows the gate's condition 7, the added test command run by the other plan's next landing, held only because the orchestrator held plan 3's step 1 back from landing. That hold went against `plan-orchestration` "Two steps in flight", bullet "Landings are one at a time across all plans", which lands steps in the order they are verified. Plan 3's step 1 was verified at 16:02:55 and plan 5's step 2 at 16:13:53, so under the text plan 3's step 1 lands first and plan 3 never runs the new command. The hold was booked nowhere. The run also found that the texts count and compare only dispatch entries, so a step whose `/spec` is still running is invisible to another `/spec` (report finding 9), and that the position line has no form for a plan at its closing (finding 10). The landing order rule itself is sound; what failed is the scratch design, which left the order to timing.
+  - Option (a), recommended: two steps before the closing, which becomes step 5. Step 3 changes the texts so a step counts toward the limit and is compared from the start of its `/spec`, says how a `/spec` waiting on its brief check stands beside other skills, gives the position line of a plan at its closing, and covers report finding 2 (another plan's uncommitted record failing a landing's character-set check); the skills' versions are raised and main is tagged `v6.0.0-rc.2` and pinned. Step 4 is a second real run in a new scratch repository whose plan 3 has a step that names the test command plan 5's step 2 adds, so the texts' rule on "a dependency that forces an order" makes it wait until that step lands, with plan 5's step 2 in flight beside plan 3's step 2. The run's other findings (1, 3, 6, 7 and 8) are outside entry 2.I's goal and go to a new roadmap entry through `/roadmap add` under self-rule. Pro: the gate is shown by the texts as installed, with no hand ordering, and the defect of finding 9 is fixed before `v6.0.0`. Con: a second scratch run, about 40 minutes and 5 USD of agents at this run's rates, and your other sessions run `v6.0.0-rc.2` until the closing.
+  - Option (b): count condition 7 as met with the hold disclosed, fix the texts in a step 3, and close. Pro: one step less. Con: the gate's condition 7 stays shown only by a hold against the text, and the fixed texts are never run.
+  - Recommendation: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -114,8 +105,8 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Step 1 of 3 landed (0158079). The pin is `v6.0.0-rc.1` (ea0add9).
-- Next step: 2, the real run in a scratch repository (orchestrator, no agent).
+- 2026-10-12. Step 2 of 3 landed: the real run's record and report. The pin is `v6.0.0-rc.1` (ea0add9).
+- Next step: 3, the closing, blocked by the open item "Step 2, condition 7 shown only through a hold", which may add two steps before it.
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
-- Step 2 in flight: prepared in c93adae, run inline by the orchestrator in the scratch repository.
-- Open on Axel's side: none.
+- No step in flight.
+- Open on Axel's side: the open item above.
