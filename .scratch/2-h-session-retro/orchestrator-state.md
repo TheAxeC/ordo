@@ -45,9 +45,11 @@ dispatch:
   base: ca6134d
   launched: 2026-10-12
   report: .scratch/2-h-session-retro/agents/reviews/5-report.md
+  builder_usage: 121052 tokens, 22 tool uses, 2.7 minutes (round 0)
+  reviewer_report: .scratch/2-h-session-retro/agents/reviews/5-refuter.md (ae6e103a75ddf21f7, claude-opus-5-5, 136654 tokens, 31 tool uses, 4.8 minutes)
   brief_check: .scratch/2-h-session-retro/agents/reviews/5-brief-check.md (af3f25fec9cb469d4, claude-opus-5-5, 178009 tokens, 48 tool uses, 7.7 minutes)
   landing: not-started
-  round: 0
+  round: 1
   session_id: aa1d6f027dba49d15 (claude-sonnet-5-5)
 ```
 
