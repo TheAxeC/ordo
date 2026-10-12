@@ -29,7 +29,8 @@ One real run over the sessions of plan 2.C, its report holding points of both ki
 - ✅ 3 The skill wired in: the README's skill table, Quick start and install loop; `ordo-help`'s sequence and "Use instead"; `plan-retro`'s "Use instead" (refuter reports there, transcripts here); new terms in `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md`; check: each changed text read in place, and `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` exits 0 (1 commit) (approved)
 - ✅ 3b No breakage testing in Ordo: `skills/spec/templates/brief.md` "Cases" loses its two bullets that ask, for each case kept as a test, for one small change to the code under test and the failing line with that change made, and no other text of `skills/`, `docs/dev/`, `README.md` or `utils/` asks for code to be broken deliberately to see a test fail; the `spec` skill's version is raised; check: `git grep -n -i -e mutation -e "small change to the code" -e "with that change made" -- skills docs/dev README.md utils` prints nothing, and each changed text read in place (1 commit) (ruling No breakage testing)
 - 4 The real run over plan 2.C's sessions, before 2026-10-28; check: the report holds points of both kinds with quoted places, reviewed by Axel, his ruling beside each proposal (1 commit; orchestrator, no agent) (approved)
-- 5 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.H`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
+- 5 `session-retro` ends a plan's window at the latest commit that touches the plan's `plan.md` or `orchestrator-state.md`, under either root, in `skills/session-retro/SKILL.md` Steps 1 and its "What it reads", so a later plan's commit into the archived folder does not widen the window; check: the skill text read in place, and the window it gives for `/session-retro 2.C` ends one second after 75c987f's committer time, 2026-09-29T12:04:42+02:00 (1 commit) (ruling Open item Step 4, the end of a plan's window)
+- 6 the closing: the roadmap entry ticked with the gate's output (`/roadmap done 2.H`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (approved)
 
 ## Could run in parallel
 
@@ -51,6 +52,9 @@ One real run over the sessions of plan 2.C, its report holding points of both ki
 - Steps by part (2026-10-04): Axel agreed the plan of how entries become steps (plan 2.E.A, ruling "Steps by part"): a plan's step list is drafted from the entry's goal as its parts: a step is a part that must exist and work before another part is built on it, or a point where the user reads or decides before the rest goes on; a gate's check runs inside the step that delivers what it checks; wiring in, terms and documentation belong to the step that builds the thing; bookkeeping is done in a commit the orchestrator already makes, never as a step; new work goes by its reason: a finding inside the step's part is fixed in its repair rounds whatever files it reaches, a ruling on a part not yet built changes that step's brief, a part the entry needs that no step builds or a landed part found wrong or short is a new step by the user's ruling or a self-rule choice, work outside the entry's goal is a new roadmap entry through `/roadmap add`, and a finding that changes a public shape or an established decision is an open item. In this plan, step 3a moves to plan 2.E.A's step 12c, since it changes the `spec` skill and not session-retro; step 12c makes the six changes of the ruling "Recurring findings" where main's text lacks them, the mutation of a code case only for a case kept as a test; this plan keeps step 4 and the closing; the lazy option was capping the number of steps per entry (the user).
 - No breakage testing (2026-10-05): Axel ruled that Ordo asks for no breakage testing of any kind, "This must be fixed": step 3b removes the two bullets of `skills/spec/templates/brief.md` "Cases" that ask for one small change per case kept as a test and its failing line, and any other text of Ordo that asks for code to be broken deliberately to see a test fail; this replaces the part "one mutation per code case" of the ruling "Recurring findings"; the gate of roadmap entry 2.G loses its clause "each block removed in a scratch copy turns the test red" through `/roadmap` (the user).
 - Self-rule on (2026-10-05): the configuration block gains `self_rule: on`, `next_entry: on` and `repair_reviewer: claude:sonnet` from `.agents/plan.yaml`, so the plan runs under self-rule, the user's "Of course, self-rule is turned on" (the user).
+
+- Open item Step 4, the window of the real run (2026-10-12): the real run reads the window of plan 2.C's own commits, `/session-retro 2026-09-28T22:51:46+02:00 2026-09-29T12:04:42+02:00`, from the commit that added its `plan.md` to one second after 75c987f, the last commit that touches its `plan.md` or state file; it unblocks step 4 (self-rule).
+- Open item Step 4, the end of a plan's window (2026-10-12): step 5 is added to have `session-retro` end a plan's window at the latest commit that touches its `plan.md` or `orchestrator-state.md`, and the closing is renumbered 6; it unblocks nothing (self-rule).
 
 ## Agents
 
@@ -81,6 +85,10 @@ Each agent started for this plan has its agent id, its role and the model the ru
 ## Blocked, and by what
 
 - 4: the transcripts of 2.C last until about 2026-10-28.
+
+### Step 0 of step 4
+
+- 2026-10-12. `/session-retro 2.C` resolved the window from 2026-09-28T22:51:46+02:00 to 2026-10-06T01:10:44+02:00: the latest commit that touches the folder is ef9f292, step 3 of plan 2.1, which deleted the scripts under `.scratch/` and so touched 2.C's archived folder a week after 2.C closed. The reader's outputs over that window held 8374595 bytes in 281 parts, the skill's stop "A large output". Closed under self-rule as the open items "Step 4, the window of the real run" (C36) and "Step 4, the end of a plan's window" (C37). Over the window of 2.C's own commits the output holds 730556 bytes in 25 parts.
 
 ### Step 1, the transcript reader (landed 2026-09-30)
 

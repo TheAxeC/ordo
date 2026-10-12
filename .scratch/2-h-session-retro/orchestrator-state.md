@@ -49,6 +49,8 @@ none
 - Step 2 reading (2026-09-30): approved by Axel with the correction to "The reader"'s opening sentence, made on main as a fix of step 2; step 2 ticked.
 
 - Recurring findings (2026-09-30): Axel ruled (a) for each of the six proposals; step 3a.
+- 2026-10-12: Open item Step 4, the window of the real run, the skill's stop "A large output" over the window it resolved for 2.C: closed under self-rule, C36.
+- 2026-10-12: Open item Step 4, the end of a plan's window, a later plan's commit widening the window of an archived plan: closed under self-rule, C37.
 
 ## The standing demands (from Axel, in force)
 
@@ -71,5 +73,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-05. Steps 1, 2, 3 and 3b landed and ticked.
-- Next: step 4, the real run over 2.C's sessions with Axel, before 2026-10-28. By the user's order of 2026-10-05, plan 2.H waits while plan 2.1 runs first and then 2.F.
+- 2026-10-12. Steps 1, 2, 3 and 3b landed and ticked. Step 4, the real run, is under way over the window of plan 2.C's own commits (C36); step 5 added (C37); the closing is step 6.
+- Next: step 4's sessions report, read in full, then each proposal to Axel.
