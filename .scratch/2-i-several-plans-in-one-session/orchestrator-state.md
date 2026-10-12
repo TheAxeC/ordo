@@ -104,8 +104,8 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-13. Step 4 of 5 landed: the second real run. The pin is `v6.0.0-rc.2` (61d3eab).
-- Next step: 5, the closing: the closing report, `/roadmap done 2.I`, the tag `v6.0.0` and its pin, and the run findings of `agents/reviews/4-report.md` brought to Axel with options.
+- 2026-10-13. Step 5 of 5, the closing: the closing report `agents/reviews/closing.md` is written. The pin is `v6.0.0-rc.2` (61d3eab).
+- Next: the roadmap diff of `/roadmap done 2.I`, the tag `v6.0.0` and its pin, each for Axel's approval, and the run findings of `agents/reviews/4-report.md` brought to Axel with options; then the move of this folder to `.scratch/archive/`.
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
 - No step in flight.
 - Open on Axel's side: nothing.

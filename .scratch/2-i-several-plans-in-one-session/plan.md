@@ -104,7 +104,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - adb62eea8017b1dd4: brief check of step 2, claude-opus-5-5
 - a4f34743273779a48: reviewer of step 2, claude-opus-5-5
 - a147c0afbb4437820: reviewer of step 2 over round 1, claude-sonnet-5-5
-- a26b85029189e3c01: brief check of step 3, claude-opus-5-5, ended by an interrupt before its report
+- a26b85029189e3c01: brief check of step 3, claude-opus-5-5
 - a6ce8870a2a7c0b32: brief check of step 3, claude-opus-5-5
 - a04584a0f86c68b1f: builder of step 3, claude-sonnet-5-5
 - ab30d93c9a0113445: reviewer of step 3, claude-opus-5-5
