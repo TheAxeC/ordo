@@ -727,4 +727,4 @@ The same fault, comparing paths by how they are written, appears in two more pla
 
 ## The call
 
-Open: Axel's call, open item "Step 5, the call on the blind comparison".
+Axel ruled (a) on 2026-10-12: `diagnose` wins. Booked in `plan.md` Rulings ("Step 5, the call on the blind comparison").

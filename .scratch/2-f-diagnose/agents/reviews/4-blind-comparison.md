@@ -594,4 +594,4 @@ Strengths:
 
 ## The call
 
-Open: Axel's call, the open item "Step 4, the call on the blind comparison".
+Axel ruled (a) on 2026-10-12: `diagnose` loses. Booked in `plan.md` Rulings ("Step 4, the call on the blind comparison").
