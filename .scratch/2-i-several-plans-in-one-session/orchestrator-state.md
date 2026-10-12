@@ -52,18 +52,11 @@ dispatch:
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item Step 2, the scratch gates that could pass without their goals (2026-10-12, kind 3: a change to the content you ruled in "Open item Step 2, what the scratch run needs approved"). `/plan 3 --ruling .scratch/rulings/3-the-guide-s-usage-line-and-its-faq.md "A"` in the scratch repository asks of entry 3's gate "could this pass without the goal being reached?", and the answer is yes: `grep -c 'sh run.sh <name>' docs/guide.md` prints 1 for a usage sentence anywhere in the guide, not right after the install sentence, and `grep -c '^## ' docs/faq.md` prints 2 for two headings that are no questions about the guide and have no answers. Step 2's check of plan 3 has the same gap. Entry 5's gate has it too: `grep -c 'sh install.sh' docs/guide.md` passes for the sentence outside the opening paragraph, and the test's FAIL case covers only a missing title. Under a quoted ruling `/plan` writes the plan without its stop only when every answer is no, so as the ruling stands `/plan` stops for you on both plans, and the run asks you during the run. Two smaller findings come with it: the ruled step lines end `(ruling A)`, where `/plan` writes `(approved)` for a list a ruling of the user approves; and `/plan`'s quoted-ruling compare covers the steps, while "Could run in parallel" has no rule for where a ruling's line goes.
-  - Option (a), recommended: the scratch roadmap's gates and the ruled step checks become the text below, the step lines end `(approved)`, and the orchestrator writes them into the scratch repository's roadmap and rulings files as a second setup commit before `/plan` runs again; the run then asks you nothing. The text:
-    - Entry 5's gate: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh'` prints 1 (line 3 is the opening paragraph); `sh tests/guide.test.sh` prints `PASS: docs/guide.md`; `sh tests/guide.test.sh <a file whose first line is not a title>` and `sh tests/guide.test.sh <a file with a title line and a tab>` each print a `FAIL:` line; `grep -c -F 'sh tests/guide.test.sh 2>&1 | tail -1' docs/dev/building.md` prints 1.
-    - Plan 5's step 1 check: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh'` prints 1. Step 2's check: the three test runs of the gate print what the gate says, and the `grep -c -F` of the gate prints 1.
-    - Entry 3's gate: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh[^.]*\. [^.]*sh run\.sh <name>'` prints 1 (the usage sentence is the sentence right after the install sentence, in the opening paragraph); `head -1 docs/faq.md` prints `# FAQ`; `grep -c '^## .*?$' docs/faq.md` prints 2; each of the two questions, read in place, is about the guide and is followed by a paragraph that answers it.
-    - Plan 3's step 1 check: the `sed` and `grep -c` of the gate print 1. Step 2's check: the three FAQ parts of the gate.
-    - Pro: every gate and check answers no to `/plan`'s question, so both plans open under your ruling and the run asks you nothing. Con: a second change to scratch content you already ruled once.
-  - Option (b): the gates stay; `/plan` stops on both plans and you approve each draft during the run. Pro: no change to what you ruled. Con: the run asks you during the run, so condition 9 of the brief and the step line's "with nothing asked of the user" are NOT DONE.
-  - Recommendation: (a). The lazy option is (b), which keeps gates that pass without their goals.
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-12: Open item Step 2, the scratch gates that could pass without their goals: ruled (a) by the user.
 - 2026-10-12: Open item Step 2, what the scratch run needs approved: ruled (a) by the user.
 - 2026-10-12: Open item ADR 0012, the landing commit's paths: ruled (a) by the user; the ADR's sentence names `--no-renames`.
 - 2026-10-12: Open item Step 2, how the real run invokes step 1's texts: ruled (a) by the user; tag `v6.0.0-rc.1` and its pin.
@@ -124,4 +117,4 @@ dispatch:
 - Next step: 2, the real run in a scratch repository (orchestrator, no agent).
 - Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
 - Step 2 in flight: prepared in c93adae, run inline by the orchestrator in the scratch repository.
-- Open on Axel's side: the open item "Step 2, the scratch gates that could pass without their goals"; the scratch repository is set up (a1525e9 there) and no scratch plan is open.
+- Open on Axel's side: none.

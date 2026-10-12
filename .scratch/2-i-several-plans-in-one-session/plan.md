@@ -17,7 +17,7 @@ one real run over two open plans whose next steps change the same file, with a t
 ## Steps, in execution order
 
 - ✅ 1 Several plans in one session in the skill texts: `plan-orchestration` with `references/self-rule.md`, `spec`, `land`, `refute`, `plan` with `templates/orchestrator-state.md`, `ordo-help`, the commit command of every skill that commits on main, `skills/repo-setup/templates/plan-terms.md` synced into `docs/glossary.md`, and `README.md`, as the rulings D15 to D28 say, each skill's version raised as `docs/dev/skill-layout.md` says; check: each changed text read in place against its ruling, `git grep -n -e 'git add --' -e 'committed by path' -- skills` from the repository root read to show every commit on main in the form `git commit -m <message> -- <path> ...`, `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` from the repository root exits 0, and `sh skills/land/templates/checks.sh .scratch/2-i-several-plans-in-one-session/orchestrator-state.md` from the repository root passes (1 commit) (ruling A) (ruling Open item Step 1, the projects form)
-- 2 The real run: in a scratch repository under the session's scratch folder, two open plans whose next steps change the same file, a third step in flight, and one plan's step adding a test command to the verification page; the orchestrator runs the loop of step 1's texts over both plans in its own session, invoking each skill through the Skill tool from the pin `v6.0.0-rc.1` of main's head after step 1, with nothing asked of the user; check: the run's ledgers and transcript show the run starting with the plan first in the roadmap, steps of both plans in flight at the same time, the second plan's step waiting until the first plan's step landed, the steps in flight never above the one limit, no two landings overlapping, the added test command run by the other plan's next landing with its line quoted, and the one report checked by a fresh reviewer agent against the two plans' ledgers (1 commit; orchestrator, no agent) (ruling A) (ruling Step 2, how the real run invokes step 1's texts) (ruling Step 2, what the scratch run needs approved)
+- 2 The real run: in a scratch repository under the session's scratch folder, two open plans whose next steps change the same file, a third step in flight, and one plan's step adding a test command to the verification page; the orchestrator runs the loop of step 1's texts over both plans in its own session, invoking each skill through the Skill tool from the pin `v6.0.0-rc.1` of main's head after step 1, with nothing asked of the user; check: the run's ledgers and transcript show the run starting with the plan first in the roadmap, steps of both plans in flight at the same time, the second plan's step waiting until the first plan's step landed, the steps in flight never above the one limit, no two landings overlapping, the added test command run by the other plan's next landing with its line quoted, and the one report checked by a fresh reviewer agent against the two plans' ledgers (1 commit; orchestrator, no agent) (ruling A) (ruling Step 2, how the real run invokes step 1's texts) (ruling Step 2, what the scratch run needs approved) (ruling Step 2, the scratch gates that could pass without their goals)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output (`/roadmap done 2.I`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (ruling A)
 
 ## Could run in parallel
@@ -81,6 +81,11 @@ Independent of each other; the standing rule of one agent at a time still serial
   - Plan 3's steps: 1, the usage sentence right after the install sentence; 2, `docs/faq.md` with the title line `# FAQ` and two questions, each a `## ` heading followed by its answer; 3, the closing. Steps 1 and 2 can run in parallel.
   - The scratch rules page gains: "The verification page `docs/dev/building.md` is not a configuration file: a step that changes it runs beside other steps."
   - Every scratch agent runs on Sonnet, and the scratch `.agents/plan.yaml` holds `workers_at_once: 2`, `self_rule: on` and `next_entry: off`.
+- Open item Step 2, the scratch gates that could pass without their goals (2026-10-12): (a) the scratch roadmap's gates and the ruled step checks become the text below, the ruled step lines end `(approved)`, and the orchestrator writes them into the scratch repository's roadmap and rulings files as a second setup commit before `/plan` runs again (the user).
+  - Entry 5's gate: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh'` prints 1 (line 3 is the opening paragraph); `sh tests/guide.test.sh` prints `PASS: docs/guide.md`; `sh tests/guide.test.sh <a file whose first line is not a title>` and `sh tests/guide.test.sh <a file with a title line and a tab>` each print a `FAIL:` line; `grep -c -F 'sh tests/guide.test.sh 2>&1 | tail -1' docs/dev/building.md` prints 1.
+  - Plan 5's step 1 check: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh'` prints 1. Step 2's check: the three test runs of the gate print what the gate says, and the `grep -c -F` of the gate prints 1.
+  - Entry 3's gate: `sed -n 3p docs/guide.md | grep -c 'sh install\.sh[^.]*\. [^.]*sh run\.sh <name>'` prints 1 (the usage sentence is the sentence right after the install sentence, in the opening paragraph); `head -1 docs/faq.md` prints `# FAQ`; `grep -c '^## .*?$' docs/faq.md` prints 2; each of the two questions, read in place, is about the guide and is followed by a paragraph that answers it.
+  - Plan 3's step 1 check: the `sed` and `grep -c` of the gate print 1. Step 2's check: the three FAQ parts of the gate.
 
 ## Agents
 
@@ -96,7 +101,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- Step 2: the open item "Step 2, the scratch gates that could pass without their goals".
+- none.
 
 ### Step 0 of step 2
 
