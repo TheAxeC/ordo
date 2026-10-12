@@ -28,7 +28,7 @@ The open item names its kind by its number:
   - The item stays open for the user.
 - An option that runs `/roadmap add` under a quoted ruling ending "(self-rule)" whose bullet names a finding of a running plan, as the `roadmap` skill's "What it reads" 6 says, is closed like any other, since `/roadmap add` takes such a bullet.
   - After `/roadmap add` commits the entry, the orchestrator adds `the roadmap entry <n>` to the choice's `Builds on it:` line.
-  - The orchestrator then commits the choices file by path, a resume point.
+  - The orchestrator then commits the choices file as a resume point, in the form `SKILL.md`, "Resuming, and handing the plan over", states.
 
 ## Closing an open item
 
@@ -40,7 +40,8 @@ An open item that "The six kinds left open" and "A skill with its own approval s
    - That bullet is the line "Steps / A ruling" 2 names for a ruling that adds or splits a step, rewrites the line of a step not yet built, or runs a skill.
 4. The open item moves to the Closed items as `- <date>: Open item <L>, <what was raised>: closed under self-rule, C<n>.`
 5. The choice is written to the choices file, as "The choices file" says.
-6. The open item, the step's Step 0, the Rulings bullet, the Closed items, the step text the ruling rewrote and the choices file are committed by path at once, a resume point.
+6. The open item, the step's Step 0, the Rulings bullet, the Closed items, the step text the ruling rewrote and the choices file are committed at once, a resume point of the step's plan.
+   - The commit is made in the form `SKILL.md`, "Resuming, and handing the plan over", states.
 7. The loop goes on with the step as the ruling leaves it: `/spec` again for a step stopped before its build, the repair round or the landing for a step stopped after it.
 
 ## The counts
@@ -50,32 +51,35 @@ An open item that "The six kinds left open" and "A skill with its own approval s
 
 ## Next-entry mode
 
-Next-entry mode runs the next open roadmap entry after a plan's closing, under self-rule.
+Next-entry mode runs the next open roadmap entry that has no open plan after a plan's closing, under self-rule, while the steps of the other plans the invocation runs go on.
 
+- The plans the invocation runs are every open plan under `/plan-orchestration` with no entry and `continue the plan`, and the named plan and the plan of each next entry the run takes under `/plan-orchestration <entry>`.
 - It applies when, after a plan's closing step completes, `.agents/plan.yaml` (in the `projects:` form, the project's keys) holds `self_rule: on` and `next_entry: on`.
-  - The orchestrator reads the file itself, since no plan is open then.
+  - The orchestrator reads the file itself, since the closed plan's state file has moved to `<archive_root>/`.
   - `/grill` and `/plan` check the same two keys.
 - The closing step is the same with and without next-entry mode: its `/roadmap done` diff stays with the user, as kind 4 of "The six kinds left open" says.
   - The orchestrator takes the next entry only after the closing step has written the closing report and moved the ledger folder.
-  - A next-entry run therefore waits at every closing for the user's approval of that diff.
+  - The next entry therefore waits at every closing for the user's approval of that diff.
+  - Only that entry waits, and the steps of the other plans the invocation runs go on.
   - The user's approval resumes the closing step.
   - The run then goes on in the same turn.
-- The next entry is the first entry of the roadmap's open order, as the `roadmap` skill's "Steps / Show" prints it, which the orchestrator reads from the roadmap file.
-  - With no entry in the open order and none under "Not yet specified", the run ends.
+- The next entry is the first entry of the roadmap's open order that has no open plan, as the `roadmap` skill's "Steps / Show" prints it, which the orchestrator reads from the roadmap file.
+  - An entry with a plan open is passed over, since the loop runs its plan with no `/grill` and no `/plan`.
+  - With no entry in the open order and none under "Not yet specified", no next entry can be taken.
     - The final message says no open entry is left.
-  - With no entry in the open order and one or more under "Not yet specified", the run ends at the first of them.
+  - With no entry in the open order and one or more under "Not yet specified", no next entry can be taken past the first of them.
     - The final message names it with `/roadmap add <entry>`, which names its gate.
-  - An entry that waits on an entry neither done nor dropped, other than one the run has just closed, ends the run there.
+  - An entry that waits on an entry neither done nor dropped, other than one the run has just closed, ends the taking of entries there.
     - The final message names the entry it waits on.
-  - An entry with a plan open (a folder under `<ledger_root>/`, outside `<archive_root>/`, whose `plan.md` opens with `# Plan: <entry>`) is run by the orchestrator through the loop on that plan, with no `/grill` and no `/plan`.
-    - An open plan with no step that can move without the user is passed over, as `SKILL.md` Steps 2 says.
 - For any other next entry, the orchestrator invokes these through the runner, in this order:
   1. `/grill <entry> --self-rule`.
   2. `/plan <entry> --self-rule`.
   3. The loop on the new plan, which runs under its own configuration block.
   - In the `projects:` form `<entry>` is `<project>/<entry>`.
-- The run stops at an item of the six kinds, at a stop "The counts" names, at a stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule`, and at a refusal of `/grill` or `/plan`.
-  - A `/grill` round of decisions of the six kinds ends the turn.
+  - The steps of the other plans the invocation runs go on while the first two run.
+- The taking of the next entry stops at an item of the six kinds, at a stop "The counts" names, at a stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule`, and at a refusal of `/grill` or `/plan`.
+  - Such a stop blocks only that entry, and the steps of the other plans the invocation runs go on.
+  - A `/grill` round of decisions of the six kinds waits for the user's answers.
     - The user's answers resume `/grill`, which goes on under `--self-rule` with the next frontier.
     - The run goes on to `/plan` when `/grill` ends.
   - A stop that the `plan` skill's Steps 3 keeps with the user under `--self-rule` shows its draft.
@@ -85,8 +89,9 @@ Next-entry mode runs the next open roadmap entry after a plan's closing, under s
   - A refusal changes nothing.
   - The final message names the refusal.
   - Nothing of such a stop is lost when the session ends, since a decision not yet written is drawn again by the skill that raised it when it runs again.
+- The run ends when none of the plans the invocation runs has an unblocked step and no next entry can be taken.
 - A session that takes over reads what is written.
-  - `continue the plan` with no plan open, under both keys in `.agents/plan.yaml`, takes the next entry as this section says.
+  - `continue the plan` and `/plan-orchestration` with no entry, with no plan open and both keys in `.agents/plan.yaml` on, take the next entry as this section says.
   - An entry with a rulings file and no plan resumes at `/grill <entry> --self-rule`, which draws its tree afresh from the rulings file (the `grill` skill's Steps 3).
   - An entry with a plan open resumes the loop on it.
   - A rulings file that holds the user's own bullets is read the same way.
@@ -161,4 +166,4 @@ C<n> => <the user's ruling, one clause per question the open item asked>
     - The review's commit message names the choice and the decision in its place.
   - The `C<n> =>` bullet is written to that rulings file, where `/plan` copies it.
 - A `C<n>` the choices file does not hold, or no choices file, is refused: the refusal names the numbers the file holds, or says there is no file, and nothing is written.
-- The files the review changed are committed by path at once, a resume point.
+- The files the review changed are committed at once, a resume point, in the form `SKILL.md`, "Resuming, and handing the plan over", states.

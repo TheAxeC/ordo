@@ -2,7 +2,7 @@
 name: plan-retro
 description: "Read every refuter report of a repository's plans, open and archived, group the findings by the kind of defect, count the kinds that come back across steps and plans, and for each one propose the change that stops it at its source: a rule sentence on the rules page, a change to the text that should have prevented the defect, a page added to the standards the briefs point at, or, for a fact a machine computes, a check the user approves. Writes a retro report and changes nothing else until the user approves. Triggers on: plan-retro, retro, run a retro, what do the reviews keep finding, mine the refuter reports."
 metadata:
-  version: "1.2.1"
+  version: "1.2.2"
 ---
 
 # Retro over the refuter reports
@@ -61,7 +61,9 @@ metadata:
 12. Make the approved edits: the rules page, a standards page, the text that should have prevented the defect, `.agents/plan.yaml`, the verification page, and, for an approved check of a fact, its script.
 13. Run each approved check's command.
 14. Show each command's output.
-15. Commit the retro and the edited files by explicit path list, in one commit whose subject names the retro.
+15. Commit the retro and the edited files in one commit whose subject names the retro.
+    - Each file is staged with `git add -- <path> ...`.
+    - The commit names the same paths: `git commit -m <message> -- <path> ...`.
 
 ## Grouping
 

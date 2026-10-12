@@ -2,7 +2,7 @@
 name: roadmap
 description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves or under a quoted ruling. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # Keep the roadmap
@@ -91,6 +91,8 @@ metadata:
    - A draft that differs in anything, such as a place or a number the skill's own rules give, is shown whole with each difference named, and the stop stands.
    - The step is done when the change is written, or the draft is shown with each difference named and the stop stands.
 5. Commit the files by explicit path list, one commit per change, the subject naming the entry and what changed.
+   - Each file is staged with `git add -- <path> ...`.
+   - The commit names the same paths: `git commit -m <message> -- <path> ...`.
    - A change written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
    - The step is done when each change written is in a commit of its own.
 

@@ -2,7 +2,7 @@
 name: diagnose
 description: "Find the cause of a defect before changing anything: one command run red on the exact symptom, the case shrunk until each remaining part is needed for the red, three to five ranked hypotheses that each name the result that would falsify them, one change per probe tied to one hypothesis, the fix with a test run red without it where the failure costs something, and the cause written where it is kept. Run by a person, it waits for the reply to the hypotheses before the first probe. Run unattended in a plan's loop, it runs in a fresh agent, probes on a scratch copy, leaves the step's worktree unchanged and hands the fix over by where the defect was found. It leaves behind the diagnosis record. Triggers on: diagnose, diagnose this, debug this, this is broken, find the cause of, why does this fail, why is this slow, this got slower, this test is flaky, fails only sometimes, the cause is not known, diagnose the finding, find the cause a step's text asks for."
 metadata:
-  version: "2.1.0"
+  version: "2.1.1"
 ---
 
 # Diagnose a defect
@@ -68,7 +68,7 @@ metadata:
    - A later diagnosis of the same step is appended to that file under its own heading at the level of the record's title, `# Diagnosis: <the symptom in a few words>`, which names its finding or quotes its part.
    - For `premise`, each part of the step's text that asks for a cause to be found gets a diagnosis of its own, in the order of the step's text, the first filling the record as opened.
    - Inside a plan, the record is written to disk in the main checkout and not committed on its own, except as Steps 20 says for `premise`.
-     - The next resume-point commit carries it, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+     - The next resume-point commit of its own plan carries it, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
    - Done when the record exists and its Symptom section holds the symptom as "What it reads" 1 gives it, word for word.
 3. Choose where the probes run.
    - Write into the record's "Where the probes run" section what the choice names.
@@ -316,7 +316,7 @@ metadata:
     - Run by a person outside a plan, done also when the red command run again on the original case is green.
 23. Write where the cause is kept.
     - Outside a plan, the session drafts the last bullet of the commit message, which states the cause, the red command and the fix's test, and names "No test reaches it" with its reason when the record holds one.
-    - Outside a plan, the session commits only as the repository's commit rule allows, and otherwise shows the bullet to the user.
+    - Outside a plan, the session commits only as the repository's commit rule allows, naming the paths the fix changed in the form Steps 20 states, and otherwise shows the bullet to the user.
     - Inside a plan, the orchestrator books the record at the step's landing, as the `land` skill's Steps 9 says.
     - Done when the bullet is drafted and shown or committed, or, inside a plan, when the record's path and the cause are written for the landing's booking.
 24. Outside a plan, run by a person, remove the copy of the record in `$TMPDIR` once it has been shown.

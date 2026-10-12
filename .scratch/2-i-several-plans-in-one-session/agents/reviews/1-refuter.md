@@ -183,3 +183,151 @@ Cases of the brief's "Cases":
 - Sentence length across all 480 changed lines against the prose standard's "under roughly 20 words unless the mechanism needs more": the long lines read (descriptions, the dispatch comment, glossary entries, the `/spec refuses` sequence line) carry lists of keys or places, which the builder's report names; no further sentence was judged over the limit.
 
 Reviewer usage: afa9f0216c64339f0, claude-opus-5-5, 295878 tokens, 56 tool uses, 9 min 43 s.
+
+## Repair round 1, refuted
+
+Worktree /Users/axelfaes/workspace/ordo/.agents/worktrees/2i-1, base cc1fd7a. Read-only throughout. Every verification command below was run from the worktree root in this review.
+
+```
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ git ls-files -coz --exclude-standard -- skills docs README.md .agents/plan.yaml | xargs -0 perl -CSD -ne '<the brief's character-set check>'
+(no output)
+exit 0
+$ git grep -n -e 'worktree_root>/<step>' -e '\-b <step>' -- skills docs README.md ':!skills/land/templates/land.sh'
+(no output)
+exit 1
+$ git grep -n -e '<base>\.\.<step>' -- skills README.md docs ':!skills/land/templates/land.sh'
+(no output)
+exit 1
+$ git grep -n workers_at_once -- skills docs README.md .agents/plan.yaml
+16 hits: .agents/plan.yaml:14, docs/glossary.md:55, skills/ordo-help/SKILL.md:96, skills/plan-orchestration/SKILL.md:294, 295, 296, skills/plan/templates/orchestrator-state.md:33, skills/plan/templates/plan.md:25, skills/plan/templates/plan.projects.yaml:23, 50, skills/plan/templates/plan.yaml:21, skills/repo-setup/templates/plan-terms.md:50, skills/spec/SKILL.md:37, 227, 228, 413 (each reads the key from .agents/plan.yaml, or is a plan.yaml template line)
+$ grep -c 'workers_at_once:' skills/plan/templates/orchestrator-state.md
+0
+$ python3 -I <scratchpad>/figs2/gen_figures.py   (a copy of docs/figures/gen_figures.py; the worktree was not written)
+wrote scratchpad/figs2/pipeline.svg (31539 bytes)
+wrote scratchpad/figs2/plan-loop.svg (31979 bytes)
+exit 0
+$ cmp <scratch>/pipeline.svg docs/figures/pipeline.svg ; cmp <scratch>/plan-loop.svg docs/figures/plan-loop.svg
+pipeline.svg equal
+plan-loop.svg equal
+$ git status --short docs/figures
+ M docs/figures/gen_figures.py
+ M docs/figures/plan-loop.svg
+$ python3 -c '<description lengths>' (12 skills)
+plan-orchestration 1018 / spec 1003 / land 725 / refute 989 / plan 477 / ordo-help 564 / grill 877 / roadmap 1022 / plan-retro 616 / ordo-init 632 / repo-setup 783 / diagnose 965
+$ grep -m1 'version:' over the twelve skills
+plan-orchestration 5.0.0 / spec 5.0.0 / land 3.0.0 / refute 3.0.1 / plan 4.0.0 / ordo-help 3.1.0 / grill 1.3.1 / roadmap 1.3.1 / plan-retro 1.2.2 / ordo-init 2.0.1 / repo-setup 4.0.0 / diagnose 2.1.1
+$ git status --short
+22 modified paths (.agents/plan.yaml, README.md, docs/figures/gen_figures.py, docs/figures/plan-loop.svg, docs/glossary.md, 12 skills' SKILL.md files incl. plan-orchestration/references/self-rule.md, plan/templates/orchestrator-state.md, plan.md, plan.yaml, repo-setup/templates/plan-terms.md) and ?? .scratch/2-i-several-plans-in-one-session/agents/reviews/1-report.md; every one is in "Paths this step writes"
+$ git diff cc1fd7a --stat | tail -1
+22 files changed, 297 insertions(+), 208 deletions(-)
+$ diff <(sed -n '/<!-- ordo:plan-terms begin -->/,/<!-- ordo:plan-terms end -->/p' docs/glossary.md | sed '1d;$d') skills/repo-setup/templates/plan-terms.md
+(no output; "glossary-block-equal")
+$ git grep -n -i -e '\bcommit\b' -e 'commits ' -e 'committed' -e 'amend' -- skills | wc -l
+269   (equals the round report's figure)
+$ sed -n 35,39p skills/plan-orchestration/SKILL.md
+item 1 of "What it reads", with the open-plan definition at line 38 and "A folder without such a plan.md is no plan." at line 39 (equals the round report's claim of lines 38 and 39)
+$ git grep -n -i -e 'nothing staged' -e 'something staged' -- skills
+skills/land/SKILL.md:59, 212, 219; skills/spec/SKILL.md:61, 410; skills/land/templates/land.sh:281, 287, 328
+```
+
+The round's tree state was not recorded, so the delta was identified from the places the round brief names, read against the whole diff since the base. The claims in the report's "Repair round 1" section that I could rerun (line numbers, the 16 and 269 counts, the 22-path status, the stat line, the sub-bullet lines, the figure bytes) all reproduce.
+
+### Closure of each earlier finding
+
+- Spec 1 (land Steps 4 and "The landing script"): closed. `skills/land/SKILL.md` Steps 4 reads `git cherry-pick -n <base>..<slug>-<step>`; "The landing script" reads `<base>..<slug>-<step>` in both bullets, and the Stops bullets read `<slug>-<step>` and `<slug>-<step>-land`. The `<base>..<step>` grep is empty. The only remaining `<step>` in land is the step id in `agents/reviews/<step>-...` paths.
+- Spec 2 (plan-orchestration Steps 2 "Done when", Steps 10): closed at the two places the ruling names. Steps 2 reads "none of the plans the invocation runs has an unblocked step"; Steps 10 reads "The loop ends only at a pause of every plan the invocation runs or when none of them has an unblocked step." The same defect remains elsewhere: see Spec N1.
+- Spec 3 (ADR 0012 `--name-only`): no change by ruling, raised by the orchestrator to the user; not counted.
+- Standards 1 and Proof 1 (open plan): closed. The definition is stated once, as sub-bullets of `skills/plan-orchestration/SKILL.md` "What it reads" 1 (lines 38 and 39). The glossary entry **open plan** in the template and in the block names only `plan-orchestration`, "What it reads" 1 under "Stated in", and the block equals the template. I read that section and it states the definition (with the `projects:` form and the exclusion of `archive_root`).
+- Standards 2 (land Rules): closed. The clause on a nothing-staged preflight is gone; the line reads "The range stays staged on main until that commit." Nothing was written in its place. No other skill text claims that a started skill refuses.
+- Standards 3 (ordo-help "What it reads"): closed. Item 5 is the roadmap file `.agents/plan.yaml`'s `roadmap:` names, with the `projects:` order as a sub-bullet. It is appended after item 4, so items 1 to 4 keep their numbers.
+- Standards 4 (spec Rules): closed. The bullet reads "...until the next resume point of its own plan."
+- Standards 5 (one requirement per bullet): closed for the five places. The spec Steps 1 bullet has three sub-bullets. The state-file sentence of "Resuming, and handing the plan over" is two bullets. The self-rule closing-wait bullet is two bullets. The Stops pause bullet is a scope with two sub-bullets. land Steps 2 keeps "Set `landing: cherry-picking`..." with five sub-bullets ending "Done when `landing: cherry-picking` is set and the verify list equals the page's commands."
+- Behaviour 1: closed. The report's "Host- or user-visible changes, added" gives the before and after of the recurring-findings pass, the night rule and next-entry mode. Each statement matches the diff.
+- Declined to judge, effort and models: closed. "Two steps in flight" holds the bullet "Each step is prepared, built and reviewed under its own plan's configuration block: worker, reviewer, efforts, review cadence and repair rounds." Steps 1's agent check reads "the effort agents each plan the run runs names in its configuration block".
+- Declined to judge, resumption under `/plan-orchestration <entry>`: the content is in "Resuming, and handing the plan over". Its form is Standards N1.
+
+The builder's reading of `CLAUDE_CODE_EFFORT_LEVEL` is correct. The ruling's replacement words ("the effort agents each plan the run runs names in its configuration block") fit only the agent-listing check. The environment variable is a property of the process that runs every agent, no plan's block holds it, and one check before the first dispatch covers every plan. Leaving that bullet unchanged is not a removed check and not a narrower fix.
+
+### Verdicts (whole diff since the base)
+
+Items of "What to build":
+
+- 1: holds. "Two steps in flight" "The limit" bullet and its two sub-bullets; spec "What it reads" 3 and the Stops row; `workers_at_once` grep (16 hits, each reads `.agents/plan.yaml`); template grep 0; `check_config.test.sh` PASS.
+- 2: holds. spec Steps 1 and 4, land "What it reads" 8, Steps 2, 9, 12; plan Steps 4.
+- 3: holds. plan-orchestration "What it reads" 3, Steps 1, "Resuming"; spec "What it reads" 3 and Steps 5.
+- 4: holds. spec Steps 7 and 9 and the Stops row; land Steps 4, "The landing script", Stops; `<base>..<step>` and `-b <step>` greps empty.
+- 5: holds. The form is stated once per skill and named elsewhere (plan-orchestration "Resuming", spec Steps 6, land Steps 12, plan Steps 6, diagnose Steps 20, the bullet pairs under grill, roadmap, plan-retro, ordo-init, repo-setup); `--no-renames`, the amend, the revert and the order rule are present; 269 hits, the round added no commit sentence.
+- 6: holds. "Resuming" (own plan's records, choices file whole under ADR 0005, a stop commits its own plan's only, a session that stops commits every plan's).
+- 7: holds. plan-orchestration Steps 2.
+- 8: holds. "Two steps in flight"; spec Steps 5 and 9; template comment; glossary shared path.
+- 9: holds. Steps 5 and Stops scope the pause and say where it is written; Reports and the template line carry the PAUSED form.
+- 10: holds. "Reports"; land Steps 11.
+- 11: holds. "Resuming" (state-file bullet pair), land Steps 10 and Rules, template line 3 and heading.
+- 12: holds. self-rule "Next-entry mode" follows D26 as ruled. The `<entry>` run reading of the same section is Spec N1, filed under item 14.
+- 13: holds. "What it reads" 5, "The recurring-findings pass", "The pace when a deadline is set".
+- 14: violated, Spec N1 (the end condition and "go on" wording of self-rule "Next-entry mode" is still written over every open plan, against `/plan-orchestration <entry>` running that plan alone). The ordo-help input gap of the first report is closed.
+- 15: holds. The definition is in plan-orchestration "What it reads" 1 and the entry names that place alone; template and block equal.
+- 16: holds. Versions and description lengths as printed above (maximum 1018).
+- 17: holds. land `<slug>-<step>`, the land Rules sentence and the spec Rules sentence of the first report are all corrected. The greps of the brief's item 17 for the changed names show no hit left false, except self-rule line 91 and the "other plans go on" lines that Spec N1 names.
+
+Cases:
+
+- D15: met. spec "What it reads" 3, Steps 9, Stops row "A step in flight" count every open plan's block against `.agents/plan.yaml`'s limit; the template holds no `workers_at_once:` line (grep 0); plan Steps 4 no longer lists the key.
+- D16: met. spec Steps 1 compares, rewrites and keeps an equal list; land Steps 2 does the same before `land.sh`; no script named.
+- D17 and D22, simple merge: met. spec "What it reads" 3, Steps 5 and 9.
+- D21 and D22, not simple: met. spec Steps 5 waits; plan-orchestration Steps 2 blocks it and gives the slot to the next pick.
+- D18: met. spec Steps 7 gives `git worktree add -b <slug>-<step> <worktree_root>/<slug>-<step> <base>`; land Steps 4 and "The landing script" give `<slug>-<step>` throughout.
+- The projects form, a worktree that exists: met. spec Steps 1 preflight and Stops row "A worktree or branch that exists" name the path or branch and resume when the holding step lands.
+- D19: met. Read sentence by sentence; a landing names a rename's old path through `--no-renames`; a stop's new report is staged by the form's `git add --` bullet.
+- D19, the order rule: met. land Rules and plan-orchestration "Two steps in flight".
+- D20: met. land Steps 12.
+- D21, the order: met. plan-orchestration Steps 2.
+- D22, a step that runs alone: met. plan-orchestration Steps 2 and "Two steps in flight".
+- D23: met. Stops and Steps 5.
+- D24: met. "Reports" and Steps 10.
+- D25: met. land Rules; template line 3.
+- D26: met. self-rule "Next-entry mode" for the all-plans run.
+- D27: met. "The recurring-findings pass" and "The pace when a deadline is set".
+- D28: partial. Quick start, "What it reads" 1, Steps 2, Steps 10, ordo-help, README and the band say what the case asks, and `/ordo-help` with no entry is covered. The missing part: the `<entry>` run's end under next-entry mode, Spec N1.
+- The glossary: met. The block equals the template; the entries named by items 1 to 14 read as the skill texts do.
+- The configuration templates: met. `plan.yaml` line 21 opens `# optional, default 1.`; `check_config.test.sh` PASS.
+- The versions: met. As printed above.
+
+## 1. Spec
+
+1. `skills/plan-orchestration/references/self-rule.md` "Next-entry mode", line "- The run ends when no open plan has an unblocked step and no next entry can be taken." (also "...while the steps of the other open plans go on." in the section's opening sentence, "Only that entry waits, and the steps of the other open plans go on.", "Such a stop blocks only that entry, and the steps of the other open plans go on.", and "The steps of the other open plans go on while the first two run."). What is wrong: this is the defect of the first report's Spec 2, left standing in a place the round's ruling did not name. D28 and `SKILL.md` Steps 2 make `/plan-orchestration <entry>` run that plan alone, and `SKILL.md` Steps 10 now says the run after a closing "ends in one of the cases `references/self-rule.md`, "Next-entry mode", lists", but that section's end condition is written over every open plan, and its wording says other plans' steps go on although an `<entry>` run does not work them. Failure scenario: `/plan-orchestration 2.I` with `next_entry: on`, 2.I closes, plan 3 stays open with an unblocked step. Steps 10 says the loop ended at "none of them has an unblocked step" for the plans it runs, while the self-rule case says the run ends only when no open plan (plan 3 included) has an unblocked step. The orchestrator either waits with no exit or dispatches plan 3's step against "runs that plan alone". Verdict: item 14 violated; case D28 partial.
+
+## 2. Proof
+
+none.
+
+## 3. Standards
+
+1. `skills/plan-orchestration/SKILL.md` "Resuming, and handing the plan over", the lead-in to the resumption bullets: "On resumption, every open plan's dispatch block is read for the count and the path comparison, and only the steps of the plans the invocation runs are resolved and worked, another plan's running builder being left to the session that runs that plan, and for each step a resolved block holds:". What is wrong: the round's ruling asked for the content in this sentence, but the form is the builder's. `skills/repo-setup/templates/docs/dev/prose-standard.md` E, "Sentence length: under roughly 20 words unless the mechanism needs more": this one is about 58 words and joins three requirements (read every block, resolve only the invoked plans' steps, leave another plan's running builder alone); its ending "and for each step a resolved block holds:" leads into bullets that also cover a dead builder's report and a continuation builder, which no "resolved block holds". `skill-layout` "Lists and tables" asks one requirement per statement. Failure scenario: a session resuming `/plan-orchestration 2.I` while plan 3's builder is running checks one of the three requirements and cannot tell from the sentence where the others end; a later edit to the "left to the session that runs that plan" clause cannot be made without rewriting the sentence the bullets hang on. Verdict: none of the items alone; recorded against the prose standard and the skill layout.
+
+## 4. Behaviour
+
+none.
+
+## Declined to judge
+
+- Whether the `/plan-orchestration <entry>` run should take the next entry at all after its plan closes (D26 speaks of other plans going on; D28 says the named plan alone). The rulings do not rank them, so the orchestrator or the user settles it; Spec N1 states only the inconsistency.
+- The plan's whole verify list (`land.test.sh`, `pin.test.sh`): the brief keeps it for landing on main.
+- ADR 0012's `--name-only` sentence: ruled "no change in this round" and raised to the user.
+- Whether the effort-agent check of Steps 1 covers a plan opened mid-run by next-entry mode (its block is unread when the check runs): the text names "each plan the run runs" and the rulings do not say, so it is for the orchestrator's reading.
+
+Reviewer usage: a06100f8bf1b72886, claude-sonnet-5-5, 225180 tokens, 31 tool uses, 5 min 21 s.
+
+## Closed
+
+- First run, Spec 1, Spec 2, Standards 1 to 5, Proof 1, Behaviour 1 and the two points declined to judge: closed by the builder in repair round 1, as the run over the round records.
+- First run, Spec 3 (ADR 0012's `--name-only`): raised to the user as the open item "ADR 0012, the landing commit's paths".
+- Round 1, Spec N1 (self-rule "Next-entry mode" written over every open plan): small and inside the brief (item 14), fixed at landing: the section speaks of the plans the invocation runs, defined in a new first bullet as every open plan under `/plan-orchestration` with no entry and `continue the plan`, and the named plan and the plan of each next entry the run takes under `/plan-orchestration <entry>`; the run ends when none of them has an unblocked step and no next entry can be taken.
+- Round 1, Standards N1 (the resumption lead-in of 58 words): small and inside the brief, fixed at landing: the sentence is split into one bullet per requirement under a short lead-in.

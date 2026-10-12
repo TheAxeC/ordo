@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "3.0.0"
+  version: "4.0.0"
 ---
 
 # Open a plan
@@ -111,9 +111,11 @@ metadata:
      - A closing step that runs the script writes the script's output to `agents/reviews/closing.md`, the closing report.
      - A non-zero exit of the script that no fix within the plan covers is the stop "A red check" of `plan-orchestration`.
      - The stop message holds the script's `error:` lines.
-     - A model the table lacks is covered by a row copied into the table from the pricing page, committed with the closing.
+     - A model the table lacks is covered by a row copied into the table from the pricing page, committed with the closing report in the form Steps 6 states.
      - When the closing step has run the script, the ledger folder moves only when the script exits 0.
      - When the closing step has skipped the script, the ledger folder moves.
+     - The closing makes three commits on main, each in the form Steps 6 states: the closing report, the ticked entry as `/roadmap done` makes it, and the move of the ledger folder.
+     - The move is made with `git mv`, and its commit names the old and the new paths, which `git diff --cached --name-only --no-renames` lists after `git mv`.
    - `/plan` writes the closing step itself, at the end of the drafted list.
    - The step is done when the draft holds the goal, the gate, the answers of "## Gate", the Rulings, the Agents section and the step list with the closing step last, and when the draft, read back, holds every agent bullet of the rulings file once, in its Agents section.
 3. Show the draft to the user, its "## Gate" holding the answer and its reason for the gate and for each step's check (Steps 2).
@@ -151,7 +153,8 @@ metadata:
    - A stop that stands writes nothing, the choices file and the rulings file included.
    - The step is done when `plan.md` is written and the `Booked:` lines are rewritten, or the draft is shown and the stop stands.
 4. Write `orchestrator-state.md` from `templates/orchestrator-state.md`.
-   - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verification commands copied from the page, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `workers_at_once`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry`, `repair_reviewer`.
+   - The configuration block is filled in from `plan.yaml`, every key of the block written out with the default for an optional key the file leaves out: the verify list, the rules file, the standards, the worktree root and paths, the worker, the reviewer, `libraries`, the review cadence, `repair_rounds`, `refute_after_repair`, `review_minutes`, `look`, `bench`, `adr`, `design_bar`, `design_references`, `worker_effort`, `reviewer_effort`, `self_rule`, `next_entry`, `repair_reviewer`.
+   - The verify list is the verification page's commands, each test command with the filter the page names for its summary line, so the copy and the compare of the `spec` skill's Steps 1 follow one rule.
    - A `repair_reviewer` that `plan.yaml` leaves out is written with the `reviewer` value.
    - The block's `executor:` is not a project specific and is not in `plan.yaml`.
    - `executor:` is written as `agent` unless the user says otherwise when the plan is opened.
@@ -161,13 +164,15 @@ metadata:
    - The position names the first step.
    - The step is done when the state file holds the configuration block with every key written out, the empty dispatch block, no open item and the position.
 5. Create `agents/briefs/` and `agents/reviews/`, each with an empty `.gitkeep`, since git does not keep an empty folder.
-6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files by path as the plan's opening commit.
+6. Commit `plan.md`, `orchestrator-state.md` and the two `.gitkeep` files as the plan's opening commit, naming its paths.
+   - Each new or changed path is staged with `git add -- <path> ...`.
+   - The commit names the same paths, a deleted path included: `git commit -m <message> -- <path> ...`.
    - Its subject holds the roadmap entry's number.
    - The opening commit also holds the choices file `<ledger_root>/choices.md` when Steps 3 changed it, as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item" 6, says.
    - A plan written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
    - When Steps 2 copied the ruling from the rulings file, the ledger file named is the new `plan.md`.
    - The commit also removes the rulings file copied at Steps 2.
-     - When the last commit holds it (`git cat-file -e HEAD:<path>` exits 0), the removal is `git rm -q -f -- <path>`, and its path is named in the commit with the others.
+     - When the last commit holds it (`git cat-file -e HEAD:<path>` exits 0), the removal is `git rm -q -f -- <path>`, and its path is named in the commit command with the others.
      - Otherwise the removal is `git rm -q -f --cached -- <path>` when git lists the file as staged, and the file is deleted before the commit, its path not named.
      - The `-f` removes a copy with uncommitted changes, whose bullet lines Steps 2 has already copied.
    - The step is done when the opening commit holds the four files, the choices file when Steps 3 changed it, and the removal of the rulings file when there was one.

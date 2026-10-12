@@ -1,8 +1,8 @@
 ---
 name: land
-description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit by explicit path list, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
+description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit that names its paths, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Land a step
@@ -40,6 +40,7 @@ metadata:
    - The user's unrelated changes are listed by path.
      - They are left alone.
 7. The step's diagnosis record `agents/reviews/<step>-diagnosis.md`, when it exists, for the booking of Steps 9.
+8. The verification page `.agents/plan.yaml`'s `verification:` names, for the compare of Steps 2.
 
 ## Steps
 
@@ -48,13 +49,18 @@ metadata:
    - Then the runner's agent listing must show none of them left.
    - A check that fails is a refusal before main is touched ("Stops").
 2. Set `landing: cherry-picking` in the dispatch block.
+   - Then compare the plan's verify list with the verification page's commands, as the `spec` skill's Steps 1 says.
+   - Rewrite the list in the state file on a difference, before `templates/land.sh` runs it.
+   - The booking (Steps 9) names the change.
+   - The landing commit carries the state file (Steps 12).
+   - Done when `landing: cherry-picking` is set and the verify list equals the page's commands.
 3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` of the whole tree with the ledger root left out.
    - `git commit -q -m wip` when something is staged.
    - A builder that committed everything leaves nothing staged, and the landing makes no wip commit.
    - The landing removes a lock older than 60 s while no `git` process runs, as stale.
    - Each wait for a lock, here and on main before Steps 4, is bounded at 60 s of waiting.
      - At the bound the landing stops ("Stops").
-4. On main: `git cherry-pick -n <base>..<step>`, the whole range from the recorded base, so the landing applies the complete reviewed change and never only the last fix.
+4. On main: `git cherry-pick -n <base>..<slug>-<step>`, the whole range from the recorded base, so the landing applies the complete reviewed change and never only the last fix.
    - A conflict is resolved by the orchestrator or the session, never by an agent.
    - `templates/land.sh` prints the conflicting paths and exits 2 instead.
    - A range with no commit, as when the step's only output is a ledger file, has nothing to copy, and the landing goes on to Steps 6.
@@ -84,8 +90,8 @@ metadata:
    - The step's agents are booked in `plan.md`'s Agents section by the rules of Steps 9, since `/spec` later removes the step's dispatch entry.
      - The booking is written and read back before the commit below.
      - The agents of its later landing are appended when it lands, those already in the section skipped.
-   - The state file and `plan.md` are then committed by path, a resume point.
-     - The commit also holds the other ledger records the session wrote since the last one.
+   - The state file and `plan.md` are then committed, a resume point, in the form Steps 12 states.
+     - The commit also holds the other ledger records of this plan that the session wrote since the last one.
    - `/spec` then saves the step's work as a patch and prepares it again from main's head, as the `spec` skill's "Steps / A step taken back out of main" says.
    - Done when every verification command has run on main and each red line is fixed on main, or the step is taken back out of main.
 7. Open the changed views, as "The look" says.
@@ -107,30 +113,34 @@ metadata:
    - A diagnosis agent has its numbered item already, which the session wrote right after its start as the `diagnose` skill's "Rules" say, so the booking adds none.
    - A `plan.md` without the section gets it before `## Blocked, and by what`.
    - The section is read back after the write, and each agent of the entry has exactly one bullet.
+   - It names the change Steps 2 made to the plan's verify list, when it made one.
    - It states whether the builder's first report passed its bar, and the fixes at landing.
    - It names each diagnosis record of the step (`agents/reviews/<step>-diagnosis.md`, one heading per diagnosis) with its cause and its diagnosis agent's usage from the record's head, or with "cause not found" and the open item it was raised as.
    - Tick the step.
    - Done when the booking is in `plan.md`, the step is ticked, and the Agents section, read back, holds each agent of the step once.
 10. Read the step's `worktree` from its dispatch entry, for Steps 13.
-    - Then rewrite the state file: the step's dispatch entry removed, the position line, the open items as they stand.
+    - Then rewrite this plan's state file, as "Rules" says: the step's dispatch entry removed, the position line, the open items as they stand.
 11. Write the landing report, `agents/reviews/<step>-landing.md`, so it lands with the step and stands alone on disk.
-    - It opens with the position line: the roadmap entry with its title, the plan step as "step n of m" with its name, and the next step.
+    - It opens with the position line of its own plan: the roadmap entry with its title, the plan step as "step n of m" with its name, and the next step.
     - Then the open items, verbatim, which hold only what the user must rule on.
     - Then the check of Steps 1 with what it showed, anything NOT DONE, what landed with the commit, what was found, and what is next.
     - Then the agents' usage, whether the first report passed its bar and the fixes at landing, as the booking of Steps 9 states them.
     - The verification lines it quotes are redacted as Steps 9 says.
     - Under the loop it is also the report the orchestrator prints.
     - Run by hand, it is the message that ends the turn.
-12. Commit by explicit path, a resume point: every path from `git diff --cached --name-only`.
-    - The commit also holds the ledger files the session wrote since the last resume point, the landing report among them.
+12. Commit by explicit path, a resume point: every path from `git diff --cached --name-only --no-renames`, so a rename's old path is named too.
+    - The commit also holds the files of this plan's ledger that the session wrote since the last resume point, the landing report among them, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+    - It also holds the choices file when a choice of this plan changed it.
     - The paths are written out in the `git add -- <path> ...` command, never through a shell variable.
     - Deleted paths are already staged by the cherry-pick and are not re-added.
+    - The commit names the same paths: `git commit -m <message> -- <path> ...`.
     - The message is in the repository's shape.
     - The message's last bullet is the booking.
     - No attribution.
     - Never push.
-    - Afterwards `git status --short` shows nothing of the step's and no ledger file the session wrote.
-    - Such a ledger file left modified means the commit missed the booking, and the head is amended with its path.
+    - Afterwards `git status --short` shows nothing of the step's and no ledger file of this plan that the session wrote.
+    - Such a ledger file left modified means the commit missed the booking, and it is staged with `git add -- <path>` and the head is amended with `git commit --amend --no-edit -- <path>`.
+    - A ledger file of another open plan left modified is that plan's record, which waits for that plan's next resume point.
 13. Remove the step's worktree and its branches, as "Removing a step's worktree" says, with the `worktree` Steps 10 read.
 
 ## The look
@@ -143,19 +153,19 @@ metadata:
 
 ## The landing script
 
-- `templates/land.sh` does Steps 3, 4 and 6 as one command, run from the repository root as `sh <this skill's folder>/templates/land.sh <state file> <step> <base>`.
+- `templates/land.sh` does Steps 3, 4 and 6 as one command, run from the repository root as `sh <this skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`.
   - `<state file>` is the plan's `orchestrator-state.md`, relative to the repository root or absolute.
-  - `<step>` is the step's branch, which is also its worktree folder's name.
+  - `<slug>-<step>` is the step's branch, which is also its worktree folder's name, `<slug>` being the name of the plan's ledger folder.
   - `<base>` is the base the dispatch block records.
 - It reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`.
   - In the `projects:` form it reads them from the project whose `ledger_root` holds the state file.
-  - The step's worktree is `<worktree_root>/<step>`, and the worktree's add leaves that `ledger_root` out.
+  - The step's worktree is `<worktree_root>/<slug>-<step>`, and the worktree's add leaves that `ledger_root` out.
   - No `.agents/plan.yaml`, an empty one or one that is not valid YAML, no `worktree_root`, no `ledger_root`, a state file under no project's `ledger_root`, or no `checks.sh` in `land.sh`'s own folder is refused with exit 64 before anything is touched.
 - Its check on main (Steps 6) is the plan's verify list: after main's cherry-pick it runs `sh <its own folder>/checks.sh <state file>` from the repository root.
   - Its own folder is the one that holds `land.sh`, and it looks for `checks.sh` nowhere else.
   - A non-zero exit fails the landing with exit 1 and the output of `checks.sh` printed.
-- When `<base>..<step>` holds no commit, it skips both cherry-picks.
-  - It prints `nothing to copy: <base>..<step> holds no commit` in place of the cherry-picks' output.
+- When `<base>..<slug>-<step>` holds no commit, it skips both cherry-picks.
+  - It prints `nothing to copy: <base>..<slug>-<step> holds no commit` in place of the cherry-picks' output.
   - It still runs the verify list on main (Steps 6).
 - It then prints the booking data: the diff stat against `<base>` and the paths staged on main.
 - It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict, 64 when it refuses its arguments or its configuration, and 127 when `python3` is not installed, or with git's own status when a git step fails.
@@ -205,11 +215,11 @@ metadata:
 
 - The first row is a stop: it leaves an open item.
 - The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.
-  - Under `templates/land.sh`, the stop leaves the worktree on `<step>` or, after the script's checkout of `<step>-land`, on that branch, and the script exits 1.
-  - `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<step>`, deletes `<step>-land` and lands from the start.
+  - Under `templates/land.sh`, the stop leaves the worktree on `<slug>-<step>` or, after the script's checkout of `<slug>-<step>-land`, on that branch, and the script exits 1.
+  - `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<slug>-<step>`, deletes `<slug>-<step>-land` and lands from the start.
 - The rows after those two, up to the last, are refusals: they come before main is touched.
 - The last row is a stop after the landing's commit that leaves an open item: the step is on main, and only its worktree and branches are left, named in the open item.
-  - The open item is booked in the state file's open items and committed by path as a resume point.
+  - The open item is booked in the state file's open items and committed as a resume point, in the form Steps 12 states.
   - Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item.
 - A refusal names its cause and leaves nothing.
 - A red line recorded in the step's Step 0 is not a stop: the step is out of main and keeps its line and its tag.
@@ -228,6 +238,10 @@ metadata:
   - The step that finishes it on top of what landed enters the plan only as `plan-orchestration`'s "What earns a step of its own" says.
 - A landed commit is reverted only on a ruling of the user, or, under `self_rule: on`, on a choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books when the step's authority is a bullet ending "(self-rule)" alone.
   - The revert of a step the user approved, or one a ruling of the user added, is kind 3 of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open".
+  - The revert runs `git revert --no-commit <commit>`, and then the commit of Steps 12 with the paths of `git diff --cached --name-only --no-renames`.
   - Its preparation commit stays.
   - Only a step so reverted is booked as reverted.
-- The state file is rewritten before the commit, so main's head always carries a state file that describes it.
+- A landing runs from its cherry-pick (Steps 4) to its commit (Steps 12) before the session makes any other commit or starts any other skill; builders and reviewers already running go on.
+  - The range stays staged on main until that commit.
+- The landing rewrites its own plan's state file before the commit, and no other plan's state file.
+  - The state file then describes that plan as of its own last resume point, as `plan-orchestration`'s "Resuming, and handing the plan over" says.

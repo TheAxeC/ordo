@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns the checks the brief names and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round, and once alone for a small text step. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "3.0.0"
+  version: "3.0.1"
 ---
 
 # Refute a step
@@ -77,7 +77,7 @@ metadata:
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
    - It records the report's path under the dispatch block's `reviewer_report` field, after the records before it, followed by, in parentheses, the reviewer's agent id, its served model (Steps 1), and its tokens, tool uses and time from its completion notice: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`.
    - Both are written to disk in the main checkout.
-   - The next resume-point commit carries them, and they get no commit of their own, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
+   - The next resume-point commit of its own plan carries them, and they get no commit of their own, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
    - Done when the report is saved and its record is under `reviewer_report`.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
@@ -96,7 +96,7 @@ metadata:
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns the checks the brief's "Verify before you report" names again.
 6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
-   - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit as Steps 7 says.
+   - It records the run in the same field, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit of its own plan as Steps 7 says.
    - Done when the run's section is appended and its record is in `reviewer_report`.
 7. The findings of the run over the last round are never sent to the builder.
    - Each is fixed at landing when it is small and inside the brief, or raised to the user as "Finding dispositions" says.

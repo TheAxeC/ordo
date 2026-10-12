@@ -2,7 +2,7 @@
 name: ordo-init
 description: "Set a repository up for the plan skills: draft .agents/plan.yaml from what the repository already has (the roadmap, the page that defines the checks, the change standard, the check commands its CI and build files run, one project or several), offer the pages it lacks, make git ignore the worktree root and keep the configuration tracked, and write nothing until the user approves. On a repository that already has .agents/plan.yaml it checks the file instead: required keys, unknown keys, values, the pages it names, the ignore rules. Triggers on: ordo-init, set up the plan skills, init plan.yaml, configure ordo, check plan.yaml."
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
 ---
 
 # Set a repository up for the plan skills
@@ -128,7 +128,9 @@ Run from the repository root.
 13. Run `python3 <this skill's folder>/templates/check_config.py .`.
     - Show its output.
     - The setup is done only when that exits 0.
-14. Commit the files written by explicit path list, in one commit whose subject names the plan configuration.
+14. Commit the files written in one commit whose subject names the plan configuration.
+    - Each file is staged with `git add -- <path> ...`.
+    - The commit names the same paths: `git commit -m <message> -- <path> ...`.
     - The commit is made only when the repository's commit rule ("What it reads" 3) allows it.
     - Otherwise the skill stops ("Stops"), except under `/repo-setup`, where the setup goes on and `repo-setup`'s Steps 12 raises the one stop.
     - A setup written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.

@@ -1,18 +1,18 @@
 ---
 name: ordo-help
-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
+description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, with no entry the position and open items of each open plan, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
 metadata:
-  version: "3.0.0"
+  version: "3.1.0"
 ---
 
 # Ordo help
 
-`/ordo-help` prints the command sequence for running a plan step by step, and, for a named plan, where that plan stands and the command that comes next.
+`/ordo-help` prints the command sequence for running a plan step by step and the position of each open plan, and, for a named plan, where that plan stands and the command that comes next.
 
 ## Quick start
 
 ```
-/ordo-help            print the sequence and the choices awaiting review
+/ordo-help            print the sequence and the choices awaiting review, then the position and open items of each open plan
 /ordo-help <entry>    print the sequence and the choices awaiting review, then the named plan's position and the command that comes next
 ```
 
@@ -33,8 +33,12 @@ metadata:
 2. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
-3. For `/ordo-help <entry>`, the folder's state file, and the brief, the report and the refuter report of the step in flight.
+3. The state file of each plan it prints.
+   - For `/ordo-help` with no entry, that of each open plan, in the roadmap's order.
+   - For `/ordo-help <entry>`, that of the named plan's folder, and the brief, the report and the refuter report of the step in flight.
 4. The choices file `<ledger_root>/choices.md`, when it exists.
+5. For `/ordo-help` with no entry, the roadmap file `.agents/plan.yaml`'s `roadmap:` names, for the order Steps 3 prints the open plans in.
+   - In the `projects:` form, the order of the projects in `.agents/plan.yaml` comes first.
 
 ## Steps
 
@@ -43,10 +47,12 @@ metadata:
    - The line `Choices awaiting review: <count>`, then each choice's `## C<n>.` heading under its entry's heading, as the choices file holds them.
    - The line `Choices awaiting review: none` when there is no file or no choice.
    - The step is done when the line is printed.
-3. For `/ordo-help <entry>`, print the named plan's position.
-   - From the state file: the position line, the open items verbatim, and the dispatch block (a step in flight, its worktree, its base, its round).
-   - From the ledger folder, for the step in flight: which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings.
-   - The step is done when the position is printed.
+3. Print the position of each plan.
+   - For `/ordo-help` with no entry, print the position of each open plan in the roadmap's order: the position line and the open items verbatim of its state file, or a line saying no plan is open.
+   - For `/ordo-help <entry>`, print the named plan's position.
+     - From the state file: the position line, the open items verbatim, and the dispatch block (a step in flight, its worktree, its base, its round).
+     - From the ledger folder, for the step in flight: which of the brief, the report and the refuter report exist, and whether the last refuter report has open findings.
+   - The step is done when the positions are printed.
 4. For `/ordo-help <entry>`, print one line from that position: the command that comes next, in the sequence.
    - An open item that waits on a ruling is printed with it.
    - The line after an open item that waits on a ruling is `Ruled: ...`.
@@ -87,13 +93,14 @@ when a command stops:
 C<n> Agree                    under self-rule: you agree with a choice the orchestrator took; the session rewrites its ruling as yours and removes it from choices.md
 C<n> => <your ruling>         under self-rule: you replace a choice with your ruling; the session books it, adds a fix step when work built on the choice has landed, and removes it from choices.md
 /spec <entry> <step>          again; it now writes the brief
-/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours or a choice taken under self-rule), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. A file its brief shares with a step in flight is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: in its dispatch entry, and waits otherwise
+/spec refuses                 the step's line lacks your authority ((approved), or (ruling <name>) of a ruling of yours or a choice taken under self-rule), a file it reads is unusable, or the configured effort cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): it names the cause and leaves nothing; rule on the step, or install the effort agents as the plan skills are or unset the variable and start a new session, then /spec again. The steps in flight of all open plans already reaching plan.yaml's workers_at_once, or the step's worktree or branch already existing, is a refusal that names it: the step that holds it must land first. A file its brief shares with a step in flight, of any open plan, is no refusal: the step runs beside that step when the orchestrator judges the merge at landing simple, named under shared_paths: with the other step's plan and step in its dispatch entry, and waits otherwise
 /refute stops                 the reviewer was served a model other than the configured one: it stops the reviewer, uses nothing it wrote, and shows the configured value, the served model and the Claude Code version; rule on it, then /refute again
 /refute refuses               it names the cause and leaves nothing, such as the configured effort that cannot apply (the runner lists no ordo-<level> effort agent the configuration names, or CLAUDE_CODE_EFFORT_LEVEL is set): install the effort agents as the plan skills are, or unset the variable, then /refute again in a new session
 /land refuses                 it names what is missing, such as a finding neither closed nor raised as an open item, or the step's dispatch block: supply it, then /land again
 /land meets a red line        a red line no fix inside the brief closes: the step goes back out of main. Its failure is recorded in its Step 0 in plan.md. /spec that step again when it comes up, with no new ruling. When only you can decide what to do, /spec it after your ruling. /spec saves its work as a patch and prepares it again from main's head. When its cause is not known, /diagnose <entry> <step> red line finds it once the step is out of main and before /spec prepares it again, and writes it in the step's Step 0.
 
-/plan-orchestration <entry>   instead of the lines above: runs them for every step unattended, with the executor the plan names (an agent by default) at "build it" and "close them"
+/plan-orchestration           instead of the lines above: runs them for every step of every open plan unattended, with the executor each plan names (an agent by default) at "build it" and "close them"
+/plan-orchestration <entry>   the same for the plan of that entry alone
 
 /plan-retro                   after plans have run: the findings the reviews keep making, and the rule sentence, text change or page that stops each, a check only for a fact
 /session-retro <entry>        for a plan, open or closed: what went well and what went wrong in its Claude Code sessions, each with a proposed change

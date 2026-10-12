@@ -2,7 +2,7 @@
 name: repo-setup
 description: "Set up a new repository in the shape the plan skills expect: CLAUDE.md with the shared rules, docs/ with the change standard, the prose standard, the standards pages (design principles, coding standards, a UI standard), the building page, a roadmap, a glossary and an ADR folder, src/ and utils/, a .gitignore for the language, LICENSE, README, the project skills installed with skills-lock.json, and the plan configuration .agents/plan.yaml. Shows the whole tree and every file's text before writing. With sync, compares an existing repository's shared-rules block and its glossary's plan-terms block with their templates and rewrites them after approval. Triggers on: repo-setup, set up a new repo, scaffold a repository, new project repo, sync the shared rules, sync the glossary."
 metadata:
-  version: "3.0.0"
+  version: "4.0.0"
 ---
 
 # Set up a repository
@@ -115,7 +115,9 @@ metadata:
 11. Show the user each check's output.
     - The step is done when the outputs are shown.
     - The setup goes on to Steps 12 without waiting.
-12. Commit the setup's other files in one commit by explicit path list, the subject naming the repository's setup.
+12. Commit the setup's other files in one commit, the subject naming the repository's setup.
+    - Each file is staged with `git add -- <path> ...`.
+    - The commit names the same paths: `git commit -m <message> -- <path> ...`.
     - Every file written is named, except those `/ordo-init` committed at Steps 8.
     - The commit is made only when the answer to question 5 allows it.
     - Otherwise the skill stops ("Stops").
@@ -156,7 +158,7 @@ metadata:
    - The file named in the line is fixed first, by the user or with the user's approval.
 8. After a written draft or a fixed file: run the check again, at most twice, following steps 2 to 7 on its exit status each time.
    - A check that does not exit 0 on the second of those runs is a stop ("Stops").
-9. After exit 1 or exit 2: commit the change by explicit path list when the repository's commit rule allows it, and otherwise stop ("Stops").
+9. After exit 1 or exit 2: commit the change, in the form Steps 12 states, when the repository's commit rule allows it, and otherwise stop ("Stops").
    - A change written under a quoted ruling names the ruling in the commit message, by its name and its ledger file.
    - When no commit is made, the list of files the stop shows names the ruling the same way.
    - The item is done when the change is committed, or the stop shows the files changed.

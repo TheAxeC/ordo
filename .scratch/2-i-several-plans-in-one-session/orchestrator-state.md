@@ -24,7 +24,6 @@ refute_after_repair: yes     # /refute runs again over each repair round.
 repair_rounds: 1             # the most repair rounds a step gets.
 review_minutes: 0            # no time box.
 look:                        # none: no view changes.
-workers_at_once: 3           # steps in flight at once, from .agents/plan.yaml.
 bench: []                    # no A/B.
 adr: docs/adr                # the ADR folder: grill writes the decision records into it, /plan, /spec and /refute read them.
 design_bar: industry         # what grill's options are held to: industry, state-of-the-art or novel.
@@ -37,20 +36,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 1
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2i-1
-  base: cc1fd7a
-  launched: 2026-10-12
-  report: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-report.md
-  brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-brief-check.md (a0a3ea2bc782eb427, claude-opus-5-5, 286488 tokens, 61 tool uses, 13 min 15 s)
-  landing: not-started
-  round: 1
-  session_id: a4fbe03371bb439ec (claude-sonnet-5-5)
-  builder_usage: 126733 tokens, 115 tool uses, 19 min 31 s
-  reviewer_report: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-refuter.md (afa9f0216c64339f0, claude-opus-5-5, 295878 tokens, 56 tool uses, 9 min 43 s)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -114,7 +100,7 @@ dispatch:
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Plan opened in edddd57; nothing landed. Roadmap entries 2.E, 2.F and 2.H, which step 1 waited on, are done.
-- Step 1 in flight: brief check closed (C39 taken), preparation commit cc1fd7a, builder a4fbe03371bb439ec dispatched in .agents/worktrees/2i-1.
-- Next step: 1, in flight.
-- Open on Axel's side: none.
+- 2026-10-12. Step 1 of 3 landed: several plans in one session in the skill texts, booked in `plan.md` with its landing report `agents/reviews/1-landing.md`.
+- Next step: 2, the real run in a scratch repository (orchestrator, no agent).
+- Plan 3's configuration block still holds `workers_at_once: 3` at line 27, removed at plan 3's next resume point (brief 1, Decisions 5); the texts read it as absent until then.
+- Open on Axel's side: the open item "ADR 0012, the landing commit's paths".

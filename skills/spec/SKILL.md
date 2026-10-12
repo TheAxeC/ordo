@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "4.1.0"
+  version: "5.0.0"
 ---
 
 # Prepare a step
@@ -33,11 +33,12 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - `/plan` names a new folder by the entry's slug.
    - An older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
-3. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block.
-   - A step already in flight is a refusal, under the condition in "Stops".
+3. `orchestrator-state.md`: the configuration block, the open items, and the dispatch block; and the dispatch block of every other open plan's `orchestrator-state.md`.
+   - The limit on steps in flight is `.agents/plan.yaml`'s `workers_at_once`, counted over the dispatch blocks of every open plan, as `plan-orchestration`'s "Two steps in flight" states it.
+   - A step is refused when the steps in flight of all open plans already reach that limit ("Stops").
    - A dispatch entry of this step that reads `landing: backed-out` is not a step in flight.
      - The step goes through "Steps / A step taken back out of main", which reads the entry's `base` and `worktree`.
-   - The brief of each step the dispatch block names, `agents/briefs/<step>.md` beside the state file, for its "Paths this step writes" (Steps 5).
+   - The brief of each step in flight in those dispatch blocks, `agents/briefs/<step>.md` beside its own plan's state file, for its "Paths this step writes" (Steps 5).
 4. `plan.md`: the step's line, the rulings that touch it, and everything the plan carries to it.
    - The step list is the section `## Steps, in execution order`, and the rulings are the section `## Rulings`.
      - A `plan.md` without either section is a refusal ("Stops").
@@ -61,15 +62,20 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - Any unrelated change of the user's outside the ledger folder is listed by path.
      - It is left alone.
    - Every uncommitted change under the ledger folder is listed by path (`git status --short -- <ledger>`).
-   - A change the session itself made since the last resume-point commit is one of its own records:
+   - A change the session itself made since the last resume-point commit is one of its own records, and the commit of the plan it belongs to carries it (`plan-orchestration`'s "Resuming, and handing the plan over"):
      - a ruling it booked;
      - a report or a reviewer it recorded;
      - a diagnosis record, with the text the diagnosis wrote in Step 0;
-     - the diagnosis agent's numbered item in the Agents section.
-   - The preparation commit carries the session's own records (Steps 6).
+     - the diagnosis agent's numbered item in the Agents section;
+     - the verify list it rewrote in the state file, as the compare below says.
+   - A change under another open plan's ledger folder is a record of that plan.
+     - It is listed by path.
+     - It is left alone.
+     - It is not one of the user's changes.
+   - The preparation commit carries the session's own records of this plan (Steps 6).
    - Any other change under the ledger folder is left alone.
      - It is never committed.
-   - An uncommitted change on the ledger's `plan.md` or state file that the session did not make is a refusal ("Stops"), named by path, since Steps 2 and 9 write those files.
+   - An uncommitted change on this plan's `plan.md` or state file that the session did not make is a refusal ("Stops"), named by path, since Steps 2 and 9 write those files.
    - `plan.md` is copied aside to the session's scratch folder before Steps 2.
      - A step that waits at Steps 5 restores it with the session's own records of the list above, so a booked ruling is never lost.
    - An uncommitted change at the brief's path `agents/briefs/<step>.md` is a refusal ("Stops"), named by path, since Steps 4 writes the brief there.
@@ -77,6 +83,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - The runner lists the effort agent `ordo-<reviewer_effort>` among its agent types, the level `high` when the configuration block has no `reviewer_effort` key, since "Steps / The brief check" and the diagnosis of Steps 2 start that agent.
    - `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either effort check failing is the refusal "The configured effort cannot apply" ("Stops"), and writes nothing.
+   - The step's worktree path `<worktree_root>/<slug>-<step>` and its branch `<slug>-<step>` do not exist, `<slug>` being the name of the plan's ledger folder, apart from those of this step's own dispatch entry that reads `landing: backed-out`.
+   - A path or a branch that exists is the refusal "A worktree or branch that exists" ("Stops"), which names it and writes nothing.
    - A preflight that fails is a refusal ("Stops").
    - Then, before any premise check, read the step's line and the Rulings section of `plan.md`, as "What it reads" 4 says.
    - A step whose line carries its authority goes on.
@@ -87,7 +95,11 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - A step not in the list is a refusal ("Stops"), with the list printed.
    - A refusal here writes nothing.
    - A step whose dispatch entry reads `landing: backed-out` then goes through "Steps / A step taken back out of main" before Steps 2.
-   - Steps 1 is done when the preflight and the authority check have passed, or a refusal has named its cause and written nothing.
+   - Then compare the plan's verify list with the commands of the verification page `.agents/plan.yaml`'s `verification:` names, copied as the `plan` skill's Steps 4 copies them, by reading.
+     - A list equal to the page's commands, filters included, is left as it is.
+     - On a difference, the session rewrites the `verify:` list of the state file to the page's commands, and Steps 4 names the change in the brief under "What is on the tree".
+     - The rewritten list is one of the session's own records, so a step that waits at Steps 5 keeps it.
+   - Steps 1 is done when the preflight, the authority check and the compare have passed, or a refusal has named its cause and written nothing.
 2. Check every premise the step's text makes against the tree.
    - A premise found false that the plan can absorb is corrected in `plan.md` before the brief exists, never left for the builder to hit.
    - That correction goes into the preparation commit (Steps 6).
@@ -129,6 +141,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - `Size: a full step` for every other step.
    - The premises as checked, with the command that checked each.
    - The ADRs the step touches, as Steps 2 names them.
+   - The change Steps 1 made to the plan's verify list, when it made one.
    - The fix text is the requirements of the step's part, in the brief's own words and not a pointer.
      - What must hold when the part is done.
      - Each file the part touches, with the constraint it is under.
@@ -161,14 +174,14 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - The brief says Steps 7 applies it with `git apply --3way`.
    - The brief is committed at Steps 6, before the apply.
      - Its section "The patch as applied" is added after Steps 7, as Steps 7 says.
-5. Compare the brief's "Paths this step writes" with the brief of every other step in the dispatch block, by reading them.
+5. Compare the brief's "Paths this step writes" with the brief of every other step in flight in the dispatch block of every open plan, by reading them, each brief from its own plan's `agents/briefs/`.
    - No shared path: the step goes on.
-   - A shared path is a file both briefs name, whatever lines each names.
+   - A shared path is a file both briefs name, whatever lines each names, in one plan or in two.
      - It is not a refusal.
      - It goes to the orchestrator's judgment, as `plan-orchestration`'s "Two steps in flight" says.
      - Run by hand, the session judges.
    - When the merge at landing is judged simple, the step goes on.
-     - Steps 9 writes `shared_paths:` in its dispatch entry, naming each shared file and why the merge is simple.
+     - Steps 9 writes `shared_paths:` in its dispatch entry, naming each shared file, the other step's plan and step, and why the merge is simple, as `plan-orchestration`'s "Two steps in flight" says.
    - When it is not judged simple, the step waits until the other step lands.
      - This run leaves only the session's own records of Steps 1's list.
      - The brief is restored to main's copy (`git restore -- <path>`, or deleted when main has none).
@@ -183,14 +196,15 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - A step with such a report is not checked again: the session closes the report's findings in the brief it has written, by the rulings booked since, and goes on.
    - Steps 5 is done when every finding of the brief check is closed in the brief, or when the step waits or has stopped.
 6. Make the preparation commit, a resume point ("Rules").
-   - It holds the brief, the brief check's report of a full step, the patch of a step taken back out of main, and each of the session's own records (Steps 1).
+   - It holds the brief, the brief check's report of a full step, the patch of a step taken back out of main, and each of the session's own records of this plan (Steps 1).
    - It holds `plan.md` and the state file when this run or the session's own records changed them.
    - It holds the choices file `<ledger_root>/choices.md` when this run changed its `Builds on it:` line.
    - The paths are written out in the `git add -- <path> ...` command.
      - A ledger change the session did not make is not among them.
+   - The commit names the same paths, a deleted path included: `git commit -m <message> -- <path> ...`.
    - Its hash is the base.
    - Steps 6 is done when the commit holds those paths and its hash is recorded as the base.
-7. Create the worktree from the base: `git worktree add -b <step> <worktree_root>/<step> <base>`.
+7. Create the worktree from the base: `git worktree add -b <slug>-<step> <worktree_root>/<slug>-<step> <base>`, `<slug>` being the name of the plan's ledger folder.
    - Then, from inside it, `git sparse-checkout set <worktree_paths>` when the block names any.
    - Then, for a step whose patch the ledger holds, from inside the worktree: `git apply --3way <repository root>/<ledger>/agents/reviews/<step>-backed-out.patch`.
      - The patch is named by its path in the main checkout, since a sparse checkout may leave the ledger out.
@@ -207,20 +221,21 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
 8. Stage the base binaries for the landing's A/B, copied aside from the current build.
    - The configuration block's `bench:` line names them.
    - With none named, none is staged.
-9. Write the dispatch block into the state file: step, executor, worker, worktree, base, launched, report path, `brief_check` ("Steps / The brief check"), `landing: not-started`, `round: 0`.
+9. Write the dispatch block into the state file: step, executor, worker, worktree (`<worktree_root>/<slug>-<step>`), base, launched, report path, `brief_check` ("Steps / The brief check"), `landing: not-started`, `round: 0`.
    - A small text step's `brief_check` reads `none, a small text step`, since no brief-check agent ran.
    - The entry takes the shape the `plan` skill's `templates/orchestrator-state.md` gives.
-     - With `workers_at_once` 1, one entry, `dispatch:` followed by its keys.
-     - With `workers_at_once` above 1, the entry is appended to the list of entries.
+     - With `.agents/plan.yaml`'s `workers_at_once` 1, one entry, `dispatch:` followed by its keys.
+     - With `.agents/plan.yaml`'s `workers_at_once` above 1, the entry is appended to the list of entries.
    - The executor is the configuration block's default, until the orchestrator chooses for the step.
-   - A step whose brief shares a file with a step in flight, judged simple to merge at Steps 5, gets `shared_paths:` in its entry: each shared file and why the merge is simple.
+   - A step whose brief shares a file with a step in flight, judged simple to merge at Steps 5, gets `shared_paths:` in its entry.
+     - It names each shared file, the other step's plan and step, and why the merge is simple, as `plan-orchestration`'s "Two steps in flight" says.
    - With no shared file the key is left out.
    - The entry is not committed here.
-     - It is committed once the builder's identity is in it: under `agent` right after the launch, and under `inline` and `academic-paper` before the build starts.
+     - It is committed, in the form Steps 6 states, once the builder's identity is in it: under `agent` right after the launch, and under `inline` and `academic-paper` before the build starts.
    - For a step whose patch Steps 7 applied, that commit also carries the brief with its section "The patch as applied".
    - Under `plan-orchestration`, its Steps 4 makes that commit under every executor.
    - Run by hand, the session writes itself as the identity.
-     - It makes that commit before the build starts.
+     - It makes that commit before the build starts, in the form Steps 6 states.
    - The worker's identity goes into the block the moment it is known.
 
 ### A step taken back out of main
@@ -260,7 +275,7 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
      - The option names that stop.
      - An option that runs a skill with an approval stop states the change in full, or names that stop as a stop of its own, as `plan-orchestration`'s "Stops" says.
    - The same text under the step's Step 0 in `plan.md` or the part file it names.
-   - The ledger files the session wrote, committed by path as a resume point, so the stop survives the session.
+   - The ledger files of this plan that the session wrote, committed as a resume point in the form Steps 6 states, so the stop survives the session.
    - The item is done when the open item, its text under Step 0 and the commit of the ledger files exist.
 2. No brief, no worktree and no dispatch block exist for the stopped step.
 3. A step stops at most twice before its build, counted as the open items under its Step 0.
@@ -300,7 +315,7 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
      - the old record is marked superseded in the words the folder uses (`superseded by NNNN` under the template);
      - the new record gets its row in the folder's index when there is one;
      - the session shows the user the new record;
-     - the session commits these files by path at once, a resume point, so that `/spec` or `/land` in any session reads them;
+     - the session commits these files at once, a resume point of this plan, in the form Steps 6 states, so that `/spec` or `/land` in any session reads them;
    - a ruling that replaces a bullet ending "(self-rule)" always writes a Rulings bullet of its own that names the bullet it replaces;
    - that ruling is booked as `plan-orchestration`'s `references/self-rule.md`, "The choices file", says;
    - the ledger files are written and not committed on their own: the next `/spec` carries them in its preparation commit (Steps 6);
@@ -392,10 +407,11 @@ The first seven rows are stops, which leave an open item as "Steps / A stop" say
 | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
 | A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)" (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |
-| A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on the ledger's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |
+| A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on this plan's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/spec` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then `/spec` |
-| A step in flight | A step is already in flight, and the configuration block does not allow more than one | The step in flight, named | That step landed, or a red line took its landing back out of main and its dispatch block reads `landing: backed-out` (the `land` skill's Steps 6) |
+| A step in flight | The steps in flight of all open plans already reach `.agents/plan.yaml`'s `workers_at_once` ("What it reads" 3) | The steps in flight, each named with its plan | A step landed, or a red line took its landing back out of main and its dispatch block reads `landing: backed-out` (the `land` skill's Steps 6) |
+| A worktree or branch that exists | The step's worktree path `<worktree_root>/<slug>-<step>` or its branch `<slug>-<step>` exists, other than those of this step's own entry that reads `landing: backed-out` (Steps 1) | The path or the branch, named | The step that holds it landed, then `/spec` again |
 | No such step | The step is not in `plan.md`'s list (Steps 1) | The list | `/spec` with a step in the list |
 | The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level the configuration block's `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 1) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/spec` again in a new session |
 | A step taken back out of main that cannot be saved | At "Steps / A step taken back out of main", a path in the kept worktree outside the ledger root, two diffs that differ, a failed git command, or a state file that cannot be written or does not read back | The path, or the command and what it printed | The cause put right, as the bullet below says, then `/spec` again |
@@ -415,4 +431,4 @@ The first seven rows are stops, which leave an open item as "Steps / A stop" say
 - Every git command on a worktree runs from inside it, never as `git -C`.
 - A ledger record is committed only at a resume point, as `plan-orchestration`'s "Resuming, and handing the plan over" lists them.
   - Only the session that wrote it commits it.
-- Every other record stays on disk in the main checkout until the next resume point.
+- Every other record stays on disk in the main checkout until the next resume point of its own plan.

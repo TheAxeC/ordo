@@ -687,8 +687,9 @@ def plan_loop_svg() -> str:
 
     band = Box(
         Rect(25, band_y, 990, band_h),
-        "/plan-orchestration <entry>",
-        "Runs the row above for every step, unattended, with the executor the plan names at "
+        "/plan-orchestration [<entry>]",
+        "Runs the row above for every step of the named plan, or of every open plan with no "
+        "entry, unattended, with the executor the plan names at "
         "build it and close them; you may run the row by hand instead. Only the stops marked "
         "in these two figures, and the proposals of its recurring-findings pass, reach you; the "
         "rest of the row runs without asking. Under self_rule: on, the orchestrator closes every "

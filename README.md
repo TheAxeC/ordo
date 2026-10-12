@@ -18,9 +18,9 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `spec` | Prepares one step. It checks the step's authority, the user's approval or a ruling, and checks the step's premises against the tree. It writes the brief and checks the paths it writes against the steps in flight. For a full step, a fresh read-only agent checks the brief against the tree, and each finding is closed in the brief. It creates the worktree and stages the base binaries |
 | `refute` | Reviews a built step without changing it: reruns the checks the brief's "Verify before you report" names and every command the builder's report quotes, never the plan's whole verify list, writes a verdict per item of the brief and per case, and findings each with its failure scenario |
 | `diagnose` | Finds the cause of a defect before anything is changed. It runs one command red on the exact symptom, shrinks the case, ranks three to five hypotheses, makes one change per probe, and writes the fix with its test and a diagnosis record. Inside a plan, with no person present, it runs in a fresh agent, probes on a scratch copy and leaves the step's worktree unchanged; run by a person it waits for the reply to the hypotheses |
-| `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits by explicit path, removes the worktree |
-| `plan-orchestration` | Runs an open plan unattended, step by step, and stops only where a decision belongs to the user. Under `self_rule: on` and `next_entry: on` it goes on to the next roadmap entry after the closing |
-| `ordo-help` | Prints the command sequence, and for a named plan its position and the command that comes next |
+| `land` | Cherry-picks a reviewed step onto `main`, runs the checks there, books the step, commits the paths it names, removes the worktree |
+| `plan-orchestration` | Runs every open plan unattended in one session, or the plan named, step by step, and stops only where a decision belongs to the user. Under `self_rule: on` and `next_entry: on` it goes on to the next roadmap entry after a closing |
+| `ordo-help` | Prints the command sequence and the position of each open plan, and for a named plan its position and the command that comes next |
 | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
 | `session-retro` | Reads the transcripts of a plan's Claude Code sessions, of one session or of a time window. It reports what went well, to keep, and what went wrong, to change. Each point quotes its place and proposes a change to a rule, skill or brief, which the user decides on |
 
@@ -45,7 +45,8 @@ for every step:
 C<n> Agree                    under self-rule: you agree with a choice the orchestrator took
 C<n> => <your ruling>         under self-rule: you replace a choice with your ruling
 
-/plan-orchestration <entry>   instead of the step lines: runs them for every step unattended, and under self_rule: on and next_entry: on goes on to the next entry after the closing
+/plan-orchestration           instead of the step lines: runs them for every step of every open plan unattended, and under self_rule: on and next_entry: on goes on to the next entry after a closing
+/plan-orchestration <entry>   the same for the plan of that entry alone
 /plan-retro                   after plans have run: the findings that recur, and the rule sentence, text change or page that stops each, a check only for a fact
 /session-retro <entry>        for a plan, open or closed: what went well and what went wrong in its Claude Code sessions, each with a proposed change
 /diagnose <symptom>           at any time, outside a plan: the cause of a defect, from a command red on it, before any fix
@@ -160,7 +161,7 @@ python3 <skills>/plan-orchestration/templates/plan_cost.py <ledger folder> [<tra
 
 ## The landing script
 
-`skills/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <step> <base>`. It runs from the `land` skill itself, and nothing is copied into the ledger.
+`skills/land/templates/land.sh` does the cherry-pick and the checks on `main` as one command, run from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`, `<slug>` being the name of the plan's ledger folder. It runs from the `land` skill itself, and nothing is copied into the ledger.
 
 `land.sh` reads `worktree_root` and `ledger_root` from `.agents/plan.yaml`, and refuses with exit 64 when either is missing. In the `projects:` form it reads those of the project whose `ledger_root` holds the state file. After main's cherry-pick it runs the verify list through the `checks.sh` in its own folder. It then prints the data for the step's booking in the plan: the diff stat against the base and the staged paths.
 

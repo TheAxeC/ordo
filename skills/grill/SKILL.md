@@ -2,7 +2,7 @@
 name: grill
 description: "Settle a roadmap entry's design decisions before its plan opens, by an interview in rounds: list the decisions the entry's goal and gate need, ask every decision whose prerequisites are settled in one round, each with its options, their pros and cons, a reference line for the configured design bar, one recommendation and the lazy option named, have facts looked up by agents instead of asked, and write each answer as it settles into the plan's Rulings or the entry's rulings file, each lookup agent into the Agents section of the same file, the roadmap entry, the glossary and a proposed ADR, written on the user's yes or, under `--self-rule`, on the orchestrator's recommendation. Triggers on: grill <entry>, grill me on the entry, settle the design decisions of an entry, interview me about the design, design decisions before the plan, stress-test the design of an entry."
 metadata:
-  version: "1.3.0"
+  version: "1.3.1"
 ---
 
 # Settle an entry's design decisions
@@ -204,7 +204,9 @@ metadata:
     - Print that gate's text whole beside the command, for the user to give it.
     - Without `--self-rule`, ask, in the same message, whether the user confirms a shared understanding and whether the skill may commit.
     - Under `--self-rule`, ask nothing: the commit is made as the bullet below says, and this list is the run's report.
-    - On a yes to both, or under `--self-rule`, commit the files the run wrote, the choices file among them when it wrote it, by explicit path list in one commit, its subject naming the entry and that its design decisions are settled.
+    - On a yes to both, or under `--self-rule`, commit the files the run wrote, the choices file among them when it wrote it, in one commit, its subject naming the entry and that its design decisions are settled.
+      - Each file is staged with `git add -- <path> ...`.
+      - The commit names the same paths: `git commit -m <message> -- <path> ...`.
     - A run under `--self-rule` that wrote no file makes no commit and says so in its report.
     - The commit message names a quoted ruling an entry was changed under, by its name and its ledger file.
     - Without a yes to committing, list the files written with `git status --short`.

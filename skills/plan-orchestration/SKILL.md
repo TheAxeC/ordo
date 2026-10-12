@@ -1,20 +1,21 @@
 ---
 name: plan-orchestration
-description: "Run an open plan unattended, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after the closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plan to another mid-way. Triggers on: run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
+description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "4.0.0"
+  version: "5.0.0"
 ---
 
 # Plan orchestration
 
-The unattended loop that runs an open plan's steps, one after another, until a pause or until nothing unblocked is left; a stop blocks only its own step. It leaves behind each landed step on main, its landing report in the ledger, and a state file that says where the plan stands. Under `self_rule: on` and `next_entry: on`, the orchestrator goes on after the closing to the next roadmap entry (`references/self-rule.md`, "Next-entry mode").
+The unattended loop that runs the steps of every open plan, or of the one plan named, one after another, until a pause of every plan it runs or until none has an unblocked step left; a stop blocks only its own step. It leaves behind each landed step on main, its landing report in its plan's ledger, and a state file per plan that says where that plan stands. Under `self_rule: on` and `next_entry: on`, the orchestrator goes on after a closing to the next roadmap entry (`references/self-rule.md`, "Next-entry mode").
 
 ## Quick start
 
 ```
-/plan-orchestration <entry>          run the plan's steps unattended until a pause, or until nothing unblocked is left; under self_rule: on and next_entry: on, go on to the next roadmap entry after the closing
+/plan-orchestration                  run the steps of every open plan unattended until a pause of every open plan, or until no open plan has an unblocked step; with no plan open, under self_rule: on and next_entry: on, take the next roadmap entry
+/plan-orchestration <entry>          the same for the plan of that entry alone
 /plan-orchestration <entry> inline   the same, with the orchestrating session building every code step itself
-continue the plan                    resume from the state file, after a compaction or in another session; with no plan open, under both keys, take the next roadmap entry
+continue the plan                    the same as /plan-orchestration with no entry, resuming from the state files after a compaction or in another session
 ```
 
 ## Use instead
@@ -23,7 +24,7 @@ continue the plan                    resume from the state file, after a compact
 |---|---|
 | One step by hand, stopping after each skill | `/spec`, then "build it", `/refute` and `/land`, the sequence `/ordo-help` prints |
 | The plan is not open yet | `/plan <entry>` |
-| Where the plan stands and which command comes next | `/ordo-help <entry>` |
+| Where a plan stands and which command comes next, or where every open plan stands | `/ordo-help <entry>`, or `/ordo-help` |
 | The repository has no `.agents/plan.yaml` | `/ordo-init` |
 | A finding, a red line or a brief-check finding whose cause is not known, or a cause a step's text asks to have found, diagnosed by hand | `/diagnose <entry> <step> <finding>`, `red line`, `brief check <n>` or `premise` |
 | What the reviews keep finding across plans | `/plan-retro` |
@@ -31,28 +32,37 @@ continue the plan                    resume from the state file, after a compact
 
 ## What it reads
 
-1. `.agents/plan.yaml` and the plan's ledger folder: every project specific comes from them.
-2. The state file `orchestrator-state.md` first, then `plan.md`, then the tail of the transcript when there is one: the reading order after any compaction, and for a new orchestrator.
-3. The dispatch block in the state file, which "Resuming, and handing the plan over" reads.
+1. `.agents/plan.yaml` and the ledger folder of each plan the invocation runs: every project specific comes from them.
+   - `/plan-orchestration` with no entry and `continue the plan` run every open plan.
+   - `/plan-orchestration <entry>` runs that plan alone.
+   - An open plan is a folder under `<ledger_root>/` (in the `projects:` form, under a project's `ledger_root`), outside `<archive_root>/`, whose `plan.md` opens with `# Plan: <entry>`.
+     - A folder without such a `plan.md` is no plan.
+2. The state file `orchestrator-state.md` of each of those plans first, then its `plan.md`, then the tail of the transcript when there is one: the reading order after any compaction, and for a new orchestrator.
+3. The dispatch block in the state file of every open plan, which "Resuming, and handing the plan over" reads.
 4. The builder's report, the diff since the step's base, and the refuter reports of the step.
-5. For the recurring-findings pass, the refuter reports written since the last pass.
+5. For the recurring-findings pass of a plan, the refuter reports of that plan written since its last pass.
 6. Under `self_rule: on`, and for the review of a choice, the choices file `<ledger_root>/choices.md`.
 7. Under `self_rule: on` and `next_entry: on`, after a closing: the roadmap file and the ledger folders under `<ledger_root>/` and `<archive_root>/`, for the next entry and its plan.
 
 ## Steps
 
-The loop runs over a plan that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/ordo-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops and the reports.
+The loop runs over the plans that `/plan` opened. Each step goes through the same skills a person runs by hand (`/spec`, `/refute`, `/land`, with `/ordo-help` printing the sequence); this skill adds what running unattended needs: picking the next step, dispatching and resuming a builder, sending a reviewer's findings back, the cadence of the review, two steps in flight, the stops and the reports.
 
 1. Read the inputs in the order "What it reads" gives them.
-   - Resolve a dispatch block before anything else.
-   - Before any dispatch, check that the runner lists the effort agents `ordo-<worker_effort>` and `ordo-<reviewer_effort>` among its agent types, each level `high` when the configuration block has no such key.
+   - Read the dispatch block of every open plan and resolve those of the plans the invocation runs before anything else, as "Resuming, and handing the plan over" says.
+   - Before any dispatch, check that the runner lists the effort agents each plan the run runs names in its configuration block, `ordo-<worker_effort>` and `ordo-<reviewer_effort>`, among its agent types, each level `high` when that block has no such key.
    - Before any dispatch, check that `CLAUDE_CODE_EFFORT_LEVEL` is unset: `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), and the loop dispatches nothing.
-2. Pick the next step that nothing blocks.
-   - A session runs one plan at a time.
-     - With several plans open, it takes them in the roadmap's order.
-     - It starts the next plan only when the one before it has no step left that can move without the user.
-   - One at a time, unless the block sets `workers_at_once` above 1 and the next steps qualify under "Two steps in flight".
+2. Pick the next step that nothing blocks, for each free slot under the limit of "Two steps in flight".
+   - Each free slot takes the next unblocked step of the earliest plan in the roadmap's order that has one.
+     - In the `projects:` form, the projects stand in the order `.agents/plan.yaml` lists them, and each project's plans in its roadmap's order.
+   - Each pair of the picked step with the steps in flight is judged under "Two steps in flight".
+   - A step that waits because its shared file is not simple to merge is blocked, and the slot goes to the next pick.
+   - A step that must run alone ("Two steps in flight"), when it is the next pick, holds the loop: no further step is dispatched until nothing else is in flight and it has been dispatched.
+   - `/plan-orchestration <entry>` picks from that plan alone.
+   - With no open plan, `/plan-orchestration` with no entry and `continue the plan` take the next roadmap entry under `self_rule: on` and `next_entry: on`, as `references/self-rule.md`, "Next-entry mode", says.
+     - Otherwise they say that no plan is open and name `/plan <entry>`.
+   - Done when a step is picked for each free slot, or none of the plans the invocation runs has an unblocked step.
 3. Invoke `/spec <entry> <step>`, which checks the premises, writes the brief, runs for a full step the brief check before the preparation commit (the `spec` skill's "Steps / The brief check"), makes the worktree and writes the dispatch block.
    - Before dispatching the builder of a full step, read the brief check's report and the changes to the brief its "Closed" heading names.
    - A stop it raises goes to the user by "Stops".
@@ -70,7 +80,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **The launch commit.** Under every executor, the dispatch entry is committed once its builder's identity is in it, and the commit is a resume point.
      - Under `agent` it comes right after the launch and the model check of "Launching a builder", since the builder's agent id exists only once it is launched.
      - Under `inline` and `academic-paper` it comes before the build starts.
-     - The paths are the state file and the session's own records since the last resume point, named in `git add -- <path> ...`.
+     - The commit is made in the form "Resuming, and handing the plan over" states, with the state file and the session's own records of the step's plan since the last resume point.
    - **The prompt.** It states, in its own words:
      - The worktree, and that it is the only place to work.
      - The no-git rule.
@@ -90,21 +100,21 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
      - The step is then built through that skill with the brief as its input.
      - That skill's output is the step's report.
 5. While the builder runs, do ledger work only: the next step's premise checks, the bookings.
-   - Never dispatch beyond what `workers_at_once` allows.
-   - Never dispatch while the user has asked for a pause.
+   - Never dispatch beyond the limit "Two steps in flight" states.
+   - Never dispatch a step of a plan a pause holds ("Stops").
 6. On the report, save it into the main ledger at the dispatch block's `report` path, on disk and not committed on its own.
    - Then read the whole diff.
    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
    - When the builder wrote no report file, the orchestrator takes the report from the final message its completion notification carries, into the `report` path.
    - The orchestrator writes the builder's tokens, tool uses and time, from its completion notice, into the dispatch block under `builder_usage`, beside `report`, on disk.
-   - The next resume-point commit carries them.
+   - The next resume-point commit of its plan carries them.
    - The report is a lead, not a fact.
    - A builder whose first run of the brief's "Cases" finds a case the brief's rules get wrong stops before changing any code and hands back the first run and that case, with the rule and the result.
      - Read that hand-back the same way as a report.
    - Rule on such a case when the fix stays inside the step's part.
      - Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`.
      - Hold the text the ruling gives the builder word for word as Steps 8's "Dictated text" says, before it is committed.
-     - Commit it by path as a round sent.
+     - Commit it as a round sent, in the form "Resuming, and handing the plan over" states.
    - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`.
      - The builder's final report carries the ruling.
    - Such a case whose fix changes a public shape or an established decision is a stop of the kind "A finding that is the user's", by "Stops".
@@ -115,7 +125,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - Read the diff yourself while it runs.
    - Save its report.
      - Write its path, with the reviewer's agent id, its served model and its tokens, tool uses and time from its completion notice, into the dispatch block under `reviewer_report` in the form of the `refute` skill's Steps 7, on disk.
-     - The next resume-point commit carries them.
+     - The next resume-point commit of its plan carries them.
    - Done when the refuter report is saved and its record is under `reviewer_report`.
 8. Send the findings back to the same builder, as a numbered list with a ruling per finding that stays inside the step's part and the written rules.
    - **A small text step.** It has no repair round, so no finding of its review is sent back.
@@ -124,7 +134,7 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 "Dictated text" holds a brief's, since the brief check never reads those files.
    - **Before the resume.** Write `round: n` into the dispatch block.
-     - Commit it as a resume point, by path, with the round's brief and the session's own records since the last resume point.
+     - Commit it as a resume point, in the form "Resuming, and handing the plan over" states, with the round's brief and the session's own records of the step's plan since the last resume point.
    - **Only known fixes.** Each ruling says what to change.
      - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>).
        - The diagnosis runs in a diagnosis agent, as the `diagnose` skill's "Rules" say.
@@ -162,12 +172,11 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 10. Continue with step 2.
     - The landing report is on disk at `agents/reviews/<step>-landing.md`, committed with the step, so the loop never ends its turn for a report.
     - Under `self_rule: on` and `next_entry: on`, the orchestrator goes on after the closing step as `references/self-rule.md`, "Next-entry mode", says.
-    - The loop ends only at a pause or when nothing unblocked is left, and step 3 says what a stop does to the loop.
-    - Under `self_rule: on` and `next_entry: on`, the run after the closing step ends in one of the cases `references/self-rule.md`, "Next-entry mode", lists.
-    - The final message opens as "Reports" says.
-      - It then lists every step landed since the loop began with the path of each report, and the open items.
-      - After the closing step, it also names the path of the closing report.
-      - Under `self_rule: on`, it also lists the choices taken since the loop began, by `C<n>` and heading.
+    - The loop ends only at a pause of every plan the invocation runs or when none of them has an unblocked step.
+    - Step 3 says what a stop does to the loop.
+    - Under `self_rule: on` and `next_entry: on`, the run after a closing step ends in one of the cases `references/self-rule.md`, "Next-entry mode", lists.
+    - The final message is the orchestrator's report as "Reports" says.
+      - After a closing step, it also names the path of the closing report.
       - Under `self_rule: on`, it also says the choices are reviewed in `<ledger_root>/choices.md` with `C<n> Agree` or `C<n> => <ruling>`.
     - Done when the final message is written, or the loop is at step 2.
 
@@ -197,25 +206,38 @@ The loop runs over a plan that `/plan` opened. Each step goes through the same s
 
 The ledger is the whole handoff. An orchestrator may stop after any step, and another Claude Code session continues from the files alone, under these rules:
 
-- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file: every decision, ruling, path a step depends on, sharp edge and landing report is in the ledger folder of the main checkout.
+- Nothing needed to continue lives only in a runner's memory, its transcript, its scratch folder or a machine-local temp file: every decision, ruling, path a step depends on, sharp edge and landing report is in the ledger folder of its plan in the main checkout.
 - A step's commits are only the points another session resumes from: a stop (its open item and Step 0), the preparation commit, the dispatch entry once the builder's identity is in it, a repair round sent (its round brief and the round's entry), a step taken back out of main at its landing (its entry and Step 0), a choice taken under self-rule, a review of a choice, the landing, and a handover.
 - Every other ledger record (a builder's report saved, the builder's usage under `builder_usage`, a refuter report saved, a reviewer recorded, a ruling booked) is written to disk in the main checkout.
-  - It is carried by the next of those commits.
-- A resume-point commit holds only the paths the session itself wrote since the last one.
-  - Each is named in the `git add -- <path> ...` command.
+  - It is carried by the next of those commits of its plan.
+- **The form of a commit.** Every commit the session makes on main names its paths, so that it records only what it names, whatever another skill has staged.
+  - Each new or changed path is staged with `git add -- <path> ...`.
+  - The commit is `git commit -m <message> -- <path> ...`, naming every path the commit records, a deleted path included.
+- A resume-point commit carries the session's own records under its own plan's ledger folder, and the choices file when a choice of that plan changed it.
+  - It holds only the paths the session itself wrote since the last one.
+  - Another plan's records wait for that plan's next resume point.
+  - A commit that names the choices file records the whole file, every plan's changes to it included, since the file is one for every plan.
 - A ledger change the session did not make is listed by path.
   - It is left alone.
-  - One on `plan.md` or the state file is a refusal of `/spec` (the `spec` skill's Steps 1).
+  - One on the `plan.md` or the state file of the plan a `/spec` run prepares a step of is a refusal of `/spec` (the `spec` skill's Steps 1).
 - A session taking over reads the ledger in the working tree as well as at main's head, since a record not yet committed is on disk in the main checkout.
 - Handing the plan over is a resume point.
-- A session that stops, for a handover, a pause or a stop, first commits by path the records it wrote since the last resume point.
+- A session that stops, for a handover, a pause or its end, first commits the records it wrote since the last resume point, of every open plan, in the form above.
+- A stop of one step blocks its own step and does not stop the session, so its resume-point commit carries the records of its own plan only.
 - So a session taking over finds no uncommitted record of the session before it.
   - A ledger change it did not make is listed, as the bullets above say.
     - It is left alone, as the bullets above say.
-- The state file is rewritten before every step commit, so main's head always carries a state file that describes main's head.
-- A dispatch in flight is recorded in the state file before the builder starts, so a new orchestrator can tell whether a builder is still running, finished, or died, before it does anything.
+- A plan's state file is rewritten before every step commit of that plan, so it describes that plan as of its own last resume point.
+- A commit of one plan rewrites no other plan's state file.
+- A dispatch in flight is recorded in the state file of its plan before the builder starts, so a new orchestrator can tell whether a builder is still running, finished, or died, before it does anything.
 
-On resumption with a dispatch block present:
+On resumption, the dispatch blocks are read this way:
+
+- Every open plan's dispatch block is read for the count and the path comparison.
+- Only the steps of the plans the invocation runs are resolved and worked.
+- Another plan's running builder is left to the session that runs that plan.
+
+For each step, a resolved block holds:
 
 - The builder is checked first, in the runner's own agent listing, by its agent id in `session_id`.
 - A builder still running is waited for.
@@ -254,8 +276,8 @@ On every resumption, with a dispatch block or without one:
 
 ## The recurring-findings pass
 
-- Every tenth landed step, and at any pause, the orchestrator reads the refuter reports written since the last pass and groups their findings by cause.
-- A cause that appears in three or more steps is booked in the open items, since the user rules on it unless `references/self-rule.md`, "Closing an open item", closes it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
+- The pass runs per plan: every tenth landed step of a plan, and at any pause of it, the orchestrator reads that plan's refuter reports written since that plan's last pass and groups their findings by cause.
+- A cause that appears in three or more steps of that plan is booked in the open items, since the user rules on it unless `references/self-rule.md`, "Closing an open item", closes it, with the smallest change that would end it: a rule sentence in the rules file, or a change to the text that should have prevented it (a brief's wording, a skill's step, a standards page).
 - For a rule already written that keeps being broken, what is proposed is a sharper sentence for the rule or a change to the text that should have prevented it.
 - A check (a command in the verification list, or a script) is proposed under these limits:
   - It is proposed only for a fact a machine computes.
@@ -273,23 +295,29 @@ On every resumption, with a dispatch block or without one:
 
 ## Two steps in flight
 
-With `workers_at_once` above 1 the orchestrator, still one, may have that many steps running at once, each through steps 3 to 9 on its own, under these rules:
+The orchestrator, still one, may have as many steps running at once as the limit allows, each through steps 3 to 9 on its own, across every open plan, under these rules:
 
+- **The limit.** `.agents/plan.yaml`'s `workers_at_once` is the most steps in flight at once, read at each pick and counted over the dispatch blocks of every open plan.
+  - In the `projects:` form, the limit is the smallest `workers_at_once` among the projects that have an open plan.
+  - A configuration block that holds a `workers_at_once` line is read as if the line were not there.
+- Every rule below holds for a pair of steps from two plans as for a pair from one plan.
 - Whether two steps can run at once is decided by how simply the second one's change lands on the first's, not by their paths alone.
 - For each pair the orchestrator states what each changes in code the other reads or changes, and how the later landing takes it: nothing to merge, a mechanical rerun (a converter, a formatter, a generator), a hand merge of named functions, or a dependency that forces an order.
 - A pair whose later landing needs more than a mechanical rerun or a hand merge of a few named functions runs in sequence.
 - Each brief lists the paths its step writes under "Paths this step writes".
-  - `/spec` compares the list with the briefs of the steps in flight by reading them (the `spec` skill's Steps 5).
+  - `/spec` compares the list with the briefs of the steps in flight of every open plan by reading them (the `spec` skill's Steps 5).
 - Two steps in flight may name the same file if and only if the orchestrator judges that merging them at landing is simple.
-  - The orchestrator writes that judgment in the later step's dispatch entry as `shared_paths:`, naming each shared file and why the merge is simple.
+  - The orchestrator writes that judgment in the later step's dispatch entry as `shared_paths:`, naming each shared file, the other step's plan and step, and why the merge is simple.
   - With no shared file the key is left out.
 - When the merge is not simple, the later step waits until the earlier one lands.
 - No script checks that judgment.
-- A step that touches a configuration file or a rule file runs alone.
+- A step that touches a configuration file or a rule file runs alone across all plans.
 - Each step has its own worktree, base, builder, reviewer, rounds and dispatch entry.
-- A later step is dispatched only after the earlier one's launch commit (Steps 4), so its base holds the earlier brief and dispatch entry.
-- Landings are one at a time, in the order the steps are verified.
+- Each step is prepared, built and reviewed under its own plan's configuration block: worker, reviewer, efforts, review cadence and repair rounds.
+- A later step is dispatched only after the earlier one's launch commit (Steps 4), whichever plan each belongs to, so its base holds the earlier brief and dispatch entry.
+- Landings are one at a time across all plans, in the order the steps are verified.
   - A later one lands on the head the earlier left, its whole diff read again there.
+  - A landing runs from its cherry-pick to its commit before any other commit or skill, as the `land` skill's Rules say.
 - A file both steps changed means the later step goes back through step 6 on the new head before it lands.
 
 ## Launching a builder
@@ -328,9 +356,14 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 
 ## Reports
 
-- The orchestrator's reports and the landing report open with a position line: the roadmap entry with its title, the plan step being worked as "step n of m" with its name, and the next step, in the form "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>."
+- A position line belongs to one plan: the roadmap entry with its title, the plan step being worked as "step n of m" with its name, and the next step, in the form "Roadmap entry <n> (<title>). Plan step <k> of <m>: <step name>. Next: step <k+1>, <step name>."
+  - A plan a pause holds ends its position line with "Next: PAUSED, until <the user> says otherwise." in place of the next step.
+- The orchestrator's report opens with one position line per open plan, in the roadmap's order, each followed by that plan's open items verbatim.
+  - Then come the steps landed since the loop began, grouped by plan, each with the path of its landing report.
+  - Under `self_rule: on`, then come the choices taken since the loop began, by `C<n>` and heading.
+- The landing report stays one per step, in its plan's ledger, and opens with its own plan's position line.
 - A builder's report keeps the shape of the repository's change standard.
-- The state file's open items follow the position line, verbatim.
+- In the landing report, the state file's open items follow the position line, verbatim.
 - The open items hold only what the user must rule on: a stop, and a proposal of the recurring-findings pass.
 - A finding that is neither closed in the repair rounds nor fixed at landing is an open item, which goes where "What earns a step of its own" says.
 - The other list, the closed one, is the log of what was raised and how it ended.
@@ -347,14 +380,15 @@ With `workers_at_once` above 1 the orchestrator, still one, may have that many s
 
 ## The pace when a deadline is set
 
-When the user sets a time by which no agent may run, the loop keeps a night rule and writes it into the state file:
+When the user sets a time by which no agent may run, the loop keeps a night rule and writes it into the state file of every open plan:
 
+- The cut-off holds every agent of the session, whichever plan it works for.
 - A builder is dispatched only while the longest step so far still fits before the cut-off.
 - A reviewer or a repair round is dispatched only while its usual length fits before the cut-off.
 - At the cut-off anything still running is stopped.
   - Its worktree is kept.
-  - The state file is rewritten with what was in flight.
-  - The plan is paused.
+  - Each open plan's state file is rewritten with what was in flight.
+  - Every open plan is paused.
 - A one-shot wake-up at the cut-off does the stopping when the runner offers one.
 
 ## Stops
@@ -375,7 +409,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 - Fixing a defect in what the user asked for is never a stop, whatever the fix makes visible.
 - A stop is booked in the state file's open items the moment it is raised, and under the step's Step 0 in `plan.md`.
   - Under `self_rule: on`, a stop of a kind that `references/self-rule.md`, "The six kinds left open", does not name, and that is not one of the stops its "The counts" names, is then closed as its "Closing an open item" says.
-- The ledger files the session wrote are then committed by path, a resume point, so the stop survives the session.
+- The ledger files of the step's plan that the session wrote are then committed as a resume point, in the form "Resuming, and handing the plan over" states, so the stop survives the session.
 - A ruling that adds or splits a step is booked as the `spec` skill's "Steps / A ruling" says: the new line in the step list ends with `(ruling <name>)`, naming the ruling's line in the Rulings section.
 - A stop is repeated in every report until the user has ruled, or, under `self_rule: on`, until the orchestrator closes it as `references/self-rule.md`, "Closing an open item", says.
 - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
@@ -387,7 +421,9 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
   - An option that runs a skill with an approval stop (`/plan`, `/roadmap`, `/ordo-init`, `/repo-setup` or `/grill`) states the change in full, as that skill's text says a quoted ruling must state it, or names that skill's approval stop as a stop of its own.
   - After the user's ruling on an option that states the change, the session books the ruling as the `spec` skill's "Steps / A ruling" says.
   - It then runs the skill with `--ruling <ledger file> "<name>"`.
-- A pause the user asks for holds until they lift it.
+- A pause the user asks for holds every open plan unless the user names the plans it holds.
+  - It holds until the user lifts it.
+  - It is written in the position line of each plan it holds ("Reports").
 
 ## Anti-patterns
 

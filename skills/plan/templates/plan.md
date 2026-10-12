@@ -22,7 +22,7 @@ Execution ledger for <the roadmap entry, linked>. One bullet is one step: a part
 
 ## Could run in parallel
 
-Independent of each other; the standing rule of one agent at a time still serialises them unless the configuration block allows more.
+Independent of each other; the standing rule of one agent at a time still serialises them unless `.agents/plan.yaml`'s `workers_at_once` allows more.
 
 - <1> with anything after <0>.
 
