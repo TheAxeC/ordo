@@ -47,13 +47,18 @@ dispatch:
   report: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-report.md
   brief_check: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-brief-check.md (a0a3ea2bc782eb427, claude-opus-5-5, 286488 tokens, 61 tool uses, 13 min 15 s)
   landing: not-started
-  round: 0
+  round: 1
   session_id: a4fbe03371bb439ec (claude-sonnet-5-5)
+  builder_usage: 126733 tokens, 115 tool uses, 19 min 31 s
+  reviewer_report: .scratch/2-i-several-plans-in-one-session/agents/reviews/1-refuter.md (afa9f0216c64339f0, claude-opus-5-5, 295878 tokens, 56 tool uses, 9 min 43 s)
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-none
+- Open item ADR 0012, the landing commit's paths (2026-10-12, kind 3: a decision record the user ruled, D29). `docs/adr/0012-every-commit-on-main-names-its-paths.md` says "The landing commit takes its paths from `git diff --cached --name-only`." For a step that renames a file that command lists only the new path, so a commit naming only those paths leaves the old path's deletion staged, and the next commit on main sweeps it in (scratch run in `agents/reviews/1-refuter.md`, Verification). Step 1's `land` text uses `git diff --cached --name-only --no-renames`, which lists both.
+  - Option (a), recommended: add "with `--no-renames`" to the ADR's sentence, so the record names the command the skill runs. Pro: the record and the skill agree, and a reader of the ADR gets a complete commit. Con: a change to the text of a record you ruled.
+  - Option (b): leave the ADR as it is. Pro: your record stays word for word. Con: the ADR names a command that leaves a rename's old path out, and a reader who follows the ADR gets that defect.
+  - Recommendation: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
