@@ -46,7 +46,8 @@ none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- {DATE}: Open item A, the step list as drafted: closed under self-rule, C34.
+- 2026-10-05: Open item A, the step list as drafted: closed under self-rule, C34.
+- 2026-10-12: Open item Step 1, the projects form (the brief check `agents/reviews/1-brief-check.md`, section 3, finding 3): closed under self-rule, C39.
 - 2026-10-07: C5, goal part, every open plan in one session: agreed by the user.
 - 2026-10-07: C6, goal part, the roadmap's order: agreed by the user.
 - 2026-10-07: C7, goal part, paths compared across plans: agreed by the user.
@@ -97,5 +98,6 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- {DATE}. Plan opened.
-- Next step: 1, because it is the first; it waits on roadmap entries 2.F and 2.H.
+- 2026-10-12. Plan opened in edddd57; nothing landed. Roadmap entries 2.E, 2.F and 2.H, which step 1 waited on, are done.
+- Next step: 1, because it is the first and nothing blocks it.
+- Open on Axel's side: none.

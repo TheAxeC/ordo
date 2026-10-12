@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C38
+Last number: C39
 
 # Entry 2.H session-retro
 
@@ -42,3 +42,18 @@ Open item Step 5, a later plan's commit into a plan's own files: the rule of C37
 Taken: (b)
 Booked: `.scratch/2-h-session-retro/plan.md:58` (Open item Step 5, a later plan's commit into a plan's own files)
 Builds on it: 5
+
+# Entry 2.I Several plans in one session
+
+## C39. The one limit and the worktree names in the projects form (2026-10-12)
+
+Open item Step 1, the projects form: rulings D15 and D18 name `.agents/plan.yaml`'s `workers_at_once` and the worktree `<worktree_root>/<slug>-<step>` without the `projects:` form, where each project has its own `workers_at_once` and the projects may share one `worktree_root` (`skills/plan/templates/plan.projects.yaml` lines 12 and 39). The brief check of step 1 (`.scratch/2-i-several-plans-in-one-session/agents/reviews/1-brief-check.md`, section 3, finding 3) found the brief deciding this silently.
+
+- Option (a), recommended: with no entry the session runs every open plan of every project, the projects in the order `.agents/plan.yaml` lists them and each project's plans in its roadmap's order; the one limit is the smallest `workers_at_once` among the projects with an open plan; the worktree keeps `<slug>-<step>`, and `/spec` refuses a step whose worktree path or branch already exists until the step holding it lands. Pro: one limit holds across all plans, as the goal says, and D18 stands as ruled. Con: a project with a low limit slows the others while it has an open plan.
+- Option (b): each project's `workers_at_once` holds across its own open plans only. Pro: each project keeps its own load. Con: a session runs up to the sum of the limits, against the goal's one limit across all plans.
+- Option (c): leave the `projects:` form unstated. Pro: no text. Con: each session decides it differently, and two plans with the same slug collide on one worktree path.
+- Recommendation: (a), the only option that keeps the goal's one limit and ruling D18 as written. The lazy option is (c).
+
+Taken: (a)
+Booked: `.scratch/2-i-several-plans-in-one-session/plan.md:62` (Open item Step 1, the projects form)
+Builds on it: 1
