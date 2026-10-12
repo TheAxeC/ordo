@@ -37,20 +37,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-  step: 5
-  executor: agent
-  worker: claude:sonnet
-  worktree: .agents/worktrees/2h-5
-  base: ca6134d
-  launched: 2026-10-12
-  report: .scratch/2-h-session-retro/agents/reviews/5-report.md
-  builder_usage: 121052 tokens, 22 tool uses, 2.7 minutes (round 0)
-  reviewer_report: .scratch/2-h-session-retro/agents/reviews/5-refuter.md (ae6e103a75ddf21f7, claude-opus-5-5, 136654 tokens, 31 tool uses, 4.8 minutes)
-  brief_check: .scratch/2-h-session-retro/agents/reviews/5-brief-check.md (af3f25fec9cb469d4, claude-opus-5-5, 178009 tokens, 48 tool uses, 7.7 minutes)
-  landing: not-started
-  round: 1
-  session_id: aa1d6f027dba49d15 (claude-sonnet-5-5)
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled)
@@ -87,5 +74,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-12. Steps 1, 2, 3, 3b and 4 landed and ticked. Step 4's sessions report is `.scratch/retros/sessions-2026-10-12.md` (4e03a0a), each proposal ruled by Axel.
-- Next: step 5, `session-retro` ends a plan's window at the latest commit that touches its `plan.md` or `orchestrator-state.md` (`/spec 2.H 5`); then step 6, the closing.
+- 2026-10-12. Steps 1, 2, 3, 3b, 4 and 5 landed and ticked. Step 5 ends a plan's window at its own last commit (C38).
+- Next: step 6, the closing: `/roadmap done 2.H` with the gate's output, its diff to Axel, then the folder moved to `.scratch/archive/`, the tag and the pin to Axel.

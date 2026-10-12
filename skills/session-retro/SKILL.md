@@ -1,8 +1,8 @@
 ---
 name: session-retro
-description: "Read the transcripts of Claude Code sessions, from a plan's opening to its last commit, from one Claude Code session with its subagents, or from a time window, and report what went well, to keep and repeat, and what went wrong, to change. Each point quotes its place in the transcript by id, line and timestamp and proposes a change to a named rule, skill or brief, as a sentence to add or change, and the user decides on each proposal. Leaves behind a sessions report in the ledger's retros folder. Triggers on: session-retro, review the Claude Code sessions of a plan, review this Claude Code session, review a time window of Claude Code sessions, what went well and what went wrong in the Claude Code sessions, mine the Claude Code transcripts, read the transcripts of a plan."
+description: "Read the transcripts of Claude Code sessions, from a plan's opening to its own last commit (to the time of the run while the plan is open), from one Claude Code session with its subagents, or from a time window, and report what went well, to keep and repeat, and what went wrong, to change. Each point quotes its place in the transcript by id, line and timestamp and proposes a change to a named rule, skill or brief, as a sentence to add or change, and the user decides on each proposal. Leaves behind a sessions report in the ledger's retros folder. Triggers on: session-retro, review the Claude Code sessions of a plan, review this Claude Code session, review a time window of Claude Code sessions, what went well and what went wrong in the Claude Code sessions, mine the Claude Code transcripts, read the transcripts of a plan."
 metadata:
-  version: "1.0.1"
+  version: "2.0.0"
 ---
 
 # Review of Claude Code sessions
@@ -12,7 +12,7 @@ metadata:
 ## Quick start
 
 ```
-/session-retro <entry>                 review the Claude Code sessions of a plan, from the commit that added its plan.md to its last commit
+/session-retro <entry>                 review the Claude Code sessions of a plan, from the commit that added its plan.md to its own last commit, or to the time of the run while it is open
 /session-retro session <session id>    review one Claude Code session with its subagents
 /session-retro <start> <end>           review any window, two ISO 8601 times with a zone, such as 2026-09-28T22:51:46+02:00
 ```
@@ -36,6 +36,8 @@ metadata:
 5. For each proposal, the text it names.
 6. The earlier sessions reports, `<ledger_root>/retros/sessions-*.md`, for the points that already have a decision.
 7. For a change point, the texts Steps 9 searches for its rule: the rules file and the standards pages `rules` and `standards` name, the user's rules files `CLAUDE.md` and `rules/` under `$CLAUDE_CONFIG_DIR` when that variable is set and under `~/.claude` otherwise, and the `SKILL.md` of the skill the Claude Code session was running.
+8. For `<entry>`, the commits the window is read from: the commit that added the plan's `plan.md` under `<ledger_root>/`, the commit that added it under `<archive_root>/`, and the later commits that touch its `plan.md` or `orchestrator-state.md`.
+   - No commit that added its `plan.md` is a refusal ("Stops").
 
 ## Steps
 
@@ -49,12 +51,20 @@ metadata:
      ```sh
      git log --diff-filter=A --format=%cI -- "<ledger_root>/<slug>/plan.md" | tail -n 1
      ```
-   - The end is one second after the committer time of the latest commit that touches the folder under either root, or the time of the run when the folder is still under `<ledger_root>/`:
+   - The end is one second after the committer time of the plan's own last commit, or the time of the run when the folder is still under `<ledger_root>/`:
      ```sh
-     git log -1 --format=%cI -- "<ledger_root>/<slug>" "<archive_root>/<slug>"
+     move=$(git log --diff-filter=A --format=%H -- "<archive_root>/<slug>/plan.md" | tail -n 1)
+     end=$move
+     for c in $(git log --format=%H "$move.." -- "<ledger_root>/<slug>/plan.md" "<ledger_root>/<slug>/orchestrator-state.md" "<archive_root>/<slug>/plan.md" "<archive_root>/<slug>/orchestrator-state.md"); do
+       git show --name-only --format= "$c" | grep -E '/(plan|orchestrator-state)\.md$' | grep -v -e "^<ledger_root>/<slug>/" -e "^<archive_root>/<slug>/" | grep -q -e "^<ledger_root>/" -e "^<archive_root>/" || { end=$c; break; }
+     done
+     git log -1 --format=%cI "$end"
      python3 -c 'import sys, datetime; print((datetime.datetime.fromisoformat(sys.argv[1]) + datetime.timedelta(seconds=1)).isoformat())' '<that time>'
      python3 -c 'import datetime; print(datetime.datetime.now().astimezone().isoformat(timespec="seconds"))'
      ```
+   - The plan's own last commit is the commit that added its `plan.md` under `<archive_root>/`, or a later commit that touches its `plan.md` or `orchestrator-state.md` and no other plan's `plan.md` or `orchestrator-state.md`, so that a later plan's commit into the archived folder does not widen the window.
+   - The block prints the committer time of that commit.
+   - For an archived plan, the six lines from `move=` to `git log -1` run as one Bash call with `<ledger_root>`, `<archive_root>` and `<slug>` substituted, since they pass `move`, `end` and `c` from line to line. The first `python3` line then runs with the time they printed.
    - For `session <session id>`, there is no window: the reader's `--session` form is used.
    - For `<start> <end>`, the window is as given.
    - The step is done when the start and end, or the session id, are known.

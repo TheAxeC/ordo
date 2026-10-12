@@ -86,14 +86,14 @@ The plan's whole verify list is not run here; it runs once at landing.
 
 ## Host- or user-visible changes, before and after
 
-- `/session-retro <entry>` for an archived plan: the end of the window was one second after the latest commit touching the folder under either root; it is one second after the plan's own last commit. For plans 1, 2.A, 2.B, 2.C, 2.coverage and 2.E.grill the end moves earlier (table above); for plans 2.1, 2.D, 2.E.A-self-rule and 2.F the end is the same.
+- `/session-retro <entry>` for an archived plan: the end of the window was one second after the latest commit touching the folder under either root; it is one second after the plan's own last commit. The end moves earlier for plans 1, 2, 2.A, 2.B, 2.C and 2.E, and stays the same for 2.1, 2.D, 2.E.A and 2.F.
 - `metadata.version` of the skill: `1.0.1` to `2.0.0`.
-- Description, Quick start line, report template line and glossary entry: "its last commit" and "the latest commit that touches its folder" to "its own last commit".
+- Description, Quick start line, report template line and glossary entry: "its last commit" and "the latest commit that touches its folder" to "its own last commit"; the description, the Quick start line and the template line also gain the end of an open plan, the time of the run.
 
 Sentence lengths (item 7 of "Verify before you report"), read against `skills/repo-setup/templates/docs/dev/prose-standard.md` section E (under roughly 20 words unless the mechanism needs more) and `docs/dev/skill-layout.md` "Lists and tables" (one rule per bullet):
 
 - `skills/session-retro/SKILL.md:65` is one sentence of 47 words (`wc -w` on the line): the definition of the own last commit with its two cases and the reason clause the brief asks for in one clause. It stays one bullet because the exception ("no other plan's `plan.md` or `orchestrator-state.md`") is a qualifier of the rule and the layout keeps a qualifier in the bullet of its rule.
-- `skills/session-retro/SKILL.md:66` is one sentence of 37 words (`wc -w` on the line): it states what the block prints, which the brief asks for in one sentence.
+- `skills/session-retro/SKILL.md:67` before repair round 1 (`:66` then) was one sentence of 37 words (`wc -w` on the line): it states what the block prints, which the brief asks for in one sentence.
 - `skills/session-retro/SKILL.md:39` (item 8) is one sentence of 36 words (`wc -w` on the line, item number included): three commit kinds of one input, which the layout's "one input per item" keeps in one item.
 - `skills/session-retro/SKILL.md:54` is one sentence of 29 words (`wc -w` on the line): the end and the open-plan case, as the old bullet had them.
 - `docs/glossary.md:134` and `plan-terms.md:129`: the entry's first sentence is 53 words and its second, the definition of the own last commit, 28 words. A glossary entry defines the term and its qualifiers in the entry itself, and the first sentence is the old one with its end reworded.
@@ -102,3 +102,37 @@ Sentence lengths (item 7 of "Verify before you report"), read against `skills/re
 ## Anything in the brief that was wrong or impossible
 
 - Nothing in the brief was wrong or impossible. A needed change outside "Paths this step writes": none.
+
+## Repair round 1
+
+All four items DONE.
+
+- Item 1, Spec 1: DONE. `skills/session-retro/SKILL.md:66` is the new bullet, after the bullet at line 65 that begins "The plan's own last commit is", word for word as the round brief gives it. `grep -n` prints line 56 as `move=`, line 65 as "The plan's own last commit", line 66 as "The six lines from `move=` to `git log -1`" and line 67 as "Among the later commits".
+- Item 2, Standards 1: DONE. The bullet that began "The block prints the committer time of the newest commit" is now line 67, "Among the later commits that touch the plan's `plan.md` or `orchestrator-state.md`, the block takes the newest that writes no other plan's `plan.md` or `orchestrator-state.md`. With none, it takes the commit that added the `plan.md` under `<archive_root>/`. It prints the committer time of the commit it takes."
+- Item 3, the open-plan end: DONE. Line 3 reads "from a plan's opening to its own last commit, or to the time of the run while the plan is open, from one Claude Code session"; line 15 ends "to its own last commit, or to the time of the run while it is open"; `templates/sessions.md` line 5 reads "...its own last commit, each with its committer time, or the time of the run for an open plan | the session id | ...".
+- Item 4, Behaviour 1: DONE. "Host- or user-visible changes" above now reads "The end moves earlier for plans 1, 2, 2.A, 2.B, 2.C and 2.E, and stays the same for 2.1, 2.D, 2.E.A and 2.F."
+
+Checks, from the worktree's root, as printed:
+
+- The six lines from `move=` to `git log -1`, copied from the changed skill with `awk` (`wc -l` printed `6`), substituted with `.scratch`, `.scratch/archive` and `2-c-scripts-compute-facts-and-writing-is-removed` and run as one `sh` call: `2026-09-29T12:04:41+02:00`, exit 0.
+- Description length, the `python3 -c 'import yaml; ...'` command: `833`, at most 1024.
+- `git grep -n -i -e "touches the folder" -e "touches its folder" -e "its last commit" -- skills docs README.md`: prints nothing, exit 1.
+- The character-set check of "Verify before you report" 1 over the four files: prints nothing, exit 0.
+- `python3 skills/repo-setup/templates/sync_rules.py . --only glossary`: `ok: the plan-terms block equals the template`.
+- `git diff ca6134d --stat`:
+
+```
+ docs/glossary.md                           |  2 +-
+ skills/repo-setup/templates/plan-terms.md  |  2 +-
+ skills/session-retro/SKILL.md              | 20 +++++++++++++++-----
+ skills/session-retro/templates/sessions.md |  2 +-
+ 4 files changed, 18 insertions(+), 8 deletions(-)
+```
+
+- `git status --short`: the four modified paths and `?? .scratch/2-h-session-retro/agents/reviews/5-report.md`.
+
+Sentence lengths read against the prose standard section E (`wc -w` on the line, bullet marker included):
+
+- `SKILL.md:66`, 43 words, two sentences of 32 and 11 words by reading: the first states why the six lines run as one call, the second what runs next. The first sentence carries the mechanism the call needs (the variables passed from line to line), so it stays over 20 words.
+- `SKILL.md:67`, 47 words, three sentences of 28, 17 and 10 words by reading: the first names the rule for the case with a later commit, the other two the fallback and the output; the first exceeds 20 words because it names both files and the exclusion.
+- `SKILL.md:3` (description) and `SKILL.md:15` (Quick start) each gain a clause; the description stays one sentence of the skill's triggers form and the Quick start line is a command comment. `sessions.md:5` is a template placeholder line that gains a clause.

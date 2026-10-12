@@ -134,3 +134,131 @@ none
 - The builder's agent id, served model and usage. These are the orchestrator's records, not this review's.
 
 Reviewer usage: ae6e103a75ddf21f7, claude-opus-5-5, 136654 tokens, 31 tool uses, 4.8 min.
+
+## Repair round 1, refuted
+
+```
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+$ git ls-files -coz --exclude-standard -- skills/session-retro/SKILL.md skills/session-retro/templates/sessions.md skills/repo-setup/templates/plan-terms.md docs/glossary.md | xargs -0 perl -CSD -ne '...the brief's character-set check, as given...'
+(nothing printed)
+exit 0
+$ python3 -c 'import yaml; print(len(yaml.safe_load(open("skills/session-retro/SKILL.md").read().split("---")[1])["description"]))'
+833
+$ git grep -n -i -e "touches the folder" -e "touches its folder" -e "its last commit" -- skills docs README.md
+(nothing printed)
+grep exit 1
+$ grep -n 'version: "2.0.0"' skills/session-retro/SKILL.md
+5:  version: "2.0.0"
+$ git status --short
+ M docs/glossary.md
+ M skills/repo-setup/templates/plan-terms.md
+ M skills/session-retro/SKILL.md
+ M skills/session-retro/templates/sessions.md
+?? .scratch/2-h-session-retro/agents/reviews/5-report.md
+$ git diff ca6134d --stat
+ docs/glossary.md                           |  2 +-
+ skills/repo-setup/templates/plan-terms.md  |  2 +-
+ skills/session-retro/SKILL.md              | 20 +++++++++++++++-----
+ skills/session-retro/templates/sessions.md |  2 +-
+ 4 files changed, 18 insertions(+), 8 deletions(-)
+$ lines 56-61 of skills/session-retro/SKILL.md, 5 leading spaces removed, <ledger_root>/<archive_root>/<slug> substituted by sed, run as one sh call per folder of .scratch/archive/ (the old command of the brief's table, git log -1 --format='%h %cI' -- .scratch/<slug> .scratch/archive/<slug>, beside it)
+1-one-layout-for-every-skill | 2026-09-23T17:11:54+02:00 | old 8becbcd 2026-09-26T04:49:17+02:00
+2-1-scripts-cut-to-their-jobs | 2026-10-07T14:52:51+02:00 | old 1212148 2026-10-07T14:52:51+02:00
+2-a-launch-notes-for-builders-run-as-their-own-process | 2026-09-24T01:23:03+02:00 | old 8becbcd 2026-09-26T04:49:17+02:00
+2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found | 2026-09-28T12:24:19+02:00 | old ef9f292 2026-10-06T01:10:43+02:00
+2-c-scripts-compute-facts-and-writing-is-removed | 2026-09-29T12:04:41+02:00 | old ef9f292 2026-10-06T01:10:43+02:00
+2-coverage-inventory-of-the-academic-skills | 2026-09-23T21:33:36+02:00 | old 8becbcd 2026-09-26T04:49:17+02:00
+2-d-the-plan-skills-take-the-comparisons-process-changes | 2026-09-29T17:38:29+02:00 | old 8ea1b6d 2026-09-29T17:38:29+02:00
+2-e-a-self-rule | 2026-10-04T23:58:42+02:00 | old 7f459fb 2026-10-04T23:58:42+02:00
+2-e-grill | 2026-09-30T23:39:21+02:00 | old deb0d80 2026-10-01T15:47:02+02:00
+2-f-diagnose | 2026-10-12T14:26:50+02:00 | old 6043818 2026-10-12T14:26:50+02:00
+$ the six dictated lines extracted from briefs/5.md ("What to build" 1) diffed against lines 56-61 of the skill
+identical
+$ the six lines, 2.C and 1, each as one sh call
+2026-09-29T12:04:41+02:00 / exit 0
+2026-09-23T17:11:54+02:00 / exit 0
+$ the six lines with <slug> = 2-h-session-retro (the open plan, .scratch/2-h-session-retro)
+fatal: ambiguous argument '': unknown revision or path not in the working tree.
+exit 128
+$ for n in 3 15 39 40 54 65 66 67: sed -n "${n}p" skills/session-retro/SKILL.md | wc -w
+3: 152   15: 33   39: 36   40: 11   54: 29   65: 47   66: 43   67: 47
+```
+
+The ten printed times equal the brief's "Own last commit" column, row by row. The round brief's word-for-word texts: `SKILL.md:66` (new bullet, after the bullet at `:65` that begins "The plan's own last commit is"), `SKILL.md:67` (replaces the "The block prints the committer time" bullet), `SKILL.md:3`, `SKILL.md:15` and `templates/sessions.md:5` each stand as dictated, read against the round brief. The builder's report section "Host- or user-visible changes" names the plans as the round brief gives them (1, 2, 2.A, 2.B, 2.C, 2.E move; 2.1, 2.D, 2.E.A, 2.F stay), and the titles in `head -1 .scratch/archive/*/plan.md` match those entries.
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since `ca6134d`:
+
+- 1: holds. Lines 56-61 are identical to the dictated block and print all ten "Own last commit" times. `:54` gives the end and the open-plan case, `:65` defines the plan's own last commit with the reason in one clause, `:66` now says the six lines run as one Bash call with the three placeholders substituted (the closure of the earlier Spec 1, reproduced above), and `:67` says what the block prints. The earlier Spec 1 and Standards 1 are closed. Spec 1 below is a different point about `:66`, and it leaves the verdict at holds because `:54` states the open-plan end the item asks for.
+- 2: holds. `SKILL.md:39-40` is item 8; items 1 to 7 keep their numbers, and the references at `:49`, `:138`, `:182`, `:183` still point at items 2, 7, 1, 2.
+- 3: holds. `:3` and `:15` say "its own last commit" with the open-plan clause; `plan.md` on `:15` has no backticks; the description is 833 characters.
+- 4: holds. `templates/sessions.md:5` carries "its own last commit".
+- 5: holds. `plan-terms.md:129` and `glossary.md:134` carry the same text; the sync check prints `ok: the plan-terms block equals the template`.
+- 6: holds. `5:  version: "2.0.0"`.
+- 7: holds. `git status --short` lists the four paths and the report; `git diff ca6134d --stat` lists four files.
+
+Cases of the brief's "Cases":
+
+- Plan 2.C, archived, own correction after the move: met. The block printed `2026-09-29T12:04:41+02:00`; the old command printed `ef9f292 2026-10-06T01:10:43+02:00`.
+- Plan 1, a later plan's commit into its own `plan.md`: met. The block printed `2026-09-23T17:11:54+02:00`; the old command printed `8becbcd 2026-09-26T04:49:17+02:00`.
+- Plan 2.E, its closing commit also writes another plan's state file: met. The block printed `2026-09-30T23:39:21+02:00`; the old command printed `deb0d80 2026-10-01T15:47:02+02:00`.
+- Plan 2.D, own correction after the move: met. The block and the old command both print `2026-09-29T17:38:29+02:00`.
+- Every archived plan: met. The ten lines above equal the table's column.
+- Plan 2.H, open: met, by reading `SKILL.md:54` ("the time of the run when the folder is still under `<ledger_root>/`"); `.scratch/2-h-session-retro` is under `.scratch`, not `.scratch/archive`. See Spec 1 for how `:66` reads beside it.
+- The texts of items 2 to 5 read in place, with the grep: met. Each states the end as the plan's own last commit, and the three short statements (`:3`, `:15`, `sessions.md:5`) now name the open-plan end; the `git grep` prints nothing (exit 1).
+
+### Findings
+
+**1. Spec**
+
+- `skills/session-retro/SKILL.md:66`, Steps 1: "The six lines from `move=` to `git log -1` run as one Bash call with `<ledger_root>`, `<archive_root>` and `<slug>` substituted, since they pass `move`, `end` and `c` from line to line. The first `python3` line then runs with the time they printed."
+  - What is wrong: the sentence has no condition, and it sits after the bullet at `:54` whose fence holds both the block and the time-of-run line. For a plan still under `<ledger_root>/` the six lines have no `plan.md` added under `<archive_root>/`: `move` is empty, and I ran them for `2-h-session-retro` (`.scratch/2-h-session-retro`) and got `fatal: ambiguous argument ''` with exit 128. Item 1 of the brief says that for an open plan the end is the time of the run, not the block.
+  - Failure scenario: `/session-retro 2.H` during the plan's own run. An agent that follows `:66` literally runs the six lines for the open plan, gets exit 128, and has no sentence saying to skip them; it either stops on the error or improvises. The text of `:66` was dictated by the round brief, so the fix is the orchestrator's: "For an archived plan, the six lines ...".
+  - Verdict: none (item 1 and the open-plan case stay holds and met, since `:54` states the open-plan end).
+
+**2. Proof**
+
+none
+
+**3. Standards**
+
+- `skills/session-retro/SKILL.md:3`, the description: "Read the transcripts of Claude Code sessions, from a plan's opening to its own last commit, or to the time of the run while the plan is open, from one Claude Code session with its subagents, or from a time window, and report ..."
+  - What is wrong: the description lists three sources separated by commas and "or". The inserted clause "or to the time of the run while the plan is open" is set off by commas of the same kind, so it reads as a source of its own beside "from one Claude Code session" and "from a time window". `docs/dev/skill-layout.md` "Frontmatter" says the first words of `description` name what the skill does in the phrase a request is matched on. The prose standard E asks for sentences under roughly 20 words unless the mechanism needs more; this one is 152 words, as the description was before.
+  - Failure scenario: a reader or a model reading the description takes "to the time of the run while the plan is open" as a fourth input in the list. It does not change what is matched, but it misstates what `/session-retro <entry>` takes. The fix is a reword at landing, for example "from a plan's opening to its own last commit (to the time of the run while the plan is open)".
+  - Verdict: none.
+- `skills/session-retro/SKILL.md:65` and `:67`, Steps 1.
+  - The quoted hunks: `:65` "The plan's own last commit is the commit that added its `plan.md` under `<archive_root>/`, or a later commit that touches its `plan.md` or `orchestrator-state.md` and no other plan's `plan.md` or `orchestrator-state.md`, so that a later plan's commit into the archived folder does not widen the window." and `:67` "Among the later commits that touch the plan's `plan.md` or `orchestrator-state.md`, the block takes the newest that writes no other plan's `plan.md` or `orchestrator-state.md`. With none, it takes the commit that added the `plan.md` under `<archive_root>/`."
+  - What is wrong: both bullets state the same selection rule in different words, and `docs/glossary.md:134` states it a third time. `docs/dev/skill-layout.md` "Where a rule goes": "A rule is written once. Another place that needs it names the section it is in." Brief item 1 asked for `:65` and `:67` separately.
+  - Failure scenario: a later change to what counts as another plan's file (a third file name) is made in `:65` and not in `:67`; the two bullets then give different rules in the same step, and a reader cannot tell which holds. Fix at landing: `:67` says only what the block prints, and `:65` states the rule.
+  - Verdict: none.
+
+**4. Behaviour**
+
+- `.scratch/2-h-session-retro/agents/reviews/5-report.md`, "Host- or user-visible changes, before and after", third bullet: "Description, Quick start line, report template line and glossary entry: "its last commit" and "the latest commit that touches its folder" to "its own last commit"."
+  - What is wrong: after the round, the description (`SKILL.md:3`), the Quick start (`:15`) and `templates/sessions.md:5` also gain the clause naming the open-plan end (the time of the run). The bullet gives the before and after of the first change only. The round brief's item 4 asked to name plans in the first bullet, not to leave this one as it was.
+  - Failure scenario: the landing booking copies this bullet as the host-visible change; the added clause in the description, which a model matches requests on, goes unbooked. The fix is one clause in the bullet.
+  - Verdict: none.
+
+### Declined to judge
+
+- The exact delta of the round. The dispatch block of the state file records `round: 1` and no commit or tree state for the round's start, and the only git I ran is `git diff ca6134d` and `git status --short`. I read the whole diff since the base, matched each word-for-word text of the round brief in the files, and found nothing in the diff outside items 1 to 7 and the round's four items. That the round changed no file beyond `SKILL.md` lines 3, 15 and the Steps 1 bullets after the block, and `sessions.md` line 5, is not verified; `git diff <round start tree> --stat` would settle it.
+- The hash of the plan's own last commit for each plan. The block prints a committer time; the times equal the brief table's column, and matching hashes needs `git log -1 --format='%h %cI' <hash>` for each, a git command this review was not given.
+- The plan's whole verify list; it runs once, at landing on main.
+- The builder's measured time of the run for 2.H; no decision rests on it.
+- The builder's agent id, served model and usage; they are the orchestrator's records.
+
+Reviewer usage: a31a5cd217da659c3, claude-sonnet-5-5, 126355 tokens, 21 tool uses, 2.5 min.
+
+## Closed
+
+- First run, Spec 1 (the six lines run as one call): closed in repair round 1, item 1; the run over the round reproduced it.
+- First run, Standards 1 (the "block prints" sentence): closed in repair round 1, item 2.
+- First run, Behaviour 1 (plans named by folder): closed in repair round 1, item 4.
+- First run, Declined to judge, the open-plan end in the description, the Quick start and the template: closed in repair round 1, item 3.
+- Repair round 1, Spec 1 (the six lines run for an open plan): fixed at landing; the bullet opens "For an archived plan, the six lines".
+- Repair round 1, Standards 1 (the description's inserted clause read as a fourth source): fixed at landing; the clause is in parentheses.
+- Repair round 1, Standards 2 (the selection rule stated in two bullets): fixed at landing; the last bullet of the end says only what the block prints and names the bullet that holds the rule.
+- Repair round 1, Behaviour 1 (the report's third host-visible bullet without the open-plan clause): fixed at landing in the main checkout's copy of the report.

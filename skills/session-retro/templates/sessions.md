@@ -2,7 +2,7 @@
 
 ## Window
 
-- Resolved from: <the entry, the commit that added its plan.md and the latest commit that touches its folder, each with its committer time | the session id | the two times as given>
+- Resolved from: <the entry, the commit that added its plan.md and its own last commit, each with its committer time, or the time of the run for an open plan | the session id | the two times as given>
 - Start: <ISO 8601 time with zone | none, for a session id>
 - End: <ISO 8601 time with zone | none, for a session id>
 - Working folder, `<work>`: `<path>`
