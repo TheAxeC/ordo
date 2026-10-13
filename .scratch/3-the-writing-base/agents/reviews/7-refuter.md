@@ -186,3 +186,174 @@ Cases:
 - The cohesion of the whole of `references/registers.md` was not reread, since the diff leaves it unchanged (`diff` exit 0).
 
 Reviewer usage: afe8061d591582615, claude-opus-5-5, 198184 tokens, 40 tool uses, 8.0 minutes.
+
+## Repair round 1, refuted (run over the worktree .agents/worktrees/3-the-writing-base-7, base c99b4a6, snapshot .agents/worktrees/3-the-writing-base-7-round-1)
+
+### Verification (rerun by the reviewer)
+```
+$ cd .agents/worktrees/3-the-writing-base-7 ; git status --short
+ M skills/writing/SKILL.md
+ M skills/writing/references/rules.md
+?? .scratch/3-the-writing-base/agents/briefs/7-cases.md
+?? .scratch/3-the-writing-base/agents/briefs/7-round-1.md
+?? .scratch/3-the-writing-base/agents/reviews/7-report.md
+
+$ git diff c99b4a6 --stat
+ skills/writing/SKILL.md            | 38 ++++++++++++++++++++++++++++++++++----
+ skills/writing/references/rules.md | 12 ++++++++----
+ 2 files changed, 42 insertions(+), 8 deletions(-)
+
+# Brief Verify 1 (run exactly as the brief writes it)
+charset exit 0
+
+# Brief Verify 2
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+
+# Brief Verify 3
+$ grep -n -E '[^[:space:]] - | -- ' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md; echo "grep exit $?"
+grep exit 1
+
+# Brief Verify 4, the reviewer's form over git diff c99b4a6 (the builder's form is `git diff c99b4a6 -- skills/writing | ...`, same filter)
+$ git diff c99b4a6 | awk '/^diff --git/{keep = ($0 ~ / a\/skills\/writing\//)} keep' | grep '^+' | grep -c -i -E 'hccnet|grant|manuscript|step [0-9]|plan\b|finding [0-9]'
+0
+$ git diff c99b4a6 | awk '...skills/writing only...' | grep '^+[^+]' | grep -c ";"
+0
+
+# The builder's quoted evidence
+$ wc -l skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md .scratch/3-the-writing-base/agents/reviews/7-report.md
+     234 skills/writing/SKILL.md
+     223 skills/writing/references/rules.md
+      53 skills/writing/references/registers.md
+     195 .scratch/3-the-writing-base/agents/reviews/7-report.md
+$ grep -n version skills/writing/SKILL.md
+5:  version: "1.0.0"
+82:     - The message that ends the turn shows the configured model, the served model and the Claude Code version (`claude --version`).
+214:| A model other than the configured one | The runner served the review agent a model that is not the configured one, as `refute`'s Stops table defines it (Steps 6) | The configured model, the served model and the Claude Code version (`claude --version`) | `/writing` again, once the runner serves the configured model or the configuration names another |
+$ LC_ALL=C grep -n '[^ -~]' skills/writing/SKILL.md skills/writing/references/rules.md ; echo "exit $?"
+exit 1
+$ diff main/.scratch/.../briefs/{7.md,7-cases.md,7-round-1.md} and .../reviews/7-report.md against the worktree copies
+7-cases.md diff exit 0 / 7-round-1.md diff exit 0 / 7.md diff exit 0 / report diff exit 0
+$ grep -n -i 'full path' skills/writing/SKILL.md skills/writing/references/*.md; echo "exit $?"
+exit 1
+
+# Added sentences of 18 words or more (a count; python3 -I over the added lines of git diff c99b4a6 under skills/writing, split on ". ")
+31 | Where the draft gives neither, it is a bracket that names the number, the share of cases the claim holds in, or the specific claim, as a fact for the author.
+21 | That entry names the other list's rule by its page and section, or its term, in a line of its own.
+21 | A passage that breaks two or more rules is reported once, in one finding, with one replacement that ends every break.
+22 | **The last pass.** Before your final message, read your whole report once more, ... (19 words after the label)
+28 | A finding or group line that still breaks a rule after the second rewrite stays in the report, with a line that names the rule it still breaks.
+23 | Drop a finding only where "What you report" says its passage is not reported, so that no break of the draft is lost.
+21 | The passage and the replacement are written out as text, with no reference to another finding, entry or group ("A finding").
+22 | Each place is in its form, with the file's path from the main file's folder where the form has one ("A finding").
+25 | The replacement of a vague qualifier is the number, the specific claim or the bracket, never a cut that makes the claim universal ("A finding").
+23 | Each group line names a loss that one of the group's findings shows and that holds in the draft ("How you group them").
+22 | A replacement brings in a technical term whenever its passage does not hold the term, whether or not the draft defines it.
+23 | Evidence the paragraph gives for a claim it makes, and that is not followed by what it means for that claim, is reported.
+21 | A sentence that reports data the paragraph uses for no claim, such as a property of a cohort, is not reported.
+(the other lines of that output are 18 to 20 words)
+$ python3 -I (word count of two sentences the report counts)
+17 Every list of places gives each place as its own entry, with its passage and its replacement.
+16 Such lists include a term's places under several names, a tense list and another rule's places.
+```
+Every sentence over 20 words in that list is named in the report's judgment calls. `docs/adr` and the pinned copy were not checked (see Declined to judge).
+
+### Checks of the rulings
+- Ruling 1 (S1, P1), closed. `rules.md` "Terms defined at first use" now has "Such a term is used only where the draft defines it at or before the passage." with the sub-bullet "Otherwise the replacement defines it, or names its definition in square brackets as a fact for the author." The rule and its exception stand in one bullet and no sentence contradicts the first. Base line 14 (`git show c99b4a6`) read "..., or the replacement defines it."; the report's judgment call states that and the new text, which reproduces. Line 13 is 22 words and is named.
+- Ruling 2 (B1, P2), implemented as ruled: the "An entry is written out also where ..." bullet is gone, the list-of-places bullet keeps its rule, the passage that breaks two or more rules is reported once with its rule named by page and section in a line of its own, a place reached by two lists is given once in the first list, and the pass's first check keeps "no reference to another finding, entry or group". New defects the form brings are findings T1, T2 and B1 below.
+- Ruling 3 (T1), closed. "Rewrite each finding or group line that breaks one of their rules, at most twice." and the line for one that still breaks a rule. The count and its outcome are stated. It interacts badly with the drop rule (B1) and with "and nothing else" (T3).
+- Ruling 4 (T2), closed. "full path" is gone (grep exit 1), the check reads "with the file's path from the main file's folder where the form has one", and the quoted-passage check is its own item.
+- Ruling 5 (T3), closed for the two sentences named. The list-of-places rule is now 17 words with a 16-word examples sub-bullet, and `rules.md` line 15 is 18 words. The remaining over-20 sentences are named, but their reasons are weak (T5).
+- Ruling 6 (P3, P4), closed. The `metadata.version` row quotes all three lines as my rerun prints them. Verify 5 and the judgment calls name every added sentence over 20 words that my count finds.
+- Ruling 7 (B1, B2), closed for the three listed changes: the two-rule form with the step 6 forms as the before, the narrowed "Hedging", and the last pass's count and line. The "Elsewhere" bullet (vague-qualifier bracket, undefined term, data used for no claim) gives only an after (B2).
+- Ruling 8 (P2, C7), closed. The report reads Limitations 2, Clear antecedents 2, filler 3 and the tense-bearing entries against ruling 2 and states each form. I checked them against `6-run/manuscript-report.md`. Limitations 2 has "Also: ... section 0 ...; "Tense per section" (Results)" at line 13. Clear antecedents 2 has "Also: ... section A ("considerably")" at line 251, and section A's group has no entry for it. Filler 3 is at line 575 with "(with the Methodology tense)". The six tense-bearing entries are at lines 211, 213, 214, 218, 220 and 228. The report reads "No synonym cycling 1.1" as these six entries, while `6-marks.md` row 1.1 is the heading at `b_architecture.tex:5`. The wider reading covers the refuter's example, so it is not a finding.
+- First-run findings: S1, P1, P2, P3, P4, T1, T2, T3, B1 and B2 are each closed as above. T3 and P4 closed in form, with the weak reasons of T5 left.
+
+### Verdicts, whole step since the base
+Fixes of the brief, as the rulings change them:
+- 1, the last pass: holds. It is after "How you group them" and before "A draft with no break". It has both halves of ruling (a) of `7-cases.md`, the count, and 15 checks each naming its part, and it changes no file and runs no command. Findings T3, T6 and B1 attach to it.
+- 2, a passage that breaks two rules, as ruling 2 of round 1 replaces it: holds. All four sub-requirements of the ruling are in the text, and the "as in N" form is no longer allowed. Findings T1, T2 and T4 attach to it.
+- 3, the bracket of a qualifier: holds. SKILL.md lines 143 to 145 (the section "A finding").
+- 4, hedging: holds. `rules.md` "Hedging" has the three bullets. Hedging 5 falls under "A passage whose device already has the strength the evidence carries is not reported."
+- 5, an undefined term: holds. `rules.md` "Terms defined at first use", lines 13 to 15. Terms 2 breaks the three lines, and grant 1.1 breaks line 14.
+- 6, explanation of evidence: holds. `rules.md` "Explanation of evidence".
+
+Cases:
+- C1: met. Each fix-1 row and the five group lines name an existing sentence and a pass check, and the report carries the rulings on filler 4 and grant 12.19.
+- C2: met. Grant 11.1 to 11.5, 11.7 and 11.10 break "No other group gives an entry for the passage or refers to it." Manuscript report line 229 breaks "A place that two lists of places reach is given once, in the first list that reaches it." and "The later list leaves the place out and refers to it nowhere."
+- C3: met. The "or" brackets of Evidence 2 and vague qualifiers 4 break line 144. Vague qualifiers 2's bracket meets line 145. The bracket of vague qualifiers 1 is "[by the measured amount, with its citation]" and that of vague qualifiers 3 is "[The share of traditional approaches, with its citation]". Neither has an "or", although the report says "an amount or a share".
+- C4: met.
+- C5: met.
+- C6: met.
+- C7: met. The forms named in the report reproduce against the step 6 reports.
+
+### 1. Spec
+None. Fix 5 and S1 are closed, and no ADR (0001 to 0003 read) is contradicted: nothing is copied from the prose standard and the agent still changes no file.
+
+### 2. Proof
+- P1. `7-report.md`, "Repair round 1", row 5: "the rule in one sentence of 16 words and the examples as a sub-bullet of 15 words". `SKILL.md:164` has 17 words (`python3 -I` count above) and `SKILL.md:165` has 16. The counts are off by one, and no decision rests on them. Failure scenario: the orchestrator copies the counts into the booking, and a reviewer who recounts reads them as an unreproduced claim.
+- P2. `7-report.md:132`, the `metadata.version` row. The cell quotes line 214 of the Stops table, which contains `|` characters. Hunk: "`214:| A model other than the configured one | The runner served ...`". The unescaped pipes split the cell into extra columns where the report is rendered. The command's output is correct, but it is unreadable in the table. Failure scenario: the orchestrator reads a row whose cells are shifted and cannot tell which text is the output.
+
+### 3. Standards
+- T1. `SKILL.md:164` and `SKILL.md:166-169`.
+  - Hunk: `- Every list of places gives each place as its own entry, with its passage and its replacement.` and, as the next bullet, `- A place that two lists of places reach is given once, in the first list that reaches it.` with `- The later list leaves the place out and refers to it nowhere.`
+  - What is wrong: the rule says every list gives each place, and the exception (a later list leaves out a place an earlier list gave) stands in a sibling bullet. `docs/dev/skill-layout.md`, "Lists and tables", keeps an exception in the same bullet as its rule, and `change-standard.md` rule 19 forbids two statements that contradict each other. The sub-bullet at line 165 makes a tense list a list of places, so the tense list is told both to give each of its sentences and to leave out those given before.
+  - Failure scenario: the review agent reads line 164 for the tense list and writes `b_architecture.tex:14` under tense again, or reads line 169 and leaves out a tense sentence no other list reached. The two readings give different reports, and a marker who reads one marks the other wrong.
+- T2. `SKILL.md:166-169` against `SKILL.md:172-176`.
+  - Hunks:
+    - `- A place that two lists of places reach is given once, in the first list that reaches it.`
+    - `- Its replacement carries every change at that place.`
+    - `- That entry names the other list's rule by its page and section, or its term, in a line of its own.`
+    - `- The later list leaves the place out and refers to it nowhere.`
+    - `- A passage that breaks two or more rules is reported once, in one finding, with one replacement that ends every break.`
+    - `- That finding stands under the group of one of those rules.`
+    - `- That finding names each other rule it breaks by its page and section, in a line of its own.`
+    - `- No other group gives an entry for the passage or refers to it.`
+    - `- ... the replacement gives the text at that place as it reads after every finding on it.`
+  - What is wrong: one situation is governed by two bullet groups. Line 165 makes the group of any rule a list of places, so a passage with two rules is also a place that two lists reach. The two groups differ on where it stands (line 173 "the group of one of those rules", line 166 "the first list"). The naming sentence is written in both (lines 168 and 174), the no-reference sentence in both (169 and 175), and "carries every change" in three (167, 172, 176). `docs/dev/skill-layout.md`, "Where a rule goes": "A rule is written once."
+  - Failure scenario: a sentence in a term list that also breaks the tense rule is placed by line 173 under whichever group the agent picks, and by line 166 under the first group. Two runs differ, and the first marker sees a finding in the tense group, the second in the term group.
+- T3. `SKILL.md:105` against `SKILL.md:186`.
+  - Hunks: `Report a break of a rule of the prose standard, the rules page or the registers page, and nothing else.` and `A finding or group line that still breaks a rule after the second rewrite stays in the report, with a line that names the rule it still breaks.`
+  - What is wrong: the new line is report content that is no break of a draft. It is also no finding, since a finding gives its place, passage, rule and replacement. ADR 0003 says the agent "reports only breaks of a named rule", and line 105 says "nothing else". `change-standard.md` rule 19 forbids the contradiction. The report states the line as a user-visible change but does not reconcile it with line 105.
+  - Failure scenario: an agent weighing "nothing else" against the line omits the line and leaves a self-flawed finding unmarked. The user applies it, and the marker cannot tell which findings the agent doubted.
+- T4. `SKILL.md:172-175`, a synonym for a name the skill already uses.
+  - Hunks: `- A passage that breaks two or more rules is reported once, in one finding, ...` and `- No other group gives an entry for the passage or refers to it.`
+  - What is wrong: "finding" and "entry" name the same thing in adjacent bullets. Line 117 and line 164 use "entry" for a list item, but line 175 uses it for a finding under a group.
+  - Failure scenario: an agent takes "entry" in line 175 as a list item only and puts the passage again as a plain finding under the second group.
+- T5. `7-report.md`, "Judgment calls", the over-20-word bullets.
+  - Hunk: `31 words ... It names the three things the bracket may name, and the brief dictates the three.` and `28 words ... the ruling asks for both.`
+  - What is wrong: the reasons name who asked for the sentence, not why the mechanism needs more than about 20 words. `7-round-1.md` ruling 5 asks for a shortened sentence or a reason it needs its length. Both sentences split without loss: the 31-word one into the three things as sub-bullets, the 28-word one into the outcome and the line. Line 163 also calls 21 and 22 words "within roughly 20". The 25-word check at `SKILL.md:199` is the same case.
+  - Failure scenario: step 8's markers or a later refuter find 31 and 28 words in a prompt a model follows by reading, with a reason that is the brief's say-so. The same finding returns each step.
+- T6. `SKILL.md:199` against `SKILL.md:146-147`.
+  - Hunks: `- The replacement of a vague qualifier is the number, the specific claim or the bracket, never a cut that makes the claim universal ("A finding").` and `- Where the draft holds the claim in every case, by a definition or by its own data, the replacement cuts the qualifier. The finding names that definition or those data.`
+  - What is wrong: the check restates the rule of lines 143 to 146 without its exception at line 147. The brief dictated this check. The restatement without the exception is still two statements that disagree, which `change-standard.md` rule 19 forbids.
+  - Failure scenario: the last pass meets a finding like step 6's vague qualifiers 8 ("Generally, lower MAE values ..." cut, because the claim holds by the MAE's definition). The check reads that cut as one that "makes the claim universal", and the agent puts the qualifier back or rewrites it to a bracket, so the right finding is lost.
+
+### 4. Behaviour
+- B1. `SKILL.md:187` with `SKILL.md:175` and `SKILL.md:185-186`.
+  - Hunk: `- Drop a finding only where "What you report" says its passage is not reported, so that no break of the draft is lost.`
+  - What is wrong: the new rule forbids a second group's entry for a passage ("No other group gives an entry for the passage"). A report that has such a duplicate breaks "A finding", so the pass must remove one entry. Line 187 allows a drop only for a passage that is not reported. A duplicate cannot be rewritten into something else, nor dropped, and lines 185 and 186 end with it left in place and a line that names the rule it breaks. The pass has no check for the duplicate either.
+  - Failure scenario: the agent's draft report gives a passage with two rules under both groups. The pass notes it, cannot drop it, and hands back both entries plus a self-flag line. The user then applies the same passage twice with two replacements, the conflict that ruling 2 was written to prevent.
+- B2. `7-report.md`, "User-visible changes", the "Elsewhere" bullet.
+  - Hunk: "Elsewhere: a bracket for a vague qualifier offers no "or" alternative that leaves the claim universal. A term the draft never defines is defined in the replacement or its definition is bracketed. Data the paragraph uses for no claim is not reported under "Explanation of evidence"."
+  - What is wrong: three user-visible changes of `/writing`'s report have an after and no before. Before: a bracket could offer an "or" alternative that left the claim universal, a replacement need not define a term the draft never defines, and data used for no claim was reported under "Explanation of evidence". `change-standard.md` rule 7 asks for the before and after of each.
+  - Failure scenario: the user compares step 8's report with step 6's. Brackets with an alternative disappear and findings for data like grant 7.1 are gone. With no before in the change log, the user cannot tell an intended change from a missed break.
+
+### Declined to judge
+- How the changed prompt behaves on the real drafts, and whether the pass and the one-finding form reproduce the markers' right marks, is step 8's run. I did not start the review agent.
+- The brief's premises about git history (`git diff --quiet 1c26ac1 HEAD -- docs/adr`, `git diff --quiet 178bc42 HEAD -- skills/writing`), the pinned copy (`diff -r skills/writing ~/.claude-backup/skills/writing`, `git -C ~/.local/share/ordo-stable describe --tags`), and whether the index equals c99b4a6 (`git diff --cached --quiet c99b4a6`) need git commands outside the three allowed or lie outside the worktree. `git diff c99b4a6 --stat` shows no change under `docs/`, `registers.md` or any ADR, so no ADR text is touched.
+- The report's "`git status --short` before any change printed nothing" describes a past state and cannot be reproduced.
+- The untracked ledger copies in the worktree (`7-cases.md`, `7-round-1.md`, `7-report.md`) equal main's (`diff` exit 0 on each). How the landing's wip commit and cherry-pick treat files already on main would be settled by `git log` and `land.sh`, which I may not run.
+- The hand count of the "22 to 21 words" sentences in the judgment calls: the lead of "The last pass" is 19 words after its label, which I did not treat as a finding.
+
+Reviewer usage: a5ac0aefa8b6630f9, claude-sonnet-5-5, 203204 tokens, 37 tool uses, 6.8 minutes.
+
+## Closed
+
+- First run, S1, P1 to P4, T1 to T3, B1 and B2: closed by repair round 1 (`agents/briefs/7-round-1.md`, rulings 1 to 8). Ruling 2 replaced fix 2's form with one finding per passage that names its other rules. The run over round 1 found each ruling's change in the two skill pages and the report.
+- Run over round 1, T1, T2 and T4: fixed at landing in `skills/writing/SKILL.md`. The passage rule and the two-list place rule are one rule: a passage or place is given once, in the first group that reaches it, names its other rules or term by page and section, and is not given again or referred to. The list-of-places bullet carries the exception as a sub-bullet, and "entry" stands only for an item of a list of places.
+- Run over round 1, T3: fixed at landing in `SKILL.md`. "What you report" says a finding may carry the last pass's line on a rule it still breaks, as part of the finding.
+- Run over round 1, B1: fixed at landing in `SKILL.md`. The last pass drops a finding whose passage an earlier group already gives, and checks that no passage or place is given twice.
+- Run over round 1, T5: fixed at landing in `SKILL.md`. The 31-word bracket sentence and the 28-word still-breaks sentence are split. The added sentences that remain over 20 words run 21 to 23 words.
+- Run over round 1, T6: fixed at landing in `SKILL.md`. The vague-qualifier check says the replacement takes one of the forms "A finding" gives for it.
+- Run over round 1, P1, P2 and B2: fixed at landing in `7-report.md` (the counts 17 and 16, the escaped pipes, and the before and after of each "Elsewhere" change).

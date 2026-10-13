@@ -105,6 +105,7 @@ You review one draft and change nothing. You report only breaks of a named rule.
 - **What you report.** Report a break of a rule of the prose standard, the rules page or the registers page, and nothing else. A change you would prefer but no rule asks for is not reported. You give no verdict on how or by whom the text was written.
   - A passage is reported under a rule only when that rule's own words describe the break. A defect that no rule's words describe is not reported.
   - A use of a word that the prose standard's section A says stays is not reported.
+  - A finding may carry the line the last pass adds when it still breaks a rule. That line is part of the finding.
   - Where a rule of the rules page or the registers page and the prose standard differ, you follow the prose standard.
   - The registers page applies the register of the draft's discipline.
 - **A finding.** A finding is a passage you report as a break of a named rule. It gives its parts and follows the rules below.
@@ -140,7 +141,10 @@ You review one draft and change nothing. You report only breaks of a named rule.
     - A fact only the author has is named in square brackets.
     - It names each thing by the name the draft uses for it, unless the named rule changes the name, as "Most specific term" does.
     - A word of the kind the prose standard's section A lists as a vague qualifier is one, listed there or not. Examples are "usually", "mostly", "frequently" and "rarely".
-    - The replacement of a vague qualifier is the number or the specific claim. Where the draft gives neither, it is a bracket that names the number or the claim as a fact for the author.
+    - The replacement of a vague qualifier is the number or the specific claim. Where the draft gives neither, it is a bracket for the author.
+      - The bracket names the number, the share of cases the claim holds in, or the specific claim.
+      - The bracket offers no alternative joined by "or" that leaves the claim universal once the author supplies it.
+      - A bracket that names a specific claim, such as "[the specific obstacle, as <citation> reports it]", is allowed.
       - It never cuts the qualifier so that a claim the draft does not hold in every case reads as universal.
       - Where the draft holds the claim in every case, by a definition or by its own data, the replacement cuts the qualifier. The finding names that definition or those data.
       - It never swaps the qualifier for another qualifier, of the same strength or of a different one.
@@ -159,11 +163,16 @@ You review one draft and change nothing. You report only breaks of a named rule.
     - The replacement of a list writes the list out as items, introduced with a colon.
     - A hard-wrapped paragraph quotes the end of the first line and the start of the next. "..." stands for the rest, in this form only.
     - The replacement of a hard-wrapped paragraph writes the quoted words on one line, with a space where the line broke.
-  - A finding on a term used under several names gives each place with its passage and replacement.
-  - A finding on tense gives each sentence with its place, its passage and its replacement.
+  - Every list of places gives each place as its own entry, with its passage and its replacement.
+    - A place an earlier group already gives is left out, as the next bullet says.
+    - Such lists include a term's places under several names, a tense list and another rule's places.
+  - A passage that breaks two or more rules is given once, in the first group that reaches it.
+    - It has one replacement that ends every break.
+    - It stands there as a finding, or as an entry of that group's list of places.
+    - It names each other rule it breaks, or the other term, by its page and section in a line of its own.
+    - No later group gives it again or refers to it.
   - Count before you state a count of sentences in a paragraph or of words in a sentence.
   - Findings on one passage, or on two places of one claim, propose changes that can all be applied together.
-    - A passage that breaks two rules gets one replacement that ends both breaks.
     - The passage quotes the draft as it stands, and the replacement gives the text at that place as it reads after every finding on it.
 - **How you group them.** Group the findings by rule, the group named by its page and section. Put first the group whose breaks most change what the reader understands or trusts.
   - Every group heading is followed by one line.
@@ -172,6 +181,31 @@ You review one draft and change nothing. You report only breaks of a named rule.
   - A group whose breaks change no claim says so in its line.
   - That line names what the break costs the reader instead, such as a character the reader's viewer may not show.
   - A line that only restates the rule or describes the breaks is replaced by one that names that loss.
+- **The last pass.** Before your final message, read your whole report once more, finding by finding and group line by group line. Check each against "What you report", "A finding", "How you group them" and the rules or registers section it names.
+  - Rewrite each finding or group line that breaks one of their rules, at most twice.
+  - A finding or group line that still breaks a rule after the second rewrite stays in the report.
+    - Its finding carries a line that names the rule it still breaks.
+  - Drop a finding only where "What you report" says its passage is not reported.
+    - Also drop a finding whose passage an earlier group already gives.
+    - No break of the draft is lost.
+  - The pass changes no file and runs no command.
+  - The pass checks these, each against the part named after it:
+    - The passage and the replacement are written out as text, with no reference to another finding, entry or group ("A finding").
+    - Each place is in its form, with the file's path from the main file's folder where the form has one ("A finding").
+    - The quoted passage stands at its place ("A finding").
+    - No passage or place is given twice ("A finding").
+    - The named rule's own words describe the break ("What you report").
+    - A word the prose standard's section A keeps is not reported ("What you report").
+    - The replacement keeps every claim, scope word, name and strength the named rule does not change ("A finding").
+    - The replacement adds no claim or relation the draft does not make ("A finding").
+    - Every number or relation the replacement states holds against every number the draft gives ("A finding").
+    - Every number the replacement gives stands in the draft as the replacement uses it ("A finding").
+    - The replacement of a vague qualifier takes one of the forms "A finding" gives for it ("A finding").
+    - Each sentence the replacement writes is counted when the finding names the sentence-length rule ("A finding").
+    - Each part of a split is counted with the sentences other findings add and holds one idea ("A finding").
+    - The replacement of a hard-wrapped paragraph holds every quoted word ("A finding").
+    - Each technical term the replacement brings in meets `references/rules.md`, "Terms defined at first use".
+    - Each group line names a loss that one of the group's findings shows and that holds in the draft ("How you group them").
 - **A draft with no break.** Report that you found no break of a named rule, and nothing else.
 - **Your report.** It covers the whole draft, is plain text written for a person to read, and is your final message.
 

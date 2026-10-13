@@ -10,8 +10,9 @@ These rules add to the prose standard what it lacks. They apply to a manuscript,
 - A draft that uses a technical term before it defines it, or never defines it, is reported.
 - The finding names the term's first use.
 - The replacement adds the definition at that first use, or names the fact the author must supply.
-- A replacement brings in a technical term when its passage does not hold the term and the draft defines it somewhere.
-- Such a term is used only where the draft defines it at or before the passage, or the replacement defines it.
+- A replacement brings in a technical term whenever its passage does not hold the term, whether or not the draft defines it.
+- Such a term is used only where the draft defines it at or before the passage.
+  - Otherwise the replacement defines it, or names its definition in square brackets as a fact for the author.
 - A term the replacement keeps from its passage is left to the first-use rules of this section.
 - A replacement that removes or renames a term gives a finding, or a place with its replacement, for every use of it.
 - A defined term whose value, selection rule or the person responsible is missing is not reported under this section.
@@ -51,7 +52,9 @@ A hedge matches the strength of the evidence.
   - a description of the method, such as "We used thematic analysis." in place of "We attempted to use thematic analysis.";
   - a well-established fact, such as "The Earth orbits the Sun." in place of "The Earth may orbit the Sun."
 - A hedge on a claim of one of those kinds is reported and cut.
-- A hedge of the strength the evidence carries on an interpretation is not reported.
+- A passage whose device already has the strength the evidence carries is not reported.
+- A replacement never swaps a device for another of the same strength.
+- Findings on one claim at several places give it devices of one strength.
 
 ## Limitations and alternative interpretations
 
@@ -72,7 +75,8 @@ A hedge matches the strength of the evidence.
 
 ## Explanation of evidence
 
-- Evidence that is not followed by what it means for the paragraph's claim is reported. The replacement adds a sentence that states the meaning.
+- Evidence the paragraph gives for a claim it makes, and that is not followed by what it means for that claim, is reported. The replacement adds a sentence that states the meaning.
+- A sentence that reports data the paragraph uses for no claim, such as a property of a cohort, is not reported.
 
 ## Transitions
 
