@@ -37,20 +37,20 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: 1
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item C (2026-10-13, step 1, kind 3: your written rules). After step 1, `/writing` runs its review agent on the `reviewer` model and reads the `standards` list, but the comments in Ordo's `.agents/plan.yaml` that say who uses those keys would not mention it. For example, line 10 reads `# claude:<model> the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on.` and would leave out `/writing`. The file is your configuration, so self-rule leaves the change to you. Found by the brief check, finding F4 (`agents/reviews/1-brief-check.md`).
-  - (a) Step 1 also changes three comments of `.agents/plan.yaml`. Line 1 becomes `# The project specifics the plan skills read (/plan, /spec, /refute, /land, /ordo-help, plan-orchestration); /writing reads reviewer, reviewer_effort and standards.` Line 10's comment becomes `# claude:<model> the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill and the review of /writing run on.` Line 13's comment becomes `# Files every brief tells the builder to read in full, and the reviewer holds a diff to; /writing reads the prose standard from this list.` Pro: the comments stay true. Con: none beyond the three edits.
-  - (b) The comments stay as they are. Pro: nothing to change. Con: the three comments are incomplete once `/writing` exists. This is the lazy option.
-  - Recommendation: (a).
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-05: Open items Gate 3 and Gate 3b, the gate's conditions, and Open item A, the step list: ruled by Axel.
 - 2026-10-13: Open item B, the project argument of `/writing` (brief check of step 1, finding F7): closed under self-rule, C68.
+- 2026-10-13: Open item C, the comments of `.agents/plan.yaml`: ruled (a) by the user.
 
 ## The standing demands (from Axel, in force)
 
@@ -71,5 +71,5 @@ dispatch: none
 
 ## Current position (rewritten before every step commit)
 
-- 2026-10-13. Step 1 stopped after its brief check, on Open item C; Open item B closed under self-rule (C68). The brief check's report is `agents/reviews/1-brief-check.md`, its Closed heading listing the change to the brief for each finding.
-- Next step: 1, `/spec 3 1` again once Open item C is ruled; it writes the brief with the closed changes and runs no second brief check.
+- 2026-10-13. Step 1 stopped after its brief check, on Open item C, which the user ruled (a); Open item B closed under self-rule (C68). The brief check's report is `agents/reviews/1-brief-check.md`, its Closed heading listing the change to the brief for each finding.
+- Next step: 1, `/spec 3 1` again; it writes the brief with the closed changes and runs no second brief check.
