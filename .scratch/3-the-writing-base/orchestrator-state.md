@@ -47,8 +47,9 @@ dispatch:
   launched: 2026-10-13
   report: .scratch/3-the-writing-base/agents/reviews/4-report.md
   brief_check: .scratch/3-the-writing-base/agents/reviews/4-brief-check.md (ad1ea91040f763510, claude-opus-5-5, 196338 tokens, 47 tool uses, 8.2 minutes)
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/4-refuter.md (a3fe6a6fa48ceb52f, claude-opus-5-5, 328040 tokens, 57 tool uses, 10.8 minutes)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
