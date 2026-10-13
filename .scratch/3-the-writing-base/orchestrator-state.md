@@ -42,7 +42,10 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-none
+- Open item F (2026-10-13, step 3, kind 3: your written rule that `utils/pin.sh` is never run without asking). Step 3 fixes `/writing` and then repeats the two runs. The runs go through the installed `/writing`, which is pinned to `v7.1.0-rc.1` and so does not have the fixes. For example, a fix that stops the review agent from writing a file would not be in the rerun. The fixes reach the runs only once they are on main, tagged and pinned, and that cannot happen inside one step, since a step reaches main only when it lands.
+  - (a) Split step 3 in two: step 3 makes the fixes and lands; main's head is then tagged `v7.1.0-rc.2` and pinned with `sh utils/pin.sh v7.1.0-rc.2` (this ruling approves both); a new step 4 repeats the runs and the marks on the same copies, with step 3's current check; the closing becomes step 5 and tags `v7.1.0` with your approval then. Pro: the rerun tests the fixed skill, as the gate asks; the same split you approved for 2.I (fixes, then pin, then rerun). Con: one more step.
+  - (b) Keep step 3 whole and rerun on the installed `v7.1.0-rc.1`. Con: the rerun tests the old skill, so its marks say nothing about the fixes, and the gate cannot pass honestly.
+  - Recommendation: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -80,4 +83,5 @@ none
 - 2026-10-13. Step 2 prepared at base e00f6bd, executor inline (orchestrator, no agent).
 - 2026-10-13. Step 2 run inline: both `/writing` runs and four markers; refuted (`agents/reviews/2-refuter.md`); repair round 1 sent (`agents/briefs/2-round-1.md`); Open item E closed under self-rule (C69), widening step 3.
 - 2026-10-13. Step 2 landed (`agents/reviews/2-landing.md`).
-- Next: step 3, the fixes, through `/spec 3 3`; its fixes reach the runs only after a new tag and pin, which needs the user's approval.
+- 2026-10-13. Step 3 stopped at its `/spec` premise check on Open item F: the rerun needs the fixes tagged and pinned, which a step cannot do before it lands.
+- Next: the user's ruling on Open item F.
