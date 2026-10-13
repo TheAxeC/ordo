@@ -199,3 +199,5 @@ The step stopped on findings 1.5, 1.6 and 1.8, which are the user's (the open it
 - 8, line 69 (item 11's second sentence): written as a sub-bullet of "**Dictated text.**".
 - 8, the dictated lines longer than prose standard E: their words are fixed by approved proposals; the builder names each under Verify 5.
 - 8, lines 57 and 65 ("handed back"): closed by 1.4.
+- The ruling "Step 1, three clashes in the written rules" (the user): question 1 is item 1's second paragraph, question 2 is item 7, question 3 is item 20; findings 1.5, 1.6 and 1.8 are closed by it.
+- The dictated line added after the check, item 7, "- **A decision is written down when it is given.** A decision the user gives outside a plan's ledger is written into a file in the repository in the same turn, and committed in that turn where the repository's commit rule allows it, so a compaction or a new session finds it.": holds against the rules file and the standards pages; it uses "decision", which the glossary does not reserve, and its length past prose standard E's guide is fixed by the user's ruling, named under the brief's Verify 5.

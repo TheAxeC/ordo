@@ -15,7 +15,7 @@ A user-visible choice: a value of the dispatch entry, a term of the glossary. St
   - Recommendation: (a). The lazy option is (c).
 
 Taken: (a)
-Booked: `.scratch/2-i-several-plans-in-one-session/plan.md:92` (Open item Step 3, how a step in /spec is recorded)
+Booked: `.scratch/archive/2-i-several-plans-in-one-session/plan.md:92` (Open item Step 3, how a step in /spec is recorded)
 Builds on it: step 3
 
 # Entry 2.K The skill-text fixes from the retro and the real run
@@ -30,7 +30,7 @@ The goal part "no breakage testing, in docs/dev/change-standard.md, the repo-set
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:30` (D1 no breakage testing)
-Builds on it: none
+Builds on it: step 1
 
 ## C42. The character-set check reads only files on disk (2026-10-13)
 
@@ -42,7 +42,7 @@ The goal part "the character-set check of docs/dev/building.md and docs/dev/chan
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:31` (D2 the character-set check reads only files on disk)
-Builds on it: none
+Builds on it: step 1
 
 ## C43. Land never settles a clash of two rulings (2026-10-13)
 
@@ -54,7 +54,7 @@ The goal part "land never settles a clash between two of the user's rulings at l
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:32` (D3 land never settles a clash of two rulings)
-Builds on it: none
+Builds on it: step 1
 
 ## C44. Land carries out a ruling only on what it names (2026-10-13)
 
@@ -66,7 +66,7 @@ The goal part "land carries out a ruling only on what it names". What exists now
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:33` (D4 land carries out a ruling only on what it names)
-Builds on it: none
+Builds on it: step 1
 
 ## C45. A ruling given outside a plan is written down (2026-10-13)
 
@@ -78,7 +78,7 @@ The goal part "the shared rules write a ruling given outside a plan into the rep
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:34` (D5 a ruling given outside a plan is written down)
-Builds on it: none
+Builds on it: step 1
 
 ## C46. A proposal says what exists now (2026-10-13)
 
@@ -90,7 +90,7 @@ The goal part "the shared rules have a proposal say what exists now, what change
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:35` (D6 a proposal says what exists now)
-Builds on it: none
+Builds on it: step 1
 
 ## C47. The builder's prompt says a shortcut is a finding (2026-10-13)
 
@@ -102,7 +102,7 @@ The goal part "the builder's prompt says a shortcut is a finding". What exists n
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:36` (D7 the builder's prompt says a shortcut is a finding)
-Builds on it: none
+Builds on it: step 1
 
 ## C48. Roadmap compares the written file with the draft (2026-10-13)
 
@@ -114,7 +114,7 @@ The goal part "roadmap compares the written file with the approved draft before 
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:37` (D8 roadmap compares the written file with the draft)
-Builds on it: none
+Builds on it: step 1
 
 ## C49. A dictated sentence about a script is run first (2026-10-13)
 
@@ -126,7 +126,7 @@ The goal part "a sentence a brief or a round dictates about how a script behaves
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:38` (D9 a dictated sentence about a script is run first)
-Builds on it: none
+Builds on it: step 1
 
 ## C50. The reviewer's git commands (2026-10-13)
 
@@ -138,7 +138,7 @@ The goal part "refute's reviewer runs no git command other than git diff <base>,
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:39` (D10 the reviewer's git commands)
-Builds on it: none
+Builds on it: step 1
 
 ## C51. How a verify command that starts with git reaches a builder (2026-10-13)
 
@@ -150,7 +150,7 @@ The goal part "a verify command that starts with git reaches a builder in a form
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:40` (D11 how a verify command that starts with git reaches a builder)
-Builds on it: none
+Builds on it: step 1
 
 ## C52. A builder's saved report passes the character-set check (2026-10-13)
 
@@ -162,7 +162,7 @@ The goal part "a builder's report saved into the ledger passes the character-set
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:41` (D12 a builder's saved report passes the character-set check)
-Builds on it: none
+Builds on it: step 1
 
 ## C53. A repair round's brief reaches the builder in its worktree (2026-10-13)
 
@@ -174,7 +174,7 @@ The goal part "a repair round's brief reaches the builder in its worktree". What
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:43` (D14 a repair round's brief reaches the builder in its worktree)
-Builds on it: none
+Builds on it: step 1
 
 ## C54. A reviewer's saved report passes the character-set check (2026-10-13)
 
@@ -186,7 +186,7 @@ The goal part "a reviewer's report saved into the ledger passes the character-se
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:44` (D15 a reviewer's saved report passes the character-set check)
-Builds on it: none
+Builds on it: step 1
 
 ## C55. Who writes a reviewer's usage line (2026-10-13)
 
@@ -198,7 +198,7 @@ The goal part "the session writes a reviewer's usage line from the reviewer's co
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:45` (D16 who writes a reviewer's usage line)
-Builds on it: none
+Builds on it: step 1
 
 ## C56. How a closing step runs beside the other steps (2026-10-13)
 
@@ -210,7 +210,7 @@ The goal part "plan-orchestration says whether a closing step goes through /spec
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:46` (D17 how a closing step runs beside the other steps)
-Builds on it: none
+Builds on it: step 1
 
 ## C57. The builder's git rule (2026-10-13)
 
@@ -222,19 +222,7 @@ The goal part "the builder's git rule reads the same in plan-orchestration and i
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:47` (D18 the builder's git rule)
-Builds on it: none
-
-## C58. The report that holds the NOT DONE items (2026-10-13)
-
-The goal part "plan-orchestration Reports says which report holds the NOT DONE items and the DONE / NOT DONE ledger". What exists now: the last bullet of "Reports" reads "Then anything NOT DONE first, then the DONE / NOT DONE ledger naming the command that proves each row." after bullets on both reports; `land` Steps 11 already has the landing report state anything NOT DONE (run finding 8 of the second run).
-  - Option (a), recommended: the bullet belongs to the orchestrator's report: after the landed steps and the choices, anything NOT DONE in the run first, then the DONE / NOT DONE ledger, one row per step landed or stopped, each naming the landing report or the open item that proves it. Pro: the run's one report says what is not done, which the second run's report did not. Con: none.
-  - Option (b): the bullet belongs to the landing report. Con: `land` Steps 11 already says it, so the orchestrator's report keeps no NOT DONE.
-  - Industry: no source read in this session bears on this rule; the option rests on the source the decision names.
-  - Recommendation: (a). The lazy option is (b).
-
-Taken: (a)
-Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:48` (D19 the report that holds the NOT DONE items)
-Builds on it: none
+Builds on it: step 1
 
 ## C59. Each changed skill's version raised (2026-10-13)
 
@@ -246,7 +234,7 @@ The goal part "each changed skill's version is raised as docs/dev/skill-layout.m
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:49` (D20 each changed skill's version raised)
-Builds on it: none
+Builds on it: step 1
 
 ## C60. The gate's grep and fresh reviewer (2026-10-13)
 
@@ -258,7 +246,7 @@ The gate part "each fix's sentence is found in its file by grep -n -F of its tex
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:50` (D21 the gate's grep and fresh reviewer)
-Builds on it: none
+Builds on it: step 1
 
 ## C61. The gate's deleted-file worktree run (2026-10-13)
 
@@ -270,7 +258,7 @@ The gate part "the character-set check of docs/dev/building.md, run in a worktre
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:52` (D23 the gate's deleted-file worktree run)
-Builds on it: none
+Builds on it: step 1
 
 ## C62. The gate's version check (2026-10-13)
 
@@ -282,7 +270,7 @@ The gate part "each changed skill's version read against docs/dev/skill-layout.m
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:53` (D24 the gate's version check)
-Builds on it: none
+Builds on it: step 1
 
 ## C63. The gate's checks.sh run (2026-10-13)
 
@@ -294,7 +282,7 @@ The gate part "sh skills/land/templates/checks.sh passes". What exists now: the 
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:54` (D25 the gate's checks.sh run)
-Builds on it: none
+Builds on it: step 1
 
 ## C64. The gate's land.test.sh case (2026-10-13)
 
@@ -306,7 +294,7 @@ The gate part "`sh skills/land/templates/land.test.sh 2>&1 | tail -1` prints a P
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:51` (D22 the gate's land.test.sh case)
-Builds on it: none
+Builds on it: step 1
 
 ## C65. The roadmap diff of entry 2.K (2026-10-13)
 
@@ -318,7 +306,7 @@ No answer of the interview changes the entry's goal, its gate or what it waits o
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:55` (D26 the roadmap diff of entry 2.K)
-Builds on it: the roadmap diff of entry 2.K
+Builds on it: the roadmap diff of entry 2.K, step 1
 
 ## C66. Record as ADR? (2026-10-13)
 
@@ -330,7 +318,7 @@ D13 refines ADR 0010's Consequences sentence; the other decisions are skill text
 
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:56` (D27 record as ADR?)
-Builds on it: none
+Builds on it: step 1
 
 ## C67. The step list of plan 2.K as drafted (2026-10-13)
 
