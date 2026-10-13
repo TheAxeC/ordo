@@ -10,7 +10,9 @@ These rules add to the prose standard what it lacks. They apply to a manuscript,
 - A draft that uses a technical term before it defines it, or never defines it, is reported.
 - The finding names the term's first use.
 - The replacement adds the definition at that first use, or names the fact the author must supply.
-- The replacement introduces no term before the place the draft defines it.
+- A replacement brings in a technical term when its passage does not hold the term and the draft defines it somewhere.
+- Such a term is used only where the draft defines it at or before the passage, or the replacement defines it.
+- A term the replacement keeps from its passage is left to the first-use rules of this section.
 - A replacement that removes or renames a term gives a finding, or a place with its replacement, for every use of it.
 - A defined term whose value, selection rule or the person responsible is missing is not reported under this section.
 - A sentence that states a criterion other than the one the author meant is not reported under this section.
@@ -19,6 +21,7 @@ These rules add to the prose standard what it lacks. They apply to a manuscript,
 
 - The most specific term available is used. A general word where a more specific term exists for the same thing is reported. The replacement is the specific term.
 - A word that is the right term for what it names is not reported under this section.
+- A word that the draft's own tables or figures use for the measure it names is the right term.
 - A missing number or threshold is not reported under this section.
 
 ## Clear antecedents
@@ -42,6 +45,7 @@ A hedge matches the strength of the evidence.
   - a generalization from a limited sample;
   - an interpretation with alternative explanations.
 - Such a claim stated without a hedge, or with a strong device the evidence does not carry, is reported. The replacement uses a device of the strength the evidence carries.
+- The replacement changes the device and keeps the claim it hedges.
 - A claim of one of these kinds is not hedged:
   - reported factual data, such as "The response rate was 78%." in place of "The response rate appeared to be 78%.";
   - a description of the method, such as "We used thematic analysis." in place of "We attempted to use thematic analysis.";
@@ -56,7 +60,8 @@ A hedge matches the strength of the evidence.
 ## Evidence for claims
 
 - A claim with neither evidence nor a citation is reported. The replacement adds the evidence or the citation, or names the fact the author must supply.
-- Evidence the draft gives in its text, a table or a figure counts, cited or not. A claim that has such evidence is not reported under this section.
+- The replacement adds no hedge that no other finding on the passage asks for.
+- Evidence the draft gives anywhere counts, cited or not: in a later sentence or paragraph as in an earlier one, and in a table or a figure. A claim that has such evidence is not reported under this section.
 - A claim that the draft's own data hold only in part is reported under "Limitations and alternative interpretations". The replacement is the limit.
 - A number or a claim that the draft's own data contradict is a question of content. No rule of the review covers it.
 
@@ -119,6 +124,7 @@ At every point of the draft a reader can answer four questions. A passage after 
 - A section whose text does not answer its reader's question is reported.
 - The replacement does what the last column says.
 - A first sentence that states the section's contribution is not reported for being general.
+- An Introduction whose opening states a real-world consequence or a knowledge gap answers the question of its row and is not reported.
 
 | Section | The reader asks | The section does |
 |---|---|---|
@@ -205,4 +211,9 @@ These rules apply in a manuscript or a grant.
 
 - A contraction is reported. The replacement is the full form, such as "do not" for "don't".
 - A colloquial word or a slang term is reported. The replacement is the formal academic word.
-- A sentence that carries two ideas that could stand alone is reported. The replacement splits it. Clearly connected ideas may share a sentence.
+  - A colloquial word that carries strength, such as an intensifier, is replaced by a formal word of the same strength.
+  - A word that the prose standard's section A bans as filler is left to that section, which cuts it.
+- A sentence that carries two ideas that could stand alone is reported. The replacement splits it.
+  - The finding names the two ideas the sentence carries, each a claim the reader can take without the other.
+  - A clause that states the cause or the consequence of the other clause is part of its idea and is not split from it.
+  - Two clauses joined by a concession or a contrast are two ideas when each is a claim, and a split between them is allowed.

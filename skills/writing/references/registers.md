@@ -11,6 +11,7 @@ The prose standard's actor test decides where the passive is used: where the act
   - "The authors chose a learning rate of 0.01." is reported, and the replacement is "We chose a learning rate of 0.01."
 - **The Social Sciences.** The researcher's decisions take "we". A procedure takes the passive where the participants or the instrument matter.
 - The authors are never referred to in the third person.
+- The replacement of a third-person reference to the authors is "we", also for a draft with one author, and never "I" or "my".
 - A venue's author guidelines, when the project names the venue, hold over these rules.
 
 ## Sciences (Natural, Applied)

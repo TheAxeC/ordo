@@ -177,3 +177,147 @@ Cases of the brief's "Cases":
 - Whether "Transformer" or "MRI" are defined at or before `main.tex:45`, which would decide whether manuscript 33 also breaks `rules.md:13`: I did not check it, so 33 is not named under Standards 2.
 
 Reviewer usage: abc52e37d862af422, claude-opus-5-5, 290609 tokens, 45 tool uses, 10.4 minutes.
+
+## Repair round 1, refuted (run over the worktree .agents/worktrees/3-the-writing-base-5, base e691c84, snapshot .agents/worktrees/3-the-writing-base-5-round-1)
+
+```
+$ printf '%s\0' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md .scratch/3-the-writing-base/agents/reviews/5-report.md | xargs -0 sh -c '...' sh | xargs -0 perl -CSD -ne '...'; echo "charset exit $?"
+charset exit 0
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ grep -n -E '[^[:space:]] - | -- ' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md; echo "dash exit $?"
+dash exit 1
+$ grep -n -F -e 'the same two sentences' -e 'stated as usual' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md; echo "phrase exit $?"
+phrase exit 1
+$ git status --short
+ M skills/writing/SKILL.md
+ M skills/writing/references/registers.md
+ M skills/writing/references/rules.md
+?? .scratch/3-the-writing-base/agents/briefs/5-round-1.md
+?? .scratch/3-the-writing-base/agents/reviews/5-report.md
+$ git diff e691c84 --stat
+ skills/writing/SKILL.md                | 46 +++++++++++++++++++++++++---------
+ skills/writing/references/registers.md |  1 +
+ skills/writing/references/rules.md     | 17 ++++++++++---
+ 3 files changed, 49 insertions(+), 15 deletions(-)
+$ wc -l skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md .scratch/3-the-writing-base/agents/reviews/5-report.md
+     204 skills/writing/SKILL.md
+     219 skills/writing/references/rules.md
+      53 skills/writing/references/registers.md
+     272 .scratch/3-the-writing-base/agents/reviews/5-report.md
+$ for p in SKILL.md references/rules.md references/registers.md templates/docx_paragraphs.py; do git show e691c84:skills/writing/$p | diff -q - ~/.claude-backup/skills/writing/$p >/dev/null; echo "$p base-vs-pinned exit $?"; done
+SKILL.md base-vs-pinned exit 0
+references/rules.md base-vs-pinned exit 0
+references/registers.md base-vs-pinned exit 0
+templates/docx_paragraphs.py base-vs-pinned exit 0
+$ git -C ~/.local/share/ordo-stable describe --tags
+v7.1.0-rc.2
+$ head -8 skills/writing/SKILL.md | sed -n 4,6p
+metadata:
+  version: "1.0.0"
+---
+$ for p in SKILL.md references/rules.md references/registers.md; do git show e691c84:skills/writing/$p | wc -l; done
+182
+208
+52
+$ grep -n -E '^\- \*\*place' docs/glossary.md | cut -c1-60
+77:- **place, of a defect**: an operation of any kind, such 
+78:- **place, of a point**: one line of the reader's output 
+$ cmp .scratch/3-the-writing-base/agents/reviews/5-report.md /Users/axelfaes/workspace/ordo/.scratch/3-the-writing-base/agents/reviews/5-report.md; echo "cmp exit $?"
+cmp exit 0
+```
+
+The greps the report quotes for ruling 5, run in the read-only manuscript copy:
+
+```
+$ grep -rn -i -F 'exponential moving average' sections tables
+sections/appendix/a_implementation/3_hyperparams.tex:3:  (a use: "increased the initial momentum of the exponential moving average update")
+sections/3_methodology/d_pretraining.tex:3:  (a use: "the teacher is built as an exponential moving average of the student")
+sections/4_experiments/b_implementation.tex:1:  (a use: "increase the initial exponential moving average momentum")
+tables/hyperparams.tex:29:        Exponential Moving Average & 0.9995 & - & - & - \\
+ema exit 0
+$ grep -rn -i -F 'feed-forward' .
+ff exit 1
+$ grep -rn -i 'layer normali[sz]ation' sections
+ln exit 1
+```
+
+The report says these print the four places and nothing for the other two. They do. The only claim of the report I could not rerun in its form is `diff -r skills/writing ~/.claude-backup/skills/writing` printing nothing, which was a statement about the unchanged tree; on the changed tree it prints the differences, so I reproduced it as the four `git show e691c84:... | diff -q` exits above. The word counts of the report's new forms for grants 4, 7, 11, 12, 24 and 26 were rerun by a per-sentence word count (citation markers left out), and the counts of paragraphs 31, 35, 41 and 42 of the grant draft were rerun from `docx_paragraphs.py` on the copy.
+
+The round's delta, `diff -u` of each path of files.txt, snapshot against worktree: `SKILL.md` has 3 hunks (the passage bullet at line 120 to 121; the scope-word sub-bullets at 133 to 134, the name exception at 141, the vague-qualifier bullets at 142 to 145; the split-count bullet at 156); `references/registers.md` has none; `references/rules.md` has 4 hunks (Terms defined at first use, lines 13 to 15; Reader's question per section, line 127; Vague language, the sentence "The replacement stands in the place of "many"" removed; Formality, line 214). No path changed that files.txt does not list, apart from the report and the round brief, both untracked.
+
+### Verdicts
+
+Items of the brief's "What to build", in its numbering, for the whole diff since e691c84:
+
+- 1: holds. `SKILL.md` "A finding": "A passage is never a description of the draft's text or a reference to another finding." (line 122), "It is never a reference to another finding or to the passage, such as "as in finding N", "the same sentence" or "the replacement of finding N". It writes the text those words point at." (126), "The replacement of a paragraph split writes both sentences out whole, with an empty line between them." (155), 150, 159, 161, 163. Verify 4 prints nothing.
+- 2: holds. `SKILL.md` 167: "The passage quotes the draft as it stands, and the replacement gives the text at that place as it reads after every finding on it." The two old sentences are not in the file.
+- 3: holds. Spec 2 of the first run is closed: line 120 "A passage may be a phrase, a clause or a sentence.", 121 "A paragraph split quotes the two sentences that the forms for a split below name.", 153 and 160.
+- 4: holds. `SKILL.md` 117.
+- 5: holds as the rulings of the round shape it (ruling 1 removes "in the qualifier's place" and conditions the never-cut sentence; ruling 7 removes the "stands in the place of "many"" sentence). `SKILL.md` 142 to 147, `rules.md` "Vague language" row "many studies" kept, line 131's old sentence gone (Verify 4).
+- 6: holds. `rules.md` 214 and 215.
+- 7: holds. `SKILL.md` 133 to 135 and 137, `rules.md` 48. The first run's contradiction (Standards 1) is closed: 133 reads "A word that sets a claim's scope, such as an article or a quantifier, is kept unless the named rule replaces it." as a sub-bullet of 132.
+- 8: holds. `rules.md` 63 and 64.
+- 9: holds. `rules.md` 24.
+- 10: holds as ruling 6 narrows it. `rules.md` 127: "An Introduction whose opening states a real-world consequence or a knowledge gap answers the question of its row and is not reported."
+- 11: holds. `SKILL.md` 148, 156 and 157.
+- 12: holds. `rules.md` 217 to 219. The removal of "Clearly connected ideas may share a sentence." is replaced by the report's judgment call 3 with the ground marker 2 gives and the widening stated.
+- 13: holds as ruling 5 words it. `rules.md` 13 to 15, `SKILL.md` 131 and 141. Manuscript 35 and 36 stay as the ruling says (rerun greps above).
+- 14: holds. `registers.md` 14.
+- 15: holds. `SKILL.md` 170 to 174.
+- 16: holds. `SKILL.md` 102.
+
+Cases of the brief's "Cases":
+
+- C1: met. The reference and description forms of kind 1's list break `SKILL.md` 122 or 126; the replacements of 64 (first break), 67 and 69 break 155; the tense clauses "as in finding N" break 126 and 163.
+- C2: met. Split 35 (b) and grant 16 against 42 (e) break 167.
+- C3: met. The shortened quotes of the splits and lists break 153; a one-sentence phrase passage stays allowed by 120.
+- C4: met. `SKILL.md` 117.
+- C5: met. 37 and 38 (cut) break 144, 54 and 55 ("usually") break 146, 56 and 59 ("such as [...]") break 147; line 131's old sentence is gone.
+- C6: met. 62 and 85 break `rules.md` 214.
+- C7: met. The limits of 1, 2, 40 and 47 and the two tense clauses break `SKILL.md` 137 (AUPRC for T1 DCE-MRI runs 0.329 to 0.628, for DW-MRI 0.507 to 0.725, for T1 IOP & T2-MRI 0.373 to 0.519 in `tables/results_finetune.tex`); grant 28 and manuscript 51 "therefore" break 135; grant 32 breaks 133; manuscript 7 breaks `rules.md` 48.
+- C8: met. `rules.md` 63 and 64.
+- C9: met. `rules.md` 24 (group means of accuracy 0.854, 0.811, 0.799 in `tables/results_finetune.tex`).
+- C10: met. `rules.md` 127.
+- C11: met. Grant 15 breaks `SKILL.md` 157; 68 and 72 break 156; grant 4 (sentences of 28 and 31 words, rerun count) breaks 148 as the standard's "roughly 20 words" reads. See Proof 1 for the report's second reading of the same sentence.
+- C12: met. `rules.md` 217 to 219.
+- C13: met. Grant 3 and 4 break `rules.md` 13 and 14 ("sequence" is defined in paragraph 40 of the grant, after paragraphs 31 and 35); grant 8 breaks `SKILL.md` 131; grant 33 breaks 141.
+- C14: met. `registers.md` 14.
+- C15: met. `SKILL.md` 170 to 173.
+- C16: met. `SKILL.md` 102.
+- C17: partial. The corrections the round asked for hold for manuscript 25, 58, 61, 35, 36 and grant 17 to 21 (reproduced against 133, 142 to 145 and `rules.md` 13 to 15). The missing part is in Proof 1 and Proof 2: the new forms of grant 7 and 11 are not what `SKILL.md` 148 leads to, and grant 30 and 33 are not given in a new form.
+
+### Findings
+
+Spec: none. The round's changes are the eleven rulings and nothing more: `git diff e691c84` shows no sentence outside them, no dependency, and no name of a draft, project, person, finding number or this plan in the three files (grep over the added lines for HCC, MRI, ConvNeXt, Transformer, manuscript, grant, step, plan 3, round, AUPRC, MAE and dates printed nothing). No ADR is contradicted: ADR 0001 (no copy of the prose standard) holds, since `SKILL.md` 142 and 148 name section A and the sentence-length rule without restating them; ADR 0002 and 0003 are not touched by a contradiction I can find (see Declined to judge for the one reading that is the user's).
+
+Proof:
+
+- Proof 1. `5-report.md`, "The cases' first run", C17 part 4 and "Judgment calls" 2, against `SKILL.md:148`: "Where the finding names the prose standard's rule on sentence length, it leaves each sentence it writes within that rule." What is wrong: judgment call 2 reads section E as "about 25 words or fewer, a longer one only where its length enumerates the parts of one thing". No sentence of the skill or of the standard gives that reading; the standard gives "under roughly 20 words unless the mechanism needs more", and `SKILL.md:148` points only at it. The reading is applied one way to the report's own forms and another way to grant 4. Rerun counts: grant 11's new form has sentences of 28 and 29 words; grant 7's new form has "The detection limit of the divergence score (a study's distance from the patient's earlier usable studies) is fixed in advance by inserting changes of known size into real liver scans." at 30 words, which enumerates nothing, and grant 7's passage names section E "Sentence length" (grant report finding 7), so `:148` reaches it; the report counts grant 7 only for its old form (17 and 21 words) and calls it "within the rule". Against that, C11 and the findings-table row for grant 4 say `:148` forbids grant 4's 28-word sentence ("The tested study is the latest usable study (all non-contrast sequences present) at least 12 months before the clinical diagnosis date, with at least one earlier usable study.", three conditions of one thing) and its 31-word sentence (one quantity, defined). Under the report's own exception both would pass; under the standard's "roughly 20" the report's forms for grants 7 and 11 would not. The decision that rests on it: whether C17 is closed for ruling 8 and whether the first line "Everything in the brief and in the eleven rulings of repair round 1 is done" holds. Failure scenario: step 6's review agent, reading `:148` and the standard, writes the replacements of paragraphs 35 and 41 in sentences of about 20 words; or it follows the report's forms, and a marker applying marker 2's standard of step 4 (28 and 31 words wrong) marks grant 7 and 11 wrong. Verdict: C17 partial.
+- Proof 2. `5-report.md`, C17 part 4, "Grant 33: the list passage is quoted whole and the replacement names the scan-to-scan variation of cirrhotic tissue as the draft does; grant 30: the list passage is quoted whole. Both are in the findings table." What is wrong: ruling 8 names grant 30 to 34 and asks that a finding whose form changes is given in its new form. The findings table rows G25 and G26 name only the sentences; neither the quoted passage nor the replacement of 30 or 33 is written out, as parts 2 to 4 do for the others. Manuscript 19's new form is given as "..., enticing recent studies to extend the analysis ... \citep{[citations, from the author]}" with its first part elided. Also, C17 part 1 cites `tables/results_finetune.tex` for the limit of manuscript 3 and 4 ("for DW-MRI and T1 DCE-MRI"); the numbers that carry it are in `tables/results_pretrain_ablation.tex` (CNN backbone only 0.672 and 0.524 against Transformer encoder only 0.310 and 0.361; T1 IOP & T2-MRI 0.447 against 0.457). The limit holds there, so no decision rests on the path. The decision that rests on the first two: whether ruling 8 is done for 30, 33 and 19. Failure scenario: the orchestrator accepts C17 as complete; at step 6 the replacement of grant 33 (the third name "of cirrhotic livers" against the draft's "scan-to-scan variation of cirrhotic tissue", paragraph 35) and of grant 30 have no recorded form to be compared with. Verdict: C17 partial.
+
+Standards: none. The delta's sentences of 24 words or more (rerun count: 24, 27, 26, 24, 25, 24, 27, 24, 24) are all named in judgment call 10 with the reason; the two the first run flagged are now 22 and 20 words or split; the two ruled sentences have no semicolon, no spaced hyphen and no history; the layout's one-rule-per-bullet rule holds for the added bullets (156 and 145 carry a qualifier or the naming of the data in a second sentence, which I read as the limit of the rule they stand with). No sentence of a document or head comment is made false: grep for "Clearly connected", "stands in the place", "in the qualifier", "introduces no term", "Introduction row", "share a sentence" and "keeps a claim that holds" over `skills`, `docs`, `README.md` and `utils` prints nothing.
+
+Behaviour:
+
+- Behaviour 1. `5-report.md`, "Every host- or user-visible change", the bullet on terms: "The reader sees replacements that carry a short definition, such as "radiomic features (computer-extracted image features)"."; and C17 part 3, grant 14: ""radiomic features (computer-extracted image features)" brings in a term, which the replacement defines". What is wrong: `rules.md` 13 reaches a term "when its passage does not hold the term and the draft defines it somewhere". "radiomic" occurs in the grant only in the titles of references 8 (paragraph 57 and 58 of the `docx_paragraphs.py` output: `grep -n -i -o '.\{50\}radiomic.\{50\}'` prints those two lines); no sentence defines it. The parenthesis in grant 14 comes from "Most specific term", not from the terms rule. The report's example therefore names a replacement the new sentence does not produce. The decision that rests on it: what the orchestrator and the user expect step 6's reports to show from the terms sentence. Failure scenario: step 6's grant report gives no definition for a term the draft never defines (as `rules.md` 13 to 15 intend), and the orchestrator reads that as a regression against this statement. Verdict: none (the sentence in `rules.md` is as ruling 5 words it).
+
+### Declined to judge
+
+- Verify 5 in the form the brief gives it, `git diff 1c26ac1 -- skills/writing`: a git command other than the three allowed. I read `git diff e691c84` whole and checked the base's four files equal the pinned `v7.1.0-rc.2` copy (exit 0 above). `git diff 1c26ac1 e691c84 -- skills/writing` would settle that main at 1c26ac1 equals the base.
+- Whether the changed text makes the review agent report right findings: that is step 6's runs and marks.
+- Whether `SKILL.md` 145 (the cut of a vague qualifier where the draft holds the claim in every case) is "the specific claim" of the prose standard's section A, and whether 142 ("listed there or not") widens section A past its words under ADR 0002: the first follows ruling 1 and the second is a reading of the standard that is the user's.
+- The sentence counts of the draft paragraphs behind manuscript 68 and 72: I took the markers' counts and did not recount the manuscript copy. I recounted grant paragraphs 31, 35, 41 and 42 against the report's part counts (41: 4, 1, 5 and 7 sentences; 42: 1, 3, 3, 4, 4 and 1; 35 and 31 consistent) and they hold.
+- Grant findings 3, 8, 29 splits 34 (a), 40 (a) and (b) and 42 (a) to (d), 31 (c) and (d): read against the new sentences only for the points above; a claim-by-claim comparison of every new form against its draft passage was not made, only for grants 4, 7, 11, 12, 24, 26, 28, 32 and 33 and the manuscript findings of C17.
+- Whether "we" for a draft with one author (`registers.md` 14) is the right rule: ruling D18, the user's.
+- Whether the draft "defines" the phrase exponential moving average at `d_pretraining.tex:3` ("where the teacher is built as an exponential moving average of the student"), which would make manuscript 35's replacement break `rules.md` 14: the ruling reads it as a use, not a definition, and I followed the ruling.
+- The output of `docx_paragraphs.py` for the grant copy was written to a scratch file in the session scratchpad (`.../scratchpad/grant-paras.txt`), outside the repository and the ledger, for the paragraph reads above. Nothing else was written.
+
+Reviewer usage: ac11b15dbd17b34b2, claude-sonnet-5-5, 314172 tokens, 55 tool uses, 12.1 minutes.
+
+## Closed
+
+- First run, Spec 1, Spec 2, Proof 1, Proof 2, Standards 1 to 4, Behaviour 1 and 2: closed by repair round 1 (`agents/briefs/5-round-1.md`, rulings 1 to 11). The run over round 1 found the rulings' changes in the three files and nothing beyond them.
+- Run over round 1, Proof 1: fixed at landing in `5-report.md`. Grant 7 and 11 are given in sentences of 24 words or fewer, the C17 part 4 opening and judgment call 2 read section E as the markers of step 4 read it (grant 26 at 24 words right, grant 4 at 28 and 31 words wrong), and the paragraph 41 part counts follow grant 11's four sentences.
+- Run over round 1, Proof 2: fixed at landing in `5-report.md`. Grant 30 and 33 are written out with whole passages and their replacements, grant 33 with the draft's name "the scan-to-scan variation of cirrhotic tissue", manuscript 19 is written out whole, and the limit of manuscript 3 and 4 cites `tables/results_pretrain_ablation.tex`.
+- Run over round 1, Behaviour 1: fixed at landing in `5-report.md`. The example of a defined term is grant 12's "the divergence score (a study's distance from the patient's earlier usable studies)", and grant 14's parenthesis is named as the change "Most specific term" asks, "radiomic" being defined nowhere in the grant.
