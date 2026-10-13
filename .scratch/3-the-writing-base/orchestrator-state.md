@@ -46,8 +46,9 @@ dispatch:
   session_id: inline
   launched: 2026-10-13
   report: .scratch/3-the-writing-base/agents/reviews/6-report.md
-  round: 0
+  round: 1
   brief_check: .scratch/3-the-writing-base/agents/reviews/6-brief-check.md (a3e0cceb00ecca6b5, claude-opus-5-5, 197104 tokens, 48 tool uses, 7.6 minutes)
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/6-refuter.md (a93f0aad040198357, claude-opus-5-5, 59333 tokens, 66 tool uses, 9.5 minutes)
   landing: not-started
 ```
 
