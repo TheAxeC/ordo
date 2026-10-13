@@ -37,15 +37,15 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch: none
+dispatch:
+- step: 3
+  brief_check: "running: ac0b534b48b96acce"
+  landing: preparing
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item F (2026-10-13, step 3, kind 3: your written rule that `utils/pin.sh` is never run without asking). Step 3 fixes `/writing` and then repeats the two runs. The runs go through the installed `/writing`, which is pinned to `v7.1.0-rc.1` and so does not have the fixes. For example, a fix that stops the review agent from writing a file would not be in the rerun. The fixes reach the runs only once they are on main, tagged and pinned, and that cannot happen inside one step, since a step reaches main only when it lands.
-  - (a) Split step 3 in two: step 3 makes the fixes and lands; main's head is then tagged `v7.1.0-rc.2` and pinned with `sh utils/pin.sh v7.1.0-rc.2` (this ruling approves both); a new step 4 repeats the runs and the marks on the same copies, with step 3's current check; the closing becomes step 5 and tags `v7.1.0` with your approval then. Pro: the rerun tests the fixed skill, as the gate asks; the same split you approved for 2.I (fixes, then pin, then rerun). Con: one more step.
-  - (b) Keep step 3 whole and rerun on the installed `v7.1.0-rc.1`. Con: the rerun tests the old skill, so its marks say nothing about the fixes, and the gate cannot pass honestly.
-  - Recommendation: (a). The lazy option is (b).
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -54,6 +54,7 @@ dispatch: none
 - 2026-10-13: Open item C, the comments of `.agents/plan.yaml`: ruled (a) by the user.
 - 2026-10-13: Open item D, `/writing` not installed for step 2: ruled (a) by the user, tag `v7.1.0-rc.1` and pin.
 - 2026-10-13: Open item E, where the gate failures of step 2's runs are fixed (refuter of step 2, finding S1): closed under self-rule, C69.
+- 2026-10-13: Open item F, the rerun of step 3 needs a pin: ruled (a) by the user, step 3 split, tag `v7.1.0-rc.2` and pin after step 3 lands.
 
 ## The standing demands (from Axel, in force)
 
@@ -84,4 +85,5 @@ dispatch: none
 - 2026-10-13. Step 2 run inline: both `/writing` runs and four markers; refuted (`agents/reviews/2-refuter.md`); repair round 1 sent (`agents/briefs/2-round-1.md`); Open item E closed under self-rule (C69), widening step 3.
 - 2026-10-13. Step 2 landed (`agents/reviews/2-landing.md`).
 - 2026-10-13. Step 3 stopped at its `/spec` premise check on Open item F: the rerun needs the fixes tagged and pinned, which a step cannot do before it lands.
-- Next: the user's ruling on Open item F.
+- 2026-10-13. Open item F ruled (a) by the user: step 3 the fixes, then tag `v7.1.0-rc.2` and pin, step 4 the repeated runs, step 5 the closing.
+- Next: step 3, through `/spec 3 3`.
