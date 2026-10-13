@@ -76,7 +76,16 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: waits on nothing; it is next.
+- 2: waits on Open item D, `/writing` not installed.
+
+### Step 2, the runs: Step 0 (stopped 2026-10-13)
+
+- Open item D (2026-10-13, step 2, kind 3: your written rule that `utils/pin.sh` is never run without asking). Step 2 runs `/writing` on copies of the manuscript and a grant, but `/writing` is not installed: it exists only in the repository since step 1 landed, and the installed skills are pinned to `v7.0.0`, which has no `skills/writing/`. For example, `ls ~/.claude-backup/skills/writing` prints "No such file or directory". So the Skill tool cannot run it.
+  - (a) Tag `v7.1.0-rc.1` on main's head and run `sh utils/pin.sh v7.1.0-rc.1`, so every installed skill moves to that tag and `/writing` is installed; step 2 then invokes it through the Skill tool. The closing step later tags `v7.1.0` and pins it, with your approval then. Pro: the runs test the skill as it is installed, as plan 2.I's step 2 did with `v6.0.0-rc.1`. Con: the skills in use switch to the release candidate mid-plan; outside `skills/writing/`, step 1 changed 21 lines of them (`git diff --stat v7.0.0 HEAD`): the five agent definitions name `writing`, the `plan` template's comments, the prose standard's two openers, four glossary terms and two version lines.
+  - (b) Step 2 waits and nothing is pinned. Con: the gate needs the runs, so plan 3 cannot finish.
+  - The lazy option is running the skill's text by hand without installing it, which the rule that a skill's work is done by invoking the skill forbids, so it is not offered.
+  - Recommendation: (a).
+
 
 ### Step 1, the writing base and `/writing`: Step 0 (stopped 2026-10-13; Open item C ruled (a) by the user 2026-10-13)
 
