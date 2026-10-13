@@ -46,9 +46,11 @@ dispatch:
   base: 4c51680
   launched: 2026-10-13
   report: .scratch/3-the-writing-base/agents/reviews/1-report.md
+  builder_usage: 161914 tokens, 124 tool uses, 26.5 minutes
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/1-refuter.md (ad97ac04e6f24c9ae, claude-opus-5-5, 288794 tokens, 70 tool uses, 12.0 minutes)
   brief_check: .scratch/3-the-writing-base/agents/reviews/1-brief-check.md (ac0e79251e07d0d2c, claude-opus-5-5, 236990 tokens, 70 tool uses, 12.9 minutes)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -82,4 +84,5 @@ none
 
 - 2026-10-13. Step 1 stopped after its brief check, on Open item C, which the user ruled (a); Open item B closed under self-rule (C68). The brief check's report is `agents/reviews/1-brief-check.md`, its Closed heading listing the change to the brief for each finding.
 - 2026-10-13. Step 1 prepared at base 4c51680 and its builder launched (ad8dec496562b2dbf, claude-sonnet-5-5).
-- Next: step 1's report, then `/refute 3 1`.
+- 2026-10-13. Step 1 built and refuted (`agents/reviews/1-refuter.md`); repair round 1 sent with the rulings in `agents/briefs/1-round-1.md`.
+- Next: the round's reply, then `/refute 3 1` over round 1, then `/land 3 1`.
