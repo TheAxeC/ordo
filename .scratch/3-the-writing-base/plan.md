@@ -67,7 +67,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item D (2026-10-13): (a), main's head is tagged `v7.1.0-rc.1` and pinned with `sh utils/pin.sh v7.1.0-rc.1`, so `/writing` is installed and step 2 invokes it through the Skill tool; the closing tags `v7.1.0` and pins it with the user's approval then; the lazy option, running the skill's text by hand, was not offered (the user).
 - Open item E (2026-10-13): (a), step 3 also fixes, in `skills/writing/SKILL.md` or `skills/writing/references/`, each failure of a gate condition on the runs that step 2's report `agents/reviews/2-report.md` names, the way the session invokes the runs included, and its check also reads each condition of the gate on the repeated runs from their reports and transcripts; the lazy option was (b), step 3 as written, which leaves those failures to the closing (self-rule).
 - Open item F (2026-10-13): (a), step 3 is split: step 3 makes the fixes and lands, main's head is then tagged `v7.1.0-rc.2` and pinned with `sh utils/pin.sh v7.1.0-rc.2`, step 4 repeats the runs and the marks on the same copies with the pinned skill and takes step 3's former check, and the closing becomes step 5, tagging `v7.1.0` with the user's approval then; the lazy option was (b), the rerun on `v7.1.0-rc.1` (the user).
-- Open item G (2026-10-13): (a), the two markers of the manuscript run of step 4 read the report from `agents/reviews/4-run/manuscript-report.md`, given by path, in place of the report written into their prompts; the file equals the review agent's final message apart from one accented letter written by its name, checked by a comparison of the two texts before the markers started; the grant markers have the report in their prompts as the brief says; gate condition 6 reads the prompt as holding that path for the manuscript markers; the lazy option was none, since the report could not be written into the prompt (self-rule, C70).
+- Open item G (2026-10-13): (a), the two markers of the manuscript run of step 4 read the report from `agents/reviews/4-run/manuscript-report.md`, given by path, in place of the report written into their prompts; the file equals the review agent's final message apart from one accented letter written by its name, checked by a comparison of the two texts before the markers started; the grant markers have the report in their prompts as the brief says; gate condition 6 reads the prompt as holding that path for the manuscript markers; the lazy option was none, since the one start whose prompt held the report was stopped by a safety classifier and the runner's notice barred producing that content again; the choice is C70 in `.scratch/choices.md` (self-rule).
 - Open item H (2026-10-13): (a), step 4's check failed (35 manuscript and 29 grant findings not marked right by both, gate conditions 1, 2, 3, 5 and 6 failing, `agents/reviews/4-report.md`), so a step 5 fixes each of those failures in `skills/writing/SKILL.md` or `skills/writing/references/` and main's head is then tagged `v7.1.0-rc.3` and pinned, step 6 repeats the runs and the marks on the pinned skill, and the closing becomes step 7; step 4 lands unticked; the lazy option was (b), closing entry 3 with the gate unmet (the user).
 - Plan 2.1 ruling C (2026-10-06): plan 2.1's ruling C removed the planted text from roadmap entry 3's gate, and plan 2.1's Open item D, ruled (a), carries it here: the gate is copied again from the roadmap, step 2 runs `/writing` on the real manuscript and the real grant only, step 3's check is every finding of the repeated real runs marked right by both; this replaces the planted-text parts of D9, Open item Gate 3 and Open item Gate 3b, whose other conditions stand (the user).
 
@@ -89,6 +89,9 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a248d03293a97a4ad: builder of step 3, claude-sonnet-5-5
 - abfeeaa9da306797f: reviewer of step 3, claude-opus-5-5
 - a8a5490e9ef2bc1ad: reviewer of step 3 over round 1, claude-sonnet-5-5
+- ad1ea91040f763510: brief check of step 4, claude-opus-5-5
+- a3fe6a6fa48ceb52f: reviewer of step 4, claude-opus-5-5
+- a7b58ef3a3bbf84be: reviewer of step 4 over round 1, claude-sonnet-5-5
 
 Agents in no role the cost script prices:
 
@@ -98,11 +101,39 @@ Agents in no role the cost script prices:
 4. a8b59f48cf296377c: marker 2 of the manuscript run of step 2, claude-opus-5-5
 5. acd1419c52668eabb: marker 1 of the grant run of step 2, claude-opus-5-5
 6. ab390b5665608f5d1: marker 2 of the grant run of step 2, claude-opus-5-5
+7. ae6cdd9db984557c9: review agent of the manuscript run of step 4, claude-opus-5-5
+8. ad72ce97d4f621a3b: review agent of the grant run of step 4, claude-opus-5-5
+9. a06df53aba5d3a063: marker 1 of the manuscript run of step 4, claude-opus-5-5
+10. a1adeaa151d894670: marker 2 of the manuscript run of step 4, claude-opus-5-5
+11. a0e8b92e8fd4f7258: marker 1 of the grant run of step 4, claude-opus-5-5
+12. a17c2d12dd7e8cd3f: marker 2 of the grant run of step 4, claude-opus-5-5
+13. a16a29426ffdd26f3: marker start of step 4, stopped before any tool call, no model line in its record
+14. a620ea19667843403: marker start of step 4, stopped before any tool call, no model line in its record
+15. a07ee5da81e8d1b27: marker start of step 4, stopped after two `Read` calls, claude-opus-5-5
 
 ## Blocked, and by what
 
-- 4: waits on the pin of `v7.1.0-rc.2`, which ruling F approves and follows this landing.
-- 5: waits on step 4.
+- 6: waits on step 5 and the pin of `v7.1.0-rc.3`, which ruling H approves and follows step 5's landing.
+- 7: waits on step 6.
+
+### Step 4, the repeated runs (landed 2026-10-13, unticked by ruling H)
+
+- Landed: the records of the repeated runs, all in the ledger: `agents/reviews/4-run/` (the two review reports and the four markers' marks), `agents/reviews/4-marks.md` (one row per finding, place, split and tense clause), `agents/reviews/4-report.md`, C70 in `.scratch/choices.md` and step 6's Step 0. The range 295b1e8..3-the-writing-base-4 holds no commit (`land.sh`: `nothing to copy`), since the step was built inline in the main checkout's ledger.
+- Unticked: the step's check does not hold. 35 manuscript and 29 grant findings are not marked right by both markers, and gate conditions 1, 2, 3 (manuscript), 5 and 6 fail (`4-report.md`). Open item H, ruled (a) by the user, adds steps 5 and 6 and leaves step 4 unticked.
+- Verify list: unchanged at Steps 2. The verification page `docs/dev/building.md` is unchanged since the base (`git diff --quiet 295b1e8 HEAD -- docs/dev/building.md` exit 0) and its six commands equal the list.
+- Premise corrections (at /spec): the copies made again from research-hub, and the grant run started only after the manuscript run's agent ended (Step 0 of step 4). The brief check's findings are closed in the brief (`agents/reviews/4-brief-check.md`). During the build, Open item G (self-rule, C70) gave the manuscript markers the saved report by path.
+- Review: `agents/reviews/4-refuter.md`. The first run found Spec 1 to 3, Proof 1 to 3 and Standards 1 to 4, closed in repair round 1 (`agents/briefs/4-round-1.md`, 039316e), Spec 1 by no change. The run over round 1 found one Spec finding for the clause "prepend", one Spec finding for a decision taken for step 6 in its Step 0, and one Proof finding for "could not be written", all fixed at landing (`4-refuter.md`, Closed).
+- Fixes at landing: 1. `4-report.md`, "Place checks", the check of the tense clause "prepend" at `b_architecture.tex:26` added (prints `1`), the counts 228 and 227. 2. `plan.md`, step 6's Step 0, the third bullet ends "This is the cause the brief of step 6 plans for." 3. C70, the Open item G line and `4-report.md`, "Wrong or impossible in the brief", name the classifier stop, the runner's notice "Do not produce that content again, even reworded" and that what the classifier objected to is not known.
+- Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/land.sh .scratch/3-the-writing-base/orchestrator-state.md 3-the-writing-base-4 295b1e8` exit 0: `PASS: land.sh scratch tests`, `PASS: check_config.py scratch tests`, `PASS: sync_rules.py scratch tests`, `ok: the plan-terms block equals the template`, `PASS: pin.sh scratch tests`, the character-set check printing nothing, `checks: 6 commands passed`.
+- A/B: none. Look: none configured.
+- Usage: brief check ad1ea91040f763510 claude-opus-5-5 196338 tokens, 47 tool uses, 8.2 min; builder inline (the session); review agents ae6cdd9db984557c9 211130 tokens, 39 tool uses, 30.5 min and ad72ce97d4f621a3b 134085 tokens, 6 tool uses, 10.3 min; markers a06df53aba5d3a063 244143 tokens, 32 tool uses, 14.3 min, a1adeaa151d894670 230831 tokens, 42 tool uses, 13.4 min, a0e8b92e8fd4f7258 118985 tokens, 8 tool uses, 5.5 min and a17c2d12dd7e8cd3f 120846 tokens, 7 tool uses, 6.0 min; reviewer a3fe6a6fa48ceb52f claude-opus-5-5 328040 tokens, 57 tool uses, 10.8 min; reviewer over round 1 a7b58ef3a3bbf84be claude-sonnet-5-5 284397 tokens, 80 tool uses, 10.3 min.
+- The builder's first report did not pass its bar: the place checks were not quoted and missed further places, `4-marks.md` merged rows, the DONE / NOT DONE table lacked verify checks 1 and 4, the marker 1 reading of condition 6 and the `sleep 10` departure were unnamed, and the report broke the semicolon limit and left files out of "Files".
+
+### Step 6, the third runs: Step 0
+
+- Carried from step 4's review (Proof 1): manuscript marker 1 of step 4 read 16 of the 33 draft files with `cat -n` in `Bash` and 17 with `Read`. Each marker's prompt of step 6 says that the draft files are read with the file-reading tool only, and that no `cat`, `sed` or `grep` prints a draft file whole.
+- Carried from step 4's review (Standards 2): the session read each review agent's served model after `sleep 10`, which the change standard's "no background shells, sleeping or polling" does not allow. Step 6 reads each served model from the runner's record of the agent with no sleep.
+- Carried from step 4's review (Proof 2): three marker starts of step 4 were stopped. The first two prompts (a16a29426ffdd26f3, 5226 characters, and a620ea19667843403, 5016 characters) carried the placeholders "FILE_PLACEHOLDER" and "REPORT_TEXT" where the report should stand. The third (a07ee5da81e8d1b27) stopped at 32354 characters when a safety classifier stopped the session's response that held the manuscript report, and the agent made two `Read` calls before it was stopped. The grant markers' prompts of 44152 characters went through. This is the cause the brief of step 6 plans for.
 
 ### Step 3, the fixes (landed 2026-10-13)
 

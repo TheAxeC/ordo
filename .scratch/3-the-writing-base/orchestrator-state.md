@@ -37,19 +37,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 4
-  executor: inline
-  worker: claude:sonnet
-  session_id: inline
-  worktree: .agents/worktrees/3-the-writing-base-4
-  base: 295b1e8
-  launched: 2026-10-13
-  report: .scratch/3-the-writing-base/agents/reviews/4-report.md
-  brief_check: .scratch/3-the-writing-base/agents/reviews/4-brief-check.md (ad1ea91040f763510, claude-opus-5-5, 196338 tokens, 47 tool uses, 8.2 minutes)
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/4-refuter.md (a3fe6a6fa48ceb52f, claude-opus-5-5, 328040 tokens, 57 tool uses, 10.8 minutes)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -107,4 +95,6 @@ none
 - 2026-10-13. Main's head 68c14d8 tagged `v7.1.0-rc.2` and pinned (`sh utils/pin.sh v7.1.0-rc.2`: "pinned: v7.1.0-rc.2 (68c14d8), 14 skills linked"), as ruling F approves.
 - 2026-10-13. Step 4 prepared at base 295b1e8 (brief check `agents/reviews/4-brief-check.md`, 18 findings closed in the brief), executor inline (orchestrator, no agent).
 - 2026-10-13. Step 4 prepared at base 295b1e8, executor inline; both `/writing` runs and four markers done; the check failed (`agents/reviews/4-report.md`); Open item G closed under self-rule (C70); Open item H ruled (a) by the user: steps 5 and 6 added, the closing becomes step 7; `/refute 3 4` running.
-- Next: the `/refute 3 4` report, then `/land 3 4` with step 4 unticked, then `/spec 3 5`.
+- 2026-10-13. Step 4's repair round 1 built inline and refuted over the round (three findings, fixed at landing).
+- 2026-10-13. Step 4 landed unticked, as ruling H says (`agents/reviews/4-landing.md`).
+- Next: `/spec 3 5`, the second fixes; after its landing, main's head tagged `v7.1.0-rc.3` and pinned, as ruling H approves.
