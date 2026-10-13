@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C69
+Last number: C70
 
 # Entry 2.I Several plans in one session
 
@@ -358,3 +358,17 @@ Step 3 fixes only the findings that the two markers did not both mark right. Som
 Taken: (a)
 Booked: `.scratch/3-the-writing-base/plan.md:64` (Open item E)
 Builds on it: step 3
+
+# Entry 3 The writing base
+
+## C70. How the manuscript markers of step 4 get the report (2026-10-13)
+
+Step 4's brief says each marker gets the review report written into its prompt, never as a file path. For the manuscript report, 76936 characters, the session could not write it into a prompt: the attempt was cut off before the agent started with the whole text, and that agent was stopped. For example, a marker given a report cut off at finding 42 would mark only half the findings.
+  - Option (a), recommended: the two manuscript markers read the saved report `agents/reviews/4-run/manuscript-report.md` by path. Pro: the markers mark the whole report, and the file is shown equal to the agent's final message by a comparison of the two texts (one accented letter written by its name). Con: gate condition 6 reads a path where the brief asked for text.
+  - Option (b): stop step 4 and ask the user. Pro: none beyond waiting. Con: the step stalls with no other way to give the markers the report.
+  - Rule: step 4's brief, "The marks", first bullet, and its gate condition 6.
+  - Recommendation: (a). The lazy option is none.
+
+Taken: (a)
+Booked: `.scratch/3-the-writing-base/plan.md` (Open item G, in the Rulings)
+Builds on it: step 4

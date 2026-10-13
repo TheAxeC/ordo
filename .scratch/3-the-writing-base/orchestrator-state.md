@@ -63,6 +63,8 @@ none
 - 2026-10-13: Open item D, `/writing` not installed for step 2: ruled (a) by the user, tag `v7.1.0-rc.1` and pin.
 - 2026-10-13: Open item E, where the gate failures of step 2's runs are fixed (refuter of step 2, finding S1): closed under self-rule, C69.
 - 2026-10-13: Open item F, the rerun of step 3 needs a pin: ruled (a) by the user, step 3 split, tag `v7.1.0-rc.2` and pin after step 3 lands.
+- 2026-10-13: Open item G, how the manuscript markers of step 4 get the report: closed under self-rule, C70.
+- 2026-10-13: Open item H, step 4's check failed: ruled (a) by the user, step 5 the second fixes with tag `v7.1.0-rc.3` and pin, step 6 the third runs, step 7 the closing.
 
 ## The standing demands (from Axel, in force)
 
@@ -103,4 +105,5 @@ none
 - 2026-10-13. Step 3 landed (`agents/reviews/3-landing.md`).
 - 2026-10-13. Main's head 68c14d8 tagged `v7.1.0-rc.2` and pinned (`sh utils/pin.sh v7.1.0-rc.2`: "pinned: v7.1.0-rc.2 (68c14d8), 14 skills linked"), as ruling F approves.
 - 2026-10-13. Step 4 prepared at base 295b1e8 (brief check `agents/reviews/4-brief-check.md`, 18 findings closed in the brief), executor inline (orchestrator, no agent).
-- Next: the copies, then the manuscript run of `/writing`.
+- 2026-10-13. Step 4 prepared at base 295b1e8, executor inline; both `/writing` runs and four markers done; the check failed (`agents/reviews/4-report.md`); Open item G closed under self-rule (C70); Open item H ruled (a) by the user: steps 5 and 6 added, the closing becomes step 7; `/refute 3 4` running.
+- Next: the `/refute 3 4` report, then `/land 3 4` with step 4 unticked, then `/spec 3 5`.
