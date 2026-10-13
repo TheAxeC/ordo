@@ -39,8 +39,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 2
-  landing: preparing
-  brief_check: "running: a1f33775f8646df06"
+  executor: inline
+  worker: orchestrator
+  session_id: inline
+  worktree: .agents/worktrees/3-the-writing-base-2
+  base: e00f6bd
+  launched: 2026-10-13
+  report: .scratch/3-the-writing-base/agents/reviews/2-report.md
+  brief_check: .scratch/3-the-writing-base/agents/reviews/2-brief-check.md (a1f33775f8646df06, claude-opus-5-5, 192280 tokens, 52 tool uses, 9.5 minutes)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -79,4 +87,5 @@ none
 - 2026-10-13. Step 1 landed (`agents/reviews/1-landing.md`).
 - 2026-10-13. Step 2 stopped at its `/spec` premise check on Open item D: `/writing` is not installed.
 - 2026-10-13. Open item D ruled (a) by the user: main's head tagged `v7.1.0-rc.1` and pinned.
-- Next: step 2.
+- 2026-10-13. Step 2 prepared at base e00f6bd, executor inline (orchestrator, no agent).
+- Next: step 2's runs.
