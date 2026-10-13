@@ -96,6 +96,9 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a2237d2ff6d37342a: builder of step 5, claude-sonnet-5-5
 - abc52e37d862af422: reviewer of step 5, claude-opus-5-5
 - ac11b15dbd17b34b2: reviewer of step 5 over round 1, claude-sonnet-5-5
+- a3e0cceb00ecca6b5: brief check of step 6, claude-opus-5-5
+- a93f0aad040198357: reviewer of step 6, claude-opus-5-5
+- a03b4e5b01f526569: reviewer of step 6 over round 1, claude-sonnet-5-5
 
 Agents in no role the cost script prices:
 
@@ -114,10 +117,29 @@ Agents in no role the cost script prices:
 13. a16a29426ffdd26f3: marker start of step 4, stopped before any tool call, no model line in its record
 14. a620ea19667843403: marker start of step 4, stopped before any tool call, no model line in its record
 15. a07ee5da81e8d1b27: marker start of step 4, stopped after two `Read` calls, claude-opus-5-5
+16. a99cdbe7fbe41e52f: review agent of the manuscript run of step 6, claude-opus-5-5
+17. a7997258e999ed0be: review agent of the grant run of step 6, claude-opus-5-5
+18. af9e18c06b5359637: marker 1 of the manuscript run of step 6, claude-opus-5-5
+19. a497a69fded97a0ab: marker 2 of the manuscript run of step 6, claude-opus-5-5
+20. af17cd67cb401d1dd: marker 1 of the grant run of step 6, claude-opus-5-5
+21. aa0fae041cb07f141: marker 2 of the grant run of step 6, claude-opus-5-5
 
 ## Blocked, and by what
 
-- 7: waits on step 6.
+- 7: waits on Open item I, step 6's failed check.
+
+### Step 6, the third runs (landed 2026-10-13, unticked: its check failed, Open item I)
+
+- Landed: the records of the third runs, all in the ledger: `agents/reviews/6-run/` (the two review reports, the four markers' marks and the two manuscript markers' reasons files), `agents/reviews/6-marks.md` (one row per finding, place, split and list entry: 191 manuscript rows and 74 grant rows) and `agents/reviews/6-report.md`. The range 178bc42..3-the-writing-base-6 holds no commit (`land.sh`: `nothing to copy`), since the step was run inline in the main checkout's ledger.
+- Unticked: the step's check does not hold. 20 manuscript rows and 13 grant rows are not marked right by both markers, against 35 and 29 findings at step 4. Gate conditions 1, 2, 5 and 6 fail, and 3, 4 and 7 hold (`6-report.md`). The kinds: 8 rows point at another finding in place of writing the text out (grant 11.1 to 11.5, 11.7, 11.10 and manuscript report line 229); 9 rows change a claim's scope or strength; 5 rows leave a sentence over the length rule or a split part too long; 4 rows report a passage the rule's words do not describe; 2 rows each for a hard-wrapped quote cut short, a number without its bracket and a term brought in undefined; 1 row cuts a qualifier with no number. Five group lines name no loss (manuscript 13, 14, 16, 17 and grant 10). Condition 6 fails because both manuscript markers' `grep` term searches reached files outside the draft. Open item I asks the user what follows.
+- Verify list: unchanged at Steps 2. The verification page `docs/dev/building.md` is unchanged since the base in the worktree and on main (`git diff --quiet 178bc42 -- docs/dev/building.md` exit 0 in both).
+- Premise corrections (at /spec): none to the plan. The brief check's 14 findings closed in the brief (`agents/reviews/6-brief-check.md`, Closed). Step 6's Step 0 is carried: each marker read the draft with `Read` only, and each served model was read with no `sleep`.
+- Review: `agents/reviews/6-refuter.md`. The first run found Spec 1, Proof 1 to 5 and Standards 7, all in the record, closed in repair round 1 (`agents/briefs/6-round-1.md`, c4a25f1), in which the two manuscript markers were each resumed once for their missing reasons and changed no mark. The run over round 1 found Spec 1, Proof 1 and Standards 1, all in `6-report.md`, all fixed at landing (`6-refuter.md`, Closed).
+- Fixes at landing: 1. `6-report.md`, gate condition 6 states each manuscript marker's resume, its message naming rows only, the two reasons files with 87 and 123 reasons and no mark changed. 2. `6-report.md`, C8 states that 47 of marker 1's 67 tense reasons and 44 of marker 2's 67 name only the tense category and the new verb. 3. `6-report.md`, the long sentences of C1, C8, C10, conditions 1, 2 and 6 and the judgment call split, and the repeated note on which marker named a group line replaced by one sentence.
+- Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/land.sh .scratch/3-the-writing-base/orchestrator-state.md 3-the-writing-base-6 178bc42` exit 0: `PASS: land.sh scratch tests`, `PASS: check_config.py scratch tests`, `PASS: sync_rules.py scratch tests`, `ok: the plan-terms block equals the template`, `PASS: pin.sh scratch tests`, the character-set check printing nothing, `checks: 6 commands passed`.
+- A/B: none. Look: none configured.
+- Usage: brief check a3e0cceb00ecca6b5 claude-opus-5-5 197104 tokens, 48 tool uses, 7.6 min; builder inline (the session); review agents a99cdbe7fbe41e52f 208276 tokens, 70 tool uses, 32.2 min and a7997258e999ed0be 132487 tokens, 6 tool uses, 10.0 min; markers af9e18c06b5359637 224746 tokens, 42 tool uses, 12.3 min (231078 tokens in total, 1 tool use, 0.7 min on its resume), a497a69fded97a0ab 214918 tokens, 41 tool uses, 11.0 min (276105 tokens in total, 31 tool uses, 1.9 min on its resume), af17cd67cb401d1dd 114985 tokens, 7 tool uses, 5.0 min and aa0fae041cb07f141 118836 tokens, 7 tool uses, 5.5 min; reviewer a93f0aad040198357 claude-opus-5-5 59333 tokens, 66 tool uses, 9.5 min; reviewer over round 1 a03b4e5b01f526569 claude-sonnet-5-5 227502 tokens, 53 tool uses, 8.1 min.
+- The builder's first report did not pass its bar: gate condition 2 was not listed group by group, the claim that every list of places gives full paths was false, C8 was reported met while many manuscript marks had no reason of their own, the markers' commands were misdescribed, the markers' totals were not explained, the report reads were described as whole, and `6-report.md` was missing from "Files".
 
 ### Step 5, the second fixes (landed 2026-10-13)
 

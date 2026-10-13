@@ -37,24 +37,15 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 6
-  base: 178bc42
-  worktree: .agents/worktrees/3-the-writing-base-6
-  executor: inline
-  worker: claude:sonnet
-  session_id: inline
-  launched: 2026-10-13
-  report: .scratch/3-the-writing-base/agents/reviews/6-report.md
-  round: 1
-  brief_check: .scratch/3-the-writing-base/agents/reviews/6-brief-check.md (a3e0cceb00ecca6b5, claude-opus-5-5, 197104 tokens, 48 tool uses, 7.6 minutes)
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/6-refuter.md (a93f0aad040198357, claude-opus-5-5, 59333 tokens, 66 tool uses, 9.5 minutes)
-  landing: not-started
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-none
+- Open item I (2026-10-13), step 6's check failed. The third runs still give findings the two markers do not both mark right: 20 of 191 in the manuscript and 13 of 74 in the grant, against 35 and 29 at step 4. Example: grant finding 11.3 gives "Passage and replacement as in 5.1" instead of the text, which `SKILL.md` already forbids. Gate conditions 1, 2, 5 and 6 fail (`agents/reviews/6-report.md`). Step 7, the closing, cannot pass the gate as things stand.
+  - (a) Recommended. Add step 7, the third fixes: each of the 33 rows and each gate failure fixed in `skills/writing/SKILL.md` or `skills/writing/references/`. Where `SKILL.md` already has the rule and the agent broke it anyway (the 8 references to other findings, the sentence lengths), the fix is a last pass in the review agent's prompt: before it hands back, it checks each finding against the finding rules and rewrites the ones that break them. The markers' prompts also say that `grep` runs only on the draft's files. After landing, tag `v7.1.0-rc.4` and pin with `sh utils/pin.sh v7.1.0-rc.4` (approved by this ruling). Step 8 repeats the runs and the marks. The closing becomes step 9. Pro: it is what the gate and step 6's check ask for, and the failures fell by half from step 4 to step 6. Con: two more steps of the size of steps 5 and 6, and one more round may still not reach zero.
+  - (b) Add step 7, the fixes as in (a), and go straight to the closing with no further runs. Pro: half the cost. Con: nothing shows the fixes work, and step 6's check stays failed. This is the lazy option.
+  - (c) Close the plan now with steps 4 and 6 unticked. Con: the gate fails, so `/roadmap done 3` cannot honestly tick the entry.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -114,4 +105,6 @@ none
 - 2026-10-13. Step 5 landed (`agents/reviews/5-landing.md`).
 - 2026-10-13. Main's head ce30787 tagged `v7.1.0-rc.3` and pinned (`sh utils/pin.sh v7.1.0-rc.3`: "pinned: v7.1.0-rc.3 (ce30787), 14 skills linked"), as ruling H approves.
 - 2026-10-13. Step 6 prepared at base 178bc42 (brief check `agents/reviews/6-brief-check.md`, 14 findings closed in the brief), executor inline (orchestrator, no agent).
-- Next: the manuscript run of `/writing`, then the grant run; after the grant report, the step waits for the user's next message before the markers.
+- 2026-10-13. Step 6 run inline: both `/writing` runs and four markers; the check failed (`agents/reviews/6-report.md`); refuted, repair round 1 sent (`agents/briefs/6-round-1.md`, c4a25f1); the run over round 1 found three findings in the report, fixed at landing.
+- 2026-10-13. Step 6 landed unticked (`agents/reviews/6-landing.md`); Open item I raised to the user.
+- Next: the user's ruling on Open item I.

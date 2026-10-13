@@ -143,3 +143,144 @@ none
 - My own actions outside the brief's three git commands: I ran `git -C ~/.local/share/ordo-stable describe --tags` and `git -C ~/.local/share/ordo-stable rev-parse --short HEAD` once each, read-only, printing `v7.1.0-rc.3` and `ce30787`. I wrote helper scripts and their output only under the scratchpad folder `refute6/` (including `grant_paras.txt`) and ran extract_handback.py only into the scratchpad. I edited no file in the repository, started no agent and invoked no skill.
 
 Reviewer usage: a93f0aad040198357, claude-opus-5-5, 59333 tokens, 66 tool uses, 9.5 minutes.
+
+## Repair round 1, refuted (run over the worktree .agents/worktrees/3-the-writing-base-6, base 178bc42, snapshot .agents/worktrees/3-the-writing-base-6-round-1)
+
+I edited no file, started no agent, invoked no skill and ran no git command other than `git diff 178bc42` and `git status --short`. Helper output went only under the scratchpad folder `refute6r1/`.
+
+### Verification (rerun by the reviewer)
+
+```
+# Verify 1, character-set check over 6-marks.md, 6-report.md, 6-run/* (main checkout)
+(no output)
+verify1 exit 0
+
+# Verify 2
+diff -r <scratchpad>/3-2-run/manuscript <research-hub>/.../manuscript   -> (no output)  verify2 diff exit 0
+cmp <scratchpad>/3-2-run/grant/Application-form-ENW-XS-26-3-LS.docx <research-hub>/.../Application-form-ENW-XS-26-3-LS.docx   -> (no output)  verify2 cmp exit 0
+
+# Verify 3, git -C research-hub status --short -- projects/manuscripts/hccnet-revision funding/2026-nwo-enw-xs
+(no output)
+verify3 exit 0
+
+# Verify 4, git status --short in .agents/worktrees/3-the-writing-base-6
+(no output)
+verify4 exit 0
+git diff 178bc42 | wc -c   -> 0
+
+# git status --short, main checkout
+?? .scratch/3-the-writing-base/agents/reviews/6-marks.md
+?? .scratch/3-the-writing-base/agents/reviews/6-report.md
+?? .scratch/3-the-writing-base/agents/reviews/6-run/
+
+# wc -l, main checkout (equals the "Files" block of 6-report.md line for line)
+ 389 6-marks.md | 971 6-report.md | 122 grant-marks-1.md | 117 grant-marks-2.md | 357 grant-report.md
+ 100 manuscript-marks-1-reasons.md | 181 manuscript-marks-1.md | 140 manuscript-marks-2-reasons.md | 249 manuscript-marks-2.md | 663 manuscript-report.md | total 3289
+
+# Place checks of 6-report.md, every "$ ..." command parsed out of the report and rerun (script in the scratchpad)
+ms (190, 0)   gr (67, 0)      (checks run, mismatches; every one prints 1 as quoted)
+
+# Delta
+diff -u of the snapshot against the current file, 8 paths of files.txt:
+  6-run/grant-marks-1.md, grant-marks-2.md, grant-report.md, manuscript-marks-1.md, manuscript-marks-2.md, manuscript-report.md: no difference
+  6-marks.md: one sentence of the header changed (names the two reasons files, "no mark changed")
+  6-report.md: the round's edits (read in full)
+  new: 6-run/manuscript-marks-1-reasons.md (100 lines), 6-run/manuscript-marks-2-reasons.md (140 lines), read whole
+
+# Replies against the transcripts (python3 -I, characters outside the set written by name)
+manuscript-marks-1-reasons.md body == last SubagentHandback of af9e18c06b5359637 (14179 chars): True
+manuscript-marks-2-reasons.md body == last SubagentHandback of a497a69fded97a0ab (22143 chars): True
+the six first-run files against their first hand-backs: all True (87381, 35741, 26084, 25954, 15735, 16354)
+turn-ending text 39413 == manuscript hand-back (87381) True; 39461 == grant hand-back (35741) True
+completion notices of the resumes: af9e18c06b5359637 231078 / 1 tool use / 44215 ms; a497a69fded97a0ab 276105 / 31 / 112218 ms (the header lines and the "Four markers" row agree)
+```
+
+### Checks of the rulings
+
+- Ruling 1 (Spec 1, group lines): closes the finding. The report lists 19 manuscript and 15 grant lines. I compared every entry with the group line in `manuscript-report.md` (`grep -n -A2 '^== '`, 19 groups) and `grant-report.md` (15 groups). Each description matches its line. The five lines it lists as naming no loss are the five the marker files name (`manuscript-marks-1.md` last section, `manuscript-marks-2.md` last section, `grant-marks-1.md:118`, `grant-marks-2.md:114`). The statement about manuscript group 16 holds: `discussion.tex` line 18 has three sentences and ends with the single-cohort clause. Two notes are under "Declined to judge". The marker reasons that the first version quoted are shortened to a phrase.
+- Ruling 2 (Proof 1, line 229): closes the finding. `manuscript-report.md:229` reads "the two places at d_results.tex:15 and 1_baseline.tex:3 under item 2 above also carry this change." A grep for `name.tex:N` without a `sections/`, `figures/` or `tables/` prefix finds only that line. The `SKILL.md` quotation matches `SKILL.md` line 117 of the pinned copy. No sentence that every list gives the path remains: `grep -n "main file's folder"` shows the C1, condition 1 and "Place checks" lines only.
+- Ruling 3 (Proof 2, reasons): the resumes are done and correct, but one part of the ruling is not done (Spec 1 below).
+  - Exactly one `SendMessage` per marker (transcript entries 39916 and 39917, nothing else between 39770 and the end). Each names the report path again and names rows by group and number or place.
+  - A 4-gram search of both messages against the manuscript report finds only group headings (`section d, "no synonym`, `section a, filler and`), and against the other marker's marks file only group headings. No quoted words of the report and nothing of the other marker's marks.
+  - The rows named equal the rows that had no reason. Counted bare marks in the first-run files: marker 1, 20 lines plus the 67 tense entries; marker 2, 123 lines (`grep -cE ': (right|wrong)\.?$'`). The reasons files hold 87 and 123 entries, all `right`, in the same groups. The grant files have 0 bare marks.
+  - No mark changed: all 210 reasons entries say `right`, and the first-run marks of those rows were `right`. `6-marks.md` has only the header sentence changed. That edit is not asked for (no mark changed), and it is harmless.
+  - The usage in both headers agrees with the completion notices. Marker 1 made no tool call before its reply (after its first hand-back: `SubagentHandback` 1). Marker 2 made 30 `Read` calls: 28 re-reads of draft files and two reads of the report with offsets.
+- Ruling 4 (Proof 3, commands): closes the finding. The transcripts show the commands as the report states them. Marker 1's first command failed with `(eval):1: no matches found: --include=*.tex`. Its second reached `sections/2_related_work/a_prediction.tex:3:guideline` and `tables/results_pretrain_ablation_original.tex:27:DINO`. Marker 2's loop globbed `sections/2_related_work/*.tex`. I computed the 33 draft files from the `\input`/`\include` closure of `main.tex` and the 16 `.tex` files outside it. Of the markers' globs, only `a_prediction.tex` falls outside the draft in marker 2's, and no hit appeared there. Condition 6 now fails on this and the first line and the DONE / NOT DONE row agree.
+- Ruling 5 (Proof 4, totals): closes the finding. Rerun: marker 1 marks 124 lines plus 67 tense entries = 191 rows, 18 `wrong`; marker 2 marks 191 rows, 17 `wrong`. The union of rows not right by both is 20 (my count of 22 includes the two `ack.tex` rows that marker 1 writes with a longer path).
+- Ruling 6 (Proof 5, report reads): closes the finding. The first `Read` returned lines 1 to 452 (61650 characters) and the second (offset 452, limit 220) returned lines 452 to 664 in both marker transcripts. The tool's line 664 is an empty line after the final newline. The file has 663 lines, so "452 to 663" holds for its content.
+- Ruling 7 (Standards 7, Files): closes the finding. `6-report.md` and the two reasons files are listed with counts equal to the `wc -l` above.
+
+Reach: the round changes only `6-report.md`, the header of `6-marks.md` and the two new files. No finding was closed by removing what it guarded. The old judgment call on marker 1's command is replaced by a correct statement under condition 6, which is what the ruling asks.
+
+### Verdicts, whole step since the base
+
+Items of "What to build":
+
+- The runs: holds. The session's `tool_use` calls from the manuscript `Skill` call (entry 39323) to the grant report (entry 39461) are Skill 2, Bash 6, Agent 2, Read 2 (the two reads are of the runner's saved copy of the hand-back). There is no Write, Edit, NotebookEdit or sleep. The review agents are `ordo-high` and served `claude-opus-5-5` (78 and 8 entries). The manuscript agent has Read 36 with no offset or limit, covering the 33 draft files, and Bash 33. The grant agent has Read 3 and Bash 2. The grant `Skill` call is at entry 39367, in the turn the manuscript hand-back (39364) starts. The two turn-ending texts equal the hand-backs (above).
+- The record of the reports: holds. All six saved files equal the hand-backs apart from character names (above).
+- The marks: holds. Every row has two marks from four fresh `ordo-high` agents served `claude-opus-5-5`, and all 265 marks now carry a reason sentence. Proof 1 gives a limit on the reasons.
+- The record files: holds, with Spec 1 and Standards 1 on `6-report.md`. The 20 and 13 rows are reproduced from the marks files.
+- Gate condition 1: holds as a stated failure. The report's evidence is now true (line 229, bare names). All 257 place checks rerun and print 1.
+- Gate condition 2: holds as a stated failure. The group-by-group list is present and reproduces.
+- Gate condition 3: holds, rerun from the transcripts as above.
+- Gate condition 4: holds, rerun from the transcript as above.
+- Gate condition 5: holds as a stated failure (8 entries: line 229 and grant 11.1 to 11.5, 11.7 and 11.10, both markers).
+- Gate condition 6: violated for the report's evidence (Spec 1). The failure verdict on the commands is right and reproduces.
+- Gate condition 7: holds (Verify 2 and 3 rerun).
+- Gate condition 8: holds. The sentence is in the report.
+- The check: NOT DONE, as the report says (20 manuscript and 13 grant rows not right by both).
+- The booking of agents: not judged, since it happens at landing.
+
+Cases:
+
+- C1: not met, as the report says. All 190 place checks print 1, and line 229 has no passage and bare names.
+- C2: not met, as the report says. The 7 grant entries have no passage; 67 checks print 1.
+- C3: not met, as the report says. The five marker-named lines are confirmed in the marks files.
+- C4: not met, as the report says (8 entries).
+- C5: met. C6: met. C7: met.
+- C8: met. Every row has two marks with a reason (counts above). Proof 1 notes that many of marker 2's reasons repeat.
+- C9: met as a record.
+- C10: met. Four starts, all four used. No prompt holds report text. The two resume messages hold only group headings and places.
+
+### 1. Spec
+
+- `6-report.md`, "The gate conditions", item 6, and "Repair round 1", row "3, Proof 2". Quoted: "On their resume (repair round 1) the manuscript markers ran no command: marker 1 made no tool call before its reply, and marker 2 made 30 `Read` calls." and "No marker wrote, started an agent or invoked a skill, and no marker was given the other's marks: each prompt names only its report and the pages." and, in the table, "C8 is met, and C10 states the resumes."
+  What is wrong: ruling 3 says "C8 and gate condition 6 state the resume and its result." Condition 6 states only the resume's commands. It does not say that each manuscript marker was resumed once, that the two replies are `manuscript-marks-1-reasons.md` and `manuscript-marks-2-reasons.md` with 87 and 123 reasons, that no mark changed, or that the resume messages named rows and no marker received the other's marks. The sentence "each prompt names only its report and the pages" now omits two of the markers' inputs. The round's section does not say that part of ruling 3 is open, though its brief says anything not done comes first.
+  Failure scenario: a reader or the `/land` booking who takes condition 6 as the evidence for what the markers were given and returned sees only the first prompts. They would not know the reasons files exist or that a message beyond the prompt reached the markers.
+  Verdict: gate condition 6 violated, as an item of the record.
+
+### 2. Proof
+
+- `6-run/manuscript-marks-2-reasons.md` (the tense list and others) and `6-report.md` C8: "Every row now has two marks with a reason each". Reasons counted with a script: marker 2 repeats "This is a Methodology action, put in the past." 28 times, "Both verbs are put in the past." 9 times and "This is a Results finding, put in the past." 7 times, which is 44 of its 67 tense reasons. Marker 1 repeats "Both verbs become past." 7 times and "A Methodology action, now ..." in varying forms.
+  What is wrong: each is one sentence, so the ruling's letter is met. These sentences give the category only. They say nothing of whether the quoted words stand at the named place or whether the replacement ends the break, which are conditions 1 and 4 of the marking. C8 says "met" without saying so.
+  Failure scenario: a tense entry whose replacement leaves one verb in the present (a second verb in a clause list) is marked `right` with "Both verbs are put in the past." A user checking that mark from its reason cannot tell. The first refuter's scenario for finding Proof 2 (a wrong right-mark passing unseen) stays open for these 44 and 7 rows.
+  Verdict: none changed. C8 is met by the brief's wording.
+
+### 3. Standards
+
+- `6-report.md`, C8, C10, condition 1, condition 2, condition 6 and the judgment call. Seven sentences added or changed in the round run 36 to 62 words. Quoted: "Every row now has two marks with a reason each, from two fresh agents per run, none of them a review agent, each `ordo-high` served `claude-opus-5-5`, each given the report by path, each having read ..." (62 words with code spans counted as one). The condition 2 items 13, 14, 16 and 17 repeat the construction "(marker 2 names it; marker 1 does not)" four times and add four semicolons.
+  What is wrong: the brief's Conventions apply the prose standard's section E (sentences under roughly 20 words unless the mechanism needs more), section B (semicolons) and section 0 ("No repeated construction") to the record's running prose.
+  Failure scenario: the long C8 and condition 1 sentences hold six to eight separate facts each, and a reader checking one fact (which agent, which tool) must parse the whole sentence.
+  Verdict: none.
+
+### 4. Behaviour
+
+none
+
+### Declined to judge
+
+- Whether the lines of manuscript group 19 ("a phrase broken across lines cannot be found with a search or read cleanly in a diff") and grant group 15 ("a plain-text viewer or a grep may not show as written") name what the reader of this draft loses, or a cost in the source or in a tool. The report's reading says "names a cost" for both, and neither marker named them. This is a judgment for the user.
+- What the completion notice's token figure counts. "231078 tokens in total after the resume" (marker 1) and "276105 tokens in total" (marker 2) are the notice's figures. I could not reconcile them with the transcripts' usage fields (marker 1's last context size is 225478 after the resume), so whether they are cumulative is not verified. The landing booking will carry these numbers.
+- Whether each `right` mark in the reasons files is correct. I read the reasons and did not re-mark the findings.
+- The booking of agents at landing, and the first-line statement of the failures as conditions and row counts rather than one line per failure.
+- Whether the runner's compaction between entries 39424 and 39461 bears on the turn shape beyond the quoted equality and the absence of a user turn in 39364 to 39461 except the hand-back messages, the skill re-invocation and the compaction summary.
+- My own actions: I read only; I ran `python3 -I` scripts that read the transcripts and the record, and one script (`refute6r1/place.py`, in the scratchpad) that reran the 257 place-check commands from the report.
+
+Reviewer usage: a03b4e5b01f526569, claude-sonnet-5-5, 227502 tokens, 53 tool uses, 8.1 minutes.
+
+## Closed
+
+- First run, Spec 1 and Proof 1 to 5 and Standards 7: closed by repair round 1 (`agents/briefs/6-round-1.md`, rulings 1 to 7). The run over round 1 reproduced each ruling's change in `6-report.md`, `6-marks.md` and the two reasons files.
+- Run over round 1, Spec 1: fixed at landing in `6-report.md`. Gate condition 6 states that each manuscript marker was resumed once with one message naming rows only, that the replies are the two reasons files with 87 and 123 reasons, and that no mark changed. The sentence on what each marker was given names the resume messages.
+- Run over round 1, Proof 1: fixed at landing in `6-report.md`. C8 is met by the brief's wording and states that 47 of marker 1's 67 tense reasons and 44 of marker 2's 67 name only the tense category and the new verb, which does not show whether the passage stands at its place or whether the replacement ends the break.
+- Run over round 1, Standards 1: fixed at landing in `6-report.md`. The long sentences of C1, C8, C10, conditions 1, 2 and 6 and the judgment call on the totals are split, and the repeated note on which marker named a group line is replaced by one sentence after the list.
