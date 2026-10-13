@@ -41,7 +41,20 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Open item Step 1, three clashes in the written rules (2026-10-13, kind 3: a clash between your written rules, and a change to a Rulings bullet). The brief check (`agents/reviews/1-brief-check.md`, findings 1.5, 1.6 and 1.8) found that three fixes of step 1, written as approved, contradict a rule that stays on the tree. No brief is written until this is ruled; every other finding of the check is closed in the brief, as the report's "Closed" heading says.
+  - Question 1, no breakage testing against rule 13. Now: rule 13 of `docs/dev/change-standard.md` and of `skills/repo-setup/templates/docs/dev/change-standard.md`, first bullet, says a new or changed test "is run there again after every change to the test" on the unchanged tree (the tree at the step's base), "in the form it has after the change"; `skills/spec/templates/brief.md` "Verify before you report" 4 and `skills/refute/SKILL.md` "The four headings", Proof, ask the same. Once the code has changed, that run needs the old code put back under the new test, which is what your no-breakage rule bans ("a revert or removal of the code under test to watch a test go red").
+    - Option (a), recommended: the test is written and run on the unchanged tree before the code changes, and that first run is the proof; a later change to the test is judged by reading, with no second run on the old code. Rule 13's first bullet, brief.md Verify 4 and refute's Proof bullet are reworded to that, beside the new "No breakage testing." rule. Pro: no run ever needs the old code restored, so the two rules agree; the order of work gives the failing run for free. Con: a test changed after its first run carries no failing run of its final form, only a reading.
+    - Option (b): keep rule 13 as it stands and read "the unchanged tree" as the real tree at the base, which is not broken on purpose. Pro: the final form of each test keeps a quoted failing run. Con: getting that run after the change means putting the old code back in a copy, the practice your rule names.
+    - Option (c): add the rule sentence only and leave the clash. The lazy option: the two rules keep contradicting each other.
+  - Question 2, "A ruling is written down when it is given" against the commit rule. Now: the approved sentence for `skills/repo-setup/templates/shared-rules.md` says such a ruling is "committed in the same turn"; the `repo-setup` template `CLAUDE.md` gives a repository the commit rule "Commit only when told, each time.", and `repo-setup` "The questions" 5 asks for it. The glossary's **ruling** is "the user's decision on an open item, typed as `Ruled:`", narrower than this sentence's use.
+    - Option (a), recommended: the bullet reads "**A decision is written down when it is given.** A decision the user gives outside a plan's ledger is written into a file in the repository in the same turn, and committed in that turn where the repository's commit rule allows it, so a compaction or a new session finds it." Pro: no clash with a repository that commits only when told, and no second sense for **ruling**. Con: the words differ from the approved proposal.
+    - Option (b): keep the approved words, and the commit rule of a repository that sets "commit only when told" holds over them; **ruling** gains the wider sense in the glossary. Pro: your approved words stand. Con: two rules in one CLAUDE.md that say opposite things about the same commit.
+    - Option (c): leave the bullet out. The lazy option: the approved fix is not made.
+  - Question 3, where the orchestrator's report puts NOT DONE (replaces D19, self-rule). Now: D19 says the orchestrator's report, "after the landed steps and the choices, states anything NOT DONE first"; the shared rule "Reports state the end state" says "The first line says what is NOT done", and `plan-orchestration` Anti-patterns says "Put anything NOT DONE first".
+    - Option (a), recommended: the orchestrator's report opens with a line naming anything NOT DONE, or that everything is done; then the position lines with their open items, the landed steps and the choices, as now; then the DONE / NOT DONE ledger, one row per step landed or stopped, naming the landing report or the open item that proves it. A Rulings bullet replaces D19. Pro: agrees with the shared rule and the anti-pattern. Con: none beyond the edit.
+    - Option (b): keep D19 as written. Con: the report's first line is not what the shared rule asks.
+    - Option (c): leave "Reports" as it is. The lazy option: finding 8 of the second run stays open.
+  - Recommendation: (a), (a), (a). Answer with `Ruled: (a), (a), (a)` or your own choice per question.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -68,5 +81,5 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 - 2026-10-13. The plan is opened; nothing has landed.
 - Verified: none yet.
-- Next step: 1, because it is the only build step and the closing waits on it.
-- Open on Axel's side: none.
+- Next step: 1, stopped before its brief on the open item "Step 1, three clashes in the written rules"; the closing waits on it.
+- Open on Axel's side: that open item.
