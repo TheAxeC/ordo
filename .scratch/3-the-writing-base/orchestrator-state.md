@@ -46,6 +46,7 @@ dispatch:
   session_id: a09a39ebd2fcccd6b
   launched: 2026-10-13
   report: .scratch/3-the-writing-base/agents/reviews/7-report.md
+  builder_usage: first read, 183556 tokens, 21 tool uses, 3.0 min
   round: 0
   brief_check: .scratch/3-the-writing-base/agents/reviews/7-brief-check.md (a50f0c31ddca5b769, claude-opus-5-5, 175635 tokens, 39 tool uses, 6.8 minutes)
   landing: not-started
@@ -118,4 +119,5 @@ none
 - 2026-10-13. Step 6 landed unticked (`agents/reviews/6-landing.md`); Open item I raised to the user.
 - 2026-10-13. Open item I ruled (a) with a stopping rule by the user: step 7 the third fixes, step 8 the last runs, step 9 the last fixes when step 8 leaves a failure, step 10 the closing.
 - 2026-10-13. Step 7 prepared at base c99b4a6 (brief check `agents/reviews/7-brief-check.md`, every finding closed in the brief) and its builder launched (a09a39ebd2fcccd6b, claude-sonnet-5-5).
+- 2026-10-13. Step 7's builder handed back case C1 after its first read; ruled in `agents/briefs/7-cases.md` and the builder resumed.
 - Next: step 7's report, then `/refute 3 7`.
