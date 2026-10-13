@@ -95,4 +95,6 @@ none
 - 2026-10-13. Step 3 stopped at its `/spec` premise check on Open item F: the rerun needs the fixes tagged and pinned, which a step cannot do before it lands.
 - 2026-10-13. Open item F ruled (a) by the user: step 3 the fixes, then tag `v7.1.0-rc.2` and pin, step 4 the repeated runs, step 5 the closing.
 - 2026-10-13. Step 3 prepared at base aa513eb (brief check `agents/reviews/3-brief-check.md`, 17 findings closed in the brief) and its builder launched (a248d03293a97a4ad, claude-sonnet-5-5).
-- Next: step 3's report, then `/refute 3 3`.
+- 2026-10-13. Step 3's builder handed back a case its brief got wrong; ruled in `agents/briefs/3-cases.md` (7a2d3a4) and the builder resumed.
+- 2026-10-13. The user asked to pause once step 3's builder reports: its report is saved and read, and nothing further (no `/refute`) runs until the user says to go on.
+- Next: step 3's report, then a pause for the user.
