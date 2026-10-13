@@ -1,0 +1,24 @@
+# Repair round 1 of step 7, the third fixes
+
+The refuter report is `.scratch/3-the-writing-base/agents/reviews/7-refuter.md`. Read its verdicts and its findings S1, P1 to P4, T1 to T3, B1 and B2 in full. Each ruling below says what to change. The brief `agents/briefs/7.md` and the cases ruling `agents/briefs/7-cases.md` still govern everything this round does not change, their Verify and Report sections included. The path list is the brief's. The rulings say what each sentence must do; the wording is yours, under the prose standard and `docs/dev/skill-layout.md`.
+
+1. **S1 and P1, "Terms defined at first use".** The rule on where a brought-in term may be used and its exception stand in one bullet, as `docs/dev/skill-layout.md`, "Lists and tables", asks: such a term is used only where the draft defines it at or before the passage, or where the replacement defines it or names its definition in square brackets as a fact for the author. The exception may be a sub-bullet of that bullet. No second sentence contradicts the first. Each sentence stays within the prose standard's section E. The report's judgment call on line 14 states what the base line said and what the new text says.
+2. **B1 and P2, a passage that breaks two rules. This replaces fix 2's "given whole under each rule's group" and the brief's decision 2.** The orchestrator rules for the form the step 6 markers marked right in 29 manuscript findings, which keeps the report from repeating one passage under several groups:
+   - A passage that breaks two or more rules is reported once, in one finding, under the group of one of those rules, with one replacement that ends every break.
+   - That finding names each other rule it breaks by its page and section, in a line of its own. No other group gives an entry for the passage or refers to it.
+   - A place that two lists of places reach, such as two terms or a term and the tense list, is given once, in the first list that reaches it, with the replacement that carries every change at that place, and names the other list's rule or term in the same way. A later list leaves it out and refers to it nowhere.
+   - The bullet "An entry is written out also where an entry of another term changed the same place." goes, and the list-of-places bullet keeps only the rule that each place of a list is its own entry with its place, passage and replacement.
+   - The last pass's first check keeps "no reference to another finding, entry or group". A line naming another rule by page and section is not such a reference.
+3. **T1, the repeat of the last pass.** The rewrite gets a count, as `docs/dev/skill-layout.md`, "Writing for an agent", asks: a finding or a group line is rewritten at most twice. One that still breaks a rule after the second rewrite stays in the report with a line that names the rule it still breaks.
+4. **T2, "full path".** The check on places names the path as "A finding" does: the file's path from the main file's folder. The word "full path" goes.
+5. **T3, sentence length.** The list-of-places bullet is split so that its rule stands in one sentence within section E and its examples stand as sub-bullets or a short second sentence, with no "each place ... with its place" repetition. Every other sentence the step adds is read again against section E, and each one that departs is shortened or named in the report with why it needs its length.
+6. **P3 and P4, the report.** The DONE / NOT DONE row for `metadata.version` quotes the command's output as printed, all three lines. The Verify 5 row and the judgment calls name every added sentence over about 20 words that remains, with why it needs its length.
+7. **B1 and B2, the report's user-visible changes.** "Every host- or user-visible change" gives, each with its before and after:
+   - the form of a passage that breaks two rules (ruling 2), with the step 6 forms as the before: the "Also:" line, the "as in N" finding and the tense group's "not repeated here";
+   - the narrowed "Hedging": a passage whose device already has the strength the evidence carries is not reported whatever claim it hedges, and a same-strength swap is no longer proposed;
+   - the last pass's count and its line for a finding that still breaks a rule (ruling 3).
+8. **P2, C7.** The report's C7 reads each manuscript finding of the C7 list that breaks a second rule (Limitations 2, Clear antecedents 2, filler 3 and the tense-bearing entries of "No synonym cycling" 1.1) against ruling 2, and states for each whether its form changes.
+
+Verify before you report: the brief's "Verify before you report" again, over the files as they stand after this round, from the worktree.
+
+Report: `7-report.md` in the worktree's ledger, rewritten in place, with a section "Repair round 1" that has one row per ruling above with what changed and where. Anything not done comes first. Run no git command that changes state.

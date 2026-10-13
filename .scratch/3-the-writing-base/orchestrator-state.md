@@ -46,9 +46,10 @@ dispatch:
   session_id: a09a39ebd2fcccd6b
   launched: 2026-10-13
   report: .scratch/3-the-writing-base/agents/reviews/7-report.md
-  builder_usage: first read, 183556 tokens, 21 tool uses, 3.0 min
-  round: 0
+  builder_usage: first read, 183556 tokens, 21 tool uses, 3.0 min; after the cases ruling, 215978 tokens, 15 tool uses, 2.9 min
+  round: 1
   brief_check: .scratch/3-the-writing-base/agents/reviews/7-brief-check.md (a50f0c31ddca5b769, claude-opus-5-5, 175635 tokens, 39 tool uses, 6.8 minutes)
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/7-refuter.md (afe8061d591582615, claude-opus-5-5, 198184 tokens, 40 tool uses, 8.0 minutes)
   landing: not-started
 ```
 
@@ -120,4 +121,5 @@ none
 - 2026-10-13. Open item I ruled (a) with a stopping rule by the user: step 7 the third fixes, step 8 the last runs, step 9 the last fixes when step 8 leaves a failure, step 10 the closing.
 - 2026-10-13. Step 7 prepared at base c99b4a6 (brief check `agents/reviews/7-brief-check.md`, every finding closed in the brief) and its builder launched (a09a39ebd2fcccd6b, claude-sonnet-5-5).
 - 2026-10-13. Step 7's builder handed back case C1 after its first read; ruled in `agents/briefs/7-cases.md` and the builder resumed.
-- Next: step 7's report, then `/refute 3 7`.
+- 2026-10-13. Step 7 built and refuted (`agents/reviews/7-refuter.md`); repair round 1 sent with `agents/briefs/7-round-1.md`.
+- Next: the round's report, then `/refute 3 7` over round 1.
