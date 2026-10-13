@@ -46,8 +46,10 @@ dispatch:
   session_id: a2237d2ff6d37342a
   launched: 2026-10-13
   report: .scratch/3-the-writing-base/agents/reviews/5-report.md
-  round: 0
+  builder_usage: 116700 tokens, 75 tool uses, 17.5 minutes
+  round: 1
   brief_check: .scratch/3-the-writing-base/agents/reviews/5-brief-check.md (a31fba24d82d7a955, claude-opus-5-5, 285071 tokens, 46 tool uses, 9.5 minutes)
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/5-refuter.md (abc52e37d862af422, claude-opus-5-5, 290609 tokens, 45 tool uses, 10.4 minutes)
   landing: not-started
 ```
 
