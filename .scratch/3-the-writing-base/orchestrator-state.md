@@ -39,7 +39,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 1
-  landing: preparing
+  executor: agent
+  worker: claude:sonnet
+  session_id: ad8dec496562b2dbf (claude-sonnet-5-5)
+  worktree: .agents/worktrees/3-the-writing-base-1
+  base: 4c51680
+  launched: 2026-10-13
+  report: .scratch/3-the-writing-base/agents/reviews/1-report.md
+  brief_check: .scratch/3-the-writing-base/agents/reviews/1-brief-check.md (ac0e79251e07d0d2c, claude-opus-5-5, 236990 tokens, 70 tool uses, 12.9 minutes)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -72,4 +81,5 @@ none
 ## Current position (rewritten before every step commit)
 
 - 2026-10-13. Step 1 stopped after its brief check, on Open item C, which the user ruled (a); Open item B closed under self-rule (C68). The brief check's report is `agents/reviews/1-brief-check.md`, its Closed heading listing the change to the brief for each finding.
-- Next step: 1, `/spec 3 1` again; it writes the brief with the closed changes and runs no second brief check.
+- 2026-10-13. Step 1 prepared at base 4c51680 and its builder launched (ad8dec496562b2dbf, claude-sonnet-5-5).
+- Next: step 1's report, then `/refute 3 1`.
