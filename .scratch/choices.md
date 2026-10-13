@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C66
+Last number: C67
 
 # Entry 2.I Several plans in one session
 
@@ -29,7 +29,7 @@ The goal part "no breakage testing, in docs/dev/change-standard.md, the repo-set
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:3` (D1 no breakage testing)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:30` (D1 no breakage testing)
 Builds on it: none
 
 ## C42. The character-set check reads only files on disk (2026-10-13)
@@ -41,7 +41,7 @@ The goal part "the character-set check of docs/dev/building.md and docs/dev/chan
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:4` (D2 the character-set check reads only files on disk)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:31` (D2 the character-set check reads only files on disk)
 Builds on it: none
 
 ## C43. Land never settles a clash of two rulings (2026-10-13)
@@ -53,7 +53,7 @@ The goal part "land never settles a clash between two of the user's rulings at l
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:5` (D3 land never settles a clash of two rulings)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:32` (D3 land never settles a clash of two rulings)
 Builds on it: none
 
 ## C44. Land carries out a ruling only on what it names (2026-10-13)
@@ -65,7 +65,7 @@ The goal part "land carries out a ruling only on what it names". What exists now
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:6` (D4 land carries out a ruling only on what it names)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:33` (D4 land carries out a ruling only on what it names)
 Builds on it: none
 
 ## C45. A ruling given outside a plan is written down (2026-10-13)
@@ -77,7 +77,7 @@ The goal part "the shared rules write a ruling given outside a plan into the rep
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:7` (D5 a ruling given outside a plan is written down)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:34` (D5 a ruling given outside a plan is written down)
 Builds on it: none
 
 ## C46. A proposal says what exists now (2026-10-13)
@@ -89,7 +89,7 @@ The goal part "the shared rules have a proposal say what exists now, what change
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:8` (D6 a proposal says what exists now)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:35` (D6 a proposal says what exists now)
 Builds on it: none
 
 ## C47. The builder's prompt says a shortcut is a finding (2026-10-13)
@@ -101,7 +101,7 @@ The goal part "the builder's prompt says a shortcut is a finding". What exists n
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:9` (D7 the builder's prompt says a shortcut is a finding)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:36` (D7 the builder's prompt says a shortcut is a finding)
 Builds on it: none
 
 ## C48. Roadmap compares the written file with the draft (2026-10-13)
@@ -113,7 +113,7 @@ The goal part "roadmap compares the written file with the approved draft before 
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:10` (D8 roadmap compares the written file with the draft)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:37` (D8 roadmap compares the written file with the draft)
 Builds on it: none
 
 ## C49. A dictated sentence about a script is run first (2026-10-13)
@@ -125,7 +125,7 @@ The goal part "a sentence a brief or a round dictates about how a script behaves
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:11` (D9 a dictated sentence about a script is run first)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:38` (D9 a dictated sentence about a script is run first)
 Builds on it: none
 
 ## C50. The reviewer's git commands (2026-10-13)
@@ -137,7 +137,7 @@ The goal part "refute's reviewer runs no git command other than git diff <base>,
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:12` (D10 the reviewer's git commands)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:39` (D10 the reviewer's git commands)
 Builds on it: none
 
 ## C51. How a verify command that starts with git reaches a builder (2026-10-13)
@@ -149,7 +149,7 @@ The goal part "a verify command that starts with git reaches a builder in a form
   - Recommendation: (a): it keeps the builder inside the rules file's reading commands and is the form the second run's briefs used. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:13` (D11 how a verify command that starts with git reaches a builder)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:40` (D11 how a verify command that starts with git reaches a builder)
 Builds on it: none
 
 ## C52. A builder's saved report passes the character-set check (2026-10-13)
@@ -161,7 +161,7 @@ The goal part "a builder's report saved into the ledger passes the character-set
   - Recommendation: (a): the report is right when written and the save is checked. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:14` (D12 a builder's saved report passes the character-set check)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:41` (D12 a builder's saved report passes the character-set check)
 Builds on it: none
 
 ## C53. A repair round's brief reaches the builder in its worktree (2026-10-13)
@@ -173,7 +173,7 @@ The goal part "a repair round's brief reaches the builder in its worktree". What
   - Recommendation: (a), since the worktree is the builder's only place to work. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:16` (D14 a repair round's brief reaches the builder in its worktree)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:43` (D14 a repair round's brief reaches the builder in its worktree)
 Builds on it: none
 
 ## C54. A reviewer's saved report passes the character-set check (2026-10-13)
@@ -185,7 +185,7 @@ The goal part "a reviewer's report saved into the ledger passes the character-se
   - Recommendation: (a), the same rule as D12. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:17` (D15 a reviewer's saved report passes the character-set check)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:44` (D15 a reviewer's saved report passes the character-set check)
 Builds on it: none
 
 ## C55. Who writes a reviewer's usage line (2026-10-13)
@@ -197,7 +197,7 @@ The goal part "the session writes a reviewer's usage line from the reviewer's co
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:18` (D16 who writes a reviewer's usage line)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:45` (D16 who writes a reviewer's usage line)
 Builds on it: none
 
 ## C56. How a closing step runs beside the other steps (2026-10-13)
@@ -209,7 +209,7 @@ The goal part "plan-orchestration says whether a closing step goes through /spec
   - Recommendation: (a). The lazy option is none: both options are a sentence.
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:19` (D17 how a closing step runs beside the other steps)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:46` (D17 how a closing step runs beside the other steps)
 Builds on it: none
 
 ## C57. The builder's git rule (2026-10-13)
@@ -221,7 +221,7 @@ The goal part "the builder's git rule reads the same in plan-orchestration and i
   - Recommendation: (a): the rules file ranks it, since a brief and a skill never override the rules file. The lazy option is none.
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:20` (D18 the builder's git rule)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:47` (D18 the builder's git rule)
 Builds on it: none
 
 ## C58. The report that holds the NOT DONE items (2026-10-13)
@@ -233,7 +233,7 @@ The goal part "plan-orchestration Reports says which report holds the NOT DONE i
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:21` (D19 the report that holds the NOT DONE items)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:48` (D19 the report that holds the NOT DONE items)
 Builds on it: none
 
 ## C59. Each changed skill's version raised (2026-10-13)
@@ -245,7 +245,7 @@ The goal part "each changed skill's version is raised as docs/dev/skill-layout.m
   - Recommendation: (a), since the user approved the fix and the defect is on the tree. The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:22` (D20 each changed skill's version raised)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:49` (D20 each changed skill's version raised)
 Builds on it: none
 
 ## C60. The gate's grep and fresh reviewer (2026-10-13)
@@ -257,7 +257,7 @@ The gate part "each fix's sentence is found in its file by grep -n -F of its tex
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:23` (D21 the gate's grep and fresh reviewer)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:50` (D21 the gate's grep and fresh reviewer)
 Builds on it: none
 
 ## C61. The gate's deleted-file worktree run (2026-10-13)
@@ -269,7 +269,7 @@ The gate part "the character-set check of docs/dev/building.md, run in a worktre
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:25` (D23 the gate's deleted-file worktree run)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:52` (D23 the gate's deleted-file worktree run)
 Builds on it: none
 
 ## C62. The gate's version check (2026-10-13)
@@ -281,7 +281,7 @@ The gate part "each changed skill's version read against docs/dev/skill-layout.m
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:26` (D24 the gate's version check)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:53` (D24 the gate's version check)
 Builds on it: none
 
 ## C63. The gate's checks.sh run (2026-10-13)
@@ -293,7 +293,7 @@ The gate part "sh skills/land/templates/checks.sh passes". What exists now: the 
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:27` (D25 the gate's checks.sh run)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:54` (D25 the gate's checks.sh run)
 Builds on it: none
 
 ## C64. The gate's land.test.sh case (2026-10-13)
@@ -305,7 +305,7 @@ The gate part "`sh skills/land/templates/land.test.sh 2>&1 | tail -1` prints a P
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:24` (D22 the gate's land.test.sh case)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:51` (D22 the gate's land.test.sh case)
 Builds on it: none
 
 ## C65. The roadmap diff of entry 2.K (2026-10-13)
@@ -317,7 +317,7 @@ No answer of the interview changes the entry's goal, its gate or what it waits o
   - Recommendation: (a). The lazy option: none, since (a) leaves no work undone.
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:28` (D26 the roadmap diff of entry 2.K)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:55` (D26 the roadmap diff of entry 2.K)
 Builds on it: the roadmap diff of entry 2.K
 
 ## C66. Record as ADR? (2026-10-13)
@@ -329,5 +329,17 @@ D13 refines ADR 0010's Consequences sentence; the other decisions are skill text
   - Recommendation: (a). The lazy option: none, since the ADR edit is done in either case.
 
 Taken: (a)
-Booked: `.scratch/rulings/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run.md:29` (D27 record as ADR?)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:56` (D27 record as ADR?)
 Builds on it: none
+
+## C67. The step list of plan 2.K as drafted (2026-10-13)
+
+`/plan 2.K --self-rule` drafted two steps: step 1, every skill-text fix of the goal with the gate's checks as its check, and step 2, the closing. No fix needs another fix's landed result, and the content of each is known in advance from the rulings D1 to D27, so `/plan` Steps 2 makes them one step. Every answer of "## Gate" is no, no design decision is left unsettled after `/grill 2.K --self-rule`, and no line of the rulings file was left to place.
+  - Option (a), recommended: open the plan with the list as drafted. Pro: the plan opens and step 1 can be prepared at once; one builder holds every fix, so the shared files (`plan-orchestration`, `land`, the change standards) are changed once and each skill's version is raised once. Con: one large step for one builder and one review.
+  - Option (b): keep the draft for the user. Pro: the user sees the list before the plan opens. Con: the plan does not open, and nothing in the written rules needs the user's call here.
+  - Rule: the `plan` skill's Steps 2 and 3.
+  - Recommendation: (a). The lazy option is (b).
+
+Taken: (a)
+Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:57` (Open item A)
+Builds on it: step 1, step 2

@@ -1,0 +1,67 @@
+# Plan: 2.K The skill-text fixes from the retro and the real run
+
+Execution ledger for roadmap entry 2.K of `docs/roadmap.md`. One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+the skill texts and change standards hold these fixes, each in the files it names. From the approved proposals of `.scratch/retros/sessions-2026-10-12.md`: no breakage testing, in `docs/dev/change-standard.md`, `skills/repo-setup/templates/docs/dev/change-standard.md` and `skills/repo-setup/templates/shared-rules.md`; the character-set check of `docs/dev/building.md` and `docs/dev/change-standard.md` reads only files that exist on disk; `land` never settles a clash between two of the user's rulings at landing, and carries out a ruling only on what it names; the shared rules write a ruling given outside a plan into the repository in the same turn, and have a proposal say what exists now, what changes, what it replaces and why; the builder's prompt says a shortcut is a finding; `roadmap` compares the written file with the approved draft before the commit; a sentence a brief or a round dictates about how a script behaves is run on the script before it is written; `refute`'s reviewer runs no git command other than `git diff <base>`, `git status --short` and `git show <base>:<path>`. From run findings 1, 3, 6 and 7 of `.scratch/archive/2-i-several-plans-in-one-session/agents/reviews/2-report.md`: a verify command that starts with git reaches a builder in a form that runs no git; a builder's report saved into the ledger passes the character-set check; a step that adds a command to the verification page runs that command at its own landing; a repair round's brief reaches the builder in its worktree. From run findings 2, 3, 5, 7 and 8 of `.scratch/archive/2-i-several-plans-in-one-session/agents/reviews/4-report.md`: a reviewer's report saved into the ledger passes the character-set check; the session writes a reviewer's usage line from the reviewer's completion notice, and the reviewer does not; `plan-orchestration` says whether a closing step goes through `/spec` and takes a slot; the builder's git rule reads the same in `plan-orchestration` and in `skills/repo-setup/templates/docs/dev/change-standard.md`; `plan-orchestration` "Reports" says which report holds the NOT DONE items and the DONE / NOT DONE ledger. Each changed skill's version is raised as `docs/dev/skill-layout.md` says.
+
+## Gate
+
+each fix's sentence is found in its file by `grep -n -F` of its text and read in place by a fresh reviewer agent against the proposal or finding it answers; `sh skills/land/templates/land.test.sh 2>&1 | tail -1` prints a `PASS:` line, with a case in which a step adds a command to the verification page and that command's `$ <command>` line is in its landing's checks output; the character-set check of `docs/dev/building.md`, run in a worktree in which a tracked file was deleted, exits 0; each changed skill's version read against `docs/dev/skill-layout.md`; and `sh skills/land/templates/checks.sh` passes.
+
+- The gate: could this pass without the goal being reached? No. Each fix is read in place by a fresh reviewer against the proposal or finding it answers, so a sentence found by grep that does not do what the proposal asks fails the read; the `land.test.sh` case, the deleted-file run, the version read and `checks.sh` each check a part the read does not run.
+- Step 1: could this pass without the goal being reached? No. The step delivers every fix of the goal, and its check is the gate's checks, each fix read in place against its proposal or finding, with the glossary sync for a changed plan term.
+- Step 2: could this pass without the goal being reached? No. The closing ticks the entry only with the gate's output from step 1's landing.
+
+## Steps, in execution order
+
+- 1 The skill-text fixes of the goal, each in the files the goal names, as the rulings D1 to D20 say: no breakage testing in the change standards and the shared rules; the character-set check reads only files on disk; `land` never settles a clash of two rulings, carries out a ruling only on what it names, and compares the verify list with the verification page as the cherry-pick brings it, with ADR 0010's Consequences sentence edited as D13 says and a `land.test.sh` case for it; the shared rules write a ruling given outside a plan into the repository and have a proposal say what exists now, what changes, what it replaces and why; the builder's prompt says a shortcut is a finding; `roadmap` compares the written file with the approved draft; a dictated sentence about a script is run first; `refute`'s reviewer git commands; a verify command that starts with git reaches a builder as D11 says; builders' and reviewers' saved reports pass the character-set check; a repair round's brief reaches the builder in its worktree; the session writes a reviewer's usage line; a closing step as D17 says; the builder's git rule reads the same in `plan-orchestration` and the change standard template; `plan-orchestration` "Reports" names the report that holds the NOT DONE items and the DONE / NOT DONE ledger; every file of each changed skill checked against the change, each changed skill's version raised as `docs/dev/skill-layout.md` says, and `docs/glossary.md` synced where a plan term changes; check: each fix's sentence found in its file by `grep -n -F` of its text from the repository root and read in place by the step's fresh reviewer against the proposal or finding it answers; `sh skills/land/templates/land.test.sh 2>&1 | tail -1` from the repository root prints a `PASS:` line, with a case in which a step adds a test script and its command to the verification page and the command's `$ <command>` line is in that landing's checks output; the character-set check of `docs/dev/building.md`, run from the root of a worktree in which a tracked file was deleted, exits 0; each changed skill's version read against `docs/dev/skill-layout.md`; `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` from the repository root exits 0; and `sh skills/land/templates/checks.sh .scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/orchestrator-state.md` from the repository root passes (1 commit) (ruling A)
+- 2 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output (`/roadmap done 2.K`), this folder moved to `.scratch/archive/` (orchestrator, no agent) (ruling A)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless `.agents/plan.yaml`'s `workers_at_once` allows more.
+
+- none: the plan has one build step, and the closing starts only after it has landed.
+
+## Rulings (2026-10-13)
+
+- D1 no breakage testing (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D2 the character-set check reads only files on disk (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D3 land never settles a clash of two rulings (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D4 land carries out a ruling only on what it names (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D5 a ruling given outside a plan is written down (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D6 a proposal says what exists now (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D7 the builder's prompt says a shortcut is a finding (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D8 roadmap compares the written file with the draft (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D9 a dictated sentence about a script is run first (2026-10-13): (a) the part kept as the entry writes it, in `plan-orchestration` Steps 4, "The prompt", for the builder, and Steps 8, "Dictated text", for the orchestrator, the run quoted in the round's brief (self-rule).
+- D10 the reviewer's git commands (2026-10-13): (a) the part kept as the entry writes it, in `refute` Rules, with "What it reads" 5 naming the same three commands (self-rule).
+- D11 how a verify command that starts with git reaches a builder (2026-10-13): (a) `spec` Steps 4 writes a verify-list check that starts with git with its file list given as `printf '%s\0' <the files the step changes> |`, the rest as the verify list has it (self-rule).
+- D12 a builder's saved report passes the character-set check (2026-10-13): (a) the builder writes its report in the rules file's character set, naming a character outside it such as `<tab>`, and the session checks the saved report and fixes a hit in place by the same naming (self-rule).
+- D13 how a step that adds a command to the verification page runs it at its own landing (2026-10-13): (a) `land` Steps 2 compares the verify list with the page as the cherry-pick brings it, read from the step's branch when the range changes the page and from main otherwise, before `land.sh` runs, with no script change; ADR 0010's Consequences sentence is edited as a refinement to "A landing is held to the checks main holds once the step is on it."; the lazy option was (c) (the user).
+- D14 a repair round's brief reaches the builder in its worktree (2026-10-13): (a) before a resume the orchestrator copies the round's brief, and a cases ruling, into the worktree's copy of the ledger at the same path and names that path in the message (self-rule).
+- D15 a reviewer's saved report passes the character-set check (2026-10-13): (a) the reviewer writes its report in the rules file's character set, naming a character outside it, and the session checks the saved report and fixes a hit in place the same way (self-rule).
+- D16 who writes a reviewer's usage line (2026-10-13): (a) `refute` Steps 6 drops the reviewer's usage line, and Steps 7 has the session fill it from the completion notice (self-rule).
+- D17 how a closing step runs beside the other steps (2026-10-13): (a) a closing step runs without `/spec` or a dispatch entry, takes no slot, starts only when every other step of its plan has landed, and makes its commits outside any landing (self-rule).
+- D18 the builder's git rule (2026-10-13): (a) `plan-orchestration` Steps 4 states the rules file's rule: the builder runs no git command that changes state and reads only with `git status`, `git diff` and `git show` (self-rule).
+- D19 the report that holds the NOT DONE items (2026-10-13): (a) the orchestrator's report, after the landed steps and the choices, states anything NOT DONE first, then a DONE / NOT DONE ledger, one row per step landed or stopped, naming the landing report or open item that proves it (self-rule).
+- D20 each changed skill's version raised (2026-10-13): (a) the part kept as the entry writes it (self-rule).
+- D21 the gate's grep and fresh reviewer (2026-10-13): (a) the gate part kept as the entry writes it (self-rule).
+- D22 the gate's land.test.sh case (2026-10-13): (a) the gate part kept as the entry writes it, the case a step that adds a test script and its command to the verification page, whose landing output holds the command's `$ <command>` line (self-rule).
+- D23 the gate's deleted-file worktree run (2026-10-13): (a) the gate part kept as the entry writes it (self-rule).
+- D24 the gate's version check (2026-10-13): (a) the gate part kept as the entry writes it (self-rule).
+- D25 the gate's checks.sh run (2026-10-13): (a) the gate part kept as the entry writes it (self-rule).
+- D26 the roadmap diff of entry 2.K (2026-10-13): (a) no change to the entry, since every answer settles how a part of the goal is done and none changes the goal, the gate or what it waits on (self-rule).
+- D27 record as ADR? (2026-10-13): (a) no new record, since D13 refines ADR 0010 by an edit in place as the ADR folder's README says for a refinement, and the other decisions are skill text that binds through the skills themselves (self-rule).
+- Open item A (2026-10-13): the step list as drafted, 2 steps, which opens the plan (self-rule).
+
+## Agents
+
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent in no role the cost script prices, which has a numbered item under the heading "Agents in no role the cost script prices:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+
+- a4ab88a3280809e54: grill lookup, claude-opus-5-5
+
+## Blocked, and by what
+
+- none.
