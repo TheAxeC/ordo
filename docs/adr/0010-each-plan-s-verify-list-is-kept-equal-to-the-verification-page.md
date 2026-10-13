@@ -17,4 +17,4 @@ Status: proposed
 
 ## Consequences
 
-A landing is held to the checks main holds at that moment. Each preparation and each landing reads the verification page once more. A page edited outside any plan reaches every open plan at its next preparation or landing.
+A landing is held to the checks main holds once the step is on it. Each preparation and each landing reads the verification page once more. A page edited outside any plan reaches every open plan at its next preparation or landing.

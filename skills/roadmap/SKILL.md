@@ -2,7 +2,7 @@
 name: roadmap
 description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves or under a quoted ruling. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
-  version: "1.3.1"
+  version: "1.4.0"
 ---
 
 # Keep the roadmap
@@ -76,20 +76,22 @@ metadata:
 1. Read the file's format, as "The file's format" says, and whether a capability map sits beside it ("A capability map beside the ordered file").
    - The plain `/roadmap` then runs "Steps / Show" and ends there: it changes nothing and shows nothing for approval.
 2. For `add`, `move`, `done` and `drop` only, draft the change by the command's subsection below.
-   - Nothing is written yet.
+   - Nothing is written to the repository yet.
+   - The draft is the roadmap file, and for a capability map the system file, written whole to the session's scratch folder.
    - Under a quoted ruling ("What it reads" 6), the draft takes the ruling's text.
    - For `add` that text is the entry's title, goal, gate, level, number, what it waits on and its place, with the capability's draft where the roadmap has a capability map.
    - For `move`, `done` and `drop` it is the change the ruling states.
    - Each item of the command's subsection is then worked on that draft.
    - An item replaces ruled text only where a rule of this skill gives another result, such as a place, a number, a level or the file's form.
    - The ruled wording of the title, the goal, the gate and what it waits on is kept.
-   - The step is done when the change is drafted and nothing is written.
-3. Show each change as a diff of the roadmap file, and of the system file for a map, and for `add` the gate's answer with its reason (Steps / add 6).
+   - The step is done when the change is drafted in the scratch folder and nothing is written to the repository.
+3. Show each change as the diff of the roadmap file against its draft, and of the system file against its draft for a map, and for `add` the gate's answer with its reason (Steps / add 6).
 4. Write the change once the user approves or corrects it ("Stops").
+   - The file is then compared with the approved draft, and `diff <file> <draft>` prints nothing before the commit.
    - Under a quoted ruling, compare the draft, after the command's subsection has been worked on it, with the change the ruling states.
    - A draft that is that change is written without the stop, for `add` only when the gate's answer of Steps / add 3 is no.
    - A draft that differs in anything, such as a place or a number the skill's own rules give, is shown whole with each difference named, and the stop stands.
-   - The step is done when the change is written, or the draft is shown with each difference named and the stop stands.
+   - The step is done when the change is written and `diff` prints nothing, or the draft is shown with each difference named and the stop stands.
 5. Commit the files by explicit path list, one commit per change, the subject naming the entry and what changed.
    - Each file is staged with `git add -- <path> ...`.
    - The commit names the same paths: `git commit -m <message> -- <path> ...`.

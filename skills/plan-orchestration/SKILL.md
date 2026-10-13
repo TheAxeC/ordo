@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "5.0.0"
+  version: "6.0.0"
 ---
 
 # Plan orchestration
@@ -59,6 +59,12 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
    - Each pair of the picked step with the steps in flight is judged under "Two steps in flight".
    - A step that waits because its shared file is not simple to merge is blocked, and the slot goes to the next pick.
    - A step that must run alone ("Two steps in flight"), when it is the next pick, holds the loop: no further step is dispatched until nothing else is in flight and it has been dispatched.
+   - The closing step is the last step of a plan, which `/plan` writes itself.
+     - It runs without `/spec` and without a dispatch entry.
+     - It takes no slot under the limit.
+     - It starts only when every other step of its plan has landed.
+     - It makes its commits outside any landing.
+     - Another step marked "orchestrator, no agent" is not a closing step and is not covered by these bullets.
    - `/plan-orchestration <entry>` picks from that plan alone.
    - With no open plan, `/plan-orchestration` with no entry and `continue the plan` take the next roadmap entry under `self_rule: on` and `next_entry: on`, as `references/self-rule.md`, "Next-entry mode", says.
      - Otherwise they say that no plan is open and name `/plan <entry>`.
@@ -84,13 +90,15 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
        - The brief and the brief-check report of a `/spec` waiting on its brief check are not among those records (the `spec` skill's "Steps / The brief check" 1).
    - **The prompt.** It states, in its own words:
      - The worktree, and that it is the only place to work.
-     - The no-git rule.
+     - That the builder runs no git command that changes state (no `add`, `commit`, `stash`, `checkout`, `mv`, `restore`), that reading with `git status`, `git diff` and `git show` is fine, and that a file is moved with `mv`.
      - What is never touched: the ledger beyond the builder's report, the main checkout, the user's data.
      - The reading order: the rules file, the brief, the standards, the ADRs the brief names.
      - Every requirement the step is judged on.
+     - That a shortcut is a finding, a narrower reading of an item and work inside the step called outside it among them, and that such work is done or handed back with the reason before the report.
+     - That a sentence the brief or a round gives word for word about how a script behaves is run before it is written, and one the run shows false is left unwritten and handed back with the run.
      - That the builder runs the checks the brief names for the files the step changes, and that the lines they print are what the report quotes.
      - The report path and shape.
-   - **The builder.** It never runs a git command.
+   - **The builder.** It runs no git command that changes state (no `add`, `commit`, `stash`, `checkout`, `mv`, `restore`); reading with `git status`, `git diff` and `git show` is fine; it moves a file with `mv`.
      - In the ledger it writes only its report, at the path the brief names in the worktree's copy of the ledger.
    - **`inline`.** The orchestrating session writes `inline` as the builder's identity under `session_id`.
      - It makes the launch commit.
@@ -107,6 +115,8 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
    - Then read the whole diff.
    - The orchestrator copies the report from where Steps 4 ("The builder") says the builder writes it.
    - When the builder wrote no report file, the orchestrator takes the report from the final message its completion notification carries, into the `report` path.
+   - The saved report is checked with the character-set check before it is read.
+     - A character outside the set is written in place by its name in angle brackets, such as `<tab>` or `<em dash>`.
    - The orchestrator writes the builder's tokens, tool uses and time, from its completion notice, into the dispatch entry under `builder_usage`, beside `report`, on disk.
    - The next resume-point commit of its plan carries them.
    - The report is a lead, not a fact.
@@ -116,6 +126,8 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
      - Write the ruling into the ledger as the round-0 ruling file `agents/briefs/<step>-cases.md`.
      - Hold the text the ruling gives the builder word for word as Steps 8's "Dictated text" says, before it is committed.
      - Commit it as a round sent, in the form "Resuming, and handing the plan over" states.
+     - Copy that file into the worktree's copy of the ledger at the same path before the resume.
+       - The message that resumes the builder names that path.
    - Then resume the same builder with it, by Steps 8's "How" and "Before the resume" with `round: 0`.
      - The builder's final report carries the ruling.
    - Such a case whose fix changes a public shape or an established decision is a stop of the kind "A finding that is the user's", by "Stops".
@@ -134,8 +146,17 @@ The loop runs over the plans that `/plan` opened. Each step goes through the sam
      - A review that finds the step is not a small text step (the `refute` skill's "The four headings", Spec) makes it a full step, and the bullets below apply.
    - **How.** The builder is resumed by the runner's message tool on its agent id in `session_id`, the numbered list as the message.
    - **Dictated text.** Text a round's brief or a cases ruling gives the builder word for word is held line by line before the round's brief or the ruling is committed, as the `spec` skill's "Steps / The brief check" 2 "Dictated text" holds a brief's, since the brief check never reads those files.
+     - A dictated sentence that says how a script behaves is run on the script before the round is committed, and the run is quoted in the round's brief.
    - **Before the resume.** Write `round: n` into the dispatch block.
-     - Commit it as a resume point, in the form "Resuming, and handing the plan over" states, with the round's brief and the session's own records of the step's plan since the last resume point.
+     - Copy the round's brief into the worktree's copy of the ledger at the path it has in the main ledger.
+       - The message that resumes the builder names that path.
+     - For a repair round, snapshot the step's change as the round is sent.
+       - `git status --porcelain --untracked-files=all`, run from inside the step's worktree, lists every changed path.
+       - Each listed path outside the ledger root is copied into `<worktree_root>/<slug>-<step>-round-<n>/` at the same relative path.
+       - The session writes the list itself, the lines `git status` printed for those paths, into that folder as `files.txt`.
+       - A deleted path is named in `files.txt` and not copied.
+       - The folder lies under the worktree root, which git ignores, so no check reads it and no commit carries it.
+     - Commit the dispatch block as a resume point, in the form "Resuming, and handing the plan over" states, with the round's brief and the session's own records of the step's plan since the last resume point.
        - The brief and the brief-check report of a `/spec` waiting on its brief check are not among those records (the `spec` skill's "Steps / The brief check" 1).
    - **Only known fixes.** Each ruling says what to change.
      - A finding whose cause is not known (a failure that does not reproduce, a slow case, a fault seen once) is diagnosed, before the round is sent, with `/diagnose <entry> <step> <finding>` (`round <n>` before the name for a finding of the run over repair round <n>).
@@ -378,17 +399,19 @@ The orchestrator, still one, may have as many steps running at once as the limit
       - the tag and the pin, for the user's approval, where the plan's rulings set them;
       - the move of the folder to `<archive_root>/`.
   - A plan whose folder has moved to `<archive_root>/` is not open and has no position line.
-- The orchestrator's report opens with one position line per open plan, in the roadmap's order, each followed by that plan's open items verbatim.
+- The orchestrator's report opens with a line naming anything NOT DONE, or saying that everything is done.
+  - Then come one position line per open plan, in the roadmap's order, each followed by that plan's open items verbatim.
   - Then come the steps landed since the loop began, grouped by plan, each with the path of its landing report.
   - Under `self_rule: on`, then come the choices taken since the loop began, by `C<n>` and heading.
-- The landing report stays one per step, in its plan's ledger, and opens with its own plan's position line.
+- The landing report stays one per step, in its plan's ledger, and opens with its own plan's position line, in the order the `land` skill's Steps 11 gives.
 - A builder's report keeps the shape of the repository's change standard.
 - In the landing report, the state file's open items follow the position line, verbatim.
 - The open items hold only what the user must rule on: a stop, and a proposal of the recurring-findings pass.
 - A finding that is neither closed in the repair rounds nor fixed at landing is an open item, which goes where "What earns a step of its own" says.
 - The other list, the closed one, is the log of what was raised and how it ended.
   - No report carries it.
-- Then anything NOT DONE first, then the DONE / NOT DONE ledger naming the command that proves each row.
+- The orchestrator's report ends with a DONE / NOT DONE table, one row per step landed or stopped since the loop began.
+  - Each row names the landing report and the command it quotes, or the open item that proves it.
 
 ## Usage
 

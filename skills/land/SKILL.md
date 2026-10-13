@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit that names its paths, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "3.0.0"
+  version: "4.0.0"
 ---
 
 # Land a step
@@ -41,6 +41,7 @@ metadata:
      - They are left alone.
 7. The step's diagnosis record `agents/reviews/<step>-diagnosis.md`, when it exists, for the booking of Steps 9.
 8. The verification page `.agents/plan.yaml`'s `verification:` names, for the compare of Steps 2.
+   - Its copy in the step's worktree when the step changed it since the base, main's copy otherwise, and the merge of the two when main and the worktree both changed it.
 
 ## Steps
 
@@ -50,10 +51,15 @@ metadata:
    - A check that fails is a refusal before main is touched ("Stops").
 2. Set `landing: cherry-picking` in the step's dispatch entry.
    - Then compare the plan's verify list with the verification page's commands, as the `spec` skill's Steps 1 says.
+   - The page is read as the cherry-pick of Steps 4 will bring it.
+     - From the step's worktree when its page differs from the base's there (`git diff --quiet <base> -- <page>`, run from inside the worktree, exits 1).
+       - `templates/land.sh`'s Steps 3 commits the worktree's changes into the range.
+     - From main otherwise.
+     - When main and the worktree both changed the page since the base, as the merge of the two in place of either copy.
    - Rewrite the list in the state file on a difference, before `templates/land.sh` runs it.
    - The booking (Steps 9) names the change.
    - The landing commit carries the state file (Steps 12).
-   - Done when `landing: cherry-picking` is set and the verify list equals the page's commands.
+   - Done when `landing: cherry-picking` is set and the verify list equals the page's commands as the cherry-pick brings the page.
 3. In the worktree, from inside it, after waiting for its `index.lock` to go: `git add -A` of the whole tree with the ledger root left out.
    - `git commit -q -m wip` when something is staged.
    - A builder that committed everything leaves nothing staged, and the landing makes no wip commit.
@@ -73,6 +79,13 @@ metadata:
    - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here.
      - It is counted and named the same way as a red line.
    - A finding of a small text step's review that is small and inside the brief is fixed on main here the same way.
+   - A finding that is a clash between two of the user's rulings is never fixed at landing; it is the stop "A rule clash" of `plan-orchestration`.
+     - It takes the step back out of main as a red line for the user does (the bullets below), before any other commit.
+     - It is raised as the open item of the stop "A rule clash" ("Stops").
+   - A ruling is carried out on what it names; another place its reason reaches is raised as an open item before it is changed.
+     - The landing goes on with the ruling carried out on what it names.
+     - The other place is booked as an open item in the state file and named in the booking (Steps 9).
+     - This is no stop.
    - A red line that a fix inside the brief closes is fixed on main.
      - It is counted as a fix at landing.
      - It is named in the booking with its cause.
@@ -188,7 +201,7 @@ metadata:
   - When every command exits 0, it prints `checks: <n> commands passed`.
   - When every command exits 0, it exits 0.
   - A list it cannot read is refused with exit 2 before anything runs, and never passes.
-- `templates/land.test.sh` proves `land.sh` on scratch repositories: a conflict exits 2 and leaves main as it was, a ledger file left uncommitted in the worktree never reaches main, a failing check fails the landing, and a clean landing stages the step on main.
+- `templates/land.test.sh` proves `land.sh` on scratch repositories: a conflict exits 2 and leaves main as it was, a ledger file left uncommitted in the worktree never reaches main, a failing check fails the landing, a clean landing stages the step on main, and a step whose new test script and its command, left uncommitted in the worktree, reach main, where `checks.sh` runs that command after the cherry-pick with the verify list the fixture gives.
 - `land.sh`'s zero exit passes the checks on main (Steps 6).
   - It never passes the look (Steps 7), which it does not do.
 
@@ -204,8 +217,9 @@ metadata:
    - Each path must be under the ledger root, `.agents/plan.yaml`'s `ledger_root` (in the `projects:` form, the one that holds the state file's folder), since the ledger is written only on main and its copies in the worktree are records already saved there or copies the orchestrator put there.
    - Any other path is a stop ("Stops") that names it, and nothing is removed.
 3. Run `git worktree remove --force <worktree>`, when it still exists, since without `--force` git refuses a worktree holding untracked or modified files, such as those ledger copies.
-4. Run `git branch -D` for `<branch>` and for `<branch>-land`, each only when it exists, since after a cherry-pick neither is merged into main (the cherry-pick made new commits) and only `-D` deletes an unmerged branch.
-5. These commands run without asking the user, since the step's work is committed on main.
+4. Run `rm -r` on each `<worktree>-round-<n>` folder beside the worktree, when it exists.
+5. Run `git branch -D` for `<branch>` and for `<branch>-land`, each only when it exists, since after a cherry-pick neither is merged into main (the cherry-pick made new commits) and only `-D` deletes an unmerged branch.
+6. These commands run without asking the user, since the step's work is committed on main.
    - When the runner refuses one of them, the session gives the user the command to run and waits.
 
 ## Stops
@@ -213,6 +227,7 @@ metadata:
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
 | A red line for the user | A red line after the cherry-pick that no fix inside the brief closes, and what to do is a decision for the user | The failure, booked in the open items as Steps 6 says | The user's ruling or, under `self_rule: on`, for a first failure only (Steps 6), the choice `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", books |
+| A rule clash | A finding at landing is a clash between two of the user's rulings (Steps 6), the stop of the same name of `plan-orchestration` | The open item naming both rulings, and the step taken back out of main | The user's ruling |
 | A lock held | An `index.lock`, the worktree's or main's, still there after 60 s of waiting at Steps 3 or 4 | The lock's path, and what the stop leaves, as the bullet below says | The lock removed once no git command uses it, then `/land` again, as the bullet below says |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/land` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan`, then the step prepared, built and refuted |
@@ -223,11 +238,11 @@ metadata:
 | Agents still running | The check of Steps 1 fails: an agent still listed | Each one left | Each one stopped, then `/land` again |
 | A worktree that cannot be removed | At Steps 13, the worktree holds a path outside the ledger root, or a removal command fails ("Removing a step's worktree") | The open item, with the worktree path and both branches, as Steps 10 read them, and what stopped the removal (each path outside the ledger root, or the command and what it printed) | The cause put right, such as the path moved out of the worktree or removed by the user, then "Removing a step's worktree" run on the worktree and branches the open item names |
 
-- The first row is a stop: it leaves an open item.
-- The second row is a stop that leaves no open item: main is untouched, and landing again resumes it.
+- The first two rows are stops: each leaves an open item.
+- The third row is a stop that leaves no open item: main is untouched, and landing again resumes it.
   - Under `templates/land.sh`, the stop leaves the worktree on `<slug>-<step>` or, after the script's checkout of `<slug>-<step>-land`, on that branch, and the script exits 1.
   - `templates/land.sh`, run again on a main with nothing staged, returns the worktree to `<slug>-<step>`, deletes `<slug>-<step>-land` and lands from the start.
-- The rows after those two, up to the last, are refusals: they come before main is touched.
+- The rows after those three, up to the last, are refusals: they come before main is touched.
 - The last row is a stop after the landing's commit that leaves an open item: the step is on main, and only its worktree and branches are left, named in the open item.
   - The open item is booked in the state file's open items and committed as a resume point, in the form Steps 12 states.
   - Removing them, as "Removing a step's worktree" says, finishes the landing and closes the open item.

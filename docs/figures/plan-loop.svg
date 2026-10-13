@@ -97,9 +97,10 @@
 <text x="897.6" y="152" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
 <text x="860" y="172" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A red line for the</text>
 <text x="868" y="186" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">user</text>
-<text x="860" y="200" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A lock held</text>
-<text x="860" y="214" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A worktree that</text>
-<text x="868" y="228" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">cannot be removed</text>
+<text x="860" y="200" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A rule clash</text>
+<text x="860" y="214" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A lock held</text>
+<text x="860" y="228" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A worktree that</text>
+<text x="868" y="242" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">cannot be removed</text>
 <line x1="215" y1="62" x2="232" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
 <line x1="343" y1="62" x2="360" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
 <line x1="491" y1="62" x2="508" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>

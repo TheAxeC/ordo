@@ -6,7 +6,10 @@
 # index as they were; a ledger file left uncommitted in the worktree never reaches main, under the
 # projects: form of plan.yaml with the state file given as an absolute path; a failing check exits
 # 1 with checks.sh's failure line and leaves main's HEAD as it was; a clean landing exits 0, runs
-# its check on main after the cherry-pick and stages the step's change on main.
+# its check on main after the cherry-pick and stages the step's change on main; a step that adds a
+# test script and its command, both left uncommitted in the worktree as a builder leaves them,
+# reaches main and exits 0 with the command's line and the added script's PASS line printed by
+# checks.sh on main after the cherry-pick, with the verify list the fixture gives.
 
 set -u
 
@@ -152,5 +155,29 @@ assert_contains "$clean_output" "checks: 1 commands passed" "clean landing"
 clean_staged=$(cd "$clean_repo" && git diff --cached --name-only) || fail "could not read the clean staged paths"
 [ "$clean_staged" = "change.txt
 pending.txt" ] || fail "clean landing staged [$clean_staged], expected [change.txt pending.txt]"
+
+# A step that adds a test script and its command: both are left uncommitted in the worktree, as a
+# builder leaves them, and the state file's verify list the fixture gives holds the command. Exit 0,
+# the command's line printed by checks.sh on main after the cherry-pick, the added script's own
+# PASS line, and the command in main's copy of the verification page.
+make_repo verification 'ledger_root: ledger
+worktree_root: .agents/wt' ledger/plan/orchestrator-state.md .agents/wt <<'EOF'
+sh utils/added.test.sh
+EOF
+verification_repo=$repo
+commit_file "$verification_repo" docs/verification.md "# Verification"
+verification_base=$(cd "$verification_repo" && git rev-parse HEAD) || fail "could not read the verification base"
+add_worktree "$verification_repo" .agents/wt/verification verification
+verification_worktree=$verification_repo/.agents/wt/verification
+mkdir -p "$verification_worktree/utils"
+printf '%s\n' "printf 'PASS: added test\\n'" >"$verification_worktree/utils/added.test.sh"
+printf '%s\n' "# Verification" "sh utils/added.test.sh" >"$verification_worktree/docs/verification.md"
+verification_output=$(cd "$verification_repo" && sh "$land_script" ledger/plan/orchestrator-state.md verification "$verification_base" 2>&1)
+verification_status=$?
+[ "$verification_status" -eq 0 ] || { printf '%s\n' "$verification_output" >&2; fail "verification landing exited $verification_status, expected 0"; }
+assert_contains "$verification_output" '$ sh utils/added.test.sh' "verification landing"
+assert_contains "$verification_output" "PASS: added test" "verification landing"
+assert_contains "$verification_output" "checks: 1 commands passed" "verification landing"
+grep -qxF 'sh utils/added.test.sh' "$verification_repo/docs/verification.md" || fail "verification landing left the added command out of main's docs/verification.md"
 
 printf 'PASS: land.sh scratch tests\n'

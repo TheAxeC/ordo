@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "5.0.0"
+  version: "6.0.0"
 ---
 
 # Prepare a step
@@ -172,6 +172,7 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
    - Under "Verify before you report", each check of the configuration block's verify list that covers a file the step changes, then the step's own gate.
      - Each check has the directory it runs from and the output that counts as a pass.
      - The character-set check over those files is among the checks where the verify list holds one.
+     - A check of the verify list whose file list comes from a git command is written in the brief with that file list given as `printf '%s\0' <the files the step changes> |` in place of the git command, the rest of the command as the verify list has it.
      - The brief says the plan's whole verify list runs once, at landing on main.
    - The report shape, with the cases' first run before the result table.
    - Under "Cases", every must-pass and must-refuse example the step's text gives, in one list, each an input and its expected result.
@@ -282,7 +283,7 @@ A step whose dispatch entry reads `landing: backed-out` has its old worktree and
    - Two diffs that differ are a refusal ("Stops"), and nothing is removed.
    - An empty diff writes no patch.
      - It removes a patch an earlier back-out of the step left there.
-4. Remove the worktree and branches, as the `land` skill's "Removing a step's worktree" says: `git worktree remove --force <worktree>`, then `git branch -D` for `<branch>` and `<branch>-land`, each only when it exists.
+4. Remove the worktree and branches, as the `land` skill's "Removing a step's worktree" says: `git worktree remove --force <worktree>`, then `rm -r` on each `<worktree>-round-<n>` folder beside the worktree, then `git branch -D` for `<branch>` and `<branch>-land`, each only when it exists.
    - These commands run without asking the user, since the step's work is saved in the checked patch.
    - When the runner refuses one of them, the session gives the user the command to run and waits.
 5. Remove the backed-out entry from the dispatch block.
@@ -385,6 +386,7 @@ Steps 5 says when this runs.
    - It invokes no skill: it runs the reads and commands of item 2 itself.
    - It starts no agent: every read and every command runs in its own session.
    - It writes `<REDACTED>` in place of the value of a secret in every line it quotes, as the rules file's rule on secrets in quoted command output says.
+   - It writes its report in the rules file's character set, a character outside it in a quoted line written by its name in angle brackets, such as `<tab>` or `<em dash>`.
    - The agent runs in the background.
    - Right after the start, the session reads the agent's id and the model the runner served it, from the runner's record of the agent as `plan-orchestration`'s "Launching a builder" says.
    - A served model that is not the configured one is the stop "A model other than the configured one" ("Stops").
@@ -426,10 +428,12 @@ Steps 5 says when this runs.
    - The checks are done when each has its findings, or "none".
 3. The agent's final message is its report, in the shape of `templates/brief-check.md`: one heading per check of item 2, each with its findings or "none", then "Declined to judge", then the agent's usage.
    - The session saves it at `agents/reviews/<step>-brief-check.md` beside the state file, the usage line filled with the agent's id, its served model (item 1) and its tokens, tool uses and time from its completion notice.
+   - It checks the saved report with the character-set check.
+     - A character outside the set is written in place by its name in angle brackets, such as `<tab>` or `<em dash>`.
    - A full step has one such report, since the check runs once per full step (item 4).
    - When the agent ends while this `/spec` waits, the session saves its final message there from the completion notice, and this `/spec` goes on to item 4.
    - A brief-check agent is dead only when the runner no longer lists it and no completion notice with its final message arrived.
-   - Item 3 is done when the report stands at that path with its usage line filled.
+   - Item 3 is done when the report stands at that path with its usage line filled and its characters in the set.
 4. The session closes each finding by a change to the brief, before the preparation commit.
    - Each change is named under the report's "Closed" heading, beside its finding.
    - A dictated line the session rewrites to close a finding, or adds to the brief after the check, is held line by line as item 2's "Dictated text" says, before the preparation commit.

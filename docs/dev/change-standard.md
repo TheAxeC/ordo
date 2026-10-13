@@ -39,8 +39,8 @@ Every rule on this page that names a script, a test or a check is read under thi
 11. **Nothing added on a hypothesis.** No mutable global state; no member, parameter or file whose only user is a test or a hypothetical caller; no dependency the brief did not name.
 12. **Nothing inside the brief is left undone.** A miss is fixed before the report is written, or it is a stop with the evidence and the rest still lands. A miss is never reported as a known limit, a gap, a sharp edge or a later item.
 13. **A test proves the change by failing on the unchanged tree, and the report quotes the failure.** The unchanged tree is the tree before the change; for a plan step it is the tree at the step's base. The report quotes each run verbatim beside the test's name and names no revert.
-   - A new or changed test of a behaviour the change adds or changes fails on the unchanged tree. It is run there again after every change to the test, and the report quotes its failure there in the form it has after the change.
-   - A new or changed test of a behaviour the change preserves passes after the change, and passes on the unchanged tree in the form it had there, or, for a new test, whenever it can run there. The report quotes each of those runs.
+   - A new or changed test of a behaviour the change adds or changes is run once on the unchanged tree, before the code is changed, and fails there. That run is its proof, and the report quotes the failure. An edit to the test after that run is checked by reading it, with no further run on the unchanged tree.
+   - A new or changed test of a behaviour the change preserves is run on the unchanged tree before the change, where it can run there, and passes, and it passes again after the change. The report quotes each of those runs.
    - A case asserting that a rule stays silent carries a control, the near-miss the same rule must report. Of the two, the test of the behaviour the change adds or changes is the one that fails on the unchanged tree.
    - A test that would still pass with the behaviour it is written for taken out of the code is an audit, not a proof: an assertion over source text, over a name alone, over a constant, or over a path the suite never executes. The reviewer finds such a test by reading it.
    - Each behaviour the change adds or changes whose failure costs something, as "Scripts compute facts; judgment is read" says, has a case, and the report lists them in a table: the behaviour, the case and the failing line quoted for it. The table covers those behaviours, not every branch or every rule a head comment states.
@@ -52,6 +52,7 @@ Every rule on this page that names a script, a test or a check is read under thi
 19. **A change leaves no two statements that contradict each other.** Each rule the change writes is grepped by its key terms across the changed files and the pages they name, and a statement that says otherwise is changed in the same step, or reported as a stop when the brief does not cover it.
 20. **Nothing is changed that no brief item asks for.** A change outside the brief's items is left out; when an item cannot be met without it, the report lists it under the judgment calls with the item it serves.
 21. **A secret in quoted command output is written `<REDACTED>`.** Every quote of a command's output, a verbatim one included, carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed.
+22. **No breakage testing.** Code is never deliberately broken to see whether a test catches it: no revert proof, no fault put into a copy, no harness that applies such changes. A test is judged by reading it.
 
 ## Where the work happens
 
@@ -71,7 +72,7 @@ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 sh utils/pin.test.sh 2>&1 | tail -1
-git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 ```
 
 The plan's whole verify list runs once, at landing on main, through the `land` skill's runner, `sh skills/land/templates/checks.sh <state file>`. The booking quotes the lines the runner printed, never a count. Before landing, the builder and the reviewer run the checks the brief names for the files the step changes, and the report quotes their output. Each command in the verify list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`.

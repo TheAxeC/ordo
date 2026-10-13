@@ -2,6 +2,8 @@
 
 A page this report cites (the rules file, a standard, a skill's text) is named with its section, never with a line number, since a page's lines move and a section's name does not. A finding in code keeps its `file:line`.
 
+The report is written in the rules file's character set. A character outside it in a quoted line is written by its name in angle brackets, such as `<tab>` or `<em dash>`.
+
 ## Verification (rerun by the reviewer)
 
 ```
@@ -39,7 +41,7 @@ Cases of the brief's "Cases":
 
 - <a point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
 
-Reviewer usage: <agent id>, <served model>, <tokens>, <tool uses>, <minutes>.
+Reviewer usage: <the session fills this from the completion notice: agent id, served model, tokens, tool uses, minutes>.
 
 ## Repair round <n>, refuted (one section per run after a round, when the configuration block says refute_after_repair: yes)
 
@@ -60,7 +62,7 @@ Reviewer usage: <agent id>, <served model>, <tokens>, <tool uses>, <minutes>.
 
 - <a point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle>, <the reason>. Or: nothing.
 
-Reviewer usage: <agent id>, <served model>, <tokens>, <tool uses>, <minutes>.
+Reviewer usage: <the session fills this from the completion notice: agent id, served model, tokens, tool uses, minutes>.
 
 ## Closed (the orchestrator's disposition of every finding above, appended before /land)
 

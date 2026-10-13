@@ -2,6 +2,8 @@
 
 The report of the fresh agent of the `spec` skill's "Steps / The brief check", on `agents/briefs/<step>.md`. A page this report cites (the rules file, a standard, a skill's text) is named with its section, never with a line number, since a page's lines move and a section's name does not. A line of code or a hit of a grep keeps its `file:line`.
 
+The report is written in the rules file's character set. A character outside it in a quoted line is written by its name in angle brackets, such as `<tab>` or `<em dash>`.
+
 ## 1. Names
 
 - <each name the step changes (a file, a heading, a key, a function, a term)>: `<the grep command>`; each hit outside the brief's "Paths this step writes", as the command printed it, with whether the change makes it false and why. Or, for a name: no hit outside the paths.

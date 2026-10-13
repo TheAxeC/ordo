@@ -638,7 +638,12 @@ def plan_loop_svg() -> str:
             (
                 Group(
                     ONLY_WHEN,
-                    ("A red line for the user", "A lock held", "A worktree that cannot be removed"),
+                    (
+                        "A red line for the user",
+                        "A rule clash",
+                        "A lock held",
+                        "A worktree that cannot be removed",
+                    ),
                 ),
             ),
         ),

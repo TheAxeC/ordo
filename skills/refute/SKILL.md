@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns the checks the brief names and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round, and once alone for a small text step. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "3.0.1"
+  version: "4.0.0"
 ---
 
 # Refute a step
@@ -38,7 +38,8 @@ metadata:
    - The cases ruling `agents/briefs/<step>-cases.md` when one exists, read with the brief.
      - Where it rules a case, the diff is judged against the ruling.
 5. The diff since the base, from inside the worktree, the new files whole, and a sample of a mechanical sweep with the sample named.
-   - `git diff <base>` and `git status --short`, read-only, are the only git the reviewer runs.
+   - `git diff <base>`, `git status --short` and `git show <base>:<path>`, read-only, are the only git the reviewer runs.
+     - `git show <base>:<path>` reads a file of the unchanged tree.
    - Then the ADRs the brief names under "What is on the tree", and every other `NNNN-*.md` record in the folder the configuration block's `adr` names (`docs/adr` when the block has none) whose part in force governs a file, a name, a rule or a behaviour the diff changes, in force and decision as the `spec` skill's "What it reads" 5 says.
 6. The builder's report, last.
    - No report on disk is a refusal ("Stops").
@@ -64,6 +65,7 @@ metadata:
    - The lines they print are what the refuter report quotes.
    - The plan's whole verify list runs once, at landing on main.
 4. The reviewer runs every command the report quotes as evidence, in the same form, and compares the output with what the report claims.
+   - A quoted command that runs a git command other than the three of Rules is not run, and is named under "Declined to judge" as Rules says.
    - Where a claim needs a second build to reproduce (an A/B, a size figure), the reviewer says so.
      - It reproduces what it can from the one build.
 5. The reviewer looks for the findings "The four headings" lists and gives the verdicts "The verdicts" lists, until every item of the brief's "What to build" and every case of its "Cases" has a verdict.
@@ -72,13 +74,16 @@ metadata:
    - Then the verdicts, as "The verdicts" says: one per item of the brief's "What to build", then one per case of its "Cases".
    - Then the four headings, each with findings, or "none", and each finding with its place (a file and a line in code, a page and its section in a page), the quoted hunk, what is wrong, its failure scenario as "The four headings" says, and the verdict it names when it has one, as "The verdicts" says.
    - Then "Declined to judge": each point the reviewer did not check, or declined because it is the user's call or outside what a read and a rerun can settle, with the reason.
-   - Then the reviewer's usage line: its agent id, its served model, its tokens, its tool uses and its minutes.
-   - Done when the report holds the verification lines, a verdict for each item and case, the four headings, "Declined to judge" and the usage line.
+   - The report's usage line stays as the template gives it, since the session fills it (Steps 7).
+   - Done when the report holds the verification lines, a verdict for each item and case, the four headings and "Declined to judge".
 7. The orchestrator or the session saves the report at `agents/reviews/<step>-refuter.md`.
    - It records the report's path under the `reviewer_report` field of the step's dispatch entry, after the records before it, followed by, in parentheses, the reviewer's agent id, its served model (Steps 1), and its tokens, tool uses and time from its completion notice: `<path> (<agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>)`.
+   - It fills the report's usage line with the same agent id, served model, tokens, tool uses and time, from the completion notice.
+   - It checks the saved report with the character-set check.
+     - A character outside the set is written in place by its name in angle brackets, such as `<tab>` or `<em dash>`.
    - Both are written to disk in the main checkout.
    - The next resume-point commit of its own plan carries them, and they get no commit of their own, as `plan-orchestration`'s "Resuming, and handing the plan over" says.
-   - Done when the report is saved and its record is under `reviewer_report`.
+   - Done when the report is saved with its usage line filled and its characters in the set, and its record is under `reviewer_report`.
 8. Each finding is then closed or raised to the user, as "Finding dispositions" says.
 
 ### Over a repair round
@@ -88,14 +93,18 @@ metadata:
    - This holds for every run over a repair round, the run over the extra round of `plan-orchestration`'s exception and a reviewer started over a round in place of one stopped for another model included.
    - A run that finds nothing ends the rounds.
    - Done when the reviewer of the run is dispatched on the model this item gives.
-2. The reviewer reads the same files, plus the first refuter report and the dispatch block's round entries.
-3. Its diff is the delta of the round (from the commit or tree state recorded when the round was sent), read against the whole diff since the base.
+2. The reviewer reads the same files, plus the first refuter report, the dispatch block's round entries and the snapshot folder made when the round was sent, `<worktree>-round-<n>`, beside the worktree, with its `files.txt`.
+3. The round's delta is, read against the whole diff since the base:
+   - for each path of `files.txt`, the difference between the snapshot's copy and the worktree's file (`diff -u`), a deleted path against nothing;
+   - for each path changed now that `files.txt` does not list, its change since the base, the part of `git diff <base>` for that path, or the whole file when it is untracked.
 4. It looks for the same four things over that delta, and for every closure the builder claims:
    - a finding closed by removing a check rather than fixing what the check guarded;
    - a fix that reaches beyond the finding;
    - a claim of closure the reviewer's own rerun does not reproduce.
 5. It reruns the checks the brief's "Verify before you report" names again.
 6. The orchestrator or the session appends the run's verdicts, findings and points declined to judge to the same file under "Repair round <n>, refuted", in the shape `templates/report.md` gives it.
+   - It fills the run's usage line from the completion notice, as Steps 7 says.
+   - It checks the appended text with the character-set check, as Steps 7 says.
    - It records the run in the same field of the step's dispatch entry, after the records before it, as `over round <n>: <agent id>, <served model>, <tokens> tokens, <tool uses> tool uses, <time>`, written to disk and carried by the next resume-point commit of its own plan as Steps 7 says.
    - Done when the run's section is appended and its record is in `reviewer_report`.
 7. The findings of the run over the last round are never sent to the builder.
@@ -126,8 +135,9 @@ metadata:
   - a `static`, `thread_local` or file-scope mutable added;
   - a null guard, an early return or a fallback standing where a fix was asked for;
   - a count, a path or a measurement in the report that the reviewer's own run does not reproduce, when a decision rests on it, and the finding names that decision;
-  - a new or changed test of a behaviour the change adds or changes with no failure on the unchanged tree quoted for it in the form it has after the change;
-  - a new or changed test of a behaviour the change preserves with no passing run quoted for it after the change, or on the unchanged tree where it could run there;
+  - a new or changed test of a behaviour the change adds or changes with no failure quoted for it from its run on the unchanged tree before the code was changed;
+    - An edit to the test after that run is judged by reading it, and the reviewer asks for no further run on the unchanged tree.
+  - a new or changed test of a behaviour the change preserves with no passing run quoted for it after the change, or before the change on the unchanged tree where it could run there;
   - a test that would still pass with the behaviour it is written for taken out of the code, found by reading it (an assertion over source text, over a label alone, over a constant, or over an effect the test environment never runs).
 - **Standards.** A finding is:
   - a documented standard the diff breaks, citing the standard's file and rule;
@@ -198,6 +208,8 @@ The first row is a stop, a decision for the user: it leaves an open item, booked
 - The reviewer never writes into the ledger itself.
 - The reviewer invokes no skill: it reads the inputs "What it reads" lists, runs the commands this skill names, and writes its report itself.
 - The reviewer starts no agent: every read and every command of the review runs in the reviewer's own session.
+- The reviewer runs no git command other than `git diff <base>`, `git status --short` and `git show <base>:<path>`; a fact only another git command would give, such as what git ignores or the tree after staging, is named under "Declined to judge" with the command that would settle it.
+- The reviewer writes its report in the rules file's character set, a character outside it written by its name in angle brackets, such as `<tab>` or `<em dash>`.
 - The reviewer writes `<REDACTED>` in place of the value of a secret in every line it quotes, a verbatim one included, as the rules file's rule on secrets in quoted command output says.
 - An unreproduced claim is a finding, except a count, a path or a measurement no decision rests on, as the Proof heading says.
 - A time box, the configuration block's `review_minutes` when above 0 or one the invocation names, is respected by reporting what was checked and naming what was not.

@@ -74,13 +74,15 @@ Run from <directory>, each must hold, each output piped through the filter the r
 
 1. The checks of the verify list that cover the files the step changes, as this brief names them: <each command, with the directory it runs from and the output that counts as a pass>.
    - The character-set check over those files is among them where the verify list holds one.
+   - A check of the verify list whose file list comes from a git command is written here with that file list given as `printf '%s\0' <the files the step changes> |` in place of the git command, the rest of the command as the verify list has it.
    - The report quotes the lines they print.
    - The plan's whole verify list runs once, at landing on main.
 2. `<command>` prints <expected output>.
 3. `<command>`: <the threshold or the shape the output must have>.
-4. Each new or changed test is run on the unchanged tree and after the change.
-   - A test of a behaviour the change adds or changes fails on the unchanged tree, in the form it has after its last change, and the report quotes that failure.
-   - A test of a behaviour the change preserves passes after the change and, where it can run there, on the unchanged tree, and the report quotes those runs.
+4. Each new or changed test is run once on the unchanged tree, before the code is changed, and again after the change.
+   - A test of a behaviour the change adds or changes fails on the unchanged tree, that run is its proof, and the report quotes the failure.
+     - An edit to the test after that run is checked by reading it, with no further run on the unchanged tree.
+   - A test of a behaviour the change preserves passes on the unchanged tree where it can run there, and passes after the change, and the report quotes those runs.
    - A test that would still pass with the behaviour it is written for taken out of the code is an audit, not a proof, and this brief says which it is.
    - The reviewer finds such a test by reading it.
    - A case checked by a quoted run is no test and is not judged as one.
@@ -88,7 +90,7 @@ Run from <directory>, each must hold, each output piped through the filter the r
 
 ## Report
 
-Write it to `<ledger>/agents/reviews/<step>-report.md`, with these parts in this order.
+Write it to `<ledger>/agents/reviews/<step>-report.md`, in the rules file's character set, a character outside it in quoted output written by its name in angle brackets, such as `<tab>` or `<em dash>`, with these parts in this order.
 
 - The first line: anything NOT done, or "Everything in the brief is done".
 - The open items of the state file, verbatim, which hold only what the user must rule on.
