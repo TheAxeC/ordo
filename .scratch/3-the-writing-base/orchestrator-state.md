@@ -90,4 +90,5 @@ none
 - 2026-10-13. The user said to go on. Step 3 refuted (11 findings); repair round 1 sent to the builder with `agents/briefs/3-round-1.md`.
 - 2026-10-13. Step 3's builder closed repair round 1; the run over round 1 found three findings, fixed at landing.
 - 2026-10-13. Step 3 landed (`agents/reviews/3-landing.md`).
-- Next: tag main's head `v7.1.0-rc.2` and run `sh utils/pin.sh v7.1.0-rc.2` (ruling F), then step 4 through `/spec 3 4`.
+- 2026-10-13. Main's head 68c14d8 tagged `v7.1.0-rc.2` and pinned (`sh utils/pin.sh v7.1.0-rc.2`: "pinned: v7.1.0-rc.2 (68c14d8), 14 skills linked"), as ruling F approves.
+- Next: step 4 through `/spec 3 4`.
