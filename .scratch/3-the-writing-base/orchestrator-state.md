@@ -39,8 +39,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 3
-  brief_check: "running: ac0b534b48b96acce"
-  landing: preparing
+  executor: agent
+  worker: claude:sonnet
+  session_id: a248d03293a97a4ad (claude-sonnet-5-5)
+  worktree: .agents/worktrees/3-the-writing-base-3
+  base: aa513eb
+  launched: 2026-10-13
+  report: .scratch/3-the-writing-base/agents/reviews/3-report.md
+  brief_check: .scratch/3-the-writing-base/agents/reviews/3-brief-check.md (ac0b534b48b96acce, claude-opus-5-5, 247327 tokens, 53 tool uses, 11.4 minutes)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -86,4 +94,5 @@ none
 - 2026-10-13. Step 2 landed (`agents/reviews/2-landing.md`).
 - 2026-10-13. Step 3 stopped at its `/spec` premise check on Open item F: the rerun needs the fixes tagged and pinned, which a step cannot do before it lands.
 - 2026-10-13. Open item F ruled (a) by the user: step 3 the fixes, then tag `v7.1.0-rc.2` and pin, step 4 the repeated runs, step 5 the closing.
-- Next: step 3, through `/spec 3 3`.
+- 2026-10-13. Step 3 prepared at base aa513eb (brief check `agents/reviews/3-brief-check.md`, 17 findings closed in the brief) and its builder launched (a248d03293a97a4ad, claude-sonnet-5-5).
+- Next: step 3's report, then `/refute 3 3`.
