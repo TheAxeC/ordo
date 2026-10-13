@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C67
+Last number: C68
 
 # Entry 2.I Several plans in one session
 
@@ -331,3 +331,18 @@ Builds on it: step 1
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:57` (Open item A)
 Builds on it: step 1, step 2
+
+# Entry 3 The writing base
+
+## C68. The project argument of /writing (2026-10-13)
+
+A user-visible choice: the shape of a public command. `/writing` must know which project's settings to use in a repository whose `.agents/plan.yaml` lists several projects (the `projects:` form), as research-hub's does. For example, in research-hub, `/writing projects/manuscripts/hccnet-revision/manuscript/main.tex` does not say whether the file belongs to the project `oculus`. Raised by the brief check of step 1, finding F7.
+  - Option (a), recommended: the project comes before the file, `/writing <project> <file>`, as `/roadmap <project> ...` takes it; in that form with no project named, a refusal that lists the projects. Pro: the same shape as the other skills, and no guessing. Con: one more word to type in research-hub.
+  - Option (b): the project is worked out from the file's path. Pro: a shorter command. Con: a file outside every project's folders has no answer, and the rule exists in this skill only.
+  - Option (c): the only project is taken when the form lists one, and the argument is needed otherwise. Pro: a shorter command in research-hub today. Con: the command's shape changes the day a second project is added.
+  - Rule: the `spec` skill's Steps 4, a public shape is not taken in a brief.
+  - Recommendation: (a). The lazy option is (c).
+
+Taken: (a)
+Booked: `.scratch/3-the-writing-base/plan.md:61` (Open item B)
+Builds on it: step 1

@@ -10,7 +10,7 @@ verify:                      # commands run in the worktree and again on main, i
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - >-
-  git ls-files -coz --exclude-standard | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+  git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
 standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
@@ -42,11 +42,15 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-none
+- Open item C (2026-10-13, step 1, kind 3: your written rules). After step 1, `/writing` runs its review agent on the `reviewer` model and reads the `standards` list, but the comments in Ordo's `.agents/plan.yaml` that say who uses those keys would not mention it. For example, line 10 reads `# claude:<model> the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on.` and would leave out `/writing`. The file is your configuration, so self-rule leaves the change to you. Found by the brief check, finding F4 (`agents/reviews/1-brief-check.md`).
+  - (a) Step 1 also changes three comments of `.agents/plan.yaml`. Line 1 becomes `# The project specifics the plan skills read (/plan, /spec, /refute, /land, /ordo-help, plan-orchestration); /writing reads reviewer, reviewer_effort and standards.` Line 10's comment becomes `# claude:<model> the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill and the review of /writing run on.` Line 13's comment becomes `# Files every brief tells the builder to read in full, and the reviewer holds a diff to; /writing reads the prose standard from this list.` Pro: the comments stay true. Con: none beyond the three edits.
+  - (b) The comments stay as they are. Pro: nothing to change. Con: the three comments are incomplete once `/writing` exists. This is the lazy option.
+  - Recommendation: (a).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-05: Open items Gate 3 and Gate 3b, the gate's conditions, and Open item A, the step list: ruled by Axel.
+- 2026-10-13: Open item B, the project argument of `/writing` (brief check of step 1, finding F7): closed under self-rule, C68.
 
 ## The standing demands (from Axel, in force)
 
@@ -67,5 +71,5 @@ none
 
 ## Current position (rewritten before every step commit)
 
-- {DATE}. Plan opened.
-- Next step: 1, because it is the first; it waits for entry 2.I, as the roadmap's order sets.
+- 2026-10-13. Step 1 stopped after its brief check, on Open item C; Open item B closed under self-rule (C68). The brief check's report is `agents/reviews/1-brief-check.md`, its Closed heading listing the change to the brief for each finding.
+- Next step: 1, `/spec 3 1` again once Open item C is ruled; it writes the brief with the closed changes and runs no second brief check.
