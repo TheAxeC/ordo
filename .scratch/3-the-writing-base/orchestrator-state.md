@@ -100,4 +100,5 @@ none
 - 2026-10-13. Step 5 prepared at base e691c84 (brief check `agents/reviews/5-brief-check.md`, 25 findings closed in the brief) and its builder launched (a2237d2ff6d37342a, claude-sonnet-5-5).
 - 2026-10-13. Step 5 refuted (`agents/reviews/5-refuter.md`); repair round 1 sent with `agents/briefs/5-round-1.md` (8fbedf7); the run over round 1 found three findings in the report, fixed at landing.
 - 2026-10-13. Step 5 landed (`agents/reviews/5-landing.md`).
-- Next: main's head tagged `v7.1.0-rc.3` and pinned with `sh utils/pin.sh v7.1.0-rc.3`, as ruling H approves; then step 6, the third runs.
+- 2026-10-13. Main's head ce30787 tagged `v7.1.0-rc.3` and pinned (`sh utils/pin.sh v7.1.0-rc.3`: "pinned: v7.1.0-rc.3 (ce30787), 14 skills linked"), as ruling H approves.
+- Next: step 6, the third runs, through `/spec 3 6`, with step 6's Step 0 carried into its brief.

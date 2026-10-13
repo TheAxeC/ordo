@@ -117,7 +117,6 @@ Agents in no role the cost script prices:
 
 ## Blocked, and by what
 
-- 6: waits on the pin of `v7.1.0-rc.3`, which ruling H approves and which follows step 5's landing.
 - 7: waits on step 6.
 
 ### Step 5, the second fixes (landed 2026-10-13)
