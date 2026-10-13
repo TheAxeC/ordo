@@ -134,7 +134,7 @@ Agents in no role the cost script prices:
 
 ## Blocked, and by what
 
-- 8: waits on the tag `v7.1.0-rc.4` and its pin.
+- 8: nothing; `v7.1.0-rc.4` is tagged on 09601dc and pinned.
 - 9: waits on step 8, and runs only when step 8 leaves a failure.
 - 10: waits on step 8, or on step 9 when it runs.
 

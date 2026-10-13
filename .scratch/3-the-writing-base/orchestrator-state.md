@@ -111,4 +111,5 @@ none
 - 2026-10-13. Step 7 built and refuted (`agents/reviews/7-refuter.md`); repair round 1 sent with `agents/briefs/7-round-1.md`.
 - 2026-10-13. Step 7's round 1 built; the run over round 1 found ten findings, fixed at landing.
 - 2026-10-13. Step 7 landed (`agents/reviews/7-landing.md`).
-- Next: main's head tagged `v7.1.0-rc.4` and pinned with `sh utils/pin.sh v7.1.0-rc.4`, as ruling I approves; then `/spec 3 8`.
+- 2026-10-13. Main's head 09601dc tagged `v7.1.0-rc.4` and pinned (`sh utils/pin.sh v7.1.0-rc.4`: "pinned: v7.1.0-rc.4 (09601dc), 14 skills linked"), as ruling I approves.
+- Next: `/spec 3 8`, the fourth runs, the last runs.
