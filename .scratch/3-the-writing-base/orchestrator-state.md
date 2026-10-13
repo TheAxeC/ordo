@@ -39,8 +39,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 4
+  executor: inline
+  worker: claude:sonnet
+  session_id: inline
+  worktree: .agents/worktrees/3-the-writing-base-4
+  base: 295b1e8
+  launched: 2026-10-13
+  report: .scratch/3-the-writing-base/agents/reviews/4-report.md
   brief_check: .scratch/3-the-writing-base/agents/reviews/4-brief-check.md (ad1ea91040f763510, claude-opus-5-5, 196338 tokens, 47 tool uses, 8.2 minutes)
-  landing: preparing
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -94,4 +102,5 @@ none
 - 2026-10-13. Step 3's builder closed repair round 1; the run over round 1 found three findings, fixed at landing.
 - 2026-10-13. Step 3 landed (`agents/reviews/3-landing.md`).
 - 2026-10-13. Main's head 68c14d8 tagged `v7.1.0-rc.2` and pinned (`sh utils/pin.sh v7.1.0-rc.2`: "pinned: v7.1.0-rc.2 (68c14d8), 14 skills linked"), as ruling F approves.
-- Next: step 4 through `/spec 3 4`.
+- 2026-10-13. Step 4 prepared at base 295b1e8 (brief check `agents/reviews/4-brief-check.md`, 18 findings closed in the brief), executor inline (orchestrator, no agent).
+- Next: the copies, then the manuscript run of `/writing`.
