@@ -41,7 +41,13 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Open item Closing 1 (2026-10-13, kind 4: the closing's roadmap diff). `/roadmap done 2.K` drafted the change, kept unwritten until it is approved: the 2.K entry leaves the open order, and Done gains the line "- [x] 2.K. The skill-text fixes from the retro and the real run: at the closing on main (6595ff3), ..." with the gate's output (the reviews, the deleted-file run, the `land.test.sh` case, `checks: 6 commands passed`).
+  - Option (a), recommended: approve the diff as drafted.
+  - Option (b): correct it.
+- Open item Closing 2 (2026-10-13, kind 4: the tag and the pin). Tag `v7.0.0` on the roadmap commit and run `sh utils/pin.sh v7.0.0`: the major part, since land, plan-orchestration, refute, spec and repo-setup each took a major version raise.
+  - Option (a), recommended: tag `v7.0.0` and pin it.
+  - Option (b): no tag now; the installed skills stay at `v6.0.0`.
+
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -71,4 +77,4 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - 2026-10-13. Step 1 of 2, the skill-text fixes, landed; next is step 2, the closing.
 - Verified: `checks.sh` on main printed `checks: 6 commands passed` and exited 0 after the fixes at landing (`plan.md`, the booking of step 1).
 - Next step: 2, the closing: `plan_cost.py` and `agents/reviews/closing.md`, then `/roadmap done 2.K`, the tag and the pin, which go to Axel, then the folder moved to `.scratch/archive/`.
-- Open on Axel's side: none.
+- Open on Axel's side: Closing 1 and Closing 2.
