@@ -4,16 +4,27 @@ These rules add to the prose standard what it lacks. They apply to a manuscript,
 
 ## Terms defined at first use
 
-- A technical term is defined where it first appears. A draft that uses it before it defines it, or never defines it, is reported.
-- The replacement adds the definition, or names the fact the author must supply.
+- This section covers technical terms only. A plain word for a role or a thing, such as "the analyst", is not reported under it.
+- A technical term is defined where it first appears in the whole draft.
+- A `.tex` draft is read as one document and a `.docx` draft from paragraph 1.
+- A draft that uses a technical term before it defines it, or never defines it, is reported.
+- The finding names the term's first use.
+- The replacement adds the definition at that first use, or names the fact the author must supply.
+- The replacement introduces no term before the place the draft defines it.
+- A replacement that removes or renames a term gives a finding, or a place with its replacement, for every use of it.
+- A defined term whose value, selection rule or the person responsible is missing is not reported under this section.
+- A sentence that states a criterion other than the one the author meant is not reported under this section.
 
 ## Most specific term
 
-- The most specific term available is used. A general word where a specific term exists is reported, with the specific term as the replacement.
+- The most specific term available is used. A general word where a more specific term exists for the same thing is reported. The replacement is the specific term.
+- A word that is the right term for what it names is not reported under this section.
+- A missing number or threshold is not reported under this section.
 
 ## Clear antecedents
 
-- A pronoun such as "this" or "it" with no clear antecedent is reported. The replacement names the noun the pronoun stands for.
+- A pronoun such as "this" or "it" that stands alone, with no clear antecedent, is reported. The replacement names the noun the pronoun stands for, and is never another pronoun.
+- A determiner with its noun, such as "this variation" or "such summaries", is not reported under this section.
 
 ## Hedging
 
@@ -36,6 +47,7 @@ A hedge matches the strength of the evidence.
   - a description of the method, such as "We used thematic analysis." in place of "We attempted to use thematic analysis.";
   - a well-established fact, such as "The Earth orbits the Sun." in place of "The Earth may orbit the Sun."
 - A hedge on a claim of one of those kinds is reported and cut.
+- A hedge of the strength the evidence carries on an interpretation is not reported.
 
 ## Limitations and alternative interpretations
 
@@ -44,10 +56,14 @@ A hedge matches the strength of the evidence.
 ## Evidence for claims
 
 - A claim with neither evidence nor a citation is reported. The replacement adds the evidence or the citation, or names the fact the author must supply.
+- Evidence the draft gives in its text, a table or a figure counts, cited or not. A claim that has such evidence is not reported under this section.
+- A claim that the draft's own data hold only in part is reported under "Limitations and alternative interpretations". The replacement is the limit.
+- A number or a claim that the draft's own data contradict is a question of content. No rule of the review covers it.
 
 ## Paragraph point
 
 - A paragraph whose first sentence does not state its point is reported. The replacement is a first sentence that states it.
+- A first sentence that states the paragraph's point is not reported for being general.
 
 ## Explanation of evidence
 
@@ -100,7 +116,9 @@ At every point of the draft a reader can answer four questions. A passage after 
 
 ## Reader's question per section
 
-A section whose text does not answer its reader's question is reported. The replacement does what the last column says.
+- A section whose text does not answer its reader's question is reported.
+- The replacement does what the last column says.
+- A first sentence that states the section's contribution is not reported for being general.
 
 | Section | The reader asks | The section does |
 |---|---|---|

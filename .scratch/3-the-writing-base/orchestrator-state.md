@@ -37,20 +37,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 3
-  executor: agent
-  worker: claude:sonnet
-  session_id: a248d03293a97a4ad (claude-sonnet-5-5)
-  worktree: .agents/worktrees/3-the-writing-base-3
-  base: aa513eb
-  launched: 2026-10-13
-  report: .scratch/3-the-writing-base/agents/reviews/3-report.md
-  builder_usage: "first read 226692 tokens, 27 tool uses, 7.0 minutes; after the cases ruling 274154 tokens, 42 tool uses, 11.5 minutes"
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/3-refuter.md (abfeeaa9da306797f, claude-opus-5-5, 228244 tokens, 40 tool uses, 8.6 minutes)
-  brief_check: .scratch/3-the-writing-base/agents/reviews/3-brief-check.md (ac0b534b48b96acce, claude-opus-5-5, 247327 tokens, 53 tool uses, 11.4 minutes)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -101,4 +88,6 @@ none
 - 2026-10-13. The user asked to pause once step 3's builder reports: its report is saved and read, and nothing further (no `/refute`) runs until the user says to go on.
 - 2026-10-13. Step 3 built; its report saved at `agents/reviews/3-report.md` and the diff read. Paused, as the user asked.
 - 2026-10-13. The user said to go on. Step 3 refuted (11 findings); repair round 1 sent to the builder with `agents/briefs/3-round-1.md`.
-- Next: the builder's round-1 report, then `/refute 3 3` over round 1.
+- 2026-10-13. Step 3's builder closed repair round 1; the run over round 1 found three findings, fixed at landing.
+- 2026-10-13. Step 3 landed (`agents/reviews/3-landing.md`).
+- Next: tag main's head `v7.1.0-rc.2` and run `sh utils/pin.sh v7.1.0-rc.2` (ruling F), then step 4 through `/spec 3 4`.

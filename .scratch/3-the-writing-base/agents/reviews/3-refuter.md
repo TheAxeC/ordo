@@ -185,3 +185,135 @@ Cases of the brief's "Cases":
 - Whether Standards 3 is a contradiction of ADR 0001 that the brief asked for, and so a rule clash for the user, or a finding the landing fixes by naming section D. That is the orchestrator's call: the brief's Decision 1 holds the words and its ADR 0001 bullet and Conventions forbid them.
 
 Reviewer usage: abfeeaa9da306797f, claude-opus-5-5, 228244 tokens, 40 tool uses, 8.6 minutes.
+
+## Repair round 1, refuted
+
+```
+(run from /Users/axelfaes/workspace/ordo/.agents/worktrees/3-the-writing-base-3, base aa513eb)
+$ printf '%s\0' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'; echo "exit $?"
+exit 0
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary; echo "exit $?"
+ok: the plan-terms block equals the template
+exit 0
+$ grep -n -E '[^[:space:]] - | -- ' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md; echo "exit $?"
+exit 1
+$ grep -n -i -E 'rc\.1|step [0-9]|plan 3|finding [0-9]|manuscript [0-9]|grant [0-9]' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md; echo "exit $?"
+exit 1
+$ LC_ALL=C grep -n '[^ -~]' skills/writing/SKILL.md skills/writing/references/rules.md .scratch/3-the-writing-base/agents/reviews/3-report.md .scratch/3-the-writing-base/agents/briefs/3-round-1.md; echo "exit $?"
+exit 1
+$ git status --short
+ M skills/writing/SKILL.md
+ M skills/writing/references/rules.md
+?? .scratch/3-the-writing-base/agents/briefs/3-cases.md
+?? .scratch/3-the-writing-base/agents/briefs/3-round-1.md
+?? .scratch/3-the-writing-base/agents/reviews/3-report.md
+$ git diff aa513eb --numstat
+47<tab>8<tab>skills/writing/SKILL.md
+23<tab>5<tab>skills/writing/references/rules.md
+$ wc -l skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md
+     178 skills/writing/SKILL.md
+     208 skills/writing/references/rules.md
+      52 skills/writing/references/registers.md
+     438 total
+$ diff <main checkout>/.scratch/3-the-writing-base/agents/reviews/3-report.md <worktree>/.scratch/3-the-writing-base/agents/reviews/3-report.md && echo same
+same
+```
+
+The report's four checks and its file counts match the rerun. Its "Files" block (178, 208, 52) and its `git status --short` listing match. Verify 4 (`git diff e00f6bd`) is not run here; see "Declined to judge". I read the delta as `diff -u` of the snapshot's `SKILL.md` and `rules.md` against the worktree's, and read it against `git diff aa513eb`. No path outside `files.txt` changed in the tree. The three untracked ledger files are the cases ruling, the round brief and the report.
+
+### Verdicts
+
+Items of the brief's "What to build", over the whole diff since the base:
+
+- 1: holds. `SKILL.md`, "A finding", carries every requirement of kind 1 as the cases ruling amends it. The scope-and-strength bullet now ends "Examples are the device of the right strength under "Hedging" and the limit under "Limitations and alternative interpretations"." That is ruling 3's words as given. Round 1's Spec 3 is closed.
+- 2: holds. `rules.md`, "Terms defined at first use", opens with "This section covers technical terms only. A plain word for a role or a thing, such as "the analyst", is not reported under it." That is ruling 1's words as given, and the missing-value bullet reads "the person responsible". The other scope sentences are in place: "Evidence for claims" (three), "Terms" (value and criterion), "Clear antecedents", "Most specific term" (two), "Hedging", "Paragraph point", "Reader's question per section" and the two prompt sentences under "What you report". Round 1's Spec 1 is closed.
+- 3: holds. `rules.md`, "Terms defined at first use": the whole-draft first use, the `.tex` and `.docx` reading, "The replacement introduces no term before the place the draft defines it.", and the every-use bullet.
+- 4: holds. `SKILL.md`, "A finding", three bullets on "delete" and rewriting, in the cases ruling's words. The claim-and-clause bullet now ends "that the named rule does not cut" (ruling 4), so it no longer contradicts the "delete" bullets.
+- 5: holds. `SKILL.md`, "A finding": place forms, every further place, the place check, the addition form, the structure forms, the several-names and tense bullets (now two), the never-an-instruction sentence and the count bullet. See Standards 1 and 2.
+- 6: holds. `SKILL.md`, "A finding", the last bullet and its two sub-bullets.
+- 7: holds. `SKILL.md`, "How you group them", three bullets.
+- 8: holds. `SKILL.md`, "What you read" (the file-reading tool, whole), "What you run" (the one `grep`, the `.docx` pipe, no redirect).
+- 9: holds. `SKILL.md` Steps 3 ("The session holds the list in its own message and writes it to no file."), Steps 5 ("The session writes the prompt and the paths in the start call itself and writes them to no file.") and Steps 7, which again reads "The session writes no file and adds no finding of its own." (`git diff aa513eb` shows no change at Steps 7; round 1's Spec 2 is closed.)
+
+Cases of the brief's "Cases", over the whole diff since the base:
+
+- C1: met. Each finding's replacement was read against both markers' reasons in `2-marks.md` and breaks a sentence of "A finding". Findings 12, 15, 16, 23, 54, 56, 88, 94 and grant 45 and 62 break the claim-and-clause bullet. Findings 17, 46 and 84 break the computed-number bullet. Findings 20 and 25 break the draft's-own-data bullet. Findings 45, 68 and 113 break the scope-and-strength bullet. Finding 59 breaks "reads as a sentence there", and 82 breaks the vague-qualifier bullet. Findings 2, 3, 4, 19, 21, 29 and grant 41 break the sentences the report's table names.
+- C2: met. Grant 8 and 9 are now outside the section by the "technical terms only" bullet (grant 9 also by the person-responsible bullet). The others are as the first refuter found them: manuscript 1, 2, 3, 4 and 13 by the "Evidence for claims" bullets; 28, 34 and 29 by the value and criterion bullets; grant 41, 42 and 43 by "Clear antecedents"; manuscript 52 and grant 33 by "Most specific term"; 21 by "Hedging"; 49 by "Paragraph point" and "Reader's question per section"; 92 by the section A sentence.
+- C3: met. Grant 1 and 5 break the whole-draft first-use bullet. Grant 4 breaks the every-use bullet and "introduces no term before the place the draft defines it". Grant 12 breaks the every-use bullet.
+- C4: met. Manuscript 1 (the rule adds evidence), 119 and 120 (section 0 says rewrite), and grant 37 ("is rewritten once noticed") break "Where the rule says to rewrite, the replacement is the rewritten text, in a comment too." Manuscript 61 stands under the second "delete" bullet.
+- C5: met. Each failure of kind 5's list breaks the sentence the report's table names (place forms and further places, the place check, the addition form, the structure forms, per-place replacements, text in place of an instruction, counting before stating).
+- C6: met. Grant 37 and 38 against 35 and 17 break "Findings on one passage, or on two places of one claim, propose changes that can all be applied together."
+- C7: met. The eight groups with no line break "Every group heading is followed by one line." The nine whose line restates or describes break the next two bullets.
+- C8: met. Commands 1 to 3 break the file-reading bullet and "The one command". Command 4 breaks "You redirect none of it to a file." Commands 5 and 6 break "The one command ... You run it once for each file" by their counts and their folder scope.
+- C9: met. The file list written to a file breaks the Steps 3 sentence, and the three prompt files break the Steps 5 sentence.
+- C10: met by reading the changed text against each finding's row in `2-marks.md` and the report's "C10 after the change". Grant 16 and 18 stand under ruling 1, manuscript 61 under ruling 2 and grant 44 under ruling 3. The draft facts it takes from the copies are not reproduced (see "Declined to judge").
+
+Rulings 1 to 10 against the delta and the report:
+
+- 1: closed (words as given, bullet placed first).
+- 2: closed (Steps 7 as at the base, Steps 3 and 5 sentences kept).
+- 3: closed (words as given).
+- 4: closed (words as given).
+- 5: closed (words as given; "case" no longer appears in the added lines, checked by grep).
+- 6: closed. Every sentence Proof 1 lists is split except the vague-qualifier bullet, which is given by ruling 5 and named under "Departures". I counted every added sentence (inline code as one word) and found 26 words in the vague-qualifier bullet, 22 in the renames-a-term bullet, and 20 or fewer in every other. The report names exactly the same four sentences, with counts one higher than mine. No decision rests on that difference.
+- 7: closed (words as given; the bullet now names section D).
+- 8: closed for the four places listed (two bullets each; "Reader's question per section" is three bullets above the table). See Standards 2 for places of the same kind that ruling 8 did not list.
+- 9: closed (the check is quoted whole, no "...", no placeholder, with `exit 0`).
+- 10: partly closed. See Behaviour 1.
+
+No closure removes a check instead of fixing what it guarded. No fix reaches beyond a finding: the bullets split under ruling 6 beyond Proof 1's list (added-text lead, `.docx` pipe, group line, "Most specific term") come from the recount that ruling asks for.
+
+### Findings
+
+#### 1. Spec
+
+- none.
+
+#### 2. Proof
+
+- none.
+
+#### 3. Standards
+
+- 1. `skills/writing/SKILL.md:115`, "A finding": "Before you report a place, check the quoted passage. It stands at that line, or in that paragraph of the command's output."
+  - What is wrong: ruling 6 split the sentence "Before you report a place, check that the quoted passage stands at that line, or in that paragraph of the command's output." The first sentence now asks to "check the quoted passage" with nothing to check it against. The second states a fact about the passage. The check, what the agent must verify, is no longer an instruction. Change standard, rule 17 (a rewrite keeps the meaning of every rule it carries). The sentence needed about 22 words and the mechanism is one check. Ruling 6 allows it to stay whole and be named under "Departures".
+  - Failure scenario: the review agent reads "It stands at that line" as a description of the passage it has already quoted. It verifies nothing, and reports a place whose passage stands in the paragraph before, as the grant finding on a passage quoted from the wrong paragraph did.
+  - Verdict: none (item 5 holds).
+- 2. `skills/writing/SKILL.md:135`, `:137` and `:138`, "A finding": "A paragraph split quotes the last sentence before the break and the first sentence after it. Its replacement is the same two sentences with an empty line between them." (also "A list quotes the sentence that holds the items. Its replacement is the list as text, introduced with a colon." and "A hard-wrapped paragraph quotes the end of the first line and the start of the next. "..." stands for the rest. Its replacement is the same words with the line break replaced by a space.")
+  - What is wrong: `docs/dev/skill-layout.md`, "Lists and tables": two requirements that can each be broken while the other holds, joined by a second sentence, are two bullets. In each of these, what the finding quotes and what its replacement is can each be broken while the other holds. Ruling 8 listed the places to split and these were not among them. The report's "Departures from the lists and sentence-length rules" names no list-item departure in `SKILL.md`; it names only the `rules.md` "is reported. The replacement is ..." bullets. So Verify 5, which asks each such place be named with why it needs its form, is marked DONE with these three unnamed. The same holds for `SKILL.md:99`, where which command to run and that it runs once for each file are one bullet.
+  - Failure scenario: a later edit to the split form changes the replacement and, reading the bullet as one rule, leaves the quote form unchanged. Or the review agent follows the replacement form and quotes the whole paragraph, because the quote requirement is not a bullet of its own.
+  - Verdict: none.
+
+#### 4. Behaviour
+
+- 1. `.scratch/3-the-writing-base/agents/reviews/3-report.md`, "Host- or user-visible changes", the "Paragraph point" bullet: ""Paragraph point": before it reported a conclusion's first sentence that states the contribution ("In this work, we presented a framework for longitudinal medical image analysis ..."); after it does not, and the same holds for "Reader's question per section"."
+  - What is wrong: ruling 10 asks, for each scope bullet added to `references/rules.md`, what `/writing` reported before and after with one example passage for each. The example is manuscript 49, which step 2 reported under "Reader's question per section" (Conclusion), not under "Paragraph point" (`2-run/manuscript-report.md` line 84: `Rule: rules.md, "Reader's question per section" (Conclusion)`). So the "Paragraph point" bullet has no example of its own and is given another rule's before-state. The "Reader's question per section" bullet has no line of its own.
+  - Failure scenario: a user reading the change record believes `/writing` reported first sentences of paragraphs under "Paragraph point" for being general, and that this has stopped. The runs show it did so only under "Reader's question per section".
+  - Verdict: none (ruling 10 only partly closed).
+
+### Declined to judge
+
+- Whether `git diff e00f6bd -- skills/writing` is the diff the report says it read whole, and the brief's premise that no commit since e00f6bd changed `skills/writing/` or `docs/dev/building.md`. Both need a git command outside the three allowed. `git diff e00f6bd aa513eb -- skills/writing docs/dev/building.md` printing nothing settles both. I read `git diff aa513eb` whole instead.
+- The draft facts the report's first run and "C10 after the change" rest on: the ASCII grep outputs on `main.tex` and on the grant paragraphs, the paragraph where "background-liver", "components" and "readout" first appear, `b_implementation.tex:1` at 6 sentences split 4 and 2, `conclusion.tex:1` at 8 sentences split 3, 3 and 2, and grant 44's paragraph. The step 2 copies are not at the brief's path (the scratchpad holds only `3-table.md`, `mk3.py` and `st.txt`). I read each finding's marks and the step 2 reports instead. The "before" examples of "Host- or user-visible changes" I matched to `2-run/manuscript-report.md` and `2-run/grant-report.md`, and all but the one in Behaviour 1 stand under the rule the report names.
+- Whether a draft line longer than the runner's file-reading tool shows in one read leaves part unread under "read whole with the runner's file-reading tool". Counting the copy's `.tex` lines over 2000 characters settles it, and the copy is not on disk.
+- Whether the review agent following the changed text reports right findings on the two drafts. That is step 4's rerun and marks.
+- Whether "the person responsible" (ruling 1's words, used as given) tells the agent for what the person is responsible. That is the orchestrator's wording, not the builder's.
+
+Reviewer usage: a8a5490e9ef2bc1ad, claude-sonnet-5-5, 210747 tokens, 33 tool uses, 4.1 minutes.
+
+## Closed
+
+- Spec 1, technical terms only and "holder": closed in round 1, `rules.md`, "Terms defined at first use", first bullet and "the person responsible"; the run over round 1 gives item 2 holds and C2 met.
+- Spec 2, Steps 7's no-file rule: closed in round 1, Steps 7 reads "The session writes no file and adds no finding of its own."
+- Spec 3, the closed list of changes of strength: closed in round 1, "Examples are the device ...".
+- Spec 4, the shortened check in the report: closed in round 1, `3-report.md`, "The checks as run", the command whole.
+- Proof 1 and Standards 1, sentences over roughly 20 words unnamed: closed in round 1, the sentences split and the rest named under the report's Departures.
+- Standards 2, two rules in one bullet at the four places listed: closed in round 1.
+- Standards 3, the prose standard's paragraph rule restated: closed in round 1, "meets the prose standard's section D".
+- Standards 4, the claim-and-clause sentence against the rules that cut: closed in round 1, "... that the named rule does not cut."
+- Standards 5, the glossary term "case": closed in round 1, the vague-qualifier bullet without it.
+- Behaviour 1, the before and after of the new scope bullets: closed in round 1 for each bullet but "Paragraph point"; the rest under round 1's Behaviour 1 below.
+- Round 1, Standards 1, the place check split from its object: fixed at landing, `SKILL.md`, "A finding", the sentence whole, named under `3-report.md`, Departures.
+- Round 1, Standards 2, quote form and replacement form in one bullet: fixed at landing, `SKILL.md`, "A finding", separate bullets for a paragraph split, a list and a hard-wrapped paragraph, and "You run it once for each file." as its own bullet under "What you run".
+- Round 1, Behaviour 1, "Paragraph point" given another rule's example: fixed at landing, `3-report.md`, "Host- or user-visible changes", one bullet each for "Paragraph point" and "Reader's question per section".
+- Declined to judge, the copies of step 2 not on disk: booked in `plan.md`, step 4's Step 0: step 4 copies the manuscript folder and the grant again from research-hub and checks them with `diff -r` and `cmp` before its runs.
