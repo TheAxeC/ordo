@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C68
+Last number: C69
 
 # Entry 2.I Several plans in one session
 
@@ -346,3 +346,15 @@ A user-visible choice: the shape of a public command. `/writing` must know which
 Taken: (a)
 Booked: `.scratch/3-the-writing-base/plan.md:61` (Open item B)
 Builds on it: step 1
+
+## C69. Where the gate failures of step 2's runs are fixed (2026-10-13)
+
+Step 3 fixes only the findings that the two markers did not both mark right. Some failures of the gate's conditions on step 2's runs are not such a finding, so no step fixes them, and the gate would fail at the closing. For example, the manuscript review agent wrote a file during its run, and eight groups of the two reports have no line saying why they stand where they do; both are failures of the gate with no finding behind them. Raised by the refuter of step 2, finding S1.
+  - Option (a), recommended: step 3 also fixes each failure of a gate condition that step 2's report names, in `skills/writing/SKILL.md` or `skills/writing/references/`, the way the session invokes the runs included, and its check also reads each gate condition on the repeated runs. Pro: the gate's conditions are fixed and checked before the closing, in the step that already changes those files and repeats the runs. Con: a larger step 3.
+  - Option (b): step 3 as written. Pro: none beyond a smaller step. Con: the failures reach the closing unfixed, and the gate does not pass.
+  - Rule: the user's rule never to take the lazy option, and the `plan-orchestration` skill's "What earns a step of its own".
+  - Recommendation: (a). The lazy option is (b).
+
+Taken: (a)
+Booked: `.scratch/3-the-writing-base/plan.md:64` (Open item E)
+Builds on it: step 3

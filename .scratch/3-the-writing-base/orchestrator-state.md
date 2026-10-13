@@ -37,19 +37,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 2
-  executor: inline
-  worker: orchestrator
-  session_id: inline
-  worktree: .agents/worktrees/3-the-writing-base-2
-  base: e00f6bd
-  launched: 2026-10-13
-  report: .scratch/3-the-writing-base/agents/reviews/2-report.md
-  brief_check: .scratch/3-the-writing-base/agents/reviews/2-brief-check.md (a1f33775f8646df06, claude-opus-5-5, 192280 tokens, 52 tool uses, 9.5 minutes)
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/2-refuter.md (a78110fac0e276e53, claude-opus-5-5, 270259 tokens, 53 tool uses, 10.3 minutes)
-  landing: not-started
-  round: 1
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -62,6 +50,7 @@ none
 - 2026-10-13: Open item B, the project argument of `/writing` (brief check of step 1, finding F7): closed under self-rule, C68.
 - 2026-10-13: Open item C, the comments of `.agents/plan.yaml`: ruled (a) by the user.
 - 2026-10-13: Open item D, `/writing` not installed for step 2: ruled (a) by the user, tag `v7.1.0-rc.1` and pin.
+- 2026-10-13: Open item E, where the gate failures of step 2's runs are fixed (refuter of step 2, finding S1): closed under self-rule, C69.
 
 ## The standing demands (from Axel, in force)
 
@@ -89,4 +78,6 @@ none
 - 2026-10-13. Step 2 stopped at its `/spec` premise check on Open item D: `/writing` is not installed.
 - 2026-10-13. Open item D ruled (a) by the user: main's head tagged `v7.1.0-rc.1` and pinned.
 - 2026-10-13. Step 2 prepared at base e00f6bd, executor inline (orchestrator, no agent).
-- Next: step 2's runs.
+- 2026-10-13. Step 2 run inline: both `/writing` runs and four markers; refuted (`agents/reviews/2-refuter.md`); repair round 1 sent (`agents/briefs/2-round-1.md`); Open item E closed under self-rule (C69), widening step 3.
+- 2026-10-13. Step 2 landed (`agents/reviews/2-landing.md`).
+- Next: step 3, the fixes, through `/spec 3 3`; its fixes reach the runs only after a new tag and pin, which needs the user's approval.
