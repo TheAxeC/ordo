@@ -116,7 +116,7 @@ Agents in no role the cost script prices:
 ### Step 4, the repeated runs: Step 0
 
 - Found at step 3's review: the step 2 copies are no longer on disk (the session's scratchpad folder is empty). Step 4 copies the manuscript folder and the grant `.docx` again from their research-hub sources to the same paths, and checks them against the sources with `diff -r` and `cmp` before its runs, so the runs read the same text as step 2's.
-- Carried from step 3's brief check (finding F1): step 2 started both runs in one turn, so `writing`'s Steps 7 (the report ends the turn) could not hold for the grant run. Step 4 invokes each run in its own turn, so each report ends the turn its run started in.
+- Carried from step 3's brief check (finding F1): step 2 started both runs in one turn, so `writing`'s Steps 7 (the report ends the turn) could not hold for the grant run. A run's agent runs in the background and its report comes with the runner's completion notice, which starts a turn of its own. Step 4 starts the grant run only after the manuscript run's agent has ended, and each run's report is the whole message that ends the turn its completion notice starts (premise corrected at `/spec 3 4`).
 
 ### Step 3, the fixes: Step 0 (stopped 2026-10-13; Open item F ruled (a) by the user 2026-10-13)
 
