@@ -4,7 +4,7 @@ Status: proposed
 
 ## Context
 
-`/writing <file>` reviews a draft by reading it against the writing base's rules and reports each finding with its place, the quoted passage, the rule and a proposed replacement, the user deciding on each. The writing skills `paper` and `grant` draft text and then review it with `/writing`, so the session that runs the review may be the one that wrote the draft. Ordo already has a fresh reviewer that changes nothing review each step of a plan (`README.md`, opening).
+`/writing <file>` reviews a draft by reading it against the writing base's rules and reports each finding with its place, the quoted passage and the rule it breaks, with no proposed replacement, the user deciding on each. The writing skills `paper` and `grant` draft text and then review it with `/writing`, so the session that runs the review may be the one that wrote the draft. Ordo already has a fresh reviewer that changes nothing review each step of a plan (`README.md`, opening).
 
 ## Decision
 
