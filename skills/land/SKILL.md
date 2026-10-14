@@ -2,7 +2,7 @@
 name: land
 description: "Bring a refuted step from its worktree onto main and book it: the step's builder and reviewers stopped, a wip commit in the worktree, the cherry-pick of the whole range onto main, the verification commands on main, the look at the changed views where the configuration block's look: says, the interleaved A/B against the staged base binaries, the booking in the plan with each agent's tokens, tool uses and time, the state file rewritten, the landing report, the commit that names its paths, the worktree and its branches removed. Refuses while a finding is left neither closed nor raised to the user as an open item, or with any red line. Triggers on: land <entry> <step>, land the step, cherry-pick the step, book the step."
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
 ---
 
 # Land a step
@@ -79,6 +79,7 @@ metadata:
    - A finding of the refutation of the last repair round that is small and inside the brief is fixed on main here.
      - It is counted and named the same way as a red line.
    - A finding of a small text step's review that is small and inside the brief is fixed on main here the same way.
+   - A finding of an unapproved script is never fixed here, by naming the script in a report or otherwise; it is raised to the user, as `refute`'s "Finding dispositions" says.
    - A finding that is a clash between two of the user's rulings is never fixed at landing; it is the stop "A rule clash" of `plan-orchestration`.
      - It takes the step back out of main as a red line for the user does (the bullets below), before any other commit.
      - It is raised as the open item of the stop "A rule clash" ("Stops").

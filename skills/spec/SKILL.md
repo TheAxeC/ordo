@@ -2,7 +2,7 @@
 name: spec
 description: "Prepare one step of an open plan: refuse a step without its authority ((approved) or (ruling <name>)), check each premise of the step's text against the tree, under libraries: check, look for a library for each capability the step builds, a candidate being the user's choice, or under self-rule the orchestrator's, write the brief (checked premises, fix text, verification list, report shape, pointer to the rules file, cases, libraries checked, paths it writes), compare those paths with the briefs of steps in flight, a shared file judged by the orchestrator, run for a full step the brief check by a fresh read-only agent, create the worktree at main's head, stage the base binaries, and record the dispatch in the state file. A step a red line took back out of main is prepared again, its old work saved as a patch in the ledger and applied in the new worktree. Triggers on: spec <entry> <step>, brief <step>, prepare step <n>, write the brief; and on a ruling typed in reply to a stop (Ruled: ...)."
 metadata:
-  version: "6.0.0"
+  version: "6.1.0"
 ---
 
 # Prepare a step
@@ -107,6 +107,8 @@ Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says;
      - The session notes the tags that give it.
    - A step without it is a refusal ("Stops") that names the step and the authority it lacks.
      - The refusal says a ruling is needed.
+   - A step whose line fixes what a run or a review of another step found and runs that check again is a repair round of that step, whatever ruling its line names.
+     - It is the refusal "A repair round as a step" ("Stops"), which writes nothing.
    - A `plan.md` that is missing or not UTF-8, lacks a section, or lists a step twice is a refusal ("Stops").
    - A step not in the list is a refusal ("Stops"), with the list printed.
    - A refusal here writes nothing.
@@ -468,6 +470,7 @@ The first seven rows are stops, which leave an open item as "Steps / A stop" say
 | A cause not found | A part of the step's text asks for a cause to be found and the diagnosis did not find it, and the step has no other part (Steps 2) | The open item the `diagnose` skill's Steps 15 raised, with the diagnosis record's path | A ruling |
 | A model other than the configured one | The runner served the brief-check agent or a diagnosis agent a model that is not the configured one: a different model family, or an older version than the newest the configured alias names in the runner's model list ("Steps / The brief check") | The open item, booked in the open items, with the configured value, the served model and the Claude Code version | A ruling |
 | A step that does not converge | The step has stopped twice before its build (two open items under its Step 0) and this run finds a third choice for the user ("Steps / A stop" 3) | The open item, booked in the open items, with the two rulings given and every choice left | A ruling that rewrites, splits or removes the step |
+| A repair round as a step | The step's line fixes what a run or a review of another step found and runs that check again (Steps 1) | The step, the step whose finding it fixes, and `plan-orchestration`'s "What earns a step of its own" | The failure raised to the user as an open item on the approach, as `plan-orchestration`'s "What earns a step of its own" says |
 | A step without its authority | The step's line ends with neither `(approved)` nor a `(ruling <name>)` for each ruling it rests on, each naming a ruling in the Rulings section, a line ending "(the user)" or "(self-rule)" (Steps 1) | The step and the authority it lacks | A ruling, booked as "Steps / A ruling" says with the tag on the step's line, then `/spec` again |
 | An unusable `plan.md` | `plan.md` is missing or not UTF-8, lacks the step list or the Rulings section, or lists a step twice (Steps 1) | What is wrong in it | `plan.md` put right, then `/spec` again |
 | A failed preflight | Not on `main`, something staged, a git operation in progress, an uncommitted change at the brief's path or at the brief check's report path, or one on this plan's `plan.md` or state file that the session did not make (Steps 1) | What it saw | The tree put right, then `/spec` again |

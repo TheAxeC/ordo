@@ -2,7 +2,7 @@
 name: refute
 description: "Review a built step without changing anything: a fresh reviewer reads the diff against the brief and the repository's standards, reruns the checks the brief names and every command the builder's report quotes, treats an unreproduced claim as a finding (a count, a path or a measurement only when a decision rests on it), and writes a report that gives a verdict per item of the brief and per case (holds, violated or not applicable; met, partial, unmet or not verifiable) and findings under four headings (spec, proof, standards, behaviour), each with its failure scenario. Run once per step before its first repair round, and once alone for a small text step. Run again over each repair round when the configuration block says refute_after_repair: yes, up to repair_rounds. One more round is allowed only for a red verification command or an unbuilt acceptance item whose fix is too large for landing. Triggers on: refute <entry> <step>, review the step, refute the diff, run the refuter."
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
 ---
 
 # Refute a step
@@ -125,6 +125,7 @@ metadata:
   - an ADR the diff is under that the brief's "What is on the tree" does not name;
   - a case of a code step in the brief's "Cases" that the rules file's test rule calls a test for and no test of the step checks;
   - a case whose first run on the unchanged tree the report does not give;
+  - a script written for the step, by the builder or by the session that runs it inline, that the brief does not build under "What to build" and that no line of `plan.md`'s Rulings approves;
   - a step whose brief's size line says it is a small text step and whose diff changes a script, a test or a configuration file, or 20 lines or more, counted as the glossary's entry **small text step** says.
     - Such a step is then handled as a full step.
 - **Proof.** A finding is:
@@ -174,6 +175,8 @@ metadata:
   - It becomes a step only as `plan-orchestration`'s "What earns a step of its own" says.
 - A contradiction of an ADR that the brief asked for is a rule clash: it is raised to the user as an open item, never closed in a repair round or at landing, since only the user rules between the step and the ADR.
 - A contradiction of an ADR that the builder made against the brief is closed like any other finding, by a change that follows the ADR.
+- A finding of an unapproved script is never closed by naming the script in a report, nor fixed at landing.
+  - It is raised to the user as an open item, and nothing the script produced is used until the user rules.
 - A finding of a small text step's review is never sent to the builder.
   - It is fixed at landing when it is small and inside the brief, and otherwise raised to the user as an open item.
 - The open items hold only what the user must rule on.

@@ -2,7 +2,7 @@
 name: plan-orchestration
 description: "Run every open plan unattended in one session, or the plan named, step by step, from its ledger folder: pick the next unblocked step, prepare its brief and worktree, dispatch one builder agent in the step's worktree, have a reviewer refute the result, send its findings back to the builder for the repair rounds plan.yaml allows, read the delta, land the step with the small fixes made at landing, book it, and repeat, and under self_rule: on and next_entry: on go on to the next roadmap entry after a closing; stop only where a decision is for the user. Every project specific comes from .agents/plan.yaml and the ledger, so the same skill runs a code tool, a research project or a manuscript under Claude Code, and one orchestrator session can hand the plans to another mid-way. Triggers on: run every open plan, run the plan, next step, orchestrate the plan, plan orchestration, dispatch the next step, continue the plan, resume the plan, C<n> Agree, C<n> => <ruling> (the review of a choice taken under self-rule)."
 metadata:
-  version: "6.0.0"
+  version: "6.1.0"
 ---
 
 # Plan orchestration
@@ -381,6 +381,9 @@ The orchestrator, still one, may have as many steps running at once as the limit
   - Small work is fixed at landing.
   - Other work is an open item, and a new step for it needs a reason of this list.
 - **A ruling on a part not yet built.** It rewrites that step's line and brief, the line ending with `(ruling <name>)`, and adds no step.
+- **A fix of what a run or a review of a step found, followed by that check again.** It is a repair round of that step, counted against the round cap ("Rules"), and never a new step.
+  - When the cap is spent, the failure goes to the user as an open item on the approach, by "Stops".
+  - No option of that open item offers more rounds, or a step that fixes and runs the check again.
 - **A part the entry needs that no step builds, or a landed part found wrong or short.** It is a new step, a line ending with `(ruling <name>)`.
 - **Work outside the entry's goal.** It is a new roadmap entry through `/roadmap add` and never a step of this plan.
 - **A finding that changes a public shape or an established decision.** It is an open item, by "Stops".
@@ -493,6 +496,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 - The round cap: a step gets at most `repair_rounds` repair rounds, and one more only when the delta leaves a verification command red or an acceptance item of the brief unbuilt and the fix is too large for landing.
   - A new finding of a review never earns that round.
   - The user's yes never extends the cap.
+  - No ruling adds a step that does what a repair round does: a fix of what a run or a review of a step found, followed by that check again.
 - Nothing in the loop repeats without a count:
   - a full step gets one brief check (the `spec` skill's "Steps / The brief check" 4), the repair rounds of the round cap, one refutation before the first round and one over each round;
   - a small text step gets one refutation, no brief check and no repair round;

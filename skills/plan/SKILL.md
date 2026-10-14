@@ -2,7 +2,7 @@
 name: plan
 description: "Open a plan for one roadmap entry: create its ledger folder from the repository's plan configuration, write plan.md with the entry's goal, gate and a drafted step list for approval, the gate and each step's check asked whether it could pass without the goal being reached, each approved step tagged (approved), and orchestrator-state.md with the configuration block filled from the repository. Triggers on: open a plan, start a plan, plan <roadmap entry>, new plan for <entry>."
 metadata:
-  version: "4.0.0"
+  version: "4.1.0"
 ---
 
 # Open a plan
@@ -79,6 +79,9 @@ metadata:
    - The session asks of the copied gate "could this pass without the goal being reached?" and writes the answer with its reason in the section "## Gate", on the line the template gives the gate.
    - A copied gate that could pass without the goal is kept as the roadmap has it, since the gate is the roadmap's and the user's.
    - The answer and reason for such a gate go to the user at Steps 3.
+   - The session also asks of the copied gate "is this checked once, on the finished work?".
+     - A gate that is met only by fixing and checking again until nothing fails, such as "each one not marked right is fixed before the gate passes", has no count, against the round cap of `plan-orchestration`'s Rules.
+     - Such a gate is the stop "A gate with no count" ("Stops"): no plan is opened, and the user rules the gate through `/roadmap`.
    - The step list is drafted from the entry's goal as its parts, each step with the check that proves its part.
      - A step is a part that must exist and work before another part is built on it.
      - A step is also a point where the user reads or decides before the rest goes on.
@@ -101,6 +104,8 @@ metadata:
    - Each step line keeps the shape the template gives it.
    - A step's check that could pass without the goal (such as the forms the `roadmap` skill's "Steps / add" 3 names) is redrafted and asked again, at most twice, before the draft is shown.
    - A check that could still pass after the second redraft is kept as drafted.
+   - Each step's check is run once, on the step's finished part. A check that is met only by fixing and checking again until nothing fails is redrafted.
+   - No step is drafted to fix what another step's run or review found and to run that check again: that is a repair round of the other step, as `plan-orchestration`'s "What earns a step of its own" says.
    - The answer and reason for such a check go to the user at Steps 3.
    - The last step is the closing: the roadmap entry ticked with the gate's output (`/roadmap done <entry>`), and the ledger folder moved to `<archive_root>/`.
      - The closing step skips the cost script only when the ledger names no agent: no bullet line stands under a `## Agents` heading of `plan.md`, up to the next `## ` heading, and none stands in `agents/agent-roles.md`.
@@ -181,6 +186,7 @@ metadata:
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
+| A gate with no count | The copied gate is met only by fixing and checking again until nothing fails (Steps 2) | The gate, the words that need the repeated fixing, and the round cap of `plan-orchestration`'s Rules | The user's gate, written through `/roadmap`, then `/plan` again |
 | The drafted step list | Every plan, after Steps 2, except a draft written under a quoted ruling as Steps 3 says, or under `--self-rule` outside the cases Steps 3 keeps with the user: the skill does the mechanical half of opening a plan and stops at the design half | The drafted `plan.md`: the goal, the gate, the steps and each step's check, and in "## Gate" the answer to "could this pass without the goal being reached?" with its reason for the gate and for each step's check, and the design decisions no ADR in force or ruling settles and the rulings file's lines left to place (Steps 3) | The user's approval or correction |
 | No configuration | `.agents/plan.yaml` is missing: no file, no run | That the file is missing, and `/ordo-init`, which writes it | `/ordo-init`, then `/plan` again |
 | A required key missing | A required key is not in `plan.yaml`; the refusal names the key | The key | The key added, then `/plan` again |

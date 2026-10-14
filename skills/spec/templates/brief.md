@@ -45,6 +45,8 @@ When the first run finds a case the brief's own rules get wrong, the builder sto
 
 One path per line: a whole file, or a range of lines of a shared document, numbered as on main at the base. The step writes these paths and nothing else.
 
+No script is written for this step, by the builder or by the session that runs it inline, other than a script the step builds under "What to build". Any other script needs the user's approval of what it computes, quoted from a line of `plan.md`'s Rulings. This brief's mention of a script is no approval.
+
 ## Decisions taken in this brief (each reversible, none silent)
 
 1. <a choice the plan left open, taken here so the builder does not take it; a user-visible one went to the user before this brief was written>. <For a format or a rule applied across the tree: five real cases from the tree, each input and its output under the decision.>

@@ -2,7 +2,7 @@
 name: roadmap
 description: "Keep the roadmap, the ordered list of work a plan is opened for: show the open entries in order with what each waits on and which has a plan open, followed by the entries under \"Not yet specified\"; add an entry (goal, a gate that could not pass without the goal being reached, what it waits on) in the file's own format and in dependency order; put work whose gate cannot yet be named under \"Not yet specified\" with what must be known first; name the gate of such an entry and place it in the order; move an entry; mark one done with its gate's output; or drop one with the reason. Learns the format from the file, whether one file holds everything or an ordered build plan sits over a capability map of per-system files. Writes only after the user approves or under a quoted ruling. Triggers on: roadmap, add to the roadmap, new roadmap entry, what is next on the roadmap, not yet specified, park on the roadmap until its gate is known, name the gate of an entry, mark the entry done, drop the entry, reorder the roadmap."
 metadata:
-  version: "1.4.0"
+  version: "1.5.0"
 ---
 
 # Keep the roadmap
@@ -122,7 +122,11 @@ metadata:
        - A ruled gate that could pass without the goal keeps the stop of Steps 4.
    - A goal whose gate could still pass after the second redraft is a goal whose gate cannot be named (Steps / add 2).
      - The stop "No gate" is not raised for a quoted ruling's gate.
-   - The step is done when the answer with its reason stands in the draft, and the gate's answer is no or the gate is a quoted ruling's.
+   - It also asks of the drafted gate "is this checked once, on the finished work?" and writes that answer with its reason in the same draft.
+     - A gate that is met only by fixing and checking again until nothing fails, such as "each one not marked right is fixed before the gate passes", has no count, against the round cap of `plan-orchestration`'s Rules.
+     - Such a gate is redrafted as a check run once on the finished work, and asked both questions again, within the two redrafts above.
+     - Under a quoted ruling the ruled gate is not redrafted, and a ruled gate with no count keeps the stop of Steps 4.
+   - The step is done when both answers with their reasons stand in the draft, and the gate could not pass without the goal and is checked once, or the gate is a quoted ruling's.
 4. Draft what it waits on: the entries (open or done) the work depends on, found from the goal and the entries' text, each with the reason.
    - A dependency the roadmap does not hold is a stop ("Stops").
 5. Draft the place: after everything it waits on and before the entries that will depend on it, with that reason written out.
