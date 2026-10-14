@@ -39,8 +39,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 9
-  brief_check: "running: aa2534267459358b5"
-  landing: preparing
+  base: 1077fe4
+  worktree: .agents/worktrees/3-the-writing-base-9
+  executor: agent
+  worker: claude:sonnet
+  session_id: aba3c07cc124b6961
+  launched: 2026-10-14
+  report: .scratch/3-the-writing-base/agents/reviews/9-report.md
+  round: 0
+  brief_check: .scratch/3-the-writing-base/agents/reviews/9-brief-check.md (aa2534267459358b5, claude-opus-5-5, 216006 tokens, 43 tool uses, 9.8 minutes)
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -123,4 +131,5 @@ none
 - 2026-10-14. Grant marker 1 and manuscript marker 2 resumed once for missing reasons, no mark changed; `agents/reviews/8-marks.md` and `agents/reviews/8-report.md` written. The check fails: 48 manuscript and 35 grant rows not marked right by both, gate conditions 2, 5 and 6 failing; by ruling I step 9 follows.
 - 2026-10-14. Step 8 refuted (`agents/reviews/8-refuter.md`, aa417a503739647c4); repair round 1 sent with `agents/briefs/8-round-1.md` (3328be4) and built inline: the six rulings applied in `8-report.md` and `8-marks.md`, manuscript marker 1 resumed once (`8-run/manuscript-marks-1-resume.md`, no mark changed).
 - 2026-10-14. The run over round 1 (ab480b5eb42266865, claude-sonnet-5-5) found Proof 1, Standards 1 and Standards 2, all fixed at landing. Step 8 landed unticked, its check failed (`agents/reviews/8-landing.md`); by ruling I step 9 follows.
-- Next: `/spec 3 9`, the last fixes, then tag `v7.1.0-rc.5` and pin after it lands (approved by ruling I), then step 10, the closing.
+- 2026-10-14. Step 9 prepared at base 1077fe4 (brief check `agents/reviews/9-brief-check.md`, every finding closed in the brief) and its builder launched (aba3c07cc124b6961, claude-sonnet-5-5).
+- Next: step 9 built, `/refute 3 9`, `/land 3 9`, then tag `v7.1.0-rc.5` and pin (approved by ruling I), then step 10, the closing.
