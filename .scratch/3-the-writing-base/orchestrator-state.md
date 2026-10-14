@@ -42,7 +42,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Open item J (2026-10-14, kind 4, the roadmap diff of `/roadmap done 3`): the draft removes entry 3 from the open order and adds a `[x]` line under Done. The legend reads "`[x]` done (its gate ran and passed)". On the last runs (step 8) gate conditions 2 and 5 failed and 83 rows were not marked right by both; step 9 fixed each in the skill text with no run after it, by ruling I. Options: (a) approve the draft as it stands, the line naming that no run followed the fix; (b) one more run of `/writing` at `v7.1.0-rc.5` with two markers per run, as a step before the closing, and the entry marked done only if the gate holds on it (this changes ruling I's stopping rule); (c) leave entry 3 open as `[~]` and archive the plan. Recommendation: (b). The lazy option is (a).
+none
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -55,6 +55,7 @@ dispatch: none
 - 2026-10-13: Open item G, how the manuscript markers of step 4 get the report: closed under self-rule, C70.
 - 2026-10-13: Open item H, step 4's check failed: ruled (a) by the user, step 5 the second fixes with tag `v7.1.0-rc.3` and pin, step 6 the third runs, step 7 the closing.
 - 2026-10-13: Open item I, step 6's check failed: ruled (a) with a stopping rule by the user, step 7 the third fixes with tag `v7.1.0-rc.4` and pin, step 8 the last runs, step 9 the last fixes only when step 8 leaves a failure, with tag `v7.1.0-rc.5` and pin, step 10 the closing.
+- 2026-10-14: Open item J, the roadmap diff of `/roadmap done 3` at the closing: ruled (b) by the user, step 10 the fifth runs at `v7.1.0-rc.5`, the closing becomes step 11.
 
 ## The standing demands (from Axel, in force)
 
@@ -127,4 +128,5 @@ dispatch: none
 - 2026-10-14. Main's head 509e516 tagged `v7.1.0-rc.5` and pinned (`sh utils/pin.sh v7.1.0-rc.5`: "pinned: v7.1.0-rc.5 (509e516), 14 skills linked"), as ruling I approves.
 - 2026-10-14. Step 10, the closing: the closing report written (`agents/reviews/closing.md`, the cost script exit 0).
 - 2026-10-14. `/roadmap done 3` drafted; Open item J raised to the user.
-- Next: the user's ruling on Open item J; then the `v7.1.0` tag and pin, with the user's approval; then this folder moved to `.scratch/archive/`.
+- 2026-10-14. Open item J ruled (b) by the user: step 10 the fifth runs at `v7.1.0-rc.5`, the closing becomes step 11.
+- Next: `/spec 3 10`, the fifth runs.
