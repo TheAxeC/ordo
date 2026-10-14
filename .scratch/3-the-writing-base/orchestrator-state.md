@@ -46,8 +46,10 @@ dispatch:
   session_id: aba3c07cc124b6961
   launched: 2026-10-14
   report: .scratch/3-the-writing-base/agents/reviews/9-report.md
-  round: 0
+  builder_usage: 116878 tokens, 83 tool uses, 20.0 minutes
+  round: 1
   brief_check: .scratch/3-the-writing-base/agents/reviews/9-brief-check.md (aa2534267459358b5, claude-opus-5-5, 216006 tokens, 43 tool uses, 9.8 minutes)
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/9-refuter.md (a9dcaf7661d9c1ae9, claude-opus-5-5, 228107 tokens, 44 tool uses, 10.4 minutes)
   landing: not-started
 ```
 
@@ -132,4 +134,5 @@ none
 - 2026-10-14. Step 8 refuted (`agents/reviews/8-refuter.md`, aa417a503739647c4); repair round 1 sent with `agents/briefs/8-round-1.md` (3328be4) and built inline: the six rulings applied in `8-report.md` and `8-marks.md`, manuscript marker 1 resumed once (`8-run/manuscript-marks-1-resume.md`, no mark changed).
 - 2026-10-14. The run over round 1 (ab480b5eb42266865, claude-sonnet-5-5) found Proof 1, Standards 1 and Standards 2, all fixed at landing. Step 8 landed unticked, its check failed (`agents/reviews/8-landing.md`); by ruling I step 9 follows.
 - 2026-10-14. Step 9 prepared at base 1077fe4 (brief check `agents/reviews/9-brief-check.md`, every finding closed in the brief) and its builder launched (aba3c07cc124b6961, claude-sonnet-5-5).
-- Next: step 9 built, `/refute 3 9`, `/land 3 9`, then tag `v7.1.0-rc.5` and pin (approved by ruling I), then step 10, the closing.
+- 2026-10-14. Step 9 built and refuted (`agents/reviews/9-refuter.md`); repair round 1 sent with `agents/briefs/9-round-1.md`.
+- Next: the builder closes round 1, `/refute 3 9` over the round, `/land 3 9`, then tag `v7.1.0-rc.5` and pin (approved by ruling I), then step 10, the closing.
