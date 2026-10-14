@@ -39,8 +39,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:
 - step: 10
-  brief_check: "running: a1b59c3039b987617"
-  landing: preparing
+  base: 9f6a598
+  worktree: .agents/worktrees/3-the-writing-base-10
+  executor: inline
+  worker: claude:sonnet
+  session_id: inline
+  launched: 2026-10-14
+  report: .scratch/3-the-writing-base/agents/reviews/10-report.md
+  round: 0
+  brief_check: .scratch/3-the-writing-base/agents/reviews/10-brief-check.md (a1b59c3039b987617, claude-opus-5-5, 209032 tokens, 39 tool uses, 6.6 minutes)
+  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -132,4 +140,5 @@ none
 - 2026-10-14. Step 10, the closing: the closing report written (`agents/reviews/closing.md`, the cost script exit 0).
 - 2026-10-14. `/roadmap done 3` drafted; Open item J raised to the user.
 - 2026-10-14. Open item J ruled (b) by the user: step 10 the fifth runs at `v7.1.0-rc.5`, the closing becomes step 11.
-- Next: `/spec 3 10`, the fifth runs.
+- 2026-10-14. Step 10 prepared at base 9f6a598 (brief check `agents/reviews/10-brief-check.md`, every finding closed in the brief), executor inline (orchestrator, no agent).
+- Next: step 10's manuscript run of `/writing`, then the grant run; then, at the user's next message, the four markers.
