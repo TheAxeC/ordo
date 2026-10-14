@@ -1,4 +1,34 @@
-# Rulings: 3. The writing base
+# Plan: 3. The writing base
+
+Execution ledger for entry 3 of `docs/roadmap.md`, the writing base. One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+A `writing` skill folder the writing skills read from, and a `/writing <file>` review. `references/` holds the rules for academic prose that the prose standard lacks, taken from the three `rebuild: writing` sources, with the registers of Engineering and CS, Medicine and Health, the Sciences and the Social Sciences. The prose standard is read where the repository keeps it and holds wherever the two differ. `/writing` has one fresh agent that changes nothing read a whole draft: a `.tex` file with its `\input` and `\include` files, a `.md`, a `.txt` or a `.docx`. It reports the findings grouped by rule, in document order within each group, each with its place, the quoted passage and the rule it breaks with what that rule asks for. The prose standard gains two throat-clearing openers, and the term **finding** gains its sense for `/writing`.
+
+## Gate
+
+a file of known cases written before the run holds, for each rule the review reports, one passage that breaks it and one that does not, each with its expected result, placed in a `.tex` with an `\input` file and in a `.docx`; `/writing` runs once on each, and its report is read against the expected results: every break found at its place under its rule, places in the `\input` file included, and nothing reported in the clean passages; `/writing` then runs once on `research-hub/funding/2026-nwo-enw-xs/submission/Application-form-ENW-XS-26-3-LS.docx`, and the user reads its report for false alarms only; the plan's ledger holds a record for each `rebuild: writing` row that the file of `skills/writing/` the row names holds what the source file did, apart from what the entry's rulings leave out, checked by reading both; the skill follows `docs/dev/skill-layout.md`; section C of the `repo-setup` skill's `templates/docs/dev/prose-standard.md` holds the openers "In today's rapidly evolving..." and "As a matter of fact...", checked by reading it; the term **finding** in the `repo-setup` skill's `templates/plan-terms.md` holds its sense for `/writing`, checked by reading it, and `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` exits 0; every report is grouped by rule in document order within each group, and every finding quotes its passage and names its rule with what it asks for, checked by reading the reports; each run's transcript shows the review made by one fresh agent that edits no file.
+
+- The gate: could this pass without the goal being reached? No, the known cases fail on a rule missed or a clean passage reported, the user reads the real run for false alarms, and every other part reads a named file. Checked once: yes, each run is made once and read once, and a part that fails goes to the user as an open item.
+- Step 1: could this pass without the goal being reached? No, each record, the layout, the openers and the term are read in the file that holds them, and the script's run on the real `.docx` is quoted.
+- Step 2: could this pass without the goal being reached? No, a rule without a breaking and a clean passage with their expected results fails the read against the rule list.
+- Step 3: could this pass without the goal being reached? No, the reports are read against the expected results and by the user for false alarms, and the transcripts show the one fresh agent.
+
+## Steps, in execution order
+
+- 1 The writing base: `skills/writing/` with `SKILL.md`, `references/rules.md`, `references/registers.md` and `templates/docx_paragraphs.py` (D16), the two openers in section C of the `repo-setup` skill's `templates/docs/dev/prose-standard.md`, the term **finding** with its `/writing` sense in `skills/repo-setup/templates/plan-terms.md` synced into `docs/glossary.md`, coverage row 76's reason amended (D11), and the pages that list the skills and the scripts; the check: a ledger record for each `rebuild: writing` row (`docs/academic-coverage.md` rows 76, 100 and 101) that the file of `skills/writing/` the row names holds what the source file did, apart from what the rulings leave out, checked by reading both, the skill read against `docs/dev/skill-layout.md`, section C and the term read, `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` exits 0, and `docx_paragraphs.py` run once on `research-hub/funding/2026-nwo-enw-xs/submission/Application-form-ENW-XS-26-3-LS.docx` prints its paragraphs numbered, the run quoted (1 commit) (approved)
+- 2 The known cases: a builder other than step 1's writes into this folder, for each rule of `skills/writing/references/` and of the prose standard, one passage that breaks it and one that does not, each with its expected result, as a `.tex` with an `\input` file and as a `.docx` made with `textutil -convert docx`; the check: the reviewer reads the case files against the rule list and finds each rule with its two passages and their expected results, and `docx_paragraphs.py` on the case `.docx` prints the passages (1 commit) (approved)
+- 3 The gate runs: `/writing` once on the case `.tex`, once on the case `.docx` and once on `research-hub/funding/2026-nwo-enw-xs/submission/Application-form-ENW-XS-26-3-LS.docx`, after a tag and a pin the user rules on; the check: the case reports read against the expected results, every break found at its place under its rule, places in the `\input` file included, and nothing reported in the clean passages, the user reads the real report for false alarms only, every report grouped by rule in document order within each group with each finding quoting its passage and naming its rule, and each transcript shows one fresh agent that edits no file (1 commit; orchestrator, no agent) (approved)
+- 4 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless `.agents/plan.yaml`'s `workers_at_once` allows more.
+
+- none: step 2 needs step 1's landed rules, and step 3 needs both.
+
+## Rulings (2026-09-30)
 
 - D1 A counting helper for the review (2026-09-30): (b) no counting script; the review reads, and `LC_ALL=C grep -n '[^ -~]'` is named for the ASCII rule (the user).
 - D2 When entry 4 is redrafted (2026-09-30): (a) after entry 3 is approved, entry 4 waiting on 3 for the prose rules only (the user).
@@ -29,5 +59,11 @@
 
 ## Agents
 
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent in no role the cost script prices, which has a numbered item under the heading "Agents in no role the cost script prices:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+
 - af13b1283ef969029: grill lookup, claude-opus-5-5
 - a52b63fb9d7ff8105: grill lookup, claude-opus-5-5
+
+## Blocked, and by what
+
+- 3: the tag and the pin that make `/writing` invocable, a decision the user owes when step 3 is due.
