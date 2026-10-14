@@ -125,4 +125,5 @@ none
 - 2026-10-14. Step 9's round 1 built (aba3c07cc124b6961); the run over round 1 (a52d49d8b5f66bfc8, claude-sonnet-5-5) found Standards 1 to 5, all fixed at landing.
 - 2026-10-14. Step 9 landed (`agents/reviews/9-landing.md`).
 - 2026-10-14. Main's head 509e516 tagged `v7.1.0-rc.5` and pinned (`sh utils/pin.sh v7.1.0-rc.5`: "pinned: v7.1.0-rc.5 (509e516), 14 skills linked"), as ruling I approves.
-- Next: step 10, the closing, whose `v7.1.0` tag and pin wait for the user's approval.
+- 2026-10-14. Step 10, the closing: the closing report written (`agents/reviews/closing.md`, the cost script exit 0).
+- Next: `/roadmap done 3`, its diff for the user's approval; then the `v7.1.0` tag and pin, with the user's approval; then this folder moved to `.scratch/archive/`.
