@@ -37,19 +37,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 8
-  base: a34bfbf
-  worktree: .agents/worktrees/3-the-writing-base-8
-  executor: inline
-  worker: claude:sonnet
-  session_id: inline
-  launched: 2026-10-13
-  report: .scratch/3-the-writing-base/agents/reviews/8-report.md
-  round: 1
-  brief_check: .scratch/3-the-writing-base/agents/reviews/8-brief-check.md (a4f02d8519832d0b6, claude-opus-5-5, 218117 tokens, 45 tool uses, 7.1 minutes)
-  reviewer_report: .scratch/3-the-writing-base/agents/reviews/8-refuter.md (aa417a503739647c4, claude-opus-5-5, 94498 tokens, 87 tool uses, 11.3 minutes)
-  landing: not-started
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -130,4 +118,6 @@ none
 - 2026-10-14. Three markers done, marks saved in `8-run/`: grant marker 1 (a5b964c740016412e, 192438 tokens, 9 tool uses, 15.0 min), grant marker 2 (a136ed68531e76d65, 166605 tokens, 7 tool uses, 11.3 min), manuscript marker 1 (a8f3e0b981dc00ca4, 285965 tokens, 43 tool uses, 21.0 min).
 - 2026-10-14. Manuscript marker 2 done (aa83277990558acd9, 213568 tokens, 40 tool uses, 29.4 min), marks saved in `8-run/manuscript-marks-2.md`.
 - 2026-10-14. Grant marker 1 and manuscript marker 2 resumed once for missing reasons, no mark changed; `agents/reviews/8-marks.md` and `agents/reviews/8-report.md` written. The check fails: 48 manuscript and 35 grant rows not marked right by both, gate conditions 2, 5 and 6 failing; by ruling I step 9 follows.
-- Next: `/refute 3 8`, then `/land 3 8` with step 8 left unticked, then step 9.
+- 2026-10-14. Step 8 refuted (`agents/reviews/8-refuter.md`, aa417a503739647c4); repair round 1 sent with `agents/briefs/8-round-1.md` (3328be4) and built inline: the six rulings applied in `8-report.md` and `8-marks.md`, manuscript marker 1 resumed once (`8-run/manuscript-marks-1-resume.md`, no mark changed).
+- 2026-10-14. The run over round 1 (ab480b5eb42266865, claude-sonnet-5-5) found Proof 1, Standards 1 and Standards 2, all fixed at landing. Step 8 landed unticked, its check failed (`agents/reviews/8-landing.md`); by ruling I step 9 follows.
+- Next: `/spec 3 9`, the last fixes, then tag `v7.1.0-rc.5` and pin after it lands (approved by ruling I), then step 10, the closing.

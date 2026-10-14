@@ -107,6 +107,9 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a09a39ebd2fcccd6b: builder of step 7, claude-sonnet-5-5
 - afe8061d591582615: reviewer of step 7, claude-opus-5-5
 - a5ac0aefa8b6630f9: reviewer of step 7 over round 1, claude-sonnet-5-5
+- a4f02d8519832d0b6: brief check of step 8, claude-opus-5-5
+- aa417a503739647c4: reviewer of step 8, claude-opus-5-5
+- ab480b5eb42266865: reviewer of step 8 over round 1, claude-sonnet-5-5
 
 Agents in no role the cost script prices:
 
@@ -131,12 +134,17 @@ Agents in no role the cost script prices:
 19. a497a69fded97a0ab: marker 2 of the manuscript run of step 6, claude-opus-5-5
 20. af17cd67cb401d1dd: marker 1 of the grant run of step 6, claude-opus-5-5
 21. aa0fae041cb07f141: marker 2 of the grant run of step 6, claude-opus-5-5
+22. ad512c438c546f57c: review agent of the manuscript run of step 8, claude-opus-5-5
+23. ab89cdca00b160e9a: review agent of the grant run of step 8, claude-opus-5-5
+24. a8f3e0b981dc00ca4: marker 1 of the manuscript run of step 8, claude-opus-5-5
+25. aa83277990558acd9: marker 2 of the manuscript run of step 8, claude-opus-5-5
+26. a5b964c740016412e: marker 1 of the grant run of step 8, claude-opus-5-5
+27. a136ed68531e76d65: marker 2 of the grant run of step 8, claude-opus-5-5
 
 ## Blocked, and by what
 
-- 8: nothing; `v7.1.0-rc.4` is tagged on 09601dc and pinned.
-- 9: waits on step 8, and runs only when step 8 leaves a failure.
-- 10: waits on step 8, or on step 9 when it runs.
+- 9: nothing; step 8 left rows not marked right by both and gate conditions 2, 5 and 6 failing (`agents/reviews/8-report.md`), so step 9 runs.
+- 10: waits on step 9.
 
 ### Step 6, the third runs (landed 2026-10-13, unticked: its check failed, Open item I)
 
@@ -190,6 +198,19 @@ Agents in no role the cost script prices:
 - A/B: none. Look: none configured.
 - Usage: brief check a50f0c31ddca5b769 claude-opus-5-5 175635 tokens, 39 tool uses, 6.8 min; builder a09a39ebd2fcccd6b claude-sonnet-5-5 183556 tokens, 21 tool uses, 3.0 min for the first read, 215978 tokens, 15 tool uses, 2.9 min after the cases ruling, and 252539 tokens, 10 tool uses, 2.6 min in round 1; reviewer afe8061d591582615 claude-opus-5-5 198184 tokens, 40 tool uses, 8.0 min; reviewer over round 1 a5ac0aefa8b6630f9 claude-sonnet-5-5 203204 tokens, 37 tool uses, 6.8 min.
 - The builder's first report did not pass its bar: two sentences of "Terms defined at first use" contradicted each other, fix 2's form repeated a passage under several groups, the last pass's rewrite had no count, "full path" named the place's path a second way, two added sentences ran 42 and 29 words, and the report missed output lines, long sentences and two user-visible changes.
+
+### Step 8, the fourth runs, the last runs (landed 2026-10-14, unticked: its check failed, step 9 follows by ruling I)
+
+- Landed: the records of the fourth runs, all in the ledger: `agents/reviews/8-run/` (the two review reports, the four markers' marks and the three resume replies), `agents/reviews/8-marks.md` (one row per finding, place, split and list entry: 228 manuscript rows and 74 grant rows) and `agents/reviews/8-report.md`. The range a34bfbf..3-the-writing-base-8 holds no commit (`land.sh`: `nothing to copy`), since the step was run inline in the main checkout's ledger.
+- Unticked: the step's check does not hold. 48 manuscript rows and 35 grant rows are not marked right by both markers; both markers mark 27 and 24 of them wrong. Gate conditions 2, 5 and 6 fail, and 1, 3, 4 and 7 hold, condition 4 with the turn shape changed at the user's instruction ("Please pause once the agent is done."). Condition 2: the group lines of manuscript groups 6, 11 and 14 and grant groups 1, 3, 5, 9 and 15 name no loss the draft shows. Condition 5: the tense entry at `b_implementation.tex:3` is a reference to finding 6.4, finding 5.2 gives an instruction, and three places are given twice. Condition 6: manuscript marker 1's third command printed draft lines, manuscript marker 1's first command and grant marker 1's third ran `grep` on the saved report, the grant marker prompts lacked the brief's `grep` rule, and 17 marks have no reason of their own. The kinds of rows not marked right by both are listed in `8-report.md`, "The rows not marked right by both". By ruling I, step 9 fixes each with no further run.
+- Verify list: unchanged at Steps 2. The verification page `docs/dev/building.md` is unchanged since the base in the worktree and on main (`git diff --quiet a34bfbf -- docs/dev/building.md` exit 0 in the worktree, `git diff --quiet a34bfbf HEAD -- docs/dev/building.md` exit 0 on main).
+- Premise corrections (at /spec): none to the plan. The brief check's eight findings closed in the brief (`agents/reviews/8-brief-check.md`, Closed). Step 8's Step 0 is carried in the marker prompts, apart from the `grep` rule the grant marker prompts lacked (condition 6).
+- Review: `agents/reviews/8-refuter.md`. The first run found Spec 1 and Proof 1 to 5, all in the record, closed in repair round 1 (`agents/briefs/8-round-1.md`, 3328be4), in which manuscript marker 1 was resumed once for its group 9 rows and changed no mark. The run over round 1 found Proof 1, Standards 1 and Standards 2, all in `8-report.md` and `8-marks.md`, all fixed at landing (`8-refuter.md`, "Repair round 1, refuted", Closed).
+- Fixes at landing: 1. `8-report.md` (C8, condition 6, the judgment call on reasons, "Repair round 1" row 3) and `8-marks.md` (head): the judgment call on reasons read alike for every marker leaves 17 marks without a reason of their own, manuscript marker 1's 12.1 to 12.9 and 14.2 to 14.5, manuscript marker 2's 14.2 to 14.4 and grant marker 1's 16s, listed as failures of condition 6 (Proof 1). 2. `8-report.md`, C11 names "Manuscript marker 1's third command" and "Manuscript marker 2 and the two grant markers" (Standards 1). 3. `8-report.md`, the statement that entry numbers are 1-based line numbers moved to the opening of "The cases' first run", before the first entry number (Standards 2). 4. `8-report.md`, "Files" line counts refreshed.
+- Verification on main: `sh skills/land/templates/land.sh .scratch/3-the-writing-base/orchestrator-state.md 3-the-writing-base-8 a34bfbf` exit 0, and `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/checks.sh .scratch/3-the-writing-base/orchestrator-state.md` again after the fixes at landing: `PASS: land.sh scratch tests`, `PASS: check_config.py scratch tests`, `PASS: sync_rules.py scratch tests`, `ok: the plan-terms block equals the template`, `PASS: pin.sh scratch tests`, the character-set check printing nothing, `checks: 6 commands passed`. The brief's checks 1 to 4 after the fixes: the character-set check over `8-marks.md`, `8-report.md`, `8-refuter.md` and `8-run/*` exit 0, `diff exit 0`, `cmp exit 0`, research-hub status printing nothing, worktree status printing nothing.
+- A/B: none. Look: none configured.
+- Usage: brief check a4f02d8519832d0b6 claude-opus-5-5 218117 tokens, 45 tool uses, 7.1 min; builder inline (the session); review agents ad512c438c546f57c 179068 tokens, 38 tool uses, 28.7 min and ab89cdca00b160e9a 175667 tokens, 6 tool uses, 15.8 min; markers a8f3e0b981dc00ca4 285965 tokens, 43 tool uses, 21.0 min (333087 tokens in total, 18 tool uses, 2.6 min on its resume in round 1), aa83277990558acd9 213568 tokens, 40 tool uses, 29.4 min (232869 tokens in total, 1 tool use, 2.4 min on its resume), a5b964c740016412e 192438 tokens, 9 tool uses, 15.0 min (209838 tokens in total, 4 tool uses, 1.3 min on its resume) and a136ed68531e76d65 166605 tokens, 7 tool uses, 11.3 min; reviewer aa417a503739647c4 claude-opus-5-5 94498 tokens, 87 tool uses, 11.3 min; reviewer over round 1 ab480b5eb42266865 claude-sonnet-5-5 175986 tokens, 49 tool uses, 4.9 min.
+- The builder's first report did not pass its bar: the grant marker prompts' missing `grep` rule was not counted under condition 6, C8 stated that every bare "Right." of grant marker 1 got a reason on its resume while row 16s did not, manuscript marker 1's short tense notes were not resumed, two `grep` runs on the saved report were not listed as failures, the entry numbers were 0-based with no word saying so, and ConvNeXt in 6.1 stood under the wrong kind.
 
 ### Step 8, the fourth runs: Step 0
 

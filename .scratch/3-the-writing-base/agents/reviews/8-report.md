@@ -8,7 +8,9 @@ none
 
 ## The cases' first run
 
-The brief's first run, `ls .scratch/3-the-writing-base/agents/reviews/8-run .scratch/3-the-writing-base/agents/reviews/8-marks.md` before the runs, was not run then. The unchanged tree is read from the base commit instead: `git ls-tree -r --name-only a34bfbf -- .scratch/3-the-writing-base/agents/reviews/8-run .scratch/3-the-writing-base/agents/reviews/8-marks.md` prints nothing (`ls-tree exit 0`), and the session's transcript shows `8-run/` made first by `mkdir -p 8-run` at entry 41349, after both runs. So none of the record existed for any of the twelve cases. After the step:
+Entry numbers are 1-based line numbers of the session's transcript, `~/.claude-backup/projects/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda.jsonl`, as `sed -n '<n>p'` reads them.
+
+The brief's first run, `ls .scratch/3-the-writing-base/agents/reviews/8-run .scratch/3-the-writing-base/agents/reviews/8-marks.md` before the runs, was not run then. The unchanged tree is read from the base commit instead: `git ls-tree -r --name-only a34bfbf -- .scratch/3-the-writing-base/agents/reviews/8-run .scratch/3-the-writing-base/agents/reviews/8-marks.md` prints nothing (`ls-tree exit 0`), and the session's transcript shows `8-run/` made first by `mkdir -p 8-run` at entry 41350, after both runs. So none of the record existed for any of the twelve cases. After the step:
 
 - C1: met. The manuscript report's 251 place checks under "Place checks" all print `1`. Every place, list entries included, is `file:line` with its path from the main file's folder, and nearly every finding stands in an included file, such as `sections/abstract/abstract.tex:3`.
 - C2: met. The grant report's 100 place checks all print `1`, and the header place is `paragraph 64 [word/header1.xml]`.
@@ -17,10 +19,10 @@ The brief's first run, `ls .scratch/3-the-writing-base/agents/reviews/8-run .scr
 - C5: met for both runs, with the evidence under condition 3.
 - C6: met for both runs, with the evidence under condition 3.
 - C7: met for both runs on the writes and reads, with the evidence under condition 4. The turn shape differs from the brief's at the user's instruction, as condition 4 says.
-- C8: met after one resume of two markers, apart from the manuscript marker 1 command that condition 6 names. Every row has two marks, each with a reason of its own that says whether the passage stands and whether the replacement ends the break. Grant marker 1 gave five rows no reason and two a reason naming only the new word, and manuscript marker 2's tense and synonym reasons mostly named only the new word. Each was resumed once and gave the reasons, and no mark changed.
+- C8: partial. Every row has two marks. After one resume of three markers, 17 marks still have no reason of their own by the judgment call on reasons below: manuscript marker 1's nine group 12 rows (12.1 to 12.9), whose reasons are one sentence over the group and a short note per row such as "Paragraph label." or "Table note."; manuscript marker 1's group 14 rows 14.2 to 14.5, whose reasons open with "Same"; manuscript marker 2's group 14 rows 14.2 to 14.4, which give "Same reason" or "with the same fix"; and grant marker 1's row 16s, a bare "Right.". The brief allows one resume per marker, and each of the three resumes is spent, so these marks stay as they are. Grant marker 1 gave six rows a bare "Right." (16k, 16l, 16q, 16s, 16x, 16y) and two a reason naming only the new word (8a, 8e), and its resume named all of them but 16s. Manuscript marker 2's tense and synonym reasons named only the new word, and manuscript marker 1's tense notes were short, such as "Result." 21 times, or cross-references. Manuscript marker 2 was resumed for its group 9 and group 12 rows and manuscript marker 1 for its group 9 rows, and each gave the reasons; no mark changed. Manuscript marker 1's group 12 rows were not in its resume, which round 1 sent for group 9 alone.
 - C9: met as a record. `8-marks.md` has one row per finding, further place, split and list entry, and lists the 48 and 35 rows not marked right by both, each with both reasons. The step's check therefore does not hold.
-- C10: met. Four marker starts, all four used. No marker prompt holds a line of either report, and the two resume messages hold none and quote no words of the report.
-- C11: not met for manuscript marker 1. Its third command, `grep -n -e "CNN" -e "MRI" "$D/main.tex" | cut -c1-80; grep -n -i -e "projection" -e "temperature" <four named draft files> | cut -c1-200`, printed parts of 12 draft lines, such as `45:\title{HCCNet: A Self-Supervised CNN-Transformer for Disease Prognosis from L`. Each `grep` named draft files the marker had read whole, and none ran on a folder, a glob or with `-r`. The other three markers ran no command that printed a draft line, apart from the grant markers' script command and `grep` on its output through a pipe.
+- C10: met. Four marker starts, all four used. No marker prompt holds a line of either report, and the three resume messages hold none and quote no words of the report.
+- C11: not met for manuscript marker 1 and grant marker 1. Manuscript marker 1's third command, `grep -n -e "CNN" -e "MRI" "$D/main.tex" | cut -c1-80; grep -n -i -e "projection" -e "temperature" <four named draft files> | cut -c1-200`, printed parts of 12 draft lines, such as `45:\title{HCCNet: A Self-Supervised CNN-Transformer for Disease Prognosis from L`. Each `grep` named draft files the marker had read whole, and none ran on a folder, a glob or with `-r`. Manuscript marker 2 and the two grant markers ran no command that printed a draft line, apart from the grant markers' script command and `grep` on its output through a pipe. Two more commands break C11's rule on a file outside the draft: manuscript marker 1's first command and grant marker 1's third each ran `grep` on the saved report. The grant marker prompts did not carry the brief's rule on `grep`, as condition 6 says.
 - C12: not met. Three places are given twice, as condition 5 lists. Many findings carry a replacement that leaves a further break unnamed, as the rows of `8-marks.md` show.
 
 ## DONE / NOT DONE
@@ -31,7 +33,7 @@ The brief's first run, `ls .scratch/3-the-writing-base/agents/reviews/8-run .scr
 | Manuscript run through the Skill tool | DONE: review agent ad512c438c546f57c, `ordo-high`, served `claude-opus-5-5`, 179068 tokens, 38 tool uses, 28.7 min |
 | Grant run through the Skill tool | DONE: review agent ab89cdca00b160e9a, `ordo-high`, served `claude-opus-5-5`, 175667 tokens, 6 tool uses, 15.8 min |
 | Reports saved into `8-run/` | DONE: `extract_handback.py` printed 85932 and 54673 characters, and its second run into the scratchpad compared with `cmp` exited 0 for both. One letter of the manuscript report is written by its name (`<latin small letter e with acute>`), and four characters of the grant report (`<en dash>`) |
-| Four markers | DONE: manuscript a8f3e0b981dc00ca4 (285965 tokens, 43 tool uses, 21.0 min) and aa83277990558acd9 (213568 tokens, 40 tool uses, 29.4 min; 232869 tokens in total, 1 tool use, 2.4 min on its resume); grant a5b964c740016412e (192438 tokens, 9 tool uses, 15.0 min; 209838 tokens in total, 4 tool uses, 1.3 min on its resume) and a136ed68531e76d65 (166605 tokens, 7 tool uses, 11.3 min); each `ordo-high`, served `claude-opus-5-5` |
+| Four markers | DONE: manuscript a8f3e0b981dc00ca4 (285965 tokens, 43 tool uses, 21.0 min; 333087 tokens in total, 18 tool uses, 2.6 min on its resume in repair round 1) and aa83277990558acd9 (213568 tokens, 40 tool uses, 29.4 min; 232869 tokens in total, 1 tool use, 2.4 min on its resume); grant a5b964c740016412e (192438 tokens, 9 tool uses, 15.0 min; 209838 tokens in total, 4 tool uses, 1.3 min on its resume) and a136ed68531e76d65 (166605 tokens, 7 tool uses, 11.3 min); each `ordo-high`, served `claude-opus-5-5` |
 | Every row right by both | NOT DONE: 48 manuscript rows and 35 grant rows are not |
 | Gate conditions 1 to 7 | NOT DONE: 2, 5 and 6 fail |
 | Verify 1, the character-set check over `8-marks.md`, `8-report.md` and `8-run/*` | DONE: it prints nothing, exit 0 (quoted under "Files") |
@@ -81,9 +83,9 @@ The brief's first run, `ls .scratch/3-the-writing-base/agents/reviews/8-run .scr
 3. **One fresh agent per run, editing no file.** Holds.
    - Manuscript: agent ad512c438c546f57c, `agent-ad512c438c546f57c.meta.json` reading `"agentType":"ordo-high"`, served model `46 "model":"claude-opus-5-5"`. Its `tool_use` names: `Read` 36, `Bash` 1, `SubagentHandback` 1. No `Edit`, `Write` or `NotebookEdit`. The 36 `Read` calls are the prose standard, `rules.md`, `registers.md` and the 33 draft files, each read once with no `offset` or `limit`. The one `Bash` command is `cd <scratchpad>/3-2-run/manuscript && for f in <the 33 draft files>; do echo "== $f"; LC_ALL=C grep -n '[^ -~]' "$f"; done`, which runs the grep once for each draft file in one call, with nothing redirected.
    - Grant: agent ab89cdca00b160e9a, `ordo-high`, served model `8 "model":"claude-opus-5-5"`. Its `tool_use` names: `Read` 3, `Bash` 2, `SubagentHandback` 1. The three pages are each read with no `offset` or `limit`. Its two commands are `python3 '<pinned skill>/templates/docx_paragraphs.py' '<copy>'` and that command piped to `LC_ALL=C grep -n '[^ -~]'`.
-   - One `Agent` call in the session's transcript per run: entry 41192 between the manuscript `Skill` call (41168) and its report (41277), and entry 41308 between the grant `Skill` call (41293) and its report (41337).
+   - One `Agent` call in the session's transcript per run: entry 41193 between the manuscript `Skill` call (41169) and its report (41278), and entry 41309 between the grant `Skill` call (41294) and its report (41338).
 4. **The session wrote no file and read no draft in each run's span.** Holds on the writes and reads. The turn shape differs from the brief's at the user's instruction.
-   - The manuscript span, entries 41168 to 41277, holds these `tool_use` calls in order:
+   - The manuscript span, entries 41169 to 41278, holds these `tool_use` calls in order:
      - `Skill` (writing, manuscript).
      - `Bash`: `grep -n '^reviewer\|^standards\|^reviewer_effort' .agents/plan.yaml; ls skills/repo-setup/templates/docs/dev/prose-standard.md`, then the Steps 3 `grep -n -e '\\input{' -e '\\include{' 'main.tex'`.
      - `Bash`: the same `grep` over the 21 files `main.tex` inputs, each line prefixed with its file by `sed`.
@@ -94,15 +96,15 @@ The brief's first run, `ls .scratch/3-the-writing-base/agents/reviews/8-run .scr
      - `Bash`: a `python3 -I` count of the agent's `tool_use` names, which printed `{'Read': 36, 'Bash': 1}`.
      - `Bash`: `grep -o` of the usage lines of `6-landing.md` and `4-landing.md`, at the user's "How long will this take?".
      - Two `Read` calls of the runner's saved copy of the agent's hand-back, which is not a draft file.
-   - The grant span, entries 41293 to 41337, holds:
+   - The grant span, entries 41294 to 41338, holds:
      - `Skill` (writing, grant).
      - `Bash`: the configuration `grep`, `ls` of the copy, and `printenv CLAUDE_CODE_EFFORT_LEVEL; echo "effort exit $?"`.
      - `Agent`.
      - `Bash`: the model read.
      - One `Read` of the runner's saved copy of the agent's hand-back.
    - In both spans there was no `Write`, `Edit` or `NotebookEdit`, no command that writes, no `sleep` and no read of a draft file.
-   - The text that ends the manuscript turn (entry 41277) equals the manuscript agent's `SubagentHandback` message, 85932 characters, compared with `==` in `python3 -I` (`True`). The text that ends the grant turn (entry 41337) equals the grant agent's message, 54673 characters (`True`). No turn ended between a notice and its report: the turns that ended inside the manuscript span (41204, 41224, 41237 and 41249) ended before the agent's notice (41255).
-   - The turn shape differs from the brief's. At entry 41241 the user wrote "Please pause once the agent is done.", so the turn the manuscript notice started ended with the manuscript report and no grant `Skill` call. The grant `Skill` call (41293) stands in the turn the user's "Please continue" (41286) started. Between the two spans, at entry 41290, the session wrote the state file's position line with `python3 -I`; that write lies outside both spans.
+   - The text that ends the manuscript turn (entry 41278) equals the manuscript agent's `SubagentHandback` message, 85932 characters, compared with `==` in `python3 -I` (`True`). The text that ends the grant turn (entry 41338) equals the grant agent's message, 54673 characters (`True`). No turn ended between a notice and its report: the turns that ended inside the manuscript span (41205, 41225, 41238 and 41250) ended before the agent's notice (41256).
+   - The turn shape differs from the brief's. At entry 41242 the user wrote "Please pause once the agent is done.", so the turn the manuscript notice started ended with the manuscript report and no grant `Skill` call. The grant `Skill` call (41294) stands in the turn the user's "Please continue" (41287) started. Between the two spans, at entry 41291, the session wrote the state file's position line with `python3 -I`; that write lies outside both spans.
    - The pin: `describe` printed `v7.1.0-rc.4`, and both `Skill` results name `Base directory for this skill: /Users/axelfaes/.claude-backup/skills/writing`, which resolves into the pinned worktree at 09601dc.
 5. **Every finding quotes its passage and gives a replacement as text.** Fails.
    - The tense list entry at `sections/4_experiments/b_implementation.tex:3` reads `"pre-training of the Transformer encoder considers" is given in finding 6.4.`, with no replacement and a reference to another finding. Both manuscript markers name it.
@@ -113,21 +115,22 @@ The brief's first run, `ls .scratch/3-the-writing-base/agents/reviews/8-run .scr
      - `b_implementation.tex:3`, "considers": in 6.4, and referred to again from the tense list.
    - Grant marker 1 asks whether the group 16 splits, which quote again sentences earlier findings give, count as given twice. Grant marker 2 and both manuscript markers read them as the split form `SKILL.md` requires, with text that agrees. The session's reading is the same: `SKILL.md` asks a split to quote the sentences on either side of the break, and to give the text at a place as it reads after every finding on it, so these quotes are not failures.
    - No finding carries the last pass's line that it still breaks a rule. Manuscript marker 1 and grant marker 1 ran a `grep` for "still" over their report, and all four markers report no such line.
-6. **Two marks per row from four distinct fresh agents.** Fails on manuscript marker 1's third command. The rest holds.
+6. **Two marks per row from four distinct fresh agents.** Fails on five points: manuscript marker 1's third command, which printed parts of draft lines; manuscript marker 1's first command and grant marker 1's third, each a `grep` on the saved report, a file outside the draft; the grant marker prompts, which did not carry the brief's rule on `grep`; and 17 marks with no reason of their own, which C8 lists: manuscript marker 1's 12.1 to 12.9 and 14.2 to 14.5, manuscript marker 2's 14.2 to 14.4, and grant marker 1's 16s. The rest holds.
    - The four markers are distinct from each other and from both review agents.
-   - Each is `ordo-high` (its `meta.json`) and served `claude-opus-5-5` only (`grep -o '"model":"[^"]*"' | sort | uniq -c` prints 49, 47, 19 and 9 lines of `claude-opus-5-5` and no other model, resumes included).
-   - Each `Agent` prompt (entries 41359 to 41362, 5914, 5914, 4477 and 4477 characters) names its saved report's path, and holds no line of either report (checked line by line in `python3 -I`: 0 report lines in each).
-   - The two resume messages (entries 41607 and 41608) hold no line of either report and quote no words of it. They name rows by group and letter or by list position.
+   - Each is `ordo-high` (its `meta.json`) and served `claude-opus-5-5` only (`grep -o '"model":"[^"]*"' | sort | uniq -c` prints 71, 47, 19 and 9 lines of `claude-opus-5-5` and no other model, resumes included).
+   - The two grant marker prompts (entries 41362 and 41363) did not carry the brief's rule that every `grep` names each file it searches by its path, nor its ban on a `grep` on a folder, with a glob or with `-r`. They said only: "you run that command on the copy, which prints the draft, and you may pipe its output to `grep`; these are the one exception to the rule that no command prints the draft. No other command reads the draft." The two manuscript prompts carried the rule whole. No grant marker ran a `grep` on a folder, with a glob or with `-r`. Ruling I makes step 8 the last run, so no marker was started again.
+   - Each `Agent` prompt (entries 41360 to 41363, 5914, 5914, 4477 and 4477 characters) names its saved report's path, and holds no line of either report (checked line by line in `python3 -I`: 0 report lines in each).
+   - The three resume messages (entries 41608, 41609 and 41998) hold no line of either report and quote no words of it. They name rows by group and letter or by list position.
    - The saved reports equal the review agents' final messages (`cmp` above).
-   - Manuscript marker 1: `Read` 39, `Bash` 3, `SubagentHandback` 1. Manuscript marker 2: `Read` 39, `SubagentHandback` 2. Each read the report, the prose standard, `SKILL.md`, `rules.md`, `registers.md` and the 33 draft files, each draft file with no `offset` or `limit`. Each read the report in two `Read` calls: the first returned lines 1 to 433, and the second (`offset` 433) returned lines 433 to 633, so together they cover every line.
+   - Manuscript marker 1: `Read` 39, `Bash` 3, `SubagentHandback` 1 in its first run, and `Read` 17, `SubagentHandback` 1 on its resume. Manuscript marker 2: `Read` 39, `SubagentHandback` 2. Each read the report, the prose standard, `SKILL.md`, `rules.md`, `registers.md` and the 33 draft files, each draft file with no `offset` or `limit`. Each read the report in two `Read` calls: the first returned lines 1 to 433, and the second (`offset` 433) returned lines 433 to 633, so together they cover every line.
    - Manuscript marker 1's commands:
-     - `grep -n -i -e "still break" -e "still breaks" -e "still" <the saved report> | cut -c1-160`, a search of the report.
+     - `grep -n -i -e "still break" -e "still breaks" -e "still" <the saved report> | cut -c1-160`, a search of the report. The report is a file outside the draft, and the prompt's rule is that every `grep` names "one of the 33 files above". This is a failure of condition 6.
      - `grep -n -o -e "AUPRC" -e "AUROC" -e "rojection head" -e "SSL" <13 named draft files> | sort -u`, which printed file, line and term only.
      - `grep -n -e "CNN" -e "MRI" "$D/main.tex" | cut -c1-80; grep -n -i -e "projection" -e "temperature" <four named draft files> | cut -c1-200`. Without `-o`, this printed the first 80 or 200 characters of 12 draft lines. Each file was one the marker had read whole and named by path, but the brief's prompt rule is that `grep` serves only to find a line number and that no `grep` prints a draft file. This is the failure of condition 6.
-   - Grant marker 1: `Read` 7, `Bash` 4, `SubagentHandback` 2. Its commands are the script's command on the copy, the script's output piped to `grep` three times in one call, a `grep` of the saved report for "still breaks", and on its resume the script's output piped to `grep -E '^(35|41|42):'`. It read the report whole (lines 1 to 596) and, on its resume, lines 189 to 228 and 446 to 580 again.
+   - Grant marker 1: `Read` 7, `Bash` 4, `SubagentHandback` 2. Its commands are the script's command on the copy, the script's output piped to `grep` three times in one call, a `grep` of the saved report for "still breaks", which is a `grep` on a file outside the draft and a failure of condition 6, and on its resume the script's output piped to `grep -E '^(35|41|42):'`. It read the report whole (lines 1 to 596) and, on its resume, lines 189 to 228 and 446 to 580 again.
    - Grant marker 2: `Read` 5, `Bash` 1, `SubagentHandback` 1. Its one command is the script's command on the copy.
    - No marker wrote, started an agent or invoked a skill. No marker was given the other's marks.
-   - Every row has a reason of its own after the two resumes, and no mark changed on a resume.
+   - After the three resumes, 17 marks have no reason of their own, as C8 lists them, and no mark changed on a resume. They are a failure of condition 6. Manuscript marker 1's resume, in repair round 1, made 17 `Read` calls of the report's group 9 lines, 13 draft files and three tables, and ran no command.
 7. **The copies equal their sources after the marks.** Holds: `diff exit 0`, `cmp exit 0`, `rh status exit 0`.
 8. **Row counts beside step 6's.** The manuscript run has 228 rows against step 6's 191, and the grant run 74 against 74. This is a fact for the user and gates nothing.
 9. **What the marks do not check.** The marks judge the findings the reports give, and no check counts breaks a report missed, since the gate asks for none.
@@ -143,12 +146,13 @@ The 48 manuscript rows and 35 grant rows, each with both reasons, are listed in 
   - a list in paragraph form: 13.9, 13.17;
   - a missing limit: 1.9, 1.10, 13.20;
   - a performative aside: 2.1;
+  - a term the passage already holds undefined, ConvNeXt: 6.1;
   - the cut of "slightly": Methodology 67.
 
   In the grant, most often a sentence over the length rule left in place or not named, in 19 rows. Otherwise:
   - two claims in one sentence: 11f, 14b, 16o, 16v, 16z;
   - "scan" left for a study or a sequence: 2f, 7b, 7d, 16n.
-- A term brought in undefined: manuscript 1.1, 5.12 and 10.4, and ConvNeXt in 6.1; grant 3a, 4a and 16p.
+- A term brought in undefined: manuscript 1.1, 5.12 and 10.4; grant 3a, 4a and 16p.
 - A scope word changed, or a qualifier cut so that a claim reads as universal: manuscript 5.4, 5.5, 5.11, 5.18 and 5.20; grant 1c, 2e, 8c and 16h.
 - A first-use claim that does not hold, since the title at `main.tex:45` uses CNN and MRI first: manuscript 5.1 and 6.1.
 - An "Also breaks" line or a named rule whose words do not describe the passage: manuscript 3.3, 3.7, 5.6, 5.9, Methodology 57 and 11.4; grant 1b, 2e, 14b and 17a.
@@ -162,7 +166,7 @@ The 48 manuscript rows and 35 grant rows, each with both reasons, are listed in 
 - The cases' first run is read from the base commit with `git ls-tree`, since the `ls` was not run before the runs.
 - The manuscript review agent ran its one grep once for each draft file inside one `for` loop in one `Bash` call. The session reads this as the one grep run once for each file, since `SKILL.md` names the command and the count of runs, not the count of calls.
 - A split gets two place checks, one on each quoted sentence. Every other place gets one.
-- A reason that names only the new word, with a general sentence over the list, was taken as no reason of its own, and the two markers that gave such reasons were resumed once for those rows.
+- A reason that names only the new word, a short note such as "Result.", or a cross-reference, with a general sentence over the list, was taken as no reason of its own, for every marker alike. Grant marker 1 and manuscript marker 2 were resumed once for such rows, and manuscript marker 1 once for its group 9 rows; grant marker 2 gave none. The 17 marks C8 lists are such reasons left after the resumes, and they count against condition 6.
 - The group 16 splits of the grant report that quote sentences other findings also give are not counted as passages given twice, as condition 5 says.
 - The markers' stated totals that disagree with their marks are noted in `8-marks.md`, and the tables are read from the marks. Manuscript marker 2 states 41 wrong rows and lists 28. Grant marker 1 states 75 rows and 33 wrong, and its marks hold 74 and 32.
 
@@ -175,21 +179,37 @@ None: the step changes no file outside the ledger.
 - The brief's turn shape for the grant run could not hold once the user asked the session to pause after the manuscript agent ended. Condition 4 records it.
 - Nothing else.
 
+## Repair round 1
+
+The refuter's findings (`8-refuter.md`) and the round's rulings (`agents/briefs/8-round-1.md`), each with what changed:
+
+| Ruling | What changed |
+|---|---|
+| 1. Spec 1, the grant marker prompts | Condition 6 and C11 state that the two grant marker prompts did not carry the brief's rule on `grep`, quote what they said instead, and count it as a failure of condition 6. No grant marker ran a `grep` on a folder, with a glob or with `-r`. |
+| 2. Proof 1, grant row 16s | C8 and condition 6 state the six bare "Right." rows of grant marker 1, that its resume named five of them, and that row 16s has no reason of its own, a failure of condition 6. `8-marks.md` says the same. |
+| 3. Proof 2, manuscript marker 1's tense notes | Manuscript marker 1 was resumed once for the group 9 entries it marked right, by list position, and gave a reason for each. The reply is `8-run/manuscript-marks-1-resume.md`. No mark changed. C8, condition 6, the DONE / NOT DONE table, `8-marks.md` and the judgment call on reasons record it. The run over round 1 found that the judgment call, read alike for every marker, leaves 16 manuscript marks without a reason of their own beside row 16s; at landing C8, condition 6 and the judgment call list them as failures of condition 6. |
+| 4. Proof 3, the greps on the saved report | Condition 6 and C11 list manuscript marker 1's first command and grant marker 1's third, each a `grep` on the saved report, as failures. C11 is not met for both markers. |
+| 5. Proof 4, entry numbers | Every entry number is a 1-based line number of the transcript, one higher than before, and the opening of "The cases' first run", where the first one stands, says so. |
+| 6. Proof 5, ConvNeXt in 6.1 | ConvNeXt moved from "A term brought in undefined" to the kinds of a further break left unnamed. |
+
 ## Files
 
 `wc -l`, run after the last edit, from the repository root:
 
 ```
      583 .scratch/3-the-writing-base/agents/reviews/8-marks.md
-    1263 .scratch/3-the-writing-base/agents/reviews/8-report.md
+     245 .scratch/3-the-writing-base/agents/reviews/8-refuter.md
+    1283 .scratch/3-the-writing-base/agents/reviews/8-report.md
       89 .scratch/3-the-writing-base/agents/reviews/8-run/grant-marks-1-resume.md
      150 .scratch/3-the-writing-base/agents/reviews/8-run/grant-marks-1.md
      193 .scratch/3-the-writing-base/agents/reviews/8-run/grant-marks-2.md
      595 .scratch/3-the-writing-base/agents/reviews/8-run/grant-report.md
+     471 .scratch/3-the-writing-base/agents/reviews/8-run/manuscript-marks-1-resume.md
      344 .scratch/3-the-writing-base/agents/reviews/8-run/manuscript-marks-1.md
      647 .scratch/3-the-writing-base/agents/reviews/8-run/manuscript-marks-2-resume.md
      300 .scratch/3-the-writing-base/agents/reviews/8-run/manuscript-marks-2.md
      632 .scratch/3-the-writing-base/agents/reviews/8-run/manuscript-report.md
+      14 .scratch/3-the-writing-base/agents/briefs/8-round-1.md
 ```
 
 Verify 1, `printf '%s\0' .scratch/3-the-writing-base/agents/reviews/8-marks.md .scratch/3-the-writing-base/agents/reviews/8-report.md .scratch/3-the-writing-base/agents/reviews/8-run/* | xargs -0 perl -CSD -ne '<the check>'; echo "charset exit $?"`, printed only `charset exit 0`.
