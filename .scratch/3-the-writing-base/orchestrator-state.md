@@ -46,8 +46,9 @@ dispatch:
   session_id: inline
   launched: 2026-10-13
   report: .scratch/3-the-writing-base/agents/reviews/8-report.md
-  round: 0
+  round: 1
   brief_check: .scratch/3-the-writing-base/agents/reviews/8-brief-check.md (a4f02d8519832d0b6, claude-opus-5-5, 218117 tokens, 45 tool uses, 7.1 minutes)
+  reviewer_report: .scratch/3-the-writing-base/agents/reviews/8-refuter.md (aa417a503739647c4, claude-opus-5-5, 94498 tokens, 87 tool uses, 11.3 minutes)
   landing: not-started
 ```
 
@@ -124,4 +125,9 @@ none
 - 2026-10-13. Step 7 landed (`agents/reviews/7-landing.md`).
 - 2026-10-13. Main's head 09601dc tagged `v7.1.0-rc.4` and pinned (`sh utils/pin.sh v7.1.0-rc.4`: "pinned: v7.1.0-rc.4 (09601dc), 14 skills linked"), as ruling I approves.
 - 2026-10-13. Step 8 prepared at base a34bfbf (brief check `agents/reviews/8-brief-check.md`, eight findings closed in the brief), executor inline (orchestrator, no agent).
-- Next: step 8 run inline: the copies checked, the manuscript run of `/writing`, then the grant run.
+- 2026-10-13. Step 8's manuscript run done (review agent ad512c438c546f57c, claude-opus-5-5, 179068 tokens, 38 tool uses, 28.7 min); its report shown whole. The user asked to pause once the agent was done, so the grant run was not invoked in the turn the manuscript agent's notice started; the user then said to continue, and the grant run starts in that later turn. Step 8's report states this under gate condition 4.
+- 2026-10-14. Step 8's grant run done (review agent ab89cdca00b160e9a, claude-opus-5-5, 175667 tokens, 6 tool uses, 15.8 min); its report shown whole. At the user's next message both reports were saved into `agents/reviews/8-run/` (helper rerun and `cmp` exit 0 for both) and the four markers started, each served claude-opus-5-5 as `ordo-high`: manuscript a8f3e0b981dc00ca4 and aa83277990558acd9, grant a5b964c740016412e and a136ed68531e76d65.
+- 2026-10-14. Three markers done, marks saved in `8-run/`: grant marker 1 (a5b964c740016412e, 192438 tokens, 9 tool uses, 15.0 min), grant marker 2 (a136ed68531e76d65, 166605 tokens, 7 tool uses, 11.3 min), manuscript marker 1 (a8f3e0b981dc00ca4, 285965 tokens, 43 tool uses, 21.0 min).
+- 2026-10-14. Manuscript marker 2 done (aa83277990558acd9, 213568 tokens, 40 tool uses, 29.4 min), marks saved in `8-run/manuscript-marks-2.md`.
+- 2026-10-14. Grant marker 1 and manuscript marker 2 resumed once for missing reasons, no mark changed; `agents/reviews/8-marks.md` and `agents/reviews/8-report.md` written. The check fails: 48 manuscript and 35 grant rows not marked right by both, gate conditions 2, 5 and 6 failing; by ruling I step 9 follows.
+- Next: `/refute 3 8`, then `/land 3 8` with step 8 left unticked, then step 9.
