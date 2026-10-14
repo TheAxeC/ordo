@@ -4,7 +4,7 @@ Ordo is a set of agent skills for Claude Code that run a multi-step change as a 
 
 One roadmap entry becomes a plan, kept in a ledger folder. Each step of the plan gets a brief, its written specification, and is built in its own git worktree. A fresh reviewer that changes nothing reviews the step. The step is cherry-picked onto `main` only after its checks pass there.
 
-Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, `diagnose` finds the cause of a defect, inside a plan's loop or on its own, and `plan-retro` turns what the reviewers keep finding into rules. `session-retro` reads the transcripts of Claude Code sessions and proposes a change to a named rule, skill or brief for what went well and for what went wrong. `writing` has a fresh agent that changes nothing review a draft's prose and report each break of a named rule.
+Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `roadmap` keeps the entries the plans open, `grill` settles an entry's design decisions before its plan opens, `diagnose` finds the cause of a defect, inside a plan's loop or on its own, and `plan-retro` turns what the reviewers keep finding into rules. `session-retro` reads the transcripts of Claude Code sessions and proposes a change to a named rule, skill or brief for what went well and for what went wrong.
 
 ## The skills
 
@@ -23,7 +23,6 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `ordo-help` | Prints the command sequence and the position of each open plan, and for a named plan its position and the command that comes next |
 | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
 | `session-retro` | Reads the transcripts of a plan's Claude Code sessions, of one session or of a time window. It reports what went well, to keep, and what went wrong, to change. Each point quotes its place and proposes a change to a rule, skill or brief, which the user decides on |
-| `writing` | Reviews the prose of one draft against the prose standard and the academic prose rules. The draft is a `.tex` file with its `\input` and `\include` files, a `.md`, a `.txt` or a `.docx`. One fresh agent that changes nothing reads the whole draft and reports the findings, grouped by rule with the most consequential first. Each finding gives its place, the quoted passage, the rule and a proposed replacement. It applies nothing |
 
 The order of use, shortened from what `/ordo-help` prints:
 
@@ -74,7 +73,7 @@ The loop of one step carries the same marks, with the band that runs the loop un
 
 The skills call each other and read each other's templates, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
 
-The plan skills, and `writing` for its review agent, launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
+The plan skills launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
 
 ### With the skills CLI
 
@@ -101,7 +100,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec writing; do
+    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
     agents=$(dirname "$dir")/agents

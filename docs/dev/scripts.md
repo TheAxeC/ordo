@@ -20,7 +20,6 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/plan-orchestration/templates/plan_cost.py` | Prices the usage of each agent role of a plan from the response bodies and the agents' transcripts |
 | `skills/repo-setup/templates/sync_rules.py` | Compares the shared-rules block and the plan-terms block of a repository with their templates, and rewrites them on request |
 | `skills/session-retro/templates/transcript_window.py` | Prints what was said and done in Claude Code transcripts, for a time window or for one Claude Code session, with secrets replaced |
-| `skills/writing/templates/docx_paragraphs.py` | Prints the text of each paragraph of a Word document, numbered, with each paragraph of a text box on its own line, tracked deletions and comments left out and field codes dropped |
 
 ## Test scripts
 

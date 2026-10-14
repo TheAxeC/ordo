@@ -36,7 +36,7 @@ Flagged, not banned; each use must be the most precise word rather than a defaul
 
 ## C. Throat-clearing and meta-commentary
 
-Delete the opener rather than rewriting it: "In the realm of", "It's important to note that", "It is worth mentioning that", "In today's rapidly evolving", "This serves as a testament to", "It goes without saying that", "In order to" (use "To"), "It should be noted that", "As a matter of fact", "When it comes to", "At the end of the day", "With that being said".
+Delete the opener rather than rewriting it: "In the realm of", "It's important to note that", "It is worth mentioning that", "This serves as a testament to", "It goes without saying that", "In order to" (use "To"), "It should be noted that", "When it comes to", "At the end of the day", "With that being said".
 
 Never describe what the page is about to do. "This section explains", "The following covers" are cut; the explanation itself is the page.
 
