@@ -37,23 +37,22 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:
-- step: 10
-  base: 9f6a598
-  worktree: .agents/worktrees/3-the-writing-base-10
-  executor: inline
-  worker: claude:sonnet
-  session_id: inline
-  launched: 2026-10-14
-  report: .scratch/3-the-writing-base/agents/reviews/10-report.md
-  round: 0
-  brief_check: .scratch/3-the-writing-base/agents/reviews/10-brief-check.md (a1b59c3039b987617, claude-opus-5-5, 209032 tokens, 39 tool uses, 6.6 minutes)
-  landing: not-started
+dispatch: none
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-none
+- Open item K (2026-10-14): step 10's check failed, so by ruling J the closing waits for the user.
+  - What happened: on the fifth runs, at `v7.1.0-rc.5`, 97 of 133 manuscript findings and 52 of 90 grant findings are not marked right by both markers. The counts over the five runs are, manuscript then grant: step 2 36 and 16, step 4 35 and 29, step 6 20 and 13, step 8 48 and 35, step 10 97 and 52. Each fix round has been followed by a run that fails again, and the last two runs failed on more findings than the run before. Why step 10 failed on more is not known.
+  - (a) Find the cause before fixing: step 11 runs `/diagnose 3 10` on why the failures rose from step 8 to step 10 (a change in `/writing` at `v7.1.0-rc.5`, a change in what the markers were told, or the agents' variance), then fixes `skills/writing/` for the cause it finds, tag `v7.1.0-rc.6` and pin. Step 12 repeats the runs and marks. The closing becomes step 13. Pro: the fix is aimed at a known cause, and the runs show whether it worked. Con: three more steps, about the cost of steps 8 to 10 again, and no promise that the gate then holds.
+  - (b) Another fix round without a diagnosis: step 11 fixes each failure step 10 lists, tag `v7.1.0-rc.6` and pin, step 12 the runs, step 13 the closing. Pro: the same shape as steps 7 to 10. Con: that shape has not converged in four rounds.
+  - (c) Change the gate, for example to a share of findings right by both. Pro: the plan can close. Con: it reverses the user's ruling on the gate (Gate 3), and loosens a check.
+  - (d) Mark entry 3 done as it stands. The lazy option: it closes with the gate failed.
+  - Recommendation: (a).
+- Open item L (2026-10-14): six helper scripts the session wrote for step 10 under the scratchpad, which the user never approved. Each computes a fact: `mk10prompts.py` builds the marker prompts from step 8's prompts and the brief's two quoted blocks, `mk10rows.py` lists the rows of each report, `mk10marks.py` reads each marker's mark and reason per row, `mk10md.py` writes `10-marks.md` from them, `mk10places.py` runs the place checks, `an10agents.py` counts the tool calls in the agents' transcripts. They are listed in `agents/reviews/10-report.md`, "Helper scripts and scratch files", and the refuter compared their counts with the files and found no difference.
+  - (a) Approve what they compute, for step 10's record and for the repeated runs if K is (a) or (b). Pro: the counts of 223 rows and 446 marks are made by a machine and checked by the refuter. Con: none beyond the approval.
+  - (b) Not approved: step 10's tables are redone by reading, and later steps count by hand. Pro: no script. Con: hand counts over hundreds of marks are where a wrong number gets in.
+  - Recommendation: (a). The lazy option is none here: both cost the user one ruling.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -141,4 +140,7 @@ none
 - 2026-10-14. `/roadmap done 3` drafted; Open item J raised to the user.
 - 2026-10-14. Open item J ruled (b) by the user: step 10 the fifth runs at `v7.1.0-rc.5`, the closing becomes step 11.
 - 2026-10-14. Step 10 prepared at base 9f6a598 (brief check `agents/reviews/10-brief-check.md`, every finding closed in the brief), executor inline (orchestrator, no agent).
-- Next: step 10's manuscript run of `/writing`, then the grant run; then, at the user's next message, the four markers.
+- 2026-10-14. Step 10 run inline: both `/writing` runs at `v7.1.0-rc.5` and four markers, each resumed once; the record in `agents/reviews/10-run/`, `10-marks.md` and `10-report.md`. The check fails: 97 manuscript rows and 52 grant rows not right by both, gate conditions 2, 5 and 6.
+- 2026-10-14. `/refute 3 10` run (`agents/reviews/10-refuter.md`); repair round 1 sent (`agents/briefs/10-round-1.md`), carried out inline.
+- 2026-10-14. The run over round 1 (a65b9752129715d7f, claude-sonnet-5-5) found Spec 1 to 3, Proof 1 to 3 and Standards 1 and 2, all but Spec 1 fixed at landing. Step 10 landed unticked, its check failed (`agents/reviews/10-landing.md`); Open items K and L raised to the user.
+- Next: the user's ruling on Open items K and L; then the step K names, or the closing.
