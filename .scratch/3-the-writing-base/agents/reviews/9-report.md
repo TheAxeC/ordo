@@ -8,6 +8,23 @@ Everything in the brief is done.
 
 none
 
+## Repair round 1
+
+Nothing in the ten rulings is left undone. The only point outside the rulings that the reader needs is that Verify 4 and 5 and the cases were run again on the files as they stand; their results are under "DONE / NOT DONE" and "Cases after the change".
+
+| Ruling | What changed |
+|---|---|
+| 1. Spec 1, operations 4 and 6 | "The last pass" has the operation that lists each other rule the passage breaks before the operation that reads the words of the rules, so that operation reads the rules the finding ends up naming. The old operations 4, 5 and 6 are now 5, 6 and 4. O5 reads "Take each rule or table row the finding names, its rule and each "Also breaks" line included." |
+| 2. Spec 2, grant 4a | `references/rules.md`, "Reader's question per section", gains R5 "A section is read whole before a finding says it does not answer its question." and R6 "A replacement repeats no sentence that the section already holds." O6 now reads "Take a finding under "Evidence for claims" or "Reader's question per section"." and finds every other place in the draft that states the claim or answers the question, the section the passage stands in read whole. The row of grant 4a in "The rows" names R5, R6 and O6. |
+| 3. Proof 1 | The rows of Verify 1 and Verify 3 under "DONE / NOT DONE" quote the brief's commands as the brief gives them, with the lines they print: `charset exit 0` alone for Verify 1, nothing for Verify 3. |
+| 4. Proof 2 | "The rows" has one cell per row that names, for each reason of both markers, a sentence or an operation. Grant 7b names R1, R2 and E8 for "atlas" in paragraph 25, N5 and N5a for "kind of MRI scan" and for the renamed sequence, N4a for "matched", and N2b with N8 and O8 for the 30-word sentence. Grant 8j names O7 for the duplicated label "Risks and mitigation:", O5 for the antecedent Also line, N5 and N5a for "each scan's signal", N2e for four mitigations in paragraph form, and N8 with O8 for the long items. Grant 16t names N8 and O8 for the 32-word sentence, N5 and N5a for "pair of T1 scans", and N2b with O2 for 11e's sentence. Every other row was read again against both markers' reasons in `8-marks.md`, and each reason has its sentence in the table. |
+| 5. Standards 1 | E2c is now "It has one replacement, as the replacement bullets say." The bullet "The finding names that rule when its rule line does not." is cut; E2a asks the same. |
+| 6. Standards 2 | N7 opens with the condition: "Where the draft does not hold the claim in every case, a word of frequency is replaced by a share or a count." N7a, "The share or the count is of the cases the claim holds in.", keeps the cases. The sub-bullet on a bracket that names a specific claim and the sub-bullet on cutting the qualifier (N7e) are unchanged. |
+| 7. Standards 3 | N6a lists "repeatedly" with the words of frequency; N6b lists the words of size or degree without it. |
+| 8. Standards 4 | Each operation is one action per sentence, in short sentences. The sentences over 20 words of the first build are split or shortened: the "ends every break" bullet (N1, N1a, N1b), the scope bullet (N4a, N4b), the additions bullet (N4c, N4d), the rename bullet (N5a, N5b), the examples (N6a, N6b), the bracket bullet (N7b, N7c), the length bullet (N8, N8a), the condition bullet (N9, N9a), the place bullet (N13b), the cost bullet (N13e), the `.tex` sentence and the "many studies" bullet of `rules.md` (R1, R3), and the "robust" item (R4). One sentence is over about 20 words: N7, 23 words, since ruling 6 puts its condition first; the section "Departures from the standards pages" gives the scan and the reason. |
+| 9. Standards 5 | N1a reads "One of them is the break that the rule the finding gives names." `grep -n -i 'rule line' skills/writing/SKILL.md skills/writing/references/rules.md` prints nothing (below). |
+| 10. Standards 6 | O12 reads "For each number and each relation the replacement states or keeps, list every measure of it." followed by "Search the draft's text, tables and figures for them." and "Read the number or the relation under each measure ("A finding")." |
+
 ## The cases' first run
 
 Read on the unchanged tree: `git status --short` printed nothing before the first edit, and the worktree's HEAD is the preparation commit 1077fe4 (`git rev-parse --short HEAD`). Each case was read against `skills/writing/SKILL.md`, `references/rules.md` and `references/registers.md` as they stood, the records of step 8 named in the brief, and the draft copies where a case needs the passage. No case is one the brief's own rules get wrong, so no hand-back was made. Three examples of Decision 3 and one consequence of fix 5 are noted under "Anything in the brief that was wrong or impossible"; none changes a rule the brief dictates.
@@ -130,186 +147,218 @@ Reading: U11 against the eight lines of gate condition 2 and the two accepted li
 
 Reading: `grep -c -E '\| (1\.3|4\.1|5\.3|7\.2|8\.1|12\.[1-9]|2a|5a|6a|9a|15a) \| .*\| right \| right \|$' 8-marks.md` printed `19`: manuscript 1.3, 4.1, 5.3, 7.2, 8.1, 12.1 to 12.9 and grant 2a, 5a, 6a, 9a, 15a are each `right | right`. Result: each holds on the unchanged tree. Their reading against the changed text is under "Cases after the change".
 
+
 ## Cases after the change
 
-Sentences of the changed tree, by label (file and section; the text is quoted whole):
+The sentences of the changed tree are labelled here and cited by label in the table. Each is quoted whole from the file and section named.
 
-- N1: `SKILL.md`, "The review agent's prompt", "A finding", replacement bullets: "It ends every break the passage holds: the one the finding's rule line names, and each other one of the prose standard, the rules page or the registers page."
-- N2: same place: "The text it writes breaks no rule of the prose standard, the rules page or the registers page. Examples are these breaks:" with the items N2a "a vague qualifier, a word of size or degree included;", N2b "a sentence over the prose standard's rule on sentence length;", N2c "a change of tense or of voice that the finding does not name;", N2d "two ideas in one sentence;", N2e "a list in paragraph form;", N2f "a relation with no limit where the draft's numbers set one;" and N2g "a performative aside."
-- N3: same place: "It keeps every claim and clause of the passage that a rule the finding names does not cut."
-- N4: same place: "It changes no claim's scope or strength beyond the change a rule the finding names asks of it." N4b: "A word that sets a claim's scope, such as an article or a quantifier, is kept unless a rule the finding names replaces it."
-- N5: same place: "A replacement that renames a thing for any other rule, such as synonym cycling, uses a name that covers the same set, never a narrower or a wider one." N5b: "The new name is a word that the draft does not use for another thing."
-- N6: same place: "A word of the kind the prose standard's section A lists as a vague qualifier is one, listed there or not. Examples are the words of frequency "usually", "mostly", "frequently" and "rarely", and the words of size or degree "markedly", "largely", "essentially", "considerably", "repeatedly", "increasingly" and "predominantly"."
-- N7: same place: "The replacement of a word of frequency, such as "often", "typically" or "usually", is the share or the count of cases the claim holds in." N7b: "The bracket for such a word asks for that share or count and for no other quantity, such as a size." N7c: "A bracket holds "or" only where each alternative, supplied alone, keeps the claim's scope."
-- N8: same place: "The replacement ends each sentence of the passage that is over the prose standard's rule on sentence length, whatever rule the finding names." N8b: "The finding names that rule when its rule line does not." N8c: "No sentence it writes is as long as a sentence the report names as over that rule."
-- N9: same place: "A split of a paragraph or of a sentence keeps a condition, such as an opening "If <a condition> holds", in each part that holds a claim the condition governs."
-- N10: `references/rules.md`, "Terms defined at first use": "A `.tex` draft is read from the main file's first line, its title included, in the order `SKILL.md`, "What you read", gives." N10b: "A claim that a use is the first is checked against every earlier use."
-- N11: `references/rules.md`, "Vague language", after the table: "The rows "many studies" and "some researchers" each cover their phrase with its noun replaced by another noun that names published work or its authors. Examples are "many approaches" and "some studies", and the replacement of the row is then written with that noun." N11b: "Every other row covers its own phrase only."
-- N12: `references/rules.md`, "Replacements for flagged terms": "\"robust\" in statistics, for an estimate or a method insensitive to outliers, to departures from the model's assumptions or to the partition of the data, as in \"robust estimator\";"
-- N13: `SKILL.md`, "How you group them": "The line states what the reader of this draft wrongly believes or does, or cannot do, because of the group's breaks." N13b: "The line gives the place of one finding of the group where that loss happens, in the form that finding gives its place." N13c: "The loss holds in the draft's own text and data." N13d: "A group whose breaks change no claim says so in its line." with "That line names what the break costs the reader instead at the place it gives, such as a character the reader's viewer may not show." N13e: "Rewrite a line that describes the breaks, restates the rule or names a loss its finding does not show."
-- Sentences of the prompt the changed text keeps and the rows rest on: E1 "It is text, written out whole, that stands in place of the passage and reads as a sentence there. It is never an instruction such as ..." and "It is never a reference to another finding or to the passage ..."; E2 "A passage that breaks two or more rules is given once, in the first group that reaches it." with "It names each other rule it breaks, or the other term ..." and "No later group gives it again or refers to it."; E3 "A use of a word that the prose standard's section A says stays is not reported."; E4 "A passage is reported under a rule only when that rule's own words describe the break."; E5 "A limit or a relation it states is checked against every number the draft gives for the claim, its tables and figures included."; E6 "Each part a split leaves meets the prose standard's section D ... A part is counted with the sentences that other findings add to it."; E7 `references/rules.md`, "Evidence for claims": "Evidence the draft gives anywhere counts, cited or not ..."; E8 `references/rules.md`, "Terms defined at first use": "Such a term is used only where the draft defines it at or before the passage."
+`SKILL.md`, "The review agent's prompt", "A finding", the replacement bullets:
 
-The operations of "The last pass" are O1 to O15, numbered as `SKILL.md` numbers them: O1 find the quoted words at the place; O2 find every other finding or list entry that quotes the same or overlapping words at that place, outside the forms for a split; O3 check each entry of a list that follows a table's rows under the row of its own section; O4 quote the words of the rule or table row the finding names and read each exception against the passage; O5 for "Evidence for claims", find every other place that states the claim; O6 read the passage against each section of the three pages and list each other rule it breaks; O7 read the replacement as text in the place of the passage; O8 count the words of each sentence the replacement writes; O9 compare the replacement with the passage word by word and give each changed word the rule that asks for it; O10 for each split, find each condition of the passage and the parts it governs; O11 list each technical term the replacement holds that the passage does not and find where the draft defines it; O12 for each relation, list every measure of that property in the text, tables and figures and read the relation under each; O13 read each bracket with "or" with each alternative alone; O14 for a split, write out each part as it reads after every finding and count its sentences and name its ideas; O15 for each group line, name the finding whose place it gives and read the loss at that place.
+- N1: "It ends every break the passage holds." N1a: "One of them is the break that the rule the finding gives names." N1b: "The others are each break of the prose standard, the rules page or the registers page."
+- N2: "The text it writes breaks no rule of the prose standard, the rules page or the registers page. Examples are these breaks:" with the items N2a "a vague qualifier, a word of size or degree included;", N2b "a sentence over the prose standard's rule on sentence length;", N2c "a change of tense or of voice that the finding does not name;", N2d "two ideas in one sentence;", N2e "a list in paragraph form;", N2f "a relation with no limit where the draft's numbers set one;" and N2g "a performative aside."
+- N3: "It keeps every claim and clause of the passage that a rule the finding names does not cut."
+- N4: "It changes no claim's scope or strength beyond the change a rule the finding names asks of it." N4a: "A word that sets a claim's scope, such as an article or a quantifier, is kept." N4b: "A rule the finding names may replace such a word."
+- N4c: "It adds no claim or relation that the draft does not make, and no word that presumes one." N4d: "A rule the finding names may ask for an addition."
+- E5: "A limit or a relation it states is checked against every number the draft gives for the claim, its tables and figures included." E5a: "A number it gives stands in the draft as the replacement uses it."
+- N5: "It names each thing by the name the draft uses for it, unless the named rule changes the name, as "Most specific term" does." N5a: "A replacement that renames a thing for another rule, such as synonym cycling, uses a name for the same set." N5b: "It never names a narrower set or a wider one." N5c: "The new name is a word that the draft does not use for another thing."
+- N6: "A word of the kind the prose standard's section A lists as a vague qualifier is one, listed or not." N6a: "Examples are the words of frequency "usually", "mostly", "frequently", "rarely" and "repeatedly"." N6b: "Examples are the words of size or degree "markedly", "largely", "essentially", "considerably", "increasingly" and "predominantly"."
+- N7: "Where the draft does not hold the claim in every case, a word of frequency is replaced by a share or a count." N7a: "The share or the count is of the cases the claim holds in." N7b: "The bracket for such a word asks for that share or count only." N7c: "A size is not that share or count." N7d: "A bracket holds "or" only where each alternative, supplied alone, keeps the claim's scope." N7e: "It never cuts the qualifier so that a claim the draft does not hold in every case reads as universal."
+- N8: "The replacement ends each sentence of the passage that is over the prose standard's rule on sentence length." N8a: "It does so whatever rule the finding gives." N8b: "No sentence it writes is as long as a sentence the report names as over that rule."
+- N9: "A split of a paragraph or sentence keeps a condition in each part that holds a claim it governs." N9a: "An example is an opening "If <a condition> holds"."
+
+`SKILL.md`, "A finding", outside the replacement bullets, and "What you report", sentences the changed text keeps:
+
+- E1: "It is text, written out whole, that stands in place of the passage and reads as a sentence there. It is never an instruction such as ..." E1b: "It is never a reference to another finding or to the passage, such as "as in finding N", "the same sentence" or "the replacement of finding N"." E1c: "A passage is never a description of the draft's text or a reference to another finding."
+- E2: "A passage that breaks two or more rules is given once, in the first group that reaches it." E2a: "It names each other rule it breaks, or the other term, by its page and section in a line of its own." E2b: "No later group gives it again or refers to it." E2c: "It has one replacement, as the replacement bullets say."
+- E3: "A use of a word that the prose standard's section A says stays is not reported." E4: "A passage is reported under a rule only when that rule's own words describe the break."
+- E6: "Each part a split leaves meets the prose standard's section D, or the finding gives a further split. A part is counted with the sentences that other findings add to it."
+
+`SKILL.md`, "How you group them":
+
+- N13: "The line states what the reader of this draft wrongly believes or does, or cannot do, because of its breaks." N13a: "That loss is why the group stands where it does." N13b: "The line gives the place of one finding of the group where that loss happens. The place is in the form that finding gives." N13c: "The loss holds in the draft's own text and data." N13d: "A group whose breaks change no claim says so in its line." N13e: "That line names what the break costs the reader instead at the place it gives. An example is a character the reader's viewer may not show." N13f: "Rewrite a line that describes the breaks, restates the rule or names a loss its finding does not show."
+
+`references/rules.md`:
+
+- R1, "Terms defined at first use": "A `.tex` draft is read from the main file's first line, its title included. The order of its files is the one `SKILL.md`, "What you read", gives." R2, same section: "A claim that a use is the first is checked against every earlier use." E8, same section: "Such a term is used only where the draft defines it at or before the passage."
+- R3, "Vague language": "The rows "many studies" and "some researchers" cover a second form of their phrase. That form has another noun that names published work or its authors in place of the row's noun. Examples are "many approaches" and "some studies". The replacement of the row is then written with that noun." R3b: "Every other row covers its own phrase only."
+- R4, "Replacements for flagged terms": the item "robust" in statistics, as in "robust estimator", for an estimate or a method insensitive to one of these: outliers; departures from the model's assumptions; the partition of the data.
+- R5, "Reader's question per section": "A section is read whole before a finding says it does not answer its question." R6, same section: "A replacement repeats no sentence that the section already holds."
+- E7, "Evidence for claims": "Evidence the draft gives anywhere counts, cited or not ..."
+
+The operations of "The last pass" are numbered as `SKILL.md` numbers them. O1 finds the quoted words at the place. O2 finds every other finding or list entry that quotes the same or overlapping words there, a quote the forms for a split give excepted. O3 checks each entry of a list that follows a table's rows under the row of its own section. O4 reads the passage against each section of the three pages and lists each other rule it breaks. O5 takes each rule or table row the finding names, its rule and each "Also breaks" line included, quotes the words that describe the passage and reads each exception of its section against it. O6 takes a finding under "Evidence for claims" or "Reader's question per section" and finds every other place in the draft that states the claim or answers the question. O7 reads the replacement as the reader would, as text in the place of the passage. O8 counts the words of each sentence the replacement writes. O9 compares the replacement with the passage word by word and gives each changed word the rule that asks for it. O10 finds, for each split, each condition and the parts it governs. O11 lists each technical term and abbreviation the replacement adds and finds where the draft defines it. O12 lists, for each number and each relation the replacement states or keeps, every measure of it in the draft's text, tables and figures, and reads it under each. O13 reads each bracket that holds "or" with each alternative alone. O14 writes out each part of a split as it reads after every finding and counts its sentences and names its ideas. O15 names, for each group line, the finding whose place it gives and reads the loss there.
 
 ### The rows
 
-One row per row of `8-marks.md` "Rows not marked right by both" (48 manuscript, 35 grant) and per gate failure. "Fix" is the numbered item of the brief.
+One row per row of `8-marks.md`, "Rows not marked right by both" (48 manuscript, 35 grant), and per gate failure. The reasons are those of both markers, each read again in `8-marks.md` after this round; each reason is followed by the sentence or operation that prevents it. A marker that marked the row right gave no reason to answer.
 
-| Row or failure | Fix | Sentence that now prevents it | Operation |
-|---|---|---|---|
-| Manuscript 1.1 | 8 | N2f; E5; the term rule E8 for AUPRC and the expected calibration error | O11, O12 |
-| Manuscript 1.2 | 1 | N2c (the voice of "We demonstrate" changed), N1 | - |
-| Manuscript 1.9 | 1, 8 | N2f ("a relation with no limit where the draft's numbers set one"); E5 | O12 |
-| Manuscript 1.10 | 1, 2, 8 | N2a with N6 ("moderate"), N2f; E5 | O12 |
-| Manuscript 1.12 | 1, 2 | N2a with N6 ("at most marginal"), N2d | - |
-| Manuscript 2.1 | 1 | N2g ("More interestingly") | - |
-| Manuscript 3.1 | 1, 2 | N2a with N6 ("predominately") | - |
-| Manuscript 3.3 | 6, 8 | N11b ("Every other row covers its own phrase only"); E4 | O4 |
-| Manuscript 3.5 | 1 | N2c ("our study uses" is a Voice break that N1 requires the finding to end and name) | - |
-| Manuscript 3.7 | 8 | E7 ("Evidence the draft gives anywhere counts") | O5 |
-| Manuscript 3.9 | 1, 2 | N2a with N6 ("repeatedly") | - |
-| Manuscript 5.1 | 5 | N10 (the title at `main.tex:45` is read first), N10b | - |
-| Manuscript 5.2 | 8 | E1 ("It is never an instruction") | O7 |
-| Manuscript 5.4 | 8 | N4b ("Traditional" is a scope word) | O9 |
-| Manuscript 5.5 | 3 | N7b ("asks for that share or count and for no other quantity, such as a size") | - |
-| Manuscript 5.6 | 6 | N11 ("many existing approaches" is covered by "many studies") | - |
-| Manuscript 5.9 | 6 | N11 ("some ... studies" is covered by "some researchers") | - |
-| Manuscript 5.11 | 3 | N7 ("typically" is replaced by a share or a count), N7b | - |
-| Manuscript 5.12 | 8 | E8 (AUPRC and AUROC brought in before the draft defines them) | O11 |
-| Manuscript 5.18 | 8 | N4b ("consecutive folds" is a scope word) | O9 |
-| Manuscript 5.19 | 1, 2 | N2a with N6 ("far less pronounced") | - |
-| Manuscript 5.20 | 3 | N7c ("A bracket holds "or" only where each alternative, supplied alone, keeps the claim's scope") | O13 |
-| Manuscript 6.1 | 1, 5 | N10, N10b (CNN is first used in the title); N1 with E2 ("or the other term") for ConvNeXt | - |
-| Manuscript 7.1 | 1 | N2c ("aims" made "aimed" without a Tense line) | - |
-| Manuscript Methodology 56 | 8 | E2 ("No later group gives it again or refers to it"), E1 ("It is never a reference to another finding") | O2 |
-| Manuscript Methodology 57 | 8 | E3 ("just" as a minimality claim) | O4 |
-| Manuscript Methodology 67 | 1 | N1 with E2 (the cut of "slightly" is a section A break that the entry names) | - |
-| Manuscript Results 5, 10, 16, 24, 26, 29 | 1, 2 | N2a with N6 ("markedly", "closely", "largely", "essentially", "essentially all", "clearly") | - |
-| Manuscript 10.4 | 8 | E8 ("projection head" brought in undefined) | O11 |
-| Manuscript 11.1 | 8 | E1 ("reads as a sentence there") | O7 |
-| Manuscript 11.4 | 4, 7, 8 | N12 ("robust" for an estimate insensitive to the partition of the data is not reported), N5b ("reliable" is the draft's word for calibration); the false note by E2 | O2 |
-| Manuscript 13.1 | 1 | N2c (the carried voice change of 1.2) | - |
-| Manuscript 13.4 | 1, 2, 8 | N2a with N6 ("increasingly"), N2c (the present perfect); E1 for the replacement that is no sentence | O7 |
-| Manuscript 13.9 | 1 | N2e (three items after semicolons in paragraph form) | - |
-| Manuscript 13.11 | 1 | N2c (tense changes no entry names) | - |
-| Manuscript 13.12 | 8 | E6 (a part is counted with the sentences other findings add) | O14 |
-| Manuscript 13.13 | 4, 7 | N12, N5b (it carries 11.4) | - |
-| Manuscript 13.17 | 1 | N2e (six metrics after a colon in paragraph form) | - |
-| Manuscript 13.19 | 1, 2 | N2a with N6 ("largely") | - |
-| Manuscript 13.20 | 1, 2, 8 | N2a with N6 ("comparatively little", "at most marginal"), N2f; E5 | O12 |
-| Manuscript 13.21 | 1, 2 | N2a with N6 ("at most marginal") | - |
-| Manuscript 13.22 | 1 | N2d (two ideas joined by "while") | - |
-| Manuscript 14.6 | 1 | N2c (the Voice break of 7.5 carried to a second place) | - |
-| Grant 1b | 8 | E4 (the Also line on "Clear antecedents" does not describe the passage) | O4 |
-| Grant 1c | 8 | N9 (the opening "If the hypothesis holds" is kept in each part that holds a claim it governs) | O10 |
-| Grant 2e | 4 | N5 ("serial scans" made "serial MRI studies" covers a narrower set) | - |
-| Grant 2f | 1 | N8, N8b (the 35-word sentence is ended and named); N1 for "scans" | - |
-| Grant 2h | 1 | N8, N8b (43 words) | - |
-| Grant 3a | 8 | E8 ("hepatitis B virus" brought in undefined) | O11 |
-| Grant 4a | 1, 8 | N8 (31 words); E8 ("80 percent power") | O8, O11 |
-| Grant 7a | 1 | N8 (29 words made 32) | - |
-| Grant 7b | 1, 8 | N2b, N8 (the finding names the length rule and a written sentence has 30 words); N4b ("matched") | O8, O9 |
-| Grant 7d | 1 | N1 with E2 ("scans" for a study is a break the finding names) | - |
-| Grant 8c | 8 | N4b ("a detection limit" made "the detection limit") | O9 |
-| Grant 8g | 1 | N8, N8b (38 words) | - |
-| Grant 8i | 1 | N8 (42 words), N2e | - |
-| Grant 8j | 1 | N8 (31 and 43 words), N2e | - |
-| Grant 11c | 1 | N2b, N8 (the first new sentence has 28 words) | - |
-| Grant 11d | 1 | N2b, N8 (the second new sentence has 29 words) | - |
-| Grant 11e | 1 | N2b, N8 (the first new sentence has 28 words) | - |
-| Grant 11f | 1 | N2d (two independent claims joined) | - |
-| Grant 12a | 1 | N8, N8b (27 words) | - |
-| Grant 13a | 1 | N8, N8b (28 words) | - |
-| Grant 14b | 1, 8 | N2d; E4 (the Also line on the "ongoing state" row does not describe the replacement) | O4 |
-| Grant 16a | 1 | N8, N8b (32 words) | - |
-| Grant 16b | 1 | N8, N8b (29 words) | - |
-| Grant 16h | 4 | N5 (it carries 2e) | - |
-| Grant 16j | 1 | N8, N8b (28 words) | - |
-| Grant 16n | 1 | N2e (the list of 2f carried) | - |
-| Grant 16o | 1 | N2d | - |
-| Grant 16p | 8 | E8 ("80 percent power"); E6 | O11, O14 |
-| Grant 16r | 1, 8 | N2d (alignment joined to blinding); E6 | O14 |
-| Grant 16t | 1 | N8, N8b (32 words) | - |
-| Grant 16u | 1 | N8, N8b (28 words) | - |
-| Grant 16v | 1 | N2d (the level-2 exclusion and the level-1 analysis in one sentence) | - |
-| Grant 16y | 8 | E6 (the part after the break holds more than one idea) | O14 |
-| Grant 16z | 1 | N2d (the carried two-claim sentence of 14b) | - |
-| Grant 17a | 8 | E4 (the section 0 rule on the en dash as an aside) | O4 |
-| Gate condition 2, manuscript group 6 | 9 | N13c, N13b (CNN is first used in the title) | O15 |
-| Gate condition 2, manuscript group 11 | 9 | N13e ("names a loss its finding does not show"; the line is contradicted by findings 11.1, 11.2 and 11.4) | O15 |
-| Gate condition 2, manuscript group 14 | 9 | N13, N13d, N13e (the line restates the rule and names no cost) | O15 |
-| Gate condition 2, grant groups 1 and 3 | 9 | N13 ("wrongly believes or does, or cannot do"), N13e | O15 |
-| Gate condition 2, grant groups 5 and 9 | 9 | N13, N13b, N13e (group 9 also N13d) | O15 |
-| Gate condition 2, grant group 15 | 9 | N13c, N13d (the cost named at paragraph 31 must hold there) | O15 |
-| Gate condition 5, the tense entry at `b_implementation.tex:3` | 8 | E2 ("No later group gives it again or refers to it"), E1 | O2 |
-| Gate condition 5, finding 5.2's instruction | 8 | E1 ("It is never an instruction") | O7 |
-| Gate condition 5, the three places given twice | 8 | E2 | O2 |
-| The group 9 heading under "Methodology" | 8 | `references/rules.md`, "Tense per section" (each entry stands under the row of its own section) | O3 |
+| Row | Reason of the markers, then the sentence and operation that prevent it |
+|---|---|
+| Manuscript 1.1 | AUPRC and the expected calibration error brought into the abstract before the draft defines them: E8, O11. The reliability claim kept without its limit against MCE and Brier numbers: E5, N2f, O12. |
+| Manuscript 1.2 | "we" dropped, an unnamed Voice break: N2c, N1b. |
+| Manuscript 1.9 | The unlimited "aligned the models closer" against the ECE and MCE numbers: E5, N2f, O12. The Limitations break unnamed: E2a, O4. |
+| Manuscript 1.10 | "on average more reliable" against the MCE numbers: E5, O12. The size word "moderate improvements" kept: N2a, N6. |
+| Manuscript 1.12 | "at most marginal" kept: N2a, N6. Two ideas kept, a Formality break: N2d. |
+| Manuscript 2.1 | "More interestingly" kept: N2g. |
+| Manuscript 3.1 | "predominately" kept: N2a, N6b. |
+| Manuscript 3.3 | The Also line names the row "in recent years" and "recent studies" is not its phrase: R3b, E4, O5. |
+| Manuscript 3.5 | "our study uses" kept, a Voice break unnamed: N2c. |
+| Manuscript 3.7 | The claim has a source at `introduction.tex:5`: E7, O6. |
+| Manuscript 3.9 | "repeatedly" kept: N6a, N2a, N7. |
+| Manuscript 5.1 | MRI first stands in the title at `main.tex:45`: R1, R2, O5. |
+| Manuscript 5.2 | The antecedent fix is an instruction and the written text still opens "This is especially relevant": E1, O7. |
+| Manuscript 5.4 | "Traditional" dropped: N4a, O9. |
+| Manuscript 5.5 | "often small" made "small" with a bracket for sizes: N7, N7b, N7c. |
+| Manuscript 5.6 | The Also line names the row "many studies" and the phrase is "many existing approaches": R3, O5. |
+| Manuscript 5.9 | The Also line names the row "some researchers" and the phrase is "some ... studies": R3, O5. |
+| Manuscript 5.11 | "typically" cut so the claim reads as universal, a bracket for sizes: N7e, N7, N7b. |
+| Manuscript 5.12 | AUPRC and AUROC brought in before the draft defines them: E8, O11. |
+| Manuscript 5.18 | "consecutive folds" made "any two folds", a claim the draft does not make: N4a, N4c, O9. |
+| Manuscript 5.19 | "far less pronounced" kept: N2a, N6. |
+| Manuscript 5.20 | A bracket with an "or" alternative that leaves the claim universal: N7d, O13. |
+| Manuscript 6.1 | CNN first stands in the title: R1, R2, O5. ConvNeXt undefined and not named: E2a, O4. |
+| Manuscript 7.1 | "aims" made "aimed", a tense change the finding does not name: N2c. |
+| Manuscript Methodology 56 | An entry that is a reference to finding 6.4, with no passage and replacement: E1b, E1c, E2b, O2. |
+| Manuscript Methodology 57 | "just 8000 training steps" is a minimality claim that section A keeps: E3, O5. |
+| Manuscript Methodology 67 | The cut of "slightly" answers section A, which the entry does not name, and the passage belongs in group 5: E2, E2a, O4, O2. |
+| Manuscript Results 5, 10, 16, 24, 26, 29 | "markedly", "closely", "largely", "essentially", "essentially all" and "clearly" kept: N2a, N6b. For Results 26 the table has CNN-only above both stages: E5, O12. |
+| Manuscript 10.4 | "projection head" brought in undefined: E8, O11. |
+| Manuscript 11.1 | The replacement's subordinate clause has no verb: E1, O7. The place group 9 already lists is given again: E2b, O2. |
+| Manuscript 11.4 | "robust" is the statistical term: R4. "reliable" is the draft's term for calibration: N5c. The note that the place is not in the tense list is false: O3, O1. |
+| Manuscript 13.1 | The carried voice change of 1.2: N2c. |
+| Manuscript 13.4 | "have therefore increasingly employed", a present perfect and a trend word, unnamed: N2c, N2a, N6b. 11.1's text, not a sentence: E1, O7. |
+| Manuscript 13.9 | Three semicolon items in paragraph form: N2e. |
+| Manuscript 13.11 | "is pre-trained" and "is then fine-tuned" changed to the past, unnamed: N2c. |
+| Manuscript 13.12 | The first part holds five sentences with the sentence 4.1 adds: E6, O14. |
+| Manuscript 13.13 | 11.4's change of "robust" to "reliable": R4, N5c. |
+| Manuscript 13.17 | Six metrics after a colon in paragraph form: N2e. |
+| Manuscript 13.19 | "largely" kept: N2a, N6b. |
+| Manuscript 13.20 | "comparatively little" and "at most marginal" kept: N2a, N6. The CNN backbone's dominance without a limit against the table at 0.457 and 0.447: N2f, E5, O12. |
+| Manuscript 13.21 | "at most marginal gains" kept: N2a, N6. |
+| Manuscript 13.22 | Two ideas joined by "while": N2d. |
+| Manuscript 14.6 | "This study therefore developed", the Voice break 7.5 fixes, unnamed: N2c. |
+| Grant 1b | The Also line on "Clear antecedents" does not hold: E4, O5. |
+| Grant 1c | "If the hypothesis holds" dropped from the new sentence on transfer: N9, O10. |
+| Grant 2e | "serial scans" made "serial MRI studies", a narrower set: N5a, N5b. The synonym line does not hold, since reference 7 is CT radiomics: E4, O5. |
+| Grant 2f | "scans" kept for sequences: N5a, E2a, O4. The 35-word sentence neither ended nor named: N8, E2a, O8. |
+| Grant 2h | The 43-word sentence kept, with no Also line for length: N8, E2a, O8. |
+| Grant 3a | "hepatitis B virus" brought in undefined: E8, O11. |
+| Grant 4a | The 31-word sentence kept whole and the length rule not named: N8, E2a, O8. The reading of the rule left uncounted: the prompt's "Count before you state a count of sentences in a paragraph or of words in a sentence", O8. Paragraph 42 of the same section states the limit, so the section is read whole and the replacement repeats a sentence it holds: R5, R6, O6. "80 percent power" brought in undefined: E8, O11. |
+| Grant 7a | 29 words made 32, neither ended nor named: N8, N2b, E2a, O8. |
+| Grant 7b | A written sentence of 30 words: N8, N2b, O8. "kind of MRI scan" brings back "scan" for a sequence: N5, N5a. "atlas" first used in paragraph 25: R1, R2, E8, O11. "matched" dropped: N4a, O9. "sequence" renamed: N5, N5a. |
+| Grant 7d | "into real liver scans" kept for the cohort's studies: N5, N5a, E2a, O4. |
+| Grant 8c | "a detection limit" made "the detection limit": N4a, O9. The sentence grows from 21 to 26 words: N2b, O8. |
+| Grant 8g | The 38-word sentence kept, with no Also line for length: N8, E2a, O8. |
+| Grant 8i | The 42-word WP1 item kept with five list-shaped actions, neither named: N8, N2e, E2a, O8. |
+| Grant 8j | The added label "Risks and mitigation:" duplicates the draft's label: O7. Items (i) and (iv) kept at about 31 and 43 words: N8, E2a, O8. "each scan's signal" left: N5, N5a. The antecedent line does not hold: E4, O5. Item (iv) keeps four mitigations in paragraph form: N2e. |
+| Grant 11c | The first new sentence has 28 words: N2b, O8. |
+| Grant 11d | The second new sentence has 29 words: N2b, O8. |
+| Grant 11e | The first new sentence has 28 words: N2b, O8. |
+| Grant 11f | The second sentence joins two independent claims: N2d. |
+| Grant 12a | The 27-word passage sentence kept, with no Also line for length: N8, E2a, O8. |
+| Grant 13a | The 28-word sentence neither ended nor named: N8, E2a, O8. |
+| Grant 14b | The sentence joins two independent claims: N2d. It states the present state of two fields, the "ongoing state" row, and the replacement treats its two parallel clauses differently: O5, N2c. |
+| Grant 16a | The 32-word sentence on what the project tests kept: N8, O8. |
+| Grant 16b | "Dit project test of..." kept at 29 words: N8, O8. |
+| Grant 16h | 2e's "serial MRI studies", the same scope change: N5a, N5b. |
+| Grant 16j | The 28-word "Success means" sentence kept: N8, O8. |
+| Grant 16n | The "T1 scans" list of 2f carried: N2e, N5a. |
+| Grant 16o | "776 are usable ..., and an organ map ... exists", two claims in one sentence: N2d. |
+| Grant 16p | With 4a, a part of four sentences on two ideas: E6, O14. 4a's sentence with "80 percent power" undefined: E8, O11. |
+| Grant 16r | The part joins alignment to the reference liver with blinding of the analyst, two ideas: E6, O14. |
+| Grant 16t | "Components are checked ..." kept at 32 words: N8, O8. "pair of T1 scans" for a sequence: N5, N5a. 11e's 28-word first sentence left in place: N2b, O2. |
+| Grant 16u | "The tested study is ..." kept at 28 words: N8, O8. |
+| Grant 16v | The level-2 exclusion and the level-1 sensitivity analysis in one sentence: N2d. |
+| Grant 16y | The part after the break holds more than one idea, with no further split: E6, O14. |
+| Grant 16z | 14b's two-claim sentence kept: N2d. "placed" carried from 14b: N2c. The part after the break joins novelty with impact: E6, O14. |
+| Grant 17a | The Rule line also names section 0's en dash as an aside, and these dashes separate parts of a header title: E4, O5. |
+| Gate condition 2, manuscript group 6 | The CNN example's first-use claim fails, since CNN first stands in the title: N13c, R2, O15. |
+| Gate condition 2, manuscript group 11 | The "softener with no fact" line is contradicted by findings 11.1, 11.2 and 11.4: N13c, N13f, O15. |
+| Gate condition 2, manuscript group 14 | The line restates the rule and names no cost: N13, N13f, O15. |
+| Gate condition 2, grant groups 1 and 3 | The lines describe the breaks and name no loss: N13, N13b, N13f, O15. |
+| Gate condition 2, grant groups 5 and 9 | The lines restate the rule or describe the break and name no cost: N13, N13b, N13d, N13e, N13f, O15. |
+| Gate condition 2, grant group 15 | The cost does not hold in the draft: N13c, N13e, O15. |
+| Gate condition 5, the tense entry at `b_implementation.tex:3` | A reference to another finding in place of a passage and replacement: E1b, E1c, E2b, O2. |
+| Gate condition 5, finding 5.2's instruction | The antecedent fix is an instruction: E1, O7. |
+| Gate condition 5, the three places given twice | A place an earlier group already gives is given again: E2, E2b, O2. |
+| The group 9 heading under "Methodology" | Two section 2 entries stand under "Methodology": O3. |
 
-Gate condition 6 is not a row: its failures concern the markers' commands, the grant marker prompts and 17 marks without a reason of their own, and no text of `/writing`. The closing report names them, as the brief says.
+Gate condition 6 is not a row: its failures concern the markers' commands and prompts and 17 marks without a reason of their own, and no text of `/writing`. The closing report names them, as the brief says.
 
 ### C1 to C10 after the change
 
-- C1: each row of fix 1's list is in the table above with the rewritten sentence that prevents it: N1, N2 with its items, N3, N4 and N4b for the "named rule" sentences, N8 to N8c for the length rows. The report's reading of the length rule is kept even by N8c, which states no number of words.
-- C2: N6. Its second example group names "markedly", "largely", "essentially", "considerably", "repeatedly", "increasingly" and "predominantly", and its first sentence keeps "is one, listed there or not". N2a names "a word of size or degree" in the list. "Closely", "clearly", "moderate", "at most marginal", "comparatively little" and "far less pronounced" are read as words of size or degree.
-- C3: manuscript 5.5 breaks N7b, 5.11 breaks N7 and N7b, 5.20 breaks N7c. Grant 2a breaks none of N7, N7b and N7c: its brackets ask for "the share of cases the author's source gives", and it stays allowed.
-- C4: grant 2e and 16h break N5 ("serial MRI studies" covers the narrower set of MRI studies). Manuscript 11.4 and 13.13 break N5b; N12 makes "robust performance estimates" an exempt term, so the finding is no longer reported.
-- C5: manuscript 5.1 and 6.1 break N10: the title at `main.tex:45` precedes the abstract at `main.tex:96`. The group 6 line, whose example rests on that claim, breaks N10b ("checked against every earlier use") and N13c.
-- C6: manuscript 5.6 and 5.9 are covered by the row they name, under N11. Manuscript 3.3 is not covered: "recent studies" is not the phrase of the row "in recent years", and N11b says so. `a_problem_formulation.tex:1` "some patients" is not covered: patients are no published work (N11).
-- C7: manuscript 11.4: N12 exempts "robust" for an estimate insensitive to the partition of the data, and "robust performance estimates" with a stratified 5-fold cross-validation against a single hold-out split is such an estimate. It is not reported.
-- C8: each failing row has its operation in the table. The eight findings at grant paragraph 42 (2h, 8g, the group 11 finding, 12a, 13a, 16u, 16v, 16y) stay: O2 finds another finding or entry that quotes the same or overlapping words outside the forms for a split, 16u, 16v and 16y are split quotes, and the other five quote different words.
+- C1: each row of fix 1's list is in the table above with the sentence that prevents it: N1 to N4d for the "ends every break" and "a rule the finding names" rows, N8 to N8b for the length rows, E2a for the rows whose other break the finding must name.
+- C2: N6 and N6b make "markedly", "largely", "essentially", "considerably", "increasingly" and "predominantly" vague qualifiers, N2a names a word of size or degree in the list of breaks, and N6's "listed or not" covers "closely", "clearly", "moderate", "at most marginal", "comparatively little" and "far less pronounced". N6a lists "repeatedly" as a word of frequency.
+- C3: manuscript 5.5 breaks N7b and N7c, 5.11 breaks N7e and N7b, 5.20 breaks N7d. Grant 2a breaks none of N7, N7a and N7b: its brackets ask for the share of cases the author's source gives, and it stays allowed.
+- C4: grant 2e and 16h break N5b ("serial MRI studies" covers a narrower set). Manuscript 11.4 and 13.13 break N5c, and R4 exempts "robust" for an estimate insensitive to the partition of the data, so "robust performance estimates" is not reported.
+- C5: manuscript 5.1 and 6.1 break R1 and R2: the title at `main.tex:45` precedes the abstract at `main.tex:96`. The group 6 line, whose example rests on that claim, breaks N13c.
+- C6: manuscript 5.6 and 5.9 are covered by their rows under R3. Manuscript 3.3 is not covered ("recent studies" is not the phrase of "in recent years", and R3b says so). `a_problem_formulation.tex:1` "some patients" is not covered, since patients are no published work.
+- C7: manuscript 11.4: R4 exempts "robust" for an estimate insensitive to the partition of the data. It is not reported.
+- C8: each failing row has its operation in the table. The eight findings at grant paragraph 42 (2h, 8g, the group 11 finding, 12a, 13a, 16u, 16v, 16y) stay: O2 excepts a quote the forms for a split give, 16u, 16v and 16y are split quotes, and the other five quote different words.
 - C9: the eight lines are in the table, each with the sentence of "How you group them" it breaks. Manuscript group 1's line states a loss and gives `abstract.tex:5`, which becomes `sections/abstract/abstract.tex:5`, the place form of finding 1.4 (N13b). Grant group 2's line states "the reader cannot weigh the problem" and gives paragraph 34, where findings 2c and 2d stand. Both keep their losses and take the place form.
-- C10: manuscript 1.3, 7.2, 8.1 and the nine list entries of 12.1 to 12.9 keep their place, passage, rule and replacement: their passage sentences run 19, 19 and 13 words (counted by splitting `8-run/manuscript-report.md` text at full stops), and N5 and N5b are met by 12.x because "model variants" names the five sizes the draft already calls variants. Grant 2a, 5a, 6a, 9a and 15a keep theirs: 2a's passage sentence has 24 words and its replacement already ends it in sentences of 17 and 22 words, with brackets for the share of cases that N7 and N7b ask for; 5a, 6a, 9a and 15a have passage sentences of 22, 14, 8 and 14 words. Two rows are asked in another form: manuscript 4.1 (a passage sentence of 40 words, and a replacement that keeps a sentence of 40 words) and manuscript 5.3 (a passage sentence of 26 words, and a replacement of 32 words) now end the long sentence in the replacement and name the length rule, as N8 and N8b ask. Their places, passages and the rules that cause the rest of their replacement stay.
+- C10: manuscript 1.3, 7.2, 8.1 and the nine list entries of 12.1 to 12.9 keep their place, passage, rule and replacement: their passage sentences run 19, 19 and 13 words (counted by splitting the text of `8-run/manuscript-report.md` at full stops), and 12.x meets N5a and N5c because "model variants" names the five sizes the draft already calls variants. Grant 2a, 5a, 6a, 9a and 15a keep theirs: 2a's passage sentence has 24 words and its replacement already ends it in sentences of 17 and 22 words, with brackets for the share of cases that N7 and N7b ask for; 5a, 6a, 9a and 15a have passage sentences of 22, 14, 8 and 14 words. Two rows are asked in another form: manuscript 4.1 (a passage sentence of 40 words, and a replacement that keeps a sentence of 40 words) and manuscript 5.3 (a passage sentence of 26 words, and a replacement of 32 words) now end the long sentence in the replacement, as N8 asks. Their places, passages and the rules that cause the rest of their replacement stay.
 
 ## DONE / NOT DONE
 
-| Item | State | Command and output |
+| Item | State | Evidence |
 |---|---|---|
-| Fix 1, a replacement ends every break and writes none | DONE | N1 to N4b and N8 to N8c in `SKILL.md`, "A finding", replacement bullets. |
-| Fix 2, size and degree words | DONE | N6 in the same place. |
-| Fix 3, a frequency word | DONE | N7, N7b, N7c in the same place. |
-| Fix 4, a new name | DONE | N5, N5b in the same place. |
-| Fix 5, the first use | DONE | N10, N10b in `references/rules.md`, "Terms defined at first use". |
-| Fix 6, two rows of "Vague language" | DONE | N11, N11b in `references/rules.md`, "Vague language". |
-| Fix 7, "robust" | DONE | N12 in `references/rules.md`, "Replacements for flagged terms". |
-| Fix 8, the last pass | DONE | O1 to O15 in `SKILL.md`, "The last pass"; N9 moved to the replacement bullets. |
-| Fix 9, the group lines | DONE | N13 to N13e in `SKILL.md`, "How you group them". |
-| Verify 1, the character-set check over the four files | DONE | `LC_ALL=C grep -n '[^ -~]' <the four files>` printed nothing; `echo "charset exit $?"` printed `charset exit 1` (grep found no match, so no non-ASCII character). |
+| Fix 1, a replacement ends every break and writes none | DONE | N1 to N4d, N8 to N8b in `SKILL.md`, "A finding", replacement bullets. |
+| Fix 2, size and degree words | DONE | N6, N6b in the same place. |
+| Fix 3, a frequency word | DONE | N7 to N7e in the same place. |
+| Fix 4, a new name | DONE | N5 to N5c in the same place. |
+| Fix 5, the first use | DONE | R1, R2 in `references/rules.md`, "Terms defined at first use". |
+| Fix 6, two rows of "Vague language" | DONE | R3, R3b in `references/rules.md`, "Vague language". |
+| Fix 7, "robust" | DONE | R4 in `references/rules.md`, "Replacements for flagged terms". |
+| Fix 8, the last pass | DONE | O1 to O15 in `SKILL.md`, "The last pass"; N9 stays with the replacement bullets. |
+| Fix 9, the group lines | DONE | N13 to N13f in `SKILL.md`, "How you group them". |
+| Repair round 1, rulings 1 to 10 | DONE | The section "Repair round 1" above. |
+| Verify 1, the character-set check | DONE | The brief's command, run as given, printed `charset exit 0` and no other line (below). |
 | Verify 2, the glossary check | DONE | `python3 skills/repo-setup/templates/sync_rules.py . --only glossary` printed `ok: the plan-terms block equals the template`. |
-| Verify 3, the spaced-dash grep | DONE | `grep -n -E '[^[:space:]] -{1,2} ' <the four files>` printed nothing; `echo "dash exit $?"` printed `dash exit 1`. |
-| Verify 4, `git diff 1077fe4 skills/writing` read whole | DONE | `git diff --stat 1077fe4 skills/writing` printed ` skills/writing/SKILL.md | 76 ++++++++++++++++++++++----------------`, ` skills/writing/references/rules.md | 9 ++++-`, ` 2 files changed, 52 insertions(+), 33 deletions(-)`. Notes under the table. |
-| Verify 5, new items and sentences read against the standards pages | DONE | See "Departures from the standards pages" below. |
-| `metadata.version` | DONE | `grep -n 'version:' skills/writing/SKILL.md` prints `5:  version: "1.0.0"`. |
+| Verify 3, the spaced-dash grep | DONE | The brief's command, run as given, printed nothing (below). |
+| Verify 4, `git diff 1077fe4 skills/writing` read whole | DONE | Notes below. |
+| Verify 5, new and changed items and sentences read against the standards pages | DONE | "Departures from the standards pages" below. |
+| `metadata.version` | DONE | `grep -n 'version:' skills/writing/SKILL.md` printed `5:  version: "1.0.0"`. |
 | `references/registers.md` | unchanged | `git diff 1077fe4 --quiet skills/writing/references/registers.md` exits 0. No fix of the brief belongs on that page. |
+
+Verify 1, the brief's command as the brief gives it, run from the worktree's root after the last edit of the report:
+
+```
+printf '%s\0' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md .scratch/3-the-writing-base/agents/reviews/9-report.md | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'; echo "charset exit $?"
+```
+
+Printed: `charset exit 0` and no other line.
+
+Verify 3, the brief's command as the brief gives it:
+
+```
+grep -n -E '[^[:space:]] - | -- ' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md
+```
+
+Printed: nothing.
 
 Notes on Verify 4:
 
 - The worktree copy of the dispatch entry holds no base; `git rev-parse --short HEAD` printed `1077fe4`, the preparation commit, and the diff is read against it.
-- Every changed sentence serves a fix of "What to build".
-- `git diff -U0 1077fe4 skills/writing | grep '^+' | grep -v '^+++' | grep -n -E 'HCC|CNN|MRI|ConvNeXt|AUPRC|paragraph [0-9]+|\.tex:|main\.tex|8-run|step [0-9]|plan 3|ordo'` printed one line, `47:+- A `.docx` draft is read from paragraph 1.`, which is the dictated generic rule and names no part of a draft or plan.
+- `git diff --stat 1077fe4 skills/writing` printed `skills/writing/SKILL.md | 89`, `skills/writing/references/rules.md | 14` and `2 files changed, 69 insertions(+), 34 deletions(-)`.
+- Every changed sentence serves a fix of "What to build" or a ruling of repair round 1.
+- `git diff -U0 1077fe4 skills/writing | grep '^+' | grep -v '^+++' | grep -n -E 'HCC|CNN|MRI|ConvNeXt|AUPRC|paragraph [0-9]+|\.tex:|main\.tex|8-run|step [0-9]|plan 3|ordo'` printed one line, `59:+- A `.docx` draft is read from paragraph 1.`, which is the dictated generic rule and names no part of a draft or plan.
+- `grep -n -i 'rule line' skills/writing/SKILL.md skills/writing/references/rules.md` printed nothing, and `echo "ruleline exit $?"` printed `ruleline exit 1`.
 
 ### Departures from the standards pages
 
-Sentences over about 20 words, counted on the added and changed lines (a word count by `python3 -I` that splits the added lines of `git diff -U0 1077fe4 skills/writing` at sentence ends and prints each sentence of 21 words or more; its output lists the sentences named below). Each stays because of the reason named.
+The prose standard's section E asks for sentences under roughly 20 words unless the mechanism needs more. A scan with `python3 -I` splits the added lines of `git diff -U0 1077fe4 skills/writing` at sentence ends and prints each sentence of 19 words or more. It printed ten sentences, of 19 to 23 words.
 
-- "It ends every break the passage holds: ..." (29 words) names the three pages the brief names.
-- "It adds no claim or relation ... beyond the addition a rule the finding names asks for." (28 words) and "A word that sets a claim's scope ... unless a rule the finding names replaces it." (24 words) are existing sentences with three words changed.
-- "A replacement that renames a thing for any other rule, ..." (29 words) carries the example and the limit "never a narrower or a wider one".
-- "A word of the kind the prose standard's section A lists ..." (21 words) is the existing sentence. Its examples sentence (26 words) lists the example words.
-- "The replacement of a word of frequency ..." (25 words) carries its three example words.
-- "A split of a paragraph or of a sentence keeps a condition ..." (30 words) is the existing sentence widened to a sentence split, with its example.
-- The group-line bullets (21, 23 and 25 words) each hold one condition and its limit.
-- O2 (28 words), O3 (31 words), O4 (31 words), O5 (28 words), O6 (26 words), O9 (25 words), O11 (27 words), O12 (31 words) and O14 (26 words) each name one operation, how it is done and the part it applies in parentheses. O4, O9, O11, O12, O14 and O15 join two actions of one operation with "and" (quote and read, compare and give, list and find, list and read, write out and count and name, name and read), as the brief dictates the operation.
-- The rules page sentences "A `.tex` draft is read from the main file's first line ..." (22 words), "The rows "many studies" and "some researchers" ..." (25 words) and the "robust" item (29 words) are one clause each of the dictated rule.
-- Sentences of 21 to 23 words, within the standard's "roughly 20": the existing "delete" bullet widened to "a rule the finding names" (21), N7b (21), N8 (23), N13 (21), N13b (23), O1 (21) and O15 (22).
-- The seven items of N2 end in semicolons as the file's other list items do; the semicolons are list punctuation, not running prose.
-- The list of "A proposed replacement" bullets now holds N1 and N2 beside the existing "A passage that breaks two or more rules" sub-bullet "It has one replacement that ends every break." The two state the same requirement from two sides and both are kept as the brief states them.
+- One sentence stays over about 20 words. It is N7, "Where the draft does not hold the claim in every case, a word of frequency is replaced by a share or a count." (23 words). Ruling 6 makes the condition its opening, and the condition (11 words) and the replacement it governs cannot be split without separating them.
+- Sentences of 19 and 20 words stay: N5a, N6, N13, the "delete" bullet, N9, O2's first sentence, O10, O1 and the rewrite bullet N13f. Each holds one rule or one action.
+- The operations hold one action per sentence. Operations 2, 3, 4, 5, 6, 9, 11, 12, 14 and 15 are two or more short sentences.
+- The seven items of N2 and the three items of R4 end in semicolons as the file's other list items do; they are list punctuation, not running prose.
+- The "robust" item of R4 is a lead line with three sub-items, so each stays a noun phrase.
+- The bullets of "A finding" are bullets and sub-bullets, one rule each; the nesting of N1 with N1a and N1b, N4 with N4a and N4b, N5 with N5a to N5c and N7 with N7a to N7e follows the file's own nesting.
 
 ## The terms
 
-- **finding** (`docs/glossary.md`, "a passage of a draft that `/writing` reports as a break of a named rule, with its place, the quoted passage and a proposed replacement"): used in N1, N3, N4, N8 to N8c, N9, N13 to N13e and O1 to O15 in that sense ("the finding's rule line", "a rule the finding names"). Each use is a passage `/writing` reports.
+- **finding** (`docs/glossary.md`, "a passage of a draft that `/writing` reports as a break of a named rule, with its place, the quoted passage and a proposed replacement"): used in N1a, N3, N4, N8a, N13 to N13f and O1 to O15 in that sense ("the rule the finding gives", "a rule the finding names"). Each use is a passage `/writing` reports.
 - **place**: the glossary defines "place, of a defect" for `diagnose` and "place, of a point" for `session-retro`, neither of which is `/writing`'s. The text uses "place" for a finding's place, as "A finding" defines it before this change; the new uses (O1, O2, N13b) read it that way.
-- **case**: N7 uses "cases" in its ordinary sense, the cases a claim holds in, as the sentence it replaces did. The glossary's **case** is a brief's example; it is not meant.
+- **case**: N7 and N7a use "cases" in their ordinary sense, the cases a claim holds in. The glossary's **case** is a brief's example; it is not meant.
 - **operation**: used for the items of "The last pass". The glossary uses the word inside **place, of a defect** and **other input** for `diagnose`; it defines no term "operation", and the new use does not change those entries.
 - **kind**: the new text does not use the word as a term. The existing "A word of the kind ..." stays.
 - **report**, **group**, **split**, **list**, **pass**: no glossary entry applies.
@@ -319,27 +368,28 @@ Sentences over about 20 words, counted on the added and changed lines (a word co
 `wc -l`, run after the last edit:
 
 ```
-252 skills/writing/SKILL.md
-228 skills/writing/references/rules.md
+263 skills/writing/SKILL.md
+233 skills/writing/references/rules.md
  53 skills/writing/references/registers.md
-369 .scratch/3-the-writing-base/agents/reviews/9-report.md
+420 .scratch/3-the-writing-base/agents/reviews/9-report.md
 ```
 
 ## Judgment calls the brief left open
 
-- Fix 1 lead sentence. The brief asks for a replacement that ends every break the passage holds and whose text breaks none of the rules. N1 states the first and N2 the second, with the seven items as "Examples are these breaks:", so the list is a set of examples of the rule and the rule itself covers every other break.
-- Fix 1, the length rule. N8 to N8c are three bullets, one rule each. The requirement that every sentence a replacement writes meets the length rule is carried by N2b under N2, so it is stated once and N8 holds the rest: the passage's long sentence is ended in the replacement, the finding names the rule, and no sentence is as long as one the report names. N8c states no number of words, as Decision 6 says.
-- Fix 3. The frequency-word rule is a sub-bullet of "The replacement of a vague qualifier is the number or the specific claim." That bullet states the rule for another vague qualifier, so the brief's third clause is not repeated. The old bracket sentence "The bracket names the number, the share of cases the claim holds in, or the specific claim." is replaced by N7, N7b and the existing line "Where the draft gives neither, it is a bracket for the author."
-- Fix 4. The exception "unless the named rule changes the name" keeps its words, as the brief says. N5 and N5b are sub-bullets of that bullet.
+- Fix 1 lead sentences. N1 states that the replacement ends every break and N2 that the text it writes breaks no rule, with the seven items as "Examples are these breaks:", so the list is a set of examples and the rule covers every other break.
+- Fix 1, the length rule. N8 and N8a are bullets of one rule, and N8b is the comparison with a sentence the report names. The requirement that every sentence a replacement writes meets the length rule is carried by N2b, so it is stated once. N8b states no number of words, as Decision 6 says. The finding's naming of the length rule is asked by E2a ("It names each other rule it breaks"), which the repair round leaves as the one place that asks it.
+- Fix 3. The frequency-word rule is a sub-bullet of "The replacement of a vague qualifier is the number or the specific claim." That bullet already states the rule for another vague qualifier, so the brief's third clause is not repeated.
+- Fix 4. The exception "unless the named rule changes the name" keeps its words, as the brief says.
 - Fix 6 and fix 5 are written as separate bullets, one rule each.
-- Fix 8, O1. The old pass item "Each place is in its form ..." has no operation of its own in the brief's list. O1 states the place as "given in one of the forms", so finding the quoted words at the place needs the place in its form.
+- Fix 8, O1. The old pass item "Each place is in its form ..." has no operation of its own in the brief's list. O1 states the place as "given, in one of the forms", so finding the quoted words needs the place in its form.
 - Fix 8, O3. The brief names "A finding" for the part of the prompt O3 applies. "A finding" holds no rule that a tense-list entry stands under the row of its own section, and `references/rules.md`, "Tense per section", holds the rows, so O3 cites that section.
-- Fix 8, O14. The brief's operation counts the sentences of each part. The old pass item also asked that each part "holds one idea", and grant 16y (a part with several ideas) rests on that. O14 adds "and name its ideas" so that the old requirement and that row stay covered.
-- Fix 8, O2. "Outside the forms for a split" names the quoted splits of "A finding", so a split that quotes a sentence another finding gives is not read as a second giving.
-- Fix 8, O4. The brief says "the named rule or table row". The text reads "the rule or table row the finding names", for a finding that names several rules.
-- Fix 9. The place bullet N13b is a bullet of its own, since a line can state a loss and miss the place. The old sentence "That loss is why the group stands where it does." stays in the first bullet.
-- The base of Verify 4 is `1077fe4`, as the table says.
-- Examples. N6 lists the seven words the brief names for size and degree; "closely", "clearly", "moderate" and the like are read under N2a, "a word of size or degree included".
+- Fix 8, O14. The old pass item asked that each part "holds one idea", and grant 16y rests on that. O14 names the ideas of each part so that the old requirement stays covered.
+- Fix 8, O2. "A quote that the forms for a split give is not another finding on those words" keeps a split that quotes a sentence another finding gives from being read as a second giving.
+- Fix 9. The place bullet N13b is a bullet of its own, since a line can state a loss and miss the place. N13a, "That loss is why the group stands where it does.", stays in the first bullet.
+- Repair round 1, ruling 2. R5 and R6 sit in "Reader's question per section" after the bullet on a first sentence that states the contribution; O6 names the section in the same sentence as "Evidence for claims".
+- Repair round 1, ruling 5. The sentence "The finding names that rule when its rule line does not." is cut. Its content is asked by E2a, which names each other rule a passage breaks, so a finding that omits the length rule in its Also line breaks E2a.
+- The base of Verify 4 is `1077fe4`, as the notes say.
+- Examples. N6b lists six words of size or degree and N6a five words of frequency; "closely", "clearly", "moderate" and the like are read under N2a and N6.
 
 ## Every user-visible change, before and after
 
@@ -348,22 +398,23 @@ Sentences over about 20 words, counted on the added and changed lines (a word co
 | Part | Before | After |
 |---|---|---|
 | Replacement text | Ends the named break only; may keep another break unnamed | Ends every break the passage holds and breaks no rule of the three pages; N2's examples are vague qualifiers, long sentences, unnamed tense or voice changes, two ideas, lists in paragraph form, relations with no limit and performative asides |
-| Rules the replacement applies | "the named rule" | "a rule the finding names", so a rule named on a line of its own counts |
-| Sentence length | A replacement stays within the length rule only when the finding names it | A replacement ends each over-long sentence of the passage whatever rule the finding names, and no sentence is as long as one the report names as over the rule |
-| Vague qualifiers | Frequency words only are examples | Words of size or degree are also vague qualifiers |
-| A frequency word | A bracket may name a number, a share or the specific claim, and may offer "or" | The replacement is the share or the count of cases; a bracket asks for no other quantity; "or" only where each alternative keeps the scope |
+| Rules the replacement applies | "the named rule" | "a rule the finding names", so a rule named in an Also line counts |
+| Sentence length | A replacement stays within the length rule only when the finding names it | A replacement ends each over-long sentence of the passage whatever rule the finding gives, and no sentence is as long as one the report names as over the rule |
+| Vague qualifiers | Frequency words only are examples | Words of size or degree are also vague qualifiers, and "repeatedly" is a word of frequency |
+| A frequency word | A bracket may name a number, a share or the specific claim, and may offer "or" | Where the draft does not hold the claim in every case the replacement is a share or a count of cases; the bracket asks for no size; "or" only where each alternative keeps the scope |
 | A new name | The draft's name, except where the named rule renames | A rename by another rule covers the same set and is a word the draft does not use for another thing |
 | First use of a term | A `.tex` draft "read as one document" | Read from the main file's first line, title included; a first-use claim is checked against every earlier use |
 | "Vague language" | Each row is its phrase | "many studies" and "some researchers" also cover another noun for published work or its authors |
 | "robust" | Exempt "as in robust estimator" | Exempt for an estimate or a method insensitive to outliers, to departures from the model's assumptions or to the partition of the data |
-| A split | A condition is kept in each part among the paragraph-split forms | Kept in each part of a split of a paragraph or of a sentence |
+| "Reader's question per section" | A finding may be reported without reading the section whole | A section is read whole before a finding says it does not answer its question, and the replacement repeats no sentence the section holds |
+| A split | A condition is kept in each part among the paragraph-split forms | Kept in each part of a split of a paragraph or sentence |
 | Group lines | Name a loss "as one of the group's own findings shows" | State the reader's wrong belief, act or inability, give the place of one finding where it happens, and a no-claim group names its cost at that place |
-| The last pass | A list of sixteen things to check | Fifteen numbered operations, carried out for each finding in order, each saying how and naming the part it applies |
+| The last pass | A list of sixteen things to check | Fifteen numbered operations, in order, each one action per sentence and naming the part it applies; the other rules a passage breaks are listed before the words of every named rule are read |
 
 ## Anything in the brief that was wrong or impossible
 
-- Decision 3's example lines do not all hold in the draft. The group 5 example gives paragraph 40, and the only finding of grant group 5 stands at paragraph 42 (`awk '/^=== 5\./{f=1} /^=== 6\./{f=0} f' 8-run/grant-report.md | grep '^Place:'` printed `Place: paragraph 42`). The group 9 example gives paragraph 31 for "we" and "the applicant"; a `grep -o -i -E '\b(we|our|us|the applicant)\b'` over the printed paragraphs shows paragraph 31 holds "the applicant" twice and no "we", paragraph 46 holds "The applicant" and no "we", and paragraph 35 holds both, though group 9's findings stand at paragraphs 31 and 46. The group 15 example cost, "the reader learns who acts only at the end of the sentence", does not hold at paragraph 31: the sentence reads "Computing is provided by the host institution at no cost, so none is requested.", the same point `8-report.md` condition 2 makes. The rule text of fix 9 carries none of these examples, and "The loss holds in the draft's own text and data" governs them, so the skill is unaffected; the examples are not to be copied into a later brief.
+- Decision 3's example lines do not all hold in the draft. The group 5 example gives paragraph 40, and the only finding of grant group 5 stands at paragraph 42 (`awk '/^=== 5\./{f=1} /^=== 6\./{f=0} f' 8-run/grant-report.md | grep '^Place:'` printed `Place: paragraph 42`). The group 9 example gives paragraph 31 for "we" and "the applicant"; a `grep -E -o -i '\b(we|our|us|the applicant)\b'` over each paragraph printed by `skills/writing/templates/docx_paragraphs.py` shows paragraph 31 holds "the applicant" twice and no "we", paragraph 46 holds "The applicant" and no "we", and paragraph 35 holds both, though group 9's findings stand at paragraphs 31 and 46. The group 15 example cost, "the reader learns who acts only at the end of the sentence", does not hold at paragraph 31: the sentence reads "Computing is provided by the host institution at no cost, so none is requested.", the same point `8-report.md` condition 2 makes. The rule text of fix 9 carries none of these examples, and N13c governs them, so the skill is unaffected; the examples are not to be copied into a later brief.
 - Fix 5 as ruled makes the title the first use. A finding on CNN or MRI then stands at `main.tex:45`, and its replacement defines the term in a title or names the definition as a fact for the author. That is the consequence of the dictated sentence.
-- The expected result of C4 for manuscript 11.4 and 13.13 is the sentence on names. After fix 7 those two are not reported at all, since "robust performance estimates" is exempt; N5b is the second guard if a draft's "robust" is reported and renamed.
-- The old pass item "Each place is in its form" and the item "The replacement of a vague qualifier takes one of the forms ..." have no operation in the brief's list. The first is in O1; the second is carried by O9, O4 and O13 together (a word dropped or changed needs the rule that asks for it, the exceptions of the section are read, and a bracket with "or" is read alone). Both stay stated once in "A finding".
+- The expected result of C4 for manuscript 11.4 and 13.13 is the sentence on names. After fix 7 those two are not reported at all, since "robust performance estimates" is exempt; N5c is the second guard if a draft's "robust" is reported and renamed.
+- The old pass item "The replacement of a vague qualifier takes one of the forms ..." has no operation in the brief's list. It is carried by O9, O5 and O13 together: a word dropped or changed needs the rule that asks for it, the exceptions of the section are read, and a bracket with "or" is read alone.
 - Gate condition 6 is outside `skills/writing/`, as the brief says, and is not changed here.

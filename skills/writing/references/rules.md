@@ -6,7 +6,9 @@ These rules add to the prose standard what it lacks. They apply to a manuscript,
 
 - This section covers technical terms only. A plain word for a role or a thing, such as "the analyst", is not reported under it.
 - A technical term is defined where it first appears in the whole draft.
-- A `.tex` draft is read as one document and a `.docx` draft from paragraph 1.
+- A `.tex` draft is read from the main file's first line, its title included. The order of its files is the one `SKILL.md`, "What you read", gives.
+- A `.docx` draft is read from paragraph 1.
+- A claim that a use is the first is checked against every earlier use.
 - A draft that uses a technical term before it defines it, or never defines it, is reported.
 - The finding names the term's first use.
 - The replacement adds the definition at that first use, or names the fact the author must supply.
@@ -128,6 +130,8 @@ At every point of the draft a reader can answer four questions. A passage after 
 - A section whose text does not answer its reader's question is reported.
 - The replacement does what the last column says.
 - A first sentence that states the section's contribution is not reported for being general.
+- A section is read whole before a finding says it does not answer its question.
+- A replacement repeats no sentence that the section already holds.
 - An Introduction whose opening states a real-world consequence or a knowledge gap answers the question of its row and is not reported.
 
 | Section | The reader asks | The section does |
@@ -170,6 +174,9 @@ A phrase of the left column is reported. The replacement is the right column.
 | "some researchers" | The researchers named with their citations |
 | "it is well known that" | The citation of the source, or nothing when no source exists |
 
+- The rows "many studies" and "some researchers" cover a second form of their phrase. That form has another noun that names published work or its authors in place of the row's noun. Examples are "many approaches" and "some studies". The replacement of the row is then written with that noun.
+- Every other row covers its own phrase only.
+
 ## Replacements for flagged terms
 
 The prose standard, section A, flags the terms of the left column. When a use is not the most precise word, the replacement is one of the right column, whichever fits the sentence.
@@ -205,7 +212,10 @@ The prose standard, section A, flags the terms of the left column. When a use is
 - A term that is standard terminology in the discipline the draft addresses is not reported:
   - "paradigm shift" in the philosophy of science;
   - "landscape" in ecology or geography, when it is literal;
-  - "robust" in statistics, as in "robust estimator";
+  - "robust" in statistics, as in "robust estimator", for an estimate or a method insensitive to one of these:
+    - outliers;
+    - departures from the model's assumptions;
+    - the partition of the data;
   - "navigate" in wayfinding research, when it is literal.
 - A replacement is never itself a flagged term of the prose standard, section A, or one of its vague qualifiers. A replacement that would be one is left out of the table above, and a finding does not propose it.
 
