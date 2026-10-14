@@ -42,7 +42,7 @@ dispatch: none
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-none
+- Open item J (2026-10-14, kind 4, the roadmap diff of `/roadmap done 3`): the draft removes entry 3 from the open order and adds a `[x]` line under Done. The legend reads "`[x]` done (its gate ran and passed)". On the last runs (step 8) gate conditions 2 and 5 failed and 83 rows were not marked right by both; step 9 fixed each in the skill text with no run after it, by ruling I. Options: (a) approve the draft as it stands, the line naming that no run followed the fix; (b) one more run of `/writing` at `v7.1.0-rc.5` with two markers per run, as a step before the closing, and the entry marked done only if the gate holds on it (this changes ruling I's stopping rule); (c) leave entry 3 open as `[~]` and archive the plan. Recommendation: (b). The lazy option is (a).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -126,4 +126,5 @@ none
 - 2026-10-14. Step 9 landed (`agents/reviews/9-landing.md`).
 - 2026-10-14. Main's head 509e516 tagged `v7.1.0-rc.5` and pinned (`sh utils/pin.sh v7.1.0-rc.5`: "pinned: v7.1.0-rc.5 (509e516), 14 skills linked"), as ruling I approves.
 - 2026-10-14. Step 10, the closing: the closing report written (`agents/reviews/closing.md`, the cost script exit 0).
-- Next: `/roadmap done 3`, its diff for the user's approval; then the `v7.1.0` tag and pin, with the user's approval; then this folder moved to `.scratch/archive/`.
+- 2026-10-14. `/roadmap done 3` drafted; Open item J raised to the user.
+- Next: the user's ruling on Open item J; then the `v7.1.0` tag and pin, with the user's approval; then this folder moved to `.scratch/archive/`.
