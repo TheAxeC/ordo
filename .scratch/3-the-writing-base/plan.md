@@ -231,6 +231,12 @@ Agents in no role the cost script prices:
 - Usage: brief check aa2534267459358b5 claude-opus-5-5 216006 tokens, 43 tool uses, 9.8 min; builder aba3c07cc124b6961 claude-sonnet-5-5 116878 tokens, 83 tool uses, 20.0 min, and 198183 tokens, 21 tool uses, 5.7 min in round 1; reviewer a9dcaf7661d9c1ae9 claude-opus-5-5 228107 tokens, 44 tool uses, 10.4 min; reviewer over round 1 a52d49d8b5f66bfc8 claude-sonnet-5-5 208984 tokens, 35 tool uses, 7.2 min.
 - The builder's first report did not pass its bar: the last pass read the words of the named rule only, not of the other rules a finding names; grant 4a's repeated paragraph had no sentence that prevents it; the report's checks were not quoted as the brief gives them; the rows table left reasons of both markers without a sentence; and the prompt stated one rule twice, opened the frequency sentence with its rule in place of its condition, ran sentences over the length rule, listed "repeatedly" as a size word, used the undefined term "rule line" and had no check for a number.
 
+### Step 10, the fifth runs: Step 0
+
+- Carried from step 8's report, condition 6: the grant marker prompts did not carry the rule on `grep`. Each of the four marker prompts of step 10 carries it whole.
+- Carried from step 8's report, condition 6: manuscript marker 1's `grep` without `-o` printed parts of 12 draft lines, and manuscript marker 1 and grant marker 1 each ran `grep` on the saved report, a file outside the draft. Each marker prompt of step 10 asks for `grep -n -o` on the draft files only, the saved report and the four pages read and never searched with `grep`.
+- Carried from step 8's report, condition 6: 17 marks gave a general sentence over a list with a short note per entry in place of a reason of their own. Each marker prompt of step 10 says that such a sentence is not a reason of its own.
+
 ### Step 8, the fourth runs: Step 0
 
 - Carried from step 6's report, condition 6: both manuscript markers of step 6 ran `grep` term searches over folders that reached files outside the draft (`sections/2_related_work/a_prediction.tex`, `tables/results_pretrain_ablation_original.tex`). Each marker's prompt of step 8 says that `grep` runs only on the draft's files, each named by its path.
