@@ -147,7 +147,7 @@ Agents in no role the cost script prices:
 
 ## Blocked, and by what
 
-- 10: nothing; every other step has landed, steps 4, 6 and 8 unticked as their bookings say.
+- 10: nothing; every other step has landed, steps 4, 6 and 8 unticked as their bookings say, and `v7.1.0-rc.5` is tagged on 509e516 and pinned.
 
 ### Step 6, the third runs (landed 2026-10-13, unticked: its check failed, Open item I)
 
