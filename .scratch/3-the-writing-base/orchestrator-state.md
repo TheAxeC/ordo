@@ -41,12 +41,16 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Step 3, the second run (2026-10-15). The nine `/writing` runs ran once more on tag v8.1.0-rc.2, and the check failed again: six of the eight case reports miss breaks of section-level or whole-draft rules, and all eight report breaks in passages the tables list as clean, most of which the drafts really hold (`agents/reviews/3-gate-reading-run-2.md`). The ruling "Step 3, the case reports" allows no further round.
+  - (a), recommended: stop here. Step 3 stays unticked, entry 3 stays open on the roadmap, and tag v8.1.0-rc.2 stays pinned, so `/writing` is in use as it is. Pro: keeps the no-further-round ruling and claims nothing the check did not show. Con: the known misses stay in the skill and entry 3 is not done.
+  - (b): change the Gate of entry 3 so the case reports are a record and not a pass condition, then close entry 3 on your reading of the NWO XS report. Pro: entry 3 closes. Con: it reverses an approved gate after it failed, and it marks done a skill that the cases show still misses rules. The lazy option.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - Step 2, the case files (2026-10-15): ruled (a), (a) by the user on 2026-10-15; booked in `plan.md` Rulings, with the lines of steps 2 and 3 rewritten.
 - Step 2, the brief check (2026-10-15): ruled (a), (a) by the user on 2026-10-15; booked in `plan.md` Rulings, with the line of step 2 rewritten.
+- Step 3, the case reports (2026-10-15): ruled (a) by the user on 2026-10-15; booked in `plan.md` Rulings.
+- Step 3, how the ruled fix is carried (2026-10-15): ruled (a) by the user on 2026-10-15; booked in `plan.md` Rulings, with the line of step 3 rewritten.
 
 ## The standing demands (from Axel, in force)
 
@@ -70,5 +74,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 - 2026-10-15. Steps 1 and 2 are landed. Step 3's one repair round is landed: the review agent prompt of `skills/writing/SKILL.md` and the case files.
 - Verified: `checks.sh` on main printed `checks: 6 commands passed` after the fixes at landing.
-- Next step: a new tag and pin, then the nine `/writing` runs of step 3 once more; a failure then goes to the user with no further round.
+- Tag `v8.1.0-rc.2` is on the landing commit ae05d76 and pinned. The nine `/writing` runs of step 3 run once more, each agent on claude-opus-5-5.
+- The nine runs ran; the reading is `agents/reviews/3-gate-reading-run-2.md`, and the check is not met.
+- Next step: the user's ruling on the open item "Step 3, the second run".
 - Open on Axel's side: his reading of the NWO XS report of the second run for false alarms.

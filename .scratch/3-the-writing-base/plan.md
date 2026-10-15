@@ -89,10 +89,19 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - acaa4055895146282: brief check of step 3, claude-opus-5-5
 - a2772a0b72fc9ee89: builder of step 3, claude-sonnet-5-5
 - a57bba76c73b503b3: reviewer of step 3, claude-opus-5-5
+- a67813b9887927643: /writing review agent of step 3, second run, on the engineering .tex, claude-opus-5-5
+- a690fc021f40c3aa1: /writing review agent of step 3, second run, on the engineering .docx, claude-opus-5-5
+- a51a4e81641351e24: /writing review agent of step 3, second run, on the medicine .tex, claude-opus-5-5
+- ad202f6b86359e3d2: /writing review agent of step 3, second run, on the medicine .docx, claude-opus-5-5
+- a3f7e7427fe01e4d2: /writing review agent of step 3, second run, on the sciences .tex, claude-opus-5-5
+- a5237796b250abb4e: /writing review agent of step 3, second run, on the sciences .docx, claude-opus-5-5
+- a751cde6b2a6041ff: /writing review agent of step 3, second run, on the social .tex, claude-opus-5-5
+- a3850563e0de9aa84: /writing review agent of step 3, second run, on the social .docx, claude-opus-5-5
+- ac0c8308fb418781e: /writing review agent of step 3, second run, on the NWO XS .docx, claude-opus-5-5
 
 ## Blocked, and by what
 
-- none.
+- Step 3: the open item "Step 3, the second run", the user's ruling on what follows a second failed check, with no further round.
 
 ### Step 1, the writing base (landed 2026-10-15)
 
@@ -151,6 +160,11 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
   - (a), recommended: one new step, built by a builder, reviewed once and landed. It changes the review prompt in `skills/writing/SKILL.md` so the agent checks each section-level and whole-draft rule against every section and names every rule a passage breaks. It also rewrites the case files so the clean text breaks no rule and every row is right. Then step 3 runs once more on the new tag, and a failure then comes back to you with no further round. Two more runs of the plan's work, about the cost of step 2.
   - (b): change the Gate so the known cases count as a record, not a pass condition, and close entry 3 on the NWO XS reading alone. The skill keeps its misses.
   - (c): leave entry 3 open and stop plan 3 here. The lazy option.
+
+- Step 3, the second run (2026-10-15). On tag v8.1.0-rc.2 the nine `/writing` runs ran once each, every agent on claude-opus-5-5 and editing no file, and their reports are in `agents/reviews/3-writing-<draft>-run-2.md`. The medicine `.tex` agent also ran `cat -n`, `grep`, `wc -w` and an inline `python3 -I -c` sentence splitter on the draft, all reads, which its prompt does not allow. The eight case reports do not meet `cases/expected.md`, as `agents/reviews/3-gate-reading-run-2.md` lists row by row, so the gate's part on the known cases is not met again. Under the ruling "Step 3, the case reports" no further round follows.
+  - The skill. Both social reports meet every break row. The other six still miss section-level or whole-draft breaks: "What the reader looks for" in both medicine runs; "Tense per section", "Reader's four questions" and "First sentence states the point" in both engineering runs; and in the engineering `.docx` also "Vary paragraph length", "No mirror structure" and "Limitations". The engineering runs still leave out the second rule on the five dash rows and on three other rows.
+  - The case files. Most findings in passages the tables list as clean are breaks the drafts hold. Four "thus" paragraph closers in the social draft and the "late summer" sentence in the sciences draft were written at the landing of the repair round, and they break rules the clean rows say the drafts keep.
+  - Open item "Step 3, the second run": (a) stop here, recommended; (b) change the Gate and close entry 3; the lazy option is (b). The state file holds the open item.
 
 ### Step 3, the repair round (landed 2026-10-15)
 
