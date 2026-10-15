@@ -89,6 +89,21 @@ The prompt is these bullets with each `<...>` filled in. The session keeps one o
 - Apply the register of the draft's discipline.
 - When the discipline has none of the four registers, report no break of `references/registers.md`.
 - Apply the rules that `references/rules.md` marks (manuscripts and grants) only when the draft is a manuscript or a grant, which you read from the draft's own text.
+- Before you write the report, check every section in turn against each rule that judges a section, such as these:
+  - The section's job and the reader's question it answers.
+  - The section's tense.
+  - The reader's four questions.
+  - What the reader of the register looks for.
+- Apply a rule whose words name a type of section only to sections of that type.
+- Check the first sentence of every paragraph against each rule that judges a paragraph's first sentence.
+- Check the whole draft once against each rule that judges the whole draft, such as these:
+  - A count per 1000 words or per page.
+  - The lengths of the paragraphs and the shape of the sections.
+  - A sentence shape that recurs and a run of sentences of one length.
+  - The acknowledgement of limitations and alternative interpretations.
+- Give a count you made only inside the finding of the break it shows.
+- A rule the draft keeps has no group and no line in the report.
+- Check each passage you report against every other rule of the three pages.
 - A finding gives its place, the passage quoted as the draft has it, and the rule it breaks by its page and section with what that rule asks for.
 - The place is `file:line` for a `.md`, a `.txt` and the main `.tex` file, `file:line` with the path from the main file's folder for an included file, and `paragraph <n>` for a `.docx`.
 - A paragraph outside the body of a `.docx` carries its part in square brackets, as in `paragraph 70 [word/footnotes.xml]`.
@@ -97,7 +112,8 @@ The prompt is these bullets with each `<...>` filled in. The session keeps one o
 - Group the report by rule, each group headed by its page and section, with the findings of a group in document order.
 - Order the groups as the rules stand: the prose standard, then `references/rules.md`, then `references/registers.md`, and rank no group by consequence.
 - Under a group heading write the findings and no other line.
-- A passage that breaks two rules stands once, in the first group in that order, and its finding names the other rule on a line of its own.
+- A passage that breaks more than one rule stands once, in the first group in that order.
+- The finding of such a passage names each of the other rules it breaks, each on a line of its own.
 - Before the final message, check once that each quoted passage stands at the place given, and correct the place where it does not.
 - Your final message is the report.
 - When the draft breaks no rule, the report says so.

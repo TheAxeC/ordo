@@ -5,7 +5,7 @@
 \maketitle
 
 \begin{abstract}
-We compare a fixed worker pool with a growing worker pool for bounded task queues in server software. On four hosts the fixed pool raised throughput by 24 percent and lowered the 99th percentile latency from 410 to 190 microseconds.
+We compare a fixed worker pool with a growing worker pool for bounded task queues in server software. On four hosts the fixed pool raised throughput by 24 percent. It lowered the 99th percentile latency, the latency that 99 percent of tasks stayed below, from 410 to 190 microseconds.
 \end{abstract}
 
 \noindent Keywords: task queues, worker pools, concurrent systems, software engineering
@@ -28,7 +28,7 @@ The fixed pool raised throughput by 24 percent and lowered the 99th percentile l
 
 A lock-based queue guards its head and tail with one mutex, a lock that admits one thread at a time. Smith (2019) measured the cost of that mutex and found a 40 percent loss at 32 threads. The loss suggests that the wait for the lock is the cost of this design.
 
-The correctness proof of this design fits into two pages (Jones, 2020).
+A correctness proof of this design exists (Jones, 2020), so this study measures only its performance.
 
 Contention grows with the thread count, as the threefold slowdown from 8 to 64 threads reported by Lee (2021) shows. Lee varied the thread count alone and left the effect of the pool policy unmeasured.
 

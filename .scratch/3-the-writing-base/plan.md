@@ -86,6 +86,9 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - ab1f0ed86fe59e6fb: /writing review agent of step 3 on the social .tex, claude-opus-5-5
 - a0b65a0508268b7a0: /writing review agent of step 3 on the social .docx, claude-opus-5-5
 - a7f4fe964415a39bd: /writing review agent of step 3 on the NWO XS .docx, claude-opus-5-5
+- acaa4055895146282: brief check of step 3, claude-opus-5-5
+- a2772a0b72fc9ee89: builder of step 3, claude-sonnet-5-5
+- a57bba76c73b503b3: reviewer of step 3, claude-opus-5-5
 
 ## Blocked, and by what
 
@@ -148,3 +151,13 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
   - (a), recommended: one new step, built by a builder, reviewed once and landed. It changes the review prompt in `skills/writing/SKILL.md` so the agent checks each section-level and whole-draft rule against every section and names every rule a passage breaks. It also rewrites the case files so the clean text breaks no rule and every row is right. Then step 3 runs once more on the new tag, and a failure then comes back to you with no further round. Two more runs of the plan's work, about the cost of step 2.
   - (b): change the Gate so the known cases count as a record, not a pass condition, and close entry 3 on the NWO XS reading alone. The skill keeps its misses.
   - (c): leave entry 3 open and stop plan 3 here. The lazy option.
+
+### Step 3, the repair round (landed 2026-10-15)
+
+- Landed on main: `skills/writing/SKILL.md`, "Review agent prompt", with the checks of each section-level rule against every section, of each first-sentence rule against every paragraph and of each whole-draft rule over the whole draft, the restriction of a rule that names a type of section to sections of that type, the count kept inside a finding, no line for a rule kept, and each reported passage checked against every other rule and naming each one (version stays 1.0.0); and the case files under `cases/`, copied from the builder's scratch folder `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/ordo-3-3-cases` before `land.sh` ran: `expected.md` and the four drafts in both forms.
+- Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude-backup/skills/land/templates/land.sh .scratch/3-the-writing-base/orchestrator-state.md 3-the-writing-base-3 8ff6ed7` exited 0 with `checks: 6 commands passed`; after the fixes at landing, `checks.sh` over the same list printed `checks: 6 commands passed` again. The verify list was not changed. A/B: none. Look: none configured.
+- Brief check acaa4055895146282, claude-opus-5-5: 178028 tokens, 40 tool uses, 8 min 41 s; 12 findings, each closed in the brief.
+- Builder a2772a0b72fc9ee89, claude-sonnet-5-5: 304559 tokens, 255 tool uses, 49 min 11 s. Its report did not pass its bar: the review found clean and unlisted passages that break rules, most made by the round's own edits.
+- Reviewer a57bba76c73b503b3, claude-opus-5-5: 289143 tokens, 57 tool uses, 13 min 20 s; Spec 1 to 7, Proof 1 and 2, Standards 1 and 2, Behaviour 1 and 2.
+- Fixes at landing: 10 (Spec 1 to 7, Proof 1, Standards 1, Behaviour 1), each named under the Closed heading of `agents/reviews/3-refuter.md`; Proof 2 is closed by them, and Standards 2 and Behaviour 2 needed no change. Every single-place row compared with its `.tex` line and `.docx` paragraph after the fixes: 142 held, 0 missed.
+- Step 3 stays unticked: its check is the nine `/writing` runs once more, on a new tag and pin, which follow this landing.
