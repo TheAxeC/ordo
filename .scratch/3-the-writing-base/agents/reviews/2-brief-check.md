@@ -175,3 +175,11 @@ The step stopped on findings 1.1, 1.2 and 1.3 (the builder writing into the ledg
 - 6.1, 6.2, 6.3: the pattern is `.scratch/archive/*/*/cases/*) ;; .scratch/archive/*/cases/*) continue ;; .scratch/*/*/cases/*) ;; .scratch/*/cases/*) continue ;;`, tried on eleven paths: the two ruled places skipped, a nested `cases/`, `2-cases.md` and a `cases/` outside `.scratch/` kept; C7 names these paths.
 - 7.5: ADR 0012 is named, and the landing commit names each case file.
 - 8.2: the sentence is given as two sentences.
+
+After the ruling "Step 2, the brief check" (a), (a), `/spec 3 2` wrote the brief with each closure above in it. Findings 1.1, 1.2 and 1.3 are closed by Question 1 (a): the builder writes the case files in the scratch folder `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/ordo-3-2-cases` and only its report in the ledger, so the rules file, the builder's prompt and the term **ledger** stay true. Findings 5.10a, 5.12 (Limitations) and 5.11 (Limitations) are closed by Question 2 (a): the clean rows of the rules judged on a whole draft stand in the short drafts. Finding 4.1 is closed with the path `<cases>/*/main.tex`.
+
+Dictated lines added after the check, held line by line against the rules file and the standards pages:
+
+- `grep -n 'Every passage of a draft that a table' briefs/2.md`: "Every passage of a draft that a table does not list is expected to be reported under no rule." Holds: 19 words, ASCII, the passive kept because the actor (whoever reads the report) is irrelevant.
+- `grep -n 'never changed after them' briefs/2.md`: "The expected results are read against the reports of step 3 and are never changed after them." Holds: 17 words, ASCII, the passive kept for the same reason.
+- `grep -n 'archive/\*/\*/cases' briefs/2.md`: the fenced `sh` command of item 4. Holds: ASCII, the fence carries a tag, no comment.
