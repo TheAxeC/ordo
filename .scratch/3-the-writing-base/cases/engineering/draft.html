@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>A Fixed Worker Pool for Bounded Task Queues</title>
+</head>
+<body>
+<h1>A Fixed Worker Pool for Bounded Task Queues</h1>
+<p>We compare a fixed worker pool with a growing worker pool for bounded task queues in server software. On four hosts the fixed pool raised throughput by 24 percent and lowered the 99th percentile latency from 410 to 190 microseconds.</p>
+<p>Keywords: task queues, worker pools, concurrent systems, software engineering</p>
+<h2>Introduction</h2>
+<p>A server that accepts more work than it can run loses requests or exhausts memory. A bounded task queue limits that risk, but its locking cost grows with the number of threads.</p>
+<p>We compare a fixed worker pool with a growing worker pool on four hosts. Both pools serve the same bounded queue of 4096 slots under the same offered load.</p>
+<p>A fixed pool may lower the 99th percentile latency of a bounded queue. The latency study checks that on every host with the same harness and the same load.</p>
+<p>Throughput is the number of tasks completed per second at an offered load of 500,000 tasks per second. Latency is the 99th percentile of the time from submission to completion.</p>
+<p>The four hosts have 96, 128, 160 and 192 cores, split over two sockets in each host. Each host runs Linux 6.5 on x86 processors with 512 GB of memory.</p>
+<p>The fixed pool raised throughput by 24 percent and lowered the 99th percentile latency from 410 to 190 microseconds. Both gains held on every host and in every run.</p>
+<h2>Lock-Based Queues</h2>
+<p>A lock-based queue guards its head and tail with one mutex, a lock that admits one thread at a time. Smith (2019) measured the cost of that mutex and found a 40 percent loss at 32 threads. The loss suggests that the wait for the lock is the cost of this design.</p>
+<p>The correctness proof of this design fits into two pages (Jones, 2020).</p>
+<p>Contention grows with the thread count, as the threefold slowdown from 8 to 64 threads reported by Lee (2021) shows. Lee varied the thread count alone and left the effect of the pool policy unmeasured.</p>
+<h2>Lock-Free Queues</h2>
+<p>A lock-free queue advances its head and tail with compare-and-swap (CAS), an atomic instruction that conditionally stores a value. At 32 threads, the measurements of Park (2018) put the loss from CAS at 12 percent. The loss is below a third of the mutex loss, which suggests that CAS costs less than a lock at 32 threads.</p>
+<p>A stalled thread cannot block the others in this design, since no thread waits for a lock (Kim, 2020).</p>
+<p>Memory reclamation is the main cost of this design: another thread may still read a removed node. Michael (2004) described a remedy that costs one extra memory write per access, a cost that every worker pays. No measurement of a lock-free queue compares a fixed with a growing pool.</p>
+<h2>Implementation</h2>
+<p>The queue was a ring buffer with 4096 slots. Producers wrote at the tail index and workers read at the head index.</p>
+<p>The fixed pool started 64 worker threads at launch. The growing pool started 8 threads and added one thread whenever the queue held more than 2048 tasks.</p>
+<p>Each worker was pinned to one core within its NUMA node. The kernel scheduler never moved a pinned worker to another core.</p>
+<p>A task was a function pointer with a 64-byte argument block that was copied into its slot on submission.</p>
+<p>We chose a ring buffer because it needed no allocation after launch.</p>
+<p>The scheduler bailed out when the queue was full.</p>
+<p>When it came to growth, the growing pool stopped at 256 threads.</p>
+<p>The fixed pool never changed its thread count. Its 64 workers stayed alive until the end of the run.</p>
+<p>The benchmark ran on a modern server.</p>
+<p>The scheduler passed the task to a worker when it was ready.</p>
+<p>A worker returned its slot to the queue when the task ended. The slot was then free for the next producer write.</p>
+<p>The harness was written in C, and the third host was installed in 2021.</p>
+<p>The harness submitted tasks from eight producer threads that each ran on a separate core. The producers shared no state except the tail index.</p>
+<p>Due to the fact that all workers shared one queue, the head index was atomic. The tail index was atomic for the same reason.</p>
+<p>In recent years, hosts gained cores, so the pool sizes of this study started at 8 and 64 threads. Both starting sizes stayed below the core count of the smallest host.</p>
+<p>Inputs: queue depth and thread count.</p>
+<p>Outputs: tasks per second and tail latency.</p>
+<p>With this setup complete, the harness submitted the first task.</p>
+<p>The first task entered slot 0 of the ring buffer.</p>
+<p>A worker ran each task to completion. Only then did it read the next slot.</p>
+<h2>Throughput Method</h2>
+<p>The throughput study tested whether a fixed pool completed more tasks per second than a growing pool.</p>
+<p>We chose an offered load of 500,000 tasks per second because it saturated the growing pool on every host.</p>
+<p>Each task spent 100 microseconds on the CPU. Producers submitted tasks at a constant rate.</p>
+<p>Each run lasted 60 seconds after a 10-second warm-up. The run was repeated 30 times.</p>
+<p>Producers ran on cores 0 to 7 of each host. The queue sat on core 8. The harness kept producers and workers on separate cores to avoid shared cache lines.</p>
+<p>The harness covered only x86 hosts, so the results do not extend to other architectures. All four hosts used processors from one vendor.</p>
+<p>All runs used GCC 13.2 at optimization level 2 on Linux 6.5. The same binary served both pools.</p>
+<p>The queue was filled with 4096 tasks before each run.</p>
+<p>The harness appeared to stop each run after 60 seconds. The log recorded the stop time of every run.</p>
+<p>The harness didn't retry a failed task.</p>
+<p>The growing pool did not remove a thread after a burst.</p>
+<p>The queue was allocated in the memory of the first socket. Workers on the second socket accessed it remotely.</p>
+<p>The run order was randomized because the cache state differed between runs.</p>
+<p>The harness stopped just after the last task finished. It then wrote the summary of the run.</p>
+<p>The authors chose 42 as the random seed.</p>
+<p>We kept the producers identical for both pools.</p>
+<p>The harness recorded two latency percentiles per run: the median and the 99th.</p>
+<p>Each pool ran on the same hosts and the same queue.</p>
+<p>The harness started all eight producers together. The queue filled within the first second. The workers then began to take tasks.</p>
+<p>A timer started with the first task. The timer stopped after the 60th second.</p>
+<p>Throughput was averaged over the repetitions of each host.</p>
+<h2>Throughput Results</h2>
+<p>The fixed pool completed 412,000 tasks per second and the growing pool completed 331,000. The difference was 24 percent of the growing pool's rate. Both pools served the same load on the same hosts, so the difference measured the effect of the pool policy.</p>
+<p>The growing pool created 248 threads during each run. Creating them therefore took 6 percent of each run. Thread creation alone thus explains only part of the 24 percent gap.</p>
+<p>The gain ranged from 22 percent on the first host to 27 percent on the fourth host. It held on all four hosts.</p>
+<p>The throughput of the fixed pool on the fourth host, the host with the most cores of the four, was the highest value that any run of the study produced. A fixed pool may therefore scale with the core count of its host.</p>
+<p>The fixed pool completed between 380,000 and 442,000 tasks per second on the four hosts, with a mean of 412,000. Even the lowest host exceeded the growing pool's mean of 331,000.</p>
+<p>The growing pool was idle for 38 percent of each run. The fixed pool was idle for 4 percent.</p>
+<p>The fixed pool created 64 threads. Consequently, the growing pool created 248 threads. The counts differed because only the growing pool changed its size.</p>
+<p>The fixed pool used less memory than the growing pool. The harness sampled memory once per second.</p>
+<p>No worker crashed in any throughput run, so no run lost part of its pool.</p>
+<h2>Latency Method</h2>
+<p>Each pool was compared by the 99th percentile of its task latency.</p>
+<p>Each task recorded its submission time and its completion time. Its latency was the difference between the two.</p>
+<p>The percentile was computed over the pooled latencies of all runs of a pool.</p>
+<p>The two pools were compared with a Mann-Whitney U test, a rank test for two independent samples. The test required no assumption about the shape of the latency distribution.</p>
+<p>We chose an offered load below saturation because latency grows without bound above it.</p>
+<p>Only one queue size was tested, which limited the latency result to that size.</p>
+<h2>Latency Results</h2>
+<p>A Mann-Whitney U test compared the two latency distributions and gave p below 0.001. The test rejected the hypothesis that both pools had the same latency distribution.</p>
+<p>The fixed pool lowered the 99th percentile latency from 410 to 190 microseconds. The result confirms, for these hosts, the expectation that a fixed pool lowers the tail.</p>
+<p>The growing pool created threads inside the request path, which may have added to the tail.</p>
+<h2>Discussion</h2>
+<p>The study adds what the earlier queue studies left unmeasured: the fixed pool lowered the tail latency on every host. Why does a fixed pool lower the tail latency? The results suggest that a fixed pool lowers tail latency by removing thread creation from the request path.</p>
+<p>Hosts with more cores show larger gains, so core count raises the benefit of a fixed pool.</p>
+<p>This section explains how the fixed pool lowers the tail. A fixed pool keeps every worker pinned to a warm cache.</p>
+<p>The growing pool creates threads inside the request path and queues tasks behind them.</p>
+<p>This raises the tail. A fixed pool avoids both effects.</p>
+<p>A new thread of the growing pool starts on a cold core, where its first tasks miss the cache.</p>
+<p>The cache is happy when a worker stays on one core.</p>
+<p>Pinning keeps caches warm. A pinned worker never loses its cache to another core. In short, pinned workers keep their caches.</p>
+<p>The growing pool creates threads on demand. Static in the fixed pool.</p>
+<p>The fixed pool allocates all 64 threads at launch, which removes thread creation from the request path. The growing pool allocates its threads one at a time.</p>
+<p>The queue provides bounded submission and is configurable.</p>
+<p>The queue rejects a task when no slot is free. The producer receives an error code and moves on to its next task.</p>
+<p>What does the harness log? It logs one line per run and one per rejected task.</p>
+<p>The summary file is written by the harness.</p>
+<p>The fixed pool is small, compact and light.</p>
+<p>The harness uses two kinds of thread, the producers and the workers.</p>
+<p>The queue holds tasks. The buffer orders them by arrival. The channel feeds the workers.</p>
+<p>The fixed pool runs on cores 9 and above. The fixed pool leaves cores 0 to 8 to the producers and the queue. The fixed pool never shares a core with them.</p>
+<p>The log holds the run number, the host name, the pool type and the elapsed time.</p>
+<p>The harness varies the thread count and the queue depth. Every other setting stays fixed within a run.</p>
+<p>The fixed pool reduces contention---the main cost of the lock-based queue.</p>
+<p>The growing pool creates threads -- up to 256 of them -- inside the request path. The extra threads share the same queue.</p>
+<p>The ring buffer is bounded - a full queue rejects new tasks.</p>
+<p>The pinned workers keep their caches warm &#8212; a gain the growing pool cannot match. The gain appears on every host.</p>
+<p>The growing pool pays for each new thread &#8211; a cost the fixed pool pays once.</p>
+<p>The lock-free queue and the fixed pool both keep waiting out of the request path.</p>
+<p>The lock-based queue serializes every producer at one mutex. A mutex is a turnstile and a ring buffer is an open door.</p>
+<p>A producer claims a slot with one atomic increment of the tail index. A worker frees the slot by advancing the head index.</p>
+<p>Contention rises with the thread count, which is exactly when the fixed pool matters.</p>
+<p>Pinning removes the cache misses that follow a thread from core to core. Each miss costs a read from main memory.</p>
+<p>Contact us if further data would help.</p>
+<p>The data come from 120 runs per pool. Each run lasts 70 seconds, including the warm-up.</p>
+<p>The fixed pool is a simple change to the scheduler. It adds one counter and one loop.</p>
+<p>The growing pool is typically idle between bursts.</p>
+<p>The fixed pool leverages every core of the host.</p>
+<p>Workers sleep while the queue is empty. They wake when a producer writes a task.</p>
+<p>The report prints the status &#8220;complete&#8221; after each run.</p>
+<p>The harness counts rejected tasks&#8230; and reports the total.</p>
+<p>The log line reads "task rejected ... queue full" for each rejected task. The count of such lines equals the count of rejected tasks.</p>
+<p>Submission order is producer -&gt; queue.</p>
+<p>Completion order is queue &#8594; worker.</p>
+<p>Tasks leave the queue in the order in which they arrived. The order of arrival is the order of the tail index.</p>
+<p>The queue is bounded; its ring buffer holds 4096 slots; each slot holds one task; no slot holds two; the free slots decide every write. A producer checks the free slots before it writes; a full queue rejects the write; the harness counts each rejection.</p>
+<p>The fixed pool has a constant thread count, not a variable one. It pins each worker to a core, not to a socket. It places the queue on core 8, not on a worker core.</p>
+<p>The harness records each task twice. It stamps the submission time on entry. It stamps the completion time on exit. The host also reports memory use once per second. The harness writes the report after the run. A summary file holds the totals.</p>
+<p>A queue holds tasks until a worker is free. Servers use queues for that purpose.</p>
+<p>We believe the fixed pool is the better design.</p>
+<p>We chose to report the 99th percentile because it exposes queueing delay. The 99th percentile is the latency that 99 percent of the tasks stayed below.</p>
+<p>The fixed pool leads on ALL four hosts.</p>
+<p>The harness writes four result files.</p>
+<ol>
+<li>The raw latency samples of each run.</li>
+<li>A summary of the totals of each run.</li>
+<li>The memory samples taken once per second.</li>
+<li>A copy of the configuration file.</li>
+</ol>
+<p>Each file carries the run number in its name, so a run can be traced to its files. The run number is the same in all four files.</p>
+<p>The summary file holds four totals:</p>
+<ol>
+<li>The number of completed tasks.</li>
+<li>The number of rejected tasks.</li>
+<li>The mean latency.</li>
+<li>The 99th percentile latency.</li>
+</ol>
+<p>The fixed pool is separate from the queue so that a stalled worker cannot block a producer. The queue sits on core 8 and the workers run on other cores.</p>
+<p>The pool size of 64 stayed below the 96 cores of the smallest host. The producers and the queue therefore kept cores of their own.</p>
+<h2>Conclusion</h2>
+<p>The study compared a fixed pool with a growing pool on four hosts.</p>
+<p>The fixed pool raised throughput by 24 percent and lowered the 99th percentile latency to 190 microseconds.</p>
+</body>
+</html>

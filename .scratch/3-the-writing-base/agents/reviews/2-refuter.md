@@ -258,3 +258,210 @@ Cases of the brief's "Cases":
 - I read all 177 rows of `expected.md`, all eight `.tex` files and all four `docx_paragraphs.py` outputs whole. No row was sampled or left unread. Whether `/writing` itself reports any of the places named above is for step 3. These findings say only that a right report could, by the rules' own words.
 
 Reviewer usage: a1d4edc40c77a9221, claude-opus-5-5, 256176 tokens, 45 tool uses, 14 min 9 s.
+
+## Repair round 1, refuted
+
+```
+$ git -C .agents/worktrees/3-the-writing-base-2 status --short
+ M docs/dev/building.md
+ M docs/dev/change-standard.md
+?? .scratch/3-the-writing-base/agents/briefs/2-round-1.md
+?? .scratch/3-the-writing-base/agents/reviews/2-refuter.md
+?? .scratch/3-the-writing-base/agents/reviews/2-report.md
+
+$ git diff f241b23 | grep -c '^+[^+]' ; git diff f241b23 | grep -c '^-[^-]'
+5
+3
+(5 non-blank added lines plus 2 blank ones = the report's "7 insertions, 3 deletions", holds)
+
+Round delta of files.txt: diff -u of the snapshot against the current docs/dev/building.md: the paragraph after the block is split into three paragraphs (4, 3 and 1 sentences); docs/dev/change-standard.md: no difference. The case folder differs in every file, read whole.
+The report in the worktree and the main-ledger copy are identical (diff -q printed nothing).
+
+Verify 1b (brief's printf form over building.md, change-standard.md and 2-report.md):
+exit 0   (nothing printed before it)
+
+Verify 1a, full command: its git ls-files form is not run (see Declined to judge). The same loop and perl over find . -path ./.git -prune -o -type f -print0 (leading ./ stripped) printed nothing.
+
+Verify 2: diff <(sed -n 11p docs/dev/building.md) <(sed -n 75p docs/dev/change-standard.md); echo "diff exit $?"
+diff exit 0
+
+Verify 3, the loop on the 11 paths of brief item 4 plus the 17 case paths:
+kept: .scratch/3-the-writing-base/agents/reviews/cases/x.md
+kept: .scratch/archive/2-i-x/agents/reviews/2-run/.scratch/3-y/cases/z.md
+kept: .scratch/3-the-writing-base/agents/briefs/2-cases.md
+kept: skills/writing/cases/x.tex
+kept: docs/cases/x.md
+kept: cases/x.md
+kept: .scratch/3-the-writing-base/plan.md
+kept: README.md
+(8 kept paths, none of the 17 case paths; git show f241b23:docs/dev/building.md | sed -n 11p holds one "if [ -e" loop, which keeps every path that exists)
+
+Verify 4: docx_paragraphs.py <cases>/<draft>/draft.docx, exit 0 for each:
+engineering 148 paragraphs, 2521 words; medicine 41, 677; sciences 43, 665; social 46, 733.
+The four outputs quoted whole in the report's "Verify 4" section equal these outputs (compared after naming the non-ASCII characters in angle brackets: True for all four).
+
+Verify 5: docx_paragraphs.py | LC_ALL=C grep -n '[^ -~]' ; LC_ALL=C grep -n '[^ -~]' <cases>/<draft>/*.tex
+engineering docx paragraphs 107, 108, 120, 121, 124; engineering sections.tex lines 177, 179, 203, 205, 211; medicine, sciences, social: nothing, both forms. These are the five rows of expected.md (em dash, en dash, curly quotes, ellipsis, arrow character).
+
+C6: textutil -convert docx draft.html into a fresh temp folder, then diff of the two docx_paragraphs.py outputs: diff 0 for all four drafts (temp folder removed).
+html text (textutil -convert txt -stdout) against docx paragraphs: no difference for medicine, sciences, social; engineering differs only in the list-marker whitespace (a tab against a space) of the 8 list items.
+.tex (main.tex with sections.tex at the \input line) against the docx paragraphs: medicine, sciences, social, the same text; engineering differs only in the 2 subsection headings and 8 paragraphs of expected.md's "not in the .docx" rows.
+grep -c -E '<ul|&nbsp;|<table' draft.html: 0 for each; U+2022 count in word/document.xml: 0 for each; grep -c '<ol' engineering/draft.html: 2, grep -c '<li': 8.
+
+C4, a scratch comparison of each row of expected.md (178 rows) with its quoted passage against the .tex line and the .docx paragraph it names: 0 misses. The multi-place and range rows and the heading rows were read by hand against sed -n output: all hold.
+Row counts (awk over column 2 per section): engineering 70 break / 56 clean; medicine 6 / 11; sciences 4 / 12; social 7 / 12; 178 in all (the report: 178).
+expected.md snapshot against now: 21 rows identical, 156 only in the snapshot, 157 only now: 155 changed, 1 removed, 2 added, as the report says (155 Before: and 155 After: blocks).
+grep -o ';' */*.tex: engineering/sections.tex:215 6; medicine 1; sciences 1; social 1. grep -E ', not |not [a-z]+, ': engineering/sections.tex:217 (3), medicine/sections.tex:31, sciences/sections.tex:29, social/sections.tex:43.
+Vary-paragraph-length rows recounted by my own split of docx_paragraphs.py output: medicine 17/8/3x6 = 31 body paragraphs, 7 to 53 words; sciences 16/13/4 = 33, 5 to 37; social 18/17/1 = 36, 7 to 38; engineering paragraphs 5 to 10 hold 32 29 29 30 30 29 words and 2 sentences each (rows reproduced).
+
+The report's other quoted commands, rerun from <cases> in the same form: grep -n -i 'tested whether' (3 lines, one per short draft), 'Two patients|Three patients' (exit 1), 'Residents who' (1 line, social/main.tex:15), ', so ... may' (3 lines, one per short draft), 'covered' (exit 1), quickly (exit 1), '^This |^These ' (engineering/sections.tex:135 and :139), 'measured the cost' (engineering/main.tex:29), 'Due to the fact' (engineering/sections.tex:29), 'covered only|Only one queue' (:55 and :119), grep -w pool (the 8 lines the report lists), the hedge-word grep over the three short drafts' sections.tex, grep for page-by-line-number citations in the report (exit 1): all reproduce.
+```
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: violated, Spec 1, 2, 3, 4, 5, 6, 7, 8 and 9. The four folders hold main.tex, sections.tex, draft.html and draft.docx, each states its discipline and names no venue, and the two forms hold the same text apart from the .tex-only cases. The short drafts and the engineering draft still hold breaks and near-copies their rows do not list.
+- 2: violated, Proof 1. expected.md has the columns, the two sentences word for word (sed -n 3,4p), the rules with no case (the colon part of the list bullet is now cased) and the short-draft clean rows; the social binary-contrast count is not reproduced.
+- 3: violated, Spec 1 to 9.
+- 4: holds. Verify 1b, Verify 2 and Verify 3 above; the command is the brief's word for word in both pages; the paragraph after the block is now three paragraphs of 4, 3 and 1 sentences, one idea each, with every fact of the old paragraph kept (Standards 1 is a sentence-length remark only).
+
+Cases of the brief's "Cases":
+
+- C1, the rule list: met. I read the 37 rules of the prose standard, the 23 headings of references/rules.md and the 16 of references/registers.md against the 178 rows; each has a break and a clean row or a named exception, and the colon part of section D's list bullet now has both (engineering/sections.tex:229 to :236 and :240 to :247).
+- C2, the other registers: met. Each of the 12 headings of the three short drafts has a break and a clean row in its section.
+- C3, each passage against its rule: unmet, Spec 1, 2, 3, 4, 5, 6, 7, 8 and 9.
+- C4, the places: met (the 178-row comparison above, plus the multi-place rows by hand).
+- C5, the \input file: met. grep -n '\\input' <cases>/*/main.tex holds \input{sections} in all four, and each draft has break rows in main.tex and in sections.tex.
+- C6, the two forms: met (the second conversion and the three comparisons above).
+- C7, the discipline and the genre: met. Keywords name software engineering, geriatric medicine, agroecology and sociology; each draft has a title, abstract and sections.
+- C8, the clean text: unmet, Spec 1, 2, 3, 4, 5, 6, 7, 8 and 9.
+- C9, the skip: met (Verify 3).
+- C10, the check on the tree: met. Verify 1b and the find-based run print nothing; the loop keeps none of the 17 case paths; the report's first run of the base loop (Spec 13 of the first review) is given in its section 17 and agrees with the base command, which keeps every path that exists. The git ls-files form is declined.
+- C11, the sentence: met. The paragraph is true of the changed command.
+
+Closure of the 17 rulings of the round brief:
+
+- 1 (repeated construction in the short drafts): not closed, Spec 4.
+- 2 (unhedged conclusions): closed. The four named lines carry a hedge (social/sections.tex:49, sciences/sections.tex:35, medicine/sections.tex:37, engineering/sections.tex:141), and a reread of every Discussion and Conclusion line found no further causal or generalizing claim without one.
+- 3 (unlisted breaks in the short drafts): closed except the paragraph of sciences/main.tex:19, Spec 8.
+- 4 (counts): the two named counts are corrected and reproduce; the social binary-contrast count does not reproduce, Proof 1.
+- 5 (Voice): not closed, Spec 3.
+- 6 (evidence followed by what it means): not closed, and the fix adds new breaks, Spec 1.
+- 7 (near-copies): the six named pairs are closed; two adjacent pairs and one restating clean row remain, Spec 2.
+- 8 (second rule of a break passage): the eight named places are closed; Spec 9 is a new place of the same kind.
+- 9 (the group of a double break): the Wordy-phrase pair and the social limitations are closed; the mirror-structure sentence shape is only partly closed, Spec 5.
+- 10 (unlisted places in engineering): the named places are closed; Spec 6 lists places of the same kind that remain or are new.
+- 11 (contradictions): closed. The core counts (96 to 192 cores, pool of 64, 248 created threads plus 8 started equals the cap of 256) agree, the "pool" sentences all name their pool or mean both, and the synonym-cycling clean row names the fixed pool.
+- 12 (list colon): closed, rows and paragraphs 133 to 143 read.
+- 13 (the two forms): closed, paragraphs 144 and 145 are in both forms.
+- 14 (building.md paragraph): closed.
+- 15 (cite by section): closed, the report's grep for line-number citations exits 1.
+- 16 (before and after of building.md): closed, the section "Host-visible changes, before and after" quotes the three paragraphs in full.
+- 17 (first run of C10's loop half): closed, section 17 of the repair round gives the 17-path run.
+
+No ruling was closed by removing a check; the one row removed (the second Wordy-phrase break) is the option the ruling allowed, and 2 rows were added. No fix reaches beyond its finding.
+
+### Findings
+
+Spec
+
+1. Ruling 6 is not closed, and its fix adds new breaks of "E. Sentence shapes / Restating closes". Heading: spec.
+   - New restating closes. engineering/sections.tex:91, the Transitions clean row (paragraph 64): "Creating them therefore took 6 percent of each run. Thread creation took time that the growing pool could not spend on tasks." The last sentence says the one before in other words. engineering/sections.tex:95: "...was the highest value that any run of the study produced. That value set the upper end of the throughput range." The same. engineering/sections.tex:125: "The fixed pool lowered the 99th percentile latency from 410 to 190 microseconds. The tail of the growing pool was more than twice as long." The prose standard, section E, "Restating closes": a final sentence that says the paragraph again in shorter words. The break row of the rule is sections.tex:145 ("In short, pinned workers keep their caches.").
+   - Evidence still not followed by what it means, in paragraphs the round brief named or implied: medicine/main.tex:43 "Each group held 240 patients. All 480 patients completed follow-up and entered the analysis." sciences/main.tex:49 "Plots wider than 5 m held 16 species on average. That mean exceeded the overall mean of 12.3 species by 3.7 species." social/main.tex:43 "...as their main cost. Six of them said that the trip kept them from visiting at all." social/main.tex:45 "...described the merger in neutral terms. Their answers named no change in their contact with the council." In each, the last sentence is more evidence. The clean row (sections.tex:89) shows the standard: its last sentence says what the figures mean for the claim. The report says "Each last sentence is a conclusion, an interpretation or a consequence of the evidence in its paragraph"; this does not reproduce for these four.
+   - Failure scenario: a right report applies "Restating closes" at engineering paragraphs 64, 68 and 81 and "Evidence followed by what it means" at the four short-draft paragraphs, all in text the table expects nothing for; step 3 counts each as a false alarm, and the Transitions clean row is among them.
+   - Verdict: items 1 and 3 violated; C3 and C8 unmet.
+
+2. Ruling 7 is closed for the six named pairs; the same fault stands in three more places. Heading: spec.
+   - engineering/sections.tex:270 and :272 (.tex only), adjacent: "Pinning keeps each cache warm and removes cross-core traffic. \textbf{The fixed pool design is the strongest option for this workload.}" and the clean row "Workers stay on their cores and keep their caches warm. The measured gain on the fourth host is 27 percent." The clean paragraph's first sentence says the first sentence of the break paragraph again, with the bold sentence replaced by a figure.
+   - engineering/sections.tex:139 and :141, adjacent: "This raises the tail. A fixed pool avoids both effects." and the Cold opens clean row "Thread creation may raise the tail because each creation blocks the producer." The clean sentence is the break sentence with its pronoun resolved and a hedge added.
+   - engineering/sections.tex:165, the synonym-cycling clean row, "The fixed pool holds 64 workers. The fixed pool starts them at launch. The fixed pool never adds another.", says what sections.tex:5 and :17 already say (64 workers at launch, never changed).
+   - Brief item 3: a clean passage "is never the break sentence with the fault removed, since two near-identical passages break 'Reader's path / Clarity test'".
+   - Failure scenario: a right report flags the clean paragraph of a pair under "Reader's path / Clarity test" (removal loses nothing), and step 3 counts a false alarm on a row expected to be silent.
+   - Verdict: item 3 violated; C3 unmet.
+
+3. Ruling 5 is not closed: a procedure in "we" remains that the reread was told to find. Heading: spec.
+   - sciences/main.tex:17: "We surveyed ground beetles along hedgerows of different width." references/registers.md, "Sciences (Natural, Applied) / Voice": "A procedure takes the passive, since its actor is irrelevant." The builder rewrote "We sampled beetles along hedgerows." to the passive for the same reason (sciences/sections.tex:5), and listed this sentence as a contribution. social/main.tex:17 "We studied residents of two towns that merged in 2019." falls under "Social Sciences / Voice": "A procedure takes the passive where the participants or the instrument matter." (the residents are the participants). The abstracts' "We tested whether" (medicine, sciences) and "We examined" (social) state the aim and are not counted.
+   - Failure scenario: a right report applies the Voice rule's own words at these lines; step 3 counts false alarms in drafts that must hold no Voice break except the listed one.
+   - Verdict: item 3 violated; C3 and C8 unmet.
+
+4. Ruling 1 is not closed: sentence shapes still recur across sections of the short drafts. Heading: spec.
+   - sciences/main.tex:53 "Richness did not depend on farm size (r = 0.12, p = .58). Farm size was an unlikely source of the width effect." and sciences/sections.tex:17 "Activity did not differ between hedgerows of different width (F = 0.8, p = .45). Hedgerow width was unlikely to shift the timing of activity." Same two-sentence skeleton in Richness Results and Activity Results.
+   - social/main.tex:39 to :45, four consecutive paragraphs of one template (a participant group, a verb of saying, a finding; then a second sentence led by "All nine", "Six of them" or "Their answers"): "Nine participants described the merger as a gain in services. All nine lived..." / "Participants without a local office named a trip... Six of them said..." / "Participants who kept an office nearby described the merger in neutral terms. Their answers named...".
+   - The report's evidence is greps for the shapes the first review named ("tested whether", ", so ... may", "Residents who"), which cannot find these.
+   - prose standard, section 0, "No repeated construction": a sentence shape that recurs across entries or sections is a template. The clean rows of these two drafts say "No sentence shape recurs across sections."
+   - Failure scenario: a right report names "No repeated construction" in sciences and social, against clean rows that expect nothing.
+   - Verdict: item 1 and item 3 violated; C3 and C8 unmet.
+
+5. Ruling 9, the mirror-structure sections, is partly closed. Heading: spec. engineering/main.tex:29 "Smith (2019) measured the cost of that mutex and found a 40 percent loss at 32 threads." and :37 "Park (2018) reported a 12 percent loss for CAS at 32 threads." The literal "measured the cost of Y and found Z" now stands once, but the skeleton (author and year, a verb of reporting, an N-percent loss, at 32 threads) still recurs in the two sections. A right report names "No repeated construction" at :37, which stands in group 0 before the row's "D. Structure / No mirror structure"; the row expects the passage to be reported only under D. Failure scenario: step 3 reads a finding in the earlier group at a place the row does not list as a false alarm. Verdict: item 3 violated; C3 unmet.
+
+6. Unlisted places in engineering of rules whose rows name one place (the kind ruling 10 removed). Heading: spec.
+   - sections.tex:129 to :272, the Discussion, states neither a connection back to the gap nor what the study adds; `grep -i 'gap\|adds\|extend\|earlier\|prior'` over those lines finds only unrelated "adds"/"new". "Reader's path / So what per section", Discussion row: "Connects back to the gap and states what the study adds to what was known." This round the three short drafts' Discussions each gained such a sentence. The row names only Latency Results (break) and Throughput Results (clean).
+   - sections.tex:105: "The latency study applied the same two pools to the tail of the latency distribution." A section-end sentence about the next study, the form the builder removed from the three short drafts, and the shape of "C. ... Never describe what the page is about to do" (break row :135).
+   - sections.tex:131: "Why does a fixed pool lower the tail latency? The results suggest that a fixed pool lowers tail latency by removing thread creation from the request path." (Rhetorical-questions and Hedging clean row). Its first sentence is a question, so "Paragraphs / First sentence states the point" applies, the shape of the break row :53.
+   - sections.tex:255: "The value of 64 was set below the 96 cores of the smallest host so that the producers and the queue keep cores of their own." 26 words, against the Sentence-length break row :95 (30 words) and clean row :93 (17 words); section E: under roughly 20 words unless the mechanism needs more.
+   - Failure scenario: a right report names these places, and step 3 counts misses and false alarms against rows that list neither.
+   - Verdict: item 3 violated; C3 and C8 unmet.
+
+7. medicine/sections.tex:1 to :11, Cohort Methods (paragraphs 23 to 28), breaks "Reader's path / So what per section", Methodology row ("Shows rigor and acknowledges limitations upfront"), a rule its row does not name. Heading: spec. The section holds "Records were incomplete for 18 patients, who were excluded." and no sentence acknowledging a limitation, while the builder added one to every other methods section (medicine/main.tex:33, sciences/main.tex:35 and sections.tex:9, social/sections.tex:11, engineering/sections.tex:55 and :119) and keeps the social Interview Method as a listed double break for the same fault. Reading-dependent: the exclusion sentence could be read as acknowledging a limitation. Failure scenario: a right report adds "So what per section" at Cohort Methods, a group before the Medicine register's; step 3 counts it a false alarm and the row's group a miss. Verdict: item 3 violated; C3 unmet.
+
+8. Ruling 3, paragraphs of more than one idea (section D, "Paragraphs cover one idea"). Heading: spec. sciences/main.tex:19, which the ruling named: "Species richness is the number of species in a plot. We expected richness to rise with hedgerow width." One of three ideas was removed; a definition and a hypothesis remain. medicine/main.tex:49 (new, from ruling 6): "Length of stay did not differ between the groups, with a median of 7 days in each. Mortality at 90 days was 6 percent after early mobilization and 8 percent after usual care (RR 0.75, 95% CI [0.39, 1.43]). With an interval that included 1, the trial left the effect on mortality open." Two outcomes in one paragraph, with the meaning sentence covering one. Failure scenario: a right report names both paragraphs under the one-idea rule at places the tables do not list. Verdict: item 1 violated; C8 unmet.
+
+9. sciences/sections.tex:15, the Register break row: "We were delighted to find a rare ground beetle in the third hedgerow." It also breaks "Precision / Most specific term" ("a rare ground beetle" names no species, where the field has the species name), a rule that stands before the registers in the review's order. The row expects the passage under "Sciences (Natural, Applied) / Register" and names no second rule (brief item 3: a break passage breaks only its rule unless its row names the second rule, with the group the review's order gives). Failure scenario: a right report groups it under Precision; step 3 counts a miss under the Register group and a false alarm under Precision. Verdict: item 3 violated; C3 unmet.
+
+Proof
+
+1. expected.md, social, "D. Structure / Binary contrast ... at most twice per page" clean row: "Count: 1 binary contrast in the draft." social/sections.tex:23, "Trust did not differ by age (r = .04, p = .41) but rose with years of residence (r = .18, p below .001).", is a second "not X but Y" contrast; the report counted with `grep -n -o '[^.]*, not [^.]*\.'`, which cannot find the "but" form. The count that a decision rests on (the clean row holds while it is at most 2) is 2 by my read, so the row still holds; the stated count is wrong. Failure scenario: the reader of step 3 recounts, gets 2 against the row's 1, and cannot tell whether the row or the draft is wrong; any further "but" contrast added later passes the stated count and breaks the limit. Verdict: item 2 violated.
+
+Standards
+
+1. docs/dev/building.md, section "Building and checking Ordo", first paragraph after the block: "Those files hold the drafts the `/writing` gate runs on and their expected results, and the drafts must hold the characters the prose standard bans." In this round two short sentences (as in the snapshot) were joined into one 25-word sentence with two ideas joined by "and". skills/repo-setup/templates/docs/dev/prose-standard.md, section E, "Sentence length": under roughly 20 words unless the mechanism needs more; the brief's Verify 6 asks each departure to be named with its reason, and the report's Verify 6 names only the 31-word sentence. Low weight; the paragraph is within four sentences and the facts are kept. Failure scenario: the next `/writing` or `/refute` over the page reports the sentence. Verdict: none.
+
+Behaviour
+
+none.
+
+### Declined to judge
+
+- Verify 1a with `git ls-files -coz --exclude-standard`, and the report's `git log` and `git diff --stat` lines: git commands outside the three I run. `sed -n 11p docs/dev/building.md > <file> && sh <file>` run from the worktree root would settle the first; I ran the same loop and perl over a find listing and over the brief's printf list instead, and both printed nothing.
+- Whether `/writing` reads Medicine and Health "What the reader looks for" per methods section (so Cohort Methods breaks it) or per paper (CONSORT is named at medicine/main.tex:27); step 3's run settles it. Spec 7 depends on the per-section reading the brief chose.
+- Figures that contradict each other in the drafts, which no prose rule reports: engineering/sections.tex:49 "Each task spent 200 microseconds on the CPU." against a 99th percentile latency of 190 microseconds (sections.tex:125), engineering/sections.tex:155 "It logs one line per run." against :207 "for each rejected task", and social/main.tex:39 to :45 (15 and 9 of 24 participants leave none for the group in neutral terms). Whether step 3 reports any of them is for step 3.
+- The keywords line of each draft (four comma-separated items in paragraph form), and "A total of" and "support"/"hold" in the sciences draft: I do not count them as findings; only step 3 settles them.
+- Whether a right report counts the abstracts' "We tested whether ..." and "We examined ..." as procedures (Spec 3 leaves them out).
+- I read all 178 rows of expected.md, all eight .tex files, the four .html files by their textutil text, and the four docx_paragraphs.py outputs whole. No row was sampled.
+
+Reviewer usage: a7a8c86524ffc2678, claude-sonnet-5-5, 358931 tokens, 78 tool uses, 17 min 29 s.
+
+## Closed (the orchestrator's disposition of every finding above, appended before /land)
+
+The first run:
+
+- Spec 1 (repeated construction in the short drafts): closed in round 1 for the shapes the run named (ruling 1); the shapes the run over round 1 found (its Spec 4) were fixed at landing, below.
+- Spec 2 (near-copies): closed in round 1 for the six named pairs (ruling 7); the three places of its Spec 2 were fixed at landing, below.
+- Spec 3 (Voice): closed in round 1 for the named lines (ruling 5); the two lines of its Spec 3 were fixed at landing, below.
+- Spec 4 (unhedged conclusions): closed in round 1 (ruling 2), confirmed by the run over round 1.
+- Spec 5 (evidence followed by what it means): closed in round 1 for the named paragraphs (ruling 6); the paragraphs of its Spec 1 were fixed at landing, below.
+- Spec 6 (unlisted breaks in the short drafts): closed in round 1 (ruling 3) except `sciences/main.tex:19`, fixed at landing (its Spec 8).
+- Spec 7 (a second rule a break passage breaks): closed in round 1 (ruling 8); the Register break of its Spec 9 was fixed at landing.
+- Spec 8 (the group of a double break): closed in round 1 (ruling 9); the remaining shape of its Spec 5 was fixed at landing.
+- Spec 9 (unlisted places in engineering): closed in round 1 (ruling 10); the places of its Spec 6 were fixed at landing.
+- Spec 10 (the list colon), Spec 11 (the two forms), Spec 12 (contradictions), Spec 13 (the first run of the loop): closed in round 1 (rulings 12, 13, 11 and 17), confirmed by the run over round 1.
+- Proof 1 (counts): closed in round 1 (ruling 4); the binary-contrast count of its Proof 1 was fixed at landing.
+- Proof 2 (the short drafts keep the seven whole-draft rules): closed with Spec 1, 5 and 6 of this run, in round 1 and at landing.
+- Standards 1, Standards 2, Behaviour 1: closed in round 1 (rulings 14, 15 and 16), confirmed by the run over round 1; the sentence of its Standards 1 was fixed at landing.
+
+The run over round 1, each fixed at landing on main in `.scratch/3-the-writing-base/cases/` (both forms, each `draft.docx` made again with `textutil -convert docx` from its `draft.html`) or in `docs/dev/building.md`:
+
+- Spec 1: `engineering/sections.tex:91` now closes "Thread creation alone thus explains only part of the 24 percent gap."; `:95` closes "A fixed pool may therefore scale with the core count of its host."; `:125` closes "The result confirms, for these hosts, the expectation that a fixed pool lowers the tail."; `medicine/main.tex:43` gains "With no loss to follow-up, attrition cannot account for the difference in readmission."; `sciences/main.tex:49` closes "Richness therefore kept rising at the wide end of the width range."; `social/main.tex:43` and `:45` close with what the evidence means for contact with the council.
+- Spec 2: `engineering/sections.tex:272` (the clean row of "No dramatic bolded closers") now holds the temperature record of each host; `:141` (the Cold opens clean row) now says that a new thread of the growing pool starts on a cold core; `:165` (the synonym-cycling clean row) now places the fixed pool on cores 9 and above, which no other sentence says.
+- Spec 3: `sciences/main.tex:17` reads "The present survey related ground beetle richness to hedgerow width."; `social/main.tex:17` reads "The study followed residents of two towns that merged in 2019."
+- Spec 4: `sciences/sections.tex:17` reads "The timing of activity showed no link to hedgerow width (F = 0.8, p = .45). Width thus appeared to shape how many species a plot held and to leave their season of activity unchanged."; `social/main.tex:41` to `:45` now open with three different shapes.
+- Spec 5: `engineering/main.tex:37` reads "At 32 threads, the measurements of Park (2018) put the loss from CAS at 12 percent."
+- Spec 6: `engineering/sections.tex:131` opens "The study adds what the earlier queue studies left unmeasured: the fixed pool lowered the tail latency on every host.", so the Discussion connects back to the gap and the paragraph's first sentence states its point before the question; `:105` reads "No worker crashed in any throughput run, so no run lost part of its pool."; `:255` is two sentences of 13 and 11 words.
+- Spec 7: `medicine/sections.tex:5` gains "Their exclusion may have biased the cohort toward patients with complete nursing notes."
+- Spec 8: `sciences/main.tex:19` reads "Species richness, the number of species in a plot, was expected to rise with hedgerow width."; `medicine/main.tex:49` holds the two secondary outcomes as one idea, closing "The trial thus gave no evidence that early mobilization changed either secondary outcome."
+- Spec 9: `sciences/sections.tex:15` names the species: "We were delighted to find Carabus auratus in the third hedgerow."
+- Proof 1: `social/sections.tex:23` reads "Trust rose with years of residence (r = .18, p below .001) and showed no link to age (r = .04, p = .41).", so the draft holds the one binary contrast its row counts.
+- Standards 1: `docs/dev/building.md`, section "Building and checking Ordo": the 25-word sentence is now two sentences in a paragraph of its own about the `cases/` folders.
+- Three contradictions the run named under "Declined to judge" were fixed with them, since the brief asks for none: a task's CPU time is now 100 microseconds (`engineering/sections.tex:49`), below the 190-microsecond 99th percentile; the harness logs one line per run and one per rejected task (`:155`), as `:207` says; six participants saw better services (`social/main.tex:41`, `social/sections.tex:43`), so 15, 6 and 3 make the 24.
+- `expected.md`: 17 lines changed, the rows quoting the passages above and every count: engineering 2574 words (6 semicolons, 2.33 per 1000), medicine 697 (1.43 per 1000), sciences 672 (1.49 per 1000), social 737 (1.36 per 1000), and the vary-paragraph-length rows of medicine (16, 8 and 7 paragraphs of 1, 2 and 3 sentences, 7 to 48 words) and sciences (17, 12 and 4, 5 to 37 words). Every single-place row's passage was compared with its `.tex` line and its `.docx` paragraph (133 held, the 16 heading rows checked by hand, 29 multi-place rows unchanged), each draft keeps its paragraph count (148, 41, 43, 46), and no draft holds a run of five same-length sentences apart from the engineering break row.
