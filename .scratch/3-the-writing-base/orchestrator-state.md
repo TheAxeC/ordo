@@ -41,7 +41,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Step 3, the case reports (2026-10-15): the eight case reports of step 3 do not meet `cases/expected.md` (`agents/reviews/3-gate-reading.md`); the skill misses section-level and whole-draft rules and drops second rules, and the case files hold breaks their tables call clean. Options in `plan.md`, Step 0 of step 3: (a) one new step that fixes the review prompt and the case files, then step 3 once more; (b) the known cases made a record and entry 3 closed on the NWO XS reading; (c) stop. Recommended (a).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -68,7 +68,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-15. Steps 1 and 2 are landed (6105b48 and the landing commit of step 2). The case files are in `cases/` of this folder.
-- Verified: on main after the landing fixes, `checks.sh` over the verify list printed `checks: 6 commands passed`.
-- Next step: 3, the gate runs, which starts only after Axel's ruling on a tag and a pin that make `/writing` invocable.
-- Open on Axel's side: the tag and the pin for step 3.
+- 2026-10-15. Steps 1 and 2 are landed. Step 3 ran its nine `/writing` runs on tag v8.1.0-rc.1 (pinned); the reports and the reading against `cases/expected.md` are in `agents/reviews/`.
+- Verified: each review agent ran on claude-opus-5-5 and used only Read and Bash (the tool calls are listed in each `3-writing-<draft>.md`).
+- Next step: none until Axel rules on the open item "Step 3, the case reports".
+- Open on Axel's side: that open item, and his reading of the NWO XS report for false alarms.

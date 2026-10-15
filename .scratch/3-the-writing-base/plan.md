@@ -75,10 +75,19 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a9e170623ba28cc36: builder of step 2, claude-sonnet-5-5
 - a1d4edc40c77a9221: reviewer of step 2, claude-opus-5-5
 - a7a8c86524ffc2678: reviewer of step 2 over round 1, claude-sonnet-5-5
+- a1e9698a397d678f3: /writing review agent of step 3 on the engineering .tex, claude-opus-5-5
+- a73d92751943d4fbf: /writing review agent of step 3 on the engineering .docx, claude-opus-5-5
+- a312a7fbbc04aa1fa: /writing review agent of step 3 on the medicine .tex, claude-opus-5-5
+- af7307205dfd95a1c: /writing review agent of step 3 on the medicine .docx, claude-opus-5-5
+- a77cd3d2e2044f130: /writing review agent of step 3 on the sciences .tex, claude-opus-5-5
+- a00c480376f117436: /writing review agent of step 3 on the sciences .docx, claude-opus-5-5
+- ab1f0ed86fe59e6fb: /writing review agent of step 3 on the social .tex, claude-opus-5-5
+- a0b65a0508268b7a0: /writing review agent of step 3 on the social .docx, claude-opus-5-5
+- a7f4fe964415a39bd: /writing review agent of step 3 on the NWO XS .docx, claude-opus-5-5
 
 ## Blocked, and by what
 
-- none.
+- 3: the case reports did not meet `cases/expected.md`; the open item "Step 3, the case reports" in Step 0 of step 3 waits on the user.
 
 ### Step 1, the writing base (landed 2026-10-15)
 
@@ -129,3 +138,11 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - Usage: brief check a0a40444046c6ffdc claude-opus-5-5 221286 tokens, 43 tool uses, 13 min 16 s; builder a9e170623ba28cc36 claude-sonnet-5-5 84056 tokens, 197 tool uses, 51 min 1 s (round 0) and 320648 tokens, 182 tool uses, 44 min 2 s (round 1); reviewer a1d4edc40c77a9221 claude-opus-5-5 256176 tokens, 45 tool uses, 14 min 9 s; reviewer over round 1 a7a8c86524ffc2678 claude-sonnet-5-5 358931 tokens, 78 tool uses, 17 min 29 s.
 - The builder's first report did not pass its bar: the short drafts held breaks their rows did not list (repeated shapes, unhedged conclusions, procedures in "we", paragraphs of two ideas), the engineering draft held near-copies, contradictions and unlisted places of listed rules, the list colon had no case, two count rows were wrong, and the paragraph after the block of `docs/dev/building.md` ran to eight sentences.
 
+### Step 0 of step 3
+
+- Step 3, the case reports (2026-10-15). The nine `/writing` runs ran once each, every agent on claude-opus-5-5 and using only Read and Bash, and their reports are in `agents/reviews/3-writing-<draft>.md`. The eight case reports do not meet `cases/expected.md`, as `agents/reviews/3-gate-reading.md` lists row by row, so the gate's part on the known cases is not met. Two things failed.
+  - The skill. Every run misses some break of a rule judged over a whole section or the whole draft: "What the reader looks for" in five of the eight runs, and "Limitations and alternative interpretations", "Tense per section", "Reader's four questions", "No mirror structure" and "First sentence states the point" in the engineering runs. Seven passages lose the second rule their row names. Example: in the medicine draft the Cohort Methods names no reporting guideline, and neither medicine run reports it.
+  - The case files. Most findings in passages the tables list as clean are breaks the drafts really hold. Example: the medicine draft calls the comparison arm "usual mobilization" and later "usual care", which is synonym cycling, and its table says the draft has none. Three rows name one rule for a passage that breaks two, and the arrow row asks for "ASCII throughout" on `->`, which is ASCII. Five of these passages are sentences the session wrote when it fixed the step 2 review findings at landing.
+  - (a), recommended: one new step, built by a builder, reviewed once and landed. It changes the review prompt in `skills/writing/SKILL.md` so the agent checks each section-level and whole-draft rule against every section and names every rule a passage breaks. It also rewrites the case files so the clean text breaks no rule and every row is right. Then step 3 runs once more on the new tag, and a failure then comes back to you with no further round. Two more runs of the plan's work, about the cost of step 2.
+  - (b): change the Gate so the known cases count as a record, not a pass condition, and close entry 3 on the NWO XS reading alone. The skill keeps its misses.
+  - (c): leave entry 3 open and stop plan 3 here. The lazy option.
