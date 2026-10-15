@@ -41,7 +41,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Step 3, the case reports (2026-10-15): the eight case reports of step 3 do not meet `cases/expected.md` (`agents/reviews/3-gate-reading.md`); the skill misses section-level and whole-draft rules and drops second rules, and the case files hold breaks their tables call clean. Options in `plan.md`, Step 0 of step 3: (a) one new step that fixes the review prompt and the case files, then step 3 once more; (b) the known cases made a record and entry 3 closed on the NWO XS reading; (c) stop. Recommended (a).
+- Step 3, how the ruled fix is carried (2026-10-15): the ruling "Step 3, the case reports" asks for one new step that fixes and then step 3 once more, and `plan-orchestration`'s "What earns a step of its own" says such a fix followed by the same check is a repair round of step 3, never a new step, and `/spec` refuses it as "A repair round as a step". Options: (a) the fix as step 3's one repair round (`repair_rounds: 1`), done by a builder agent with a brief, one review and a landing, then the nine runs once more; (b) a new step 4 as ruled, with `/spec`'s refusal set aside for this step. Recommended (a).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
