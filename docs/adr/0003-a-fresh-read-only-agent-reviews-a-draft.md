@@ -1,6 +1,6 @@
 # 0003. A fresh read-only agent reviews a draft
 
-Status: proposed
+Status: superseded by 0013
 
 ## Context
 
