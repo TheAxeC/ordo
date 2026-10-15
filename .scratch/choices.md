@@ -331,3 +331,15 @@ Builds on it: step 1
 Taken: (a)
 Booked: `.scratch/2-k-the-skill-text-fixes-from-the-retro-and-the-real-run/plan.md:57` (Open item A)
 Builds on it: step 1, step 2
+
+## C68. Which register rules the agents of /writing get (2026-10-15)
+
+The brief of step 4 of plan 3 gave the finding agents the register rules "of the draft's register", and also said the session that runs `/writing` judges nothing of the draft. The builder gave the agents the rules of all four registers, since picking the register is a judgment about the draft. The reviewer (Spec 2 of `.scratch/3-the-writing-base/agents/reviews/4-refuter.md`) found that the checking agent had no bullet that limits register findings to the draft's register.
+  - Option (a), recommended: keep the four registers in the finding agents' lists, which each apply the register of the draft's discipline, and give the checking agent the bullet that keeps a register finding only under that register. Pro: the agents, which read the draft, decide its discipline, and the session judges nothing; the four registers cost about 700 tokens more per agent. Con: three registers in each prompt do not apply to the draft.
+  - Option (b): the session picks the draft's register and puts only that one in the prompts. Pro: shorter prompts. Con: the session then judges the draft, against the skill's rule that it judges nothing, and a wrong pick removes the right register's rules.
+  - Rule: `skills/writing/SKILL.md`, "Rules" and "Finding agent prompt"; ADR 0013, "only its own rules": the register rules are in the sentence and section agents' own lists.
+  - Recommendation: (a). The lazy option is (b), which needs no checking-agent bullet.
+
+Taken: (a)
+Booked: `.scratch/3-the-writing-base/plan.md:74` (Step 4, the register rules)
+Builds on it: step 4

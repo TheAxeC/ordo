@@ -21,6 +21,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/repo-setup/templates/sync_rules.py` | Compares the shared-rules block and the plan-terms block of a repository with their templates, and rewrites them on request |
 | `skills/session-retro/templates/transcript_window.py` | Prints what was said and done in Claude Code transcripts, for a time window or for one Claude Code session, with secrets replaced |
 | `skills/writing/templates/docx_paragraphs.py` | Prints the text of each paragraph of a `.docx` file, numbered, with tracked insertions kept and tracked deletions and comments left out |
+| `skills/writing/templates/prose_facts.py` | Prints the facts of a draft with one right answer: words per sentence, sentences and words per paragraph, semicolons per 1000 words, runs of sentences of equal length, non-ASCII characters, the words of the prose standard's banned and flagged lists, and contractions |
 
 ## Test scripts
 

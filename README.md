@@ -23,7 +23,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `ordo-help` | Prints the command sequence and the position of each open plan, and for a named plan its position and the command that comes next |
 | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
 | `session-retro` | Reads the transcripts of a plan's Claude Code sessions, of one session or of a time window. It reports what went well, to keep, and what went wrong, to change. Each point quotes its place and proposes a change to a rule, skill or brief, which the user decides on |
-| `writing` | Reviews the prose of a draft with one fresh agent that changes nothing: a `.tex` file with its input files, a `.md`, a `.txt` or a `.docx`. It reports each break of a named rule with its place, the quoted passage and what the rule asks for, grouped by rule, and proposes no replacement |
+| `writing` | Reviews the prose of a draft with a script and four fresh agents that change nothing: a `.tex` file with its input files, a `.md`, a `.txt` or a `.docx`. It reports each break of a named rule with its place, the quoted passage and what the rule asks for, grouped by rule, and proposes no replacement |
 
 The order of use, shortened from what `/ordo-help` prints:
 

@@ -72,7 +72,7 @@ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 sh utils/pin.test.sh 2>&1 | tail -1
-git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do case "$f" in .scratch/archive/*/*/cases/*) ;; .scratch/archive/*/cases/*) continue ;; .scratch/*/*/cases/*) ;; .scratch/*/cases/*) continue ;; esac; if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 ```
 
 The plan's whole verify list runs once, at landing on main, through the `land` skill's runner, `sh skills/land/templates/checks.sh <state file>`. The booking quotes the lines the runner printed, never a count. Before landing, the builder and the reviewer run the checks the brief names for the files the step changes, and the report quotes their output. Each command in the verify list exits non-zero when it fails, as written, and a command with long output uses its tool's quiet mode or a filter under `pipefail`.

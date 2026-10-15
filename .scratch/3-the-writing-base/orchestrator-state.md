@@ -10,7 +10,7 @@ verify:                      # commands run once, at landing on main, in order; 
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 - sh utils/pin.test.sh 2>&1 | tail -1
 - >-
-  git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do case "$f" in .scratch/archive/*/*/cases/*) ;; .scratch/archive/*/cases/*) continue ;; .scratch/*/*/cases/*) ;; .scratch/*/cases/*) continue ;; esac; if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
+  git ls-files -coz --exclude-standard | xargs -0 sh -c 'for f; do if [ -e "$f" ]; then printf "%s\0" "$f"; fi; done' sh | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'
 rules: docs/dev/change-standard.md # the repository's change standard: the rules every builder works under; every brief points at it.
 standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose-standard.md, docs/glossary.md] # files every brief tells the builder to read in full, from .agents/plan.yaml.
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
@@ -36,23 +36,12 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 4
-  executor: agent
-  session_id: a672784c13c7427a1 (claude-sonnet-5-5)
-  worker: claude:sonnet
-  worktree: .agents/worktrees/3-the-writing-base-4
-  base: 235e36f
-  launched: 2026-10-15
-  report: .scratch/3-the-writing-base/agents/reviews/4-report.md
-  brief_check: .scratch/3-the-writing-base/agents/reviews/4-brief-check.md (a293907a50452e96c, claude-opus-5-5, 252343 tokens, 58 tool uses, 11 min 52 s)
-  landing: not-started
-  round: 0
+dispatch: none               # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Step 4, ADR 0013 and the moved place (2026-10-15): ADR 0013 says the checking agent of `/writing` "keeps a finding only where its quote stands at its place". The landed skill also lets it move a finding to the paragraph where the quoted words really stand: a finding that says paragraph 12 for words that stand in paragraph 14 is kept as paragraph 14, where the ADR's words would drop it (finding Spec 4 of `agents/reviews/4-refuter.md`). (a), recommended: change the ADR's sentence to "keeps a finding only where its quote stands in the draft, at the place given or moved to where it stands, and the rule's own words describe the break". Pro: a real break with a wrong paragraph number still reaches the user. Con: none. (b): take the move out of the skill, so such a finding is dropped. Pro: no ADR edit. Con: real breaks are lost over a wrong number. The lazy option is (b). This is the user's call because it is a contradiction of an ADR.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -73,18 +62,17 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 - A landing runs the `land` skill's `templates/land.sh` from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`. It commits the step's work in its worktree, cherry-picks the range onto main, runs the `verify` list on main through `templates/checks.sh` and prints the booking data. It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict and 64 on a refusal, 127 when `python3` is not installed, or with git's own status when a git step fails; the `land` skill's `templates/land.test.sh` proves it.
 - The step's own check, named on its line in `plan.md` and in its brief, run from the repository root.
 - The `verify` list above runs through the `land` skill's `templates/checks.sh <state file>` from the root of main's checkout, once, at landing. It prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and the lines it prints are what the booking quotes. The builder and the reviewer run the checks the brief names for the files the step changes before landing.
-- Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches outside a ledger's `cases/` folder finds nothing new, and `git status --short` shows nothing of the step's.
+- Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
 
 ## Where things are
 
-- Design: `docs/roadmap.md` entry 3, the rulings in `plan.md`, ADRs 0001 to 0003, the three `rebuild: writing` rows of `docs/academic-coverage.md` and their source files in research-hub. Ledger: `.scratch/3-the-writing-base/`, with `agents/briefs/` and `agents/reviews/`.
+- Design: `docs/roadmap.md` entry 3, the rulings in `plan.md`, ADRs 0001, 0002 and 0013 (0003 superseded), the three `rebuild: writing` rows of `docs/academic-coverage.md` and their source files in research-hub. Ledger: `.scratch/3-the-writing-base/`, with `agents/briefs/` and `agents/reviews/`.
 - research-hub is read only: the source files and the NWO XS `.docx` are read, never changed.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-15. Steps 1 and 2 are landed. Step 3's one repair round is landed: the review agent prompt of `skills/writing/SKILL.md` and the case files.
+- 2026-10-15. Steps 1, 2 and 4 are landed; step 3 stays unticked, its check replaced by step 4's under the ruling "Step 3, the second run". Step 4 landed `skills/writing/templates/prose_facts.py` and the rewritten `skills/writing/SKILL.md` (a script, then three finding agents and a checking agent), and deleted `.scratch/3-the-writing-base/cases/`.
 - Verified: `checks.sh` on main printed `checks: 6 commands passed` after the fixes at landing.
-- Tag `v8.1.0-rc.2` is on the landing commit ae05d76 and pinned. The nine `/writing` runs of step 3 run once more, each agent on claude-opus-5-5.
-- The nine runs ran; the reading is `agents/reviews/3-gate-reading-run-2.md`, and the check is not met.
-- Next step: the Goal and Gate of entry 3 rewritten through `/roadmap` under the ruling "Step 3, the second run", then `/spec` of step 4, the rebuilt review.
-- Open on Axel's side: his reading of the NWO XS report of the second run for false alarms.
+- Entry 3's Goal and Gate in `docs/roadmap.md` were rewritten in d1165b2 after the user's approval.
+- Next: tag `v8.1.0-rc.3` on the landing commit and its pin, as the ruling "Step 3, the second run" says; then `/writing` once on the NWO XS application, its report shown whole with the four agents' tokens and the session's verdict, for the user's reading ("useful" or "noise"); then step 5, the closing, or the noise ending of that ruling.
+- Open on Axel's side: the open item "Step 4, ADR 0013 and the moved place".
