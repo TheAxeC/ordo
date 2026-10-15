@@ -41,20 +41,20 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Step 2, the case files (2026-10-15). Two parts of step 2's line cannot be done as written. Both answers change your gate or a verify command, so they are yours.
-  - Question 1, the registers. `/writing` applies only the register of the draft's discipline (`skills/writing/SKILL.md` line 89). A case draft has one discipline, so one draft can test only 4 of the 16 register rules. Example: a passage where the authors call themselves "the authors" breaks the Voice rule of Medicine and Health only in a medical draft; in an engineering draft the review must not apply that register.
-    - (a), recommended: four case drafts instead of one. The full case set in one discipline, plus one short draft for each other register that holds only that register's cases, each as a `.tex` with an `\input` file and as a `.docx`. Every register rule gets its break and its clean passage. Step 3 runs `/writing` 8 times on the cases instead of 2. Needs the Gate of roadmap entry 3 and the lines of steps 2 and 3 rewritten; the roadmap diff comes to you for approval.
-    - (b): the `.tex` in one discipline and the `.docx` in another. 8 of the 16 register rules tested. The gate stays as it is.
-    - (c): one discipline for both. 4 of the 16 tested. The lazy option.
-  - Question 2, where the case files are kept. The verify list's character-set check reads every tracked file and fails on any byte outside ASCII. It exits 1 on a `.docx` (run on the NWO XS `.docx`), and the cases for the em dash rule and the straight-quotes rule must hold those characters. Also, a builder writes only its report in the ledger, and `land.sh` never carries another ledger file from the worktree to main, so case files the builder writes into this folder would not land.
-    - (a), recommended: the case files go in `.scratch/3-the-writing-base/cases/`, committed with their real characters and the `.docx`. The character-set check in `docs/dev/building.md`, `docs/dev/change-standard.md` and the state file's verify list skips files under a ledger's `cases/` folder (`.scratch/*/cases/` and `.scratch/archive/*/cases/`). At landing the session copies `cases/` from the worktree to main, as it copies the builder's report. This changes a verify command.
-    - (b): everything committed stays ASCII. The `.tex` cases spell the dash as ` -- ` and break the ASCII rule with `->` in prose, and the `.docx` is made at step 3 from a committed `.html` that writes the characters as codes such as `&#8212;` (tried: `textutil -convert docx` turns it into a real em dash, and `docx_paragraphs.py` prints it). The session copies `cases/` at landing. No check changes, but the `.tex` run never sees a real non-ASCII character.
-    - (c): the case files kept outside git. Nothing of the cases is recorded. The lazy option.
+- Step 2, the brief check (2026-10-15). The brief check of step 2 (`agents/reviews/2-brief-check.md`) found two things that only you can settle. Every other finding is closed in the brief, as that report's Closed heading lists.
+  - Question 1, the builder writing into the ledger. Your ruling "Step 2, the case files" has the builder write the case files into this folder's `cases/`. The rules file says the opposite: `docs/dev/change-standard.md`, "Where the work happens": "Nothing under the ledger folder is edited except the report the brief names." The builder's prompt says the same (`plan-orchestration`, "Launching a builder": "What is never touched: the ledger beyond the builder's report"). A builder given both stops, or its reviewer files the case files as a breach.
+    - (a), recommended: the builder writes the case files in a scratch folder outside both repositories, which the brief names, and touches only its report in the ledger. Before `land.sh` runs, the session copies the folder into `.scratch/3-the-writing-base/cases/` on main, and the landing commit names each case file. The case files end up where you ruled, committed with their real characters, and no rule changes. What changes in your ruling is only where the session copies from: the builder's scratch folder instead of the worktree.
+    - (b): the builder writes into the worktree's `cases/` as ruled, and the rules file's sentence, the builder's prompt in `plan-orchestration` and the term **ledger** in the glossary and its template each gain "and the files its brief names under the ledger". This changes a written rule and a skill.
+    - (c): leave the clash in the brief and let the builder sort it out. The lazy option.
+  - Question 2, the rules judged on a whole draft. Some rules are counted or judged over the whole draft: semicolons (at most 2 per 1000 words), binary contrast (at most twice per page), varied paragraph length, no repeated construction, no five same-length sentences in a row, no mirror structure, and "Objectivity / Limitations and alternative interpretations" ("The text acknowledges the limitations"). In the engineering draft that holds their breaks, no passage can keep them. Example: once the draft has three binary contrasts, a fourth sentence with one contrast is not a clean passage, it adds to the count.
+    - (a), recommended: their clean rows stand in the three short drafts, whose text must already break no rule. Each short draft then holds its register's cases plus clean rows of these rules, and no other break. Your ruling said the short drafts hold "only that register's cases"; this adds clean rows, never a break, and no extra run.
+    - (b): a fifth draft that holds only these clean cases, as a `.tex` and a `.docx`. Two more runs at step 3, and the Gate is rewritten again.
+    - (c): no clean row for these rules. The lazy option.
   - Recommendation: (a), (a). Answer with `Ruled: (a), (a)` or your own choice per question.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
-- none.
+- Step 2, the case files (2026-10-15): ruled (a), (a) by the user on 2026-10-15; booked in `plan.md` Rulings, with the lines of steps 2 and 3 rewritten.
 
 ## The standing demands (from Axel, in force)
 
@@ -67,7 +67,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - A landing runs the `land` skill's `templates/land.sh` from the repository root as `sh <the land skill's folder>/templates/land.sh <state file> <slug>-<step> <base>`. It commits the step's work in its worktree, cherry-picks the range onto main, runs the `verify` list on main through `templates/checks.sh` and prints the booking data. It exits 0 when the step landed and every check passed, 1 on a failed check or a stop, 2 on a conflict and 64 on a refusal, 127 when `python3` is not installed, or with git's own status when a git step fails; the `land` skill's `templates/land.test.sh` proves it.
 - The step's own check, named on its line in `plan.md` and in its brief, run from the repository root.
 - The `verify` list above runs through the `land` skill's `templates/checks.sh <state file>` from the root of main's checkout, once, at landing. It prints `$ <command>` and the output of each command, then `checks: <n> commands passed`, and the lines it prints are what the booking quotes. The builder and the reviewer run the checks the brief names for the files the step changes before landing.
-- Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches finds nothing new, and `git status --short` shows nothing of the step's.
+- Every step: `LC_ALL=C grep -n '[^ -~]'` over every file the diff touches outside a ledger's `cases/` folder finds nothing new, and `git status --short` shows nothing of the step's.
 
 ## Where things are
 
@@ -76,6 +76,6 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-15. Step 1 is landed (6105b48). Step 2, the known cases, is stopped before its brief: the open item "Step 2, the case files" waits for Axel's ruling.
-- Next step: 2, through `/spec 3 2` once the ruling is booked.
-- Open on Axel's side: "Step 2, the case files"; later, the tag and the pin for step 3.
+- 2026-10-15. Step 1 is landed (6105b48). The Gate of entry 3 is rewritten for four case drafts (6f97b05). Step 2 is stopped after its brief check: the open item "Step 2, the brief check" waits for Axel's ruling.
+- Next step: 2, through `/spec 3 2` once the ruling is booked; its brief check has run (`agents/reviews/2-brief-check.md`) and is not run again.
+- Open on Axel's side: "Step 2, the brief check"; later, the tag and the pin for step 3.
