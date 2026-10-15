@@ -41,7 +41,6 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- Step 4, ADR 0013 and the moved place (2026-10-15): ADR 0013 says the checking agent of `/writing` "keeps a finding only where its quote stands at its place". The landed skill also lets it move a finding to the paragraph where the quoted words really stand: a finding that says paragraph 12 for words that stand in paragraph 14 is kept as paragraph 14, where the ADR's words would drop it (finding Spec 4 of `agents/reviews/4-refuter.md`). (a), recommended: change the ADR's sentence to "keeps a finding only where its quote stands in the draft, at the place given or moved to where it stands, and the rule's own words describe the break". Pro: a real break with a wrong paragraph number still reaches the user. Con: none. (b): take the move out of the skill, so such a finding is dropped. Pro: no ADR edit. Con: real breaks are lost over a wrong number. The lazy option is (b). This is the user's call because it is a contradiction of an ADR.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -50,6 +49,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - Step 3, the case reports (2026-10-15): ruled (a) by the user on 2026-10-15; booked in `plan.md` Rulings.
 - Step 3, how the ruled fix is carried (2026-10-15): ruled (a) by the user on 2026-10-15; booked in `plan.md` Rulings, with the line of step 3 rewritten.
 - Step 3, the second run (2026-10-15): ruled by the user on 2026-10-15, one new step 4 that rebuilds `/writing`; booked in `plan.md` Rulings, with step 4's line added and the closing made step 5.
+- Step 4, ADR 0013 and the moved place (2026-10-15): closed by the user's four changes to `/writing` on 2026-10-15, which rewrote ADR 0013's sentence on the checking agent to keep a finding at the place given or moved to where its quote stands; booked in `plan.md` Rulings, "Step 4, the four changes".
 
 ## The standing demands (from Axel, in force)
 
@@ -75,4 +75,4 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 - Verified: `checks.sh` on main printed `checks: 6 commands passed` after the fixes at landing.
 - Entry 3's Goal and Gate in `docs/roadmap.md` were rewritten in d1165b2 after the user's approval.
 - Next: tag `v8.1.0-rc.3` on the landing commit and its pin, as the ruling "Step 3, the second run" says; then `/writing` once on the NWO XS application, its report shown whole with the four agents' tokens and the session's verdict, for the user's reading ("useful" or "noise"); then step 5, the closing, or the noise ending of that ruling.
-- Open on Axel's side: the open item "Step 4, ADR 0013 and the moved place".
+- Open on Axel's side: his reading of the second NWO run of `/writing` after the four changes.
