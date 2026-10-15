@@ -58,6 +58,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D32 The roadmap diff of entry 3 (2026-10-14): (a) the Goal's report sentence and the whole Gate are written as drafted from D27 to D30, Status and Waits on unchanged; the lazy option was (c), keeping the entry (the user).
 - Step 2, the case files (2026-10-15): (a), (a). Question 1: four case drafts, the full case set in one discipline and one short draft for each other register holding only that register's cases, each as a `.tex` with an `\input` file and as a `.docx`, so step 3 runs `/writing` 8 times on the cases; the Gate of roadmap entry 3 is rewritten through `/roadmap`, whose diff is a stop of its own for the user's approval. Question 2: the case files are committed in this folder's `cases/` with their real characters and the `.docx`, the character-set check in `docs/dev/building.md`, `docs/dev/change-standard.md` and the state file's verify list skips the files under `.scratch/*/cases/` and `.scratch/archive/*/cases/`, and the session copies `cases/` from the worktree to main at landing; the lazy options were (c) and (c) (the user).
 - Step 2, the brief check (2026-10-15): (a), (a). Question 1: the builder writes the case files in a scratch folder outside both repositories that the brief names and touches only its report in the ledger; before `land.sh` runs, the session copies them into `.scratch/3-the-writing-base/cases/` on main, and the landing commit names each case file; no rule changes. Question 2: the clean rows of the rules judged on a whole draft (semicolons, binary contrast, varied paragraph length, no repeated construction, no five same-length sentences, no mirror structure, and "Objectivity / Limitations and alternative interpretations") stand in the three short drafts, which gain clean rows and no break; the lazy options were (c) and (c) (the user).
+- Step 3, the tag and the scratch folder (2026-10-15): (a), (a). Question 1: tag `v8.1.0-rc.1` on 225e210 and pin it with `utils/pin.sh v8.1.0-rc.1`, so `/writing` runs from the pinned copy, the final tag left to the closing; the lazy option was (c), running nothing. Question 2: the builder's scratch folder `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/ordo-3-2-cases` is deleted, the committed `cases/` replacing it; the lazy option was (b), keeping it (the user).
 
 ## Agents
 
@@ -76,7 +77,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 3: the tag and the pin that make `/writing` invocable, a decision the user owes when step 3 is due.
+- none.
 
 ### Step 1, the writing base (landed 2026-10-15)
 
