@@ -18,4 +18,4 @@ Status: proposed
 
 ## Consequences
 
-Each review costs four agent runs and one script run. Counts no longer depend on an agent's reading. Every rule added to the three pages must be given to one of the four agents. The script needs its own tests, since a wrong count is a wrong finding.
+Each review costs four agent runs and one script run. Counts no longer depend on an agent's reading. Every rule added to the three pages must be given to one of the four agents. The script is listed on `docs/dev/scripts.md` as a user script.

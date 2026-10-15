@@ -68,6 +68,7 @@ Independent of each other; the standing rule of one agent at a time still serial
   - Goal: "`/writing` has one fresh agent that changes nothing read a whole draft:" becomes "`/writing` measures a whole draft with a script, and four fresh agents that change nothing review it, one for the rules a sentence can break, one for the rules of each section, one for the rules that span the draft, and one that removes each finding the draft does not hold:".
   - Gate: the part from "known cases written before the run" to "the user reads its report for false alarms only;" becomes "`/writing` runs once on `research-hub/funding/2026-nwo-enw-xs/submission/Application-form-ENW-XS-26-3-LS.docx`, the user reads its report and finds it useful, and the run's agents total at most 300,000 tokens, read from their completion notices;".
   - Gate: "each run's transcript shows the review made by one fresh agent that edits no file." becomes "the run's transcripts show the review made by fresh agents that edit no file.".
+- Step 4, the session's verdict (2026-10-15): the user's words "I also need to know your viewpoint/idea of whether this version passes or not". With the NWO report the session gives its own verdict, pass or fail, worked from reading: each finding read against the application and the rule it names, whether the application holds the break; the application read against the section and whole-draft rules, each break the report misses named; and the four agents' token sum against 300,000. The user's reading of the report decides the Gate. (the user)
 
 ## Agents
 
@@ -83,27 +84,30 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a9e170623ba28cc36: builder of step 2, claude-sonnet-5-5
 - a1d4edc40c77a9221: reviewer of step 2, claude-opus-5-5
 - a7a8c86524ffc2678: reviewer of step 2 over round 1, claude-sonnet-5-5
-- a1e9698a397d678f3: /writing review agent of step 3 on the engineering .tex, claude-opus-5-5
-- a73d92751943d4fbf: /writing review agent of step 3 on the engineering .docx, claude-opus-5-5
-- a312a7fbbc04aa1fa: /writing review agent of step 3 on the medicine .tex, claude-opus-5-5
-- af7307205dfd95a1c: /writing review agent of step 3 on the medicine .docx, claude-opus-5-5
-- a77cd3d2e2044f130: /writing review agent of step 3 on the sciences .tex, claude-opus-5-5
-- a00c480376f117436: /writing review agent of step 3 on the sciences .docx, claude-opus-5-5
-- ab1f0ed86fe59e6fb: /writing review agent of step 3 on the social .tex, claude-opus-5-5
-- a0b65a0508268b7a0: /writing review agent of step 3 on the social .docx, claude-opus-5-5
-- a7f4fe964415a39bd: /writing review agent of step 3 on the NWO XS .docx, claude-opus-5-5
 - acaa4055895146282: brief check of step 3, claude-opus-5-5
 - a2772a0b72fc9ee89: builder of step 3, claude-sonnet-5-5
 - a57bba76c73b503b3: reviewer of step 3, claude-opus-5-5
-- a67813b9887927643: /writing review agent of step 3, second run, on the engineering .tex, claude-opus-5-5
-- a690fc021f40c3aa1: /writing review agent of step 3, second run, on the engineering .docx, claude-opus-5-5
-- a51a4e81641351e24: /writing review agent of step 3, second run, on the medicine .tex, claude-opus-5-5
-- ad202f6b86359e3d2: /writing review agent of step 3, second run, on the medicine .docx, claude-opus-5-5
-- a3f7e7427fe01e4d2: /writing review agent of step 3, second run, on the sciences .tex, claude-opus-5-5
-- a5237796b250abb4e: /writing review agent of step 3, second run, on the sciences .docx, claude-opus-5-5
-- a751cde6b2a6041ff: /writing review agent of step 3, second run, on the social .tex, claude-opus-5-5
-- a3850563e0de9aa84: /writing review agent of step 3, second run, on the social .docx, claude-opus-5-5
-- ac0c8308fb418781e: /writing review agent of step 3, second run, on the NWO XS .docx, claude-opus-5-5
+
+Agents in no role the cost script prices:
+
+1. a1e9698a397d678f3: /writing review agent of step 3 on the engineering .tex, claude-opus-5-5
+2. a73d92751943d4fbf: /writing review agent of step 3 on the engineering .docx, claude-opus-5-5
+3. a312a7fbbc04aa1fa: /writing review agent of step 3 on the medicine .tex, claude-opus-5-5
+4. af7307205dfd95a1c: /writing review agent of step 3 on the medicine .docx, claude-opus-5-5
+5. a77cd3d2e2044f130: /writing review agent of step 3 on the sciences .tex, claude-opus-5-5
+6. a00c480376f117436: /writing review agent of step 3 on the sciences .docx, claude-opus-5-5
+7. ab1f0ed86fe59e6fb: /writing review agent of step 3 on the social .tex, claude-opus-5-5
+8. a0b65a0508268b7a0: /writing review agent of step 3 on the social .docx, claude-opus-5-5
+9. a7f4fe964415a39bd: /writing review agent of step 3 on the NWO XS .docx, claude-opus-5-5
+10. a67813b9887927643: /writing review agent of step 3, second run, on the engineering .tex, claude-opus-5-5
+11. a690fc021f40c3aa1: /writing review agent of step 3, second run, on the engineering .docx, claude-opus-5-5
+12. a51a4e81641351e24: /writing review agent of step 3, second run, on the medicine .tex, claude-opus-5-5
+13. ad202f6b86359e3d2: /writing review agent of step 3, second run, on the medicine .docx, claude-opus-5-5
+14. a3f7e7427fe01e4d2: /writing review agent of step 3, second run, on the sciences .tex, claude-opus-5-5
+15. a5237796b250abb4e: /writing review agent of step 3, second run, on the sciences .docx, claude-opus-5-5
+16. a751cde6b2a6041ff: /writing review agent of step 3, second run, on the social .tex, claude-opus-5-5
+17. a3850563e0de9aa84: /writing review agent of step 3, second run, on the social .docx, claude-opus-5-5
+18. ac0c8308fb418781e: /writing review agent of step 3, second run, on the NWO XS .docx, claude-opus-5-5
 
 ## Blocked, and by what
 
