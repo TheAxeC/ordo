@@ -210,3 +210,128 @@ None.
 - Whether the bare "writing" trigger fires on drafting requests in practice. That needs a session test, which I did not run.
 
 Reviewer usage: a5914ed9e26f92be4, claude-opus-5-5, 325975 tokens, 77 tool uses, 14m 58s.
+
+## Repair round 1, refuted
+
+```
+$ sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
+PASS: sync_rules.py scratch tests
+$ sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+PASS: check_config.py scratch tests
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh utils/pin.test.sh 2>&1 | tail -1
+PASS: pin.sh scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary; echo "exit $?"
+ok: the plan-terms block equals the template
+exit 0
+$ printf '%s\0' <the 21 paths of the brief> | xargs -0 perl -CSD -ne '...'; echo "exit $?"
+exit 0          (printed nothing before the exit line)
+$ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research; echo "exit $?"
+ok: docs/academic-coverage.md
+exit 0
+$ python3 -c 'import yaml; print(len(yaml.safe_load(open("skills/writing/SKILL.md").read().split("---")[1])["description"]))'
+593
+$ python3 skills/ordo-init/templates/check_config.py . | tail -1 | cut -c1-120
+ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists
+$ LC_ALL=C grep -c '[^ -~]' skills/writing/SKILL.md skills/writing/references/rules.md skills/writing/references/registers.md skills/writing/templates/docx_paragraphs.py
+skills/writing/SKILL.md:0   skills/writing/references/rules.md:0   skills/writing/references/registers.md:0   skills/writing/templates/docx_paragraphs.py:0
+
+Round delta ("diff -u <snapshot>/<path> <worktree>/<path>" for the 21 paths of files.txt): README.md (1 line), skills/writing/SKILL.md (description line, prompt introduction), skills/writing/references/rules.md (6 hunks). No other tracked path differs; "git status --short" lists the same 17 modified paths plus skills/writing/ as files.txt.
+$ wc -l skills/writing/SKILL.md skills/writing/references/rules.md README.md
+     127 skills/writing/SKILL.md
+     220 skills/writing/references/rules.md
+     194 README.md          (the counts the report's "Repair round 1" gives)
+
+Report's evidence, rerun (python3 -I, from the worktree root):
+NWO XS grant: | wc -l  -> 55 ; | LC_ALL=C grep -c '[^ -~]' -> 0 ; line 3 od -c -> "3: Duration of the project (in months): 12" with one space before "12" ; diff against the report's "cat nwo.out" block -> identical (samenwo)
+no argument -> "usage: docx_paragraphs.py <file.docx>", exit 2
+README.md -> "error: README.md: not a zip file", exit 1
+/nonexistent.docx -> "error: /nonexistent.docx: No such file or directory", exit 1
+builder's grant-cut.docx -> "error: .../grant-cut.docx: word/document.xml: not well-formed XML (no element found: line 2, column 19943)", exit 1
+First page of thesis_070519.docx -> 36 lines; "| sort | uniq -d" prints nothing; my own ElementTree count of w:p with own text: {'Choice': 28, 'Fallback': 28, 'else': 8}  (28 + 8 = 36)
+HexC -> 202 lines ; veni -> last line "243 [word/footnotes.xml]:  To avoid gender effects, please do not state your first name." ; main_MVH2_AF2 -> 367 lines
+Place lines of the three records (inline python -I, every "  place <file>:<n>: <text>" line of the report, lines 960 to 1873, against line <n> of its file, plan.md and the two ADRs included): places 245, bad 2; the two are "place briefs/1.md:71" and "place briefs/1.md:144", partial quotes of lines 71 and 144 of the brief, which I read. The rows that name SKILL.md:87 (writing_quality_check.md:5 and :7) hold: line 87 of SKILL.md is "- Judge the text by the rules only, and state nothing on how or by whom it was written."
+$ grep -n 'version' skills/repo-setup/SKILL.md skills/plan/SKILL.md skills/writing/SKILL.md
+5:  version: "5.2.0" / 5:  version: "5.0.1" / 5:  version: "1.0.0"
+```
+
+### Verdicts
+
+Items (whole diff since 724bde5):
+
+1. `skills/writing/SKILL.md`: holds. The prompt introduction (line 76) names the two bullets by what they say, and the flagged-term bullet (line 96) is not among them. "writing" is gone from `Triggers on:`.
+2. `skills/writing/references/rules.md`: holds for the five rulings 1 to 5 as worded; see Findings Spec A for the one sentence the ruling does not name.
+3. `skills/writing/references/registers.md`: holds (unchanged in the round).
+4. `skills/writing/templates/docx_paragraphs.py`: holds (unchanged; the runs above).
+5. Section C of the prose standard: holds (line 39 only, file still 75 lines).
+6. Term **finding**, **effort agent**, **reviewer**, glossary line 3, `repo-setup` 5.2.0: holds (`sync_rules.py` ok, version 5.2.0).
+7. The records: holds. All 243 place lines that name a file stand at the line they give, and the two rows with `SKILL.md:86` now name `:87`. The report has two stale statements, under Findings Proof A and B.
+8. The coverage rows: holds (`check_coverage.py` ok).
+9. The agents and the configuration comments: holds (line 3 and line 6 of `agents/ordo-high.md` read; `check_config.py` ok; `plan` 5.0.1).
+10. The lists: holds. The README `for skill in` line ends `spec writing`, and the `scripts.md` row is present.
+
+Round rulings against the text now in the files:
+
+- Ruling 1 (`rules.md:17`): holds. The text is "A pronoun such as "this" or "it" has a clear antecedent." and no distance remains.
+- Ruling 2 (`rules.md:33`): holds. The text is "The text acknowledges the limitations of the study and the alternative interpretations of its results."
+- Ruling 3 (`rules.md:47` to `55`): holds with the note under Spec A. The table is kept and introduced as the hedging scale. "Hedge where a claim is uncertain" (line 57) and "No hedge on facts" (line 66) are unchanged.
+- Ruling 4 (`rules.md:157`, `:159`): holds. The first sentence is "At any point the reader can answer four questions." and question 1 reads "The section structure and signposting answer it." The record row for `writing_judgment_framework.md:19` quotes the new line 159, and its place line stands there.
+- Ruling 5 (`rules.md:172`): holds. The text is "Shows rigor and acknowledges limitations upfront."
+- Ruling 6: holds, as the place-line compare above shows.
+- Ruling 7: partial, see Proof A. The thesis case is stated as met (report line 563 and Repair round 1, "Proof 2"), and my count reproduces 28, 28 and 8.
+- Ruling 8: holds. The intro names the `.tex`/`.md`/`.txt` bullet and the `.docx` bullet, and says every other bullet is always in the prompt.
+- Ruling 9: holds. The description is 593 characters.
+- Ruling 10: holds. `README.md:77` reads "The plan skills, `grill` and `writing` launch their agents through five agent definitions", which matches line 3 and line 6 of the five definitions.
+
+Cases:
+
+- `ls skills/writing`: met.
+- NWO XS grant, whole output: met (55 lines, identical to the report's block, no `[word/` line).
+- No argument: met.
+- `README.md`: met.
+- Nonexistent path: met.
+- HexC proposal: met (202 lines; the report's quoted lines read in the earlier pass).
+- `main_MVH2_AF2.docx`: met.
+- Thesis title page: met. Each `w:p` is printed once (36 lines, no duplicate line).
+- Veni pre-proposal: met.
+- NWO XS specifics: met.
+- Malformed XML: met, run on the builder's existing copy read only.
+- Section C: met.
+- `plan-terms.md`, `docs/glossary.md`, `sync_rules.py`: met.
+- `SKILL.md` against the skill layout: met (frontmatter, then the nine `##` sections in order: Quick start, Use instead, What it reads, Steps, Review agent prompt, Stops, Anti-patterns, Rules, plus the title).
+- Each of the three records against its source: met (place lines verified; completeness counts 152, 42 and 131 are the builder's, not rerun by me; see Declined).
+- `SKILL.md` Steps and the prompt against D1, D6, D16, D29 and D30: met.
+- `rules.md` against the prose standard and `registers.md` against D11, D18 and D22: met.
+- Coverage rows 76, 100 and 101: met.
+- README row and `for` line, `scripts.md` row, agents, four comments, glossary line 3, versions: met.
+
+### Findings
+
+**Proof A** (Proof). Place: `.scratch/3-the-writing-base/agents/reviews/1-report.md:11`. Quoted: "No case showed a rule of the brief to be wrong; the one wording that can be misread is named at the end of this report under "Anything in the brief that was wrong or impossible"."
+- What is wrong: ruling 7 says the report says "nowhere that a case of the brief was wrong". The sentence still tells the reader a wording of the brief can be misread and that the end of the report names it. The section it points to (lines 1989 to 1993) names none: item 1 is about `orchestrator-state.md` line 14, item 2 is about lines item 7 omitted, and item 3 says "Nothing in the brief was impossible." The claim is not reproduced by the report.
+- Failure scenario: the orchestrator reads the first section, goes to the named section for the misreadable wording, finds none, and has to work out whether a case is still disputed. That is the same reading the round was meant to end.
+- Closure verdict: ruling 7 partial.
+
+**Proof B** (Proof). Place: report lines 193 and 205. Quoted: line 193 "...the description-length command printed 602; the character-set grep printed 0 for the file" and line 205 "| Verify 3 (description length) | DONE | printed 602 | same |".
+- What is wrong: after ruling 9 the description is 593 characters. The report's own run (line 226) and my rerun print 593, and Repair round 1 says "593; 602 before the round". The DONE table, which the report's opening says is the output "as printed", still quotes 602.
+- Failure scenario: a reader checking the DONE table against the final tree finds 593 and cannot tell which statement of the report is the current one.
+
+**Spec A** (Spec, small). Place: `skills/writing/references/rules.md:47` to `49`. Before: "A claim carries the hedge its evidence supports. A weak device fits a claim the evidence only suggests. A moderate device fits a trend the data show. A strong device fits a link the evidence establishes." Now: "The hedging scale has three strengths, each with its devices."
+- What is wrong: ruling 3 says "delete the three sentences that tie a strength to a level of evidence". The round deleted four, and the report's Spec 3 entry neither says the first one went as well nor gives the reason. The first sentence is the same unsourced evidence-to-hedge rule, so deleting it ends the cause of the finding; but it is a deletion the ruling's count does not state, and it is undisclosed.
+- Failure scenario: none for the agent's reports. The orchestrator reading the ruling against the diff finds one more deleted sentence than the ruling names and cannot tell whether it was meant.
+
+### Declined to judge
+
+- The builder's completeness counts (152, 42 and 131 non-blank source lines, each with a block). I compared place lines against their files and read the rows the round changed, but did not recount the blocks. The first refuter report does the count at the same numbers, and no row was added or removed in the round, except the second place of the `academic_writing_style.md:19` row, which the report says it dropped (245 place lines now against 246 in the first refuter's compare).
+- Whether `rules.md` "Hedging / Hedge strength", now a heading over a table with no rule sentence, gives the review agent anything to report. Ruling 3 prescribes that form, so I take it as the ruling's result, not as a defect of the round.
+- Whether a pre-existing `skills/writing/templates/__pycache__/` directory (listed by `git status --short --ignored` as ignored) matters. It is ignored by git and not part of any cherry-pick.
+- Whether the report's "Repair round 1 / Proof 2" sentence that the later section "no longer lists the case" is acceptable as a description of end state. It is accurate about the end state and I raised no finding.
+- The builder's first run on the unchanged tree (needs a checkout at 724bde5, a git command outside the three allowed).
+
+Reviewer usage: aa07e2ce319421fca, claude-sonnet-5-5, 163294 tokens, 30 tool uses, 3m 50s.
+
+## Closed
+
+- Proof A: fixed at landing. The report's line 11 is rewritten on main to say that no case showed a rule of the brief to be wrong, with no pointer to a misreadable wording.
+- Proof B: fixed at landing. The report's lines 193 and 205 quote 593, the description length the final tree prints.
+- Spec A: closed with no change. The fourth deleted sentence, "A claim carries the hedge its evidence supports.", ties a strength to a level of evidence as the other three do, so it is inside ruling 3's reason, a judgment of content D22 says `/writing` does not make. Its deletion is named here and in the booking.
+

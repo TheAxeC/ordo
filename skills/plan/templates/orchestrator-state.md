@@ -11,7 +11,7 @@ worktree_root: <path>        # where a step's worktree is created, relative to t
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default for who builds a step: agent (a builder dispatched in the worktree), inline (the orchestrating session writes the step itself), academic-paper (the step is built through that skill). Chosen per step by the orchestrator and recorded in the dispatch block; a step of manuscript content is always academic-paper.
 worker: claude:<model>       # the default worker is claude:opus; a builder never runs on Fable.
-reviewer: claude:<model>     # the model the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on: claude:opus by default; a reviewer never runs on Fable.
+reviewer: claude:<model>     # the model the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill and the review agent of /writing run on: claude:opus by default; a reviewer never runs on Fable.
 libraries: check|avoid       # the project's library policy from plan.yaml: check, /spec looks for libraries before a brief; avoid, no new dependency.
 review: every                # every, or earned: under the loop, the reviewer runs unless the worker's record earns the skip (plan-orchestration, "The review, earned"); a small text step is always reviewed once.
 refute_after_repair: yes     # yes: /refute runs again over each repair round, its findings fixed at landing or raised as open items, never sent back; no: the orchestrator's read of the round stands in.
@@ -23,7 +23,7 @@ adr: docs/adr                # the ADR folder: grill writes the decision records
 design_bar: industry         # what grill's options are held to: industry, state-of-the-art or novel.
 design_references: []        # the published standards a design is held to, such as WCAG 2.2 AA.
 worker_effort: high          # the effort a builder runs at: low, medium, high, xhigh or max.
-reviewer_effort: high        # the effort a reviewer, a brief-check agent, a diagnosis agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
+reviewer_effort: high        # the effort a reviewer, a brief-check agent, a diagnosis agent, a lookup agent of /grill and the review agent of /writing run at: low, medium, high, xhigh or max.
 self_rule: off               # on: the plan runs under self-rule; off: every open item waits for the user.
 next_entry: off              # copied from .agents/plan.yaml; after the closing, next-entry mode reads .agents/plan.yaml itself, as plan-orchestration's references/self-rule.md, "Next-entry mode", says.
 repair_reviewer: claude:<model>  # the model the run of /refute over a repair round runs on, at reviewer_effort; the reviewer value when plan.yaml leaves it out.

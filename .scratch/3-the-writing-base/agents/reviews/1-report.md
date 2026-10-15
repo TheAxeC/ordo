@@ -8,7 +8,7 @@ Everything in the brief is done.
 
 ## The cases' first run
 
-Every run below is on the unchanged tree: the worktree at its base, `724bde5`, before any file was changed. A text case was read from the base with `git show HEAD:<path>`. Scratch files are in `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/wb1.ASxi06`, outside both repositories. A command that ends in `cut -c1-N` shows the first N characters of each line, and every other output is whole. No case showed a rule of the brief to be wrong; the one wording that can be misread is named at the end of this report under "Anything in the brief that was wrong or impossible".
+Every run below is on the unchanged tree: the worktree at its base, `724bde5`, before any file was changed. A text case was read from the base with `git show HEAD:<path>`. Scratch files are in `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/wb1.ASxi06`, outside both repositories. A command that ends in `cut -c1-N` shows the first N characters of each line, and every other output is whole. No case showed a rule of the brief to be wrong.
 
 ### Case: ls skills/writing
 
@@ -182,7 +182,7 @@ Result: no `writing` row, no `writing` in the `for` line, no script row, the age
 
 ### Cases the brief's rules got wrong
 
-One case wording, in "Cases": "The same script on `First page of thesis_070519.docx`: each text box's paragraphs printed once, and no paragraph printed twice". The rule as worded does not hold of the file: the file holds a Dutch and an English title page, and several lines are the same on both pages (KU Leuven, Jury:, the two title lines, the author's name, March 2023), so the output prints some lines twice because the file has them twice. The part of the case that holds is "each text box's paragraphs printed once", which the counts in "The cases after the change" prove (for example "Dante Mantini": 4 in the raw XML, 2 in the output). The run of the script on the file is in that section. No other case's wording was wrong: the other cases ran as worded. The orchestrator's ruling on this wording is not given in the brief, and none is needed to proceed, since the script's behaviour is the one the brief states in "What to build" item 4.
+None.
 
 ## DONE / NOT DONE
 
@@ -190,7 +190,7 @@ Everything in the table is DONE; nothing in the brief is NOT DONE. The output of
 
 | Item | State | Check | Output in |
 |---|---|---|---|
-| 1. `skills/writing/SKILL.md` | DONE | `ls -R skills/writing`; `grep -n '^#' skills/writing/SKILL.md` (frontmatter, then the title and the nine sections of the layout in order, the one reference section being "Review agent prompt"); the description-length command printed 602; the character-set grep printed 0 for the file | "The checks of the brief's Verify list" |
+| 1. `skills/writing/SKILL.md` | DONE | `ls -R skills/writing`; `grep -n '^#' skills/writing/SKILL.md` (frontmatter, then the title and the nine sections of the layout in order, the one reference section being "Review agent prompt"); the description-length command printed 593; the character-set grep printed 0 for the file | "The checks of the brief's Verify list" |
 | 2. `skills/writing/references/rules.md` | DONE | `grep -n '^## '` for the groups; the second and third records for its rows; the character-set grep printed 0 | "The checks of the brief's Verify list", "The three records" |
 | 3. `skills/writing/references/registers.md` | DONE | `grep -n '^## '` for the four registers; the first and second records for its rows; the character-set grep printed 0 | same |
 | 4. `skills/writing/templates/docx_paragraphs.py` | DONE | the runs of every case, the numbering check, the head-comment table; the character-set grep printed 0 | "The cases after the change", "Change standard rule 14" |
@@ -202,7 +202,7 @@ Everything in the table is DONE; nothing in the brief is NOT DONE. The output of
 | 10. The lists | DONE | `git diff -U0` of `README.md` (table row, `for skill` line, line 77) and `docs/dev/scripts.md`; the tree-versus-table comparison of scripts printed no difference | "Items 5, 6, 8, 9 and 10", "Change standard rule 14" |
 | Verify 1 (the five checks) | DONE | the five commands; the character-set check printed nothing, exit 0 | "The checks of the brief's Verify list" |
 | Verify 2 (coverage) | DONE | `check_coverage.py`, exit 0 | same |
-| Verify 3 (description length) | DONE | printed 602 | same |
+| Verify 3 (description length) | DONE | printed 593 | same |
 | Verify 4 (the docx cases) | DONE | every case, run on the changed tree | "The cases after the change" |
 | Verify 5 (list items and sentences) | DONE | the word count and the named departures | "Verify 5" |
 ### The checks of the brief's Verify list, run on the final tree
@@ -223,7 +223,7 @@ $ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/work
 ok: docs/academic-coverage.md
 exit 0
 $ python3 -c 'import yaml; print(len(yaml.safe_load(open("skills/writing/SKILL.md").read().split("---")[1])["description"]))'
-602
+593
 $ python3 skills/ordo-init/templates/check_config.py . | tail -1 | cut -c1-120
 ok: .agents/plan.yaml carries every required key, no unknown key, and every page it names exists
 $ ls -R skills/writing
@@ -236,7 +236,11 @@ registers.md
 rules.md
 
 skills/writing/templates:
+__pycache__
 docx_paragraphs.py
+
+skills/writing/templates/__pycache__:
+docx_paragraphs.cpython-313.pyc
 $ sed -n 1,6p skills/writing/SKILL.md | cut -c1-70
 ---
 name: writing
@@ -281,6 +285,7 @@ $ wc -l skills/writing/SKILL.md skills/writing/references/rules.md skills/writin
      139 skills/writing/templates/docx_paragraphs.py
      563 total
 ```
+
 ## The cases after the change (Verify 4)
 
 Each run below is on the changed tree. Output is quoted whole as printed except where a line is stated to be an excerpt. The script's output files and the cut-short copies are in the session's scratch folder `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/wb1.ASxi06`, outside both repositories.
@@ -555,7 +560,7 @@ $ python3 skills/writing/templates/docx_paragraphs.py "First page of thesis_0705
 exit 0
 ```
 
-"No paragraph printed twice" cannot hold as the brief words it, because the file holds a Dutch and an English title page that repeat lines of their own (KU Leuven, Jury:, the two title lines, the author's name, March 2023). The count of each name in the raw XML against the output shows the Choice and Fallback copies are not both printed:
+The case is met as worded: each `w:p` of the file is printed once. The paragraphs with text of `word/document.xml`, counted by an inline `python3 -I -` run that counts a `w:p`'s own text (text outside a `w:p` nested in it) by the branch the paragraph stands in, are 28 under `mc:Choice`, the same 28 under `mc:Fallback`, and 8 elsewhere; the output has 36 lines, which is the 28 under `mc:Choice` plus the 8 elsewhere. The lines the output repeats (KU Leuven, Jury:, the two title lines, the author's name, March 2023) are distinct paragraphs of the Dutch and the English title page. The count of each name in the raw XML against the output shows the `mc:Fallback` copies are not printed:
 
 ```
 Dante Mantini: raw 4, output 2
@@ -608,6 +613,8 @@ $ git status --short
  M skills/repo-setup/templates/docs/dev/prose-standard.md
  M skills/repo-setup/templates/docs/glossary.md
  M skills/repo-setup/templates/plan-terms.md
+?? .scratch/3-the-writing-base/agents/briefs/1-round-1.md
+?? .scratch/3-the-writing-base/agents/reviews/1-refuter.md
 ?? .scratch/3-the-writing-base/agents/reviews/1-report.md
 ?? skills/writing/
 $ git diff --numstat
@@ -641,14 +648,14 @@ index 995062c..72a98cf 100644
 -reviewer: claude:opus                     # claude:<model> the first run of /refute, the brief check, the diagnosis agent and the lookups of /grill run on.
 +reviewer: claude:opus                     # claude:<model> the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill and the review agent of /writing run on.
 diff --git a/README.md b/README.md
-index 7309172..79259ed 100644
+index 7309172..90f66a4 100644
 --- a/README.md
 +++ b/README.md
 @@ -25,0 +26 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 +| `writing` | Reviews the prose of a draft with one fresh agent that changes nothing: a `.tex` file with its input files, a `.md`, a `.txt` or a `.docx`. It reports each break of a named rule with its place, the quoted passage and what the rule asks for, grouped by rule, and proposes no replacement |
 @@ -76 +77 @@ The skills call each other and read each other's templates, so install all of th
 -The plan skills launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
-+The plan skills and `writing` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
++The plan skills, `grill` and `writing` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
 @@ -103 +104 @@ for dir in ~/.claude/skills; do
 -    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec; do
 +    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec writing; do
@@ -910,9 +917,9 @@ The pages read are `docs/dev/skill-layout.md` "Lists and tables" (one rule per b
 
 The 26, each with the reason it keeps its form:
 
-- `SKILL.md` line 3 (three sentences, 30, 32 and 36 words): the frontmatter description is one paragraph by the layout, and says what the skill does, what it produces and the trigger phrases; the 36-word one is the list of trigger phrases, which the layout asks for in full.
+- `SKILL.md` line 3 (three sentences, 30, 32 and 35 words): the frontmatter description is one paragraph by the layout, and says what the skill does, what it produces and the trigger phrases; the 35-word one is the list of trigger phrases, which the layout asks for in full.
 - `SKILL.md` Steps 4, 5, 6 and 7 and their sub-bullets (lines 60, 63, 64, 66, 67, 69 and 70; 21 to 28 words): each is one action with its parameters (an agent name, a key, a path list) or a completion criterion that names two states, and a split would separate a parameter from the action it belongs to.
-- `SKILL.md` line 76, the introduction of the prompt (27 words): it states which bullets the prompt is made of and the choice between the two bullets that begin "For a".
+- `SKILL.md` line 76, the introduction of the prompt (the second sentence, 33 words): it names the two bullets the session chooses between, by what they say.
 - `SKILL.md` prompt bullets (lines 83, 84, 86, 91, 92, 93, 96, 97, 100 and 101; 22 to 33 words): each states one rule with its condition or qualifier in the same bullet, as the layout says. Lines 83 and 84 are the two fixed command lists of the ruling D1 (the only commands the agent may run), line 92 is the three parts a finding gives, line 93 lists the three forms of a place, and line 96 and line 100 each add the one qualifier D30 and D29 give to their rule.
 - `SKILL.md` Stops rows (lines 115 and 116; 22 and 28 words): the "When" cells state a condition with its alternatives, each a cell as the layout allows.
 - `SKILL.md` line 127, the one Rules bullet (24 words): one rule with the reason that fixes it, in one clause.
@@ -970,7 +977,7 @@ source academic_writing_style.md:8: - Use the most specific term available
 source academic_writing_style.md:9: - Define technical terms on first use
   place rules.md:13: A technical term is defined where it first appears.
 source academic_writing_style.md:10: - Avoid ambiguous pronouns ("this," "it") without clear antecedents
-  place rules.md:17: A pronoun such as "this" or "it" has one clear antecedent in its own sentence or the sentence before. A paragraph that opens with a pronoun that has no antecedent falls under the prose standard, section E, "Cold opens".
+  place rules.md:17: A pronoun such as "this" or "it" has a clear antecedent. A paragraph that opens with a pronoun that has no antecedent falls under the prose standard, section E, "Cold opens".
 source academic_writing_style.md:12: ### 2. Conciseness
   place: none
   note: heading
@@ -991,11 +998,10 @@ source academic_writing_style.md:17: ### 3. Objectivity
 source academic_writing_style.md:18: - Base claims on evidence, not opinion
   place rules.md:29: A claim rests on evidence, not on opinion.
 source academic_writing_style.md:19: - Use hedging for uncertain claims
-  place rules.md:49: A claim carries the hedge its evidence supports. A weak device fits a claim the evidence only suggests. A moderate device fits a trend the data show. A strong device fits a link the evidence establishes.
   place rules.md:59: A claim of one of these four sorts is hedged:
-  note: the hedging scale and the four sorts of claim that are hedged
+  note: the four sorts of claim that are hedged; the hedging scale is the table at lines 51 to 55
 source academic_writing_style.md:20: - Acknowledge limitations and alternative interpretations
-  place rules.md:33: A passage that draws a conclusion acknowledges the limitations of the study and the alternative interpretations of the result.
+  place rules.md:33: The text acknowledges the limitations of the study and the alternative interpretations of its results.
 source academic_writing_style.md:22: ### 4. Formality
   place: none
   note: heading
@@ -1405,9 +1411,9 @@ source writing_judgment_framework.md:15: ## The Reader's Journey
   place: none
   note: heading
 source writing_judgment_framework.md:17: Academic writing is a guided tour. At any point, the reader should be able to answer:
-  place rules.md:157: At any point the reader can answer four questions, each from the section structure and the transitions. A sentence that announces what the page is about to do falls under the prose standard, section C.
+  place rules.md:157: At any point the reader can answer four questions. A sentence that announces what the page is about to do falls under the prose standard, section C.
 source writing_judgment_framework.md:19: 1. **Where am I?** (Section structure, signposting)
-  place rules.md:159: 1. Where am I? The section structure answers it.
+  place rules.md:159: 1. Where am I? The section structure and signposting answer it.
 source writing_judgment_framework.md:20: 2. **Why am I here?** (Connection to the research question)
   place rules.md:160: 2. Why am I here? The connection to the research question answers it.
 source writing_judgment_framework.md:21: 3. **What should I take away?** (The point of this section)
@@ -1415,7 +1421,7 @@ source writing_judgment_framework.md:21: 3. **What should I take away?** (The po
 source writing_judgment_framework.md:22: 4. **Where am I going next?** (Transition logic)
   place rules.md:162: 4. Where am I going next? The transition logic answers it.
 source writing_judgment_framework.md:24: If ANY of these is unclear, the writing needs revision <em dash> regardless of how accurate the content is.
-  place rules.md:157: At any point the reader can answer four questions, each from the section structure and the transitions. A sentence that announces what the page is about to do falls under the prose standard, section C.
+  place rules.md:157: At any point the reader can answer four questions. A sentence that announces what the page is about to do falls under the prose standard, section C.
   note: an unclear question is a break the review reports under "Reader's path / Reader's four questions"
 source writing_judgment_framework.md:26: ## Discipline-Specific Voice
   place: none
@@ -1463,7 +1469,7 @@ source writing_judgment_framework.md:42: | Introduction | Why should I care abou
 source writing_judgment_framework.md:43: | Literature Review | What's missing from what we know? | Build to the gap, don't just summarize |
   place rules.md:171: | Literature review | What is missing from what we know? | Builds to the gap and does more than summarize. |
 source writing_judgment_framework.md:44: | Methodology | Can I trust these results? | Show rigor, acknowledge limitations upfront |
-  place rules.md:172: | Methodology | Can I trust these results? | Shows rigor and acknowledges limitations at the start. |
+  place rules.md:172: | Methodology | Can I trust these results? | Shows rigor and acknowledges limitations upfront. |
 source writing_judgment_framework.md:45: | Results | What did you actually find? | Lead with the finding, not the statistical test |
   place rules.md:173: | Results | What did you actually find? | Leads with the result, not the statistical test. |
 source writing_judgment_framework.md:46: | Discussion | What does this mean for the field? | Connect back to the gap; state the delta clearly |
@@ -1509,10 +1515,10 @@ source writing_quality_check.md:3: ## Purpose
   place: none
   note: heading
 source writing_quality_check.md:5: A set of writing quality rules extracted from common patterns in AI-generated text. These are **good writing rules** that apply regardless of whether the text was AI-generated or human-written. The goal is better prose, not detection evasion.
-  place SKILL.md:86: - Judge the text by the rules only, and state nothing on how or by whom it was written.
+  place SKILL.md:87: - Judge the text by the rules only, and state nothing on how or by whom it was written.
   note: the purpose: the prompt judges the text by the rules only
 source writing_quality_check.md:7: > **Design boundary**: This checklist improves writing quality. It is NOT a humanizer. We do not aim to fool AI detectors. We aim to produce clear, precise, varied academic prose.
-  place SKILL.md:86: - Judge the text by the rules only, and state nothing on how or by whom it was written.
+  place SKILL.md:87: - Judge the text by the rules only, and state nothing on how or by whom it was written.
   note: the design boundary: the prompt asks for no statement on how or by whom the text was written
 source writing_quality_check.md:9: Reference this checklist during the self-review step of drafting (draft_writer_agent Step 2.7, report_compiler_agent final check).
   place: none
@@ -1955,11 +1961,11 @@ Each is the state the files are in now, with the reason.
 3. The files of a `.tex` draft are listed depth-first in the order the commands stand, a file listed once, a name resolved against the main file's folder with `.tex` added to a name without an extension, and a command after an unescaped `%` not followed (Steps 3). The brief fixes the `\input` and `\include` commands and the main file first; the rest is chosen so that the order is reproducible.
 4. Two prompt bullets order the groups: the prose standard, then `references/rules.md`, then `references/registers.md`, and a passage that breaks two rules stands in the first group of that order with its finding naming the other rule on a line of its own (brief judgment call 2).
 5. The agent definitions (five files) say "Ordo's skills launch" in line 6 where they said "Ordo's plan skills launch", and name the diagnosis agent and the `grill` lookup agent beside the review agent of `writing`: the sentence now lists the six kinds of agent the five definitions are launched for, and the diagnosis agent and the lookup agent were already launched as `ordo-<reviewer_effort>` (the **effort agent** entry names them).
-6. `skills/plan/templates/orchestrator-state.md` line 14 names the review agent of `writing` as line 26 does: the line lists the same agents, so it changes with line 26 (change standard rule 14). The brief's item 9 names only line 26. `README.md` line 77 says "The plan skills and `writing` launch their agents": the sentence says who launches the five definitions, so it changes with the definitions (rule 14).
+6. `skills/plan/templates/orchestrator-state.md` line 14 names the review agent of `writing` as line 26 does: the line lists the same agents, so it changes with line 26 (change standard rule 14). The brief's item 9 names only line 26. `README.md` line 77 says "The plan skills, `grill` and `writing` launch their agents": the sentence says who launches the five definitions, so it changes with the definitions (rule 14).
 7. `docx_paragraphs.py` catches `OSError` on opening, so a path that does not exist or is a directory gives one `error:` line with the operating system's reason and exit 1, like the other errors (the brief lists the missing path as exit 1). It tests emptiness with `strip(" ")`, the literal space, so a paragraph of only spaces is not printed and a paragraph holding another whitespace character, such as a non-breaking space, still is.
 8. `registers.md` opens with the rule that where a register line and its voice rule differ on the pronoun, the voice rule holds, and that a venue's author guidelines hold over a voice rule when the project names the venue (D18's last clause). The Sciences register line is "formal, impersonal and focused on the method" with the pronoun rule in the Voice section.
 9. The Medicine and Health reader line is "adherence to reporting guidelines", and the rule the review applies to it is that a methods or results section names the reporting guideline the paper follows; whether the paper meets the guideline is a check of content this review does not make (D22).
-10. `rules.md`: the hedge-strength rule maps each of the three strengths to the evidence it fits (weak: evidence only suggests; moderate: the data show a trend; strong: the evidence establishes a link). The flagged-term "why" column is reworded where the source said "often" (a vague qualifier in the prose standard section A) and "Cliche" is written without its accent. The alternatives "landscape" (under tapestry), "significant" (under pivotal) and "comprehensive" (under holistic) are dropped from the table because the prose standard flags those words. The example reads "350 degrees Celsius" where the source has "350" followed by the degree sign and "C", since the files are ASCII. "findings" is written "results" in the tense table and the so-what rows (the glossary gives "finding" its senses).
+10. `rules.md`: the hedging scale is the table of three strengths with their devices and examples. The flagged-term "why" column is reworded where the source said "often" (a vague qualifier in the prose standard section A) and "Cliche" is written without its accent. The alternatives "landscape" (under tapestry), "significant" (under pivotal) and "comprehensive" (under holistic) are dropped from the table because the prose standard flags those words. The example reads "350 degrees Celsius" where the source has "350" followed by the degree sign and "C", since the files are ASCII. "findings" is written "results" in the tense table and the so-what rows (the glossary gives "finding" its senses).
 11. `SKILL.md` "Use instead" names `paper` and `grant`, which do not exist until roadmap entries 5 and 8, so the rows point at skills not yet installed; the brief's item 1 states the three rows.
 12. The coverage rows 76, 100 and 101 are worded to name `rules.md` and `registers.md` for what they hold, the rulings D11, D18, D23 for what they leave out, `paper` at entry 5 and `rebuttal` for what goes there. Row 101 says "every em dash" in place of "over three dashes".
 13. "Stated in" of **finding**: the entry carries one list that names `writing`, "Review agent prompt" after the three existing sources, with the `/writing` sense in a sentence introduced by "Also, for `/writing`". The **effort agent** entry names the `writing` Steps 4 and 5, and **reviewer** names Steps 5.
@@ -1971,7 +1977,7 @@ Each is the state the files are in now, with the reason.
 Each pair is the `-` and `+` line of the diff above (`git diff -U0`).
 
 - A new skill `writing`. Before: `ls skills` listed `diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec`. After: it lists `writing` as well, with `SKILL.md`, `references/rules.md`, `references/registers.md` and `templates/docx_paragraphs.py`. `/writing <file>` starts one fresh agent that reads a `.tex` file with its `\input` and `\include` files, a `.md`, a `.txt` or a `.docx`, and shows the agent's report as the message that ends the turn.
-- `README.md`: the skills table gains the `writing` row (line 26), the `for skill in` copy loop gains `writing` (line 104, after `spec`), and line 77 reads "The plan skills and `writing` launch their agents through five agent definitions" where it read "The plan skills launch their agents through five agent definitions".
+- `README.md`: the skills table gains the `writing` row (line 26), the `for skill in` copy loop gains `writing` (line 104, after `spec`), and line 77 reads "The plan skills, `grill` and `writing` launch their agents through five agent definitions" where it read "The plan skills launch their agents through five agent definitions".
 - `docs/dev/scripts.md`: the "User scripts" table gains the row for `skills/writing/templates/docx_paragraphs.py`.
 - `agents/ordo-{low,medium,high,xhigh,max}.md` lines 3 and 6: line 3 reads "The plan skills launch it by name for a builder, a reviewer, a brief-check agent or a diagnosis agent, `grill` for a lookup agent and `writing` for its review agent; it is never chosen for other work." where it read "...for a builder, a reviewer or a brief-check agent; ..."; line 6 reads "You are an agent that Ordo's skills launch: a builder, a reviewer, a brief-check agent, a diagnosis agent, a lookup agent of `grill` or the review agent of `writing`." where it read "...Ordo's plan skills launch: a builder, a reviewer or a brief-check agent." An installed copy of the definitions shows the new description to Claude Code once it is copied again.
 - Comments: `skills/plan/templates/plan.yaml` lines 12 and 27, `skills/plan/templates/orchestrator-state.md` lines 14 and 26 and `.agents/plan.yaml` line 10 name the review agent of `/writing` among the agents the `reviewer` and `reviewer_effort` keys cover. No key, default or value changes.
@@ -1982,7 +1988,169 @@ Each pair is the `-` and `+` line of the diff above (`git diff -U0`).
 
 ## Anything in the brief that was wrong or impossible
 
-1. The thesis case wording "no paragraph printed twice" cannot hold of that file (see "Cases the brief's rules got wrong"); the evidence is the raw and output counts in "The cases after the change".
-2. Item 9 names `skills/plan/templates/orchestrator-state.md` line 26 only. Line 14 of the same file lists the agents the `reviewer` key covers and is carried with it (judgment call 6).
-3. Item 7 names the parts of the three sources that are left out and held elsewhere, and omits some lines the records have to cover: `writing_quality_check.md` line 9 ("Reference this checklist during the self-review step of drafting (draft_writer_agent Step 2.7, report_compiler_agent final check)"), which names agents Ordo does not have, and the lines that carry a rationale ("Why") and no rule. They appear in the record with `place: none` and the reason in the note.
-4. Nothing in the brief was impossible. No case needed a hand-back to the orchestrator.
+1. Item 9 names `skills/plan/templates/orchestrator-state.md` line 26 only. Line 14 of the same file lists the agents the `reviewer` key covers and is carried with it (judgment call 6).
+2. Item 7 names the parts of the three sources that are left out and held elsewhere, and omits some lines the records have to cover: `writing_quality_check.md` line 9 ("Reference this checklist during the self-review step of drafting (draft_writer_agent Step 2.7, report_compiler_agent final check)"), which names agents Ordo does not have, and the lines that carry a rationale ("Why") and no rule. They appear in the record with `place: none` and the reason in the note.
+3. Nothing in the brief was impossible. No case needed a hand-back to the orchestrator.
+
+## Repair round 1
+
+The round closes the ten findings of `agents/reviews/1-refuter.md` as `agents/briefs/1-round-1.md` rules each. The files changed in the round are `skills/writing/references/rules.md`, `skills/writing/SKILL.md` and `README.md`; the line count of each is unchanged (220, 127 and 194), so no line of any file moved. Each "Before" is the text before the round, each "After" the text now, read from the file.
+
+### Spec 1: Pronoun with a clear antecedent (`rules.md:17`)
+
+Before: A pronoun such as "this" or "it" has one clear antecedent in its own sentence or the sentence before. A paragraph that opens with a pronoun that has no antecedent falls under the prose standard, section E, "Cold opens".
+
+After:
+
+```
+A pronoun such as "this" or "it" has a clear antecedent. A paragraph that opens with a pronoun that has no antecedent falls under the prose standard, section E, "Cold opens".
+```
+
+### Spec 2: Limitations and alternative interpretations (`rules.md:33`)
+
+Before: A passage that draws a conclusion acknowledges the limitations of the study and the alternative interpretations of the result.
+
+After:
+
+```
+The text acknowledges the limitations of the study and the alternative interpretations of its results.
+```
+
+### Spec 3: Hedge strength (`rules.md:49`, the table at lines 51 to 55 kept)
+
+Before: A claim carries the hedge its evidence supports. A weak device fits a claim the evidence only suggests. A moderate device fits a trend the data show. A strong device fits a link the evidence establishes.
+
+After:
+
+```
+### Hedge strength
+
+The hedging scale has three strengths, each with its devices.
+
+| Strength | Hedging devices | Example |
+|---|---|---|
+| Weak | may, might, could, possibly | "This may suggest a correlation." |
+| Moderate | suggests, indicates, appears | "The data suggest a positive trend." |
+| Strong | demonstrates, establishes, confirms | "The evidence demonstrates a clear link." |
+```
+
+"Hedge where a claim is uncertain" (line 57) and "No hedge on facts" (line 66) are unchanged.
+
+### Spec 4: Reader's four questions (`rules.md:157` and `rules.md:159`)
+
+Before: At any point the reader can answer four questions, each from the section structure and the transitions. A sentence that announces what the page is about to do falls under the prose standard, section C. And: 1. Where am I? The section structure answers it.
+
+After:
+
+```
+At any point the reader can answer four questions. A sentence that announces what the page is about to do falls under the prose standard, section C.
+1. Where am I? The section structure and signposting answer it.
+```
+
+The record row for `writing_judgment_framework.md:19` quotes the new line 159 (listed below).
+
+### Spec 5: So what per section, Methodology row (`rules.md:172`)
+
+Before: | Methodology | Can I trust these results? | Shows rigor and acknowledges limitations at the start. |
+
+After:
+
+```
+| Methodology | Can I trust these results? | Shows rigor and acknowledges limitations upfront. |
+```
+
+### Proof 1: the place lines of the records
+
+All three records were rechecked after the edits of the round: every `  place <file>:<line>: <text>` line of the report was compared with that line of its file (the text of the place line must stand in the line of the file). The two rows that named `SKILL.md:86` (`writing_quality_check.md:5` and `:7`) now name `SKILL.md:87`, where the quoted bullet stands. No other place line names a line that moved, since no line of any file moved. The place lines whose quoted text changed with the edits are refreshed from the files. The comparison, run inline and printed:
+
+```
+place lines 245, not found in their line 0
+```
+
+Record rows whose place line changed in the round (the new line and the quoted text as the report now holds them):
+
+```
+source academic_writing_style.md:10: - Avoid ambiguous pronouns ("this," "it") without clear antecedents
+  place rules.md:17: A pronoun such as "this" or "it" has a clear antecedent. A paragraph that opens with a pronoun that has no antecedent falls under the prose standard, section E, "Cold opens".
+source academic_writing_style.md:20: - Acknowledge limitations and alternative interpretations
+  place rules.md:33: The text acknowledges the limitations of the study and the alternative interpretations of its results.
+source writing_judgment_framework.md:17: Academic writing is a guided tour. At any point, the reader should be able to answer:
+  place rules.md:157: At any point the reader can answer four questions. A sentence that announces what the page is about to do falls under the prose standard, section C.
+source writing_judgment_framework.md:19: 1. **Where am I?** (Section structure, signposting)
+  place rules.md:159: 1. Where am I? The section structure and signposting answer it.
+source writing_judgment_framework.md:24: If ANY of these is unclear, the writing needs revision <em dash> regardless of how accurate the content is.
+  place rules.md:157: At any point the reader can answer four questions. A sentence that announces what the page is about to do falls under the prose standard, section C.
+source writing_judgment_framework.md:44: | Methodology | Can I trust these results? | Show rigor, acknowledge limitations upfront |
+  place rules.md:172: | Methodology | Can I trust these results? | Shows rigor and acknowledges limitations upfront. |
+source writing_quality_check.md:5: A set of writing quality rules extracted from common patterns in AI-generated text. These are **good writing rules** that apply regardless of whether the text was AI-generated or human-written. The goal is better prose, not detection evasion.
+  place SKILL.md:87: - Judge the text by the rules only, and state nothing on how or by whom it was written.
+source writing_quality_check.md:7: > **Design boundary**: This checklist improves writing quality. It is NOT a humanizer. We do not aim to fool AI detectors. We aim to produce clear, precise, varied academic prose.
+  place SKILL.md:87: - Judge the text by the rules only, and state nothing on how or by whom it was written.
+```
+
+The row for `academic_writing_style.md:19` names `rules.md:59` only: line 49 no longer states that a claim carries a hedge, and line 59 states that a claim of one of four sorts is hedged. Its note names the table at lines 51 to 55 for the scale.
+
+### Proof 2: the thesis case
+
+The case is met as worded. The report states that in "Case: First page of thesis_070519.docx, whole output" (28 paragraphs with text under `mc:Choice`, the same 28 under `mc:Fallback`, 8 elsewhere; 36 printed lines), the section "Cases the brief's rules got wrong" says "None.", and "Anything in the brief that was wrong or impossible" no longer lists the case. The count, run again:
+
+```
+{'elsewhere': 8, 'mc:Choice': 28, 'mc:Fallback': 28}
+$ python3 skills/writing/templates/docx_paragraphs.py "First page of thesis_070519.docx" | wc -l
+36
+```
+
+### Standards 1: the prompt's introduction (`SKILL.md:76`)
+
+Before: The prompt is these bullets with each `<...>` filled in, and with the one of the two bullets that begin "For a" which fits the draft's extension.
+
+After:
+
+```
+The prompt is these bullets with each `<...>` filled in. The session keeps one of two bullets by the draft's extension: the bullet on the commands for a `.tex`, `.md` or `.txt` draft, or the bullet on the commands for a `.docx` draft. Every other bullet is always in the prompt.
+```
+
+The bullets that begin "For a" are three; the introduction names the two between which the session chooses by what they say:
+
+```
+$ grep -n '^- For a ' skills/writing/SKILL.md | cut -c1-90
+83:- For a `.tex`, `.md` or `.txt` draft, run only `LC_ALL=C grep -n '[^ -~]' <file>`, onc
+84:- For a `.docx` draft, run only `python3 <docx_paragraphs.py> <draft>`, which prints th
+96:- For a flagged term of the prose standard's section A, what the rule asks for is the m
+```
+
+### Standards 2: the trigger phrases (`SKILL.md:3`)
+
+Before: ... Triggers on: writing, /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text.
+
+After:
+
+```
+Triggers on: /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text."
+```
+
+The description's length is printed in the checks above (593; 602 before the round).
+
+### Standards 3: README Install (`README.md:77`)
+
+Before: The plan skills and `writing` launch their agents through five agent definitions, ...
+
+After:
+
+```
+The plan skills, `grill` and `writing` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, whi
+```
+
+### The brief's Verify list, run again after the round
+
+The sections "The checks of the brief's Verify list, run on the final tree" and "Items 5, 6, 8, 9 and 10" above are the output of the run after the round, as printed. The docx cases, rerun after the round with the script unchanged:
+
+```
+$ python3 skills/writing/templates/docx_paragraphs.py <NWO XS grant> | cmp - nwo.out && echo same; ... | wc -l
+same
+55
+$ python3 skills/writing/templates/docx_paragraphs.py README.md; echo "exit $?"
+exit 1
+$ python3 skills/writing/templates/docx_paragraphs.py <veni>.docx | tail -1
+243 [word/footnotes.xml]:  To avoid gender effects, please do not state your first name.
+```
