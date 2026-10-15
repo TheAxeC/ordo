@@ -41,7 +41,16 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
-- none.
+- Step 2, the case files (2026-10-15). Two parts of step 2's line cannot be done as written. Both answers change your gate or a verify command, so they are yours.
+  - Question 1, the registers. `/writing` applies only the register of the draft's discipline (`skills/writing/SKILL.md` line 89). A case draft has one discipline, so one draft can test only 4 of the 16 register rules. Example: a passage where the authors call themselves "the authors" breaks the Voice rule of Medicine and Health only in a medical draft; in an engineering draft the review must not apply that register.
+    - (a), recommended: four case drafts instead of one. The full case set in one discipline, plus one short draft for each other register that holds only that register's cases, each as a `.tex` with an `\input` file and as a `.docx`. Every register rule gets its break and its clean passage. Step 3 runs `/writing` 8 times on the cases instead of 2. Needs the Gate of roadmap entry 3 and the lines of steps 2 and 3 rewritten; the roadmap diff comes to you for approval.
+    - (b): the `.tex` in one discipline and the `.docx` in another. 8 of the 16 register rules tested. The gate stays as it is.
+    - (c): one discipline for both. 4 of the 16 tested. The lazy option.
+  - Question 2, where the case files are kept. The verify list's character-set check reads every tracked file and fails on any byte outside ASCII. It exits 1 on a `.docx` (run on the NWO XS `.docx`), and the cases for the em dash rule and the straight-quotes rule must hold those characters. Also, a builder writes only its report in the ledger, and `land.sh` never carries another ledger file from the worktree to main, so case files the builder writes into this folder would not land.
+    - (a), recommended: the case files go in `.scratch/3-the-writing-base/cases/`, committed with their real characters and the `.docx`. The character-set check in `docs/dev/building.md`, `docs/dev/change-standard.md` and the state file's verify list skips files under a ledger's `cases/` folder (`.scratch/*/cases/` and `.scratch/archive/*/cases/`). At landing the session copies `cases/` from the worktree to main, as it copies the builder's report. This changes a verify command.
+    - (b): everything committed stays ASCII. The `.tex` cases spell the dash as ` -- ` and break the ASCII rule with `->` in prose, and the `.docx` is made at step 3 from a committed `.html` that writes the characters as codes such as `&#8212;` (tried: `textutil -convert docx` turns it into a real em dash, and `docx_paragraphs.py` prints it). The session copies `cases/` at landing. No check changes, but the `.tex` run never sees a real non-ASCII character.
+    - (c): the case files kept outside git. Nothing of the cases is recorded. The lazy option.
+  - Recommendation: (a), (a). Answer with `Ruled: (a), (a)` or your own choice per question.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -67,7 +76,6 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-15. Step 1, the writing base, is landed on main and ticked in `plan.md`, with its booking and its landing report `agents/reviews/1-landing.md`.
-- Verified: `land.sh` on main printed `checks: 6 commands passed` and exited 0.
-- Next step: 2, the known cases, through `/spec 3 2`, with a builder other than step 1's.
-- Open on Axel's side: none until step 3, which needs his ruling on a tag and a pin before `/writing` runs.
+- 2026-10-15. Step 1 is landed (6105b48). Step 2, the known cases, is stopped before its brief: the open item "Step 2, the case files" waits for Axel's ruling.
+- Next step: 2, through `/spec 3 2` once the ruling is booked.
+- Open on Axel's side: "Step 2, the case files"; later, the tag and the pin for step 3.
