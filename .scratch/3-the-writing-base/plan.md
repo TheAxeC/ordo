@@ -73,6 +73,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Step 4, the session's verdict (2026-10-15): the user's words "I also need to know your viewpoint/idea of whether this version passes or not". With the NWO report the session gives its own verdict, pass or fail, worked from reading: each finding read against the application and the rule it names, whether the application holds the break; the application read against the section and whole-draft rules, each break the report misses named; and the four agents' token sum against 300,000. The user's reading of the report decides the Gate. (the user)
 - Step 4, the register rules (2026-10-15): finding Spec 2 of `agents/reviews/4-refuter.md`; the finding agents keep the register rules of all four registers in their lists and apply the register of the draft's discipline, and the checking agent keeps a register finding only under that register (fixed at the landing of step 4); choice C68 of `.scratch/choices.md`. (self-rule)
 - Step 4, the four changes (2026-10-15): the user's words "do those four changes now here in line, and then do the evaluation again", given to the session's four proposed changes to `/writing` after the first NWO run: the agents read what each part of the draft is and who reads it, and no finding is kept that would make a part worse for its reader; the report puts the findings that leave the reader wrong or unsure first ("Fix first") and the style findings after; a break found in several places, or in a translation of another passage, stands as one finding; and a long sentence is reported only where its length makes it hard to follow. Carried inline in `skills/writing/SKILL.md` and ADR 0013, then tag `v8.1.0-rc.4` and its pin, then one more `/writing` run on the NWO XS application. On the token cap the user's words are "who the fuck cares about 20k tokens", so the 300,000 cap is not used to fail a run that exceeds it by that much. (the user)
+- Step 4, the reading of the second run (2026-10-16): the user's word "Agreed", given to the session's recommendation "Leave the skill as it is, and go to step 5, the closing" after the second `/writing` run on the NWO XS application on `v8.1.0-rc.4`. The user reads the report as useful, so the Gate's reading holds and the closing (step 5) runs, its roadmap diff and its final tag and pin each brought to the user for approval; no option was the lazy one, since the session found no defect in the skill for a fix to end (the user).
 
 ## Agents
 
@@ -115,6 +116,15 @@ Agents in no role the cost script prices:
 16. a751cde6b2a6041ff: /writing review agent of step 3, second run, on the social .tex, claude-opus-5-5
 17. a3850563e0de9aa84: /writing review agent of step 3, second run, on the social .docx, claude-opus-5-5
 18. ac0c8308fb418781e: /writing review agent of step 3, second run, on the NWO XS .docx, claude-opus-5-5
+19. a9a1c1fa9645918e8: /writing sentence agent of step 4, first run on `v8.1.0-rc.3`, on the NWO XS .docx, claude-opus-5-5
+20. a73b977360419dca6: /writing section agent of step 4, first run, on the NWO XS .docx, claude-opus-5-5
+21. a5080f6e8d5412877: /writing whole-draft agent of step 4, first run, on the NWO XS .docx, claude-opus-5-5
+22. a8fa37bc35d38061c: /writing checking agent of step 4, first run, on the NWO XS .docx, claude-opus-5-5
+23. a6b9cba644cf622ac: /writing sentence agent of step 4, second run on `v8.1.0-rc.4`, on the NWO XS .docx, claude-opus-5-5
+24. a025fc805b9ab0c38: /writing section agent of step 4, second run, stopped before its first reply because its prompt held a shortened copy of the facts, no served model recorded
+25. a8133d5ff20449d8a: /writing section agent of step 4, second run, started in place of a025fc805b9ab0c38, claude-opus-5-5
+26. ad8b7ac9c020d549a: /writing whole-draft agent of step 4, second run, on the NWO XS .docx, claude-opus-5-5
+27. a681654ad3be2db5c: /writing checking agent of step 4, second run, on the NWO XS .docx, claude-opus-5-5
 
 ## Blocked, and by what
 

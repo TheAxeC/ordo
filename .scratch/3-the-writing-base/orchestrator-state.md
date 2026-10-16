@@ -71,8 +71,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-15. Steps 1, 2 and 4 are landed; step 3 stays unticked, its check replaced by step 4's under the ruling "Step 3, the second run". Step 4 landed `skills/writing/templates/prose_facts.py` and the rewritten `skills/writing/SKILL.md` (a script, then three finding agents and a checking agent), and deleted `.scratch/3-the-writing-base/cases/`.
-- Verified: `checks.sh` on main printed `checks: 6 commands passed` after the fixes at landing.
-- Entry 3's Goal and Gate in `docs/roadmap.md` were rewritten in d1165b2 after the user's approval.
-- Next: tag `v8.1.0-rc.3` on the landing commit and its pin, as the ruling "Step 3, the second run" says; then `/writing` once on the NWO XS application, its report shown whole with the four agents' tokens and the session's verdict, for the user's reading ("useful" or "noise"); then step 5, the closing, or the noise ending of that ruling.
-- Open on Axel's side: his reading of the second NWO run of `/writing` after the four changes.
+- 2026-10-16. Roadmap entry 3 (The writing base). Plan step 5 of 5: the closing. Next: the roadmap diff of `/roadmap done 3`, for the user's approval.
+- Steps 1, 2 and 4 are landed; step 3 stays unticked, its check replaced by step 4's under the ruling "Step 3, the second run". The user read the second NWO run of `/writing` on `v8.1.0-rc.4` as useful (ruling "Step 4, the reading of the second run").
+- The closing report `agents/reviews/closing.md` holds the cost script's output, which exited 0.
+- Open on Axel's side: the roadmap diff of entry 3, then the final tag and its pin.
