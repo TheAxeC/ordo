@@ -21,3 +21,4 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0011](0011-each-plan-keeps-its-own-dispatch-block-read-across-plans.md) | Each plan keeps its own dispatch block, read across plans |
 | [0012](0012-every-commit-on-main-names-its-paths.md) | Every commit on main names its paths |
 | [0013](0013-a-script-and-four-fresh-read-only-agents-review-a-draft.md) | A script and four fresh read-only agents review a draft |
+| [0014](0014-a-finding-agent-and-a-checking-agent-review-a-diff-s-comments-and-a-rewrite-is-kept-only-when-the-comment-stripped-files-compare-equal.md) | A finding agent and a checking agent review a diff's comments, and a rewrite is kept only when the comment-stripped files compare equal |

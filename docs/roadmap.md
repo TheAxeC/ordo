@@ -20,10 +20,10 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 ## 4. code-comments
 
-- Status: [ ] (drafted again, from its sources, before it is opened)
-- Goal: A skill that checks and rewrites the comments of a diff: what the code does and why, no history, no step numbers, ASCII only.
-- Gate: one real run on a real diff that you review.
-- Waits on: 3, for the checks.
+- Status: [ ]
+- Goal: A `code-comments` skill that reviews the comments a git diff adds or changes, by default the uncommitted changes against `HEAD`, otherwise a range `<base>..<head>`. A comment says what the code does and why, is true of the code beneath it, serves a purpose for its reader rather than restating what the code plainly shows, carries no history and no step numbers, is ASCII only, and follows sections 0, A, B, C and E of the prose standard, read where the repository keeps it. A fresh agent that changes nothing reports the findings and a fresh checking agent keeps those that hold, in one report with the false comments first; the user says which findings to apply, a fresh agent rewrites those comments in the working tree and commits nothing, and `templates/strip_comments.py` compares each rewritten C, C++ or CMake file with its version before the rewrite and puts back a file that differs in more than its comments.
+- Gate: `/code-comments` runs once on the range `a0aa831^..a0aa831` in a scratch clone of `game-engine` at `a0aa831`, the user reads its report and finds it useful, and the run's transcripts show the review made by fresh agents that edit no file; the findings the user picks are rewritten, and `python3 skills/code-comments/templates/strip_comments.py --compare <before> <after>` prints `equal` for each rewritten file; `sh skills/code-comments/templates/strip_comments.test.sh` exits 0; the skill follows `docs/dev/skill-layout.md`, checked by reading it.
+- Waits on: 3, for the prose rules.
 
 ## 9. literature
 
