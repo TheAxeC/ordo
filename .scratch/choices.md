@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C100
+Last number: C101
 
 # Entry 2.I Several plans in one session
 
@@ -650,3 +650,14 @@ Taken: (a)
 Booked: `.scratch/9-literature/plan.md:83` (Open item A)
 Builds on it: step 1, step 2, step 3
 
+## C101. The `projects:` form of `.agents/plan.yaml` in the literature skill (2026-10-18)
+
+The builder of step 1 refused the `projects:` form of `.agents/plan.yaml` (its report, judgment call 12), reading a project name as part of the topic. research-hub's `.agents/plan.yaml` has that form, with the one project `oculus`, so the gate run of step 2 stops there at "No plan configuration", and Steps 17 hands `/writing` no project, which `/writing` refuses as "Unknown project". The reviewer (`.scratch/9-literature/agents/reviews/1-refuter.md`, Spec, the first finding) found it; D30 gives the three call forms and says nothing on the form.
+  - Option (a), recommended: in the `projects:` form the first argument of the call names the project whose keys are read, before the mode and the topic, as `/writing` and `/code-comments` read it; a name no project has is the refusal "Unknown project", which lists the projects; Steps 17 passes the project to `/writing`. Pro: the skill runs in research-hub, and the call reads as every other Ordo skill's call does in that form. Con: one more argument in that form.
+  - Option (b): keep the refusal, and run the gate in ordo with an absolute `--bib` and an `--out` outside research-hub. Pro: no change to the call forms. Con: the skill cannot run in the repository it is for.
+  - Rule: `skills/writing/SKILL.md` and `skills/code-comments/SKILL.md`, "What it reads" 1.
+  - Recommendation: (a). The lazy option is (b).
+
+Taken: (a)
+Booked: `.scratch/9-literature/plan.md:97` (The `projects:` form in `/literature`)
+Builds on it: step 1, step 2
