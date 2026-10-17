@@ -45,9 +45,11 @@ dispatch:               # or the block /spec writes (a list when .agents/plan.ya
   launched: 2026-10-17
   session_id: a506da4c91c7ab7a8 (claude-sonnet-5-5)
   report: .scratch/4-code-comments/agents/reviews/1-report.md
+  builder_usage: "first run 137104 tokens, 18 tool uses, 3m 51s; resumed run 255446 tokens, 37 tool uses, 13m 26s"
   brief_check: .scratch/4-code-comments/agents/reviews/1-brief-check.md (a0c9f327f17f5773c, claude-opus-5-5, 237377 tokens, 45 tool uses, 13m 6s)
+  reviewer_report: .scratch/4-code-comments/agents/reviews/1-refuter.md (a1303ca1b092c3c67, claude-opus-5-5, 230654 tokens, 48 tool uses, 14m 15s)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -85,5 +87,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - Step 1: the brief is written and checked by agent a0c9f327f17f5773c (`agents/reviews/1-brief-check.md`), every finding closed in the brief but one, raised as open item A and ruled (a); no brief, worktree or dispatch entry stands.
 - Step 1 is building: builder a506da4c91c7ab7a8 (claude-sonnet-5-5) in `.agents/worktrees/4-code-comments-1` from base b107561.
 - The builder handed back at its first run of the cases, before any code: open item B, ruled (a); the builder is resumed with that ruling.
-- Next step: 1, `/refute 4 1` when the builder reports.
+- Step 1 reviewed (`agents/reviews/1-refuter.md`); repair round 1 sent (`agents/briefs/1-round-1.md`), 14 rulings.
+- Next step: 1, `/refute 4 1` over round 1 when the builder reports, then `/land 4 1`.
 - Open on Axel's side: none.
