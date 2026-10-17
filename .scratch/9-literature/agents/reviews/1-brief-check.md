@@ -283,3 +283,6 @@ The step stopped on open item D ("A step that does not converge"), so the brief 
 - 7, 0015: choice 1; the scan's writer as above; each reference file names the file its agent writes.
 - 7, 0016 `curl`: choice 2. 0016 abstract-only: choice 4.
 - 8, line 89's "slug": as the first line of this section.
+- The `/spec 9 1` run after the ruling on open item D wrote the brief with each change above, and with open item D's seven answers in items 4 to 9, 13 and 14, the cases T5 to T7, C8, C11 to C17 and "Paths this step writes".
+- A dictated line added after the check, "The full text is fetched by `lookup.py fetch` into a temporary folder" (`grep -n -F 'fetched by `lookup.py fetch` into a temporary folder' agents/briefs/1.md`): holds; ASCII, one plain sentence, the words open item D's choice 2 rules.
+- The dictated labels added after the check, "issues", "two revisions", "the folder named after the topic", "no identifier", "no passage", "no text" and "not found" (`grep -n -F -e '"issues"' -e '"no passage"' agents/briefs/1.md`): hold; none is a term of `docs/glossary.md` (`grep -n -E '^- \*\*(issue|revision|passage)' docs/glossary.md` prints nothing), and each is a plain label under the prose standard's "0. Hard rules".

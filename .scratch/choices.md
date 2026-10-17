@@ -368,7 +368,7 @@ The goal names "search through Crossref, OpenAlex, Semantic Scholar and arXiv". 
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:44` (D2 The four indexes of the goal)
+Booked: `.scratch/9-literature/plan.md:53` (D2 The four indexes of the goal)
 Builds on it: none
 
 ## C73. Source verification in the goal (2026-10-17)
@@ -380,7 +380,7 @@ The goal names "source verification". Coverage row 196 takes the verifier: a tit
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:45` (D3 Source verification in the goal)
+Booked: `.scratch/9-literature/plan.md:54` (D3 Source verification in the goal)
 Builds on it: none
 
 ## C74. Synthesis in the goal (2026-10-17)
@@ -392,7 +392,7 @@ The goal names "synthesis". Coverage rows 197 and 231 take the source-by-theme m
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:46` (D4 Synthesis in the goal)
+Booked: `.scratch/9-literature/plan.md:55` (D4 Synthesis in the goal)
 Builds on it: none
 
 ## C75. The `.bib` in the goal (2026-10-17)
@@ -404,7 +404,7 @@ The goal names "the `.bib`". The hub's manuscripts cite from a `.bib` beside the
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:47` (D5 The `.bib` in the goal)
+Booked: `.scratch/9-literature/plan.md:56` (D5 The `.bib` in the goal)
 Builds on it: none
 
 ## C76. The gate's check that every cited source resolves (2026-10-17)
@@ -416,7 +416,7 @@ The gate says "every source it cites resolves".
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:48` (D6 The gate's check that every cited source resolves)
+Booked: `.scratch/9-literature/plan.md:57` (D6 The gate's check that every cited source resolves)
 Builds on it: none
 
 ## C77. The gate's reading of twenty citations drawn at random (2026-10-17)
@@ -428,7 +428,7 @@ The gate says "for a sample of twenty citations drawn at random, the cited passa
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:49` (D7 The gate's reading of twenty citations drawn at random)
+Booked: `.scratch/9-literature/plan.md:58` (D7 The gate's reading of twenty citations drawn at random)
 Builds on it: none
 
 ## C78. The gate's check that a source that cannot be accessed is reported (2026-10-17)
@@ -440,7 +440,7 @@ The gate says "a source that cannot be accessed is reported, not written around"
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:50` (D8 The gate's check that a source that cannot be accessed is reported)
+Booked: `.scratch/9-literature/plan.md:59` (D8 The gate's check that a source that cannot be accessed is reported)
 Builds on it: none
 
 ## C79. The gate's blind comparison against deep-research (2026-10-17)
@@ -452,7 +452,7 @@ The gate says "a side-by-side run against deep-research on a real topic, compare
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:51` (D9 The gate's blind comparison against deep-research)
+Booked: `.scratch/9-literature/plan.md:60` (D9 The gate's blind comparison against deep-research)
 Builds on it: none
 
 ## C80. The gate's coverage records (2026-10-17)
@@ -464,7 +464,7 @@ The gate asks for a record per `rebuild: literature` row. `grep -c 'rebuild: lit
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:52` (D10 The gate's coverage records)
+Booked: `.scratch/9-literature/plan.md:61` (D10 The gate's coverage records)
 Builds on it: none
 
 ## C81. The agents of a literature run (2026-10-17)
@@ -477,20 +477,7 @@ Coverage rows 185 to 197 take the bibliography, verification, synthesis, report,
   - Recommendation: (a). The lazy option is (c).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:53` (D14 The agents of a literature run)
-Builds on it: none
-
-## C82. How a citation is tied to its source (2026-10-17)
-
-Coverage rows 191 and 197 require a page, section or quote on each citation, and row 185 counts a source verified only once its original was read. WebFetch "runs the prompt against the content in a separate model call, and Claude receives the result of that call rather than the raw page" (https://code.claude.com/docs/en/tools-reference), and the Read tool reads PDFs.
-  - Option (a), recommended: a locator and a verbatim passage read in the run from the full text fetched with `curl`, never through WebFetch; an abstract-only source is cited only for its abstract and marked so. Pro: the twenty-citation reading of the gate can find each passage; a passage from a model's summary could be a paraphrase that is not in the source. Con: a full-text fetch and read per source.
-  - Option (b): a locator only. Pro: shorter report. Con: the reader must find the passage, and nothing shows the writer read it.
-  - Option (c): abstracts and metadata only. Pro: cheap. Con: fails coverage row 185 and the gate's reading.
-  - Industry: Ai2 Scholar QA extracts "verbatim quotes" and its code matches them as substrings of the passages (https://raw.githubusercontent.com/allenai/ai2-scholarqa-lib/main/api/scholarqa/scholar_qa.py); PaperQA2 cites page ranges of parsed full text (https://raw.githubusercontent.com/Future-House/paper-qa/main/README.md).
-  - Recommendation: (a). The lazy option is (c).
-
-Taken: (a)
-Booked: `.scratch/9-literature/plan.md:54` (D15 How a citation is tied to its source)
+Booked: `.scratch/9-literature/plan.md:62` (D14 The agents of a literature run)
 Builds on it: none
 
 ## C83. A source that cannot be accessed, and a reference that cannot be confirmed (2026-10-17)
@@ -502,7 +489,7 @@ The gate wants such a source "reported, not written around"; coverage row 196 se
   - Recommendation: (a). The lazy option is none, since both do the work; (b) costs a stop.
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:55` (D16 A source that cannot be accessed, and a reference that cannot be confirmed)
+Booked: `.scratch/9-literature/plan.md:64` (D16 A source that cannot be accessed, and a reference that cannot be confirmed)
 Builds on it: none
 
 ## C84. The report's form (2026-10-17)
@@ -515,19 +502,7 @@ The report goes to the user and to `paper`, whose manuscripts are LaTeX with a `
   - Recommendation: (a). The lazy option is (c).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:56` (D17 The report's form)
-Builds on it: none
-
-## C85. The `.bib` of a run (2026-10-17)
-
-Coverage row 166 says the user's library is "never modified", and the hub's library is the project's `.bib`.
-  - Option (a), recommended: `references.bib` beside the report with exactly the cited sources; a source the project's `.bib` holds keeps its key and entry. Pro: the report compiles alone, and keys do not clash with the manuscript's. Con: an entry can stand in both files.
-  - Option (b): only the sources the project's `.bib` lacks. Pro: no duplicates. Con: the report does not compile alone.
-  - Rule: coverage row 166.
-  - Recommendation: (a). The lazy option is (b).
-
-Taken: (a)
-Booked: `.scratch/9-literature/plan.md:57` (D18 The `.bib` of a run)
+Booked: `.scratch/9-literature/plan.md:65` (D17 The report's form)
 Builds on it: none
 
 ## C86. A stop for the user before searching (2026-10-17)
@@ -539,7 +514,7 @@ deep-research's full mode makes phase 1 interactive (`research-hub/.claude/skill
   - Recommendation: (a). The lazy option is none; (b) costs the comparison.
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:58` (D19 A stop for the user before searching)
+Booked: `.scratch/9-literature/plan.md:67` (D19 A stop for the user before searching)
 Builds on it: none
 
 ## C87. The prose check of the report (2026-10-17)
@@ -551,7 +526,7 @@ Coverage row 184 sends the writing check to `writing`; entry 3's ruling D30 says
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:59` (D20 The prose check of the report)
+Booked: `.scratch/9-literature/plan.md:68` (D20 The prose check of the report)
 Builds on it: none
 
 ## C88. Where a run writes (2026-10-17)
@@ -563,7 +538,7 @@ A run produces a report, a `.bib` and a record of what was fetched. The user wan
   - Recommendation: (a). The lazy option is none; both cost the same.
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:60` (D21 Where a run writes)
+Booked: `.scratch/9-literature/plan.md:69` (D21 Where a run writes)
 Builds on it: none
 
 ## C89. The optional second-model critique (2026-10-17)
@@ -575,7 +550,7 @@ Coverage row 186 keeps "the optional second-model critique, sent only with the u
   - Recommendation: (a). The lazy option is to leave the critique out, which row 186 does not allow.
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:61` (D22 The optional second-model critique)
+Booked: `.scratch/9-literature/plan.md:70` (D22 The optional second-model critique)
 Builds on it: none
 
 ## C91. Record the agents of a literature run as an ADR (2026-10-17)
@@ -587,7 +562,7 @@ D14 is not obvious from the code, binds `paper` and `paper-review`, which reuse 
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:63` (D25 Record the agents of a literature run (D14) as an ADR)
+Booked: `.scratch/9-literature/plan.md:72` (D25 Record the agents of a literature run (D14) as an ADR)
 Builds on it: the record `docs/adr/0015-a-literature-run-is-done-by-fresh-agents-in-turn-and-reviewed-by-a-fresh-editor-and-devil-s-advocate.md`
 
 ## C92. Record the tie between a citation and its source as an ADR (2026-10-17)
@@ -599,7 +574,7 @@ D15 binds `paper`, which cites through the same lookups (D1), and rejects WebFet
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:64` (D26 Record the tie between a citation and its source (D15) as an ADR)
+Booked: `.scratch/9-literature/plan.md:73` (D26 Record the tie between a citation and its source (D15) as an ADR)
 Builds on it: the record `docs/adr/0016-a-cited-claim-rests-on-a-verbatim-passage-read-from-the-source-in-the-same-run.md`
 
 ## C93. The roadmap diff of entry 9 (2026-10-17)
@@ -611,7 +586,7 @@ The user ruled D12: a fresh reviewer agent reads the twenty sampled citations an
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:67` (D28 The roadmap diff of entry 9)
+Booked: `.scratch/9-literature/plan.md:76` (D28 The roadmap diff of entry 9)
 Builds on it: the roadmap diff of entry 9
 
 ## C94. Record the lookup script as an ADR (2026-10-17)
@@ -623,21 +598,8 @@ The user ruled D11. The decision binds `paper`, which reuses the lookups (D1), a
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:68` (D29 Record the lookup script (D11) as an ADR)
+Booked: `.scratch/9-literature/plan.md:77` (D29 Record the lookup script (D11) as an ADR)
 Builds on it: the record `docs/adr/0017-one-standard-library-script-makes-every-reference-lookup-of-the-literature-skill.md`
-
-## C95. The call forms and modes of the literature skill (2026-10-17)
-
-Coverage row 184 gives the skill the six phases with the lit-review and three-way scan modes. deep-research's modes table (`research-hub/.claude/skills/deep-research/SKILL.md`, "Operational Modes") runs `full` with every core agent, `lit-review` with bibliography, verification and synthesis only, and `three-way-scan` as a WHY, HOW and WHAT shortlist.
-  - Option (a), recommended: `/literature <topic>` the full report, `/literature review <topic>` the lit-review, `/literature scan <topic>` the three-way scan, each with `--bib <path>` and `--out <folder>`. Pro: each mode the coverage rows take has its call, the default is the complete one, and the library is named rather than guessed. Con: three forms to document and test.
-  - Option (b): one form `/literature <topic>` that picks the mode from the request's words. Pro: one call. Con: the user cannot tell from the call which mode will run, and a wrong pick runs the wrong agents.
-  - Option (c): the full report only. Pro: one form. Con: coverage row 184's lit-review and three-way scan go unbuilt.
-  - Industry: deep-research names each mode in its call (its "Operational Modes" table); STORM's README sets its stages by flags such as `do_polish_article` (https://raw.githubusercontent.com/stanford-oval/storm/main/README.md).
-  - Recommendation: (a). The lazy option is (c).
-
-Taken: (a)
-Booked: `.scratch/9-literature/plan.md:70` (D30 The call forms and modes of the literature skill)
-Builds on it: none
 
 ## C96. The model and effort of a literature run's agents (2026-10-17)
 
@@ -649,7 +611,7 @@ The user ruled that `code-comments`' rewrite agent runs on `reviewer` at `review
   - Recommendation: (a). The lazy option is none, since each option costs the same to build; (c) costs least to run.
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:71` (D31 The model and effort of a literature run's agents)
+Booked: `.scratch/9-literature/plan.md:80` (D31 The model and effort of a literature run's agents)
 Builds on it: none
 
 ## C97. The gate's topic and mode, replacing D23 (2026-10-17)
@@ -661,7 +623,7 @@ D23 compared the full report against deep-research's `lit-review` mode, which ru
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:72` (D32 The gate's topic and mode, replacing D23)
+Booked: `.scratch/9-literature/plan.md:81` (D32 The gate's topic and mode, replacing D23)
 Builds on it: none
 
 ## C98. The roadmap diff of entry 9 for D30 to D32 (2026-10-17)
@@ -673,7 +635,7 @@ The gate names "a side-by-side run against deep-research on a real topic"; D30 t
   - Recommendation: (a). The lazy option is none; (a) does the work the rules ask.
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:73` (D33 The roadmap diff of entry 9 for D30 to D32)
+Booked: `.scratch/9-literature/plan.md:82` (D33 The roadmap diff of entry 9 for D30 to D32)
 Builds on it: none
 
 ## C99. The step list of plan 9 as drafted (2026-10-17)
@@ -685,17 +647,6 @@ Builds on it: none
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/9-literature/plan.md:74` (Open item A)
+Booked: `.scratch/9-literature/plan.md:83` (Open item A)
 Builds on it: step 1, step 2, step 3
 
-## C100. Where a cited passage stands in the report, and how the lookup commands find a cited source (2026-10-17)
-
-D15 ties each cited claim to a verbatim passage and a locator, D17 writes citations as `[@key, <locator>]`, and D11's `quote-check <report> <folder>` and `check-urls <report>` must find each cited passage and each cited source, which no ruling places.
-  - (a) Where a passage stands: under each paragraph that cites, one blockquote line per citation of that paragraph, `> [@<key>, <locator>]: "<passage>"`, the passage on one line as it stands in its source's text. How the commands find a source: `check-urls <report>` and `quote-check <report> <folder>` read the `references.bib` beside the report (D21's folder) and take each cited key's `doi`, `eprint` or `url`; `fetch <id> <folder>` writes the full text as `<folder>/<id>.pdf` or `<folder>/<id>.html` and its text as `<folder>/<id>.txt` (by `pdftotext`, or with the HTML tags removed), each `/` and `:` of the id written `_`, and `quote-check` looks a key's passage up in that `.txt`. Pro: the reader sees each passage under the claim it supports; each line is found by one pattern whatever the passage holds; the commands keep D11's arguments. Con: a report with many citations grows by one line per citation.
-  - (b) Where a passage stands: a section "Passages" at the end, one numbered item per citation, and the citation in the text `[@<key>, <locator>; passage <n>]`; the commands as in (a). Pro: the body reads without quotes. Con: the reader turns to the end for every claim, and a renumbering breaks every link.
-  - (c) Where a passage stands: inside the citation, `[@<key>, <locator>, "<passage>"]`. Pro: one place per citation. Con: a passage holding `]` or `;` breaks the citation, and long passages make sentences unreadable.
-  - Recommendation: (a), since the passage stands where the reader checks the claim and the commands find it without new arguments. The lazy option is none: the three cost the same to build.
-
-Taken: (a)
-Booked: `.scratch/9-literature/plan.md:76` (Open item C)
-Builds on it: step 1
