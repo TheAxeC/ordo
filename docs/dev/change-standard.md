@@ -67,6 +67,7 @@ Every rule on this page that names a script, a test or a check is read under thi
 Every build, test or check command runs in the foreground with a long timeout, one configuration per command, and each test's output goes through a filter for its summary lines so raw build output never enters the context; the glossary check and the ASCII check take no filter:
 
 ```
+sh skills/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1
 sh skills/land/templates/land.test.sh 2>&1 | tail -1
 sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1

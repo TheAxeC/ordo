@@ -216,3 +216,139 @@ The report's "User-visible changes" table states the host-visible changes (agent
 - The report's "`git status --short` printed nothing" and its first-read grep for cases 25 to 45, both on the unchanged tree. They cannot be rerun on that tree now. Settled by the builder's transcript.
 
 Agent usage: agent a1303ca1b092c3c67, ordo-high, served claude-opus-5-5, 230,654 tokens, 48 tool uses, 854,668 ms.
+
+## Repair round 1, refuted
+
+### Verification lines (worktree root, run under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE` where the brief's commands touch skill folders)
+
+`sh skills/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1`
+```
+PASS: strip_comments.py scratch tests
+```
+`sh skills/code-comments/templates/strip_comments.test.sh >/dev/null 2>&1; echo "exit $?"`
+```
+exit 0
+```
+`sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1`
+```
+PASS: check_config.py scratch tests
+```
+`python3 skills/repo-setup/templates/sync_rules.py . --only glossary`
+```
+ok: the plan-terms block equals the template
+```
+`sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1`
+```
+PASS: sync_rules.py scratch tests
+```
+The brief's character-set check over its 20 files, then `echo "charset exit $?"`: no line printed, then
+```
+charset exit 0
+```
+The brief's frontmatter check:
+```
+code-comments 1.0.0 756
+```
+`grep -n "code-comments"` over the brief's files printed a line in each of them (I cut each line at 90 characters, so these are not verbatim beyond the path and line number): `docs/dev/building.md:6`, `docs/dev/scripts.md:17` and `:31`, `README.md:27`, `:78` and `:105`, `docs/dev/change-standard.md:70`, `agents/ordo-{max,low,medium,xhigh,high}.md:3` and `:6`, `skills/plan/templates/plan.yaml:12` and `:27`, `skills/repo-setup/templates/docs/glossary.md:3`, `skills/plan/templates/orchestrator-state.md:14` and `:26`, `.agents/plan.yaml:10`, `skills/repo-setup/templates/plan-terms.md:39`, `:41` and `:99`.
+`grep -n -o -E '^- \*\*(effort agent|reviewer|finding)\*\*' skills/repo-setup/templates/plan-terms.md` printed `39:- **effort agent**`, `41:- **finding**`, `99:- **reviewer**`.
+
+Report commands rerun, all matching the report's quoted output:
+- `wc -l` of the three new files: 252, 341, 711.
+- `git diff b107561 --numstat` lines.
+- `grep -n 'a\\#b' skills/code-comments/templates/strip_comments.py` printed `24:    character plain, so `a\#b` holds no comment while `a\\#b` ends in one.`
+- `grep -n "Rewrite agent"` printed lines 125 and 200.
+- `grep -n "gets each"` printed lines 243 and 244.
+- `grep -c "code-comments"` per file matches the report.
+- Judgment call 6's run printed `differ`, exit 1.
+- Judgment call 7's run printed `differ`, exit 1.
+- Case 24 (no argument, and `--compare /dev/null`) printed the two usage lines and `exit 2` each time.
+
+The delta against the snapshot touches three files: `SKILL.md`, `strip_comments.py` and `strip_comments.test.sh`. Every other path of `files.txt` is byte-identical to its snapshot copy. `git status --short` lists no path outside the brief's paths and the two ledger files.
+
+### Round items 1 to 14
+
+1. S1: closed. `SKILL.md` has `## Rewrite agent` (lines 200 to 210) with all seven bullets of the ruling. "The rewrite" 5 lists "The bullets of "Rewrite agent"" (line 125) and "each with its number in the report" (line 121). The four replaced sentences are gone from item 5.
+2. S2: closed. The head comment states reading (c) (`strip_comments.py` lines 18 to 20). The report lists (a) to (c) as judgment call 13 and names the round brief for the digit-separator and stream rulings (judgment calls 1 and 2). Judgment call 13 stands under the heading "Anything in the brief that was wrong or impossible" (see S-F3).
+3. B1: closed. `join_splices` handles `\\\r\n` (lines 130 to 133) and the head comment says so (lines 25 to 27). My run of the CRLF pair printed `differ`, exit 1, and the LF pair printed `differ`, exit 1. The test has the case at lines 340 to 344.
+4. B2: closed. `quoted_end(text, start, spans_lines)` ends a C or C++ non-raw literal at the first newline. Raw strings, unclosed `/*`, and CMake quoted and bracket text still run to the end of the file. My run of the B2 file (`#if 0` / `don't` / `#endif` / `// it's "quoted` / `const char* u = "http://x"; int n = 1;`) against `n = 2` printed `differ`, exit 1. The test has the case at lines 666 to 682.
+5. P1: closed. Judgment calls 6 and 7 are rewritten to the new behaviour with runs. My reruns print the same lines.
+6. P2: closed. Test lines 265 to 272 (plain `R` pair) and 405 to 415 (splice pair). My runs printed `differ` and `equal`. By reading, case 8's `n = 1`/`n = 2` pair prints `equal` without the raw-string reading, so it now depends on it. Case 12's pair prints `differ` without splice joining, so it now depends on it.
+7. P3: closed. Test lines 212 to 219 (C++ `"a  b"`), 587 to 594 (CMake `"a  b"`) and 496 to 503 (`a /*c*/ b` against `ab`). My runs printed `differ` for all three.
+8. ST1: closed. Controls added at test lines 106, 143, 487, 515 and 538 for cases 3, 4, 14, 15 and 16. I read every `expect equal` in the file against its neighbours, and each sits beside a `differ` pair of the same rule. The case 12 splice pair is covered by the `foo`/`fox` pair of the same case. Head comment line 4 holds. The report's item 8 row lists the cases with their controls.
+9. ST2: closed. The docstring is `r"""` (line 2) and line 24 reads `a\#b` and `a\\#b`. The test has `a\\#b c` against `a\\#b d` (`equal`, lines 595 to 602) and the `a\#b` `differ` case stays (lines 578 to 585). My runs printed `equal` and `differ`.
+10. ST3: closed, with F1 below. I ran every changed command form on a file named `-n.cpp` in a scratch git repository. `cat -n --`, `grep -n -e ... --`, `git show 'HEAD:-n.cpp' | cat -n`, `| grep -n -e`, `| cmp -s -- -`, `mkdir -p --`, `cp -p --`, `cmp -s --`, `git diff --no-index --numstat -z -- /dev/null`, `python3 ... --compare <scratch>/-n.cpp ./-n.cpp` and `git restore --` each exited 0, except `cmp` which exited 1 on differing text as expected. The grep hit the non-ASCII line.
+11. ST4: closed. Former lines 46, 84, 224 and 227 are split at lines 46 to 47, 85 to 87, 247 to 248 and 251 to 252.
+12. ST5: closed. Rules lines 243 and 244.
+13. B3: closed. "The rewrite" 4 line 117 keeps the listing, and item 6 lines 132 to 137 state the three cases of the ruling plus `rm --` and `git restore --`. My scratch repo showed ` D old.cpp` still listed after the agent step, which by line 132 is not a changed file.
+14. B4: closed. Lines 126 to 128.
+
+No check was removed to close a finding. The delta to the test file only adds cases and rewrites head-comment lines 5 to 7. No fix reaches beyond its finding.
+
+### Item verdicts ("What to build")
+
+1. `SKILL.md`: violated, by F1 and F2 (both small, text only). The layout sections, invocations, "What it reads", Steps 1 to 8, "The rewrite" 1 to 8, the reference sections, the Stops table, Anti-patterns and Rules hold otherwise. All first-run findings of this item are closed.
+2. `strip_comments.py`: holds. Modes, exits, language by name, stderr lines, head-comment lists and the three rulings (items 2, 3, 4) hold.
+3. `strip_comments.test.sh`: holds. Its form, cases 1 to 23 and its head comment hold.
+4. The places that name the skills or their agents: holds. The grep above and the PASS lines show it; the files are unchanged since the snapshot.
+
+### Case verdicts (whole diff since the base)
+
+- 1 to 28 met. Case 8 and case 12 now depend on the behaviour they name. Case 10 covers LF and CRLF. Case 20 covers the unclosed `/*` and the unclosed literal. Case 24 was rerun.
+- 29 met: every path command is single-quoted and ends its options (item 10 runs above).
+- 30 to 35 met. 36 met (the three agent bullet sets each carry the "text under review" bullet). 37 to 44 met. 45 met on the normal path and on the model-stop path.
+
+No case is partial, unmet or not verifiable.
+
+### Spec
+
+F1. `SKILL.md` line 246: "Every command ends its options before a supplied path, with `--` or `-e` as the command takes it, so a path that starts with `-` is read as a path."
+- What is wrong: it is false for `strip_comments.py`. That command takes neither `--` nor `-e`, and line 141 says its paths are given as `./<path>`. It is also false for `git rev-parse` and `git show '<head>:<path>'`, which end no options.
+- Failure scenario: a reader or a later reviewer takes "every command" literally and either adds `--` to the script call, which exits 2 as a wrong argument count, or reports the script call as a break of the rule.
+- The sentence follows the round brief's wording (ruling 10), so the change of wording is the orchestrator's.
+
+F2. `SKILL.md` line 218, the first Stops row, "What it shows": "The configured model, the served model and the Claude Code version, as plain text". "The rewrite" 5, lines 126 to 128, says the same stop during the rewrite also names each file put back and the scratch folder removed.
+- Failure scenario: a reader of the Stops table builds the stop's message from the row, and the message lacks the put-back files and the scratch folder that ruling 14 requires.
+
+### Proof
+
+None. Declined to judge: the failing runs of the added cases 10 (CRLF) and 20 (unclosed literal) on the pre-round script (see below).
+
+### Standards
+
+F3. The report places judgment call 13 (the readings (a) to (c), round ruling 2) after the bullets of "Anything in the brief that was wrong or impossible", numbered 13 in a list that belongs to "Judgment calls". Change-standard rule 7 fixes the order of the report's parts. Failure scenario: a reader of "Judgment calls" finds twelve calls, and the readings sit where the report says the brief was wrong.
+
+F4. Brief "Verify before you report" 6 asks that each new or changed sentence be read against the sentence-length rule (prose standard, section E, "Sentence length") and each departure named. The report's "Standards on list items and sentence length" section is not updated for this round, and its `SKILL.md` line numbers are those before the split (for example "73" is now 74). Sentences of this round over 20 words with no named departure:
+- line 85: 28 words
+- line 114: 24
+- line 115: 24
+- line 134: 31
+- line 136: 23
+- line 137: 22
+- line 210: 26
+- line 243: 23
+
+Only line 246 (31 words) is covered by the report's "option bullet (31 words)". Failure scenario: the next reviewer cannot tell which long sentences were judged to need their form.
+
+F5. `SKILL.md` line 115: "Two files of the same name in different folders never share a copy, and the user's uncommitted work in every file is kept." The layout's "Lists and tables" first bullet makes two requirements joined by "and" two bullets. The delta turned this sentence into a bullet of its own. Failure scenario: a later edit to one half cannot be told from the other half in a diff of the bullet.
+
+### Behaviour
+
+None. Reruns of the first report's B1, B2, B3, ST3 (on `-n.cpp`) and P1 scenarios print the closed results. Two edge paths I read and found no failure in: an unclosed literal at the end of the file, and an escape (`\`) as the last character of the text, where `quoted_end` returns `min(i, len(text))`.
+
+### Declined to judge
+
+- The failing runs of items 3 and 4 as the report quotes them (`FAIL: case 10, backslash before a CRLF line end ...` and `FAIL: case 20, code after an unclosed literal changed ...`). Reproducing them means running the new test against the pre-round script, which is a revert proof and is banned. Reading settles the direction: the snapshot `join_splices` deletes only `\\\n` and its `quoted_end` runs across newlines, which matches the round brief's own pre-change runs (`equal`, exit 0).
+- Whether the user must rule on the readings (a) to (c) of ruling 2. Round ruling 2 already puts them with the orchestrator as readings of D7's literals and comments.
+- Whether F1's wording is changed or kept: it is dictated by round ruling 10, so the call is the orchestrator's.
+
+Agent usage: agent a9ba00623e6a89399, ordo-high, served claude-sonnet-5-5, 181,142 tokens, 32 tool uses, 367,171 ms.
+
+## Closed
+
+The first run's findings S1, S2, P1 to P3, ST1 to ST5 and B1 to B4 were sent back in repair round 1 (`agents/briefs/1-round-1.md`, items 1 to 14), and the run over round 1 found each closed. The run over the last round's findings are fixed at landing on main, since each is small, text only and inside the brief:
+
+- F1, `SKILL.md`'s Rules bullet on ending options: fixed at landing, the bullet naming the commands that take `--` or `-e` and the script call's `./<path>`.
+- F2, the first Stops row: fixed at landing, its "What it shows" naming the files put back and the scratch folder removed when the stop comes during the rewrite.
+- F3, judgment call 13 of the builder's report: fixed at landing, moved under "Judgment calls".
+- F4, the sentences of round 1 over 20 words: fixed at landing in the builder's report's "Standards on list items and sentence length", each sentence named with its line on main and why it needs its form, or split.
+- F5, `SKILL.md` "The rewrite" 4, the bullet with two requirements: fixed at landing, split into two bullets.

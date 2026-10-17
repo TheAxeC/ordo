@@ -14,6 +14,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 
 | Script | Job |
 |---|---|
+| `skills/code-comments/templates/strip_comments.py` | Prints the code of a C, C++ or CMake file without its comments, and with `--compare` says whether two files have the same code, so that a rewrite of comments is kept only when it changed no code |
 | `skills/land/templates/checks.sh` | Runs a plan's verify list and says whether every command exited 0 |
 | `skills/land/templates/land.sh` | Commits a step's work in its worktree, copies it onto main, runs the verify list there and prints the booking data |
 | `skills/ordo-init/templates/check_config.py` | Checks `.agents/plan.yaml` against the plan skill's template and prints each error and note |
@@ -27,6 +28,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 
 | Script | Proves |
 |---|---|
+| `skills/code-comments/templates/strip_comments.test.sh` | `skills/code-comments/templates/strip_comments.py` |
 | `skills/land/templates/land.test.sh` | `skills/land/templates/land.sh` |
 | `skills/ordo-init/templates/check_config.test.sh` | `skills/ordo-init/templates/check_config.py` |
 | `skills/repo-setup/templates/sync_rules.test.sh` | `skills/repo-setup/templates/sync_rules.py` with `--write` |

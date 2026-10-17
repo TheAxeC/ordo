@@ -24,6 +24,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `plan-retro` | Reads every refuter report and groups the findings by kind. For each kind that recurs, it proposes the rule sentence, the change to the text that should have prevented it, or the standards page that stops it, and a check only for a fact a machine computes, which the user approves |
 | `session-retro` | Reads the transcripts of a plan's Claude Code sessions, of one session or of a time window. It reports what went well, to keep, and what went wrong, to change. Each point quotes its place and proposes a change to a rule, skill or brief, which the user decides on |
 | `writing` | Reviews the prose of a draft with a script and four fresh agents that change nothing: a `.tex` file with its input files, a `.md`, a `.txt` or a `.docx`. It reports each break of a named rule with its place, the quoted passage and what the rule asks for, grouped by rule, and proposes no replacement |
+| `code-comments` | Reviews the comments a git diff adds or changes, the uncommitted changes or a range, with a finding agent and a checking agent that change nothing. It reports each comment that breaks a named rule with its place, the quoted comment and what the rule asks for, the false comments first, and proposes no replacement. On `apply <numbers>` or `apply all` a fresh agent rewrites the picked comments in C, C++ and CMake files, and a rewrite is kept only when `templates/strip_comments.py` finds the code unchanged |
 
 The order of use, shortened from what `/ordo-help` prints:
 
@@ -74,7 +75,7 @@ The loop of one step carries the same marks, with the band that runs the loop un
 
 The skills call each other and read each other's templates, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
 
-The plan skills, `grill` and `writing` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
+The plan skills, `grill`, `writing` and `code-comments` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
 
 ### With the skills CLI
 
@@ -101,7 +102,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec writing; do
+    for skill in code-comments diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec writing; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
     agents=$(dirname "$dir")/agents

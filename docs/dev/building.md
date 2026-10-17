@@ -3,6 +3,7 @@
 Ordo has no build step. The green check is every command below passing, each run from the repository root. Each test builds scratch repositories or scratch files under `$TMPDIR` and removes them; none touches the installed skills.
 
 ```sh
+sh skills/code-comments/templates/strip_comments.test.sh   # strip_comments.py on pairs of C, C++ and CMake files that differ in a comment or in code, and on files it refuses
 sh skills/land/templates/land.test.sh                  # land.sh on a conflict, a ledger file left in the worktree, a failing check, a clean landing and a step whose new test script and command, left uncommitted in the worktree, reach main and run there
 sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
 sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py --write on drifted shared-rules and plan-terms blocks, the bytes it keeps and its refusals
