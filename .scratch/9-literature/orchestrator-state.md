@@ -45,12 +45,12 @@ dispatch:                   # or the block /spec writes (a list when .agents/pla
   base: dc0b03092ee34ad5f7f8b1205d88d6a3019161bb
   launched: "2026-10-17 23:06"
   report: .scratch/9-literature/agents/reviews/1-report.md
-  builder_usage: "first run 173617 tokens, 22 tool uses, 3.1 minutes; build 240656 tokens, 222 tool uses, 39.6 minutes"
+  builder_usage: "first run 173617 tokens, 22 tool uses, 3.1 minutes; build 240656 tokens, 222 tool uses, 39.6 minutes; round 1 331964 tokens, 228 tool uses, 31.9 minutes"
   brief_check: .scratch/9-literature/agents/reviews/1-brief-check.md (a5a672294bcd03f60, claude-opus-5-5, 220323 tokens, 53 tool uses, 14.6 minutes)
   landing: not-started
   round: 1
   session_id: afda9b14cfe0326ae (claude-sonnet-5-5)
-  reviewer_report: .scratch/9-literature/agents/reviews/1-refuter.md (a3ac3230ac86633aa, claude-opus-5-5, 313702 tokens, 62 tool uses, 17.7 minutes)
+  reviewer_report: ".scratch/9-literature/agents/reviews/1-refuter.md (a3ac3230ac86633aa, claude-opus-5-5, 313702 tokens, 62 tool uses, 17.7 minutes); over round 1: a8bf82fafabd884d9, claude-sonnet-5-5, 339943 tokens, 71 tool uses, 19.2 minutes"
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -58,6 +58,7 @@ dispatch:                   # or the block /spec writes (a list when .agents/pla
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
 - Open item E (2026-10-18), step 1: a computation of `lookup.py` that no ruling approves, the arXiv ID read also as the DOI `10.48550/arXiv.<id>` and that DOI read as the arXiv ID; options (a) approve both readings, recommended, and (b) approve only the DOI read as the arXiv ID, the lazy option; written in full under step 1's Step 0 in `plan.md`. It blocks the landing of step 1, not its repair round.
+- Open item F (2026-10-18), step 1: a computation of `lookup.py` that no ruling approves, `openalex_query` replacing each `?` and `*` of a search string with a space before OpenAlex; options (a) approve it, recommended, and (b) remove it, the lazy option; written in full under step 1's Step 0 in `plan.md`. It blocks the landing of step 1.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
