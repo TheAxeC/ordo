@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C70
+Last number: C71
 
 # Entry 2.I Several plans in one session
 
@@ -343,3 +343,16 @@ The brief of step 4 of plan 3 gave the finding agents the register rules "of the
 Taken: (a)
 Booked: `.scratch/3-the-writing-base/plan.md:74` (Step 4, the register rules)
 Builds on it: step 4
+
+# Entry 4 code-comments
+
+## C71. Step 1b reaches session-retro (2026-10-17)
+
+The user ruled the `$0` defect of `code-comments` fixed (open item E). `grep -n '\$[0-9]' skills/*/SKILL.md` finds the same construct in `skills/session-retro/SKILL.md` lines 47, 80 and 118, three `awk` commands that test `$0`, in a skill called as `/session-retro <entry>`, so the runner serves them with the entry in place of `$0`.
+  - Option (a), recommended: step 1b fixes both skills. Pro: the defect's cause ends in every skill that has it. Con: step 1b writes a skill outside entry 4's goal.
+  - Option (b): a roadmap entry for `session-retro` alone. Pro: entry 4 stays inside its goal. Con: `session-retro` stays broken until that entry runs, for the same cause step 1b ends.
+  - Recommendation: (a). The lazy option is (b).
+
+Taken: (a)
+Booked: `.scratch/4-code-comments/plan.md:74` (Step 1b reaches `session-retro`)
+Builds on it: step 1b
