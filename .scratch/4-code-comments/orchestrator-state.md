@@ -74,7 +74,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-17. Step 1b of 4, no positional argument in a skill's text, landed: `skills/code-comments/SKILL.md` and `skills/session-retro/SKILL.md`, `agents/reviews/1b-landing.md`.
-- Step 2, the gate run, in a scratch clone of game-engine at `a0aa831`: the checking agent's report is shown; the rewrite on the user's `apply` waits for the tag and the pin after step 1b, which the user rules.
-- `v8.2.0-rc.3` tagged on `436760d` and pinned, as the user ruled on open item F.
-- Open on Axel's side: the findings to apply.
+- 2026-10-17. Step 2 of 4, the gate run, done: the report shown, findings 1 to 4 and 6 to 33 rewritten, `equal` for each of the 10 files; booked in `plan.md`.
+- Step 3, the closing: the closing report `agents/reviews/closing.md` written; the ticked roadmap entry, the move to the archive and the final tag and pin wait for the user.
+- Open on Axel's side: the gate's reading of the report as useful, the closing's roadmap diff, and the final tag and pin.

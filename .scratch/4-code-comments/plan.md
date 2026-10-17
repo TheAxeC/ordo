@@ -21,7 +21,7 @@ A `code-comments` skill that reviews the comments a git diff adds or changes, by
 - ✅ 1 The skill: `skills/code-comments/SKILL.md` (1.0.0) as D1 to D4 and D7 rule, `templates/strip_comments.py` computing only what D7 and open items A and B approve, and its test `templates/strip_comments.test.sh`, added to the verify list in `docs/dev/building.md`; the skill wired in where `writing`'s review agents are named (`agents/ordo-*.md`, the `reviewer` and `reviewer_effort` comments of `skills/plan/templates/plan.yaml` and `.agents/plan.yaml`), and listed in `README.md` and `docs/dev/scripts.md`, with ADR 0014 followed; the check: the skill read against `docs/dev/skill-layout.md`, the rulings and ADR 0014, `sh skills/code-comments/templates/strip_comments.test.sh` exits 0 after failing on the unchanged tree, and the character-set check over the changed files prints nothing (1 commit) (approved) (ruling A) (ruling B)
 - ✅ 1a The prompt file: `skills/code-comments/SKILL.md` changed as ruling C says: the session writes each agent's prompt (the diff, `cat -n` of each reviewed file, the non-ASCII output, the rules and the bullets) into a file in a scratch folder with shell commands, and the agent's prompt names that file, which the agent reads whole and is the only file it reads; a reviewed file over 256 KB is given as each of its diff hunks with 40 lines on either side in place of the whole file, and the report names each such file; the agents' bullets, the Rules, the Anti-patterns and every other place of the skill that says the agents read no file or get each file whole say the same; the sentence of ADR 0014's Decision on what the finding agent reads edited to its current state, as `docs/adr/README.md` says of a refinement that keeps the decision; the check: the skill read against ruling C, `docs/dev/skill-layout.md` and ADR 0014, a prompt file built by the skill's commands for `a0aa831^..a0aa831` in a scratch clone of `game-engine` holds `manual.html` as hunks and every other file whole, and the character-set check over the changed files prints nothing (1 commit) (ruling C)
 - ✅ 1b No positional argument in a skill's text: `skills/code-comments/SKILL.md` and `skills/session-retro/SKILL.md` hold no `$` followed by a digit, each `awk` field written `$(<n>)` in place of `$<n>`, so the runner's replacement of `$0`, `$1` and the like with the call's arguments leaves every command as the file has it; `session-retro`'s `metadata.version` raised once for this plan as `docs/dev/skill-layout.md` says, and `code-comments`' kept at `1.0.0`, since this plan created it; the check: `grep -n '\$[0-9]' skills/*/SKILL.md` prints nothing, each changed `awk` command run on the input its step gives prints what it printed before the change, and the character-set check over the changed files prints nothing (1 commit) (ruling E) (ruling Step 1b reaches `session-retro`)
-- 2 The gate run: after step 1a lands and a tag and a pin the user rules on, its report acted on after step 1b lands and its tag and pin, `/code-comments a0aa831^..a0aa831` in a scratch clone of `game-engine` at `a0aa831`, invoked through the Skill tool, its report shown whole; the user reads it and picks the findings to apply, the rewrite runs, and `--compare` is run on each rewritten file; the check: the user's reading of the report, `equal` for each rewritten file, and the transcripts showing the review agents edited no file (no commit; orchestrator, no agent) (approved)
+- ✅ 2 The gate run: after step 1a lands and a tag and a pin the user rules on, its report acted on after step 1b lands and its tag and pin, `/code-comments a0aa831^..a0aa831` in a scratch clone of `game-engine` at `a0aa831`, invoked through the Skill tool, its report shown whole; the user reads it and picks the findings to apply, the rewrite runs, and `--compare` is run on each rewritten file; the check: the user's reading of the report, `equal` for each rewritten file, and the transcripts showing the review agents edited no file (no commit; orchestrator, no agent) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ### Step 1, Step 0
@@ -90,6 +90,12 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - a40a88b2b9f6d4594: builder of step 1b, claude-sonnet-5-5
 - a419e24d4ce17de1e: reviewer of step 1b, claude-opus-5-5
 
+Agents in no role the cost script prices:
+
+1. aa87fe2fa398e2c7f: finding agent of the gate run, step 2, claude-opus-5-5
+2. a6aae766e31a3c74e: checking agent of the gate run, step 2, claude-opus-5-5
+3. a1e53b8e4ed91e30c: rewrite agent of the gate run, step 2, claude-opus-5-5
+
 ## Blocked, and by what
 
 - none.
@@ -134,3 +140,13 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 - A/B: none. Look: none configured.
 - Usage: brief check none, a small text step; builder a40a88b2b9f6d4594 claude-sonnet-5-5 116622 tokens, 35 tool uses, 2 min 5 s; reviewer a419e24d4ce17de1e claude-opus-5-5 146073 tokens, 44 tool uses, 7 min 33 s.
 - The builder's first report passed its bar on every item and case; the reviewer's three findings are the fixes at landing above.
+
+### Step 2, the gate run (run 2026-10-17)
+
+- Run: `/code-comments a0aa831^..a0aa831` through the Skill tool, in a scratch clone of game-engine at `a0aa831`, on `v8.2.0-rc.2` for the review and `v8.2.0-rc.3` for the rewrite. 26 files reviewed, `docs/user/manual.html` (1293416 bytes) given as hunks; the finding agent reported 49 findings, the checking agent kept 33.
+- The user's reading: the report was shown whole; the user agreed to apply findings 1 to 4 and 6 to 33, finding 5 dropped since `WriteSystem::declare` is idempotent and its comment is true.
+- Rewrite: the rewrite agent changed the 10 files the picked findings name, 73 lines added and 62 removed; `python3 skills/code-comments/templates/strip_comments.py --compare <copy> <file>` printed `equal` and exited 0 for each of the 10; no file was put back. The rewrite agent wrote copies of the files and a script `strip_cpp.py` of its own in the session's scratch folder, outside its bullets; the session removed both, and nothing the script printed was used.
+- Transcripts: the finding agent made 40 Reads, the checking agent 45, each one `wc` and `grep` on its own prompt file and its hand-back, and neither made an Edit or a Write.
+- The prompt file of the rewrite carried the picked findings with the group headings 9 to 31 written as a lead-in sentence and a "Rule:" line on findings 8 and 33; the rewrite agent's prompt named the clone as the root of the paths, since the session ran in the ordo repository.
+- Usage: finding agent aa87fe2fa398e2c7f claude-opus-5-5 180874 tokens, 42 tool uses, 9 min 30 s; checking agent a6aae766e31a3c74e claude-opus-5-5 208547 tokens, 47 tool uses, 10 min 17 s; rewrite agent a1e53b8e4ed91e30c claude-opus-5-5 170762 tokens, 66 tool uses, 5 min 36 s.
+- The scratch clone, the prompt folders and the scratch folder are removed.
