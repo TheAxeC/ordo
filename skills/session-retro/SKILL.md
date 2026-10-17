@@ -2,7 +2,7 @@
 name: session-retro
 description: "Read the transcripts of Claude Code sessions, from a plan's opening to its own last commit (to the time of the run while the plan is open), from one Claude Code session with its subagents, or from a time window, and report what went well, to keep and repeat, and what went wrong, to change. Each point quotes its place in the transcript by id, line and timestamp and proposes a change to a named rule, skill or brief, as a sentence to add or change, and the user decides on each proposal. Leaves behind a sessions report in the ledger's retros folder. Triggers on: session-retro, review the Claude Code sessions of a plan, review this Claude Code session, review a time window of Claude Code sessions, what went well and what went wrong in the Claude Code sessions, mine the Claude Code transcripts, read the transcripts of a plan."
 metadata:
-  version: "2.0.0"
+  version: "2.1.0"
 ---
 
 # Review of Claude Code sessions
@@ -44,7 +44,7 @@ metadata:
 1. Resolve the window.
    - For `<entry>`, find the plan's folder, whose name is `<slug>`:
      ```sh
-     for plan in "<ledger_root>"/*/plan.md "<archive_root>"/*/plan.md; do [ -f "$plan" ] && head -n 1 "$plan" | awk -v entry='<entry>' 'index($0, "# Plan: ") == 1 { title = substr($0, 9); if (title == entry || index(title, entry " ") == 1 || index(title, entry ". ") == 1) found = 1 } END { exit !found }' && echo "$plan"; done
+     for plan in "<ledger_root>"/*/plan.md "<archive_root>"/*/plan.md; do [ -f "$plan" ] && head -n 1 "$plan" | awk -v entry='<entry>' 'index($(0), "# Plan: ") == 1 { title = substr($(0), 9); if (title == entry || index(title, entry " ") == 1 || index(title, entry ". ") == 1) found = 1 } END { exit !found }' && echo "$plan"; done
      ```
    - The loop matches `<entry>` as "What it reads" 2 says.
    - The start is the committer time of the commit that added `<ledger_root>/<slug>/plan.md`, the earliest one when several print:
@@ -77,7 +77,7 @@ metadata:
      repo=$(cd "$(git worktree list --porcelain | sed -n '1s/^worktree //p')" && pwd -P)
      name=$(printf '%s' "$repo" | sed 's/[^A-Za-z0-9-]/-/g')
      prefix=$(printf '%s' "$repo/<worktree_root>/" | sed 's/[^A-Za-z0-9-]/-/g')
-     ls "$projects" | awk -v name="$name" -v prefix="$prefix" '$0 == name || index($0, prefix) == 1'
+     ls "$projects" | awk -v name="$name" -v prefix="$prefix" '$(0) == name || index($(0), prefix) == 1'
      ```
    - For `session <session id>`, the folder is the one of those that holds `<session id>.jsonl`:
      ```sh
@@ -115,7 +115,7 @@ metadata:
 6. Read each output whole, in parts.
    - A part is a line range that this command prints for the output, at most 30,000 bytes, so that the Read tool, which refuses a read above 25,000 tokens, takes each part whole; a line longer than that is a part of its own:
      ```sh
-     LC_ALL=C awk -v max=30000 'NR == 1 { first = 1 } { n = length($0) + 1; if (size > 0 && size + n > max) { print first "-" (NR - 1); first = NR; size = 0 } size += n } END { if (NR > 0) print first "-" NR }' "<work>/<folder>.out"
+     LC_ALL=C awk -v max=30000 'NR == 1 { first = 1 } { n = length($(0)) + 1; if (size > 0 && size + n > max) { print first "-" (NR - 1); first = NR; size = 0 } size += n } END { if (NR > 0) print first "-" NR }' "<work>/<folder>.out"
      ```
    - A part is read with Claude Code's Read tool on the output file, from line `<first>` for `<last> - <first> + 1` lines, since Claude Code keeps only a 2 KB preview of a large Bash output.
    - A part of one line, and a line the Read tool shows cut, is written folded into a file with `sed -n '<n>p' "<work>/<folder>.out" | fold -w 2000 > "<work>/line-<n>.txt"`, and that file is read with the Read tool 15 lines at a time.
@@ -203,5 +203,6 @@ python3 <this skill's folder>/templates/transcript_window.py <transcript folder>
 - A secret the reader left in a quoted line is written `<REDACTED>`, and the rest of the line stays as printed.
 - Each character outside printable ASCII in a quoted line is written as its code point, `<U+2014>` for an em dash.
 - A command names the paths `<projects>`, `<work>` and `<report>` as placeholders and is run with the literal path substituted, since each Bash call starts a fresh shell and keeps no variable of an earlier call.
+- An `awk` field in a command of this skill is written `$(<n>)`, and the whole record `$(0)`. The runner that serves the skill's text replaces a dollar sign followed by a digit with an argument of the call.
 - The skill writes in the repository only the sessions report.
 - The skill runs from the repository's main checkout, the first line of `git worktree list --porcelain`, since the ledger is written only there.

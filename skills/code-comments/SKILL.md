@@ -211,16 +211,16 @@ Each piece after the first starts with a line break. Its own `printf` writes it,
 
   ```sh
   printf '\nNon-ASCII hits in %s, on the lines of its hunks\n' '<path>' >> <out>
-  <hunks> | while read -r c d; do d=${d:-1}; e=$((c + d - 1)); <hits> | awk -F: -v c="$c" -v e="$e" '$1 >= c && $1 <= e' >> <out>; done
+  <hunks> | while read -r c d; do d=${d:-1}; e=$((c + d - 1)); <hits> | awk -F: -v c="$c" -v e="$e" '$(1) >= c && $(1) <= e' >> <out>; done
   ```
 
 - **The rules.** Each piece is the text of the named sections of the file, copied by a command that prints it. `<Role>` is Finding, Checking or Rewrite.
 
   ```sh
   printf '\n' >> <out>
-  awk '/^## /{p = ($0 == "## Rules of a comment")} p' '<this skill's folder>/SKILL.md' >> <out>
-  awk '/^## /{p = ($2 ~ /^[0ABCE]\.$/)} p' '<prose standard>' >> <out>
-  awk '/^## /{p = ($0 == "## <Role> agent")} p' '<this skill's folder>/SKILL.md' >> <out>
+  awk '/^## /{p = ($(0) == "## Rules of a comment")} p' '<this skill's folder>/SKILL.md' >> <out>
+  awk '/^## /{p = ($(2) ~ /^[0ABCE]\.$/)} p' '<prose standard>' >> <out>
+  awk '/^## /{p = ($(0) == "## <Role> agent")} p' '<this skill's folder>/SKILL.md' >> <out>
   ```
 
 - **The files given as hunks, for `checking.md`.** One line for each such file, or the one line that none was.
@@ -366,6 +366,7 @@ The first row is a stop, a decision for the user. It leaves no open item, since 
 - Every value the user or the diff supplies, such as a range end or a path, reaches a command as one single-quoted argument, a single quote inside it written `'\''`, so the shell expands nothing in it.
 - Every command that takes an option ends its options before a supplied path, with `--` or `-e` as the command takes it, so a path that starts with `-` is read as a path.
 - `strip_comments.py` takes no `--`, so a relative path reaches it as `./<path>`.
+- An `awk` field in a command of this skill is written `$(<n>)`, and the whole record `$(0)`. The runner that serves the skill's text replaces a dollar sign followed by a digit with an argument of the call.
 - The review writes only its prompt folder, which stands outside the repository, and removes it before the report is shown.
 - The review changes nothing.
 - The rewrite changes the working tree and commits nothing.

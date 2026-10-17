@@ -37,25 +37,17 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:               # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 1b
-  base: 97eec149356f6f3d60d75bcb8926e94a6be4db5b
-  worktree: .agents/worktrees/4-code-comments-1b
-  executor: agent
-  worker: claude:sonnet
-  launched: 2026-10-17
-  session_id: a40a88b2b9f6d4594 (claude-sonnet-5-5)
-  report: .scratch/4-code-comments/agents/reviews/1b-report.md
-  brief_check: none, a small text step
-  round: 0
-  landing: not-started
+dispatch: none               # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none.
+- Open item F (2026-10-17), step 2, the tag and the pin after step 1b: the installed skills are `v8.2.0-rc.2`, whose `code-comments` and `session-retro` still write `$0`, `$1` and `$2` in their `awk` commands, so the rewrite of step 2, run through the Skill tool on `apply`, is served its rules commands with the call's argument in place of `$0`.
+  - (a) Tag `v8.2.0-rc.3` on the landing commit of step 1b and run `utils/pin.sh v8.2.0-rc.3`, the final `v8.2.0` left to the closing. Pro: the rewrite runs the fixed skill, as served. Con: one more release candidate tag.
+  - (b) Run the rewrite on the pinned `v8.2.0-rc.2`, the session typing the rules commands as the file on disk has them. Pro: no tag. Con: the gate runs a skill that is not the one on main, and the session departs from the skill's served text.
+  - Recommendation: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -84,7 +76,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-17. Step 1b of 4, no positional argument in a skill's text, building: its builder runs in `.agents/worktrees/4-code-comments-1b` from base `97eec14`.
-- `v8.2.0-rc.2` tagged on `7481267` and pinned, as the user ruled on open item D.
-- Step 2, the gate run, is under way in a scratch clone of game-engine at `a0aa831`: the finding agent ended, the checking agent runs; the rewrite waits for step 1b, its tag and its pin.
-- Open on Axel's side: none.
+- 2026-10-17. Step 1b of 4, no positional argument in a skill's text, landed: `skills/code-comments/SKILL.md` and `skills/session-retro/SKILL.md`, `agents/reviews/1b-landing.md`.
+- Step 2, the gate run, in a scratch clone of game-engine at `a0aa831`: the checking agent's report is shown; the rewrite on the user's `apply` waits for the tag and the pin after step 1b, which the user rules.
+- Open on Axel's side: the tag and the pin after step 1b; the findings to apply.
