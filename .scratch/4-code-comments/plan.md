@@ -63,6 +63,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item B (2026-10-17): (a) added to the computation open item A approves for `strip_comments.py`: the stripped form drops the whitespace at the start of the file and ends with exactly one newline; a run of whitespace that holds the newline before a preprocessor directive, or the newline that ends one, becomes one newline, and any other run one space, so a comment line or a blank line removed between two `#define` lines leaves the form unchanged; the lazy option was (b), cases 5 and 14 moved off the file's first line (the user).
 - The tag and the pin for step 2 (2026-10-17): (a) tag `v8.2.0-rc.1` on `4e2788e` and run `utils/pin.sh v8.2.0-rc.1`, the final `v8.2.0` left to the closing; the lazy option was (b), tagging `v8.2.0` before the gate ran (the user).
 - Open item C (2026-10-17): (a) a new step 1a before the gate changes `code-comments` so that the session writes each agent's prompt into a file in a scratch folder with shell commands and the agent reads that file whole as the only file it reads, and a reviewed file over 256 KB is given as each of its diff hunks with 40 lines on either side in place of the whole file, the report naming each such file; this changes ruling D4's "each changed file whole" for those files only; the step is followed by a tag `v8.2.0-rc.2` and its pin, which the user rules; the lazy option was (b), a file over 256 KB left out of the review (the user).
+- Open item D (2026-10-17): (a) tag `v8.2.0-rc.2` on `7481267`, the landing commit of step 1a, and run `utils/pin.sh v8.2.0-rc.2`, the final `v8.2.0` left to the closing; the lazy option was (b), the gate run on the pinned `v8.2.0-rc.1` (the user).
 
 ## Agents
 
@@ -80,7 +81,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: the tag `v8.2.0-rc.2` and its pin, which the user rules on.
+- none.
 
 ### Step 1, the skill (landed 2026-10-17)
 

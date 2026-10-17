@@ -44,16 +44,14 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item D (2026-10-17), step 2, the tag and the pin before the gate run: step 1a landed on main, changing `skills/code-comments/SKILL.md` and ADR 0014, and the pinned `v8.2.0-rc.1` on `4e2788e` still serves the skill without the prompt file, so `/code-comments` on the gate's range would stop again as open item C found.
-  - (a) Tag `v8.2.0-rc.2` on the landing commit of step 1a and run `utils/pin.sh v8.2.0-rc.2`; the final `v8.2.0` stays with the closing. Pro: the gate runs the skill as it now stands on main. Con: one more release-candidate tag.
-  - (b) Run the gate on the pinned `v8.2.0-rc.1`. Pro: no new tag. Con: the run stops at the prompt size again, so the gate cannot pass.
-  - Recommendation: (a), since the gate must run the skill that landed. The lazy option is (b).
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - Open item A (2026-10-17), step 1, what `strip_comments.py` computes: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings and under step 1's Step 0.
 - Open item B (2026-10-17), step 1, the start and end of the file in `strip_comments.py`'s stripped form: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings and under step 1's Step 0.
 - Open item C (2026-10-17), step 2, the size of the agents' prompt: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings and under step 2's Step 0; step 1a added.
+- Open item D (2026-10-17), step 2, the tag and the pin before the gate run: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings; `v8.2.0-rc.2` tagged on `7481267` and pinned.
 
 ## The standing demands (from Axel, in force)
 
@@ -76,5 +74,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-10-17. Step 1a of 4, the prompt file, landed: `skills/code-comments/SKILL.md` and ADR 0014, `agents/reviews/1a-landing.md`.
-- Next step: 2, the gate run, after the tag and the pin of open item D.
-- Open on Axel's side: open item D.
+- `v8.2.0-rc.2` tagged on `7481267` and pinned, as the user ruled on open item D.
+- Next step: 2, the gate run, `/code-comments a0aa831^..a0aa831` in a scratch clone of game-engine at `a0aa831`.
+- Open on Axel's side: none.
