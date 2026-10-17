@@ -1,0 +1,51 @@
+# Plan: 4. code-comments
+
+Execution ledger for entry 4 of `docs/roadmap.md`, code-comments. One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+A `code-comments` skill that reviews the comments a git diff adds or changes, by default the uncommitted changes against `HEAD`, otherwise a range `<base>..<head>`. A comment says what the code does and why, is true of the code beneath it, serves a purpose for its reader rather than restating what the code plainly shows, carries no history and no step numbers, is ASCII only, and follows sections 0, A, B, C and E of the prose standard, read where the repository keeps it. A fresh agent that changes nothing reports the findings and a fresh checking agent keeps those that hold, in one report with the false comments first; the user says which findings to apply, a fresh agent rewrites those comments in the working tree and commits nothing, and `templates/strip_comments.py` compares each rewritten C, C++ or CMake file with its version before the rewrite and puts back a file that differs in more than its comments.
+
+## Gate
+
+`/code-comments` runs once on the range `a0aa831^..a0aa831` in a scratch clone of `game-engine` at `a0aa831`, the user reads its report and finds it useful, and the run's transcripts show the review made by fresh agents that edit no file; the findings the user picks are rewritten, and `python3 skills/code-comments/templates/strip_comments.py --compare <before> <after>` prints `equal` for each rewritten file; `sh skills/code-comments/templates/strip_comments.test.sh` exits 0; the skill follows `docs/dev/skill-layout.md`, checked by reading it.
+
+- The gate: could this pass without the goal being reached? No, the user reads the report of a real run on a real diff and judges it useful, the comparison is run on the files the real rewrite changed, the test runs the script, and the skill is read against the layout. Checked once: yes, one run read once, with no fix-and-run-again.
+- Step 1: could this pass without the goal being reached? No, the skill is read against `docs/dev/skill-layout.md` and D1 to D7, and the script's test runs C, C++ and CMake cases taken from the gate's diff, each first run on the unchanged tree.
+- Step 2: could this pass without the goal being reached? No, the user reads the real report and picks the findings, and `--compare` runs on the real rewritten files.
+
+## Steps, in execution order
+
+- 1 The skill: `skills/code-comments/SKILL.md` (1.0.0) as D1 to D4 and D7 rule, `templates/strip_comments.py` computing only what D7 approves, and its test `templates/strip_comments.test.sh`, added to the verify list in `docs/dev/building.md`; the skill wired in where `writing`'s review agents are named (`agents/ordo-*.md`, the `reviewer` and `reviewer_effort` comments of `skills/plan/templates/plan.yaml` and `.agents/plan.yaml`), and listed in `README.md` and `docs/dev/scripts.md`, with ADR 0014 followed; the check: the skill read against `docs/dev/skill-layout.md`, the rulings and ADR 0014, `sh skills/code-comments/templates/strip_comments.test.sh` exits 0 after failing on the unchanged tree, and the character-set check over the changed files prints nothing (1 commit) (approved)
+- 2 The gate run: after a tag and a pin the user rules on, `/code-comments a0aa831^..a0aa831` in a scratch clone of `game-engine` at `a0aa831`, invoked through the Skill tool, its report shown whole; the user reads it and picks the findings to apply, the rewrite runs, and `--compare` is run on each rewritten file; the check: the user's reading of the report, `equal` for each rewritten file, and the transcripts showing the review agents edited no file (no commit; orchestrator, no agent) (approved)
+- 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless `.agents/plan.yaml`'s `workers_at_once` allows more.
+
+- none: step 2 runs the skill step 1 builds.
+
+## Rulings (2026-10-17)
+
+- D1 Whether the skill only reports or also rewrites (2026-10-17): (a) the review reports each finding, the user says which to apply, a fresh agent rewrites those comments and nothing else, and a check then proves that only comments changed; the lazy option was (b), report only (the user).
+- D2 What the skill reads (2026-10-17): (a) a git diff, by default the uncommitted changes against `HEAD`, otherwise a range `<base>..<head>`; only the comments the diff adds or changes are judged, each read with the code around it; no option was the lazy one, since the goal names a diff (the user).
+- D3 Which rules a comment is judged by (2026-10-17): (a), with the user's words "also, no obvious explanation, comments need to serve a purpose": the goal's four rules (what the code does and why, no history, no step numbers, ASCII only), accuracy (the comment is true of the code beneath it), the prose standard's sections 0, A, B, C and E read where the repository keeps it, and a comment that only restates what the code plainly shows, or serves no purpose for its reader, is a finding; the lazy option was (b), the goal's four rules only (the user).
+- D4 How the review runs (2026-10-17): (a) non-ASCII found by `LC_ALL=C grep -n '[^ -~]'` over the lines the diff adds, no new script; a fresh read-only finding agent reads the diff, each changed file whole and the rules; a fresh checking agent keeps a finding only where its quote stands at its place, the rule's words describe it and applying it would not make the comment worse; one report, the false comments first, then the rest grouped by rule; the lazy option was (b), one agent with no checking agent (the user).
+- D5 The real diff the gate runs on (2026-10-17): (a) game-engine commit `a0aa831`, "Implement save-slot runtime and container functionality" (26 files, +1005/-40, of which 14 C++ files with +957/-9 and 145 added comment lines, and CMake files whose added lines carry `#` comments); the lazy option was (c), `76066b5` (the user).
+- D6 What entry 4 waits on (2026-09-30): "(a) after entry 3 is approved, entry 4 waiting on 3 for the prose rules only", carried from `.scratch/archive/3-the-writing-base/plan.md:36` (the user).
+- D7 How the skill proves a rewrite changed only comments (2026-10-17): (a) a new script `skills/code-comments/templates/strip_comments.py`, approved as computing a file's text with its comments removed and, with `--compare <before> <after>`, printing `equal` or `differ`, for C and C++ (`.c .cc .cpp .h .hpp`: `//`, `/* */`, string, character and raw-string literals, a backslash-newline) and CMake (`CMakeLists.txt`, `.cmake`: `#` outside quoted arguments, `#[[ ]]` comments); a rewritten file that compares `differ` is put back as it was and the report names it; a file in another language gets its findings and no rewrite; the rewrite edits the working tree and commits nothing; the script has a test; the lazy option was (c), no script (the user).
+- D8 The roadmap diff of entry 4 (2026-10-17): (a) the Goal, the Gate and Waits on rewritten as drafted from D1 to D7, the Status note "(drafted again, from its sources, before it is opened)" removed; the lazy option was (c), leaving the entry as it stood (the user).
+- D9 Whether to record the design as an ADR (2026-10-17): (a) ADR 0014, status `proposed`, recording D1, D2, D4 and D7 with their rejected alternatives; the lazy option was (b), no record (the user).
+- E1 How the user names the findings to apply (2026-10-17): (a) the report numbers its findings, as `/writing`'s does, and the user answers `apply <numbers>` or `apply all`; no option was the lazy one (the user).
+- E2 Which model the rewrite agent runs on (2026-10-17): (b) `reviewer` (`claude:opus`) at `reviewer_effort`, in place of the recommended `worker`; no option was the lazy one (the user).
+
+## Agents
+
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent in no role the cost script prices, which has a numbered item under the heading "Agents in no role the cost script prices:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+
+- a62d70475a1f1e686: grill lookup, claude-opus-5-5
+
+## Blocked, and by what
+
+- 2: the tag and the pin the user rules on, after step 1 lands.
