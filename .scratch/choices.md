@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C94
+Last number: C98
 
 # Entry 2.I Several plans in one session
 
@@ -578,18 +578,6 @@ Taken: (a)
 Booked: `.scratch/rulings/9-literature.md:21` (D22 The optional second-model critique)
 Builds on it: none
 
-## C90. The gate's topic and mode (2026-10-17)
-
-The gate needs "a real topic". `research-hub/projects/active/linfoot-estimator/README.md` sets an ML topic whose related work (MIST, VDC, vector copulas) a v2 must cite, and its `manuscript/main.bib` holds 13 entries (`grep -c '^@'`).
-  - Option (a), recommended: a full lit-review report on neural and amortized estimators of mutual information and of the Linfoot informational correlation, with that `.bib` as the library, against deep-research's lit-review mode; the same report gives the twenty citations. Pro: a real need of an active project, in the `cs_ml` field the skill defaults to. Con: none.
-  - Option (b): a topic of another active project (eeg-saad-challenge, loewner, novel-math-primitives, sandpile-operator). Pro: none over (a). Con: none of their READMEs was read for a literature need.
-  - Rule: `docs/dev/blind-comparison.md` item 1.
-  - Recommendation: (a). The lazy option is none.
-
-Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:22` (D23 The gate's topic and mode)
-Builds on it: none
-
 ## C91. Record the agents of a literature run as an ADR (2026-10-17)
 
 D14 is not obvious from the code, binds `paper` and `paper-review`, which reuse the roles, and has alternatives rejected.
@@ -637,3 +625,53 @@ The user ruled D11. The decision binds `paper`, which reuses the lookups (D1), a
 Taken: (a)
 Booked: `.scratch/rulings/9-literature.md:28` (D29 Record the lookup script (D11) as an ADR)
 Builds on it: the record `docs/adr/0017-one-standard-library-script-makes-every-reference-lookup-of-the-literature-skill.md`
+
+## C95. The call forms and modes of the literature skill (2026-10-17)
+
+Coverage row 184 gives the skill the six phases with the lit-review and three-way scan modes. deep-research's modes table (`research-hub/.claude/skills/deep-research/SKILL.md`, "Operational Modes") runs `full` with every core agent, `lit-review` with bibliography, verification and synthesis only, and `three-way-scan` as a WHY, HOW and WHAT shortlist.
+  - Option (a), recommended: `/literature <topic>` the full report, `/literature review <topic>` the lit-review, `/literature scan <topic>` the three-way scan, each with `--bib <path>` and `--out <folder>`. Pro: each mode the coverage rows take has its call, the default is the complete one, and the library is named rather than guessed. Con: three forms to document and test.
+  - Option (b): one form `/literature <topic>` that picks the mode from the request's words. Pro: one call. Con: the user cannot tell from the call which mode will run, and a wrong pick runs the wrong agents.
+  - Option (c): the full report only. Pro: one form. Con: coverage row 184's lit-review and three-way scan go unbuilt.
+  - Industry: deep-research names each mode in its call (its "Operational Modes" table); STORM's README sets its stages by flags such as `do_polish_article` (https://raw.githubusercontent.com/stanford-oval/storm/main/README.md).
+  - Recommendation: (a). The lazy option is (c).
+
+Taken: (a)
+Booked: `.scratch/rulings/9-literature.md:30` (D30 The call forms and modes of the literature skill)
+Builds on it: none
+
+## C96. The model and effort of a literature run's agents (2026-10-17)
+
+The user ruled that `code-comments`' rewrite agent runs on `reviewer` at `reviewer_effort`, in place of the recommended `worker` (E2, `.scratch/archive/4-code-comments/plan.md:67`). `.agents/plan.yaml:10` lists who runs on `reviewer`, and `agents/ordo-high.md:3` lists the work its agents are launched for.
+  - Option (a), recommended: every agent of a run on `reviewer` at `reviewer_effort`, the comments and descriptions naming the literature agents, no value changed. Pro: the report's reading and synthesis get the model the user picked for writing work, and one rule covers every agent. Con: a run with many sources costs more than on `worker`.
+  - Option (b): the search and reading agents on `worker`, the synthesis, editor and devil's advocate on `reviewer`. Pro: cheaper reading. Con: the passages every claim rests on are extracted by the weaker model, against the user's choice in E2.
+  - Option (c): every agent on `worker`. Pro: cheapest. Con: the same, for the whole report.
+  - Industry: PaperQA2 maps one model across every chunk for its evidence step (https://arxiv.org/html/2409.13740); none of the four systems fetched names a per-stage model split.
+  - Recommendation: (a). The lazy option is none, since each option costs the same to build; (c) costs least to run.
+
+Taken: (a)
+Booked: `.scratch/rulings/9-literature.md:31` (D31 The model and effort of a literature run's agents)
+Builds on it: none
+
+## C97. The gate's topic and mode, replacing D23 (2026-10-17)
+
+D23 compared the full report against deep-research's `lit-review` mode, which runs bibliography, verification and synthesis only, with no editor or devil's advocate (deep-research's "Operational Modes" table). The report D14 rules matches deep-research's `full` mode, whose phase 1 is interactive (`deep-research/SKILL.md:140`); a side that stops to ask is judged on what it produced (`docs/dev/blind-comparison.md` item 1).
+  - Option (a), recommended: `/literature <topic>` with `--bib research-hub/projects/active/linfoot-estimator/manuscript/main.bib` against deep-research's `full` mode on the same input. Pro: the two sides run the same stages, so the comparison measures the skill and not the mode. Con: deep-research's `full` run is the longer one.
+  - Option (b): keep D23, the full report against `lit-review`. Pro: a shorter old side. Con: the new side would win on stages the old side never ran, which shows nothing.
+  - Rule: `docs/dev/blind-comparison.md` item 1.
+  - Recommendation: (a). The lazy option is (b).
+
+Taken: (a)
+Booked: `.scratch/rulings/9-literature.md:32` (D32 The gate's topic and mode, replacing D23)
+Builds on it: none
+
+## C98. The roadmap diff of entry 9 for D30 to D32 (2026-10-17)
+
+The gate names "a side-by-side run against deep-research on a real topic"; D30 to D32 change the skill's calls, its agents' model and the mode of that run.
+  - Option (a), recommended: no change to the entry. Pro: the entry states the goal, the gate and the dependencies, and the mode and topic are rulings `/plan` copies. Con: none.
+  - Option (b): name the topic and the mode in the gate. Pro: the roadmap shows them. Con: a run's detail in the entry, which the `roadmap` skill's Rules keep to the goal, the gate and the dependencies.
+  - Rule: the `roadmap` skill's Rules.
+  - Recommendation: (a). The lazy option is none; (a) does the work the rules ask.
+
+Taken: (a)
+Booked: `.scratch/rulings/9-literature.md:33` (D33 The roadmap diff of entry 9 for D30 to D32)
+Builds on it: none
