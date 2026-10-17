@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C98
+Last number: C99
 
 # Entry 2.I Several plans in one session
 
@@ -368,7 +368,7 @@ The goal names "search through Crossref, OpenAlex, Semantic Scholar and arXiv". 
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:4` (D2 The four indexes of the goal)
+Booked: `.scratch/9-literature/plan.md:32` (D2 The four indexes of the goal)
 Builds on it: none
 
 ## C73. Source verification in the goal (2026-10-17)
@@ -380,7 +380,7 @@ The goal names "source verification". Coverage row 196 takes the verifier: a tit
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:5` (D3 Source verification in the goal)
+Booked: `.scratch/9-literature/plan.md:33` (D3 Source verification in the goal)
 Builds on it: none
 
 ## C74. Synthesis in the goal (2026-10-17)
@@ -392,7 +392,7 @@ The goal names "synthesis". Coverage rows 197 and 231 take the source-by-theme m
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:6` (D4 Synthesis in the goal)
+Booked: `.scratch/9-literature/plan.md:34` (D4 Synthesis in the goal)
 Builds on it: none
 
 ## C75. The `.bib` in the goal (2026-10-17)
@@ -404,7 +404,7 @@ The goal names "the `.bib`". The hub's manuscripts cite from a `.bib` beside the
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:7` (D5 The `.bib` in the goal)
+Booked: `.scratch/9-literature/plan.md:35` (D5 The `.bib` in the goal)
 Builds on it: none
 
 ## C76. The gate's check that every cited source resolves (2026-10-17)
@@ -416,7 +416,7 @@ The gate says "every source it cites resolves".
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:8` (D6 The gate's check that every cited source resolves)
+Booked: `.scratch/9-literature/plan.md:36` (D6 The gate's check that every cited source resolves)
 Builds on it: none
 
 ## C77. The gate's reading of twenty citations drawn at random (2026-10-17)
@@ -428,7 +428,7 @@ The gate says "for a sample of twenty citations drawn at random, the cited passa
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:9` (D7 The gate's reading of twenty citations drawn at random)
+Booked: `.scratch/9-literature/plan.md:37` (D7 The gate's reading of twenty citations drawn at random)
 Builds on it: none
 
 ## C78. The gate's check that a source that cannot be accessed is reported (2026-10-17)
@@ -440,7 +440,7 @@ The gate says "a source that cannot be accessed is reported, not written around"
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:10` (D8 The gate's check that a source that cannot be accessed is reported)
+Booked: `.scratch/9-literature/plan.md:38` (D8 The gate's check that a source that cannot be accessed is reported)
 Builds on it: none
 
 ## C79. The gate's blind comparison against deep-research (2026-10-17)
@@ -452,7 +452,7 @@ The gate says "a side-by-side run against deep-research on a real topic, compare
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:11` (D9 The gate's blind comparison against deep-research)
+Booked: `.scratch/9-literature/plan.md:39` (D9 The gate's blind comparison against deep-research)
 Builds on it: none
 
 ## C80. The gate's coverage records (2026-10-17)
@@ -464,7 +464,7 @@ The gate asks for a record per `rebuild: literature` row. `grep -c 'rebuild: lit
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:12` (D10 The gate's coverage records)
+Booked: `.scratch/9-literature/plan.md:40` (D10 The gate's coverage records)
 Builds on it: none
 
 ## C81. The agents of a literature run (2026-10-17)
@@ -477,7 +477,7 @@ Coverage rows 185 to 197 take the bibliography, verification, synthesis, report,
   - Recommendation: (a). The lazy option is (c).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:13` (D14 The agents of a literature run)
+Booked: `.scratch/9-literature/plan.md:41` (D14 The agents of a literature run)
 Builds on it: none
 
 ## C82. How a citation is tied to its source (2026-10-17)
@@ -490,7 +490,7 @@ Coverage rows 191 and 197 require a page, section or quote on each citation, and
   - Recommendation: (a). The lazy option is (c).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:14` (D15 How a citation is tied to its source)
+Booked: `.scratch/9-literature/plan.md:42` (D15 How a citation is tied to its source)
 Builds on it: none
 
 ## C83. A source that cannot be accessed, and a reference that cannot be confirmed (2026-10-17)
@@ -502,7 +502,7 @@ The gate wants such a source "reported, not written around"; coverage row 196 se
   - Recommendation: (a). The lazy option is none, since both do the work; (b) costs a stop.
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:15` (D16 A source that cannot be accessed, and a reference that cannot be confirmed)
+Booked: `.scratch/9-literature/plan.md:43` (D16 A source that cannot be accessed, and a reference that cannot be confirmed)
 Builds on it: none
 
 ## C84. The report's form (2026-10-17)
@@ -515,7 +515,7 @@ The report goes to the user and to `paper`, whose manuscripts are LaTeX with a `
   - Recommendation: (a). The lazy option is (c).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:16` (D17 The report's form)
+Booked: `.scratch/9-literature/plan.md:44` (D17 The report's form)
 Builds on it: none
 
 ## C85. The `.bib` of a run (2026-10-17)
@@ -527,7 +527,7 @@ Coverage row 166 says the user's library is "never modified", and the hub's libr
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:17` (D18 The `.bib` of a run)
+Booked: `.scratch/9-literature/plan.md:45` (D18 The `.bib` of a run)
 Builds on it: none
 
 ## C86. A stop for the user before searching (2026-10-17)
@@ -539,7 +539,7 @@ deep-research's full mode makes phase 1 interactive (`research-hub/.claude/skill
   - Recommendation: (a). The lazy option is none; (b) costs the comparison.
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:18` (D19 A stop for the user before searching)
+Booked: `.scratch/9-literature/plan.md:46` (D19 A stop for the user before searching)
 Builds on it: none
 
 ## C87. The prose check of the report (2026-10-17)
@@ -551,7 +551,7 @@ Coverage row 184 sends the writing check to `writing`; entry 3's ruling D30 says
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:19` (D20 The prose check of the report)
+Booked: `.scratch/9-literature/plan.md:47` (D20 The prose check of the report)
 Builds on it: none
 
 ## C88. Where a run writes (2026-10-17)
@@ -563,7 +563,7 @@ A run produces a report, a `.bib` and a record of what was fetched. The user wan
   - Recommendation: (a). The lazy option is none; both cost the same.
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:20` (D21 Where a run writes)
+Booked: `.scratch/9-literature/plan.md:48` (D21 Where a run writes)
 Builds on it: none
 
 ## C89. The optional second-model critique (2026-10-17)
@@ -575,7 +575,7 @@ Coverage row 186 keeps "the optional second-model critique, sent only with the u
   - Recommendation: (a). The lazy option is to leave the critique out, which row 186 does not allow.
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:21` (D22 The optional second-model critique)
+Booked: `.scratch/9-literature/plan.md:49` (D22 The optional second-model critique)
 Builds on it: none
 
 ## C91. Record the agents of a literature run as an ADR (2026-10-17)
@@ -587,7 +587,7 @@ D14 is not obvious from the code, binds `paper` and `paper-review`, which reuse 
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:23` (D25 Record the agents of a literature run (D14) as an ADR)
+Booked: `.scratch/9-literature/plan.md:51` (D25 Record the agents of a literature run (D14) as an ADR)
 Builds on it: the record `docs/adr/0015-a-literature-run-is-done-by-fresh-agents-in-turn-and-reviewed-by-a-fresh-editor-and-devil-s-advocate.md`
 
 ## C92. Record the tie between a citation and its source as an ADR (2026-10-17)
@@ -599,7 +599,7 @@ D15 binds `paper`, which cites through the same lookups (D1), and rejects WebFet
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:24` (D26 Record the tie between a citation and its source (D15) as an ADR)
+Booked: `.scratch/9-literature/plan.md:52` (D26 Record the tie between a citation and its source (D15) as an ADR)
 Builds on it: the record `docs/adr/0016-a-cited-claim-rests-on-a-verbatim-passage-read-from-the-source-in-the-same-run.md`
 
 ## C93. The roadmap diff of entry 9 (2026-10-17)
@@ -611,7 +611,7 @@ The user ruled D12: a fresh reviewer agent reads the twenty sampled citations an
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:27` (D28 The roadmap diff of entry 9)
+Booked: `.scratch/9-literature/plan.md:55` (D28 The roadmap diff of entry 9)
 Builds on it: the roadmap diff of entry 9
 
 ## C94. Record the lookup script as an ADR (2026-10-17)
@@ -623,7 +623,7 @@ The user ruled D11. The decision binds `paper`, which reuses the lookups (D1), a
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:28` (D29 Record the lookup script (D11) as an ADR)
+Booked: `.scratch/9-literature/plan.md:56` (D29 Record the lookup script (D11) as an ADR)
 Builds on it: the record `docs/adr/0017-one-standard-library-script-makes-every-reference-lookup-of-the-literature-skill.md`
 
 ## C95. The call forms and modes of the literature skill (2026-10-17)
@@ -636,7 +636,7 @@ Coverage row 184 gives the skill the six phases with the lit-review and three-wa
   - Recommendation: (a). The lazy option is (c).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:30` (D30 The call forms and modes of the literature skill)
+Booked: `.scratch/9-literature/plan.md:58` (D30 The call forms and modes of the literature skill)
 Builds on it: none
 
 ## C96. The model and effort of a literature run's agents (2026-10-17)
@@ -649,7 +649,7 @@ The user ruled that `code-comments`' rewrite agent runs on `reviewer` at `review
   - Recommendation: (a). The lazy option is none, since each option costs the same to build; (c) costs least to run.
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:31` (D31 The model and effort of a literature run's agents)
+Booked: `.scratch/9-literature/plan.md:59` (D31 The model and effort of a literature run's agents)
 Builds on it: none
 
 ## C97. The gate's topic and mode, replacing D23 (2026-10-17)
@@ -661,7 +661,7 @@ D23 compared the full report against deep-research's `lit-review` mode, which ru
   - Recommendation: (a). The lazy option is (b).
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:32` (D32 The gate's topic and mode, replacing D23)
+Booked: `.scratch/9-literature/plan.md:60` (D32 The gate's topic and mode, replacing D23)
 Builds on it: none
 
 ## C98. The roadmap diff of entry 9 for D30 to D32 (2026-10-17)
@@ -673,5 +673,17 @@ The gate names "a side-by-side run against deep-research on a real topic"; D30 t
   - Recommendation: (a). The lazy option is none; (a) does the work the rules ask.
 
 Taken: (a)
-Booked: `.scratch/rulings/9-literature.md:33` (D33 The roadmap diff of entry 9 for D30 to D32)
+Booked: `.scratch/9-literature/plan.md:61` (D33 The roadmap diff of entry 9 for D30 to D32)
 Builds on it: none
+
+## C99. The step list of plan 9 as drafted (2026-10-17)
+
+`/plan 9 --self-rule` drafted three steps: step 1, the skill, its lookup script with the script's test, its wiring and the coverage records, with the gate's coverage check as part of its check; step 2, the gate run, which needs step 1 landed, tagged and pinned and is run by the orchestrator with the user's reading of the table; step 3, the closing. The script and the skill are one step, since both contents are known in advance from D11 and D30 and the skill only names the script's commands. Every answer of "## Gate" is no, no design decision is left unsettled after the two `/grill 9 --self-rule` runs, and no line of the rulings file was left to place.
+  - Option (a), recommended: open the plan with the list as drafted. Pro: the plan opens and step 1 can be prepared at once; one builder writes the skill and the script together, so the commands the skill names are the ones the script has. Con: one large step for one builder and one review.
+  - Option (b): keep the draft for the user. Pro: the user sees the list before the plan opens. Con: the plan does not open, and nothing in the written rules needs the user's call here.
+  - Rule: the `plan` skill's Steps 2 and 3.
+  - Recommendation: (a). The lazy option is (b).
+
+Taken: (a)
+Booked: `.scratch/9-literature/plan.md:62` (Open item A)
+Builds on it: step 1, step 2, step 3

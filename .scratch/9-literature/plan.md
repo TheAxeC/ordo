@@ -1,4 +1,32 @@
-# Rulings: 9. literature
+# Plan: 9. literature
+
+Execution ledger for entry 9 of `docs/roadmap.md`, literature. One bullet is one step: a part of the entry. A step is built by one dispatch of its executor (a builder agent by default), or run by the orchestrator without an agent (marked). A step is ticked only after its verification commands ran and the whole diff was read; the commands are in `orchestrator-state.md`, and nothing is ticked on inspection. The green checkmark is this file's status vocabulary; everything else in this folder is ASCII. Read `orchestrator-state.md` first after any context compaction.
+
+## Goal
+
+The literature skill: search through Crossref, OpenAlex, Semantic Scholar and arXiv, source verification, synthesis and the `.bib`.
+
+## Gate
+
+every source it cites resolves; for a sample of twenty citations drawn at random, a fresh reviewer agent reads each cited passage in its source and finds that it supports the claim it is cited for, in a table the user reads, and a source that cannot be accessed is reported, not written around; a side-by-side run against deep-research on a real topic, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
+
+- The gate: could this pass without the goal being reached? No, the resolve check runs the lookup script on the real report's DOIs and URLs, the twenty passages are read in their sources by an agent that did not write the report and quoted in a table the user reads, the comparison is judged blind by two fresh judges against deep-research on the same input, and each coverage record is checked by reading both files. Checked once: yes, one run of each on the finished skill.
+- Step 1: could this pass without the goal being reached? No, the skill is read against the layout, the rulings and ADRs 0015 to 0017, the script's test fails on the unchanged tree before it passes, a live lookup is read, and each coverage record is read against its source file.
+- Step 2: could this pass without the goal being reached? No, a real run on a real topic is compared blind, its citations resolve by the script, and its twenty sampled passages are read in their sources.
+
+## Steps, in execution order
+
+- 1 The skill: `skills/literature/SKILL.md` (1.0.0) with the three call forms of D30, the agents of D14 and D31, the citation tie of D15, the outputs of D16 to D18 and D21, no stop before searching (D19), the `/writing` pass of D20 and the second-model critique of D22, its `references/` holding what each agent is given; `templates/lookup.py` computing only what D11 and D27 approve, and its offline test `templates/lookup.test.sh` with recorded responses, added to the verify list in `docs/dev/building.md` and to the command block of `docs/dev/change-standard.md`; the skill wired in as D31 says (the `reviewer` and `reviewer_effort` comments of `.agents/plan.yaml` and `skills/plan/templates/plan.yaml`, the descriptions of `agents/ordo-*.md`), listed in `README.md` and `docs/dev/scripts.md`, with ADRs 0015, 0016 and 0017 followed; one record per `rebuild: literature` row of `docs/academic-coverage.md` in `agents/reviews/1-coverage.md`, saying which file of `skills/literature/` holds what the source file did; the check: the skill read against `docs/dev/skill-layout.md`, the rulings and the three ADRs, `sh skills/literature/templates/lookup.test.sh` exits 0 after failing on the unchanged tree, `python3 skills/literature/templates/lookup.py resolve 2511.18945` run live and its output read, each coverage record checked by reading the row's source file and the skill's file, and the character-set check over the changed files prints nothing (1 commit) (ruling A)
+- 2 The gate run: after step 1 lands and its release-candidate tag and pin, `/literature` on the topic and library of D32 and deep-research's `full` mode on the same input, each in its own fresh session, compared blind twice as `docs/dev/blind-comparison.md` says; `lookup.py check-urls` on the report; the twenty citations drawn by a kept `python3 -c 'import random; ...'` command and read by a fresh reviewer agent into the table of D12, which the user reads; the report's "Sources not accessed" and "References not confirmed" sections read for D16; the check: the comparison's result is a win or a tie, every cited DOI and URL resolves, each of the twenty rows reads supports, and the user's reading of the table (1 commit; orchestrator) (ruling A)
+- 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (ruling A)
+
+## Could run in parallel
+
+Independent of each other; the standing rule of one agent at a time still serialises them unless `.agents/plan.yaml`'s `workers_at_once` allows more.
+
+- none: step 2 runs the skill step 1 builds.
+
+## Rulings (2026-10-17)
 
 - D1 Place of entry 9 and the reference lookups entry 5 reuses (2026-09-26): "entry 9 moves before entry 5 and entry 5 waits on 9 for the reference lookups", carried from `.scratch/archive/2-b-repair-what-the-audit-of-plans-1-2-and-2-a-found/plan.md:118` (the user).
 - D2 The four indexes of the goal (2026-10-17): kept as written, search through Crossref, OpenAlex, Semantic Scholar and arXiv (self-rule).
@@ -31,8 +59,15 @@
 - D31 The model and effort of a literature run's agents (2026-10-17): every agent of a run, the reading agents included, runs as `ordo-<reviewer_effort>` on the model `reviewer` names, as the user ruled for `code-comments`' rewrite agent (E2 of `.scratch/archive/4-code-comments/plan.md:67`); the `reviewer` and `reviewer_effort` comments of `.agents/plan.yaml` and `skills/plan/templates/plan.yaml` and the descriptions of `agents/ordo-*.md` name the literature agents, with no value changed (self-rule).
 - D32 The gate's topic and mode, replacing D23 (2026-10-17): the full report, `/literature <topic>`, on "neural and amortized estimators of mutual information and of the Linfoot informational correlation", with `--bib research-hub/projects/active/linfoot-estimator/manuscript/main.bib`, against deep-research's `full` mode on the same input; the same run's report gives the twenty citations of D7 (self-rule).
 - D33 The roadmap diff of entry 9 for D30 to D32 (2026-10-17): none, since the gate already names "a side-by-side run against deep-research on a real topic" and D32 only names the mode (self-rule).
+- Open item A (2026-10-17): the step list as drafted, 3 steps, which opens the plan (self-rule).
 
 ## Agents
 
+Each agent a plan skill started for this plan has one bullet, with its agent id, its role and the model the runner served it, except an agent in no role the cost script prices, which has a numbered item under the heading "Agents in no role the cost script prices:"; `/land` writes a step's agents at its booking and when it takes a step back out of main, `/grill` writes its lookup agents, `/spec` writes a brief-check agent it stopped for another model or found dead when it took a run over, the orchestrator writes a brief-check agent it stopped under "The review of a choice", the session that starts a diagnosis agent writes its numbered item right after the start, and `/plan` copies the bullets of a rulings file.
+
 - a2a0d04c7695256a4: grill lookup, claude-opus-5-5
 - a725dc958535ce682: grill lookup, claude-opus-5-5
+
+## Blocked, and by what
+
+- 2: the landing of step 1 and its release-candidate tag and pin, a moment that has not come.
