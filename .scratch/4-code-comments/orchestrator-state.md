@@ -72,5 +72,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-10-17. Step 1 of 3, the skill, landed: `skills/code-comments/` with `strip_comments.py` and its test, wired in, `agents/reviews/1-landing.md`.
-- Next step: 2, the gate run, after the tag and the pin the user rules on.
-- Open on Axel's side: the tag and the pin before step 2.
+- `v8.2.0-rc.1` tagged on `4e2788e` and pinned, as the user ruled.
+- Next step: 2, the gate run, `/code-comments a0aa831^..a0aa831` in a scratch clone of game-engine at `a0aa831`.
+- Open on Axel's side: none.

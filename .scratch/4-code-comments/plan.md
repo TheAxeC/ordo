@@ -52,6 +52,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - E2 Which model the rewrite agent runs on (2026-10-17): (b) `reviewer` (`claude:opus`) at `reviewer_effort`, in place of the recommended `worker`; no option was the lazy one (the user).
 - Open item A (2026-10-17): (a) `strip_comments.py` is approved as computing: each comment becomes one space; in C and C++, a backslash-newline outside a literal is deleted first, each run of whitespace outside a literal becomes one space, and a preprocessor directive keeps its own line; in CMake, each run of whitespace outside quoted and bracket arguments becomes one space; literals, quoted arguments and bracket arguments are kept byte for byte; `--compare` prints `equal` when the two results are the same and `differ` otherwise; the lazy option was (b), comments removed and every other byte compared (the user).
 - Open item B (2026-10-17): (a) added to the computation open item A approves for `strip_comments.py`: the stripped form drops the whitespace at the start of the file and ends with exactly one newline; a run of whitespace that holds the newline before a preprocessor directive, or the newline that ends one, becomes one newline, and any other run one space, so a comment line or a blank line removed between two `#define` lines leaves the form unchanged; the lazy option was (b), cases 5 and 14 moved off the file's first line (the user).
+- The tag and the pin for step 2 (2026-10-17): (a) tag `v8.2.0-rc.1` on `4e2788e` and run `utils/pin.sh v8.2.0-rc.1`, the final `v8.2.0` left to the closing; the lazy option was (b), tagging `v8.2.0` before the gate ran (the user).
 
 ## Agents
 
@@ -65,7 +66,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: the tag and the pin the user rules on, after step 1 lands.
+- none.
 
 ### Step 1, the skill (landed 2026-10-17)
 
