@@ -215,4 +215,4 @@ Each finding was closed in `agents/briefs/1.md` before dispatch:
 - Decision 3 replaced: a Markdown file is reviewed for its `<!-- -->` comments, so ADR 0014 is not narrowed.
 - Verify: the test's exit status checked apart from `tail`; Verify 3 checks the **effort agent** and **reviewer** entries; a new Verify 5 reads `SKILL.md` against the layout, D1 to D7, E1, E2 and ADR 0014.
 - Declined to judge, the line-53 widening: the bullet now reads "It carries no step numbers.", as D3 has it.
-- Declined to judge, the whitespace normalisation of `strip_comments.py`: raised to the user as an open item, since it is a script computation (kind 3).
+- Declined to judge, the whitespace normalisation of `strip_comments.py`: raised to the user as open item A, since it is a script computation (kind 3); the user ruled (a), the normalisation as the brief states it, and the brief names that ruling beside D7.
