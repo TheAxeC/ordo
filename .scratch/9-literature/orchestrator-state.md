@@ -44,14 +44,13 @@ dispatch: none              # or the block /spec writes (a list when .agents/pla
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item B (2026-10-17), step 1, the edits of the user's pages that wire `literature` in: step 1 adds a test (D11) and agents that run on `reviewer` (D31), and the pages that list the verify commands, the commands and their filters, and who runs on `reviewer` and as `ordo-<reviewer_effort>` are the user's written pages (kind 3 of `plan-orchestration`'s `references/self-rule.md`). `docs/dev/building.md` says a new script "adds its test here and to the command block of `docs/dev/change-standard.md`" when it has one; `skills/repo-setup/templates/plan-terms.md` lines 39 and 99 (**effort agent**, **reviewer**) list `writing` and `code-comments` and not `literature`; `skills/repo-setup/templates/docs/glossary.md` line 3 lists the skills whose terms stand in the block; `.agents/plan.yaml` line 10, `skills/plan/templates/plan.yaml` lines 12 and 27 and `skills/plan/templates/orchestrator-state.md` lines 14 and 26 list who runs on `reviewer` and at `reviewer_effort`.
-  - (a) Step 1 makes these edits and no value changes: (1) `docs/dev/building.md`, the command block gains `sh skills/literature/templates/lookup.test.sh` with a comment saying what it proves, so the test joins every plan's verify list; (2) `docs/dev/change-standard.md`, "Commands and their filters", gains `sh skills/literature/templates/lookup.test.sh 2>&1 | tail -1`; (3) `skills/repo-setup/templates/plan-terms.md`, synced into `docs/glossary.md` by `python3 skills/repo-setup/templates/sync_rules.py . --write --only glossary`, adds "the agents of `literature`" to **effort agent** (launched as `ordo-<reviewer_effort>`) and to **reviewer** (run on `reviewer:`), with the `literature` steps that state it in each "Stated in"; (4) `skills/repo-setup/templates/docs/glossary.md` line 3 adds `literature` to the skills whose terms stand in the block; (5) the `reviewer` comment of `.agents/plan.yaml` and the `reviewer` and `reviewer_effort` comments of `skills/plan/templates/plan.yaml` and `skills/plan/templates/orchestrator-state.md` add "the agents of /literature", as D31 says. Pro: the test runs at every landing, and every page that lists who runs on `reviewer` stays complete. Con: five of your pages change in one step.
-  - (b) Step 1 builds the skill and its test and changes none of these pages. Pro: no page of yours changes. Con: no landing runs the test, so a broken lookup lands green; the glossary, the comments and the change standard no longer list every agent that runs on `reviewer`, which D31 asks to keep complete.
-  - Recommendation: (a), since the test then guards every landing and D31's wiring is carried to every page that lists the agents. The lazy option is (b).
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - Open item A (2026-10-17), the step list as drafted: closed 2026-10-17 under self-rule, option (a), the plan opened with the three steps; booked in `plan.md`'s Rulings and as choice C99 of `.scratch/choices.md`.
+- Open item B (2026-10-17), step 1, the edits of the user's pages that wire `literature` in: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings and under step 1's Step 0.
+- 2026-10-17: Open item C, step 1, where a cited passage stands in the report and how `quote-check` and `check-urls` find a cited source: closed under self-rule, C100.
 
 ## The standing demands (from Axel, in force)
 
@@ -75,5 +74,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-10-17. The plan is opened; nothing has landed. The working tree holds nothing of the plan's.
-- Next step: 1, stopped at its `/spec` on open item B, which waits on Axel's ruling.
-- Open on Axel's side: open item B.
+- Next step: 1, its `/spec` run again after the ruling on open item B.
+- Open on Axel's side: none.
