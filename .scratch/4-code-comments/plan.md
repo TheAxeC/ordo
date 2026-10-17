@@ -12,12 +12,14 @@ A `code-comments` skill that reviews the comments a git diff adds or changes, by
 
 - The gate: could this pass without the goal being reached? No, the user reads the report of a real run on a real diff and judges it useful, the comparison is run on the files the real rewrite changed, the test runs the script, and the skill is read against the layout. Checked once: yes, one run read once, with no fix-and-run-again.
 - Step 1: could this pass without the goal being reached? No, the skill is read against `docs/dev/skill-layout.md` and D1 to D7, and the script's test runs C, C++ and CMake cases taken from the gate's diff, each first run on the unchanged tree.
+- Step 1a: could this pass without the goal being reached? No, the prompt file is built by the skill's own commands on the gate's real range and read, and the skill is read against ruling C.
 - Step 2: could this pass without the goal being reached? No, the user reads the real report and picks the findings, and `--compare` runs on the real rewritten files.
 
 ## Steps, in execution order
 
 - ✅ 1 The skill: `skills/code-comments/SKILL.md` (1.0.0) as D1 to D4 and D7 rule, `templates/strip_comments.py` computing only what D7 and open items A and B approve, and its test `templates/strip_comments.test.sh`, added to the verify list in `docs/dev/building.md`; the skill wired in where `writing`'s review agents are named (`agents/ordo-*.md`, the `reviewer` and `reviewer_effort` comments of `skills/plan/templates/plan.yaml` and `.agents/plan.yaml`), and listed in `README.md` and `docs/dev/scripts.md`, with ADR 0014 followed; the check: the skill read against `docs/dev/skill-layout.md`, the rulings and ADR 0014, `sh skills/code-comments/templates/strip_comments.test.sh` exits 0 after failing on the unchanged tree, and the character-set check over the changed files prints nothing (1 commit) (approved) (ruling A) (ruling B)
-- 2 The gate run: after a tag and a pin the user rules on, `/code-comments a0aa831^..a0aa831` in a scratch clone of `game-engine` at `a0aa831`, invoked through the Skill tool, its report shown whole; the user reads it and picks the findings to apply, the rewrite runs, and `--compare` is run on each rewritten file; the check: the user's reading of the report, `equal` for each rewritten file, and the transcripts showing the review agents edited no file (no commit; orchestrator, no agent) (approved)
+- 1a The prompt file: `skills/code-comments/SKILL.md` changed as ruling C says: the session writes each agent's prompt (the diff, `cat -n` of each reviewed file, the non-ASCII output, the rules and the bullets) into a file in a scratch folder with shell commands, and the agent's prompt names that file, which the agent reads whole and is the only file it reads; a reviewed file over 256 KB is given as each of its diff hunks with 40 lines on either side in place of the whole file, and the report names each such file; the agents' bullets, the Rules, the Anti-patterns and every other place of the skill that says the agents read no file or get each file whole say the same; the check: the skill read against ruling C, `docs/dev/skill-layout.md` and ADR 0014, a prompt file built by the skill's commands for `a0aa831^..a0aa831` in a scratch clone of `game-engine` holds `manual.html` as hunks and every other file whole, and the character-set check over the changed files prints nothing (1 commit) (ruling C)
+- 2 The gate run: after step 1a lands and a tag and a pin the user rules on, `/code-comments a0aa831^..a0aa831` in a scratch clone of `game-engine` at `a0aa831`, invoked through the Skill tool, its report shown whole; the user reads it and picks the findings to apply, the rewrite runs, and `--compare` is run on each rewritten file; the check: the user's reading of the report, `equal` for each rewritten file, and the transcripts showing the review agents edited no file (no commit; orchestrator, no agent) (approved)
 - 3 the closing: the closing report written (the cost script's output, or that the plan started no agent), the roadmap entry ticked with the gate's output, this folder moved to the archive (orchestrator, no agent) (approved)
 
 ### Step 1, Step 0
@@ -31,11 +33,18 @@ A `code-comments` skill that reviews the comments a git diff adds or changes, by
   - (b) Keep ruling A as written and move cases 5 and 14 off the file's first line. Pro: no addition to what you approved. Con: a comment-only rewrite of a file's first line, such as a `///` doc block at the top of a header, is always put back as `differ`.
   - Recommendation: (a), since it makes ruling A hold for a comment on the first or last line of a file, and the directive reading is the one the ruled words name. The lazy option is (b), which fits the cases to the rule and leaves the top-of-file comments unappliable.
 
+### Step 2, Step 0
+
+- Open item C (2026-10-17), closed 2026-10-17 by the user's ruling (a); step 2, raised at the gate run before any agent started: the skill's Steps 6 and 7 put the diff and every reviewed file whole into the agents' prompt, and the agents read no file. For `a0aa831^..a0aa831` that is 26 files: `docs/user/manual.html` alone is 1,293,416 bytes (8820 lines, generated by `./utils/build.py site`), the other 25 are 473,668 bytes, and the diff is 136,251 bytes, so the session would have to type out about 1.9 MB as one prompt. The diff changes 8 lines of `manual.html` and none of its `<!-- -->` comments.
+  - (a) A new step 1a before the gate: the prompt written to a scratch file by shell commands and read whole by the agent as its only file; a reviewed file over 256 KB given as its diff hunks with 40 lines on either side, named in the report; then a tag `v8.2.0-rc.2` and its pin, which the user rules. Pro: the skill runs on any diff and every changed comment stays under review. Con: a comment in a large file is judged against 40 lines on either side of it; one more step, tag and pin.
+  - (b) As (a), but a file over 256 KB left out and named. Pro: a smaller change. Con: comments added to a large file are never judged.
+  - Recommendation: (a). The lazy option is (b).
+
 ## Could run in parallel
 
 Independent of each other; the standing rule of one agent at a time still serialises them unless `.agents/plan.yaml`'s `workers_at_once` allows more.
 
-- none: step 2 runs the skill step 1 builds.
+- none: step 1a changes the skill step 1 built, and step 2 runs it.
 
 ## Rulings (2026-10-17)
 
@@ -53,6 +62,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item A (2026-10-17): (a) `strip_comments.py` is approved as computing: each comment becomes one space; in C and C++, a backslash-newline outside a literal is deleted first, each run of whitespace outside a literal becomes one space, and a preprocessor directive keeps its own line; in CMake, each run of whitespace outside quoted and bracket arguments becomes one space; literals, quoted arguments and bracket arguments are kept byte for byte; `--compare` prints `equal` when the two results are the same and `differ` otherwise; the lazy option was (b), comments removed and every other byte compared (the user).
 - Open item B (2026-10-17): (a) added to the computation open item A approves for `strip_comments.py`: the stripped form drops the whitespace at the start of the file and ends with exactly one newline; a run of whitespace that holds the newline before a preprocessor directive, or the newline that ends one, becomes one newline, and any other run one space, so a comment line or a blank line removed between two `#define` lines leaves the form unchanged; the lazy option was (b), cases 5 and 14 moved off the file's first line (the user).
 - The tag and the pin for step 2 (2026-10-17): (a) tag `v8.2.0-rc.1` on `4e2788e` and run `utils/pin.sh v8.2.0-rc.1`, the final `v8.2.0` left to the closing; the lazy option was (b), tagging `v8.2.0` before the gate ran (the user).
+- Open item C (2026-10-17): (a) a new step 1a before the gate changes `code-comments` so that the session writes each agent's prompt into a file in a scratch folder with shell commands and the agent reads that file whole as the only file it reads, and a reviewed file over 256 KB is given as each of its diff hunks with 40 lines on either side in place of the whole file, the report naming each such file; this changes ruling D4's "each changed file whole" for those files only; the step is followed by a tag `v8.2.0-rc.2` and its pin, which the user rules; the lazy option was (b), a file over 256 KB left out of the review (the user).
 
 ## Agents
 
@@ -66,7 +76,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- none.
+- 2: step 1a, and the tag and the pin the user rules on after it.
 
 ### Step 1, the skill (landed 2026-10-17)
 
