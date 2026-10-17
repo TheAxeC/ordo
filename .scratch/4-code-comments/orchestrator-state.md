@@ -43,7 +43,10 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none.
+- Open item A (2026-10-17); step 1, one finding of the brief check (`agents/reviews/1-brief-check.md`, "Declined to judge") that the brief cannot settle, since it decides what a new script computes: ruling D7 approved `strip_comments.py` as "computing a file's text with its comments removed" and printing `equal` or `differ`. Removing comments alone leaves the spaces and line breaks around them, so deleting a trailing comment (`x = 1;   // why` becomes `x = 1;`), deleting a whole comment line, moving a comment onto its own line, or reflowing a three-line `///` block into two lines all print `differ`, and the skill would put each such rewrite back. The brief also has the script normalise whitespace outside literals, as Cathedra's `strip_comments.py`, which ADR 0014's Context cites, does.
+  - (a) Approve this computation for `strip_comments.py`: each comment becomes one space; in C and C++, a backslash-newline outside a literal is deleted first, as the compiler deletes it, each run of whitespace outside a literal becomes one space, and a preprocessor directive keeps its own line; in CMake, each run of whitespace outside quoted and bracket arguments becomes one space; literals, quoted arguments and bracket arguments are kept byte for byte; `--compare` prints `equal` when the two results are the same and `differ` otherwise. Pro: deleting, moving and reflowing a comment compare `equal`, so the findings that ask for a comment to be removed or shortened can be applied; whitespace outside literals does not change what C, C++ or CMake build, and the line a directive ends on is kept. Con: a rewrite that also re-indents code or moves a line break in code compares `equal` and is kept; a rewrite that joins two tokens (`int x` to `intx`) or splits one still compares `differ`.
+  - (b) Approve only what D7's words say: comments removed, every other byte kept, the results compared byte for byte. Pro: any change outside a comment, whitespace included, prints `differ`. Con: every comment deletion, move or reflow prints `differ` and is put back, so most findings that ask to remove or shorten a comment can never be applied, and cases 4, 5 and 14 of the brief expect `differ` instead of `equal`.
+  - Recommendation: (a), since the skill exists to apply the findings the user picks, and whitespace in code outside literals and directive lines does not change the build. The lazy option is (b), which costs less to build and leaves the comment deletions the findings ask for impossible to apply.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -70,5 +73,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-10-17. The plan is opened; nothing has landed.
-- Next step: 1, the skill, because step 2 runs it.
-- Open on Axel's side: none.
+- Step 1: the brief is written and checked by agent a0c9f327f17f5773c (`agents/reviews/1-brief-check.md`), every finding closed in the brief but one, raised as open item A; no brief, worktree or dispatch entry stands.
+- Next step: 1, `/spec 4 1` again after the ruling on open item A.
+- Open on Axel's side: open item A, what `strip_comments.py` computes.
