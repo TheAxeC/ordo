@@ -54,7 +54,10 @@ dispatch:               # or the block /spec writes (a list when .agents/plan.ya
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none.
+- Open item B (2026-10-17); step 1, raised by its builder (agent a506da4c91c7ab7a8) at the first run of the cases, before any code, since it decides what a new script computes: under ruling A, each comment becomes one space and each run of whitespace becomes one space, so a file that starts with a comment starts with a space once the comment is stripped, and the same file without the comment does not. Deleting `/// doc` from the first line of `/// doc\nint f();\n` therefore gives ` int f(); ` against `int f(); `, which prints `differ`; so does moving a trailing comment above a file's first code line, and deleting a comment at the very end of a file with no final newline. Cases 5 and 14 of the brief expect `equal`. The builder waits in its worktree, nothing changed.
+  - (a) Add to ruling A: the stripped form drops the whitespace at the start of the file and ends with exactly one newline, as Cathedra's `strip_comments.py` does; and "a preprocessor directive keeps its own line" means that a run of whitespace holding the newline before a directive or the newline that ends one becomes one newline, any other run one space, so a comment line or a blank line removed between two `#define` lines leaves the form unchanged. Pro: deleting or moving a comment on a file's first or last line compares `equal`, as ruling A intends for every comment; a change of code at the start or end of a file still prints `differ`. Con: two files that differ only in blank lines or spaces at their start or end compare `equal`, which changes nothing a C, C++ or CMake build reads.
+  - (b) Keep ruling A as written and move cases 5 and 14 off the file's first line. Pro: no addition to what you approved. Con: a comment-only rewrite of a file's first line, such as a `///` doc block at the top of a header, is always put back as `differ`.
+  - Recommendation: (a), since it makes ruling A hold for a comment on the first or last line of a file, and the directive reading is the one the ruled words name. The lazy option is (b), which fits the cases to the rule and leaves the top-of-file comments unappliable.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -83,5 +86,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-17. The plan is opened; nothing has landed.
 - Step 1: the brief is written and checked by agent a0c9f327f17f5773c (`agents/reviews/1-brief-check.md`), every finding closed in the brief but one, raised as open item A and ruled (a); no brief, worktree or dispatch entry stands.
 - Step 1 is building: builder a506da4c91c7ab7a8 (claude-sonnet-5-5) in `.agents/worktrees/4-code-comments-1` from base b107561.
-- Next step: 1, `/refute 4 1` when the builder reports.
-- Open on Axel's side: none.
+- The builder handed back at its first run of the cases, before any code: open item B. It waits, resumed with the ruling.
+- Next step: 1, the builder resumed on the ruling on open item B, then `/refute 4 1`.
+- Open on Axel's side: open item B, the start and end of the file in `strip_comments.py`'s stripped form.
