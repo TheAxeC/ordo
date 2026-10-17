@@ -44,10 +44,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item F (2026-10-17), step 2, the tag and the pin after step 1b: the installed skills are `v8.2.0-rc.2`, whose `code-comments` and `session-retro` still write `$0`, `$1` and `$2` in their `awk` commands, so the rewrite of step 2, run through the Skill tool on `apply`, is served its rules commands with the call's argument in place of `$0`.
-  - (a) Tag `v8.2.0-rc.3` on the landing commit of step 1b and run `utils/pin.sh v8.2.0-rc.3`, the final `v8.2.0` left to the closing. Pro: the rewrite runs the fixed skill, as served. Con: one more release candidate tag.
-  - (b) Run the rewrite on the pinned `v8.2.0-rc.2`, the session typing the rules commands as the file on disk has them. Pro: no tag. Con: the gate runs a skill that is not the one on main, and the session departs from the skill's served text.
-  - Recommendation: (a). The lazy option is (b).
+- none.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -55,6 +52,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - Open item B (2026-10-17), step 1, the start and end of the file in `strip_comments.py`'s stripped form: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings and under step 1's Step 0.
 - Open item C (2026-10-17), step 2, the size of the agents' prompt: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings and under step 2's Step 0; step 1a added.
 - Open item D (2026-10-17), step 2, the tag and the pin before the gate run: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings; `v8.2.0-rc.2` tagged on `7481267` and pinned.
+- Open item F (2026-10-17), step 2, the tag and the pin after step 1b: closed 2026-10-17 by the user's ruling (a), booked in `plan.md`'s Rulings; `v8.2.0-rc.3` tagged on `436760d` and pinned.
 
 ## The standing demands (from Axel, in force)
 
@@ -78,4 +76,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-10-17. Step 1b of 4, no positional argument in a skill's text, landed: `skills/code-comments/SKILL.md` and `skills/session-retro/SKILL.md`, `agents/reviews/1b-landing.md`.
 - Step 2, the gate run, in a scratch clone of game-engine at `a0aa831`: the checking agent's report is shown; the rewrite on the user's `apply` waits for the tag and the pin after step 1b, which the user rules.
-- Open on Axel's side: the tag and the pin after step 1b; the findings to apply.
+- `v8.2.0-rc.3` tagged on `436760d` and pinned, as the user ruled on open item F.
+- Open on Axel's side: the findings to apply.

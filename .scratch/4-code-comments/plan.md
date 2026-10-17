@@ -72,6 +72,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - Open item D (2026-10-17): (a) tag `v8.2.0-rc.2` on `7481267`, the landing commit of step 1a, and run `utils/pin.sh v8.2.0-rc.2`, the final `v8.2.0` left to the closing; the lazy option was (b), the gate run on the pinned `v8.2.0-rc.1` (the user).
 - Open item E (2026-10-17): fix the defect that the runner, when it serves a skill's text, replaces `$0` with the call's first argument, so the two `awk` commands of `code-comments`' "The prompt file" that test `$0` read `(a0aa831^..a0aa831 == "## Rules of a comment")` as served, and a session copying them writes a prompt file with no rules sections; as a new step 1b before the gate's report is acted on, with a tag and a pin after it that the user rules; the user's words were "OBVIOUSLY FIX" (the user).
 - Step 1b reaches `session-retro` (2026-10-17): (a) step 1b also writes `skills/session-retro/SKILL.md`, whose three `awk` commands test `$0` and which is called as `/session-retro <entry>`, so the same defect replaces them with the entry; the lazy option was (b), a roadmap entry for `session-retro` alone (self-rule).
+- Open item F (2026-10-17): (a) tag `v8.2.0-rc.3` on `436760d`, the landing commit of step 1b, and run `utils/pin.sh v8.2.0-rc.3`, the final `v8.2.0` left to the closing; the lazy option was (b), the rewrite run on the pinned `v8.2.0-rc.2` (the user).
 
 ## Agents
 
@@ -91,7 +92,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2, the rewrite after the report: the tag and the pin the user rules on after step 1b.
+- none.
 
 ### Step 1, the skill (landed 2026-10-17)
 
