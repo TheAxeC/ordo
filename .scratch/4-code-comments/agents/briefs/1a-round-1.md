@@ -1,0 +1,13 @@
+# Step 1a, repair round 1
+
+The findings of `agents/reviews/1a-refuter.md`, each with the orchestrator's ruling. Every ruling stays inside the step's part and the brief `agents/briefs/1a.md`, which still holds in full. The paths this round writes are the brief's paths: `skills/code-comments/SKILL.md`, the ADR 0014 file and the report `.scratch/4-code-comments/agents/reviews/1a-report.md`.
+
+## Rulings
+
+1. ST1, the line break before the rules. In each prompt file (`finding.md`, `checking.md`, `rewrite.md`), the first piece written after the reviewed files, the rules piece in `rewrite.md` and the non-ASCII piece or the rules piece wherever another piece follows a file's text or a heading with no line under it, starts with a line break, as the sentence "Each `printf` that starts a piece writes a line break first." says: write `printf '\n' >> '<prompt file>'` (or the piece's own `printf` with a leading `\n`) before every piece that does not start with a `printf`, so that sentence holds for every piece and the sentence "A heading with no line under it means no hit" holds for the last file. Rerun the reviewer's input: a `rewrite.md` and a `finding.md` whose last reviewed file ends without a final newline, built with the skill's commands in a scratch repository under `$TMPDIR`; `grep -c '^## Rules of a comment$'` prints 1 in each, and the last file's last line stands alone. Quote the runs before and after the change.
+2. ST2, sentence length. ADR 0014's Decision: the clause on how the agent gets the files becomes a sentence of its own before the agent's sentence, so that "or as its diff hunks" attaches to the files and no reader takes the diff itself to be cut; each sentence under about 20 words where the mechanism allows, as the prose standard's section E, "Sentence length", says. `SKILL.md`'s opening paragraph: the first sentence's added clause becomes its own sentence. The ADR still differs from its base by its Decision line only. Name each sentence over 20 words that stays, with why it needs its length, in the report's Verify 7.
+3. B1, the description. Add to the report's "Every host- or user-visible change" one bullet for the frontmatter `description`, with its text before and after, since the runner shows it in every session's skill listing.
+
+## Verify
+
+Rerun every check of the brief's "Verify before you report", and cases 3, 6, 7, 8 and 14 on the changed text. Item 1's run is quoted failing on the worktree as it stands before the round's change, and passing after it. Append a section "Repair round 1" to the report with each ruling above by its number, what changed, and the evidence.

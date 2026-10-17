@@ -46,9 +46,11 @@ dispatch:               # or the block /spec writes (a list when .agents/plan.ya
   launched: 2026-10-17
   session_id: af40906f8aa8074f1 (claude-sonnet-5-5)
   report: .scratch/4-code-comments/agents/reviews/1a-report.md
+  builder_usage: "283251 tokens, 85 tool uses, 19m 9s"
   brief_check: .scratch/4-code-comments/agents/reviews/1a-brief-check.md (ac9dd04a4278294c4, claude-opus-5-5, 204421 tokens, 42 tool uses, 14m 10s)
+  reviewer_report: .scratch/4-code-comments/agents/reviews/1a-refuter.md (acaa6da129278eb92, claude-opus-5-5, 249732 tokens, 58 tool uses, 15m 8s)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -85,5 +87,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-10-17. Step 1 of 3, the skill, landed: `skills/code-comments/` with `strip_comments.py` and its test, wired in, `agents/reviews/1-landing.md`.
 - `v8.2.0-rc.1` tagged on `4e2788e` and pinned, as the user ruled.
-- Step 1a, the prompt file, building: its builder runs in `.agents/worktrees/4-code-comments-1a` from base `d4809cd`. Then its review and landing, a tag and a pin the user rules on, then step 2.
+- Step 1a, the prompt file, in repair round 1 (`agents/briefs/1a-round-1.md`) after its first review: its builder runs in `.agents/worktrees/4-code-comments-1a` from base `d4809cd`. Then its review and landing, a tag and a pin the user rules on, then step 2.
 - Open on Axel's side: none.
