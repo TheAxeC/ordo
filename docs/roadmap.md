@@ -18,6 +18,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
+## 4.A ordo-help skills
+
+- Status: [ ]
+- Goal: `/ordo-help skills` prints, for every skill in the `skills/` folder that holds `ordo-help` itself, the skill's name and its Quick start block copied from its `SKILL.md`, so every mode of every Ordo skill is listed by one command. `skills` is read as this command before `<entry>` is matched against the roadmap.
+- Gate: `/ordo-help skills`, run once through the Skill tool on main, prints one block per folder of `skills/` that holds a `SKILL.md`, as many blocks as `ls skills/*/SKILL.md | wc -l` counts, and `diff` of each printed block against the Quick start block of that skill's `SKILL.md` prints nothing; `skills/ordo-help/SKILL.md` is read against `docs/dev/skill-layout.md`, its version raised by the minor part.
+- Waits on: 1, for the Quick start section every skill has (done).
+
 ## 5. paper
 
 - Status: [ ]
