@@ -51,7 +51,7 @@ every source it cites resolves; for a sample of twenty citations drawn at random
 
 ### Step 2, Step 0
 
-- Open item G (2026-10-18), step 2, how the two fresh sessions of the gate run are started: the step runs `/literature` and deep-research's `full` mode "each in its own fresh session", and `docs/dev/blind-comparison.md` says the orchestrator runs the comparison "from the two runs of the skills to the record". A fresh session the orchestrator starts is a `claude -p` process on the user's Claude Code login, which cannot answer a permission prompt, so it runs with the tools its skill uses allowed and no person watching its commands. deep-research's `full` mode asks the user questions in its Phase 1 (`research-hub/.claude/skills/deep-research/SKILL.md:140`, "full mode (Phase 1 will be interactive)"). research-hub is read only, so neither run starts there.
+- Open item G (2026-10-18), closed 2026-10-18 by the user's ruling (a); step 2, how the two fresh sessions of the gate run are started: the step runs `/literature` and deep-research's `full` mode "each in its own fresh session", and `docs/dev/blind-comparison.md` says the orchestrator runs the comparison "from the two runs of the skills to the record". A fresh session the orchestrator starts is a `claude -p` process on the user's Claude Code login, which cannot answer a permission prompt, so it runs with the tools its skill uses allowed and no person watching its commands. deep-research's `full` mode asks the user questions in its Phase 1 (`research-hub/.claude/skills/deep-research/SKILL.md:140`, "full mode (Phase 1 will be interactive)"). research-hub is read only, so neither run starts there.
   - (a) The orchestrator starts each side as its own `claude -p --model opus` process, each in its own scratch folder outside research-hub holding a copy of research-hub's `.agents/plan.yaml` and of `projects/active/linfoot-estimator/manuscript/main.bib`, the deep-research folder also holding a copy of the deep-research skill folder under `.claude/skills/`; each process has Read, Write, Edit, Bash, Agent, Skill, WebSearch and WebFetch allowed; `/literature oculus <the D32 topic> --bib <the copy> --out <its folder>` is the first prompt of one, and deep-research's `full` mode on the same topic and library the first prompt of the other; each question deep-research asks is answered through `claude -p --resume <its session>` with the input alone: "Use the topic and the library as given and write the full report." Pro: the gate runs unattended, as the comparison page says, and both sides get the same information. Con: two processes run with those tools allowed and nobody watching their commands; deep-research's Phase 1 gets a fixed answer in place of a person's.
   - (b) The orchestrator prepares the two scratch folders as in (a) and gives the user each call; the user starts each in a fresh Claude Code session and answers deep-research's Phase 1 questions; the orchestrator does everything after the two runs. Pro: the user sees both runs and deep-research gets a person's answers, as it is written for. Con: the user's time for two runs, whose length is not known; the comparison then rests on answers given to one side only.
   - Recommendation: (a), since it is the run the comparison page describes and it gives both sides the same input. The lazy option is (b), which hands the runs to the user.
@@ -108,6 +108,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - The `projects:` form in `/literature` (2026-10-18): when `.agents/plan.yaml` has the `projects:` form, the first argument of a `/literature` call names the project whose keys are read, before the mode and the topic, as `/writing` and `/code-comments` read it; a name no project has is the refusal "Unknown project", which lists the projects; Steps 18 passes the project to `/writing` (self-rule).
 - Open item E (2026-10-18): (a), `lookup.py` reads an arXiv ID `<id>` also as the DOI `10.48550/arXiv.<id>`, and that DOI also as the arXiv ID `<id>`, as step 1's Step 0 states it (the user).
 - Open item F (2026-10-18): (a), `lookup.py`'s `openalex_query` replaces each `?` and `*` of a search string with a space before it reaches OpenAlex's `search` parameter, as step 1's Step 0 states it (the user).
+- Open item G (2026-10-18): (a), the orchestrator starts `/literature` and deep-research's `full` mode each as its own `claude -p --model opus` process in a scratch folder outside research-hub, with Read, Write, Edit, Bash, Agent, Skill, WebSearch and WebFetch allowed, and answers each question deep-research asks with the input alone, as step 2's Step 0 states it (the user).
 
 ## Agents
 
@@ -122,7 +123,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: open item G, how the two fresh sessions of the gate run are started.
+- 2: the user's reading of the citation table and the user's call on the blind comparison, once the runs are done.
 
 ### Step 1, the skill (landed 2026-10-18)
 
