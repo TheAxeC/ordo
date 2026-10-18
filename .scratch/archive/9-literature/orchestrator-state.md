@@ -81,5 +81,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-18. Step 1 of 3, the skill, landed on main at 0074728, tagged `v8.3.0-rc.1` and pinned; step 2, the gate run, waits on open item G.
-- Open on Axel's side: open item G.
+- 2026-10-18. Dropped by the user at step 2 of 3, with roadmap entry 9; step 1 removed from main by c613bd2, the pin back to v8.2.0, the tag v8.3.0-rc.1 deleted.
+- Open on Axel's side: none.

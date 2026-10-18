@@ -123,7 +123,7 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: the user's reading of the citation table and the user's call on the blind comparison, once the runs are done.
+- Dropped (2026-10-18) by the user at step 2, with roadmap entry 9: the gate's `/literature` run had read 8 of its 39 kept sources after 77 minutes, about 4 hours projected, and the user does not use deep-research, which the skill rebuilt. Both gate runs were stopped. Commit c613bd2 removed step 1 from main, the pin went back to v8.2.0 and the tag v8.3.0-rc.1 was deleted, on the user's approval. ADRs 0016 and 0017 stay proposed for the grill of entry 5; ADR 0015 is removed. The literature search moves to entry 5, from academic-paper's lit-review mode and literature strategist, with `lookup.py` and its test taken from 0074728. Choices C72 to C101 lapsed with the plan and are kept in `choices.md` beside this file.
 
 ### Step 1, the skill (landed 2026-10-18)
 
