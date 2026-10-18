@@ -8,7 +8,7 @@ Roadmap entry 9's gate reads twenty citations drawn at random for whether the ci
 
 ## Decision
 
-Each claim the `literature` skill cites carries a locator (a page, a section or a paragraph) and a verbatim passage read in the same run from the source's full text. The full text is fetched with `curl` into a temporary folder and read with the Read tool for a PDF or as text for HTML, never through WebFetch. A source of which only the abstract was read is cited only for what the abstract says, and the citation is marked so. A source whose text cannot be fetched is cited for nothing and listed with the URLs tried.
+Each claim the `literature` skill cites carries a locator (a page, a section or a paragraph) and a verbatim passage read in the same run from the source's full text. The full text is fetched by `lookup.py fetch` into a temporary folder and read with the Read tool for a PDF or as text for HTML, never through WebFetch. A source of which only the abstract was read is cited only for what the abstract says, and the citation is marked so. A source whose text cannot be fetched is cited for nothing and listed with the URLs tried.
 
 ## Alternatives rejected
 

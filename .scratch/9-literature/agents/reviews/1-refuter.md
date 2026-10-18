@@ -572,3 +572,20 @@ Hand-back of point 9: sound. A stop raised at "Prose findings" waits for a reply
 - Sentence length elsewhere in the round's added text was judged by reading, not counted per file; only `search.md:104` stood out.
 
 Reviewer usage: a8bf82fafabd884d9, claude-sonnet-5-5, 339943 tokens, 71 tool uses, 19.2 minutes.
+
+## Closed
+
+The first run's findings were sent to the builder as the 21 points of repair round 1 (`agents/briefs/1-round-1.md`, commit 1f167b1), and the run over round 1 gives each point's item or case verdict as holds or met above. Its last Spec finding, the arXiv ID read as the DOI `10.48550/arXiv.<id>`, was raised as open item E and ruled (a) by the user. Round 1 was the last round `repair_rounds: 1` allows, so the findings of the run over it were fixed at landing on main or raised, as follows.
+
+- Spec 1, `references/verification.md` "Resolving each kept source": fixed at landing. A record of the title search at a ratio of 0.70 or more is a match; a source with an identifier is confirmed when any match in any index carries that identifier; a mismatch is written only when no match carries it and a match carries another, and then the match with the highest title ratio gives the identifier; the ratio `resolve '<DOI or arXiv ID>'` prints is named as comparing each index's record with the first record found, so it confirms nothing by itself.
+- Spec 2, `openalex_query` (`lookup.py:889-891`): raised as open item F and ruled (a) by the user; the code stays.
+- Spec 3, `SKILL.md` Steps 10: fixed at landing. The restarted search agent has written its work when `<work>/search.md` names the expansion under "Search limitations", the restarted verification agent when `<work>/verified.md` holds a row for each kept source of `<work>/search.md`; otherwise each is an agent that wrote no file as Steps 7 says, and the Done line names both.
+- Proof 1, no case through `Client.once`: fixed at landing. `lookup.test.sh` sends requests through `Client.get` with a recording `arxiv_turn` and a stubbed `send`: an arXiv host takes a turn, a Crossref host takes none, and a redirect to arxiv.org takes a turn.
+- Proof 2, the scheme check (`lookup.py:813-814`): fixed at landing. `lookup.test.sh` checks that `file:///etc/hosts`, given directly and reached by a redirect, raises `LeftOut` "not an http or https URL" and is never sent.
+- Proof 3, Semantic Scholar on a sentence query: fixed at landing by rewording. The live run `lookup.py search 'How accurate are neural estimators of mutual information in high dimensions?' --limit 3` printed Crossref and OpenAlex records, "Semantic Scholar: left out, HTTP 429 after 3 retries" and "arXiv: not found"; the reviewer's one answered run printed "Semantic Scholar: not found". `references/search.md` layer 4 now says OpenAlex and Crossref give the hits, since both rank by relevance, and that "not found" from arXiv or Semantic Scholar is expected.
+- Proof 4, the shortened quotes of the builder's report: no change. No decision rests on them, and the reviewer's own reruns above stand in for them.
+- Standards 1, `SKILL.md` Rules on a stop once `<work>` exists: fixed at landing, split into three bullets: stop every running agent, use nothing they wrote, remove `<work>` after the agents are stopped.
+- Standards 2, `references/writer.md` "The removals" and "The checks": fixed at landing. The removals say that every output line names a failure and every line but `line <n>: malformed passage line` and `the report cites no key` names a key; "References not confirmed" comes first and takes "no identifier", "no entry" and "no entry in references.bib", and "Sources not accessed" takes a key with "no text" that it does not list, so a key is listed once. The checks say that `quote-check` numbers the lines and `check-urls` prints no line numbers.
+- Standards 3, `references/search.md:104`: fixed at landing, split into two sentences, one per trigger.
+- Standards 4, the head comment line 33 and the `arxiv_turn` docstring: fixed at landing, "across every lookup.py process on the machine" now reads "across every lookup.py process that uses the same temporary folder".
+- Behaviour: none.
