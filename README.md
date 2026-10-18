@@ -25,7 +25,6 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `session-retro` | Reads the transcripts of a plan's Claude Code sessions, of one session or of a time window. It reports what went well, to keep, and what went wrong, to change. Each point quotes its place and proposes a change to a rule, skill or brief, which the user decides on |
 | `writing` | Reviews the prose of a draft with a script and four fresh agents that change nothing: a `.tex` file with its input files, a `.md`, a `.txt` or a `.docx`. It reports each break of a named rule with its place, the quoted passage and what the rule asks for, grouped by rule, and proposes no replacement |
 | `code-comments` | Reviews the comments a git diff adds or changes, the uncommitted changes or a range, with a finding agent and a checking agent that change nothing. It reports each comment that breaks a named rule with its place, the quoted comment and what the rule asks for, the false comments first, and proposes no replacement. On `apply <numbers>` or `apply all` a fresh agent rewrites the picked comments in C, C++ and CMake files, and a rewrite is kept only when `templates/strip_comments.py` finds the code unchanged |
-| `literature` | Searches Crossref, OpenAlex, Semantic Scholar and arXiv on a topic with fresh agents in turn, verifies each source, reads its full text and writes a cited report in the folder named after the topic. Every cited claim carries a locator and a verbatim passage that `templates/lookup.py` finds in the source's text. `/literature <topic>` writes the full report, `review` the annotated bibliography with a thematic synthesis, and `scan` a shortlist compared by WHY, HOW and WHAT. A source that cannot be accessed or confirmed is listed and never cited |
 
 The order of use, shortened from what `/ordo-help` prints:
 
@@ -76,7 +75,7 @@ The loop of one step carries the same marks, with the band that runs the loop un
 
 The skills call each other and read each other's templates, so install all of them. Claude Code reads skills from `~/.claude/skills` (or `$CLAUDE_CONFIG_DIR/skills` for a second account). Remove any copy of these skills under a repository's `.agents/skills` or `.claude/skills`, so that the installed copy is the only one loaded.
 
-The plan skills, `grill`, `writing`, `code-comments` and `literature` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
+The plan skills, `grill`, `writing` and `code-comments` launch their agents through five agent definitions, `agents/ordo-low.md` to `agents/ordo-max.md`, which Claude Code reads from `~/.claude/agents` (or `$CLAUDE_CONFIG_DIR/agents`). `CLAUDE_CODE_EFFORT_LEVEL` must be unset, since it overrides the effort each definition sets.
 
 ### With the skills CLI
 
@@ -103,7 +102,7 @@ For a second Claude Code account, run the last three commands again with `$CLAUD
 rm -rf /tmp/ordo && git clone --depth 1 https://github.com/TheAxeC/ordo.git /tmp/ordo
 for dir in ~/.claude/skills; do
     mkdir -p "$dir"
-    for skill in code-comments diagnose grill land literature ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec writing; do
+    for skill in code-comments diagnose grill land ordo-help ordo-init plan plan-orchestration plan-retro refute repo-setup roadmap session-retro spec writing; do
         rm -rf "$dir/$skill" && cp -R /tmp/ordo/skills/$skill "$dir/"
     done
     agents=$(dirname "$dir")/agents

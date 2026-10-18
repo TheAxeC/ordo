@@ -22,6 +22,5 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0012](0012-every-commit-on-main-names-its-paths.md) | Every commit on main names its paths |
 | [0013](0013-a-script-and-four-fresh-read-only-agents-review-a-draft.md) | A script and four fresh read-only agents review a draft |
 | [0014](0014-a-finding-agent-and-a-checking-agent-review-a-diff-s-comments-and-a-rewrite-is-kept-only-when-the-comment-stripped-files-compare-equal.md) | A finding agent and a checking agent review a diff's comments, and a rewrite is kept only when the comment-stripped files compare equal |
-| [0015](0015-a-literature-run-is-done-by-fresh-agents-in-turn-and-reviewed-by-a-fresh-editor-and-devil-s-advocate.md) | A literature run is done by fresh agents in turn and reviewed by a fresh editor and devil's advocate |
 | [0016](0016-a-cited-claim-rests-on-a-verbatim-passage-read-from-the-source-in-the-same-run.md) | A cited claim rests on a verbatim passage read from the source in the same run |
 | [0017](0017-one-standard-library-script-makes-every-reference-lookup-of-the-literature-skill.md) | One standard-library script makes every reference lookup of the literature skill |

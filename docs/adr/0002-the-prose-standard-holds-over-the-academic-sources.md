@@ -17,4 +17,4 @@ The prose standard holds for every text the writing skills write or review. The 
 
 ## Consequences
 
-One set of rules governs every text the user writes. A long introduction paragraph is reported, and the user judges it. A later writing skill that needs a rule the prose standard contradicts reopens this record with a superseding one. A passage line `> [@<key>, <locator>]: "<passage>"` in a report of the `literature` skill is quoted source text, kept as the source has it, and a `/writing` finding inside it is not applied, as the prose standard's section "How it is applied" says.
+One set of rules governs every text the user writes. A long introduction paragraph is reported, and the user judges it. A later writing skill that needs a rule the prose standard contradicts reopens this record with a superseding one.
