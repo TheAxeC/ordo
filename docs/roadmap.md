@@ -21,9 +21,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 5. paper
 
 - Status: [ ]
-- Goal: The paper skill: drafting, structure, citations, figures and statistics, disclosure statements and revision patches, as the coverage inventory marks them rebuild, with the manuscript scripts `anchorize_tex.py` and `apply_tex_patch.py` moved in from `research-hub/tools/manuscript`. It applies the `/writing` findings you accept to the manuscript.
-- Gate: `anchorize_tex.py` and `apply_tex_patch.py` pass their tests in the skill; the `\cite`-against-`.bib` check and the DOI check pass their tests; a side-by-side run against academic-paper on a real revision round, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: paper` row that the file of `skills/paper/` the row names holds what the source file did, checked by reading both.
-- Waits on: 3, for the writing base; 2, for the coverage; 9, for the reference lookups.
+- Goal: The paper skill, built on academic-paper: drafting, structure, citations, figures and statistics, disclosure statements, revision patches and the lit-review mode with its literature strategist, as the coverage inventory marks them rebuild, with the manuscript scripts `anchorize_tex.py` and `apply_tex_patch.py` moved in from `research-hub/tools/manuscript` and `lookup.py` with its test taken from commit 0074728 for every literature search and reference lookup. It applies the `/writing` findings you accept to the manuscript.
+- Gate: `anchorize_tex.py`, `apply_tex_patch.py` and `lookup.py` pass their tests in the skill; the `\cite`-against-`.bib` check and the DOI check pass their tests; a side-by-side run against academic-paper on a real revision round, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: paper` row that the file of `skills/paper/` the row names holds what the source file did, checked by reading both.
+- Waits on: 3, for the writing base; 2, for the coverage.
 
 ## 6. paper-review
 
@@ -49,9 +49,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 10. idea
 
 - Status: [ ]
-- Goal: The idea skill: the `grill` interview (entry 2.E) pointed at a research idea, and the novelty check with cited literature.
-- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against deep-research's socratic mode (`references/socratic_mode_protocol.md`) on a real idea, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: idea` row that the file of `skills/idea/` the row names holds what the source file did, checked by reading both.
-- Waits on: 2.E, for the `grill` interview; 9, for the literature search.
+- Goal: The idea skill: the `grill` interview (entry 2.E) pointed at a research idea, and the novelty check with cited literature, its searches and lookups made with `paper`'s `lookup.py`.
+- Gate: one real run that you review, whose novelty claim cites the sources it checked; a side-by-side run against academic-paper's plan mode (`agents/socratic_mentor_agent.md`) on a real idea, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: idea` row that the file of `skills/idea/` the row names holds what the source file did, checked by reading both.
+- Waits on: 2.E, for the `grill` interview; 5, for `lookup.py`.
 
 ## 11. scaffold
 
@@ -72,7 +72,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Status: [ ]
 - Goal: The researcher skill: the new-project and revise roadmap templates, an adopt mode for a project already underway (it reads the code, configs, results, logs and draft, writes the roadmap with the finished stages marked done with their evidence, and continues after your approval from the first stage not done), a run over a named range of stages, venue files in `venues/`, and plan-orchestration's support for SLURM jobs. Each stage's input and output files have a written format, so any stage can start from files that exist. When experiments do not beat the baseline, the loop proposes a new method and runs the next experiments; it never writes up a negative result.
 - Gate: the adopt mode is run once on a real research project that already has code and results but is not finished, and you check that the roadmap it writes marks as done exactly the stages that are done, each with the file that shows it; a run over a named range of stages on a small test project writes each of those stages' output files; submitting jobs to SLURM is tested against a fake scheduler that records the jobs it is sent; the plan's ledger holds a record for each `rebuild: researcher` row that the file of `skills/researcher/` the row names holds what the source file did, checked by reading both.
-- Waits on: 5 to 12, for the skills its entries call.
+- Waits on: 5 to 8 and 10 to 12, for the skills its entries call.
 
 ## 14. submit-manuscript
 
@@ -91,16 +91,16 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 ## 15.A Rebuild-later rows
 
 - Status: [ ]
-- Goal: Every row of `docs/academic-coverage.md` marked `rebuild later: <skill>` is built into its skill while the installed academic skills are still there to read: 6 for paper, 6 for literature, 3 for paper-review.
+- Goal: Every row of `docs/academic-coverage.md` marked `rebuild later: <skill>` is built into its skill while the installed academic skills are still there to read: 8 for paper and 3 for paper-review.
 - Gate: no row of `docs/academic-coverage.md` is still marked `rebuild later` (`grep -c '| rebuild later: ' docs/academic-coverage.md` prints 0); each built row is re-marked `rebuild: <skill>` and its reason names the file of the skill that now holds it; the plan's ledger holds a record for each re-marked row that the file it names holds what the source file did, checked by reading both.
-- Waits on: 5, 6 and 9, the skills the rows go to.
+- Waits on: 5 and 6, the skills the rows go to.
 
 ## 16. Switch over
 
 - Status: [ ]
 - Goal: The new writing skills replace the installed academic skills.
 - Gate: with the user's explicit permission, asked for before any of it: your global `CLAUDE.md` and `research-hub/CLAUDE.md` name the new skills; the installed academic skills are removed from research-hub; `research-hub/tools/manuscript` points at `paper`. Nothing of it is done without that permission. `utils/check_coverage.py` and its mention in `docs/dev/scripts.md` are deleted.
-- Waits on: 5 to 10, each with its side-by-side run passed; 14, for the submission checks and the cover letter of `references/journal_submission_guide.md`; 15.A, so every later row is built before the academic skills are removed.
+- Waits on: 5 to 8 and 10, each with its side-by-side run passed; 14, for the submission checks and the cover letter of `references/journal_submission_guide.md`; 15.A, so every later row is built before the academic skills are removed.
 
 ## 17. review
 
