@@ -45,7 +45,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none.
+- Open item G (2026-10-18), step 2: how the two fresh sessions of the gate run are started; options (a) the orchestrator starts each as a `claude -p` process in a scratch folder outside research-hub with the tools its skill uses allowed, deep-research's Phase 1 questions answered with the input alone, recommended, and (b) the user starts each in a fresh session and answers deep-research's questions, the lazy option; written in full under step 2's Step 0 in `plan.md`. It blocks step 2.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -81,5 +81,5 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-18. Step 1 of 3, the skill, landed on main; next, the release-candidate tag `v8.3.0-rc.1` on the landing commit and `utils/pin.sh v8.3.0-rc.1`, taken without asking as the user ruled, then step 2, the gate run.
-- Open on Axel's side: none.
+- 2026-10-18. Step 1 of 3, the skill, landed on main at 0074728, tagged `v8.3.0-rc.1` and pinned; step 2, the gate run, waits on open item G.
+- Open on Axel's side: open item G.
