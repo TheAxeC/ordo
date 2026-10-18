@@ -18,13 +18,6 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Waits on: <entry numbers with the reason, or nothing>
 -->
 
-## 9. literature
-
-- Status: [ ]
-- Goal: The literature skill: search through Crossref, OpenAlex, Semantic Scholar and arXiv, source verification, synthesis and the `.bib`.
-- Gate: every source it cites resolves; for a sample of twenty citations drawn at random, a fresh reviewer agent reads each cited passage in its source and finds that it supports the claim it is cited for, in a table the user reads, and a source that cannot be accessed is reported, not written around; a side-by-side run against deep-research on a real topic, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: literature` row that the file of `skills/literature/` the row names holds what the source file did, checked by reading both.
-- Waits on: 3, for the writing base; 2, for the coverage.
-
 ## 5. paper
 
 - Status: [ ]
@@ -199,6 +192,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 
 <!-- - <n>. <title>: <the reason> -->
 
+- 9. literature: dropped, since it rebuilt deep-research, which the user does not use, and a run took about four hours; its search moves to entry 5, from academic-paper's lit-review mode and literature strategist, with `lookup.py` and its test as at 0074728.
 - 3.A. Landing checks the brief and the review: dropped, since it is a script that polices the orchestrator: whether a step is ready to land is judged by reading its reports (`/land`, the Stops row "The step not ready"), and under the rule "scripts compute facts; judgment is read" no script gates that judgment.
 - 2.G. git guard: dropped, since entry 2.1 deleted the guard: its hook script, its test, its settings text and `repo-setup`'s offer of it are removed, and its plan folder with them.
 - 2.J. The session retro's text changes: dropped, since entry 2.K replaces it: ten of its proposals, the two on a dictated script sentence merged into one, the reviewer's git rule widened to allow `git show <base>:<path>`, and the proposals on the scratchpad and on sleep loops left out because Claude Code already sends temporary files to the scratchpad and blocks a foreground `sleep`.
