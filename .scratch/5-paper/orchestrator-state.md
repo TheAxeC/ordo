@@ -58,7 +58,7 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item F (2026-10-19), kind 3, a change to your written rules, raised by the brief check of `/spec 5 3` (F4.8), not blocking step 3: `~/.claude/CLAUDE.md:26` routes all manuscript content through `academic-paper`, which `paper` is built to replace, and every side and judge of the gate loads it. (a) leave it through the gate, both sides alike, and decide its wording at the closing; (b) change it now to name `paper`; (c) run every side without your global instructions. Recommendation: (a). The lazy option: (c). The full text is under step 3's Step 0 in `plan.md`.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -67,6 +67,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-19: Open item C, what each mode of `paper` leaves in the manuscript's files, how it finds the `.bib`, and how a patch reaches the manuscript: closed under self-rule, C104.
 - 2026-10-19: Open item D, the numbers of the `/writing` findings the user accepts and the names of a run's patch files: closed under self-rule, C105.
 - 2026-10-19: Open item E, how the `/writing` findings reach `/paper` on the current dongho manuscript: closed under self-rule, C106.
+- 2026-10-19: Open item F, the line of `~/.claude/CLAUDE.md` that routes manuscript content: ruled by the user, a form of (b), the line names `academic-paper` or `paper`.
 
 ## The standing demands (from Axel, in force)
 
