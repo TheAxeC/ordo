@@ -49,6 +49,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
 - 2026-10-19: Open item A, the drafted step list of `/plan 5 --self-rule`: closed under self-rule, C102.
+- 2026-10-19: Open item B, the command forms of `lookup.py` cite-keys, check-urls and quote-check: closed under self-rule, C103.
 
 ## The standing demands (from Axel, in force)
 

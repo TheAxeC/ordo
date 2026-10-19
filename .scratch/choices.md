@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C102
+Last number: C103
 
 # Entry 2.I Several plans in one session
 
@@ -369,3 +369,15 @@ The stop "The drafted step list" of `/plan 5 --self-rule`: four steps, the scrip
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md:78` (Open item A)
 Builds on it: step 1, step 2, step 3, step 4
+
+## C103. The command forms of lookup.py's key check, check-urls and quote-check (2026-10-19)
+
+step 1, raised by `/spec 5 1` before the brief: rulings D15 and D17 fix what `lookup.py` computes, and no ruling fixes the command form of the new `\cite` key check or of `check-urls` and `quote-check` once they read a manuscript. These are the commands the skill's text and its user run. On the tree, `lookup.py` at 0074728 reads `references.bib` in a report's folder (`git show 0074728:skills/literature/templates/lookup.py`, its head comment, check-urls and quote-check), and the hub's manuscripts name their `.bib` by `\bibliography{refs}` (23 files), `{main}` (16), `{references}` (3) and `{References}` (2), cite with `\cite` (2348), `\citep` (114) and `\citet` (28), and `\input` files with and without `.tex` (`grep -rhoE` over `research-hub/projects/**/*.tex`).
+  - (a) The `.bib` named on the command line: `lookup.py cite-keys <main.tex> <file.bib>` prints `missing: <key>` for each cited key the `.bib` lacks and `unused: <key>` for each entry no `\cite` uses, and exits 1 when it prints either; `lookup.py check-urls <main.tex> <file.bib>` prints, for each cited key, the status of its doi, else its eprint, else its url, as now, and for a key with a doi the title ratio of the entry's title to the title the doi resolves to, the first record found in the order Crossref, OpenAlex, Semantic Scholar, with `DOI_MISMATCH` below 0.70; `lookup.py quote-check <integrity record> <file.bib> <folder>` checks the record's passage lines as now. One function reads the cited keys for all three: every command whose name begins with `cite`, its optional `[...]` arguments skipped, in the main file and in every file it `\input`s or `\include`s, a name without an extension read as `.tex`, relative to the main file's folder, with the text after an unescaped `%` left out. Pro: a `.bib` anywhere works, and the three commands share one key reader. Con: one argument more on each call.
+  - (b) The `.bib` read from the `.tex`'s `\bibliography{...}` line, with the same commands taking only `<main.tex>`. Pro: one argument fewer. Con: a second thing to parse, a line naming several files, and a manuscript without the line fails.
+  - Recommendation: (a), since the file the check reads is then the one named, and `lookup.py` parses only the cited keys. No option is the lazy one; (b) costs more to build.
+  - The lazy option: none; (b) costs more to build.
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md:79` (Open item B)
+Builds on it: step 1
