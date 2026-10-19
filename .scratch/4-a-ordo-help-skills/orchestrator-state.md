@@ -70,7 +70,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-19. Steps 1 and 2 landed. The pin is at `v8.3.0-rc.2`.
-- Verified: step 2's landing, `checks.sh` printed `checks: 7 commands passed` on main.
-- Next: step 3, the closing: the cost script into `agents/reviews/closing.md`, `/roadmap done 4.A`, the folder moved to `.scratch/archive/`, then the tag `v8.3.0` and its pin.
+- 2026-10-19. Steps 1 and 2 landed. Step 3, the closing: the closing report is written (`agents/reviews/closing.md`, 7 priced agents, at least 9.72 USD). The pin is at `v8.3.0-rc.2`.
+- Verified: `plan_cost.py` exited 0 on the ledger.
+- Next: `/roadmap done 4.A`, the folder moved to `.scratch/archive/`, then the tag `v8.3.0` and its pin.
 - Open on Axel's side: none.
