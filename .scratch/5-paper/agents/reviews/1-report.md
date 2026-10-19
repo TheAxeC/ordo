@@ -32,16 +32,13 @@ exit 0
 
 ### L1 to L6 (lookup.py of 0074728)
 
-Command: `cd $TMPDIR/b1/lk && sh lookup.test.sh; echo $?` with the final `lookup.test.sh`. Output as printed (34 lines, exit 1):
+Command: `cd $TMPDIR/b1/lk && sh lookup.test.sh; echo $?` with the final `lookup.test.sh` (the version after repair round 1). Output as printed (29 lines, exit 1):
 
 ```
 L1 cite-keys (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])
 L2 cite-keys with nothing to print (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])
 L3 keys of the main file and of the files it inputs (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])
 L4 missing input file (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])
-L4 missing .bib (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])
-L4 missing main file (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])
-L4 one argument (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])
 L5 a title that matches ('error: check-urls takes <report>', [], [])
 L5 a title below 0.70 ('error: check-urls takes <report>', [], [])
 L5 a key the .bib lacks ('error: check-urls takes <report>', [], [])
@@ -61,13 +58,11 @@ L5d the doi at Crossref ['', '', '', '']
 L5d the doi at OpenAlex ['', '', '', '']
 L5d the doi at Semantic Scholar ['', '', '', '']
 L5d the line ('error: check-urls takes <report>', [], [])
-check-urls a .bib that cannot be read ('error: check-urls takes <report>', [], [])
 check-urls one argument ('error: only-one: No such file or directory', [])
 L6 the passage is checked against the folder's text []
 L6 the key the named .bib lacks []
 L6 exit status ('error: quote-check takes <report> <folder>', [])
 L6 two arguments (1, ['line 3: k1, p. 1: found', 'k1: no entry', 'k2: no passage', 'k2: no text'])
-L6 a .bib that cannot be read ('error: quote-check takes <report> <folder>', [])
 FAIL: lookup.py does not hold the behaviour above
 ```
 
@@ -76,14 +71,14 @@ Reading of it, by case:
 - L1: `cite-keys` does not exist, usage error, exit 2.
 - L2: the same.
 - L3: the same (the check runs from a folder other than `main.tex`'s).
-- L4: the same for the missing `\input` file, the missing `.bib`, the missing main file and one argument. The brief says the unchanged copy also exits 2; the check fails because the error line is the usage line.
-- L5, L5a, L5b, L5c, L5d: `check-urls` takes one argument (`error: check-urls takes <report>`), so two arguments are refused with exit 2, as the brief says. The four `L5d the doi at ...` lines are empty because no request was made. The one line `check-urls one argument` shows the unchanged command reading its single argument as a report file.
+- L4: the same for the missing `\input` file. The brief says the unchanged copy also exits 2; the check fails because the error line is the usage line.
+- L5, L5a, L5b, L5c, L5d: `check-urls` takes one argument (`error: check-urls takes <report>`), so two arguments are refused with exit 2, as the brief says. The four `L5d the doi at ...` lines are empty because no request was made. The line `check-urls one argument` shows the unchanged command reading its single argument as a report file.
 - L6: `quote-check` takes two arguments, so three are refused; the line `L6 two arguments (1, [...])` shows two arguments accepted, with `references.bib` of the record's folder (a decoy holding k2 only) read in place of the named `.bib`: `k1: no entry` is printed for the key the named `.bib` holds.
 - `L6 the key the named .bib holds` (`k1: no entry` is absent) passes vacuously on the unchanged tree because the command is refused first; its control in the same test is `L6 the key the named .bib lacks`, which fails there.
 
 ### L7 (the cases of the test at 0074728)
 
-Command: `sh $TMPDIR/b1/lk0/lookup.test.sh >/dev/null 2>&1; echo "orig test on orig: exit $?"` (the test of 0074728 beside the file of 0074728). Output: `orig test on orig: exit 0`. The new `lookup.test.sh` keeps every case of the old one unchanged, and none of the 34 first-run lines above names an old case.
+Command: `sh $TMPDIR/b1/lk0/lookup.test.sh >/dev/null 2>&1; echo "orig test on orig: exit $?"` (the test of 0074728 beside the file of 0074728). Output: `orig test on orig: exit 0`. The new `lookup.test.sh` keeps every case of the old one unchanged, and none of the 29 first-run lines above names an old case.
 
 ### After the change
 
@@ -108,15 +103,15 @@ The behaviours the change adds or changes whose failure costs something, each wi
 | `cite-keys` prints `missing:` then `unused:` in the `.tex` and `.bib` orders and exits 1 | L1, `L1 cite-keys` | `L1 cite-keys (2, [], ['usage: lookup.py <command> ...', 'commands: resolve, search, refs, cited-by, bibtex, check-urls, fetch, quote-check'])` |
 | `cite-keys` prints nothing and exits 0 when keys and entries agree | L2, `L2 cite-keys with nothing to print` | `L2 cite-keys with nothing to print (2, [], ['usage: lookup.py <command> ...', ...])` as printed in the output above |
 | The key reader follows `\input` and `\include` relative to the main file's folder, skips `% \input{gone}`, reads `\%`, `\cite {k1}`, `\cite{k2, k3}` and a call over two lines, and does not follow `\includegraphics` | L3, `L3 keys of the main file and of the files it inputs` | `L3 keys of the main file and of the files it inputs (2, [], ['usage: lookup.py <command> ...', ...])` as printed above |
-| An `\input` file, a `.bib` or a main file that cannot be read gives one `error: <path>: <reason>` line and exit 2 | L4, `L4 missing input file`, `L4 missing .bib`, `L4 missing main file`, `L4 one argument` | the four `L4 ...` lines above |
+| An `\input` file that does not exist gives one `error: <path>: <reason>` line and exit 2 | L4, `L4 missing input file` | the `L4 missing input file` line above |
 | `check-urls <main.tex> <file.bib>`: the keys come from the `.tex`, `no entry in <the .bib's name>`, `the .tex cites no key`, no title check for a key without a doi | L5, `L5 a key the .bib lacks`, `L5 a key with no identifier`, `L5 a key with a url has no title check`, `L5 a .tex that cites no key` | `L5 a key the .bib lacks ('error: check-urls takes <report>', [], [])` and the three lines after it |
 | The title ratio against the first record the doi resolves to, `DOI_MISMATCH` below 0.70, exit 1 on it | L5, `L5 a title that matches`, `L5 a title below 0.70` | `L5 a title that matches ('error: check-urls takes <report>', [], [])` and `L5 a title below 0.70 ('error: check-urls takes <report>', [], [])` |
 | An arXiv doi Crossref does not hold is compared with OpenAlex's record, and Semantic Scholar is not asked | L5a, `L5a the ratio against OpenAlex` | `L5a the ratio against OpenAlex ('error: check-urls takes <report>', [], [])` |
 | An index left out is named with its reason and an outage is never `doi not found`; a doi all three answer as not found is `doi not found`; a URL that gave no answer keeps its title check | L5b, `L5b every index left out`, `L5b one index left out, two not found`, `L5b a record after an index left out`, `L5b control, a doi no index holds`, `L5b a url that gives no answer keeps its title check` | the five `L5b ...` lines above, each ending `'error: check-urls takes <report>', [], [])` |
 | The braces of a `.bib` title do not lower the ratio | L5c, `L5c braces in the title` | `L5c braces in the title ('error: check-urls takes <report>', [], [])` |
 | A doi reaches the three indexes stripped of its prefix and percent-encoded | L5d, `L5d a doi written as a URL`, `L5d the doi at the status request`, `... at Crossref`, `... at OpenAlex`, `... at Semantic Scholar`, `L5d the line` | the six `L5d ...` lines above |
-| `check-urls` with one argument and a `.bib` that cannot be read | `check-urls one argument`, `check-urls a .bib that cannot be read` | `check-urls one argument ('error: only-one: No such file or directory', [])` and `check-urls a .bib that cannot be read ('error: check-urls takes <report>', [], [])` |
-| `quote-check <record> <file.bib> <folder>` reads the named `.bib`, not the record's folder's | L6, `L6 the passage is checked against the folder's text`, `L6 the key the named .bib lacks`, `L6 exit status`, `L6 two arguments`, `L6 a .bib that cannot be read` | the five `L6 ...` lines above |
+| `check-urls` with one argument is refused (the old form read the argument as a report) | `check-urls one argument` | `check-urls one argument ('error: only-one: No such file or directory', [])` |
+| `quote-check <record> <file.bib> <folder>` reads the named `.bib`, not the record's folder's | L6, `L6 the passage is checked against the folder's text`, `L6 the key the named .bib lacks`, `L6 exit status`, `L6 two arguments` | the four `L6 ...` lines above |
 
 The `USER_AGENT` string changed from `lookup.py (the literature skill of Ordo)` to `lookup.py (the paper skill of Ordo)`. No case is written for it: a failure of a constant costs nothing and a test over it would be an assertion over a constant (rule 13, fourth bullet of its list). The change is checked by `git diff` (hunk at line 95) and by reading.
 
@@ -139,12 +134,12 @@ Run from the worktree's root, `/Users/axelfaes/workspace/ordo/.agents/worktrees/
 | 7. The three pages | `git diff --stat -- docs` | `docs/dev/building.md 3 +++`, `docs/dev/change-standard.md 3 +++`, `docs/dev/scripts.md 6 ++++++` | DONE |
 | Verify 1: `sh skills/paper/templates/anchorize_tex.test.sh 2>&1 \| tail -1` | run | `PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run and of an environment with a blank line inside, makes separate blocks of the paragraphs inside a document environment, and writes a manifest whose blocks and separators hold the whole file` (test exit 0) | DONE |
 | Verify 1: `sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 \| tail -1` | run | `PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names with the manifest's hashes and writes the apply report, rejects a wrong hash, a stale manifest, two ops on a block, a stale op among good ones and an output equal to the patched .tex with exit 2 and nothing written, answers a heading change, a deleted section and more than 0.6 of the blocks with exit 3 and nothing written unless acknowledged, and writes nothing with --check-only` (test exit 0) | DONE |
-| Verify 1: `sh skills/paper/templates/lookup.test.sh 2>&1 \| tail -1` | run | `PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, and takes the .tex, the .bib and the integrity record on the command line` (test exit 0) | DONE |
+| Verify 1: `sh skills/paper/templates/lookup.test.sh 2>&1 \| tail -1` | run | `PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, and refuses the one-argument check-urls and the two-argument quote-check` (test exit 0) | DONE |
 | Verify 1: the character-set check over the nine changed files (the brief's `printf '%s\0' ... \| xargs -0 perl -CSD -ne ...`) | run | prints nothing; `ascii exit 0` | DONE |
 | Verify 2: every case's first run quoted, and its run after | the section "The cases' first run" | quoted | DONE |
 | Verify 3: `diff` of each copy against the research-hub copy prints only head-comment lines | `diff ../research-hub/tools/manuscript/anchorize_tex.py skills/paper/templates/anchorize_tex.py \| grep -E '^[0-9]'` | `2c2`, `4,9c4`, `11,13c6`, `15,16c8`, `18,19c10,24`; the module docstring ends at line 25 and `from __future__` is line 26 (research-hub: line 21) | DONE |
 | Verify 3, apply | the same with `apply_tex_patch.py` | `2c2`, `4,10c4`, `12c6,7`, `13a9,10`, `32,36c29,32`, `38,42c34,64`; the docstring ends at line 65 and `from __future__` is line 66 (research-hub: line 44) | DONE |
-| Verify 4: hunks of `lookup.py` against 0074728 | `diff <(git show 0074728:skills/literature/templates/lookup.py) skills/paper/templates/lookup.py \| grep -E '^[0-9]'` | `2c2`, `11c11,12`, `13c14`, `25c26,28`, `27c30`, `29c32`, `30a34,40`, `34c44`, `43c53`, `58c68`, `60c70`, `95c105`, `121c131,136`, `670a686,709`, `1049,1054d1087`, `1133a1167,1201`, `1136,1138c1204,1206`, `1142c1210`, `1151a1220`, `1153,1157c1222,1225`, `1159c1227`, `1165,1166c1233,1234`, `1169c1237,1238`, `1289a1359`; each listed with its item below | DONE |
+| Verify 4: hunks of `lookup.py` against 0074728 | `diff <(git show 0074728:skills/literature/templates/lookup.py) skills/paper/templates/lookup.py \| grep -E '^[0-9]'` | `2c2`, `11c11,12`, `13c14`, `25c26,28`, `27c30`, `29c32`, `30a34,40`, `34c44`, `43c53`, `58c68`, `60c70`, `95c105`, `121c131,136`, `513c528`, `537,538c552,553`, `540c555`, `565c580`, `567c582`, `596c611`, `670a686,709`, `1049,1054d1087`, `1133a1167,1201`, `1136,1138c1204,1206`, `1142c1210`, `1151a1220`, `1153,1157c1222,1225`, `1159c1227`, `1165,1166c1233,1234`, `1169c1237,1238`, `1175c1244`, `1289a1359`; each listed with its item below | DONE |
 | Verify 5: each new test run on the unchanged tree first, again after | the section "The cases' first run" | quoted | DONE |
 | Verify 6: the new lines of the three pages read against the standards | below | | DONE |
 | Verify 7 | `grep -rn 'literature\|research-hub\|this hub\|tools/manuscript' skills/paper/templates/; echo "grep7 exit $?"` | `grep7 exit 1` (no line printed) | DONE |
@@ -166,6 +161,7 @@ Outside this step: the plan's whole verify list, which the brief says runs once,
 | `60c70` | The exit status names `cite-keys` and the three added failures | 4 |
 | `95c105` | `USER_AGENT = "lookup.py (the paper skill of Ordo)"` | 4, first bullet |
 | `121c131,136` | `TEX_COMMENT` and `TEX_CALL`, and `COMMANDS` gains `cite-keys` | 5, dispatch |
+| `513c528`, `537,538c552,553`, `540c555`, `565c580`, `567c582`, `596c611`, `1175c1244` | The integrity record is named as such: the docstrings of `cited_keys` and `read_record`, the renames `read_report` to `read_record` and `report_text` to `record_text`, and the printed line `the integrity record cites no key` | 4 (quote-check), round 1 point 3 |
 | `670a686,709` | `tex_cited_keys`, the one function both commands call | 5 |
 | `1049,1054d1087` | `read_report_and_bib` removed; both commands read their files by `read_text_file` and `parse_bib` | 4 |
 | `1133a1167,1201` | `title_check` and `run_cite_keys` | 4 |
@@ -202,7 +198,7 @@ Each term of `docs/glossary.md` found in text the diff adds (read by listing the
 | `skills/paper/templates/lookup.py` | 1393 |
 | `skills/paper/templates/anchorize_tex.test.sh` | 117 |
 | `skills/paper/templates/apply_tex_patch.test.sh` | 234 |
-| `skills/paper/templates/lookup.test.sh` | 519 |
+| `skills/paper/templates/lookup.test.sh` | 506 |
 | `docs/dev/building.md` | 37 (3 lines added) |
 | `docs/dev/change-standard.md` | 91 (3 lines added) |
 | `docs/dev/scripts.md` | 41 (6 lines added) |
@@ -214,20 +210,20 @@ Line counts are those of `wc -l`. `lookup.py` is 1323 lines at 0074728 and `look
 
 1. Key order: the keys are listed in the order of the text, a file named by `\input` or `\include` being read at the place of the command. The brief says "in the order the keys first occur"; this reads it as document order, as LaTeX reads the files.
 2. `check-urls` appends the title check to the line of a key whose URL gave no answer: `<key>: failed, <reason> <url>, ratio ...`. The brief gives the words of the status line and of the three endings; it does not say whether a failed URL skips the title check. Skipping it would leave a key with a doi unchecked during an outage of doi.org alone.
-3. `quote-check` prints `the report cites no key` unchanged for a record that cites no key. The brief calls the file the integrity record; changing that output line is outside its items (rule 20), so the head comment names the line as printed. The orchestrator may rule on renaming it.
+3. `quote-check` prints `the integrity record cites no key` for a record that cites no key, as repair round 1 rules; the head comment states the line.
 4. A `doi` field whose text matches no DOI pattern is passed to the three indexes stripped (`Identifier("doi", doi, doi)`) instead of through `classify` alone, which would give an empty doi and request the index's list endpoint. No entry of the hub's `.bib` files has such a field (`parse_bib` over `projects/**/*.bib`: 467 entries with a doi, none failing `DOI_PATTERN` after `strip_doi`); a wrong answer there is a false `DOI_MISMATCH`.
 5. An entry with a doi and no `title`, or a record with an empty title, gives ratio 0.00 and `DOI_MISMATCH`, as `resolve` does for an empty title. The same scan found no entry with a doi and without a title.
 6. The names after `\input` and `\include` are stripped of surrounding white space; an empty part between commas is no key; `\input` and `\include` are matched only when no letter follows (`\includegraphics` and `\includeonly` are not followed), a case added to L3 since a wrong reading would make every manuscript with a figure fail with exit 2.
 7. The path printed for an `\input` error is the main file's folder joined with the name, with `.tex` added when the name has no extension (`../l4/nosuch.tex` in the test), the same form `read_text_file` prints for every other file.
 8. `cite-keys` stands between `bibtex` and `check-urls` in `COMMANDS`, the usage lines and the head comment.
 9. The head comments of the two manuscript scripts are raw docstrings (`r"""`) because they hold `\begin` and `\section`. The head comment of `anchorize_tex.py` also lists the `AssertionError` its self-check can end with, and both list `-h`/`--help` exit 0.
-10. The tests are a POSIX `sh` wrapper around a Python heredoc, as `lookup.test.sh` is, and extend assertions past the brief's literal lines where the head comment promises an error line: an unreadable `.bib` or main file (L4, a `check-urls` `.bib`, a `quote-check` `.bib`), the argument-count lines of `cite-keys`, `check-urls` and `quote-check`, the mixed left-out case of L5b and its control (a doi all three answer as not found), and a left-out index followed by a record.
+10. The tests are a POSIX `sh` wrapper around a Python heredoc, as `lookup.test.sh` is, and extend assertions past the brief's literal lines where a wrong result would pass silently: the refusal of the one-argument `check-urls` and of the two-argument `quote-check`, the mixed left-out case of L5b and its control (a doi all three answer as not found), and a left-out index followed by a record. The error lines for an unreadable `.bib` or main file and the argument count of `cite-keys` are checked by quoted runs in "Repair round 1", not by the test.
 11. The three commands stand in `docs/dev/building.md` and `docs/dev/change-standard.md` after the `ordo-init` line (skills in alphabetical order, `paper` before `repo-setup`), before the ASCII check as the brief asks.
 
 ## Host- or user-visible changes
 
-- `lookup.py check-urls <report>` becomes `lookup.py check-urls <main.tex> <file.bib>`: before, the keys came from a report and the `.bib` was `references.bib` in the report's folder (`error: check-urls takes <report>` for two arguments); after, the keys come from the `.tex` and the files it inputs, a key with a doi gets `, ratio <r> against <index>` (with `, DOI_MISMATCH` below 0.70), `, doi not found in Crossref, OpenAlex or Semantic Scholar` or `, title not checked: <index> left out, <reason>`, and these three count as failures; `no entry in references.bib` becomes `no entry in <the .bib's file name>`; `the report cites no key` becomes `the .tex cites no key`.
-- `lookup.py quote-check <report> <folder>` becomes `lookup.py quote-check <integrity record> <file.bib> <folder>`; before, `references.bib` in the report's folder, after, the `.bib` named.
+- `lookup.py check-urls <report>` becomes `lookup.py check-urls <main.tex> <file.bib>`: before, the keys came from a report and the `.bib` was `references.bib` in the report's folder (`error: check-urls takes <report>` for two arguments); after, the keys come from the `.tex` and the files it inputs, a key with a doi gets `, ratio <r> against <index>` (with `, DOI_MISMATCH` below 0.70), `, doi not found in Crossref, OpenAlex or Semantic Scholar` or `, title not checked: <index> left out, <reason>`, and these three count as failures; `no entry in references.bib` becomes `no entry in <the .bib's file name>`; `the report cites no key` becomes `the .tex cites no key`. The requests: before, one request per cited key with an identifier, its status request; after, a key with a doi gets that request and up to three more, to Crossref, OpenAlex and Semantic Scholar in that order, the next index asked when one answers not found or is left out (an HTTP 429 after its retries or no answer included), so a manuscript of n keys with a doi makes at most 4n requests before retries, each request retried on HTTP 429 up to 3 times after 2 seconds each, and each sent with the credential its host gets; "Repair round 1", point 2, gives the lines of the code.
+- `lookup.py quote-check <report> <folder>` becomes `lookup.py quote-check <integrity record> <file.bib> <folder>`; before, `references.bib` in the report's folder, after, the `.bib` named; the line for a record that cites no key was `the report cites no key` and is `the integrity record cites no key`.
 - `lookup.py cite-keys <main.tex> <file.bib>` is new: `missing: <key>` and `unused: <key>` lines, exit 1 when it printed either.
 - The `User-Agent` header of every request reads `lookup.py (the paper skill of Ordo)`; before, `lookup.py (the literature skill of Ordo)`.
 - `lookup.py`'s head comment names the `paper` skill and lists the changed commands, the key reader, the reads, the errors and the exit status.
@@ -237,3 +233,195 @@ Line counts are those of `wc -l`. `lookup.py` is 1323 lines at 0074728 and `look
 ## Anything in the brief that was wrong or impossible
 
 Nothing was found wrong or impossible. Every sentence the brief gives word for word about a script was run before it was written: the exit statuses and tracebacks of both scripts (`python3 -B anchorize_tex.py nosuch.tex` exit 1 with `FileNotFoundError`, no arguments and an unknown option exit 2; `apply_tex_patch.py` with no manifest, a missing base, a patch that is not JSON and an unwritable output exit 1 with `FileNotFoundError` or `json.decoder.JSONDecodeError`, a missing `--output` exit 2 with `--output is required unless --check-only is used`, `--help` exit 0), and each line of `check-urls` through the L5 checks. One point the brief's list of exit 1 causes lacks: `anchorize_tex.py` can also end with an `AssertionError` traceback from its self-check, and its head comment says so.
+
+## Repair round 1
+All commands ran from the worktree's root unless a `cd` is shown. The scratch files are under `$TMPDIR/b1/round1/`.
+
+### Point 1: the checks that pin error wording
+
+Change: five checks removed from `skills/paper/templates/lookup.test.sh` with the setup lines only they used. Old beside new:
+
+| Old (check, with its setup) | New |
+|---|---|
+| `L4 missing .bib`, with `put("l4/plain.tex", ...)` | removed |
+| `L4 missing main file` | removed |
+| `L4 one argument` | removed |
+| `check-urls a .bib that cannot be read`, with `missing_bib` and its `check_urls([], ...)` call | removed |
+| `L6 a .bib that cannot be read`, with `missing_named` and its `run_in_process` call | removed |
+| `L4 missing input file`, `check-urls one argument`, `L6 two arguments` | kept as they were |
+
+The head comment of the test now ends its list `... the error line for an input file that does not exist, and the refusal of the one-argument form of check-urls and of the two-argument form of quote-check.` where it ended `... and the arguments of check-urls and quote-check.`, and the `PASS:` line ends `reports an input file that does not exist, and refuses the one-argument check-urls and the two-argument quote-check` where it ended `and takes the .tex, the .bib and the integrity record on the command line`. Both say what the test still proves: the refusals guard the old forms, which read a report and a `references.bib` the new forms do not read. `grep -c 'L4 missing .bib\|L4 missing main file\|L4 one argument\|a .bib that cannot be read' skills/paper/templates/lookup.test.sh` is the check that none is left (below).
+
+The behaviours of the five removed checks, each run on scratch files from another folder (`cd $TMPDIR/b1/round1/other`, the files in `../l4/`, `../rec.md` and `../texts`):
+
+- a `.bib` that cannot be read (`cite-keys`):
+
+```
+$ python3 -B -I lookup.py cite-keys ../l4/plain.tex ../l4/nosuch.bib; echo "exit $?"
+exit 2
+error: ../l4/nosuch.bib: No such file or directory
+```
+
+- a main file that cannot be read (`cite-keys`):
+
+```
+$ python3 -B -I lookup.py cite-keys ../l4/nosuch.tex ../l4/refs.bib; echo "exit $?"
+exit 2
+error: ../l4/nosuch.tex: No such file or directory
+```
+
+- `cite-keys` with one argument:
+
+```
+$ python3 -B -I lookup.py cite-keys ../l4/plain.tex; echo "exit $?"
+exit 2
+error: cite-keys takes <main.tex> <file.bib>
+```
+
+- a `.bib` that cannot be read (`check-urls`; `../l4/cites.tex` cites one key):
+
+```
+$ python3 -B -I lookup.py check-urls ../l4/cites.tex ../l4/nosuch.bib; echo "exit $?"
+exit 2
+error: ../l4/nosuch.bib: No such file or directory
+```
+
+- a `.bib` that cannot be read (`quote-check`):
+
+```
+$ python3 -B -I lookup.py quote-check ../rec.md ../l4/nosuch.bib ../texts; echo "exit $?"
+exit 2
+error: ../l4/nosuch.bib: No such file or directory
+```
+
+Reading: each run prints one `error:` line naming the path (or the command's argument shape) and exits 2, as the head comment's error list says. The checks cost nothing when they fail, the failure being a traceback with exit 1, which `cite-keys`, `check-urls` and `quote-check` already count as a failure.
+
+### Point 2: the requests of check-urls
+
+Before (0074728, `run_check_urls`): one request per cited key that has an identifier, its status request through `client.get(url, read_body=False)`. After: that request, and for a key whose entry has a doi, up to three more from `title_check` (`lookup.py:1167`), asked one after the other in the order Crossref, OpenAlex, Semantic Scholar (`lookup.py:1176`), stopping at the first index that gives a record and moving to the next when an index answers not found or is left out. A key with an eprint or a url and no doi keeps its one request.
+
+Each of the requests goes through `Client.get` (`lookup.py:849`), so it carries what `Client.prepare` (`lookup.py:817`) gives its host: the `S2_API_KEY` in the `x-api-key` header to api.semanticscholar.org (`:822`), the `OPENALEX_API_KEY` as the `api_key` parameter to api.openalex.org (`:824`), and the `CROSSREF_POLITE_EMAIL` as the `mailto` parameter and in the User-Agent to api.crossref.org (`:826`, `:827`); the status request to doi.org carries none. Each is retried on HTTP 429: `Client.get` makes `RETRIES + 1` attempts (`lookup.py:854`, `RETRIES = 3` at `:95`) and waits `RETRY_WAIT` seconds (`lookup.py:858`, `RETRY_WAIT = 2.0` at `:94`) after each 429 but the last.
+
+What it means for a run, read from those lines:
+
+- A request that answers 429 every time waits 3 times 2.0 seconds, 6 seconds, before the index is left out. Each of the up to three title requests of a key can wait that long, so a key with a doi adds up to 18 seconds of waiting to what its status request (itself up to 6 seconds) already could. The figure counts only the retry waits; the time of the requests themselves is not counted, and a request to an index that gives no answer waits up to `TIMEOUT = 30` seconds (`lookup.py:96`) per attempt before it is left out.
+- A manuscript of n cited keys that all have a doi makes at most 4n requests, counted without the retries; with them, each of the 4n requests may be sent up to four times (`RETRIES + 1`). The count does not include a redirect, which starts a new set of attempts (`for _ in range(MAX_REDIRECTS + 1)`, `lookup.py:851`); the index APIs answer the requests without a redirect.
+- Semantic Scholar is asked for a doi that Crossref and OpenAlex both answered not found or left out, a 429 or an outage of either included (`lookup.py:1176-1184`). Without an `S2_API_KEY`, a 429 from it shows as `title not checked: Semantic Scholar left out, HTTP 429 after 3 retries`, which is a rate limit and not a defect of the reference.
+
+The head comment of `lookup.py` gains in the check-urls title-check bullet, after the sentence on a key whose URL gave no answer: `A key with a doi costs up to three requests more than its status request.`
+
+### Point 3: the name of the integrity record
+
+`quote-check` on a scratch integrity record that cites no key (`../rec.md` holds `No citation in this record.`), run from `$TMPDIR/b1/round1/other`:
+
+Before the change (run before any edit of this round):
+
+```
+$ python3 -B -I lookup.py quote-check ../rec.md ../refs.bib ../texts   (before the change)
+the report cites no key
+exit 0
+```
+
+After the change:
+
+```
+$ python3 -B -I lookup.py quote-check ../rec.md ../refs.bib ../texts; echo "exit $?"
+the integrity record cites no key
+exit 0
+```
+
+Changes, old beside new, in `lookup.py` and `lookup.test.sh`:
+
+| Place | Old | New |
+|---|---|---|
+| `lookup.py:528`, the docstring of `cited_keys` | `... in one line of a report, in order.` | `... in one line of an integrity record, in order.` |
+| `lookup.py:552`, `def` of the reader | `read_report(report_text)` | `read_record(record_text)` |
+| `lookup.py:553`, its docstring | `... of a report. A passage line gives ...` | `... of an integrity record. A passage line gives ...` |
+| `lookup.py:555`, its loop | `report_text.splitlines()` | `record_text.splitlines()` |
+| `lookup.py:580`, `def quote_check_lines` | `(report_text, bib_keys, read_text)` | `(record_text, bib_keys, read_text)` |
+| `lookup.py:582` | `read_report(report_text)` | `read_record(record_text)` |
+| `lookup.py:611`, the printed line | `the report cites no key` | `the integrity record cites no key` |
+| `lookup.py:1237`, `1244`, in `run_quote_check` | `report_text` | `record_text` |
+| `lookup.py:30`, the quote-check bullet of the head comment | `A record that cites no key prints "the report cites no key".` | `A record that cites no key prints "the integrity record cites no key".` |
+| `lookup.test.sh:135` | `# T6: passage lines and the keys a report cites.` | `# T6: passage lines and the keys an integrity record cites.` |
+| `lookup.test.sh:141`, `142` | the variable `report` | the variable `record` |
+
+The test's other callers of the renamed functions: `quote_check_lines` is called positionally in `lookup.test.sh`, and `read_report` had no caller in it, so no further edit was needed. No check is added for the line.
+
+### Reruns
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run and of an environment with a blank line inside, makes separate blocks of the paragraphs inside a document environment, and writes a manifest whose blocks and separators hold the whole file
+```
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names with the manifest's hashes and writes the apply report, rejects a wrong hash, a stale manifest, two ops on a block, a stale op among good ones and an output equal to the patched .tex with exit 2 and nothing written, answers a heading change, a deleted section and more than 0.6 of the blocks with exit 3 and nothing written unless acknowledged, and writes nothing with --check-only
+```
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/lookup.test.sh 2>&1 | tail -1
+PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, and refuses the one-argument check-urls and the two-argument quote-check
+```
+
+```
+$ for t in anchorize_tex apply_tex_patch lookup; do env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/$t.test.sh >/dev/null 2>&1; echo "$t test exit $?"; done
+anchorize_tex test exit 0
+apply_tex_patch test exit 0
+lookup test exit 0
+```
+
+```
+$ printf '%s\0' skills/paper/templates/anchorize_tex.py skills/paper/templates/apply_tex_patch.py skills/paper/templates/anchorize_tex.test.sh skills/paper/templates/apply_tex_patch.test.sh skills/paper/templates/lookup.py skills/paper/templates/lookup.test.sh docs/dev/building.md docs/dev/change-standard.md docs/dev/scripts.md | xargs -0 perl -CSD -ne 'my $bad_char = $ARGV =~ /\.md\z/ ? qr/[^\x20-\x7E\x{2705}\n]/ : qr/[^\x20-\x7E\n]/; if (/$bad_char/) { print "$ARGV:$.: $_"; $bad = 1 } close ARGV if eof; END { $? ||= 1 if $bad }'; echo "charset exit $?"
+charset exit 0
+```
+
+```
+$ for f in anchorize_tex apply_tex_patch; do diff /Users/axelfaes/workspace/research-hub/tools/manuscript/$f.py skills/paper/templates/$f.py | grep -E '^[0-9]' | tr '\n' ' '; echo; diff <(sed -n '/^from __future__/,$p' /Users/axelfaes/workspace/research-hub/tools/manuscript/$f.py) <(sed -n '/^from __future__/,$p' skills/paper/templates/$f.py); echo "$f code diff exit $?"; done
+2c2 4,9c4 11,13c6 15,16c8 18,19c10,24 
+anchorize_tex code diff exit 0
+2c2 4,10c4 12c6,7 13a9,10 32,36c29,32 38,42c34,64 
+apply_tex_patch code diff exit 0
+```
+
+```
+$ diff <(git show 0074728:skills/literature/templates/lookup.py) skills/paper/templates/lookup.py | grep -E '^[0-9]' | tr '\n' ' '
+2c2 11c11,12 13c14 25c26,28 27c30 29c32 30a34,40 34c44 43c53 58c68 60c70 95c105 121c131,136 513c528 537,538c552,553 540c555 565c580 567c582 596c611 670a686,709 1049,1054d1087 1133a1167,1201 1136,1138c1204,1206 1142c1210 1151a1220 1153,1157c1222,1225 1159c1227 1165,1166c1233,1234 1169c1237,1238 1175c1244 1289a1359 
+```
+
+```
+$ grep -rn 'literature\|research-hub\|this hub\|tools/manuscript' skills/paper/templates/; echo "grep7 exit $?"
+grep7 exit 1
+```
+
+```
+$ grep -c 'L4 missing .bib\|L4 missing main file\|L4 one argument\|a .bib that cannot be read' skills/paper/templates/lookup.test.sh; echo "exit $?"
+0
+exit 1
+```
+
+```
+$ grep -n 'report' skills/paper/templates/lookup.py skills/paper/templates/lookup.test.sh | cut -c1-110
+skills/paper/templates/lookup.test.sh:146:check("T6 a failure is reported", failed)
+skills/paper/templates/lookup.test.sh:506:echo "PASS: lookup.py parses recorded bodies, matches titles, merges
+```
+
+```
+$ wc -l skills/paper/templates/*
+     135 skills/paper/templates/anchorize_tex.py
+     117 skills/paper/templates/anchorize_tex.test.sh
+     285 skills/paper/templates/apply_tex_patch.py
+     234 skills/paper/templates/apply_tex_patch.test.sh
+    1393 skills/paper/templates/lookup.py
+     506 skills/paper/templates/lookup.test.sh
+    2670 total
+```
+
+Readings of the remaining hits of `grep -n 'report'`:
+
+- `lookup.test.sh:146`, `check("T6 a failure is reported", failed)`: "reported" is the verb, a failure reported by `quote_check_lines`. It stays.
+- `lookup.test.sh:506`, the `PASS:` line: `reports an input file that does not exist` is the verb. It stays.
+- `lookup.py` has no hit left. Before the round its hits were the docstrings at `:528` and `:553`, the function and variable names `read_report` and `report_text` (`:552`, `:555`, `:580`, `:582`, `:1237`, `:1244`), the printed line at `:611` and the head comment's quote-check bullet at `:30`; each meant the integrity record and was renamed as the table above shows. `lookup.test.sh:135` and the variable at `:141` and `:142` meant the same and were renamed. No hit meant another thing (an apply report or a builder's report).
+
+Passages of the report above corrected by this round: the first-run output of `lookup.test.sh` (29 lines now, the five removed checks no longer printed), the L4 and L6 rows of the rule 13 table, the `check-urls` row of that table, the DONE row of the lookup `PASS:` line and of the Verify 4 hunks, the hunk table (a row for the renames), the line count of `lookup.test.sh` (506), judgment call 3 (the line is `the integrity record cites no key`) and judgment call 10 (the error-line checks are gone from the test), and the host- and user-visible changes (the printed line of `quote-check`, and the requests of `check-urls`, stated in point 2 above).

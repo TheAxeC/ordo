@@ -70,6 +70,9 @@ Every build, test or check command runs in the foreground with a long timeout, o
 sh skills/code-comments/templates/strip_comments.test.sh 2>&1 | tail -1
 sh skills/land/templates/land.test.sh 2>&1 | tail -1
 sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
+sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+sh skills/paper/templates/lookup.test.sh 2>&1 | tail -1
 sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary
 sh utils/pin.test.sh 2>&1 | tail -1

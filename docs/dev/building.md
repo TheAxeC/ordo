@@ -6,6 +6,9 @@ Ordo has no build step. The green check is every command below passing, each run
 sh skills/code-comments/templates/strip_comments.test.sh   # strip_comments.py on pairs of C, C++ and CMake files that differ in a comment or in code, and on files it refuses
 sh skills/land/templates/land.test.sh                  # land.sh on a conflict, a ledger file left in the worktree, a failing check, a clean landing and a step whose new test script and command, left uncommitted in the worktree, reach main and run there
 sh skills/ordo-init/templates/check_config.test.sh     # check_config.py on complete and broken configurations
+sh skills/paper/templates/anchorize_tex.test.sh        # anchorize_tex.py on scratch .tex files: the blocks of paragraphs, of a table and of a document environment, the .tex left unchanged, the manifest's spans
+sh skills/paper/templates/apply_tex_patch.test.sh      # apply_tex_patch.py on scratch .tex files: a patch applied, a wrong hash, a stale manifest, two ops on a block, a structural change, an output equal to the input and --check-only
+sh skills/paper/templates/lookup.test.sh               # lookup.py on recorded response bodies and scratch .tex and .bib files, offline: matching, merging, cite-keys, the title check of check-urls, the arguments of quote-check
 sh skills/repo-setup/templates/sync_rules.test.sh      # sync_rules.py --write on drifted shared-rules and plan-terms blocks, the bytes it keeps and its refusals
 python3 skills/repo-setup/templates/sync_rules.py . --only glossary   # Ordo's glossary block equals plan-terms.md
 sh utils/pin.test.sh                                   # pin.sh in pin and check mode under a scratch HOME, its refusals included

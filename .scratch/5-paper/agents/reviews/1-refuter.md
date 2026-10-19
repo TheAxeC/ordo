@@ -149,3 +149,165 @@ Cases of the brief's "Cases":
 - Whether `.scratch/5-paper/agents/reviews/1-report.md`, untracked in the worktree, is ignored by the landing's ASCII check, and what git ignores in the worktree. `git check-ignore -v` would settle it; the file has no character outside printable ASCII (`LC_ALL=C grep -n '[^ -~]'` printed nothing), and its two copies are equal (`cmp`).
 
 Reviewer usage: a8f3bf8ec5b9a9df5, claude-opus-5-5, 300438 tokens, 58 tool uses, 14.5 min.
+
+## Repair round 1, refuted
+
+All commands ran from `/Users/axelfaes/workspace/ordo/.agents/worktrees/5-paper-1` unless a folder is named. The tests ran under `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE`. Scratch files are under `.../scratchpad/refute51r1/`. The round's delta is `diff -u` of the snapshot `.agents/worktrees/5-paper-1-round-1/` against the worktree for each path of its `files.txt`. Of the nine paths, only `lookup.py` and `lookup.test.sh` differ; the other seven, the three pages and the four other scripts and tests included, are byte-equal to the snapshot (`diff -q` printed nothing). The one changed path that `files.txt` does not list is the builder's report. I read both deltas whole (`lookup.py`: the quote-check bullet of the head comment, the title-check bullet, the docstrings, the renames of `read_report` to `read_record` and `report_text` to `record_text`, and the printed line; `lookup.test.sh`: the head comment, the T6 rename, the five removed checks and their setup, the `PASS:` line).
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run and of an environment with a blank line inside, makes separate blocks of the paragraphs inside a document environment, and writes a manifest whose blocks and separators hold the whole file
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names with the manifest's hashes and writes the apply report, rejects a wrong hash, a stale manifest, two ops on a block, a stale op among good ones and an output equal to the patched .tex with exit 2 and nothing written, answers a heading change, a deleted section and more than 0.6 of the blocks with exit 3 and nothing written unless acknowledged, and writes nothing with --check-only
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/lookup.test.sh 2>&1 | tail -1
+PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, and refuses the one-argument check-urls and the two-argument quote-check
+$ for t in anchorize_tex apply_tex_patch lookup; do env -u ... sh skills/paper/templates/$t.test.sh >/dev/null 2>&1; echo "$t test exit $?"; done
+anchorize_tex test exit 0
+apply_tex_patch test exit 0
+lookup test exit 0
+$ printf '%s\0' <the nine files of Verify 1> | xargs -0 perl -CSD -ne '<the brief's character-set check>'; echo "charset exit $?"
+charset exit 0          (no line printed)
+$ for f in anchorize_tex apply_tex_patch; do diff ../research-hub/tools/manuscript/$f.py skills/paper/templates/$f.py | grep -E '^[0-9]' | tr '\n' ' '; echo; diff <(sed -n '/^from __future__/,$p' <hub copy>) <(sed -n '/^from __future__/,$p' <new copy>); echo "$f code diff exit $?"; done
+2c2 4,9c4 11,13c6 15,16c8 18,19c10,24
+anchorize_tex code diff exit 0
+2c2 4,10c4 12c6,7 13a9,10 32,36c29,32 38,42c34,64
+apply_tex_patch code diff exit 0
+$ grep -rn 'literature\|research-hub\|this hub\|tools/manuscript' skills/paper/templates/; echo "grep7 exit $?"
+grep7 exit 1          (no line printed)
+$ diff <(cat <plain-file copy of lookup.py at 0074728>) skills/paper/templates/lookup.py | grep -E '^[0-9]' | tr '\n' ' '
+2c2 11c11,12 13c14 25c26,28 27c30 29c32 30a34,40 34c44 43c53 58c68 60c70 95c105 121c131,136 513c528 537,538c552,553 540c555 565c580 567c582 596c611 670a686,709 1049,1054d1087 1133a1167,1201 1136,1138c1204,1206 1142c1210 1151a1220 1153,1157c1222,1225 1159c1227 1165,1166c1233,1234 1169c1237,1238 1175c1244 1289a1359
+  (the report's hunk list, hunk for hunk; the same two files compared as two path arguments print 668a684,707 and 1131a1165,1199 for the two insertions, the same inserted text placed two lines higher. The renames at 513, 537, 540, 565, 567, 596 and 1175 lie in cited_keys, read_record, quote_check_lines and run_quote_check, the quote-check places Verify 4 allows. Nothing lies outside the places Verify 4 allows.)
+```
+
+The round's evidence commands, rerun in my scratch folder:
+
+```
+$ cd <scratch>/lk && sh lookup.test.sh > first.txt 2>&1; echo "exit $?"      (0074728 lookup.py as a plain file, sha1 9ffecaf21fd99ddae391f1896774b76c33a181bd; the worktree's lookup.test.sh)
+exit 1
+  29 lines; diff against lines 38 to 66 of the builder's report: "quoted block equals rerun"
+$ sh $TMPDIR/b1/lk0/lookup.test.sh >/dev/null 2>&1; echo "orig test on orig exit $?"
+orig test on orig exit 0
+$ cd <scratch>/hub (the two research-hub scripts and the worktree's two tests) && sh anchorize_tex.test.sh; sh apply_tex_patch.test.sh
+PASS: anchorize_tex.py leaves the .tex byte-identical, ...   exit 0
+PASS: apply_tex_patch.py replaces, inserts after and deletes only ...   exit 0
+$ diff $TMPDIR/b1/lk0/lookup.test.sh skills/paper/templates/lookup.test.sh | grep -E '^[0-9]'
+2c2 12a13 134c135 140,141c141,142 318a320,324 319a326,492 333c506      (the five lines it removes are the header, the T6 comment, two T6 lines and the PASS line; no case of 0074728's test is gone)
+Point 1, from <scratch>/r1/other, scratch files in ../l4/, ../rec.md, ../texts (output order as printed; the report's blocks print the `exit 2` line before the `error:` line, the lines and statuses are the same):
+$ python3 -B -I lookup.py cite-keys ../l4/plain.tex ../l4/nosuch.bib
+error: ../l4/nosuch.bib: No such file or directory
+exit 2
+$ python3 -B -I lookup.py cite-keys ../l4/nosuch.tex ../l4/refs.bib
+error: ../l4/nosuch.tex: No such file or directory
+exit 2
+$ python3 -B -I lookup.py cite-keys ../l4/plain.tex
+error: cite-keys takes <main.tex> <file.bib>
+exit 2
+$ python3 -B -I lookup.py check-urls ../l4/cites.tex ../l4/nosuch.bib
+error: ../l4/nosuch.bib: No such file or directory
+exit 2
+$ python3 -B -I lookup.py quote-check ../rec.md ../l4/nosuch.bib ../texts
+error: ../l4/nosuch.bib: No such file or directory
+exit 2
+Point 3, a scratch record holding "No citation in this record.", the snapshot's lookup.py as lookup_before.py:
+$ python3 -B -I lookup_before.py quote-check ../rec.md ../refs.bib ../texts
+the report cites no key
+exit 0
+$ python3 -B -I lookup.py quote-check ../rec.md ../refs.bib ../texts
+the integrity record cites no key
+exit 0
+$ grep -c 'L4 missing .bib\|L4 missing main file\|L4 one argument\|a .bib that cannot be read' skills/paper/templates/lookup.test.sh
+0   (exit 1)
+$ grep -n 'report' skills/paper/templates/lookup.py skills/paper/templates/lookup.test.sh | cut -c1-110
+skills/paper/templates/lookup.test.sh:146:check("T6 a failure is reported", failed)
+skills/paper/templates/lookup.test.sh:506:echo "PASS: lookup.py parses recorded bodies, matches titles, merges
+$ grep -n -i 'report' skills/paper/templates/lookup.py | cut -c1-80
+524:# Reports and BibTeX.
+$ grep -rn 'cites no key\|read_report\|report_text\|quote-check <report\|check-urls <report' . (outside .scratch and .git)
+skills/paper/templates/lookup.py:27 (the .tex line), :30, :611, :1227 and skills/paper/templates/lookup.test.sh:429; no other hit
+$ wc -l skills/paper/templates/*
+     135 anchorize_tex.py   117 anchorize_tex.test.sh   285 apply_tex_patch.py   234 apply_tex_patch.test.sh   1393 lookup.py   506 lookup.test.sh   (2670 total)
+Point 2, read from the code: lookup.py:94 RETRY_WAIT = 2.0, :95 RETRIES = 3, :96 TIMEOUT = 30, :97 MAX_REDIRECTS = 10, :817 prepare, :822 x-api-key, :824 api_key, :826-827 mailto, :849 get, :851 the redirect loop, :854 range(RETRIES + 1), :858 time.sleep(RETRY_WAIT), :1167 title_check, :1176 the order Crossref, OpenAlex, Semantic Scholar, :1223 the call from run_check_urls. Each of lookup_crossref, lookup_openalex and lookup_s2 (:902-913) makes one get_parsed call.
+```
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1: holds. `anchorize_tex.py` is equal to the snapshot's and its code below the docstring equals research-hub's (code diff exit 0); its head comment names no hub, no installation and no history (grep7 exit 1).
+- 2: holds. The same for `apply_tex_patch.py` (code diff exit 0, grep7 exit 1); its test run on the research-hub copy passes.
+- 3: holds. Both tests pass (above) and are equal to the snapshot's; A1 to A4 and P1 to P11 are present as named checks (`anchorize_tex.test.sh:64-102`, `apply_tex_patch.test.sh:92-219`), read again.
+- 4: holds. The hunks stay inside the places Verify 4 allows. `USER_AGENT` is at `lookup.py:105`, `cite-keys` and `check-urls` as before this round, and `quote-check <integrity record> <file.bib> <folder>` now prints `the integrity record cites no key` (rerun above), the head comment stating the line (`lookup.py:30`). The title-check bullet gains the sentence "A key with a doi costs up to three requests more than its status request." (`lookup.py:28`). Standards 1 below is a residual comment of this file; it does not change this verdict.
+- 5: holds. `tex_cited_keys` (`lookup.py:686`) is the one reader both commands call; unchanged this round.
+- 6: holds. The test of 0074728 is kept whole (diff above); the new cases are offline. Standards 2 and 3 below are leftovers of the round's removals; they do not change this verdict.
+- 7: holds. The three pages equal the snapshot's, each gaining three commands or six rows as before.
+
+Cases of the brief's "Cases":
+
+- A1: met, `anchorize_tex.test.sh:67-71`, passes.
+- A2: met, `:76-77`.
+- A3: met, `:82-83`.
+- A4: met, the checks from `:85`.
+- P1: met, `apply_tex_patch.test.sh:98-108`.
+- P2: met, `:115-117`.
+- P3: met, `:126-128`.
+- P4: met, `:135-138`.
+- P5: met, `:146-151`.
+- P6: met, `:159-167`.
+- P7: met, `:175-179`.
+- P8: met, `:186-188`.
+- P9: met, `:195-198`.
+- P10: met, `:205-208`.
+- P11: met, `:216-219`.
+- L1: met, `lookup.test.sh:350`; the first run of the final test on the 0074728 file prints the usage line with exit 2 (rerun above, equal to the report's block).
+- L2: met, `:356`.
+- L3: met, `:368`, run from `elsewhere/`.
+- L4: met, `:375`, the error line and exit 2; its first run prints the usage line.
+- L5: met, `:418-429`: ratio 1.00 with exit 0, `ratio 0.34 against Crossref, DOI_MISMATCH` with exit 1, `gone: no entry in paper-refs.bib`; first run `error: check-urls takes <report>`.
+- L5a: met, `:434-435`.
+- L5b: met, `:440-448`, with the control at `:446`.
+- L5c: met, `:452`.
+- L5d: met, `:456-463`.
+- L6: met, `:486-491`: the decoy `references.bib` is not read, `k2: no entry` is printed and `k1: no entry` is not; first run refused with three arguments.
+- L7: met. No line of the 0074728 test is gone (diff above), `orig test on orig exit 0`, and none of the 28 failing first-run lines names an old case.
+
+### Findings
+
+Spec: none. The round's delta contains no change that no point asks for and no script.
+
+Proof:
+
+- Report, "Repair round 1", Point 2, third bullet: "Without an `S2_API_KEY`, Semantic Scholar is asked only for a doi neither Crossref nor OpenAlex holds, so a 429 from it shows as `title not checked: Semantic Scholar left out, HTTP 429 after 3 retries`, which is a rate limit and not a defect of the reference." What is wrong: `lookup.py:1176-1184` moves to the next index when an index answers not found and also when it is left out (`if outcome.left_out: left_out.append(...)`, then the loop continues), so Semantic Scholar is also asked for a doi that Crossref or OpenAlex could not answer because of an HTTP 429 or an outage. The claim is a statement about the request count that the tree does not reproduce, and a decision rests on it: step 2's text describing `check-urls` from this report. Failure scenario: step 2's author writes "Semantic Scholar is reached only for a doi the other two do not hold"; on a day Crossref rate-limits a run of 55 dois, every key goes on to Semantic Scholar without an `S2_API_KEY`, and the writer's explanation of the resulting `title not checked` lines does not match the requests made. Verdict: none (the other figures of Point 2, 6 s per request, 18 s per key, at most 4n requests, 4 attempts per request, and every line number it names, reproduce from the code).
+
+Standards:
+
+- `skills/paper/templates/lookup.py:524`: "# Reports and BibTeX." What is wrong: Point 3 asks that every comment that calls the integrity record a report name it the integrity record "and any other you find". This section comment heads `cited_keys`, `passage_line`, `read_record` and `quote_check_lines`, which all read the integrity record, and the report's reading "`lookup.py` has no hit left" holds only for the case-sensitive `grep -n 'report'`; `grep -n -i 'report'` prints this line. Rule 14 of `docs/dev/change-standard.md`, "The rules", asks that a changed name be carried to every place that names it. Failure scenario: a maintainer reading the section list sees "Reports" and looks for a report in the file, where the vocabulary the round set (the integrity record) is the one the head comment, the usage line and the printed line use. Verdict: none (item 4 holds).
+- `skills/paper/templates/lookup.test.sh:398-400`: "except lookup.UsageError as error:" / "status = "error: " + str(error)" in `check_urls`. What is wrong: this branch served only the removed check `check-urls a .bib that cannot be read`, which expected the `error:` status; every remaining call of `check_urls` and `check_urls_of` passes files that exist, so the branch cannot run. Point 1 asked to remove "any setup line that only they use". Failure scenario: a reader of the helper believes a refused call can come back through it, and a later check that passes a missing file gets a status string instead of the traceback it should show. Verdict: none (item 6 holds).
+- `skills/paper/templates/lookup.test.sh:2` (head comment) and `:506` (the `PASS:` line): "reports an input file that does not exist, and refuses the one-argument check-urls and the two-argument quote-check". What is wrong: the line replaced "takes the .tex, the .bib and the integrity record on the command line" and no longer names two things the test proves, that `quote-check` reads the `.bib` named on the command line and not the `references.bib` of the record's folder (`:479-491`, with the decoy) and that `check-urls` names the `.bib` it was given (`:423`). Item 6 asks for a `PASS:` line naming what the test proves. Failure scenario: a maintainer who reads the `PASS:` line at landing sees no sign that the named-`.bib` behaviour is covered and may drop `L6` as unlisted. Verdict: none (item 6 holds).
+
+Behaviour:
+
+- Report, "Host- or user-visible changes", first bullet: "The requests of the title check are stated in "Repair round 1", point 2." What is wrong: the round asked that this section state the before and after of the requests (one status request per key before; that request plus up to three more per key with a doi, retries and credentials included, now). The section holds a pointer and no before or after; the statement is in the "Repair round 1" section, which the final message of the builder is. Failure scenario: step 2's author, or the orchestrator copying the host-visible changes into a booking or a skill page, reads only this section and describes `check-urls` as making one request per key, which is the scenario the first report's Behaviour finding named. Verdict: none.
+
+Closures: Point 1 is closed. The five checks the first report's Standards finding named are the five removed, the three that guard a wrong pass (`L4 missing input file`, `check-urls one argument`, `L6 two arguments`) stay, the five behaviours are checked by runs that reproduce, and no case of the brief lost its test. Point 2 is closed except Proof 1 and Behaviour 1. Point 3 is closed except Standards 1: the printed line, the head comment, the docstrings at `:528` and `:553`, the renames and the T6 comment and variable all reproduce.
+
+### Declined to judge
+
+- That the plain-file copy of `lookup.py` at 0074728 (sha1 9ffecaf21fd99ddae391f1896774b76c33a181bd, equal to the builder's `lk0` and `lk` copies and the brief-check agent's copy) is the commit's file, and the report's Verify 4 command in its `diff <(git show 0074728:...)` form: only `git show 0074728:skills/literature/templates/lookup.py` settles it, and the refute skill's Rules allow no git command but the three it names.
+- The report's `git diff --stat -- docs`: not run in that form; the three pages equal the snapshot's (`diff -q`) and `git diff b2b39ec --stat` prints the three files with 3, 3 and 6 added lines.
+- Whether the report should quote, under rule 14 of the rules file, a grep of the renamed names across `skills/`, `utils/`, `docs/` and `README.md`: its grep covers the two files only. I ran that grep outside `.scratch` and found no hit of `read_report`, `report_text` or the old printed line, so no defect stands in the tree.
+- How the three indexes answer in practice and the real time a run takes: the figures are counted from the retry code, not measured, and no network request was made.
+- The plan's whole verify list and the rewrite of the state file's verify list from 7 to 10 commands under ADR 0010: both happen at landing on main.
+- The ADRs in force (0017 and 0018 on `quote-check` and the integrity record, 0019, 0020, 0021) were read against the delta; none governs a change this round makes beyond the printed line, which follows ADR 0018's name for the record.
+
+Reviewer usage: a2421c20d030e1072, claude-sonnet-5-5, 195943 tokens, 40 tool uses, 6.2 min.
+
+## Closed
+
+- First run, 3. Standards 1 (the five checks that pin error wording): closed in the round, point 1; the five checks are gone (`grep -c` of their names prints 0) and their behaviours are quoted as runs, rerun by the reviewer over round 1.
+- First run, 4. Behaviour 1 (the added requests of check-urls): closed in the round, point 2, with the report's section and the head comment's sentence at `skills/paper/templates/lookup.py:28`; its two residues are the round's Proof 1 and Behaviour 1 below.
+- First run, Declined to judge, the line "the report cites no key": closed in the round, point 3; `quote-check` prints `the integrity record cites no key`, rerun by the reviewer over round 1.
+- Round 1, Proof 1 (Semantic Scholar asked only for a doi the others do not hold): fixed at landing, the sentence of `agents/reviews/1-report.md`, "Repair round 1", point 2, now says Semantic Scholar is asked when Crossref and OpenAlex both answered not found or were left out, a 429 or an outage included, as `lookup.py:1176-1184` does.
+- Round 1, Standards 1 (`# Reports and BibTeX.`): fixed at landing, `skills/paper/templates/lookup.py:524` reads `# Integrity records and BibTeX.`; `grep -n -i 'report' skills/paper/templates/lookup.py` prints nothing.
+- Round 1, Standards 2 (the dead `except lookup.UsageError` branch of `check_urls` in the test): fixed at landing, removed from `skills/paper/templates/lookup.test.sh`; the test prints its `PASS:` line on main.
+- Round 1, Standards 3 (the head comment and the `PASS:` line no longer name the named `.bib`): fixed at landing, both name the `.bib` check-urls and quote-check read from the command line.
+- Round 1, Behaviour 1 (the report's "Host- or user-visible changes" points at the round's section): fixed at landing, its first bullet states the before and the after of the requests.
