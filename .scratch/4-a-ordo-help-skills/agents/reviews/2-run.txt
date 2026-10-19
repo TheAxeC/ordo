@@ -1,0 +1,109 @@
+/code-comments
+```
+/code-comments                    review the comments of the uncommitted changes against HEAD, untracked files included
+/code-comments <base>..<head>     review the comments of a range of commits
+/code-comments <project> ...      the same when .agents/plan.yaml has the projects: form; <project> names the project whose keys are read
+apply <numbers>                   after a report: rewrite the comments of those findings, the numbers separated by commas or spaces
+apply all                         after a report: rewrite the comments of every finding
+```
+
+/diagnose
+```
+/diagnose <symptom>                        find the cause of a symptom, given in the user's words, in the checkout the skill is run in
+/diagnose <entry> <step> <finding>         find the cause of a finding of a plan's step, written as the refuter report names it
+/diagnose <entry> <step> red line          find the cause of a red line at the step's landing whose cause is not known
+/diagnose <entry> <step> brief check <n>   find the cause of finding <n> of the step's brief check
+/diagnose <entry> <step> premise           find the cause a step's text asks to have found, before the step's brief is written
+```
+
+/grill
+```
+/grill <entry>                                                  interview about the entry, by number or title, including one under "Not yet specified"
+/grill <entry> --bar <industry|state-of-the-art|novel>          the same, with this design bar in place of the configured one, for this interview only
+/grill <project>/<entry>                                        the same, in a repository whose plan.yaml lists several projects
+/grill <entry> --ruling <ledger file> "<name>"                  the same, under a quoted ruling: a roadmap diff that is the ruled text is written without its decision
+/grill <entry> --self-rule                                      the same, run by plan-orchestration in next-entry mode: each decision outside the six kinds takes its recommendation
+```
+
+/land
+```
+/land <entry> <step>     the only way a step reaches main: bring the refuted step over, check it there, book it, commit it, remove its worktree
+```
+
+/ordo-help
+```
+/ordo-help            print the sequence and the choices awaiting review, then the position and open items of each open plan
+/ordo-help <entry>    print the sequence and the choices awaiting review, then the named plan's position and the command that comes next
+/ordo-help skills     print each skill's name and its Quick start block, in folder-name order
+```
+
+/ordo-init
+```
+/ordo-init     draft .agents/plan.yaml and the pages it lacks for approval, or check the .agents/plan.yaml that is there
+/ordo-init --ruling <ledger file> "<name>"   the same, under a quoted ruling: a draft the ruling states is written without the stop
+```
+
+/plan
+```
+/plan <entry>             open the plan for one roadmap entry: the ledger folder the step skills and the orchestrator run from, its step list drafted for approval
+/plan <project>/<entry>   the same, in a repository whose plan.yaml lists several projects
+/plan <entry> --ruling <ledger file> "<name>"   the same, under a quoted ruling: a step list that is the ruled one is written without the stop
+/plan <entry> --self-rule   the same, run by plan-orchestration in next-entry mode: the orchestrator takes the drafted step list as its choice
+```
+
+/plan-orchestration
+```
+/plan-orchestration                  run the steps of every open plan unattended until a pause of every open plan, or until no open plan has an unblocked step; with no plan open, under self_rule: on and next_entry: on, take the next roadmap entry
+/plan-orchestration <entry>          the same for the plan of that entry alone
+/plan-orchestration <entry> inline   the same, with the orchestrating session building every code step itself
+continue the plan                    the same as /plan-orchestration with no entry, resuming from the state files after a compaction or in another session
+```
+
+/plan-retro
+```
+/plan-retro             the retro over every refuter run the previous retro did not list
+/plan-retro <project>   the same, for one project of a plan.yaml in the projects: form
+```
+
+/refute
+```
+/refute <entry> <step>   a fresh reviewer reads the step's diff, reruns the checks the brief's "Verify before you report" names and every quoted command, never the plan's whole verify list, and writes verdicts and findings
+```
+
+/repo-setup
+```
+/repo-setup [<path>]          a new repository at <path> (default: the current folder, which must hold no tracked file)
+/repo-setup sync [<path>]     an existing repository: its shared-rules block and its glossary's plan-terms block against their templates
+/repo-setup ... --ruling <ledger file> "<name>"   either form, under a quoted ruling: a draft or a sync change the ruling states is written without the stop
+```
+
+/roadmap
+```
+/roadmap                                  the open entries in order: status, what each waits on, the plan open for it, the next one; then the entries not yet specified
+/roadmap add <goal>                       drafts an entry and its place in the order, writes it after approval
+/roadmap add <entry>                      for an entry under "Not yet specified": drafts its gate and its place in the order, writes it after approval
+/roadmap move <entry> before|after <entry>  moves the entry to the place named, after approval
+/roadmap done <entry>                     marks it done with the gate's output; the closing step of a plan uses it
+/roadmap drop <entry> <reason>            moves the entry to where the file keeps dropped work, with the reason, after approval
+/roadmap <project> ...                    the same, for one project of a plan.yaml in the projects: form
+/roadmap <command> ... --ruling <ledger file> "<name>"   add, move, done or drop under a quoted ruling: a draft that is the ruled change is written without the stop
+```
+
+/session-retro
+```
+/session-retro <entry>                 review the Claude Code sessions of a plan, from the commit that added its plan.md to its own last commit, or to the time of the run while it is open
+/session-retro session <session id>    review one Claude Code session with its subagents
+/session-retro <start> <end>           review any window, two ISO 8601 times with a zone, such as 2026-09-28T22:51:46+02:00
+```
+
+/spec
+```
+/spec <entry> <step>     write the one file a builder works from, have a fresh agent check it against the tree for a full step, and put the tree in the state the builder expects
+Ruled: <the choice>      the reply to a stop, booked as "Steps / A ruling" says; then /spec <entry> <step> again
+```
+
+/writing
+```
+/writing <file>             review the draft <file>: a .tex main file, a .md, a .txt or a .docx
+/writing <project> <file>   the same when .agents/plan.yaml has the projects: form; <project> names the project whose keys are read
+```
