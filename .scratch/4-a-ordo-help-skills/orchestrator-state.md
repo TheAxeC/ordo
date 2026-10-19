@@ -44,7 +44,7 @@ dispatch: none               # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- none
+- Open item A (2026-10-19), kind 4 of `plan-orchestration`'s `references/self-rule.md`, "The six kinds left open": the closing's roadmap diff. `/roadmap done 4.A` drafted entry 4.A removed from the open order and the line `- [x] 4.A ordo-help skills: ...` added under Done, after entry 4, with the gate's output (the diff is in the orchestrator's report of 2026-10-19). Options: (a) approve the diff as drafted: the closing writes it, commits it, moves the ledger to `.scratch/archive/`, then tags `v8.3.0` and pins it; (b) correct the diff's wording, then the same. Recommendation: (a), since every number in the line is quoted from the step 2 report and the landing. The lazy option: none, since both write the same entry.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -70,7 +70,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-19. Steps 1 and 2 landed. Step 3, the closing: the closing report is written (`agents/reviews/closing.md`, 7 priced agents, at least 9.72 USD). The pin is at `v8.3.0-rc.2`.
+- 2026-10-19. Steps 1 and 2 landed. Step 3, the closing: the closing report is written (aeeb9b8). `/roadmap done 4.A` waits on Open item A, the roadmap diff. The pin is at `v8.3.0-rc.2`.
 - Verified: `plan_cost.py` exited 0 on the ledger.
-- Next: `/roadmap done 4.A`, the folder moved to `.scratch/archive/`, then the tag `v8.3.0` and its pin.
-- Open on Axel's side: none.
+- Next: on Axel's approval of the roadmap diff, its commit, the folder moved to `.scratch/archive/`, then the tag `v8.3.0` and its pin.
+- Open on Axel's side: Open item A, the roadmap diff.
