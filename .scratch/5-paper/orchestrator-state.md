@@ -48,10 +48,12 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   base: 05a4bd6
   launched: 2026-10-19
   report: .scratch/5-paper/agents/reviews/2-report.md
+  builder_usage: 181394 tokens, 680 tool uses, 124.9 min
+  reviewer_report: .scratch/5-paper/agents/reviews/2-refuter.md (a20e791c4d7c8dedd, claude-opus-5-5, 221292 tokens, 122 tool uses, 20.9 min)
   brief_check: .scratch/5-paper/agents/reviews/2-brief-check.md (a3bbeeb121f4b8378, claude-opus-5-5, 280536 tokens, 67 tool uses, 14 min 55 s)
   session_id: a36ec75854b27e0a8 (claude-sonnet-5-5)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -88,7 +90,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-19. Step 2 of 4, the skill, is prepared: open item D closed under self-rule (C105), the brief at `agents/briefs/2.md` with every brief-check finding closed under the report's Closed heading, the preparation commit 05a4bd6 as the base, and the worktree `.agents/worktrees/5-paper-2`.
-- The builder a36ec75854b27e0a8 (claude-sonnet-5-5) is running in that worktree; its report goes to `agents/reviews/2-report.md`.
-- Next: the builder's report, then `/refute 5 2`.
+- 2026-10-19. Step 2 of 4, the skill: the builder a36ec75854b27e0a8 (claude-sonnet-5-5) reported (`agents/reviews/2-report.md`), and the reviewer a20e791c4d7c8dedd (claude-opus-5-5) refuted it (`agents/reviews/2-refuter.md`): 8 Spec, 3 Proof, 7 Standards and 3 Behaviour findings.
+- Repair round 1 is sent to the same builder with 21 points (`agents/briefs/2-round-1.md`), the snapshot at `.agents/worktrees/5-paper-2-round-1/` with its `files.txt`. Spec 1, the first build's helper scripts that no ruling approved, is closed in the round: the round redoes their work with typed commands, the Edit tool and reading, and nothing they produced is kept.
+- Next: the round's report, then `/refute 5 2` over round 1 on sonnet, then `/land 5 2`.
 - Open on Axel's side: none.
