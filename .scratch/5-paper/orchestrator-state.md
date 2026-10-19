@@ -42,7 +42,16 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```yaml
 dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
 - step: 2
-  landing: preparing
+  executor: agent
+  worker: claude:sonnet
+  worktree: .agents/worktrees/5-paper-2
+  base: 05a4bd6
+  launched: 2026-10-19
+  report: .scratch/5-paper/agents/reviews/2-report.md
+  brief_check: .scratch/5-paper/agents/reviews/2-brief-check.md (a3bbeeb121f4b8378, claude-opus-5-5, 280536 tokens, 67 tool uses, 14 min 55 s)
+  session_id: a36ec75854b27e0a8 (claude-sonnet-5-5)
+  landing: not-started
+  round: 0
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -79,7 +88,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-19. Step 1 of 4, the scripts, landed on main with its booking; its worktree and branches removed.
-- Verified: `checks.sh` on main printed `checks: 10 commands passed` after the fixes at landing.
-- Next step: 2, the skill, with `/spec 5 2`.
+- 2026-10-19. Step 2 of 4, the skill, is prepared: open item D closed under self-rule (C105), the brief at `agents/briefs/2.md` with every brief-check finding closed under the report's Closed heading, the preparation commit 05a4bd6 as the base, and the worktree `.agents/worktrees/5-paper-2`.
+- The builder a36ec75854b27e0a8 (claude-sonnet-5-5) is running in that worktree; its report goes to `agents/reviews/2-report.md`.
+- Next: the builder's report, then `/refute 5 2`.
 - Open on Axel's side: none.
