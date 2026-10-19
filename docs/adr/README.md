@@ -27,3 +27,4 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0018](0018-a-claim-the-paper-skill-judges-rests-on-a-passage-read-from-the-source-in-the-same-run.md) | A claim the paper skill judges rests on a passage read from the source in the same run |
 | [0019](0019-a-paper-run-is-done-by-academic-paper-s-agent-roles-each-a-fresh-agent.md) | A paper run is done by academic-paper's agent roles, each a fresh agent |
 | [0020](0020-a-paper-run-keeps-its-records-in-a-folder-beside-the-manuscript-s-folder.md) | A paper run keeps its records in a folder beside the manuscript's folder |
+| [0021](0021-paper-runs-writing-itself-and-applies-the-findings-you-accept-as-patches.md) | Paper runs `/writing` itself and applies the findings you accept as patches |
