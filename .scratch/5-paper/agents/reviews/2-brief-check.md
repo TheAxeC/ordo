@@ -284,3 +284,63 @@ Each dictated line, found with `grep -n -- '<text>' .scratch/5-paper/agents/brie
 - The text of `.scratch/rulings/5-paper.md`, which ADR 0018's Context cites: `ls .scratch/rulings` prints "No such file or directory". That predates this step and is not its concern.
 
 Usage: a3bbeeb121f4b8378, claude-opus-5-5, 280536 tokens, 67 tool uses, 14 min 55 s
+
+## Closed
+
+Each finding with the change to the brief `agents/briefs/2.md` that closes it. Names 1 and ADRs 2 and 4 were raised as open item D (`plan.md`, step 2's Step 0) and closed under self-rule with (a), C105, before these changes.
+
+- Names 1, ADRs 2, Implied inputs 6: item 7 numbers each patch of a run and names its manifest, patch, patched file and apply report by that number in `patches/`, the file anchorized again before every patch (open item D (a)); C15 runs two patches in a row.
+- Names 2: Decision 3 names the strategist's file `refs.bib`, as open item C (a) does, and says how full mode's `refs.bib` comes from it.
+- Names 3: the reference page is `references/ai-disclosure.md` (items 11, Decision 1, Paths); the run folder's `disclosure.md` keeps open item C (a)'s name.
+- Names 4: `peer-reviewer.md` keeps the draft review for full mode and names revision's second reading only by what it does; the Conventions say the draft review is full mode's alone.
+- Names 5: the Conventions say a bare "round" means a repair round, with "draft review round" and "pass" for the skill's repeats; item 9 and Decision 4 say "pass".
+- Names 6: "What is on the tree" names `docs/dev/building.md:6`, `docs/dev/scripts.md:17` and `:34` and `docs/dev/change-standard.md:70` as staying.
+- Names 7: no change; the findings hold.
+- Step line 1, Step line 6: `statements.md` holds the data availability statement, the ethics statement with the approval, and the responsible-use statement (item 11), and item 12 names the six statements of "Mandatory Inclusions".
+- Step line 2: `ethics.md` holds the reproducibility check (item 11).
+- Step line 3: item 10 adds the stop "A claim the run cannot support" (rows 54 and 159 and ADR 0018's unfetched source), and row 53's weak-argument signs go to the user at the outline stop, the argument builder moved before it in full mode (Decision 2).
+- Step line 4, ADRs 3: "What is on the tree" says under ADR 0017 that the web searches of rows 213 and 169 are not carried; `integrity-verification.md` carries row 213's duplicate detection and runs row 169's screen with `lookup.py search`.
+- Step line 5: item 12 and "Read" 3 name `formatter_agent.md:790`, the pre-output checklist, which row 56 sends to `SKILL.md`.
+- Step line 7: `abstract.md` takes the protections of `report_compiler_agent.md:200`, named in "Read" 3.
+- Step line 8: item 4 reads the latest earlier run's `config.md` and intake offers it (C14).
+- Step line 9: `literature-strategist.md` never changes or removes an existing entry and only adds new ones (row 165, D2).
+- Step line 10: `ai-disclosure.md` says the four anchors are not rendered and get no sentence.
+- Step line 11: "What is on the tree" lists the rows outside the 43 that send a part to `paper` at entry 5; items 11, 12, 15 and 16 carry, name and record those parts, and C5 and C12 read them.
+- Premises 1: no change.
+- Premises 2: the `rebuild later: paper` rows read 56, 61, 73, 84, 88, 91, 108 and 161.
+- Premises 3: "What is on the tree" says 13 of the 14 main files have one uncommented `\bibliography{` line and `ecg-readable-substrate` uses `thebibliography`.
+- Premises 4: Decision 2 says where it departs from academic-paper's mode table and the ruling or ADR behind each departure; outline-only keeps the table's roles.
+- Premises 5, ADRs 6: the ADR 0013 line quotes its Decision ("The session shows the one report, in two parts, ... and changes nothing").
+- Premises 6: "What to build" names D1 to D31 and D33 to D41.
+- Premises 7: the README premise names the table at lines 11 to 27.
+- Cases and checks 1: item 5 quotes every user value as one single-quoted argument; C17 checks it.
+- Cases and checks 2: item 7 checks each copy with `cmp` and the apply report's output hash.
+- Cases and checks 3: item 16 asks for the quoted line of each part.
+- Cases and checks 4: item 14 keeps line 3 valid YAML; C11 and Verify 4 parse the five frontmatters.
+- Cases and checks 5, Implied inputs 7: item 9 sends `unused:` lines to the user and says lit-review's added entries print them; C15 runs both.
+- Cases and checks 6, Implied inputs 1 and 2: item 4 leaves out commented text and `\bibliographystyle`; C16 runs six real files.
+- Cases and checks 7: Verify 6 greps `literature` as a word with the role's name left out.
+- Cases and checks 8: no change.
+- The question: C4 rests on Decision 2, now stated with its departures; C5 and the step check read the rows outside the 43; C7 checks every exit status and the numbered files; C8 rests on item 18; C10 holds the new stops; C11 parses the frontmatters; C14 is now C16 with the commented line.
+- Implied inputs 3: item 4 has abstract-only and disclosure read no `.bib`.
+- Implied inputs 4: open item C (a) rules the refusal; C16 shows it on `bare_jrnl.tex:1082`.
+- Implied inputs 5: Decision 6 names the ids each patch carries; C15 runs an empty list.
+- Implied inputs 8: item 7 gives exits 2 (each kind), 3, 4 and 1 their outcomes, and item 9 those of `lookup.py`.
+- Implied inputs 9 and 15: Decision 7 does not carry them, with the reason.
+- Implied inputs 10: item 5 takes the local date of `date +%Y-%m-%d`.
+- Implied inputs 11: item 4 and Decision 3 keep an existing `refs.bib` and add to it by patch.
+- Implied inputs 12: `literature-strategist.md` skips an entry whose key or DOI the `.bib` holds and rekeys a key-only collision.
+- Implied inputs 13: item 10's "A claim the run cannot support" holds the unfetched source.
+- Implied inputs 14: `visualization.md` and item 6 say who runs the figure scripts, where the images go, that no file of the manuscript's folder is replaced, and that a missing library is written in `figures.md`.
+- ADRs 1: "What is on the tree" says under ADR 0019 which further stops the skill has and why the decision's list does not exclude them.
+- ADRs 4: item 18 has `/writing` number its findings, `skills/writing/SKILL.md` among the paths (open item D (a)); item 8 reads the answer against those numbers.
+- ADRs 5: "What is on the tree" says under ADR 0002 which source rules are not carried, and `draft-writer.md` keeps the paragraph's order within the prose standard's length.
+- ADRs 7: no change.
+- ADRs 8: "What is on the tree" names ADR 0007.
+- Dictated text 1: Quick start lines carry their short comment (item 2).
+- Dictated text 2: item 3 gives the `idea` row as one phrase and moves the refusal of `/paper plan` to Steps; nothing of D3 is dictated now.
+- Dictated text 11: item 7's names follow open item D (a).
+- Dictated text 13: `candidates.bib` is `refs.bib` and the page is `ai-disclosure.md`.
+- Dictated text 14: the Conventions keep the draft review to full mode.
+- Dictated text 3 to 10, 12 and 15: no change; they hold.
+- Lines added after the check and held against the rules file and the standards: the patch file names of item 7 (`patches/<nn>-<file name>.block-manifest.json`, `.patch.json`, `.patched`, `.patched.apply-report.json`), the stop names "A script failed" and "A claim the run cannot support", the ids of Decision 6 (`R<n>-<m>`, `D<r>-<m>`, `C<m>`, `I<m>`, `W<k>`) and the page name `ai-disclosure.md`: each is a code line or a name, ASCII, a noun phrase as the other stop names are, and breaks no rule of the change standard, the skill layout, the prose standard or the glossary.
