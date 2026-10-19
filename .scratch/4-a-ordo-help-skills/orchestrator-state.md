@@ -46,9 +46,11 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   base: 7e8082d
   launched: 2026-10-19
   report: .scratch/4-a-ordo-help-skills/agents/reviews/1-report.md
+  builder_usage: 152050 tokens, 32 tool uses, 5.0 minutes
+  reviewer_report: .scratch/4-a-ordo-help-skills/agents/reviews/1-refuter.md (a6c49cd6b72bbc846, claude-opus-5-5, 160305 tokens, 36 tool uses, 7.6 minutes)
   brief_check: .scratch/4-a-ordo-help-skills/agents/reviews/1-brief-check.md (aa44557b3704429d8, claude-opus-5-5, 168049 tokens, 40 tool uses, 7.6 minutes)
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -83,5 +85,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - 2026-10-19. Step 1 is prepared (base 7e8082d) and its builder is running in `.agents/worktrees/4-a-ordo-help-skills-1`; nothing has landed.
 - Verified: none yet.
-- Next: step 1's report, then `/refute 4.A 1` and `/land 4.A 1`; then step 2, the gate's run.
+- Step 1's first review found four findings, sent back as repair round 1 (`agents/briefs/1-round-1.md`).
+- Next: the round's reply, `/refute 4.A 1` over the round, then `/land 4.A 1`; then step 2, the gate's run.
 - Open on Axel's side: none.
