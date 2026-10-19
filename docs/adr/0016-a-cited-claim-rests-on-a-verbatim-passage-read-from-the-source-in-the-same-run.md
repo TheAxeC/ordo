@@ -1,6 +1,6 @@
 # 0016. A cited claim rests on a verbatim passage read from the source in the same run
 
-Status: proposed
+Status: superseded by 0018
 
 ## Context
 

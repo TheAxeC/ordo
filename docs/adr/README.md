@@ -23,4 +23,7 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0013](0013-a-script-and-four-fresh-read-only-agents-review-a-draft.md) | A script and four fresh read-only agents review a draft |
 | [0014](0014-a-finding-agent-and-a-checking-agent-review-a-diff-s-comments-and-a-rewrite-is-kept-only-when-the-comment-stripped-files-compare-equal.md) | A finding agent and a checking agent review a diff's comments, and a rewrite is kept only when the comment-stripped files compare equal |
 | [0016](0016-a-cited-claim-rests-on-a-verbatim-passage-read-from-the-source-in-the-same-run.md) | A cited claim rests on a verbatim passage read from the source in the same run |
-| [0017](0017-one-standard-library-script-makes-every-reference-lookup-of-the-literature-skill.md) | One standard-library script makes every reference lookup of the literature skill |
+| [0017](0017-one-standard-library-script-makes-every-reference-lookup-of-the-paper-skill.md) | One standard-library script makes every reference lookup of the paper skill |
+| [0018](0018-a-claim-the-paper-skill-judges-rests-on-a-passage-read-from-the-source-in-the-same-run.md) | A claim the paper skill judges rests on a passage read from the source in the same run |
+| [0019](0019-a-paper-run-is-done-by-academic-paper-s-agent-roles-each-a-fresh-agent.md) | A paper run is done by academic-paper's agent roles, each a fresh agent |
+| [0020](0020-a-paper-run-keeps-its-records-in-a-folder-beside-the-manuscript-s-folder.md) | A paper run keeps its records in a folder beside the manuscript's folder |
