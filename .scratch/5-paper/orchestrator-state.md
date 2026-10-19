@@ -90,6 +90,6 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-19. Step 2 of 4, the skill, landed: `skills/paper/SKILL.md` 1.0.0 with its 14 pages, `/writing` 1.1.0 numbering its findings, and the wiring, after one repair round and eight fixes at landing (`agents/reviews/2-landing.md`).
-- Next: step 3 of 4, the gate's runs: `/spec 5 3`, beginning with the release-candidate tag and pin (Rulings, "The pins of plan 5").
+- 2026-10-19. Step 2 of 6, the skill, landed: `skills/paper/SKILL.md` 1.0.0 with its 14 pages, `/writing` 1.1.0 numbering its findings, and the wiring, after one repair round and eight fixes at landing (`agents/reviews/2-landing.md`).
+- Next: step 3 of 6, the academic-paper sides: `/spec 5 3`, beginning with the release-candidate tag and pin (Rulings, "The pins of plan 5").
 - Open on Axel's side: none.
