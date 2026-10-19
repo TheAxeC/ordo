@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C104
+Last number: C105
 
 # Entry 2.I Several plans in one session
 
@@ -393,4 +393,17 @@ step 2, raised by `/spec 5 2` before the brief: the rulings fix the arguments of
 
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md:80` (Open item C)
+Builds on it: step 2
+
+## C105. The numbers of the /writing findings the user accepts and the names of a run's patch files (2026-10-19)
+
+step 2, raised by the brief check of `/spec 5 2` (`agents/reviews/2-brief-check.md`, ADRs 4 and Names 1), two choices the user would see. First, D40 and ADR 0021 have the user accept `/writing` findings in one line such as `all but 3, 7`, but the `/writing` report numbers no finding: `skills/writing/SKILL.md:247` to `:255` give the report two parts, groups by rule and findings in document order, and no number, so `3` names nothing. Second, open item C (a) applies each patch with `--output <run folder>/<file name>.patched` and moves the manifest into the run folder under the name `anchorize_tex.py` gives it, while the run folder is to keep each manifest, patch and apply report; full mode patches `main.tex` several times in one run (the draft review rounds, the citation compliance patch, the abstract patch, the `/writing` fixes), and on a scratch copy a second anchorize and move left one `main.tex.block-manifest.json`, one `main.tex.patched` and one apply report, the first trail replaced without warning; the hub's own dongho revision kept one file per round (`admin/reviews/patches/trail/main.rev1.tex` to `main.rev4.tex`).
+  - (a) `/writing` numbers its findings 1, 2, 3 in the order its report gives them, across both parts, each finding's number before its first line, a finding that lists several places keeping one number; `paper` reads the user's line against those numbers, `skills/writing/SKILL.md` gaining the rule with its version raised and step 2's paths widened to it. And each patch of a run gets the next number of the run, two digits from 01, and its files are named by it in the run folder's `patches/` folder: `<nn>-<file name>.block-manifest.json`, `<nn>-<file name>.patch.json`, `<nn>-<file name>.patched` and `<nn>-<file name>.patched.apply-report.json`, the file anchorized again before each patch. Pro: the user's line names what the report shows, every later `/writing` report has the numbers for any reader, and the run folder keeps every patch's trail as ADR 0020 says. Con: a change to a second skill in this step.
+  - (b) `paper` numbers the findings itself when it shows the `/writing` report, and the patch files are named as in (a). Pro: `/writing` is unchanged. Con: the report the user reads is no longer the one `/writing` printed, so a session that writes no part of a report edits one, and a separate `/writing` run given to `/paper revision` has no numbers.
+  - (c) The user names accepted findings by quoting each finding's passage, and the patch files keep C (a)'s names. Pro: no change to either skill. Con: the one-line answer D40 rules becomes many lines, and every patch after a file's first replaces the trail ADR 0020 keeps.
+  - Recommendation: (a), since it carries D40's one-line answer as ruled and keeps the trail ADR 0020 and open item C name. The lazy option is (c).
+  - The lazy option: (c).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md:81` (Open item D)
 Builds on it: step 2
