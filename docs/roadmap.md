@@ -46,6 +46,13 @@ Status: `[ ]` open, `[~]` in progress, `[x]` done (its gate ran and passed, with
 - Gate: every referee point has a response and a pointer to its change; each referee point has a verdict, judged by reading the response and the manuscript: addressed, partly, not, or cannot be checked from the manuscript; a side-by-side run against academic-paper's revision coach (`agents/revision_coach_agent.md`) on a real round of referee comments, compared blind as `docs/dev/blind-comparison.md` says, wins or ties; the plan's ledger holds a record for each `rebuild: rebuttal` row that the file of `skills/rebuttal/` the row names holds what the source file did, checked by reading both.
 - Waits on: 5, for the apply report; 6, for the point table.
 
+## 7.A referee
+
+- Status: [ ]
+- Goal: The referee skill: the referee review of someone else's paper, by one reviewer from the reviewer's side, writing the report for the editor: a summary of the paper, a recommendation, the major and the minor points each tied to the passage it is about, and the confidential comments to the editor. It is neither the draft review of `paper`'s full mode nor the panel review of `paper-review`.
+- Gate: a referee review of `research-hub/tmp/BIOINF-2026-1778-review/manuscript.txt`, compared blind as `docs/dev/blind-comparison.md` says against academic-paper-reviewer's full mode on the same manuscript, wins or ties; you read the report against the comments you sent (`research-hub/tmp/BIOINF-2026-1778-review/COMMENTS_TO_AUTHOR.md`) and find it written by one reviewer from the reviewer's side, with each point tied to its passage and no panel synthesis.
+- Waits on: 3, for the writing base the report is written to.
+
 ## 8. grant
 
 - Status: [ ]
