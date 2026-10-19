@@ -30,6 +30,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 
 - D1 How each skill is printed by `/ordo-help skills` (2026-10-19): (a), a line `/<name>`, then its Quick start block exactly as its `SKILL.md` has it, the skills in folder-name order; no option was the lazy one (the user).
 - D2 Whether `/ordo-help skills` also prints the sequence and the choices awaiting review (2026-10-19): (a), no, only the blocks; no option was the lazy one (the user).
+- The pin of step 2 (2026-10-19): step 2 may tag a release candidate of main with step 1 and pin it with `utils/pin.sh <tag>` without asking again (the user).
 
 ## Agents
 
@@ -37,4 +38,4 @@ Each agent a plan skill started for this plan has one bullet, with its agent id,
 
 ## Blocked, and by what
 
-- 2: the pin of step 1's tag, which waits for your permission.
+- none.
