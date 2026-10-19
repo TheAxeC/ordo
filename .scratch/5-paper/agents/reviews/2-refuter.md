@@ -159,3 +159,122 @@ Cases of the brief's "Cases":
 - Whether the builder's scripts (Spec 1) are accepted after the fact: the user's ruling.
 
 Reviewer usage: a20e791c4d7c8dedd, claude-opus-5-5, 221292 tokens, 122 tool uses, 20.9 min.
+
+## Repair round 1, refuted
+
+```
+$ sh skills/repo-setup/templates/check_config.test.sh        (run from the repository root)
+PASS: check_config.py scratch tests
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template      (exit 0)
+$ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+ok: docs/academic-coverage.md                     (exit 0)
+$ description lengths (paper, writing)
+838, 779                                          (both under the limit)
+$ the five agents/ordo-*.md frontmatters parse with their names                    (exit 0)
+$ character-set check over the 29 changed files, and over the report file       (exit 0, nothing outside the set)
+$ the brief's grep 6a                              (prints nothing, exit 1)
+$ the brief's literature grep                      (37 lines)
+$ grep -rn 'pending\|integrity\.md\|The patch file\|patch rule\|hub\|several times' skills/paper/
+the hits equal the builder's list: integrity.md for revision and lit-review, "sources pending" and "[GAP: abstract pending]", the title of patch-file.md, the variable `pending` in templates/lookup.py. Nothing in a page names patches/pending, "The patch file" of SKILL.md, a "patch rule" outside patch-file.md or a project.
+$ grep -n -w 'again\|until\|several\|repeatedly\|repeat' skills/paper/SKILL.md skills/paper/references/*.md
+every repeat that loops carries a count: SKILL.md Steps 9 and 10 (one new patch), outline stops (at most 3 times), draft review (round 2, once more), disclosure (once more, a second mismatch is the stop); literature-strategist.md "The review passes only when every gate holds" ("A failed gate is handled once, as its row says"); visualization.md "The rendered figure" (at most 2 fix passes); integrity-verification.md (asked again once, fetches again once). The remaining hits are prose ("several sources", "run again" in a stop table row for the user), not loops.
+$ C15 on a fresh mktemp -d folder: anchorize_tex.py, mv to patches/01-main.tex.block-manifest.json, apply_tex_patch.py --check-only --manifest, apply with --output patches/01-main.tex.patched, cp, cmp
+cmp exit 0; shasum -a 256 of the file equals output_sha256 of patches/01-main.tex.patched.apply-report.json; after the cp a second apply against the old manifest exits 2 with kind stale-manifest; empty roadmap_item_ids exits 2 with kind validation; a patch written against another version exits 2 with kind validation and the validation block; insert_after on refs.bib with cite-keys prints "unused: beta2021" or nothing, as SKILL.md Steps 11 says.
+$ C16: grep -n '\\bibliography\|\\addbibresource' on the five real main files, text after an unescaped % left out
+dongho 839 (refs), linfoot 501 (main), meseret 566 (References; 570 is commented), bare_jrnl 1082 (two files: refusal naming line 1082), ecg-readable-substrate no \bibliography line (refusal). The builder's lines match.
+$ C17: sh -c "set -- $qp $qt; echo \"arguments: \$#\""
+arguments: 2                                        (the printf run prints the two whole arguments, nothing substituted)
+$ python3 skills/paper/templates/lookup.py fetch 10.1126/science.1127647 <folder> k       (public indexes, no key)
+wrote <folder>/k.abstract.txt, exit 1
+$ python3 skills/paper/templates/lookup.py check-urls behind a closed proxy
+a line "failed ..., title not checked: Crossref left out ...", exit 1
+$ python3 skills/paper/templates/lookup.py quote-check on a citation-report.md-shaped file
+found / not found lines, exit 1 for a not-found line
+$ find in the worktree and in $TMPDIR for files newer than files.txt           (none; the three templates are unchanged)
+```
+
+Rows sampled for "held in" (each read against the place it names): 51, 52, 55, 56, 65, 66, 76, 78, 82, 83, 89, 90, 94, 96, 97, 99, 148 and 169 (18 rows). Fifteen hold: for each, the named page and section state the part. Three do not read as the brief and the standards ask: 78, 148 and 169 (Findings 2, 3 and 4). Rows 55, 94, 82 and 51/56 name places that hold their parts: `references/patch-file.md` "The patch file" holds the JSON form and "copies `base_sha256` and each `old_hash` from the manifest"; SKILL.md Steps 10 holds the numbered paths, `--acknowledge-structural`, the stale-manifest exit and "Never edit a patch by hand"; row 82's `references/intake.md` "Venue AI policy" row exists; SKILL.md "the closing checks" holds the cite-keys and `unused:` lines that rows 51 and 56 cite. Records: I checked 30 sampled quotes by `sed -n` at their cited lines (SKILL.md 115, 123, 126, 129, 131, 226, 227, 305; structure-architect.md 24; literature-strategist.md 97; citation-compliance.md 82; peer-reviewer.md 162; patch-file.md head and all patch-file.md names in SKILL.md 63, 113, 331, 342 to 348) and each stands at its line; the other records of the 355 are not re-verified one by one here (see Declined).
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since 05a4bd6:
+
+- 1: holds, SKILL.md `metadata.version` "1.0.0", description 838 characters, sections in the layout's order.
+- 2: holds, Quick start has the seven modes and the `projects:` form; a mode outside the list and `/paper plan` are refused with the list.
+- 3: holds, Use instead rows present, one phrase per When cell.
+- 4: holds, What it reads, including the `.bib` rule of C16 and the intake record offered from the latest earlier `config.md`.
+- 5: holds, the shared steps end on a completion criterion, the temporary folder is made and removed on every ending path, quoting rule in single quotes.
+- 6: partial, the served-model check after a start has no defined result for a disclosure patch that holds no model identifier, Finding 6.
+- 7: holds, the patch rule stands in `references/patch-file.md` and SKILL.md Steps 9 and 10 with numbered paths; C15 reproduces.
+- 8: holds, `/writing` is invoked through the Skill tool; the findings are `F<k>` and the comments-file findings `W<k>` in Steps 12, the id table, `draft-writer.md` and `peer-reviewer.md`.
+- 9: holds, `cite-keys`, `check-urls` and `quote-check` run once after the owner's corrections; a "title not checked: <index> left out" line goes to the user unchanged (`citation-compliance.md` "DOI and URL", Steps 11).
+- 10: holds, the Stops table holds the brief's stops; the eleventh, "The draft review does not pass", is named in the report as the build's addition with its source.
+- 11: partial, `references/visualization.md` check 9 and the trace are unconditional under "figures in parallel" (Finding 1), and `integrity-verification.md` "What the agent reads" and the Agent prompts row say "every check" while the lit-review check gets no `.tex` (Finding 5).
+- 12: holds, SKILL.md holds the full-mode rows; the one draft-review stop rule is consistent in full item 12, `peer-reviewer.md` "The verdict" and "The second draft review round", and the Stops row.
+- 13: holds, README row, line 79 and the install loop of line 106 name `paper`.
+- 14: holds, `git diff 05a4bd6 -- .agents/plan.yaml skills/plan/templates/plan.yaml` changes only comment text on the `reviewer` and `reviewer_effort` lines; the five `agents/ordo-*.md` parse.
+- 15: partial, 55 rows changed as `git diff 05a4bd6 -- docs/academic-coverage.md | grep -c '^+|'` printed in the builder's report, and `check_coverage.py` exits 0, but rows 78, 148 and 169 are not as the brief and the standards ask (Findings 2, 3, 4).
+- 16: partial, the records stand at their lines in the sample, but the record of row 78 quotes a line that does not state the part (Finding 4).
+- 17: holds, the three scripts are unchanged and no script file was written after the snapshot; each sentence about a script reproduced above.
+- 18: holds, `skills/writing/SKILL.md` line 251 numbers the findings and `metadata.version` is "1.1.0".
+
+Cases of the brief's "Cases":
+
+- C1: met, SKILL.md has every layout section in order with completion criteria.
+- C2: met, Quick start read against the brief.
+- C3: met, Use instead read against the brief.
+- C4: partial, the served-model check after a start in disclosure mode has no defined result when the patch holds no identifier, Finding 6.
+- C5: partial, rows 78, 148 and 169, Findings 2, 3 and 4.
+- C6: met, the ADR rules read against named lines (ADR 0017 to 0021): the temporary folder, passage lines before a judgment, stops, the numbered trail.
+- C7: met, the patch rule stands once in `references/patch-file.md` and every writing step names it; every exit status has its handling.
+- C8: met, the closing `/writing` run, the one-line answer and the accepted findings as patches are in Steps 12.
+- C9: met, run folder, local date, `-2` rule, `mktemp -d` and its removal read against Steps.
+- C10: met, the stops and refusals of item 10 stand in Stops and in the steps that reach them.
+- C11: met, the README, the comments and the glossary terms name `paper`; the diff of the two plan templates shows comment text only.
+- C12: partial, `check_coverage.py` exits 0, but the reasons of rows 78, 148 and 169 are not as above.
+- C13: met, SKILL.md of `writing` line 251.
+- C14: met, the intake record of an earlier run is offered at intake (What it reads, Steps).
+- C15: met, reproduced on a fresh `mktemp -d` folder: `cmp` exits 0, the hash equals `output_sha256`, stale-manifest and validation exit 2.
+- C16: met, results read from the `grep -n` lines above.
+- C17: met, `sh -c` printed two whole arguments with nothing substituted.
+
+### Findings
+
+- 1. Standards. `skills/paper/references/visualization.md` "The ten checks of a figure": "- Check 9 compares the plotted values with the data file and with the numbers the manuscript reports for the same quantity. The agent reads values from the script's inputs and the manuscript, and a number that differs is reported in `figures.md`." and "The trace" template "- Claims in the manuscript:" with "<claim text> (<section and paragraph>)"; what is wrong: round point 4 makes the visualization agent start together with the draft writer, given only `outline.md` and `arguments.md`, so no manuscript exists when check 9 runs and when the trace lists claims; "What the agent reads" says "The main `.tex`, when it exists" but check 9 and the trace do not, and no page says the check is skipped or done later (change-standard rule 14: a change carries to every place that names it; rule 19); failure scenario: a run with "figures in parallel" reaches check 9, the agent has no manuscript to read, and either invents "reported numbers" or marks the figure NEEDS_REVIEW, which the integrity agent then reads as a defect of the figure; verdict: item 11 partial.
+- 2. Standards. `docs/academic-coverage.md` row 169 (`references/plagiarism_detection_protocol.md`): "sampled sentences searched on the web and graded from original to verbatim, searched with `lookup.py search` in place of a web search, and a self-plagiarism check against the authors' earlier papers"; what is wrong: the round brief asked that the reason "keeps its words" and "reads plainly", and the insertion was placed literally after "graded from original to verbatim", so one sentence says the sentences are searched on the web and, two clauses later, that they are searched with `lookup.py search` instead of a web search, and "a self-plagiarism check" follows a list of participles (prose-standard: one statement per sentence, no self-contradiction); failure scenario: a reader of the map asking what the skill does for the originality screen reads that it searches the web, and then that it does not; the skill (`integrity-verification.md` "The screen of sampled sentences") does the second only; verdict: item 15 partial, C5 partial, C12 partial.
+- 3. Spec. `docs/academic-coverage.md` row 148 (`academic-pipeline SKILL.md`): "`paper` takes the optional parallel drafting, held in `skills/paper/SKILL.md` and `skills/paper/references/draft-writer.md`"; what is wrong: in the source (`academic-pipeline/SKILL.md` Parallelization) visualization runs with the argument builder and the draft writer waits for both; the skill now runs visualization with the draft writer after the outline's approval and adds the figures by a later patch, a different shape, and the reason says "takes" without saying so (rule 17: a rewrite keeps meaning; the map says what changed); the shape came from round point 4, so the builder followed the brief, and whether the departure is acceptable is the orchestrator's call; failure scenario: a later reader of the map who checks the source against the skill finds a different parallelism and cannot tell from row 148 whether it was meant; verdict: C5 partial.
+- 4. Standards. `docs/academic-coverage.md` row 78 (`references/apa7_extended_guide.md`): "Venue templates replace the title page, running head, abstract page, headings and table and figure format, held in `skills/paper/SKILL.md`." with the record quote `SKILL.md` "the closing checks": "The font, spacing, margins and page numbers follow the venue's template or the limits stated in `config.md`."; what is wrong: the named place says the font, spacing, margins and page numbers follow the template; the title page, running head, abstract page, headings and table and figure format are not stated as template-governed in SKILL.md or any page (change-standard rule 18: a map row names a place that states each part); failure scenario: a reader trusts "held in" and does not look for a rule on the running head or the table format, which the skill does not give, and the writer follows no template for them; verdict: item 15 partial, item 16 partial, C5 partial.
+- 5. Standards. `skills/paper/SKILL.md` Agent prompts, Integrity verification row: "the main `.tex` and the files it inputs for every check", and `skills/paper/references/integrity-verification.md` "What the agent reads": "- The main `.tex` and the files it inputs, and the `.bib`, in every check."; what is wrong: the lit-review check of entries (SKILL.md lit-review item 2) is given `config.md`, `review.md`, `refs.bib` and the temporary folder only, and lit-review without a `.tex` has none (rule 19: no two statements that contradict); the round brief point 5 asked for "for every check", so the origin is the brief, but the rule is still false for that check; failure scenario: the integrity agent started for a lit-review reads "in every check", looks for a `.tex` it was not given and either reports a missing input or judges nothing against a manuscript; verdict: item 11 partial.
+- 6. Behaviour. `skills/paper/SKILL.md` ### disclosure, item 1: "Before the patch is applied, compare that identifier, read from the patch's `new_text`, with the model the runner served the agent, read at Steps 8." and "Unequal: the patch is not applied. Start the draft writer once more as a fresh agent (Steps 8 and 9) with the served model in its prompt, and compare again. A second mismatch is the stop "A patch that does not apply"."; what is wrong: `references/ai-disclosure.md` "The sentence" gives the statement "No AI was used in preparing this paper." with no model identifier, and the no-answer case writes no statement and so no patch; the step defines no result when the `new_text` holds no identifier or no patch exists; failure scenario: a disclosure run for a paper with no AI use writes the one-sentence statement, the session finds no identifier, takes it as unequal, restarts the writer, gets the same sentence and raises "A patch that does not apply" for a correct patch; verdict: item 6 partial, C4 partial.
+
+### Declined to judge
+
+- Whether the new shape of "figures in parallel" is acceptable against the source (Finding 3), because it is the orchestrator's decision and round point 4 ordered it.
+- Whether each of the other 325 records of the 355 quotes its line, because I re-read a sample of 30 by `sed -n` and the builder's own 260-standing count was not recomputed.
+- The wording of the "read whole" claims in the coverage records, because a read and a rerun cannot settle whether the builder read a source whole.
+- The exit-4 sentence of `apply_tex_patch.py`, which is judged by reading only, since a run needs a failing output file and no breakage testing is allowed.
+- The network behaviour of the `fetch` and `check-urls` runs, because they depend on the public indexes and on the proxy at the time; the S14 and S13 runs printed what is quoted above and are not claimed to repeat.
+- `references/ethics.md`: "BLOCKED is reserved for ... concrete harm-enabling content" beside "Dual use is advisory ... never to BLOCKED" contradict each other in the page, and the source `deep-research/agents/ethics_review_agent.md` has the same pair, so it is carried faithfully and is not a finding of this round; the choice to keep or resolve it belongs to the orchestrator.
+- `references/citation-compliance.md` "An unsupported claim": an annotation that already holds the claim stands with no passage read, which follows round point 6 as written; whether that meets ADR 0018 for every case is the orchestrator's call.
+- `docs/academic-coverage.md` row 68 says "the paper skill's example will be a hub ML paper"; that text is in the base tree, lies outside `skills/paper/` and outside the 55 edits, and the round brief's point 7 covers pages only.
+
+Reviewer usage: a0cba8ec4935041d4, claude-sonnet-5-5, 102980 tokens, 98 tool uses, 11.7 min.
+
+## Closed
+
+First run (Spec 1 to 8, Proof 1 to 3, Standards 1 to 7, Behaviour 1 to 3): each was sent in repair round 1 as points 1 to 21 of `agents/briefs/2-round-1.md`, and the run over round 1 gives its items and cases holds or met except those its six findings name.
+
+Run over round 1, all fixed at landing on main, since each is small and inside the brief:
+
+- 1 (Standards, `references/visualization.md`, figures in parallel): fixed at landing, "What the agent reads" says that under "figures in parallel" no `.tex` exists when the agent runs, check 9 compares with the data file and the numbers `arguments.md` states, and the trace lists the claims of `arguments.md` by chain; the integrity check's "The figures and the tables" then compares them with the manuscript.
+- 2 (Standards, row 169): fixed at landing, the reason says the sampled sentences are searched with `lookup.py search` in place of the source's web search and graded from original to verbatim, in one plain sentence.
+- 3 (Spec, row 148): fixed at landing, the reason states the shape the skill takes: the visualization agent runs beside the draft writer after the outline's approval, where the source runs it beside the argument builder, and the figures are added by a patch after the first draft.
+- 4 (Standards, row 78): fixed at landing, `SKILL.md` "the closing checks" states that the title page, running head, abstract page, heading format and the format of tables and figures follow the venue's template, which the row names.
+- 5 (Standards, integrity inputs): fixed at landing, `SKILL.md` Agent prompts and `references/integrity-verification.md` "What the agent reads" give the main `.tex` and the files it inputs for every check of a manuscript, and name the check of entries, which reads `review.md` and `refs.bib` in their place.
+- 6 (Behaviour, disclosure mode): fixed at landing, disclosure item 1 says that a statement which names no model, such as "No AI was used in preparing this paper.", has nothing to compare and goes on to Steps 10, and that no patch means nothing to compare.
+
+Two points the run declined to judge, fixed at landing because each is a sentence a page contradicts:
+
+- `references/ethics.md` "Verdict and stop": "Dual use is advisory ... never to BLOCKED" beside BLOCKED for concrete harm-enabling content: the dual-use bullet now says a topic or method open to misuse is advisory, and only concrete harm-enabling content without safeguards, as defined above it, is BLOCKED.
+- `references/citation-compliance.md` "An unsupported claim": "A claim is judged only on a passage the agent read in this run from the source's full text" beside the annotation that needs no fetch: the first bullet now follows ADR 0018, a claim judged only on text read in this run, and a source of which only the abstract was read supporting only what the abstract says.

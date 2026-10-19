@@ -1,8 +1,8 @@
 ---
 name: writing
-description: "Review the prose of a draft with a script and four fresh agents that change nothing. The script computes the counts and word lists that have one right answer. The agents read a whole .tex file with the files it inputs and includes, a .md, a .txt or a .docx against the prose standard and the academic writing rules, each checking its own rules. The report shown to the user lists each break of a named rule with its place, the quoted passage and what the rule asks for, the findings that leave the reader wrong or unsure first, grouped by rule, and proposes no replacement. Triggers on: /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text."
+description: "Review the prose of a draft with a script and four fresh agents that change nothing. The script computes the counts and word lists that have one right answer. The agents read a whole .tex file with the files it inputs and includes, a .md, a .txt or a .docx against the prose standard and the academic writing rules, each checking its own rules. The report shown to the user lists each break of a named rule, numbered, with its place, the quoted passage and what the rule asks for, the findings that leave the reader wrong or unsure first, grouped by rule, and proposes no replacement. Triggers on: /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text."
 metadata:
-  version: "1.0.0"
+  version: "1.1.0"
 ---
 
 # Review the prose of a draft
@@ -248,6 +248,7 @@ The checking agent gets these bullets and no other:
 - Group each part by rule, each group headed by the rule's page and its name on that page, as the findings name it.
 - Within each part, order the groups as the rules stand: the prose standard, then `references/rules.md`, then `references/registers.md`.
 - Put the findings of a group in document order.
+- Number the findings 1, 2, 3 in the order the report gives them, across both parts, with the number before the first line of each finding. A finding that lists several places keeps one number.
 - Write no line under a group heading but the findings.
 - A rule the draft keeps has no group and no line.
 - A passage reported under more than one rule stands once, in the first group of the report that names one of its rules.
