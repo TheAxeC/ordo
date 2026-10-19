@@ -407,3 +407,16 @@ step 2, raised by the brief check of `/spec 5 2` (`agents/reviews/2-brief-check.
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md:81` (Open item D)
 Builds on it: step 2
+
+## C106. How the /writing findings reach /paper on the current dongho manuscript (2026-10-19)
+
+step 3, raised by the brief check of `/spec 5 3` (`agents/reviews/3-brief-check.md`, ADRs F7.1), a choice the user would see. The brief as drafted had the orchestrator write `accepted-findings.md` from Axel's one-line answer to a separate `/writing` report and give that file to `/paper revision`. `skills/paper/SKILL.md` "### revision" item 1 reads a comments file that is a `/writing` report as items `W<k>`, and only Steps 12's stop "The findings to apply" reads the user's one-line answer, so that route runs neither route of D40 and ADR 0021: `paper` never reads the line, and the comments file is no `/writing` report, against ADR 0021's last sentence.
+  - (a) On the copy of research-hub's current revised dongho-ecg-clustering manuscript, after the four single-mode runs, `/writing manuscript/main.tex` runs and its report is saved whole; `/paper revision manuscript/main.tex <that report>` takes it as its comments file, each item `W<k>` changed or named as left unchanged with its reason, and its closing `/writing` review raises "The findings to apply", where Axel answers in one line and the accepted `F<k>` are applied; Axel reads both sets of applied fixes, the diff and the apply reports. Pro: both routes of D40 and ADR 0021 run as the skill builds them, and `paper` reads Axel's line. Con: Axel does not pick among the first report's findings, since every one becomes an item as D40's second route rules, and the run is longer.
+  - (b) The brief as drafted: the orchestrator writes the findings Axel accepts to a file of its own and gives it to `/paper revision`. Pro: Axel picks among the first report's findings. Con: neither route of ADR 0021 runs, and the comments file is not the `/writing` report its last sentence names, a contradiction of an ADR in force.
+  - (c) Only the closing `/writing` review of the new side's revision comparison counts for D37. Pro: no further run. Con: D37 names the current revised manuscript, which that comparison does not use (it runs on f8c5e7176), so a clause of the step's line goes undone.
+  - Recommendation: (a), since it runs D40 and ADR 0021 as ruled and recorded on the manuscript D37 and D39 name. The lazy option is (c).
+  - The lazy option: (c).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md:78` (Open item E)
+Builds on it: step 3
