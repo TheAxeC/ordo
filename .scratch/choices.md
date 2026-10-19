@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C103
+Last number: C104
 
 # Entry 2.I Several plans in one session
 
@@ -381,3 +381,16 @@ step 1, raised by `/spec 5 1` before the brief: rulings D15 and D17 fix what `lo
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md:79` (Open item B)
 Builds on it: step 1
+
+## C104. What each mode of paper leaves in the manuscript's files (2026-10-19)
+
+step 2, raised by `/spec 5 2` before the brief: the rulings fix the arguments of each mode (D26), that full mode writes `.tex` and revision edits through anchorize, patch and apply (D25), and where a run keeps its records (D27, ADR 0020), but no ruling fixes what each mode leaves in the manuscript's files, how a mode given only the main `.tex` finds its `.bib`, or how a patch reaches the manuscript. These are what the user gets from each run. On the tree: `apply_tex_patch.py` exits 2 with kind `output` when `--output` is the base and never writes the base (its head comment; case P6 of step 1); `anchorize_tex.py` writes `<tex>.block-manifest.json` beside the file it reads and has no option for another place; on a scratch copy of dongho-ecg-clustering's `manuscript/refs.bib`, `anchorize_tex.py refs.bib --print-blocks` prints `21 blocks`, one per entry (`grep -c '^@'` prints 21); the hub's manuscripts stand in `<project>/manuscript/main.tex` beside `refs.bib` or `main.bib` and name it by one `\bibliography{...}` line (C103's count; `ls` of the three gate projects' `manuscript/` folders).
+  - (a) Every change to a manuscript file, the `.tex`, a file it inputs and its `.bib`, is a patch: the file is anchorized, its manifest moved into the run folder, the patch checked with `--check-only`, applied with `--manifest` and `--output <run folder>/<file name>.patched`, and the patched file copied over the file, one patch per file, the run folder keeping each manifest, patch and apply report. Full mode writes `<project>/manuscript/main.tex` and `<project>/manuscript/refs.bib`, refused when `main.tex` exists, the first draft whole and every later change as a patch. A mode given a main `.tex` finds its `.bib` by the one `\bibliography{...}` or `\addbibresource{...}` of the main file or a file it inputs, resolved against the main file's folder with `.bib` added to a name without it; none, or more than one file, is a refusal that names the lines. outline-only writes `outline.md`, the approved outline with its evidence map, into the run folder and changes no manuscript file; abstract-only writes the abstract and keywords into the `.tex` as a patch; citation-check writes `citation-report.md` into the run folder and applies its format corrections as patches; disclosure writes its statements into the `.tex` as a patch at the place the venue's policy gives, and `disclosure.md` in the run folder names the policy and the place; lit-review without a `.tex` writes `review.md` and `refs.bib` into `paper-runs/lit-review-<YYYY-MM-DD>/` of the folder the session runs in, and with a `.tex` writes `review.md` into the run folder beside the manuscript's folder and adds its entries to the `.bib` as a patch. Pro: the manuscript holds each change and every change leaves its manifest, patch and apply report, as row 23 and ADR 0020 ask, and each mode is called with D26's arguments alone. Con: the session copies each patched file over the manuscript file, a write the scripts do not make.
+  - (b) The same, except that the patched file stays in the run folder and the manuscript is left as it was, for the user to copy over. Pro: the skill never writes a manuscript file. Con: D40 and ADR 0021 say the accepted findings are applied to the manuscript, and the user then does by hand, after every run, what the run could do.
+  - (c) The same as (a), with a `--bib <path>` argument on every mode in place of reading the `\bibliography` line. Pro: no line of the `.tex` is read for it. Con: an argument D26 does not give, which changes a ruling.
+  - Recommendation: (a), since it applies what the run changes, keeps the trail ADR 0020 names and needs no argument beyond D26. The lazy option is (b).
+  - The lazy option: (b).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md:80` (Open item C)
+Builds on it: step 2
