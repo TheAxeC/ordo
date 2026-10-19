@@ -32,6 +32,7 @@ Independent of each other; the standing rule of one agent at a time still serial
 - D2 Whether `/ordo-help skills` also prints the sequence and the choices awaiting review (2026-10-19): (a), no, only the blocks; no option was the lazy one (the user).
 - The pin of step 2 (2026-10-19): step 2 may tag a release candidate of main with step 1 and pin it with `utils/pin.sh <tag>` without asking again (the user).
 - The final tag of the closing (2026-10-19): the closing tags the release `v8.3.0` on main and pins it with `utils/pin.sh v8.3.0` without asking (the user).
+- Open item A (2026-10-19): (a), the closing's roadmap diff approved as drafted; `/roadmap done 4.A` wrote it (d0cb61f) (the user).
 
 ## Agents
 
