@@ -536,7 +536,8 @@ def pipeline_svg() -> str:
     help_box = Box(
         Rect(533, side_top, 228, side_h),
         "/ordo-help",
-        "Prints the sequence and, for a named plan, where it stands and the next command.",
+        "Prints the sequence and, for a named plan, where it stands and the next command. "
+        "/ordo-help skills prints every skill's Quick start.",
         (Group(OPTIONAL), Group("", ("No stop.",))),
         dashed=True,
     )

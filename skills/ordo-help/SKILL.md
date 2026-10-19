@@ -1,19 +1,20 @@
 ---
 name: ordo-help
-description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, with no entry the position and open items of each open plan, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review."
+description: "Print the command sequence for running a plan step by step (open, spec, build, refute, diagnose, close, land, and the loop inside a step) with the choices awaiting review that the orchestrator took under self-rule, with no entry the position and open items of each open plan, and for the plan named, where it stands: the position, the open items, the step in flight, which of its artifacts exist, and the command that comes next. With the argument skills, print instead the name and the Quick start block of every skill in the folder that holds this skill, in folder-name order. Triggers on: ordo-help, ordo help, what do I type next, where is the plan, how does the plan loop work, which choices await my review, ordo-help skills, which skills are there, list every skill and its modes, what modes does a skill have."
 metadata:
-  version: "3.1.0"
+  version: "3.2.0"
 ---
 
 # Ordo help
 
-`/ordo-help` prints the command sequence for running a plan step by step and the position of each open plan, and, for a named plan, where that plan stands and the command that comes next.
+`/ordo-help` prints the command sequence for running a plan step by step and the position of each open plan, and, for a named plan, where that plan stands and the command that comes next. `/ordo-help skills` prints the name and the Quick start block of every skill in the folder that holds this skill, and nothing else.
 
 ## Quick start
 
 ```
 /ordo-help            print the sequence and the choices awaiting review, then the position and open items of each open plan
 /ordo-help <entry>    print the sequence and the choices awaiting review, then the named plan's position and the command that comes next
+/ordo-help skills     print each skill's name and its Quick start block, in folder-name order
 ```
 
 ## Use instead
@@ -28,19 +29,30 @@ metadata:
 
 ## What it reads
 
-1. `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
+1. The argument, read first.
+   - An argument that is exactly `skills` is the `skills` mode, before `<entry>` is matched against the roadmap or a ledger folder.
+   - Any other argument is `<entry>`.
+2. For `/ordo-help skills`, the skills folder, which is the parent of this skill's folder after that folder is resolved to its real path.
+   - This skill's folder is the base directory the runner states when the skill loads, resolved through any link by `cd <base directory> && pwd -P`.
+   - The parent of the base directory as stated is never the skills folder.
+3. For `/ordo-help skills`, the `SKILL.md` of each folder in the skills folder.
+4. For `/ordo-help` and `/ordo-help <entry>`, `.agents/plan.yaml`, its required keys and defaults as `/plan` states them.
    - A required key missing is a refusal ("Stops").
-2. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
+5. For `/ordo-help <entry>`, the ledger folder: `<entry>` resolves to the folder under `<ledger_root>/` whose `plan.md` opens with `# Plan: <entry>` (the number, or the number and title).
    - `/plan` names a new folder by the entry's slug, and an older plan keeps whatever folder it has.
    - No such folder is a refusal ("Stops").
-3. The state file of each plan it prints.
+6. For `/ordo-help` and `/ordo-help <entry>`, the state file of each plan it prints.
    - For `/ordo-help` with no entry, that of each open plan, in the roadmap's order.
    - For `/ordo-help <entry>`, that of the named plan's folder, and the brief, the report and the refuter report of the step in flight.
-4. The choices file `<ledger_root>/choices.md`, when it exists.
-5. For `/ordo-help` with no entry, the roadmap file `.agents/plan.yaml`'s `roadmap:` names, for the order Steps 3 prints the open plans in.
+7. For `/ordo-help` and `/ordo-help <entry>`, the choices file `<ledger_root>/choices.md`, when it exists.
+8. For `/ordo-help` with no entry, the roadmap file `.agents/plan.yaml`'s `roadmap:` names, for the order "Steps / The sequence and the plans" 3 prints the open plans in.
    - In the `projects:` form, the order of the projects in `.agents/plan.yaml` comes first.
 
 ## Steps
+
+### The sequence and the plans
+
+`/ordo-help` and `/ordo-help <entry>` run these steps.
 
 1. Print the sequence in "The sequence, printed verbatim".
 2. Print the choices awaiting review, for `/ordo-help` and for `/ordo-help <entry>`.
@@ -60,6 +72,22 @@ metadata:
    - An open item that waits on a ruling is printed with it.
    - The line after an open item that waits on a ruling is `Ruled: ...`.
    - The step is done when the line is printed.
+
+### skills
+
+`/ordo-help skills` runs these steps.
+
+1. Find the skills folder as "What it reads" 2 says.
+   - The step is done when the parent of the resolved path is known as the skills folder.
+2. Sort the names of the folders in the skills folder bytewise, as `LC_ALL=C ls -1` sorts them, so `plan` comes before `plan-orchestration` and `plan-retro`.
+   - The step is done when the sorted names are known.
+3. For each folder in the sorted order, print the skill's name line and its Quick start block.
+   - A folder with no `SKILL.md` is skipped.
+   - For a folder that holds a `SKILL.md`, print the line `/<name>`, `<name>` being the folder's name.
+   - Under that line, print the lines of the code block under `## Quick start`, from its opening fence line to its closing fence line, both included, copied from the `SKILL.md` this step reads.
+   - A `SKILL.md` with no code block under `## Quick start` gets its name line and then the line `no Quick start block`.
+   - A blank line stands between one skill's block and the next skill's name line.
+   - The step is done when every folder in the sorted order is skipped or printed.
 
 ## The sequence, printed verbatim
 
@@ -114,7 +142,7 @@ C<n> => <your ruling>         under self-rule: you replace a choice with your ru
 
 | Stop | When | What it shows | What resumes it |
 |---|---|---|---|
-| No stop | The skill never stops for a decision; the rows below are refusals, which name their cause and leave nothing | Nothing | Nothing |
+| No stop | The skill never stops for a decision; the rows below are refusals of `/ordo-help` and `/ordo-help <entry>`, which name their cause and leave nothing, and `/ordo-help skills` refuses nothing | Nothing | Nothing |
 | A required key missing | A required key is not in `.agents/plan.yaml`; the refusal names it | The key | The key added, then `/ordo-help` again |
 | No ledger folder | No folder under `<ledger_root>/` holds a `plan.md` that opens with `# Plan: <entry>` | A refusal that names `/plan` | `/plan <entry>`, or `/ordo-help` with an entry that has a plan |
 
@@ -122,8 +150,10 @@ C<n> => <your ruling>         under self-rule: you replace a choice with your ru
 
 | Anti-pattern | Why it fails | Do instead |
 |---|---|---|
-| Printing the sequence in other words | A reader matching what they typed against the sequence finds lines that are not there | Steps 1 |
+| Printing the sequence in other words | A reader matching what they typed against the sequence finds lines that are not there | "Steps / The sequence and the plans" 1 |
+| Printing a skill's Quick start block from memory, from an earlier output or in other words | A reader then types a mode the skill no longer has, or misses one it has | "Steps / skills" 3 |
 
 ## Rules
 
 - The skill writes nothing.
+- The `skills` mode prints only the name lines, the Quick start blocks, the `no Quick start block` lines and the blank lines between skills.
