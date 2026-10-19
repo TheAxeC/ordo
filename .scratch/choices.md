@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C101
+Last number: C102
 
 # Entry 2.I Several plans in one session
 
@@ -356,3 +356,16 @@ The user ruled the `$0` defect of `code-comments` fixed (open item E). `grep -n 
 Taken: (a)
 Booked: `.scratch/4-code-comments/plan.md:74` (Step 1b reaches `session-retro`)
 Builds on it: step 1b
+
+# Entry 5 paper
+
+## C102. The drafted step list of plan 5 (2026-10-19)
+
+The stop "The drafted step list" of `/plan 5 --self-rule`: four steps, the scripts with their tests, the skill with a record for each of the 43 `rebuild: paper` rows, the gate's runs (the release-candidate pin, the three blind comparisons, the resolve check, the four single-mode runs and the `/writing` findings applied), and the closing. Every answer of "## Gate" is no, no design decision is left unsettled (D1 to D41, ADR 0017 to 0021), and the four lines under D37 (its sub-bullet and the fenced gate line) are copied below D37 as they stand.
+  - Option (a), recommended: open the plan with the list as drafted. Pro: each step is a part of the goal with its check, in dependency order, and the loop starts at step 1. Con: step 2 is one large step, the whole skill text and 43 records, which the rule that parts known in advance are one step requires.
+  - Option (b): keep the draft for the user. Pro: the user reads the list first. Con: the plan stays unopened while nothing in the list is left for the user to rank.
+  - Recommendation: (a). The lazy option is (b).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md:78` (Open item A)
+Builds on it: step 1, step 2, step 3, step 4
