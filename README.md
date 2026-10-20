@@ -25,7 +25,7 @@ Around that loop, `repo-setup` and `ordo-init` set a repository up for it. `road
 | `session-retro` | Reads the transcripts of a plan's Claude Code sessions, of one session or of a time window. It reports what went well, to keep, and what went wrong, to change. Each point quotes its place and proposes a change to a rule, skill or brief, which the user decides on |
 | `writing` | Reviews the prose of a draft with a script and four fresh agents that change nothing: a `.tex` file with its input files, a `.md`, a `.txt` or a `.docx`. It reports each break of a named rule with its place, the quoted passage and what the rule asks for, grouped by rule and numbered, and proposes no replacement |
 | `code-comments` | Reviews the comments a git diff adds or changes, the uncommitted changes or a range, with a finding agent and a checking agent that change nothing. It reports each comment that breaks a named rule with its place, the quoted comment and what the rule asks for, the false comments first, and proposes no replacement. On `apply <numbers>` or `apply all` a fresh agent rewrites the picked comments in C, C++ and CMake files, and a rewrite is kept only when `templates/strip_comments.py` finds the code unchanged |
-| `paper` | Writes, revises and checks a LaTeX manuscript in seven modes (full, outline-only, revision, abstract-only, lit-review, citation-check and disclosure) with fresh agents that each hold one role. Every change to the manuscript is a patch applied by script, every claim rests on a passage read in the run, and the run's records stay in `paper-runs/` beside the manuscript's folder. Full and revision runs end with `/writing`, and the findings you accept are applied as patches |
+| `paper` | Writes, revises and checks a LaTeX manuscript in seven modes (full, outline-only, revision, abstract-only, lit-review, citation-check and disclosure) with fresh agents that each hold one role: literature strategist, planner, draft writer, visualization and peer reviewer, and, in citation-check mode only, citation compliance. A first draft is written whole and every later change to the manuscript is a patch applied by script. Citation-check mode checks each cited claim against a passage read in the run. Full and revision runs run the citation scripts and give their output to the writer and the reviewer. Lit-review runs them only when you give it a `.tex`, and outline-only, abstract-only and disclosure run none. The run's records stay in `paper-runs/` beside the manuscript's folder. Full and revision runs end with `/writing`, and a one-line reply starts the draft writer on the findings you pick, or on every finding when you ask for the autonomous pass |
 
 The order of use, shortened from what `/ordo-help` prints:
 
@@ -64,6 +64,16 @@ The pipeline below marks where each skill of a roadmap entry asks you. A stop ma
 The loop of one step carries the same marks, with the band that runs the loop unattended below it.
 
 ![The loop of one step as boxes in order: /spec, build it, /refute, close them, which sends a finding whose cause is not known through /diagnose, /refute over the round, and /land, with a return for a further round, a card for when a command stops, a card for when it refuses, the optional /ordo-help card, and the optional /plan-orchestration band. Each box lists the stops where you are asked, marked every run, only when or optional.](docs/figures/plan-loop.svg)
+
+The skills that launch agents outside the plan loop each have a figure. A stop marked "every run" waits each time the box runs. A box whose stop a flag changes or closes says so in its text.
+
+![The seven modes of /paper as boxes: full; revision; lit-review; citation-check; disclosure; outline-only; abstract-only. Each box lists its steps in order, the roles that are fresh agents and the session steps, and the stops where you are asked, marked every run or only when.](docs/figures/paper.svg)
+
+![The steps of /grill as boxes in order: resolve; design tree; a round; the answers; write down; close, with a return from write down to design tree until no decision is open, then a card for the lookup agent and a card for when it refuses: lookup agent; when it refuses. Each box lists the stops where you are asked, marked every run or only when.](docs/figures/grill.svg)
+
+![The steps of /writing as boxes in order: read the call; the scripts; three agents; checking agent; the report, then a card for when it refuses: when it refuses. Each box lists the stops where you are asked, marked every run or only when.](docs/figures/writing.svg)
+
+![The steps of /code-comments as boxes in order: resolve the diff; prompt file; finding agent; checking agent; the report, then the steps of a reply of apply numbers or apply all: pick findings; rewrite agent; compare, then a card for when it refuses: when it refuses. Each box lists the stops where you are asked, marked every run or only when.](docs/figures/code-comments.svg)
 
 ## Requirements
 

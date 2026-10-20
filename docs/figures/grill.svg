@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 662" width="1040" height="662" role="img" aria-label="The steps of /grill as boxes in order: resolve; design tree; a round; the answers; write down; close, with a return from write down to design tree until no decision is open, then a card for the lookup agent and a card for when it refuses: lookup agent; when it refuses. Each box lists the stops where you are asked, marked every run or only when.">
+<title>The steps of /grill as boxes in order: resolve; design tree; a round; the answers; write down; close, with a return from write down to design tree until no decision is open, then a card for the lookup agent and a card for when it refuses: lookup agent; when it refuses. Each box lists the stops where you are asked, marked every run or only when.</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1040" height="662" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">FOR EVERY ENTRY, IN ORDER</text>
+<rect x="25" y="42" width="150" height="283" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="42" x2="167" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="35" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">resolve</text>
+<text x="35" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Reads plan.yaml,</text>
+<text x="35" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">sets the design</text>
+<text x="35" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">bar and finds the</text>
+<text x="35" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">entry.</text>
+<rect x="193" y="42" width="150" height="283" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="201" y1="42" x2="335" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="203" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">design tree</text>
+<text x="203" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Reads the rules,</text>
+<text x="203" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the ADRs, the</text>
+<text x="203" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">glossary and the</text>
+<text x="203" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">rulings, then</text>
+<text x="203" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">lists the</text>
+<text x="203" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">decisions the goal</text>
+<text x="203" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">and gate need and</text>
+<text x="203" y="191" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">marks the settled</text>
+<text x="203" y="206" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">ones.</text>
+<rect x="361" y="42" width="150" height="283" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="369" y1="42" x2="503" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="371" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">a round</text>
+<text x="371" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Asks, in one</text>
+<text x="371" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">message, every</text>
+<text x="371" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">decision whose</text>
+<text x="371" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">prerequisites are</text>
+<text x="371" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">settled, each with</text>
+<text x="371" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">its options and</text>
+<text x="371" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">one</text>
+<text x="371" y="191" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">recommendation.</text>
+<text x="371" y="206" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Under --self-rule</text>
+<text x="371" y="221" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">only the decisions</text>
+<text x="371" y="236" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">of the six kinds</text>
+<text x="371" y="251" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">left open are sent</text>
+<text x="371" y="266" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">as a round.</text>
+<rect x="371" y="275" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="408.6" y="287" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+<text x="371" y="307" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A round</text>
+<rect x="529" y="42" width="150" height="283" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="537" y1="42" x2="671" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="539" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">the answers</text>
+<text x="539" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Reads each answer</text>
+<text x="539" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">against the round</text>
+<text x="539" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">shown, and checks</text>
+<text x="539" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">its terms, its</text>
+<text x="539" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">claims and its</text>
+<text x="539" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">contradictions.</text>
+<rect x="697" y="42" width="150" height="283" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="705" y1="42" x2="839" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="707" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">write down</text>
+<text x="707" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Writes each</text>
+<text x="707" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">settled answer as</text>
+<text x="707" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">a Rulings line, a</text>
+<text x="707" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">glossary term, a</text>
+<text x="707" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">roadmap change</text>
+<text x="707" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">and, when</text>
+<text x="707" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">recorded, an ADR.</text>
+<rect x="865" y="42" width="150" height="283" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="873" y1="42" x2="1007" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="875" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">close</text>
+<text x="875" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Lists the</text>
+<text x="875" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">decisions settled</text>
+<text x="875" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">with where each</text>
+<text x="875" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">was written, then</text>
+<text x="875" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">asks to confirm</text>
+<text x="875" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">and to commit.</text>
+<rect x="875" y="170" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="912.6" y="182" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+<text x="875" y="202" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- The end</text>
+<text x="875" y="222" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">Under --self-rule</text>
+<text x="875" y="236" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">nothing is asked</text>
+<text x="875" y="250" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">and the commit is</text>
+<text x="875" y="264" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">made.</text>
+<line x1="175" y1="62" x2="192" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="343" y1="62" x2="360" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="511" y1="62" x2="528" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="679" y1="62" x2="696" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="847" y1="62" x2="864" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M772,325 L772,349 L268,349 L268,326" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="276" y="364" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">until no decision is open</text>
+<text x="25" y="399" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">WHEN A FACT IS NEEDED</text>
+<text x="530" y="399" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">AT ANY POINT</text>
+<rect x="25" y="411" width="485" height="148" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="411" x2="502" y2="411" stroke="#4f46e5" stroke-width="3"/>
+<text x="35" y="435" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">lookup agent</text>
+<text x="35" y="455" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Started for a fact the session cannot read in a few lines. It is</text>
+<text x="35" y="470" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">read-only, runs as ordo-&lt;reviewer_effort&gt; on the model reviewer</text>
+<text x="35" y="485" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">names, and returns each fact with its source. Its id and served</text>
+<text x="35" y="500" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">model are written to the Agents section of the rulings file.</text>
+<rect x="35" y="509" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="72.6" y="521" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+<text x="35" y="541" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A lookup agent served another model</text>
+<rect x="530" y="411" width="485" height="148" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="411" x2="1007" y2="411" stroke="#b45309" stroke-width="3"/>
+<text x="540" y="435" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it refuses</text>
+<text x="540" y="455" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command names its cause and changes nothing more: no</text>
+<text x="540" y="470" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">configuration, no such entry, a required key missing, --self-rule</text>
+<text x="540" y="485" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">without the keys, --self-rule for an entry under Not yet specified,</text>
+<text x="540" y="500" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">an unknown bar. A refusal carries no mark: fix the cause and run</text>
+<text x="540" y="515" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the command again.</text>
+<text x="25" y="583" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
+<rect x="25" y="597" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="62.6" y="609" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+<text x="108.2" y="609" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
+<rect x="355" y="597" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="392.6" y="609" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+<text x="438.2" y="609" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
+<rect x="685" y="597" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="719.2" y="609" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+<text x="761.4" y="609" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
+<text x="25" y="631" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">A stop marked "every run" waits each time the box runs. A box whose stop a flag changes or closes says so in its text.</text>
+</svg>

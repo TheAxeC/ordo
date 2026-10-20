@@ -1,4 +1,5 @@
-"""Write the two SVG figures of the README: the pipeline of one roadmap entry and the plan loop.
+"""Write the six SVG figures of the README: the pipeline of one roadmap entry, the plan loop, and a
+figure for each skill that launches agents outside the plan loop.
 
 Writes, beside this file:
 
@@ -6,9 +7,16 @@ Writes, beside this file:
   with /plan-retro, /session-retro, /diagnose and /ordo-help beside them.
 - plan-loop.svg: /spec, build it, /refute, close them, /refute over the round, /land, the return
   for a further round, the stops and refusals, and the /plan-orchestration band.
+- paper.svg: one box for each of the seven modes of /paper, with its roles and session steps in
+  order and its stops.
+- grill.svg: the steps of /grill in order, its lookup agent and its refusals.
+- writing.svg: the steps of /writing in order, its three finding agents and its checking agent.
+- code-comments.svg: the steps of /code-comments in order, its finding agent, its checking agent
+  and its rewrite agent.
 
 Every box, arrow and label is written in this file, taken from each skill's Stops table and from
-the sequence /ordo-help prints; the script reads no skill file. A change to a Stops table, to the
+the sequence /ordo-help prints, and for paper, grill, writing and code-comments from the Steps and
+Stops of that skill's SKILL.md; the script reads no skill file. A change to a Stops table, to the
 sequence or to a skill name is made in the labels below, and the script is run again.
 
 Run, from the repository root: python3 docs/figures/gen_figures.py
@@ -34,11 +42,12 @@ Errors, each printed to stderr as "error: <message>":
 
 The label and ASCII errors stop the run before any file is written.
 
-Exit status: 0 both files written and verified, 1 an error above.
+Exit status: 0 all six files written and verified, 1 an error above.
 """
 
+import math
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from html import escape
 from pathlib import Path
 from typing import NamedTuple
@@ -67,6 +76,7 @@ CAPTION_SIZE = 10
 BODY_LEADING = 15
 NAME_LEADING = 14
 BADGE_HEIGHT = 16
+SCRATCH_HEIGHT = 100000
 
 EVERY_RUN = "every run"
 ONLY_WHEN = "only when"
@@ -317,8 +327,11 @@ def _draw_names(canvas: Canvas, box: Box, group: Group, cursor: float, put: _Put
     return cursor
 
 
-def draw_box(canvas: Canvas, box: Box) -> None:
-    """Draw a card: rule, title, body, the groups of stops with their marks, and the note."""
+def draw_box(canvas: Canvas, box: Box) -> float:
+    """Draw a card: rule, title, body, the groups of stops with their marks, and the note.
+
+    Return the baseline that the next line of the card would take.
+    """
     figure = canvas.name
     put = _Put(canvas, box)
     inner = box.area.w - 2 * PAD_X
@@ -362,6 +375,27 @@ def draw_box(canvas: Canvas, box: Box) -> None:
             put.check(cursor, box.note)
             canvas.text(box.area.x + PAD_X, cursor, line, NAME_SIZE, MUTED)
             cursor += NAME_LEADING
+    return cursor
+
+
+def box_height(figure: str, box: Box) -> int:
+    """The height a card needs: draw_box run on a scratch canvas, so the layout has one source."""
+    scratch = Canvas(figure, 1, 1, "")
+    tall = replace(box, area=Rect(box.area.x, box.area.y, box.area.w, SCRATCH_HEIGHT))
+    return math.ceil(draw_box(scratch, tall) - box.area.y) + 4
+
+
+def fit_row(
+    figure: str, left: float, top: float, gap: float, boxes: tuple[Box, ...]
+) -> tuple[Box, ...]:
+    """Place cards left to right, each as wide as it says, all as tall as the tallest needs."""
+    height = max(box_height(figure, box) for box in boxes)
+    placed: list[Box] = []
+    x = left
+    for box in boxes:
+        placed.append(replace(box, area=Rect(x, top, box.area.w, height)))
+        x += box.area.w + gap
+    return tuple(placed)
 
 
 def draw_caption(canvas: Canvas, x: float, y: float, label: str, width: float) -> None:
@@ -374,7 +408,19 @@ def draw_note(canvas: Canvas, x: float, y: float, label: str, width: float) -> N
     canvas.text(x, y, label, NAME_SIZE, MUTED)
 
 
-def draw_legend(canvas: Canvas, x: float, y: float, width: float) -> None:
+PLAN_LEGEND_NOTE = (
+    'A stop marked "every run" waits each time, unless a quoted ruling states the change '
+    "or, under self_rule: on, plan-orchestration closes it."
+)
+SKILL_LEGEND_NOTE = (
+    'A stop marked "every run" waits each time the box runs. A box whose stop a flag changes '
+    "or closes says so in its text."
+)
+
+
+def draw_legend(
+    canvas: Canvas, x: float, y: float, width: float, note: str = PLAN_LEGEND_NOTE
+) -> None:
     """The three marks and the dashed box with what each says, on one row, and a note under it."""
     draw_caption(canvas, x, y, "HOW TO READ THE MARKS", width)
     items = (
@@ -388,14 +434,7 @@ def draw_legend(canvas: Canvas, x: float, y: float, width: float) -> None:
         badge = draw_badge(canvas, left, y + 26, mark)
         _check_line(canvas.name, "the legend", meaning, step - badge - 22, NAME_SIZE)
         canvas.text(left + badge + 8, y + 26, meaning, NAME_SIZE)
-    draw_note(
-        canvas,
-        x,
-        y + 48,
-        'A stop marked "every run" waits each time, unless a quoted ruling states the change '
-        "or, under self_rule: on, plan-orchestration closes it.",
-        width,
-    )
+    draw_note(canvas, x, y + 48, note, width)
 
 
 def draw_row_arrows(canvas: Canvas, boxes: tuple[Box, ...]) -> None:
@@ -403,6 +442,13 @@ def draw_row_arrows(canvas: Canvas, boxes: tuple[Box, ...]) -> None:
     for left, right in zip(boxes, boxes[1:]):
         y = left.area.y + 20
         canvas.line(left.area.x + left.area.w, y, right.area.x - 1, y, ACCENT, 2, arrow=True)
+
+
+def draw_column_arrows(canvas: Canvas, boxes: tuple[Box, ...]) -> None:
+    """Draw an arrow from the foot of each box of a column to the head of the next."""
+    for upper, lower in zip(boxes, boxes[1:]):
+        x = upper.area.x + upper.area.w / 2
+        canvas.line(x, upper.area.y + upper.area.h, x, lower.area.y - 1, ACCENT, 2, arrow=True)
 
 
 def pipeline_svg() -> str:
@@ -723,14 +769,545 @@ def plan_loop_svg() -> str:
     return canvas.render()
 
 
-def write_figures(figures: tuple[tuple[str, str], ...]) -> list[str]:
-    """Check every body, then write each file and read it back; return one line per file."""
+SKILL_FIGURE_WIDTH = 1040
+SKILL_LEFT = 25
+SKILL_SPAN = 990
+LEGEND_TO_EDGE = 79
+MODEL_STOP = "A model other than the configured one"
+
+
+def row_bottom(row: tuple[Box, ...]) -> float:
+    """The lower edge of a row placed by fit_row, whose cards share one height."""
+    return row[0].area.y + row[0].area.h
+
+
+def box_list(*rows: tuple[Box, ...]) -> str:
+    """The titles of the cards in drawing order, for the alt text of a figure."""
+    return "; ".join(box.title for row in rows for box in row)
+
+
+def draw_rows(canvas: Canvas, *rows: tuple[Box, ...]) -> None:
+    for row in rows:
+        for box in row:
+            draw_box(canvas, box)
+
+
+def paper_svg() -> str:
+    """The seven modes of /paper, each with its roles and session steps in order and its stops."""
+    name = "paper.svg"
+    outline = "The outline's approval"
+    patch_stops = (
+        "A structural patch",
+        "A patch that does not apply",
+        "A script failed",
+        MODEL_STOP,
+    )
+    full = Box(
+        Rect(0, 0, 485, 0),
+        "full",
+        "Intake, then a first draft, two draft review rounds, the reference checks and a compile.",
+        (
+            Group(
+                "",
+                (
+                    "1. role: literature strategist, only when no .bib is held",
+                    "2. session: put the .bib in the manuscript folder",
+                    "3. role: planner writes outline.md and arguments.md",
+                    "4. session: the outline's approval",
+                    (
+                        "5. role: draft writer writes main.tex whole; role: visualization beside "
+                        "it when the materials hold data for a figure"
+                    ),
+                    (
+                        "6. role: draft writer adds the figure environments as a patch, when a "
+                        "figure was drawn"
+                    ),
+                    "7. session: lookup.py cite-keys and check-urls",
+                    (
+                        "8. role: peer reviewer, draft review round 1; role: draft writer on its "
+                        "issues; role: peer reviewer, round 2; role: draft writer once more when "
+                        "the score is under 6.5"
+                    ),
+                    "9. session: check the references; role: draft writer for a reference-fix pass",
+                    "10. session: compile in a copy",
+                    "11. session: /writing, then the end of the run",
+                ),
+            ),
+            Group(EVERY_RUN, ("The intake confirmation", outline)),
+            Group(ONLY_WHEN, ("The draft review does not pass",) + patch_stops),
+        ),
+        "A one-line reply to the /writing report starts the draft writer for the findings picked, "
+        "then the patches are applied and the compile runs again.",
+    )
+    revision = Box(
+        Rect(0, 0, 485, 0),
+        "revision",
+        "Intake, which asks what the run may do, then the answers to a comments file.",
+        (
+            Group(
+                "",
+                (
+                    "1. role: peer reviewer writes items.md from the comments file",
+                    (
+                        "2. role: literature strategist, when an item calls for a new reference "
+                        "and intake allowed it"
+                    ),
+                    (
+                        "3. role: visualization, when an item calls for a figure change and "
+                        "intake allowed it"
+                    ),
+                    "4. role: draft writer, patches that name the ids of the items",
+                    "5. session: lookup.py cite-keys and check-urls",
+                    (
+                        "6. role: peer reviewer, reading 1; role: draft writer once on the items "
+                        "not resolved; role: peer reviewer, reading 2"
+                    ),
+                    "7. session: check the references",
+                    "8. session: compile in a copy",
+                    "9. session: /writing, then the end of the run",
+                ),
+            ),
+            Group(EVERY_RUN, ("The intake confirmation",)),
+            Group(ONLY_WHEN, patch_stops),
+        ),
+        "A one-line reply to the /writing report starts the draft writer for the findings picked, "
+        "then the patches are applied and the compile runs again.",
+    )
+    lit_review = Box(
+        Rect(0, 0, 318, 0),
+        "lit-review",
+        "A literature review of a topic, with the entries for a .bib.",
+        (
+            Group(
+                "",
+                (
+                    (
+                        "1. role: literature strategist, one start; writes review.md and refs.bib "
+                        "and, given a .tex, a .bib patch"
+                    ),
+                    "2. session: apply the patch, given a .tex",
+                    "3. session: check the references, given a .tex",
+                    "4. session: end the run",
+                ),
+            ),
+            Group(EVERY_RUN, ("The intake confirmation",)),
+            Group(ONLY_WHEN, patch_stops),
+        ),
+    )
+    citation_check = Box(
+        Rect(0, 0, 318, 0),
+        "citation-check",
+        "Each reference confirmed, each cited claim checked against a passage read in the run.",
+        (
+            Group(
+                "",
+                (
+                    "1. session: lookup.py cite-keys and check-urls",
+                    (
+                        "2. role: citation compliance agent reads the sources; writes "
+                        "citation-report.md and the patches C<m>"
+                    ),
+                    "3. session: check the references, with quote-check on citation-report.md",
+                    "4. session: end the run",
+                ),
+            ),
+            Group(EVERY_RUN, ("The intake confirmation",)),
+            Group(
+                ONLY_WHEN,
+                (
+                    "A reference that cannot be confirmed",
+                    "A claim the run cannot support",
+                )
+                + patch_stops,
+            ),
+        ),
+    )
+    disclosure = Box(
+        Rect(0, 0, 318, 0),
+        "disclosure",
+        "The statements of a manuscript, with the AI disclosure.",
+        (
+            Group(
+                "",
+                (
+                    (
+                        "1. role: draft writer writes the statements as a patch and disclosure.md; "
+                        "the disclosure names the model identifier the session gives"
+                    ),
+                    "2. session: apply the patch",
+                    "3. session: end the run",
+                ),
+            ),
+            Group(EVERY_RUN, ("The intake confirmation",)),
+            Group(ONLY_WHEN, patch_stops),
+        ),
+    )
+    outline_only = Box(
+        Rect(0, 0, 485, 0),
+        "outline-only",
+        "The outline and the argument map, with no manuscript file written.",
+        (
+            Group(
+                "",
+                (
+                    "1. role: literature strategist, only when no .bib is held",
+                    "2. role: planner writes outline.md and arguments.md",
+                    "3. session: the outline's approval",
+                    "4. session: end the run",
+                ),
+            ),
+            Group(EVERY_RUN, ("The intake confirmation", outline)),
+            Group(ONLY_WHEN, (MODEL_STOP, "A script failed")),
+        ),
+    )
+    abstract_only = Box(
+        Rect(0, 0, 485, 0),
+        "abstract-only",
+        "The abstract and the keywords of a manuscript.",
+        (
+            Group(
+                "",
+                (
+                    "1. session: find the file that holds the abstract",
+                    "2. role: draft writer writes the abstract and the keywords as a patch",
+                    "3. session: apply the patch",
+                    "4. session: end the run",
+                ),
+            ),
+            Group(EVERY_RUN, ("The intake confirmation",)),
+            Group(ONLY_WHEN, patch_stops),
+        ),
+    )
+    top = 42
+    row_gap = 18
+    first = fit_row(name, SKILL_LEFT, top, 20, (full, revision))
+    second = fit_row(
+        name, SKILL_LEFT, row_bottom(first) + row_gap, 18, (lit_review, citation_check, disclosure)
+    )
+    third = fit_row(
+        name, SKILL_LEFT, row_bottom(second) + row_gap, 20, (outline_only, abstract_only)
+    )
+    legend_y = row_bottom(third) + 24
+    canvas = Canvas(
+        name,
+        SKILL_FIGURE_WIDTH,
+        int(legend_y + LEGEND_TO_EDGE),
+        "The seven modes of /paper as boxes: "
+        + box_list(first, second, third)
+        + ". Each box lists its steps in order, the roles that are fresh agents and the session "
+        "steps, and the stops where you are asked, marked every run or only when.",
+    )
+    draw_caption(
+        canvas,
+        SKILL_LEFT,
+        30,
+        "EACH BOX LISTS ITS STEPS IN ORDER; ROLE IS A FRESH AGENT, SESSION IS THE SESSION",
+        SKILL_SPAN,
+    )
+    draw_rows(canvas, first, second, third)
+    draw_legend(canvas, SKILL_LEFT, legend_y, SKILL_SPAN, SKILL_LEGEND_NOTE)
+    return canvas.render()
+
+
+def grill_svg() -> str:
+    """The steps of /grill in order, its lookup agent and its refusals."""
+    name = "grill.svg"
+    steps = fit_row(
+        name,
+        SKILL_LEFT,
+        42,
+        18,
+        (
+            Box(
+                Rect(0, 0, 150, 0),
+                "resolve",
+                "Reads plan.yaml, sets the design bar and finds the entry.",
+            ),
+            Box(
+                Rect(0, 0, 150, 0),
+                "design tree",
+                "Reads the rules, the ADRs, the glossary and the rulings, then lists the decisions "
+                "the goal and gate need and marks the settled ones.",
+            ),
+            Box(
+                Rect(0, 0, 150, 0),
+                "a round",
+                "Asks, in one message, every decision whose prerequisites are settled, each with "
+                "its options and one recommendation. Under --self-rule only the decisions of the "
+                "six kinds left open are sent as a round.",
+                (Group(EVERY_RUN, ("A round",)),),
+            ),
+            Box(
+                Rect(0, 0, 150, 0),
+                "the answers",
+                "Reads each answer against the round shown, and checks its terms, its claims and "
+                "its contradictions.",
+            ),
+            Box(
+                Rect(0, 0, 150, 0),
+                "write down",
+                "Writes each settled answer as a Rulings line, a glossary term, a roadmap change "
+                "and, when recorded, an ADR.",
+            ),
+            Box(
+                Rect(0, 0, 150, 0),
+                "close",
+                "Lists the decisions settled with where each was written, then asks to confirm "
+                "and to commit.",
+                (Group(EVERY_RUN, ("The end",)),),
+                "Under --self-rule nothing is asked and the commit is made.",
+            ),
+        ),
+    )
+    bottom = row_bottom(steps)
+    loop_y = bottom + 24
+    cards_y = loop_y + 62
+    lookup = Box(
+        Rect(0, 0, 485, 0),
+        "lookup agent",
+        "Started for a fact the session cannot read in a few lines. It is read-only, runs as "
+        "ordo-<reviewer_effort> on the model reviewer names, and returns each fact with its "
+        "source. Its id and served model are written to the Agents section of the rulings file.",
+        (Group(ONLY_WHEN, ("A lookup agent served another model",)),),
+    )
+    refusals = Box(
+        Rect(0, 0, 485, 0),
+        "when it refuses",
+        "The command names its cause and changes nothing more: no configuration, no such entry, a "
+        "required key missing, --self-rule without the keys, --self-rule for an entry under Not "
+        "yet specified, an unknown bar. A refusal carries no mark: fix the cause and run the "
+        "command again.",
+        accent=STOP,
+    )
+    cards = fit_row(name, SKILL_LEFT, cards_y, 20, (lookup, refusals))
+    canvas = Canvas(
+        name,
+        SKILL_FIGURE_WIDTH,
+        int(row_bottom(cards) + 24 + LEGEND_TO_EDGE),
+        "The steps of /grill as boxes in order: "
+        + box_list(steps)
+        + ", with a return from write down to design tree until no decision is open, then a card "
+        "for the lookup agent and a card for when it refuses: "
+        + box_list(cards)
+        + ". Each box lists the stops where you are asked, marked every run or only when.",
+    )
+    draw_caption(canvas, SKILL_LEFT, 30, "FOR EVERY ENTRY, IN ORDER", SKILL_SPAN)
+    draw_rows(canvas, steps)
+    draw_row_arrows(canvas, steps)
+    write_down, tree = steps[4], steps[1]
+    start_x = write_down.area.x + write_down.area.w / 2
+    end_x = tree.area.x + tree.area.w / 2
+    canvas.path(
+        [(start_x, bottom), (start_x, loop_y), (end_x, loop_y), (end_x, bottom + 1)],
+        ACCENT,
+        2,
+        "5 4",
+        True,
+    )
+    draw_note(canvas, end_x + 8, loop_y + 15, "until no decision is open", 300)
+    draw_caption(canvas, SKILL_LEFT, cards_y - 12, "WHEN A FACT IS NEEDED", 485)
+    draw_caption(canvas, SKILL_LEFT + 505, cards_y - 12, "AT ANY POINT", 485)
+    draw_rows(canvas, cards)
+    legend_y = row_bottom(cards) + 24
+    draw_legend(canvas, SKILL_LEFT, legend_y, SKILL_SPAN, SKILL_LEGEND_NOTE)
+    return canvas.render()
+
+
+def writing_svg() -> str:
+    """The steps of /writing in order, its four agents and its refusals."""
+    name = "writing.svg"
+    steps = fit_row(
+        name,
+        SKILL_LEFT,
+        42,
+        20,
+        (
+            Box(
+                Rect(0, 0, 182, 0),
+                "read the call",
+                "Reads the call and plan.yaml, finds the prose standard, lists the draft's files "
+                "and checks the effort agent.",
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "the scripts",
+                "Runs prose_facts.py on the draft and the prose standard and, for a .docx, "
+                "docx_paragraphs.py: the counts and word lists.",
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "three agents",
+                "Started at once in the background: the sentence agent, the section agent and the "
+                "whole-draft agent, each checking its own rules.",
+                (Group(ONLY_WHEN, (MODEL_STOP,)),),
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "checking agent",
+                "Started after the three, since its prompt carries their findings. It keeps the "
+                "findings the rules support and groups them.",
+                (Group(ONLY_WHEN, (MODEL_STOP,)),),
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "the report",
+                "Shows the report whole as the message that ends the turn, then the tokens of the "
+                "four agents on one line.",
+            ),
+        ),
+    )
+    cards_y = row_bottom(steps) + 52
+    refusals = Box(
+        Rect(0, 0, SKILL_SPAN, 0),
+        "when it refuses",
+        "The command names its cause and changes nothing more: no plan configuration, an unknown "
+        "project, no prose standard, a draft refused, the configured effort cannot apply, no facts "
+        "when a script exits non-zero. A refusal carries no mark: fix the cause and run the "
+        "command again.",
+        accent=STOP,
+    )
+    cards = fit_row(name, SKILL_LEFT, cards_y, 20, (refusals,))
+    canvas = Canvas(
+        name,
+        SKILL_FIGURE_WIDTH,
+        int(row_bottom(cards) + 24 + LEGEND_TO_EDGE),
+        "The steps of /writing as boxes in order: "
+        + box_list(steps)
+        + ", then a card for when it refuses: "
+        + box_list(cards)
+        + ". Each box lists the stops where you are asked, marked every run or only when.",
+    )
+    draw_caption(canvas, SKILL_LEFT, 30, "FOR EVERY DRAFT, IN ORDER", SKILL_SPAN)
+    draw_rows(canvas, steps)
+    draw_row_arrows(canvas, steps)
+    draw_caption(canvas, SKILL_LEFT, cards_y - 12, "AT ANY POINT", SKILL_SPAN)
+    draw_rows(canvas, cards)
+    draw_legend(canvas, SKILL_LEFT, row_bottom(cards) + 24, SKILL_SPAN, SKILL_LEGEND_NOTE)
+    return canvas.render()
+
+
+def code_comments_svg() -> str:
+    """The steps of /code-comments in order, its two review agents, its rewrite and its refusals."""
+    name = "code-comments.svg"
+    review = fit_row(
+        name,
+        SKILL_LEFT,
+        42,
+        20,
+        (
+            Box(
+                Rect(0, 0, 182, 0),
+                "resolve the diff",
+                "Reads the call and plan.yaml, finds the prose standard, resolves the diff and "
+                "lists the files to review with their sizes.",
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "prompt file",
+                "Makes the prompt folder and writes finding.md with shell commands: the rules, the "
+                "diff and each file whole, or as hunks over 256 KB.",
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "finding agent",
+                "Judges the comments the diff adds or changes, each against the code around it. "
+                "It changes nothing.",
+                (Group(ONLY_WHEN, (MODEL_STOP,)),),
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "checking agent",
+                "Keeps a finding only when the rule's words describe the break, and puts the false "
+                "comments first.",
+                (Group(ONLY_WHEN, (MODEL_STOP,)),),
+            ),
+            Box(
+                Rect(0, 0, 182, 0),
+                "the report",
+                "Removes the prompt folder, shows the report whole, then the tokens of both agents "
+                "on one line.",
+            ),
+        ),
+    )
+    rewrite_y = row_bottom(review) + 52
+    rewrite = fit_row(
+        name,
+        SKILL_LEFT,
+        rewrite_y,
+        21,
+        (
+            Box(
+                Rect(0, 0, 316, 0),
+                "pick findings",
+                "Takes the numbers named, or every number for all, and copies each file they name "
+                "to a scratch folder.",
+            ),
+            Box(
+                Rect(0, 0, 316, 0),
+                "rewrite agent",
+                "Rewrites only the comments of the picked findings, and changes no code.",
+                (Group(ONLY_WHEN, (MODEL_STOP,)),),
+            ),
+            Box(
+                Rect(0, 0, 316, 0),
+                "compare",
+                "strip_comments.py --compare keeps a rewrite only when the file's code equals its "
+                "code before; otherwise the copy is put back. Nothing is committed.",
+            ),
+        ),
+    )
+    cards_y = row_bottom(rewrite) + 52
+    refusals = Box(
+        Rect(0, 0, SKILL_SPAN, 0),
+        "when it refuses",
+        "The command names its cause and changes nothing more: no plan configuration, an unknown "
+        "project, no prose standard, not a range, a range that does not resolve, nothing to "
+        "review, the configured effort cannot apply, no report to apply, a number the report does "
+        "not hold. A refusal carries no mark: fix the cause and run the command again.",
+        accent=STOP,
+    )
+    cards = fit_row(name, SKILL_LEFT, cards_y, 20, (refusals,))
+    canvas = Canvas(
+        name,
+        SKILL_FIGURE_WIDTH,
+        int(row_bottom(cards) + 24 + LEGEND_TO_EDGE),
+        "The steps of /code-comments as boxes in order: "
+        + box_list(review)
+        + ", then the steps of a reply of apply numbers or apply all: "
+        + box_list(rewrite)
+        + ", then a card for when it refuses: "
+        + box_list(cards)
+        + ". Each box lists the stops where you are asked, marked every run or only when.",
+    )
+    draw_caption(canvas, SKILL_LEFT, 30, "FOR EVERY REVIEW, IN ORDER", SKILL_SPAN)
+    draw_rows(canvas, review)
+    draw_row_arrows(canvas, review)
+    draw_caption(
+        canvas,
+        SKILL_LEFT,
+        rewrite_y - 12,
+        "AFTER THE REPORT, ON THE REPLY apply <numbers> OR apply all",
+        SKILL_SPAN,
+    )
+    draw_rows(canvas, rewrite)
+    draw_row_arrows(canvas, rewrite)
+    draw_caption(canvas, SKILL_LEFT, cards_y - 12, "AT ANY POINT", SKILL_SPAN)
+    draw_rows(canvas, cards)
+    draw_legend(canvas, SKILL_LEFT, row_bottom(cards) + 24, SKILL_SPAN, SKILL_LEGEND_NOTE)
+    return canvas.render()
+
+
+def write_figures(figures: tuple[tuple[str, str], ...], folder: Path = HERE) -> list[str]:
+    """Check every body, then write each file into a folder of the repository and read it back.
+
+    Return one line per file. The folder is this file's own folder unless the caller gives one.
+    """
     for name, body in figures:
         if not body.isascii():
             raise FigureError(f"{name}: the body holds a character that is not ASCII")
     lines: list[str] = []
     for name, body in figures:
-        path = HERE / name
+        path = folder / name
         try:
             with path.open("w", encoding="utf-8", newline="\n") as handle:
                 handle.write(body)
@@ -745,7 +1322,14 @@ def write_figures(figures: tuple[tuple[str, str], ...]) -> list[str]:
 
 def main() -> int:
     try:
-        figures = (("pipeline.svg", pipeline_svg()), ("plan-loop.svg", plan_loop_svg()))
+        figures = (
+            ("pipeline.svg", pipeline_svg()),
+            ("plan-loop.svg", plan_loop_svg()),
+            ("paper.svg", paper_svg()),
+            ("grill.svg", grill_svg()),
+            ("writing.svg", writing_svg()),
+            ("code-comments.svg", code_comments_svg()),
+        )
         lines = write_figures(figures)
     except FigureError as error:
         print(f"error: {error}", file=sys.stderr)

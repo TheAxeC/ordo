@@ -8,9 +8,20 @@ The visualization agent reads this page to decide which figures a paper needs, t
 - The project's results data and statistical output that the Materials in hand row names, as CSV files, tables or described data.
 - `outline.md`, for the places where it calls for a figure, and `arguments.md`, for evidence that a figure would show better than a sentence.
 - The main `.tex`, when it exists, for the Results section and the claims that need a figure.
-- Under "figures in parallel" no `.tex` exists when the agent runs. Check 9 then compares the plotted values with the data file and with the numbers `arguments.md` states, and the trace lists under "Claims in the manuscript" the claims of `arguments.md` that lean on the figure, each by its sub-argument number. The integrity check compares them with the manuscript, as its "The figures and the tables" says.
+- In full mode the agent starts together with the draft writer of the first draft, so no `.tex` exists when it runs. Check 9 then compares the plotted values with the data file and with the numbers `arguments.md` states. The trace lists under "Claims in the manuscript" the claims of `arguments.md` that lean on the figure, each by its sub-argument number. `figures.md` is the record that the check of the figures against their traces reads, which belongs to `researcher` (roadmap entry 13).
+- In revision mode, the numbered items of `items.md` that call for a figure change, and the Figure changes row of `config.md`.
 - The names of the files in the manuscript's folder and in its `figures/` folder, which the session puts in the prompt.
 - The language of the scripts is Python, unless the Notes of `config.md` ask for R.
+
+## Revision mode
+
+In revision mode the session starts the agent once for the items that call for a figure change, and only when the Figure changes row of `config.md` allows a change.
+
+- The agent draws or redraws only the figures the items name, and the report names the item ids each figure answers.
+- When the row allows editing the project's figure script, the agent edits that script and runs it.
+- When the row allows only a copy, the agent copies the script into `figures/` of the run folder, edits the copy and runs the copy. The project's script stays as it is.
+- In both cases the images the run uses and the trace entries are written in `figures/` and `figures.md` of the run folder.
+- The draft writer adds the changed environments by a patch.
 
 ## Whether to draw a figure
 
@@ -633,7 +644,7 @@ After the script ran, the agent reads the PNG with the Read tool and checks what
 
 ## The trace
 
-`figures.md` holds one entry for each figure and for each manuscript table whose data the agent produced. The integrity verification agent reads the entries.
+`figures.md` holds one entry for each figure and for each manuscript table whose data the agent produced. `researcher` reads the entries when it checks the figures against their traces (roadmap entry 13).
 
 ```
 ## Figure 3
@@ -655,7 +666,7 @@ After the script ran, the agent reads the PNG with the Read tool and checks what
 - The Source data names a real file. When the source is a table or sentence of the manuscript, the entry gives the section, the paragraph and the operation instead of a file, such as "mean over 3 seeds, Results, paragraph 2".
 - The hash comes from `shasum -a 256 'figures/figure_03.py'`. A source given as a manuscript table needs no script hash, and the entry says how to derive the numbers.
 - A vague source such as "computed manually" or "see paper" is not enough.
-- The caption claim is the claim the caption makes about the data. A compound claim stays compound, and the integrity verification agent splits it.
+- The caption claim is the claim the caption makes about the data. A compound claim stays compound.
 - The agent lists a manuscript claim under the figure only when the figure's data support it. Each listed claim cites the figure. A claim is given by its text and its place, so that it does not depend on a number that may change.
 - A manuscript sentence that only points to the figure, such as "see Figure 3 for the architecture", is not listed.
 - `figures.md` also holds these parts:

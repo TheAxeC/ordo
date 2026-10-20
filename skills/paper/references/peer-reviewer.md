@@ -5,8 +5,8 @@ The peer reviewer agent reads this page to run the draft review of full mode and
 ## What the agent reads
 
 - The draft: the main `.tex` and the files it inputs.
-- `config.md`, `outline.md`, `arguments.md`, `citation-report.md` and `integrity-1.md`.
-- The output of `lookup.py cite-keys`, which the session runs and puts in the prompt.
+- `config.md`, `outline.md` and `arguments.md`.
+- The outputs of `lookup.py cite-keys` and `lookup.py check-urls`, which the session runs and puts in the prompt. In draft review round 1 each failure line of the two outputs is an issue. In revision mode reading 1 is given the two outputs, run again after the patches.
 - The draft writer's report with the draft metadata and, from the second draft review round on, the revision log and the apply reports of the patches.
 - The previous `review-<r>.md`, from the second draft review round on.
 - In revision mode, the comments file the call names.
@@ -16,7 +16,7 @@ A missing input is handled as follows:
 | Missing | The agent does |
 |---|---|
 | The outline | Reverse-engineers the structure from the draft. The Argument Coherence score may be limited, and the review says so. |
-| The citation report | Scans the citations for consistency itself and counts citation issues in the Writing Quality score. |
+| The output of `cite-keys` or `check-urls` | Names the missing output in the review, scans the citations for consistency itself and counts citation issues in the Writing Quality score. |
 | The word count of the draft | Counts it itself. |
 
 ## The draft review
@@ -158,8 +158,9 @@ Adjustments by paper type:
    - the abstract reflects the results of the paper.
    - the research question of the introduction is answered by the conclusion.
    - every table and figure is referred to in the text.
-   - the citation form is consistent, with the citation report as a reference.
-   - every cited key has an entry in the `.bib`, as the output of `lookup.py cite-keys` shows. An `unused:` line of that output is an issue marked "needs the user".
+   - the citation form is consistent.
+   - every cited key has an entry in the `.bib`, as the output of `lookup.py cite-keys` shows. A `missing:` line is an issue, and an `unused:` line is an issue marked "needs the user".
+   - every cited entry's identifier resolves, as the output of `lookup.py check-urls` shows. A status outside the 2xx range, `failed, <reason>`, `no identifier`, `no entry in <file>`, `DOI_MISMATCH` and `doi not found in Crossref, OpenAlex or Semantic Scholar` are each an issue. A `title not checked` line is an issue marked "needs the user".
    - the word count is within the target.
    - the closing checks of the skill's full mode, which are the pre-output checklist and the six statements.
 4. **Scoring.** The agent scores each dimension and records the passages that show the score. A score must agree with its evidence.
@@ -266,7 +267,7 @@ The agent reads the comments file the call names, and `items.md` holds each comm
 
 ### The reading of the changes
 
-After the patches of the draft writer and the citation and integrity checks, the agent reads each item's change again.
+After the patches of the draft writer and the two scripts, the agent reads each item's change again.
 
 - For each item, it reads the patched text and the apply reports, and records the item resolved, partly resolved or not resolved.
 - It records a problem a change introduced as a new item of the same reviewer, the next number of that reviewer's items.

@@ -6,7 +6,8 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 
 | Script | Job |
 |---|---|
-| `docs/figures/gen_figures.py` | Writes the two SVG figures of the README from the labels written in the file |
+| `docs/figures/academic-paper-comparison/gen_comparison.py` | Writes the nine SVG figures that set academic-paper's modes and academic-pipeline's stages beside the skills of Ordo that take their work, from the labels written in the file |
+| `docs/figures/gen_figures.py` | Writes the six SVG figures of the README from the labels written in the file: the pipeline, the plan loop, and one figure each for `paper`, `grill`, `writing` and `code-comments` |
 | `utils/check_coverage.py` | Checks that a coverage list names every file of the named skill folders once, with a mark and a reason |
 | `utils/pin.sh` | Pins the installed skills and agents to a tag of this repository, or checks the pin |
 

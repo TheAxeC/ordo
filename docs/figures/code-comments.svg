@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 637" width="1040" height="637" role="img" aria-label="The steps of /code-comments as boxes in order: resolve the diff; prompt file; finding agent; checking agent; the report, then the steps of a reply of apply numbers or apply all: pick findings; rewrite agent; compare, then a card for when it refuses: when it refuses. Each box lists the stops where you are asked, marked every run or only when.">
+<title>The steps of /code-comments as boxes in order: resolve the diff; prompt file; finding agent; checking agent; the report, then the steps of a reply of apply numbers or apply all: pick findings; rewrite agent; compare, then a card for when it refuses: when it refuses. Each box lists the stops where you are asked, marked every run or only when.</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1040" height="637" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">FOR EVERY REVIEW, IN ORDER</text>
+<rect x="25" y="42" width="182" height="177" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="42" x2="199" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="35" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">resolve the diff</text>
+<text x="35" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Reads the call and</text>
+<text x="35" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">plan.yaml, finds the</text>
+<text x="35" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">prose standard,</text>
+<text x="35" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">resolves the diff and</text>
+<text x="35" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">lists the files to</text>
+<text x="35" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">review with their</text>
+<text x="35" y="176" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">sizes.</text>
+<rect x="227" y="42" width="182" height="177" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="235" y1="42" x2="401" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="237" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">prompt file</text>
+<text x="237" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Makes the prompt folder</text>
+<text x="237" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">and writes finding.md</text>
+<text x="237" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">with shell commands:</text>
+<text x="237" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the rules, the diff and</text>
+<text x="237" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">each file whole, or as</text>
+<text x="237" y="161" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">hunks over 256 KB.</text>
+<rect x="429" y="42" width="182" height="177" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="437" y1="42" x2="603" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="439" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">finding agent</text>
+<text x="439" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Judges the comments the</text>
+<text x="439" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">diff adds or changes,</text>
+<text x="439" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">each against the code</text>
+<text x="439" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">around it. It changes</text>
+<text x="439" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">nothing.</text>
+<rect x="439" y="155" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="476.6" y="167" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+<text x="439" y="187" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than</text>
+<text x="447" y="201" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">the configured one</text>
+<rect x="631" y="42" width="182" height="177" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="639" y1="42" x2="805" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="641" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">checking agent</text>
+<text x="641" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Keeps a finding only</text>
+<text x="641" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">when the rule's words</text>
+<text x="641" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">describe the break, and</text>
+<text x="641" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">puts the false comments</text>
+<text x="641" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">first.</text>
+<rect x="641" y="155" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="678.6" y="167" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+<text x="641" y="187" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than</text>
+<text x="649" y="201" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">the configured one</text>
+<rect x="833" y="42" width="182" height="177" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="841" y1="42" x2="1007" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="843" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">the report</text>
+<text x="843" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Removes the prompt</text>
+<text x="843" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">folder, shows the</text>
+<text x="843" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">report whole, then the</text>
+<text x="843" y="131" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">tokens of both agents</text>
+<text x="843" y="146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">on one line.</text>
+<line x1="207" y1="62" x2="226" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="409" y1="62" x2="428" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="611" y1="62" x2="630" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="813" y1="62" x2="832" y2="62" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="25" y="259" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">AFTER THE REPORT, ON THE REPLY apply &lt;numbers&gt; OR apply all</text>
+<rect x="25" y="271" width="316" height="118" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="271" x2="333" y2="271" stroke="#4f46e5" stroke-width="3"/>
+<text x="35" y="295" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">pick findings</text>
+<text x="35" y="315" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Takes the numbers named, or every number</text>
+<text x="35" y="330" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">for all, and copies each file they name to</text>
+<text x="35" y="345" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">a scratch folder.</text>
+<rect x="362" y="271" width="316" height="118" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="370" y1="271" x2="670" y2="271" stroke="#4f46e5" stroke-width="3"/>
+<text x="372" y="295" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">rewrite agent</text>
+<text x="372" y="315" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Rewrites only the comments of the picked</text>
+<text x="372" y="330" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">findings, and changes no code.</text>
+<rect x="372" y="339" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="409.6" y="351" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+<text x="372" y="371" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">- A model other than the configured one</text>
+<rect x="699" y="271" width="316" height="118" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="707" y1="271" x2="1007" y2="271" stroke="#4f46e5" stroke-width="3"/>
+<text x="709" y="295" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">compare</text>
+<text x="709" y="315" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">strip_comments.py --compare keeps a</text>
+<text x="709" y="330" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">rewrite only when the file's code equals</text>
+<text x="709" y="345" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">its code before; otherwise the copy is put</text>
+<text x="709" y="360" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">back. Nothing is committed.</text>
+<line x1="341" y1="291" x2="361" y2="291" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="678" y1="291" x2="698" y2="291" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="25" y="429" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">AT ANY POINT</text>
+<rect x="25" y="441" width="990" height="93" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="441" x2="1007" y2="441" stroke="#b45309" stroke-width="3"/>
+<text x="35" y="465" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">when it refuses</text>
+<text x="35" y="485" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The command names its cause and changes nothing more: no plan configuration, an unknown project, no prose standard, not a range, a range</text>
+<text x="35" y="500" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">that does not resolve, nothing to review, the configured effort cannot apply, no report to apply, a number the report does not hold. A</text>
+<text x="35" y="515" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">refusal carries no mark: fix the cause and run the command again.</text>
+<text x="25" y="558" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE MARKS</text>
+<rect x="25" y="572" width="75.2" height="16" rx="2" fill="#4f46e5" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="62.6" y="584" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#ffffff" font-weight="700" text-anchor="middle">every run</text>
+<text x="108.2" y="584" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you each time it runs</text>
+<rect x="355" y="572" width="75.2" height="16" rx="2" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="392.6" y="584" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">only when</text>
+<text x="438.2" y="584" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">it waits on you in the named case</text>
+<rect x="685" y="572" width="68.4" height="16" rx="8" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3 2"/>
+<text x="719.2" y="584" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#0f172a" font-weight="700" text-anchor="middle">optional</text>
+<text x="761.4" y="584" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">you may skip it; the box is dashed</text>
+<text x="25" y="606" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">A stop marked "every run" waits each time the box runs. A box whose stop a flag changes or closes says so in its text.</text>
+</svg>

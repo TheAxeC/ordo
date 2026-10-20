@@ -28,7 +28,10 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 | Length | The target word count. | full, outline-only |
 | Materials in hand | Which of the six materials below the user has. | full, outline-only, revision |
 | Domain evidence profile | The profile of "The evidence profile" below. | full, outline-only, lit-review |
-| DOI checking | Strict or mark-only. | full, revision, citation-check, lit-review |
+| New references | Whether the roles may add a reference that the `.bib` does not hold, and which the user names. | full, revision |
+| Computed numbers | Whether the roles may compute a number from the project's saved results, and from which files. | full, revision |
+| Figure changes | Whether the roles may change a figure, and whether they may edit and run the project's figure script or only a copy of it in the run folder. | full, revision |
+| DOI checking | Strict or mark-only. | citation-check |
 | Authors | One row per author: name, affiliation, ORCID and whether the author is the corresponding author. | full, revision, disclosure |
 | Contributions | For each author, the CRediT roles of `references/statements.md` taken, each marked Lead or Supporting. | full, disclosure |
 | Funding | One row per funder, or "no funding". | full, disclosure |
@@ -55,7 +58,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 | Policy Brief | Evidence-based policy recommendations | 2,000 to 4,000 words |
 | Conference Paper | Concise presentation of research | 2,000 to 5,000 words |
 
-- The default type is Conference Paper, which is the default skeleton of `references/structure-architect.md`; a synthesis topic suggests Literature Review, and a journal venue that asks for it suggests IMRaD.
+- The default type is Conference Paper, which is the default skeleton of `references/planner.md`; a synthesis topic suggests Literature Review, and a journal venue that asks for it suggests IMRaD.
 - The length defaults to the typical length of the type, and the user can override it.
 - A length below the low end of the type's typical length is flagged to the user at the confirmation, such as 2,000 words for an IMRaD paper.
 
@@ -101,13 +104,23 @@ The user marks each of these as held or not:
 - Reviewer feedback.
 - A style guide or template from the venue.
 
-- The literature strategist runs in a full run when no `.bib` is held, or when the user asks for a search.
+- The literature strategist runs in a full or outline-only run when no `.bib` is held, and in lit-review mode.
 - A material the user holds is read by the roles and is not asked for again.
-- When the materials hold data and the user wants the figures drawn while the first draft is written, the session records "figures in parallel" in the Notes.
+- When the materials hold data for a figure, the visualization agent starts together with the draft writer of the first draft, and the user is not asked.
+
+## Permissions
+
+- The three permission rows are asked at intake in full and revision mode, one question per row, and are never asked again after intake.
+- A row answered no, or not answered, is a no: the roles do not do what the row covers.
+- New references: a yes lets the strategist add references to the `.bib` in revision mode, and lets the draft writer add them in full mode, only from the sources the user names or that `lookup.py` resolves.
+- Computed numbers: a yes names the files of saved results the numbers may come from, and a number is computed only from those files.
+- Figure changes: a yes says whether the visualization agent may edit and run the project's own figure script, or only a copy of it in the run folder. Without the first, the project's script and its outputs stay unchanged.
 
 ## DOI checking
 
-- **Mark-only** is the default. A citation whose DOI fails the check is marked in the integrity record and named in the final message, and the run goes on.
+The question is asked in citation-check mode only. In every other mode a failed DOI is an issue of draft review round 1 or of reading 1.
+
+- **Mark-only** is the default. A citation whose DOI fails the check is marked in `citation-report.md` and named in the final message, and the run goes on.
 - **Strict** treats a citation whose exact DOI or arXiv ID provably fails lookup as a reference that cannot be confirmed, which stops the run at the stop "A reference that cannot be confirmed".
 - Mark-only suits fields that cite reports, standards or grey literature, where real but unindexed citations are common.
 - Strict suits fields that cite by DOI.
@@ -132,6 +145,7 @@ The user marks each of these as held or not:
 - An equal-contribution declaration is recorded in the Authors row.
 - A study with no funding is recorded as "no funding", which still gets its own statement in the paper.
 - An uncertain AI-use category is confirmed here with the user, and one the user cannot confirm stays "uncertain".
+- A responsible-use statement or a reproducibility statement that the venue or the user asks for is recorded in the Notes, and `references/statements.md` writes it from there.
 
 ## The record
 

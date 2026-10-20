@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 429" width="1040" height="429" role="img" aria-label="The citation-check mode of academic-paper against the citation-check mode of paper, which adds the claim check against the passages read. Left, academic-paper 3.2.0 as boxes in order: 6 citation_compliance_agent. Right, paper 2.0.0 as boxes in order: session: intake; session: lookup.py cite-keys and check-urls; role: citation compliance; session: references and quote-check.">
+<title>The citation-check mode of academic-paper against the citation-check mode of paper, which adds the claim check against the passages read. Left, academic-paper 3.2.0 as boxes in order: 6 citation_compliance_agent. Right, paper 2.0.0 as boxes in order: session: intake; session: lookup.py cite-keys and check-urls; role: citation compliance; session: references and quote-check.</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1040" height="429" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">ACADEMIC-PAPER 3.2.0, AGENTS IN ORDER</text>
+<text x="530" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">PAPER 2.0.0, ROLES AND SESSION STEPS IN ORDER</text>
+<rect x="25" y="42" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="42" x2="502" y2="42" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">6 citation_compliance_agent</text>
+<text x="35" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Citation format verification, reference list completeness and DOI</text>
+<text x="35" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">checking. It writes a citation error report.</text>
+<rect x="530" y="42" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="42" x2="1007" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">session: intake</text>
+<text x="540" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The session's interview writes config.md, with what the run may do;</text>
+<text x="540" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the user confirms it.</text>
+<rect x="530" y="142" width="485" height="63" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="142" x2="1007" y2="142" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="166" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">session: lookup.py cite-keys and check-urls</text>
+<text x="540" y="186" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The citation scripts, run by the session before the agent starts.</text>
+<rect x="530" y="227" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="227" x2="1007" y2="227" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="251" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">role: citation compliance</text>
+<text x="540" y="271" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Reads each source's full text, writes a passage line for each cited</text>
+<text x="540" y="286" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">claim in citation-report.md, and writes the patches C&lt;m&gt;.</text>
+<rect x="530" y="327" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="327" x2="1007" y2="327" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="351" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">session: references and quote-check</text>
+<text x="540" y="371" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Applies the patches, runs the reference checks and quote-check on</text>
+<text x="540" y="386" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the report.</text>
+<line x1="772.5" y1="120" x2="772.5" y2="141" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="205" x2="772.5" y2="226" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="305" x2="772.5" y2="326" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

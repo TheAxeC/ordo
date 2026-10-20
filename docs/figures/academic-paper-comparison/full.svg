@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 974" width="1040" height="974" role="img" aria-label="The full mode of academic-paper against the full mode of paper: nine agents against five roles, with the citation scripts as a session step. Left, academic-paper 3.2.0 as boxes in order: 1 intake_agent; 2 literature_strategist_agent; 3 structure_architect_agent; 4 argument_builder_agent; 5 draft_writer_agent; 11 visualization_agent, if quantitative; 6 and 7, in parallel; 8 peer_reviewer_agent; 9 formatter_agent. Right, paper 2.0.0 as boxes in order: session: intake; role: literature strategist; role: planner; role: draft writer; role: visualization; session: lookup.py cite-keys and check-urls; role: peer reviewer; session: references, compile, /writing.">
+<title>The full mode of academic-paper against the full mode of paper: nine agents against five roles, with the citation scripts as a session step. Left, academic-paper 3.2.0 as boxes in order: 1 intake_agent; 2 literature_strategist_agent; 3 structure_architect_agent; 4 argument_builder_agent; 5 draft_writer_agent; 11 visualization_agent, if quantitative; 6 and 7, in parallel; 8 peer_reviewer_agent; 9 formatter_agent. Right, paper 2.0.0 as boxes in order: session: intake; role: literature strategist; role: planner; role: draft writer; role: visualization; session: lookup.py cite-keys and check-urls; role: peer reviewer; session: references, compile, /writing.</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1040" height="974" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<text x="25" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">ACADEMIC-PAPER 3.2.0, AGENTS IN ORDER</text>
+<text x="530" y="30" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">PAPER 2.0.0, ROLES AND SESSION STEPS IN ORDER</text>
+<rect x="25" y="42" width="485" height="93" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="42" x2="502" y2="42" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">1 intake_agent</text>
+<text x="35" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The configuration interview: paper type, discipline, journal,</text>
+<text x="35" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">citation format, output format, language and word count. The user</text>
+<text x="35" y="116" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">confirms the record.</text>
+<rect x="25" y="157" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="157" x2="502" y2="157" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="181" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">2 literature_strategist_agent</text>
+<text x="35" y="201" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Search strategy, source screening, annotated bibliography and</text>
+<text x="35" y="216" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">literature matrix.</text>
+<rect x="25" y="257" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="257" x2="502" y2="257" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="281" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">3 structure_architect_agent</text>
+<text x="35" y="301" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Paper structure, detailed outline, word count allocation and</text>
+<text x="35" y="316" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">evidence mapping. The user approves the outline.</text>
+<rect x="25" y="357" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="357" x2="502" y2="357" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="381" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">4 argument_builder_agent</text>
+<text x="35" y="401" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Argument construction, claim-evidence chains, logical flow and</text>
+<text x="35" y="416" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">counter-arguments.</text>
+<rect x="25" y="457" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="457" x2="502" y2="457" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="481" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">5 draft_writer_agent</text>
+<text x="35" y="501" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The full draft, section by section, in the discipline's register,</text>
+<text x="35" y="516" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">with a word count.</text>
+<rect x="25" y="557" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="557" x2="502" y2="557" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="581" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">11 visualization_agent, if quantitative</text>
+<text x="35" y="601" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Figure code in Python or R with APA 7.0 formatting, when the paper</text>
+<text x="35" y="616" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">has quantitative results.</text>
+<rect x="25" y="657" width="485" height="93" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="657" x2="502" y2="657" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="681" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">6 and 7, in parallel</text>
+<text x="35" y="701" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">citation_compliance_agent: citation format, reference list</text>
+<text x="35" y="716" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">completeness and DOI checking. abstract_bilingual_agent: the</text>
+<text x="35" y="731" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">abstract in two languages and the keywords.</text>
+<rect x="25" y="772" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="772" x2="502" y2="772" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="796" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">8 peer_reviewer_agent</text>
+<text x="35" y="816" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">A simulated double-blind review with five-dimension scoring, up to</text>
+<text x="35" y="831" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">2 revision loops.</text>
+<rect x="25" y="872" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="33" y1="872" x2="502" y2="872" stroke="#64748b" stroke-width="3"/>
+<text x="35" y="896" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">9 formatter_agent</text>
+<text x="35" y="916" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Converts to LaTeX, DOCX, PDF or Markdown, with journal formatting</text>
+<text x="35" y="931" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">and a cover letter.</text>
+<line x1="267.5" y1="135" x2="267.5" y2="156" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="267.5" y1="235" x2="267.5" y2="256" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="267.5" y1="335" x2="267.5" y2="356" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="267.5" y1="435" x2="267.5" y2="456" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="267.5" y1="535" x2="267.5" y2="556" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="267.5" y1="635" x2="267.5" y2="656" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="267.5" y1="750" x2="267.5" y2="771" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="267.5" y1="850" x2="267.5" y2="871" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="530" y="42" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="42" x2="1007" y2="42" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="66" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">session: intake</text>
+<text x="540" y="86" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The session's interview writes config.md, with what the run may do;</text>
+<text x="540" y="101" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">the user confirms it.</text>
+<rect x="530" y="142" width="485" height="63" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="142" x2="1007" y2="142" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="166" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">role: literature strategist</text>
+<text x="540" y="186" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Only when no .bib is held. Writes review.md and refs.bib.</text>
+<rect x="530" y="227" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="227" x2="1007" y2="227" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="251" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">role: planner</text>
+<text x="540" y="271" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Writes outline.md with its evidence map and arguments.md with the</text>
+<text x="540" y="286" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">argument map. The session raises the outline's approval.</text>
+<rect x="530" y="327" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="327" x2="1007" y2="327" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="351" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">role: draft writer</text>
+<text x="540" y="371" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Writes main.tex whole: the body, the abstract, the keywords and the</text>
+<text x="540" y="386" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">six statements.</text>
+<rect x="530" y="427" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="427" x2="1007" y2="427" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="451" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">role: visualization</text>
+<text x="540" y="471" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Beside the draft writer when the materials hold data for a figure.</text>
+<text x="540" y="486" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The draft writer adds the figure environments as a patch.</text>
+<rect x="530" y="527" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="527" x2="1007" y2="527" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="551" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">session: lookup.py cite-keys and check-urls</text>
+<text x="540" y="571" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The citation scripts, run by the session, in place of a citation</text>
+<text x="540" y="586" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">compliance agent.</text>
+<rect x="530" y="627" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="627" x2="1007" y2="627" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="651" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">role: peer reviewer</text>
+<text x="540" y="671" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">Draft review rounds 1 and 2, given the closing checks and the two</text>
+<text x="540" y="686" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">script outputs. The draft writer answers its issues.</text>
+<rect x="530" y="727" width="485" height="78" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<line x1="538" y1="727" x2="1007" y2="727" stroke="#4f46e5" stroke-width="3"/>
+<text x="540" y="751" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="14" fill="#0f172a" font-weight="700" text-anchor="start">session: references, compile, /writing</text>
+<text x="540" y="771" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">The reference checks, a compile in a copy, then /writing with its</text>
+<text x="540" y="786" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="start">one-line reply.</text>
+<line x1="772.5" y1="120" x2="772.5" y2="141" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="205" x2="772.5" y2="226" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="305" x2="772.5" y2="326" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="405" x2="772.5" y2="426" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="505" x2="772.5" y2="526" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="605" x2="772.5" y2="626" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="772.5" y1="705" x2="772.5" y2="726" stroke="#4f46e5" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

@@ -4,11 +4,11 @@ Status: proposed
 
 ## Context
 
-A `paper` run produces records that show what it changed and why: the block manifests, the patches and the apply reports of a revision (`docs/academic-coverage.md`, row 94), the integrity record with a passage per judged claim (ADR 0018) and the approved outline (row 62). Roadmap entry 7, `rebuttal`, writes the response letter "from the referee comments and the revision's apply report". The hub kept its own revision trail in `admin/reviews/patches/` and moved it out of the manuscript folder (research-hub commit 4293ea487, "Move the revision round trail out of the manuscript folder"). Full texts fetched for the claim checks are published papers whose PDFs a project does not keep.
+A `paper` run produces records that show what it changed and why: the block manifests, the patches and the apply reports of a revision (`docs/academic-coverage.md`, row 94), the citation report with a passage per judged claim (ADR 0024) and the approved outline (row 62). Roadmap entry 7, `rebuttal`, writes the response letter "from the referee comments and the revision's apply report". The hub kept its own revision trail in `admin/reviews/patches/` and moved it out of the manuscript folder (research-hub commit 4293ea487, "Move the revision round trail out of the manuscript folder"). Full texts fetched for the claim checks are published papers whose PDFs a project does not keep.
 
 ## Decision
 
-A `paper` run writes its records to `paper-runs/<mode>-<YYYY-MM-DD>/` beside the manuscript's folder, with `-2`, `-3` and so on for further runs of the same mode on the same day: the manifests, the patches, the apply reports, the integrity record and the approved outline. Fetched full texts go to a temporary folder that the run removes at its end.
+A `paper` run writes its records to `paper-runs/<mode>-<YYYY-MM-DD>/` beside the manuscript's folder, with `-2`, `-3` and so on for further runs of the same mode on the same day: the manifests, the patches, the apply reports, the citation report and the approved outline. Fetched full texts go to a temporary folder that the run removes at its end.
 
 ## Alternatives rejected
 

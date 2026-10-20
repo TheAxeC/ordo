@@ -1,14 +1,13 @@
 # AI disclosure
 
-The draft writer reads this page to write the AI disclosure statement of a paper, in disclosure mode and as one of the six statements of full mode. The statement is written as a patch as `references/patch-file.md` gives, at the place the venue's policy gives.
+The draft writer reads this page to write the AI disclosure statement of a paper, in disclosure mode and as one of the six statements of full mode. In full mode the statement is part of the first draft. In disclosure mode it is a patch, as `references/patch-file.md` gives. It stands at the place the venue's policy gives.
 
 ## Inputs
 
 - The manuscript, which shows what the AI did.
 - The AI use row of `config.md`: each category marked used, not used or uncertain, the tools with their versions, and the user's answer on whether any AI was used.
 - The venue and, for a venue this page does not list, the policy text the user pasted.
-- In full mode, the model the runner served the agents already started in the run, which the session gives in the prompt.
-- In disclosure mode no served model exists when the agent starts, so the agent writes the model identifier its runtime states for itself. The session compares it with the model the runner served the agent, and gives the served model in the prompt only when it starts the agent again after a mismatch.
+- The model identifier that the configured `reviewer` alias names in the runner's model list, which the session gives in the prompt.
 
 ## Categories of AI use
 
@@ -43,7 +42,7 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 - The categories are matched against the venue's requirements. A category the venue requires disclosed but the answer marks uncertain is a mismatch, and the report names it.
 - The statement is one paragraph in the venue's preferred voice (person and tense) with the venue's required phrasing elements, such as "the authors take full responsibility for the content".
 - The paragraph names the tool and the version, never "AI tools" alone, and names the categories marked used.
-- The model identifier is the one the runner served, never one written from memory. In disclosure mode the agent writes the identifier its runtime states for itself, and the session checks it against the runner's record of the model it served.
+- The model identifier is the one the session gives in the prompt, never one written from memory.
 - It describes the human oversight: who reviewed what, and at which stages.
 - It states the limits of the tool that matter for the content, such as a possible hallucination.
 - Where the policy asks for the statement in more than one place, such as the Methods and the cover letter, each place gets its own text.
@@ -81,7 +80,7 @@ The literature strategist writes one line at the end of `review.md`, under the h
 - The line says the review was produced with AI-assisted research tools, and names the tool and the version the AI use row gives.
 - It names the categories the review involved that the row marks used: research assistance for the search and the annotated bibliography, and drafting assistance for the synthesis.
 - It says a person oversaw the process and the authors take responsibility for the content.
-- It claims no check, no audit and no verification. The integrity record holds the checks the run made.
+- It claims no check, no audit and no verification.
 - An answer of no AI in the AI use row contradicts a review the strategist wrote. No line is written then, and the report names the contradiction.
 - The venues' policies below govern the statement of a manuscript. They do not govern this line.
 
