@@ -40,29 +40,14 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 3
-  executor: orchestrator
-  worker: orchestrator
-  worktree: .agents/worktrees/5-paper-3
-  base: f78dc68
-  launched: 2026-10-19
-  report: .scratch/5-paper/agents/reviews/3-report.md
-  brief_check: .scratch/5-paper/agents/reviews/3-brief-check.md (a4c187208c83cba26, claude-opus-5-5, 239241 tokens, 58 tool uses, 15.6 min)
-  session_id: orchestrator (claude-opus-5-5)
-  reviewer_report: ".scratch/5-paper/agents/reviews/3-refuter.md (a8fba4bf496c55073, claude-opus-5-5, 234343 tokens, 51 tool uses, 11.2 min); over round 1: ae2329cd44595d881, claude-sonnet-5-5, 239721 tokens, 52 tool uses, 8.6 min"
-  landing: not-started
-  round: 1
+dispatch: none                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- Open item H (2026-10-20), kind 3 of `plan-orchestration`'s `references/self-rule.md` (an option that adds a script), raised by the review of step 3 over round 1 (`agents/reviews/3-refuter.md`, "Repair round 1, refuted", Spec 1). Step 3's records were made with commands that no ruling approves: `scratchpad/fix.py`, which takes each `result` message from a session's stream, writes each character outside the rules file's set by its Unicode name in angle brackets, and writes `final-message-turn1.md`, `final-message-turn2.md` and the record's quoted turns; Python heredocs that count the tool calls of each turn by tool name and scan the 1333 tool calls for the strings `research-hub` and `/Users/axelfaes/workspace` (C10); and Python replacements of exact strings in the record, the brief and ADR 0022. The reviewer recomputed every output independently and found each equal. Until the ruling, nothing they produced is used, and step 3 does not land.
-  - (a) Approve what they compute, as listed here, for step 3's records. Pro: the records stand as made and checked, and step 3 lands with the fixes at landing. Con: a script ran before its approval.
-  - (b) The records made again without those commands: each message copied by hand from the streams and each count made by reading. Pro: no script beyond the approved. Con: 14 messages and 1333 tool calls copied and counted by hand, where a copy or a count can go wrong, for the same content.
-  - Recommendation: (a), since each computes one exact answer (a copy, a count, a string match) and the review reproduced every one. The lazy option: none; (b) costs more and gives the same text.
+None.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -74,6 +59,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 - 2026-10-19: Open item F, the line of `~/.claude/CLAUDE.md` that routes manuscript content: ruled by the user, a form of (b), the line names `academic-paper` or `paper`.
 - 2026-10-20: Open item G, plan 5's steps after `/grill 5` settled D42 to D59: ruled by the user, (a).
 - 2026-10-20: C107, the ended academic-paper revision run's three closing decisions (step 3, review over round 1, Spec 2): closed under self-rule, (a).
+- 2026-10-20: Open item H, the commands that made step 3's records: ruled by the user, (a).
 
 ## The standing demands (from Axel, in force)
 
@@ -96,6 +82,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-20. Step 3 of 6, the academic-paper side of the revision comparison, is built and reviewed: the record `agents/reviews/3-blind-comparison.md`, the report `agents/reviews/3-report.md`, the review and the review over its one repair round in `agents/reviews/3-refuter.md`.
-- Next: open item H, then `/land 5 3` with the fixes at landing the review over round 1 names (Spec 3, Spec 4, Proof 1, Standards 1 to 3, Behaviour 1), then `/spec 5 4`.
-- Open on Axel's side: open item H.
+- 2026-10-20. Step 3 of 6, the academic-paper side of the revision comparison, landed: the record `agents/reviews/3-blind-comparison.md` with the kept output, and the stopped `paper` run's messages as step 4's evidence (`agents/reviews/3-landing.md`).
+- Next: step 4 of 6, the new shape of paper: `/spec 5 4`.
+- Open on Axel's side: none.

@@ -289,3 +289,17 @@ On the two restatements the brief asked me to judge. C10: the case was for "noth
 - I read the files `files.txt` lists against the snapshot and `orchestrator-state.md` and `3-refuter.md` as the review's own records; I ran Python only to read the jsonl in memory, wrote no file, and ran `utils/pin.sh` with no argument only because brief check 2 names it (it changes nothing).
 
 Reviewer usage: ae2329cd44595d881, claude-sonnet-5-5, 239721 tokens, 52 tool uses, 8.6 min.
+
+## Closed
+
+The run over round 1 is the run over the last round (`repair_rounds: 1`). Each of its findings, and how it ended:
+
+- Spec 1, the commands that made the records: raised to the user as open item H, ruled (a), what they compute approved (`plan.md`, Rulings, "Open item H").
+- Spec 2, the side's three closing decisions: closed under self-rule as choice C107, (a), none relayed; C5 is met with that reason in the record.
+- Spec 3, the sources outside the input and the denials: fixed at landing; the record adds the `sysctl`, `find` and `elsarticle-num.bst` commands, the Reads of the session's `tool-results/` files and the `diff -rq` of the clone, and states that the stopped run made no Skill call and no denied call.
+- Spec 4, ADR 0022's sentence: fixed at landing; it names turn 4's figures and turn 5's figure script and references.
+- Proof 1, check 4's text: fixed at landing; the brief's check 4 reads "only files under `.scratch/5-paper/` and the ADR path".
+- Standards 1, the brief's C10 and check 3: fixed at landing; both carry the premise correction's wording.
+- Standards 2, the report's DONE rows: fixed at landing; each row names its command and output, items 5 to 8 included.
+- Standards 3, the record's hedge on the `init` messages: fixed at landing; the record says each of the 15 `init` messages gives `claude-opus-5-5`, and counts the 15 `result` messages (the review counted 14).
+- Behaviour 1, the 13 working files: fixed at landing; the record and the report name each one.

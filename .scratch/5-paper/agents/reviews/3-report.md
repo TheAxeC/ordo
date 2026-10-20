@@ -36,20 +36,21 @@ pinned: 5 agents linked in: /Users/axelfaes/.claude/agents, /Users/axelfaes/.cla
 
 ## DONE / NOT DONE
 
-- Item 1, the release candidate. DONE: C1's output above.
-- Item 2, the working folder. DONE: the copy `gate/revision-2`, its input from `git archive` (C3), its one commit `03b7915 input`, academic-paper 3.2.0 under `.claude/skills/academic-paper/`.
-- Item 3, the side. DONE: the command, session id and served model in `3-blind-comparison.md`, "The side" (C2, C4).
-- Item 4, the stops. DONE: C5.
-- Item 9, the records. DONE: `3-blind-comparison.md` with the side's output, its last message of each turn kept as `final-message-turn1.md` and `final-message-turn2.md`, its sources outside its input, and every message of the stopped run's seven turns with the answers sent; the character check exits 0.
-- Item 10. DONE for research-hub (C10). Nothing was pushed: no `git push` was run in this step.
+- Item 1, the release candidate. DONE. `git tag --list v8.4.0-rc.1` prints `v8.4.0-rc.1`, `git rev-list -n1 v8.4.0-rc.1` prints `d5282e361c5f79832505eb9b9b62aca2b12ebcd0`, `git -C ~/.local/share/ordo-stable describe --tags` prints `v8.4.0-rc.1`; the pinning run's output is under C1.
+- Item 2, the working folder. DONE. `git -C gate/revision-2 log --oneline` prints `03b7915 input`; the `diff -r` commands of C3 print nothing; `ls gate/revision-2/.claude/skills/academic-paper/SKILL.md` exists and its head names version 3.2.0.
+- Item 3, the side. DONE. The `init` messages of `gate/revision-2.turn1.jsonl` and `turn2.jsonl`, read with `python3 -I`, give session 022ad776-b049-48f5-8777-3e8f2d48395e, model `claude-opus-5-5`, `skills: []`, `slash_commands: []`.
+- Item 4, the stops. DONE. The last `result` of `revision-2.turn1.jsonl` holds the three questions, the resumed turn's prompt holds the answer, and `permission_denials` is `[]` in both results; choice C107 records the side's three closing decisions.
+- Items 5 to 8. Step 5's under ruling G; not run in this step.
+- Item 9, the records. DONE. `3-blind-comparison.md` and the two `final-message-turn<n>.md`, made with the commands open item H approves; check 1 prints nothing and exits 0.
+- Item 10. DONE for research-hub: the scan of C10 prints `tool calls read: 1333 hits: 0`. No `git push` was run in this step.
 - Check 1, the character set: `find .scratch/5-paper/agents/reviews -path '*/3-*' -type f -print0 | xargs -0 perl -CSD -ne '...'` printed nothing, exit 0.
-- Check 2: as C1.
+- Check 2: as item 1, and `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE utils/pin.sh` exits 0.
 - Check 3: as C10.
-- Check 4: `git status --short` shows `.scratch/5-paper/agents/briefs/3.md`, `.scratch/5-paper/orchestrator-state.md` and `docs/adr/0022-...md` modified, and `3-blind-comparison.md`, the two `final-message-turn<n>.md`, `3-refuter.md` and this report untracked: the paths the brief lists, and the review's records.
+- Check 4: `git status --short` shows only files under `.scratch/5-paper/` and `docs/adr/0022-...md`.
 
 ## Files changed
 
-- `.scratch/5-paper/agents/reviews/3-blind-comparison.md`: new, 485 lines.
+- `.scratch/5-paper/agents/reviews/3-blind-comparison.md`: new, 486 lines.
 - `.scratch/5-paper/agents/reviews/3-blind-comparison/revision/academic-paper-output/final-message-turn1.md`: new, 61 lines.
 - `.scratch/5-paper/agents/reviews/3-blind-comparison/revision/academic-paper-output/final-message-turn2.md`: new, 52 lines.
 - `.scratch/5-paper/agents/reviews/3-report.md`: this report.
@@ -70,7 +71,7 @@ Not judged in this step; the `paper` side, the judges and Axel's call are step 5
 
 - The tag `v8.4.0-rc.1` at d5282e3, which did not exist before.
 - The pinned worktree `~/.local/share/ordo-stable` and the skill links: before at `v8.3.0`, now at `v8.4.0-rc.1`.
-- Left on the host by the runs, outside `gate/`: the academic-paper side's clone of the authors' public repository at `/private/tmp/claude-502/ecg-code/repo` (312K), a PDF its WebFetch saved under its session's tool folder (611137 bytes), and the stopped `paper` run's temporary folder of fetched sources, `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/tmp.gxtDZZFxPa` (26M), which the skill removes at a run's end and the stop left in place.
+- Left on the host by the runs, outside `gate/`: the academic-paper side's clone of the authors' public repository at `/private/tmp/claude-502/ecg-code/repo` (312K), a PDF its WebFetch saved under its session's tool folder (611137 bytes), and the stopped `paper` run's temporary folder of fetched sources, `/var/folders/7r/49ks4w4558vcr57tvb9svmph0000gp/T/tmp.gxtDZZFxPa` (26M), which the skill removes at a run's end and the stop left in place. The academic-paper side also left 13 working files in `/tmp` and `/private/tmp/claude-502/`, each named in `3-blind-comparison.md`, "Sources the side used outside its input".
 
 ## Wrong or impossible in the brief
 
