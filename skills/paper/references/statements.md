@@ -1,6 +1,6 @@
 # Statements
 
-The draft writer reads this page to write the six statements of a paper: author contributions, funding, conflict of interest, data availability, ethics and, with `references/ai-disclosure.md`, the AI disclosure. The facts come from `config.md` of the run, and each statement is written into the first draft in full mode and as a patch in disclosure mode, as `references/patch-file.md` gives.
+The draft writer reads this page to write the six statements of a paper: author contributions, funding, conflict of interest, data availability, ethics and, with `references/ai-disclosure.md`, the AI disclosure. The facts come from `config.md` of the run, and each statement is written as a patch as `references/patch-file.md` gives.
 
 ## Facts and gaps
 
@@ -166,11 +166,11 @@ Data sharing is not applicable to this article as no new data were created or an
 - The form is "This study was approved by <board> (Approval No. <number>). <the consent obtained>. <the de-identification applied>."
 - The statement states the approval the collecting study obtained and does not plan the approval.
 - A study without human or patient data states "This study used no data from human participants or patients."
-- A missing approval number, consent or de-identification of a study with human data is a gap. The writer's report and the final message name it as a gap for the user to fill.
+- A missing approval number, consent or de-identification of a study with human data is a gap, and the ethics check of `references/ethics.md` lists it as a conditional issue.
 
 ## Responsible use
 
-- A responsible-use statement is written when the venue or the user asks for one. The request is recorded in the Notes of `config.md`.
+- A responsible-use statement is written when the ethics check of `references/ethics.md` rates dual use Moderate or above.
 - The statement has this form:
 
 ```
@@ -179,7 +179,7 @@ Responsible Use: This research is intended for <stated purpose>. The authors ack
 
 ## Reproducibility
 
-- A reproducibility statement is written when the venue or the user asks for one. The request is recorded in the Notes of `config.md`.
+- A reproducibility statement is written when the venue asks for one, or when the ethics check marks the documentation of the search, the inclusion criteria or the analysis as a gap.
 - The statement has this form:
 
 ```

@@ -1,12 +1,11 @@
 # Literature strategist
 
-The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder in one start and changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries in the same start, as `references/patch-file.md` gives.
+The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder and changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. A start that gives only the manifest and a finished `refs.bib` asks for the patch alone.
 
 ## What the agent reads
 
 - `config.md`: Topic, Research question, Discipline, Language, Paper type, Domain evidence profile, Materials in hand, AI use and the Notes.
 - The manuscript's `.bib`, when the call gives one.
-- In revision mode, the numbered items of `items.md` that call for a new reference, and the New references row of `config.md`.
 - Every lookup is made with `lookup.py` and never with a web search, a fetch of a web page or `curl`.
 
 Where an input is missing:
@@ -21,15 +20,6 @@ Where an input is missing:
 - In lit-review mode the paper type is Literature Review.
 - A research question that is vague gets two or three possible search directions listed in the report, and the session returns them to the user.
 - A discipline that is too broad, such as "social science", gets a narrower sub-field suggested in the report.
-
-## Revision mode
-
-In revision mode the session starts the agent once for the items that call for a new reference, and only when the New references row of `config.md` allows it.
-
-- The research question of the search is the request of those items, and the topic is the manuscript's.
-- The agent searches, screens and annotates as the sections below say, and writes `review.md`, `refs.bib` and the patch that adds the new entries to the manuscript's `.bib`.
-- Each operation of the patch names the ids of the items it answers in `roadmap_item_ids`.
-- The agent adds no reference that no item calls for.
 
 ## The search design
 
@@ -203,7 +193,7 @@ Each included source has this annotation:
 ## The literature matrix
 
 - The matrix has one row per included source and one column per theme, with `main` where a theme is the source's main one and `x` where it also touches the theme.
-- It adds the columns Method and Quality, with Quality as High, Medium or Low, so that the planner assigns high-quality sources to the core sections.
+- It adds the columns Method and Quality, with Quality as High, Medium or Low, so that the structure architect assigns high-quality sources to the core sections.
 - It has no column for provenance.
 
 ```
@@ -250,6 +240,7 @@ Distribution advisory:
 - The synthesis has one paragraph group per theme of the matrix, and each paragraph states what the included sources show on that theme, where they agree and where they disagree.
 - Each claim cites its sources as `[@key]`, with the key of the source's entry in `refs.bib`.
 - The synthesis claims only what an annotation supports.
+- Integrity verification judges each of its claims, as `references/integrity-verification.md` says.
 
 ## The BibTeX entries
 
@@ -260,7 +251,7 @@ Distribution advisory:
 - When the call gives a `.bib`, the rules apply in this order to each included source.
   - A source whose DOI, or whose arXiv ID when it has no DOI, is already in the `.bib` gets no new entry and is marked "already in the .bib" in the annotation.
   - Any other source whose key equals an existing key gets the key with the first unused letter appended: `a`, then `b`.
-- `refs.bib` holds the new entries only. The patch that adds them to the manuscript's `.bib` inserts them after its last block. Its operations name the id `lit-review` in `roadmap_item_ids` in lit-review mode, and the ids of the items they answer in revision mode.
+- `refs.bib` holds the new entries only. The patch that adds them to the manuscript's `.bib` inserts them after its last block, and its operations name the id `lit-review` in `roadmap_item_ids` in lit-review mode and the id `full` in full mode.
 
 ## The report
 
@@ -278,4 +269,4 @@ Distribution advisory:
 10. Search limitations and gate failures, when there are any.
 11. AI disclosure: the one line that `references/ai-disclosure.md` gives under "The line of a review".
 
-- The planner reads the matrix, the gaps and the sources by theme with their stance, and the draft writer reads the table of sources by section.
+- The structure architect reads the matrix and the gaps, the argument builder reads the sources by theme with their stance, the draft writer reads the table of sources by section, and citation compliance reads the entries of `refs.bib`.

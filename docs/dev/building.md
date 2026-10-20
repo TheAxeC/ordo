@@ -32,6 +32,6 @@ The check prints each line holding a character outside printable ASCII (an em or
 
 The green checkmark is allowed in Markdown files, where the plan ledgers use it as their status marker, and nowhere else.
 
-The figures under `docs/figures/` are written and committed. Every skill that launches agents has its figure there: `python3 docs/figures/gen_figures.py` writes the figures of the README, the pipeline and the plan loop for the plan skills, and one figure each for `paper`, `grill`, `writing` and `code-comments`. `python3 docs/figures/academic-paper-comparison/gen_comparison.py` writes the figures of `docs/academic-coverage.md` that set academic-paper and academic-pipeline beside the skills of Ordo. A change to a skill's Stops table, to its sequence or to its name changes the labels in the script that draws it, which is then run again; neither script is part of the verify list.
+The figures under `docs/figures/` are written by `python3 docs/figures/gen_figures.py` and committed. A change to a skill's Stops table, to the sequence or to a skill name changes the labels in that script, which is then run again; the script is not part of the verify list.
 
 This page is the list of tests and checks, and says how the committed figures are made; a new script is listed on `docs/dev/scripts.md`, and adds its test here and to the command block of `docs/dev/change-standard.md` only when it has one.

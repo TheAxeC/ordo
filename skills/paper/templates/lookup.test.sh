@@ -132,7 +132,7 @@ check("T5 hyphen between letters, one line", lookup.passage_found("self-supervis
 check("T5 one word changed", not lookup.passage_found("mutual information estimation", text))
 check("T5 an empty passage is not found", not lookup.passage_found("", text))
 
-# T6: passage lines and the keys a citation report cites.
+# T6: passage lines and the keys an integrity record cites.
 line = '> [@a, p. 3]: "the "plug-in" estimator"'
 parsed = lookup.passage_line(line)
 check("T6 passage with quotation marks", parsed == ("a", "p. 3", 'the "plug-in" estimator'), repr(parsed))
@@ -473,7 +473,7 @@ def run_in_process(function, arguments):
 result = run_in_process(lookup.run_check_urls, ["only-one"])
 check("check-urls one argument", result == ("error: check-urls takes <main.tex> <file.bib>", []), repr(result))
 
-# L6: quote-check reads the citation report, the .bib named and the texts of a folder.
+# L6: quote-check reads the integrity record, the .bib named and the texts of a folder.
 put("l6/texts/k1.txt", "Here the plug-in estimator is biased for small samples.\n")
 record = put("l6/record/record.md", "Claim [@k1, p. 1] and [@k2, p. 2].\n\n> [@k1, p. 1]: \"the plug-in estimator is biased\"\n")
 put("l6/record/references.bib", bib_of("k2"))
@@ -485,7 +485,7 @@ check("L6 the key the named .bib lacks", "k2: no entry" in lines, repr(lines))
 check("L6 the key the named .bib holds", "k1: no entry" not in lines, repr(lines))
 check("L6 exit status", status == 1, repr((status, lines)))
 result = run_in_process(lookup.run_quote_check, [record, texts])
-check("L6 two arguments", result == ("error: quote-check takes <citation report> <file.bib> <folder>", []), repr(result))
+check("L6 two arguments", result == ("error: quote-check takes <integrity record> <file.bib> <folder>", []), repr(result))
 
 for failure in failures:
     print(failure)

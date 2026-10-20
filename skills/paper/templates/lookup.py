@@ -11,7 +11,7 @@ Usage:
     lookup.py cite-keys <main.tex> <file.bib>
     lookup.py check-urls <main.tex> <file.bib>
     lookup.py fetch <DOI | arXiv ID> <folder> <key>
-    lookup.py quote-check <citation report> <file.bib> <folder>
+    lookup.py quote-check <integrity record> <file.bib> <folder>
 
 Every command prints plain text for a person, one line per record or result, and never JSON.
 
@@ -27,9 +27,9 @@ Commands:
 - check-urls reads the keys the .tex cites and the .bib. For each cited key it prints the HTTP status, after redirects, of the key's doi (as https://doi.org/<doi>), else its eprint (as https://arxiv.org/abs/<id>), else its url. A cited key with none of the three is printed as "no identifier", a cited key the .bib lacks as "no entry in <the .bib's file name>", and a URL that gives no answer as "failed, <reason>". A .tex that cites no key prints "the .tex cites no key".
 - check-urls also checks the title of a key whose entry has a doi. The doi is stripped to the bare DOI and percent-encoded as resolve does, and the entry's title is compared, by the title ratio of resolve, with the title of the first record the doi resolves to. The indexes are asked in the order Crossref, OpenAlex, Semantic Scholar, and the next one is asked when an index answers "not found" or is left out. The line of the key then ends with ", ratio <r> against <index>", the ratio written as resolve writes it, followed by ", DOI_MISMATCH" when the ratio is below 0.70. It ends with ", doi not found in Crossref, OpenAlex or Semantic Scholar" when each of the three answered "not found", and with ", title not checked: <index> left out, <reason>" when no index gave a record and one or more was left out, one clause for each index left out, the clauses separated by "; ". A key whose URL gave no answer gets the same ending after its "failed, <reason>". A key with a doi costs up to three requests more than its status request.
 - fetch writes the full text of a source into <folder>, named from <key> with each / and : written _ (<stem>). It tries, in order, https://arxiv.org/html/<id> and https://arxiv.org/pdf/<id> when the input holds an arXiv ID, the open_access.oa_url of OpenAlex and the openAccessPdf.url of Semantic Scholar. HTML counts only from arxiv.org/html. From every other source only a body starting %PDF- counts. The first that counts is written as <stem>.html or <stem>.pdf, and its text as <stem>.txt, by pdftotext (called with its arguments as a list) for a PDF, with the tags removed by html.parser and the text of script and style elements left out for HTML. A PDF whose text pdftotext cannot make or makes empty counts as no text and is removed, and the next URL is tried. When no full text is found, the abstract the indexes return (the arXiv summary, else the Semantic Scholar abstract, else the OpenAlex abstract_inverted_index put back in word order) is written as <stem>.abstract.txt. fetch prints each lookup and each URL tried with its status, and exits 1 when no full text was found.
-- quote-check reads the citation report, the .bib and the texts in <folder>. For each passage line "> [@<key>, <locator>]: "<passage>"" of the record it prints found or not found ("not found, no <file>" when the text file is missing); the passage is the text between the first " after "]: " and the last " of the line. It looks the passage up in <folder>/<stem>.txt, or in <folder>/<stem>.abstract.txt when the locator is abstract. Both texts are normalised first: every hyphen at a line end is removed with its line break, every hyphen between two letters is removed, then each run of whitespace becomes one space. A passage is found when the normalised passage occurs in the normalised text, and an empty passage is never found. A line that starts "> [@" and does not have the form of a passage line is printed as malformed. It also prints each cited key with no passage line ("no passage"), each cited key the .bib lacks ("no entry") and each cited key with neither <stem>.txt nor <stem>.abstract.txt in the folder ("no text"). A report that cites no key prints "the citation report cites no key".
+- quote-check reads the integrity record, the .bib and the texts in <folder>. For each passage line "> [@<key>, <locator>]: "<passage>"" of the record it prints found or not found ("not found, no <file>" when the text file is missing); the passage is the text between the first " after "]: " and the last " of the line. It looks the passage up in <folder>/<stem>.txt, or in <folder>/<stem>.abstract.txt when the locator is abstract. Both texts are normalised first: every hyphen at a line end is removed with its line break, every hyphen between two letters is removed, then each run of whitespace becomes one space. A passage is found when the normalised passage occurs in the normalised text, and an empty passage is never found. A line that starts "> [@" and does not have the form of a passage line is printed as malformed. It also prints each cited key with no passage line ("no passage"), each cited key the .bib lacks ("no entry") and each cited key with neither <stem>.txt nor <stem>.abstract.txt in the folder ("no text"). A record that cites no key prints "the integrity record cites no key".
 
-A citation in a citation report is [@<key>, <locator>] or [@<a>; @<b>, <locator>]. A line that is a passage line contributes the key of its leading citation only; the passage is not searched for citations.
+A citation in an integrity record is [@<key>, <locator>] or [@<a>; @<b>, <locator>]. A line that is a passage line contributes the key of its leading citation only; the passage is not searched for citations.
 
 The keys a .tex cites, read by cite-keys and check-urls:
 
@@ -50,7 +50,7 @@ Reads:
 - The arguments of the call.
 - The environment variables S2_API_KEY (sent in the x-api-key header to api.semanticscholar.org), OPENALEX_API_KEY (sent as the api_key parameter to api.openalex.org) and CROSSREF_POLITE_EMAIL (sent as the mailto parameter and in the User-Agent to api.crossref.org). Each is optional, and no value is ever printed.
 - The indexes at https://api.crossref.org, https://api.openalex.org, https://api.semanticscholar.org/graph/v1 and https://export.arxiv.org, https://doi.org, https://arxiv.org, and each URL an index returns for an open-access copy.
-- For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the citation report, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
+- For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the integrity record, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
 - For fetch: the program pdftotext, which it runs on the PDF it wrote.
 - For every request to arXiv: the file ordo-lookup-arxiv in the temporary folder.
 
@@ -65,7 +65,7 @@ Errors, each printed as one line on standard error:
 - "error: <value> is not a DOI, an arXiv ID, a Semantic Scholar ID or an OpenAlex ID", for refs and cited-by.
 - "error: the key is empty", for fetch.
 - "error: <folder>: not a folder", for fetch and quote-check.
-- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib or a citation report that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
+- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib or an integrity record that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
 
 Exit status: 0 when the command ran and found nothing to fail; 1 when bibtex got no BibTeX entry, when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), or when fetch found no full text; 2 for a call it cannot read (every error line above).
 """
@@ -521,11 +521,11 @@ def merged_lines(named):
     return lines
 
 
-# Citation reports and BibTeX.
+# Integrity records and BibTeX.
 
 
 def cited_keys(line):
-    """The keys of the citations in one line of a citation report, in order."""
+    """The keys of the citations in one line of an integrity record, in order."""
     keys = []
     for bracket in CITATION.findall(line):
         for part in bracket.split(";"):
@@ -550,7 +550,7 @@ def passage_line(line):
 
 
 def read_record(record_text):
-    """(passages, malformed lines, cited keys in order) of a citation report. A passage line gives the key of its leading citation only."""
+    """(passages, malformed lines, cited keys in order) of an integrity record. A passage line gives the key of its leading citation only."""
     passages, malformed, keys = [], [], []
     for number, line in enumerate(record_text.splitlines(), 1):
         parsed = passage_line(line)
@@ -608,7 +608,7 @@ def quote_check_lines(record_text, bib_keys, read_text):
             lines.append(f"{key}: {problem}")
             failed = True
     if not keys:
-        lines.append("the citation report cites no key")
+        lines.append("the integrity record cites no key")
     return lines, failed
 
 
@@ -1230,7 +1230,7 @@ def run_check_urls(client, arguments, out):
 
 def run_quote_check(client, arguments, out):
     positional, _ = parse_options(arguments, (), "quote-check")
-    expect_arguments(positional, 3, "quote-check", "<citation report> <file.bib> <folder>")
+    expect_arguments(positional, 3, "quote-check", "<integrity record> <file.bib> <folder>")
     folder = positional[2]
     if not os.path.isdir(folder):
         raise UsageError(f"{folder}: not a folder")

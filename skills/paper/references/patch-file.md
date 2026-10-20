@@ -33,6 +33,5 @@ The ids are:
 | `F<k>` | Finding `k` of the `/writing` report of a run's own closing review (Steps 12) |
 | `D<r>-<m>` | Issue `m` of draft review round `r` |
 | `C<m>` | Issue `m` of the citation report |
-| `full`, `abstract-only`, `lit-review`, `disclosure` | A change the mode itself asks for, such as the figure environments and the new `.bib` entries of a first draft, the abstract in abstract-only mode, the entries of a literature review or the statements of disclosure mode |
-| `reference-fix` | A change that answers a failing line of the reference checks |
-| `compile-fix` | A change that answers a failed compile or a layout fault of the compile's log |
+| `I<m>` | Issue `m` of an integrity record; the ids of the second check go on from the highest of the first |
+| `full`, `abstract-only`, `lit-review`, `disclosure` | A change the mode itself asks for, such as the abstract, the statements or the entries of a literature review |
