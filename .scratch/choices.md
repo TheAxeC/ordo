@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C105
+Last number: C107
 
 # Entry 2.I Several plans in one session
 
@@ -419,4 +419,17 @@ step 3, raised by the brief check of `/spec 5 3` (`agents/reviews/3-brief-check.
 
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md:78` (Open item E)
+Builds on it: step 3
+
+## C107. The ended academic-paper revision run's three closing decisions (2026-10-20)
+
+step 3, raised by the review over round 1 (`agents/reviews/3-refuter.md`, "Repair round 1, refuted", Spec 2). The side's final message ended its run and closed with three "Decisions for you": rerun both foundation models with their authors' preprocessing ("I recommend yes"), run the remaining experiments once running code is allowed ("I recommend running them"), and the deadline, 2026-10-02, with no recommendation. The ruling "The same lines to every side" gives a side the standing lines "at its next stop" and sends a later stop to the user "only when it holds no recommendation".
+  - (a) None of the three is relayed: the run had ended, so there is no next stop to answer; decisions 1 and 2 run code, which Axel's answer to Q2 forbids; decision 3 is answered in research-hub's `projects/manuscripts/dongho-ecg-clustering/README.md`: "the revision is complete and independently verified, due 2026-10-02". C5 is met with that reason in the record. Pro: the side's output stays the output of the run as it ended, as the ruling "Keep the academic-paper results" keeps it, and Axel is asked nothing he has already written. Con: the deadline question gets its answer from the README, not from Axel.
+  - (b) Decision 3 goes to Axel as an open item. Pro: Axel answers it himself. Con: it asks him a fact his README states, about a round the comparison's input predates.
+  - (c) The side is resumed with the standing lines. Pro: the ruling's lines reach the side. Con: the side would take recommendations 1 and 2 and run code against Q2, and change the kept output.
+  - Recommendation: (a), since the run had ended and the README answers the one question without a recommendation.
+  - The lazy option: none; (a) leaves no work undone, since the question's answer is written.
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md`, step 3's Step 0
 Builds on it: step 3

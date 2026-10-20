@@ -50,15 +50,19 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   report: .scratch/5-paper/agents/reviews/3-report.md
   brief_check: .scratch/5-paper/agents/reviews/3-brief-check.md (a4c187208c83cba26, claude-opus-5-5, 239241 tokens, 58 tool uses, 15.6 min)
   session_id: orchestrator (claude-opus-5-5)
+  reviewer_report: ".scratch/5-paper/agents/reviews/3-refuter.md (a8fba4bf496c55073, claude-opus-5-5, 234343 tokens, 51 tool uses, 11.2 min); over round 1: ae2329cd44595d881, claude-sonnet-5-5, 239721 tokens, 52 tool uses, 8.6 min"
   landing: not-started
-  round: 0
+  round: 1
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-None.
+- Open item H (2026-10-20), kind 3 of `plan-orchestration`'s `references/self-rule.md` (an option that adds a script), raised by the review of step 3 over round 1 (`agents/reviews/3-refuter.md`, "Repair round 1, refuted", Spec 1). Step 3's records were made with commands that no ruling approves: `scratchpad/fix.py`, which takes each `result` message from a session's stream, writes each character outside the rules file's set by its Unicode name in angle brackets, and writes `final-message-turn1.md`, `final-message-turn2.md` and the record's quoted turns; Python heredocs that count the tool calls of each turn by tool name and scan the 1333 tool calls for the strings `research-hub` and `/Users/axelfaes/workspace` (C10); and Python replacements of exact strings in the record, the brief and ADR 0022. The reviewer recomputed every output independently and found each equal. Until the ruling, nothing they produced is used, and step 3 does not land.
+  - (a) Approve what they compute, as listed here, for step 3's records. Pro: the records stand as made and checked, and step 3 lands with the fixes at landing. Con: a script ran before its approval.
+  - (b) The records made again without those commands: each message copied by hand from the streams and each count made by reading. Pro: no script beyond the approved. Con: 14 messages and 1333 tool calls copied and counted by hand, where a copy or a count can go wrong, for the same content.
+  - Recommendation: (a), since each computes one exact answer (a copy, a count, a string match) and the review reproduced every one. The lazy option: none; (b) costs more and gives the same text.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -69,6 +73,7 @@ None.
 - 2026-10-19: Open item E, how the `/writing` findings reach `/paper` on the current dongho manuscript: closed under self-rule, C106.
 - 2026-10-19: Open item F, the line of `~/.claude/CLAUDE.md` that routes manuscript content: ruled by the user, a form of (b), the line names `academic-paper` or `paper`.
 - 2026-10-20: Open item G, plan 5's steps after `/grill 5` settled D42 to D59: ruled by the user, (a).
+- 2026-10-20: C107, the ended academic-paper revision run's three closing decisions (step 3, review over round 1, Spec 2): closed under self-rule, (a).
 
 ## The standing demands (from Axel, in force)
 
@@ -87,10 +92,10 @@ None.
 
 - Design: `docs/roadmap.md` entry 5, the rulings in `plan.md` (D1 to D59, the pins of plan 5, open items A to G), ADRs 0017, 0020, 0022, 0023 and 0024. Ledger: `.scratch/5-paper/`, with `agents/briefs/` and `agents/reviews/`.
 - The sources: `../research-hub/.agents/skills/academic-paper/`, `academic-pipeline/` and `deep-research/` (the coverage rows of `docs/academic-coverage.md`), `../research-hub/tools/manuscript/`, and `lookup.py` at commit 0074728. research-hub is read only; the gate's runs work on copies outside it.
-- The installed skills are pinned at v8.3.0 (`git -C ~/.local/share/ordo-stable describe --tags`); step 3 tags a release candidate and pins it, and the closing tags the final release and pins it (Rulings, "The pins of plan 5").
+- The installed skills are pinned at v8.4.0-rc.1, the release candidate of step 3 (`git -C ~/.local/share/ordo-stable describe --tags`); step 5 tags the next release candidate and pins it, and the closing tags the final release and pins it (Rulings, "The pins of plan 5").
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-19. Step 2 of 6, the skill, landed: `skills/paper/SKILL.md` 1.0.0 with its 14 pages, `/writing` 1.1.0 numbering its findings, and the wiring, after one repair round and eight fixes at landing (`agents/reviews/2-landing.md`).
-- Next: step 3 of 6, the academic-paper sides: `/spec 5 3`, beginning with the release-candidate tag and pin (Rulings, "The pins of plan 5").
-- Open on Axel's side: none.
+- 2026-10-20. Step 3 of 6, the academic-paper side of the revision comparison, is built and reviewed: the record `agents/reviews/3-blind-comparison.md`, the report `agents/reviews/3-report.md`, the review and the review over its one repair round in `agents/reviews/3-refuter.md`.
+- Next: open item H, then `/land 5 3` with the fixes at landing the review over round 1 names (Spec 3, Spec 4, Proof 1, Standards 1 to 3, Behaviour 1), then `/spec 5 4`.
+- Open on Axel's side: open item H.
