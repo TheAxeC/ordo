@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C107
+Last number: C108
 
 # Entry 2.I Several plans in one session
 
@@ -433,3 +433,34 @@ step 3, raised by the review over round 1 (`agents/reviews/3-refuter.md`, "Repai
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md`, step 3's Step 0
 Builds on it: step 3
+
+## C108. Five choices of step 4's brief check (2026-10-20)
+
+step 4, raised by the brief check of `/spec 5 4` (`agents/reviews/4-brief-check.md`, "2. The step line" findings 2, 3, 7, 8 and 10), five choices the user would see.
+  - Part 1, the figures of the other skills that launch agents. The ruling "The figures of skills that launch agents" says `docs/figures/` gains a figure of `paper` "and of every other skill that launches agents, once plan 5's fix is done"; step 4's line names `paper`'s figure only, and no step or roadmap entry holds the others (`grep -n -i figure docs/roadmap.md` prints nothing). `README.md:79` names the plan skills, `grill`, `writing`, `code-comments` and `paper` as the skills that launch agents; `docs/figures/pipeline.svg` and `plan-loop.svg` draw the plan skills. `docs/dev/building.md:35` says `gen_figures.py` writes every figure under `docs/figures/`.
+    - (a) Step 4 also adds to `docs/figures/gen_figures.py` a figure each of `grill`, `writing` and `code-comments`, drawn as `paper`'s is (its agents in order, its stops with their marks), each shown in `README.md`, and `docs/dev/building.md`'s sentence on the figures says that every skill that launches agents has its figure there and names both scripts. Pro: the ruling is carried out with the fix it names, in the step that already changes `gen_figures.py` and the README's figures. Con: the step grows by three figures, about 30 min of build.
+    - (b) A new step between 4 and 5 for the three figures. Pro: step 4 stays as drafted. Con: a second step rewrites the same script and the same README lines right after step 4.
+    - (c) Left to a later entry. Pro: no work now. Con: the ruling's sentence goes undone in the plan it names.
+    - Recommendation: (a). The lazy option is (c).
+  - Part 2, where a failure of the reference checks goes in full, revision and lit-review. Today a `missing:` line of `lookup.py cite-keys` or a failed line of `check-urls` goes to the citation compliance agent (`skills/paper/SKILL.md`, Steps 11), which D43, D48 and D49 remove from those modes.
+    - (a) After the last writer pass the session runs both checks; a failure starts the draft writer once with the failing keys and lines, its patch is applied, the checks run again, and a failure left after that is named in the final message with the line as printed. The pass is driven by a script's output, so it is not one of ADR 0022's "at most three writer passes driven by other agents' issues". Pro: the references resolve without a stop and without the user's hands. Con: one more writer start when a check fails.
+    - (b) The failures are named in the final message only. Pro: no extra start. Con: the user fixes by hand what the run could fix.
+    - (c) A failure is a stop. Con: a stop outside the mode's list, against "The stops of paper".
+    - Recommendation: (a). The lazy option is (b).
+  - Part 3, the model identifier the AI disclosure names (D47). The configured `reviewer` is the alias `claude:opus` (`.agents/plan.yaml:10`), and `refute`'s Stops define the configured model as the newest model that alias names in the runner's model list.
+    - (a) The session gives the draft writer the identifier the alias names in the runner's model list at the run's start, such as `claude-opus-5-5`, the disclosure writes that identifier, and the stop "A model other than the configured one" compares each served model with it. Pro: the disclosure names a model version, and the stop and the disclosure use one value. Con: none found.
+    - (b) The alias as written. Con: a disclosure that names `claude:opus`, which is no model's name.
+    - Recommendation: (a). No option is the lazy one.
+  - Part 4, the statements whose trigger is the ethics check: the responsible-use statement, written when the ethics check rates dual use Moderate or above (`skills/paper/references/statements.md:173`); the reproducibility statement's second trigger, a gap the ethics check marks (`:182`); and a missing approval number, consent or de-identification, which the ethics check lists (`:169`).
+    - (a) The responsible-use statement is written when the venue asks for one or the user asks for one at intake, recorded in the Notes; the reproducibility statement when the venue or the user asks for one; a missing approval number, consent or de-identification is named in the draft writer's report and in the final message as a gap for the user to fill; the rating of dual use is left to `researcher`'s ethics check (entry 13). Pro: each trigger is something the rebuilt run has, and no part of the ethics check is done in `paper`. Con: until `researcher` exists a dual-use statement depends on the venue's or the user's ask.
+    - (b) The draft writer rates dual use itself from the materials. Pro: the statement is written without an ask. Con: a part of the ethics check comes back into `paper`, against D42 and ADR 0022.
+    - Recommendation: (a). No option is the lazy one.
+  - Part 5, intake's DOI checking question (`skills/paper/references/intake.md`, "DOI checking"), asked in full, revision, citation-check and lit-review: its Strict answer stops the run at "A reference that cannot be confirmed", which D43, D48 and D49 remove from full, lit-review and revision, and its mark-only answer marks the integrity record, which the rebuilt skill does not write.
+    - (a) Asked in citation-check mode only, mark-only marking the entry in `citation-report.md`; in the other modes a failed DOI is an issue of draft review round 1 or reading 1 (D44) and goes as part 2 says. Pro: no answer leads to a stop outside a mode's list. Con: full, revision and lit-review no longer offer the choice.
+    - (b) Asked in every mode, Strict sending a failed DOI to the draft writer. Con: the answer then changes nothing part 2 does not already do.
+    - Recommendation: (a). No option is the lazy one.
+  - Recommendation: (a) for each part, since each carries out a ruling or an ADR in force on the part the step builds.
+
+Taken: (a) for each part
+Booked: `.scratch/5-paper/plan.md:221` (Open item I, step 4's Step 0)
+Builds on it: step 4
