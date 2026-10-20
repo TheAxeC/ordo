@@ -248,3 +248,38 @@ Findings:
 - I did not run either figure script, since the task allows no file to be written. C13's premise was checked by comparing the generated bodies with the committed files in memory.
 
 Agent usage: a40fbd6557bc65701, claude-opus-5-5, 279372 tokens, 62 tool uses, 14.4 min.
+
+## Closed (the session's change to the brief for every finding above, and each dictated line added after the check, made before the preparation commit)
+
+- 1. Names, finding 1 (`docs/dev/building.md:35`): item 17 and "Paths this step writes" (`docs/dev/building.md` lines 35-35); under ruling I part 1 the sentence names both scripts and the figure of every skill that launches agents.
+- 1. Names, finding 2 (`lookup.py` and `lookup.test.sh` name the integrity record): item 21 renames `quote-check`'s first argument to the citation report in the usage line, head comment and messages, the test's error text and L6 comment changed to match; both files added to the paths; case C22.
+- 1. Names, finding 3, and 7. ADRs, findings 3 and 4 (ADRs 0017 and 0020): item 21 refines both in place, as `docs/adr/README.md` allows for a refinement that keeps the decision ("What is on the tree", ADRs; decision 8); both files added to the paths.
+- 2. The step line, finding 1, and 7. ADRs, finding 1 (the strategist's "or the user asked for a search"): removed from item 1's full and outline-only bullets, item 4 changes `intake.md:104` to match ADR 0022; C4.
+- 2. The step line, finding 2 (the figures of the other skills that launch agents): a stop, open item I part 1, closed under self-rule with (a), C108; item 14 adds `grill.svg`, `writing.svg` and `code-comments.svg`, item 17 the building page's sentence, step 4's line rewritten with the tag (ruling I).
+- 2. The step line, finding 3 (where a failed reference check goes): a stop, open item I part 2, closed with (a), C108; item 1's Steps 11 bullet and item 3 carry the one reference-fix pass and the final message.
+- 2. The step line, finding 4 (`cite-keys` without a `.tex`): item 1's Steps 11 bullet runs the checks in lit-review only when a `.tex` is given; the clause on the strategist's page removed; C6.
+- 2. The step line, finding 5 (abstract-only and disclosure): item 1's Steps 11 bullet names the modes that run the checks and the ones that run none.
+- 2. The step line, finding 6 (the compile's folder and the reply after the end): item 1's Steps 7 bullet makes the folder in full and revision for the compile and citation-check for the fetches; the Steps 12 bullet makes a new folder for the reply's compile and states the final message after it; decision 3; C4 and C9.
+- 2. The step line, finding 7 (the disclosure's identifier and `draft-writer.md:177`): a stop, open item I part 3, closed with (a), C108; item 1's disclosure bullet, items 3 and 7; C8.
+- 2. The step line, finding 8 (DOI checking): a stop, open item I part 5, closed with (a), C108; item 4; C10.
+- 2. The step line, finding 9 ("figures in parallel"): items 1, 3, 4 and 9 remove the flag at `intake.md:106`, `draft-writer.md:139` and `visualization.md:11`; C3 and C17.
+- 2. The step line, finding 10 (the triggers of the removed checks): `statements.md` by open item I part 4, closed with (a), C108, item 10; `visualization.md:11`, `:636`, `:658` by item 9 (`figures.md` the record `researcher` reads); `peer-reviewer.md:8`, `:268` by item 5; `ai-disclosure.md:84` by item 7; `intake.md:110` by item 4; all listed under "What is on the tree"; C3, C17 to C20.
+- 2. The step line, finding 11 (the count of writer passes): item 1 names the three passes ADR 0022's Consequences count and the three passes outside the count; C4.
+- 3. Premises, finding 1 (academic-paper's modes run to line 278): "What is on the tree" and "Read" 7 give lines 266 to 278 with disclosure and rebuttal-audit; item 15 draws disclosure on both sides and the four modes academic-paper has alone; C14.
+- 4. Cases and checks, finding 1, and 8. Dictated text, finding 1 (the `##` section "Decisions a run takes itself"): item 1 puts the rule in `## Rules` and the Stops table's lead; decision 6; the heading is no longer dictated.
+- 4. Cases and checks, finding 2 (`pipeline.svg` and `plan-loop.svg` rewritten): both added to the paths as written again byte-equal; C13.
+- 5. The question, finding 1: C1 checks the passage claim and the trigger.
+- 5. The question, finding 2: C3's pattern widened to the integrity record, the integrity and ethics checks, `I<m>`, "figures in parallel" and `integrity-1.md`, the only hits allowed naming `researcher`.
+- 5. The question, findings 3 and 4: C4, C9 and C10 as above.
+- 5. The question, finding 5: C8 as above.
+- 5. The question, finding 6: item 13's rule for a row that holds both; C12 reads rows 65, 152 and 195 by it.
+- 5. The question, finding 7: C16 reads `paper.svg` and the three new figures box by box against their skills.
+- 5. The question, finding 8: C14 reads every comparison figure.
+- 5. The question, finding 9: the check run requires the strategist and the visualization agent for the items that call for them, and the reply `all` in a resumed turn; its intake answers follow the later and more specific step-3 answer (decision 7).
+- 5. The question, finding 10: cases C17 to C21 read `draft-writer.md`, `peer-reviewer.md`, `literature-strategist.md`, `visualization.md`, `statements.md` and the other skills.
+- 6. Implied inputs, findings 1 to 3: C13 and C14 run each script from another directory and check where the files go; item 15 has `gen_comparison.py` write into its own folder only and find its import from its own location.
+- 6. Implied inputs, finding 4: as 3. Premises, finding 1.
+- 6. Implied inputs, finding 5: item 15 maps each stage to the roadmap entry whose goal names its work and draws a box dashed while that skill's folder does not exist; "What is on the tree" names the entries; decision 9.
+- 6. Implied inputs, finding 6: item 15 links every SVG the script writes from the new section, and every link names a written file; C14.
+- 7. ADRs, finding 2 (ADR 0024's Consequences): item 1's Steps 7 bullet makes no mode other than citation-check fetch a full text; decision 3.
+- Dictated lines added after the check: the names in item 21 ("the citation report", "the citation report cites no key", `<citation report>`): hold against the prose standard, "0. Hard rules" (plain words, the term used for the record ADR 0024 names) and match the form of the error lines beside them in `lookup.py`. The headings "paper against academic-paper" and the figure file names `grill.svg`, `writing.svg`, `code-comments.svg`: names, and hold.
