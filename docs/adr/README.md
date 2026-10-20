@@ -28,3 +28,6 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0019](0019-a-paper-run-is-done-by-academic-paper-s-agent-roles-each-a-fresh-agent.md) | A paper run is done by academic-paper's agent roles, each a fresh agent |
 | [0020](0020-a-paper-run-keeps-its-records-in-a-folder-beside-the-manuscript-s-folder.md) | A paper run keeps its records in a folder beside the manuscript's folder |
 | [0021](0021-paper-runs-writing-itself-and-applies-the-findings-you-accept-as-patches.md) | Paper runs `/writing` itself and applies the findings you accept as patches |
+| [0022](0022-a-paper-run-is-done-by-five-agent-roles-and-the-integrity-and-ethics-checks-belong-to-researcher.md) | A paper run is done by five agent roles, and the integrity and ethics checks belong to researcher |
+| [0023](0023-paper-ends-a-run-with-the-writing-findings-listed-and-applies-the-ones-you-pick-or-an-autonomous-writer-pass.md) | Paper ends a run with the writing findings listed, and applies the ones you pick or an autonomous writer pass |
+| [0024](0024-a-claim-paper-s-citation-check-mode-judges-rests-on-a-passage-read-from-the-source-in-the-same-run.md) | A claim paper's citation-check mode judges rests on a passage read from the source in the same run |

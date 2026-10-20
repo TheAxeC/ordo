@@ -1,6 +1,6 @@
 # 0019. A paper run is done by academic-paper's agent roles, each a fresh agent
 
-Status: proposed
+Status: superseded by 0022
 
 ## Context
 

@@ -1,6 +1,6 @@
 # 0018. A claim the paper skill judges rests on a passage read from the source in the same run
 
-Status: proposed
+Status: superseded by 0024
 
 ## Context
 

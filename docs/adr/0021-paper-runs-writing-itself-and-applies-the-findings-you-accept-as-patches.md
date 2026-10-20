@@ -1,6 +1,6 @@
 # 0021. Paper runs `/writing` itself and applies the findings you accept as patches
 
-Status: proposed
+Status: superseded by 0023
 
 ## Context
 
