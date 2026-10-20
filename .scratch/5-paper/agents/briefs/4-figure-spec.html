@@ -1,0 +1,787 @@
+<title>Paper against academic-paper</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: the cost table, the simple view of each mode, the detailed view of each mode, then the other modes, academic-pipeline and the skill map */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #1d2330; --muted: #5b6475; --line: #d5dae3;
+  --stop: #c2410c; --ruled: #4338ca; --ok: #15803d;
+  --sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12151c; --panel: #1a1f29; --fg: #e6e9ef; --muted: #9aa3b5; --line: #2e3544;
+  --stop: #fb923c; --ruled: #a5b4fc; --ok: #4ade80; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12151c; --panel: #1a1f29; --fg: #e6e9ef; --muted: #9aa3b5; --line: #2e3544;
+  --stop: #fb923c; --ruled: #a5b4fc; --ok: #4ade80; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.5; margin: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+main { max-width: 1280px; margin: 0 auto; display: grid; gap: 40px; }
+h1 { font-size: 1.9rem; margin: 0; text-wrap: balance; }
+h2 { font-size: 1.3rem; margin: 0 0 12px; text-transform: uppercase; letter-spacing: .06em; text-wrap: balance; }
+h3 { font-family: var(--mono); font-size: .95rem; margin: 0 0 8px; color: var(--muted); font-weight: 600; }
+h4 { margin: 24px 0 8px; font-size: 1.1rem; font-family: var(--mono); }
+p, li { max-width: 80ch; }
+code { font-family: var(--mono); font-size: .88em; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .95rem; margin-bottom: 12px; }
+.stopk { color: var(--stop); font-weight: 700; }
+.ruledk { color: var(--ruled); font-weight: 700; }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 900px) { .pair { grid-template-columns: 1fr; } }
+.side { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; overflow-x: auto; }
+.none { color: var(--muted); font-style: italic; margin: 4px 0 0; }
+.note { color: var(--muted); font-size: .92rem; margin: 8px 0 0; }
+pre.mermaid { margin: 0; background: transparent; }
+.src { color: var(--muted); font-size: .9rem; font-family: var(--mono); }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; background: var(--panel); }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+td.num { font-family: var(--mono); white-space: nowrap; }
+</style>
+
+<main>
+  <header style="display:grid;gap:12px">
+    <h1>paper against academic-paper</h1>
+    <p>Each mode of <code>paper</code> as your rulings of 2026-10-20 make it (open items J to W, booked in <code>plan.md</code> as commit <code>21a7a44</code>), beside the same mode of academic-paper 3.2.0, research-hub's copy. The skill on main at <code>b35651c</code> does not do this yet; step 4 is redone to it (your ruling on Q).</p>
+    <p>Two rulings hold for every mode and are not drawn: an unfinished run is offered for continuing, its finished steps skipped (Z), and intake of full and outline-only offers an earlier lit-review's review and <code>.bib</code> and an earlier outline-only's approved outline, which full then skips (Y).</p>
+    <p>The page has two views of each mode. The simple view draws the agents, the stops and the cycles, which set what a run costs. The detailed view draws every step, script and stop from each skill's files.</p>
+  </header>
+
+  <section>
+    <h2>What a run costs</h2>
+    <p>The count is the agent starts of a run of each mode: the fewest, and the most when every agent that runs only when needed does run and every cycle with a cap goes round once. Your own changes at intake and at the outline are not counted, since each adds one start in both skills. A cycle with no cap is named, not counted.</p>
+    <div class="tbl"><table>
+      <tr><th>Mode</th><th>academic-paper: agent starts</th><th>paper: agent starts</th><th>academic-paper: cycles</th><th>paper: cycles</th></tr>
+      <tr><td>full</td><td class="num">11 to 15</td><td class="num">7 to 15</td><td>outline restructuring, no cap; review round 2, once; formatter checklist, no cap</td><td>outline changes, no cap; review round 2, once; a rejected patch, once</td></tr>
+      <tr><td>revision</td><td class="num">3 to 6</td><td class="num">7 to 15</td><td>re-review round 2, once; a rejected patch, once</td><td>reading 2, once; a rejected patch, once</td></tr>
+      <tr><td>lit-review</td><td class="num">2</td><td class="num">1 to 2</td><td>none</td><td>a rejected patch, once</td></tr>
+      <tr><td>outline-only</td><td class="num">3</td><td class="num">2</td><td>outline restructuring, no cap</td><td>outline changes, no cap</td></tr>
+      <tr><td>abstract-only</td><td class="num">2</td><td class="num">1</td><td>none</td><td>a rejected patch, once</td></tr>
+      <tr><td>citation-check</td><td class="num">1</td><td class="num">1 to 2</td><td>none</td><td>a rejected patch, once</td></tr>
+      <tr><td>disclosure</td><td class="num">0 to 1</td><td class="num">1</td><td>none</td><td>a rejected patch, once</td></tr>
+    </table></div>
+    <ul class="note">
+      <li>academic-paper full writes its draft in two separate calls (the pre-commitment, then the draft) and its peer review in two (the scoring plan, then the review), each counted as a start (<code>SKILL.md</code>, "Four-call structure"). Its files do not say whether the revision and round 2 repeat the first call; each is counted as one.</li>
+      <li>academic-paper's intake is an agent and is counted; paper's intake is the session's own interview (D24) and is not.</li>
+      <li>paper's full and revision counts hold the 4 agents of <code>/writing</code> (3 finding agents and a checking agent, <code>skills/writing/SKILL.md</code> Steps 6 and 8), which D46 puts at the end of both modes.</li>
+      <li>academic-paper's disclosure mode: its mode table names the formatter, while its mode guide runs the protocol in the session.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The simple view</h2>
+    <div class="legend">
+      <span>Solid box: an agent start that always runs</span>
+      <span>Dashed box: an agent start that runs only when needed</span>
+      <span class="stopk">Orange box: the run stops for you</span>
+      <span>Dotted arrow: a cycle, with its cap</span>
+      <span>Dotted loop on one agent: a check it repeats inside its own start, with its cap; it adds no start</span>
+    </div>
+    <p class="note">Scripts and the session's own steps are left out. Not drawn because they are the same in every mode of paper: at every agent start, a model other than the configured one stops the run (D47); at every patch, a structural patch, a patch that does not apply or a failed script stops it (open item C).</p>
+
+    <h4>full</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake agent: you confirm"]:::stop --> L["Literature strategist, unless you give your own sources"]:::maybe
+  L --> LR["You review the sources, optional"]:::stop
+  L -.->|"search passes, up to 4"| L
+  LR --> A["Structure architect"]
+  A --> OA["Outline approval"]:::stop
+  OA -.->|"restructuring, no cap"| A
+  OA --> B["Argument builder"]
+  B --> W["Draft writer, 2 calls"]
+  B --> V["Visualization, with data"]:::maybe
+  V -.->|"checks the rendered figure, up to 2 fixes, optional"| V
+  W --> C["Citation compliance"]
+  W --> AB["Abstract agent"]
+  C --> P["Peer reviewer, 2 calls"]
+  AB --> P
+  P -.->|"Minor or Major: round 2, once"| WR["Draft writer: the whole draft again"]
+  WR -.-> P
+  P -->|"Reject, or a Critical issue after round 2"| SD["You decide"]:::stop
+  P --> RA["RAISE compliance agent"]
+  RA --> F["Formatter"]
+  V --> F
+  F -.->|"a checklist item fails, no cap"| F
+  F -->|"a citation unverified"| G["Output refused"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef maybe fill:#ffffff,stroke:#64748b,stroke-dasharray:6 4,color:#1e293b
+</pre><p class="note">Also stops for you: a draft that fails its format check twice, and a claim not in its source.</p></div>
+      <div class="side"><h3>paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: you confirm"]:::stop --> L["Literature strategist, unless you skip it"]:::maybe
+  L --> LR["You review the sources, optional"]:::stop
+  L -.->|"search passes, up to 4"| L
+  LR --> PL["Planner"]
+  PL --> OA["Outline approval"]:::stop
+  OA -.->|"changes, no cap"| PL
+  OA --> W["Draft writer"]
+  OA --> V["Visualization, with data"]:::maybe
+  V -.->|"checks the rendered figure, up to 2 fixes"| V
+  W --> P["Peer reviewer"]
+  V --> P
+  P -.->|"Minor or Major: round 2, once"| WR["Draft writer: a patch"]
+  WR -.-> P
+  P -->|"Reject, or a Critical issue after round 2"| SD["You decide"]:::stop
+  P --> RF["Draft writer: reference fix"]:::maybe
+  RF -->|"strict: a reference still fails"| SD
+  RF --> CF["Draft writer: compile fix"]:::maybe
+  CF --> WG["/writing: 4 agents"]
+  WG --> RP["Your reply to the report"]:::stop
+  RP --> WA["Draft writer: applies what you pick"]:::maybe
+  WA --> CF2["Draft writer: compile fix"]:::maybe
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef maybe fill:#ffffff,stroke:#64748b,stroke-dasharray:6 4,color:#1e293b
+</pre></div>
+    </div>
+
+    <h4>revision</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper</h3>
+<pre class="mermaid">
+flowchart TD
+  P["Peer reviewer: the comments as a roadmap"] --> W["Draft writer: a patch"]
+  W -->|"restructuring, or a patch rejected twice"| SD["You decide"]:::stop
+  W --> C["Citation compliance"]
+  C -.->|"round 2, once"| P
+  C --> X["Revised draft, the rest as limitations"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+      <div class="side"><h3>paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: you confirm"]:::stop --> P["Peer reviewer: the comments as items"]
+  P --> LS["Literature strategist, for a new reference"]:::maybe
+  LS -.->|"search passes, up to 4"| LS
+  P --> V["Visualization, for a figure"]:::maybe
+  V -.->|"checks the rendered figure, up to 2 fixes"| V
+  P --> W["Draft writer: a patch per item"]
+  LS --> W
+  V --> W
+  W --> R["Peer reviewer: reading"]
+  R -.->|"items not resolved: reading 2, once"| W2["Draft writer: one pass"]
+  W2 -.-> R
+  R --> RF["Draft writer: reference fix"]:::maybe
+  RF -->|"strict: a reference still fails"| SD["You decide"]:::stop
+  RF --> CF["Draft writer: compile fix"]:::maybe
+  CF --> WG["/writing: 4 agents"]
+  WG --> RP["Your reply to the report"]:::stop
+  RP --> WA["Draft writer: applies what you pick"]:::maybe
+  WA --> CF2["Draft writer: compile fix"]:::maybe
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef maybe fill:#ffffff,stroke:#64748b,stroke-dasharray:6 4,color:#1e293b
+</pre></div>
+    </div>
+
+    <h4>lit-review</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake agent: you confirm"]:::stop --> L["Literature strategist"]
+  L --> LR["You review the sources, optional"]:::stop
+  L -.->|"search passes, up to 4"| L
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+      <div class="side"><h3>paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: you confirm"]:::stop --> L["Literature strategist"]
+  L --> LR["You review the sources, optional"]:::stop
+  L -.->|"search passes, up to 4"| L
+  LR --> RF["Draft writer: reference fix, when a .tex is given"]:::maybe
+  RF -->|"strict: a reference still fails"| SD["You decide"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef maybe fill:#ffffff,stroke:#64748b,stroke-dasharray:6 4,color:#1e293b
+</pre></div>
+    </div>
+
+    <h4>outline-only</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake agent: you confirm"]:::stop --> L["Literature strategist"]
+  L --> LR["You review the sources, optional"]:::stop
+  L -.->|"search passes, up to 4"| L
+  LR --> A["Structure architect"]
+  A --> OA["Outline approval"]:::stop
+  OA -.->|"restructuring, no cap"| A
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+      <div class="side"><h3>paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: you confirm"]:::stop --> L["Literature strategist"]
+  L --> LR["You review the sources, optional"]:::stop
+  L -.->|"search passes, up to 4"| L
+  LR --> PL["Planner: outline and argument map"]
+  PL --> OA["Outline approval"]:::stop
+  OA -.->|"changes, no cap"| PL
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+    </div>
+
+    <h4>abstract-only</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake agent: you confirm"]:::stop --> AB["Abstract agent"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+      <div class="side"><h3>paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: you confirm"]:::stop --> W["Draft writer: the abstract"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+    </div>
+
+    <h4>citation-check</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper</h3>
+<pre class="mermaid">
+flowchart TD
+  C["Citation compliance"] -->|"a claim not in its source"| SD["You decide"]:::stop
+  C --> X["Citation audit report"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+      <div class="side"><h3>paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: you confirm"]:::stop --> C["Citation compliance"]
+  C -->|"a claim the source does not hold, or a reference no lookup confirms"| SD["You decide"]:::stop
+  C --> C2["Citation compliance once more, when a check fails"]:::maybe
+  C2 --> X["Citation report"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef maybe fill:#ffffff,stroke:#64748b,stroke-dasharray:6 4,color:#1e293b
+</pre></div>
+    </div>
+
+    <h4>disclosure</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper</h3>
+<pre class="mermaid">
+flowchart TD
+  S["You name the venue, and paste the policy of a venue it does not know"]:::stop --> U["You confirm each uncertain kind of AI use"]:::stop
+  U --> F["Formatter"]:::maybe
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef maybe fill:#ffffff,stroke:#64748b,stroke-dasharray:6 4,color:#1e293b
+</pre></div>
+      <div class="side"><h3>paper</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: the venue, its policy when not listed,<br/>each kind of AI use; you confirm"]:::stop --> W["Draft writer: the statements"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The detailed view</h2>
+    <div class="legend">
+      <span class="stopk">Orange box: the run stops for you</span>
+      <span>Dotted arrow: a cycle back, with its cap</span>
+      <span>Grey box: a script</span>
+      <span>Plain box, no tag: as academic-paper does it</span>
+      <span class="ruledk">Indigo box, "[D44]" or "[K]": differs from academic-paper by your ruling, a D number or the letter of the open item you ruled on 2026-10-20</span>
+    </div>
+
+    <h4>full</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper 3.2.0</h3>
+<pre class="mermaid">
+flowchart TD
+  I0["Phase 0 Intake: configuration record<br/>citation verification: mark only or strict"]:::stop
+  I0 --> Q1{"you skip Phase 1,<br/>giving your own sources?"}
+  Q1 -->|"no, the default"| L1["Phase 1 Literature strategist<br/>screens your sources, searches for what they miss,<br/>unless you say your sources only"]
+  Q1 -->|"yes"| O2
+  L1 --> R1["You review the sources: add or remove, optional"]:::stop
+  R1 --> O2["Phase 2 Structure architect: outline and evidence map"]
+  O2 --> OA["Outline approval"]:::stop
+  OA -.->|"you ask for restructuring, no cap stated"| O2
+  OA --> A3["Phase 3 Argument builder"]
+  A3 --> W4["Phase 4 Draft writer<br/>4a pre-commitment, 4b draft and self-scores"]
+  A3 --> V4["Visualization, when there are quantitative results:<br/>figure code and LaTeX inclusion code"]
+  W4 -->|"format check fails twice"| AB["Phase aborted: you decide"]:::stop
+  W4 --> C5["Phase 5a Citation compliance: corrects format and DOIs,<br/>flags a wrong source, stops on a claim not in its source"]
+  W4 --> B5["Phase 5b Abstract agent, in parallel"]
+  C5 --> P6["Phase 6 Peer reviewer, round 1<br/>6a scoring plan, 6b scores and verdict"]
+  B5 --> P6
+  P6 -->|"Reject"| UD["You decide"]:::stop
+  P6 -->|"Minor or Major"| W6["Draft writer: revises, a full draft again"]
+  W6 -.->|"round 2, the last"| P62["Peer reviewer, round 2: the revised sections"]
+  P62 -->|"below 6.5, a Critical issue unresolved"| UD
+  P62 -->|"6.5 or more, or every Critical resolved:<br/>the rest become limitations"| RA
+  P6 -->|"Accept"| RA["RAISE compliance check, warnings only"]
+  RA --> F7["Phase 7 Formatter: adds the AI disclosure and limitations if missing,<br/>places the figures, converts, compiles with tectonic or xelatex"]
+  V4 --> F7
+  F7 --> K7["Final checklist: content, format, required elements, DOIs<br/>compile errors fixed, warnings accepted"]
+  K7 -.->|"an item fails: fix it and check it again, no cap"| F7
+  K7 --> G7{"Hard gate: a citation unverified, fabricated<br/>or unsupported, or blocked under strict?"}
+  G7 -->|"yes"| U7["Output refused: you fix it"]:::stop
+  G7 -->|"no"| X7["Output package"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre>
+<p class="note">Sources: SKILL.md Checkpoint rules 1 to 5, :143, :236-239, :333; references/workflow_phase_details.md; agents/intake_agent.md:260-280; agents/literature_strategist_agent.md:270-290; agents/structure_architect_agent.md:284; agents/peer_reviewer_agent.md:62-69, :406-430; agents/visualization_agent.md:22, :451; agents/citation_compliance_agent.md:128-140; agents/formatter_agent.md:191-203, :309-372, :480-518, :676-681, :853-866.</p></div>
+      <div class="side"><h3>paper, as ruled</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: config.md, the session's interview [D24]<br/>skip the search? DOI checking [O], the venue's policy [W]"]:::stop
+  I -.->|"you change it, until you confirm [R]"| I
+  I --> Q{"you skip the search? [J]"}:::ruled
+  Q -->|"no, the default"| LS["Literature strategist: screens your sources,<br/>searches for what they miss [J]"]:::ruled
+  Q -->|"yes"| PL
+  LS --> SR["You review the sources: add or remove, optional [J]"]:::stop
+  SR --> PL["Planner: outline and evidence map, argument map<br/>one role for structure architect and argument builder [D43]"]:::ruled
+  PL --> OA["Outline approval"]:::stop
+  OA -.->|"you ask for changes, until you approve [R]"| PL
+  OA --> DW["Draft writer: first draft, with abstract, keywords and six statements,<br/>figure places marked [S], the disclosure names the model [N],<br/>no pre-commitment or self-scores [D43, D45]"]:::ruled
+  OA --> VZ["Visualization, when the materials hold data, beside the writer [D43]:<br/>figures and their LaTeX, placed as its own patch [S]"]:::ruled
+  DW --> SC["Script: cite-keys, check-urls, output to round 1<br/>in place of citation compliance and the abstract agent [D44, D43]"]:::ruled
+  VZ --> SC
+  SC --> R1["Peer reviewer, round 1: fixed criteria, no scoring plan [D45]"]:::ruled
+  R1 -->|"Reject"| NP["The draft review does not pass"]:::stop
+  R1 -->|"Minor or Major"| W1["Draft writer: round 1 issues, a patch [C]"]:::ruled
+  W1 -.->|"round 2, the last"| R2["Peer reviewer, round 2 [D45]"]:::ruled
+  R2 -->|"a Critical issue unresolved"| NP
+  R2 -->|"otherwise: the rest become limitations [U]"| RC
+  R1 -->|"Accept"| RC["Script: reference checks"]:::script
+  RC -->|"a failure"| RF["Draft writer: reference-fix, once [K]"]:::ruled
+  RF --> RC2["Script: reference checks again, failures left named [K]"]:::script
+  RC2 -->|"strict: a reference still fails [O]"| SS["A reference that cannot be confirmed [O]"]:::stop
+  RC --> CP
+  RC2 --> CP["Session: compile in a copy, no formatter [M]"]:::ruled
+  CP -->|"fails, or a layout fault [M]"| CF["Draft writer: compile-fix, once [M]"]:::ruled
+  CF --> CP2["Session: compile once more, the rest named [M]"]:::ruled
+  CP --> WR
+  CP2 --> WR["/writing review: 4 agents [D46]"]:::ruled
+  WR --> FM["Final message: the numbered report [D46]"]:::stop
+  FM -->|"your one-line reply, up to 3 answers [R],<br/>or an autonomous pass [D46]"| WA["Draft writer: applies the findings, then the compile again [D46]"]:::ruled
+  PS["At every patch: a structural patch, a patch that does not apply, a script failed [C]"]:::stop
+  MS["At every agent start: a model other than the configured one [D47]"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef ruled fill:#eef2ff,stroke:#4338ca,stroke-width:2px,color:#312e81
+  classDef script fill:#eceff3,stroke:#64748b,color:#1e293b
+</pre>
+<p class="note">No RAISE check (V) and no hard gate: what the hard gate refuses is handled by K and O. academic-paper's conversion to DOCX and Markdown is paper's format-convert mode at entry 15.A (D3, D25).</p></div>
+    </div>
+
+    <h4>revision</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper 3.2.0</h3>
+<pre class="mermaid">
+flowchart TD
+  RP["Peer reviewer: the comments as a revision roadmap"] --> AN["Script: anchorize the draft"]:::script
+  AN --> RW["Draft writer: a patch, never a full draft"]
+  RW --> AP["Script: apply the patch to a new file"]:::script
+  AP -.->|"exit 2: the writer emits the patch once more"| RW
+  AP -->|"a second rejection"| D1["You decide: retry, full re-emission or abort"]:::stop
+  AP -->|"exit 3, structural"| D2["You acknowledge it, or the patch is narrowed"]:::stop
+  RW -->|"the round needs restructuring"| D3["You confirm a full re-emission"]:::stop
+  AP --> RC["Citation compliance on the revised draft"]
+  RC -.->|"round 2: re-review, the last"| RP
+  RC -->|"after round 2: the rest become limitations"| RX["Revised draft, apply report, revision log"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef script fill:#eceff3,stroke:#64748b,color:#1e293b
+</pre>
+<p class="note">No compile and no formatter in this mode. Its agents are the peer reviewer, the draft writer and citation compliance; the mode table lists no intake agent for it, while the intake page's mode list names it. Sources: SKILL.md :266-270, :324-333, Checkpoint rule 3; references/mode_selection_guide.md:98-113; references/revision_patch_protocol.md:23-58.</p></div>
+      <div class="side"><h3>paper, as ruled</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: config.md, the run's permissions, DOI checking [D24, Stops of paper, O]"]:::stop
+  I -.->|"you change it, until you confirm [R]"| I
+  I --> IT["Peer reviewer: the comments as items.md"]
+  IT -->|"an item needs a new reference, intake allows it"| LS["Literature strategist: a .bib patch [Stops of paper]"]:::ruled
+  IT -->|"an item needs a figure change, intake allows it"| VZ["Visualization [Stops of paper]"]:::ruled
+  IT --> AN["Script: anchorize the files"]:::script
+  LS --> AN
+  VZ --> AN
+  AN --> DW["Draft writer: a patch per item"]
+  DW --> AP["Script: apply the patch"]:::script
+  AP -.->|"rejected: the writer emits the patch once more"| DW
+  AP -->|"a second rejection"| D1["A patch that does not apply"]:::stop
+  AP -->|"exit 3, structural"| D2["A structural patch"]:::stop
+  AP --> SC["Script: reference checks, failures are items of reading 1 [D49, K]"]:::ruled
+  SC --> RD1["Peer reviewer: reading 1 [D49]"]:::ruled
+  RD1 -->|"items not resolved"| W2["Draft writer: the one pass [D49]"]:::ruled
+  W2 --> SC2["Script: reference checks, failures are items of reading 2 [K]"]:::ruled
+  SC2 -.->|"reading 2, the last"| RD2["Peer reviewer: reading 2 [D49]"]:::ruled
+  RD1 -->|"all resolved"| CP
+  RD2 -->|"items left become limitations"| CP
+  RD2 -->|"a reference still failing"| RF["Draft writer: reference-fix, once [K]"]:::ruled
+  RF --> RC3["Script: reference checks again, failures left named [K]"]:::script
+  RC3 -->|"strict: a reference still fails [O]"| SS["A reference that cannot be confirmed [O]"]:::stop
+  RC3 --> CP["Session: compile in a copy [D46]"]:::ruled
+  CP -->|"fails, or a layout fault [M]"| CF["Draft writer: compile-fix, once [M]"]:::ruled
+  CF --> CP2["Session: compile once more, the rest named [M]"]:::ruled
+  CP --> WR
+  CP2 --> WR["/writing review: 4 agents [D46]"]:::ruled
+  WR --> FM["Final message: the numbered report [D46]"]:::stop
+  FM -->|"your one-line reply, up to 3 answers [R],<br/>or an autonomous pass [D46]"| WA["Draft writer: applies the findings, then the compile again [D46]"]:::ruled
+  PS["At every patch: a script failed"]:::stop
+  MS["At every agent start: a model other than the configured one [D47]"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef ruled fill:#eef2ff,stroke:#4338ca,stroke-width:2px,color:#312e81
+  classDef script fill:#eceff3,stroke:#64748b,color:#1e293b
+</pre>
+<p class="note">"Stops of paper" is your ruling of that name in plan.md's Rulings. paper has no full re-emission: a structural patch is acknowledged or narrowed once (open item C).</p></div>
+    </div>
+
+    <h4>lit-review</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper 3.2.0</h3>
+<pre class="mermaid">
+flowchart TD
+  LI["Intake<br/>citation verification: mark only or strict"]:::stop --> LL["Literature strategist"]
+  LL --> LR["You review the sources: add or remove, optional"]:::stop
+  LR --> LX["Annotated bibliography, literature matrix, synthesis"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre><p class="none">No cycle, no reference check, no manuscript changed. Sources: SKILL.md :272; references/mode_selection_guide.md:133-146; references/workflow_phase_details.md Phase 1.</p></div>
+      <div class="side"><h3>paper, as ruled</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: config.md, DOI checking [D24, O]"]:::stop
+  I -.->|"you change it, until you confirm [R]"| I
+  I --> LS["Literature strategist, once: review.md, refs.bib,<br/>a .bib patch when a .tex is given [D48, D2]"]:::ruled
+  LS --> SR["You review the sources: add or remove, optional [J]"]:::stop
+  SR -->|"no .tex"| X["End"]
+  SR -->|".tex given"| AP["Script: apply the .bib patch [D48]"]:::script
+  AP --> RC["Script: reference checks [D48]"]:::script
+  RC -->|"a failure"| RF["Draft writer: reference-fix, once [K]"]:::ruled
+  RF --> RC2["Script: reference checks again, failures left named [K]"]:::script
+  RC2 -->|"strict: a reference still fails [O]"| SS["A reference that cannot be confirmed [O]"]:::stop
+  RC --> X
+  RC2 --> X
+  PS["At every patch: a structural patch, a patch that does not apply, a script failed [C]"]:::stop
+  MS["At every agent start: a model other than the configured one [D47]"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef ruled fill:#eef2ff,stroke:#4338ca,stroke-width:2px,color:#312e81
+  classDef script fill:#eceff3,stroke:#64748b,color:#1e293b
+</pre></div>
+    </div>
+
+    <h4>outline-only</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper 3.2.0</h3>
+<pre class="mermaid">
+flowchart TD
+  OI["Intake<br/>citation verification: mark only or strict"]:::stop --> OL["Literature strategist"]
+  OL --> OR["You review the sources: add or remove, optional"]:::stop
+  OR --> OS["Structure architect: outline and evidence map"]
+  OS --> OA["Outline approval"]:::stop
+  OA -.->|"you ask for restructuring, no cap stated"| OS
+  OA --> OX["Outline, evidence map, word count per section"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre><p class="none">No argument builder. Sources: SKILL.md :269; references/mode_selection_guide.md:57-70 (phases 0 to 2); references/workflow_phase_details.md Phases 1 and 2.</p></div>
+      <div class="side"><h3>paper, as ruled</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: config.md [D24]"]:::stop
+  I -.->|"you change it, until you confirm [R]"| I
+  I --> LS["Literature strategist, always [J]"]:::ruled
+  LS --> SR["You review the sources: add or remove, optional [J]"]:::stop
+  SR --> PL["Planner: outline and evidence map,<br/>argument map with its weak-argument signs [D43, T]"]:::ruled
+  PL --> OA["Outline approval"]:::stop
+  OA -.->|"you ask for changes, until you approve [R]"| PL
+  OA --> X["Outline, evidence map and argument map [T]"]:::ruled
+  MS["At every agent start: a model other than the configured one [D47]"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef ruled fill:#eef2ff,stroke:#4338ca,stroke-width:2px,color:#312e81
+</pre></div>
+    </div>
+
+    <h4>abstract-only</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper 3.2.0</h3>
+<pre class="mermaid">
+flowchart TD
+  AI["Intake<br/>citation verification: mark only or strict"]:::stop --> AB["Abstract agent"]
+  AB --> AX["Abstract and keywords"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre><p class="none">No cycle. Sources: SKILL.md :271; references/mode_selection_guide.md:117-129.</p></div>
+      <div class="side"><h3>paper, as ruled</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: config.md [D24]"]:::stop
+  I -.->|"you change it, until you confirm [R]"| I
+  I --> FD["Session: grep for the file that holds the abstract environment,<br/>since the patch must name that file [C]"]:::script
+  FD --> DW["Draft writer, in place of the abstract agent:<br/>abstract and keywords, one patch [T]"]:::ruled
+  DW --> X["Abstract and keywords"]
+  PS["At every patch: a structural patch, a patch that does not apply, a script failed [C]"]:::stop
+  MS["At every agent start: a model other than the configured one [D47]"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef ruled fill:#eef2ff,stroke:#4338ca,stroke-width:2px,color:#312e81
+  classDef script fill:#eceff3,stroke:#64748b,color:#1e293b
+</pre></div>
+    </div>
+
+    <h4>citation-check</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper 3.2.0</h3>
+<pre class="mermaid">
+flowchart TD
+  CC["Citation compliance agent, one pass:<br/>cross-check, format, DOI, retractions"] --> CD{"each issue"}
+  CD -->|"formatting only"| CA["Corrected, logged"]
+  CD -->|"right claim, wrong source"| CH["Flagged for your review"]
+  CD -->|"the claim drifts from its source"| CW["Revised wording suggested"]
+  CD -->|"the claim is not in its source"| CS["STOP: possible fabrication"]:::stop
+  CD -->|"a retracted source"| CR["Removed, or kept with a note"]
+  CA --> CX["Citation audit report"]
+  CH --> CX
+  CW --> CX
+  CR --> CX
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre><p class="none">One pass, no second run. The mode table lists no intake agent for it, while the intake page's mode list names it. Sources: SKILL.md :274; references/mode_selection_guide.md:167-180; agents/citation_compliance_agent.md:119-160, :342-370.</p></div>
+      <div class="side"><h3>paper, as ruled</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: config.md, DOI checking strict or mark only [D24, O]"]:::stop
+  I -.->|"you change it, until you confirm [R]"| I
+  I --> SC["Script: cite-keys, check-urls [entry 5's goal]"]:::script
+  SC --> CC["Citation compliance agent: fetches each source and reads<br/>the passage each claim cites [D50, D22]"]:::ruled
+  CC --> CD{"each issue"}
+  CD -->|"formatting, one right answer"| CA["Corrected by a patch, logged"]
+  CD -->|"right claim, wrong source"| CH["Flagged for your review"]
+  CD -->|"the claim drifts from its source"| CW["Revised wording suggested, no patch"]
+  CD -->|"the claim is not in its source,<br/>or the source cannot be read [D22]"| S2["A claim the run cannot support"]:::stop
+  CD -->|"a retracted source"| CR["Replaced by a candidate whose passage holds the claim, as a patch;<br/>flagged for you when none does [X]"]:::ruled
+  CD -->|"no lookup confirms a reference,<br/>or under strict a DOI fails [O]"| S1["A reference that cannot be confirmed"]:::stop
+  CA --> RC
+  CH --> RC
+  CW --> RC
+  CR --> RC["Script: cite-keys, check-urls, quote-check [D50, D22]"]:::script
+  RC -->|"a failure"| CC2["Citation compliance agent again, fresh, once [L]"]:::ruled
+  CC2 --> RC2["Script: the three checks again, failures left named [L]"]:::script
+  RC --> X["Citation report, checks.md"]
+  RC2 --> X
+  PS["At every patch: a structural patch, a patch that does not apply, a script failed [C]"]:::stop
+  MS["At every agent start: a model other than the configured one [D47]"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef ruled fill:#eef2ff,stroke:#4338ca,stroke-width:2px,color:#312e81
+  classDef script fill:#eceff3,stroke:#64748b,color:#1e293b
+</pre><p class="note">Source: references/citation-compliance.md:40-60, :78-86, :127-145. A retracted source follows academic-paper's retraction protocol (your ruling on X); it differs only in that the replacement's passage is read in the run before it is used (D22, D50).</p></div>
+    </div>
+
+    <h4>disclosure</h4>
+    <div class="pair">
+      <div class="side"><h3>academic-paper 3.2.0</h3>
+<pre class="mermaid">
+flowchart TD
+  SL{"a venue or a policy anchor given?"} -->|"neither"| SA["You name one"]:::stop
+  SL -->|"a venue"| VL{"venue in the policy database?"}
+  SL -->|"a policy anchor"| PA["Anchor table lookup"]
+  VL -->|"no"| VP["Halt: you paste the venue's policy"]:::stop
+  VL -->|"yes"| CG
+  VP --> CG
+  SA --> SL
+  PA --> CG["Each kind of AI use marked used, not used or uncertain"]
+  CG -->|"uncertain"| CU["You confirm it"]:::stop
+  CG --> MD["Session metadata: the model of this run"]
+  CU --> MD
+  MD --> DD["Disclosure paragraph: Claude, the model's name, (Anthropic),<br/>in the venue's voice and phrasing"]
+  DD --> DX["Paragraph and placement"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre><p class="none">No cycle. The mode table lists agent 9, the formatter; the mode guide says the disclosure protocol runs standalone. Sources: SKILL.md :277; references/mode_selection_guide.md:203-216; references/disclosure_mode_protocol.md:10-126.</p></div>
+      <div class="side"><h3>paper, as ruled</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake: config.md, the venue, each kind of AI use;<br/>you confirm every uncertain one [D24]"]:::stop
+  I -.->|"you change it, until you confirm [R]"| I
+  I --> VL{"the venue listed?"}
+  VL -->|"yes"| MI
+  VL -->|"not listed: you paste its policy, at intake [W]"| MI
+  VL -->|"no venue yet: the generic statement [W]"| MI
+  MI["Session: the model the alias claude:opus points to today,<br/>such as claude-opus-5-5 [N]"]:::ruled
+  MI --> DW["Draft writer: the statements as a patch, disclosure.md;<br/>the disclosure names that model [D43, D47]"]:::ruled
+  DW --> X["Statements and placement"]
+  PS["At every patch: a structural patch, a patch that does not apply, a script failed [C]"]:::stop
+  MS["At every agent start: a model other than the configured one [D47]"]:::stop
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+  classDef ruled fill:#eef2ff,stroke:#4338ca,stroke-width:2px,color:#312e81
+</pre><p class="note">The other statements are written when the venue or you ask (C108 part 4). paper has no policy-anchor track.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The modes academic-paper has and paper does not</h2>
+    <div class="pair">
+      <div class="side"><h3>academic-paper plan</h3>
+<pre class="mermaid">
+flowchart TD
+  I["Intake, 3 questions"]:::stop --> M["Socratic mentor, chapter by chapter"]
+  M --> S["Structure architect"]
+  S --> A["Argument builder"]
+  A --> X["Chapter plan and INSIGHT collection"]
+  classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
+</pre></div>
+      <div class="side"><h3>Ordo</h3>
+<pre class="mermaid">
+flowchart LR
+  P["paper plan mode, entry 15.A"]:::todo
+  classDef todo fill:transparent,stroke:#64748b,stroke-dasharray:6 4,color:#475569
+</pre><p class="note">D3: plan mode stays in paper and is built at entry 15.A. Today <code>/paper plan</code> is refused with the line that plan mode is not among the modes.</p></div>
+      <div class="side"><h3>academic-paper format-convert</h3>
+<pre class="mermaid">
+flowchart LR
+  F["Formatter: LaTeX, DOCX, PDF, Markdown, citation style"] --> X["Formatted document"]
+</pre></div>
+      <div class="side"><h3>Ordo</h3>
+<pre class="mermaid">
+flowchart LR
+  P["paper format-convert, entry 15.A"]:::todo
+  classDef todo fill:transparent,stroke:#64748b,stroke-dasharray:6 4,color:#475569
+</pre></div>
+      <div class="side"><h3>academic-paper revision-coach</h3>
+<pre class="mermaid">
+flowchart LR
+  R["Revision coach: the referee comments"] --> X["Revision roadmap, tracking template,<br/>response letter skeleton"]
+</pre></div>
+      <div class="side"><h3>Ordo</h3>
+<pre class="mermaid">
+flowchart LR
+  P["rebuttal, entry 7"]:::todo
+  classDef todo fill:transparent,stroke:#64748b,stroke-dasharray:6 4,color:#475569
+</pre></div>
+      <div class="side"><h3>academic-paper rebuttal-audit</h3>
+<pre class="mermaid">
+flowchart LR
+  R["Revision coach, parsing only: the comments and your response draft"] --> X["Coverage per comment, gaps, risk flags"]
+</pre></div>
+      <div class="side"><h3>Ordo</h3>
+<pre class="mermaid">
+flowchart LR
+  P["rebuttal, entry 7"]:::todo
+  classDef todo fill:transparent,stroke:#64748b,stroke-dasharray:6 4,color:#475569
+</pre></div>
+    </div>
+    <p class="note">Sources: SKILL.md :273-278, :306-320; references/mode_selection_guide.md:74-94, :150-163, :184-237.</p>
+  </section>
+
+  <section>
+    <h2>academic-pipeline and where its stages go</h2>
+    <div class="legend">
+      <span><b>Green</b>: academic-paper</span>
+      <span><b>Purple</b>: academic-paper-reviewer</span>
+      <span><b>Grey</b>: academic-pipeline itself</span>
+      <span><b>Sand</b>: deep-research</span>
+      <span><b>Teal</b>: paper</span>
+      <span class="stopk">The pipeline stops for you after every stage</span>
+    </div>
+    <div class="pair">
+      <div class="side"><h3>academic-pipeline: the 10 stages</h3>
+<pre class="mermaid">
+flowchart TD
+  S1["1 Research: deep-research"]:::dr --> S2["2 Write: academic-paper, plan or full"]:::ap
+  S2 --> S25["2.5 Integrity check"]:::pipe
+  S25 -.->|"fail: fix and check again, up to 3 rounds"| S25
+  S25 -->|"pass"| S3["3 Review: academic-paper-reviewer"]:::rev
+  S3 -->|"Reject"| RJ["Back to stage 2, or end"]
+  S3 -->|"Minor or Major"| S4["4 Revise: academic-paper revision"]:::ap
+  S4 --> S3b["3' Re-review"]:::rev
+  S3b -->|"Major"| S4b["4' Re-revise, no review after"]:::ap
+  S3b -->|"Accept or Minor"| S45
+  S3 -->|"Accept"| S45
+  S4b --> S45["4.5 Final integrity check, zero issues to pass"]:::pipe
+  S45 -.->|"fail: fix and check again"| S45
+  S45 -->|"pass"| S5["5 Finalize: DOCX, LaTeX, PDF"]:::ap
+  S5 --> S6["6 Process summary"]:::pipe
+  classDef ap fill:#e3f4e8,stroke:#15803d,color:#14532d
+  classDef rev fill:#efe7fb,stroke:#7c3aed,color:#3b0764
+  classDef pipe fill:#eceff3,stroke:#64748b,color:#1e293b
+  classDef dr fill:#f6eedc,stroke:#a16207,color:#422006
+</pre><p class="note">Source: academic-pipeline/SKILL.md:101-134, :140-191.</p></div>
+      <div class="side"><h3>where each stage goes now</h3>
+<pre class="mermaid">
+flowchart LR
+  A1["1 Research: deep-research"]:::dr
+  A2["2 Write: academic-paper"]:::ap
+  A3["2.5 Integrity check"]:::pipe
+  A4["3 Review"]:::rev
+  A5["4, 3', 4' Revise and re-review"]:::ap
+  A6["4.5 Final integrity check"]:::pipe
+  A7["5 Finalize"]:::ap
+  A8["6 Process summary"]:::pipe
+  P1["paper full"]:::paper
+  P2["paper revision"]:::paper
+  RS["researcher, entry 13<br/>integrity and ethics checks, the stage loop"]:::todo
+  PRV["paper-review, entry 6"]:::todo
+  FC["paper format-convert, entry 15.A"]:::todo
+  NO["none"]:::none
+  A1 -.-> RS
+  A2 --> P1
+  A3 -.-> RS
+  A4 -.-> PRV
+  A5 --> P2
+  A6 -.-> RS
+  A7 -.-> FC
+  A8 -.-> NO
+  classDef ap fill:#e3f4e8,stroke:#15803d,color:#14532d
+  classDef rev fill:#efe7fb,stroke:#7c3aed,color:#3b0764
+  classDef pipe fill:#eceff3,stroke:#64748b,color:#1e293b
+  classDef dr fill:#f6eedc,stroke:#a16207,color:#422006
+  classDef paper fill:#dff3f1,stroke:#0f766e,color:#134e4a
+  classDef todo fill:transparent,stroke:#64748b,stroke-dasharray:6 4,color:#475569
+  classDef none fill:transparent,stroke:#b91c1c,stroke-dasharray:2 3,color:#991b1b
+</pre><p class="note">D42 and D56: the integrity and ethics checks run in researcher, once on paper's finished draft and once after its revision.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The skill map</h2>
+    <div class="legend">
+      <span><b>Solid box</b>: built</span>
+      <span><b>Dashed box</b>: not built yet, with its roadmap entry</span>
+      <span>Arrow label: how many of the source skill's files go there, from <code>docs/academic-coverage.md</code></span>
+    </div>
+    <div class="side">
+<pre class="mermaid">
+flowchart LR
+  subgraph RH[research-hub academic skills]
+    AP[academic-paper]
+    APR[academic-paper-reviewer]
+    PIPE[academic-pipeline]
+    DR[deep-research]
+    AR[academic-researcher]
+  end
+  subgraph ORDO[Ordo skills]
+    PAPER[paper, entry 5]
+    WR[writing, entry 3]
+    PR[paper-review, entry 6]:::todo
+    REF[referee, entry 7.A]:::todo
+    REB[rebuttal, entry 7]:::todo
+    RES[researcher, entry 13]:::todo
+    IDEA[idea, entry 10]:::todo
+    SUB[submit-manuscript, entry 14]:::todo
+    NONE[no counterpart]:::none
+  end
+  AP -->|28 now, 7 later| PAPER
+  AP -->|5| REB
+  AP -->|3| WR
+  AP -->|1| RES
+  AP -->|1| SUB
+  APR -->|18 now, 3 later| PR
+  APR -->|1| REB
+  APR -.->|referee review| REF
+  PIPE -->|9: the integrity checks and the stage loop| RES
+  PIPE -->|3 now, 1 later| PAPER
+  PIPE -->|1| PR
+  PIPE -->|1| REB
+  DR -->|5| PAPER
+  DR -->|4| RES
+  DR -->|3| IDEA
+  AR -.->|not in the coverage list| NONE
+  classDef todo fill:transparent,stroke:#64748b,stroke-dasharray:6 4,color:#475569
+  classDef none fill:transparent,stroke:#b91c1c,stroke-dasharray:2 3,color:#991b1b
+</pre>
+<p class="note">Dropped files: academic-paper 16, academic-paper-reviewer 4, academic-pipeline 15, deep-research 40.</p></div>
+  </section>
+
+  <p class="src">Sources: ordo skills/paper/SKILL.md 2.0.0 at b35651c; skills/paper/references/draft-writer.md, planner.md, literature-strategist.md, ai-disclosure.md; skills/writing/SKILL.md; .scratch/5-paper/plan.md D2, D3, D22, D24, D25, D40, D42 to D59, "The stops of paper", open items C, I and J to W; research-hub .agents/skills/academic-paper 3.2.0: SKILL.md, references/workflow_phase_details.md, references/mode_selection_guide.md, references/revision_patch_protocol.md, references/disclosure_mode_protocol.md, agents/intake_agent.md, agents/literature_strategist_agent.md, agents/structure_architect_agent.md, agents/peer_reviewer_agent.md, agents/visualization_agent.md, agents/citation_compliance_agent.md, agents/formatter_agent.md; research-hub .agents/skills/academic-pipeline/SKILL.md; docs/academic-coverage.md row counts.</p>
+</main>

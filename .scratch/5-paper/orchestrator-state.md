@@ -83,6 +83,6 @@ None.
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-20. Step 4 of 6, the new shape of paper, landed: `skills/paper/` 2.0.0 with five roles and the citation compliance agent of citation-check mode, the figures of `paper`, `grill`, `writing` and `code-comments`, and the comparison figures against academic-paper (`agents/reviews/4-landing.md`).
-- Next: step 5 of 6, the gate's comparisons: `/spec 5 5`, held by Axel's pause before step 5.
+- 2026-10-20. Step 4 of 6, the new shape of paper, reopened under open item Q (a): its product files are back at 3b6d071 (commit cd06a91), the step is unticked, and its line in `plan.md` builds the design of the comparison page `agents/briefs/4-figure-spec.html` with rulings J to AC2.
+- Next: `/spec 5 4`. Step 5 of 6, the gate's comparisons, stays held by Axel's pause before step 5.
 - Open on Axel's side: none.
