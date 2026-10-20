@@ -68,6 +68,7 @@ None.
 - 2026-10-19: Open item D, the numbers of the `/writing` findings the user accepts and the names of a run's patch files: closed under self-rule, C105.
 - 2026-10-19: Open item E, how the `/writing` findings reach `/paper` on the current dongho manuscript: closed under self-rule, C106.
 - 2026-10-19: Open item F, the line of `~/.claude/CLAUDE.md` that routes manuscript content: ruled by the user, a form of (b), the line names `academic-paper` or `paper`.
+- 2026-10-20: Open item G, plan 5's steps after `/grill 5` settled D42 to D59: ruled by the user, (a).
 
 ## The standing demands (from Axel, in force)
 
@@ -84,7 +85,7 @@ None.
 
 ## Where things are
 
-- Design: `docs/roadmap.md` entry 5, the rulings in `plan.md` (D1 to D41, the pins of plan 5), ADRs 0017 to 0021. Ledger: `.scratch/5-paper/`, with `agents/briefs/` and `agents/reviews/`.
+- Design: `docs/roadmap.md` entry 5, the rulings in `plan.md` (D1 to D59, the pins of plan 5, open items A to G), ADRs 0017, 0020, 0022, 0023 and 0024. Ledger: `.scratch/5-paper/`, with `agents/briefs/` and `agents/reviews/`.
 - The sources: `../research-hub/.agents/skills/academic-paper/`, `academic-pipeline/` and `deep-research/` (the coverage rows of `docs/academic-coverage.md`), `../research-hub/tools/manuscript/`, and `lookup.py` at commit 0074728. research-hub is read only; the gate's runs work on copies outside it.
 - The installed skills are pinned at v8.3.0 (`git -C ~/.local/share/ordo-stable describe --tags`); step 3 tags a release candidate and pins it, and the closing tags the final release and pins it (Rulings, "The pins of plan 5").
 
