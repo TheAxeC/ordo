@@ -44,8 +44,8 @@ td.num { font-family: var(--mono); white-space: nowrap; }
 <main>
   <header style="display:grid;gap:12px">
     <h1>paper against academic-paper</h1>
-    <p>Each mode of <code>paper</code> as your rulings of 2026-10-20 make it (open items J to W, booked in <code>plan.md</code> as commit <code>21a7a44</code>), beside the same mode of academic-paper 3.2.0, research-hub's copy. The skill on main at <code>b35651c</code> does not do this yet; step 4 is redone to it (your ruling on Q).</p>
-    <p>Two rulings hold for every mode and are not drawn: an unfinished run is offered for continuing, its finished steps skipped (Z), and intake of full and outline-only offers an earlier lit-review's review and <code>.bib</code> and an earlier outline-only's approved outline, which full then skips (Y).</p>
+    <p>Each mode of <code>paper</code> as your rulings of 2026-10-20 make it (open items J to AB in <code>plan.md</code>'s Rulings), beside the same mode of academic-paper 3.2.0, research-hub's copy. The skill on main is <code>paper</code> 1.0.0, step 4's base, and does not do this yet; step 4 builds it to this page (your ruling on Q).</p>
+    <p>Two rulings hold for every mode and are not drawn: an unfinished run is offered for continuing, its finished steps skipped (Z), and intake of full and outline-only offers an earlier lit-review's review and <code>.bib</code> and an earlier outline-only's approved outline, which full then skips (Y). A plain request, such as <code>/paper please improve section 3</code>, picks the mode, which the intake confirmation shows; a request that fits two modes is asked about before intake, and the mode name still works (AB).</p>
     <p>The page has two views of each mode. The simple view draws the agents, the stops and the cycles, which set what a run costs. The detailed view draws every step, script and stop from each skill's files.</p>
   </header>
 
@@ -122,17 +122,17 @@ flowchart TD
   OA -.->|"changes, no cap"| PL
   OA --> W["Draft writer"]
   OA --> V["Visualization, with data"]:::maybe
-  V -.->|"checks the rendered figure, up to 2 fixes"| V
+  V -.->|"checks the rendered figure, up to 2 fixes, optional"| V
   W --> P["Peer reviewer"]
   V --> P
   P -.->|"Minor or Major: round 2, once"| WR["Draft writer: a patch"]
   WR -.-> P
-  P -->|"Reject, or a Critical issue after round 2"| SD["You decide"]:::stop
+  P -->|"Reject, or a Critical issue after round 2"| SD["The draft review does not pass"]:::stop
   P --> RF["Draft writer: reference fix"]:::maybe
-  RF -->|"strict: a reference still fails"| SD
+  RF -->|"strict: a reference still fails"| SR["A reference that cannot be confirmed"]:::stop
   RF --> CF["Draft writer: compile fix"]:::maybe
   CF --> WG["/writing: 4 agents"]
-  WG --> RP["Your reply to the report"]:::stop
+  WG --> RP["End: the report; your reply, optional"]
   RP --> WA["Draft writer: applies what you pick"]:::maybe
   WA --> CF2["Draft writer: compile fix"]:::maybe
   classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
@@ -155,11 +155,13 @@ flowchart TD
       <div class="side"><h3>paper</h3>
 <pre class="mermaid">
 flowchart TD
-  I["Intake: you confirm"]:::stop --> P["Peer reviewer: the comments as items"]
+  I["Intake: you confirm"]:::stop --> P["Peer reviewer: the instructions as items, or, with none, a review of the manuscript"]
+  P -->|"no instructions given"| IA["You approve the items"]:::stop
+  IA --> W
   P --> LS["Literature strategist, for a new reference"]:::maybe
   LS -.->|"search passes, up to 4"| LS
   P --> V["Visualization, for a figure"]:::maybe
-  V -.->|"checks the rendered figure, up to 2 fixes"| V
+  V -.->|"checks the rendered figure, up to 2 fixes, optional"| V
   P --> W["Draft writer: a patch per item"]
   LS --> W
   V --> W
@@ -167,10 +169,10 @@ flowchart TD
   R -.->|"items not resolved: reading 2, once"| W2["Draft writer: one pass"]
   W2 -.-> R
   R --> RF["Draft writer: reference fix"]:::maybe
-  RF -->|"strict: a reference still fails"| SD["You decide"]:::stop
+  RF -->|"strict: a reference still fails"| SD["A reference that cannot be confirmed"]:::stop
   RF --> CF["Draft writer: compile fix"]:::maybe
   CF --> WG["/writing: 4 agents"]
-  WG --> RP["Your reply to the report"]:::stop
+  WG --> RP["End: the report; your reply, optional"]
   RP --> WA["Draft writer: applies what you pick"]:::maybe
   WA --> CF2["Draft writer: compile fix"]:::maybe
   classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
@@ -195,7 +197,7 @@ flowchart TD
   L --> LR["You review the sources, optional"]:::stop
   L -.->|"search passes, up to 4"| L
   LR --> RF["Draft writer: reference fix, when a .tex is given"]:::maybe
-  RF -->|"strict: a reference still fails"| SD["You decide"]:::stop
+  RF -->|"strict: a reference still fails"| SD["A reference that cannot be confirmed"]:::stop
   classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
   classDef maybe fill:#ffffff,stroke:#64748b,stroke-dasharray:6 4,color:#1e293b
 </pre></div>
@@ -256,7 +258,7 @@ flowchart TD
 <pre class="mermaid">
 flowchart TD
   I["Intake: you confirm"]:::stop --> C["Citation compliance"]
-  C -->|"a claim the source does not hold, or a reference no lookup confirms"| SD["You decide"]:::stop
+  C -->|"a claim the source does not hold, or a reference no lookup confirms"| SD["A claim the run cannot support, or a reference that cannot be confirmed"]:::stop
   C --> C2["Citation compliance once more, when a check fails"]:::maybe
   C2 --> X["Citation report"]
   classDef stop fill:#fff1e6,stroke:#c2410c,stroke-width:2px,color:#7c2d12
@@ -362,7 +364,7 @@ flowchart TD
   CF --> CP2["Session: compile once more, the rest named [M]"]:::ruled
   CP --> WR
   CP2 --> WR["/writing review: 4 agents [D46]"]:::ruled
-  WR --> FM["Final message: the numbered report [D46]"]:::stop
+  WR --> FM["End: the final message with the numbered report [D46]"]:::ruled
   FM -->|"your one-line reply, up to 3 answers [R],<br/>or an autonomous pass [D46]"| WA["Draft writer: applies the findings, then the compile again [D46]"]:::ruled
   PS["At every patch: a structural patch, a patch that does not apply, a script failed [C]"]:::stop
   MS["At every agent start: a model other than the configured one [D47]"]:::stop
@@ -395,9 +397,14 @@ flowchart TD
       <div class="side"><h3>paper, as ruled</h3>
 <pre class="mermaid">
 flowchart TD
-  I["Intake: config.md, the run's permissions, DOI checking [D24, Stops of paper, O]"]:::stop
+  I["Intake: config.md, the run's permissions, DOI checking,<br/>the instructions: a comments file, text after the command, or none [D24, Stops of paper, O, AA]"]:::stop
   I -.->|"you change it, until you confirm [R]"| I
-  I --> IT["Peer reviewer: the comments as items.md"]
+  I -->|"a comments file or text"| IT["Peer reviewer: the instructions as items.md"]
+  I -->|"no instructions [AA]"| RV["Peer reviewer: reviews the manuscript with<br/>full mode's draft-review criteria, its issues as items.md [AA]"]:::ruled
+  RV --> IA["You approve the items: drop or add, no patch before [AA]"]:::stop
+  IA --> AN
+  IA -->|"an item needs a new reference, intake allows it"| LS
+  IA -->|"an item needs a figure change, intake allows it"| VZ
   IT -->|"an item needs a new reference, intake allows it"| LS["Literature strategist: a .bib patch [Stops of paper]"]:::ruled
   IT -->|"an item needs a figure change, intake allows it"| VZ["Visualization [Stops of paper]"]:::ruled
   IT --> AN["Script: anchorize the files"]:::script
@@ -423,7 +430,7 @@ flowchart TD
   CF --> CP2["Session: compile once more, the rest named [M]"]:::ruled
   CP --> WR
   CP2 --> WR["/writing review: 4 agents [D46]"]:::ruled
-  WR --> FM["Final message: the numbered report [D46]"]:::stop
+  WR --> FM["End: the final message with the numbered report [D46]"]:::ruled
   FM -->|"your one-line reply, up to 3 answers [R],<br/>or an autonomous pass [D46]"| WA["Draft writer: applies the findings, then the compile again [D46]"]:::ruled
   PS["At every patch: a script failed"]:::stop
   MS["At every agent start: a model other than the configured one [D47]"]:::stop
