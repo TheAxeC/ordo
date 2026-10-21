@@ -48,7 +48,9 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   worker: claude:sonnet
   launched: 2026-10-20
   report: .scratch/5-paper/agents/reviews/4-report.md
-  round: 0
+  builder_usage: 377481 tokens, 836 tool uses, 123.4 min
+  reviewer_report: .scratch/5-paper/agents/reviews/4-refuter.md (a72eb77449241ae96, claude-opus-5-5, 275856 tokens, 122 tool uses, 16.0 min)
+  round: 1
   base: 95aa872916493c7b541aacd3f9f43e0a50b8f945
   worktree: .agents/worktrees/5-paper-4
   brief_check: .scratch/5-paper/agents/reviews/4-brief-check.md (acb39ad27aa1f1022, claude-opus-5-5, 304522 tokens, 64 tool uses, 15.4 min)
@@ -58,10 +60,16 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-None.
-
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-21: Open item AP: ruled (a2) by the user, booked in plan.md's Rulings. Ruling AQ reworded on the user's instruction: no repository, project name or folder layout is written into the skill.
+- 2026-10-21: The roadmap change of AL and AO, with entry 5's goal under AF and AK, approved by the user and committed (414f8ba); plan 5's Goal changed the same way. The user's requirement that every file argument may be given in words booked as ruling AQ.
+- 2026-10-21: Open items AL, AM, AN and AO: ruled by the user, booked in plan.md's Rulings; the roadmap changes of AL and AO wait on the user's approval of their diff.
+- 2026-10-21: Open items AI (AI1 and AI2), AJ and AK: ruled by the user, booked in plan.md's Rulings.
+- 2026-10-21: Open item AD, row AD14, and open items AF, AG and AH: ruled by the user, booked in plan.md's Rulings; every row of AD is ruled. Roadmap entry 7's change under AD13 approved and committed (d3e274b).
+- 2026-10-21: Open item AD, rows AD8 and AD13 (with the change to roadmap entry 7): ruled by the user, booked in plan.md's Rulings; AD14 stays open.
+- 2026-10-21: Open item AD, rows AD1 to AD7, AD9 to AD12 and AD15 to AD17: ruled by the user, booked in plan.md's Rulings; AD8, AD13 and AD14 stay open.
+- 2026-10-21: Open item AE, the builder's unapproved script `c19.py` for case C19: ruled (a) by the user, its output not used, the reading of each figure goes into step 4's repair round.
 - 2026-10-19: Open item A, the drafted step list of `/plan 5 --self-rule`: closed under self-rule, C102.
 - 2026-10-19: Open item B, the command forms of `lookup.py` cite-keys, check-urls and quote-check: closed under self-rule, C103.
 - 2026-10-19: Open item C, what each mode of `paper` leaves in the manuscript's files, how it finds the `.bib`, and how a patch reaches the manuscript: closed under self-rule, C104.
