@@ -59,9 +59,12 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
+- Open item AS (2026-10-21), step 4: the copy of ward-bttr-crosssubject for full mode's check run (ruling AR) holds `README.md`, whose section "Dead-ends" lists approaches that failed. (a) kept in the copy, so the run shows whether paper keeps them out of the manuscript, as the rule against writing up a negative result requires; (b) removed from the copy. Recommended (a): the check run is ours, not the blind comparison, and the rule is one paper must hold on real project notes. Neither is the lazy one.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-10-21: Open item AT: ruled (a) by the user, with the exception of a manuscript asked for as internal only; booked in plan.md's Rulings and added to repair round 1 as point 31.
+- 2026-10-21: Open item AR: ruled (b) by the user, booked in plan.md's Rulings.
 - 2026-10-21: Open item AP: ruled (a2) by the user, booked in plan.md's Rulings. Ruling AQ reworded on the user's instruction: no repository, project name or folder layout is written into the skill.
 - 2026-10-21: The roadmap change of AL and AO, with entry 5's goal under AF and AK, approved by the user and committed (414f8ba); plan 5's Goal changed the same way. The user's requirement that every file argument may be given in words booked as ruling AQ.
 - 2026-10-21: Open items AL, AM, AN and AO: ruled by the user, booked in plan.md's Rulings; the roadmap changes of AL and AO wait on the user's approval of their diff.
