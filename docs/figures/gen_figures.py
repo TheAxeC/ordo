@@ -8,8 +8,8 @@ Writes, beside this file:
   the round and /land, with the /plan-orchestration band.
 - grill.svg, writing.svg, code-comments.svg: the agents, stops and cycles of each skill.
 - paper/full.svg, paper/revision.svg, paper/lit-review.svg, paper/outline-only.svg,
-  paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg: one figure per mode of
-  the paper skill.
+  paper/abstract-only.svg, paper/citation-check.svg, paper/disclosure.svg, paper/plan.svg,
+  paper/format-convert.svg: one figure per mode of the paper skill.
 
 Every figure shows the order of the run. An agent start is a box, solid when it always runs and
 dashed when it runs only when needed. A stop that waits on the user is an orange box. A cycle is a
@@ -1510,6 +1510,51 @@ def paper_disclosure_graph() -> Graph:
     return _graph(nodes, (Edge("I", "W"), Edge("W", "W2")))
 
 
+def paper_plan_graph() -> Graph:
+    nodes = (
+        Node("I", "Intake: you confirm", "stop"),
+        Node("M", "Socratic mentor: started once, resumed with each answer"),
+        Node(
+            "Q",
+            "The mentor's question: each answer; offers after 8 rounds on a chapter "
+            "and 30 in all",
+            "stop",
+        ),
+        Node("P1", "Planner: the outline from the chapter summaries"),
+        Node("S", "Mentor, Step 2.5: contribution sharpening, one round or more"),
+        Node("PE", "Planner: evaluates each stress-test answer"),
+        Node("P2", "Planner: the chapter plan"),
+        Node("H", "The plan's handoff", "stop"),
+    )
+    edges = (
+        Edge("I", "M"),
+        Edge("M", "Q"),
+        Edge("Q", "M", "your answer", "back"),
+        Edge("M", "P1", "the last chapter summary is written"),
+        Edge("P1", "S", "you confirm that summary"),
+        Edge("S", "Q", "its questions to you", "back"),
+        Edge("Q", "PE", "your answer to a stress-test question"),
+        Edge("PE", "M", "the rating goes to the mentor", "back"),
+        Edge("M", "P2", "every sub-argument is Moderate or above, or you end it"),
+        Edge("P2", "H"),
+        Edge("H", "M", "a condition of the gate is not met", "back"),
+    )
+    return _graph(nodes, edges)
+
+
+def paper_format_convert_graph() -> Graph:
+    nodes = (
+        Node("I", "Intake: you confirm", "stop"),
+        Node("F", "Formatter: the patches and the report"),
+        Node(
+            "F2",
+            "Formatter again, for the conversion patch, when the citation style changes",
+            "maybe",
+        ),
+    )
+    return _graph(nodes, (Edge("I", "F"), Edge("F", "F2")))
+
+
 PAPER_MODES = (
     ("full", paper_full_graph),
     ("revision", paper_revision_graph),
@@ -1518,6 +1563,8 @@ PAPER_MODES = (
     ("abstract-only", paper_abstract_only_graph),
     ("citation-check", paper_citation_check_graph),
     ("disclosure", paper_disclosure_graph),
+    ("plan", paper_plan_graph),
+    ("format-convert", paper_format_convert_graph),
 )
 
 

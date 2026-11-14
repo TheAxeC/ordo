@@ -60,13 +60,16 @@ Abstract text, without a paragraph indent.
 
 The first draft uses the publisher's class in place of `article` when the Materials in hand row holds no template and the Venue row names a journal of one of these publishers.
 
-| Publisher | Class |
-|---|---|
-| Elsevier | `elsarticle` |
-| Springer | `svjour3` |
-| IEEE | `IEEEtran` |
-| ACM | `acmart` |
-| MDPI | `mdpi` |
+| Publisher | Class | Engine |
+|---|---|---|
+| Elsevier | `elsarticle` | pdfLaTeX |
+| Springer | `svjour3` | none named here |
+| IEEE | `IEEEtran` | pdfLaTeX |
+| ACM | `acmart` | pdfLaTeX |
+| MDPI | `mdpi` | none named here |
+
+- The engine column is the engine the compile of SKILL.md, Steps 11, takes for a manuscript that loads the class. A class with none named leaves the engine to the venue's template, and then to XeLaTeX.
+- A manuscript set in `IEEEtran` compiled with XeLaTeX warns that font shapes of the `ptm` family are undefined and prints Latin Modern. With pdfLaTeX it prints the Times family the class sets.
 
 - A venue of another publisher, or a venue that is unknown, takes the `article` template above. The report says that the layout was not taken from the venue's template, and asks the author to check it against the journal's latest author guidelines.
 - When the class sets a citation style that differs from the Citation style row, the class wins, since the venue's requirement outranks the author's preference. The report names the change.
@@ -124,7 +127,7 @@ A paper in APA 7th uses the `apa7` class in place of `article`. The class sets t
 | Text alignment | Ragged right, so the justification override above is needed | Justified |
 
 - The `apa7` class sets the text ragged right in `man` mode. The block that loads `ragged2e` and `etoolbox` justifies it again, and the draft keeps the block.
-- A manuscript that uses `apa7` compiles with the engine of SKILL.md, Steps 11: the engine the venue's template requires, and XeLaTeX when the template names none.
+- A manuscript that uses `apa7` compiles with the engine of SKILL.md, Steps 11, which is the first that applies of the engine a `% !TEX program =` line names, the engine the class table above gives for the class, the engine the venue's template requires, and XeLaTeX.
 
 ## The width of a table column
 

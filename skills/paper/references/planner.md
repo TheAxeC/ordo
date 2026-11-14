@@ -1,6 +1,6 @@
 # Planner
 
-The planner agent reads this page to choose the structure of the paper, write its outline and build its argument, in one start. The session resumes its latest start by a second message for the review of an expanded revision whose root cause is structural or one of originality. It writes `outline.md` and `arguments.md` in the run folder, and `structure-options.md` when the user disagrees with the structure. It changes no other file. The draft writer and the visualization agent follow the outline, the draft writer follows the argument, and the user approves both at the stop "The outline's approval" before either runs. In outline-only mode the files are the result of the run.
+The planner agent reads this page to choose the structure of the paper, write its outline and build its argument, in one start. The session resumes its latest start by a second message for the review of an expanded revision whose root cause is structural or one of originality. It writes `outline.md` and `arguments.md` in the run folder, and `structure-options.md` when the user disagrees with the structure. In plan mode it also writes `stress-test.md` and `chapter-plan.md` ("Plan mode"). It changes no other file. The draft writer and the visualization agent follow the outline, the draft writer follows the argument, and the user approves both at the stop "The outline's approval" before either runs. In outline-only mode the files are the result of the run.
 
 ## What the agent reads
 
@@ -12,6 +12,8 @@ The planner agent reads this page to choose the structure of the paper, write it
 - The user's changes to the outline, when the session starts the planner again after the stop "The outline's approval".
 - The sources the literature strategist found for the sections that needed literature, when the session starts the planner again to assign them.
 - The user's answer about the structure, the structure the user chose from `structure-options.md` or insists on, when the session gives them.
+- In plan mode: `chapter-summaries.md` and `insights.md` for the outline, `arguments.md` with the mentor's question and the user's answer for an evaluation, and every file of the run for the chapter plan ("Plan mode").
+- In full mode given a plan run: that run's `chapter-plan.md`, `insights.md`, `dialogue.md`, `outline.md` and `arguments.md` ("Full mode given a plan run").
 - At its resumption for an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is structural or one of originality, with the issues it names. Also `outline.md` and `arguments.md` as it wrote them before. It writes both files again, changing the parts the issues name, and the overview states what changed and which issue each change answers.
 
 Where an input is missing:
@@ -563,3 +565,78 @@ The agent checks both files against these before it writes them, and corrects wh
 | Fallacies | No argument commits a logical fallacy such as a straw man, an attack on the person or a false dichotomy. |
 
 - The files are a proposal until the user approves them at the stop "The outline's approval".
+
+## Plan mode
+
+In plan mode the session starts the planner as a fresh agent, each time for one task named in the prompt. It starts the planner once for the outline from the chapter summaries, once for each stress-test answer, and once for the chapter plan. It starts it again for the outline when the user changes the last summary at its confirmation, and again for the chapter plan after the dialogue on the conditions of the gate that are not met. The planner changes no manuscript file and runs no patch script.
+
+### The outline from the chapter summaries
+
+- The inputs are `config.md`, `chapter-summaries.md` and `insights.md`.
+- The summaries before the last carry the user's confirmation. The last summary awaits it, since the session starts the planner for the outline before the user confirms that summary.
+- A summary the user changes at that confirmation starts the planner for the outline again, and it writes both files again from the changed summaries.
+- The planner adds nothing the summaries do not hold.
+- The planner writes `outline.md` in the form of "The files". Its sections are the chapters of the summaries, mapped onto the skeleton of "The structure" that the Paper type row names. A Paper type "not sure" takes the skeleton by the table of "The structure" from the research question of `insights.md`.
+- The evidence map assigns each supporting evidence of a summary to its section. The summary's evidence is a source or a result the user named, and the planner adds no source from memory. A source with no key in the manuscript's `.bib` is listed as "sources pending".
+- The planner writes `arguments.md` in the form of "The files" from the thesis statement of `insights.md` and each summary's Core Argument, Supporting Evidence and Potential Risks. The Potential Risks are the counter-arguments, and the planner gives each a rebuttal strategy of "Counter-arguments and rebuttals".
+- The checks of "The checks before the files are shown" apply, with two readings.
+- The Word count check compares the sum with the Expected Word Counts of the summaries.
+- The Evidence check passes when each source the summaries name is assigned or listed as "sources pending".
+- Done when both files exist and every chapter of the summaries has its section.
+
+### The evaluation of a stress-test answer
+
+- The inputs are `arguments.md`, the mentor's question and the user's answer.
+- The planner rates each sub-argument by the answer and the evidence the sub-argument holds, as Strong, Moderate or Weak:
+
+| Rating | The sub-argument |
+|---|---|
+| Strong | Rests on cited evidence or a result of the project, and the answer closes the gap the question names. |
+| Moderate | Rests on evidence that supports it in part, or on an answer that closes part of the gap. |
+| Weak | Rests on no evidence, or the answer leaves the gap open, or one of the weak-argument signs of "The weak-argument signs" applies. |
+
+- The planner writes into `stress-test.md`, for each round appended in order, the question, the answer in the user's words, each sub-argument's rating, the logical gaps and the evidence missing. A rating is judged from the user's words and the files, and the planner adds no argument of its own.
+- A rating the user's answer raises is stated with the sentence of the answer that raised it.
+- Done when `stress-test.md` holds the round.
+
+### The chapter plan
+
+- The inputs are every file of the run. The planner writes `chapter-plan.md`:
+
+```
+## Chapter plan
+
+### <Chapter name>
+- **Core argument**: <one sentence, from the final chapter summary>
+- **Supporting evidence**: <the evidence of the summary, each with its source or result>
+- **Counter-arguments**: <each, with the response to it>
+- **Argument strength**: Strong, Moderate or Weak, from the last rating in `stress-test.md`, or "not stress-tested" for a chapter with no rating
+- **Expected word count**: <number>
+
+## Seeds for the literature strategist
+- <a reference or a keyword that the evidence of the dialogue names, with the chapter that names it>
+
+## Plan-to-draft gate
+| Condition | Met |
+|---|---|
+| Every chapter has a sub-argument rated Moderate or above | Yes or No, with the chapter that fails |
+| The structure is one of the six skeletons of "The structure" | Yes or No, with the structure |
+| At least 5 potential references are named as seeds | Yes or No, with the count |
+| The research question is final | Yes or No |
+```
+
+- The section "Seeds for the literature strategist" lists each reference and keyword once. `references/literature-strategist.md`, "Starting from a plan run", reads that section.
+- A research question is final when `insights.md` holds the thesis statement and the user confirmed it in the dialogue, with no open question on it.
+- A condition that is not met is listed with what the mentor must still ask about it. The planner never marks a condition met that the files do not show.
+- Done when `chapter-plan.md` holds a section for each chapter, the seeds and the gate with each condition marked.
+
+## Full mode given a plan run
+
+The inputs are the plan run's `chapter-plan.md`, `insights.md`, `dialogue.md`, `outline.md` and `arguments.md`, which intake offered and the session copied into the run folder.
+
+- The planner maps the chapters of the plan to the sections of the skeleton that the plan's structure names, and writes `outline.md` again from that mapping, with the evidence the literature strategist found.
+- Claims, evidence and warrants come from `dialogue.md` and the chapter plan. The planner takes the final version of each chapter's plan and only the sub-arguments rated Moderate or above.
+- A Weak sub-argument stays out of the argument map. The strength assessment names it with the line "not carried from the plan run".
+- An idea the user marked "maybe" or "not sure" in the dialogue is dropped and not written as a claim.
+- The plan's thesis statement, the `thesis_statement` insight, is the thesis of `arguments.md`.
+- The outline's approval follows as for every full run.

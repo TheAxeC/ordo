@@ -8,6 +8,7 @@ The literature strategist agent reads this page to design the search, screen the
 - In revision mode, the items that call for a new reference stand in place of the Topic and the Research question, which that mode does not ask.
 - The sources given: the manuscript's `.bib`, when the call gives one, and the `.bib`, the annotated bibliography or the earlier review that the Materials in hand row names. A research report that row names gives the question, the discipline and the method that the session filled at intake.
 - Every lookup is made with `lookup.py` and never with a web search, a fetch of a web page or `curl`.
+- In full mode given an earlier plan run, that run's `chapter-plan.md` and `insights.md` ("Starting from a plan run").
 - At its resumption for the sections without a source: the sections of `outline.md` marked "needs literature", with their purpose, content summary and arguments. Also the files the agent wrote before when it ran in this run.
 - At its resumption for an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is insufficient evidence, with the claims it names as lacking support. Also the files the agent wrote before in this run.
 
@@ -305,6 +306,15 @@ After the planner's outline, the session resumes the agent when the outline mark
 - It adds the sources it includes to `review.md`, `refs.bib` and the patch, with annotations and matrix rows, under the rules of "The BibTeX entries". It removes none.
 - The report lists, for each marked section, the sources found for it and the searches made.
 - A section for which no source meets the criteria is named in the report with the searches made, so that the outline shows it as "needs literature".
+
+## Starting from a plan run
+
+In full mode, intake may take an earlier plan run's outputs (`references/intake.md`, "Earlier outputs"). The agent is then also given that run's `chapter-plan.md` and `insights.md`.
+
+- The seeds are the references the chapter plan names under "Seeds for the literature strategist" and the keywords of the evidence in `insights.md`. The agent looks each seed up with `lookup.py` and screens it under the criteria above like any source.
+- The seeds are added to the search string's concepts and synonyms. The full search of "The search design" and "The four searches" still runs, and no source is taken without screening.
+- A seed that no index returns is named in the report with the searches made, and is not added to `refs.bib`.
+- The research question is the one of `config.md`, which the plan run's `thesis_statement` insight informed.
 
 ## An expanded revision
 

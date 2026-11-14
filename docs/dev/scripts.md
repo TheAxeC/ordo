@@ -6,8 +6,8 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 
 | Script | Job |
 |---|---|
-| `docs/figures/gen_figures.py` | Writes the SVG figures of the README from the labels written in the file: `pipeline.svg`, `plan-loop.svg`, `grill.svg`, `writing.svg`, `code-comments.svg` and one figure for each of the seven modes of `paper` under `docs/figures/paper/` |
-| `docs/figures/academic-paper-comparison/gen_comparison.py` | Writes the 16 SVG figures that set `paper` beside academic-paper 3.2.0 and academic-pipeline into its own folder, from the labels written in the file, using the layout code of `gen_figures.py` |
+| `docs/figures/gen_figures.py` | Writes the SVG figures of the README from the labels written in the file: `pipeline.svg`, `plan-loop.svg`, `grill.svg`, `writing.svg`, `code-comments.svg` and one figure for each of the nine modes of `paper` under `docs/figures/paper/` |
+| `docs/figures/academic-paper-comparison/gen_comparison.py` | Writes the 20 SVG figures that set `paper` beside academic-paper 3.2.0 and academic-pipeline into its own folder, from the labels written in the file, using the layout code of `gen_figures.py` |
 | `utils/check_coverage.py` | Checks that a coverage list names every file of the named skill folders once, with a mark and a reason |
 | `utils/pin.sh` | Pins the installed skills and agents to a tag of this repository, or checks the pin |
 
@@ -23,6 +23,7 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/paper/templates/apply_tex_patch.py` | Applies a patch of replaced, inserted and deleted blocks to a LaTeX manuscript by the manifest's hashes, rejects a stale or structural patch, and writes the apply report |
 | `skills/paper/templates/calibration_counts.py` | Counts the misses and false alarms per label against the limits 0.15 and 0.10. Its input is a table of pairs, each with its built label and the label the citation compliance agent's result gave |
 | `skills/paper/templates/lookup.py` | Looks references up in Crossref, OpenAlex, Semantic Scholar and arXiv, and prints the retraction and expression-of-concern notices that Crossref lists for a DOI. Compares the keys a `.tex` cites with a `.bib`, reading the `cite` commands of natbib and biblatex. Checks each cited entry's URL and title, fetches full texts, and checks quoted passages against them |
+| `skills/paper/templates/reference_docx.py` | Writes a reference `.docx` for `pandoc --reference-doc` from `pandoc`'s default reference document, with the DOCX layout of academic-paper (Times New Roman 12 pt, double spacing, 2.54 cm margins, the page number at the top right, heading, block-text, bibliography and table styles), each field of the format profile given as an option overriding its default, and every other part of the document unchanged |
 | `skills/plan-orchestration/templates/plan_cost.py` | Prices the usage of each agent role of a plan from the response bodies and the agents' transcripts |
 | `skills/repo-setup/templates/sync_rules.py` | Compares the shared-rules block and the plan-terms block of a repository with their templates, and rewrites them on request |
 | `skills/session-retro/templates/transcript_window.py` | Prints what was said and done in Claude Code transcripts, for a time window or for one Claude Code session, with secrets replaced |
@@ -40,5 +41,6 @@ Every script in this repository outside `.scratch/` is listed here with its kind
 | `skills/paper/templates/apply_tex_patch.test.sh` | `skills/paper/templates/apply_tex_patch.py` |
 | `skills/paper/templates/calibration_counts.test.sh` | `skills/paper/templates/calibration_counts.py` |
 | `skills/paper/templates/lookup.test.sh` | `skills/paper/templates/lookup.py` |
+| `skills/paper/templates/reference_docx.test.sh` | `skills/paper/templates/reference_docx.py` |
 | `skills/repo-setup/templates/sync_rules.test.sh` | `skills/repo-setup/templates/sync_rules.py` with `--write` |
 | `utils/pin.test.sh` | `utils/pin.sh` |

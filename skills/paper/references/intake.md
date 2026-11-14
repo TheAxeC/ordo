@@ -18,23 +18,25 @@ The session reads this page at intake, before any agent starts. Intake is an int
 
 ## Questions, marked by mode
 
-The modes are full, outline-only, revision, abstract-only, lit-review, citation-check and disclosure, and the calls are draft-review and figures.
+The modes are full, outline-only, revision, abstract-only, lit-review, citation-check, disclosure, plan and format-convert, and the calls are draft-review and figures. Plan mode asks only the rows marked for it, since its mentor builds the research question, the discipline and the rest in the dialogue. Format-convert asks only the rows marked for it.
 
 | Row of `config.md` | The question | Asked in |
 |---|---|---|
-| Topic | What the paper is about. | full, outline-only, lit-review |
+| Topic | What the paper is about. In plan mode the topic may be as rough as a field or an idea. | full, outline-only, lit-review, plan |
 | Research question | The question or thesis statement the paper answers, written in full. The literature strategist does not start without one, so full, outline-only and lit-review modes do not go on until the user gives one. A topic is never taken as the question. | full, outline-only, lit-review |
-| Paper type | One type of the table below. A manuscript's type is proposed from the manuscript. When the user names none, the type is chosen by the table "Paper type and length" and shown with the reason. | full, outline-only, revision, abstract-only, citation-check, draft-review |
+| Paper type | One type of the table below. A manuscript's type is proposed from the manuscript. When the user names none, the type is chosen by the table "Paper type and length" and shown with the reason. In plan mode the row is a structure preference: IMRaD, Literature Review, another of the six types, or "not sure", and "not sure" leaves the structure to the dialogue. In format-convert the type decides the layout of a conference paper, a policy brief and a thesis chapter (`references/formatter.md`, "The paper type"). | full, outline-only, revision, abstract-only, citation-check, draft-review, plan, format-convert |
 | Discipline | The discipline and its sub-field. | full, outline-only, revision, abstract-only, lit-review, citation-check |
 | Language | The language of the paper. | full, outline-only, revision, abstract-only, lit-review, disclosure |
-| Venue | The target journal or conference, "General", or "no venue yet", which keeps the generic AI disclosure statement. | full, outline-only, revision, abstract-only, disclosure, draft-review, figures |
+| Venue | The target journal or conference, "General", or "no venue yet", which keeps the generic AI disclosure statement. In format-convert a venue is a target: the formatter applies its template and required elements. | full, outline-only, revision, abstract-only, disclosure, draft-review, figures, format-convert |
 | Venue AI policy | The venue's AI policy text, pasted, for a venue `references/ai-disclosure.md` does not list. | full, disclosure |
 | Policy anchor | In disclosure mode, the policy anchor the author targets in place of a venue: `prisma-trAIce`, `icmje`, `nature`, `ieee`, or "none". | disclosure |
-| Venue limits | The venue's limits the user states. | full, outline-only, revision, abstract-only, draft-review, figures |
-| Cover letter | For a journal venue: the article type (Research Article, Review Article or Brief Communication), the editor's name when known, the reason the paper fits the journal in one sentence, suggested reviewers and excluded reviewers with a reason, each optional. | full |
-| Citation style | One style of the table below. | full, revision, citation-check, figures |
+| Venue limits | The venue's limits the user states. | full, outline-only, revision, abstract-only, draft-review, figures, format-convert |
+| Cover letter | For a journal venue: the article type (Research Article, Review Article or Brief Communication), the editor's name when known, the reason the paper fits the journal in one sentence, suggested reviewers and excluded reviewers with a reason, each optional. | full, format-convert |
+| Target formats | One or more of `docx`, `pdf`, `markdown` and `latex`, a citation style of the table below, or a venue. A request that names no target takes Markdown, and the confirmation shows it. A target outside these, such as HTML or Harvard, is asked again with the supported targets listed. A `.bib` given takes one citation style and the targets `docx` and `markdown` only, and is asked again otherwise. | format-convert |
+| Format profile | For a target of DOCX, PDF or LaTeX only, the user's layout values: body font and size, caption font, placement and alignment, line spacing (single, 1.5, double or a fixed number of points), margins in centimetres, and table borders (three-line, full grid or none). The session never infers a value. A declined question writes no row, and a value outside this form is asked again. | format-convert |
+| Citation style | One style of the table below. For Chicago in format-convert, the form is asked too: notes and bibliography, or author-date. | full, revision, citation-check, figures, format-convert |
 | Length | The target word count. | full, outline-only |
-| Materials in hand | Which of the eight materials below the user has. Lit-review mode asks for the literature list or `.bib` only, and the figures call for the data or results only. | full, outline-only, revision, lit-review, figures |
+| Materials in hand | Which of the materials below the user has: the first eight in every mode that asks this row, and the ninth, Ideas, in plan mode only. Lit-review mode asks for the literature list or `.bib` only, and the figures call for the data or results only. Plan mode asks for all nine, with its question put as literature, data and ideas, and the mentor reads what is held. Format-convert asks for the reference `.docx` and the CSL file of "Materials in hand" below, and for the `.bib` and the venue's template when held. | full, outline-only, revision, lit-review, figures, plan, format-convert |
 | Literature search | Whether to skip the search and use the sources given only. Default: no. | full |
 | Earlier outputs | Which of the earlier runs' outputs of "Earlier outputs" below to take. | full, outline-only |
 | Domain evidence profile | One of the four profiles of "The evidence profile" below. | full, outline-only, lit-review, revision |
@@ -43,19 +45,19 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 | New references | Whether the run may add references that the manuscript's `.bib` lacks. | revision |
 | Numbers from saved results | Whether the run may compute numbers from the project's saved results, and from which files. | revision |
 | Figure changes | Whether the run may change figures, and whether it may edit and run the project's figure script or only a copy of it in the run folder. | revision, figures |
-| Authors | One row per author: name, affiliation, ORCID and whether the author is the corresponding author. | full, revision, citation-check, disclosure |
+| Authors | One row per author: name, affiliation, ORCID and whether the author is the corresponding author. | full, revision, citation-check, disclosure, format-convert when the formatter writes a cover letter |
 | Contributions | For each author, the CRediT roles of `references/statements.md` taken, each marked Lead or Supporting. | full, disclosure |
 | Funding | One row per funder, or "no funding". | full, disclosure |
 | Conflicts of interest | Each conflict, or "none". | full, disclosure |
 | Data availability | Open (repository and URL or DOI), restricted (source), on request, or no new data. | full, disclosure |
-| Human or patient data | Whether the study used any, and then the approving board, the approval number, the consent obtained and the de-identification applied. | full, disclosure |
-| AI use | Whether any AI was used, each category of `references/ai-disclosure.md` marked used, not used or uncertain, and the tools with their versions. In disclosure mode the categories come pre-marked from the records of "Disclosure records". | full, outline-only, revision, lit-review, disclosure |
+| Human or patient data | Whether the study used any, and then the approving board, the approval number, the consent obtained and the de-identification applied. | full, disclosure, format-convert when the formatter writes a cover letter |
+| AI use | Whether any AI was used, each category of `references/ai-disclosure.md` marked used, not used or uncertain, and the tools with their versions. In disclosure mode the categories come pre-marked from the records of "Disclosure records". | full, outline-only, revision, lit-review, disclosure, format-convert when the formatter writes a cover letter |
 | Style profile | Three or more past papers or writing samples, or none. | full, revision, abstract-only |
 | Claims not to make | The claims the paper must not make, each as a sentence, or "none". | full, revision, abstract-only, citation-check, draft-review |
 | Earlier papers | The authors' earlier papers that the paper may repeat passages of, each as a path, a DOI or a citation, or "none". | full, revision, citation-check |
 | Internal only | Whether the user asks for the manuscript as an internal record, such as a record of every attempt, and not as work to publish. Default: no. The session never sets it from the materials. | full, outline-only, revision, abstract-only, draft-review |
 | Existing main.tex | Asked only when a `main.tex` stands in the manuscript's folder. The session states that the first draft replaces it and that the original is kept in the run folder as `existing-main.tex`. Its text is read as existing draft sections. | full |
-| Earlier run record | The path of the latest earlier `config.md`, when one stands. | every mode |
+| Earlier run record | The path of the latest earlier `config.md`, when one stands. A paused plan run's `config.md` is the record a continued plan run takes. | every mode |
 
 - A mode that gives a main `.tex` reads the language, the venue and the citation style from it when it states them, and asks only for what it does not state.
 - The mode of the call is the row "Mode" of `config.md`, and it is not asked.
@@ -66,6 +68,15 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 - The row Existing main.tex is shown at the intake confirmation, and the run does not go on until the user confirms the record that holds it.
 - The row Instructions takes the second argument of the call or the request's text: a path to an existing file is the comments file, any other text is the instructions, and a call with neither asks the question.
 - The session shows the Instructions row at the confirmation as "comments file: <path>", "text: <the instructions>" or "none", so that a path mistyped into text is seen.
+- The plan-mode interview asks the rows marked for plan and no others: Topic, Materials in hand, Paper type and Earlier run record. The Research question, the Discipline and the Language come from the dialogue and stay out of the record.
+- The format-convert interview asks the rows marked for format-convert. A row that the manuscript states is shown with the manuscript's value, as the first bullet below the table says, for the user to confirm.
+- The formatter writes a cover letter when the venue is a journal and no `cover-letter.tex` stands beside the manuscript. Then the format-convert interview also asks the rows Authors, Human or patient data and AI use, which the letter reads (`references/draft-writer.md`, "The cover letter").
+- Each of those rows, and the row Paper type, is offered from the latest earlier run's `config.md` beside the manuscript when one stands, as "Earlier outputs" offers other rows. It is asked when no such record holds it.
+- A target of format-convert that is a citation style or a venue is a target of the same run as a format target, so one run may hold `docx` and `ieee`.
+- The confirmation names each file the run will change or write. They are each output file, `cover-letter.tex` when the formatter writes one, `<name>.tex` and `refs.bib` for a `.md` or a `.docx` given, `<main>-figure-<n>.png` beside `<main>.md` for each drawing of a Markdown target (`<main>` the main `.tex`'s name without `.tex`), and `<name>-<style>.md` and `<name>-<style>.docx` beside a `.bib` given.
+- The main `.tex` and the files it inputs stand among them only when a target is `latex`, a citation style other than the manuscript's, or a venue. With only `docx`, `markdown` and `pdf` targets, they stay as they were.
+- The confirmation names an output file that already stands beside the main `.tex` as replaced. An output whose path equals the input's, such as a `.docx` given with the target `docx`, takes `<name>-2.<extension>`, and the confirmation shows that path.
+- The input manuscript is never replaced.
 
 ## Paper type and length
 
@@ -106,6 +117,17 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 - APA 7th is the default.
 - The session suggests the style of the discipline's row, and the user can override it.
 - A style that does not match the discipline's row is warned about at the confirmation.
+- Chicago 17th has two forms, notes and bibliography or author-date. Format-convert asks which one, since the formatter writes a different citation command for each.
+- A style outside this table, such as Harvard, is not a supported target. The session asks again with the five styles listed.
+
+## Format profile
+
+- The row Format profile exists only when a target is DOCX, PDF or LaTeX. A Markdown-only run does not ask it.
+- The fields are body font and size, caption font, placement and alignment, line spacing (single, 1.5, double or a fixed number of points), margins in centimetres, and table borders (three-line, full grid or none).
+- Every value comes from the user's answer. The session never infers a value from the venue, the discipline or the manuscript.
+- A DOCX target takes its layout from a reference `.docx`, since `pandoc` reads fonts, margins and spacing from it. With none held, the session writes one with `templates/reference_docx.py`, so each declared field reaches the DOCX except the caption's placement, which `pandoc` fixes. With one held, its layout wins, and the formatter's report lists each declared field as not honoured for the DOCX target (`references/formatter.md`, "The format profile").
+- A declined question writes no row. A value outside the form of a field, such as a line spacing of 1.3, is asked again with the allowed values.
+- A declared field that would take the manuscript past a limit of the Venue limits row takes the venue's value. The formatter names each such field in `format-report.md`, and the final message names it. The confirmation promises none, since only the formatter finds them.
 
 ## Venue limits
 
@@ -147,10 +169,17 @@ The user marks each of these as held or not:
 - A style guide or template from the venue.
 - A research report: a document that states a research question, a method and a synthesis of the evidence on a topic.
 - An annotated bibliography: a list of sources that each carry an annotation.
+- Ideas, asked in plan mode: rough ideas for the paper that are not yet a question, a source or a draft. The user states them in the answer, and the mentor builds on them in the dialogue.
+
+Format-convert marks two more, asked in that mode only:
+
+- A reference `.docx`: a Word file whose styles and page settings a DOCX target takes, which `pandoc` reads through `--reference-doc`. With none held, the session writes one with `templates/reference_docx.py` (`references/formatter.md`, "The format profile").
+- A CSL file: a citation style file that a DOCX or Markdown target takes through `--csl`, and that makes the reference list of a `.bib` given in a style with no `.bst` on the installation. Without one, `pandoc` uses its default citation style, which is author-date and may differ from the style the manuscript's bibliography style names. A numbered manuscript style needs no CSL file, since the formatter's conversion patch prints its numbers and its reference list (`references/formatter.md`, "The conversion patch").
 
 - A material the user holds is read by the roles and is not asked for again.
 - The session finds a research report and an annotated bibliography by what each is, and never by a fixed path or file name. The user gives the path, and when several files fit the words, the session lists them and the user chooses.
-- When the materials hold a research report or an annotated bibliography, the session reads it at intake and fills the answers it gives. The Topic and the Research question come from the report's question, and the Discipline and the method from what the report states. The sources come from the bibliography, and the other rows from what the document answers.
+- In plan mode a research report among the materials is read by the mentor and fills no row, since the research question comes from the dialogue.
+- In every other mode, when the materials hold a research report or an annotated bibliography, the session reads it at intake and fills the answers it gives. The Topic and the Research question come from the report's question, and the Discipline and the method from what the report states. The sources come from the bibliography, and the other rows from what the document answers.
 - Each answer filled this way is shown at the confirmation with the document and the place it came from, and the user confirms or changes it. A row it fills is not asked, and a row the documents do not answer is asked as usual.
 - The sources of an annotated bibliography stand in the Materials in hand row as a list the literature strategist screens, like a `.bib`.
 - The literature strategist screens a `.bib` that is held and searches for what it misses, unless the user skips the search in the row Literature search.
@@ -162,6 +191,8 @@ The user marks each of these as held or not:
 - The session lists the outputs of earlier runs from `<project folder>/paper-runs/` and from the `paper-runs/` of the folder the session runs in, where a lit-review run with no `.tex` keeps its folder.
 - The offer for full mode is the latest lit-review run's `review.md` and `refs.bib`, and the latest outline-only run's approved `outline.md` and `arguments.md`.
 - An outline-only run is approved when the Decisions of its `config.md` hold the approval of its outline.
+- The offer for full mode also holds the latest finished plan run's `chapter-plan.md`, `insights.md`, `dialogue.md`, `outline.md` and `arguments.md`. A plan run is finished when its folder holds `final.md` and `chapter-plan.md`, and a paused plan run is offered as an unfinished run and not here.
+- A plan run taken in full mode does not skip the literature strategist, the sources' review or the outline's approval. Its named references and keywords seed the search, and its files go to the planner (SKILL.md, full mode items 1 and 4).
 - The offer for outline-only mode is the latest lit-review run's `review.md` and `refs.bib`, which become the sources its strategist screens.
 - Latest means the folder with the latest date, and of those the highest number, a folder with no number counting as 1.
 - The user takes each offered output or leaves it, and the row Earlier outputs holds the paths taken, or "none".

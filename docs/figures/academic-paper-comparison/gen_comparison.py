@@ -3,14 +3,14 @@
 Imports the layout code of ../gen_figures.py, found from this file's own location. The import
 writes a __pycache__ folder beside gen_figures.py, which git ignores.
 
-Writes, beside this file, 16 figures:
+Writes, beside this file, 20 figures:
 
-- <mode>-simple.svg and <mode>-detailed.svg for each of the seven modes full, revision,
-  lit-review, outline-only, abstract-only, citation-check and disclosure: academic-paper 3.2.0
-  on the left and paper on the right. The simple view draws the agent starts, the stops and the
+- <mode>-simple.svg and <mode>-detailed.svg for each of the nine modes full, revision,
+  lit-review, outline-only, abstract-only, citation-check, disclosure, plan and format-convert:
+  academic-paper 3.2.0 on the left and paper on the right. The simple view draws the agent starts, the stops and the
   cycles. The detailed view draws every step, script and stop, with grey boxes for scripts and
   indigo boxes tagged with the ruling that makes paper differ from academic-paper.
-- academic-paper-only-modes.svg: the four modes academic-paper has and paper does not, each
+- academic-paper-only-modes.svg: the two modes academic-paper has and paper does not, each
   with the box that takes its place, drawn dashed when it is not built yet.
 - academic-pipeline.svg: the stages of academic-pipeline and the skill each goes to.
 
@@ -240,6 +240,43 @@ def ap_disclosure_simple() -> gf.Graph:
     return _g(nodes, (E("S", "U"), E("U", "F")))
 
 
+def ap_plan_simple() -> gf.Graph:
+    nodes = (
+        N("I", "Intake agent: 3 questions, you confirm", "stop"),
+        N("M", "Socratic mentor, chapter by chapter"),
+        N("S", "Structure architect: the outline"),
+        N("M2", "Socratic mentor and argument builder: the stress test"),
+        N("X", "Chapter plan and INSIGHT collection"),
+    )
+    edges = (
+        E("I", "M"),
+        E(
+            "M",
+            "M",
+            "offers after 8 rounds on a chapter, 30 in all",
+            "back",
+        ),
+        E("M", "S"),
+        E("S", "M2"),
+        E("M2", "X"),
+    )
+    return _g(nodes, edges)
+
+
+def ap_format_convert_simple() -> gf.Graph:
+    nodes = (
+        N("F", "Formatter: LaTeX, DOCX, PDF, Markdown, citation style"),
+        N("G", "Output refused", "stop"),
+        N("X", "Formatted document"),
+    )
+    edges = (
+        E("F", "G", "a citation-provenance marker unresolved"),
+        E("F", "F", "a checklist item fails, no cap", "back"),
+        E("F", "X"),
+    )
+    return _g(nodes, edges)
+
+
 # ---------------------------------------------------------------------------------------
 # academic-paper 3.2.0, detailed view.
 
@@ -435,8 +472,9 @@ def paper_full_detailed() -> gf.Graph:
         N("SS", "A reference that cannot be confirmed [O]", "stop"),
         N(
             "CP",
-            "Session: compile in a copy with the engine the venue's template requires, no "
-            "formatter [M, AV11]",
+            "Session: compile in a copy, no formatter; the engine is the first that "
+            "applies of a % !TEX program line, the class table, the venue's template, "
+            "XeLaTeX [M, AV11] [4.A R2-6]",
             "ruled",
         ),
         N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
@@ -641,8 +679,9 @@ def paper_revision_detailed() -> gf.Graph:
         N("SS", "A reference that cannot be confirmed [O]", "stop"),
         N(
             "CP",
-            "Session: compile in a copy with the engine the venue's template requires "
-            "[D46, AV11]",
+            "Session: compile in a copy; the engine is the first that applies of a "
+            "% !TEX program line, the class table, the venue's template, XeLaTeX "
+            "[D46, AV11] [4.A R2-6]",
             "ruled",
         ),
         N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
@@ -1147,6 +1186,295 @@ def paper_disclosure_detailed() -> gf.Graph:
     return _g(nodes, edges, floating, WIDE_WIDTH)
 
 
+def ap_plan_detailed() -> gf.Graph:
+    nodes = (
+        N("PI", "Intake: the 3-question simplified interview", "stop"),
+        N(
+            "S0",
+            "Step 0 readiness check: materials and the research question; a missing "
+            "foundation is sent to deep-research first",
+        ),
+        N("S1", "Step 1 thesis: INSIGHT thesis_statement"),
+        N(
+            "S2",
+            "Step 2 chapters, six in order, at least 2 rounds each; a chapter summary "
+            "after each",
+        ),
+        N("SA", "Structure architect: the outline from all chapter summaries"),
+        N(
+            "S25",
+            "Step 2.5 contribution sharpening, at least 1 round; INSIGHT contribution_claim",
+        ),
+        N(
+            "S3",
+            "Step 3 stress test: socratic mentor and argument builder probe each "
+            "sub-argument",
+        ),
+        N("X", "Chapter plan and INSIGHT collection"),
+    )
+    edges = (
+        E("PI", "S0"),
+        E("S0", "S1"),
+        E("S1", "S2"),
+        E(
+            "S2",
+            "S2",
+            "offers after 8 rounds on a chapter, 30 in all",
+            "back",
+        ),
+        E("S2", "SA"),
+        E("SA", "S25"),
+        E("S25", "S3"),
+        E("S3", "X"),
+    )
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def paper_plan_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "I",
+            "Intake: config.md [D24]; the plan-mode interview of the topic, the materials in "
+            "hand and the structure preference",
+            "stop",
+        ),
+        N(
+            "M",
+            "Socratic mentor, started once and resumed with each answer; Step 0 refers a "
+            "missing foundation to /paper lit-review and idea [4.A D5]; checkpoint.md "
+            "after each round [AY]",
+            "ruled",
+        ),
+        N(
+            "Q",
+            "The mentor's question: each round is a stop; its offers are to skip a "
+            "chapter, switch to outline-only or pause [4.A D1]",
+            "stop",
+        ),
+        N(
+            "P1",
+            "Planner, a fresh start when the mentor ends with next: outline; the outline "
+            "and the argument map from the chapter summaries [AY] [4.A D16]",
+            "ruled",
+        ),
+        N(
+            "S",
+            "Socratic mentor, Step 2.5: contribution sharpening, three questions on the "
+            "chapter summaries, one round or more [4.A R2-7]",
+            "ruled",
+        ),
+        N(
+            "PE",
+            "Planner, a fresh start for each answer: sub-arguments rated Strong, "
+            "Moderate or Weak into stress-test.md [4.A D6]",
+            "ruled",
+        ),
+        N(
+            "P2",
+            "Planner, a fresh start: chapter-plan.md with the plan-to-draft gate [4.A D6]",
+            "ruled",
+        ),
+        N(
+            "H",
+            "The plan's handoff: the mentor's message and its cross-chapter observation "
+            "beside the chapter plan; full mode only when the gate holds [4.A D3] "
+            "[4.A R2-27]",
+            "stop",
+        ),
+        N("X", "Chapter plan and INSIGHT collection"),
+    )
+    floating = (
+        N(
+            "MS",
+            "At every agent start: a model other than the configured one [D47]",
+            "stop",
+        ),
+    )
+    edges = (
+        E("I", "I", "you change it, until you confirm [R]", "back"),
+        E("I", "M"),
+        E("M", "Q"),
+        E(
+            "Q",
+            "M",
+            "your answer; over 8 rounds on a chapter or 30 in all: the offers",
+            "back",
+        ),
+        E("M", "P1", "the last chapter summary is written"),
+        E("P1", "S", "you confirm that summary"),
+        E("S", "Q", "its questions to you", "back"),
+        E("Q", "PE", "your answer to a stress-test question"),
+        E("PE", "M", "the rating goes to the mentor", "back"),
+        E(
+            "M",
+            "P2",
+            "every sub-argument is Moderate or above, or you end it",
+        ),
+        E("P2", "H"),
+        E("H", "M", "a condition of the gate is not met", "back"),
+        E("H", "X"),
+    )
+    return _g(nodes, edges, floating, WIDE_WIDTH)
+
+
+def ap_format_convert_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "F",
+            "Phase 7 Formatter: LaTeX, DOCX through Pandoc, PDF or Markdown; journal "
+            "formatting; citations between APA 7, Chicago, MLA, IEEE and Vancouver",
+        ),
+        N(
+            "G",
+            "Hard gate: an unresolved citation-provenance marker in the input?",
+            "choice",
+        ),
+        N("U", "Output refused", "stop"),
+        N(
+            "K",
+            "Final checklist: content, format, required elements; word count within 1 "
+            "percent; compile errors fixed, warnings accepted",
+        ),
+        N("X", "Formatted document"),
+    )
+    edges = (
+        E("F", "G"),
+        E("G", "U", "yes"),
+        E("G", "K", "no"),
+        E("K", "K", "an item fails: fix it and check it again, no cap", "back"),
+        E("K", "X"),
+    )
+    return _g(nodes, edges, width=WIDE_WIDTH)
+
+
+def paper_format_convert_detailed() -> gf.Graph:
+    nodes = (
+        N(
+            "I",
+            "Intake: config.md [D24]; the targets, the citation style, the venue and its "
+            "limits, the format profile, the cover letter; a .md, .docx or .bib found by "
+            "search [AQ] [4.A R2-20]",
+            "stop",
+        ),
+        N(
+            "PC",
+            "Session: pandoc makes the .tex of a .md or .docx in the manuscript's folder "
+            "with a relative media folder, never over a file; a .docx reaches no PDF "
+            "[4.A D10] [4.A R1-21]",
+            "script",
+        ),
+        N(
+            "CP",
+            "Session: copies the folder to convert/ before any patch; when the citation "
+            "style stays, compiles it for the numbers of references and citations, "
+            "whether or not the .tex names a .bib [4.A R1-23] [4.A R2-1]",
+            "script",
+        ),
+        N(
+            "F",
+            "Formatter, first start: the format-convert patch, and the format-convert-copy "
+            "patch too when the style stays; format-report.md, refs.bib, the cover "
+            "letter [AY] [4.A R1-23] [4.A R2-9] [4.A R2-33]",
+            "ruled",
+        ),
+        N(
+            "G",
+            "Formatter, same start: a missing required element gets a placeholder in the "
+            ".tex, a missing DOI only a line in the report; the AI disclosure stays with "
+            "the draft writer [AD9] [4.A R1-8]",
+            "ruled",
+        ),
+        N(
+            "AP",
+            "Session: applies the format-convert patches to the manuscript only for "
+            "latex, another citation style or a venue, else to pdf/; then cite-keys and "
+            "check-urls [C] [4.A R1-26]",
+            "script",
+        ),
+        N(
+            "F2",
+            "A change of the citation style with a DOCX or Markdown target: the session "
+            "applies the patch to convert/ and compiles it, and the formatter starts "
+            "again as a fresh agent for the conversion patch in the new style "
+            "[4.A R2-9]",
+            "ruled",
+        ),
+        N(
+            "PD",
+            "Session: latexmk makes the PDF in pdf/ and copies it beside the .tex [AY]",
+            "script",
+        ),
+        N(
+            "CV",
+            "Session: applies the copy patches to convert/ and draws each figure to a "
+            "PNG, kept beside the Markdown [4.A R1-22] [4.A R2-8]",
+            "script",
+        ),
+        N(
+            "RD",
+            "Session: reference_docx.py writes the reference .docx when none is held, "
+            "pandoc makes DOCX and Markdown with -s [4.A R1-24] [4.A R2-12]",
+            "script",
+        ),
+        N(
+            "CK",
+            "Session: the counts of headings, figures, tables, rows, columns, cite "
+            "commands, entries and words of each output, no threshold [4.A item 6] "
+            "[4.A R2-21] [4.A R2-23]",
+            "script",
+        ),
+        N(
+            "CQ",
+            "Session: the figure paths and the abstract's first words [4.A item 6] "
+            "[4.A R2-23]",
+            "script",
+        ),
+        N(
+            "CR",
+            "Session: appends the commands it ran to format-report.md [4.A R2-26]",
+            "script",
+        ),
+        N("X", "Formatted documents and the report"),
+    )
+    floating = (
+        N(
+            "BL",
+            "A .bib given: no formatter and none of the steps above; latex and bibtex "
+            "with the style's .bst, or a CSL file, make its reference list as "
+            "<name>-<style>.md and .docx [4.A R2-20]",
+            "script",
+        ),
+        N(
+            "PS",
+            "At every patch: a structural patch, a patch that does not apply, a script "
+            "failed [C]",
+            "stop",
+        ),
+        N(
+            "MS",
+            "At every agent start: a model other than the configured one [D47]",
+            "stop",
+        ),
+    )
+    edges = (
+        E("I", "I", "you change it, until you confirm [R]", "back"),
+        E("I", "PC"),
+        E("PC", "CP"),
+        E("CP", "F"),
+        E("F", "G"),
+        E("G", "AP"),
+        E("AP", "F2"),
+        E("F2", "PD"),
+        E("PD", "CV"),
+        E("CV", "RD"),
+        E("RD", "CK"),
+        E("CK", "CQ"),
+        E("CQ", "CR"),
+        E("CR", "X"),
+    )
+    return _g(nodes, edges, floating, WIDE_WIDTH)
+
+
 # ---------------------------------------------------------------------------------------
 # The modes of academic-paper that paper does not have, and academic-pipeline.
 
@@ -1162,23 +1490,6 @@ def only_modes() -> tuple[Pair, ...]:
     def todo(label: str) -> gf.Graph:
         return _g((N("P", label, "todo"),), ())
 
-    plan = _g(
-        (
-            N("I", "Intake, 3 questions", "stop"),
-            N("M", "Socratic mentor, chapter by chapter"),
-            N("S", "Structure architect"),
-            N("A", "Argument builder"),
-            N("X", "Chapter plan and INSIGHT collection"),
-        ),
-        (E("I", "M"), E("M", "S"), E("S", "A"), E("A", "X")),
-    )
-    convert = _g(
-        (
-            N("F", "Formatter: LaTeX, DOCX, PDF, Markdown, citation style"),
-            N("X", "Formatted document"),
-        ),
-        (E("F", "X"),),
-    )
     coach = _g(
         (
             N("R", "Revision coach: the referee comments"),
@@ -1198,14 +1509,6 @@ def only_modes() -> tuple[Pair, ...]:
     )
     return (
         Pair(
-            gf.Panel("academic-paper plan", plan),
-            gf.Panel("Ordo", todo("paper plan mode, entry 5")),
-        ),
-        Pair(
-            gf.Panel("academic-paper format-convert", convert),
-            gf.Panel("Ordo", todo("paper format-convert, entry 5")),
-        ),
-        Pair(
             gf.Panel("academic-paper revision-coach", coach),
             gf.Panel("Ordo", todo("rebuttal, entry 7")),
         ),
@@ -1217,8 +1520,9 @@ def only_modes() -> tuple[Pair, ...]:
 
 
 ONLY_NOTE = (
-    "D3: plan mode stays in paper and is built at entry 5, in a step of its own. Today /paper plan is refused with "
-    "the line that plan mode is not among the modes."
+    "Plan mode and format conversion are built in paper, as its plan and format-convert modes. "
+    "The two modes drawn here, revision-coach and rebuttal-audit, are the rebuttal skill's, "
+    "roadmap entry 7."
 )
 
 
@@ -1271,16 +1575,16 @@ STAGES = (
     Stage("3 Review", "rev", "PRV", False),
     Stage("4, 3', 4' Revise and re-review", "ap", "P2", True),
     Stage("4.5 Final integrity check", "pipe", "RS", False),
-    Stage("5 Finalize", "ap", "FC", False),
+    Stage("5 Finalize", "ap", "FC", True),
     Stage("6 Process summary", "pipe", "NO", False),
 )
 
 TARGETS = {
-    "P1": ("paper full", "paper"),
+    "P1": ("paper plan and paper full", "paper"),
     "PRV": ("paper-review, entry 6", "todo"),
     "RS": ("researcher, entry 13: integrity and ethics checks, the stage loop", "todo"),
     "P2": ("paper revision", "paper"),
-    "FC": ("paper format-convert, entry 5", "todo"),
+    "FC": ("paper format-convert", "paper"),
     "NO": ("none", "none"),
 }
 
@@ -1420,6 +1724,12 @@ SIMPLE = (
     ("abstract-only", ap_abstract_only_simple, APNOTE),
     ("citation-check", ap_citation_check_simple, APNOTE),
     ("disclosure", ap_disclosure_simple, APNOTE),
+    (
+        "plan",
+        ap_plan_simple,
+        "academic-paper marks no stop in the dialogue rounds. " + APNOTE,
+    ),
+    ("format-convert", ap_format_convert_simple, APNOTE),
 )
 
 DETAILED = (
@@ -1430,7 +1740,7 @@ DETAILED = (
         (
             "No RAISE check (V) and no hard gate: what the hard gate refuses is handled by K and "
             "O. academic-paper's conversion to DOCX and Markdown is paper's format-convert mode "
-            "at entry 5, in a step of its own (D3, D25)."
+            '(D3, D25). "[4.A R2-6]" is a ruling of step 4.A\'s second repair round.'
         ),
     ),
     (
@@ -1442,7 +1752,8 @@ DETAILED = (
             "reviewer, the draft writer and citation compliance; the mode table lists no intake "
             'agent for it, while the intake page\'s mode list names it. paper: "The stops of paper" '
             "is a ruling of plan 5. paper has no full re-emission: a structural patch is "
-            "acknowledged or narrowed once (a ruling of plan 5)."
+            'acknowledged or narrowed once (a ruling of plan 5). "[4.A R2-6]" is a ruling of '
+            "step 4.A's second repair round."
         ),
     ),
     (
@@ -1482,6 +1793,35 @@ DETAILED = (
             "academic-paper: no cycle. The mode table lists agent 9, the formatter; the mode guide "
             "says the disclosure protocol runs standalone. paper: the other statements are "
             "written when the venue or you ask (C108 part 4). paper has no policy-anchor track."
+        ),
+    ),
+    (
+        "plan",
+        ap_plan_detailed,
+        paper_plan_detailed,
+        (
+            "academic-paper: the dialogue rounds are no stops. paper: the mentor is one agent "
+            "per run, resumed with each answer, and writes the checkpoint after each round "
+            "so that a continued run starts from it (AY). The stress test is the planner's "
+            "rating of each answer, with the plan-to-draft gate in the chapter plan. "
+            "academic-paper names 30 rounds in one list and 15 in another, and paper takes 30. "
+            'A tag such as "[4.A D1]" names a decision of step 4.A\'s brief and "[4.A R2-7]" '
+            "a ruling of its second repair round."
+        ),
+    ),
+    (
+        "format-convert",
+        ap_format_convert_detailed,
+        paper_format_convert_detailed,
+        (
+            "academic-paper: the formatter converts and compiles itself, with a hard gate "
+            "on provenance markers. paper: no provenance gate, no ARS marker stripping and "
+            "no 1 percent word-count threshold; the formatter writes patches and a report "
+            "and the session converts (AY); a PDF is made from the .tex only, never from a "
+            ".docx. A request with no target takes Markdown [4.A R1-16]. A tag such as "
+            '"[4.A D10]" names a decision of step 4.A\'s brief, "[4.A item 6]" an item of '
+            'it, "[4.A R1-23]" a ruling of its first repair round and "[4.A R2-9]" a '
+            "ruling of its second."
         ),
     ),
 )
