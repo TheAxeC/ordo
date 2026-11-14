@@ -51,9 +51,9 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   launched: 2026-11-14
   session_id: aedf49d8ae906e6fe (claude-sonnet-5-5)
   report: .scratch/5-paper/agents/reviews/4.A-report.md
-  builder_usage: "355770 tokens, 331 tool uses, 29.9 min (build)"
-  reviewer_report: ".scratch/5-paper/agents/reviews/4.A-refuter.md (a145edd564f454b43, claude-opus-5-5, 368722 tokens, 79 tool uses, 18.4 min)"
-  round: 1
+  builder_usage: "355770 tokens, 331 tool uses, 29.9 min (build); 307404 tokens, 306 tool uses, 33.6 min (round 1)"
+  reviewer_report: ".scratch/5-paper/agents/reviews/4.A-refuter.md (a145edd564f454b43, claude-opus-5-5, 368722 tokens, 79 tool uses, 18.4 min); over round 1: ae1b250baac140de8, claude-sonnet-5-5, 288330 tokens, 73 tool uses, 9.2 min"
+  round: 2
   landing: not-started
 ```
 
@@ -62,8 +62,11 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
 
+
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-14: Open item BA, a citation style change with a DOCX or Markdown target: ruled (a) by the user, booked in plan.md's Rulings: a second fresh formatter start writes the conversion patch from the copy compiled in the new style; ADR 0027 names the case. Built in repair round 2 of step 4.A.
+- 2026-11-14: Open item BB, the DOCX layout with no reference document: ruled (a) by the user, booked in plan.md's Rulings: `skills/paper/templates/reference_docx.py` with its test. Built in repair round 2 of step 4.A.
 - 2026-11-14: Open item AZ, the builder's unapproved edit commands in step 4.A: ruled (a) by the user, booked in plan.md's Rulings: the parts are written again with the Edit and Write tools in repair round 1, and the commands are not approved.
 - 2026-11-14: Open item AY, the Socratic mentor's dialogue against ADR 0025: ruled (a) by the user, booked in plan.md's Rulings: one mentor agent per plan run, resumed with each answer, its checkpoint in the run folder; the formatter role; DOCX and Markdown by `pandoc` when on the PATH, a PDF only from the `.tex`; ADR 0027 supersedes 0025.
 - 2026-11-14: Open item AX: ruled (b) by the user, booked in plan.md's Rulings: the manuscript prose standard lists only its differences, ADR 0026 supersedes ADR 0002 in that part; carried out at the landing of step 4.
