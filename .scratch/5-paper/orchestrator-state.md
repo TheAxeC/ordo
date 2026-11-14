@@ -51,13 +51,17 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   launched: 2026-11-14
   session_id: aedf49d8ae906e6fe (claude-sonnet-5-5)
   report: .scratch/5-paper/agents/reviews/4.A-report.md
-  round: 0
+  builder_usage: "355770 tokens, 331 tool uses, 29.9 min (build)"
+  reviewer_report: ".scratch/5-paper/agents/reviews/4.A-refuter.md (a145edd564f454b43, claude-opus-5-5, 368722 tokens, 79 tool uses, 18.4 min)"
+  round: 1
   landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
+
+- Open item AZ (2026-11-14), kind 3 of `plan-orchestration`'s `references/self-rule.md` (a script no ruling approves), raised by the review of step 4.A (`agents/reviews/4.A-refuter.md`, "1. Spec", 1). The builder of step 4.A edited three files with commands of its own where the brief requires the Edit tool: a one-off Python snippet that replaced text in `docs/figures/academic-paper-comparison/gen_comparison.py` (the two comparison pairs, the note and the pipeline entries), and shell heredocs that appended text to `skills/paper/references/planner.md` and wrote `skills/paper/references/formatter.md`. The reviewer read every hunk they produced and found only the text the report describes. Repair round 1 (ruling 1 of `agents/briefs/4.A-round-1.md`) has the builder write those parts again with the Edit and Write tools, so nothing the commands produced reaches main. Options: (a) accept the redo by the Edit and Write tools as the closure, with no approval of the commands; pro: the brief's rule holds as written and the landed text is text the Edit tool wrote and read back; con: the round costs the redo. (b) approve after the fact what the snippet and the heredocs computed (exact text replacement and appending), and land the text as it stands; pro: no redo; con: an approval given after the work, which the brief's rule exists to prevent. Recommendation: (a). The lazy option is (b).
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
