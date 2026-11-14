@@ -1,16 +1,32 @@
 # Figures
 
-The visualization agent reads this page to decide which figures a paper needs, to draw them from the project's data, to check them and to write the trace of each. It writes the scripts and the images in `figures/` of the run folder and the trace in `figures.md`. It changes no manuscript file. The draft writer adds the figures by a patch after the first draft.
+The visualization agent reads this page to decide which figures a paper needs, to draw them from the project's data, to check them, to write the trace of each and to place them in the manuscript. It writes the scripts and the images in `figures/` of the run folder, and the trace in `figures.md`. In full mode and in the figures call it also writes the patch that places the figures. It changes no other manuscript file. Under the permission "the project's figure script edited and run" it also changes the script and the files the script writes. Those lie outside the run folder, as "The files outside the run folder" says. Under the permission "a copy in the run folder" it changes nothing outside the run folder.
+
+The agent is started once. It starts in full mode beside the first draft, in revision mode when an item calls for a figure change, and in the figures call on an existing manuscript. The session resumes the same agent with a second message in two cases. The first is in full mode after the draft writer has ended, when the agent writes its placement patch as "The placement patch" says. The second is when the script rejects a patch. The figures call starts the agent once and has no resumption for placement.
 
 ## What the agent reads
 
-- `config.md`: Venue, Venue limits, Citation style, Materials in hand and the Notes.
+- `config.md`: Venue, Venue limits, Citation style, Materials in hand, Figure changes and the Notes.
 - The project's results data and statistical output that the Materials in hand row names, as CSV files, tables or described data.
-- `outline.md`, for the places where it calls for a figure, and `arguments.md`, for evidence that a figure would show better than a sentence.
-- The main `.tex`, when it exists, for the Results section and the claims that need a figure.
-- Under "figures in parallel" no `.tex` exists when the agent runs. Check 9 then compares the plotted values with the data file and with the numbers `arguments.md` states, and the trace lists under "Claims in the manuscript" the claims of `arguments.md` that lean on the figure, each by its sub-argument number. The integrity check compares them with the manuscript, as its "The figures and the tables" says.
+- In full mode, `outline.md`, for the figures its evidence map plans and their labels, and `arguments.md`, for evidence that a figure would show better than a sentence.
+- In revision mode, the main `.tex` for the Results section and the claims that need a figure, and the items of `items.md` that call for a figure change.
+- In revision mode, the permission intake gave in the row Figure changes: the project's figure script edited and run, or a copy of it in the run folder. The agent works within that permission and changes nothing else.
+- In the figures call, the main `.tex` for the Results section, and the manifest of the `.tex` and the path of the patch, which the session gives. Also the permission of the row Figure changes. The call has no `outline.md`, no `arguments.md` and no `items.md`.
+- No `.tex` exists when the agent first runs in full mode, since the draft writer writes the first draft at the same time. Check 9 then compares the plotted values with the data file and with the numbers `arguments.md` states, and the trace lists under "Claims in the manuscript" the claims of `arguments.md` that lean on the figure, each by its sub-argument number.
+- At its resumption, the manifest of `main.tex` and the path of the patch it writes, which the session gives.
 - The names of the files in the manuscript's folder and in its `figures/` folder, which the session puts in the prompt.
 - The language of the scripts is Python, unless the Notes of `config.md` ask for R.
+
+## The files outside the run folder
+
+The permission of the row Figure changes decides what the agent may change outside the run folder.
+
+- Under "the project's figure script edited and run", the files that may change outside the run folder are the project's figure script and the files it writes. Those are such files as images and tables. The agent changes no other file there.
+- Under "a copy in the run folder", the agent copies the script into `figures/` of the run folder, runs the copy, and changes nothing outside the run folder.
+- Full mode does not ask the row. In a run that has no project figure script to edit or copy, the agent writes its own scripts in `figures/` of the run folder. It changes nothing outside the run folder then.
+- Before the first edit or run, the agent records `shasum -a 256` of the project's figure script and of each file the script may write. After its last run, it records the hash of each again. A file that did not exist before has the hash "absent" before.
+- `figures.md` lists each such file under "Names", with its path, its hash before and its hash after.
+- The report lists the same files, so that the session names them in the final message.
 
 ## Whether to draw a figure
 
@@ -115,7 +131,7 @@ Diverging, for correlations and differences: negative `#2166AC`, zero `#F7F7F7`,
 
 - Red against green is never the only difference between two groups.
 - Colour is paired with a shape, a pattern or a label when it encodes a category.
-- The contrast against the background is at least 3:1.
+- By the WCAG formula, the contrast against a white background is at least 3:1 for every colour of the table except three. They are cyan `#33BBEE` (2.21:1), orange `#EE7733` (2.87:1) and grey `#BBBBBB` (1.92:1). These three are drawn only with a black outline. A bar, a box, a point or a patch in one of them has a black edge. A line in one of them carries markers with a black edge, and a label or a pattern. The black edge carries the contrast that the colour lacks.
 - A figure printed in grayscale still tells its groups apart by pattern or label.
 - A rainbow colour map is never used.
 
@@ -212,6 +228,7 @@ fig, ax = plt.subplots(figsize=(6.9, 4.5))
 bp = ax.boxplot(data, patch_artist=True, widths=0.6, medianprops=dict(color='black', linewidth=1.5))
 for patch, color in zip(bp['boxes'], CB):
     patch.set_facecolor(color)
+    patch.set_edgecolor('black')
     patch.set_alpha(0.7)
 ax.set_xticks(range(1, len(order) + 1))
 ax.set_xticklabels(order)
@@ -232,7 +249,7 @@ fig, ax = plt.subplots(figsize=(6.9, 4.5))
 for i, name in enumerate(names):
     points = [(float(x), float(y)) for x, s, y in zip(cols['x'], cols['series'], cols['y']) if s == name]
     xs, ys = zip(*points)
-    ax.plot(xs, ys, marker=markers[i % len(markers)], color=CB[i], label=name, linewidth=1.5, markersize=5)
+    ax.plot(xs, ys, marker=markers[i % len(markers)], color=CB[i], markeredgecolor='black', label=name, linewidth=1.5, markersize=5)
 ax.set_xlabel('Year')
 ax.set_ylabel('Count (n)')
 ax.legend(frameon=False)
@@ -403,7 +420,7 @@ df <- read.csv("data/scores.csv")
 df$group <- factor(df$group, levels = unique(df$group))
 
 ggplot(df, aes(x = group, y = value, fill = group)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 21, outlier.size = 1.5) +
+  geom_boxplot(alpha = 0.7, color = "black", outlier.shape = 21, outlier.size = 1.5) +
   scale_fill_manual(values = cb_palette) +
   labs(x = "Group", y = "Score (points)") +
   theme_fig +
@@ -419,11 +436,13 @@ Line chart, columns `x`, `series`, `y`:
 df <- read.csv("data/trend.csv")
 df$series <- factor(df$series, levels = unique(df$series))
 
-ggplot(df, aes(x = x, y = y, color = series, shape = series)) +
+ggplot(df, aes(x = x, y = y, color = series, fill = series, shape = series)) +
   geom_line(linewidth = 1) +
-  geom_point(size = 2.5) +
+  geom_point(size = 2.5, color = "black") +
   scale_color_manual(values = cb_palette) +
-  labs(x = "Year", y = "Count (n)", color = NULL, shape = NULL) +
+  scale_fill_manual(values = cb_palette) +
+  scale_shape_manual(values = c(21, 22, 24, 23, 25)) +
+  labs(x = "Year", y = "Count (n)", color = NULL, fill = NULL, shape = NULL) +
   theme_fig
 
 ggsave("figures/figure_03.pdf", width = 6.9, height = 4.5, units = "in", dpi = 300)
@@ -535,7 +554,7 @@ ggsave("figures/figure_08.png", width = 6.9, height = 4.5, units = "in", dpi = 3
 
 ## The LaTeX environments
 
-The draft writer copies the environment of each figure from `figures.md`. The caption stands below the figure, as the venue's template sets it.
+The agent writes the environment of each figure in `figures.md`, and the placement patch and the draft writer's revision patches copy it from there. The LaTeX label of a figure planned in full mode is `fig:<label>`, with the label the evidence map of `outline.md` gives, since the first draft refers to the figure as `Figure~\ref{fig:<label>}`. The caption stands below the figure, as the venue's template sets it.
 
 Single figure:
 
@@ -586,9 +605,34 @@ A full-page landscape figure, with `\usepackage{pdflscape}` in the preamble:
 
 - The preamble needs `graphicx`, and `subcaption` for panels.
 - Figures are numbered in the order of their first mention in the text, and `\ref{...}` gives the number.
+- A figure in an appendix is numbered A1, A2 for the first appendix and B1, B2 for the second, and so on. The text that places the first figure of an appendix begins with `\setcounter{figure}{0}` and `\renewcommand{\thefigure}{A\arabic{figure}}`, with the letter of that appendix. Both stay in force to the end of the appendix, and `\ref{...}` gives the number. The text refers to it as "Figure A1", and the first mention in the text still orders the numbers inside an appendix.
 - Each figure is referred to in the text, such as "As shown in Figure~\ref{fig:group-scores}, ...".
 - A venue whose template sets another caption form, such as a label in bold and a title in italics, keeps its own form.
 - The caption describes the figure so that it can be read without the text. It states the sample size, the meaning of the error bars and any missing values.
+
+## The placement patch
+
+In full mode the first draft holds a marker where each planned figure goes and no figure environment. The marker is the line `% FIGURE: <label>`, standing alone between blank lines. After the draft writer has ended, the session copies the images into the manuscript's `figures/` folder, anchorizes `main.tex` and resumes the agent with a second message that holds the manifest and the path of the patch.
+
+- The patch has the id `figures`, as `references/patch-file.md` gives, and the form of that page.
+- The marker is a block of its own, so the patch has one `replace_block` op for each figure drawn. The op replaces the marker block with the environment of the figure from `figures.md`, with the image name that `figures.md` gives under "Names".
+- Each op names `figures` in `roadmap_item_ids`, and its rationale names the label.
+- The agent copies `base_sha256` and each `old_hash` from the manifest, as `references/patch-file.md` says.
+- A figure listed under "Not drawn" gets one `delete_block` op for its marker. A block that refers to `fig:<label>` gets one `replace_block` op that states the same result without the reference, and changes no other word.
+- A marker whose label `figures.md` lists neither as drawn nor as not drawn is named in the agent's report, and its block is left unchanged.
+- The agent changes no other block and does not apply its patch.
+
+## The figures call
+
+The figures call starts the agent once on an existing manuscript, with no outline and no marker.
+
+- The agent finds the quantitative results of the Results section that a figure would show better than a sentence or a table. It applies "Whether to draw a figure" to each. It draws them from the data that Materials in hand names.
+- A result whose data the agent cannot find is listed under "Not drawn" with the missing file.
+- The patch has the id `figures`. For each figure drawn it has one `insert_after` op on the block that discusses the figure's result.
+- The `new_text` of the op holds a sentence that refers to the figure as `Figure~\ref{fig:<label>}` and restates the result the discussing block reports, then a blank line.
+- The `new_text` then holds the environment of the figure from `figures.md`, with the image name that `figures.md` gives under "Names".
+- The label is chosen by the agent from the result, in lower case with hyphens.
+- The agent changes no other block, writes no compile fix, and does not apply its patch. The session copies the images, applies the patch and compiles once.
 
 ## The ten checks of a figure
 
@@ -598,7 +642,7 @@ The agent runs these checks on every figure before it reports.
 |---|---|---|---|
 | 1 | Axis labels | Both axes have a descriptive label. | Add the label. |
 | 2 | Units | Every numeric axis states its unit, such as %, n or USD. | Add the unit. |
-| 3 | Legend | A chart with several series has a legend. | Add the legend. |
+| 3 | Legend and scale bar | A chart with several series has a legend, and a figure that shows an image or a map has a scale bar. | Add the legend or the scale bar. |
 | 4 | Caption | A caption exists in the template's form. | Write the caption. |
 | 5 | Colour | The palette is one of this page's palettes. | Replace the colours. |
 | 6 | Font size | No text is smaller than 8 pt in the final output. | Increase the size. |
@@ -612,7 +656,11 @@ The agent runs these checks on every figure before it reports.
 
 ## The rendered figure
 
-After the script ran, the agent reads the PNG with the Read tool and checks what the image shows against the source data.
+The check runs on a complex figure: one with more than one panel or series, or with error bars or intervals. The ten checks of "The ten checks of a figure" run on every figure.
+
+A figure that is not complex is not read as an image, and its status is SKIPPED with the reason "simple figure".
+
+After the script ran, the agent reads the PNG of a complex figure with the Read tool and checks what the image shows against the source data.
 
 1. The plotted values match the source data. A bar labelled "45%" reaches about 45 percent of the axis range.
 2. Every data series and every category is present.
@@ -633,7 +681,7 @@ After the script ran, the agent reads the PNG with the Read tool and checks what
 
 ## The trace
 
-`figures.md` holds one entry for each figure and for each manuscript table whose data the agent produced. The integrity verification agent reads the entries.
+`figures.md` holds one entry for each figure and for each manuscript table whose data the agent produced. The entries are the record that the check of the figures in `researcher` reads.
 
 ```
 ## Figure 3
@@ -655,13 +703,13 @@ After the script ran, the agent reads the PNG with the Read tool and checks what
 - The Source data names a real file. When the source is a table or sentence of the manuscript, the entry gives the section, the paragraph and the operation instead of a file, such as "mean over 3 seeds, Results, paragraph 2".
 - The hash comes from `shasum -a 256 'figures/figure_03.py'`. A source given as a manuscript table needs no script hash, and the entry says how to derive the numbers.
 - A vague source such as "computed manually" or "see paper" is not enough.
-- The caption claim is the claim the caption makes about the data. A compound claim stays compound, and the integrity verification agent splits it.
+- The caption claim is the claim the caption makes about the data. A compound claim stays compound, and the check of the figures in `researcher` splits it.
 - The agent lists a manuscript claim under the figure only when the figure's data support it. Each listed claim cites the figure. A claim is given by its text and its place, so that it does not depend on a number that may change.
 - A manuscript sentence that only points to the figure, such as "see Figure 3 for the architecture", is not listed.
 - `figures.md` also holds these parts:
   - Figure numbering: each figure with its number, its script and its image file.
-  - Names: for each image, the name it has in the run folder and the name it takes in the manuscript's folder.
-  - The environment of each figure and its in-text sentence, for the draft writer.
+  - Names: for each image, the name it has in the run folder and the name it takes in the manuscript's folder. Also each file outside the run folder that the agent changed, with its path and its hash before and after.
+  - The environment of each figure, for the placement patch and for the draft writer's revision patches.
   - Not drawn: each candidate the agent did not draw, with the case from "Whether to draw a figure" or the missing library and the error as printed.
 
 ## The names of the images

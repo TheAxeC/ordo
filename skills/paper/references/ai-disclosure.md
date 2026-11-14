@@ -1,14 +1,14 @@
 # AI disclosure
 
-The draft writer reads this page to write the AI disclosure statement of a paper, in disclosure mode and as one of the six statements of full mode. The statement is written as a patch as `references/patch-file.md` gives, at the place the venue's policy gives.
+The draft writer reads this page to write the AI disclosure statement of a paper, in disclosure mode and as one of the six statements of full mode. The statement stands at the place the venue's policy gives, or at the policy anchor's place when the Policy anchor row names one. It stands in the first draft of full mode, and in disclosure mode it is written as a patch as `references/patch-file.md` gives.
 
 ## Inputs
 
 - The manuscript, which shows what the AI did.
-- The AI use row of `config.md`: each category marked used, not used or uncertain, the tools with their versions, and the user's answer on whether any AI was used.
+- The AI use row of `config.md`: each category marked used, not used or uncertain, the tools with their versions, and the user's answer on whether any AI was used. In disclosure mode the session pre-marks the categories from the records of earlier runs, as `references/intake.md` gives under "Disclosure records", and the user confirms the marks.
 - The venue and, for a venue this page does not list, the policy text the user pasted.
-- In full mode, the model the runner served the agents already started in the run, which the session gives in the prompt.
-- In disclosure mode no served model exists when the agent starts, so the agent writes the model identifier its runtime states for itself. The session compares it with the model the runner served the agent, and gives the served model in the prompt only when it starts the agent again after a mismatch.
+- The Policy anchor row of `config.md`, in disclosure mode: one of `prisma-trAIce`, `icmje`, `nature`, `ieee`, or "none".
+- The model identifier that the session gives in the prompt, in full mode and in disclosure mode alike. It is the identifier that the runner's model list gives for the configured alias at the run's start, such as `claude-opus-5-5`. When the list gives none, it is the model the runner served to the first agent of the run. The session first checks that this model belongs to the alias's family.
 
 ## Categories of AI use
 
@@ -38,12 +38,13 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 
 ## The full statement
 
-- The venue's policy is looked up in "Venue policies" below. An unlisted venue's policy is the text the user pasted, used for this run only and not added to this page.
-- Without a listed venue and without pasted text, the statement uses one of the two generic forms below, and `disclosure.md` says the venue's policy was not checked.
+- A Policy anchor row that names an anchor takes the track of "Policy anchors" below in place of this section's venue lookup. The rest of this section applies to it as it stands. A row "none" takes the venue track.
+- The venue's policy is looked up in "Venue policies" below. An unlisted venue's policy is the text the user pasted at intake, used for this run only and not added to this page.
+- The answer "no venue yet" at intake, and a venue that is unlisted with no pasted text, give one of the two generic forms below. `disclosure.md` says the venue's policy was not checked.
 - The categories are matched against the venue's requirements. A category the venue requires disclosed but the answer marks uncertain is a mismatch, and the report names it.
 - The statement is one paragraph in the venue's preferred voice (person and tense) with the venue's required phrasing elements, such as "the authors take full responsibility for the content".
 - The paragraph names the tool and the version, never "AI tools" alone, and names the categories marked used.
-- The model identifier is the one the runner served, never one written from memory. In disclosure mode the agent writes the identifier its runtime states for itself, and the session checks it against the runner's record of the model it served.
+- The model identifier is the one the prompt gives, written in full, never one written from memory or from the agent's runtime. Without one the statement carries `[GAP: model identifier]` and the report lists it. When the draft writer is the first agent of the run and the list gave none, the session starts it again with the id `disclosure` and the served model. That start replaces the gap. The gap stays only when the runner gives no served model.
 - It describes the human oversight: who reviewed what, and at which stages.
 - It states the limits of the tool that matter for the content, such as a possible hallucination.
 - Where the policy asks for the statement in more than one place, such as the Methods and the cover letter, each place gets its own text.
@@ -64,6 +65,103 @@ Generic form, detailed:
 AI Disclosure: The authors used <tool name> during the preparation of this work. Specifically, <tool name> was used for <specific tasks, such as literature search assistance, language editing, data visualization>. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article.
 ```
 
+## Policy anchors
+
+A policy anchor is a policy framework that many journals follow, and an author who targets one rather than a single venue gets a statement written to it. The Policy anchor row of `config.md` holds one anchor or "none".
+
+- The track is chosen by the Policy anchor row. A row that names an anchor and a Venue row that names a venue are compatible only when the venue belongs to the Nature Portfolio and the anchor is `nature`. Any other pair is refused: the report names the conflict, and the user drops the venue or the anchor at the stop for the confirmation of the record. Neither the venue nor the anchor takes precedence silently.
+- A statement for an anchor follows "What the statement says" and "The full statement" above for the answer of the AI use row and the categories. The first-match rules, the gap placeholder for an uncertain category, the model identifier and the tool names are the same.
+- The cells below carry the anchor's wording as recorded from its page on the snapshot date of its heading. The user verifies the wording and the placement against the anchor's current page before submission, since policies change.
+- A field an anchor does not address is not written for that anchor. When a category marked used would be served by such a field, the report says the anchor leaves that detail to the journal's own policy and names the venue track.
+- A statement for an anchor is not built from a quote alone. It states the tool, its version, the tasks and the human oversight under the fields the anchor addresses. It uses an anchor's wording only where a cell below gives it.
+
+Each table lists the fields the anchor addresses, with the strength of its wording. The strengths are mandate (the policy says shall, must or should require) and recommend (should, describe, report). The third is implied: the policy does not name the field, and the cell says what it implies.
+
+### PRISMA-trAIce
+
+- Snapshot date: 2026-05-13. The framework is a proposal from before a consensus process, and no item is a mandate. It applies only when the paper reports a systematic literature review and AI was used as a method in it. The track is refused for any other paper, and the report says so.
+- The prompt disclosure of the third row applies only for a language model or a generative tool used as a method of the review, in the stages the first row lists. It never applies for editing alone. A review whose only AI use is editing takes the editing rule of "Editing only" below.
+
+| Field | Strength | Wording of the framework | Place |
+|---|---|---|---|
+| Tool name, version, developer | recommend | "Specify the name, version number (if applicable), and developer/provider." | Table 1, M2.a |
+| Stage of the review | recommend | "The specific SLR stage(s) where it was applied (e.g., search, screening, data extraction, Risk of Bias assessment, synthesis, drafting)." | Table 1, M3.a |
+| Task within the stage | recommend | "The precise task(s) the AI was intended to perform at each stage." | Table 1, M3.b |
+| Prompts | recommend | "The full prompt(s) employed for each specific task. If prompts are extensive, provide a detailed description of their structure, key instructions, context provided..." | Table 1, M6.a |
+| Human oversight | recommend | "Describe the process of human interaction with and oversight of the AI tool(s) at each stage": how many reviewers checked the output, and whether they worked independently | Table 1, M8.a to M8.g |
+| Performance evaluation method | recommend | "Describe methods used to evaluate the AI tool(s) performance for the specific tasks within the review (if applicable and feasible)", with the reference standard and the metrics | Table 1, M9 |
+| Performance evaluation results | recommend | "Report the results of any performance evaluations of the AI tool(s) for the specific tasks within the review", with the agreement between the AI and the human reviewers when assessed | Table 1, R2 |
+| Limitations | recommend | "Discuss any limitations encountered in using the AI tool(s) (eg, technical issues, biases identified, challenges in prompt engineering, unexpected outputs, limitations in AI performance for specific sub-tasks)." | Table 1, D1 |
+| Affected sections | implied | Each item of Table 1 names the manuscript section it belongs to, and the framework has no field for the sections an AI task touched | Table 1 |
+| Place of the disclosure | implied | Each item of Table 1 sits under Title, Abstract, Introduction, Methods, Results or Discussion | Table 1 |
+| Rights of AI-generated content | implied | "Describe how data handled by AI tools (input, output, intermediate data) was managed and stored, and any measures taken to ensure data privacy, security, and compliance with copyright or terms of service, especially when using third-party cloud-based AI tools." | Table 1, M10 |
+
+- The framework does not address the dates of use, the human responsibility statement or an exemption for editing.
+- The statement is written per section of Table 1, and not as one paragraph. It has one fragment for each of the sections Title, Abstract, Introduction, Methods, Results and Discussion that an item belongs to.
+- A record is written for each pair of a tool and a stage. A pair the user did not supply gets "not supplied" on its own line, and a tool is never given a record for the pairs of another.
+
+### ICMJE
+
+- Snapshot date: 2026-05-13. The recommendations are adopted by many journals as a baseline. The page on AI use by authors is two short paragraphs, and it leaves the detail to each journal.
+
+| Field | Strength | Wording of the recommendations | Place |
+|---|---|---|---|
+| Tool name | implied | "the journal should require authors to disclose at submission whether they used AI-assisted technologies (such as LLMs, chatbots, or image creators)." | Section V.A, paragraph 1 |
+| Stage and task | implied | "Authors who use such technology should describe... how they used it." | Section V.A, paragraph 1 |
+| Human oversight | recommend | "Authors should carefully review and edit the AI-generated content as the output can be incorrect, incomplete, or biased." | Section V.A, paragraph 1 |
+| Human responsibility | mandate | "Therefore, humans are responsible for any submitted material that included the use of AI-assisted technologies." | Section V.A, paragraph 1 |
+| Place of the disclosure | recommend | "Authors who use such technology should describe, in both the cover letter and the submitted work in the appropriate section if applicable, how they used it" | Section V.A, paragraph 1 |
+| Attribution and rights | mandate | "Humans must ensure there is appropriate attribution of all quoted material, including full citations." and "Referencing AI-generated material as the primary source is not acceptable." | Section V.A, paragraph 1 |
+
+- The framework does not address the version, the developer, the affected sections, the dates of use, the prompts, the performance of the tool, its limitations or an exemption for editing.
+- The statement has two texts: one for the cover letter, in the framework's wording, and one for the section of the manuscript the venue's own policy gives. They are not one paragraph copied twice.
+- The sentence of human responsibility is written whenever a category is marked used, in the framework's wording.
+- A paragraph on attribution is written whenever a category is marked used, even when no figure or image is involved. Material quoted from an AI tool carries its full citation, and AI-generated material is not cited as a primary source.
+- Editing has no exemption in this framework, and the statement for editing alone is written as for any other use.
+
+### Nature
+
+- Snapshot date: 2026-05-13. The policy applies to all Nature Portfolio journals. It covers AI authorship and generative AI images on the author's side. Its wording about text is a framework, and its wording about images is a prohibition with exceptions.
+
+| Field | Strength | Wording of the policy | Place |
+|---|---|---|---|
+| Tool, stage and task | implied | "Use of an LLM should be properly documented in the Methods section (and if a Methods section is not available, in a suitable alternative part) of the manuscript." | AI authorship |
+| Affected sections | implied | "in the relevant caption upon submission" for a tool that is not generative and acts on an image, and the Methods section for a language model | Generative AI images, AI authorship |
+| Human oversight | mandate | "In all cases, there must be human accountability for the final version of the text and agreement from the authors that the edits reflect their original work." | AI authorship |
+| Human responsibility | mandate | "an attribution of authorship carries with it accountability for the work, which cannot be effectively applied to LLMs", and "there must be human accountability for the final version of the text" | AI authorship |
+| Place of the disclosure | recommend | The Methods section, "and if a Methods section is not available, in a suitable alternative part", and for a tool that is not generative and acts on an image, "should be disclosed in the relevant caption upon submission" | AI authorship, Generative AI images |
+| Exemption for editing | recommend | "The use of an LLM (or other AI-tool) for 'AI assisted copy editing' purposes does not need to be declared." Such editing means "AI-assisted improvements to human-generated texts for readability and style" and does not include "generative editorial work and autonomous content creation" | AI authorship |
+| Images and other content | mandate | "Springer Nature journals are unable to permit its use for publication." and "All exceptions must be labelled clearly as generated by AI within the image field." | Generative AI images |
+
+- The policy does not address the version, the developer, the dates of use, the prompts, the performance of the tool or its limitations.
+- The statement stands in the Methods section, or in the suitable alternative part when the manuscript type has no Methods section. The placement line quotes the policy's own words.
+- Use for editing alone gives no statement. The report holds a line that says the use was editing and was not declared.
+- For each figure, the report lists which exception of the policy applies, or that none applies and the policy forbids the image. It also lists the label text the image field takes. The draft writer changes no caption or figure for this. It writes the list into `disclosure.md` for the author to apply.
+
+### IEEE
+
+- Snapshot date: 2026-05-13. The guideline page is two short paragraphs. Its policy has no statement of human responsibility, no requirement of oversight, and no rule for images apart from the rule for text.
+
+| Field | Strength | Wording of the guideline | Place |
+|---|---|---|---|
+| Tool name | mandate | "The AI system used shall be identified" | Paragraph 1, sentence 2 |
+| Level of involvement | implied | "accompanied by a brief explanation regarding the level at which the AI system was used to generate the content" | Paragraph 1, sentence 2 |
+| Task and section | mandate | "specific sections of the article that use AI-generated content shall be identified and accompanied by a brief explanation regarding the level at which the AI system was used to generate the content" | Paragraph 1, sentence 2 |
+| Place of the disclosure | mandate | "shall be disclosed in the acknowledgments section of any article submitted to an IEEE publication" | Paragraph 1, sentence 1 |
+| Editing | recommend | "The use of AI systems for editing and grammar enhancement is common practice and, as such, is generally outside the intent of the above policy. In this case, disclosure as noted above is recommended." | Paragraph 2 |
+| Images, figures and code | implied | "The use of content generated by artificial intelligence (AI) in an article (including but not limited to text, figures, images, and code) shall be disclosed in the acknowledgments section" | Paragraph 1, sentence 1 |
+
+- The guideline does not address the version, the developer, the dates of use, the prompts, human oversight, human responsibility, the performance of the tool or its limitations.
+- The statement stands in the acknowledgments section and nowhere else, and it has no cover-letter text.
+- The sections the AI-generated content touches and the level of involvement are written together. The statement gives a list of sections, such as Introduction, Methods, Results, Discussion, Abstract or Title, and a sentence on how far the AI generated the content. One is never written without the other.
+- Use for editing alone still gives a statement, at the acknowledgments, in the wording of a recommendation ("is recommended") and not of a requirement ("shall be disclosed").
+- Text, figures, images and code fall under the one acknowledgments paragraph, and no separate rule for images is applied.
+
+### Editing only
+
+- The anchors treat use for editing alone in four ways. Nature gives no statement, and IEEE gives a statement worded as a recommendation. PRISMA-trAIce leaves editing outside its scope. ICMJE does not address it, and gets the statement of any other use.
+- The session never turns the four into one rule such as "editing is exempt". The track of the anchor the Policy anchor row names applies.
+
 ## Attribution and labelling
 
 - A statement states which AI tools were used and how, in the Methods or the Acknowledgments, or where the venue puts it.
@@ -81,7 +179,7 @@ The literature strategist writes one line at the end of `review.md`, under the h
 - The line says the review was produced with AI-assisted research tools, and names the tool and the version the AI use row gives.
 - It names the categories the review involved that the row marks used: research assistance for the search and the annotated bibliography, and drafting assistance for the synthesis.
 - It says a person oversaw the process and the authors take responsibility for the content.
-- It claims no check, no audit and no verification. The integrity record holds the checks the run made.
+- It claims no check, no audit and no verification.
 - An answer of no AI in the AI use row contradicts a review the strategist wrote. No line is written then, and the report names the contradiction.
 - The venues' policies below govern the statement of a manuscript. They do not govern this line.
 

@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 1247" width="1320" height="1247" role="img" aria-label="academic-pipeline: the 10 stages, and where each stage goes now. Boxes: 1 Research: deep-research; 2 Write: academic-paper, plan or full; 2.5 Integrity check; 3 Review: academic-paper-reviewer; Back to stage 2, or end; 4 Revise: academic-paper revision; 3&#x27; Re-review; 4&#x27; Re-revise, no review after; 4.5 Final integrity check, zero issues to pass; 5 Finalize: DOCX, LaTeX, PDF; 6 Process summary; 1 Research: deep-research; 2 Write: academic-paper; 2.5 Integrity check; 3 Review; 4, 3&#x27;, 4&#x27; Revise and re-review; 4.5 Final integrity check; 5 Finalize; 6 Process summary; paper full; paper-review, entry 6; researcher, entry 13: integrity and ethics checks, the stage loop; paper revision; paper format-convert, entry 5; none.">
+<title>academic-pipeline: the 10 stages, and where each stage goes now. Boxes: 1 Research: deep-research; 2 Write: academic-paper, plan or full; 2.5 Integrity check; 3 Review: academic-paper-reviewer; Back to stage 2, or end; 4 Revise: academic-paper revision; 3' Re-review; 4' Re-revise, no review after; 4.5 Final integrity check, zero issues to pass; 5 Finalize: DOCX, LaTeX, PDF; 6 Process summary; 1 Research: deep-research; 2 Write: academic-paper; 2.5 Integrity check; 3 Review; 4, 3', 4' Revise and re-review; 4.5 Final integrity check; 5 Finalize; 6 Process summary; paper full; paper-review, entry 6; researcher, entry 13: integrity and ethics checks, the stage loop; paper revision; paper format-convert, entry 5; none.</title>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#4f46e5"/></marker></defs>
+<rect x="0" y="0" width="1320" height="1247" rx="10" fill="#f8fafc" stroke="#64748b"/>
+<text x="16" y="22" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">academic-pipeline: the 10 stages</text>
+<path d="M353.3,90 L353.3,136" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M353.3,182 L353.3,228" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M353.3,262 L353.3,309" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M353.3,355 L139,468" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M353.3,355 L387,462" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M387,508 L385.5,554" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M385.5,588 L325.7,665" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M385.5,588 L472.7,665 L472.7,711 L439.1,757" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M353.3,355 L534,462 L534,508 L532.5,554 L532.5,588 L518.7,665 L518.7,711 L439.1,757" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M325.7,711 L439.1,757" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M439.1,803 L439.1,850" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M439.1,884 L439.1,930" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M460.3,238 L482.3,238 L482.3,252 L460.3,252" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M546.1,773 L568.1,773 L568.1,787 L546.1,787" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="246.3" y="56" width="214" height="34" rx="8" fill="#f6eedc" stroke="#a16207" stroke-width="1.5"/>
+<text x="353.3" y="76.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#422006" font-weight="400" text-anchor="middle">1 Research: deep-research</text>
+<rect x="246.3" y="136" width="214" height="46" rx="8" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="353.3" y="155.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">2 Write: academic-paper,</text>
+<text x="353.3" y="169.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">plan or full</text>
+<rect x="246.3" y="228" width="214" height="34" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="353.3" y="248.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">2.5 Integrity check</text>
+<rect x="246.3" y="309" width="214" height="46" rx="8" fill="#efe7fb" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="353.3" y="328.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#3b0764" font-weight="400" text-anchor="middle">3 Review:</text>
+<text x="353.3" y="342.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#3b0764" font-weight="400" text-anchor="middle">academic-paper-reviewer</text>
+<rect x="32" y="468" width="214" height="34" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+<text x="139" y="488.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">Back to stage 2, or end</text>
+<rect x="280" y="462" width="214" height="46" rx="8" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="387" y="481.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">4 Revise: academic-paper</text>
+<text x="387" y="495.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">revision</text>
+<rect x="278.5" y="554" width="214" height="34" rx="8" fill="#efe7fb" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="385.5" y="574.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#3b0764" font-weight="400" text-anchor="middle">3' Re-review</text>
+<rect x="218.7" y="665" width="214" height="46" rx="8" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="325.7" y="684.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">4' Re-revise, no review</text>
+<text x="325.7" y="698.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">after</text>
+<rect x="332.1" y="757" width="214" height="46" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="439.1" y="776.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">4.5 Final integrity check,</text>
+<text x="439.1" y="790.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">zero issues to pass</text>
+<rect x="332.1" y="850" width="214" height="34" rx="8" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="439.1" y="870.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">5 Finalize: DOCX, LaTeX, PDF</text>
+<rect x="332.1" y="930" width="214" height="34" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="439.1" y="950.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">6 Process summary</text>
+<text x="377.9" y="289.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">pass</text>
+<text x="246.2" y="379.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Reject</text>
+<text x="317.4" y="422.8" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Minor or Major</text>
+<text x="318.8" y="630.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Major</text>
+<text x="471.2" y="607" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Accept or Minor</text>
+<text x="443.7" y="376.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">Accept</text>
+<text x="463.7" y="830.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">pass</text>
+<text x="540.6" y="235.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">fail: fix and</text>
+<text x="540.6" y="248.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">check again, up</text>
+<text x="540.6" y="261.6" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">to 3 rounds</text>
+<text x="620" y="777.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">fail: fix and</text>
+<text x="620" y="790.1" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10.5" fill="#475569" font-weight="400" text-anchor="middle" stroke="#f8fafc" stroke-width="4" stroke-linejoin="round" paint-order="stroke">check again</text>
+<text x="722" y="22" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">where each stage goes now</text>
+<path d="M922,57 L1071,177.7" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M922,107 L1071,107" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M922,157 L1071,177.7" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M922,207 L1071,240.7" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M922,263 L1071,290.7" fill="none" stroke="#4f46e5" stroke-width="1.8" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M922,319 L1071,177.7" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M922,369 L1071,369" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<path d="M922,419 L1071,419" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<rect x="722" y="40" width="200" height="34" rx="8" fill="#f6eedc" stroke="#a16207" stroke-width="1.5"/>
+<text x="822" y="60.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#422006" font-weight="400" text-anchor="middle">1 Research: deep-research</text>
+<rect x="722" y="90" width="200" height="34" rx="8" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="822" y="110.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">2 Write: academic-paper</text>
+<rect x="722" y="140" width="200" height="34" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="822" y="160.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">2.5 Integrity check</text>
+<rect x="722" y="190" width="200" height="34" rx="8" fill="#efe7fb" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="822" y="210.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#3b0764" font-weight="400" text-anchor="middle">3 Review</text>
+<rect x="722" y="240" width="200" height="46" rx="8" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="822" y="259.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">4, 3', 4' Revise and</text>
+<text x="822" y="273.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">re-review</text>
+<rect x="722" y="302" width="200" height="34" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="822" y="322.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">4.5 Final integrity check</text>
+<rect x="722" y="352" width="200" height="34" rx="8" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="822" y="372.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#14532d" font-weight="400" text-anchor="middle">5 Finalize</text>
+<rect x="722" y="402" width="200" height="34" rx="8" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="822" y="422.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#0f172a" font-weight="400" text-anchor="middle">6 Process summary</text>
+<rect x="1072" y="90" width="232" height="34" rx="8" fill="#dff3f1" stroke="#0f766e" stroke-width="1.5"/>
+<text x="1188" y="110.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#134e4a" font-weight="400" text-anchor="middle">paper full</text>
+<rect x="1072" y="147.7" width="232" height="60" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="1188" y="167" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="middle">researcher, entry 13:</text>
+<text x="1188" y="181" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="middle">integrity and ethics checks,</text>
+<text x="1188" y="195" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="middle">the stage loop</text>
+<rect x="1072" y="223.7" width="232" height="34" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="1188" y="244" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="middle">paper-review, entry 6</text>
+<rect x="1072" y="273.7" width="232" height="34" rx="8" fill="#dff3f1" stroke="#0f766e" stroke-width="1.5"/>
+<text x="1188" y="294" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#134e4a" font-weight="400" text-anchor="middle">paper revision</text>
+<rect x="1072" y="352" width="232" height="34" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="1188" y="372.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#475569" font-weight="400" text-anchor="middle">paper format-convert, entry 5</text>
+<rect x="1072" y="402" width="232" height="34" rx="8" fill="#f8fafc" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="2 3"/>
+<text x="1188" y="422.4" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11.5" fill="#991b1b" font-weight="400" text-anchor="middle">none</text>
+<text x="16" y="1004" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#475569" font-weight="400" text-anchor="start">The pipeline stops for you after every stage. D42 and D56: the integrity and ethics checks run in researcher, once on paper's finished draft and once after its revision.</text>
+<text x="16" y="1041" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="10" fill="#475569" font-weight="700" text-anchor="start">HOW TO READ THE FIGURE</text>
+<rect x="16" y="1055" width="28" height="14" rx="4" fill="#e3f4e8" stroke="#15803d" stroke-width="1.5"/>
+<text x="56" y="1066" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Green: academic-paper</text>
+<rect x="16" y="1075" width="28" height="14" rx="4" fill="#efe7fb" stroke="#7c3aed" stroke-width="1.5"/>
+<text x="56" y="1086" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Purple: academic-paper-reviewer</text>
+<rect x="16" y="1095" width="28" height="14" rx="4" fill="#eceff3" stroke="#64748b" stroke-width="1.5"/>
+<text x="56" y="1106" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Grey: academic-pipeline itself</text>
+<rect x="16" y="1115" width="28" height="14" rx="4" fill="#f6eedc" stroke="#a16207" stroke-width="1.5"/>
+<text x="56" y="1126" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Sand: deep-research</text>
+<rect x="16" y="1135" width="28" height="14" rx="4" fill="#dff3f1" stroke="#0f766e" stroke-width="1.5"/>
+<text x="56" y="1146" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Teal: paper</text>
+<rect x="16" y="1155" width="28" height="14" rx="4" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
+<text x="56" y="1166" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dashed box: not built yet, with its roadmap entry</text>
+<rect x="16" y="1175" width="28" height="14" rx="4" fill="#f8fafc" stroke="#b91c1c" stroke-width="1.5" stroke-dasharray="2 3"/>
+<text x="56" y="1186" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Red dotted box: no skill takes it</text>
+<path d="M16,1202 L44,1202" fill="none" stroke="#4f46e5" stroke-width="1.8" stroke-dasharray="2 4" marker-end="url(#arrow)" stroke-linejoin="round"/>
+<text x="56" y="1206" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="11" fill="#0f172a" font-weight="400" text-anchor="start">Dotted arrow: goes to a skill not built yet or to none; a solid arrow goes to paper</text>
+</svg>

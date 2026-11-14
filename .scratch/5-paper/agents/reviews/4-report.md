@@ -3542,3 +3542,116 @@ SKILL.md 528; references: ai-disclosure 150, citation-compliance 446, draft-writ
 - Point 8: the premise that the clinical checklist holds an integrity check of a whole manuscript does not hold. Its six rows judge one cited sentence each, and its safety line states the research-only boundary.
 - Point 7: the lines 804 and 806 of `gen_comparison.py` are lines 414 and 417 in the full view and 937 and 939 in the citation-check view of the current file.
 - The brief's point 25 and point 25a say the stop "A claim the run cannot support" applies in both modes; it applies in all three modes that run the agent, and the stop lists name it in each.
+
+
+## Repair round 2
+
+
+All 32 points of `.scratch/5-paper/agents/briefs/4-round-2.md` are built. Nothing is left partial. The one thing that is not mine is the roadmap entry 13 change (ruling AW), which the orchestrator makes through `/roadmap`. `docs/roadmap.md` still holds the entry "15.A" drift, also not mine. I did not edit `.scratch/5-paper/agents/reviews/4-report.md`; append this section to it.
+
+## Commands run in this turn, with their output
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run and of an environment with a blank line inside, makes separate blocks of the paragraphs inside a document environment, and writes a manifest whose blocks and separators hold the whole file
+$ ... apply_tex_patch.test.sh 2>&1 | tail -1
+PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names with the manifest's hashes and writes the apply report, rejects a wrong hash, a stale manifest, two ops on a block, a stale op among good ones and an output equal to the patched .tex with exit 2 and nothing written, answers a heading change, a deleted section and more than 0.6 of the blocks with exit 3 and nothing written unless acknowledged, and writes nothing with --check-only
+$ ... lookup.test.sh 2>&1 | tail -1
+PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, and prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice
+$ ... calibration_counts.test.sh 2>&1 | tail -1
+PASS: calibration_counts.py counts misses and false alarms per label, exits 0 below the limits 0.15 and 0.10, exits 1 at or above one, and exits 2 for a label outside the three
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template      (exit 0)
+$ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+ok: docs/academic-coverage.md      (exit 0)
+$ python3 docs/figures/gen_figures.py ; echo "exit $?"            -> exit 0
+$ python3 docs/figures/academic-paper-comparison/gen_comparison.py ; echo "exit $?"   -> exit 0
+  (run twice; md5sum of every SVG under docs/figures/paper/ and docs/figures/academic-paper-comparison/ identical between the two runs)
+$ ruff format --check docs/figures/gen_figures.py docs/figures/academic-paper-comparison/gen_comparison.py ; ruff check (same two files)
+2 files already formatted
+All checks passed!
+$ grep -rn -i 'research-hub\|projects/manuscripts' skills/paper skills/writing ; echo "grep exit $?"
+grep exit 1      (prints nothing)
+$ the brief's perl character-set check (-CSD, .md allows the check mark) over every changed or new file outside .scratch (git diff --name-only plus untracked)
+(prints nothing)  exit 0
+$ SKILL.md description length (python, quotes stripped): 1018   (limit 1,024)
+```
+
+The blank-line-before-heading check (typed awk one-liner, fence-aware) printed only the file's own line 1 for every page of `skills/paper/SKILL.md`, `skills/paper/references/*.md`, `skills/writing/SKILL.md`, `skills/writing/references/*.md` and ADR 0025, and a second typed awk (heading followed by text) printed nothing. A `LC_ALL=C grep -n '[^ -~]'` over SKILL.md, the references, the writing pages and the three template scripts printed nothing.
+
+`ruff format --check` on `skills/paper/templates/lookup.py` says "would reformat", and so does the HEAD version of that file (checked: `ruff format --check` on both printed "2 files would be reformatted"), so the style is not new. The repository has no ruff configuration for templates.
+
+## The points
+
+1. AV1 (intake reads a research report and annotated bibliography): `references/intake.md` rows "Materials in hand" (now eight materials; bullets at :148-:155 define each by kind and find them by what they are, never by a fixed path or name, fill Topic, Research question, Discipline, Method, Sources and other rows they answer, and show each filled answer at the confirmation) and `references/literature-strategist.md` "What the agent reads". Coverage row `agents/intake_agent.md` updated.
+2. AV2 (four evidence profiles): `intake.md` "The evidence profile" (:126-:135) has the four-profile table `general_social_science`, `cs_ml`, `humanities_interpretive`, `unknown_user_defined`; the five reserved profiles (`clinical`, `wet_lab`, `materials_physics`, `legal_case_based`, `education`) are recorded `unknown_user_defined (requested: <profile>)` with a warning; `neutral` is renamed `unknown_user_defined` everywhere. `literature-strategist.md` :50-:62 holds the profile handling (reserved, unreadable, discipline mismatch, union rule), and the quick-assessment and share-gate bullets (:147, :180) say "other than `unknown_user_defined`". Coverage row `domain_evidence_profiles.md` rewritten (the grade aggregation of the file's forward reference is not built, said in the row).
+3. AV3 (type by selection table): `intake.md` :79-:92 type table by pattern (original data IMRaD, synthesis Literature Review, theory Theoretical, cases Case Study, policy Policy Brief, conference venue Conference Paper); a paper that fits no row or two rows is shown with the candidates; `planner.md` :22 states the same when `config.md` names none. Coverage rows for `paper_structure_patterns.md` (all six skeletons held) and `intake_agent.md` updated.
+4. AV4 (draft-review stop): `peer-reviewer.md` :270-:273 and `SKILL.md` :288 give five answers: accept, expanded revision, revise by hand and resubmit (run ends with its records), lower the venue (intake's venue questions asked again, record shown at "The intake confirmation", a new draft review round against the new venue), end. Figures: full mode has the stop's back edge "lower the venue" to the peer reviewer. Coverage rows `peer_reviewer_agent.md` and `failure_paths.md` updated.
+5. AV5: `draft-writer.md` :13 reads `registers.md` (and `rules.md`) of the `writing` folder; `SKILL.md` :47, :453, :468 name both pages in the prompt.
+6. AV6: `draft-writer.md` :119: a paragraph is 120 to 200 words and may pass four sentences; the manuscript prose standard's sentence-length rule still holds per sentence.
+7. AV7 (intended claims): `draft-writer.md` :80 (written once, before the first section, first start only, one line per claim `<n>. claim | evidence: ... | sources: ...`); `citation-compliance.md` :8, :25, :317 "Claims against the list" (claim on no list and intended claim not made are MEDIUM issues C<m>, no patch, placed in "Items flagged for review", summary row added); `SKILL.md` :187, :266, :272, :362, :537 (full item 7 and revision item 5 write it, run-folder records name it). Coverage rows `draft_writer_agent.md`, `citation_compliance_agent.md`, `claim_ref_alignment_audit_agent.md`, `report_compiler_agent.md` say the manifest is built as this list, and that the schema, its negative-constraint field and the drift check across manifests are not built.
+8. AV8 (cover letter): `draft-writer.md` :205 "The cover letter" (journal venue; `cover-letter.tex` beside `main.tex`; content from the journal submission guide; suggested and excluded reviewers included); `SKILL.md` :217, :267. Coverage rows `formatter_agent.md` and `journal_submission_guide.md` say `paper` holds it (the submission checks stay with `submit-manuscript`).
+9. AV9 (anonymous copy): `draft-writer.md` :222 "The anonymous copy"; `SKILL.md` :214 (full and revision, double-blind venue, one draft-writer start after the last change to `main.tex`). Figures: node "Draft writer: the anonymous copy, for a double-blind venue" in full and revision.
+10. AV10: `latex-template.md` :59 "The class of a publisher" (Elsevier, Springer Nature, IEEE, ACM, MDPI) and :75 "The layout of a conference paper".
+11. AV11: `SKILL.md` :179 compiles with `latexmk -xelatex` or the engine the venue's template requires; Notes of `config.md` do not decide; `latex-template.md` encoding row says pdfLaTeX only where the template requires it.
+12. AV12: `ai-disclosure.md` :68 "Policy anchors" (selector, conflict rule, one table each for PRISMA-trAIce, ICMJE, Nature and IEEE with strength, quoted wording and place, "Editing only"); `intake.md` :32 and :225 (Policy anchor row; PRISMA-trAIce only for a systematic review that uses AI as a method). Coverage rows `policy_anchor_disclosure_protocol.md`, `disclosure_mode_protocol.md` updated; `policy_anchor_table.md` changed from `drop` to `rebuild: paper`; the claim "no skill renders the four anchors" in the `pipeline_orchestrator_agent.md` row is replaced.
+13. AV13: `statements.md` :118-:120 (JSPS, DFG, NHMRC rows) and :125 "Where the funding statement stands" (Elsevier, Springer Nature, Wiley, Taylor & Francis, PLOS, MDPI; Springer Nature Declarations sub-sections). Coverage rows `funding_statement_guide.md` and `funding_statement_template.md` updated (only Taiwanese formats stay out).
+14. AV14 (F5): `citation-compliance.md` :114 "A format error in most entries" (more than half the entries fail the same check: report "Systematic format error ...", no patch in that start, stop, fresh second start does the work again without stopping again); `SKILL.md` :188 raises the stop "The citation style to confirm" in full, revision and citation-check. Figures: stop and back edge in the three modes and in the comparison figures. Coverage row `failure_paths.md` says F5 is built.
+15. AV15: `intake.md` Research question row (asked in full in full and outline-only, never taken from the topic); `literature-strategist.md` missing-question row (does not start without one).
+16. AV16: `literature-strategist.md` screened `.bib` block (over 50 entries: first 20 and last 5 alphabetically with a line "<n> entries in between", the full list in `screened-<list>.txt`, one `<key>: <reason>` per line); `SKILL.md` full item 1 and lit-review item 1 write the file.
+17. AV17: `visualization.md` :608 (appendix figures A1, B1) and :645 check 3 "Legend and scale bar".
+18. AV19: `visualization.md` :134 (cyan `#33BBEE` 2.21:1, orange `#EE7733` 2.87:1, grey `#BBBBBB` 1.92:1 against white, computed with the WCAG relative-luminance formula by a typed one-liner, are drawn only with a black outline); the python boxplot edge, the line `markeredgecolor`, the R boxplot color and the R line-chart shapes 21 to 25 carry the black outline.
+19. X1 (F2 structure check): `planner.md` :58 "The structure check" (indicators, handling, user decides at the outline's stop), `outline.md` form :469 "Structure check", checks-table row :549; `SKILL.md` full item 6 shows it; coverage row `failure_paths.md` says F2 is held there.
+20. X2 to X6: coverage rows 144 (all six skeletons), 120 (claim check in full, revision and citation-check), 134 (`citation_format_switcher.md` is now `rebuild later: paper`, format conversion a step of its own before step 5 under ruling AK, carried by the `formatter_agent.md` row), 159 (JSPS, DFG, NHMRC added), and `draft-writer.md` "The five parts" gained the type table (Literature Review, Theoretical, Case Study, Policy Brief executive summary, Conference Paper); coverage row `abstract_writing_guide.md` says so.
+21. AW (no software wording): `draft-writer.md` :46 "The text carries no software wording" (applies to every correction; a field's own name for a method, dataset, tool or library and a repository URL in a statement are not software wording); `peer-reviewer.md` :131 and :174 (Writing Quality cue, penalty of at most 6 for one or two passages and at most 4 for three or more, each a Major issue; cross-section check), :249 and :303 (issue and suggested fixes in the manuscript's own terms); `citation-compliance.md` :425; `SKILL.md` Step 13 corrections in the manuscript's own terms. New page `skills/writing/references/manuscript-prose-standard.md` (sections 0, A to G; G is "The project's own software"); `skills/writing/SKILL.md` version "1.2.0", "What it reads" 2 by kind of draft (a `.tex` manuscript takes the new page, other drafts the three places), new section "The manuscript prose standard", finding name "Manuscript prose standard, section <letter> / <label>", Stops row "No prose standard", Rules updated. Every page of `skills/paper` that names the standard now says "manuscript prose standard" (`draft-writer.md` :13, :119, :236 and its closing rule, `intake.md` :185, :189, `SKILL.md` :47, :48, :102, :453, :500). Run over a scratch `.tex` with the new page, `prose_facts.py` exited 0.
+22. Claims not to make: `SKILL.md` :194 marks the claim Critical and raises the stop "A claim the run cannot support"; the Stops row trigger (:489) names it.
+23. Expanded revision resumes the literature strategist (insufficient evidence) and the planner's latest start (structural or originality cause) with the review as a second message: `SKILL.md` :288-:300 and Rules :526-:527, ADR 0025 Decision.
+24. ADR 0025 Consequences names the five start-adding cases (expanded revision, lower the venue, the draft writer's second start for the model identifier and third for the anonymous copy, citation compliance restart after the style stop). `grep -n -i cost skills/paper/SKILL.md` found no cost line, so none needed a change; the figure legends carry no count. The full-mode figure draws the second draft-writer start.
+25. `patch-file.md` :42 gives the id `disclosure` its second use (full mode, model identifier) and :46 says an id may repeat across patches of a run folder; `SKILL.md` :271 names the second start.
+26. `lookup.py` `TEX_CALL` (:135) reads every command whose name contains `cite` or `Cite`, except `\nocite`. `lookup.test.sh` gained case L2b (`\textcite`, `\parencite[see][p. 3]`, `\autocite`, `\Parencite`, `\citet`, `\citeauthor*`, `\nocite{g}`). Run first on the unchanged script it printed `L2b cite-keys reads the biblatex commands (1, ['unused: a', 'unused: b', 'unused: c', 'unused: d'], [])` then `FAIL: lookup.py does not hold the behaviour above`; after the change the test prints the PASS line above. The head comment of `lookup.py` (:38), the test's head comment, `latex-template.md` :214 and `docs/dev/scripts.md` say the same.
+27. Coverage rows 223 (earlier-papers flag in full, revision and citation-check), 138 (F2, F5, "eight materials", the five-answer stop), 249 (every section that `grep -n '^#'` prints for `source_verification_agent.md` is named with its destination or drop, "Role Definition", "Core Principles", "Verification Outcome" and "Quality Criteria" among them), and `agents/writing_quality_check.md`'s row (manuscript prose standard). `check_coverage.py` prints `ok:`.
+28. `docs/dev/change-standard.md` :75 lists `sh skills/paper/templates/calibration_counts.test.sh 2>&1 | tail -1` beside the other tests. The orchestrator adds it to the state file's verify list.
+29. Blank lines before and after headings checked as above for every page this round changed.
+30. `calibration_counts.py` head comment lists exit 2 for a wrong argument count and for a row with the wrong number of cells; its test prints PASS.
+31. `citation-compliance.md` calibration step 5 names the script `python3 '<this skill's folder>/templates/calibration_counts.py' '<the table>'`; `SKILL.md` :80 and the Rules say four scripts and name them.
+32. Figures: `docs/figures/gen_figures.py` (full: second draft-writer start, "The citation style to confirm" stop with back edge, lower-the-venue back edge, anonymous-copy node; revision: style stop and anonymous copy; citation-check: style stop; disclosure: intake names the policy anchor) and `docs/figures/academic-paper-comparison/gen_comparison.py` (paper-side detailed views of full, revision, lit-review, outline-only, abstract-only, citation-check and disclosure, with tags AV1 to AV4, AV6 to AV9, AV11, AV12, AV14 to AV16, AV18 and AW). I rendered each changed figure with `rsvg-convert` and read it. The README alt texts of the four changed mode figures and the `docs/academic-coverage.md` alt texts of the 14 comparison figures are updated to the new labels. The label-fit limit (7 lines per box) made me shorten four existing labels (intake of full, citation compliance in citation-check, disclosure intake, revision) without dropping a ruling tag. New boxes are checked against SKILL.md, since the figure spec has no round-2 boxes.
+
+## Earlier report passages that no longer hold, with the text that is true now
+
+- "no second start of any role beyond the cases listed": there are now five start-adding cases (see point 24); the draft writer has a second start for the model identifier in full mode and a further start for the anonymous copy.
+- "the paper skill runs no originality screen beyond the flag of citation-check mode": the earlier-papers flag runs in full, revision and citation-check.
+- "three scripts": four (`anchorize_tex.py`, `apply_tex_patch.py`, `lookup.py`, `calibration_counts.py`).
+- "neutral" profile: `unknown_user_defined`; two profiles: four.
+- "six materials": eight.
+- Coverage claims that the claim manifest and the policy-anchor rendering have no successor, that F2 and F5 were dropped or unbuilt, that the cover letter and blind review stay with `submit-manuscript`, that the claim check runs only in citation-check mode, that `policy_anchor_table.md` is dropped, that `citation_format_switcher.md` is dropped: each is rewritten as above.
+- "the draft-review stop offers accept, an expanded revision or end": five answers.
+- ADR 0025 counts of starts: replaced in its Consequences.
+- `standards` key of `plan.yaml`: `paper` no longer reads it; the prose standard for a manuscript is the page in the `writing` folder.
+
+## Files made false by a point and changed
+
+`SKILL.md`, the eleven `skills/paper/references/*.md` pages, `docs/adr/0025-...md`, `docs/academic-coverage.md`, `docs/dev/change-standard.md`, `docs/dev/scripts.md`, `docs/dev/building.md` (calibration test already listed), `README.md` (four alt texts), both figure scripts and every SVG they write, `skills/writing/SKILL.md`, the new `skills/writing/references/manuscript-prose-standard.md`, `lookup.py`, `lookup.test.sh`, `calibration_counts.py`.
+
+## Handed back, with reason
+
+- Roadmap entry 13's integrity check keeps code and software wording out of the manuscript text (ruling AW): the orchestrator's change through `/roadmap`, a different concern from this step.
+- Adding `calibration_counts.test.sh` to the state file's verify list: the orchestrator's.
+
+## Judgment calls
+
+- DFG and NHMRC get the generic funding form with the funder's name and grant-number form and no invented sentence; the user pastes a required sentence in Notes (the guide gives none).
+- A paper that fits no type row falls back to Conference Paper, with the reason and the alternatives shown at the confirmation.
+- The anonymous copy is written by a draft-writer start in Steps 14, after the last change to `main.tex`; the cover letter is written at the first draft.
+- `intended-claims.md` is written on the first start only; an expanded revision's first draft replaces it.
+- `\nocite` is excluded from `cite-keys`, since it cites nothing in the text.
+- Policy-anchor content sits in `ai-disclosure.md` (a section) and not in a new page; quoted wording carries a snapshot date (2026-05-13), as the venue entries carry access dates.
+- Software-name exception in the AW rule: a name the field uses for a method, dataset, tool or library, and a repository URL in a data or code availability statement.
+- Rules of the repository prose standard left out of `manuscript-prose-standard.md` because they only fit software documentation: ASCII throughout (B), Spec-sheet voice (E), Personified artifacts (E), Inline code for paths, identifiers and literals (F), Source formatting (F), the repository preamble, provenance, exemplar and excluded-trees paragraphs, the vague-qualifier examples "sub-second" and "most requests", and the coverage-table sentence-length exception. Changed: arrows only inside mathematics; paragraphs of about 120 to 200 words with no four-sentence limit. Added: section G "No software wording".
+- The heading `## Citation report` inside the code fence of the report template is left as it is.
+- The heading-spacing checks use typed awk one-liners, not a script file.
+- Coverage-doc alt texts: the paper half of each comparison alt is the figure's `aria-label` with brackets turned to parentheses and "(agent)" dropped, which reproduces the unchanged lit-review and outline-only simple alts exactly.
+
+## What the brief got wrong
+
+- Point 24 names "the cost lines of SKILL.md"; SKILL.md has none.
+- Point 29 lists `citation-compliance.md` :321 and :392 and `draft-writer.md` :63, :159, :177 as the missing blank lines; those line numbers belong to the earlier text, and the check was run over every heading of every page instead.

@@ -1,6 +1,6 @@
 # Statements
 
-The draft writer reads this page to write the six statements of a paper: author contributions, funding, conflict of interest, data availability, ethics and, with `references/ai-disclosure.md`, the AI disclosure. The facts come from `config.md` of the run, and each statement is written as a patch as `references/patch-file.md` gives.
+The draft writer reads this page to write the six statements of a paper: author contributions, funding, conflict of interest, data availability, ethics and, with `references/ai-disclosure.md`, the AI disclosure. The facts come from `config.md` of the run. The statements are part of the first draft in full mode, and in disclosure mode they are written as a patch as `references/patch-file.md` gives.
 
 ## Facts and gaps
 
@@ -115,6 +115,28 @@ A funder whose format is given here is written in that format. The funder's own 
 | SSHRC | This research was supported by the Social Sciences and Humanities Research Council of Canada (SSHRC) [Grant No. <Number>]. |
 | NSERC | This work was supported by the Natural Sciences and Engineering Research Council of Canada (NSERC) [Grant No. <Number>]. |
 | ARC | This research was supported by the Australian Research Council [Grant No. <Number>]. |
+| JSPS | This work was supported by JSPS KAKENHI Grant Number <Number, such as JP12345678>. |
+| DFG | The generic form above with "Deutsche Forschungsgemeinschaft (DFG)" as the funder and the number written as "DFG Project No. <Number>", nine digits as in "DFG Project No. 123456789". |
+| NHMRC | The generic form above with the National Health and Medical Research Council (NHMRC) as the funder and the grant number the user gave. |
+
+- The DFG and the NHMRC have no sentence of their own on this page, and the agent writes neither one from memory. A funder the table does not list gets the generic form with its official full name and the number as the user gave it.
+- Where a funder's page requires a sentence the table does not hold, the user pastes it in the Notes of `config.md`, and the draft writer quotes it verbatim.
+
+## Where the funding statement stands
+
+The venue's template or guide gives the place, and the table gives the common ones when it does not.
+
+| Publisher | Place | What it asks |
+|---|---|---|
+| Elsevier | A separate "Funding" section | The funder's name and the grant number, and the submission system's funding form |
+| Springer Nature | The "Declarations" section | A Declarations section with sub-sections for funding, conflict of interest, ethics and the other statements |
+| Wiley | The "Acknowledgments" or a separate section | It varies by journal |
+| Taylor & Francis | A "Funding" section or a "Disclosure statement" | The funder's name and the grant number |
+| PLOS | The submission system and the manuscript | Entered in the submission system one by one, and stated in the manuscript as well |
+| MDPI | A separate "Funding" section | After "Author Contributions" |
+
+- A Declarations section for a Springer Nature journal has these sub-sections in this order: "Funding", "Conflict of Interest", "Ethics Approval", "Author Contributions". Each sub-section holds the text of its statement from this page, and the author contributions sub-section holds the statement of "Author contributions". A statement that the study does not need, such as the ethics approval of a study with no human data, holds the sentence that says so.
+- Where the venue names no publisher on this table, the draft writer follows the venue's own template. Without one, it writes each statement under its own heading as the first draft's file gives.
 
 ## Conflict of interest
 
@@ -166,11 +188,11 @@ Data sharing is not applicable to this article as no new data were created or an
 - The form is "This study was approved by <board> (Approval No. <number>). <the consent obtained>. <the de-identification applied>."
 - The statement states the approval the collecting study obtained and does not plan the approval.
 - A study without human or patient data states "This study used no data from human participants or patients."
-- A missing approval number, consent or de-identification of a study with human data is a gap, and the ethics check of `references/ethics.md` lists it as a conditional issue.
+- A missing approval number, consent or de-identification of a study with human data is a gap. The draft writer names it in its report, and the final message lists it.
 
 ## Responsible use
 
-- A responsible-use statement is written when the ethics check of `references/ethics.md` rates dual use Moderate or above.
+- A responsible-use statement is written when the venue asks for one or when the user asked for one at intake, which the Notes of `config.md` record.
 - The statement has this form:
 
 ```
@@ -179,7 +201,7 @@ Responsible Use: This research is intended for <stated purpose>. The authors ack
 
 ## Reproducibility
 
-- A reproducibility statement is written when the venue asks for one, or when the ethics check marks the documentation of the search, the inclusion criteria or the analysis as a gap.
+- A reproducibility statement is written when the venue asks for one or when the user asked for one at intake, which the Notes of `config.md` record.
 - The statement has this form:
 
 ```

@@ -2,7 +2,7 @@
 name: writing
 description: "Review the prose of a draft with a script and four fresh agents that change nothing. The script computes the counts and word lists that have one right answer. The agents read a whole .tex file with the files it inputs and includes, a .md, a .txt or a .docx against the prose standard and the academic writing rules, each checking its own rules. The report shown to the user lists each break of a named rule, numbered, with its place, the quoted passage and what the rule asks for, the findings that leave the reader wrong or unsure first, grouped by rule, and proposes no replacement. Triggers on: /writing <file>, review the writing of a draft, check a draft against the prose standard, review the prose of a manuscript, review the prose of a grant, check the writing of a text."
 metadata:
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Review the prose of a draft
@@ -34,6 +34,7 @@ metadata:
    - `docs/dev/prose-standard.md`.
    - `templates/docs/dev/prose-standard.md` in the `repo-setup` skill's folder, which stands beside this skill's folder.
    - None of the three is a refusal that names the three paths.
+   - A manuscript also takes `references/manuscript-prose-standard.md` in this skill's folder, which lists the differences from the prose standard that hold for a manuscript, as "The manuscript prose standard" says. A manuscript is a `.tex` draft, and so is the main file that the `paper` skill's closing call gives. A missing page is a refusal that names the path.
 3. `references/rules.md` and `references/registers.md`.
 4. The draft, by the extension of `<file>`:
    - `.tex`: the main file and the files it inputs and includes (Steps 3).
@@ -91,7 +92,7 @@ The prompt of each finding agent holds these pieces:
 - The draft's text for a `.docx`: the output of `docx_paragraphs.py`.
 - The draft's text for a `.tex`, `.md` or `.txt` draft: the text of each file with its line numbers as `cat -n` prints them, under the file's path from the main file's folder.
 - The output of `prose_facts.py`.
-- The text of each rule of the agent's list, copied unchanged from its page.
+- The text of each rule of the agent's list, copied unchanged from its page. For a manuscript, a rule that `references/manuscript-prose-standard.md` leaves out is not given. A rule it replaces is given in its text, and its section G is given, as "The manuscript prose standard" says.
 - The page and the section of each rule, with the rule's `##` heading and its marker, such as "(manuscripts and grants)".
 - The bullets of "Finding agent prompt" and of the agent's own section.
 
@@ -121,7 +122,10 @@ The sentence agent, the section agent and the whole-draft agent each get these b
 - Report no break where following the rule would make the part worse for its reader, such as a citation asked of a lay summary, or a field's term asked in place of plain wording that a broad committee needs.
 - Take a count from the facts in the prompt, and give it only inside the finding it shows.
 - A finding gives its place, the passage quoted as the draft has it, and the rule it breaks with what that rule asks for.
-- A finding names the rule by its page and the rule's name on that page: a section and a label of the prose standard, as in "D. Structure / No mirror structure", a group and a heading of `references/rules.md`, as in "Precision / Term defined at first use", and a register and a heading of `references/registers.md`, as in "Sciences (Natural, Applied) / Voice".
+- A finding names the rule by its page and the rule's name on that page.
+  - A rule of the prose standard is named by its section and label, as in "D. Structure / No mirror structure". A rule the manuscript prose standard replaces or adds is named the same way on that page.
+  - A rule of `references/rules.md` is named by its group and heading, as in "Precision / Term defined at first use".
+  - A rule of `references/registers.md` is named by its register and heading, as in "Sciences (Natural, Applied) / Voice".
 - For a `.tex`, `.md` or `.txt` draft the place is `file:line` of the line where the quoted passage starts, with the path from the main file's folder.
 - For a `.docx` draft the place is `paragraph <n>`, and a paragraph outside the body carries its part in square brackets, as in `paragraph 70 [word/footnotes.xml]`.
 - A finding proposes no replacement and applies nothing.
@@ -181,6 +185,15 @@ The rules of the sentence agent, each named by page, section and the page's own 
 - `references/registers.md`, Register, under each register
 - `references/registers.md`, Terminology, under each register
 - `references/registers.md`, Voice, under each register
+
+## The manuscript prose standard
+
+`references/manuscript-prose-standard.md` holds no copy of the prose standard. It lists the rules of the prose standard that a manuscript leaves out, the two it replaces, and its own section G. The prose standard is the one "What it reads" 2 finds, so a repository's own prose page holds for its manuscripts too. For a manuscript, the lists of the three agents change as follows:
+
+- The rules the page lists under "Rules left out" are not given, nor the words and the exception that list names.
+- The rules "Section 0, Arrows" and "Section D, Paragraphs" are given in the text of the page's "Rules replaced", in place of the prose standard's text.
+- The sentence agent also gets the rule "G. The project's own software / No software wording".
+- A finding that names a rule the page replaces or adds names it as "Manuscript prose standard, <section> / <label>". A finding under any other rule names the prose standard as for any draft.
 
 ## Section agent
 
@@ -261,7 +274,7 @@ The checking agent gets these bullets and no other:
 
 These texts name no break, so no agent gets them:
 
-- The opening paragraphs of the prose standard.
+- The opening paragraphs of the prose standard and of the manuscript prose standard.
 - The prose standard's "How it is applied", which says how a page is written.
 - The opening paragraph of `references/rules.md`: it says what the page covers, and the form in which a finding names a rule is in "Finding agent prompt".
 - `references/rules.md`, Flagged terms / Alternatives, whose own text says that no finding is reported under it.
@@ -275,7 +288,7 @@ The first row is a stop, a decision for the user. It leaves no open item, since 
 | A model other than the configured one | The runner served one of the four agents a model that is not the configured one (Steps 7 and 8) | The configured model, the served model and the Claude Code version, as plain text | The user's decision, then `/writing` again |
 | No plan configuration | `.agents/plan.yaml` is missing, or has no `reviewer` | A refusal that names `/ordo-init` | `/ordo-init`, then `/writing` again |
 | Unknown project | In the `projects:` form, the first argument names no project | The projects the file lists | `/writing` again with a listed project |
-| No prose standard | None of the three places of "What it reads" 2 holds it | The three paths | A prose standard at one of them, then `/writing` again |
+| No prose standard | None of the three places of "What it reads" 2 holds it, or a manuscript's page `references/manuscript-prose-standard.md` is missing | The three paths, or the path of the page | A prose standard at one of the three places, or the page restored, then `/writing` again |
 | Draft refused | The extension is none of `.tex`, `.md`, `.txt` and `.docx`, or the file or an input or include file does not exist | The extension or the missing file | The draft corrected, then `/writing` again |
 | The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 4) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/writing` again in a new session |
 | No facts | A script of Steps 5 exits non-zero | The line the script printed | The cause put right, then `/writing` again |
@@ -291,5 +304,6 @@ The first row is a stop, a decision for the user. It leaves no open item, since 
 
 - The session passes the outputs of the scripts and the agents' findings on, and judges nothing of the draft.
 - Every agent gets the whole draft's text, as "Agent prompts" says, since a rule that spans sections is lost between agents that each read one section.
-- Each rule of the three pages is in the list of one finding agent, or among the rules given to no agent.
-- A change that adds a rule to one of the three pages adds it to the list of one finding agent.
+- Each rule of the prose standard, each rule the manuscript prose standard replaces or adds, and each rule of the two pages of `references/` is in the list of one finding agent, or among the rules given to no agent.
+- A rule the manuscript prose standard leaves out is not given for a manuscript.
+- A change that adds a rule to one of these pages adds it to the list of one finding agent.

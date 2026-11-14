@@ -1,23 +1,27 @@
 # Literature strategist
 
-The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder and changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. A start that gives only the manifest and a finished `refs.bib` asks for the patch alone.
+The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` for each list of the screened `.bib` block that holds more than 50 entries, and changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. It does all of this in one start. The session resumes the same agent by a second message in four cases. They are a change the user makes at the stop "The sources' review", the sections of the outline that have no source, the review of an expanded revision whose root cause is insufficient evidence, and a patch the script rejected. In revision mode the session starts it for the items that call for a new reference.
 
 ## What the agent reads
 
 - `config.md`: Topic, Research question, Discipline, Language, Paper type, Domain evidence profile, Materials in hand, AI use and the Notes.
-- The manuscript's `.bib`, when the call gives one.
+- In revision mode, the items that call for a new reference stand in place of the Topic and the Research question, which that mode does not ask.
+- The sources given: the manuscript's `.bib`, when the call gives one, and the `.bib`, the annotated bibliography or the earlier review that the Materials in hand row names. A research report that row names gives the question, the discipline and the method that the session filled at intake.
 - Every lookup is made with `lookup.py` and never with a web search, a fetch of a web page or `curl`.
+- At its resumption for the sections without a source: the sections of `outline.md` marked "needs literature", with their purpose, content summary and arguments. Also the files the agent wrote before when it ran in this run.
+- At its resumption for an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is insufficient evidence, with the claims it names as lacking support. Also the files the agent wrote before in this run.
 
 Where an input is missing:
 
 | Missing | The agent does |
 |---|---|
-| The research question | Takes the topic as the question the search answers. With neither, it reports that it cannot start. |
+| The research question | The agent does not start the search, in any mode that starts it. It reports that it cannot start, and the session asks the question at intake again. The agent never takes the topic as the question. |
 | The discipline | Searches without narrowing to a field. |
 | The language | Searches in English. |
 | The year range | Takes the last 10 years and leaves seminal works unrestricted. |
 
 - In lit-review mode the paper type is Literature Review.
+- In full mode the agent screens the sources given and searches for what they miss. In outline-only mode and lit-review mode it does the same with the sources given, which may be none.
 - A research question that is vague gets two or three possible search directions listed in the report, and the session returns them to the user.
 - A discipline that is too broad, such as "social science", gets a narrower sub-field suggested in the report.
 
@@ -46,23 +50,27 @@ Where an input is missing:
 
 The domain evidence profile of `config.md` decides which evidence types the criteria admit, and it never changes which indexes are searched.
 
+- The profile is one of the four values of `references/intake.md`, "The evidence profile". A row that is `unknown_user_defined (requested: <profile>)` with a reserved profile is read as `unknown_user_defined`, and the report says that no profile exists yet for the requested domain. A row that is absent, that holds a value outside the four, or that holds a name of the four with a `(requested: ...)` suffix is read as `unknown_user_defined`. The report says the row could not be read.
+- A profile whose discipline differs from the Discipline row, such as `cs_ml` with a Humanities discipline, is used for admission. The Discipline row is used for the choice of search terms, and the report says that the two differ. Nothing is blocked. `general_social_science` fits Social Science and Policy, `cs_ml` fits Computer Science, Engineering and Technology, and `humanities_interpretive` fits Humanities. `unknown_user_defined` and an absent row never give this warning.
 - Three gates hold under every profile: the source is relevant (its abstract addresses the research question), its methodology has no fatal design flaw, and it is not predatory or fabricated.
 - A profile only relaxes the peer-review requirement, the publication type, the currency window and the provenance expectation.
-- A profile adds ways to admit a source and removes none: whatever the neutral criteria admit stays admitted.
-- `cs_ml` admits archival preprints such as arXiv, conference proceedings and industry technical reports, since peer review lags the field. Each such source is tagged by its evidence type.
-- Under `cs_ml` the agent surfaces non-reproducible results and benchmark cherry-picking as critical gaps.
-- Under `neutral` the criteria above apply as they stand.
-- A preprint that is off-topic, fatally flawed or predatory is excluded under every profile.
+- A profile adds ways to admit a source and removes none: whatever `unknown_user_defined` admits stays admitted, and the agent combines the two by union and never by replacement.
+- `general_social_science` admits expert-panel reports and context-dependent policy analyses, tagged by their evidence type, and surfaces a finding generalized from a single context and weak external validity as critical gaps.
+- `cs_ml` admits archival preprints such as arXiv, conference proceedings and industry technical reports, since peer review lags the field. Each such source is tagged by its evidence type. The agent surfaces non-reproducible results and benchmark cherry-picking as critical gaps.
+- `humanities_interpretive` admits primary sources, archival material, canonical or older texts and monographs. It does not apply the currency window to a canonical text, since recency is no signal of quality. Each such source is tagged by its evidence type. The agent surfaces interpretive over-reach and missing primary-source grounding as critical gaps.
+- Under `unknown_user_defined` the criteria above apply as they stand and no gap is surfaced as critical on account of the profile.
+- A source that is off-topic, fatally flawed or predatory is excluded under every profile.
+- When the profile admits a source type, the year-range and publication-type filters that the agent applies at screening admit it too. A filter never removes a source that the screening tree would admit.
 
 ## Starting from the manuscript's `.bib`
 
-When the call gives a `.bib`, the searching starts there.
+When the call gives a `.bib`, the searching starts there. In full mode that is the manuscript's `refs.bib` when one stands, and otherwise the `.bib` the Materials in hand row names. An earlier lit-review run's `refs.bib` that intake took for outline-only mode is screened the same way.
 
 - Every entry is screened under the criteria above, the same as an external result. No entry is pre-approved.
 - An entry's title is always available, and its abstract is read when the `.bib` holds one. A missing field narrows the screening and does not skip the entry.
 - An entry is skipped only when the criteria cannot be applied at all. Every skipped entry is listed in `review.md` with its reason, and no entry is dropped without a line.
 - The entries of the `.bib` are never changed or removed. The new entries are only added.
-- The report opens its search strategy with a block of this form:
+- The report opens its search strategy with a block of this form, and a list of more than 50 entries is cut as the bullets after the block say:
 
 ```
 Screened from the manuscript's .bib:
@@ -72,6 +80,10 @@ Screened from the manuscript's .bib:
 - Skipped (the criteria cannot be applied): <S> entries, each as <key>: <reason>
 - Note: presence in the .bib does not imply inclusion; the same criteria applied to the .bib and to external sources.
 ```
+
+- A list of the block with more than 50 entries is printed in `review.md` as its first 20 entries and its last 5 entries, in alphabetical order of the key. A line "<n> entries in between, listed in <file name>" follows them.
+- The full list is written to a file beside `review.md` in the run folder, `screened-<list>.txt`, where `<list>` is `included`, `excluded` or `skipped`. It has one line `<key>: <reason>` for each entry, in alphabetical order of the key. The reason is the criterion that decided the entry, and for a skipped entry the reason the criteria could not be applied.
+- A list of 50 entries or fewer is printed whole in the block, and no file is written for it.
 
 - When no entry is included, the block adds "zero included after screening".
 - The causes of that result are a `.bib` that is stale for the research question, a question that has shifted from what the `.bib` was built for, or entries that are unrelated to it.
@@ -133,7 +145,7 @@ Each included source is scored on five items from 1 to 3 points:
 - A total of 12 or more is High quality, and the source is assigned to a core section.
 - A total of 8 to 11 is Medium quality, and the source is assigned to a supporting section.
 - A total of 7 or less is Low quality, and the source is used only when no alternative exists.
-- Under a non-neutral profile a source passes the quick assessment when it meets the neutral total or meets the profile's evidence-type expectation on the venue-ranking item alone. The other four items stay in force.
+- Under a profile other than `unknown_user_defined` a source passes the quick assessment when it meets the total or meets the profile's evidence-type expectation on the venue-ranking item alone. The other four items stay in force.
 
 ## Source counts and gates
 
@@ -166,7 +178,7 @@ The review passes only when every gate holds:
 | Currency | At least 50 percent of the sources are from the last 5 years, unless the topic is historical. | Search for the last 3 years and check preprints, tagged as preprints. |
 
 - A failed gate is handled once, as its row says. The bullets below say what follows when it still fails.
-- Under a non-neutral profile the two share gates relax and never tighten: preprints count toward the peer-reviewed share under `cs_ml`. The thresholds stay as they are.
+- Under a profile other than `unknown_user_defined` the two share gates relax and never tighten. Preprints count toward the peer-reviewed share under `cs_ml`. A canonical or older text does not count against the currency share under `humanities_interpretive`. The thresholds stay as they are.
 - When the source count stays short after the extra pass, the agent widens the year range by 5 years and then states "limited literature available" in the report.
 - When theme coverage stays uneven, the agent suggests different theme divisions.
 - When quality stays low, the agent replaces the sources with a score of 7 or less where it can and states the limitation in their annotations.
@@ -193,7 +205,7 @@ Each included source has this annotation:
 ## The literature matrix
 
 - The matrix has one row per included source and one column per theme, with `main` where a theme is the source's main one and `x` where it also touches the theme.
-- It adds the columns Method and Quality, with Quality as High, Medium or Low, so that the structure architect assigns high-quality sources to the core sections.
+- It adds the columns Method and Quality, with Quality as High, Medium or Low, so that the planner assigns high-quality sources to the core sections.
 - It has no column for provenance.
 
 ```
@@ -240,7 +252,11 @@ Distribution advisory:
 - The synthesis has one paragraph group per theme of the matrix, and each paragraph states what the included sources show on that theme, where they agree and where they disagree.
 - Each claim cites its sources as `[@key]`, with the key of the source's entry in `refs.bib`.
 - The synthesis claims only what an annotation supports.
-- Integrity verification judges each of its claims, as `references/integrity-verification.md` says.
+- In lit-review mode the synthesis has the structure of a review paper, so that the draft of a review can be written from it.
+  - It opens with the topic and its rationale, and the scope and boundaries (what is included and excluded, the period, the disciplines, the geographies). It then gives the review methodology (the search, the criteria and the number of sources) and a preview of the themes.
+  - It has one part for each of 3 to 5 themes of the matrix. Each part has a paragraph group for each sub-theme and a summary of what the literature says on the theme.
+  - It continues with the cross-cutting synthesis: the convergent findings, the divergent findings and the debates, and the methods that dominate or are underused.
+  - It ends with the gaps (3 to 5, the ones "The gaps" lists), a proposed research agenda, the key takeaways and the implications for practice or policy.
 
 ## The BibTeX entries
 
@@ -251,7 +267,7 @@ Distribution advisory:
 - When the call gives a `.bib`, the rules apply in this order to each included source.
   - A source whose DOI, or whose arXiv ID when it has no DOI, is already in the `.bib` gets no new entry and is marked "already in the .bib" in the annotation.
   - Any other source whose key equals an existing key gets the key with the first unused letter appended: `a`, then `b`.
-- `refs.bib` holds the new entries only. The patch that adds them to the manuscript's `.bib` inserts them after its last block, and its operations name the id `lit-review` in `roadmap_item_ids` in lit-review mode and the id `full` in full mode.
+- `refs.bib` holds the new entries only. The patch that adds them to the manuscript's `.bib` inserts them after its last block, and its operations name the id `lit-review` in `roadmap_item_ids` in lit-review mode, the id `full` in full mode, and the ids of the items they answer in revision mode.
 
 ## The report
 
@@ -269,4 +285,41 @@ Distribution advisory:
 10. Search limitations and gate failures, when there are any.
 11. AI disclosure: the one line that `references/ai-disclosure.md` gives under "The line of a review".
 
-- The structure architect reads the matrix and the gaps, the argument builder reads the sources by theme with their stance, the draft writer reads the table of sources by section, and citation compliance reads the entries of `refs.bib`.
+- The planner reads the matrix, the gaps and the sources by theme with their stance, and the draft writer reads the table of sources by section.
+
+## The sources' review
+
+The session shows the user the sources `review.md` includes, and the user may add or remove sources. The session then resumes this agent with the change as a second message, and the agent updates `review.md`, `refs.bib` and its patch.
+
+- An added source is looked up with `lookup.py resolve`, annotated, entered in the matrix and given its entry by `lookup.py bibtex`, like an included source. The annotation is marked "added by the user", and the source is not screened out.
+- A removed source leaves the annotated bibliography, the matrix, `refs.bib` and the patch, and the synthesis is rewritten where it cited the source.
+- The agent changes nothing else in the files, and it starts no new search.
+- A source the user adds that has neither a DOI nor an arXiv ID is listed under "No entry written", as "The BibTeX entries" says.
+- A rejected patch is answered the same way: the session resumes the agent with the rejection as printed, and the agent writes one new patch.
+
+## The sections without a source
+
+After the planner's outline, the session resumes the agent when the outline marks sections "needs literature". In full mode it starts the agent fresh instead when the sources came from earlier lit-review outputs that the intake took and this run's agent never ran.
+
+- The agent reads the marked sections and runs the search of "The search design" and "The four searches" for each, within its 4 passes. It screens the records under the criteria above.
+- It adds the sources it includes to `review.md`, `refs.bib` and the patch, with annotations and matrix rows, under the rules of "The BibTeX entries". It removes none.
+- The report lists, for each marked section, the sources found for it and the searches made.
+- A section for which no source meets the criteria is named in the report with the searches made, so that the outline shows it as "needs literature".
+
+## An expanded revision
+
+The user may choose an expanded revision at the stop "The draft review does not pass" when the review names insufficient evidence as the root cause. The session then resumes the agent with the review as a second message.
+
+- The agent reads the claims the review names as lacking support, and runs the search of "The search design" and "The four searches" for each, within its 4 passes. It screens the records under the criteria above.
+- It adds the sources it includes to `review.md`, `refs.bib` and the patch, with annotations and matrix rows, under the rules of "The BibTeX entries". It removes none.
+- The report lists, for each claim, the sources found for it and the searches made, and names a claim for which no source meets the criteria.
+- The session then shows the sources at the stop "The sources' review" again.
+
+## Revision mode
+
+In revision mode the session starts the agent for the items that call for a new reference, when intake allowed new references.
+
+- The agent is given `config.md`, the items, the `.bib` and its manifest.
+- It runs the search of "The search design" and "The four searches" for each item's claim, within its 4 passes, and screens the records under the criteria above.
+- It writes `review.md` and `refs.bib` for the new sources and the patch that adds their entries to the `.bib`, whose operations name the ids of the items they answer.
+- An item that finds no source meeting the criteria is named in the report with the searches made.

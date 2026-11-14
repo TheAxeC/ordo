@@ -1,6 +1,6 @@
 # 0022. A paper run is done by five agent roles, and the integrity and ethics checks belong to researcher
 
-Status: proposed
+Status: superseded by 0025
 
 ## Context
 

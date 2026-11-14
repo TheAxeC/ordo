@@ -461,3 +461,216 @@ The whole diff since the base (32 tracked files changed, 6400 insertions and 370
 - Items 1 to 3 of "What to build" and C4 to C13 are judged by reading SKILL.md and the role pages whole, not by running a host; the check run the brief reserves for the orchestrator (a `claude -p` revision run) was not made.
 
 Reviewer usage: a7e010f4ad8e61c21, claude-sonnet-5-5, 189463 tokens, 127 tool uses, 14.8 min.
+
+
+## Repair round 2, refuted
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run and of an environment with a blank line inside, makes separate blocks of the paragraphs inside a document environment, and writes a manifest whose blocks and separators hold the whole file
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names with the manifest's hashes and writes the apply report, rejects a wrong hash, a stale manifest, two ops on a block, a stale op among good ones and an output equal to the patched .tex with exit 2 and nothing written, answers a heading change, a deleted section and more than 0.6 of the blocks with exit 3 and nothing written unless acknowledged, and writes nothing with --check-only
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/lookup.test.sh 2>&1 | tail -1
+PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, and prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/calibration_counts.test.sh 2>&1 | tail -1
+PASS: calibration_counts.py counts misses and false alarms per label, exits 0 below the limits 0.15 and 0.10, exits 1 at or above one, and exits 2 for a label outside the three
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+exit 0
+$ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+ok: docs/academic-coverage.md
+exit 0
+$ grep -rn -i 'research-hub\|projects/manuscripts' skills/paper skills/writing
+grep exit 1   (prints nothing)
+$ python3 docs/figures/gen_figures.py ; echo "exit $?"
+wrote docs/figures/pipeline.svg (22045 bytes)
+wrote docs/figures/plan-loop.svg (21392 bytes)
+wrote docs/figures/grill.svg (7393 bytes)
+wrote docs/figures/writing.svg (6010 bytes)
+wrote docs/figures/code-comments.svg (6712 bytes)
+wrote docs/figures/paper/full.svg (30739 bytes)
+wrote docs/figures/paper/revision.svg (23824 bytes)
+wrote docs/figures/paper/lit-review.svg (7912 bytes)
+wrote docs/figures/paper/outline-only.svg (10460 bytes)
+wrote docs/figures/paper/abstract-only.svg (4234 bytes)
+wrote docs/figures/paper/citation-check.svg (9622 bytes)
+wrote docs/figures/paper/disclosure.svg (6502 bytes)
+exit 0
+$ python3 docs/figures/academic-paper-comparison/gen_comparison.py ; echo "exit $?"
+wrote docs/figures/academic-paper-comparison/full-simple.svg (45965 bytes)
+wrote docs/figures/academic-paper-comparison/revision-simple.svg (28467 bytes)
+wrote docs/figures/academic-paper-comparison/lit-review-simple.svg (10839 bytes)
+wrote docs/figures/academic-paper-comparison/outline-only-simple.svg (14832 bytes)
+wrote docs/figures/academic-paper-comparison/abstract-only-simple.svg (5865 bytes)
+wrote docs/figures/academic-paper-comparison/citation-check-simple.svg (12194 bytes)
+wrote docs/figures/academic-paper-comparison/disclosure-simple.svg (9472 bytes)
+wrote docs/figures/academic-paper-comparison/full-detailed.svg (85482 bytes)
+wrote docs/figures/academic-paper-comparison/revision-detailed.svg (60759 bytes)
+wrote docs/figures/academic-paper-comparison/lit-review-detailed.svg (20067 bytes)
+wrote docs/figures/academic-paper-comparison/outline-only-detailed.svg (23594 bytes)
+wrote docs/figures/academic-paper-comparison/abstract-only-detailed.svg (13477 bytes)
+wrote docs/figures/academic-paper-comparison/citation-check-detailed.svg (36024 bytes)
+wrote docs/figures/academic-paper-comparison/disclosure-detailed.svg (25387 bytes)
+wrote docs/figures/academic-paper-comparison/academic-paper-only-modes.svg (13161 bytes)
+wrote docs/figures/academic-paper-comparison/academic-pipeline.svg (22068 bytes)
+exit 0
+$ ruff format --check docs/figures/gen_figures.py docs/figures/academic-paper-comparison/gen_comparison.py ; ruff check (same two files)
+2 files already formatted
+All checks passed!
+$ character-set check (the brief's perl command, -CSD, .md allows the check mark) over the 39 changed or new paths outside .scratch that exist (git status --short minus deleted, directories expanded to their files)
+(prints nothing)  exit 0
+$ LC_ALL=C grep -n '[^ -~]' skills/paper/SKILL.md skills/paper/references/*.md skills/writing/SKILL.md skills/writing/references/*.md skills/paper/templates/*.py skills/paper/templates/*.sh
+(prints nothing)  grep exit 1
+$ grep -n -i cost skills/paper/SKILL.md
+(prints nothing)  exit 1
+$ SKILL.md description length (typed python, one line, quotes stripped)
+1018
+$ blank line before every heading, fence-aware typed awk, over skills/paper/SKILL.md, references/*.md, skills/writing/SKILL.md, skills/writing/references/*.md, docs/adr/0025*.md; and a second awk for a heading followed by a non-blank line over SKILL.md, the paper references and manuscript-prose-standard.md
+(both print nothing)
+$ python3 -I skills/writing/templates/prose_facts.py <scratch .tex> skills/writing/references/manuscript-prose-standard.md
+prints "## Paragraphs ... ## Semicolons", exit 0
+$ WCAG contrast of the table colours against white (typed python one-liner)
+#0077BB 4.82, #33BBEE 2.21, #009988 3.55, #EE7733 2.87, #CC3311 5.19, #EE3377 3.91, #BBBBBB 1.92, #000000 21.0
+$ ruff format --check skills/paper/templates/lookup.py
+unformatted: File would be reformatted ... 1 file would be reformatted   (a formatting diff over about 40 existing long lines; see Declined to judge)
+```
+
+Reruns that reproduce the builder's lines: the four test lines, the glossary line, `ok:` for the coverage list, both figure scripts (exit 0; the sizes above are mine, the builder quoted none), ruff on the two figure scripts, the grep, the character-set check, the description length 1018, the `grep -n -i cost` of SKILL.md (prints nothing, so point 24's "cost lines" do not exist), and the heading-spacing check. The test run of L2b on the unchanged script is not rerun (rule: no breakage testing); I read the base regex with `git diff <base>` and `diff -u` against the snapshot: the old `\\cite[A-Za-z]*` cannot match `\textcite`, `\parencite`, `\autocite` or `\Parencite`, so the quoted failure (`unused: a, b, c, d`) follows from the old code.
+
+The round's delta was read as `diff -u` of each of the 58 snapshot files against the worktree (the 2 files with no round-2 difference among the figure SVGs and ADRs were skipped as identical: 0017, 0020, 0022, 0024, README of the ADRs, building.md, glossary.md, modes.md, calibration_counts.test.sh and 9 SVGs), plus `git diff <base>` for `docs/dev/change-standard.md`, `skills/writing/SKILL.md` and the whole new `skills/writing/references/manuscript-prose-standard.md`.
+
+### Verdicts
+
+Items of the brief's "What to build", for the whole diff since the base:
+
+- 1 (SKILL.md): partial, Standards 1 (Stops row "No prose standard" still names the three places) and Spec 5 (the anonymous copy names `main.tex` in revision mode).
+- 2 (the mode table page): holds, `references/modes.md` unchanged in round 2 and consistent with SKILL.md.
+- 3 (full mode): partial, Spec 3 (the strategist page lists three resumptions, the planner page has no input for the resumption).
+- 4 (outline-only): holds (SKILL.md "outline-only" items 4 and 5 now name the structure check; the figure unchanged).
+- 5 (revision): partial, Spec 5.
+- 6 (abstract-only): holds.
+- 7 (lit-review): holds (the `screened-<list>.txt` file of AV16 is in item 1).
+- 8 (citation-check): holds, with the new stop "The citation style to confirm" in its stop list and the Stops table.
+- 9 (disclosure): holds; no second start in disclosure mode, the policy-anchor track is in item 1; the second start belongs to full mode and `patch-file.md` now names it.
+- 10 (a run continued): holds.
+- 11 (model identifier): holds.
+- 12 (reference checks and compile): holds as changed by ruling AV11 (`latexmk -xelatex`, the template's engine first); Declined to judge for whether the article template compiles under XeLaTeX.
+- 13 (`/writing` and the reply): holds; a finding quoting a file name or command reaches the draft writer as the claim.
+- 14 (Agent prompts and Stops): partial, Standards 1.
+- 15 (Rules and Anti-patterns): holds (SKILL.md Rules :519-:528, the four scripts, the planner resumption).
+- 16 (role pages): partial, Spec 3 (`references/literature-strategist.md:3`, `references/planner.md` "What the agent reads").
+- 17 (null-result rule): holds, `grep -n -i 'null result\|null-result\|null finding\|negative result'` prints only pages that forbid writing one up.
+- 18 (coverage): holds in content (rows 111, 120, 134, 136, 138, 139, 141, 144, 146, 147, 159, 223, 249 read; `ok:` printed), with Standards 2.
+- 19 (ADRs): partial, Spec 1 (ADR 0001 and 0002 against the new page, a rule clash) and Spec 2 (the title of 0025 says two roles are resumed, the Decision says three).
+- 20 (figures): holds for the two figures I rendered and read against SKILL.md (full, citation-check); Standards 3 and Behaviour 1 for what I read; the other 26 are not judged (Declined to judge).
+- 21 (`scripts.md`, `building.md`): holds; `docs/dev/change-standard.md` now lists `calibration_counts.test.sh` (the diff adds the line after `apply_tex_patch.test.sh`); the state file's verify list is the orchestrator's and is not in the diff.
+- 22 (README, glossary, head comments): holds; README alt texts of the four changed mode figures match the labels in `gen_figures.py`; the glossary **draft review** is unchanged and still true (it says the verdict stops the run).
+- 23 (`lookup.py` and its test): holds; the head comment, `docs/dev/scripts.md` and `references/latex-template.md` say "contains `cite` or `Cite`, except `\nocite`" and the test L2b covers all seven commands.
+
+Cases of the brief's "Cases":
+
+- C1: met (`sed -n 1,6p skills/paper/SKILL.md` shows version "2.0.0", description length 1018 of 1024).
+- C2: met (`ls skills/paper/references/` lists the twelve pages, none of the five removed).
+- C3: met (the grep prints only SKILL.md:40, which names `researcher`; `grep -rn 'RAISE' skills/paper` prints nothing).
+- C4: met against SKILL.md and the full figure; the stop list holds the ruled "citation style to confirm" (AV14), which the brief's list predates; the Spec 3 page gap does not change SKILL.md.
+- C5: met.
+- C6: met.
+- C7: met.
+- C8: met.
+- C9: met.
+- C10: met.
+- C11: met.
+- C12: met (the grep for "The findings to apply" and for "up to 3 times" print nothing).
+- C13: met.
+- C14: met (see item 17).
+- C15: met (`ok: docs/academic-coverage.md`).
+- C16: partial, Spec 1 and Spec 2 (ADR 0025 title and ADR 0001 and 0002 against the new standard page).
+- C17: met (gen_figures.py exit 0, the 12 files written, the character-set check clean).
+- C18: met (gen_comparison.py exit 0, 16 files).
+- C19: partial, I read two figures box by box (Declined to judge); Standards 3 and Behaviour 1 for those.
+- C20: met by reading the diff of `gen_figures.py`, which adds nodes and edges only and leaves the `FigureError` sites unchanged.
+- C21: met.
+- C22: partial, Spec 3.
+- C23: met.
+- C24: met (unchanged).
+- C25: met.
+- C26: met.
+- C27: met (the Agent prompts table holds the planner's resumption and the citation compliance agent's inputs).
+- C28: met.
+
+Points of `4-round-2.md`, against the file and line they cite in academic-paper 3.2.0:
+
+- 1 (AV1), holds: `agents/intake_agent.md:19`, `:29`, `:52` against `references/intake.md` "Materials in hand" bullets (found by kind, shown at the confirmation, row not asked when filled).
+- 2 (AV2), holds: the four profiles and the reserved list match `references/domain_evidence_profiles.md:9-22` cell by cell; `neutral` prints no hit as a profile (`grep -rn '`neutral`' skills docs README.md` prints nothing); citation-compliance.md reads the profile.
+- 3 (AV3), partial, Spec 4: the table matches `references/paper_structure_patterns.md:321-330`; the no-fit fallback is Conference Paper.
+- 4 (AV4), holds: five answers in SKILL.md item 11, `peer-reviewer.md`, the Stops row and the full figure (back edge "lower the venue").
+- 5 (AV5), holds: `draft-writer.md` reads `registers.md`; SKILL.md Agent prompts names it.
+- 6 (AV6), holds: `draft-writer.md:119`; the only other "four sentences" sentences are the writing skill's replaced rule.
+- 7 (AV7), holds: `intended-claims.md`, "Claims against the list", the report goes to the draft review and reading 1.
+- 8 (AV8), holds: `draft-writer.md` "The cover letter" matches `references/journal_submission_guide.md:91-142` part by part; the final message names it.
+- 9 (AV9), partial, Spec 5.
+- 10 (AV10), holds: the five publisher classes match `agents/formatter_agent.md:832-834`, the conference layout matches `:911`.
+- 11 (AV11), holds in text; not run (Declined to judge).
+- 12 (AV12), holds with Proof 2: the four tables against `references/policy_anchor_table.md`, strengths and places match; coverage rows 136, 146 and 147 changed.
+- 13 (AV13), holds: JSPS sentence matches `references/funding_statement_guide.md:111-136`, the DFG form and the NHMRC row are the generic form (the template at `:238` has no NHMRC sentence, said in the page), the placement table matches `:252` and on, the Springer Nature order matches the guide's example.
+- 14 (AV14), holds: `references/failure_paths.md:126-144` against `citation-compliance.md` "A format error in most entries", the Stops table and the stop lists of the three modes.
+- 15 (AV15), holds.
+- 16 (AV16), holds: first 20 and last 5, the file `screened-<list>.txt`, `<key>: <reason>` per line.
+- 17 (AV17), holds.
+- 18 (AV19), holds: the three contrast values reproduce (2.21, 2.87, 1.92); the other five table colours are at or above 3.55:1; the examples draw the black edge (bar, box, line markers, R boxplot and points).
+- 19 (X1), holds: `planner.md` "The structure check" covers the four indicators of `failure_paths.md:62-80`, the outline form and the checks table carry it, SKILL.md item 6 shows it.
+- 20 (X2 to X6), holds: rows 120, 134, 144, 159 and the abstract-parts table match `templates/theoretical_paper_template.md`, `case_study_template.md`, `literature_review_template.md` and `policy_brief_template.md`.
+- 21 (AW), holds as built, with Spec 1 (the ADR clash) and Behaviour 2.
+- 22, holds: SKILL.md Critical and the stop, and the Stops row trigger.
+- 23, partial, Spec 2 and Spec 3.
+- 24, partial, Spec 2 (the ADR title).
+- 25, holds: `patch-file.md` and SKILL.md full item 7.
+- 26, holds: see item 23.
+- 27, holds in content, Standards 2 for the length of the sentences of row 249.
+- 28, holds for the file; the verify list of the state file is the orchestrator's (named in the builder's report).
+- 29, holds (both awk checks print nothing).
+- 30, holds.
+- 31, holds in `citation-compliance.md` calibration step 5 and SKILL.md :80 and the Rules.
+- 32, partial: Standards 3, Behaviour 1.
+
+### Findings
+
+#### 1. Spec
+
+- docs/adr/0001-the-writing-base-reads-the-prose-standard-where-it-is.md (Decision) and docs/adr/0002-the-prose-standard-holds-over-the-academic-sources.md (Decision and Alternatives rejected), against `skills/writing/references/manuscript-prose-standard.md` and `skills/writing/SKILL.md` "What it reads" 2. ADR 0001 Decision: "`/writing` and the skills that read the writing base read the prose standard where it is: ... `skills/writing/` holds no copy of it." Its rejected alternative is "A copy in `skills/writing/references/` ...: two copies of one rule set". The diff adds exactly such a page, a changed copy of the prose standard (sections 0 to F under the same letters, with section G added), and has `/writing` read it in place of the three places for a `.tex` draft. ADR 0002 Decision: "The prose standard holds for every text the writing skills write or review ... No rule that contradicts the prose standard is carried." The page carries two rules that contradict it ("Arrows only inside mathematics" against "Arrows (`->`) only inside code and code comments"; paragraphs "about 120 to 200 words and may run past four sentences" against "Paragraphs cover one idea and stay under roughly four sentences", the very rule ADR 0002 cites at `:48`), and its Alternatives rejected names "The prose standard with three exceptions for manuscripts and grants (... paragraph length set by the argument): two rule sets to keep apart". ADR 0002's Consequences say a rule the prose standard contradicts "reopens this record with a superseding one", and no record does. The round brief asked for the page (point 21, rulings AV6 and AW), so this is a rule clash for the user, not a builder fault; the round-2 brief's "What is on the tree" names neither ADR (the diff is under two ADRs the brief does not name). Failure scenario: the user accepts the diff; the repository now holds a decision (0001, 0002) that says "no copy, no second rule set" and a skill that does the opposite, and the next reader of the ADRs, or a later writing skill (`grant`, `paper-review`) that "follows or supersedes" them, is told the wrong rule. Raise as an open item to the user (not closed in a repair round or at landing): options are a superseding ADR for 0001 and 0002 (the better one: the page exists and AV6 and AW rule it), or the page reduced to a pointer; the lazy option would be to leave the ADRs as they are. Verdict: item 19 partial, C16 partial.
+- docs/adr/0025-...md line 1, docs/adr/README.md:34, and the file name: "# 0025. A paper run is done by six agent roles, two of them resumed for a second message in named cases". The Decision now resumes three roles: the strategist, the visualization agent and "The planner's latest start is resumed for the review of an expanded revision". What is wrong: point 23 added the third resumed role and the title (which round 1 point 5 named) still says two. Failure scenario: a reader of the ADR index takes "two" as the cap, and a session that follows it refuses the planner's resumption that SKILL.md :294 and :527 require. Verdict: point 24 and item 19 partial.
+- skills/paper/references/literature-strategist.md:3 and :9-:11, and skills/paper/references/planner.md "What the agent reads": "The session resumes the same agent by a second message in three cases: a change the user makes at the stop "The sources' review", the sections of the outline that have no source, and a patch the script rejected." SKILL.md Rules :526 lists four (the review of an expanded revision with insufficient evidence is the fourth) and :527 resumes the planner. The page of the strategist still says three and has no input "the review of an expanded revision" under "What the agent reads"; `planner.md` lists no input for it either and says nothing of a second message. What is wrong: point 23 changed SKILL.md and the ADR and left the two role pages, which are the agents' instructions, without the case, and the page that says "three cases" is now false. Failure scenario: the session sends the review to the resumed planner; the planner page (its only instruction besides the message) has no step for a review, so it reads the message as a user change to the outline and rewrites sections by the user-change rule, or the strategist treats the review as a rejected patch. Verdict: item 3, item 16, C22 and point 23 partial.
+- skills/paper/references/intake.md "Paper type" (the sentence "Without an answer the type is Conference Paper") and skills/paper/references/planner.md "The structure" ("A paper that fits no row, or two rows, gets the Conference Paper skeleton"): the AV3 table is built, but the case of a paper that fits no row is decided as Conference Paper, the option AV3 named lazy ("Conference Paper as the default"); `agents/intake_agent.md:129` gives IMRaD or Literature Review as the defaults and `references/paper_structure_patterns.md:321-330` has no no-fit case. What is wrong: a decision the ruling did not take, made as the old default; the builder lists it as a judgment call, which is where the user can rule it. Failure scenario: an empirical paper whose intake answers do not match "original data collection" (for example the user says "an analysis of existing public data") is planned as a 2,000 to 5,000 word conference paper, the old behaviour AV3 meant to end, with only a line at the confirmation. Verdict: point 3 partial.
+- skills/paper/SKILL.md Steps 14 (first sub-bullet): "In full and revision, when the blind-review model of the Venue limits row is double-blind, start the draft writer ... to write `main-anonymous.tex` in the manuscript's folder from the final `main.tex`", and `references/draft-writer.md` "The anonymous copy" ("from the final `main.tex`"). In revision mode the main file is "the name of the `.tex` the call gives" (Steps 11), not `main.tex`. What is wrong: the file name is fixed to `main.tex` for a mode whose manuscript has another name. Failure scenario: `/paper revision paper/manuscript.tex ...` on a double-blind venue: the draft writer is told to read `main.tex`, which is absent or is another file of the folder, and writes `main-anonymous.tex` from it. Verdict: item 5 and point 9 partial.
+
+#### 2. Proof
+
+- /Users/axelfaes/workspace/ordo/.scratch/5-paper/agents/reviews/4-report.md, "Repair round 2" point 21: "Every page of `skills/paper` that names the standard now says "manuscript prose standard" (`draft-writer.md` :13, :119, :236 and its closing rule, `intake.md` :185, :189, `SKILL.md` :47, :48, :102, :453, :500)." Rerun: `skills/paper/SKILL.md:500` reads "| No prose standard | None of the three places of "What it reads" 2 holds it, or the writing rules page is missing | The three paths, or the path of the page | A prose standard at one of them, or the `writing` skill installed, then `/paper` again |", and the SKILL.md diff has no hunk there. The claim of closure for :500 is not reproduced (Standards 1 is the defect). A decision rests on it: the orchestrator's "no earlier page left" reading of the point.
+- /Users/axelfaes/workspace/ordo/.scratch/5-paper/agents/reviews/4-report.md, "Repair round 2", commands block: "$ ... apply_tex_patch.test.sh 2>&1 | tail -1", "$ ... lookup.test.sh ...", "$ python3 docs/figures/gen_figures.py ; echo "exit $?"            -> exit 0". Round-2 brief: "the commands with their output verbatim and unshortened ... each point with its change, old beside new (`grep -n` of the new lines)". What is wrong: three commands are written with "..." in place of their env prefix, the two figure scripts' output lines are replaced by "-> exit 0", and no point gives the old text or a `grep -n` print of the new lines (only line numbers). The brief's rule: "A line shortened with "..." is not verbatim." Failure scenario: the orchestrator copies the section into the report and a later reader cannot tell which line of a page was the old one, or what the figure scripts wrote. No finding of code rests on it; the standard is the report form.
+- skills/paper/references/ai-disclosure.md "Policy anchors", the Wording cells: the quoted text is capitalised where the source quote is a lower-case fragment: ICMJE "The journal should require authors ..." (source `references/policy_anchor_table.md` ICMJE row 1: "the journal should require authors ..."), Nature "An attribution of authorship carries with it accountability ..." and "In the relevant caption upon submission" (source: "an attribution of authorship ...", "in the relevant caption upon submission"), IEEE "Accompanied by a brief explanation ...", "Specific sections of the article that use AI-generated content shall be identified ..." and "Shall be disclosed in the acknowledgments section ..." (source: lower-case "accompanied", "specific", "shall"). The page says the cells "carry the anchor's wording as recorded". What is wrong: six cells change the first letter of a quotation without brackets. Failure scenario: low, a user pasting "Shall be disclosed in the acknowledgments section" as the policy's text quotes a sentence that starts differently in the source; the other quote cells match the source word for word.
+
+#### 3. Standards
+
+- skills/paper/SKILL.md:500 (Stops table, row "No prose standard"): "None of the three places of "What it reads" 2 holds it, or the writing rules page is missing". What it reads 2 now names three pages of the `writing` folder and says "A missing page is a refusal that names the path"; there are no "three places" in `paper` any more. Standard: skill-layout.md "Where a rule goes" (a rule written once, another place names the section) and the rule that a sentence the diff makes false is a finding. Failure scenario: a runner without the `writing` skill beside `paper` meets the refusal; the table tells the user to put a prose standard at one of three paths that this skill no longer reads, and the user writes `docs/dev/prose-standard.md`, which changes nothing. Verdict: item 1 and item 14 partial.
+- docs/academic-coverage.md row 249 (`agents/source_verification_agent.md`): "Role Definition" makes the agent the gatekeeper of the evidence that enters the pipeline, which grades sources, ... with no grading and no conflict screen" (about 67 words), "Core Principles" go one by one: ..." (73), "Red Flags for Hallucinated References" are held in ..." (78), "Verification Outcome" gives five outcomes: ..." (69), "Output Format" and its report go as follows: ..." (104), "Quality Criteria" go as follows: ..." (90). The standard `skills/repo-setup/templates/docs/dev/prose-standard.md` section E "Sentence length": "under roughly 20 words unless the mechanism needs more ... a sentence in the reason cell of a coverage table ... may run to about 35 words." The snapshot row had one sentence of 52 words, round 2 added five more of 67 to 104 words (counted with a typed awk split on full stops, file names not split; an indication, the sentences are quoted above). The brief's verify item 5 asks each such departure to be named in the report with why; round 2's section names none. Failure scenario: the entry that builds `researcher` reads a 104-word sentence of six clauses to find which sections of the source file are dropped; each is a separate decision that can be misread. Also row 111 says calibration is "under the prose standard" where `intake.md` says "manuscript prose standard" (a stale phrase).
+- docs/figures/gen_figures.py `Edge("SS", "C", "", "back")` (full, revision and citation-check): the stop "The citation style to confirm" returns to "Citation compliance" by a dotted arrow with an empty label. The legend (in the figures) says "Dotted arrow: a cycle, with its cap", and brief item 20 asks every cycle to be drawn "with its cap"; the cycle runs once (SKILL.md Steps 12: "That second start does not raise the stop again"). Failure scenario: the reader takes the dotted arrow as an uncapped loop of stop and restart. The "lower the venue" back edge has a label and no cap either, and it can stop again; the expanded revision edge is unchanged and equally uncapped (round 1's state).
+
+#### 4. Behaviour
+
+- docs/figures/paper/citation-check.svg (and the same label in full.svg and revision.svg): the label "more than half the entries fail the same check; a fresh start follows" is drawn on top of the arrow from "Citation compliance" to "Citation compliance once more, when a check fails", not beside the arrow to "The citation style to confirm". What is wrong: in the rendered figure (rsvg-convert at 1600 px, read) the text sits on the wrong arrow, which carries the label's condition to the dashed "once more" box. Failure scenario: a reader of the README or of the figure takes "more than half the entries fail" as the condition of the second citation compliance start, the opposite of what the stop does (the stop comes first, the fresh start after the answer). Verdict: item 20 and point 32 partial.
+- `/writing` on a `.tex` (skills/writing/SKILL.md "What it reads" 2): before, `/writing` read the repository's own prose standard (the page of `standards`, then `docs/dev/prose-standard.md`, then the template); after, a `.tex` draft reads only `skills/writing/references/manuscript-prose-standard.md`, so a repository that lists its own `prose-standard.md` in `standards` has it ignored for every manuscript, and a `.md` or `.docx` draft keeps the old route. The report's "Judgment calls" and its list of earlier passages give the page but not this before and after for a user. Failure scenario: a user whose repository has a prose page of its own (ADR 0001's "A repository's own prose page takes precedence") runs `/writing main.tex` and gets findings against the Ordo page with its ruled differences; nothing says the repository page was not read. Part of Spec 1.
+- Other user-visible changes of round 2 that the report states only as the new text, with no before and after: the compile engine of full and revision runs is XeLaTeX by default (before: pdfLaTeX unless the Notes named XeLaTeX); two new files appear in the manuscript's folder (`cover-letter.tex`, `main-anonymous.tex`); two new intake rows (Cover letter, Policy anchor); a stop and a second citation compliance start when more than half the entries fail the same check.
+
+### Declined to judge
+
+- Roadmap entry 13's integrity-check change (ruling AW): not in this diff; the orchestrator makes it through `/roadmap` after the user sees the diff, a different concern; also the state file's verify list, which the builder handed back.
+- Figures: I rendered and read `docs/figures/paper/full.svg` and `citation-check.svg` against SKILL.md and the stop lists. I did not render or read `revision.svg`, `disclosure.svg` or the 14 comparison SVGs box by box (their paper side changed in `gen_comparison.py`), and the figure spec `4-figure-spec.html` has no round-2 boxes to compare with (the builder says the same); `gen_comparison.py` alone raises its label-fit error, which a run did not trigger.
+- Whether the article template (`times`, `inputenc`, `fontenc`) compiles under `latexmk -xelatex`: no LaTeX run was in the checks, and a compile is the check that would settle it.
+- The failure of L2b on the unchanged script: not rerun (rule on breakage testing); judged by reading the old regex, as above.
+- `ruff format --check skills/paper/templates/lookup.py` prints a diff over about 40 existing long lines; the builder says the base file reports the same. I ran the form with `git show <base>:<path> | ruff format --check -` once but its output was not told apart from the first in this report, so I cannot confirm "not new"; no decision rests on it (the brief lists no ruff check for `lookup.py`).
+- The sentence-length counts (Standards 2) are an awk split on full stops, not a reading of every new sentence; the other sentences of 41 to 69 words that the same split showed in SKILL.md, `ai-disclosure.md`, `citation-compliance.md`, `peer-reviewer.md`, the ADR 0025 Consequences and the test's head comment were not judged one by one against "unless the mechanism needs more".
+- The 14 coverage rows of academic-paper files other than those named above, and each row's alt-text pair against its SVG: not compared.
+- Whether the content of `intended-claims.md` matches the source's `claim_intent_manifests[]` schema: the builder says the schema is not built; I read `agents/draft_writer_agent.md:540-544` and the ruling (a list), not the schema file.
+- Quotes of `references/venue_disclosure_policies.md` and the `policy_anchor_disclosure_protocol.md` renderer rules beyond the table: checked only against `references/policy_anchor_table.md` and `disclosure_mode_protocol.md:6`.
+
+Reviewer usage: ac38ba3d94a7c1b49, claude-sonnet-5-5, 347954 tokens, 92 tool uses, 9.5 min

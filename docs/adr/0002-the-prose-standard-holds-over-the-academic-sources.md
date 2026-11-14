@@ -1,6 +1,6 @@
 # 0002. The prose standard holds over the academic sources
 
-Status: proposed
+Status: proposed; superseded by 0026 for a manuscript in the part `skills/writing/references/manuscript-prose-standard.md` lists
 
 ## Context
 

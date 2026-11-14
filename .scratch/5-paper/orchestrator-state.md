@@ -9,6 +9,7 @@ verify:                      # commands run once, at landing on main, in order; 
 - sh skills/ordo-init/templates/check_config.test.sh 2>&1 | tail -1
 - sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
 - sh skills/paper/templates/apply_tex_patch.test.sh 2>&1 | tail -1
+- sh skills/paper/templates/calibration_counts.test.sh 2>&1 | tail -1
 - sh skills/paper/templates/lookup.test.sh 2>&1 | tail -1
 - sh skills/repo-setup/templates/sync_rules.test.sh 2>&1 | tail -1
 - python3 skills/repo-setup/templates/sync_rules.py . --only glossary
@@ -40,20 +41,7 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 ```
 
 ```yaml
-dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 4
-  landing: not-started
-  executor: agent
-  session_id: a8f782ee29dfe2e0a (claude-sonnet-5-5)
-  worker: claude:sonnet
-  launched: 2026-10-20
-  report: .scratch/5-paper/agents/reviews/4-report.md
-  builder_usage: "377481 tokens, 836 tool uses, 123.4 min; round 1: 351967 tokens, 535 tool uses, 114.5 min"
-  reviewer_report: ".scratch/5-paper/agents/reviews/4-refuter.md (a72eb77449241ae96, claude-opus-5-5, 275856 tokens, 122 tool uses, 16.0 min); over round 1: a7e010f4ad8e61c21, claude-sonnet-5-5, 189463 tokens, 127 tool uses, 14.8 min"
-  round: 2
-  base: 95aa872916493c7b541aacd3f9f43e0a50b8f945
-  worktree: .agents/worktrees/5-paper-4
-  brief_check: .scratch/5-paper/agents/reviews/4-brief-check.md (acb39ad27aa1f1022, claude-opus-5-5, 304522 tokens, 64 tool uses, 15.4 min)
+dispatch: none               # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -62,6 +50,7 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-14: Open item AX: ruled (b) by the user, booked in plan.md's Rulings: the manuscript prose standard lists only its differences, ADR 0026 supersedes ADR 0002 in that part; carried out at the landing of step 4.
 - 2026-11-14: Open item AW: ruled (a) by the user, booked in plan.md's Rulings: the rule against code and software wording in the manuscript, in the draft writer, the corrections sent to it, the peer reviewer and `/writing`, built in repair round 2 of step 4; roadmap entry 13's part waits on the user's approval of its diff.
 - 2026-11-14: Open item AV (AV1 to AV19): ruled by the user, booked in plan.md's Rulings: every item built as academic-paper has it, AV6 with paragraphs of 120 to 200 words that may exceed four sentences; built in repair round 2 of step 4 (AV18).
 - 2026-10-21: Open item AS: ruled (a) by the user, booked in plan.md's Rulings. The user allows the `claude -p` check runs, and runs a turn with `!` if the runner refuses it.
@@ -102,12 +91,13 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 ## Where things are
 
-- Design: `docs/roadmap.md` entry 5, the rulings in `plan.md` (D1 to D59, the pins of plan 5, open items A to G), ADRs 0017, 0020, 0022, 0023 and 0024. Ledger: `.scratch/5-paper/`, with `agents/briefs/` and `agents/reviews/`.
+- Design: `docs/roadmap.md` entry 5, the rulings in `plan.md` (D1 to D59, the pins of plan 5, open items A to AX), ADRs 0017, 0020, 0023, 0024, 0025 and 0026. Ledger: `.scratch/5-paper/`, with `agents/briefs/` and `agents/reviews/`.
 - The sources: `../research-hub/.agents/skills/academic-paper/`, `academic-pipeline/` and `deep-research/` (the coverage rows of `docs/academic-coverage.md`), `../research-hub/tools/manuscript/`, and `lookup.py` at commit 0074728. research-hub is read only; the gate's runs work on copies outside it.
 - The installed skills are pinned at v8.4.0-rc.1, the release candidate of step 3 (`git -C ~/.local/share/ordo-stable describe --tags`); step 5 tags the next release candidate and pins it, and the closing tags the final release and pins it (Rulings, "The pins of plan 5").
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-10-20. Step 4 of 6, the new shape of paper, reopened under open item Q (a): its product files are back at 3b6d071 (commit cd06a91), the step is unticked, and its line in `plan.md` builds the design of the comparison page `agents/briefs/4-figure-spec.html` with rulings J to AC2.
-- Next: `/spec 5 4`. Step 5 of 6, the gate's comparisons, stays held by Axel's pause before step 5.
+- 2026-11-14. Step 4 of 6, the new shape of paper, landed and booked in `plan.md` ("Step 4, the new shape of paper, rebuilt to academic-paper 3.2.0"); the landing report is `agents/reviews/4-landing.md`.
+- Next: a new step of this plan for plan mode and format conversion (ruling AK), added before step 5. Step 5 of 6, the gate's comparisons, stays held by Axel's pause before step 5.
+- The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Open on Axel's side: none.

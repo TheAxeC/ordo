@@ -1,6 +1,6 @@
-# Step 4 landing
+# Landing of step 4 of plan 5
 
-Roadmap entry 5, paper; plan step 4 of 6, the new shape of paper, landed; next: step 5 of 6, the gate's comparisons, held by Axel's pause before step 5.
+Roadmap entry 5, paper. Step 4 of 6, the new shape of paper (rebuilt to academic-paper 3.2.0), landed. Next: a new step for plan mode and format conversion (ruling AK) before step 5; step 5, the gate's comparisons, stays held by Axel's pause.
 
 ## Open items
 
@@ -8,26 +8,58 @@ None.
 
 ## The check of Steps 1
 
-The runner's agent listing (ListAgents) showed no agent of the step: the builder a94bbfd9b59503301 and the reviewers ac9aab32d59df88c5 and a3a06e920c3ffa6cd had finished.
+ListAgents lists no subagent of this session: the builder a8f782ee29dfe2e0a and the reviewers of the step had ended before the landing.
 
-## NOT DONE
+## Not done
 
-Nothing of the step. Step 5 waits on Axel's pause.
+Nothing inside the step. Proof 2 of the run over round 2 (the round-2 report shortens three commands with "..." and gives no old text) concerns the report, not the product, and is booked only.
 
-## What landed, what was found, the agents and the fixes
+## What landed
 
-- Landed: 39 files, 3020 insertions and 1157 deletions against the base 3b6d071, the landing fixes included: `skills/paper/SKILL.md` 2.0.0 with the five roles (literature strategist, planner, draft writer, visualization, peer reviewer) and the citation compliance agent of citation-check mode, Steps 1 to 14 with the compile in a copy and `/writing` at the end of full and revision, nine stops; `references/planner.md` in place of `structure-architect.md` and `argument-builder.md`; `abstract.md`, `ethics.md` and `integrity-verification.md` removed, their rules carried or sent to `researcher` (entry 13) by `docs/academic-coverage.md`; the changed pages `draft-writer.md`, `intake.md`, `peer-reviewer.md`, `citation-compliance.md`, `ai-disclosure.md`, `statements.md`, `literature-strategist.md`, `visualization.md` and `patch-file.md`; `lookup.py` and `lookup.test.sh` naming the citation report; ADRs 0017 and 0020 refined in place; `docs/figures/gen_figures.py` with `paper.svg`, `grill.svg`, `writing.svg` and `code-comments.svg`, `pipeline.svg` and `plan-loop.svg` byte-equal to the base; `docs/figures/academic-paper-comparison/gen_comparison.py` with its nine SVGs, shown in `docs/academic-coverage.md` "paper against academic-paper"; `README.md`, `docs/glossary.md`, `docs/dev/building.md` and `docs/dev/scripts.md`.
-- Ticked: the run over round 1 gives every item 1 to 21 holds and every case C1 to C22 met; its six findings, none with a verdict, are fixed at landing below.
-- Verify list: equal to `docs/dev/building.md`'s 10 commands with their filters, unchanged.
-- Premise corrections: at /spec, step 4's line widened to outline-only and abstract-only and to the check run from the worktree, and open item I closed under self-rule (C108), its parts on the line; the brief check's other findings closed in the brief (`agents/reviews/4-brief-check.md`).
-- Review: `agents/reviews/4-refuter.md`; the first run found 3 Spec, 2 Proof, 7 Standards and 1 Behaviour findings, items 4, 13, 14, 18 and 19 violated and cases C10, C12 and C16 partial; all were sent as the 12 points of repair round 1 (`agents/briefs/4-round-1.md`), Spec 2 (the second run of the checks in citation-check) and Behaviour 1 (the strategist only when no `.bib` is held) kept as built with the report stating them.
-- Check run: `agents/reviews/4-check-run.md`, a fresh revision run of the rebuilt skill on step 3's input, six turns, session 475cf518-b731-48f6-947a-c4d8e1c7c6e5 on `claude-opus-5-5`. It stopped only at the intake interview, the intake confirmation and "A structural patch", started the literature strategist and the visualization agent for their items, and ended with the numbered `/writing` report and its two reply sentences; resumed with `all`, it applied F1 to F22 and compiled, then stopped outside the list to ask about a layout pass, since Steps 14 gave no rule for a compile that exits 0 with layout faults. Fixed at landing (the last fix below).
-- Fixes at landing: 7. Spec 1 of the run over round 1: `references/citation-compliance.md`'s `DOI_MISMATCH` line marks an uncorrectable entry "unconfirmed" with the stop under Strict and marks it for the final message under mark-only, as `intake.md` says. Proof 1 and Standards 3: rows 191 and 235 of `docs/academic-coverage.md` and the glossary's **mark, of a figure** split into sentences under the standard's length. Proof 2: twelve label strings of `gen_figures.py` rejoined to fill their lines, every SVG byte-equal (`shasum -c` of the 15 SVGs before and after: 0 lines not OK), `ruff format --check` clean. Standards 1: `SKILL.md` Steps 11 drops "once" for `quote-check`. Standards 2: the glossary entry names the README sentences without line numbers. Behaviour 1: the builder's report states that "A reference that cannot be confirmed" and "A claim the run cannot support" are no longer stops of lit-review and revision. The check run: `SKILL.md` Steps 14 sends a layout fault (a log line starting `Overfull \hbox`, `Overfull \vbox` or `LaTeX Warning: Float too large`) to the draft writer once as `compile-fix`, one left named in the final message, and `references/patch-file.md`'s `compile-fix` row says so.
-- Verification on main: `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/land/templates/land.sh .scratch/5-paper/orchestrator-state.md 5-paper-4 3b6d071` staged the 39 paths; after the fixes `sh skills/land/templates/checks.sh .scratch/5-paper/orchestrator-state.md` printed `PASS: strip_comments.py scratch tests`, `PASS: land.sh scratch tests`, `PASS: check_config.py scratch tests`, the PASS lines of `anchorize_tex.py`, `apply_tex_patch.py` and `lookup.py`, `PASS: sync_rules.py scratch tests`, `ok: the plan-terms block equals the template`, `PASS: pin.sh scratch tests`, and `checks: 10 commands passed`; `python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research` printed `ok: docs/academic-coverage.md`.
-- A/B: none. Look: none configured.
-- Usage: brief check a40fbd6557bc65701 claude-opus-5-5 279372 tokens, 62 tool uses, 14.4 min; builder a94bbfd9b59503301 claude-sonnet-5-5 309869 tokens, 415 tool uses, 61.3 min (build) and 63477 tokens, 72 tool uses, 5.2 min (round 1); reviewer ac9aab32d59df88c5 claude-opus-5-5 116742 tokens, 103 tool uses, 15.1 min; reviewer over round 1 a3a06e920c3ffa6cd claude-sonnet-5-5 266102 tokens, 64 tool uses, 9.4 min.
-- The builder's first report did not pass its bar: the first run found 13 findings, five items violated among them.
+68 paths, 8912 insertions and 2454 deletions against the base 95aa872, the landing fixes included. `skills/paper/` follows academic-paper 3.2.0's design with the deviations the rulings make: six roles, three of them resumed in named cases (ADR 0025), the citation compliance agent in full, revision and citation-check, the cover letter and the anonymous copy, the policy anchors of the AI disclosure, the evidence profiles, and the manuscript prose standard of rulings AV6, AW and AX (ADR 0026). The paper figures and the comparison figures are drawn from their scripts.
 
-## What is next
+## What was found
 
-Step 5, the gate's comparisons: a release-candidate tag of main with step 4, pinned with `utils/pin.sh <tag>`, then the comparison runs, with time estimates given first; it starts after Axel lifts the pause.
+The first run found 6 Spec, 2 Proof, 6 Standards and 4 Behaviour findings, with 8 items violated and 6 partial; they went to repair round 1. The run over round 1 found 14 findings, which went with rulings AV1 to AV19 and AW to repair round 2. The run over round 2 found 5 Spec, 3 Proof, 3 Standards and 3 Behaviour findings. Ruling AX settled its Spec 1; the rest are fixed at landing or booked.
+
+The builder's first report did not pass its bar: the first run found 18 findings, eight items violated among them.
+
+## Fixes at landing (9)
+
+1. Spec 1, ruling AX: `skills/writing/references/manuscript-prose-standard.md` lists only its differences from the prose standard; `/writing` and `paper` read the prose standard at the three places of ADR 0001 and apply the differences to a manuscript; ADR 0026 supersedes ADR 0002 in that part.
+2. Spec 2: ADR 0025 renamed to "three of them resumed", with its title and its README line.
+3. Spec 3: the literature strategist's page names four cases of resumption and the expanded revision's input and section; the planner's page names its resumption and its input.
+4. Spec 4: a paper type that fits no row is IMRaD for empirical work and Literature Review for a synthesis.
+5. Spec 5: the anonymous copy is `<main>-anonymous.tex` beside the main `.tex` the mode gives.
+6. Proof 3: the six policy-anchor quotes take the source's lower-case first letter.
+7. Standards 2: coverage row 249 in sentences of at most 35 words; row 111's wording and fallback.
+8. Standards 3 and Behaviour 1: the figure layout routes every arrow before it places labels, keeps a return label on its outer side, grows a crowded row, and stops with an error when a label has no place; the citation-style stop carries its condition in its box and "a fresh start, once" on its return arrow; the draft review's return arrows say "no cap". The rendered figures were read: each label stands beside its own arrow.
+9. Ruling AU: 314 sentences over 30 words on lines the rounds changed were read; 195 were rewritten, and the rest are figure alt texts, table rows, lists of stops, the trigger list, ADR titles and coverage cells within the 35-word exception.
+
+## Before and after
+
+- Compile engine: before, pdfLaTeX; after, the venue template's engine, and XeLaTeX otherwise.
+- The manuscript's folder gains `cover-letter.tex` for a journal venue and `<main>-anonymous.tex` for a double-blind venue.
+- Intake gains the rows Cover letter and Policy anchor.
+- The stop "The citation style to confirm" is new; before, the agent corrected every entry itself.
+- `/writing` on a manuscript: before, the prose standard as found; after, the prose standard as found with the listed differences.
+- A paper type that fits no row: as round 2 built it, Conference Paper; after, IMRaD or Literature Review.
+- `docs/figures/gen_figures.py`: before, a label with no free place was drawn over another arrow; after, the row grows, or the script stops.
+
+## Verification on main
+
+`sh ~/.claude/skills/land/templates/land.sh .scratch/5-paper/orchestrator-state.md 5-paper-4 95aa872916493c7b541aacd3f9f43e0a50b8f945` exited 0. After the fixes, `env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh ~/.claude/skills/land/templates/checks.sh .scratch/5-paper/orchestrator-state.md` printed a PASS line for each of the eight test scripts, `ok: the plan-terms block equals the template` and `checks: 11 commands passed`. `utils/check_coverage.py` printed `ok: docs/academic-coverage.md`. Both figure scripts exited 0, and `ruff format --check` and `ruff check` passed on both. The verify list gained the `calibration_counts.test.sh` line, as `docs/dev/building.md` has it.
+
+A/B: none. Look: none configured.
+
+## Usage
+
+- Brief check acb39ad27aa1f1022, claude-opus-5-5: 304522 tokens, 64 tool uses, 15.4 min.
+- Builder a8f782ee29dfe2e0a, claude-sonnet-5-5: 377481 tokens, 836 tool uses, 123.4 min (build); 351967 tokens, 535 tool uses, 114.5 min (round 1); 291845 tokens, 244 tool uses, 26.8 min (round 2).
+- Reviewer a72eb77449241ae96, claude-opus-5-5: 275856 tokens, 122 tool uses, 16.0 min.
+- Reviewer over round 1 a7e010f4ad8e61c21, claude-sonnet-5-5: 189463 tokens, 127 tool uses, 14.8 min.
+- Reviewer over round 2 ac38ba3d94a7c1b49, claude-sonnet-5-5: 347954 tokens, 92 tool uses, 9.5 min.
+
+## Next
+
+The new step for plan mode and format conversion (ruling AK) is added to `plan.md` before step 5, then prepared with `/spec`.

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, the keys a .tex cites with the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, and the refusal of the one-argument form of check-urls and of the two-argument form of quote-check. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
+# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, and the retraction and expression-of-concern notice lines of resolve. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
 set -u
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -132,7 +132,7 @@ check("T5 hyphen between letters, one line", lookup.passage_found("self-supervis
 check("T5 one word changed", not lookup.passage_found("mutual information estimation", text))
 check("T5 an empty passage is not found", not lookup.passage_found("", text))
 
-# T6: passage lines and the keys an integrity record cites.
+# T6: passage lines and the keys a citation report cites.
 line = '> [@a, p. 3]: "the "plug-in" estimator"'
 parsed = lookup.passage_line(line)
 check("T6 passage with quotation marks", parsed == ("a", "p. 3", 'the "plug-in" estimator'), repr(parsed))
@@ -274,6 +274,35 @@ check("not found: an index left out names its reason", "Semantic Scholar: left o
 lines = lookup.merged_lines([("OpenAlex", lookup.Outcome()), ("Semantic Scholar", lookup.Outcome([s2], more=True))])
 check("not found: only the indexes asked have a line", lines[-2:] == ["OpenAlex: not found", "Semantic Scholar: first 100, more exist"] and not any("Crossref" in line or "arXiv:" in line for line in lines), repr(lines))
 
+# T8: the retraction and expression-of-concern notices Crossref lists in the "updated-by" field of the work's own record (recorded body of a retracted work, shortened).
+CROSSREF_RETRACTED_BODY = """{"status":"ok","message-type":"work","message":{"DOI":"10.1016/s0140-6736(97)11096-0","type":"journal-article",
+"title":["RETRACTED: Ileal-lymphoid-nodular hyperplasia, non-specific colitis, and pervasive developmental disorder in children"],
+"author":[{"given":"AJ","family":"Wakefield"},{"given":"SH","family":"Murch"}],"issued":{"date-parts":[[1998,2]]},"container-title":["The Lancet"],
+"updated-by":[{"DOI":"10.1016/s0140-6736(04)15715-2","type":"correction","label":"Correction","source":"retraction-watch","updated":{"date-parts":[[2004,3,6]],"date-time":"2004-03-06T00:00:00Z","timestamp":1078531200000},"record-id":"17269"},
+{"DOI":"10.1016/s0140-6736(10)60175-4","type":"retraction","label":"Retraction","source":"retraction-watch","updated":{"date-parts":[[2010,2,6]],"date-time":"2010-02-06T00:00:00Z","timestamp":1265414400000},"record-id":"4036"}]}}"""
+CROSSREF_CONCERN_BODY = CROSSREF_RETRACTED_BODY.replace('"type":"retraction","label":"Retraction","source":"retraction-watch"', '"type":"expression_of_concern","label":"Expression of concern","source":"publisher"')
+CROSSREF_CORRECTED_BODY = CROSSREF_RETRACTED_BODY.replace('"type":"retraction","label":"Retraction"', '"type":"erratum","label":"Erratum"')
+
+
+def resolve_lines(crossref_body):
+    lines = []
+    status = lookup.run_resolve(StubClient([("api.crossref.org", stub_reply(200, crossref_body))]), ["10.1016/S0140-6736(97)11096-0"], lines)
+    return status, lines
+
+
+status, lines = resolve_lines(CROSSREF_RETRACTED_BODY)
+notices = [line for line in lines if "notice" in line]
+check("T8 the retraction is printed", notices == ["Crossref notice: retraction | 2010-02-06 | doi 10.1016/s0140-6736(10)60175-4 | source retraction-watch"], repr(lines))
+check("T8 the Crossref record line stays the first line", lines[0].startswith("Crossref: ratio 1.00: RETRACTED: Ileal-lymphoid-nodular hyperplasia"), repr(lines))
+check("T8 the exit status stays 0", status == 0, repr(status))
+status, lines = resolve_lines(CROSSREF_CONCERN_BODY)
+notices = [line for line in lines if "notice" in line]
+check("T8 the expression of concern is printed", notices == ["Crossref notice: expression_of_concern | 2010-02-06 | doi 10.1016/s0140-6736(10)60175-4 | source publisher"], repr(lines))
+status, lines = resolve_lines(CROSSREF_CORRECTED_BODY)
+check("T8 a correction and an erratum print no notice", not any("notice" in line for line in lines), repr(lines))
+status, lines = resolve_lines(CROSSREF_BODY)
+check("T8 a work with no notice prints none", not any("notice" in line for line in lines) and lines[0].startswith("Crossref: ratio 1.00: Estimating mutual information"), repr(lines))
+
 # File names, DOIs in URLs, the PDF test and the arXiv HTML test.
 folder = os.path.join(os.sep, "scratch", "folder")
 for key in ("smith:2006/a", "../../etc/passwd", "..", ".", "a\\b", "x/../y"):
@@ -354,6 +383,12 @@ put("l2/main.tex", "Text \\cite{a, b}.\n")
 put("l2/refs.bib", bib_of("a", "b"))
 result = command(["cite-keys", "../l2/main.tex", "../l2/refs.bib"])
 check("L2 cite-keys with nothing to print", result == (0, [], []), repr(result))
+
+# L2b: the natbib and biblatex commands of references/latex-template.md are all read, a \nocite is not.
+put("l2b/main.tex", "Text \\textcite{a} and \\parencite[see][p. 3]{b}, \\autocite{c}, \\Parencite{d}, \\citet{e}, \\citeauthor*{f}, \\nocite{g}.\n")
+put("l2b/refs.bib", bib_of("a", "b", "c", "d", "e", "f"))
+result = command(["cite-keys", "../l2b/main.tex", "../l2b/refs.bib"])
+check("L2b cite-keys reads the biblatex commands", result == (0, [], []), repr(result))
 
 # L3: the files a .tex inputs are read relative to the main file's folder, whatever the working directory, and a % that is not escaped starts a comment.
 put("l3/main.tex", "\\input{tables/x}\n\\include{chap}\n\\input{body.tex}\n\\input{sections/s}\n\\input{tables/x}\n% \\input{gone}\n\\includegraphics[width=3cm]{fig/plot}\nA gain of 5\\% \\cite{h}\n\\cite {k1}\n\\cite{k2, k3}\n\\cite{k4,\nk5}\n")
@@ -473,7 +508,7 @@ def run_in_process(function, arguments):
 result = run_in_process(lookup.run_check_urls, ["only-one"])
 check("check-urls one argument", result == ("error: check-urls takes <main.tex> <file.bib>", []), repr(result))
 
-# L6: quote-check reads the integrity record, the .bib named and the texts of a folder.
+# L6: quote-check reads the citation report, the .bib named and the texts of a folder.
 put("l6/texts/k1.txt", "Here the plug-in estimator is biased for small samples.\n")
 record = put("l6/record/record.md", "Claim [@k1, p. 1] and [@k2, p. 2].\n\n> [@k1, p. 1]: \"the plug-in estimator is biased\"\n")
 put("l6/record/references.bib", bib_of("k2"))
@@ -485,7 +520,7 @@ check("L6 the key the named .bib lacks", "k2: no entry" in lines, repr(lines))
 check("L6 the key the named .bib holds", "k1: no entry" not in lines, repr(lines))
 check("L6 exit status", status == 1, repr((status, lines)))
 result = run_in_process(lookup.run_quote_check, [record, texts])
-check("L6 two arguments", result == ("error: quote-check takes <integrity record> <file.bib> <folder>", []), repr(result))
+check("L6 two arguments", result == ("error: quote-check takes <citation report> <file.bib> <folder>", []), repr(result))
 
 for failure in failures:
     print(failure)
@@ -500,4 +535,4 @@ if [ "$status" -ne 0 ]; then
     exit 1
 fi
 
-echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, and refuses the one-argument check-urls and the two-argument quote-check"
+echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, and prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice"
