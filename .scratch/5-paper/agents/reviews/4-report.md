@@ -3285,3 +3285,260 @@ $ grep -n -i "no cap\|fix it" academic-paper/agents/formatter_agent.md | head -3
 366:- v3.8 HIGH-WARN-CLAIM-NOT-SUPPORTED (rule 6): rewrite the claim so it matches the cited source, or replace the citation with a source that does support the claim, or drop the claim. `/ars-mark-re
 ```
 
+## Repair round 1
+
+Not done: plan mode and format conversion. The brief puts them in a step of their own (point 25f), and `docs/academic-coverage.md` rows 110, 115 and 145 stay `rebuild later: paper`. `docs/roadmap.md` of this worktree still holds the entry "15.A Rebuild-later rows" (lines 107 and 119). Main's commit 414f8ba changed the roadmap through `/roadmap`, so I did not edit that file here. Everything else in points 1 to 31 is done, and the commands below were run in this session. I did not write to `.scratch/5-paper/agents/reviews/4-report.md` (its mtime is Oct 21 00:40, before this round).
+
+### Commands, verbatim (worktree root)
+
+```
+$ env -u CLAUDE_CONFIG_DIR -u ORDO_SKILL_DIRS -u ORDO_STABLE sh skills/paper/templates/anchorize_tex.test.sh 2>&1 | tail -1
+PASS: anchorize_tex.py leaves the .tex byte-identical, makes one block of a paragraph run and of an environment with a blank line inside, makes separate blocks of the paragraphs inside a document environment, and writes a manifest whose blocks and separators hold the whole file
+$ ... apply_tex_patch.test.sh 2>&1 | tail -1
+PASS: apply_tex_patch.py replaces, inserts after and deletes only the blocks a patch names with the manifest's hashes and writes the apply report, rejects a wrong hash, a stale manifest, two ops on a block, a stale op among good ones and an output equal to the patched .tex with exit 2 and nothing written, answers a heading change, a deleted section and more than 0.6 of the blocks with exit 3 and nothing written unless acknowledged, and writes nothing with --check-only
+$ ... lookup.test.sh 2>&1 | tail -1
+PASS: lookup.py parses recorded bodies, matches titles, ... and prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice
+$ ... calibration_counts.test.sh 2>&1 | tail -1
+PASS: calibration_counts.py counts misses and false alarms per label, exits 0 below the limits 0.15 and 0.10, exits 1 at or above one, and exits 2 for a label outside the three
+$ python3 skills/repo-setup/templates/sync_rules.py . --only glossary
+ok: the plan-terms block equals the template
+$ python3 utils/check_coverage.py docs/academic-coverage.md /Users/axelfaes/workspace/research-hub/.agents/skills academic-paper academic-paper-reviewer academic-pipeline deep-research
+ok: docs/academic-coverage.md
+$ python3 docs/figures/gen_figures.py >/dev/null; echo $?          -> gen_figures exit 0
+$ python3 docs/figures/academic-paper-comparison/gen_comparison.py >/dev/null; echo $?   -> gen_comparison exit 0
+$ shasum of the 30 svg files before and after a second run of both scripts -> "svg files unchanged by a second run"
+$ ruff format --check <both scripts>   -> 2 files already formatted
+$ ruff check <both scripts>            -> All checks passed!
+$ character-set check (the brief's perl command) over the 58 changed or new files outside .scratch, svg files included -> prints nothing; charset exit 0
+$ grep -rniE 'research-hub|projects/manuscripts' skills/paper   -> prints nothing; exit 1
+```
+
+The `lookup.py` description line: the SKILL.md line 3 is 1033 characters including `description: "` and the closing quote, so the value is 1018 characters (limit 1024). `version: "2.0.0"` stands.
+
+The only `academic-paper` word left in `skills/paper` was `modes.md:28`. It now reads "The Spectrum column labels how much the mode varies from run to run." `grep -rn 'academic-paper' skills/paper | wc -l` prints 0.
+
+### The points
+
+1. Check order. Old `modes.md:7`: tables in the order "Request kinds", "Requests for a mode this skill does not have", "Requests that fit two modes". New `modes.md:7`: "Requests that fit two modes", "Request kinds", "Requests for a mode this skill does not have". `modes.md:20`: `| "Help me revise my paper", "improve my paper" | revision, or a full rewrite in full mode | The session first asks whether there are reviewer comments. ...`. `modes.md:21` keeps "Help me with my revision" (AD13). `modes.md:9`: a row holds the bare request, and a request that names a topic, a file or a venue is judged by the other tables, so a request that fits one mode still picks it without a question. `modes.md:44` states the order.
+2. Revision compile. Old `SKILL.md:165`: `latexmk ... main.tex` in full and revision. New `SKILL.md:182`: `latexmk -pdf -interaction=nonstopmode -halt-on-error '<main file name>'`, "The main file name is `main.tex` in full mode and the name of the `.tex` the call gives in revision and figures."
+3. Model identifier. Old `SKILL.md:97`: a list with no identifier left a gap. New `SKILL.md:110-112, 140-141`: the first agent's served model is checked against the alias's family (`opus`, `sonnet`, `haiku`), becomes the run's identifier, is recorded in the Notes of `config.md` and compared with every later start. A draft writer started before the identifier is known is started once more with the patch id `disclosure`. `[GAP: model identifier]` stays only for a runner that gives no served model. Same text in `ai-disclosure.md:10, 45`, `draft-writer.md:299-300`, the Stops row `SKILL.md:486` and `literature-strategist.md` (no change needed). Figures: the dashed "Draft writer once more: the model identifier" box in `paper/disclosure.svg`, disclosure simple and detailed.
+4. Files outside the run folder. New `visualization.md:19-26` ("The files outside the run folder"): the script and the files it writes may change under "the project's figure script edited and run"; `shasum -a 256` of each before and after, "absent" before for a new file, recorded in `figures.md` "Names" (`visualization.md:705`); under "a copy in the run folder" nothing outside changes. `SKILL.md:352` and the Visualization row `SKILL.md:462`; the final message lists them (`SKILL.md:218`).
+5. Resumption cases. `SKILL.md:518-519`: the strategist is resumed for the sources' review, a section with no source and a rejected patch; the visualization agent for its placement patch and a rejected patch. Same in `literature-strategist.md:3, 11, 283, 289, 293`, `visualization.md:5`, the cost table row `SKILL.md:458, 462`, and ADR 0025's title and Decision (`...two-of-them-resumed-for-a-second-message-in-named-cases...`).
+6. Stops lead. Old: a row-count sentence. New `SKILL.md:468-470`: "The first thirteen rows are stops ... A run stops only at the stops its mode lists ... Any other choice ... is taken with the option that follows from the run's goal and written to `config.md` under "Decisions" ... A choice that is the user's ... is never taken that way." I counted 13 stop rows (`sed -n 471,484p`).
+7. Boxes `RC` and `RC2` are kind `script` at `gen_comparison.py:414, 417-421` (full, paper side), `:706-709` and `:937, 939` (citation-check detailed).
+8. Coverage rows. Row 249 now maps all seven parts of `source_verification_agent.md` (resolve, predatory screen, retractions, two-source claim check, conflicts of interest not taken, data-not-instructions rule, quality matrix dropped), names holders, and drops "removes a fabricated one" (a NOT_FOUND reference is flagged SERIOUS and left to the user). Row 119: "takes all six rows, the verdict names and the safety line ... Nothing is sent to `researcher`. The closing note that ties the example to a proposed verification gate ... is dropped". The checklist holds no integrity check of a whole manuscript, so the brief's premise (see "What the brief got wrong") did not hold. The coverage check prints `ok:`.
+9. ADR 0025 line 7 carries ruling J (strategist default in full, always in outline-only, work of lit-review, and the user's review of its sources in all three); line 33 says "issues".
+10. `gen_figures.py` head lines 33-51 list the errors (label that does not fit, word longer than a line, edge label, caption, note and legend that do not fit one line, two boxes with one key, label and ASCII errors before any file is written) and the exit status. `gen_comparison.py:17-19` now ends "from skills/paper and its ADRs, which keep the rulings of plan 5."
+11. `SKILL.md:463` Citation compliance row: "the commands `resolve`, `search`, `fetch`, `bibtex` and `quote-check`".
+12. AD1. `SKILL.md:244-252` (full item 5) and `:325` (outline-only item 4): sections marked "needs literature" go to the strategist, resumed when item 1 started it in this run, fresh when intake took an earlier lit-review run, skipped when intake skipped the search; then the planner starts again to assign what was found; a section still without a source is shown at the stop. `planner.md:307-308`, `literature-strategist.md:11, 291-298`. Figures: "Literature strategist: the sections with no source" and "Planner: assigns what was found" in `paper/full.svg`, `paper/outline-only.svg` and the detailed views.
+13. AD2. `SKILL.md:254-255, 328`, `planner.md:3, 14, 35-36, 438, 466-486` (`structure-options.md`, "user-customized").
+14. AD3. `SKILL.md:285-290, 482`, `peer-reviewer.md:251-266`: three answers (accept with limitations, expanded revision from the step the root cause names, end), root causes mapped to the outline, the literature or the sections, the estimate of additional work, reviews numbered on. Figure: the dotted cycle "an expanded revision, from the step the cause names" in `paper/full.svg`.
+15. AD4. Old `SKILL.md:85, 413`: the refusal "A manuscript that already exists". New: `SKILL.md:259` (copy to `existing-main.tex`), `intake.md:55, 64, 128` (row Existing main.tex shown at the confirmation), `draft-writer.md:11`, row `SKILL.md:460`. `grep -rni 'manuscript that already exists' skills docs README.md` prints nothing (exit 1).
+16. AD5. `SKILL.md:165, 169, 484`: at the stop "A patch that does not apply" the user may ask for one more try with a fresh anchorize and a new patch; a rejection of it leaves the change listed as not applied.
+17. AD6. `draft-writer.md:328, 336` (status column and REVIEWER_DISAGREE with evidence in the Reason column), `peer-reviewer.md:251-252`.
+18. AD8. `intake.md:53` (row Earlier papers: full, revision, citation-check), `citation-compliance.md:7, 21, 47, 335-342, 413`: a repeated method description with a self-citation is noted, repeated results, discussion or conclusions are flagged with both passages quoted, a plagiarism tool is suggested, unfetchable papers are "not compared". Coverage row 223 now says the paper skill runs no originality screen beyond this flag, and the sampled-sentence screen and self-plagiarism check stay with `researcher`.
+19. AD10. `intake.md:161-184` ("Disclosure records": a table of the traces each category leaves in `paper-runs/`, complete-record rule, uncertain categories asked), `SKILL.md:74`, `ai-disclosure.md:8`. Figure: intake box of `paper/disclosure.svg`.
+20. AD11. `intake.md:26` (row Research question: full, outline-only, lit-review), `SKILL.md:387-388`, `literature-strategist.md:17`.
+21. AD7. Evidence run now. Crossref documentation: `https://api.crossref.org/swagger-docs` defines `updated-by` as an array of `WorkUpdate` with `label, DOI, type, source, updated, record-id`. `https://www.crossref.org/documentation/retrieve-metadata/retraction-watch/` says retractions come from the Retraction Watch database and that expressions of concern and corrections are included less completely. Live record fetched with `lookup.py`'s client: `https://api.crossref.org/works/10.1016/S0140-6736(97)11096-0` has `updated-by` with a `correction` (2004-03-06) and a `retraction` (DOI `10.1016/s0140-6736(04)15715-2` and `10.1016/s0140-6736(10)60175-4`, source `retraction-watch`, 2010-02-06). The record `resolve` already fetches carries them, so no second request is made. After the change: `python3 skills/paper/templates/lookup.py resolve '10.1016/S0140-6736(97)11096-0'` prints `Crossref notice: retraction | 2010-02-06 | doi 10.1016/s0140-6736(10)60175-4 | source retraction-watch` under the Crossref line. The new T8 cases (`lookup.test.sh:277-304`) run first on the round-start `lookup.py` with the new test:
+   ```
+   T8 the retraction is printed ['Crossref: ratio 1.00: RETRACTED: Ileal-lymphoid-nodular hyperplasia, ... doi 10.1016/s0140-6736(97)11096-0', 'OpenAlex: left out, no stub for https://api.openalex.org/works/doi:10.1016/S0140-6736(97)11096-0?select=id,...
+   T8 the expression of concern is printed ['Crossref: ratio 1.00: RETRACTED: ...
+   FAIL: lookup.py does not hold the behaviour above
+   exit 1
+   ```
+   The change is `NOTICE_TYPES`, `notice_date`, `crossref_notices` and `identifier_lines` in `lookup.py` (lines 111, 277-296, 533), the head comment, `docs/dev/scripts.md:25` and `citation-compliance.md:345-358` (the section "Retractions" reads the notices in place of the Retraction Watch cross-check; a source looked up by title has no notice lines, so the agent runs `resolve '<doi>'`; the report says the check covers the notices Crossref lists).
+22. AD12. Additions to the "Asked in" column of `intake.md:26-55`, each read by the page line given: Research question + lit-review (`literature-strategist.md:7`); Paper type + revision, abstract-only, citation-check, draft-review (`draft-writer.md:7`, `citation-compliance.md:7`, `peer-reviewer.md:10`); Discipline + citation-check (`citation-compliance.md:7`); Language + revision, abstract-only, disclosure (`draft-writer.md:7`); Venue + draft-review, figures and Venue limits + draft-review, figures (`peer-reviewer.md:10`, `visualization.md:9`); Citation style + figures (`visualization.md:9`); Materials in hand + lit-review, figures (`literature-strategist.md:7`, `visualization.md:9`); Figure changes + figures (`visualization.md:9`); Authors + citation-check (`citation-compliance.md:7`); AI use + outline-only, revision (`literature-strategist.md:7`, `draft-writer.md:7`). New rows: Claims not to make (:52), Earlier papers (:53), Internal only (:54), Existing main.tex (:55).
+23. AD15. `modes.md:28` (definition line) and the Spectrum column `modes.md:30-40`: balanced for full and outline-only, fidelity for revision, abstract-only, lit-review, citation-check and disclosure, none for the two calls.
+24. AD9, AD13, AD16, AD17 keep what is built, named in the table below (DS1, DX11, DX30, DX34).
+25. AD14. Quick start `SKILL.md:20-21`, Use instead (the panel review beside `paper-review`) `SKILL.md:30-40`, `### draft-review` `SKILL.md:416-426`, `### figures` `SKILL.md:427-438`, stop lists, intake rows (`draft-review`, `figures` in `intake.md`), `modes.md:24, 39-40`, `peer-reviewer.md:268-275`, `visualization.md:620-630`, the description (line 3) and README.
+25a. AF. `SKILL.md:187-201` (Steps 12), full item 9 `:272`, revision item 6 `:360`, Agent prompts `:463`, stops, Rules; `citation-compliance.md` reads `review` mode context. Rows 108, 203, 205, 216, 244 and 269 of the coverage page now name "full, revision and citation-check mode". `grep -rn -i 'citation-check mode only' docs README.md skills` finds only the superseded ADR 0022 and ADR 0025's rejected alternative. Figures: citation compliance boxes in `paper/full.svg`, `paper/revision.svg`, detailed views, and the README alt texts.
+25b. AG. `SKILL.md:217`: the final message of full and revision lists the sources only a preprint server or no index matched, says when the citations were not checked against their sources, and in full mode says when the last review's verdict was not Accept.
+25c. AH. `citation-compliance.md:282-297, 440` (clinical rows, "Clinical boundary" row 293, safety line), `draft-writer.md:164`, coverage row 119.
+25d. AI2. `intake.md:52`, `draft-writer.md:56-58`, `citation-compliance.md:299-307`, `peer-reviewer.md:172`. Coverage row 206 rewritten: the negative-constraint check is taken from the row Claims not to make; the drift check is not rebuilt. Row 215 no longer says "paper has no negative-constraint audit".
+25e. AJ. `draft-writer.md:185-191` ("The prose check").
+25f. AK/AM/AL/AP. Built: version family `citation-compliance.md:309-320` (row 127); failure paths (row 138: F3 and F4 `draft-writer.md:150-157`, F2 `planner.md`, F7 and F11 `peer-reviewer.md:251-266, 284`, F9 `intake.md` "Materials in hand", F12 `draft-writer.md:166-174`); LaTeX template `latex-template.md` (new, 227 lines, row 142); Literature Review, Theoretical, Case Study and Policy Brief skeletons `planner.md:118-236` (rows 162, 165, 156, 163); calibration `citation-compliance.md:360-375` with `templates/calibration_counts.py` and its test (row 215). All eight rows are `rebuild: paper`. Rows 182, 184, 191 are `rebuild: paper-review`; `grep -c '| rebuild later: ' docs/academic-coverage.md` gives 3 (rows 110, 115, 145). `grep -rn '15\.A' --exclude-dir=.scratch --exclude-dir=.git .` finds only `docs/roadmap.md:107, 119`.
+25g. AQ. `modes.md:55-71` ("Arguments from the request"), `SKILL.md:28, 93-104` (Steps 2: `grep -l -F '\documentclass'`, one fitting file taken, several listed at the intake confirmation, none is the refusal "An argument that does not exist", every path single-quoted), `intake.md:200` (rows Request and Taken from the request). `grep -rniE 'research-hub|projects/manuscripts' skills/paper` prints nothing.
+26. `SKILL.md:316` outline-only stops: "the mode to run (only for a plain request), an unfinished run, the intake confirmation, the sources' review, the outline's approval, and a model other than the configured one."
+27. `gen_comparison.py:68, 79, 1367-1368, 1396`: "a ruling of plan 5". The notes and legend carry no date and no letter.
+28. C19 by reading. I rendered all 7 paper figures (`rsvg-convert -w 1400`) and 16 comparison figures (`-w 1800`) and read each against `.scratch/5-paper/agents/briefs/4-figure-spec.html`. Readings:
+   - `paper/full`: matches the spec's paper side (intake, strategist dashed with 4-pass loop, review stop, planner, outline approval with the no-cap cycle, draft writer and visualization dashed with its 2-fix loop, peer reviewer, patch cycle, stop "The draft review does not pass", reference fix, strict stop, compile fix, /writing, report, applies what you pick, compile fix). By ruling: AD1 boxes, AD2/AD3 expanded-revision cycle back to the planner, AF citation compliance with its once-more run and combined stop.
+   - `paper/revision`: spec boxes plus AF citation compliance.
+   - `paper/outline-only`: spec plus AD1 boxes. `paper/lit-review`, `paper/abstract-only`: match the spec.
+   - `paper/citation-check`: matches the spec. `paper/disclosure`: spec plus the intake label of AD10 and the dashed model-identifier box.
+   - Comparison simple (7): academic-paper side matches the spec box for box; paper side equals the paper figure.
+   - Comparison detailed (7): each box, kind and tag was read; tags follow rulings: full AD1, AD2, AD3, AF, AI2, AJ, AD4, AG, AQ; revision AD6, AF, AI2, AQ, AG, the permission hash; lit-review AD11, AQ; outline-only AD1, AD2, AQ; abstract-only AD12, AI2, AJ, AQ; citation-check AD7, AD8, AH, AF, with `[D15, D17]` in place of "entry 5's goal"; disclosure AD10, N, plus a box "Draft writer once more: the model identifier, when the list gave none [N]" that the detailed view lacked, added in `gen_comparison.py` and read again after redrawing.
+   - `academic-paper-only-modes` and `academic-pipeline`: "entry 5" in place of "entry 15.A".
+   - Label legibility: edge labels are drawn with a halo (`Canvas.text(halo=True)`). In `paper/full`, `paper/revision` and the matching detailed views the label "a claim or a reference fails" belongs to the short edge to the stop box but sits beside the longer edge to the next box; it is legible.
+29. See the deviation table below.
+30. All figures that points 12, 14, 16, 25 and 25a change are redrawn by `gen_figures.py` and `gen_comparison.py` (exit 0, second run byte-identical).
+31. AT. `planner.md:46, 237-244, 463`; `draft-writer.md:46-54` (exception: `config.md` row Internal only, manuscript first line `% Internal only`); `peer-reviewer.md:172` (Critical issue); `intake.md:54, 62-63` (row Internal only, shown at the confirmation, never inferred); `SKILL.md:510` (anti-pattern row), `:525` (Rules sentence naming the pages). No page states a rule that puts a negative result in a manuscript outside that exception.
+
+### Sentences and list items (verify item 5)
+Sentences of 31 or more words in lines this round adds or changes in `skills/paper` Markdown, counted by a scratch script: SKILL.md 24 in running text and 21 in table cells, `citation-compliance.md` 6 + 7, `ai-disclosure.md` 2, `draft-writer.md` 3, `intake.md` 1 + 2, `literature-strategist.md` 6, `modes.md` 3 + 3, `peer-reviewer.md` 3, `planner.md` 2, `visualization.md` 10, `patch-file.md` 1 table cell. Five long bullets were split (SKILL.md Steps 2, `draft-writer.md` extension, `visualization.md` inputs and patch ops, `intake.md` plain request). The remaining long sentences are in four kinds: the stop lists of each mode (`SKILL.md:223, 317, 335, 375, 385, 399, 409, 429`: a shorter list leaves a reachable stop out), the first sentence of a page naming the role's duties (`*.md:3`), numbered items whose one sentence states one start with its inputs and outputs (`SKILL.md:111, 142, 183, 274, 285, 289, 422, 431, 432`), and bullets that list the fields a rule covers.
+
+### Sentences about a script (verify item 6)
+New sentences about `lookup.py resolve` notice lines were checked by the live `resolve` run in point 21 and by T8; `calibration_counts.py` exits 0, 1 and 2 as its test states; `quote-check` after the patches is the existing command with the three arguments of its usage line.
+
+### Deviations from academic-paper 3.2.0, per mode (rewritten from `4-deviations.md`)
+Rulings: D-numbers are decisions of `.scratch/5-paper/plan.md`, letters and AD numbers are its open items (AD1 line 138 to AD14 line 154, AF 155 to AJ 160, AK 161, AL 162, AM 163, AQ 166, AP 167, AT 169). Coverage rows are named by file and line of `docs/academic-coverage.md`. "Now" gives where the built skill states it.
+
+Full:
+| Id | Difference | Now | Ruling |
+|---|---|---|---|
+| DF1 | Strategist by default, intake asks to skip | `SKILL.md:225`, `intake.md:36` | J |
+| DF2 | Same strategist resumed for the sources' review | `SKILL.md:233`, `literature-strategist.md:281-289` | J, ADR 0025 |
+| DF3 | Earlier run's outputs taken at intake | `intake.md:130-140`, `SKILL.md:225` | Y |
+| DF4 | One planner for outline and argument | `planner.md:1-3` | D43 |
+| DF5 | Weak-argument signs shown at the approval | `planner.md:413`, `SKILL.md:253` | coverage 107 |
+| DF6 | Section with no source goes back to the strategist (was NO RULING) | `SKILL.md:244-252`, `planner.md:307` | AD1 |
+| DF7 | Two alternative structures (was PART) | `SKILL.md:254-255`, `planner.md:466-486` | AD2, R |
+| DF8 | Six skeletons now as the source; default Conference Paper | `planner.md:48, 80, 118, 146, 179, 212` | D8, AM, coverage 144, 156, 157, 162, 163, 165 |
+| DF9 | One draft start, no pre-commitment or self-score | `draft-writer.md:63` | D45 |
+| DF10 | Body, abstract and statements by the draft writer, one language | `draft-writer.md:193, 293` | D43, coverage 106 |
+| DF11 | Visualization places figures by its own patch | `visualization.md:608`, `SKILL.md:268` | S, ADR 0025 |
+| DF12 | Render check of a complex figure, 2 fixes | `visualization.md:651` | coverage 151 |
+| DF13 | Citation compliance agent runs after the draft, with the session's scripts first (was: neither runs) | `SKILL.md:187-201, 272` | AF |
+| DF14 | Claims read against sources in full mode | `citation-compliance.md:199-259` | AF, AI1 (158), D22 |
+| DF15 | One-pass peer review on fixed criteria | `peer-reviewer.md:29` | D45 |
+| DF16 | Round-1 issues answered by patches | `draft-writer.md:303` | C |
+| DF17 | No writer pass after round 2 | `peer-reviewer.md:246-250` | U |
+| DF18 | Three answers at the stop incl. expanded revision (was PART) | `SKILL.md:285-290, 482`, `peer-reviewer.md:251-266` | AD3, U |
+| DF19 | No RAISE check | none | V |
+| DF20 | No formatter: compile in a copy; conversion and cover letter not built | `SKILL.md:182` | D25 (conversion in a step of its own, AK), M, coverage 110 |
+| DF21 | Closing checks given to the peer reviewer | `peer-reviewer.md:170, 291` | coverage 105, U |
+| DF22 | No output gate | none | coverage 110, D42, AI1 |
+| DF23 | Reference fix once, strict stops | `draft-writer.md:344`, `SKILL.md:292` | K, O |
+| DF24 | Compile fix once | `draft-writer.md:355` | M |
+| DF25 | `/writing` at the end, cap of 3 answers | `draft-writer.md:363` | D46, R |
+| DF26 | Existing `main.tex` read as draft sections, replaced after confirmation (was PART) | `SKILL.md:259`, `intake.md:55, 128` | AD4 |
+| DF27 | Final message lists preprint-only sources, unchecked citations, non-Accept verdict | `SKILL.md:217` | AG |
+| DF28 | Claims not to make asked and checked | `intake.md:52`, `citation-compliance.md:299` | AI2 |
+| DF29 | Draft writer checks its own text against the prose standard | `draft-writer.md:185-191` | AJ |
+| DF30 | Clinical boundary row | `citation-compliance.md:282-297`, `draft-writer.md:164` | AH |
+| DF31 | Version family, failure paths, LaTeX template, calibration | `citation-compliance.md:309, 360`, `latex-template.md`, `draft-writer.md:150-174` | AK, AP, AL |
+| DF32 | A negative result is never written up | `SKILL.md:525`, `planner.md:237`, `draft-writer.md:46`, `peer-reviewer.md:172` | AT, D52 |
+
+Outline-only:
+| Id | Now | Ruling |
+|---|---|---|
+| DO1 | Strategist always runs | J, Y |
+| DO2 | Strategist resumed | J, ADR 0025 |
+| DO3, DO4 | Planner writes outline, evidence map and argument map with signs | T |
+| DO5 | Planner started again for each change, no cap | R |
+| DO6 | Two alternatives (was PART) | AD2 |
+| DO7 | Section with no source to the strategist (was NO RULING) | AD1 |
+| DO8 | Six skeletons | D8, AM |
+| DO9 | No citation-verification question | O |
+
+Revision:
+| Id | Now | Ruling |
+|---|---|---|
+| DR1 | Intake with permissions | D24, plan.md:84, O |
+| DR2 | Comments file, text, or none | AA, D40 |
+| DR3 | Items' approval with no instructions | AA |
+| DR4, DR5, DR6 | Strategist, visualization, numbers by permission | plan.md:84 |
+| DR7 | Citation compliance after the patches, scripts after each writer pass | AF, D49, K |
+| DR8 | Readings 1 and 2 | D49 |
+| DR9 | Reference fix after reading 2 | K, O |
+| DR10 | Structural patch acknowledged or narrowed, no full re-emission | C, D24 |
+| DR11 | One more try with fresh anchorize (was PART) | AD5, C |
+| DR12 | Compile in a copy | M |
+| DR13 | `/writing` at the end | D46 |
+| DR14 | Revision log with REVIEWER_DISAGREE (was PART) | AD6 |
+
+Abstract-only: DA1 draft writer writes the abstract (T); DA2 one language (coverage 106); DA3 patch (C); DA4 protections (coverage 106); DA5 length by abstract type (coverage 128); DA6 asks paper type and language, claims not to make (AD12, AI2); DA7 prose check (AJ).
+
+Lit-review: DL1 `.bib` entries and patch (D2, D48); DL2 sources' review (J, D48); DL3 reference checks, fix, strict (D48, K, O); DL4 research question asked and required (was NO RULING) `intake.md:26`, `literature-strategist.md:17` (AD11); DL5 AI disclosure line (coverage 286).
+
+Citation-check:
+| Id | Now | Ruling |
+|---|---|---|
+| DC1 | Intake | D24, O |
+| DC2 | `cite-keys`, `check-urls` before the agent; `quote-check` after corrections | D17, D50, D15 (these replace the earlier "entry 5's goal") |
+| DC3, DC4 | Passage read from the source in the run; unreadable source supports nothing | D50, D22 |
+| DC5 | Stop for an unconfirmed reference | D24, O |
+| DC6 | Retracted source replaced by patch | X |
+| DC7 | Crossref retraction and expression-of-concern notices in place of the Retraction Watch cross-check (was PART) | AD7 |
+| DC8 | Passages repeating the authors' earlier papers flagged (was NO RULING) | AD8; full screen stays with `researcher`, coverage 223 |
+| DC9 | Rendering left to the bibliography style | coverage 134, 132 |
+| DC10 | No Chinese checks | coverage 108, 131 |
+| DC11 | Agent once more after a failing check | L |
+| DC12 | `citation-report.md` with passage lines | D50, C |
+| DC13 | Mixed versions of one work flagged | AK (row 127) |
+
+Disclosure: DS1 draft writer writes the statements; keeps what is built (was PART) (AD9); DS2 six statements (D11, I); DS3 patch and `disclosure.md` (C, D27); DS4 no policy-anchor track (coverage 136, 146, 147); DS5 pasted policy, "no venue yet" (W); DS6 identifier from the model list, else the first agent's served model (N, with point 3); DS7 categories pre-marked from earlier runs' records (was PART) (AD10).
+
+Modes academic-paper has and paper does not: DP1 plan mode refused, built in a step of its own (D3, AK, coverage 145); DP2 format conversion refused, same (D25, AK, coverage 110); DP3, DP4 revision-coach and rebuttal-audit go to `rebuttal` (D1, coverage 114).
+
+Across modes:
+| Id | Ruling now covering it |
+|---|---|
+| DX1 | D24 |
+| DX2 | Intake asks every question a mode's agent reads (was PART): AD12, D26, O |
+| DX3 | D25 |
+| DX4 | coverage 111 |
+| DX5 | coverage 111, 106, 155 |
+| DX6 | coverage 157 |
+| DX7 | coverage 137 |
+| DX8 | coverage 254 (to `researcher`) |
+| DX9 | AB |
+| DX10 | "Help me revise my paper" asked before intake (was AGAINST AB): AB, point 1 |
+| DX11 | "Help me with my revision" asked: keeps what is built (was PART): AD13 |
+| DX12 | D1, D3, D25 (these replace AB for the four refusals) |
+| DX13 | D1, D3, D35, D42 |
+| DX14 | Six roles; citation compliance in full, revision and citation-check: D42, D43, AF |
+| DX15 | D24 |
+| DX16 | Resumption cases: ADR 0025, J, S, AD1, point 5 |
+| DX17 | D45, coverage 105 |
+| DX18 | D42 |
+| DX19 | `/paper draft-review` and `/paper figures` (was PART): AD14, Y, Z |
+| DX20 | Spectrum labels (was NO RULING): AD15 |
+| DX21 | D47 |
+| DX22 | Thirteen stops: D24 as changed by D42, D51, with AB, Z, J, AA, O, D22, U, C, D47, AD1 to AD5 |
+| DX23 | plan.md:84, D55 |
+| DX24 | C, D12 |
+| DX25 | D |
+| DX26 | D27 |
+| DX27 | Z |
+| DX28 | D5, D22 |
+| DX29 | D5, coverage 112 |
+| DX30 | Chinese-language search rules dropped, keeps what is built (was PART): AD16 |
+| DX31 | D42, D51, D52 |
+| DX32 | coverage 154, D46, AJ |
+| DX33 | coverage 130 |
+| DX34 | Instruction inside a manuscript is text read and never followed, keeps what is built (was NO RULING): AD17 |
+| DX35 | Failure paths: AK (row 138) |
+| DX36 | coverage 110, 141 |
+| DX37 | coverage 105 |
+| DX38 | plan.md:84 |
+| DX39 | Arguments given in words: AQ |
+
+AD9, AD13, AD16 and AD17 keep what is built: AD9 (DS1) the draft writer writes disclosure mode's statements; AD13 (DX11) the two-mode question for "help me with my revision"; AD16 (DX30) no Chinese-language search rules; AD17 (DX34) the rule about instructions inside read text. No row is left without a ruling.
+
+### Earlier report passages that no longer hold, with corrected text
+- Lines 1487-1592, "Deviations from academic-paper 3.2.0, per mode": replaced by the table above. Its line 1570 cited "entry 5's goal" for the scripts before the citation compliance agent: the rulings are D17, D15 and D50. Its line 1592 and the refusals of plan, format-convert, revision-coach and rebuttal-audit cite AB: the rulings are D1, D3 and D25. Line 1515 says plan and conversion are "built at roadmap entry 15.A": they are built at entry 5, in a step of its own, since 15.A is dropped (AK, AL).
+- Lines 1057 and the Agent prompts reading, and the citation compliance description "citation-check mode only": the agent runs in full, revision and citation-check mode (AF).
+- Lines 2074, 2271, 2874 and the Stops table (`SKILL.md:373, 376, 410, 413` of the earlier build): the refusal "A manuscript that already exists" is removed (AD4). The Stops table has 13 stops and 7 refusals; the refusal rows are now No plan configuration, Unknown project, Unknown mode, An argument that does not exist, The `.bib` is not one file, No prose standard, The configured effort cannot apply.
+- Line 1237 and the Stops lists at lines 2126-2236: the stop lists now include "a claim the run cannot support" in full, revision and citation-check, and outline-only lists no "script failed".
+- "Host- and user-visible changes" (lines 3212-3230): the README row now names the two calls and the citation compliance agent in full, revision and citation-check; "Citation-check mode. Before ... After: only citation-check mode does so" no longer holds (all three modes read each cited claim against a passage); the "Full mode. Before ... After" list adds the resumed strategist, the planner again, the citation compliance agent, the three answers at the draft-review stop and the existing-`main.tex` replacement; the Quick start gains `/paper draft-review` and `/paper figures`.
+- "Judgment calls" line about `gen_comparison.py` reproducing the spec's date and letters: the legend and notes now say "a ruling of plan 5".
+- "Handed back" (lines 3235-3287): Spectrum is built (AD15); Mode B is built as the two calls (AD14); `failure_paths.md` is built (AK); the figure legend text is changed (point 27). The zh-TW abstract (coverage 106, 155) and the deep-research handoff (coverage 254) stay with the rows that decide them.
+- Every `file:line` citation in the sections "The cases", "Sentences and list items", "Sentences about a script", "The coverage list" and "Files and line counts" refers to the files before this round; the greps of this section and the table below replace them. Case C3 (`lookup.py` "integrity record") and case C23 still hold.
+
+### Files made false, then changed
+README.md (paper row and alt texts of the paper figures); `docs/academic-coverage.md` (rows 108, 119, 127, 138, 142, 156, 162, 163, 165, 182, 184, 191, 203, 205, 206, 215, 216, 223, 244, 249, 269, the figure alt texts and the header lines 14-15); `docs/glossary.md` line 148; ADR 0017, 0020, 0022 (status), 0024 (sentences), 0025 (new), `docs/adr/README.md`; `docs/dev/scripts.md`, `docs/dev/building.md`; the 30 SVG files of `docs/figures/` (7 paper, 16 comparison, pipeline, plan-loop, grill, writing, code-comments) and `gen_figures.py`, `gen_comparison.py`.
+
+### Files with line counts
+SKILL.md 528; references: ai-disclosure 150, citation-compliance 446, draft-writer 380, intake 204, latex-template 227 (new), literature-strategist 307, modes 78, patch-file 44, peer-reviewer 308, planner 534, statements 187, visualization 715; templates: lookup.py 1420, lookup.test.sh 532, calibration_counts.py 105 and its test 86 (new); docs/academic-coverage.md 288, glossary.md 153, dev/scripts.md 44, dev/building.md 38, README.md 220, gen_figures.py 1764, gen_comparison.py 1524, ADR 0025 33.
+
+### Judgment calls
+- AF runs the citation compliance agent before draft review round 1 in full and after the patches in revision, with the session's `cite-keys`, `check-urls` first and `quote-check` after, since the agent's report goes to the reviewer.
+- Row 119 of the coverage page: the checklist holds no part that is an integrity check of a whole manuscript, so it sends nothing to `researcher`.
+- A first agent's served model that names another family than the alias's family is the same stop "A model other than the configured one".
+- Coverage rows 108, 203, 205, 206, 215, 216, 223, 244 and 269 were reworded where AF, AI2 and AD8 made their text false.
+- Spectrum labels: balanced for full and outline-only, fidelity for the other five modes, as the source's mode table gives.
+
+### What the brief got wrong
+- Point 8: the premise that the clinical checklist holds an integrity check of a whole manuscript does not hold. Its six rows judge one cited sentence each, and its safety line states the research-only boundary.
+- Point 7: the lines 804 and 806 of `gen_comparison.py` are lines 414 and 417 in the full view and 937 and 939 in the citation-check view of the current file.
+- The brief's point 25 and point 25a say the stop "A claim the run cannot support" applies in both modes; it applies in all three modes that run the agent, and the stop lists name it in each.

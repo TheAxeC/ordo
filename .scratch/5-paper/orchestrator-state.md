@@ -48,9 +48,9 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   worker: claude:sonnet
   launched: 2026-10-20
   report: .scratch/5-paper/agents/reviews/4-report.md
-  builder_usage: 377481 tokens, 836 tool uses, 123.4 min
-  reviewer_report: .scratch/5-paper/agents/reviews/4-refuter.md (a72eb77449241ae96, claude-opus-5-5, 275856 tokens, 122 tool uses, 16.0 min)
-  round: 1
+  builder_usage: "377481 tokens, 836 tool uses, 123.4 min; round 1: 351967 tokens, 535 tool uses, 114.5 min"
+  reviewer_report: ".scratch/5-paper/agents/reviews/4-refuter.md (a72eb77449241ae96, claude-opus-5-5, 275856 tokens, 122 tool uses, 16.0 min); over round 1: a7e010f4ad8e61c21, claude-sonnet-5-5, 189463 tokens, 127 tool uses, 14.8 min"
+  round: 2
   base: 95aa872916493c7b541aacd3f9f43e0a50b8f945
   worktree: .agents/worktrees/5-paper-4
   brief_check: .scratch/5-paper/agents/reviews/4-brief-check.md (acb39ad27aa1f1022, claude-opus-5-5, 304522 tokens, 64 tool uses, 15.4 min)
@@ -59,10 +59,13 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
-- Open item AS (2026-10-21), step 4: the copy of ward-bttr-crosssubject for full mode's check run (ruling AR) holds `README.md`, whose section "Dead-ends" lists approaches that failed. (a) kept in the copy, so the run shows whether paper keeps them out of the manuscript, as the rule against writing up a negative result requires; (b) removed from the copy. Recommended (a): the check run is ours, not the blind comparison, and the rule is one paper must hold on real project notes. Neither is the lazy one.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
+- 2026-11-14: Open item AW: ruled (a) by the user, booked in plan.md's Rulings: the rule against code and software wording in the manuscript, in the draft writer, the corrections sent to it, the peer reviewer and `/writing`, built in repair round 2 of step 4; roadmap entry 13's part waits on the user's approval of its diff.
+- 2026-11-14: Open item AV (AV1 to AV19): ruled by the user, booked in plan.md's Rulings: every item built as academic-paper has it, AV6 with paragraphs of 120 to 200 words that may exceed four sentences; built in repair round 2 of step 4 (AV18).
+- 2026-10-21: Open item AS: ruled (a) by the user, booked in plan.md's Rulings. The user allows the `claude -p` check runs, and runs a turn with `!` if the runner refuses it.
+- 2026-10-21: Open item AU: the builder's scratch-script count, raised by the round's refute; ruled (a) by the user, booked in plan.md's Rulings: the count is not used and the session reads the round's changed sentences at landing.
 - 2026-10-21: Open item AT: ruled (a) by the user, with the exception of a manuscript asked for as internal only; booked in plan.md's Rulings and added to repair round 1 as point 31.
 - 2026-10-21: Open item AR: ruled (b) by the user, booked in plan.md's Rulings.
 - 2026-10-21: Open item AP: ruled (a2) by the user, booked in plan.md's Rulings. Ruling AQ reworded on the user's instruction: no repository, project name or folder layout is written into the skill.
