@@ -314,8 +314,7 @@ On every resumption, with a dispatch block or without one:
   - It is proposed only for a fact a machine computes.
   - It comes after the rule sentence or the text change.
   - The proposal states what it computes.
-  - The user's ruling on the proposal approves what it computes, before it is written.
-- The user rules on each proposal whose change is a rule sentence in the rules file, a standards page or the shared rules, or a check (a command in the verification list, or a script), since such a proposal is kind 3 of `references/self-rule.md`, "The six kinds left open".
+- The user rules on each proposal whose change is a rule sentence in the rules file, a standards page or the shared rules, or a command added to the verification list, since such a proposal is kind 3 of `references/self-rule.md`, "The six kinds left open".
   - Under `self_rule: on`, any other proposal is closed as `references/self-rule.md`, "Closing an open item", says.
 
 ## Self-rule
@@ -460,7 +459,7 @@ The table holds seven kinds of stop, each for a decision for the user, and one r
 - A stop is repeated in every report until the user has ruled, or, under `self_rule: on`, until the orchestrator closes it as `references/self-rule.md`, "Closing an open item", says.
 - The stop message is plain text in the report: an open item with its options inside the written rules, the pros and cons of each, and one recommendation with its reasons.
   - It never goes through a question-box or multiple-choice tool.
-  - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list.
+  - Each option states in full every approval it would need later whose content exists when the option is written, such as a change to the configuration or the verification list.
   - The user's ruling on the item then approves those approvals too, with no second stop.
   - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
   - The option names that stop.

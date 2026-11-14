@@ -319,7 +319,7 @@ A step whose dispatch entry reads `landing: preparing`, other than one whose `/s
    - The open item in the state file, holding the step, what the tree shows against the step's text, the choice the user owns with its options and the pros and cons of each, and one recommendation with its reasons.
      - An option adds a step to the plan only for a reason `plan-orchestration`'s "What earns a step of its own" lists.
      - An option for work outside the entry's goal is a new roadmap entry through `/roadmap add`, never a step of the plan.
-     - Each option states in full every approval it would need later whose content exists when the option is written, such as what a new script computes or a change to the configuration or the verification list.
+     - Each option states in full every approval it would need later whose content exists when the option is written, such as a change to the configuration or the verification list.
      - The user's ruling on such an option approves each of those approvals too.
      - An approval of work not yet done when the option is written, such as the user's reading of a page a step will write, stays a stop of its own.
      - The option names that stop.

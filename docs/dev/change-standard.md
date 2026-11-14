@@ -16,12 +16,11 @@ Every rule on this page that names a script, a test or a check is read under thi
 - Whether text is good, whether content is right, whether work is done, and anything a careful person could dispute is judged by reading, by the model or by the user.
 - No script output stands in for that judgment, gates it, or is shown to the user as a finding.
 - A script is never made more exact in the hope of reaching such a judgment. A wrong hit of a helper script is dropped, not raised as work.
-- A new script needs the user's approval of what it computes before it is written.
 - Every script is listed on `docs/dev/scripts.md` as a development, user or test script, with its job. A change that adds, removes or renames a script updates the page in the same change.
 - A test exists only for a script, and only for behaviour whose failure costs something: lost work, a broken installation, a wrong configuration accepted.
 - A script handles a case only when that case has happened or when a wrong answer on it costs something. No brief, case or review finding adds a case on other grounds.
 - A gate for a judgment is a review: the user's, a blind comparison, run as `docs/dev/blind-comparison.md` says, or, where the user rules so for a roadmap entry, a fresh reviewer agent's. "A script prints ok" is a gate only for a fact.
-- A recurring finding is answered with a rule sentence or a change to the text that should have prevented it. A check is proposed only for a fact a machine computes, with the user's approval.
+- A recurring finding is answered with a rule sentence or a change to the text that should have prevented it. A check is proposed only for a fact a machine computes.
 - What a skill or tool gives the user is written for a person to read, never in a machine's format.
 
 ## The rules

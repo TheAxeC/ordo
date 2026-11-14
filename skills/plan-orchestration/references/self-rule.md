@@ -15,7 +15,7 @@ The open item names its kind by its number:
 3. A change to the user's written rules (the rules file, the standards pages, the shared rules, `CLAUDE.md`, `.agents/plan.yaml` and the configuration block), a clash between them, or the reversal of a ruling: an option that replaces, removes or contradicts a bullet of a Rulings section, whatever its ending, removes a step the user approved, or reverts a landed step the user approved or one a ruling of the user added.
    - Rewriting an approved step's text to absorb a found premise or a ruling on a part not yet built, and adding a step, are no reversal.
    - Kind 3 also names a contradiction of an ADR in force, or an option that supersedes one.
-   - Kind 3 also names an option that adds a check, a command in the verification list or a script, since the rules file reserves to the user the approval of what a new script computes.
+   - Kind 3 also names an option that adds a command to the verification list.
 4. The closing's roadmap diff, tag and pin.
 5. The user's reading of a page a step writes.
    - The reading stays an open item.
