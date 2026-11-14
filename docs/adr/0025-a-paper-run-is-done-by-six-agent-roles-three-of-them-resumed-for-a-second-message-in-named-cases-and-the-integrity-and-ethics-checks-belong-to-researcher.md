@@ -1,6 +1,6 @@
 # 0025. A paper run is done by six agent roles, three of them resumed for a second message in named cases, and the integrity and ethics checks belong to researcher
 
-Status: proposed
+Status: superseded by 0027
 
 ## Context
 
