@@ -464,3 +464,14 @@ step 4, raised by the brief check of `/spec 5 4` (`agents/reviews/4-brief-check.
 Taken: (a) for each part
 Booked: `.scratch/5-paper/plan.md:221` (Open item I, step 4's Step 0)
 Builds on it: step 4
+
+## C109. The judge command of step 5's comparisons (2026-11-15)
+
+step 5, raised by C14 on the lit-review judges (`.scratch/5-paper/agents/reviews/5-blind-comparison.md`, lit-review): the brief's judge command runs under `--restricted`, which loads no global instructions, and C14 and `docs/dev/blind-comparison.md` item 4 require the judge to load them.
+  - (a) Every judge of step 5 runs without `--restricted`, keeping `--tools Read Glob Grep --disable-slash-commands --strict-mcp-config`; C13 reads each judge's tool calls for a path outside its copy. Pro: the judge loads the global instructions and still has only the three reading tools, no skill and no MCP server (test run in an empty folder). Con: the file tools are not confined to the working folder by the runner, so the confinement rests on the prompt and on C13's check.
+  - (b) Keep the restricted judgments and name the missing instructions. Pro: no rerun. Con: the verdicts come from judges that never read the user's instructions, which the page counts as part of what the user needs. This is the lazy option.
+  - Recommendation: (a).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md:206` ("Step 5's judges run without `--restricted`")
+Builds on it: step 5
