@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C108
+Last number: C109
 
 # Entry 2.I Several plans in one session
 
@@ -473,5 +473,5 @@ step 5, raised by C14 on the lit-review judges (`.scratch/5-paper/agents/reviews
   - Recommendation: (a).
 
 Taken: (a)
-Booked: `.scratch/5-paper/plan.md:206` ("Step 5's judges run without `--restricted`")
+Booked: `.scratch/5-paper/plan.md:207` (Open item BC, step 5's judges run without `--restricted`)
 Builds on it: step 5

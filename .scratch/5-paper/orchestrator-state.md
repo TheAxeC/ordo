@@ -52,6 +52,7 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   launched: 2026-11-14
   session_id: inline
   report: .scratch/5-paper/agents/reviews/5-report.md
+  reviewer_report: ".scratch/5-paper/agents/reviews/5-refuter.md (ae35f1410f792b5fa, claude-opus-5-5, 283470 tokens, 93 tool uses, 20.9 min)"
   round: 0
   landing: not-started
 ```
@@ -60,9 +61,24 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
+- Open item BD (2026-11-15), raised by `agents/reviews/5-refuter.md` Spec 1: the revision and the full `paper` sides took the autonomous writer pass at the reply to their closing `/writing` report, under the answer's last sentence ("From here on, do not stop for a choice whose recommendation you would take ..."), so the `/writing` findings were applied inside the comparison (revision patch 15, full patch 26) and judged with them; the brief's item 4 has the findings applied only in item 8, and its Decision 7 gives neither side a further pass the other did not. The lit-review side has no `/writing` review. The calls stand as revision a loss and full a tie with the pass in.
+  - (a) Count the pass as part of the `paper` run: it is the skill's own last step, the one `SKILL.md` Steps 13 takes when the user says not to stop, so the outputs as judged are what `paper` gives that user; the calls stand, and step 5.A's reruns give the same answers, so the pass runs again and the record says so. Pro: the comparison measures the whole `paper` run for the answers both sides got. Con: it sets aside the brief's item 4 and Decision 7, which is a change of a ruling you approved.
+  - (b) Take the pass out: rejudge revision and full on the outputs before patches 15 and 26, and end the `paper` sides of 5.A's reruns at the closing report. Pro: it keeps item 4 and Decision 7 as written. Con: it judges a `paper` run cut before its own last step, which no user who said not to stop would get, and it needs the outputs before the pass rebuilt from the patches and four fresh judges.
+  - Recommendation: (a), as a judgment, since the pass is part of what `paper` does for these answers and it could only help the `paper` side, whose calls are a loss and a tie with it. The lazy option was leaving the pass unstated in the record, which the record now states.
+- Open item BE (2026-11-15), raised by `agents/reviews/5-refuter.md` Spec 2: item 8's route, your one-line pick of the closing `/writing` findings applied by the draft writer (D40, open item E), was never run: single-5's answer ended with the no-stop sentence, so the run took the autonomous writer pass in place of your pick. Your adopted reading covers the pass, not the pick.
+  - (a) Run item 8's revision process again on a fresh copy of the same input with the same `writing-report.md`, its intake answer saying not to stop for a choice whose recommendation it would take except the reply to the closing `/writing` report; you then answer that report in one line, the draft writer applies each finding you accept or lists it as not applied with its reason, and you read the diff and the apply reports. Pro: D40's route is checked by the gate as the brief asks. Con: one more revision run, about an hour, and your reading of about 40 findings.
+  - (b) Record the autonomous pass as item 8's result and D40's pick as not checked. Pro: no run and no reading. Con: the route a user takes when they do answer stays untested before the closing. This is the lazy option.
+  - Recommendation: (a).
+- Open item BF (2026-11-15), raised by `agents/reviews/5-refuter.md` Spec 3: seven scripts in the session's scratchpad `tools/` were written for step 5 with no approving ruling: `blind.py` (rewrites each side mark by the rules of `rules-lit.json`, `rules-rev.json`, `rules-full-p.json` and `rules-full-q.json`, which `mk-rules-full.py` writes), `to_charset.py` (writes each character outside the rules file's set by its name in angle brackets), `resolve_all.py` (runs `lookup.py resolve` on each `.bib` entry), `resolve_record.py` (writes each output into the record with the 0.70 ratio and DOI test of item 6), `facts.py` (prints a session's id, model, Skill and Agent calls, denials, `modelUsage`, instruction files and reads outside its copy) and `audit.py` (lists tool calls that name a path outside a copy). Their outputs are the blinded outputs the judges read, the ledger copies, the resolve record and the session facts of the records; the reviewer reproduced each result with its own read-only commands (`5-refuter.md`, "Verification"). Until you rule, nothing they produced is used.
+  - (a) Approve what each computes, as listed, each a fact with one right answer; copy the seven scripts and the four rules files into `agents/reviews/5-blind-comparison/tools/`, so the evidence the records cite can be rerun after the scratchpad is cleared; the outputs stand. Pro: the results stand on the reviewer's independent reproduction, and the records become checkable. Con: it approves the scripts after the fact.
+  - (b) Discard their outputs and redo the blinding, the conversion, the resolve and the facts with commands typed whole, then rejudge where an output differs. Pro: the brief's rule is kept as written. Con: the same facts computed again, with no gain in what they show, since the reviewer's own commands already gave the same results.
+  - Recommendation: (a), as a judgment. The lazy option would be approving the scripts without keeping them where the records can be rerun.
+
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+- 2026-11-15: Open item BC, the judge command of step 5's comparisons under `--restricted`, which loads no global instructions: closed under self-rule, C109.
+- 2026-11-15: The calls of step 5's comparisons (lit-review a loss, revision a loss, full a tie), the three lit-review entries that do not resolve, the full prompt's error, the new stop and the reading of the single-mode outputs: ruled by the user, booked in plan.md's Rulings ("The calls and the repair's scope", "The full call", "The reading of the single-mode outputs").
 
 - 2026-11-14: Step 4.A landed; every finding of the run over round 2 fixed at landing.
 - 2026-11-14: Open item BA, a citation style change with a DOCX or Markdown target: ruled (a) by the user, booked in plan.md's Rulings: a second fresh formatter start writes the conversion patch from the copy compiled in the new style; ADR 0027 names the case. Built in repair round 2 of step 4.A.
@@ -117,6 +133,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-14. Step 4.A, the fifth of 7 steps, plan mode and format conversion, landed and booked in `plan.md` ("Step 4.A, plan mode and format conversion"); the landing report is `agents/reviews/4.A-landing.md`.
-- Step 5, the sixth of 7 steps, the gate's comparisons, prepared (brief `agents/briefs/5.md`, base b8a5947); Axel lifted the pause before it with "Please continue". It runs inline: the orchestrator runs the sides, the runs and the judges, and Axel answers their stops.
+- Step 5, the sixth of 8 steps, the gate's comparisons, run inline by the orchestrator: every side, run and judge has ended; its records and its report `agents/reviews/5-report.md` are committed; `/refute 5 5` has run (`agents/reviews/5-refuter.md`). C8 and C15 are handed to step 5.A by the rulings "The calls and the repair's scope" and "The full call". Step 5 lands after open items BD, BE and BF are ruled; then step 5.A, the repair of `paper`, through `/spec`, then step 6, the closing.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
-- Open on Axel's side: none.
+- Open on Axel's side: open items BD, BE and BF.

@@ -12,13 +12,13 @@ Each row's counts come from the run's two transcripts (`single-<n>-turn1.jsonl`,
 
 | Copy | Request | Session | Served model | Skill calls | Agent calls | Denied calls | Commit of the output |
 |---|---|---|---|---|---|---|---|
-| single-1 | `/paper outline-only .` | 047b6827-96db-4fc0-862f-46a67122a3c5 | claude-opus-5-5 | none | 3 | none | 1f0765d `outline-only` |
+| single-1 | `/paper outline-only .` | 047b6827-96db-4fc0-862f-46a67122a3c5 | claude-opus-5-5 | none | 3 | 1 Monitor | 1f0765d `outline-only` |
 | single-2 | `/paper abstract-only manuscript/main.tex` | 31a5e810-8232-4ee1-b631-d2095aa0ec0d | claude-opus-5-5 | none | 1 | none | 4e1f500 `abstract-only` |
 | single-3 | `/paper citation-check manuscript/main.tex` | 1ec9a5a9-7e15-46eb-a273-6eaa069ab675 | claude-opus-5-5 | none | 2 | none | 8e81620 `citation-check` |
 | single-4 | `/paper disclosure manuscript/main.tex` | f15dfa3e-8b16-464f-8cdc-5c2e6cf5cba6 | claude-opus-5-5 | none | 1 | none | 2363f01 `disclosure` |
-| single-5 | `/paper revision manuscript/main.tex writing-report.md` | f9887e7f-9ff3-4337-8ea5-1e83fbd67b54 | claude-opus-5-5 | `writing` (the closing review) | 15 | none | not committed; the diff is against 576eca5 `writing` |
+| single-5 | `/paper revision manuscript/main.tex writing-report.md` | f9887e7f-9ff3-4337-8ea5-1e83fbd67b54 | claude-opus-5-5 | `writing` (the closing review) | 15 | 2 Monitor | not committed; the diff is against 576eca5 `writing` |
 
-In single-1 one Monitor call was refused by the runner's command check ("A variable in this command can't be checked before it runs"); the run started two other Monitor calls that ran. It is no permission denial and no `result` message lists it.
+The denied calls are those the `permission_denials` of the `result` messages list: in single-1's second turn one Monitor call ("forward-tracking cited-by results as each finishes"), and in single-5's second turn two Monitor calls ("wait for the index re-lookups to finish", "FedAvg and CLOCS third askings finished"). Each run went on with other Monitor calls that ran.
 
 Before single-5, one process ran `/writing manuscript/main.tex` on the fifth copy (session ab8cfa8a, transcript `single-5-writing.jsonl`); its report, 49 numbered findings, was saved whole to `writing-report.md` in the copy and committed as 576eca5 `writing`.
 
@@ -73,7 +73,7 @@ The ledger copy of each run is `5-single-mode-runs/<mode>/`: `manuscript.diff` (
 ### The /writing findings (single-5, D37, D40)
 
 - Patches 01 (47 ops, items W1 to W49 of `writing-report.md`), 04 and 09 (`refs.bib`, 2 ops each), 07 (29 ops), 11 (8 ops, layout) and 12 (42 ops, the closing pass). Each has its apply report in `paper-runs/revision-2026-11-15/patches/`.
-- `git diff --stat` against 576eca5: `main.tex` 645 insertions and 529 deletions, `refs.bib` 10 lines.
+- `git diff --stat` against 576eca5: `main.tex` 639 lines added and 525 removed, `refs.bib` 6 added and 4 removed (counted in `5-single-mode-runs/writing-revision/manuscript.diff`).
 - The closing `/writing` review gave 39 findings (`writing-review.md`). Patch 12's op ids answer every finding from 1 to 39 (read from `12-main.tex.patch.json`); the run's final message says all 39 were applied, except at the places that need the facts it lists.
 - `grep -c GAP manuscript/main.tex` prints 6: the beat-template feature, a source for lead II, the spectral neighbour count, the random-forest settings, the 9:1 subsample and the clusterer of the 9:1 results.
 - The run states that no reading checked patch 12 item by item, and that the citation check was not run again on the cited sentences patches 07 and 12 rewrote.
