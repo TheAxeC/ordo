@@ -1,6 +1,6 @@
 # Report: step 5 of plan 5, the gate's comparisons
 
-NOT done: C15, since Axel called lit-review and revision losses and full a tie; C8, since three entries of the lit-review `refs.bib` (Kolda_2009, Agueh_2011, Bonneel_2016) do not resolve; C10's record of Axel's reading of the four single-mode outputs and of the applied `/writing` findings. The first two are handed to step 5.A by the rulings "The calls and the repair's scope" and "The full call" (`plan.md` Rulings); the third waits on Axel. Everything else in the brief is done.
+NOT done: C15, since Axel called lit-review and revision losses and full a tie; C8, since three entries of the lit-review `refs.bib` (Kolda_2009, Agueh_2011, Bonneel_2016) do not resolve. Both are handed to step 5.A by the rulings "The calls and the repair's scope" and "The full call" (`plan.md` Rulings). Everything else in the brief is done.
 
 ## Open items of the state file
 
@@ -24,8 +24,8 @@ Run on the tree at the launch commit 6016155, before any change:
 | 4 The stops | DONE | `5-blind-comparison.md` "Answers to the sides"; `5-single-mode-runs.md` "Stops, questions and answers" |
 | 5 The comparison | DONE | three comparisons, each with two judgments and the order swapped; full with two more judgments under a corrected prompt |
 | 6 The lit-review entries | NOT DONE | 81 of 84 entries resolve (`5-lit-review-resolve.md`); the three that do not go to step 5.A |
-| 7 The four single-mode runs | DONE, but Axel's reading of them is not recorded | `5-single-mode-runs.md` |
-| 8 The `/writing` findings | DONE, but Axel's reading of them is not recorded | patch 12 answers findings 1 to 39 under the autonomous writer pass |
+| 7 The four single-mode runs | DONE | `5-single-mode-runs.md`, with Axel's reading under "Axel's reading" |
+| 8 The `/writing` findings | DONE | patch 12 answers findings 1 to 39 under the autonomous writer pass; Axel's reading under "Axel's reading" of `5-single-mode-runs.md` |
 | 9 The records | DONE | the six records and the outputs as judged, committed in 517f0ea, 432ecb5 and 73f3a5b |
 | 10 Nothing written in research-hub, nothing pushed, no money spent | DONE | C11 below; no `git push` ran; `lookup.py` ran on public indexes without keys |
 | C1 | met | `git tag --list v8.4.0-rc.2` prints `v8.4.0-rc.2`; `git rev-list -n1 v8.4.0-rc.2` prints `678a5a74694766e8d56046cf6e9bd783ed3de2df`; `describe --tags` prints `v8.4.0-rc.2`; `pin.sh` exit 0 |
@@ -37,7 +37,7 @@ Run on the tree at the launch commit 6016155, before any change:
 | C7 | met | two judgments per comparison with the order swapped, read through `5-blind-comparison-key.md` |
 | C8 | unmet | Kolda_2009, Agueh_2011 and Bonneel_2016 do not resolve by title (OpenAlex and Semantic Scholar answered HTTP 429); a direct Crossref lookup of each DOI matches the entry |
 | C9 | met | every `paper` run stopped first at its intake confirmation, a stop in its mode's list; each later stop, taken under the answer's last sentence, is named with the stop of the mode's list it is |
-| C10 | partial | each run left its output, and patch 12 applies or lists each of the 39 findings; Axel's reading of each is not recorded |
+| C10 | met | each run left its output, and patch 12 applies or lists each of the 39 findings; Axel adopted the record's readings as his own (ruling "The reading of the single-mode outputs") |
 | C11 | met | the scan of every `tool_use` input in the 118 transcripts under `~/.claude/projects/*gate5*` (sides, runs, judges and their subagents) printed "tool calls naming research-hub: 0"; the `git -C ../research-hub status --short -- ...` of the case prints nothing |
 | C12 | met | the character-set check below prints nothing and exits 0; the record holds Axel's calls |
 | C13 | met | no judge's tool call reads a path outside its copy (`facts.py`) |

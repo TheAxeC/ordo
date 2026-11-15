@@ -89,3 +89,7 @@ Causes read in these outputs that the repair step of `paper` ends, beside those 
 - Disclosure writes an ethics sentence no answer supplied.
 - Revision does not run the citation check again on cited sentences that later patches rewrite.
 - Citation-check and outline-only confirm venues and years only through indexes that answered HTTP 429.
+
+## Axel's reading
+
+Axel adopted as his own the readings this record gives of the four single-mode outputs and of the applied `/writing` findings (2026-11-15, "(b)"; `plan.md` Rulings, "The reading of the single-mode outputs").
