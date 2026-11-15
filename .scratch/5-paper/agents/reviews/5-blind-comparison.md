@@ -86,4 +86,4 @@ Each side ended its first turn at its intake questions. Each was answered once, 
 
 - Lit-review: a loss (2026-11-15), as recommended; both judges chose academic-paper.
 - Revision: a loss (2026-11-15), as recommended; both judges chose academic-paper, judge 2 for reasons other than the missing response letter, which is `rebuttal`'s work.
-- Full: not made yet. The first two judges chose `paper` under the prompt's error; the two new judges differ, a tie read through the key.
+- Full: a tie (2026-11-15), as recommended; the first two judges chose `paper` under the prompt's error, and the two new judges differ read through the key. Step 5.A runs the full comparison again with the losses (ruling The full call).
