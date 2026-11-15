@@ -1,6 +1,6 @@
 # 0027. A paper run is done by eight agent roles, four of them resumed for a second message in named cases, and the integrity and ethics checks belong to researcher
 
-Status: proposed; superseded by 0028 in the part that checks the numbers a run writes and its description of the data handling against the saved result files
+Status: proposed; superseded by 0028 in the part that checks the numbers a run writes and its description of the data handling against the saved result files; superseded by 0029 in when the citation compliance agent runs and in its counts of starts and passes
 
 ## Context
 
