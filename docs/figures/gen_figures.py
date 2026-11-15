@@ -1253,9 +1253,18 @@ def _paper(name: str, mode: str, graph: Graph) -> str:
 def paper_full_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist, unless you skip it", "maybe"),
+        Node(
+            "L",
+            "Literature strategist, unless you skip it; each entry checked against an index",
+            "maybe",
+        ),
         Node("LR", "You review the sources, optional", "stop"),
         Node("PL", "Planner"),
+        Node(
+            "SQ",
+            "A research question the materials do not answer, when a part has no result",
+            "stop",
+        ),
         Node("G", "Literature strategist: the sections with no source", "maybe"),
         Node("PL2", "Planner: assigns what was found", "maybe"),
         Node("OA", "Outline approval", "stop"),
@@ -1280,6 +1289,12 @@ def paper_full_graph() -> Graph:
         ),
         Node("P", "Peer reviewer"),
         Node("WR", "Draft writer: a patch"),
+        Node(
+            "IC",
+            "Citation compliance for each later patch with a cited sentence: those "
+            "sentences only",
+            "maybe",
+        ),
         Node("SD", "The draft review does not pass", "stop"),
         Node("RF", "Draft writer: reference fix", "maybe"),
         Node("SR", "A reference that cannot be confirmed", "stop"),
@@ -1287,6 +1302,8 @@ def paper_full_graph() -> Graph:
         Node("WG", "/writing: 4 agents"),
         Node("RP", "End: the report; your reply, optional"),
         Node("WA", "Draft writer: applies what you pick", "maybe"),
+        Node("IC2", "Citation compliance: the sentences of the findings pass", "maybe"),
+        Node("PR", "Peer reviewer: reads the findings pass", "maybe"),
         Node("CF2", "Draft writer: compile fix", "maybe"),
         Node(
             "AN", "Draft writer: the anonymous copy, for a double-blind venue", "maybe"
@@ -1295,12 +1312,14 @@ def paper_full_graph() -> Graph:
     edges = (
         Edge("I", "L"),
         Edge("L", "LR"),
-        Edge("L", "L", "search passes, up to 4", "back"),
+        Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),
+        Edge("PL", "SQ"),
+        Edge("SQ", "PL", "a fresh start with your answer", "back"),
         Edge("PL", "OA"),
         Edge("G", "PL2"),
-        Edge("G", "G", "search passes, up to 4", "back"),
+        Edge("G", "G", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
         Edge("PL2", "OA"),
         Edge("OA", "PL", "changes or another structure, no cap", "back"),
         Edge("OA", "W"),
@@ -1317,7 +1336,8 @@ def paper_full_graph() -> Graph:
         Edge("C", "P"),
         Edge("C2", "P"),
         Edge("P", "WR", "Minor or Major: round 2, once", "dotted"),
-        Edge("WR", "P", "", "back"),
+        Edge("WR", "IC"),
+        Edge("IC", "P", "", "back"),
         Edge("P", "SD", "Reject, or a Critical issue after round 2"),
         Edge(
             "SD",
@@ -1332,7 +1352,9 @@ def paper_full_graph() -> Graph:
         Edge("CF", "WG"),
         Edge("WG", "RP"),
         Edge("RP", "WA"),
-        Edge("WA", "CF2"),
+        Edge("WA", "IC2"),
+        Edge("IC2", "PR"),
+        Edge("PR", "CF2"),
         Edge("RP", "AN"),
         Edge("CF2", "AN"),
     )
@@ -1347,7 +1369,12 @@ def paper_revision_graph() -> Graph:
             "Peer reviewer: the instructions as items, or, with none, a review of the "
             "manuscript",
         ),
-        Node("IA", "You approve the items", "stop"),
+        Node(
+            "SQ",
+            "A research question the materials do not answer, when an item names a part",
+            "stop",
+        ),
+        Node("IA", "You approve the items, with no instructions", "stop"),
         Node("LS", "Literature strategist, for a new reference", "maybe"),
         Node("V", "Visualization, for a figure", "maybe"),
         Node("W", "Draft writer: a patch per item"),
@@ -1365,12 +1392,20 @@ def paper_revision_graph() -> Graph:
         ),
         Node("R", "Peer reviewer: reading"),
         Node("W2", "Draft writer: one pass"),
+        Node(
+            "IC",
+            "Citation compliance for each later patch with a cited sentence: those "
+            "sentences only",
+            "maybe",
+        ),
         Node("RF", "Draft writer: reference fix", "maybe"),
         Node("SD", "A reference that cannot be confirmed", "stop"),
         Node("CF", "Draft writer: compile fix", "maybe"),
         Node("WG", "/writing: 4 agents"),
         Node("RP", "End: the report; your reply, optional"),
         Node("WA", "Draft writer: applies what you pick", "maybe"),
+        Node("IC2", "Citation compliance: the sentences of the findings pass", "maybe"),
+        Node("PR", "Peer reviewer: reads the findings pass", "maybe"),
         Node("CF2", "Draft writer: compile fix", "maybe"),
         Node(
             "AN", "Draft writer: the anonymous copy, for a double-blind venue", "maybe"
@@ -1379,9 +1414,12 @@ def paper_revision_graph() -> Graph:
     edges = (
         Edge("I", "P"),
         Edge("P", "IA", "no instructions given"),
+        Edge("P", "SQ", "an item names a part with no result"),
+        Edge("SQ", "IA", "your answer, no instructions"),
+        Edge("SQ", "W", "your answer, instructions given"),
         Edge("IA", "W"),
         Edge("P", "LS"),
-        Edge("LS", "LS", "search passes, up to 4", "back"),
+        Edge("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
         Edge("P", "V"),
         Edge("V", "V", "checks the rendered figure, up to 2 fixes, optional", "back"),
         Edge("P", "W"),
@@ -1395,14 +1433,17 @@ def paper_revision_graph() -> Graph:
         Edge("C", "R"),
         Edge("C2", "R"),
         Edge("R", "W2", "items not resolved: reading 2, once", "dotted"),
-        Edge("W2", "R", "", "back"),
+        Edge("W2", "IC"),
+        Edge("IC", "R", "", "back"),
         Edge("R", "RF"),
         Edge("RF", "SD", "strict: a reference still fails"),
         Edge("RF", "CF"),
         Edge("CF", "WG"),
         Edge("WG", "RP"),
         Edge("RP", "WA"),
-        Edge("WA", "CF2"),
+        Edge("WA", "IC2"),
+        Edge("IC2", "PR"),
+        Edge("PR", "CF2"),
         Edge("RP", "AN"),
         Edge("CF2", "AN"),
     )
@@ -1412,7 +1453,7 @@ def paper_revision_graph() -> Graph:
 def paper_lit_review_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist"),
+        Node("L", "Literature strategist: each entry checked against an index"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("RF", "Draft writer: reference fix, when a .tex is given", "maybe"),
         Node("SD", "A reference that cannot be confirmed", "stop"),
@@ -1420,7 +1461,7 @@ def paper_lit_review_graph() -> Graph:
     edges = (
         Edge("I", "L"),
         Edge("L", "LR"),
-        Edge("L", "L", "search passes, up to 4", "back"),
+        Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
         Edge("LR", "RF"),
         Edge("RF", "SD", "strict: a reference still fails"),
     )
@@ -1430,7 +1471,7 @@ def paper_lit_review_graph() -> Graph:
 def paper_outline_only_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist"),
+        Node("L", "Literature strategist: each entry checked against an index"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("PL", "Planner: outline and argument map"),
         Node("G", "Literature strategist: the sections with no source", "maybe"),
@@ -1440,12 +1481,12 @@ def paper_outline_only_graph() -> Graph:
     edges = (
         Edge("I", "L"),
         Edge("L", "LR"),
-        Edge("L", "L", "search passes, up to 4", "back"),
+        Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),
         Edge("PL", "OA"),
         Edge("G", "PL2"),
-        Edge("G", "G", "search passes, up to 4", "back"),
+        Edge("G", "G", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
         Edge("PL2", "OA"),
         Edge("OA", "PL", "changes or another structure, no cap", "back"),
     )

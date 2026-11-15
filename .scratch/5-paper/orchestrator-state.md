@@ -43,19 +43,6 @@ repair_reviewer: claude:sonnet  # the model the run of /refute over a repair rou
 
 ```yaml
 dispatch:                    # or the block /spec writes (a list when .agents/plan.yaml's workers_at_once is above 1). /spec writes the entry at the end of its preflight with step and `landing: preparing`, writes `"running: <agent id>"` into brief_check while the brief-check agent runs, base after its preparation commit and worktree before it creates the worktree, and fills the entry at its Steps 9, so that it holds: step, executor, worker, worktree (<worktree_root>/<slug>-<step>), base, launched, report (the builder's report, at the path the brief names), brief_check (the brief check's report path, with the agent's id, its served model, tokens, tool uses and time, or `none, a small text step` for a small text step), landing, round. `landing` is `preparing` while /spec runs, then `not-started`, `cherry-picking` while /land cherry-picks, and `backed-out` after a red line took the step back out of main. The orchestrator adds session_id, the builder's agent id followed by the model the runner served it (<agent id> (<served model>)), as soon as the builder is dispatched and its model read, builders_before (the agent id and served model of each builder it replaced, as <agent id> (<served model>, stopped) or <agent id> (<served model>, dead), one after another), builder_usage (the builder's tokens, tool uses and time from its completion notice) beside report when the builder's report is saved, and reviewer_report (the refuter report's path, with each reviewer's agent id, served model, tokens, tool uses and time, or, for a reviewer stopped for another model, its agent id, served model and stopped) at the review. A value that holds `: ` (brief_check while its agent runs, builder_usage after a repair round, reviewer_report after a run over a round) is written in double quotes, so the block stays valid YAML. A diagnosis agent has no key here: the session that starts it writes its id and role into plan.md's Agents section, as the diagnose skill's Rules say. A step dispatched while another in flight, of this plan or of another open plan, names a file its brief also names carries shared_paths: each shared file, the other step's plan and step, and why the merge at landing is simple, as plan-orchestration's "Two steps in flight" says; with no shared file the key is left out.
-- step: 5.A
-  base: 5d6fcf2
-  worktree: .agents/worktrees/5-paper-5.A
-  executor: agent
-  worker: claude:sonnet
-  session_id: ae0b70ae88811e039 (claude-sonnet-5-5)
-  launched: 2026-11-15
-  report: .scratch/5-paper/agents/reviews/5.A-report.md
-  builder_usage: 72285 tokens, 183 tool uses, 31.4 min
-  reviewer_report: ".scratch/5-paper/agents/reviews/5.A-refuter.md (a5e5f484a2c8baf38, claude-opus-5-5, 267549 tokens, 60 tool uses, 11.0 min)"
-  brief_check: ".scratch/5-paper/agents/reviews/5.A-brief-check.md (a5e0505cfd2be33a6, claude-opus-5-5, 325707 tokens, 89 tool uses, 16.9 min)"
-  round: 1
-  landing: not-started
 ```
 
 ## Open items (only what the user must rule on: a stop, and a proposal of the recurring-findings pass; repeated verbatim after the position line of the orchestrator's reports and the landing report until ruled or, under `self_rule: on`, until the orchestrator closes it as `plan-orchestration`'s `references/self-rule.md`, "Closing an open item", says)
@@ -63,6 +50,7 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+- 2026-11-15: Step 5.A landed; the first run's findings closed in repair round 1, the three of the run over round 1 and one of the orchestrator's read fixed at landing.
 - 2026-11-15: Open item BI, step 5.A's stop that does not converge (Bonneel_2016 under `resolve --entry`, the intake answer "No.", the citation checks after later patches against ADR 0027 and ADR 0023, the search's end): ruled 1 (a), 2 (a), 3 (a), 4 (a) by the user, booked in plan.md's Rulings; ADR 0029 written.
 - 2026-11-15: Open item BH, the number checks against ADR 0027 and the command form of the changed `resolve`: ruled (a) by the user, booked in plan.md's Rulings; ADR 0028 written.
 - 2026-11-15: Open item BG, three revision defects on step 5.A's line that the `paper` side's full texts support, and the judges' source texts: ruled (a) by the user, booked in plan.md's Rulings.
@@ -118,11 +106,11 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - Design: `docs/roadmap.md` entry 5, the rulings in `plan.md` (D1 to D59, the pins of plan 5, open items A to BB), ADRs 0017, 0020, 0023, 0024, 0026 and 0027 (0027 supersedes 0025). Ledger: `.scratch/5-paper/`, with `agents/briefs/` and `agents/reviews/`.
 - The sources: `../research-hub/.agents/skills/academic-paper/`, `academic-pipeline/` and `deep-research/` (the coverage rows of `docs/academic-coverage.md`), `../research-hub/tools/manuscript/`, and `lookup.py` at commit 0074728. research-hub is read only; the gate's runs work on copies outside it.
-- The installed skills are pinned at v8.4.0-rc.1, the release candidate of step 3 (`git -C ~/.local/share/ordo-stable describe --tags`); step 5 tags the next release candidate and pins it, and the closing tags the final release and pins it (Rulings, "The pins of plan 5").
+- The installed skills are pinned at v8.4.0-rc.2, the release candidate of step 5 (`git -C ~/.local/share/ordo-stable describe --tags`); step 5.A's check tags the next release candidate and pins it, and the closing tags the final release and pins it (Rulings, "The pins of plan 5").
 
 ## Current position (rewritten before every step commit of this plan)
 
-- 2026-11-15. Step 5, the sixth of 8 steps, the gate's comparisons, landed and booked in `plan.md` ("Step 5, the gate's comparisons"); the landing report is `agents/reviews/5-landing.md`. C8 and C15 are handed to step 5.A by the rulings "The calls and the repair's scope" and "The full call".
-- Next: step 5.A, the repair of paper, through `/spec 5 5.A`; its line now carries the four causes of `agents/reviews/5-revision-fault-trace.md` and the comparison setup with research-hub's `tools/manuscript/` and `CLAUDE.md`; then step 6, the closing.
+- 2026-11-15. Step 5.A, the seventh of 8 steps, the repair of paper, landed and booked in `plan.md` ("Step 5.A, the repair of paper"); the landing report is `agents/reviews/5.A-landing.md`.
+- Next: step 5.A's check, which runs after the landing: the release candidate `v8.4.0-rc.3` tagged on main and pinned (Rulings, "The pins of plan 5"), the lit-review, revision, full and disclosure runs of the changed skill on step 5's inputs, and the lit-review, revision and full comparisons run again in copies holding research-hub's `tools/manuscript/` and `CLAUDE.md`, the academic-paper sides run again, two fresh judges each, then Axel's call; then step 6, the closing.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
-- Open on Axel's side: none. Open items BG and BH are ruled (a); `/spec 5 5.A` runs again.
+- Open on Axel's side: none.

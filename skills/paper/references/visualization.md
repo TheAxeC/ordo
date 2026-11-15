@@ -48,6 +48,16 @@ The agent lists the quantitative results of the Results section that a figure wo
 - In that case the trace names the section and the table as the source.
 - The result of this stage is the list of figure candidates, each with the result it shows. A candidate whose chart type is ambiguous goes to the user in the report.
 
+## An image from the materials
+
+A figure may be an image that the Materials in hand hold, such as a plot that a project's own script wrote, in place of a figure the agent draws. The agent places such an image only after it has read it.
+
+- The agent opens the image with the Read tool and notes what it shows: its axes, its labels, the text inside it and the result it presents.
+- The caption of the figure states what the image shows and states no result that the image does not present.
+- Text in the image can contradict the caption, as a label does that names another model or another dataset than the caption does. The agent records it in `figures.md` with the text as the image shows it and the caption it contradicts.
+- Such an image is not placed. The figure is listed under "Not drawn" with that reason, its marker is handled as "The placement patch" says for a figure not drawn, and no caption is written around the image.
+- An image that the Read tool cannot show is listed under "Not drawn" with that reason.
+
 ## Choosing the chart
 
 | The data | The question | Chart | Avoid |
@@ -710,7 +720,7 @@ After the script ran, the agent reads the PNG of a complex figure with the Read 
   - Figure numbering: each figure with its number, its script and its image file.
   - Names: for each image, the name it has in the run folder and the name it takes in the manuscript's folder. Also each file outside the run folder that the agent changed, with its path and its hash before and after.
   - The environment of each figure, for the placement patch and for the draft writer's revision patches.
-  - Not drawn: each candidate the agent did not draw, with the case from "Whether to draw a figure" or the missing library and the error as printed.
+  - Not drawn: each candidate the agent did not draw, with the case from "Whether to draw a figure", the missing library and the error as printed, or the image of the materials that contradicts its caption with the text that does.
 
 ## The names of the images
 

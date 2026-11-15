@@ -8,6 +8,7 @@ The literature strategist agent reads this page to design the search, screen the
 - In revision mode, the items that call for a new reference stand in place of the Topic and the Research question, which that mode does not ask.
 - The sources given: the manuscript's `.bib`, when the call gives one, and the `.bib`, the annotated bibliography or the earlier review that the Materials in hand row names. A research report that row names gives the question, the discipline and the method that the session filled at intake.
 - Every lookup is made with `lookup.py` and never with a web search, a fetch of a web page or `curl`.
+- `references/citation-compliance.md`, "Looking a reference up": how a line of `resolve` is read, and how a year and a venue are confirmed.
 - In full mode given an earlier plan run, that run's `chapter-plan.md` and `insights.md` ("Starting from a plan run").
 - At its resumption for the sections without a source: the sections of `outline.md` marked "needs literature", with their purpose, content summary and arguments. Also the files the agent wrote before when it ran in this run.
 - At its resumption for an expanded revision: the last `review-<r>.md` of the draft review, whose root cause is insufficient evidence, with the claims it names as lacking support. Also the files the agent wrote before in this run.
@@ -107,17 +108,20 @@ Screened from the manuscript's .bib:
 
 - Layer 2 typically adds 10 to 20 papers, and layer 4 adds cross-disciplinary work that layers 1 to 3 missed.
 - A listing that ends in "first 100, more exist" for an index holds more than 100 works for it, and the agent reads that as 100 or more.
-- A pass is one run of the four layers. The search ends when at least 3 of the 5 conditions below hold, or after 4 passes, whichever comes first:
+- A pass is one run of the four layers. After each pass the agent checks which of the 5 conditions below hold.
 
 | # | Condition | Assessment |
 |---|---|---|
 | 1 | The source count meets the target. | The minimum of the source-count table is reached. |
-| 2 | The latest search added nothing new. | It added fewer than 10 percent of the existing sources. |
+| 2 | The latest pass added little that is new. | It added fewer than 10 percent of the existing sources. |
 | 3 | Every theme is saturated. | Every theme of the literature matrix has at least 3 sources. |
 | 4 | The citation loop closes. | Citation chaining finds no cited work that is not yet collected. |
 | 5 | The temporal span is covered. | The set holds foundational works and research of the last 3 years. |
 
-- After 4 passes with fewer than 3 conditions holding, the agent records a "search limitation" in the report that names the conditions that hold, and goes on.
+- The search ends when at least 3 conditions hold and condition 2 is among them.
+- A pass that adds 10 percent or more of the existing sources leaves condition 2 unmet, and another pass runs. The passes stop at 8, and the agent then records a "search limitation" in the report that names the conditions that hold, and goes on.
+- With no condition holding after pass 4, the search ends there with a "search limitation" in the report, and the agent goes on.
+- The report names each pass with the sources it added.
 
 ## Screening
 
@@ -126,11 +130,18 @@ Records that share a DOI or an arXiv ID are one source, and duplicates are remov
 - **Title and abstract.** Each record is tagged Include, Exclude or Maybe against the criteria. The stage narrows the set to 30 to 50 candidates.
 - **Full-text assessment.** The abstract and key sections of each Include and Maybe source are read for relevance, quality and strength of evidence. The stage ends on 15 to 30 final sources, a number that varies by paper type.
 
+- **A candidate that cannot be read.** A candidate whose abstract and text the agent could not read with the lookups of this page is looked up again before it leaves the set.
+  - `lookup.py resolve` runs on each identifier the candidate has: its DOI, its arXiv ID and its title. Each index that holds the candidate prints its record and its identifiers.
+  - A candidate that stays unread is screened on its record and its `cited-by` count.
+  - An unread candidate that layer 2 marked "must include", or that the seminal rule of node 2 below admits, is included and annotated "abstract not read", with the lookups tried.
+  - Any other unread candidate is excluded, and `review.md` names the lookups tried for it.
+  - No lookup leaves `lookup.py`, and lit-review mode fetches no full text.
+
 A candidate source passes this tree in order. A "no" ends it at Exclude unless the node says otherwise.
 
 1. Is it peer-reviewed? If not, it is included as grey literature when it is a government report or white paper that addresses the research question directly. Otherwise it goes on only when the profile admits it, tagged by its evidence type, and it still passes the nodes below.
 2. Is it within the time range? If not, it is included as a seminal work when it is a foundational work of the field cited more than 100 times, counted from the `cited-by` listing. Otherwise it is excluded.
-3. Does its abstract address at least one aspect of the research question? If not, it is excluded.
+3. Does its abstract address at least one aspect of the research question? If not, it is excluded. A candidate that "A candidate that cannot be read" included as "abstract not read" is not excluded here and goes on to node 4.
 4. Is its methodology reliable, with a reasonable sample size and no obvious design flaw? If that cannot be determined, it is tagged Maybe and goes to the full-text stage. If it is not reliable, it is excluded, unless it is an important opposing viewpoint. Otherwise it is included.
 
 Each included source is scored on five items from 1 to 3 points:
@@ -202,6 +213,7 @@ Each included source has this annotation:
 
 - The annotation does not say whether the source came from the `.bib` or from a search.
 - Every annotation is written from the abstract or the full text the agent read, and a field it could not fill is left as "[GAP: <field>]".
+- The annotation of an included source whose abstract was not read says "abstract not read" and names the lookups tried. Its fields come from the record and the `cited-by` count only.
 
 ## The literature matrix
 
@@ -264,7 +276,17 @@ Distribution advisory:
 - One BibTeX entry per included source comes from `lookup.py bibtex <DOI or arXiv ID>`, written to `refs.bib` in the run folder as the script printed it.
 - One blank line stands between entries, so that each entry is a block of its own.
 - The entry is not typed from memory.
-- A source with neither a DOI nor an arXiv ID, or one for which `lookup.py bibtex` gets no entry, has no entry in `refs.bib`. It is listed in `review.md` under "No entry written" with its record, is not cited in the synthesis, and is named in the report.
+- A source with neither a DOI nor an arXiv ID, or one for which `lookup.py bibtex` gets no entry, gets its entry from the record `lookup.py resolve '<title>'` prints for it.
+  - The entry takes the title, the authors, the year, the venue and the record's open-access URL or index page from the printed line.
+  - Its type is `@inproceedings` for a proceedings volume, `@article` for a journal and `@misc` otherwise.
+- A source for which no index prints a record has no entry in `refs.bib`. It is listed in `review.md` under "No entry written" with its record, is not cited in the synthesis, and is named in the report.
+- How the venue and the year of an entry are confirmed, and how an entry whose year or venue only a left-out index could have given is resolved again, is in `references/citation-compliance.md`, "Looking a reference up".
+- An entry that no answering index confirms is named in the report and in `review.md` with the indexes that were left out.
+- The agent runs `lookup.py resolve --entry refs.bib <key>` on each entry it wrote, before the synthesis cites it.
+  - An entry that prints `CONFIRMED` stays.
+  - An entry that prints `NOT_CONFIRMED` is resolved again once by its other identifiers (its DOI, its arXiv ID, its title with its year), and it is corrected from a record that confirms it. The agent runs `resolve --entry` on the corrected entry.
+  - An entry still not confirmed is taken out of `refs.bib` and out of the synthesis. It is listed in `review.md` under "No entry written" with its line, and the report names it, so that the session carries it into the final message.
+- In full and revision mode the agent does the same for the entries it adds.
 - When the call gives a `.bib`, the rules apply in this order to each included source.
   - A source whose DOI, or whose arXiv ID when it has no DOI, is already in the `.bib` gets no new entry and is marked "already in the .bib" in the annotation.
   - Any other source whose key equals an existing key gets the key with the first unused letter appended: `a`, then `b`.
@@ -274,15 +296,15 @@ Distribution advisory:
 
 `review.md` has these sections in this order:
 
-1. Search strategy: the screened `.bib` block when there is a `.bib`, the indexes with those left out, the search strings and dates, the criteria and the profile.
+1. Search strategy: the screened `.bib` block when there is a `.bib`, the indexes with those left out, the search strings and dates, each pass with the sources it added, the conditions that held when the search ended, the criteria and the profile.
 2. Distribution advisory: the advisory blocks, or "No distribution advisory triggered."
-3. Screening results: the initial hits, the number after title and abstract screening, the number after full-text assessment and the final included sources.
+3. Screening results: the initial hits, the number after title and abstract screening, the number after full-text assessment and the final included sources, and for each candidate that stayed unread the lookups tried and whether it was included or excluded.
 4. Annotated bibliography.
 5. Literature matrix.
 6. Identified gaps.
 7. Synthesis.
 8. Recommended sources by paper section, as a table with the columns Section and Key sources for Introduction, Literature Review, Methodology and Discussion.
-9. No entry written, when a source has none.
+9. No entry written, when a source has none or an entry was taken out.
 10. Search limitations and gate failures, when there are any.
 11. AI disclosure: the one line that `references/ai-disclosure.md` gives under "The line of a review".
 
@@ -292,17 +314,17 @@ Distribution advisory:
 
 The session shows the user the sources `review.md` includes, and the user may add or remove sources. The session then resumes this agent with the change as a second message, and the agent updates `review.md`, `refs.bib` and its patch.
 
-- An added source is looked up with `lookup.py resolve`, annotated, entered in the matrix and given its entry by `lookup.py bibtex`, like an included source. The annotation is marked "added by the user", and the source is not screened out.
+- An added source is looked up with `lookup.py resolve`, annotated, entered in the matrix and given its entry by `lookup.py bibtex`, like an included source. The entry is run with `lookup.py resolve --entry`, as "The BibTeX entries" says. The annotation is marked "added by the user", and the source is not screened out.
 - A removed source leaves the annotated bibliography, the matrix, `refs.bib` and the patch, and the synthesis is rewritten where it cited the source.
 - The agent changes nothing else in the files, and it starts no new search.
-- A source the user adds that has neither a DOI nor an arXiv ID is listed under "No entry written", as "The BibTeX entries" says.
+- A source the user adds that has neither a DOI nor an arXiv ID gets its entry from the record `lookup.py resolve '<title>'` prints for it, as "The BibTeX entries" says. Only a source for which no index prints a record is listed under "No entry written".
 - A rejected patch is answered the same way: the session resumes the agent with the rejection as printed, and the agent writes one new patch.
 
 ## The sections without a source
 
 After the planner's outline, the session resumes the agent when the outline marks sections "needs literature". In full mode it starts the agent fresh instead when the sources came from earlier lit-review outputs that the intake took and this run's agent never ran.
 
-- The agent reads the marked sections and runs the search of "The search design" and "The four searches" for each, within its 4 passes. It screens the records under the criteria above.
+- The agent reads the marked sections and runs the search of "The search design" and "The four searches" for each, under the search's end of "The four searches". It screens the records under the criteria above.
 - It adds the sources it includes to `review.md`, `refs.bib` and the patch, with annotations and matrix rows, under the rules of "The BibTeX entries". It removes none.
 - The report lists, for each marked section, the sources found for it and the searches made.
 - A section for which no source meets the criteria is named in the report with the searches made, so that the outline shows it as "needs literature".
@@ -320,7 +342,7 @@ In full mode, intake may take an earlier plan run's outputs (`references/intake.
 
 The user may choose an expanded revision at the stop "The draft review does not pass" when the review names insufficient evidence as the root cause. The session then resumes the agent with the review as a second message.
 
-- The agent reads the claims the review names as lacking support, and runs the search of "The search design" and "The four searches" for each, within its 4 passes. It screens the records under the criteria above.
+- The agent reads the claims the review names as lacking support, and runs the search of "The search design" and "The four searches" for each, under the search's end of "The four searches". It screens the records under the criteria above.
 - It adds the sources it includes to `review.md`, `refs.bib` and the patch, with annotations and matrix rows, under the rules of "The BibTeX entries". It removes none.
 - The report lists, for each claim, the sources found for it and the searches made, and names a claim for which no source meets the criteria.
 - The session then shows the sources at the stop "The sources' review" again.
@@ -330,6 +352,6 @@ The user may choose an expanded revision at the stop "The draft review does not 
 In revision mode the session starts the agent for the items that call for a new reference, when intake allowed new references.
 
 - The agent is given `config.md`, the items, the `.bib` and its manifest.
-- It runs the search of "The search design" and "The four searches" for each item's claim, within its 4 passes, and screens the records under the criteria above.
+- It runs the search of "The search design" and "The four searches" for each item's claim, under the search's end of "The four searches", and screens the records under the criteria above.
 - It writes `review.md` and `refs.bib` for the new sources and the patch that adds their entries to the `.bib`, whose operations name the ids of the items they answer.
 - An item that finds no source meeting the criteria is named in the report with the searches made.

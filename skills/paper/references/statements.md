@@ -4,8 +4,15 @@ The draft writer reads this page to write the six statements of a paper: author 
 
 ## Facts and gaps
 
-- Every fact a statement states comes from a row of `config.md`: Authors, Contributions, Funding, Conflicts of interest, Data availability, Human or patient data.
-- A fact the record lacks is a gap under the draft writer's anti-leakage rule: it is written as a visible placeholder and listed in the report, never filled from the model.
+- Every fact a statement states comes from a row of `config.md`: Authors, Contributions, Funding, Conflicts of interest, Data availability, Human or patient data. The two exceptions are a fact of the materials and a public fact that a lookup finds, as the bullets below give.
+- A fact the record lacks and no lookup finds is a gap under the draft writer's anti-leakage rule. It is listed in the report and never filled from the model.
+- A gap of a statement is written once, after the statement, as an `itemize` list of lines `[GAP: <the fact the statement lacks>]`, one line for each. The statement's sentences are written without those facts, so that each reads whole, and no gap stands inside a sentence.
+- A sentence that cannot stand without a missing fact is replaced by a line of that list that names the fact.
+- A fact the public record holds is looked up before it is a gap.
+  - A dataset the materials name with its version gets its DOI from `lookup.py resolve` on the DOI, the title or the name that the materials or the `.bib` give, and then `lookup.py bibtex '<DOI>'` on the DOI the record prints.
+  - The agent writes that DOI only when the materials name it, or when the BibTeX entry's version or URL names the version the materials name. Otherwise the DOI is a gap, and its line names the lookups tried.
+  - A release tag or a version of the project's code comes from the materials: a README, a `CITATION.cff`, or the tags that `config.md` records in its Notes, which the session read at intake with `git -C '<project folder>' tag --list`. With none, it is a gap.
+  - A fact that only the authors hold, such as a grant number, a funder's role or a contribution, stays a gap.
 - The report lists each statement the co-authors must agree on before submission: the contribution roles, the funder details and the conflicts.
 - Each statement is written in the manuscript's language.
 - A statement stands even when nothing is to declare: no funding, no conflict, no new data and no human data each get their own sentence.
@@ -184,11 +191,12 @@ Data sharing is not applicable to this article as no new data were created or an
 
 ## Ethics
 
-- The ethics statement concerns human or patient data, and it states what the Human or patient data row of `config.md` gives: the approving board, the approval number, the consent obtained and the de-identification applied.
+- The ethics statement concerns human or patient data, and it states only what the Human or patient data row of `config.md` gives: the approving board, the approval number, the consent obtained and the de-identification applied.
 - The form is "This study was approved by <board> (Approval No. <number>). <the consent obtained>. <the de-identification applied>."
 - The statement states the approval the collecting study obtained and does not plan the approval.
 - A study without human or patient data states "This study used no data from human participants or patients."
-- A missing approval number, consent or de-identification of a study with human data is a gap. The draft writer names it in its report, and the final message lists it.
+- A missing approval number, consent or de-identification of a study with human data is a gap in the list after the statement. The draft writer names it in its report, and the final message lists it.
+- A study on public de-identified data whose row gives no answer on approval or consent states the data's origin and its de-identification, and leaves approval and consent as gaps. The statement says that the authors obtained no approval or consent only when the row says so.
 
 ## Responsible use
 

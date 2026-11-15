@@ -16,6 +16,7 @@ A gate that compares a new skill with another skill on a real input cites this p
      - A repository is copied whole only when the input names the repository and no path inside it.
    - The orchestrator copies into the judge's copy each file an output cites that is outside the copy, except a file of either skill.
    - The orchestrator saves into the judge's copy the page of each URL an output cites, as its fetch returns it, except a file of either skill; for a URL that does not resolve it saves what the fetch printed.
+   - The orchestrator also saves into the judge's copy each source text a side read in its run (from the side's run folder or transcript), named by the URL or the citation key it stands for, with the files of both skills removed as the next bullet says.
    - The orchestrator removes the files of both skills from each copied source and cited file.
    - The judge runs as its own process, not as an agent the orchestrator's runner starts.
    - The judge's process starts in its copy of the input.
@@ -29,6 +30,7 @@ A gate that compares a new skill with another skill on a real input cites this p
    - The orchestrator tells the judge that no skill's text, wherever the input quotes it, is the standard.
    - Neither instruction names a skill or says which output is expected to win.
    - The judge checks each URL an output cites against its saved page, for whether it resolves and says what the output claims.
+   - The judge checks a claim against that text when its page shows no more than an abstract or a block.
    - The judge opens no file outside its copy of the input.
 5. **Reading.** The judge reads each output whole, and for each lists its critical failures before stating a preference. A critical failure is one that makes the output unfit for the purpose the input sets. For example, a claim the input contradicts, a missing part the input asks for and a citation that does not resolve are critical failures. The judge quotes each critical failure with its place.
 6. **The verdict.** The judge writes the verdict, A, B or a tie, with the reasons, each reason pointing at the failures or the passages it rests on.

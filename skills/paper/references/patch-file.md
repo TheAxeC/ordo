@@ -34,12 +34,12 @@ The ids are:
 | `V<m>` | The draft writer, and the literature strategist for an item that calls for a new reference | Issue `m` that the peer reviewer found itself in revision mode: its review when there are no instructions, or a failure of the reference checks at a reading |
 | `F<k>` | The draft writer | Finding `k` of the `/writing` report of a run's own closing review (Steps 13) |
 | `D<r>-<m>` | The draft writer | Issue `m` of the review numbered `r`, such as `D1-2` for issue 2 of `review-1.md` |
-| `C<m>` | The citation compliance agent | Issue `m` of the citation report, in full, revision and citation-check mode |
+| `C<m>` | The citation compliance agent | Issue `m` of the citation report, in full, revision and citation-check mode, and issue `m` of a `citation-report-<nn>.md` for the patch with the number `<nn>` |
 | `figures` | The visualization agent | The placement of each planned figure at its marker `% FIGURE: <label>` in full mode, and in the figures call the insertion of each figure after the block that discusses its result |
 | `reference-fix` | The draft writer | The lines of the reference checks that fail after the last writer pass of full, lit-review and revision |
 | `compile-fix` | The draft writer | The compile lines of a failed compile or a layout fault |
 | `abstract-only` | The draft writer | The abstract and the keywords of abstract-only mode |
-| `disclosure` | The draft writer | The statements of disclosure mode, and in full mode the AI disclosure that a second start of the draft writer rewrites to put the model identifier in the place of `[GAP: model identifier]` |
+| `disclosure` | The draft writer | The statements of disclosure mode, and in full mode the AI disclosure that a second start of the draft writer rewrites to put the model identifier in the statement and remove the line `[GAP: model identifier]` |
 | `format-convert` | The formatter | The format conversion: the citation style, the venue's template and its required elements, and the fields of the format profile in LaTeX, with the cite commands of a `.tex` made from a `.md` or a `.docx` |
 | `format-convert-copy` | The formatter | The changes that make what `pandoc` drops readable: a table's wrapper, an algorithm, a cross-reference, a drawing, a numbered citation style, and, when the run does not change the citation style, also the same changes as `format-convert` for each block. The session applies it to the conversion copy only, never to the manuscript |
 | `lit-review` | The literature strategist | The entries a literature review adds to the manuscript's `.bib` |

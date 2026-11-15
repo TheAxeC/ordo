@@ -60,14 +60,15 @@ Abstract text, without a paragraph indent.
 
 The first draft uses the publisher's class in place of `article` when the Materials in hand row holds no template and the Venue row names a journal of one of these publishers.
 
-| Publisher | Class | Engine |
-|---|---|---|
-| Elsevier | `elsarticle` | pdfLaTeX |
-| Springer | `svjour3` | none named here |
-| IEEE | `IEEEtran` | pdfLaTeX |
-| ACM | `acmart` | pdfLaTeX |
-| MDPI | `mdpi` | none named here |
+| Publisher | Class | Engine | Highlights |
+|---|---|---|---|
+| Elsevier | `elsarticle` | pdfLaTeX | 3 to 5 bullets of at most 85 characters each, in a `highlights` environment before the `abstract` |
+| Springer | `svjour3` | none named here | none |
+| IEEE | `IEEEtran` | pdfLaTeX | none |
+| ACM | `acmart` | pdfLaTeX | none |
+| MDPI | `mdpi` | none named here | none |
 
+- The highlights column is what the draft writer adds before the abstract, as `references/draft-writer.md` gives under "Highlights". A manuscript that loads `elsarticle`, whether the class came from this table or from the venue's template, takes them.
 - The engine column is the engine the compile of SKILL.md, Steps 11, takes for a manuscript that loads the class. A class with none named leaves the engine to the venue's template, and then to XeLaTeX.
 - A manuscript set in `IEEEtran` compiled with XeLaTeX warns that font shapes of the `ptm` family are undefined and prints Latin Modern. With pdfLaTeX it prints the Times family the class sets.
 

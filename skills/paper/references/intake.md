@@ -184,6 +184,8 @@ Format-convert marks two more, asked in that mode only:
 - The sources of an annotated bibliography stand in the Materials in hand row as a list the literature strategist screens, like a `.bib`.
 - The literature strategist screens a `.bib` that is held and searches for what it misses, unless the user skips the search in the row Literature search.
 - When the materials hold data, the visualization agent draws the figures the outline plans, beside the draft writer.
+- The row records the path of the folder or the files that hold the project's results when the user holds data or results. The peer reviewer reads them to check the numbers and the descriptions of the data handling (`references/peer-reviewer.md`, "Numbers and data handling").
+- In full and disclosure mode, when the project folder is a git repository, the session reads its tags with `git -C '<project folder>' tag --list` and records the printed tags, or "no tags", in the Notes of `config.md`. The statements take the code's release tag from them (`references/statements.md`, "Facts and gaps").
 - A `main.tex` that stands in the manuscript's folder in full mode is existing draft sections. The session reads it at intake and gives it to the planner, and the row Existing main.tex records that the first draft replaces it.
 
 ## Earlier outputs
@@ -262,5 +264,6 @@ In disclosure mode the session reads the records of earlier runs, to mark each c
 - A call by plain request, and a call with an argument in words, add two rows. Request holds the request as the user wrote it. Taken from the request lists each argument taken and the words it was taken from.
 - The session writes the path it found in the Arguments row.
 - A section "Notes" holds a requirement or preference the user gave that fits no row.
+- An instruction the user gives, at intake or later in the run, not to stop for a choice whose recommendation the run would take is recorded in the Notes. The stops of SKILL.md "Stops" stay as they are, except that the stop "A research question the materials do not answer" then takes its second option, as that table says.
 - A section "Decisions" holds the user's answer at each stop and each choice the run took by its goal with its reason, appended by the session.
 - The record is shown to the user whole, and the run goes on when the user confirms it.

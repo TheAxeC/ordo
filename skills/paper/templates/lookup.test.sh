@@ -1,5 +1,5 @@
 #!/bin/sh
-# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, and the retraction and expression-of-concern notice lines of resolve. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
+# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve --entry: the entry read from a .bib (a doi or DOI field, a space before the @, the first of two entries with one key), the input it resolves by (its doi, else its arXiv ID, else its title with its year), the verdict line that confirms the entry by the first record whose title and year agree and prints NOT_CONFIRMED for a year or a title that differs, a record with no year and an entry no index holds, its exit status, the one-line error and exit status 2 for a call or an entry it cannot read, and resolve without --entry printing what it printed. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
 set -u
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -11,6 +11,7 @@ fi
 
 output=$(python3 -B -I - "$here" 2>&1 <<'PYTHON'
 import atexit
+import json
 import os
 import shutil
 import subprocess
@@ -522,6 +523,161 @@ check("L6 exit status", status == 1, repr((status, lines)))
 result = run_in_process(lookup.run_quote_check, [record, texts])
 check("L6 two arguments", result == ("error: quote-check takes <citation report> <file.bib> <folder>", []), repr(result))
 
+# E: resolve --entry reads one entry of a .bib, resolves it as resolve resolves its identifier or title, and ends with a verdict line.
+def crossref_work(doi, title, year=None):
+    message = {"DOI": doi, "title": [title], "author": [{"given": "A", "family": "Author"}], "container-title": ["A Journal"]}
+    if year:
+        message["issued"] = {"date-parts": [[year]]}
+    return stub_reply(200, json.dumps({"status": "ok", "message": message}))
+
+
+def openalex_work(doi, title, year):
+    work = {"id": "https://openalex.org/W1", "title": title, "doi": "https://doi.org/" + doi, "publication_year": year, "authorships": [], "primary_location": {"source": {"display_name": "A Journal"}}, "open_access": {"oa_url": None}}
+    return stub_reply(200, json.dumps(work))
+
+
+def crossref_hits(*hits):
+    items = [{"DOI": "10.1000/h%d" % number, "title": [title], "issued": {"date-parts": [[year]]}} for number, (title, year) in enumerate(hits)]
+    return stub_reply(200, json.dumps({"message": {"items": items}}))
+
+
+def openalex_hits(*hits):
+    results = [{"id": "https://openalex.org/W%d" % (number + 1), "title": title, "publication_year": year} for number, (title, year) in enumerate(hits)]
+    return stub_reply(200, json.dumps({"results": results}))
+
+
+EVERYTHING_ELSE = ("", NOT_FOUND)
+
+
+def entry_bib(key="k", title="Estimating mutual information", year="2004", **fields):
+    lines = ["@article{%s," % key, "  title = {%s}," % title, "  year = {%s}," % year] if year is not None else ["@article{%s," % key, "  title = {%s}," % title]
+    lines += ["  %s = {%s}," % pair for pair in fields.items()]
+    return "\n".join(lines) + "\n}\n"
+
+
+def entry_run(bib_text, key, replies):
+    path = put("e/refs.bib", bib_text)
+    client = RecordingClient(replies + [EVERYTHING_ELSE])
+    lines = []
+    try:
+        status = lookup.run_resolve(client, ["--entry", path, key], lines)
+    except lookup.UsageError as error:
+        status = "error: " + str(error)
+    return status, lines, client.requested
+
+
+def plain_resolve(replies, argument, *options):
+    lines = []
+    lookup.run_resolve(RecordingClient(replies + [EVERYTHING_ELSE]), [argument, *options], lines)
+    return lines
+
+
+# E1: the verdict of a DOI whose Crossref record agrees, after the lines resolve prints for the DOI.
+kolda_replies = [("api.crossref.org", crossref_work("10.1137/07070111x", "Tensor Decompositions and Applications", 2009))]
+result = entry_run(entry_bib("Kolda_2009", "Tensor Decompositions and Applications", "2009", doi="10.1137/07070111x"), "Kolda_2009", kolda_replies)
+check("E1 the verdict line", result[0] == 0 and result[1][-1:] == ["Kolda_2009: CONFIRMED against Crossref, ratio 1.00, year 2009"], repr(result))
+check("E1 the lines resolve prints come first", result[1][:-1] == plain_resolve(kolda_replies, "10.1137/07070111x") and len(result[1]) == 5, repr(result))
+
+# E2: Crossref's record lacks the subtitle (ratio below 0.70) and OpenAlex's record has it, so the first record that agrees is OpenAlex's.
+long_title = "Wasserstein barycentric coordinates: histogram regression using optimal transport"
+bonneel_replies = [("api.crossref.org", crossref_work("10.1145/2897824.2925918", "Wasserstein barycentric coordinates", 2016)), ("api.openalex.org", openalex_work("10.1145/2897824.2925918", long_title, 2016))]
+result = entry_run(entry_bib("Bonneel_2016", long_title, "2016", doi="10.1145/2897824.2925918"), "Bonneel_2016", bonneel_replies)
+check("E2 the first record that agrees", result[0] == 0 and result[1][-1] == "Bonneel_2016: CONFIRMED against OpenAlex, ratio 1.00, year 2016", repr(result))
+
+# E3: the title agrees in every record and the year does not.
+result = entry_run(entry_bib("Entry_2018", "Estimating mutual information", "2018", doi="10.1103/PhysRevE.69.066138"), "Entry_2018", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2019)), ("api.openalex.org", openalex_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2019))])
+check("E3 the year differs", result[0] == 1 and result[1][-1] == "Entry_2018: NOT_CONFIRMED against Crossref, ratio 1.00, year 2019, entry year 2018", repr(result))
+
+# E4: every record's title is below 0.70, and the verdict gives the first record's ratio.
+other = "A survey of protein folding kinetics"
+result = entry_run(entry_bib("k", "Estimating mutual information", "2004", doi="10.1103/PhysRevE.69.066138"), "k", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", other, 2004)), ("api.openalex.org", openalex_work("10.1103/PhysRevE.69.066138", "Another unrelated title", 2004))])
+check("E4 the titles differ", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED against Crossref, ratio 0.34, year 2004, entry year 2004", repr(result))
+
+# E5: an entry with an eprint and archivePrefix arXiv is resolved by its arXiv ID, never by its title.
+arxiv_title = "A study of the estimation of mutual information"
+result = entry_run(entry_bib("a", arxiv_title, "2025", eprint="2511.18945", archivePrefix="arXiv"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025)), ("export.arxiv.org", stub_reply(200, ARXIV_FEED))])
+check("E5 the verdict", result[0] == 0 and result[1][-1] == "a: CONFIRMED against OpenAlex, ratio 1.00, year 2025", repr(result))
+check("E5 asked by the arXiv ID", any(url.startswith("https://export.arxiv.org/api/query?id_list=2511.18945") for url in result[2]) and not any("query.bibliographic" in url or "search=" in url for url in result[2]), repr(result[2]))
+
+# E6: an entry with neither is resolved by its title, with its year given.
+title = "Neural estimation of mutual information"
+near = "Neural estimation of mutual information bounds"
+result = entry_run(entry_bib("t", title, "2019"), "t", [("api.crossref.org", crossref_hits((near, 2018))), ("api.openalex.org", openalex_hits((title, 2019)))])
+check("E6 a later index agrees", result[0] == 0 and result[1][-1] == "t: CONFIRMED against OpenAlex, ratio 1.00, year 2019", repr(result))
+result = entry_run(entry_bib("t", title, "2019"), "t", [("api.crossref.org", crossref_hits((near, 2018))), ("api.openalex.org", openalex_hits((title, 2020)))])
+check("E6 no index agrees", result[0] == 1 and result[1][-1] == "t: NOT_CONFIRMED against Crossref, ratio 0.92, year 2018, entry year 2019", repr(result))
+result = entry_run(entry_bib("t", title, "2019"), "t", [("api.crossref.org", crossref_hits((title, 2018), (near, 2019)))])
+check("E6 the candidate of the entry's year is preferred", result[0] == 0 and result[1][-1] == "t: CONFIRMED against Crossref, ratio 0.92, year 2019", repr(result))
+
+# E7: the field written DOI and a space before @ are read.
+spaced = " @article{k,\n  title={Estimating mutual information},\n  DOI={10.1103/PhysRevE.69.066138},\n  year={2004}}\n"
+result = entry_run(spaced, "k", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", "Estimating mutual information", 2004))])
+check("E7 the DOI field in capitals", result[0] == 0 and result[1][-1] == "k: CONFIRMED against Crossref, ratio 1.00, year 2004" and result[2][0] == "https://api.crossref.org/works/10.1103/PhysRevE.69.066138", repr(result))
+
+# E8: a doi field that is no DOI counts as absent, so the arXiv ID is used.
+result = entry_run(entry_bib("a", arxiv_title, "2025", doi="not available", eprint="2511.18945", archivePrefix="arXiv"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025))])
+check("E8 the arXiv ID is used", result[0] == 0 and result[1][-1] == "a: CONFIRMED against OpenAlex, ratio 1.00, year 2025" and "https://api.crossref.org/works/10.48550/arXiv.2511.18945" in result[2], repr(result))
+result = entry_run(entry_bib("a", arxiv_title, "2025", url="https://arxiv.org/abs/2511.18945v2"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025))])
+check("E8 the arXiv ID of the url", result[0] == 0 and "https://api.crossref.org/works/10.48550/arXiv.2511.18945" in result[2] and not any("query.bibliographic" in url for url in result[2]), repr(result))
+result = entry_run(entry_bib("a", arxiv_title, "2025", doi="10.48550/arXiv.2511.18945"), "a", [("api.crossref.org", NOT_FOUND), ("api.openalex.org", openalex_work("10.48550/arXiv.2511.18945", arxiv_title, 2025))])
+check("E8 the arXiv DOI", result[0] == 0 and result[1][-1] == "a: CONFIRMED against OpenAlex, ratio 1.00, year 2025", repr(result))
+
+# E9: a record with no year is printed as year none and is never a confirmation.
+result = entry_run(entry_bib("k", "Estimating mutual information", "2004", doi="10.1103/PhysRevE.69.066138"), "k", [("api.crossref.org", crossref_work("10.1103/PhysRevE.69.066138", "Estimating mutual information"))])
+check("E9 a record with no year", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED against Crossref, ratio 1.00, year none, entry year 2004", repr(result))
+
+# E10: no index prints a record.
+result = entry_run(entry_bib("k", "Estimating mutual information", "2004", doi="10.1103/PhysRevE.69.066138"), "k", [])
+check("E10 every index answers not found", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED, no record", repr(result))
+result = entry_run(entry_bib("k", "Estimating mutual information", "2004"), "k", [("api.crossref.org", RATE_LIMITED), ("api.openalex.org", OUTAGE), ("api.semanticscholar.org", RATE_LIMITED), ("export.arxiv.org", OUTAGE)])
+check("E10 every index left out", result[0] == 1 and result[1][-1] == "k: NOT_CONFIRMED, no record" and result[1][0] == "Crossref: left out, HTTP 429 after 3 retries", repr(result))
+
+# E11: a call or an entry that cannot be read is one error line and exit status 2, before any request.
+def entry_error(arguments, bib_text="@article{k, title={T}, year={2004}, doi={10.1000/x}}\n"):
+    path = put("e/refs.bib", bib_text)
+    return command(["resolve"] + [path if argument == "BIB" else argument for argument in arguments])
+
+
+def expected_error(message):
+    return (2, [], ["error: " + message])
+
+
+check("E11 a key the .bib lacks", entry_error(["--entry", "BIB", "nokey"]) == expected_error("nokey: the .bib has no entry with this key"), repr(entry_error(["--entry", "BIB", "nokey"])))
+check("E11 a key that differs in case", entry_error(["--entry", "BIB", "K"]) == expected_error("K: the .bib has no entry with this key"), repr(entry_error(["--entry", "BIB", "K"])))
+check("E11 a key with a line break", entry_error(["--entry", "BIB", "k\nx"]) == expected_error("the key holds a line break"), repr(entry_error(["--entry", "BIB", "k\nx"])))
+result = command(["resolve", "--entry", os.path.join(work, "e", "absent.bib"), "k"])
+check("E11 a .bib that does not exist", result == (2, [], ["error: %s: No such file or directory" % os.path.join(work, "e", "absent.bib")]), repr(result))
+with open(os.path.join(work, "e", "latin.bib"), "wb") as handle:
+    handle.write(b"@article{k, title={T\xe9}, year={2004}}\n")
+result = command(["resolve", "--entry", os.path.join(work, "e", "latin.bib"), "k"])
+check("E11 a .bib that is not UTF-8", result == (2, [], ["error: %s: not valid UTF-8" % os.path.join(work, "e", "latin.bib")]), repr(result))
+result = entry_error(["--entry", "BIB", "k"], "@article{k, year={2004}}\n")
+check("E11 an entry with no title", result == expected_error("k: the entry has no title"), repr(result))
+result = entry_error(["--entry", "BIB", "k"], "@article{k, title={T}}\n")
+check("E11 an entry with no year", result == expected_error("k: the entry has no year"), repr(result))
+result = entry_error(["--entry", "BIB", "k"], "@article{k, title={T}, year={2009a}}\n")
+check("E11 a year that is not four digits", result == expected_error("k: the year of the entry is not four digits"), repr(result))
+result = entry_error(["--entry", "BIB", "k", "--year", "2004"])
+check("E11 --entry with --year", result == expected_error("--entry cannot be used with --year"), repr(result))
+result = entry_error(["--entry", "BIB"])
+check("E11 --entry with one value", result == expected_error("--entry takes <file.bib> <key>"), repr(result))
+result = entry_error(["--entry", "BIB", "k", "extra"])
+check("E11 --entry with another positional argument", result == expected_error("--entry takes <file.bib> <key>"), repr(result))
+result = entry_error(["10.1000/x", "--entry", "BIB", "k"])
+check("E11 --entry after a positional argument", result == expected_error("--entry takes <file.bib> <key>"), repr(result))
+
+# E12: resolve without --entry prints what it printed before.
+title_replies = [("api.crossref.org", crossref_hits((near, 2018), (title, 2019))), ("api.openalex.org", openalex_hits((title, 2019)))]
+lines = plain_resolve(title_replies, title, "--year", "2019")
+check("E12 resolve of a title", len(lines) == 4 and lines[0].startswith("Crossref: ratio 1.00: Neural estimation of mutual information |") and lines[1].startswith("OpenAlex: ratio 1.00: Neural estimation of mutual information |") and lines[2:] == ["Semantic Scholar: not found", "arXiv: not found"], repr(lines))
+check("E12 resolve of a DOI has no verdict line", not any("CONFIRMED" in line for line in plain_resolve(kolda_replies, "10.1137/07070111x")))
+
+# E13: of two entries with one key, the first is resolved.
+duplicate = "@article{dup, title={First title}, year={2001}, doi={10.1000/first}}\n@article{dup, title={Second title}, year={2002}, doi={10.1000/second}}\n"
+result = entry_run(duplicate, "dup", [("api.crossref.org/works/10.1000/first", crossref_work("10.1000/first", "First title", 2001)), ("api.crossref.org/works/10.1000/second", crossref_work("10.1000/second", "Second title", 2002))])
+check("E13 the first entry", result[0] == 0 and result[1][-1] == "dup: CONFIRMED against Crossref, ratio 1.00, year 2001" and not any("second" in url for url in result[2]), repr(result))
+
+
 for failure in failures:
     print(failure)
 sys.exit(1 if failures else 0)
@@ -535,4 +691,4 @@ if [ "$status" -ne 0 ]; then
     exit 1
 fi
 
-echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, and prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice"
+echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, and resolves an entry of a .bib by its doi, its arXiv ID or its title and prints a verdict that CONFIRMED or NOT_CONFIRMED the entry with exit status 0 or 1, refuses a call or an entry it cannot read with exit status 2, and leaves the output of resolve without --entry as it was"

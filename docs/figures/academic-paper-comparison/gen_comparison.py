@@ -131,7 +131,7 @@ def ap_full_simple() -> gf.Graph:
     edges = (
         E("I", "L"),
         E("L", "LR"),
-        E("L", "L", "search passes, up to 4", "back"),
+        E("L", "L", "search rounds: end at any 3 of 5 conditions, or after 4 rounds when none holds", "back"),
         E("LR", "A"),
         E("A", "OA"),
         E("OA", "A", "restructuring, no cap", "back"),
@@ -182,7 +182,7 @@ def ap_lit_review_simple() -> gf.Graph:
     edges = (
         E("I", "L"),
         E("L", "LR"),
-        E("L", "L", "search passes, up to 4", "back"),
+        E("L", "L", "search rounds: end at any 3 of 5 conditions, or after 4 rounds when none holds", "back"),
     )
     return _g(nodes, edges)
 
@@ -198,7 +198,7 @@ def ap_outline_only_simple() -> gf.Graph:
     edges = (
         E("I", "L"),
         E("L", "LR"),
-        E("L", "L", "search passes, up to 4", "back"),
+        E("L", "L", "search rounds: end at any 3 of 5 conditions, or after 4 rounds when none holds", "back"),
         E("LR", "A"),
         E("A", "OA"),
         E("OA", "A", "restructuring, no cap", "back"),
@@ -391,6 +391,12 @@ def paper_full_detailed() -> gf.Graph:
             "list over 50 entries shows its first 20 and last 5 [J, AV16]",
             "ruled",
         ),
+        N(
+            "LC",
+            "Each entry confirmed against an index with resolve --entry: corrected once, "
+            "else left out of refs.bib and named [BI]",
+            "ruled",
+        ),
         N("SR", "You review the sources: add or remove, optional [J]", "stop"),
         N(
             "PL",
@@ -398,6 +404,12 @@ def paper_full_detailed() -> gf.Graph:
             "architect and argument builder [D43]; the structure checked against the "
             "question and the materials [AV18]",
             "ruled",
+        ),
+        N(
+            "SQ",
+            "A research question the materials do not answer: the part, the files and "
+            "lines, what would answer it, three options [BI]",
+            "stop",
         ),
         N(
             "LG",
@@ -415,9 +427,9 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "DW",
-            "Draft writer: first draft, abstract, keywords, six statements, figure places "
-            "[S], the disclosure names the model [N], claims list, cover letter [AV7, "
-            "AV8], no self-scores [D43, D45], prose standard [AJ, AW]",
+            "Draft writer: first draft, abstract in the venue's form, six statements, "
+            "figure places [S], model named [N], claims list and results [AV7, BH], "
+            "cover letter [AV8], no self-scores [D43, D45], prose standard [AJ, AW]",
             "ruled",
         ),
         N(
@@ -461,7 +473,18 @@ def paper_full_detailed() -> gf.Graph:
             "stop",
         ),
         N("W1", "Draft writer: round 1 issues, a patch [C]", "ruled"),
-        N("R2", "Peer reviewer, round 2 [D45]", "ruled"),
+        N(
+            "IC",
+            "Citation compliance agent, fresh: the cited sentences of the patch only, "
+            "citation-report-<nn>.md [BI]",
+            "ruled",
+        ),
+        N(
+            "R2",
+            "Peer reviewer, round 2: also checks each number against its result file and "
+            "row, and each description of the data handling [D45, BH]",
+            "ruled",
+        ),
         N("RC", "Script: reference checks", "script"),
         N("RF", "Draft writer: reference-fix, once [K]", "ruled"),
         N(
@@ -488,7 +511,20 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "WA",
-            "Draft writer: applies the findings, then the compile again [D46]",
+            "Draft writer: applies the findings [D46]",
+            "ruled",
+        ),
+        N(
+            "IC2",
+            "Citation compliance agent, fresh: the cited sentences of the findings pass "
+            "[BI]",
+            "ruled",
+        ),
+        N(
+            "RG",
+            "Peer reviewer, fresh: reads the findings pass, its numbers and its "
+            "descriptions of the data; an item goes to the writer once, then the compile "
+            "[BI]",
             "ruled",
         ),
         N(
@@ -515,9 +551,13 @@ def paper_full_detailed() -> gf.Graph:
         E("I", "Q"),
         E("Q", "LS", "no, the default"),
         E("Q", "PL", "yes"),
-        E("LS", "SR"),
+        E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
+        E("LS", "LC"),
+        E("LC", "SR"),
         E("SR", "PL"),
         E("PL", "LG", "a section has no source [AD1]"),
+        E("PL", "SQ", "a part of the question has no result [BI]"),
+        E("SQ", "PL", "a fresh start with your answer", "back"),
         E("PL", "OA"),
         E("LG", "PG"),
         E("PG", "OA"),
@@ -552,7 +592,8 @@ def paper_full_detailed() -> gf.Graph:
         E("NP", "R1", "lower the venue: a new review, no cap [AV4]", "back"),
         E("R1", "NP", "Reject"),
         E("R1", "W1", "Minor or Major"),
-        E("W1", "R2", "round 2, the last", "dotted"),
+        E("W1", "IC"),
+        E("IC", "R2", "round 2, the last", "dotted"),
         E("R2", "NP", "a Critical issue unresolved"),
         E("R2", "RC", "otherwise: the rest become limitations [U]"),
         E("R1", "RC", "Accept"),
@@ -572,7 +613,9 @@ def paper_full_detailed() -> gf.Graph:
             "your one-line reply, up to 3 answers [R], or an autonomous pass [D46]",
         ),
         E("FM", "AC", "a double-blind venue [AV9]"),
-        E("WA", "AC"),
+        E("WA", "IC2"),
+        E("IC2", "RG"),
+        E("RG", "AC"),
     )
     return _g(nodes, edges, floating, WIDE_WIDTH)
 
@@ -620,8 +663,19 @@ def paper_revision_detailed() -> gf.Graph:
             "its issues as items.md [AA]",
             "ruled",
         ),
+        N(
+            "SQ",
+            "A research question the materials do not answer: the part, the files and "
+            "lines, what would answer it, three options [BI]",
+            "stop",
+        ),
         N("IA", "You approve the items: drop or add, no patch before [AA]", "stop"),
-        N("LS", "Literature strategist: a .bib patch [Stops of paper]", "ruled"),
+        N(
+            "LS",
+            "Literature strategist: a .bib patch, each entry confirmed against an index "
+            "[Stops of paper, BI]",
+            "ruled",
+        ),
         N(
             "VZ",
             "Visualization, within the permission; the script files it changes outside the "
@@ -631,7 +685,8 @@ def paper_revision_detailed() -> gf.Graph:
         N("AN", "Script: anchorize the files", "script"),
         N(
             "DW",
-            "Draft writer: a patch per item, a revision log with its statuses [AD6]",
+            "Draft writer: a patch per item, a revision log with its statuses; each "
+            "number it writes has its result file and row in the claims list [AD6, BH]",
             "ruled",
         ),
         N("AP", "Script: apply the patch", "script"),
@@ -660,10 +715,18 @@ def paper_revision_detailed() -> gf.Graph:
         N("CA2", "Citation compliance agent again, fresh, once [AF]", "ruled"),
         N(
             "RD1",
-            "Peer reviewer: reading 1, reads the citation report [D49, AF]",
+            "Peer reviewer: reading 1, reads the citation report, checks each number "
+            "against its result file and row, and each description of the data handling "
+            "[D49, AF, BH]",
             "ruled",
         ),
         N("W2", "Draft writer: the one pass [D49]", "ruled"),
+        N(
+            "IC",
+            "Citation compliance agent, fresh: the cited sentences of the patch only, "
+            "citation-report-<nn>.md [BI]",
+            "ruled",
+        ),
         N(
             "SC2",
             "Script: reference checks, failures are items of reading 2 [K]",
@@ -695,7 +758,20 @@ def paper_revision_detailed() -> gf.Graph:
         ),
         N(
             "WA",
-            "Draft writer: applies the findings, then the compile again [D46]",
+            "Draft writer: applies the findings [D46]",
+            "ruled",
+        ),
+        N(
+            "IC2",
+            "Citation compliance agent, fresh: the cited sentences of the findings pass "
+            "[BI]",
+            "ruled",
+        ),
+        N(
+            "RG",
+            "Peer reviewer, fresh: reads the findings pass, its numbers and its "
+            "descriptions of the data; an item goes to the writer once, then the compile "
+            "[BI]",
             "ruled",
         ),
         N(
@@ -718,6 +794,12 @@ def paper_revision_detailed() -> gf.Graph:
         E("I", "RV", "no instructions [AA]"),
         E("RV", "IA"),
         E("IA", "AN"),
+        E("IT", "SQ", "an item names a part with no result [BI]"),
+        E("RV", "SQ", "an issue names a part with no result [BI]"),
+        E("SQ", "IA", "your answer, no instructions [BI]"),
+        E("SQ", "LS", "your answer, instructions given"),
+        E("SQ", "VZ", "your answer, instructions given"),
+        E("SQ", "AN", "your answer, instructions given"),
         E("IA", "LS", "an item needs a new reference, intake allows it"),
         E("IA", "VZ", "an item needs a figure change, intake allows it"),
         E("IT", "LS", "an item needs a new reference, intake allows it"),
@@ -744,7 +826,8 @@ def paper_revision_detailed() -> gf.Graph:
         E("CA2", "RD1"),
         E("SC", "RD1"),
         E("RD1", "W2", "items not resolved"),
-        E("W2", "SC2"),
+        E("W2", "IC"),
+        E("IC", "SC2"),
         E("SC2", "RD2", "reading 2, the last", "dotted"),
         E("RD1", "CP", "all resolved"),
         E("RD2", "CP", "items left become limitations"),
@@ -763,7 +846,9 @@ def paper_revision_detailed() -> gf.Graph:
             "your one-line reply, up to 3 answers [R], or an autonomous pass [D46]",
         ),
         E("FM", "AC", "a double-blind venue [AV9]"),
-        E("WA", "AC"),
+        E("WA", "IC2"),
+        E("IC2", "RG"),
+        E("RG", "AC"),
     )
     return _g(nodes, edges, floating, WIDE_WIDTH)
 
@@ -794,6 +879,13 @@ def paper_lit_review_detailed() -> gf.Graph:
             "without a research question [D48, D2, AD11, AV15, AV16]",
             "ruled",
         ),
+        N(
+            "LC",
+            "An unread candidate looked up again before it is dropped; each entry "
+            "confirmed against an index with resolve --entry: corrected once, else left "
+            "out of refs.bib and named [BI]",
+            "ruled",
+        ),
         N("SR", "You review the sources: add or remove, optional [J]", "stop"),
         N("AP", "Script: apply the .bib patch [D48]", "script"),
         N("RC", "Script: reference checks [D48]", "script"),
@@ -822,7 +914,9 @@ def paper_lit_review_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "LS"),
-        E("LS", "SR"),
+        E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
+        E("LS", "LC"),
+        E("LC", "SR"),
         E("SR", "X", "no .tex"),
         E("SR", "AP", ".tex given"),
         E("AP", "RC"),
@@ -870,6 +964,12 @@ def paper_outline_only_detailed() -> gf.Graph:
             "[J, AV15]",
             "ruled",
         ),
+        N(
+            "LC",
+            "Each entry confirmed against an index with resolve --entry: corrected once, "
+            "else left out of refs.bib and named [BI]",
+            "ruled",
+        ),
         N("SR", "You review the sources: add or remove, optional [J]", "stop"),
         N(
             "PL",
@@ -903,7 +1003,9 @@ def paper_outline_only_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "LS"),
-        E("LS", "SR"),
+        E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
+        E("LS", "LC"),
+        E("LC", "SR"),
         E("SR", "PL"),
         E("PL", "LG", "a section has no source [AD1]"),
         E("PL", "OA"),

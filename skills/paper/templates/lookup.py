@@ -4,6 +4,7 @@ r"""Make every reference lookup of the paper skill, on the Python standard libra
 Usage:
 
     lookup.py resolve <DOI | arXiv ID | title> [--year <year>]
+    lookup.py resolve --entry <file.bib> <key>
     lookup.py search <query> [--limit <n>]
     lookup.py refs <DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID>
     lookup.py cited-by <DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID>
@@ -20,6 +21,7 @@ Identifiers. A DOI may be written as a bare DOI (10.xxxx/...), as https://doi.or
 Commands:
 
 - resolve queries Crossref, OpenAlex, Semantic Scholar and arXiv and prints one line per index. For a title, each index's search gives candidates; a candidate matches at a title ratio of 0.70 or more, and of the matching candidates those whose year equals --year are preferred when there are any, and the one with the highest ratio is taken. For a DOI or an arXiv ID, the first record found, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, is the reference, each other record's title is compared with it, and a record below 0.70 is printed with DOI_MISMATCH. For a title, arXiv is searched for the title as a phrase (ti:"<title>"). For a DOI or an arXiv ID, arXiv is queried only when the input holds an arXiv ID. The year is read only for a title. A line reads "<index>: ratio <r>: <title> | <authors> | <year> | <venue> | doi ... | arXiv ... | OpenAlex ... | Semantic Scholar ... | open access ...", or "<index>: not found", or "<index>: left out, <reason>". For a DOI or an arXiv ID, the Crossref record of the work lists in its updated-by field the notices that update the work (Crossref's update types are listed in its schema). Each notice of the type retraction, partial_retraction or expression_of_concern is printed on a line of its own after the Crossref line: "Crossref notice: <type> | <date> | doi <the notice's DOI> | source <publisher or retraction-watch>". The date is the notice's date-time cut to the day, else its date-parts joined with a hyphen. A notice of any other type, such as a correction, is not printed, and a work whose record lists no such notice gets no line. A title prints no notice, since the search record does not carry the field. The notices come from the record resolve already fetches and cost no further request.
+- resolve --entry <file.bib> <key> reads the entry <key> of the .bib, resolves it, and prints the lines resolve prints for the input it resolves by, then one last line that says whether a record confirms the entry. The key is matched exactly, and the first entry of a key that two entries share is read. Field names are read in any case. The input is the entry's doi, else its arXiv ID (its eprint field when its archivePrefix field is arXiv, else the ID of an arxiv.org/abs/ URL in its url field), else its title, resolved with --year set to the entry's year. A doi field that is not a DOI counts as absent, and a doi of the form 10.48550/arXiv.<id> is read as the DOI and as the arXiv ID. The last line is "<key>: CONFIRMED against <index>, ratio <r>, year <year>" for the first record, in the order Crossref, OpenAlex, Semantic Scholar, arXiv, whose title ratio against the entry's title is 0.70 or more and whose year equals the entry's year. For a title, the record of an index is its chosen candidate. When no record agrees it is "<key>: NOT_CONFIRMED against <index>, ratio <r>, year <year>, entry year <year>" with the values of the first record printed, a record with no year written "year none", and "<key>: NOT_CONFIRMED, no record" when no index printed a record. --entry takes no --year, and no other argument.
 - search prints the records of the four indexes' searches, --limit per index (20 by default, at most 100), merged when they share a DOI (compared lowercased), an arXiv ID (version dropped) or a Semantic Scholar ID. A merged record keeps the fields of the record with more fields filled, and the other record fills its empty fields. The query goes to Crossref and Semantic Scholar as given, to OpenAlex with each ? and * replaced by a space (OpenAlex reads them as wildcards and answers HTTP 400), and to arXiv in arXiv's own syntax: each word as all:<word>, a quoted phrase as all:"<phrase>", AND and OR kept, NOT written ANDNOT, parentheses kept, and two terms with no operator between them joined by AND. An operator word is read only in capitals. An operator that follows an operator replaces it, and an operator with no term before it or after it is dropped. When the parentheses do not balance, all of them are dropped, and a pair with no term inside is dropped. Every other character is dropped. Crossref ranks by relevance and reads no operator, and arXiv has no search by a sentence: a sentence is read as its words joined by AND, and arXiv can answer "not found" for it. After the records, an index that answered with no record is printed "<index>: not found" and an index that is left out "<index>: left out, <reason>".
 - refs and cited-by print the references of a work or the works that cite it, from Semantic Scholar and OpenAlex, merged as search merges, at most 100 per index; a line "<index>: first 100, more exist" says when an index holds more. Crossref and arXiv are not asked. An index that answered with no record is printed "<index>: not found", and an index that is left out "<index>: left out, <reason>". An OpenAlex ID (W...) is read by OpenAlex only and a Semantic Scholar ID (40 hexadecimal digits) by Semantic Scholar only, and the other index is printed as left out with that reason.
 - bibtex prints the BibTeX entry https://doi.org/<doi> returns for Accept: application/x-bibtex when its first character other than whitespace is @, as it is given. For an arXiv ID, or a DOI 10.48550/arXiv.<id>, it prints an @misc entry built from the arXiv record, keyed arxiv_<id> with each character other than a letter or digit written _, with eprint and archivePrefix = {arXiv}, each run of whitespace in the title and the authors made one space, and the braces of a value removed when they are not balanced.
@@ -50,7 +52,7 @@ Reads:
 - The arguments of the call.
 - The environment variables S2_API_KEY (sent in the x-api-key header to api.semanticscholar.org), OPENALEX_API_KEY (sent as the api_key parameter to api.openalex.org) and CROSSREF_POLITE_EMAIL (sent as the mailto parameter and in the User-Agent to api.crossref.org). Each is optional, and no value is ever printed.
 - The indexes at https://api.crossref.org, https://api.openalex.org, https://api.semanticscholar.org/graph/v1 and https://export.arxiv.org, https://doi.org, https://arxiv.org, and each URL an index returns for an open-access copy.
-- For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the citation report, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
+- For resolve --entry: the .bib. For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the citation report, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
 - For fetch: the program pdftotext, which it runs on the PDF it wrote.
 - For every request to arXiv: the file ordo-lookup-arxiv in the temporary folder.
 
@@ -60,19 +62,20 @@ Errors, each printed as one line on standard error:
 
 - "usage: lookup.py <command> ..." followed by the command list, for no command or an unknown command.
 - "error: <command> takes <arguments>", for a wrong count of arguments.
+- "error: --entry cannot be used with --year" and "error: --entry takes <file.bib> <key>", for resolve --entry with --year, with fewer or more than the two values, or after another argument.
+- "error: the key holds a line break", "error: <key>: the .bib has no entry with this key", "error: <key>: the entry has no title", "error: <key>: the entry has no year" and "error: <key>: the year of the entry is not four digits", for resolve --entry.
 - "error: unknown option <option>", "error: <command> needs a value after <option>", "error: --year needs a four-digit year" and "error: --limit needs a whole number from 1 to 100".
 - "error: <value> is not a DOI or an arXiv ID", for bibtex and fetch.
 - "error: <value> is not a DOI, an arXiv ID, a Semantic Scholar ID or an OpenAlex ID", for refs and cited-by.
 - "error: the key is empty", for fetch.
 - "error: <folder>: not a folder", for fetch and quote-check.
-- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib or a citation report that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
+- "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib (the one of resolve --entry included) or a citation report that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
 
-Exit status: 0 when the command ran and found nothing to fail; 1 when bibtex got no BibTeX entry, when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), or when fetch found no full text; 2 for a call it cannot read (every error line above).
+Exit status: 0 when the command ran and found nothing to fail; 1 when resolve --entry printed NOT_CONFIRMED, when bibtex got no BibTeX entry, when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), or when fetch found no full text; 2 for a call it cannot read (every error line above).
 """
 
 import difflib
 import fcntl
-import html
 import http.client
 import json
 import os
@@ -121,10 +124,15 @@ OPENALEX_ID = re.compile(r"^W\d+$")
 CITATION = re.compile(r"\[(@[^\[\]]*)\]")
 PASSAGE_LEAD = re.compile(r"^>\s*\[@([^,;\]\s]+),\s*([^\]]+)\]:\s")
 PASSAGE_START = re.compile(r"^>\s*\[@")
+ARXIV_ABSTRACT_URL = re.compile(r"arxiv\.org/abs/([^\s?#]+?)/?(?:[?#]|\s|$)", re.IGNORECASE)
+LINE_BREAK = re.compile("[\\n\\r\\v\\f\\x1c-\\x1e\\x85\\u2028\\u2029]")
 PARSE_ERRORS = (ValueError, KeyError, TypeError, AttributeError, IndexError, ET.ParseError)
 BLOCK_TAGS = frozenset(
-    "address article aside blockquote caption dd div dl dt figcaption figure footer h1 h2 h3 h4 h5 h6 header "
-    "li main nav ol p pre section table td th tr ul".split()
+    (
+        "address", "article", "aside", "blockquote", "caption", "dd", "div", "dl", "dt", "figcaption", "figure",
+        "footer", "h1", "h2", "h3", "h4", "h5", "h6", "header", "li", "main", "nav", "ol", "p", "pre", "section",
+        "table", "td", "th", "tr", "ul",
+    )
 )
 SKIPPED_TAGS = frozenset(("script", "style"))
 QUERY_TOKEN = re.compile(r'"[^"]*"|[()]|\w+')
@@ -504,16 +512,16 @@ def format_record(record):
     return " | ".join(part for part in parts if part)
 
 
-def title_lines(query, year, outcomes):
+def title_lines(outcomes, chosen):
+    """The lines of resolve for a title, given the Outcome of each index and its chosen candidate, a (ratio, Record) pair or None."""
     lines = []
-    for name, outcome in zip(INDEX_NAMES, outcomes):
-        chosen = None if outcome.left_out else choose_candidate(outcome.records, query, year)
+    for name, outcome, pair in zip(INDEX_NAMES, outcomes, chosen):
         if outcome.left_out:
             lines.append(f"{name}: left out, {outcome.left_out}")
-        elif chosen is None:
+        elif pair is None:
             lines.append(f"{name}: not found")
         else:
-            lines.append(f"{name}: ratio {chosen[0]:.2f}: {format_record(chosen[1])}")
+            lines.append(f"{name}: ratio {pair[0]:.2f}: {format_record(pair[1])}")
     return lines
 
 
@@ -1112,19 +1120,81 @@ def read_text_file(path):
         raise UsageError(f"{path}: {error.strerror or error}") from None
 
 
+def resolve_input(client, identifier, year):
+    """(the lines resolve prints, the record each index printed in INDEX_NAMES order or None) for a classified input. The year is 0 when none is given."""
+    if identifier.kind == "title":
+        outcomes = searches(client, identifier.text, TITLE_CANDIDATES, True)
+        chosen = [None if outcome.left_out else choose_candidate(outcome.records, identifier.text, year) for outcome in outcomes]
+        return title_lines(outcomes, chosen), [pair[1] if pair else None for pair in chosen]
+    outcomes = [lookup_crossref(client, identifier), lookup_openalex(client, identifier), lookup_s2(client, identifier), lookup_arxiv(client, identifier)]
+    return identifier_lines(outcomes), [None if outcome.left_out or not outcome.records else outcome.records[0] for outcome in outcomes]
+
+
+def entry_identifier(fields, title):
+    """What a .bib entry resolves by: its DOI, else its arXiv ID, else its title. A doi field that is not a DOI is absent."""
+    identifier = classify(fields.get("doi", ""))
+    if identifier.kind == "doi":
+        return identifier
+    eprint = classify(fields.get("eprint", ""))
+    if eprint.kind == "arxiv" and fields.get("archiveprefix", "").strip().lower() == "arxiv":
+        return eprint
+    abstract_url = ARXIV_ABSTRACT_URL.search(fields.get("url", ""))
+    if abstract_url and is_arxiv_id(abstract_url.group(1)):
+        return classify(abstract_url.group(1))
+    return Identifier("title", title)
+
+
+def entry_verdict(key, title, year, records):
+    """The last line of resolve --entry and whether it confirms the entry: the first record whose title and year agree with the entry's."""
+    printed = [(name, record) for name, record in zip(INDEX_NAMES, records) if record is not None]
+    for name, record in printed:
+        ratio = title_ratio(title, record.title)
+        if ratio >= MATCH_THRESHOLD and record.year == year:
+            return f"{key}: CONFIRMED against {name}, ratio {ratio:.2f}, year {record.year}", True
+    if not printed:
+        return f"{key}: NOT_CONFIRMED, no record", False
+    name, record = printed[0]
+    record_year = record.year if record.year else "none"
+    return f"{key}: NOT_CONFIRMED against {name}, ratio {title_ratio(title, record.title):.2f}, year {record_year}, entry year {year}", False
+
+
+def run_resolve_entry(client, arguments, out):
+    position = arguments.index("--entry")
+    if "--year" in arguments:
+        raise UsageError("--entry cannot be used with --year")
+    if position != 0 or len(arguments) != 3:
+        raise UsageError("--entry takes <file.bib> <key>")
+    bib_path, key = arguments[1], arguments[2]
+    if LINE_BREAK.search(key):
+        raise UsageError("the key holds a line break")
+    fields = parse_bib(read_text_file(bib_path)).get(key)
+    if fields is None:
+        raise UsageError(f"{key}: the .bib has no entry with this key")
+    title = collapse_spaces(fields.get("title", ""))
+    if not title:
+        raise UsageError(f"{key}: the entry has no title")
+    year = fields.get("year", "").strip()
+    if not year:
+        raise UsageError(f"{key}: the entry has no year")
+    if not re.fullmatch(r"\d{4}", year):
+        raise UsageError(f"{key}: the year of the entry is not four digits")
+    identifier = entry_identifier(fields, title)
+    lines, records = resolve_input(client, identifier, int(year))
+    verdict, confirmed = entry_verdict(key, title, int(year), records)
+    out.extend(lines)
+    out.append(verdict)
+    return 0 if confirmed else 1
+
+
 def run_resolve(client, arguments, out):
+    if "--entry" in arguments:
+        return run_resolve_entry(client, arguments, out)
     positional, options = parse_options(arguments, ("--year",), "resolve")
     expect_arguments(positional, 1, "resolve", "<DOI | arXiv ID | title> [--year <year>]")
     year = options.get("--year", "")
     if year and not re.fullmatch(r"\d{4}", year):
         raise UsageError("--year needs a four-digit year")
-    identifier = classify(positional[0])
-    if identifier.kind == "title":
-        outcomes = searches(client, identifier.text, TITLE_CANDIDATES, True)
-        lines = title_lines(identifier.text, int(year) if year else 0, outcomes)
-    else:
-        outcomes = [lookup_crossref(client, identifier), lookup_openalex(client, identifier), lookup_s2(client, identifier), lookup_arxiv(client, identifier)]
-        lines = identifier_lines(outcomes)
+    lines, _ = resolve_input(client, classify(positional[0]), int(year) if year else 0)
     out.extend(lines)
     return 0
 
@@ -1292,7 +1362,7 @@ class FetchRun:
         """The text pdftotext makes of the PDF, written to <stem>.txt; the reason when there is none."""
         text_path = self.base + ".txt"
         try:
-            done = subprocess.run(["pdftotext", pdf_path, text_path], capture_output=True, timeout=120)
+            done = subprocess.run(["pdftotext", pdf_path, text_path], capture_output=True, timeout=120, check=False)
         except FileNotFoundError:
             return "pdftotext not found"
         except subprocess.TimeoutExpired:

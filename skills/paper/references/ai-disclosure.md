@@ -22,7 +22,8 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 | Peer review simulation | A review of the draft by an AI tool before submission. |
 
 - Each category is marked used, not used or uncertain at intake, and the user confirms every uncertain category there.
-- A category still uncertain at drafting is never written as used: the statement carries "[GAP: AI use category <category> not confirmed]" after the place that category would fill, and the report lists it.
+- A category still uncertain at drafting is never written as used. The statement is written without it, and the list after the statement holds one line "[GAP: AI use category <category> not confirmed]" for each such category. The report lists them.
+- No gap stands inside a sentence of the statement. The list of gaps follows the statement, one line for each gap.
 
 ## What the statement says
 
@@ -31,7 +32,7 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 - An answer of no AI with every category not used and none uncertain gives the sentence "No AI was used in preparing this paper."
 - An answer of no AI with a category uncertain and none used: no text is written and the report names the category.
 - An answer of AI used with no category marked used: no text is written and the report asks for the categories.
-- An answer of AI used, or a category marked used, gives the full statement below, in which each used category stands at full strength and each uncertain category carries the gap placeholder.
+- An answer of AI used, or a category marked used, gives the full statement below, in which each used category stands at full strength and each uncertain category stands in the list of gaps after the statement.
 - No answer with a category uncertain and none used: no text is written and the report names the category.
 - No answer with every category not used and none uncertain: no statement is written, since silence is correct when no AI was used.
 - No answer and no category supplied: no text is written and the report says the AI use is not supplied.
@@ -44,7 +45,7 @@ The draft writer reads this page to write the AI disclosure statement of a paper
 - The categories are matched against the venue's requirements. A category the venue requires disclosed but the answer marks uncertain is a mismatch, and the report names it.
 - The statement is one paragraph in the venue's preferred voice (person and tense) with the venue's required phrasing elements, such as "the authors take full responsibility for the content".
 - The paragraph names the tool and the version, never "AI tools" alone, and names the categories marked used.
-- The model identifier is the one the prompt gives, written in full, never one written from memory or from the agent's runtime. Without one the statement carries `[GAP: model identifier]` and the report lists it. When the draft writer is the first agent of the run and the list gave none, the session starts it again with the id `disclosure` and the served model. That start replaces the gap. The gap stays only when the runner gives no served model.
+- The model identifier is the one the prompt gives, written in full, never one written from memory or from the agent's runtime. Without one the statement is written without it, and the list of gaps after the statement holds the line `[GAP: model identifier]`. The report lists it. When the draft writer is the first agent of the run and the list gave none, the session starts it again with the id `disclosure` and the served model. That start writes the identifier into the statement and removes the line. The line stays only when the runner gives no served model.
 - It describes the human oversight: who reviewed what, and at which stages.
 - It states the limits of the tool that matter for the content, such as a possible hallucination.
 - Where the policy asks for the statement in more than one place, such as the Methods and the cover letter, each place gets its own text.
@@ -70,7 +71,7 @@ AI Disclosure: The authors used <tool name> during the preparation of this work.
 A policy anchor is a policy framework that many journals follow, and an author who targets one rather than a single venue gets a statement written to it. The Policy anchor row of `config.md` holds one anchor or "none".
 
 - The track is chosen by the Policy anchor row. A row that names an anchor and a Venue row that names a venue are compatible only when the venue belongs to the Nature Portfolio and the anchor is `nature`. Any other pair is refused: the report names the conflict, and the user drops the venue or the anchor at the stop for the confirmation of the record. Neither the venue nor the anchor takes precedence silently.
-- A statement for an anchor follows "What the statement says" and "The full statement" above for the answer of the AI use row and the categories. The first-match rules, the gap placeholder for an uncertain category, the model identifier and the tool names are the same.
+- A statement for an anchor follows "What the statement says" and "The full statement" above for the answer of the AI use row and the categories. The first-match rules, the list of gaps for an uncertain category, the model identifier and the tool names are the same.
 - The cells below carry the anchor's wording as recorded from its page on the snapshot date of its heading. The user verifies the wording and the placement against the anchor's current page before submission, since policies change.
 - A field an anchor does not address is not written for that anchor. When a category marked used would be served by such a field, the report says the anchor leaves that detail to the journal's own policy and names the venue track.
 - A statement for an anchor is not built from a quote alone. It states the tool, its version, the tasks and the human oversight under the fields the anchor addresses. It uses an anchor's wording only where a cell below gives it.

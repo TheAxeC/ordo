@@ -1,6 +1,6 @@
 # Citation compliance
 
-The citation compliance agent reads this page to check the citations of the manuscript against its `.bib` and against the sources they cite, and to correct what is wrong. It runs in three modes. In citation-check mode it is the whole run. In full mode it runs after the draft and before the draft review's first round. In revision mode it runs after the patches are applied. In all three it writes `citation-report.md` in the run folder and the patches that carry its corrections, as `references/patch-file.md` gives, and it changes no other file. In full and revision modes the peer reviewer reads the report, so its issues reach the draft review. The draft writer and the peer reviewer read the sections "The `.bib` entries" and "DOI and URL" for the status rules of the reference checks.
+The citation compliance agent reads this page to check the citations of the manuscript against its `.bib` and against the sources they cite, and to correct what is wrong. It runs in three modes. In citation-check mode it is the whole run. In full mode it runs after the draft and before the draft review's first round. In revision mode it runs after the patches are applied. In all three it writes `citation-report.md` in the run folder and the patches that carry its corrections, as `references/patch-file.md` gives, and it changes no other file. In full and revision modes the peer reviewer reads the report, so its issues reach the draft review. In full and revision modes a fresh start also checks the cited sentences of each later patch, as "The incremental check" says. The draft writer and the peer reviewer read the sections "The `.bib` entries" and "DOI and URL" for the status rules of the reference checks.
 
 ## What the agent reads
 
@@ -134,6 +134,9 @@ The agent counts, over the cited entries, how many fail each deterministic check
 - Fields that agree only with different records are a mashup.
 - A book chapter is looked up by its own title and by its book. The authors, the chapter title, the book and the page range must agree with one record, since a real book with an invented chapter is a common pattern.
 - Entries that share authors or have similar titles are each verified as a distinct real publication.
+- An index line `left out, <reason>` confirms nothing, neither a field nor a year nor a venue.
+- The venue and the year of an entry are taken from an index that printed a record.
+- An entry whose year or venue only a left-out index could have given is resolved again by its DOI or its arXiv ID, which reaches Crossref and OpenAlex.
 - Each lookup goes in the trail of the report with its command, the line used, the indexes whose line matched and the fields confirmed. A reference with no trail entry is not verified, and the report is not valid.
 - The trail's "Indexes that matched" column is the list of indexes whose line agreed with the entry. The report's summary counts the references that only arXiv matched (a preprint server) and the references that no index matched. It lists their keys, so the final message can name them.
 
@@ -154,7 +157,7 @@ The three queries are these:
 - A MISMATCH issue gives the correct publication's details from the record. A correction from a record whose title, first author and year agree with the entry is a patch.
 - A MISMATCH without such a record is flagged as unconfirmed.
 - An index printed as left out is asked again once.
-- If the index is still left out and no other record agrees with the entry, the reference cannot be confirmed. The report names the index and the reason as printed, and the reference goes to the stop "A reference that cannot be confirmed".
+- If the index is still left out, the entry is resolved again by its DOI or arXiv ID as "Looking a reference up" says. If no answering index then agrees with the entry, the reference cannot be confirmed. The report names each index that was left out and the reason as printed, and the reference goes to the stop "A reference that cannot be confirmed".
 - A reference with the verdict NOT_FOUND, and a MISMATCH flagged as unconfirmed, go through the same stop. The `DOI checking` row does not change this, since a reference with no record at all cannot be confirmed in either mode.
 - A VERIFIED reference with an exact DOI or arXiv ID that fails `resolve` is a citation whose DOI fails the check. The `DOI checking` row decides what happens:
   - A correction from a record whose title, first author and year agree with the entry is a patch in both modes.
@@ -423,6 +426,21 @@ Calibration measures how often the agent's judgment of a claim is wrong. The ses
 - Every correction is logged in the report, with its location, the error, the correction and the rule it follows.
 - A MINOR issue is corrected or flagged like any other, since a reviewer notices it.
 - The text that a patch puts in the manuscript, and the wording the report suggests, follow the rule of `references/draft-writer.md`, "The text carries no software wording". They name no file, script, path, code identifier or exit code, and use no wording of software operations about the project's own work. An issue the agent sends on to the draft writer says what is wrong with the claim, not the file or the command it was found by.
+
+## The incremental check
+
+In full and revision modes, a patch that adds or changes a cited sentence after the first check has run gets a check of its own. A cited sentence is a sentence that holds a cite command.
+
+- The patches that get this check are revision's second writer pass, the writer passes of the draft review, the reference fix, the compile fix and the findings pass.
+- The agent is a fresh start for one patch. It reads `config.md`, the `.bib`, `intended-claims.md`, the patch file `patches/<nn>-<file name>.patch.json` with the main `.tex` and its inputs as the patch left them, the outputs of `lookup.py cite-keys` and `check-urls`, and the path of the temporary folder.
+- It finds the cited sentences in the new text of the patch's operations. A sentence that an operation changed and that holds a cite command is one of them.
+- It checks those sentences and the entries they cite under every section of this page, with the same lookups, the same reading of the source's full text and the same verdicts as the first check. The temporary folder holds the fetched texts, and the session makes a new one when the earlier one is gone.
+- It judges no sentence the patch did not write.
+- It writes `citation-report-<nn>.md` in the run folder, where `<nn>` is the number of the patch. The file has the form of `citation-report.md`, and its Summary, Claims and Passage lines cover those sentences only.
+- Before it reports, it runs `lookup.py quote-check '<citation-report-<nn>.md>' '<the .bib>' '<temporary folder>'`, as "Reading the source" says.
+- Its patches carry ids `C<m>`, with `<m>` the number of the issue in its own report, and the session applies them as it applies the patches of the first check.
+- A claim that its source does not hold, or a source it cannot read, is the stop "A claim the run cannot support", as in the first check.
+- The peer reviewer's next reading takes the report with the patch's changes.
 
 ## The file
 

@@ -26,7 +26,7 @@ A missing input is handled as follows:
 | A chain with too little evidence | Writes with hedging language and marks `[GAP: evidence needs strengthening]`. |
 | The key results of a source | Writes no claim from that source and marks `[GAP: key results of <key>]`. |
 | The citation style | Uses the style `config.md` states. If it states none, the agent writes `\bibliographystyle{plain}` and the report says so. |
-| The model identifier | Writes `[GAP: model identifier]` in the AI disclosure and lists it in the report. |
+| The model identifier | Lists `[GAP: model identifier]` among the gaps after the AI disclosure and in the report. |
 | Claims not to make | Reads the row as "none". |
 | Internal only | Reads the row as "no". |
 
@@ -40,6 +40,7 @@ The draft is built from the project's materials and not from the agent's memory.
 - A topic the materials do not cover is written as `[GAP: <what is missing>]` at its place and listed in the report. It is never filled from memory.
 - A gap is filled from the agent's knowledge only where `config.md` grants permission for it, and the filled passage then carries the tag `[LLM-SUPPLEMENTED]` and is listed in the report.
 - A number the manuscript reports as its own result is traced to a saved run or config of the project.
+- A reason, motive or criterion for a choice the study made, such as why a model, a dataset or a setting was chosen, is written only when a material states it. The report names the file and the line that state it. Without one the sentence states the choice and `[GAP: the reason for <choice>]` follows it. The agent writes no "we chose X because ..." from the choice alone.
 - In revision mode the agent computes a number from the project's saved results only when the row Numbers from saved results of `config.md` allows it, and only from the files that row names. It computes the number with a command it runs, and the operation's rationale names the file, the column and the operation.
 - The rule restricts factual content: claims, citations, data and the description of methods. The agent uses its knowledge of academic conventions, argument and the discipline's norms freely.
 
@@ -80,14 +81,19 @@ Before the first section the agent checks that it holds `config.md`, the literat
 Before the first section the agent writes `intended-claims.md` in the run folder, the list of the claims the draft intends to make, and writes no score of its own draft.
 
 - The list has one line for each claim: `<n>. <the claim as one sentence> | evidence: <empirical, theoretical, definitional or normative> | sources: <the keys of the entries, or "the project's results">`.
-- The agent writes the list once, before any text of the draft, from the outline, the argument blueprint and the sources. It does not change the list afterwards, and a claim the draft adds later is not added to it. The citation compliance agent can then report the claim as one that is not on the list.
+- A line that states a number ends with the field `| result: <file path relative to the project folder>, <row, by the file's key column or its line number>, <column>`.
+  - A number computed from several rows writes `| result: <file>, <rows>, <column>, computed: <operation>`.
+  - A number that comes from no result file writes `| result: none, <where it comes from>`.
+  - The field names the file and the cell the agent read the number from, so that the peer reviewer opens the same cell.
+- The agent writes the list before any text of the draft, from the outline, the argument blueprint and the sources. It does not change a line afterwards, and a claim that states no number and that the draft adds later is not added to it. The citation compliance agent can then report the claim as one that is not on the list.
+- A patch that writes a number the list does not hold appends a line for it, in the form above. The agent appends it to `intended-claims.md` in the run folder, which is a record of the run and no manuscript file, so that the list holds every number the run wrote.
 - The list holds the claims the draft intends to make and no rule the paper must not break. Those stay in the row Claims not to make.
-- In a revision run the agent writes the list before its first patch, for the claims that the text it adds or changes will make, from the items. It writes no list when no item adds or changes a claim.
-- Only the first start of a run that writes new text writes the list. A first draft that an expanded revision writes again replaces the list.
+- In a revision run the agent writes the list before its first patch, for the claims that the text it adds or changes will make, from the items. It writes no list when no item adds or changes a claim. A later patch of that run that writes a number starts the list with the line of that number.
+- Only the first start of a run that writes new text writes the list. Later starts append the lines of the numbers they write. A first draft that an expanded revision writes again replaces the list.
 
 ### The file
 
-- `main.tex` holds `\documentclass`, the title and the authors, an `abstract` environment with the abstract of "The abstract and the keywords", the keywords line, the sections of the outline as `\section` and `\subsection`, the statements of "The six statements", `\bibliographystyle{<style>}` and `\bibliography{refs}`.
+- `main.tex` holds `\documentclass`, the title and the authors, for the class `elsarticle` the `highlights` environment of "Highlights", an `abstract` environment with the abstract of "The abstract and the keywords", the keywords line, the sections of the outline as `\section` and `\subsection`, the statements of "The six statements", `\bibliographystyle{<style>}` and `\bibliography{refs}`.
 - The style in `\bibliographystyle` is the style of the Venue row or of the venue's template among the Materials in hand.
 - Citations are a plain `\cite{key}`. The key is the entry's key in the `.bib`.
 - A table is a `table` environment, one block of the file.
@@ -141,6 +147,19 @@ A paragraph moves in this order, and each part is one sentence where it can be:
 - A sentence that says one event led to, enabled or superseded another has the date of the first before the date of the second. If the dates are absent from the `.bib` and the report, the agent hedges the sentence or leaves the claim unwritten.
 - A sentence with a present-tense or relative-time word such as "currently", "the latest" or "recently" is anchored to a date or a version: "as of <year>" or "the <year> edition".
 - A claim about a forthcoming version is allowed when the sentence says it is forthcoming.
+
+### Results and the model they come from
+
+- The agent names each reported result by the model, the script and the column it is read from, as the materials define the model. It reads the code that writes the column to learn the model.
+- The text names the result by the model the code fits for the column, in the name the research field gives that model. A result is never reported under the name of another model.
+- One name stands for one model through the text, the abstract and the captions.
+- The report lists each reported result with its model, script and column, and the text carries no script or column name, as "The text carries no software wording" says.
+
+### One ground for every result file
+
+- When the run leaves a result file out on a ground, such as a label source that no file records or a provisional run, it applies the same ground to every result file.
+- A result file that is reported while another is left out on that ground is a break, and the agent leaves out or reports both.
+- The report lists each result file with the ground on which it was reported or left out.
 
 ### Statistics and language
 
@@ -202,6 +221,12 @@ The visualization agent draws the figures and places them as its own patch, so t
 - The sentence that discusses the figure refers to it as `Figure~\ref{fig:<label>}`, since the visualization agent gives the figure the LaTeX label `fig:<label>`.
 - A draft for an outline that plans no figure holds no marker.
 
+### Images from the materials
+
+- The first draft includes no image of the materials by itself. An image of the Materials in hand reaches the manuscript through the visualization agent, which reads it before it places it (`references/visualization.md`, "An image from the materials").
+- The caption of such a figure states what the image shows, as `figures.md` records it.
+- A figure that `figures.md` lists under "Not drawn" because its image contradicts its caption gets no caption that works around the image.
+
 ### The cover letter
 
 When the Venue row names a journal, the agent writes `cover-letter.tex` in the manuscript's folder beside `main.tex`, in the first draft and after the abstract. It is a letter of the `letter` class, and it is not a patch, since it is written once with the draft.
@@ -254,9 +279,10 @@ The agent writes the abstract and the keywords from the finished body of the pap
 | Extended conference abstract | Longer, for a conference submission. It may hold a brief literature review and preliminary results. | 500 to 1,000 words |
 | Dissertation | The five parts below. | Up to 350 words |
 
-- A journal abstract may run to 300 words when the venue states no limit.
 - A limit in the Venue limits row replaces any of the lengths above.
-- The paper type and the venue pick the form. A form that the venue states, structured or not, is the form used.
+- With no stated limit, a journal abstract is at most 300 words. The agent counts its words and the report states the count. The count is `sed -n '/\\begin{abstract}/,/\\end{abstract}/p' '<main.tex>' | texcount -1 -sum -`, or the same extract through `wc -w` less 2 for the two environment lines when `texcount` is missing.
+- The paper type and the venue pick the form. A form that the venue states, structured or not, is the form used. The venue states it in the venue's template among the Materials in hand or in the Venue limits row.
+- With neither, a journal venue in a medical or clinical discipline takes the structured form.
 - The keyword range is 5 to 7 keywords, and the Venue limits row replaces it when it states one.
 
 ### The five parts
@@ -318,6 +344,16 @@ The four-part conference form has these parts:
 3. The key results, in 1 or 2 sentences.
 4. The significance, in 1 sentence.
 
+### Highlights
+
+A manuscript whose class is `elsarticle` takes highlights, and the class table of `references/latex-template.md` says so.
+
+- The highlights are 3 to 5 bullets of at most 85 characters each, counted with spaces.
+- They stand in the `highlights` environment, before the `abstract` environment.
+- Each bullet states one result or contribution of the finished body, in the manuscript's own terms, and holds no citation.
+- A number in a bullet has its line in `intended-claims.md` like any number of the text.
+- The report states the number of bullets and the length of the longest, and the closing checks of full mode name them.
+
 ### The keywords
 
 - The keywords are 5 to 7 terms that are not in the title and complement it.
@@ -357,9 +393,11 @@ The report holds this table, with a value for each row:
 - The agent writes the six statements in the first draft and in disclosure mode, from `references/statements.md` and `references/ai-disclosure.md` and from the rows of `config.md`.
 - In the first draft each statement stands at the place the venue's policy or template gives, or at the policy anchor's place when the Policy anchor row names an anchor. Otherwise it stands as an unnumbered section between the conclusion and the bibliography. `references/statements.md` gives the places of the common publishers.
 - A statement that the manuscript already holds is left unchanged.
+- A gap of a statement stands once, in the list after the statement, and no gap stands inside a sentence (`references/statements.md`, "Facts and gaps").
+- A fact the public record holds is looked up before it is a gap, as the same section gives.
 - In disclosure mode the statements are written as one patch per file, with the id `disclosure` in `roadmap_item_ids`.
 - The AI disclosure names the model by the identifier the session gives in the prompt, which is the identifier the configured alias names at the run's start. The agent never writes one from its own runtime or from memory.
-- When the prompt gives no identifier, the agent writes `[GAP: model identifier]` in the first draft. The session starts the agent again with the id `disclosure` and the model the first start was served, and that start replaces the gap by a patch.
+- When the prompt gives no identifier, the agent lists `[GAP: model identifier]` among the gaps after the AI disclosure in the first draft. The session starts the agent again with the id `disclosure` and the model the first start was served, and that start writes the identifier into the statement and removes the line by a patch.
 - In disclosure mode the agent also writes `disclosure.md` in the run folder. It holds the venue or the policy anchor, the policy source and the access date, the place of the disclosure, and the list of the gaps.
 
 ## Patches
@@ -397,6 +435,15 @@ The agent handles the items of a draft review or of a revision in this order: Cr
 - UNRESOLVABLE: the item cannot be answered with the project's materials, such as a new reference, figure change or computed number that `config.md` does not allow. The Reason column names the missing permission or material.
 - REVIEWER_DISAGREE: the agent declines the item because the evidence does not support it. The Reason column names the evidence, such as a passage of a source, a number of the project's results or a rule of the venue. An item is never declined without it, and the agent accepts no item without weighing it.
 - The Reason column holds "none" for a RESOLVED item.
+
+### An issue about the data handling
+
+An item or an issue that says a sentence describes the handling of the data differently from the result files is answered in the manuscript with what the files hold.
+
+- The sentence states what the files hold, such as a missing-value code and the number of rows that hold it, and the effect of that on the results.
+- Where the materials do not give the effect, the sentence states what the files hold, and a `[GAP: the effect of <what the files hold> on <result>]` follows it.
+- The agent does not delete the description, and does not soften it, without that statement.
+- The text states the files' contents in the field's terms and names no file, column or code identifier, as "The text carries no software wording" says.
 
 ### The figure of an item
 
@@ -438,4 +485,7 @@ The agent's report holds:
 - The list of gaps with the place of each, the passages tagged `[LLM-SUPPLEMENTED]`, and the sections marked "argument inferred".
 - The statements the co-authors must agree on, as `references/statements.md` says.
 - The statements that name a gap, such as a missing approval number, consent or de-identification of a study with human data.
-- For a patch, the revision log and the items it did not address.
+- The abstract's word count, and for the class `elsarticle` the number of highlights and the length of the longest.
+- Each reported result with its model, script and column, and each result file with the ground on which it was reported or left out.
+- Each reason the text gives for a choice of the study, with the file and the line of the material that states it.
+- For a patch, the revision log and the items it did not address, and the lines it appended to `intended-claims.md`.

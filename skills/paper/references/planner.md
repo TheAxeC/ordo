@@ -11,6 +11,7 @@ The planner agent reads this page to choose the structure of the paper, write it
 - The project's own results that the Materials in hand row names.
 - The user's changes to the outline, when the session starts the planner again after the stop "The outline's approval".
 - The sources the literature strategist found for the sections that needed literature, when the session starts the planner again to assign them.
+- The user's answer at the stop "A research question the materials do not answer", when the session starts the planner again after it.
 - The user's answer about the structure, the structure the user chose from `structure-options.md` or insists on, when the session gives them.
 - In plan mode: `chapter-summaries.md` and `insights.md` for the outline, `arguments.md` with the mentor's question and the user's answer for an evaluation, and every file of the run for the chapter plan ("Plan mode").
 - In full mode given a plan run: that run's `chapter-plan.md`, `insights.md`, `dialogue.md`, `outline.md` and `arguments.md` ("Full mode given a plan run").
@@ -355,6 +356,16 @@ The evidence map ends with a table of the figures the outline plans, in this for
 - The draft writer marks the figure's place with the label, and the visualization agent names the figure with it, so the label is the one name both use.
 - An outline that plans no figure says "No figure planned." under the table's heading.
 
+### The parts of the question without a result
+
+In full mode the agent checks each part of the Research question against the project's own results that the Materials in hand row names. A part is a clause of the question that asks for a result, such as a comparison, an effect or a measure.
+
+- A part has no result the run may use when no result file answers it, or when the files that exist answer another setting than the one the part names. An example is a script that the project runs with another data source than the question names.
+- The agent names each such part in `outline.md` under "Parts without a result". It gives the files and lines that show the missing result.
+- It also says what would answer the part as concretely as the materials allow, such as the scripts to run again with the setting the part names and the files they write.
+- The agent does not narrow the question, drop the part or replace it by another one. The session raises the stop "A research question the materials do not answer", and the user decides.
+- Started again with the user's answer, the agent follows it. When the answer is that the question is kept, the outline keeps the part, and the section the part belongs to holds `[GAP: <result>, from <what fills it>]` in the place of each missing result. When the answer is that the question is narrowed, the agent plans for the narrowed question the user gave. When the user supplied results, the agent plans from them.
+
 ### Transitions
 
 Each boundary between adjacent sections states:
@@ -493,7 +504,7 @@ The agent checks each core argument for these signs:
 
 - The overview holds the suggested structures when the paper type was not specified.
 - The first line of `outline.md` and of `arguments.md` is "Internal only" when `config.md` marks the manuscript Internal only, and the files have no such line otherwise.
-- The file ends with the lines "Needs literature:" and "Sources pending:" for the sections and sources of the lists above, or says that there are none.
+- The file ends with the lines "Needs literature:", "Sources pending:" and "Parts without a result:" for the sections, sources and parts of the lists above, or says that there are none.
 
 `structure-options.md` has this form, and the agent writes it only when the session gives the user's answer about the structure:
 
@@ -555,7 +566,7 @@ The agent checks both files against these before it writes them, and corrects wh
 | Evidence | Every source is assigned to a section. |
 | Transitions | Every pair of adjacent sections has a transition. |
 | Headings | They stay within 5 levels. |
-| The research question | Each aspect of the question has a section, and an aspect with none gets a section or a change to an existing one. |
+| The research question | Each aspect of the question has a section, and an aspect with none gets a section or a change to an existing one. A part with no result is listed under "Parts without a result", and the question is kept as the user set it. |
 | Figures | Every planned figure has a unique label, a section and data. |
 | The thesis | It is clear, specific and arguable. |
 | Sub-arguments | At least 3 support the thesis, and every claim has at least one cited evidence source. |
