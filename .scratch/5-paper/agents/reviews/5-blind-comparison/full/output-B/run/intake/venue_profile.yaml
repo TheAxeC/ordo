@@ -1,0 +1,13 @@
+# Venue profile declared by the scholar (intake Step 3), confirmed in run/settings.md:9 and :16.
+# Every limit and the review type were declared "not stated"; a field left null is not declared,
+# so the matching venue-limits check reports NOT-CHECKED(field not declared).
+# Field names follow the Step 3 list in the intake instructions:138;
+# the schema shared/contracts/submission/venue_profile.schema.json is not in this repository.
+declared_by: scholar
+venue: Artificial Intelligence in Medicine
+word_limit: null            # not stated
+abstract_limit: null        # not stated
+keyword_range: null         # not stated
+required_sections: null     # not stated
+reference_ceiling: null     # not stated
+blind_review_model: null    # not stated

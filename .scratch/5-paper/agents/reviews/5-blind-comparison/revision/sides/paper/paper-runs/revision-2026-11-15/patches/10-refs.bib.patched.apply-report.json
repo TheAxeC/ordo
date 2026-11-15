@@ -1,0 +1,47 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "54f9882399353503dc5996d41a877860694315aaba47d1d68ed2f9cc6a8abe42",
+  "round": 1,
+  "n_blocks": 39,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "insert_after",
+      "block_id": "B0001",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V12"
+      ],
+      "rationale": "Adds the PhysioNet record of PTB-XL release 1.0.3 (DOI 10.13026/kfzx-aw45, from lookup.py bibtex, whose url names release 1.0.3) for the sentence that states the release the study used.",
+      "chars_before": 398,
+      "chars_after": 356
+    },
+    {
+      "op_id": "OP002",
+      "kind": "delete_block",
+      "block_id": "B0025",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V15"
+      ],
+      "rationale": "Removes the Hannun_2019 entry, which this run added for the one sentence the main patch removes it from, so that every entry stays cited.",
+      "chars_before": 452,
+      "chars_after": 0
+    }
+  ],
+  "blocks_untouched": 37,
+  "roadmap_items_covered": [
+    "V12",
+    "V15"
+  ],
+  "block_touched_ratio": 0.0513,
+  "preserved_ratio": 0.9487,
+  "char_churn_ratio": 0.0559,
+  "net_growth_chars": -96,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/10-refs.bib.patched",
+  "output_sha256": "50b50ed4516b8ab735d0e6bdd2a965cfcecab97900969cd7d93cfd20834f6539"
+}

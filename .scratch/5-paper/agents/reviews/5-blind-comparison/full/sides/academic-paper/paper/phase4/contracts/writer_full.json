@@ -1,0 +1,32 @@
+{
+  "contract_id": "writer_full.standin.v1",
+  "note": "Stand-in for shared/contracts/writer/full.json, which is not in this repository. Dimension names are copied from agents/draft_writer_agent.md (Phase 4b). Failure-condition definitions are written by the orchestrator and recorded as decision C10 in paper/config.md.",
+  "mode": "academic-paper full",
+  "role": "writer",
+  "acceptance_dimensions": [
+    {"id": "D1", "name": "section_completeness", "mandatory": true, "requirement": "Every section and subsection of the approved outline is present, plus abstract and every mandatory declaration (data availability, ethics, CRediT, conflicts of interest, funding, AI-use disclosure); a [GAP] placeholder counts as present only where the run configuration prescribes it."},
+    {"id": "D2", "name": "citation_density", "mandatory": true, "requirement": "Every factual claim that is not the paper's own result cites at least one source from the verified annotated bibliography; every result number cites its admitted source in the evidence map; no citation outside the verified corpus."},
+    {"id": "D3", "name": "argument_blueprint_fidelity", "mandatory": true, "requirement": "Each claim follows the argument blueprint's claim-evidence-reasoning chain and uses no stronger wording than the blueprint allows; every counter-argument the blueprint lists is handled where the blueprint places it."},
+    {"id": "D4", "name": "total_word_count", "mandatory": false, "requirement": "Body word count within plus or minus 10 percent of the configured target."},
+    {"id": "D5", "name": "per_section_word_count", "mandatory": false, "requirement": "Each section within plus or minus 20 percent of its outline allocation."},
+    {"id": "D6", "name": "acknowledged_limitations", "mandatory": true, "requirement": "A limitations subsection states every limitation the outline and blueprint list, in plain terms."},
+    {"id": "D7", "name": "register_consistency", "mandatory": false, "requirement": "Consistent academic register for the venue; the writing quality checklist of references/writing_quality_check.md is met (no AI-typical filler terms, no em dashes, no throat-clearing openers, varied paragraph length)."}
+  ],
+  "must_not": [
+    "Any number not taken from an admitted gold-label file listed in the evidence map.",
+    "Any number from RESULTS.md, a provisional-label file, an undetermined-label file or an external-dataset file.",
+    "Any claim of statistical significance for a difference between models.",
+    "Any statement of a faithfulness or external-validation outcome while those results are [GAP] placeholders.",
+    "Any framing of a result as a negative or null finding; any mention of dead ends, provisional results, retracted analyses or attic work."
+  ],
+  "failure_conditions": [
+    {"id": "F1", "severity": 1, "fires_when": "Any mandatory dimension (D1, D2, D3, D6) scores block, or any must_not item is violated.", "writer_decision": "revise_in_phase_4b"},
+    {"id": "F4", "severity": 2, "fires_when": "The writer cannot resolve a mandatory-dimension block within its own draft because the inputs do not allow it (for example a required claim has no admitted evidence).", "writer_decision": "escalate_to_evaluator"},
+    {"id": "F2", "severity": 3, "fires_when": "D4 or D5 scores block.", "writer_decision": "revise_in_phase_4b"},
+    {"id": "F3", "severity": 4, "fires_when": "Any dimension scores warn and none scores block.", "writer_decision": "accept"},
+    {"id": "F0", "severity": 5, "fires_when": "No other condition fired.", "writer_decision": "accept"}
+  ],
+  "pre_commitment_artifacts": {
+    "acceptance_criteria_paraphrase": {"minimum_dimensions": "all"}
+  }
+}

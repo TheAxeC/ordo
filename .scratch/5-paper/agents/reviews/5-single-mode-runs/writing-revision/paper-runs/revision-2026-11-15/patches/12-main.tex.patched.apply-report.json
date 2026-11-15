@@ -1,0 +1,648 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-5/manuscript/main.tex",
+  "base_sha256": "b7ee887ee0ac0b289b17fca2019b138d9d4823a890917b8dac0b9aeacd54202e",
+  "round": 1,
+  "n_blocks": 88,
+  "n_blocks_touched": 42,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "F1",
+        "F2",
+        "F6",
+        "F9",
+        "F20",
+        "F27"
+      ],
+      "rationale": "Names the compared representations by one term without 'pipeline', calls ARI near zero 'chance level', defines patient-grouped and the silhouette at their first use, splits the 46-word sentence and cuts the editorialising line on naive pipelines.",
+      "chars_before": 1995,
+      "chars_after": 2023
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0014",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F22",
+        "F36",
+        "F38"
+      ],
+      "rationale": "Opens the Introduction with the unsupervised clinical questions, splits the account of the master's project into its own paragraph, and gives the authors' work and decisions to 'we'.",
+      "chars_before": 1258,
+      "chars_after": 1269
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F1",
+        "F3",
+        "F9",
+        "F38"
+      ],
+      "rationale": "Defines linear-evaluation accuracy and ARI where they first appear, names the MIT-BIH data source by its proper name, replaces 'arm' with 'representation' and gives the contribution to 'we'.",
+      "chars_before": 1246,
+      "chars_after": 1339
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F2",
+        "F4",
+        "F9",
+        "F20",
+        "F25",
+        "F32"
+      ],
+      "rationale": "Replaces the punchy contribution lines with a plain statement, gives the authors' expectation and credit to 'we', names the raw representation and the original project consistently, defines Yeo-Johnson power scaling and non-IID at first use, uses 'class prevalence', and gives the scaling effect as the measured range.",
+      "chars_before": 2244,
+      "chars_after": 2436
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F22",
+        "F32"
+      ],
+      "rationale": "Replaces 'underpin decades of automatic analysis' and 'general representations from millions of recordings' with what the cited sources show, and moves the study's scope, the second idea of the paragraph, to the opening of Section 3.2 (OP008).",
+      "chars_before": 1552,
+      "chars_after": 1467
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F32",
+        "F38"
+      ],
+      "rationale": "Names which models the closest benchmark found aligned with the labels and which with the dataset, in the wording the source supports, and gives the supervised ceiling to 'we'.",
+      "chars_before": 658,
+      "chars_after": 802
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "F3",
+        "F25",
+        "F27"
+      ],
+      "rationale": "Calls PTB-XL a dataset, describes the input signals without software wording, and gives the per-representation choice of leads and preprocessing to 'we'.",
+      "chars_before": 1481,
+      "chars_after": 1422
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F1",
+        "F2",
+        "F11",
+        "F16",
+        "F22",
+        "F27",
+        "F33",
+        "F37"
+      ],
+      "rationale": "Opens 3.2 in the past tense with the scope moved from Related work in the authors' voice, names raw flattening and the original project by one term each and ties the table label raw-flatten to it, replaces the unsupported 'properly specified' claim with the conv-AE's training facts, drops software wording, marks the missing source for lead II, and states in Methods that ECGFounder received upsampled 100 Hz data.",
+      "chars_before": 3264,
+      "chars_after": 3994
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0027",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F1",
+        "F2",
+        "F34",
+        "F35"
+      ],
+      "rationale": "Reports the lead choices in the past tense with 'representation' in place of 'arm', moves the interpretation of the raw result to the Results (OP023), and brings the conv-AE training and foundation-model inference paragraph from 3.3 into 3.2 (deleted there by OP011).",
+      "chars_before": 850,
+      "chars_after": 1249
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F23",
+        "F39"
+      ],
+      "rationale": "Joins the 25-word paragraph on library defaults and deterministic clusterers to the clusterer paragraph it belongs to, expanding HDBSCAN at its new first use, and marks the missing neighbour count of the spectral affinity graph.",
+      "chars_before": 1134,
+      "chars_after": 1204
+    },
+    {
+      "op_id": "OP011",
+      "kind": "delete_block",
+      "block_id": "B0030",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F35"
+      ],
+      "rationale": "Removes the conv-AE training and foundation-model inference paragraph from 3.3; OP009 places the same text in 3.2 Representations.",
+      "chars_before": 550,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F19"
+      ],
+      "rationale": "Deletes the paragraph on physical units, which restates the Range and Reading columns of the metrics table; the metric paragraph and the notation list stay unchanged.",
+      "chars_before": 1539,
+      "chars_after": 1170
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F9",
+        "F24",
+        "F39"
+      ],
+      "rationale": "Turns the five controls run as prose into a list introduced with a colon, defines Yeo-Johnson power scaling and the other three scalers in the Methods, and marks the missing random-forest settings and the missing size and drawing of the 9:1 subsample.",
+      "chars_before": 1282,
+      "chars_after": 2008
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F28"
+      ],
+      "rationale": "Removes the result sentence with the colloquial 'sat at the bottom' from the Methods; OP017 reports the same HDBSCAN result in 4.1 in formal wording.",
+      "chars_before": 913,
+      "chars_after": 605
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F1",
+        "F28"
+      ],
+      "rationale": "Replaces the colloquial 'pinned at its floor' and the term 'arm' for a representation.",
+      "chars_before": 618,
+      "chars_after": 625
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0038",
+      "section": "Federated robustness",
+      "roadmap_item_ids": [
+        "F4",
+        "F9"
+      ],
+      "rationale": "Uses 'class prevalence' for how the classes are distributed across sites, defines Lloyd iterations, and splits the 49-word sentence on the federated rounds.",
+      "chars_before": 1239,
+      "chars_after": 1351
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0041",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F2",
+        "F6",
+        "F10",
+        "F22",
+        "F28"
+      ],
+      "rationale": "Calls ARI near zero 'chance level' and names raw flattening without 'pipeline'; adds as a paragraph of its own the HDBSCAN and spectral results moved from the two-idea paragraph B0046 (deleted by OP021), with the clusterers named in place of 'Both', the 39-word sentence split, and the HDBSCAN result moved from the Methods (OP014).",
+      "chars_before": 736,
+      "chars_after": 1318
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F2",
+        "F26"
+      ],
+      "rationale": "Names raw flattening in the caption text (the row label raw-flatten stays, as the figures print it and OP008 ties it to the name) and splits the 60-word caption sentence into four.",
+      "chars_before": 1883,
+      "chars_after": 1888
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0044",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F2",
+        "F26"
+      ],
+      "rationale": "Names raw flattening by one term and splits the 39-word closing sentence into three.",
+      "chars_before": 1190,
+      "chars_after": 1212
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0045",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F2",
+        "F8"
+      ],
+      "rationale": "Cuts the closing sentence that repeats the values and the opening point, and replaces 'the raw pipeline' with 'raw flattening'.",
+      "chars_before": 567,
+      "chars_after": 386
+    },
+    {
+      "op_id": "OP021",
+      "kind": "delete_block",
+      "block_id": "B0046",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F10",
+        "F22",
+        "F32"
+      ],
+      "rationale": "Splits the two-idea paragraph by relocation: the clusterer results go to 4.1 (OP017) and the contrast of the two foundation models, with the source's specific finding, to the ceiling paragraph (OP022).",
+      "chars_before": 611,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F14",
+        "F18",
+        "F21",
+        "F22",
+        "F32"
+      ],
+      "rationale": "Hedges the inference about ECGFounder's axes of variation and drops its ', so' shape, carries the figure reference of the deleted 4.2 paragraph, and closes on the two foundation models with the specific finding of the closest benchmark.",
+      "chars_before": 733,
+      "chars_after": 1029
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F2",
+        "F6",
+        "F14",
+        "F17",
+        "F20",
+        "F21",
+        "F28",
+        "F34"
+      ],
+      "rationale": "Hedges the conv-AE interpretation, gives the raw-flattening explanation a hedge and the discriminant-test result as its support without the repeated 'A likely reason' opener, drops the ', so' shapes, the colloquial 'sat at' and the closing one-liner, uses 'chance level', and takes in the input-size reading moved from the Methods.",
+      "chars_before": 936,
+      "chars_after": 1220
+    },
+    {
+      "op_id": "OP024",
+      "kind": "delete_block",
+      "block_id": "B0050",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F18",
+        "F6",
+        "F11",
+        "F14",
+        "F27"
+      ],
+      "rationale": "Deletes the 4.2 paragraph whose values 4.1 already gives and whose citation stands in the Introduction; its unsupported 'properly trained' claim, unhedged off-axis claim, 'raw pipeline' and 'at chance' go with it, and its figure reference moves to OP022.",
+      "chars_before": 893,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F2",
+        "F18",
+        "F21",
+        "F28"
+      ],
+      "rationale": "Names the gap in the opening sentence, now the first of 4.2, rewrites the three ', so' interpretations in other shapes, replaces 'sat below' and names raw flattening by one term.",
+      "chars_before": 708,
+      "chars_after": 779
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0052",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1",
+        "F21",
+        "F31"
+      ],
+      "rationale": "Rewrites the opening ', so' interpretation, replaces 'comparison arm', and follows the 0.013 difference with what it means for the comparison.",
+      "chars_before": 1185,
+      "chars_after": 1357
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0053",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1",
+        "F21",
+        "F28",
+        "F33"
+      ],
+      "rationale": "Reports the paragraph in the past tense, replaces 'arms' and the colloquial 'rose off chance', and gives the conv-AE reading as a hedged interpretation in place of the ', so' shape.",
+      "chars_before": 801,
+      "chars_after": 850
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0059",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F17",
+        "F38"
+      ],
+      "rationale": "Supports the robust-scaling explanation with the definition of the scaler in place of the repeated 'A likely reason' opener, keeps one hedge, and gives the reporting choice to 'we'.",
+      "chars_before": 674,
+      "chars_after": 796
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0061",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "F3"
+      ],
+      "rationale": "Calls PTB-XL and MIT-BIH datasets, the one term for a data source.",
+      "chars_before": 837,
+      "chars_after": 836
+    },
+    {
+      "op_id": "OP030",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "F5",
+        "F6",
+        "F13"
+      ],
+      "rationale": "Opens the class-imbalance paragraph with its own point, leaving the federation result to the next paragraph, uses 'chance level', and adds the alternative reading that a two-cluster clusterer on a 9:1 cohort accounts for part of the drop and of the reversal.",
+      "chars_before": 1153,
+      "chars_after": 1295
+    },
+    {
+      "op_id": "OP031",
+      "kind": "replace_block",
+      "block_id": "B0065",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "F5",
+        "F6"
+      ],
+      "rationale": "Uses 'site partition' for a redrawn partition of the cohort into sites and 'chance level' for ARI near zero, and states the worst-partition criterion in those terms.",
+      "chars_before": 1311,
+      "chars_after": 1356
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "F5"
+      ],
+      "rationale": "Uses 'site partitions' in the caption of the federation figure.",
+      "chars_before": 681,
+      "chars_after": 686
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0069",
+      "section": "Deployment cost",
+      "roadmap_item_ids": [
+        "F12",
+        "F30"
+      ],
+      "rationale": "Opens with the paragraph's point, replaces the claim that cost and quality were ordered against each other with what Tables cost and main show, splits the 49-word sentence, and names the hand-crafted features in place of 'the hand-crafted path'.",
+      "chars_before": 691,
+      "chars_after": 754
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0072",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F20"
+      ],
+      "rationale": "Removes the one-line summary 'The lead constraint is concrete.' and joins its content to the sentence that gives the evidence.",
+      "chars_before": 1133,
+      "chars_after": 1140
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0073",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F2",
+        "F6",
+        "F27",
+        "F29"
+      ],
+      "rationale": "Names the representations without 'pipelines', uses 'chance level', and places the decision-rule sentence directly after the result it follows from.",
+      "chars_before": 763,
+      "chars_after": 732
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F3",
+        "F7",
+        "F20"
+      ],
+      "rationale": "Replaces the second list of the Introduction's contributions with a Discussion paragraph that relates the results to the closest benchmark, which removes the closing editorial line and the term 'database'.",
+      "chars_before": 1109,
+      "chars_after": 819
+    },
+    {
+      "op_id": "OP037",
+      "kind": "replace_block",
+      "block_id": "B0075",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F1",
+        "F26"
+      ],
+      "rationale": "Splits the 48-word and the closing long sentence, replaces 'axis' and 'arm' for the foundation-model family, and pairs each best ARI with its model.",
+      "chars_before": 1096,
+      "chars_after": 1125
+    },
+    {
+      "op_id": "OP038",
+      "kind": "replace_block",
+      "block_id": "B0077",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F1",
+        "F11",
+        "F15"
+      ],
+      "rationale": "States the measured 0.013 difference without a hedge, replaces 'arm', and adds the limitation that the conv-AE conclusions rest on one architecture with one 32-unit bottleneck.",
+      "chars_before": 963,
+      "chars_after": 1152
+    },
+    {
+      "op_id": "OP039",
+      "kind": "replace_block",
+      "block_id": "B0078",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F25"
+      ],
+      "rationale": "Gives the scope decision to 'we' in place of the passive 'is evaluated'.",
+      "chars_before": 813,
+      "chars_after": 813
+    },
+    {
+      "op_id": "OP040",
+      "kind": "replace_block",
+      "block_id": "B0079",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F6",
+        "F26",
+        "F32"
+      ],
+      "rationale": "Splits the 44-word sentence, uses 'chance level', and replaces 'by a wide margin' with the measured range.",
+      "chars_before": 942,
+      "chars_after": 985
+    },
+    {
+      "op_id": "OP041",
+      "kind": "replace_block",
+      "block_id": "B0081",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "F5",
+        "F6",
+        "F14",
+        "F26"
+      ],
+      "rationale": "Splits the 45-word sentence, uses 'site partitions' and 'chance level' without 'pipelines' or 'sit', and restricts the reporting recommendation to what the PTB-XL results show.",
+      "chars_before": 1082,
+      "chars_after": 1324
+    },
+    {
+      "op_id": "OP042",
+      "kind": "replace_block",
+      "block_id": "B0083",
+      "section": "Code and data availability",
+      "roadmap_item_ids": [
+        "F3"
+      ],
+      "rationale": "Uses 'datasets', the one term for a data source, in the ethics statement.",
+      "chars_before": 134,
+      "chars_after": 139
+    }
+  ],
+  "blocks_untouched": 46,
+  "roadmap_items_covered": [
+    "F1",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F2",
+    "F20",
+    "F21",
+    "F22",
+    "F23",
+    "F24",
+    "F25",
+    "F26",
+    "F27",
+    "F28",
+    "F29",
+    "F3",
+    "F30",
+    "F31",
+    "F32",
+    "F33",
+    "F34",
+    "F35",
+    "F36",
+    "F37",
+    "F38",
+    "F39",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9"
+  ],
+  "block_touched_ratio": 0.4773,
+  "preserved_ratio": 0.5227,
+  "char_churn_ratio": 1.5377,
+  "net_growth_chars": 1500,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/12-main.tex.patched",
+  "output_sha256": "85a465701125ac6392a358d8dfddd19e8add47d1980694f6bed4cfc4cdeb6d7a"
+}

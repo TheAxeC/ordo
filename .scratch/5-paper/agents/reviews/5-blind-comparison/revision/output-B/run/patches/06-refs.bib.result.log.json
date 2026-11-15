@@ -1,0 +1,60 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "728ddf37fd0b06668702df0a9b963ee235f22bdc23479d90ebf807b9c9ede664",
+  "round": 1,
+  "n_blocks": 39,
+  "n_blocks_touched": 3,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0013",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C1"
+      ],
+      "rationale": "The author given names are those of the Crossref record of the DOI (Hong He, Yonghong Tan, Jianfeng Xing), which agrees with the entry's title, year, venue and DOI.",
+      "chfield": 375,
+      "chfield": 380
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C2"
+      ],
+      "rationale": "The first author is H. Brendan McMahan in the OpenAlex, Semantic Scholar and arXiv records; the entry omitted the initial.",
+      "chfield": 450,
+      "chfield": 453
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0022",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C3"
+      ],
+      "rationale": "The doi field held an escaped underscore, which broke the DOI link; it now holds the bare DOI that Crossref, OpenAlex and Semantic Scholar resolve.",
+      "chfield": 355,
+      "chfield": 354
+    }
+  ],
+  "blocks_untouched": 36,
+  "roadmap_items_covered": [
+    "C1",
+    "C2",
+    "C3"
+  ],
+  "block_touched_ratio": 0.0769,
+  "preserved_ratio": 0.9231,
+  "char_churn_ratio": 0.1638,
+  "net_growth_chars": 7,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/06-refs.bib.result",
+  "output_sha256": "54f9882399353503dc5996d41a877860694315aaba47d1d68ed2f9cc6a8abe42"
+}

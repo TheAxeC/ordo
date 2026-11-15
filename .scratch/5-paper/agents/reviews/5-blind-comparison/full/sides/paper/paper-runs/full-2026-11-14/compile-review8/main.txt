@@ -1,0 +1,1316 @@
+An interpretable block-term tensor network with a
+separate clinical term for predicting incident atrial
+fibrillation from one sinus-rhythm 12-lead ECG
+[GAP: author names] [GAP: author order] [GAP: ORCIDs]<asterisk operator>
+[GAP: affiliations],
+
+Abstract
+Atrial fibrillation (AF) raises stroke risk, and electrocardiogram (ECG) models that predict its onset are explained only after training, by attribution
+methods that agree poorly. We asked whether a model whose ECG evidence
+passes through readable factors predicts incident AF from one sinus-rhythm
+12-lead ECG more accurately than a clinical model and a convolutional neural network (CNN). We also asked where in the cardiac cycle its evidence
+lies. We propose the block-term tensor network (BTTN), a Cox survival
+network on a frequency by time by lead spectrogram tensor. Each block
+projects the tensor onto a frequency factor and a lead factor, and age, sex
+and ECG intervals enter a separate linear clinical term that bypasses these
+factors. Incident AF was defined from coded diagnoses in the MIMIC-IV
+hospital records linked to MIMIC-IV-ECG. At one year, BTTN with the
+clinical term had the highest area under the receiver operating characteristic
+curve (AUROC) of the methods compared, 0.7776 (95% confidence interval
+[0.7664, 0.7888]). The clinical model reached 0.7597 [0.7488, 0.7713] and the
+CNN 0.7350 [0.7226, 0.7469]. The ECG term alone reached 0.7397 [0.7275,
+0.7517], comparable to the CNN. The AUROCs of BTTN with the clinical
+term ranged from 0.723 to 0.745 at horizons from 120 days to 5 years after
+the ECG, with a 30-day blanking window. These values were computed from
+one set of cross-validated survival risks, without refitting for any horizon. In
+the survival sample, which over-represents patients with AF, observed oneyear AF rose from 0.55% in the lowest risk decile to 11.4% in the highest.
+<asterisk operator>
+
+Corresponding author: [GAP: corresponding author]
+
+<U+000C>Per unit of signal energy, beat-aligned occlusion changed the ECG term<right single quotation mark>s
+risk most in the PR window. External validation outside this single health
+system is the next requirement.
+Keywords: interpretable machine learning, tensor decomposition, deep
+survival analysis, MIMIC-IV, occlusion sensitivity, cardiovascular risk
+prediction
+1. Introduction
+1.1. Context and problem
+Atrial fibrillation (AF) is a common arrhythmia, and in people with
+asymptomatic AF the first presentation may be a stroke or heart failure
+[1]. In the Framingham Heart Study, AF was associated with a near fivefold
+excess of stroke. The stroke risk attributable to AF rose from 1.5% at ages
+50 to 59 to 23.5% at ages 80 to 89 [2]. Over 50 years of the Framingham
+Heart Study, the age-adjusted prevalence of AF rose about fourfold and its
+incidence more than tripled, in part through more intensive surveillance [3].
+Identifying the people who will develop AF could therefore guide monitoring
+before a first complication. Clinical risk scores such as CHARGE-AF estimate this risk from routine variables [4]. These scores need the abstraction
+of clinical data, which takes time, whereas a model applied to a single ECG
+at the point of care needs no additional data abstraction [1]. The resting 12lead electrocardiogram (ECG) is thus a candidate source of risk information
+in its own right.
+Deep networks trained on sinus-rhythm ECGs predict new-onset AF. A
+network trained on 1.6 million ECGs reached an area under the receiver operating characteristic curve (AUROC) of 0.85 for new-onset AF within one
+year [5]. When an ECG network and CHARGE-AF were combined, discrimination was highest for the combination in an internal and two external test
+sets [6]. The ECG and the clinical risk factors therefore carry partly different information. Reported performance also depends on how the outcome is
+defined. A systematic review of 14 studies found a median AUC of 0.740,
+with higher values for 31-day confirmation windows than for 1-year windows
+(0.851 against 0.630) [7]. Eleven of these studies cited possible misclassification of negative cases. A model of incident AF therefore has to be judged
+with its outcome window and its label source stated.
+2
+
+<U+000C>1.2. Research gap
+The networks behind these results are black boxes, and their explanations are computed after training. A commentary on predicting incident
+AF in sinus rhythm is subtitled <left double quotation mark>more than just trusting the <left single quotation mark>black box<right single quotation mark> <right double quotation mark>
+[1], and a narrative review names interpretability as a barrier to clinical use
+[8]. The 2024 guideline of the European Society of Cardiology addresses the
+neighbouring task of automated AF diagnosis. It states that the clinical performance and broad applicability of such algorithms are not yet known [9].
+The explanations themselves are uncertain. Twelve attribution methods applied to ECG classifiers agreed poorly and were only moderately consistent
+across training runs for most methods [10]. For some of these methods, randomising the weights of the network did not remove the attribution pattern
+entirely. An explanation of this kind may describe the attribution method
+as much as the model. Rudin argued that a model for high-stakes decisions
+should be interpretable by design, instead of a black box explained afterwards
+[11]. For incident AF, such a model would have to keep the discrimination
+of a deep network while exposing what it reads from the ECG.
+Block-term tensor models offer one route to such a model. A blockterm decomposition splits a multiway signal into blocks with low-rank factors
+per mode [12]. In neural networks, block-term structure has compressed
+weight matrices, and those networks are explained with Grad-CAM maps
+instead of through their factors [13]. In supervised regression of brain signals,
+block-term tensor regression, designed for interpretability, predicted finger
+movements [14]. That regression is linear and has no survival objective,
+which incident prediction with censored follow-up needs. To our knowledge,
+no published model places readable block-term frequency and lead factors
+on the predictive path of a survival network for incident AF. Such a model
+would also need a way to add clinical risk factors, which complement the
+ECG [6]. The clinical factors should not enter the factors that are meant to
+be read, or the reading would mix the two sources.
+1.3. Aim and contributions
+This study addresses two questions. The first is whether a block-term
+tensor network predicts incident AF from one sinus-rhythm 12-lead ECG
+more accurately than a clinical risk-factor model and a convolutional neural
+network (CNN). In this network, the ECG evidence passes through readable
+frequency and lead factors. Age, sex and ECG intervals enter through a separate linear term. The second question is where in the cardiac cycle the ECG
+3
+
+<U+000C>evidence of the network lies. We answer both questions in MIMIC-IV-ECG,
+with incident AF defined from hospital diagnoses coded in the International
+Classification of Diseases (ICD). Labels read from the ECG were not used as
+outcomes, since a third of a sample of 700 AF-labelled ECGs of this database
+did not show AF on expert review (Section 4.1) [15]. All methods share one
+cohort, one set of folds and one set of risk factors. Differences between them
+are therefore differences of model.
+The contributions of the study are these:
+<bullet> BTTN, a survival network whose ECG evidence passes through perblock frequency and lead factors, with a separate linear clinical term
+that does not pass through those factors.
+<bullet> An incident-AF cohort in MIMIC-IV-ECG defined from ICD-coded
+hospital diagnoses with a 30-day blanking window, reported with its
+exclusion counts.
+<bullet> A comparison of one-year discrimination against a clinical model, a
+CNN and linear block-term tensor regression (BTTR) under one protocol, and the discrimination of BTTN at four horizons, read from the
+same cross-validated risks without refitting for each horizon.
+<bullet> The calibration, risk stratification and operating points of BTTN with
+the clinical term.
+<bullet> A beat-aligned, energy-normalised occlusion profile of the ECG term
+of BTTN.
+2. Related work
+2.1. AI-ECG prediction of incident AF
+Two tasks are reported under the heading of AF prediction from the sinusrhythm ECG, and they differ in what counts as a case. In identification, a
+case is a patient who already has AF or shows it soon after the ECG. A CNN
+developed on 649,931 sinus-rhythm ECGs of 180,922 Mayo Clinic patients,
+454,789 of them in its training set, identified patients with AF with an AUC
+of 0.87, counting AF before the tested ECG as positive [16]. A network for AF
+within 31 days of a sinus-rhythm ECG reached AUROCs of 0.86 on held-out
+Veterans Affairs ECGs and 0.93 at a non-VA site [17]. In incident prediction,
+4
+
+<U+000C>a case is a patient whose first AF follows the ECG after a stated interval.
+The two tasks give different numbers. In a systematic review, models with
+31-day confirmation windows had higher median AUCs than models with 1year windows [7], and a narrative review found AI more accurate at shorter
+event horizons [8]. The present study addresses incident prediction only.
+Studies of dated incident AF report lower values. Raghunath et al.
+reached an AUROC of 0.85 for new-onset AF within one year on ECGs from
+430,000 patients [5]. A model from a Montreal cardiac centre reached 0.78
+at five years and 0.77 on external validation in MIMIC-IV [18]. Its abstract
+does not state the label source used in MIMIC-IV. On the hospital from
+which MIMIC-IV comes, a CNN trained with a discrete-time survival loss
+reached a C-index of 0.750 [19]. A model of ECG images on the same hospital reached a C-statistic of 0.754 [20]. In Brazilian telehealth data, a residual
+CNN with survival analysis reached an AUC of 0.845 [21], in the data family
+of an earlier 12-lead diagnostic network [22]. A gradient-boosting survival
+model of 417 engineered ECG features reached a C-index of 0.781, with a
+mean follow-up of 80 days [23]. These designs differ in horizon, population
+and label source, so their values do not rank the models.
+The explanations in these studies are computed after training. Saliency
+mapping gave the P-wave the greatest influence in one ECG network [6].
+Saliency of the image model focused on P-wave morphology and the PR
+interval [20]. The feature-based model named lower P-wave amplitude among
+its predictors [23]. These reports agree on the atrial part of the beat. To our
+knowledge, none of these reports includes a test of whether the explanation
+reflects what the model uses to predict.
+2.2. Clinical risk models and their combination with the ECG
+Clinical risk models set the comparator that an ECG model has to match.
+The Framingham score predicted 10-year AF from age, sex, a heart murmur,
+heart failure, systolic blood pressure, hypertension treatment, body mass
+index and the PR interval, with a C statistic of 0.78 [24]. CHARGE-AF
+reached 0.765 at derivation and 0.664 and 0.705 in two validation cohorts [4].
+Adding ECG variables did not improve its discrimination. ECG intervals
+measured in sinus rhythm are nevertheless AF predictors in their own right.
+In Framingham, each 20 ms increment of the PR interval carried an adjusted
+hazard ratio of 1.12 for AF [25]. Across Framingham and ARIC, a P-wave
+duration above 120 ms was associated with AF (hazard ratio 1.55), but Pwave indices added little discrimination beyond traditional risk factors [26].
+5
+
+<U+000C>These results motivate the ECG intervals in the clinical term of this study.
+They also set a modest expectation for what interval measurements alone
+add.
+Studies that combined an ECG network with clinical factors found the
+two complementary in most cohorts. AUROC was comparable for CHARGEAF and an ECG network in three test sets and highest for their combination,
+at 0.838, 0.777 and 0.746 [6]. In an older community cohort, an AI-ECG and
+CHARGE-AF had equal C statistics of 0.69, predicted AF independently,
+and reached 0.72 together [27]. A single-lead ECG model with age and sex
+had an AUROC of 0.695 against 0.679 for CHARGE-AF in trial data [28].
+A random forest that combined demographic, clinical, engineered and deep
+ECG features reached 0.909, against 0.839 for the best single modality [29].
+Other studies found the ECG model ahead of the clinical score. In 2,301
+patients of a Montreal cohort, an ECG model exceeded CHARGE-AF, which
+reached an AUC of 0.62, and an AF polygenic score, which reached 0.59 [18].
+An image-based ECG model reached 0.696 against 0.667 for CHARGE-AF,
+and 0.711 when the two were combined [20]. The ranking of ECG and clinical
+models also depends on the cohort. An ECG model led in hospital patients,
+while CHARGE-AF was the best single predictor in UK Biobank [19]. Fusing
+the two sources is therefore supported, but the way the fusion is built decides
+whether the ECG part can still be read.
+2.3. Interpretable models and post-hoc explanation
+Post-hoc explanations have been put to tests, and several methods fail
+them. Tests that randomise the model parameters and the training labels
+showed some saliency methods to be independent of both the model and
+the data-generating process [30]. Under remove-and-retrain evaluation, only
+VarGrad and SmoothGrad-Squared, of the methods tested, did better than
+a random assignment of importance [31]. On the ECG, twelve attribution
+methods agreed poorly with one another [10]. Their self-consistency across
+initialisations was moderate for most methods, with mean correlations of 0.41
+to 0.65. Dataset-level auditing with sanity checks gives a more favourable
+reading, in which aggregated saliency aligned with the decision rules of cardiologists [32]. In that work the same methods also supported knowledge
+discovery, such as subtypes of myocardial infarction. The balance of this evidence leaves any explanation computed after training open to doubt about
+what it shows. It motivates models whose readable parts lie on the path of
+the prediction itself.
+6
+
+<U+000C>Such models route the prediction through parts that can be read. Concept bottleneck models first predict named concepts and then the label, at
+accuracy competitive with end-to-end models [33]. Correcting the predicted
+concepts at test time raised their accuracy, which shows one use of a readable intermediate layer. Their concept representations can, however, encode
+information beyond the named concepts, which makes the reading of the
+downstream prediction misleading [34]. B-cos networks summarise the full
+computation as one linear transform at similar ImageNet accuracy [35]. An
+anti-aliased variant gave explanations without artifacts on chest x-rays while
+keeping its predictive performance [36]. The multilinear structure of tensor
+networks has also been combined with deep networks, in preliminary results,
+to give weight-based interpretability at accuracy equal to baselines [37]. The
+leakage result bears on any nonlinear head placed on readable factors, including the head of the model in this study.
+Whether intrinsic interpretability costs accuracy on the ECG is contested.
+A study of variational-autoencoder representations of interpretable ECG features reported a cost of intrinsic explainability [38]. A supervised block-term
+discriminant method reported none on EEG decoding, with a mean accuracy
+of 64.52% against 61.00% for its predecessor, higher-order discriminant analysis, on motor imagery [39]. Image networks that are interpretable by design
+also kept their accuracy [35, 36]. The answer may depend on the model family and on the task. To our knowledge, no study in this literature compares
+an intrinsically interpretable model with a CNN on incident AF under one
+protocol. That comparison is one aim of the present work.
+2.4. Block-term tensor models
+A block-term decomposition writes a tensor as a sum of blocks of low
+multilinear rank, and it contains the CP and Tucker decompositions as special
+cases [12]. A survey covers the CP and Tucker decompositions [40]. The uses
+of block-term structure differ in where the factors sit: in the weights of a
+network, within a recording, or on the input of a predictive model. Blockterm tensor neural networks approximate the weight matrices of CNNs and
+recurrent networks by block-term tensors to compress them, and the networks
+are explained with Grad-CAM maps instead of through their factors [13]. The
+model of this paper shares part of that name and is a different model, whose
+factors act on the input and can be read. On AF ECGs, a regularised blockterm decomposition extracted several signals interpretable as AF patterns
+7
+
+<U+000C>[41]. That work separates sources within a recording and does not predict
+risk.
+Supervised block-term models extract factors that both predict and can
+be read. Block-term tensor regression (BTTR) predicted finger trajectories
+from intracranial recordings, with automatic extraction of its components
+[14]. A block-term discriminant analysis gave interpretable and efficient dimensionality reduction for brain-computer interfaces, with an ROC-AUC of
+91.25% on event-related potentials [39]. Linear BTTR has also been applied
+to the identification of AF in sinus rhythm on the median beat [42], which
+is a different task from dated incidence. These models fit their blocks by deflation, score linearly, and have no time-to-event objective. No model in this
+literature trains readable block-term frequency and lead factors end to end
+with a survival objective for incident AF, with clinical factors kept outside
+the factor layer.
+3. Method
+3.1. Spectral tensor and block-term layer
+Each index ECG is a 10-second, 12-lead recording sampled at 500 Hz
+[43]. Each lead was high-pass filtered at 0.5 Hz with a second-order filter and
+notch filtered at 50 Hz. It was then denoised by soft thresholding of a threelevel sym4 wavelet decomposition, decimated to 250 Hz, centred, and scaled
+by its maximum absolute value. A magnitude spectrogram was computed
+per lead with a 128-sample window (512 ms) and a 32-sample hop (128
+ms). Frequencies up to 40 Hz were kept, magnitudes were transformed by
+log(1 + x), and the time axis was resampled to 40 frames. Mains interference
+at 60 Hz, the mains frequency of the source hospital, therefore lies outside
+the kept band. The result is a tensor X <element of> RF <multiplication sign>T <multiplication sign>L with F = 21 frequency
+bins from 0 to 39 Hz, 1.95 Hz apart, T = 40 time frames and L = 12
+leads, standardised per recording. Within each training fold, each lead was
+standardised again with the statistics of the training patients. A magnitude
+spectrogram changes little when the beat shifts within a window, so beats
+need no alignment across recordings.
+The block-term layer has K = 12 blocks. Block k holds a frequency
+factor Ak <element of> RF <multiplication sign>3 and a lead factor Ck <element of> RL<multiplication sign>2 , and it projects the tensor
+onto them:
+<down tack>
+3<multiplication sign>T <multiplication sign>2
+Zk = X <multiplication sign> 1 A <down tack>
+,
+(1)
+k <multiplication sign>3 Ck <element of> R
+8
+
+<U+000C>where <multiplication sign>n denotes the mode-n product, which multiplies each mode-n fibre of
+the tensor by the matrix. Each block thus gives six time series, one for each
+pair of a frequency component and a lead component, and the layer gives 72.
+The projection reduces the frequency and lead modes to ranks 3 and 2, the
+mode-n ranks by which a block term is characterised [12]. The time mode
+is left to the temporal layer of Section 3.2. A frequency factor states which
+frequency bands its block weighs, and a lead factor states which leads. The
+two can therefore be read as a spectral profile and a spatial profile of the
+block.
+BTTN generalises linear BTTR [14]. Both models decompose the input
+into blocks with one factor per mode. BTTR fits its blocks one at a time by
+deflation, keeps a static score vector per block and predicts with a linear score.
+BTTN trains all blocks jointly by gradient descent and replaces the static
+score vector with learned temporal kernels. It pools their output, passes it
+through a nonlinear head and is fitted with a Cox survival objective. Figure 1
+shows the two models one above the other. The frequency and lead factors
+keep the same role in both models, so the factors of BTTN can be read as
+those of BTTR can.
+3.2. Temporal convolution, pooling, head and survival objective
+The 72 time series of the block-term layer pass through depthwise temporal convolutions at three scales. Each series is convolved with six kernels
+of each of the lengths 3, 7 and 15 frames, so that each output channel depends on one series of one block. Batch normalisation and a rectified linear
+unit follow. Each channel is then pooled along time in two ways: by one
+set of attention weights over time, computed from all channels by a softmax and shared by them, and by its maximum. The two pooled vectors are
+concatenated. A head with two hidden layers of 256 and 128 units, batch
+normalisation, rectified linear units and dropout of 0.4 maps the pooled vector to a scalar log-risk <greek small letter eta>ECG . This network without clinical factors is the
+ECG term of BTTN, called ECG-only BTTN when it is evaluated alone.
+BTTN is trained with the negative Cox partial log-likelihood [44], as
+DeepSurv trains a neural network [45]. For a mini-batch with event indicators
+<greek small letter delta>i , times ti and log-risks <greek small letter eta>i , the loss is
+<U+0011>
+X
+1 X <U+0010>
+<greek small letter delta>i <greek small letter eta>i <minus sign> log
+e<greek small letter eta>j ,
+(2)
+<script small l> = <minus sign>P
+i <greek small letter delta>i i
+j: t <greater-than or equal to>t
+j
+
+9
+
+i
+
+<U+000C>Figure 1: Linear block-term tensor regression (BTTR) and the block-term tensor network
+(BTTN). Top row: BTTR [14], labelled in the image with the online year of that article,
+splits the input tensor into blocks. Each block has two factor matrices, a core Gk and a
+static score vector tk . The blocks are fitted by deflation and give a linear score. Bottom
+row: BTTN takes the frequency by time by lead spectrogram tensor of one ECG. In each of
+K = 12 blocks it projects the tensor onto a frequency factor Ak and a lead factor Ck , then
+filters along time with learned kernels <greek capital letter psi>k of three widths. In the reported model, the box
+labelled <left double quotation mark>attention over blocks<right double quotation mark> pools each channel along time by an attention-weighted
+sum and by its maximum. A nonlinear head maps the pooled values to a log-risk, and
+the network is trained end to end with a Cox survival objective. The clinical term is not
+drawn. It is a linear function of age, sex and ECG intervals, added to the head<right single quotation mark>s log-risk
+without passing through the block-term layer. The risk curve is schematic; the text states
+the horizons at which the risk is evaluated.
+
+10
+
+<U+000C>with risk sets formed within the batch. The time is the interval from the
+index ECG to AF onset for cases and to the end of follow-up for controls.
+Training used Adam with a learning rate of 2 <multiplication sign> 10<minus sign>3 , weight decay of 10<minus sign>4 , a
+cosine schedule over at most 120 epochs and batches of 512. Batches without
+an event were skipped. Within each training fold, 15% of the patients were
+held out for early stopping on the validation AUROC, with a patience of 16
+epochs. The prediction for a test fold is the mean log-risk of three networks
+trained with different seeds.
+3.3. Clinical term and readable factors
+The clinical term is a linear function of nine risk factors. They are age,
+sex, and seven automated measurements of the index ECG from MIMIC-IVECG. The RR interval and the P, QRS and T axes are used as released. The
+P-wave duration, QRS duration and QT interval were computed from the
+released onset and end times of the waves. Age is the anchor age of MIMICIV [46]. The factors are standardised with the statistics of the training fold,
+and a missing value is replaced by the training mean. The term w<down tack> c has no
+intercept and is added to the log-risk of the ECG term:
+<greek small letter eta> = <greek small letter eta>ECG (X ) + w<down tack> c.
+
+(3)
+
+The weights w are initialised from a class-balanced logistic regression on the
+training split. They are excluded from weight decay, so that training does
+not shrink them towards zero. The PR interval is not among the factors. We
+call BTTN with the clinical term the fused model.
+This construction makes the factors readable by design and keeps the
+clinical term out of them. In this paper, readable names this property of the
+factors of a model that is interpretable by design. It is the sense in which
+the title calls BTTN interpretable. Every path from the ECG to the risk
+passes through the block projections of Equation (1). The frequency and
+lead factors are therefore parameters on which the prediction depends, and
+they can be read directly. The clinical term reaches the log-risk without
+passing through the block-term layer. Adding it leaves the role of the factors
+unchanged, and the risk factors can be read as a linear term beside the ECG
+evidence. Readability is here a property of the architecture, and this study
+reports no reading of the learned frequency and lead factors. Whether the
+nonlinear head uses the factors in the way a reader of them would assume is
+a separate question, which this study does not measure [34].
+11
+
+<U+000C>4. Experiments
+4.1. Cohort and labels
+The cohort comes from MIMIC-IV-ECG, about 800,000 diagnostic ECGs
+from nearly 160,000 patients [43]. It is linked to the hospital module of
+MIMIC-IV, drawn from the electronic health record of the Beth Israel Deaconess Medical Center [46]. Incident AF is the first hospital admission with
+a diagnosis of AF or flutter (ICD-10 I48, or ICD-9 427.31 or 427.32 for older
+admissions), dated by its admission time. AF and flutter were counted together, since a coded flutter diagnosis did not reliably separate flutter from
+AF in a registry validation [47]. Hospital diagnoses were preferred to labels
+read from the ECG, since only 65.4% of 700 AF-labelled ECGs in MIMIC-IV
+showed AF on expert review [15].
+The index ECG is each patient<right single quotation mark>s earliest ECG whose machine report
+reads sinus rhythm, without AF, flutter, or a paced, junctional or ectopic
+atrial rhythm. A patient was excluded as prevalent or concurrent when an
+AF diagnosis, or an ECG read as AF, fell before the end of a 30-day blanking
+window after the index ECG. Follow-up ends at the later of the last ECG
+and death. In the one-year design, cases had onset more than 30 and at most
+365 days after the index ECG. Controls had no AF diagnosis and at least
+365 days of follow-up. The survival design kept onset at any time after the
+blanking window, with the same controls. For modelling, the one-year design
+used all 1,855 cases and four controls per case, drawn from 16,000 sampled
+controls, for 9,275 patients by design. The survival design used 4,000 sampled
+events and 16,000 sampled controls, 20,000 patients in all.
+4.2. Baselines, protocol and metrics
+Three baselines shared the cohort, folds and inputs of BTTN. The clinical
+model is a class-balanced logistic regression on the nine factors of the clinical
+term, with median imputation and standardisation. Linear BTTR [14] was
+fitted on the same spectral tensor to the label coded as <minus sign>1 and +1, with up
+to eight blocks. The CNN applies three one-dimensional convolutional layers
+of 32, 64 and 64 channels along time, with frequency and lead flattened
+into input channels. With batch normalisation, dropout and global average
+pooling, it is trained with weighted cross-entropy and early stopping as a
+three-member ensemble. In the survival design, the clinical baseline is a Cox
+model with a ridge penalty of 0.1 on the same factors.
+
+12
+
+<U+000C>The one-year comparison used stratified five-fold cross-validation at the
+patient level, repeated over five seeds, with each patient<right single quotation mark>s scores averaged
+over seeds. The survival model used one stratified five-fold split, with an
+event within one year as the label for early stopping. Each patient<right single quotation mark>s risk in
+the survival design came from the fold in which that patient was held out.
+The clinical Cox model was fitted on the same training folds as the networks.
+AUROC intervals come from 2,000 bootstrap resamples with percentile limits. At each horizon, cases had an event by the horizon and controls were
+AF-free beyond it, and patients censored earlier were excluded. Calibration
+and clinical use were assessed at one year in the survival sample, after twofold cross-fitted logistic recalibration. They were measured by Brier scores,
+decision curves [48] and operating points at the top 5, 10, 20 and 30% of
+risk. Positive predictive value (PPV) and the number needed to monitor, its
+inverse, were recomputed at the proportion of cases among the cases and AFfree controls of the one-year design, 1,855 in 43,625. We report the study with
+reference to the TRIPOD+AI statement [49], without a table of participant
+characteristics and without counts of missing values per clinical factor.
+4.3. Occlusion readout
+Occlusion sensitivity covers part of the input and records the change in the
+output [50]. It is one of the perturbation-based explanation methods [51].
+We applied it to a single ECG-only BTTN trained on the whole survival
+sample. For the 120 highest-risk ECGs of patients with an event, a window
+of 12 samples (24 ms at 500 Hz) was set to zero in every beat of one lead. The
+window ran from 6 samples before to 5 samples after a fixed offset from each
+R peak. Each offset was rounded to a whole sample towards the R peak. R
+peaks were detected on lead II. The spectrogram was rebuilt and the drop in
+log-risk recorded, for each lead and for offsets from 350 ms before to 425 ms
+after the R peak in steps of 25 ms. Neighbouring windows abut or leave one
+sample between them. Zeroing a high-energy part of the beat changes the
+spectrogram most. Each mean drop was therefore also divided by the sum of
+two terms: the mean energy of the removed samples, and, for stability, one
+tenth of that energy<right single quotation mark>s mean over all leads and offsets.
+The offsets from 225 ms before to 375 ms after the R peak were grouped
+into five windows, the P, PR, QRS, ST and T windows. Table 5 gives the
+offsets each window contains and the span of the beat that their occlusions
+cover. The offsets from 350 to 250 ms before the R peak and at 400 and
+425 ms after it belong to no window. They are shown in Figure 3, and
+13
+
+<U+000C>their removed energy counts in the mean energy over all leads and offsets
+that the normalisation adds. They enter no window value. These windows
+are fixed offsets and are not delineated per beat. A negative mean drop at
+a lead and offset was set to zero before the window means were taken, for
+both the raw and the normalised value. The profile of a window is the mean
+over leads and over the offsets it contains. The replacement value and the
+window size shape an occlusion map [52], and the perturbation method and
+the region size shape the evaluation of attributions on time series [53]. The
+zero replacement and the 24 ms window are therefore choices of this readout.
+The readout describes the fitted model on its own training ECGs.
+5. Results
+5.1. Study cohort
+Of 151,941 patients with an eligible sinus-rhythm index ECG, 1,855 developed incident AF within one year and 41,770 qualified as controls (Table 1).
+The survival design held 8,775 events with the same 41,770 controls. The
+exclusion categories were counted over all eligible patients and overlap. The
+table therefore lists each count against the eligible total. Incident events
+numbered 1,855, 2,828 and 5,262 by one, two and five years. Controls had
+a median follow-up of 1,601 days (interquartile range 880 to 2,559). Of the
+controls, 40,960 (98.1%) had an ECG after the index ECG.
+
+14
+
+<U+000C>Table 1: Cohort counts in the one-year and survival designs. Each exclusion count is stated
+against the 151,941 eligible patients, since the exclusion categories overlap. Prevalent or
+concurrent AF counts the patients with an AF diagnosis, or an ECG read as AF, before
+the end of the 30-day blanking window after the index ECG. These patients were excluded,
+and the count is not an outcome.
+
+Count
+
+One-year
+
+Survival
+
+Eligible patients (sinus-rhythm index ECG)
+151,941
+151,941
+Prevalent or concurrent AF
+14,469
+14,469
+No AF and follow-up under 365 days
+88,945
+88,945
+AF onset after one year
+7,481 not applicable
+Cases or events
+1,855
+8,775
+Controls
+41,770
+41,770
+Cases and controls
+43,625
+50,545
+Incident events by 1, 2 and 5 years
+1,855, 2,828 and 5,262
+Control follow-up, median (IQR), days
+1,601 (880 to 2,559)
+Controls with a later ECG
+40,960 (98.1%)
+Modelling sample
+9,275 by design
+20,000
+
+5.2. Discrimination at one year and across horizons
+In the one-year design, the fused model had the highest AUROC of the
+methods compared, 0.7776 (95% CI [0.7664, 0.7888]) (Table 2). Its interval
+lay above the CNN<right single quotation mark>s interval of [0.7226, 0.7469]. It also lay above the interval
+of ECG-only BTTN, 0.7397 [0.7275, 0.7517], so the fused model discriminated
+better than ECG-only BTTN. The fused model<right single quotation mark>s interval overlapped the
+interval of the clinical model, 0.7597 [0.7488, 0.7713]. The study reports no
+paired interval for the difference between the fused and clinical models, so
+their estimates are reported side by side. The CNN reached 0.7350, with an
+interval that overlapped that of ECG-only BTTN, so the two are comparable
+on this cohort. ECG-only BTTN exceeded linear BTTR, at 0.5967 [0.5824,
+0.6115], with intervals that do not overlap.
+
+15
+
+<U+000C>Table 2: One-year discrimination in the one-year design (1,855 cases with four controls
+each, by design). AUROC is the bootstrap mean over 2,000 resamples with its 95%
+percentile interval.
+
+Method
+
+AUROC
+
+95% CI
+
+Clinical model (logistic regression)
+Linear BTTR
+CNN
+ECG-only BTTN
+Fused model (BTTN with clinical term)
+
+0.7597
+0.5967
+0.7350
+0.7397
+0.7776
+
+[0.7488, 0.7713]
+[0.5824, 0.6115]
+[0.7226, 0.7469]
+[0.7275, 0.7517]
+[0.7664, 0.7888]
+
+In the survival design, the same cross-validated risks were read at every
+horizon without refitting (Table 3). The fused model had an AUROC of
+0.723 [0.701, 0.745] at 120 days, for onset in the 90 days after the blanking
+window, 31 to 120 days after the index ECG. Its AUROC was 0.727 [0.711,
+0.743] at one year, 0.740 [0.727, 0.753] at two years and 0.745 [0.735, 0.755]
+at five years. The clinical Cox model had point estimates of 0.710, 0.711,
+0.727 and 0.731, below those of the fused model at each horizon. ECG-only
+BTTN ranged from 0.658 to 0.676. The four horizons share the same risks
+and overlapping patients. They describe the behaviour of each model and
+are not independent replications. One reason for the lower one-year values
+of the survival design is its control group. At one year it includes patients
+who develop AF later, whereas the controls of the one-year design have no
+AF diagnosis.
+
+16
+
+<U+000C>Table 3: Discrimination at four horizons in the survival design. For each model, the crossvalidated risk of every patient was read at all four horizons without refitting. Each horizon
+counts from the index ECG, and the shortest, 120 days, covers onset in the 90 days after
+the 30-day blanking window. AUROC is the full-sample estimate, with its 95% bootstrap
+percentile interval on the line below. The clinical Cox model has no interval.
+
+Horizon
+
+Patients Cases Fused model ECG-only BTTN Clinical Cox
+
+120 days
+
+20,000
+
+410
+
+0.723
+[0.701, 0.745]
+
+0.658
+[0.632, 0.684]
+
+0.710
+
+1 year
+
+19,986
+
+838
+
+0.727
+[0.711, 0.743]
+
+0.666
+[0.647, 0.684]
+
+0.711
+
+2 years
+
+16,982 1,299
+
+0.740
+[0.727, 0.753]
+
+0.674
+[0.659, 0.688]
+
+0.727
+
+5 years
+
+11,007 2,425
+
+0.745
+[0.735, 0.755]
+
+0.676
+[0.665, 0.687]
+
+0.731
+
+5.3. Calibration, risk stratification and operating points
+After logistic recalibration within the survival sample, predicted and observed one-year proportions of the fused model were close in most deciles,
+among 19,986 patients with 838 cases (Figure 2). The largest gap lay in the
+sixth decile (bar 5 of Figure 2), 4.95% observed against a mean prediction
+of 3.56%. The deciles are read in the survival sample, which holds a larger
+share of the events of the cohort than of its controls (4,000 of 8,775 against
+16,000 of 41,770). Its proportions of AF are therefore higher than those of
+the cohort. Observed one-year AF rose from 0.55% in the lowest decile to
+11.4% in the highest, with mean predicted risks of 0.61% and 12.3%. The
+sixth decile also had a higher observed proportion than the seventh (bar 6,
+4.15%). Brier scores were 0.0390 for the fused model, 0.0396 for ECG-only
+BTTN and 0.0398 for the clinical model.
+At the top 10% of risk, the fused model had a sensitivity of 0.272 against
+0.240 for the clinical model, at specificities of 0.908 and 0.906 (Table 4). At
+the proportion of cases in the one-year design, its PPV was 0.1155 against
+0.1019, a number needed to monitor of 8.7 against 9.8. Sensitivity and PPV
+were higher for the fused model than for the clinical model at all four flagged
+fractions.
+The thresholds in this paragraph are read from the decision curves of
+Figure 2. All three models had a net benefit above both treating all and
+17
+
+<U+000C>treating none at threshold probabilities from about 0.04 to about 0.1. Below
+about 0.04, their curves lay close to that of treating all. The curve of the
+fused model lay above the other two between about 0.03 and 0.12, and all
+curves lay near zero above about 0.12.
+
+Figure 2: One-year calibration, decision curves and risk deciles of the fused model
+(BTTN+clin, blue), the ECG-only BTTN (BTTN, orange) and the clinical model (clinical, green). The sample is the 19,986 patients of the survival design who had incident AF
+within one year or were followed for more than one year; 838 had AF within one year.
+Each model<right single quotation mark>s risk score was converted to a probability by logistic recalibration with twofold cross-fitting. Probabilities, AF rates and net benefit are given as proportions. Left:
+observed against mean predicted one-year AF in ten equal-count bins of each model<right single quotation mark>s
+probability, with the dashed line marking equal values. Brier scores in the legend are
+rounded to three decimals. Middle: net benefit (vertical axis) against threshold probability, at the sample<right single quotation mark>s one-year AF proportion, with treat-all (dotted) and treat-none
+(dashed) references. In the left and middle panels the three models differ by colour only.
+Right: observed one-year AF proportion in each decile of the fused model<right single quotation mark>s probability,
+numbered 0 (lowest) to 9 (highest). The dashed line, labelled <left double quotation mark>cohort prev<right double quotation mark> in the image,
+marks the sample<right single quotation mark>s one-year AF proportion. Points and bars carry no confidence intervals.
+
+18
+
+<U+000C>Table 4: Operating points at one year in the survival sample (19,986 patients, 838 cases)
+after cross-fitted recalibration. PPV and the number needed to monitor (NNM) are recomputed at the proportion of cases among the cases and AF-free controls of the one-year
+design, 1,855 in 43,625.
+
+Flagged
+
+Model
+
+5%
+
+Fused model
+ECG-only BTTN
+Clinical model
+Fused model
+ECG-only BTTN
+Clinical model
+Fused model
+ECG-only BTTN
+Clinical model
+Fused model
+ECG-only BTTN
+Clinical model
+
+10%
+20%
+30%
+
+Sensitivity
+
+Specificity
+
+PPV
+
+NNM
+
+0.154
+0.123
+0.129
+0.272
+0.232
+0.240
+0.461
+0.387
+0.428
+0.600
+0.514
+0.574
+
+0.955
+0.953
+0.953
+0.908
+0.906
+0.906
+0.811
+0.808
+0.810
+0.713
+0.709
+0.712
+
+0.1307
+0.1044
+0.1094
+0.1155
+0.0983
+0.1019
+0.0978
+0.0821
+0.0910
+0.0850
+0.0729
+0.0813
+
+7.7
+9.6
+9.1
+8.7
+10.2
+9.8
+10.2
+12.2
+11.0
+11.8
+13.7
+12.3
+
+5.4. Cardiac-cycle occlusion profile
+Raw occlusion of the ECG term was dominated by the QRS window,
+where the mean drop in log-risk was 0.0232 against 0.0037 in the PR window
+(Table 5). The QRS complex has the highest amplitude of the beat, so zeroing
+it removes the most energy and changes the spectrogram most. Per unit of
+energy removed, the profile was highest in the PR window, at 0.00216. The
+ST window (0.00157), the P window (0.00152) and the T window (0.00127)
+followed, and the QRS window was lowest (0.00086). The P and ST windows
+were close to each other. Figure 3 shows the energy-normalised response on
+the mean median beat of each lead. The profile describes what the fitted
+ECG term responds to on 120 high-risk training ECGs.
+
+19
+
+<U+000C>Figure 3: Response of the ECG-only BTTN to beat-aligned occlusion, as the mean over
+120 ECGs. The model was trained on the sample of the survival design. The ECGs are
+those of patients with incident AF to which the model gave the highest risk, passing over
+ECGs that could not be read or had fewer than three detected beats. Each panel shows
+one lead. The black trace is the mean of the ECGs<right single quotation mark> median beats, with each lead scaled
+to a maximum absolute amplitude of 1; the vertical scale is not shown. Time is relative
+to the R peak detected in lead II (dotted line). Occlusion windows of 12 samples (24 ms)
+are centred every 25 ms from 350 ms before to 425 ms after the R peak, with each centre
+rounded to a whole sample towards the R peak. Each shaded band spans the 25 ms step
+around its nominal centre. For each window, the window was set to zero in every beat
+of one lead, the spectrogram was rebuilt and the drop in log-risk was recorded. Shading
+depth shows the mean drop, with a negative mean set to zero, divided by the sum of
+the mean signal energy removed and one tenth of that energy averaged over all leads and
+windows. Depth is relative to the largest value in the figure, and windows below 3 percent
+of it are not shaded. The P, PR, QRS, ST and T windows of the text group the windows
+centred 225 to 150 ms before the R peak, 125 to 75 ms before, 50 ms before to 25 ms
+after, 50 to 125 ms after, and 150 to 375 ms after. The windows centred 350 to 250 ms
+before and at 400 and 425 ms after the R peak belong to none of the five. Table 5 gives
+the span of the beat that each group occludes. The shading describes the response of the
+fitted model to occlusion and is not an effect on the risk of AF.
+
+20
+
+<U+000C>Table 5: Beat-aligned occlusion of the ECG term over 120 high-risk training ECGs of
+patients with an event. Windows are fixed offsets from the R peak. Each window lists
+the centres of the 24 ms occlusions it groups and the span of the beat that their occluded
+samples cover, from the start of the first sample to the end of the last. Each centre is
+rounded to a whole sample towards the R peak. The raw value is the mean drop in log-risk,
+with negative means set to zero, and the normalised value is that drop per unit of signal
+energy removed.
+
+Window Centres (ms)
+P
+PR
+QRS
+ST
+T
+
+Span (ms)
+
+<minus sign>225 to <minus sign>150 <minus sign>236 to <minus sign>138
+<minus sign>125 to <minus sign>75 <minus sign>136 to <minus sign>62
+<minus sign>50 to 25
+<minus sign>62 to 36
+50 to 125
+38 to 136
+150 to 375
+138 to 386
+
+Raw drop Drop per unit energy
+0.0028
+0.0037
+0.0232
+0.0081
+0.0053
+
+0.00152
+0.00216
+0.00086
+0.00157
+0.00127
+
+6. Discussion
+6.1. Comparison with published incident-AF models
+These results answer the research question within one health system.
+BTTN with the clinical term had the highest one-year discrimination of the
+methods compared. Its point estimates stayed above those of the clinical
+model at four horizons, read from the same cross-validated risks. Its ECG
+term alone was comparable to a CNN under the same protocol. After logistic
+recalibration within the survival sample, the predicted and observed one-year
+proportions of the fused model agreed closely in most risk deciles. It flagged
+more future cases than the clinical model at each flagged fraction. Per unit
+of energy, its ECG term responded most to the PR window of the beat. The
+gain of the fused model over the clinical model is small and consistent in
+direction. The one-year intervals overlap, and the study reports no interval
+of the difference that would establish it.
+Published results give context for these values. On the hospital behind
+MIMIC-IV, a survival-loss CNN reached a C-index of 0.750 [19] and an imagebased model 0.754 [20]. A Montreal model reached an AUROC of 0.77 on
+external validation in MIMIC-IV, with a label source that its abstract does
+not state [18]. Elsewhere, an AUROC of 0.85 at one year [5] and a C-index of
+0.781 over a short follow-up [23] were reported. These studies differ from the
+present one in horizon, outcome definition, sample and metric. A systematic
+review shows how far such choices move reported values [7]. Identification
+studies [16, 17] address another task. So does AF diagnosis from the ECG:
+21
+
+<U+000C>a foundation model reported an AUROC of 0.996 for the AF label of multilabel ECG interpretation, and its authors released an open benchmark on
+MIMIC-IV-ECG [54].
+The gain of the fused model over the clinical model agrees with reports
+that ECG and clinical information are complementary [6, 27]. Its operating
+point at the top 10% of risk is of the same order as that of one externally validated model. That model flagged 9.7% of older patients with a sensitivity of
+31% and a specificity of 92%, in a different population with chart-confirmed
+endpoints [55]. The comparability of ECG-only BTTN with the CNN bears
+on the reported accuracy cost of intrinsic interpretability on the ECG [38].
+In this design, the ECG term built on readable factors reached the discrimination of a compact CNN. The CNN has three convolutional layers, so the
+result says nothing about parity with the large networks of published work.
+6.2. Implications of an ECG term built on readable factors, with a separate
+clinical term
+Separating the clinical term from the block-term layer lets the fused model
+gain discrimination without passing the risk factors through its ECG factors.
+The ECG evidence still passes through frequency and lead factors, and each
+risk factor enters the linear term with one weight. The two sources therefore
+have separate parameters that can be inspected apart, although this study
+reports no reading of the fitted frequency and lead factors. The fused model
+is trained as one network, so its factors are fitted beside the clinical term and
+may differ from those of ECG-only BTTN. In a fused network whose clinical
+inputs enter the factor layer, the factors could absorb risk-factor information,
+as concept representations absorb information beyond their concepts [34].
+The architecture of BTTN closes this route for the clinical term. It does not
+close it for information that the ECG itself carries, which the factors may
+encode in ways a reader does not expect.
+The PR-window concentration of the occlusion profile is in line with
+saliency reports of other incident-AF models. These pointed to the P-wave
+[6] and to P-wave morphology and the PR interval [20]. It is also in line with
+cohort studies that tie the PR interval measured in sinus rhythm to later
+AF. In Framingham, the PR interval was a predictor in the AF risk score
+[24], and first-degree atrioventricular block carried an adjusted hazard ratio
+of 2.06 [25]. Each standard deviation of the PR interval carried a hazard
+ratio of 1.13 in older Black and White adults [56]. First-degree block carried
+a hazard ratio of 1.75 in an older Japanese population [57]. In Black adults of
+22
+
+<U+000C>the Jackson Heart Study, the PR interval, P-wave duration and P-wave terminal force were each associated with AF [58]. P-wave indices show the same
+direction in a two-cohort study [26] and in a meta-analysis whose evidence
+was of very low certainty in selected populations [59].
+The association is not uniform, and the comparison has a limited scope.
+In a Swedish cohort of 70-year-olds, the PR interval measured in lead V1
+was not related to incident AF, while a short P-wave duration was [60]. The
+cohort studies measure the PR interval from the onset of the P wave to
+the onset of the QRS complex. The PR window of the readout groups the
+occlusions centred 125 to 75 ms before the R peak, a fixed span from 136
+to 62 ms before it. On the mean beat of Figure 3, this span holds the end
+of the P wave and the PR segment. The agreement claimed here therefore
+concerns the location within the cardiac cycle only. The clinical term holds
+P-wave duration but no PR interval. One reading of the gain of the fused
+model is that the ECG term carries information on atrial and atrioventricular
+conduction that the clinical term does not measure. The present results do
+not test this reading, which remains a hypothesis.
+An atrial focus also has a clinical frame. An expert consensus defines
+atrial cardiomyopathy as structural, architectural, contractile or electrophysiological changes of the atria that can produce clinically relevant manifestations, among them arrhythmia [61]. In a Japanese community cohort, prolonged P-wave duration was associated both with incident AF and with more
+left atrial fibrosis at autopsy [62]. One reading of the PR-window response is
+that it reflects such atrial change. The readout cannot show this. The reading
+is offered as a hypothesis for studies that pair the ECG with measurements
+of the atrium.
+6.3. Limitations
+The study used one database from one health system and has no external
+validation in a cohort with dated outcomes. Its labels are ICD-coded hospital diagnoses, which are mostly correct but incomplete. A meta-analysis of
+24 validation studies pooled a PPV of 88% and a sensitivity of 80% for administrative AF definitions [63]. In a population study, a hospital discharge
+diagnosis found 73.7% of record-verified AF, with a PPV of 88.5% [64]. A
+registry found a PPV of 92.6% for the combined AF or flutter diagnosis [47].
+Some controls may therefore have AF diagnosed only outside hospital. Onset
+is dated by the admission and not by the first occurrence of AF. Follow-up
+to death counts patients without a hospital AF diagnosis as AF-free.
+23
+
+<U+000C>The comparator and the covariates have limits of their own. Age is the
+anchor age of MIMIC-IV, which is not the age at the index ECG [46]. The
+clinical factors omit variables of the Framingham score, among them systolic
+blood pressure, hypertension treatment, body mass index and heart failure
+[24]. They also omit the PR interval, a known AF predictor [25, 56]. The
+clinical comparator is therefore narrower than a full clinical score. The CNN
+is compact, and a larger network might reach a different value.
+The evaluation of calibration and operating points has limits as well. The
+probabilities were recalibrated in the evaluation sample with two-fold crossfitting, so the calibration of the model in another population is not shown.
+The one-year design sampled four controls per case, and the survival design
+sampled cases and controls. PPV was therefore recomputed at the proportion
+of cases among the cases and AF-free controls of the one-year design, 1,855
+in 43,625. This proportion exceeds the one-year rate of the survival cohort,
+1,855 in 50,545, whose one-year negatives include the patients with onset
+after one year. The PPVs of Table 4 are therefore upper values for that
+population. The study also reports no table of the characteristics of cases
+and controls and no count of missing values per clinical factor. The sample
+therefore cannot be compared with another population on these measures.
+The occlusion readout is a perturbation explanation of the fitted model
+on 120 high-risk training ECGs. It is open to the critiques of post-hoc attribution [30, 31, 10]. Its zero replacement, its 24 ms window and its fixed
+windows relative to the R peak shape the profile, since the replacement value
+and the window size shape an occlusion map [52]. The perturbation method
+and the region size likewise shape the evaluation of attributions on time series
+[53]. Another replacement could change the order of the windows. Readable
+factors do not by themselves show that the nonlinear head routes its decision through them in the way their reading suggests [34]. The readability of
+BTTN rests on its architecture, and this study reports no measurement of
+how far the factors carry the decision on ICD-coded labels.
+6.4. Future research
+Several studies would extend this work. A test of the block factors on
+ICD-coded labels would measure how far the factors carry the decision. It
+would use control probes and the removal of top-ranked against bottomranked factors, in the manner of remove-and-retrain evaluation [31]. External
+validation in a cohort with dated outcomes, and temporal validation within
+MIMIC-IV, would test whether the model transports. Such validation would
+24
+
+<U+000C>be reported with reference to the TRIPOD+AI statement [49]. A clinical
+comparator that includes the PR interval and the variables of a full clinical
+score would sharpen the comparison with the clinical model. A paired interval for the difference between the fused and the clinical model would show
+whether the one-year gain exceeds sampling variation. An occlusion readout
+on held-out ECGs, with replacements other than zero, would show how far
+the PR-window profile depends on the choices of the present readout.
+7. Conclusion
+On ICD-coded hospital diagnoses linked to MIMIC-IV-ECG, a block-term
+tensor network with a separate clinical term had the highest one-year discrimination of the methods compared. Its AUROC was 0.7776, against 0.7597 for
+a clinical model and 0.7350 for a CNN. Without refitting for each horizon,
+it kept its point estimates above those of the clinical model at horizons from
+120 days to five years after the index ECG. After logistic recalibration within
+the survival sample, the predicted and observed one-year proportions of the
+fused model agreed closely in most risk deciles. The fused model also flagged
+more future cases than the clinical model at each flagged fraction. Its gain
+over the clinical model is small, and the one-year intervals overlap. The gain
+is consistent in direction within one health system, and no interval for the
+difference yet establishes it.
+The ECG term alone reached the discrimination of a compact CNN under
+the same protocol, while its evidence passes through frequency and lead
+factors that lie on the predictive path and can be read. The clinical term
+adds the risk factors without passing through those factors. Per unit of signal
+energy, the ECG term responded most to the PR window of the beat. This is
+the part of the cardiac cycle that cohort studies of the PR interval tie to later
+AF [25, 56]. The readout describes the fitted model, and its atrial reading
+remains a hypothesis.
+For the design of ECG risk models, the results suggest that a clinical term
+kept outside the block-term factors adds to the discrimination of the ECG
+term. At one year, the fused model reached 0.7776 [0.7664, 0.7888] and the
+ECG term alone 0.7397 [0.7275, 0.7517]. These two intervals do not overlap,
+although the study reports no paired interval for this difference. The clinical
+comparator used here is narrower than a full clinical score, and the readout
+is descriptive. Validation outside one health system, a test of the factors on
+
+25
+
+<U+000C>ICD-coded labels and a comparator that includes the PR interval are the
+next requirements before any clinical use.
+CRediT authorship contribution statement
+[GAP: CRediT roles of each author]
+Funding
+[GAP: funding]
+Declaration of competing interest
+[GAP: conflicts of interest]
+Data availability
+The data that support the findings of this study are available from PhysioNet, as MIMIC-IV-ECG [43] and the hospital module of MIMIC-IV [46],
+but restrictions apply to the availability of these data. They were used under the PhysioNet credentialed data use agreement for the current study, and
+so are not publicly available. They are available to credentialed users from
+PhysioNet under that agreement. The code of the study is available under
+the MIT licence at [GAP: repository URL or DOI].
+Ethics statement
+This study used de-identified data of MIMIC-IV and MIMIC-IV-ECG.
+This study was approved by [GAP: ethics approval]. [GAP: consent]. [GAP:
+de-identification wording]. [GAP: data-access wording].
+Declaration of generative AI and AI-assisted technologies
+During the preparation of this work the authors used Claude Opus (model
+identifier claude-opus-5-5) through a multi-agent manuscript-writing workflow. Specifically, the tool was used for research assistance (the literature
+search, the screening of sources and their annotation), for drafting assistance
+(the outline and the first draft of the text), for the placement and captions of
+the figures, for checking citations against their sources, and for a simulated
+26
+
+<U+000C>peer review of the draft. Revision assistance: [GAP: AI use category Revision assistance not confirmed]. Editing assistance: [GAP: AI use category
+Editing assistance not confirmed]. Research assistance, drafting assistance
+and peer review simulation outside this workflow: [GAP: AI use category Research assistance not confirmed] [GAP: AI use category Drafting assistance
+not confirmed] [GAP: AI use category Peer review simulation not confirmed].
+Language models can produce incorrect statements and incorrect references,
+so their output has to be checked against the sources and the results of the
+study. [GAP: human oversight: which author reviewed which AI-assisted
+content, and at which stages]. The tool is not an author. The authors take
+full responsibility for the content of the published article.
+Analysis: [GAP: AI use category Analysis assistance not confirmed]. The
+tool computed no number reported in this manuscript during its preparation.
+Every reported number comes from the saved results of the analysis of the
+study.
+Reproducibility statement
+The cohort definition, the inclusion and exclusion criteria, the models with their hyperparameters, and the evaluation are documented in the
+Method and Experiments sections. The declaration of generative AI use
+describes the AI assistance used to prepare the manuscript. The reported
+numbers come from the analysis of the study. Researchers wishing to replicate or extend this work should note that MIMIC-IV and MIMIC-IV-ECG
+require credentialed access under the PhysioNet data use agreement. The
+sampling of controls, the cross-validation folds and the initialisations of the
+networks are seeded. The code is available under the MIT licence at [GAP:
+repository URL or DOI].
+References
+[1] Kashou A, Noseworthy P. Predicting incident atrial fibrillation in sinus rhythm: more than just trusting the <left single quotation mark>black box<right single quotation mark>. Heart. 2021
+Sep;107(22):1770<en dash>1771. Available from: https://doi.org/10.1136/
+heartjnl-2021-319385.
+[2] Wolf PA, Abbott RD, Kannel WB. Atrial fibrillation as an independent risk factor for stroke: the Framingham Study. Stroke. 1991
+27
+
+<U+000C>Aug;22(8):983<en dash>988. Available from: https://doi.org/10.1161/01.
+STR.22.8.983.
+[3] Schnabel RB, Yin X, Gona P, Larson MG, Beiser AS, McManus DD,
+et al. 50 year trends in atrial fibrillation prevalence, incidence, risk
+factors, and mortality in the Framingham Heart Study: a cohort study.
+The Lancet. 2015 Jul;386(9989):154<en dash>162. Available from: https://doi.
+org/10.1016/S0140-6736(14)61774-8.
+[4] Alonso A, Krijthe BP, Aspelund T, Stepas KA, Pencina MJ, Moser
+CB, et al. Simple Risk Model Predicts Incidence of Atrial Fibrillation
+in a Racially and Geographically Diverse Population: the CHARGE-AF
+Consortium. Journal of the American Heart Association. 2013 Mar;2(2).
+Available from: https://doi.org/10.1161/JAHA.112.000102.
+[5] Raghunath S, Pfeifer JM, Ulloa-Cerna AE, Nemani A, Carbonati
+T, Jing L, et al. Deep Neural Networks Can Predict New-Onset
+Atrial Fibrillation From the 12-Lead ECG and Help Identify Those
+at Risk of Atrial Fibrillation<en dash>Related Stroke.
+Circulation. 2021
+Mar;143(13):1287<en dash>1298. Available from: https://doi.org/10.1161/
+CIRCULATIONAHA.120.047829.
+[6] Khurshid S, Friedman S, Reeder C, Di Achille P, Diamant N, Singh
+P, et al. ECG-Based Deep Learning and Clinical Risk Factors to Predict Atrial Fibrillation. Circulation. 2022 Jan;145(2):122<en dash>133. Available
+from: https://doi.org/10.1161/CIRCULATIONAHA.121.057480.
+[7] Tsiartas E, Nayak D, Meade A. Artificial intelligence capabilities in
+identifying atrial fibrillation using baseline sinus rhythm ECG : a systematic review. Open Heart. 2025 Jul;12(2):e003657. Available from:
+https://doi.org/10.1136/openhrt-2025-003657.
+[8] Saiz-Vivo J, Chakravarthy N, Ho WHH, Ching CK, Yeung WLK, Lim
+TW, et al. Artificial intelligence for atrial fibrillation prediction while
+in sinus rhythm: a narrative review. European Heart Journal - Digital
+Health. 2025 Dec;7(2). Available from: https://doi.org/10.1093/
+ehjdh/ztaf144.
+[9] Van Gelder IC, Rienstra M, Bunting KV, Casado-Arroyo R, Caso V,
+Crijns HJGM, et al. 2024 ESC Guidelines for the management of atrial
+28
+
+<U+000C>fibrillation developed in collaboration with the European Association
+for Cardio-Thoracic Surgery (EACTS). European Heart Journal. 2024
+Aug;45(36):3314<en dash>3414. Available from: https://doi.org/10.1093/
+eurheartj/ehae176.
+[10] Arends BKO, van Amsterdam WAC, van der Harst P, van Smeden M,
+van Es R, van de Leur RR. Signal or noise? Evaluating commonly used
+attribution methods for explaining deep neural networks in electrocardiogram classification. European Heart Journal - Digital Health. 2026
+Mar;7(3). Available from: https://doi.org/10.1093/ehjdh/ztag038.
+[11] Rudin C. Stop explaining black box machine learning models for high
+stakes decisions and use interpretable models instead. Nature Machine Intelligence. 2019 May;1(5):206<en dash>215. Available from: https:
+//doi.org/10.1038/s42256-019-0048-x.
+[12] De Lathauwer L. Decompositions of a Higher-Order Tensor in Block
+Terms<em dash>Part II: Definitions and Uniqueness. SIAM Journal on Matrix
+Analysis and Applications. 2008 Jan;30(3):1033<en dash>1066. Available from:
+https://doi.org/10.1137/070690729.
+[13] Ye J, Li G, Chen D, Yang H, Zhe S, Xu Z. Block-term Tensor Neural
+Networks [Preprint]. arXiv:2010.04963; 2020. Available from: https:
+//doi.org/10.48550/arXiv.2010.04963.
+[14] Faes A, Camarrone F, Van Hulle MM. Single Finger Trajectory
+Prediction From Intracranial Brain Activity Using Block-Term Tensor Regression With Fast and Automatic Component Extraction.
+IEEE Transactions on Neural Networks and Learning Systems. 2024
+Jul;35(7):8897<en dash>8908. Available from: https://doi.org/10.1109/
+tnnls.2022.3216589.
+[15] Valasakis I, Connelly D, Macfarlane P. Accuracy of atrial fibrillation
+labels in the MIMIC-IV ECG database: implications for artificial intelligence model development. European Heart Journal. 2026 Oct;47(Suppl
+1). Available from: https://doi.org/10.1093/eurheartj/ehag785.
+598.
+[16] Attia ZI, Noseworthy PA, Lopez-Jimenez F, Asirvatham SJ, Deshmukh
+AJ, Gersh BJ, et al. An artificial intelligence-enabled ECG algorithm
+29
+
+<U+000C>for the identification of patients with atrial fibrillation during sinus
+rhythm: a retrospective analysis of outcome prediction. The Lancet.
+2019 Sep;394(10201):861<en dash>867. Available from: https://doi.org/10.
+1016/S0140-6736(19)31721-0.
+[17] Yuan N, Duffy G, Dhruva SS, Oesterle A, Pellegrini CN, Theurer
+J, et al. Deep Learning of Electrocardiograms in Sinus Rhythm
+From US Veterans to Predict Atrial Fibrillation. JAMA Cardiology. 2023 Dec;8(12):1131. Available from: https://doi.org/10.1001/
+jamacardio.2023.3701.
+[18] Jabbour G, Nolin-Lapalme A, Tastet O, Corbin D, Jord<latin small letter a with grave> P, Sowa A,
+et al. Prediction of incident atrial fibrillation using deep learning,
+clinical models, and polygenic scores. European Heart Journal. 2024
+Sep;45(46):4920<en dash>4934. Available from: https://doi.org/10.1093/
+eurheartj/ehae595.
+[19] Sau A, Sieliwonczyk E, Barker J, Zeidaabadi B, Pastika L, Patlatzoglou K, et al. Prediction of incident atrial fibrillation: A comprehensive evaluation of conventional and artificial intelligence-enhanced
+approaches. Heart Rhythm. 2026 Feb;23(2):e183<en dash>e191. Available from:
+https://doi.org/10.1016/j.hrthm.2025.08.024.
+[20] Zeidaabadi B, Patlatzoglou K, Barker J, Pastika L, Khattak GR, Gurnani M, et al. Image based artificial intelligence-enhanced electrocardiogram prediction of incident atrial fibrillation. Heart Rhythm.
+2026 Mar;23(3):515<en dash>524. Available from: https://doi.org/10.1016/
+j.hrthm.2025.10.024.
+[21] Habineza T, Ribeiro AH, Gedon D, Behar JA, Ribeiro ALP, Sch<latin small letter o with diaeresis>n
+TB. End-to-end risk prediction of atrial fibrillation from the 12Lead ECG by deep neural networks. Journal of Electrocardiology.
+2023 Nov;81:193<en dash>200. Available from: https://doi.org/10.1016/j.
+jelectrocard.2023.09.011.
+[22] Ribeiro AH, Ribeiro MH, Paix<latin small letter a with tilde>o GMM, Oliveira DM, Gomes PR,
+Canazart JA, et al. Automatic diagnosis of the 12-lead ECG using
+a deep neural network. Nature Communications. 2020 Apr;11(1):1760.
+Available from: https://doi.org/10.1038/s41467-020-15432-4.
+30
+
+<U+000C>[23] Riek NT, Gokhale TA, Ji RQ, Aktas ME, Dzikowicz DJ, Akcakaya M,
+et al. Forecasting 1-year atrial fibrillation risk from sinus rhythm electrocardiograms in arrhythmia-na<latin small letter i with diaeresis>ve patients. Heart Rhythm O2. 2026 Sep.
+Available from: https://doi.org/10.1016/j.hroo.2026.09.012.
+[24] Schnabel RB, Sullivan LM, Levy D, Pencina MJ, Massaro JM,
+D<right single quotation mark>Agostino RB, et al. Development of a risk score for atrial fibrillation (Framingham Heart Study): a community-based cohort study.
+The Lancet. 2009 Feb;373(9665):739<en dash>745. Available from: https:
+//doi.org/10.1016/S0140-6736(09)60443-8.
+[25] Cheng S.
+Long-term Outcomes in Individuals With Prolonged
+PR Interval or First-Degree Atrioventricular Block. JAMA. 2009
+Jun;301(24):2571. Available from: https://doi.org/10.1001/jama.
+2009.888.
+[26] Magnani JW, Zhu L, Lopez F, Pencina MJ, Agarwal SK, Soliman
+EZ, et al. P-wave indices and atrial fibrillation: Cross-cohort assessments from the Framingham Heart Study (FHS) and Atherosclerosis
+Risk in Communities (ARIC) study. American Heart Journal. 2015
+Jan;169(1):53<en dash>61.e1. Available from: https://doi.org/10.1016/j.
+ahj.2014.10.009.
+[27] Christopoulos G, Graff-Radford J, Lopez CL, Yao X, Attia ZI, Rabinstein AA, et al. Artificial Intelligence<en dash>Electrocardiography to Predict
+Incident Atrial Fibrillation: A Population-Based Study. Circulation:
+Arrhythmia and Electrophysiology. 2020 Dec;13(12). Available from:
+https://doi.org/10.1161/CIRCEP.120.009355.
+[28] Khurshid S, Friedman SF, Al-Alusi MA, Kany S, Sommers T, Anderson
+CD, et al. Artificial intelligence-enabled analysis of handheld single-lead
+electrocardiograms to predict incident atrial fibrillation: an analysis of
+the VITAL-AF randomized trial. npj Digital Medicine. 2025 Nov;8(1).
+Available from: https://doi.org/10.1038/s41746-025-02164-2.
+[29] Biton S, Gendelman S, Ribeiro AH, Miana G, Moreira C, Ribeiro ALP,
+et al. Atrial fibrillation risk prediction from the 12-lead electrocardiogram using digital biomarkers and deep representation learning. European Heart Journal - Digital Health. 2021 Aug;2(4):576<en dash>585. Available
+from: https://doi.org/10.1093/ehjdh/ztab071.
+31
+
+<U+000C>[30] Adebayo J, Gilmer J, Muelly M, Goodfellow I, Hardt M, Kim B. Sanity
+Checks for Saliency Maps [Preprint]. arXiv:1810.03292; 2018. Available
+from: https://doi.org/10.48550/arXiv.1810.03292.
+[31] Hooker S, Erhan D, Kindermans PJ, Kim B.
+A Benchmark
+for Interpretability Methods in Deep Neural Networks [Preprint].
+arXiv:1806.10758; 2018. Available from: https://doi.org/10.48550/
+arXiv.1806.10758.
+[32] Wagner P, Mehari T, Haverkamp W, Strodthoff N.
+Explaining deep learning for ECG analysis: Building blocks for auditing and knowledge discovery. Computers in Biology and Medicine.
+2024 Jun;176:108525. Available from: https://doi.org/10.1016/j.
+compbiomed.2024.108525.
+[33] Koh PW, Nguyen T, Tang YS, Mussmann S, Pierson E, Kim B, et al.
+Concept Bottleneck Models [Preprint]. arXiv:2007.04612; 2020. Available from: https://doi.org/10.48550/arXiv.2007.04612.
+[34] Mahinpei A, Clark J, Lage I, Doshi-Velez F, Pan W. Promises
+and Pitfalls of Black-Box Concept Learning Models [Preprint].
+arXiv:2106.13314; 2021. Available from: https://doi.org/10.48550/
+arXiv.2106.13314.
+[35] B<latin small letter o with diaeresis>hle M, Fritz M, Schiele B. B-cos Networks: Alignment is All We Need
+for Interpretability [Preprint]. arXiv:2205.10268; 2022. Available from:
+https://doi.org/10.48550/arXiv.2205.10268.
+[36] Arya S, Agnihotri S, Kleinmann M, Schiele B, Keuper M. Faithful,
+Interpretable Chest X-ray Diagnosis with Artifact-free B-cos Networks
+[Preprint]. arXiv:2507.16761; 2025. Available from: https://doi.org/
+10.48550/arXiv.2507.16761.
+[37] Dooms T, Gauderis W, Wiggins GA, Oramas J. Compositionality
+Unlocks Deep Interpretable Models [Preprint]. arXiv:2504.02667; 2025.
+Available from: https://doi.org/10.48550/arXiv.2504.02667.
+[38] Patlatzoglou K, Pastika L, Barker J, Sieliwonczyk E, Khattak
+GR, Zeidaabadi B, et al. The cost of explainability in artificial
+intelligence-enhanced electrocardiogram models. npj Digital Medicine.
+32
+
+<U+000C>2025 Dec;8(1):747.
+Available from:
+s41746-025-02122-y.
+
+https://doi.org/10.1038/
+
+[39] Van Den Kerchove A, Si-Mohammed H, Cabestaing F, Van Hulle MM.
+BTTDA: Block-Term Tensor Discriminant Analysis for Brain-Computer
+Interfacing [Preprint]. arXiv:2511.04292; 2025. Available from: https:
+//doi.org/10.48550/arXiv.2511.04292.
+[40] Kolda TG, Bader BW. Tensor Decompositions and Applications. SIAM
+Review. 2009 Aug;51(3):455<en dash>500. Available from: https://doi.org/
+10.1137/07070111X.
+[41] Goulart JHdM, de Oliveira PMR, Farias RC, Zarzoso V, Comon P.
+Alternating Group Lasso for Block-Term Tensor Decomposition and
+Application to ECG Source Separation. IEEE Transactions on Signal
+Processing. 2020;68:2682<en dash>2696. Available from: https://doi.org/10.
+1109/tsp.2020.2985591.
+[42] Cornelissen D, Faes A. An interpretable tensor model for identifying
+atrial fibrillation in sinus-rhythm ECG: block-term tensor regression on
+PTB-XL, benchmarked against deep and foundation models. Zenodo;
+2026. Available from: https://zenodo.org/doi/10.5281/zenodo.
+22227432.
+[43] Gow B, Pollard T, Nathanson LA, Johnson A, Moody B, Fernandes
+C, et al. MIMIC-IV-ECG: Diagnostic Electrocardiogram Matched Subset [Dataset]. PhysioNet; 2023. Available from: https://doi.org/10.
+13026/4nqg-sb35.
+[44] Cox DR.
+Regression Models and Life-Tables.
+Journal of the
+Royal Statistical Society Series B: Statistical Methodology. 1972
+Jan;34(2):187<en dash>202. Available from: https://doi.org/10.1111/j.
+2517-6161.1972.tb00899.x.
+[45] Katzman JL, Shaham U, Cloninger A, Bates J, Jiang T, Kluger Y. DeepSurv: personalized treatment recommender system using a Cox proportional hazards deep neural network. BMC Medical Research Methodology. 2018 Feb;18(1):24. Available from: https://doi.org/10.1186/
+s12874-018-0482-1.
+
+33
+
+<U+000C>[46] Johnson AEW, Bulgarelli L, Shen L, Gayles A, Shammout A, Horng S,
+et al. MIMIC-IV, a freely accessible electronic health record dataset.
+Scientific Data. 2023 Jan;10(1):1. Available from: https://doi.org/
+10.1038/s41597-022-01899-x.
+[47] Rix TA, Riahi S, Overvad K, Lundbye-Christensen S, Schmidt EB,
+Joensen AM. Validity of the diagnoses atrial fibrillation and atrial flutter in a Danish patient registry. Scandinavian Cardiovascular Journal.
+2012 May;46(3):149<en dash>153. Available from: https://doi.org/10.3109/
+14017431.2012.673728.
+[48] Vickers AJ, Elkin EB. Decision Curve Analysis: A Novel Method
+for Evaluating Prediction Models. Medical Decision Making. 2006
+Nov;26(6):565<en dash>574.
+Available from: https://doi.org/10.1177/
+0272989X06295361.
+[49] Collins GS, Moons KGM, Dhiman P, Riley RD, Beam AL, Van Calster B, et al. TRIPOD+AI statement: updated guidance for reporting clinical prediction models that use regression or machine learning methods. BMJ. 2024 Apr;385:e078378. Available from: https:
+//doi.org/10.1136/bmj-2023-078378.
+[50] Zeiler MD, Fergus R. Visualizing and Understanding Convolutional Networks. In: Computer Vision <en dash> ECCV 2014. Springer International Publishing; 2014. p. 818<en dash>833. Available from: https://doi.org/10.1007/
+978-3-319-10590-1_53.
+[51] Ivanovs M, Kadikis R, Ozols K. Perturbation-based methods for explaining deep neural networks: A survey. Pattern Recognition Letters.
+2021 Oct;150:228<en dash>234. Available from: https://doi.org/10.1016/j.
+patrec.2021.06.030.
+[52] Zintgraf LM, Cohen TS, Adel T, Welling M. Visualizing Deep
+Neural Network Decisions: Prediction Difference Analysis [Preprint].
+arXiv:1702.04595; 2017. Available from: https://doi.org/10.48550/
+arXiv.1702.04595.
+[53] <latin capital letter s with caron>imi<latin small letter c with acute> I, Veas E, Sabol V. A comprehensive analysis of perturbation
+methods in explainable AI feature attribution validation for neural time
+
+34
+
+<U+000C>series classifiers. Scientific Reports. 2025 Jul;15(1). Available from:
+https://doi.org/10.1038/s41598-025-09538-2.
+[54] McKeen K, Masood S, Toma A, Rubin B, Wang B. ECG-FM: an
+open electrocardiogram foundation model. JAMIA Open. 2025 Sep;8(5).
+Available from: https://doi.org/10.1093/jamiaopen/ooaf122.
+[55] Pfeifer JM, Lee G, Raghunath S, Nemani A, Green T, Kaufman E, et al.
+Multicenter validation of an artificial intelligence<en dash>enabled ECG model
+to predict 1-year risk of atrial fibrillation or flutter. Heart Rhythm. 2026
+Aug;23(8):e1474<en dash>e1481. Available from: https://doi.org/10.1016/j.
+hrthm.2026.03.1956.
+[56] Magnani JW, Wang N, Nelson KP, Connelly S, Deo R, Rodondi N,
+et al. Electrocardiographic PR Interval and Adverse Outcomes in Older
+Adults: The Health, Aging, and Body Composition Study. Circulation:
+Arrhythmia and Electrophysiology. 2013 Feb;6(1):84<en dash>90. Available from:
+https://doi.org/10.1161/circep.112.975342.
+[57] Tanaka Y, Tada H, Hamaya R, Patel RB, Hayashi K, Yamagami K, et al.
+First-degree atrioventricular block is significantly associated with incident atrial fibrillation in the population predominantly including participants aged <greater-than or equal to> 60 years. Heart and Vessels. 2021 Feb;36(9):1401<en dash>1409.
+Available from: https://doi.org/10.1007/s00380-021-01805-2.
+[58] Yogeswaran V, Wiggins KL, Sitlani CM, Heckbert SR, Kamel H, Benjamin EJ, et al. P-Wave Indices and the Risks of Incident Atrial Fibrillation and Ischemic Stroke in Black Adults: The Jackson Heart Study.
+Journal of the American Heart Association. 2025 Nov;14(21). Available
+from: https://doi.org/10.1161/jaha.125.043590.
+[59] Emmanuela M, Lee JV, Wahjoepramono NND, Lim H. Electrocardiographic P-wave morphology and the risk of new-onset atrial fibrillation: a systematic review and meta-analysis. Bulgarian Cardiology.
+2026 Oct;32(3):83<en dash>90. Available from: https://doi.org/10.3897/
+bgcardio.32.e213539.
+[60] Ostrowska B, Lind L, Sciaraffia E, Blomstr<latin small letter o with diaeresis>m-Lundqvist C. Short
+P-Wave Duration Is Associated with Incident Atrial Fibrillation: A
+Registry-Based Cohort Study. International Heart Journal. 2022
+35
+
+<U+000C>Jul;63(4):700<en dash>707. Available from: https://doi.org/10.1536/ihj.
+21-797.
+[61] Goette A, Kalman JM, Aguinaga L, Akar J, Cabrera JA, Chen SA,
+et al. EHRA/HRS/APHRS/SOLAECE expert consensus on Atrial
+cardiomyopathies: Definition, characterisation, and clinical implication. Journal of Arrhythmia. 2016 Jul;32(4):247<en dash>278. Available from:
+https://doi.org/10.1016/j.joa.2016.05.002.
+[62] Maezono A, Oishi E, Sasaki T, Takase S, Sakata S, Hata J, et al. Electrocardiographic P-wave indices and onset of atrial fibrillation and histological fibrosis in a general Japanese population: a prospective cohort analysis of the Hisayama Study. European Heart Journal Open.
+2025 Sep;5(6). Available from: https://doi.org/10.1093/ehjopen/
+oeaf126.
+[63] Yao RJR, Andrade JG, Deyell MW, Jackson H, McAlister FA, Hawkins
+NM. Sensitivity, specificity, positive and negative predictive values of
+identifying atrial fibrillation using administrative data: a systematic
+review and meta-analysis. Clinical Epidemiology. 2019 Aug;11:753<en dash>767.
+Available from: https://doi.org/10.2147/clep.s206267.
+[64] Malmo V, Langhammer A, B<latin small letter o with stroke>naa KH, Loennechen J, Ellekjaer H. Validation of self-reported and hospital-diagnosed atrial fibrillation: the
+HUNT-study. Clinical Epidemiology. 2016 Jun:185. Available from:
+https://doi.org/10.2147/clep.s103346.
+
+36
+
+<U+000C>

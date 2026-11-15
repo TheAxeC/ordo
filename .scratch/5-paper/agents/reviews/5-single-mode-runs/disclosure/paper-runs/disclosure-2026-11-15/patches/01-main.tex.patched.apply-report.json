@@ -1,0 +1,82 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-4/manuscript/main.tex",
+  "base_sha256": "2cbba14422a545b01d0f17d7f01e65778ea41b5995cdf4486599d42d1813364f",
+  "round": 1,
+  "n_blocks": 81,
+  "n_blocks_touched": 5,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0075",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "disclosure"
+      ],
+      "rationale": "Writes the open-data form from the Data availability row, keeping both database versions, citation keys and the code URL, with gaps for the PhysioNet identifiers and the code DOI or release tag.",
+      "chars_before": 307,
+      "chars_after": 558
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0076",
+      "section": "Code and data availability",
+      "roadmap_item_ids": [
+        "disclosure"
+      ],
+      "rationale": "Writes the ethics statement from the Human or patient data row, with a gap for the approval and consent of the studies that collected the two databases, which the row does not give.",
+      "chars_before": 134,
+      "chars_after": 469
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0077",
+      "section": "Ethics",
+      "roadmap_item_ids": [
+        "disclosure"
+      ],
+      "rationale": "Writes the roles of the Contributions row under their CRediT names, one line per author, with the gaps for added roles and the equal-contribution declaration.",
+      "chars_before": 221,
+      "chars_after": 329
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0078",
+      "section": "CRediT author contributions",
+      "roadmap_item_ids": [
+        "disclosure"
+      ],
+      "rationale": "Writes the single-funder form with the funder name of the Funding row byte for byte, with gaps for the grant number, any other funder and the funder's role, which the row does not record.",
+      "chars_before": 186,
+      "chars_after": 381
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0080",
+      "section": "Declaration of competing interest",
+      "roadmap_item_ids": [
+        "disclosure"
+      ],
+      "rationale": "Writes the generic detailed AI disclosure from the AI use row: the kept mention of software implementation, drafting assistance by claude-opus-5-5 as used, and the gap placeholder for each uncertain category and for the earlier tool versions.",
+      "chars_before": 412,
+      "chars_after": 1119
+    }
+  ],
+  "blocks_untouched": 76,
+  "roadmap_items_covered": [
+    "disclosure"
+  ],
+  "block_touched_ratio": 0.0617,
+  "preserved_ratio": 0.9383,
+  "char_churn_ratio": 0.0735,
+  "net_growth_chars": 1596,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/01-main.tex.patched",
+  "output_sha256": "14c039f5339c789b4e15e8308ab7c9450bd0205748880905a3cfe35f0cde4c99"
+}

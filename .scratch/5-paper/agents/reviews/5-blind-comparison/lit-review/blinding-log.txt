@@ -1,0 +1,101 @@
+== paper
+text: final-message.md: 1 x /paper-runs/lit-review-2026-11-15// -> 'run/'
+text: final-message.md: 2 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /The literature strategist ran as `ordo-high`/ -> 'The search agent ran at high effort'
+text: final-message.md: 1 x /the strategist/ -> 'the search agent'
+path: paper-runs/lit-review-2026-11-15/config.md -> run/settings.md
+text: run/settings.md: 1 x //Users/axelfaes/\.claude/skills/repo-setup/templates/docs/dev/prose-standard\.md \(standards is empty and docs/dev/prose-standard\.md does not exist\)/ -> 'the default prose standard'
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 2 x /config\.md/ -> 'settings.md'
+text: run/settings.md: 1 x //paper lit-review, literature strategist on/ -> 'a search agent on'
+text: run/settings.md: 1 x /Effort agent: ordo-high\./ -> 'Agent effort: high.'
+text: run/settings.md: 1 x /The strategist's/ -> "The search agent's"
+text: run/settings.md: 1 x /the strategist/ -> 'the search agent'
+path: paper-runs/lit-review-2026-11-15/final.md -> run/final.md
+text: run/final.md: 1 x /paper-runs/lit-review-2026-11-15// -> 'run/'
+text: run/final.md: 3 x /config\.md/ -> 'settings.md'
+text: run/final.md: 1 x /# Final message: /paper lit-review, / -> '# Final message, '
+text: run/final.md: 1 x /The literature strategist \(agent [0-9a-f]+, ordo-high, served model/ -> 'The search agent (served model'
+text: run/final.md: 1 x /A later resumption of the strategist/ -> 'A later resumption of the search agent'
+text: run/final.md: 1 x /this run's strategist/ -> "this run's search agent"
+text: run/final.md: 2 x /lookup\.py/ -> 'the lookup script'
+path: paper-runs/lit-review-2026-11-15/refs.bib -> run/refs.bib
+path: paper-runs/lit-review-2026-11-15/review.md -> run/review.md
+text: run/review.md: 1 x //paper lit-review, literature strategist on/ -> 'a search agent on'
+== academic-paper
+path: config.md -> settings.md
+text: settings.md: 1 x /phase1_literature/ -> 'search'
+text: settings.md: 1 x /phase7_formatting/ -> 'output'
+text: settings.md: 1 x /config\.md/ -> 'settings.md'
+text: settings.md: 1 x /`ls \.claude/skills ~/\.claude/skills` lists only `academic-paper` under `\.claude/skills`, and `~/\.claude/skills` holds code-comments, diagnose, grill, land, ordo-help, ordo-init, paper, plan, plan-orchestration, plan-retro, refute, repo-setup, roadmap, session-retro, spec, synced and writing, none of which is `academic-paper-reviewer`\./ -> 'no review tool is installed.'
+text: settings.md: 1 x /The `academic-paper-reviewer` skill is not installed:/ -> 'The review tool is not installed:'
+text: settings.md: 1 x /literature_strategist_agent\.md/ -> "the search agent's instructions"
+text: settings.md: 4 x /literature_strategist_agent/ -> 'search agent'
+text: settings.md: 1 x /intake_agent\.md/ -> 'the intake instructions'
+text: settings.md: 1 x /intake_agent/ -> 'intake agent'
+text: settings.md: 3 x /formatter_agent/ -> 'formatting agent'
+text: settings.md: 1 x /abstract_bilingual_agent/ -> 'abstract agent'
+text: settings.md: 2 x /Paper Configuration Record/ -> 'intake record'
+text: settings.md: 1 x /(?<=\. )Phase 1/ -> 'The search stage'
+text: settings.md: 2 x /Phase 1/ -> 'the search stage'
+text: final-message.md: 1 x /phase0_paper_configuration_record\.md/ -> 'intake-record.md'
+text: final-message.md: 3 x /phase1_literature/ -> 'search'
+text: final-message.md: 4 x /phase7_formatting/ -> 'output'
+text: final-message.md: 4 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /`academic-paper-reviewer` skill/ -> 'review tool'
+path: phase0_paper_configuration_record.md -> intake-record.md
+text: intake-record.md: 4 x /config\.md/ -> 'settings.md'
+text: intake-record.md: 1 x /literature_strategist_agent/ -> 'search agent'
+text: intake-record.md: 2 x /intake_agent\.md/ -> 'the intake instructions'
+text: intake-record.md: 1 x /intake_agent/ -> 'intake agent'
+text: intake-record.md: 1 x /formatter_agent/ -> 'formatting agent'
+text: intake-record.md: 1 x /mode_selection_guide\.md/ -> 'the mode guide'
+text: intake-record.md: 1 x /Phase 0 Paper Configuration Record/ -> 'Intake record'
+text: intake-record.md: 1 x /Paper Configuration Record/ -> 'intake record'
+text: intake-record.md: 1 x /(?<=\. )Phase 1/ -> 'The search stage'
+path: phase7_formatting/literature_review.aux -> output/literature_review.aux
+path: phase7_formatting/literature_review.bbl -> output/literature_review.bbl
+path: phase7_formatting/literature_review.blg -> output/literature_review.blg
+path: phase7_formatting/literature_review.fdb_latexmk -> output/literature_review.fdb_latexmk
+path: phase7_formatting/literature_review.fls -> output/literature_review.fls
+text: output/literature_review.fls: 1 x //private/tmp/claude-502/[^ \n"'}]*?/gate5/lit-review-[12]/ -> '/work'
+text: output/literature_review.fls: 1 x /phase7_formatting/ -> 'output'
+path: phase7_formatting/literature_review.log -> output/literature_review.log
+path: phase7_formatting/literature_review.out -> output/literature_review.out
+path: phase7_formatting/literature_review.tex -> output/literature_review.tex
+text: output/literature_review.tex: 4 x /config\.md/ -> 'settings.md'
+text: output/literature_review.tex: 1 x /AI agents of the academic-paper skill \(Claude\)/ -> 'AI agents (Claude)'
+text: output/literature_review.tex: 1 x /the formatter agent of the same skill/ -> 'a formatting agent'
+text: output/literature_review.tex: 1 x /Paper Configuration Record/ -> 'intake record'
+text: output/literature_review.tex: 1 x /Phase 1/ -> 'the search stage'
+path: phase7_formatting/references.bib -> output/references.bib
+path: phase1_literature/literature_search_report.md -> search/literature_search_report.md
+text: search/literature_search_report.md: 3 x /config\.md/ -> 'settings.md'
+text: search/literature_search_report.md: 1 x /Paper Configuration Record/ -> 'intake record'
+text: search/literature_search_report.md: 1 x /Phase 1/ -> 'the search stage'
+path: phase1_literature/references.bib -> search/references.bib
+path: phase1_literature/theme_A_tensor.bib -> search/theme_A_tensor.bib
+path: phase1_literature/theme_A_tensor.md -> search/theme_A_tensor.md
+text: search/theme_A_tensor.md: 1 x /config\.md/ -> 'settings.md'
+text: search/theme_A_tensor.md: 1 x /literature_strategist_agent/ -> 'search agent'
+text: search/theme_A_tensor.md: 1 x /(?m)^Phase 1/ -> 'The search stage'
+path: phase1_literature/theme_B_transport.bib -> search/theme_B_transport.bib
+path: phase1_literature/theme_B_transport.md -> search/theme_B_transport.md
+text: search/theme_B_transport.md: 1 x /config\.md/ -> 'settings.md'
+text: search/theme_B_transport.md: 1 x /(?m)^Phase 1/ -> 'The search stage'
+path: phase1_literature/theme_C_sets.bib -> search/theme_C_sets.bib
+path: phase1_literature/theme_C_sets.md -> search/theme_C_sets.md
+text: search/theme_C_sets.md: 1 x /config\.md/ -> 'settings.md'
+text: search/theme_C_sets.md: 1 x /literature_strategist_agent/ -> 'search agent'
+text: search/theme_C_sets.md: 1 x /Paper Configuration Record/ -> 'intake record'
+text: search/theme_C_sets.md: 1 x /Phase 1/ -> 'the search stage'
+path: phase1_literature/theme_D_pipelines.bib -> search/theme_D_pipelines.bib
+path: phase1_literature/theme_D_pipelines.md -> search/theme_D_pipelines.md
+text: search/theme_D_pipelines.md: 1 x /phase0_paper_configuration_record\.md/ -> 'intake-record.md'
+text: search/theme_D_pipelines.md: 2 x /config\.md/ -> 'settings.md'
+text: search/theme_D_pipelines.md: 7 x /\| F([1-7]) \|/ -> '| PM\\1 |'
+text: search/theme_D_pipelines.md: 3 x /\bF([1-7]): (?=[0-9])/ -> 'PM\\1: '
+text: search/theme_D_pipelines.md: 3 x /\bF([1-7]) (also returned|limits|confirms)/ -> 'PM\\1 \\2'
+text: search/theme_D_pipelines.md: 1 x /\bF1 and F3 confirm/ -> 'PM1 and PM3 confirm'
+text: search/theme_D_pipelines.md: 3 x /\| W([1-9]) \| WebSearch/ -> '| WS\\1 | WebSearch'
+text: search/theme_D_pipelines.md: 1 x /Phase 1/ -> 'the search stage'

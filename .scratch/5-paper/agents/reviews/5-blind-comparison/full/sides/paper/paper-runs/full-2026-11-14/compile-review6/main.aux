@@ -1,0 +1,243 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\Newlabel{cor1}{1}
+\citation{Kashou_2021}
+\citation{Wolf_1991}
+\citation{Schnabel_2015}
+\citation{Alonso_2013}
+\citation{Kashou_2021}
+\citation{Raghunath_2021}
+\citation{Khurshid_2022}
+\citation{Tsiartas_2025}
+\citation{Kashou_2021}
+\citation{Saiz_Vivo_2025}
+\citation{Van_Gelder_2024}
+\citation{Arends_2026}
+\citation{Rudin_2019}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Context and problem}{2}{subsection.1.1}\protected@file@percent }
+\citation{De_Lathauwer_2008}
+\citation{arxiv_2010_04963}
+\citation{Faes_2024}
+\citation{Khurshid_2022}
+\citation{Valasakis_2026}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Research gap}{3}{subsection.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3}Aim and contributions}{3}{subsection.1.3}\protected@file@percent }
+\citation{Attia_2019}
+\citation{Yuan_2023}
+\citation{Tsiartas_2025}
+\citation{Saiz_Vivo_2025}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Related work}{4}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}AI-ECG prediction of incident AF}{4}{subsection.2.1}\protected@file@percent }
+\citation{Raghunath_2021}
+\citation{Jabbour_2024}
+\citation{Sau_2026}
+\citation{Zeidaabadi_2026}
+\citation{Habineza_2023}
+\citation{Ribeiro_2020}
+\citation{Riek_2026}
+\citation{Khurshid_2022}
+\citation{Zeidaabadi_2026}
+\citation{Riek_2026}
+\citation{Schnabel_2009}
+\citation{Alonso_2013}
+\citation{Cheng_2009}
+\citation{Magnani_2015}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Clinical risk models and their combination with the ECG}{5}{subsection.2.2}\protected@file@percent }
+\citation{Khurshid_2022}
+\citation{Christopoulos_2020}
+\citation{Khurshid_2025}
+\citation{Biton_2021}
+\citation{Jabbour_2024}
+\citation{Zeidaabadi_2026}
+\citation{Sau_2026}
+\citation{arxiv_1810_03292}
+\citation{arxiv_1806_10758}
+\citation{Arends_2026}
+\citation{Wagner_2024}
+\citation{arxiv_2007_04612}
+\citation{arxiv_2106_13314}
+\citation{arxiv_2205_10268}
+\citation{arxiv_2507_16761}
+\citation{arxiv_2504_02667}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Interpretable models and post-hoc explanation}{6}{subsection.2.3}\protected@file@percent }
+\citation{Patlatzoglou_2025}
+\citation{arxiv_2511_04292}
+\citation{arxiv_2205_10268,arxiv_2507_16761}
+\citation{De_Lathauwer_2008}
+\citation{Kolda_2009}
+\citation{arxiv_2010_04963}
+\citation{Goulart_2020}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}Block-term tensor models}{7}{subsection.2.4}\protected@file@percent }
+\citation{Faes_2024}
+\citation{arxiv_2511_04292}
+\citation{https://doi.org/10.5281/zenodo.22227432}
+\citation{https://doi.org/10.13026/4nqg-sb35}
+\citation{De_Lathauwer_2008}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Method}{8}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Spectral tensor and block-term layer}{8}{subsection.3.1}\protected@file@percent }
+\newlabel{eq:block}{{1}{8}{Spectral tensor and block-term layer}{equation.1}{}}
+\citation{Faes_2024}
+\citation{Faes_2024}
+\citation{Faes_2024}
+\citation{Cox_1972}
+\citation{Katzman_2018}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Temporal convolution, pooling, head and survival objective}{9}{subsection.3.2}\protected@file@percent }
+\newlabel{sec:temporal}{{3.2}{9}{Temporal convolution, pooling, head and survival objective}{subsection.3.2}{}}
+\newlabel{eq:cox}{{2}{9}{Temporal convolution, pooling, head and survival objective}{equation.2}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Linear block-term tensor regression (BTTR) and the block-term tensor network (BTTN). Top row: BTTR \cite  {Faes_2024}, labelled in the image with the online year of that article, splits the input tensor into blocks. Each block has two factor matrices, a core $\mathbf  {G}_k$ and a static score vector $\mathbf  {t}_k$. The blocks are fitted by deflation and give a linear score. Bottom row: BTTN takes the frequency by time by lead spectrogram tensor of one ECG. In each of $K = 12$ blocks it projects the tensor onto a frequency factor $\mathbf  {A}_k$ and a lead factor $\mathbf  {C}_k$, then filters along time with learned kernels $\Psi _k$ of three widths. In the reported model, the box labelled ``attention over blocks'' pools each channel along time by an attention-weighted sum and by its maximum. A nonlinear head maps the pooled values to a log-risk, and the network is trained end to end with a Cox survival objective. The clinical term is not drawn. It is a linear function of age, sex and ECG intervals, added to the head's log-risk without passing through the block-term layer. The risk curve is schematic; the text states the horizons at which the risk is evaluated.}}{10}{figure.1}\protected@file@percent }
+\newlabel{fig:bttr-to-bttn}{{1}{10}{Linear block-term tensor regression (BTTR) and the block-term tensor network (BTTN). Top row: BTTR \cite {Faes_2024}, labelled in the image with the online year of that article, splits the input tensor into blocks. Each block has two factor matrices, a core $\mathbf {G}_k$ and a static score vector $\mathbf {t}_k$. The blocks are fitted by deflation and give a linear score. Bottom row: BTTN takes the frequency by time by lead spectrogram tensor of one ECG. In each of $K = 12$ blocks it projects the tensor onto a frequency factor $\mathbf {A}_k$ and a lead factor $\mathbf {C}_k$, then filters along time with learned kernels $\Psi _k$ of three widths. In the reported model, the box labelled ``attention over blocks'' pools each channel along time by an attention-weighted sum and by its maximum. A nonlinear head maps the pooled values to a log-risk, and the network is trained end to end with a Cox survival objective. The clinical term is not drawn. It is a linear function of age, sex and ECG intervals, added to the head's log-risk without passing through the block-term layer. The risk curve is schematic; the text states the horizons at which the risk is evaluated}{figure.1}{}}
+\citation{Johnson_2023}
+\citation{arxiv_2106_13314}
+\citation{https://doi.org/10.13026/4nqg-sb35}
+\citation{Johnson_2023}
+\citation{Rix_2012}
+\citation{Valasakis_2026}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Clinical term and readable factors}{11}{subsection.3.3}\protected@file@percent }
+\newlabel{eq:fused}{{3}{11}{Clinical term and readable factors}{equation.3}{}}
+\citation{Faes_2024}
+\citation{Vickers_2006}
+\citation{Collins_2024}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experiments}{12}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Cohort and labels}{12}{subsection.4.1}\protected@file@percent }
+\newlabel{sec:cohort}{{4.1}{12}{Cohort and labels}{subsection.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Baselines, protocol and metrics}{12}{subsection.4.2}\protected@file@percent }
+\citation{Zeiler_2014}
+\citation{Ivanovs_2021}
+\citation{arxiv_1702_04595}
+\citation{_imi__2025}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Occlusion readout}{13}{subsection.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Results}{14}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Study cohort}{14}{subsection.5.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cohort counts in the one-year and survival designs. Each exclusion count is stated against the 151,941 eligible patients, since the exclusion categories overlap. Prevalent or concurrent AF counts the patients with an AF diagnosis, or an ECG read as AF, before the end of the 30-day blanking window after the index ECG. These patients were excluded, and the count is not an outcome.}}{15}{table.1}\protected@file@percent }
+\newlabel{tab:cohort}{{1}{15}{Cohort counts in the one-year and survival designs. Each exclusion count is stated against the 151,941 eligible patients, since the exclusion categories overlap. Prevalent or concurrent AF counts the patients with an AF diagnosis, or an ECG read as AF, before the end of the 30-day blanking window after the index ECG. These patients were excluded, and the count is not an outcome}{table.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Discrimination at one year and across horizons}{15}{subsection.5.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces One-year discrimination in the one-year design (1,855 cases with four controls each, by design). AUROC is the bootstrap mean over 2,000 resamples with its 95\% percentile interval.}}{16}{table.2}\protected@file@percent }
+\newlabel{tab:oneyear}{{2}{16}{One-year discrimination in the one-year design (1,855 cases with four controls each, by design). AUROC is the bootstrap mean over 2,000 resamples with its 95\% percentile interval}{table.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Discrimination at four horizons in the survival design. For each model, the cross-validated risk of every patient was read at all four horizons without refitting. Each horizon counts from the index ECG, and the shortest, 120 days, covers onset in the 90 days after the 30-day blanking window. AUROC is the full-sample estimate with its 95\% bootstrap percentile interval. The clinical Cox model has no interval.}}{16}{table.3}\protected@file@percent }
+\newlabel{tab:horizons}{{3}{16}{Discrimination at four horizons in the survival design. For each model, the cross-validated risk of every patient was read at all four horizons without refitting. Each horizon counts from the index ECG, and the shortest, 120 days, covers onset in the 90 days after the 30-day blanking window. AUROC is the full-sample estimate with its 95\% bootstrap percentile interval. The clinical Cox model has no interval}{table.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Calibration, risk stratification and operating points}{17}{subsection.5.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces One-year calibration, decision curves and risk deciles of the fused model (BTTN+clin, blue), the ECG-only BTTN (BTTN, orange) and the clinical model (clinical, green). The sample is the 19,986 patients of the survival design who had incident AF within one year or were followed for more than one year; 838 had AF within one year. Each model's risk score was converted to a probability by logistic recalibration with two-fold cross-fitting. Probabilities, AF rates and net benefit are given as proportions. Left: observed against mean predicted one-year AF in ten equal-count bins of each model's probability, with the dashed line marking equal values. Brier scores in the legend are rounded to three decimals. Middle: net benefit (vertical axis) against threshold probability, at the sample's one-year AF proportion, with treat-all (dotted) and treat-none (dashed) references. In the left and middle panels the three models differ by colour only. Right: observed one-year AF proportion in each decile of the fused model's probability, numbered 0 (lowest) to 9 (highest). The dashed line, labelled ``cohort prev'' in the image, marks the sample's one-year AF proportion. Points and bars carry no confidence intervals.}}{18}{figure.2}\protected@file@percent }
+\newlabel{fig:clinical-utility}{{2}{18}{One-year calibration, decision curves and risk deciles of the fused model (BTTN+clin, blue), the ECG-only BTTN (BTTN, orange) and the clinical model (clinical, green). The sample is the 19,986 patients of the survival design who had incident AF within one year or were followed for more than one year; 838 had AF within one year. Each model's risk score was converted to a probability by logistic recalibration with two-fold cross-fitting. Probabilities, AF rates and net benefit are given as proportions. Left: observed against mean predicted one-year AF in ten equal-count bins of each model's probability, with the dashed line marking equal values. Brier scores in the legend are rounded to three decimals. Middle: net benefit (vertical axis) against threshold probability, at the sample's one-year AF proportion, with treat-all (dotted) and treat-none (dashed) references. In the left and middle panels the three models differ by colour only. Right: observed one-year AF proportion in each decile of the fused model's probability, numbered 0 (lowest) to 9 (highest). The dashed line, labelled ``cohort prev'' in the image, marks the sample's one-year AF proportion. Points and bars carry no confidence intervals}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Operating points at one year in the survival sample (19,986 patients, 838 cases) after cross-fitted recalibration. PPV and the number needed to monitor (NNM) are recomputed at the proportion of cases among the cases and AF-free controls of the one-year design, 1,855 in 43,625.}}{19}{table.4}\protected@file@percent }
+\newlabel{tab:operating}{{4}{19}{Operating points at one year in the survival sample (19,986 patients, 838 cases) after cross-fitted recalibration. PPV and the number needed to monitor (NNM) are recomputed at the proportion of cases among the cases and AF-free controls of the one-year design, 1,855 in 43,625}{table.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Cardiac-cycle occlusion profile}{19}{subsection.5.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Response of the ECG-only BTTN to beat-aligned occlusion, as the mean over 120 ECGs. The model was trained on the sample of the survival design. The ECGs are those of patients with incident AF to which the model gave the highest risk, passing over ECGs that could not be read or had fewer than three detected beats. Each panel shows one lead. The black trace is the mean of the ECGs' median beats, with each lead scaled to a maximum absolute amplitude of 1; the vertical scale is not shown. Time is relative to the R peak detected in lead II (dotted line). Occlusion windows of 12 samples (24~ms) are centred every 25~ms from 350~ms before to 425~ms after the R peak, with each centre rounded to a whole sample towards the R peak. Each shaded band spans the 25~ms step around its nominal centre. For each window, the window was set to zero in every beat of one lead, the spectrogram was rebuilt and the drop in log-risk was recorded. Shading depth shows the mean drop, with a negative mean set to zero, divided by the sum of the mean signal energy removed and one tenth of that energy averaged over all leads and windows. Depth is relative to the largest value in the figure, and windows below 3 percent of it are not shaded. The P, PR, QRS, ST and T windows of the text group the windows centred 225 to 150~ms before the R peak, 125 to 75~ms before, 50~ms before to 25~ms after, 50 to 125~ms after, and 150 to 375~ms after. The windows centred 350 to 250~ms before and at 400 and 425~ms after the R peak belong to none of the five. Table~\ref {tab:occlusion} gives the span of the beat that each group occludes. The shading describes the response of the fitted model to occlusion and is not an effect on the risk of AF.}}{20}{figure.3}\protected@file@percent }
+\newlabel{fig:beat-saliency}{{3}{20}{Response of the ECG-only BTTN to beat-aligned occlusion, as the mean over 120 ECGs. The model was trained on the sample of the survival design. The ECGs are those of patients with incident AF to which the model gave the highest risk, passing over ECGs that could not be read or had fewer than three detected beats. Each panel shows one lead. The black trace is the mean of the ECGs' median beats, with each lead scaled to a maximum absolute amplitude of 1; the vertical scale is not shown. Time is relative to the R peak detected in lead II (dotted line). Occlusion windows of 12 samples (24~ms) are centred every 25~ms from 350~ms before to 425~ms after the R peak, with each centre rounded to a whole sample towards the R peak. Each shaded band spans the 25~ms step around its nominal centre. For each window, the window was set to zero in every beat of one lead, the spectrogram was rebuilt and the drop in log-risk was recorded. Shading depth shows the mean drop, with a negative mean set to zero, divided by the sum of the mean signal energy removed and one tenth of that energy averaged over all leads and windows. Depth is relative to the largest value in the figure, and windows below 3 percent of it are not shaded. The P, PR, QRS, ST and T windows of the text group the windows centred 225 to 150~ms before the R peak, 125 to 75~ms before, 50~ms before to 25~ms after, 50 to 125~ms after, and 150 to 375~ms after. The windows centred 350 to 250~ms before and at 400 and 425~ms after the R peak belong to none of the five. Table~\ref {tab:occlusion} gives the span of the beat that each group occludes. The shading describes the response of the fitted model to occlusion and is not an effect on the risk of AF}{figure.3}{}}
+\citation{Sau_2026}
+\citation{Zeidaabadi_2026}
+\citation{Jabbour_2024}
+\citation{Raghunath_2021}
+\citation{Riek_2026}
+\citation{Tsiartas_2025}
+\citation{Attia_2019,Yuan_2023}
+\citation{McKeen_2025}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Beat-aligned occlusion of the ECG term over 120 high-risk training ECGs of patients with an event. Windows are fixed offsets from the R peak. Each window lists the centres of the 24~ms occlusions it groups and the span of the beat that their occluded samples cover, from the start of the first sample to the end of the last. Each centre is rounded to a whole sample towards the R peak. The raw value is the mean drop in log-risk, with negative means set to zero, and the normalised value is that drop per unit of signal energy removed.}}{21}{table.5}\protected@file@percent }
+\newlabel{tab:occlusion}{{5}{21}{Beat-aligned occlusion of the ECG term over 120 high-risk training ECGs of patients with an event. Windows are fixed offsets from the R peak. Each window lists the centres of the 24~ms occlusions it groups and the span of the beat that their occluded samples cover, from the start of the first sample to the end of the last. Each centre is rounded to a whole sample towards the R peak. The raw value is the mean drop in log-risk, with negative means set to zero, and the normalised value is that drop per unit of signal energy removed}{table.5}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Discussion}{21}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Comparison with published incident-AF models}{21}{subsection.6.1}\protected@file@percent }
+\citation{Khurshid_2022,Christopoulos_2020}
+\citation{Pfeifer_2026}
+\citation{Patlatzoglou_2025}
+\citation{arxiv_2106_13314}
+\citation{Khurshid_2022}
+\citation{Zeidaabadi_2026}
+\citation{Schnabel_2009}
+\citation{Cheng_2009}
+\citation{Magnani_2013}
+\citation{Tanaka_2021}
+\citation{Yogeswaran_2025}
+\citation{Magnani_2015}
+\citation{Emmanuela_2026}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Implications of an ECG term built on readable factors, with a separate clinical term}{22}{subsection.6.2}\protected@file@percent }
+\citation{Ostrowska_2022}
+\citation{Goette_2016}
+\citation{Maezono_2025}
+\citation{Yao_2019}
+\citation{Malmo_2016}
+\citation{Rix_2012}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Limitations}{23}{subsection.6.3}\protected@file@percent }
+\citation{Johnson_2023}
+\citation{Schnabel_2009}
+\citation{Cheng_2009,Magnani_2013}
+\citation{arxiv_1810_03292,arxiv_1806_10758,Arends_2026}
+\citation{arxiv_1702_04595}
+\citation{_imi__2025}
+\citation{arxiv_2106_13314}
+\citation{arxiv_1806_10758}
+\citation{Collins_2024}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Future research}{24}{subsection.6.4}\protected@file@percent }
+\citation{Cheng_2009,Magnani_2013}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{25}{section.7}\protected@file@percent }
+\citation{https://doi.org/10.13026/4nqg-sb35}
+\citation{Johnson_2023}
+\bibstyle{vancouver}
+\bibdata{refs}
+\bibcite{Kashou_2021}{{1}{}{{}}{{}}}
+\bibcite{Wolf_1991}{{2}{}{{}}{{}}}
+\bibcite{Schnabel_2015}{{3}{}{{}}{{}}}
+\bibcite{Alonso_2013}{{4}{}{{}}{{}}}
+\bibcite{Raghunath_2021}{{5}{}{{}}{{}}}
+\bibcite{Khurshid_2022}{{6}{}{{}}{{}}}
+\bibcite{Tsiartas_2025}{{7}{}{{}}{{}}}
+\bibcite{Saiz_Vivo_2025}{{8}{}{{}}{{}}}
+\bibcite{Van_Gelder_2024}{{9}{}{{}}{{}}}
+\bibcite{Arends_2026}{{10}{}{{}}{{}}}
+\bibcite{Rudin_2019}{{11}{}{{}}{{}}}
+\bibcite{De_Lathauwer_2008}{{12}{}{{}}{{}}}
+\bibcite{arxiv_2010_04963}{{13}{}{{}}{{}}}
+\bibcite{Faes_2024}{{14}{}{{}}{{}}}
+\bibcite{Valasakis_2026}{{15}{}{{}}{{}}}
+\bibcite{Attia_2019}{{16}{}{{}}{{}}}
+\bibcite{Yuan_2023}{{17}{}{{}}{{}}}
+\bibcite{Jabbour_2024}{{18}{}{{}}{{}}}
+\bibcite{Sau_2026}{{19}{}{{}}{{}}}
+\bibcite{Zeidaabadi_2026}{{20}{}{{}}{{}}}
+\bibcite{Habineza_2023}{{21}{}{{}}{{}}}
+\bibcite{Ribeiro_2020}{{22}{}{{}}{{}}}
+\bibcite{Riek_2026}{{23}{}{{}}{{}}}
+\bibcite{Schnabel_2009}{{24}{}{{}}{{}}}
+\bibcite{Cheng_2009}{{25}{}{{}}{{}}}
+\bibcite{Magnani_2015}{{26}{}{{}}{{}}}
+\bibcite{Christopoulos_2020}{{27}{}{{}}{{}}}
+\bibcite{Khurshid_2025}{{28}{}{{}}{{}}}
+\bibcite{Biton_2021}{{29}{}{{}}{{}}}
+\bibcite{arxiv_1810_03292}{{30}{}{{}}{{}}}
+\bibcite{arxiv_1806_10758}{{31}{}{{}}{{}}}
+\bibcite{Wagner_2024}{{32}{}{{}}{{}}}
+\bibcite{arxiv_2007_04612}{{33}{}{{}}{{}}}
+\bibcite{arxiv_2106_13314}{{34}{}{{}}{{}}}
+\bibcite{arxiv_2205_10268}{{35}{}{{}}{{}}}
+\bibcite{arxiv_2507_16761}{{36}{}{{}}{{}}}
+\bibcite{arxiv_2504_02667}{{37}{}{{}}{{}}}
+\bibcite{Patlatzoglou_2025}{{38}{}{{}}{{}}}
+\bibcite{arxiv_2511_04292}{{39}{}{{}}{{}}}
+\bibcite{Kolda_2009}{{40}{}{{}}{{}}}
+\bibcite{Goulart_2020}{{41}{}{{}}{{}}}
+\bibcite{https://doi.org/10.5281/zenodo.22227432}{{42}{}{{}}{{}}}
+\bibcite{https://doi.org/10.13026/4nqg-sb35}{{43}{}{{}}{{}}}
+\bibcite{Cox_1972}{{44}{}{{}}{{}}}
+\bibcite{Katzman_2018}{{45}{}{{}}{{}}}
+\bibcite{Johnson_2023}{{46}{}{{}}{{}}}
+\bibcite{Rix_2012}{{47}{}{{}}{{}}}
+\bibcite{Vickers_2006}{{48}{}{{}}{{}}}
+\bibcite{Collins_2024}{{49}{}{{}}{{}}}
+\bibcite{Zeiler_2014}{{50}{}{{}}{{}}}
+\bibcite{Ivanovs_2021}{{51}{}{{}}{{}}}
+\bibcite{arxiv_1702_04595}{{52}{}{{}}{{}}}
+\bibcite{_imi__2025}{{53}{}{{}}{{}}}
+\bibcite{McKeen_2025}{{54}{}{{}}{{}}}
+\bibcite{Pfeifer_2026}{{55}{}{{}}{{}}}
+\bibcite{Magnani_2013}{{56}{}{{}}{{}}}
+\bibcite{Tanaka_2021}{{57}{}{{}}{{}}}
+\bibcite{Yogeswaran_2025}{{58}{}{{}}{{}}}
+\bibcite{Emmanuela_2026}{{59}{}{{}}{{}}}
+\bibcite{Ostrowska_2022}{{60}{}{{}}{{}}}
+\bibcite{Goette_2016}{{61}{}{{}}{{}}}
+\bibcite{Maezono_2025}{{62}{}{{}}{{}}}
+\bibcite{Yao_2019}{{63}{}{{}}{{}}}
+\bibcite{Malmo_2016}{{64}{}{{}}{{}}}
+\providecommand\NAT@force@numbers{}\NAT@force@numbers
+\gdef \@abspage@last{35}

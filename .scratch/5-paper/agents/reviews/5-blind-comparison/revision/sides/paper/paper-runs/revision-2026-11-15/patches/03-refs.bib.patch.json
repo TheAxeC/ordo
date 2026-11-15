@@ -1,0 +1,197 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "refs.bib",
+  "base_sha256": "98be9b3153d986f88782462133cc5bf1cf6a95860a2edcb216d830f39c0ed42a",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0004",
+      "old_hash": "b81b8752ef7fbbcf09aa61c4d65d47273a23e6ce3f3c697fa2ad7d89e01dec6e",
+      "roadmap_item_ids": ["R3-14"],
+      "rationale": "The preprint is typed as a preprint with its arXiv identifier once, in place of an article whose journal is 'arXiv preprint' with the identifier repeated in a note.",
+      "new_text": "@misc{lookingbeyond2026,\n  author  = {Filice, Francesca and De Rose, Edoardo and Bartucci, Simone and Calimeri, Francesco and Perri, Simona},\n  title   = {Looking Beyond Accuracy: A Holistic Benchmark of {ECG} Foundation Models},\n  year    = {2026},\n  eprint  = {2601.21830},\n  archivePrefix = {arXiv}}"
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0005",
+      "old_hash": "8de86a0ea15860a139046b31ca2b033c84a8a0f67fe0f4e4c652a5041599b536",
+      "roadmap_item_ids": ["R3-14"],
+      "rationale": "The weights URL leaves the reference note; the manuscript's code and data availability statement now gives it.",
+      "new_text": "@article{hubertecg2024,\n  author  = {Coppola, Edoardo and Savardi, Mattia and Massussi, Mauro and Adamo, Marianna and Metra, Marco and Signoroni, Alberto},\n  title   = {{HuBERT-ECG}: a self-supervised foundation model for broad and scalable cardiac applications},\n  journal = {medRxiv},\n  year    = {2024},\n  doi     = {10.1101/2024.11.14.24317328}}"
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0006",
+      "old_hash": "a55c7353175ec8e0d3dc0fc12c46d70afccc3d39ce7b8a63d25b5baee8b73d5f",
+      "roadmap_item_ids": ["R3-14"],
+      "rationale": "The entry takes the file's own form: the URL that would print beside the DOI, the ISSN, the publisher and the month field are removed, and the inverted author name is corrected.",
+      "new_text": "@article{ecgfounder2024,\n  author  = {Li, Jun and Aguirre, Aaron D. and Junior, Valdery Moura and Jin, Jiarui and Liu, Che and Zhong, Lanhai and Sun, Chenxi and Clifford, Gari and Westover, M. Brandon and Hong, Shenda},\n  title   = {An Electrocardiogram Foundation Model Built on over 10 Million Recordings},\n  journal = {{NEJM AI}},\n  volume  = {2}, number = {7}, year = {2025},\n  doi     = {10.1056/AIoa2401033}}"
+    },
+    {
+      "op_id": "OP004",
+      "kind": "insert_after",
+      "block_id": "B0007",
+      "old_hash": "32685472d34c1574222f27cee0134c06796302608b3c699643620db9953cf24a",
+      "roadmap_item_ids": ["R1-4", "R3-6", "R2-4", "R3-4"],
+      "rationale": "New entry for the ECGFounder preprint, whose full text gives the parameter count, the 150 label categories and the pretraining preprocessing that the revised text cites; metadata from lookup.py bibtex 2410.04133.",
+      "new_text": "@misc{arxiv_2410_04133,\n  title = {An Electrocardiogram Foundation Model Built on over 10 Million Recordings with External Evaluation across Multiple Domains},\n  author = {Jun Li and Aaron Aguirre and Junior Moura and Che Liu and Lanhai Zhong and Chenxi Sun and Gari Clifford and Brandon Westover and Shenda Hong},\n  year = {2024},\n  eprint = {2410.04133},\n  archivePrefix = {arXiv}\n}"
+    },
+    {
+      "op_id": "OP005",
+      "kind": "insert_after",
+      "block_id": "B0009",
+      "old_hash": "867b759edc3f1ad4f16333f768f317033e0d506208a1e93703ea9cc675781f4a",
+      "roadmap_item_ids": ["R2-3"],
+      "rationale": "New entry for the source of the V-measure that the metrics table cites; metadata from lookup.py resolve (Semantic Scholar 5421dbcb7e14766eb3d951910ae8d7892d735a01, venue Conference on Empirical Methods in Natural Language Processing). The record has no DOI.",
+      "new_text": "@inproceedings{rosenberg2007vmeasure,\n  author    = {Rosenberg, Andrew and Hirschberg, Julia},\n  title     = {{V}-Measure: a conditional entropy-based external cluster evaluation measure},\n  booktitle = {Proceedings of the Conference on Empirical Methods in Natural Language Processing (EMNLP)},\n  year      = {2007}}"
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "old_hash": "1d1267a57fd2f8319aeafcf7b811b6082a36d668dbc00adb39cb7e5a3edd8e1e",
+      "roadmap_item_ids": ["R3-14"],
+      "rationale": "The preprint is typed as a preprint with its arXiv identifier once, in place of an article whose journal is 'arXiv preprint' with the identifier repeated in a note.",
+      "new_text": "@misc{sslclustering2025,\n  author  = {Weng, Xi and An, Jianing and Ma, Xudong and Qi, Binhang and Luo, Jie and Yang, Xi and Dong, Jin Song and Huang, Lei},\n  title   = {Clustering Properties of Self-Supervised Learning},\n  year    = {2025},\n  eprint  = {2501.18452},\n  archivePrefix = {arXiv}}"
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "old_hash": "a86e785e3ea2e2f1752faf2edb25989a7386549680b802dcd83e74f9ee60d59a",
+      "roadmap_item_ids": ["R3-14"],
+      "rationale": "The entry had no DOI or identifier; the arXiv identifier 1602.05629 comes from lookup.py resolve (OpenAlex W2541884796 and arXiv).",
+      "new_text": "@inproceedings{fedavg2017,\n  author    = {McMahan, Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and Ag{\\\"u}era y Arcas, Blaise},\n  title     = {Communication-efficient learning of deep networks from decentralized data},\n  booktitle = {Proceedings of the 20th International Conference on Artificial Intelligence and Statistics (AISTATS)},\n  pages     = {1273--1282}, year = {2017},\n  eprint    = {1602.05629}, archivePrefix = {arXiv}}"
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "old_hash": "5ed6a3790daf0f67c0c0c732de32061565ac2ad0f3eb3d12c05b6804ce088df0",
+      "roadmap_item_ids": ["R3-14"],
+      "rationale": "The entry had no DOI or identifier; the arXiv identifier 2005.13249 comes from lookup.py resolve (OpenAlex W3107490265 and arXiv).",
+      "new_text": "@inproceedings{clocs2021,\n  author    = {Kiyasseh, Dani and Zhu, Tingting and Clifton, David A.},\n  title     = {{CLOCS}: Contrastive Learning of Cardiac Signals Across Space, Time, and Patients},\n  booktitle = {Proceedings of the 38th International Conference on Machine Learning (ICML)},\n  pages     = {5606--5615}, year = {2021},\n  eprint    = {2005.13249}, archivePrefix = {arXiv}}"
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "old_hash": "e04248460d77fa341e64ab82c358f4cb0902689c712c7172edc3b8ce89bfa932",
+      "roadmap_item_ids": ["R3-14"],
+      "rationale": "The entry had no DOI or identifier; the arXiv identifier 2106.04452 comes from lookup.py resolve (OpenAlex W3172143996, Semantic Scholar and arXiv).",
+      "new_text": "@inproceedings{threekg2021,\n  author    = {Gopal, Bryan and Han, Ryan and Raghupathi, Gautham and Ng, Andrew Y. and Tison, Geoffrey H. and Rajpurkar, Pranav},\n  title     = {{3KG}: Contrastive Learning of 12-Lead Electrocardiograms using Physiologically-Inspired Augmentations},\n  booktitle = {Proceedings of Machine Learning for Health (ML4H)},\n  pages     = {156--167}, year = {2021},\n  eprint    = {2106.04452}, archivePrefix = {arXiv}}"
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0022",
+      "old_hash": "b021cdfa15526ccd56ad33d29636cf3f41c44849fe3fde52d9219ac88a0ef7c1",
+      "roadmap_item_ids": ["R3-14", "R2-1b"],
+      "rationale": "The entry takes the file's own form with a page range in BibTeX form; the author list is cut to the first six with 'others' as the numbered style does for long lists, which also removes the characters BibTeX cannot sort.",
+      "new_text": "@article{Van_Gelder_2024,\n  author  = {Van Gelder, Isabelle C. and Rienstra, Michiel and Bunting, Karina V. and Casado-Arroyo, Ruben and Caso, Valeria and Crijns, Harry J. G. M. and others},\n  title   = {2024 {ESC} Guidelines for the management of atrial fibrillation developed in collaboration with the {European Association for Cardio-Thoracic Surgery (EACTS)}},\n  journal = {European Heart Journal},\n  volume  = {45}, number = {36}, pages = {3314--3414}, year = {2024},\n  doi     = {10.1093/eurheartj/ehae176}}"
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "old_hash": "3bf2116e7cfaa2fbc6aeaa76159e0d185815999800fd2a3c16a1359b5f956f8e",
+      "roadmap_item_ids": ["R3-14", "R2-1b"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and a page range in BibTeX form.",
+      "new_text": "@article{Hannun_2019,\n  author  = {Hannun, Awni Y. and Rajpurkar, Pranav and Haghpanahi, Masoumeh and Tison, Geoffrey H. and Bourn, Codie and Turakhia, Mintu P. and Ng, Andrew Y.},\n  title   = {Cardiologist-level arrhythmia detection and classification in ambulatory electrocardiograms using a deep neural network},\n  journal = {Nature Medicine},\n  volume  = {25}, number = {1}, pages = {65--69}, year = {2019},\n  doi     = {10.1038/s41591-018-0268-3}}"
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "old_hash": "74184d191d7e8c562c96014ac2e334b8b6df28ebfdd455731b75b81e33093178",
+      "roadmap_item_ids": ["R3-14", "R2-3"],
+      "rationale": "The entry takes the file's own form, writes the accented name in LaTeX, and gives the article number once in place of an undefined month macro and a repeated page.",
+      "new_text": "@article{Danon_2005,\n  author  = {Danon, Leon and D{\\'\\i}az-Guilera, Albert and Duch, Jordi and Arenas, Alex},\n  title   = {Comparing community structure identification},\n  journal = {Journal of Statistical Mechanics: Theory and Experiment},\n  volume  = {2005}, number = {9}, pages = {P09008}, year = {2005},\n  doi     = {10.1088/1742-5468/2005/09/P09008}}"
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "old_hash": "b093a215318c77cf94d819b9ace275503a6a64ec5ed947bbcef0316be833c678",
+      "roadmap_item_ids": ["R3-14", "R2-3"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or undefined month macro, and a page range in BibTeX form.",
+      "new_text": "@article{Fowlkes_1983,\n  author  = {Fowlkes, E. B. and Mallows, C. L.},\n  title   = {A method for comparing two hierarchical clusterings},\n  journal = {Journal of the American Statistical Association},\n  volume  = {78}, number = {383}, pages = {553--569}, year = {1983},\n  doi     = {10.1080/01621459.1983.10478008}}"
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "old_hash": "b1c3df98ecf08b4223de65cc8d038bcff7b558eb1b42bd22942c42e985091812",
+      "roadmap_item_ids": ["R3-14", "R3-1"],
+      "rationale": "The entry takes the file's own form, writes the accented name in LaTeX, protects the acronyms of the title and drops the undefined month macro.",
+      "new_text": "@article{Lunelli_2026,\n  author  = {Lunelli, Riccardo and Nicolson, Angus and Pr{\\\"o}ll, Samuel Martin and Reinstadler, Sebastian Johannes and Bauer, Axel and Dlaska, Clemens},\n  title   = {{BenchECG} and {xECG}: a benchmark and baseline for {ECG} foundation models},\n  journal = {npj Digital Medicine},\n  year    = {2026},\n  doi     = {10.1038/s41746-026-03196-y}}"
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "old_hash": "725909605670fe7e4572c3fbad9f3aafae287576ab2f16df975c468b23ea0f53",
+      "roadmap_item_ids": ["R3-14", "R3-1"],
+      "rationale": "The proceedings paper is typed as a paper in proceedings with its series, which the numbered style prints, in place of a book chapter without pages; the non-ASCII dash and multiplication sign of the booktitle are written in LaTeX.",
+      "new_text": "@inproceedings{Xu_2025,\n  author    = {Xu, Yuhao and Lu, Jiaying and Ding, Sirui and Cao, Defu and Hu, Xiao and Yang, Carl},\n  title     = {An Electrocardiogram Multi-Task Benchmark with Comprehensive Evaluations and Insightful Findings},\n  booktitle = {{MEDINFO} 2025: Healthcare Smart $\\times$ Medicine Deep},\n  series    = {Studies in Health Technology and Informatics},\n  publisher = {IOS Press},\n  year      = {2025},\n  doi       = {10.3233/SHTI251036}}"
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "old_hash": "a7bd613aba67ebe621c9f7b43dfa3f8f85272c28ee186307999131b0c8961d39",
+      "roadmap_item_ids": ["R3-14", "R3-4"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and the acronym of the title protected.",
+      "new_text": "@article{Kim_2027,\n  author  = {Kim, Sehun},\n  title   = {Learning general representation of 12-lead {ECG} with a joint-embedding predictive architecture},\n  journal = {Neural Networks},\n  volume  = {205}, pages = {109334}, year = {2027},\n  doi     = {10.1016/j.neunet.2026.109334}}"
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "old_hash": "c71eaad5492935b291d496345c69f98436fc52a9a357127113270768b1d0d7cf",
+      "roadmap_item_ids": ["R3-14", "R3-4"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and the acronyms of the title protected.",
+      "new_text": "@article{Tian_2024,\n  author  = {Tian, Yuanyuan and Li, Zhiyuan and Jin, Yanrui and Wang, Mengxiao and Wei, Xiaoyang and Zhao, Liqun and Liu, Yunqing and Liu, Jinlei and Liu, Chengliang},\n  title   = {Foundation model of {ECG} diagnosis: diagnostics and explanations of any form and rhythm on {ECG}},\n  journal = {Cell Reports Medicine},\n  volume  = {5}, number = {12}, pages = {101875}, year = {2024},\n  doi     = {10.1016/j.xcrm.2024.101875}}"
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "old_hash": "db01f3dcaa7488b2670b83591c769a04078c943dbaaab4a12805a9abb6e0f79a",
+      "roadmap_item_ids": ["R3-14", "R3-4"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or undefined month macro, and the model name protected.",
+      "new_text": "@article{McKeen_2025,\n  author  = {McKeen, Kaden and Masood, Sameer and Toma, Augustin and Rubin, Barry and Wang, Bo},\n  title   = {{ECG-FM}: an open electrocardiogram foundation model},\n  journal = {{JAMIA} Open},\n  volume  = {8}, number = {5}, year = {2025},\n  doi     = {10.1093/jamiaopen/ooaf122}}"
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "old_hash": "b7bbce0ff2486c16c68ddaee3f65c2cff27593ae751452c2ab596fe504a532cf",
+      "roadmap_item_ids": ["R3-14", "R3-1"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and the acronyms of the title protected.",
+      "new_text": "@article{Han_2026,\n  author  = {Han, Ahram and Tohyama, Takeshi and Yoon, Dukyong and Paik, Kenneth and Gow, Brian and Celi, Leo Anthony and Lee, Hyeonhoon and Lee, Hyung-Chul},\n  title   = {Review of open foundation models and datasets for {ECG} and {PPG} waveforms},\n  journal = {npj Digital Medicine},\n  year    = {2026},\n  doi     = {10.1038/s41746-026-03101-7}}"
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "old_hash": "67263bef25d748df3bc639057498edf0f134b917ceebe6bd8ac7223f39fc5c61",
+      "roadmap_item_ids": ["R3-14", "R3-2"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month.",
+      "new_text": "@article{Zheng_2020,\n  author  = {Zheng, Jianwei and Zhang, Jianming and Danioko, Sidy and Yao, Hai and Guo, Hangyuan and Rakovski, Cyril},\n  title   = {A 12-lead electrocardiogram database for arrhythmia research covering more than 10,000 patients},\n  journal = {Scientific Data},\n  volume  = {7}, number = {1}, year = {2020},\n  doi     = {10.1038/s41597-020-0386-x}}"
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "old_hash": "c729b43fbe528e8cc2d1d5d3434a41fa19d36b9c341d2f41d0c1a779a3a3cf51",
+      "roadmap_item_ids": ["R3-14", "R3-2"],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, two inverted author names corrected, and the title's acronyms protected.",
+      "new_text": "@article{Perez_Alday_2020,\n  author  = {Perez Alday, Erick A. and Gu, Annie and Shah, Amit J. and Robichaux, Chad and Wong, An-Kwok Ian and Liu, Chengyu and Liu, Feifei and Bahrami Rad, Ali and Elola, Andoni and Seyedi, Salman and Li, Qiao and Sharma, Ashish and Clifford, Gari D. and Reyna, Matthew A.},\n  title   = {Classification of 12-lead {ECGs}: the {PhysioNet/Computing in Cardiology} Challenge 2020},\n  journal = {Physiological Measurement},\n  volume  = {41}, number = {12}, pages = {124003}, year = {2020},\n  doi     = {10.1088/1361-6579/abc960}}"
+    }
+  ]
+}

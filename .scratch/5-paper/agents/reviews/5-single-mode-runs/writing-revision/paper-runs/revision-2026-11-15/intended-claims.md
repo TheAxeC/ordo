@@ -1,0 +1,67 @@
+# Intended claims
+
+The claims that the text added or changed by the revision patch for items W1 to W49 will make. Claims the patch only moves or rewords are not listed.
+
+1. On the two arrhythmia tasks the study evaluates, whether clustering of the ECG recovers a clinical label depends on the representation fed to the clustering algorithm and on how the result is evaluated. | evidence: empirical | sources: the project's results
+2. The raw and conv-AE pipelines match a majority-class assignment, the conv-AE despite a supervised ceiling of 0.678 and the raw pipeline with a ceiling of 0.519 against a majority of 0.504. | evidence: empirical | sources: the project's results
+3. Across four scalers, feature scaling moves the mean ARI of the hand-crafted features from 0.229 to 0.629. | evidence: empirical | sources: the project's results
+4. At a 9:1 SR:AF ratio the hand-crafted features have the highest ARI, ahead of ECGFounder (0.265 against 0.063), and under non-IID federation they retain the largest share of their centralized ARI (0.92 against 0.69). | evidence: empirical | sources: the project's results
+5. The hand-crafted extraction takes about one fifteenth of ECGFounder's inference time per record, and the representation with the higher retention under both stressors is also the lower-cost one to compute. | evidence: empirical | sources: the project's results
+6. The purity of the earlier master's project equalled the majority-class proportion and its silhouette was measured on a degenerate solution, so neither number measured agreement with the classes. | evidence: empirical | sources: the project's results
+7. A reconstruction autoencoder receives no class information, so nothing in its objective arranges its code by class. | evidence: definitional | sources: none
+8. ARI and AMI are exactly zero for the one-cluster solution and have expected value zero under random assignment. | evidence: definitional | sources: hubertarabie1985, vinh2010
+9. The raw arm receives more input than the hand-crafted arm, so missing input does not explain its chance-level clustering, and its 1992 dimensions may themselves weaken Euclidean clustering. | evidence: theoretical | sources: the project's results
+10. A single-lead definition lets the hand-crafted feature logic, RR timing and beat morphology, be carried to the two-lead MIT-BIH beats as the 21-dimensional beat-morphology set. | evidence: definitional | sources: the project's results
+11. On PTB-XL the spread of ARI across representations (best ARI 0.008 to 0.885) exceeded the spread across the clusterers within each representation that clustered well; on both tasks the same held. | evidence: empirical | sources: the project's results
+12. A linear probe finds little label information in the raw vector, a likely reason being that fixed sample offsets do not fall on the same part of the cardiac cycle in two records, while a random forest on the same vector reaches 0.714. | evidence: empirical | sources: the project's results
+13. On the hand-crafted features and ECGFounder the non-linear probe adds little over the linear ceiling, so their label information is already linearly accessible. | evidence: empirical | sources: the project's results
+14. HuBERT-ECG receives only the first 5 s of each 10 s record, which may contribute to its low ARI alongside the off-axis reading. | evidence: theoretical | sources: the project's results
+15. The patient-grouped bootstrap intervals hold the partitions fixed and so do not include the variation that refitting the clustering on each resample would add. | evidence: definitional | sources: the project's results
+16. At the 9:1 ratio HuBERT-ECG's partition agrees with the classes on record pairs as often as ECGFounder's but shares less information with them. | evidence: empirical | sources: the project's results
+17. The imbalance reversal holds for the one ratio, scaler and clusterer evaluated. | evidence: empirical | sources: the project's results
+18. Under non-IID federation the three representations that cluster above chance lose unequal shares of their centralized ARI, while raw flattening stays at 0.000 in every setting. | evidence: empirical | sources: the project's results
+19. Under non-IID federation ECGFounder's lead over the hand-crafted features narrows, from 0.885 against 0.644 centralized to 0.612 against 0.591. | evidence: empirical | sources: the project's results
+20. The study judges a deployment by the worst site draw as well as the average one, because each real site has one class mix, which may be an unfavourable one. | evidence: normative | sources: none
+21. On MIT-BIH the raw beat window holds label information (ceiling 0.741) that clustering does not recover, and the raw and conv-AE pipelines stay far below the beat-morphology features (at most 0.049 and 0.127 against 0.783). | evidence: empirical | sources: the project's results
+22. On a 300-record subset the upsampled 100 Hz input may raise ECGFounder's ARI by about 0.013, small against its k-means lead of 0.242 over the hand-crafted features. | evidence: empirical | sources: the project's results
+23. Atrial flutter can conduct with a regular ventricular rhythm, so flutter records among the AF positives may not fit the reading that SR and AF differ in rhythm regularity. | evidence: theoretical | sources: none in the .bib
+24. The federated simulation fits feature scaling on statistics pooled over all sites, which a real federation would not have. | evidence: definitional | sources: the project's results
+25. A clustering result on these representations needs its scaler stated. | evidence: normative | sources: the project's results
+
+## Claims of the item-8 pass (patch 07)
+
+The claims that the text added or changed by patch 07, for the items left after reading 1, will make. Claim 4 above is reworded for V8.
+
+26. Representations with nearly the same linear-evaluation accuracy can differ in how well they cluster, as reported for self-supervised image encoders, and the study treats the distinction as background. | evidence: empirical | sources: sslclustering2025
+27. The closest benchmark compares four ECG foundation models with one another and with no hand-crafted baseline, includes a cluster-separability analysis (ARI) of embeddings drawn from four 12-lead datasets with PTB-XL among them, and its datasets do not include the MIT-BIH database. | evidence: empirical | sources: lookingbeyond2026
+28. Contrastive self-supervised methods built on physiologically motivated augmentations and patient- or lead-level invariances (CLOCS, 3KG, contrastive predictive coding for 12-lead ECG) learn ECG representations without labels. | evidence: empirical | sources: clocs2021, threekg2021, mehari2022ssl
+29. The study used PTB-XL in its version 1.0.3 release, which holds 21 799 records from 18 869 patients, each 10 s long. | evidence: empirical | sources: ptbxl2020 for the database and the record length; the counts and the version rest on the authors' record of the release
+30. PTB-XL encodes rhythm statements at a likelihood of zero. | evidence: empirical | sources: ptbxl2020
+31. Automated AF detection from a single short lead has been benchmarked in a dedicated classification challenge. | evidence: empirical | sources: clifford2017af
+32. The federated clustering is federated k-means with the centroids aggregated in the manner of federated averaging (FedAvg). | evidence: definitional | sources: fedavg2017
+33. The closest benchmark reports ECG-FM, a foundation model this study does not include, to separate by clinical label. | evidence: empirical | sources: lookingbeyond2026
+34. A likely reason for the fall in mean ARI under robust scaling is that robust scaling leaves heavy arrhythmic tails unbounded, so that a few outliers may dominate Euclidean distance. | evidence: theoretical | sources: the project's results
+35. In the degenerate raw-flattening solution with agglomerative clustering, the largest cluster held all but at most 12 of the 2 542 records, the bound that a largest-cluster fraction of 1.00 to two decimals gives. | evidence: empirical | sources: the project's results
+36. On PTB-XL the choice of representation moved the best ARI from 0.008 to 0.885, and the four clusterers other than HDBSCAN moved it far less within each of the two representations that clustered well. | evidence: empirical | sources: the project's results
+37. Because the lowest hand-crafted AMI (0.329) stayed above the highest HuBERT-ECG AMI (0.132), ECGFounder, the hand-crafted features and HuBERT-ECG kept their order at every K from 2 to 8. | evidence: empirical | sources: the project's results
+38. The raw arm reproduces the input of the original project's design, so its PTB-XL result gives that project's conclusion, that the difficulty lies in processing the raw signal, in chance-corrected terms, and the decision rule chooses only between ECGFounder and the hand-crafted features. | evidence: empirical | sources: the project's results
+
+## Claims of the closing `/writing` pass (patch 12)
+
+The claims that the text added or changed by patch 12, for findings F1 to F39 of `writing-review.md`, will make. Claim 22 is replaced by claim 49, and claim 9 is now made in the Results (4.1) and no longer in the Methods.
+
+39. In the closest benchmark, the HuBERT-ECG and ECG-JEPA embeddings preserved structure tied to the dataset of origin and separated the clinical labels less well, whereas the ECGFounder and ECG-FM embeddings aligned more closely with the labels. | evidence: empirical | sources: lookingbeyond2026 (sec. 5 and 6, as quoted in citation-report.md)
+40. The standards of heart rate variability measurement define the RR-interval statistics, and RR-interval and morphology features together served automatic heartbeat classification. | evidence: empirical | sources: hrvstandards1996, dechazal2004
+41. HuBERT-ECG was pretrained by self-supervision on 12-lead records and ECGFounder on more than ten million recordings, and both are evaluated as frozen feature extractors. | evidence: empirical | sources: hubertecg2024, ecgfounder2024
+42. Linear-evaluation accuracy is the accuracy of a linear classifier trained on the frozen representation. | evidence: definitional | sources: sslclustering2025
+43. Yeo-Johnson power scaling fits a per-feature power transformation towards a Gaussian shape; standard scaling sets each feature to zero mean and unit variance; quantile scaling maps each feature through its quantiles onto a fixed reference distribution; robust scaling centres each feature on its median and divides it by its interquartile range. | evidence: definitional | sources: none
+44. A bottleneck trained to reconstruct the signal may retain a class it was not trained on (conv-AE ceiling 0.678) without arranging it into clusters (ARI 0.008). | evidence: theoretical | sources: the project's results
+45. The misalignment of fixed sample offsets with the cardiac cycle may explain the low linear ceiling of raw flattening, and the out-of-fold discriminant test agrees with this reading. | evidence: theoretical | sources: the project's results
+46. Robust scaling divides each feature by its interquartile range, which the tail records do not affect, so the records in a heavy tail keep large values and a few of them may dominate Euclidean distance. | evidence: theoretical | sources: none
+47. A clusterer fixed to two clusters on a 9:1 cohort may divide the majority class instead of separating the minority, so part of the fall in ARI at that ratio may come from the clustering set-up, and the reversal may reflect how each representation interacts with that set-up. | evidence: theoretical | sources: none
+48. ECGFounder was the most expensive representation per record, at about fifteen times the inference time of the hand-crafted features, and cost and clustering quality were not ordered alike: HuBERT-ECG cost more per record than the hand-crafted features (37.530 against 28.296 ms) and reached a best ARI of 0.195 against 0.711. | evidence: empirical | sources: the project's results
+49. On the 300-record subset the upsampled 100 Hz input gave ECGFounder an ARI 0.013 higher than the native 500 Hz input, small against its k-means lead of 0.242 over the hand-crafted features. | evidence: empirical | sources: the project's results
+50. The conv-AE results describe one architecture with one 32-unit bottleneck. | evidence: definitional | sources: the project's results
+51. Against the closest benchmark, the comparison with hand-crafted features shows that the foundation model that led on balanced data did not lead at the 9:1 ratio and that its lead narrowed under non-IID federation, and the supervised ceilings show that a low ARI alone does not show that an embedding lacks the clinical information (HuBERT-ECG ceiling 0.899, ARI 0.195). | evidence: empirical | sources: lookingbeyond2026, the project's results
+52. On PTB-XL the silhouette rewards a degenerate solution and the choice of scaler moves the mean ARI of the hand-crafted features from 0.229 to 0.629, so on these representations and this cohort a clustering result needs its scaler stated and its internal indices read against a chance-corrected index. | evidence: normative | sources: the project's results
+53. The held-out native values of the discriminant test keep the order of the full-cohort values. | evidence: empirical | sources: the project's results

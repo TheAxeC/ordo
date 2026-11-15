@@ -1,0 +1,74 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: vancouver.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: refs.bib
+Warning--empty author and editor in arxiv_2010_04963
+Warning--missing publisher in arxiv_2010_04963
+Warning--empty author and editor in arxiv_1810_03292
+Warning--missing publisher in arxiv_1810_03292
+Warning--empty author and editor in arxiv_1806_10758
+Warning--missing publisher in arxiv_1806_10758
+Warning--empty author and editor in arxiv_2007_04612
+Warning--missing publisher in arxiv_2007_04612
+Warning--empty author and editor in arxiv_2106_13314
+Warning--missing publisher in arxiv_2106_13314
+Warning--empty author and editor in arxiv_2205_10268
+Warning--missing publisher in arxiv_2205_10268
+Warning--empty author and editor in arxiv_2507_16761
+Warning--missing publisher in arxiv_2507_16761
+Warning--empty author and editor in arxiv_2504_02667
+Warning--missing publisher in arxiv_2504_02667
+Warning--empty author and editor in arxiv_2511_04292
+Warning--missing publisher in arxiv_2511_04292
+Warning--empty author and editor in https://doi.org/10.5281/zenodo.22227432
+Warning--empty author and editor in https://doi.org/10.13026/4nqg-sb35
+Warning--empty chapter in Zeiler_2014
+Warning--empty author and editor in arxiv_1702_04595
+Warning--missing publisher in arxiv_1702_04595
+You've used 64 entries,
+            3507 wiz_defined-function locations,
+            1211 strings with 32590 characters,
+and the built_in function-call counts, 232582 in all, are:
+= -- 26638
+> -- 1845
+< -- 738
++ -- 827
+- -- 333
+* -- 20817
+:= -- 24859
+add.period$ -- 273
+call.type$ -- 64
+change.case$ -- 2
+chr.to.int$ -- 1890
+cite$ -- 87
+duplicate$ -- 14357
+empty$ -- 23518
+format.name$ -- 393
+if$ -- 54050
+int.to.chr$ -- 0
+int.to.str$ -- 64
+missing$ -- 791
+newline$ -- 352
+num.names$ -- 64
+pop$ -- 1887
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1743
+stack$ -- 0
+substring$ -- 53254
+swap$ -- 2052
+text.length$ -- 128
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 23
+while$ -- 700
+width$ -- 66
+write$ -- 766
+(There were 23 warnings)

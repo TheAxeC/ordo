@@ -1,0 +1,766 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/revision-1/manuscript/main.tex",
+  "base_sha256": "4f293f8037e9a9fdbc4b7b4670927484b9f499e531783dd7b53c20cf9fd0c654",
+  "n_chars": 56790,
+  "n_blocks": 84,
+  "chars_in_blocks": 56623,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "d3468ae103577a33d62c4d78aff9fbea3f8eb4d13ce149b670f5fdfac96ed488",
+      "char_start": 0,
+      "char_end": 41,
+      "n_chars": 41,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\documentclass[preprint,11pt]{elsarticle}"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "96b2e9f1cdfafec8edd89f3377b5ebf92ad4a450cae36274875eb1d54737c883",
+      "char_start": 43,
+      "char_end": 198,
+      "n_chars": 155,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\usepackage{graphicx}"
+    },
+    {
+      "block_id": "B0003",
+      "sha256": "4d3b9d6dc0a4a196e9c9e8b3038649950e614c01afe73f8559fa26b7449ab76c",
+      "char_start": 200,
+      "char_end": 250,
+      "n_chars": 50,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\journal{Biomedical Signal Processing and Control}"
+    },
+    {
+      "block_id": "B0004",
+      "sha256": "49d34b0366eb0a68eb35c75d6d8aeb1d60be3c49779501a7e1cdf4941acdab46",
+      "char_start": 252,
+      "char_end": 268,
+      "n_chars": 16,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{document}"
+    },
+    {
+      "block_id": "B0005",
+      "sha256": "d06853700e4d858e2fe230aa9f034ee840ebc049f8f8bfbd12b251e63c2029f3",
+      "char_start": 270,
+      "char_end": 289,
+      "n_chars": 19,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{frontmatter}"
+    },
+    {
+      "block_id": "B0006",
+      "sha256": "d2eac1dccc17ebd0f5e57088a4b5523543e288f7bb9101d95a3b247a60c3aab0",
+      "char_start": 291,
+      "char_end": 419,
+      "n_chars": 128,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\title{Which representation clusters? A chance-corrected benchmark of ECG"
+    },
+    {
+      "block_id": "B0007",
+      "sha256": "757646e70be9966c473757e7ddc457f19a77312305d812e02fad92dc8ca2a2b1",
+      "char_start": 421,
+      "char_end": 850,
+      "n_chars": 429,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\author[uh]{Dongho Chun}"
+    },
+    {
+      "block_id": "B0008",
+      "sha256": "97a678f1064cc827dc0d32f6f75bcbd83b4ee8da83d2eee576a0a8dc3372c413",
+      "char_start": 852,
+      "char_end": 2722,
+      "n_chars": 1870,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{abstract}"
+    },
+    {
+      "block_id": "B0009",
+      "sha256": "a280af4f5857600e73d9f75ee1e02c0762268b92c4999c1eb8176765a43ef0d5",
+      "char_start": 2724,
+      "char_end": 2891,
+      "n_chars": 167,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{keyword}"
+    },
+    {
+      "block_id": "B0010",
+      "sha256": "ff0ff901883d19b52cd2723e1dda91da1923ce9813431c2d47da377792fba760",
+      "char_start": 2893,
+      "char_end": 2910,
+      "n_chars": 17,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\end{frontmatter}"
+    },
+    {
+      "block_id": "B0011",
+      "sha256": "dbe2c17dd790dbfa56a2f57cd96919146cfd914943746157fa8d10bde9283135",
+      "char_start": 2912,
+      "char_end": 2951,
+      "n_chars": 39,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\section{Introduction}\\label{sec:intro}"
+    },
+    {
+      "block_id": "B0012",
+      "sha256": "0bdf716d93c1956b713efa73303b6e04a83e1ec1992539fa87aafb9c17e8c32e",
+      "char_start": 2953,
+      "char_end": 3461,
+      "n_chars": 508,
+      "section": "Introduction",
+      "first_line_excerpt": "Most machine-learning work on the electrocardiogram (ECG) is supervised. Several clinically interesting questi"
+    },
+    {
+      "block_id": "B0013",
+      "sha256": "ffddd8a0ac74561bcc76286218b9abd33f103612bda33d55d386e5dcfeedf200",
+      "char_start": 3463,
+      "char_end": 4127,
+      "n_chars": 664,
+      "section": "Introduction",
+      "first_line_excerpt": "This study began as a re-examination of a master's project that clustered whole"
+    },
+    {
+      "block_id": "B0014",
+      "sha256": "0542ff5c2ef1dd9ff4bc490257b360d79be88186a8ed345dbd9aa40ebed68720",
+      "char_start": 4129,
+      "char_end": 4862,
+      "n_chars": 733,
+      "section": "Introduction",
+      "first_line_excerpt": "A representation can carry information about a label and still fail to cluster by it. Linear separability and "
+    },
+    {
+      "block_id": "B0015",
+      "sha256": "231de82f928206167ea4e44f5eab903956ce19416a9db15a080076de6b48a8f5",
+      "char_start": 4864,
+      "char_end": 5619,
+      "n_chars": 755,
+      "section": "Introduction",
+      "first_line_excerpt": "The most directly related work, by Filice et al.~\\cite{lookingbeyond2026}, benchmarks ECG foundation models ag"
+    },
+    {
+      "block_id": "B0016",
+      "sha256": "fc7058cee6c9bb703e9323f3894316e9587796ecafe0da58870e37a8eb5aec92",
+      "char_start": 5621,
+      "char_end": 7337,
+      "n_chars": 1716,
+      "section": "Introduction",
+      "first_line_excerpt": "We therefore compare five representations for the unsupervised separation of sinus rhythm (SR) from atrial fib"
+    },
+    {
+      "block_id": "B0017",
+      "sha256": "4afdec2dfaa41e91e84c8aeb37b136759effc3da5decf940f5cf2292f405ecda",
+      "char_start": 7339,
+      "char_end": 7380,
+      "n_chars": 41,
+      "section": "Introduction",
+      "first_line_excerpt": "\\section{Related work}\\label{sec:related}"
+    },
+    {
+      "block_id": "B0018",
+      "sha256": "7af70fe7ed501f8ee766e1993c9e9bdd413758d9cbc126ebc75477a539f226df",
+      "char_start": 7382,
+      "char_end": 8939,
+      "n_chars": 1557,
+      "section": "Related work",
+      "first_line_excerpt": "\\paragraph{Unsupervised ECG and representations.} Hand-crafted features built from RR-interval irregularity an"
+    },
+    {
+      "block_id": "B0019",
+      "sha256": "d1e989b560d85900095a9965f76df0695a4045f59142b5a465453850900250df",
+      "char_start": 8941,
+      "char_end": 9530,
+      "n_chars": 589,
+      "section": "Related work",
+      "first_line_excerpt": "\\paragraph{Clustering evaluation.} Cluster purity is not chance-corrected: assigning"
+    },
+    {
+      "block_id": "B0020",
+      "sha256": "774272f1f7baff2478c58ae860de5cd61176f013bb2b2b1dff1f2572a5556e5a",
+      "char_start": 9532,
+      "char_end": 10438,
+      "n_chars": 906,
+      "section": "Related work",
+      "first_line_excerpt": "\\paragraph{ECG foundation-model benchmarks.} Several recent studies benchmark ECG foundation models on supervi"
+    },
+    {
+      "block_id": "B0021",
+      "sha256": "239fc5563ba99d63c4d5867e535db1225b8b7f67082b632d76f656fe9c447ff3",
+      "char_start": 10440,
+      "char_end": 11427,
+      "n_chars": 987,
+      "section": "Related work",
+      "first_line_excerpt": "\\paragraph{Closest benchmark.} Filice et al.~\\cite{lookingbeyond2026} evaluate frozen ECG foundation models as"
+    },
+    {
+      "block_id": "B0022",
+      "sha256": "58f73a85115cb870e9c901e9dc70be0c59b3ecfc2021a0b4dab3e2b59b522dd0",
+      "char_start": 11429,
+      "char_end": 11465,
+      "n_chars": 36,
+      "section": "Related work",
+      "first_line_excerpt": "\\section{Methods}\\label{sec:methods}"
+    },
+    {
+      "block_id": "B0023",
+      "sha256": "60e22f7e5d82d55f9882d00071eacee46dd55348b1c7a5117f04b8002a89a680",
+      "char_start": 11467,
+      "char_end": 11496,
+      "n_chars": 29,
+      "section": "Methods",
+      "first_line_excerpt": "\\subsection{Data and cohorts}"
+    },
+    {
+      "block_id": "B0024",
+      "sha256": "2e556d7f651d0bf7a10cfb44d4d3c6771977d65712d19e3e2677778fa1e98eef",
+      "char_start": 11498,
+      "char_end": 12256,
+      "n_chars": 758,
+      "section": "Data and cohorts",
+      "first_line_excerpt": "\\paragraph{PTB-XL.} We use PTB-XL, a public database of 10\\,s 12-lead recordings, whose data descriptor report"
+    },
+    {
+      "block_id": "B0025",
+      "sha256": "ef6ef53c497323723fa6d182cd0ab8d7aa1645d38962889a99c2e65aab2f4677",
+      "char_start": 12258,
+      "char_end": 13546,
+      "n_chars": 1288,
+      "section": "Data and cohorts",
+      "first_line_excerpt": "Rhythm labels are taken from the statements of the Standard Communication Protocol for computer-assisted elect"
+    },
+    {
+      "block_id": "B0026",
+      "sha256": "e1f52b328fa9f69afec04ccdd6a57607db14f1a725940e453994a0a6aed93279",
+      "char_start": 13548,
+      "char_end": 14327,
+      "n_chars": 779,
+      "section": "Data and cohorts",
+      "first_line_excerpt": "\\paragraph{MIT-BIH.} For generalization we use the MIT-BIH Arrhythmia Database \\cite{mitbih2001,physionet2000}"
+    },
+    {
+      "block_id": "B0027",
+      "sha256": "91e4e2252c72a8cd819c7c8d185fb0b852b467bc889e68c5f638fa0e0c9a0a34",
+      "char_start": 14329,
+      "char_end": 14373,
+      "n_chars": 44,
+      "section": "Data and cohorts",
+      "first_line_excerpt": "\\subsection{Representations}\\label{sec:repr}"
+    },
+    {
+      "block_id": "B0028",
+      "sha256": "fc1caca9c1842e31e9297528fe2cf3c991303d93cc48bdaa855ead1fdb5eab07",
+      "char_start": 14375,
+      "char_end": 17530,
+      "n_chars": 3155,
+      "section": "Representations",
+      "first_line_excerpt": "We compare five representations on PTB-XL. Table~\\ref{tab:repr} gives the input, dimension and pretraining of "
+    },
+    {
+      "block_id": "B0029",
+      "sha256": "eb0d735c1890fac3a0d7e75f319a3a8e5203e9f108fa7c43de1398485fb5edb5",
+      "char_start": 17532,
+      "char_end": 18680,
+      "n_chars": 1148,
+      "section": "Representations",
+      "first_line_excerpt": "Only the hand-crafted features use a single lead. Raw flattening reproduces the 12-lead representation of the "
+    },
+    {
+      "block_id": "B0030",
+      "sha256": "562ded912a4f15995848c230ea8527ee35f8770891a0d8cd2befaf7cc4d9a3d8",
+      "char_start": 18682,
+      "char_end": 19234,
+      "n_chars": 552,
+      "section": "Representations",
+      "first_line_excerpt": "We chose the two foundation models by three criteria. Both have public weights and take 12-lead input. They di"
+    },
+    {
+      "block_id": "B0031",
+      "sha256": "a927c30fd2147c01074d8d16f5e92f9368bd92d3f0a57f770d581fed8361ef81",
+      "char_start": 19236,
+      "char_end": 20593,
+      "n_chars": 1357,
+      "section": "Representations",
+      "first_line_excerpt": "On MIT-BIH the rhythm features do not apply to single beats, so three beat representations are compared. The r"
+    },
+    {
+      "block_id": "B0032",
+      "sha256": "932ec9ec5d0dcd6157ae2164fb3ee831938e474d9161d6ed2b27594fc5cb664f",
+      "char_start": 20595,
+      "char_end": 22107,
+      "n_chars": 1512,
+      "section": "Representations",
+      "first_line_excerpt": "\\begin{table}[t]"
+    },
+    {
+      "block_id": "B0033",
+      "sha256": "d3a8e6de26588dc31f3890eab8db5aadc275949286f94d0c1f3eed03012c3d23",
+      "char_start": 22109,
+      "char_end": 22164,
+      "n_chars": 55,
+      "section": "Representations",
+      "first_line_excerpt": "\\subsection{Clustering and evaluation}\\label{sec:clust}"
+    },
+    {
+      "block_id": "B0034",
+      "sha256": "6425a8bddc8fc3b963c647bf04db09f6e66cbf34b7859d27dcd04f89082cfdbf",
+      "char_start": 22166,
+      "char_end": 23426,
+      "n_chars": 1260,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "Each representation is clustered with five algorithms \\cite{sklearn2011}: $k$-means, Ward agglomerative cluste"
+    },
+    {
+      "block_id": "B0035",
+      "sha256": "e7945086dddbe76ce3bbda10755945de122388cfe187ccd2d19b147f4e2469c7",
+      "char_start": 23428,
+      "char_end": 24122,
+      "n_chars": 694,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "Table~\\ref{tab:metrics} gives the meaning, formula and range of each metric. The headline metrics are the ARI "
+    },
+    {
+      "block_id": "B0036",
+      "sha256": "995a8e5801ad7379a9804e1975bc9320c3346c38eca3405526fa0aaee3423ede",
+      "char_start": 24124,
+      "char_end": 24605,
+      "n_chars": 481,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "A supervised ceiling measures how much of the label a classifier recovers from the same representation under t"
+    },
+    {
+      "block_id": "B0037",
+      "sha256": "c1a52423f837703f98d9baa42c28428ed110ea762c285c48fcec16460bc2256a",
+      "char_start": 24607,
+      "char_end": 25505,
+      "n_chars": 898,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "In the main benchmark each fit of $k$-means, spectral clustering and the GMM is repeated over ten seeds. The c"
+    },
+    {
+      "block_id": "B0038",
+      "sha256": "dd207fda0baa189fb232c74ecb25998458054cabd367ef205cfefbf845dbfddb",
+      "char_start": 25507,
+      "char_end": 26664,
+      "n_chars": 1157,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "Because heavy-tailed features can dominate Euclidean distance, four conditioners are swept: the Yeo-Johnson po"
+    },
+    {
+      "block_id": "B0039",
+      "sha256": "04feef30da29230b3da7c4be4d3921794ef9232f4f3fa9d39cb9e3b707786a1d",
+      "char_start": 26666,
+      "char_end": 29200,
+      "n_chars": 2534,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "\\begin{table}[t]"
+    },
+    {
+      "block_id": "B0040",
+      "sha256": "0e11e5ec8357387a5371fd5015a7290a7ffdabecf9ad9fa8ecde9fb689b98631",
+      "char_start": 29202,
+      "char_end": 31531,
+      "n_chars": 2329,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "\\begin{table}[t]"
+    },
+    {
+      "block_id": "B0041",
+      "sha256": "9d4976f410cdbad7019b2c94b740986782907e1507211b0674cc09b187abce23",
+      "char_start": 31533,
+      "char_end": 31577,
+      "n_chars": 44,
+      "section": "Clustering and evaluation",
+      "first_line_excerpt": "\\subsection{Federated clustering simulation}"
+    },
+    {
+      "block_id": "B0042",
+      "sha256": "1a46f042c73d8e5afb37c9897cb454a3362469e4d9f204184c8a8ce27f8adec3",
+      "char_start": 31579,
+      "char_end": 32824,
+      "n_chars": 1245,
+      "section": "Federated clustering simulation",
+      "first_line_excerpt": "To probe deployment under data siloing we use federated $k$-means, with centroid aggregation in the manner of "
+    },
+    {
+      "block_id": "B0043",
+      "sha256": "38af922a42eab1675171bc8e32009b028472bf2fc5bbc7d98f5ff5312845354b",
+      "char_start": 32826,
+      "char_end": 32862,
+      "n_chars": 36,
+      "section": "Federated clustering simulation",
+      "first_line_excerpt": "\\section{Results}\\label{sec:results}"
+    },
+    {
+      "block_id": "B0044",
+      "sha256": "f22d7c5177226ed2a271b44445b924bc3afb403f589104e20cba7d49ecd33056",
+      "char_start": 32864,
+      "char_end": 32919,
+      "n_chars": 55,
+      "section": "Results",
+      "first_line_excerpt": "\\subsection{Clustering by representation and algorithm}"
+    },
+    {
+      "block_id": "B0045",
+      "sha256": "a802dece88961f8d479b11e7625153c9298bc8e7bff9de890fb7a43a88186c0e",
+      "char_start": 32921,
+      "char_end": 33548,
+      "n_chars": 627,
+      "section": "Clustering by representation and algorithm",
+      "first_line_excerpt": "Table~\\ref{tab:main} and Fig.~\\ref{fig:heatmap} summarise the PTB-XL benchmark. ECGFounder clusters best (ARI "
+    },
+    {
+      "block_id": "B0046",
+      "sha256": "5c1385db26306a24d7efc7e8e3941103db1939beb24d176bb9be030bd8f0a76f",
+      "char_start": 33550,
+      "char_end": 35396,
+      "n_chars": 1846,
+      "section": "Clustering by representation and algorithm",
+      "first_line_excerpt": "\\begin{table}[t]"
+    },
+    {
+      "block_id": "B0047",
+      "sha256": "c81cc6cbd414d183e75305acf6368839770497aab27b704731945d2ffd5e7a97",
+      "char_start": 35398,
+      "char_end": 36007,
+      "n_chars": 609,
+      "section": "Clustering by representation and algorithm",
+      "first_line_excerpt": "\\begin{figure}[t]"
+    },
+    {
+      "block_id": "B0048",
+      "sha256": "72f50a3a6e3e045c41960ac9c94378fc36220872d35075cbc58fb47453b06280",
+      "char_start": 36009,
+      "char_end": 37281,
+      "n_chars": 1272,
+      "section": "Clustering by representation and algorithm",
+      "first_line_excerpt": "Across ten seeds the $k$-means solutions are stable. The seed standard deviation of their ARI is 0.000 for raw"
+    },
+    {
+      "block_id": "B0049",
+      "sha256": "8ba7b4beede0677c6c9e620be54e24883d840e184860535cf492f318552a86ac",
+      "char_start": 37283,
+      "char_end": 38108,
+      "n_chars": 825,
+      "section": "Clustering by representation and algorithm",
+      "first_line_excerpt": "The two foundation models do not behave as one category. ECGFounder clusters strongly while HuBERT-ECG does no"
+    },
+    {
+      "block_id": "B0050",
+      "sha256": "ef6f5eb701fcd5b77c748c7598a8adc3cb8a57d402b192a360e8f10fe524facf",
+      "char_start": 38110,
+      "char_end": 38157,
+      "n_chars": 47,
+      "section": "Clustering by representation and algorithm",
+      "first_line_excerpt": "\\subsection{Separability is not clusterability}"
+    },
+    {
+      "block_id": "B0051",
+      "sha256": "881662c6b1922a4794763c1f548b5394c35fd2abfaf5594575c61cc4204b75ce",
+      "char_start": 38159,
+      "char_end": 39495,
+      "n_chars": 1336,
+      "section": "Separability is not clusterability",
+      "first_line_excerpt": "The supervised ceilings (last column of Table~\\ref{tab:main}, Fig.~\\ref{fig:sep}) expose the gap between separ"
+    },
+    {
+      "block_id": "B0052",
+      "sha256": "78fc3a080c3fa27d5ca528bba5be7e65386f89f10bd474c0e98fd38555367d81",
+      "char_start": 39497,
+      "char_end": 40119,
+      "n_chars": 622,
+      "section": "Separability is not clusterability",
+      "first_line_excerpt": "Each result has a likely explanation, and the study did not test these mechanisms directly. ECGFounder was pre"
+    },
+    {
+      "block_id": "B0053",
+      "sha256": "5085990acaabcf6e7b60e66e0f6230635319c3a5b505a3400b4bfd122fbc97a8",
+      "char_start": 40121,
+      "char_end": 40868,
+      "n_chars": 747,
+      "section": "Separability is not clusterability",
+      "first_line_excerpt": "HuBERT-ECG was pretrained by self-supervision without diagnostic labels \\cite{hubertecg2024}, and here it saw "
+    },
+    {
+      "block_id": "B0054",
+      "sha256": "b8a84288b9d8ef1e4608523b57e696bdc01b7d5a6889d70051b52609ed427f23",
+      "char_start": 40870,
+      "char_end": 41400,
+      "n_chars": 530,
+      "section": "Separability is not clusterability",
+      "first_line_excerpt": "Raw flattening and the conv-AE score at chance for different reasons. With $k$-means, raw flattening places on"
+    },
+    {
+      "block_id": "B0055",
+      "sha256": "bac923c30f75259f22873647879f24230069eeaa51751fe57209e267d5e0d6d8",
+      "char_start": 41402,
+      "char_end": 42316,
+      "n_chars": 914,
+      "section": "Separability is not clusterability",
+      "first_line_excerpt": "\\begin{figure}[t]"
+    },
+    {
+      "block_id": "B0056",
+      "sha256": "b3eb476ff58189ffd6535514e14b0a4144a30aa0d3d2711f3e346b848b326a4d",
+      "char_start": 42318,
+      "char_end": 42350,
+      "n_chars": 32,
+      "section": "Separability is not clusterability",
+      "first_line_excerpt": "\\subsection{The silhouette trap}"
+    },
+    {
+      "block_id": "B0057",
+      "sha256": "b539a29832e878beb7c1cbd7dd50b9a22b04363793ca1638f4af087ab1aac298",
+      "char_start": 42352,
+      "char_end": 42989,
+      "n_chars": 637,
+      "section": "The silhouette trap",
+      "first_line_excerpt": "Internal indices mislead here in a specific, reproducible way. Raw flattening with Ward attains a silhouette o"
+    },
+    {
+      "block_id": "B0058",
+      "sha256": "e5a3dd702e2e8745137c7bc58e19c290f9f134ce57d5bc1cd94da68921228289",
+      "char_start": 42991,
+      "char_end": 43752,
+      "n_chars": 761,
+      "section": "The silhouette trap",
+      "first_line_excerpt": "\\begin{figure}[t]"
+    },
+    {
+      "block_id": "B0059",
+      "sha256": "493e7a36c1189e4ca8ab27705114ffbebc0dc4c4120810c6aea4efb4b42b17d9",
+      "char_start": 43754,
+      "char_end": 43787,
+      "n_chars": 33,
+      "section": "The silhouette trap",
+      "first_line_excerpt": "\\subsection{Conditioning matters}"
+    },
+    {
+      "block_id": "B0060",
+      "sha256": "87c2176f8396d24cd2471024d32ef3a6f6d85b39f3970828245b6f3cd1ec0ac7",
+      "char_start": 43789,
+      "char_end": 44399,
+      "n_chars": 610,
+      "section": "Conditioning matters",
+      "first_line_excerpt": "The feature scaler changes the outcome materially. For the hand-crafted features the"
+    },
+    {
+      "block_id": "B0061",
+      "sha256": "d1aa75eab2439ed71ffd4dec4e8d3b02470fd1326598961e3db50a32ffc48ad2",
+      "char_start": 44401,
+      "char_end": 44455,
+      "n_chars": 54,
+      "section": "Conditioning matters",
+      "first_line_excerpt": "\\subsection{Generalization to MIT-BIH beat morphology}"
+    },
+    {
+      "block_id": "B0062",
+      "sha256": "968e063068cc7bf2d0356d238abb5a5fb2d9132d305064ea37c8ad39323fd756",
+      "char_start": 44457,
+      "char_end": 44997,
+      "n_chars": 540,
+      "section": "Generalization to MIT-BIH beat morphology",
+      "first_line_excerpt": "The ordering replicates on a different dataset and a different task type (Table~\\ref{tab:mitbih}). On the N-ve"
+    },
+    {
+      "block_id": "B0063",
+      "sha256": "7826877f656a04844153611576b39e8f777ee68b31d2e707a49c1ce6b53a4ee1",
+      "char_start": 44999,
+      "char_end": 45793,
+      "n_chars": 794,
+      "section": "Generalization to MIT-BIH beat morphology",
+      "first_line_excerpt": "\\begin{table}[t]"
+    },
+    {
+      "block_id": "B0064",
+      "sha256": "b2c554d68b640277333dab400364aa3cffb527a1abfdb6592d7b718b236e81dd",
+      "char_start": 45795,
+      "char_end": 45848,
+      "n_chars": 53,
+      "section": "Generalization to MIT-BIH beat morphology",
+      "first_line_excerpt": "\\subsection{Class imbalance and simulated federation}"
+    },
+    {
+      "block_id": "B0065",
+      "sha256": "62ec0389b6841f9992d17be3df44262b661f87039c004842598a508a5494554b",
+      "char_start": 45850,
+      "char_end": 46520,
+      "n_chars": 670,
+      "section": "Class imbalance and simulated federation",
+      "first_line_excerpt": "Two stressors closer to deployment change the comparison between ECGFounder and the hand-crafted features. Und"
+    },
+    {
+      "block_id": "B0066",
+      "sha256": "ecfb40f3835ab822a4743ca40f22d61dabd53bfa63ca6cae50c91a646e43ad6f",
+      "char_start": 46522,
+      "char_end": 47294,
+      "n_chars": 772,
+      "section": "Class imbalance and simulated federation",
+      "first_line_excerpt": "The second stressor is the simulated federation (Table~\\ref{tab:fed}, Fig.~\\ref{fig:fed}). Under the IID split"
+    },
+    {
+      "block_id": "B0067",
+      "sha256": "b0f58022d6595b2fbb802937db02e08c6b8a93afc7ffafdc75d1efe115074221",
+      "char_start": 47296,
+      "char_end": 48260,
+      "n_chars": 964,
+      "section": "Class imbalance and simulated federation",
+      "first_line_excerpt": "\\begin{table}[t]"
+    },
+    {
+      "block_id": "B0068",
+      "sha256": "36d8f64951d907cbe8790452b5048fd9a8d2de7e0ed4029830006d1655f71754",
+      "char_start": 48262,
+      "char_end": 48877,
+      "n_chars": 615,
+      "section": "Class imbalance and simulated federation",
+      "first_line_excerpt": "\\begin{figure}[t]"
+    },
+    {
+      "block_id": "B0069",
+      "sha256": "0e561cd228c334147de30c33ea5b097837393c0eea887bc74293d1ce48f72b7c",
+      "char_start": 48879,
+      "char_end": 48921,
+      "n_chars": 42,
+      "section": "Class imbalance and simulated federation",
+      "first_line_excerpt": "\\section{Discussion}\\label{sec:discussion}"
+    },
+    {
+      "block_id": "B0070",
+      "sha256": "d082247dd47fe0ea20c97ecd8ed518d3d1a7079e38a37096ba96c1baefba4df1",
+      "char_start": 48923,
+      "char_end": 50115,
+      "n_chars": 1192,
+      "section": "Discussion",
+      "first_line_excerpt": "The practical reading holds for the settings tested: two binary tasks, five clusterers, two named foundation m"
+    },
+    {
+      "block_id": "B0071",
+      "sha256": "b87d5f563331e8c2e6bb8a7c909d07836a0a7d497fa219984f60dd3d30643b9a",
+      "char_start": 50117,
+      "char_end": 50476,
+      "n_chars": 359,
+      "section": "Discussion",
+      "first_line_excerpt": "The result also reframes the original master's project. Its conclusion that the bottleneck is the representati"
+    },
+    {
+      "block_id": "B0072",
+      "sha256": "240e9d00591fe94065875433440864fb4ee7784068728673e14835d6df765f67",
+      "char_start": 50478,
+      "char_end": 52179,
+      "n_chars": 1701,
+      "section": "Discussion",
+      "first_line_excerpt": "We propose no new algorithm. The gap between linear-probe accuracy and clustering quality has been reported fo"
+    },
+    {
+      "block_id": "B0073",
+      "sha256": "afaa0b7efcda8f9ead6b600c7b846ef2de31476b8cf28f0710776b2932380b7a",
+      "char_start": 52181,
+      "char_end": 52225,
+      "n_chars": 44,
+      "section": "Discussion",
+      "first_line_excerpt": "\\section{Limitations}\\label{sec:limitations}"
+    },
+    {
+      "block_id": "B0074",
+      "sha256": "e2f8373dfcf5f0cd8ec49aa4a3ceefd2ea0c2c755940c058c28afa5adcd6b3bd",
+      "char_start": 52227,
+      "char_end": 53314,
+      "n_chars": 1087,
+      "section": "Limitations",
+      "first_line_excerpt": "ECGFounder expects 500\\,Hz input. Because the 500\\,Hz records could not be obtained in bulk from the source, t"
+    },
+    {
+      "block_id": "B0075",
+      "sha256": "9e7c83cb704400b8016f1e8f6e41c597a77d8b621866091d568b5d3cd78d1883",
+      "char_start": 53316,
+      "char_end": 53942,
+      "n_chars": 626,
+      "section": "Limitations",
+      "first_line_excerpt": "Both tasks are binary, and the study makes no claim about multi-class rhythm structure. Public 12-lead databas"
+    },
+    {
+      "block_id": "B0076",
+      "sha256": "a8b9f0443e15dcf6c2c319baba4940e23235a187f302a43718a53cc72d76a87c",
+      "char_start": 53944,
+      "char_end": 53986,
+      "n_chars": 42,
+      "section": "Limitations",
+      "first_line_excerpt": "\\section{Conclusion}\\label{sec:conclusion}"
+    },
+    {
+      "block_id": "B0077",
+      "sha256": "840c0475acaac11131cf075c02ec349bbb073615b8675ca1ce5ac610c5b72c70",
+      "char_start": 53988,
+      "char_end": 54687,
+      "n_chars": 699,
+      "section": "Conclusion",
+      "first_line_excerpt": "For unsupervised SR-versus-AF and N-versus-V clustering on PTB-XL and MIT-BIH, the representation changed the "
+    },
+    {
+      "block_id": "B0078",
+      "sha256": "8c5cd186c766c99c024b3806b4909a48db417188f1a4a0475c2b1f0103f1495a",
+      "char_start": 54689,
+      "char_end": 55312,
+      "n_chars": 623,
+      "section": "Conclusion",
+      "first_line_excerpt": "\\section*{Code and data availability}"
+    },
+    {
+      "block_id": "B0079",
+      "sha256": "06751afa3760c4704aaf3cc22379f6b3261abff404c2f948e391f00283c418b4",
+      "char_start": 55314,
+      "char_end": 55448,
+      "n_chars": 134,
+      "section": "Code and data availability",
+      "first_line_excerpt": "\\section*{Ethics}"
+    },
+    {
+      "block_id": "B0080",
+      "sha256": "7982cfbda388a6e2673589b49ad30b30748fc0aa555735632023ce67b96993dc",
+      "char_start": 55450,
+      "char_end": 55671,
+      "n_chars": 221,
+      "section": "Ethics",
+      "first_line_excerpt": "\\section*{CRediT author contributions}"
+    },
+    {
+      "block_id": "B0081",
+      "sha256": "350675e201528b7864867fc47e6a8b9e1e540f574595fec0e8f4608230b67b46",
+      "char_start": 55673,
+      "char_end": 55859,
+      "n_chars": 186,
+      "section": "CRediT author contributions",
+      "first_line_excerpt": "\\section*{Funding}"
+    },
+    {
+      "block_id": "B0082",
+      "sha256": "00afcbd29d7160aff83cffb2b11b9de4887506ca52818cb457315d869c7d73c3",
+      "char_start": 55861,
+      "char_end": 56076,
+      "n_chars": 215,
+      "section": "Funding",
+      "first_line_excerpt": "\\section*{Declaration of competing interest}"
+    },
+    {
+      "block_id": "B0083",
+      "sha256": "daa98f40828dacc1b41e9e04fd6dd3d9784d3eb0bfb5a32bf748b2f936ea5137",
+      "char_start": 56078,
+      "char_end": 56718,
+      "n_chars": 640,
+      "section": "Declaration of competing interest",
+      "first_line_excerpt": "\\section*{Declaration of generative AI and AI-assisted technologies in the writing process}"
+    },
+    {
+      "block_id": "B0084",
+      "sha256": "ba847ff8f16d17f58d7855c15fc04ac86cb0f5cf60db12931d1ed50106978def",
+      "char_start": 56720,
+      "char_end": 56789,
+      "n_chars": 69,
+      "section": "Declaration of generative AI and AI-assisted technologies in the writing process",
+      "first_line_excerpt": "\\bibliographystyle{elsarticle-num}"
+    }
+  ]
+}

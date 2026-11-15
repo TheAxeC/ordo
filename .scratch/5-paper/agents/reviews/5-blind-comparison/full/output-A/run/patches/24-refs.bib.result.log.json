@@ -1,0 +1,96 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "d7ed910fe2299d3f073f689840bb8ce5e1b07953401d52795603b0ae50459de5",
+  "round": 1,
+  "n_blocks": 68,
+  "n_blocks_touched": 6,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI7.3"
+      ],
+      "rationale": "Adds the article number 747 that the full text read in the run prints (npj Digital Medicine | (2025)8:747); the article type of vancouver.bst prints pages after a colon, so the reference reads 2025 Dec;8(1):747.",
+      "chfield": 682,
+      "chfield": 695
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0041",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI7.3"
+      ],
+      "rationale": "Adds the article number 1 that the full text read in the run prints (Scientific Data | (2023) 10:1), so the reference reads 2023 Jan;10(1):1.",
+      "chfield": 581,
+      "chfield": 592
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI7.4"
+      ],
+      "rationale": "The webpage type of vancouver.bst prints the url field and never the doi field, so the url becomes the doi.org link of the entry's DOI 10.13026/4NQG-SB35, which the DOI registry's record ties to the same version 1.0 page; the reference then prints its persistent identifier like the other references.",
+      "chfield": 610,
+      "chfield": 597
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0045",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI7.3"
+      ],
+      "rationale": "Adds the article number 1760 that the full text read in the run prints (NATURE COMMUNICATIONS | (2020)11:1760), so the reference reads 2020 Apr;11(1):1760.",
+      "chfield": 632,
+      "chfield": 646
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI7.3"
+      ],
+      "rationale": "Adds the article number 24 that the full text read in the run prints (BMC Medical Research Methodology (2018) 18:24), so the reference reads 2018 Feb;18(1):24.",
+      "chfield": 511,
+      "chfield": 523
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0063",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI1.57"
+      ],
+      "rationale": "The entry type changes from inbook, whose vancouver.bst function asks for a chapter and prints the title as the book's title, to inproceedings, which prints the title as the paper's title and the booktitle after In:, so the reference names the ECCV 2014 proceedings; every field is kept.",
+      "chfield": 375,
+      "chfield": 382
+    }
+  ],
+  "blocks_untouched": 62,
+  "roadmap_items_covered": [
+    "RI1.57",
+    "RI7.3",
+    "RI7.4"
+  ],
+  "block_touched_ratio": 0.0882,
+  "preserved_ratio": 0.9118,
+  "char_churn_ratio": 0.1692,
+  "net_growth_chars": 44,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/24-refs.bib.result",
+  "output_sha256": "2a76b7f4c9da1c6463d10f8bfbcef49930e3c61e9fa97d2491f017f299f268b6"
+}

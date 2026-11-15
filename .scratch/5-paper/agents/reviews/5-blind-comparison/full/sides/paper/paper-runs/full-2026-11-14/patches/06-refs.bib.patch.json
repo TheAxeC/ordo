@@ -1,0 +1,10 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "refs.bib",
+  "base_sha256": "6023d5aefe9e9657ffe45e988e3965626379b8feb4105aed5f4f10a144945c14",
+  "round": 1,
+  "ops": [
+    {"op_id": "OP001", "kind": "replace_block", "block_id": "B0028", "old_hash": "d5e1f8423c6c95c9e3d4ce6a5855f60acfa77bf81d516675fd5b3da12a1694b7", "roadmap_item_ids": ["D1-53"], "rationale": "Adds the arXiv DOI of the cited arXiv version, in the form the other arXiv entries carry; lookup.py resolve finds arXiv 2205.10268 at ratio 1.00.", "new_text": "@misc{arxiv_2205_10268,\n  title = {B-cos Networks: Alignment is All We Need for Interpretability},\n  author = {Moritz B<latin small letter o with diaeresis>hle and Mario Fritz and Bernt Schiele},\n  year = {2022},\n  eprint = {2205.10268},\n  archivePrefix = {arXiv},\n  doi = {10.48550/arXiv.2205.10268}\n}"},
+    {"op_id": "OP002", "kind": "replace_block", "block_id": "B0030", "old_hash": "f1b869ac63a5280a858adbcc4a580e9baf7da179e20397c7d56ae0efa8021f73", "roadmap_item_ids": ["D1-53"], "rationale": "Adds the arXiv DOI of the cited arXiv version, in the form the other arXiv entries carry; lookup.py resolve finds arXiv 2507.16761 at ratio 1.00.", "new_text": "@misc{arxiv_2507_16761,\n  title = {Faithful, Interpretable Chest X-ray Diagnosis with Artifact-free B-cos Networks},\n  author = {Shreyash Arya and Shashank Agnihotri and Marcel Kleinmann and Bernt Schiele and Margret Keuper},\n  year = {2025},\n  eprint = {2507.16761},\n  archivePrefix = {arXiv},\n  doi = {10.48550/arXiv.2507.16761}\n}"}
+  ]
+}

@@ -1,0 +1,622 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "d7ed910fe2299d3f073f689840bb8ce5e1b07953401d52795603b0ae50459de5",
+  "n_chars": 40349,
+  "n_blocks": 68,
+  "chfield": 40214,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "de018b3ce9d12f7e513bab9438c4304fdd36d0a8722cf063f200410c92f638f0",
+      "char_start": 0,
+      "char_end": 706,
+      "n_chars": 706,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Attia_2019, title={An artificial intelligence-enabled ECG algorithm for the identification of patient"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "e0903ff23c0495b8a15da156d33d8749f41b96fe9a5bf6c7e26740b7d4e9728e",
+      "char_start": 708,
+      "char_end": 1669,
+      "n_chars": 961,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Raghunath_2021, title={Deep Neural Networks Can Predict New-Onset Atrial Fibrillation From the 12-Lea"
+    },
+    {
+      "block_id": "B0003",
+      "sha256": "cc5838fab2fa83c7a5a3e94d997138fba9b9b7fad84214cfc3000a4cf314e21b",
+      "char_start": 1671,
+      "char_end": 2424,
+      "n_chars": 753,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Khurshid_2022, title={ECG-Based Deep Learning and Clinical Risk Factors to Predict Atrial Fibrillatio"
+    },
+    {
+      "block_id": "B0004",
+      "sha256": "20b2c7c43b1af1fcf2a80a5c324431d06c740ba0d790368864107ac770e2b06c",
+      "char_start": 2426,
+      "char_end": 3174,
+      "n_chars": 748,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Christopoulos_2020, title={Artificial Intelligence\u2013Electrocardiography to Predict Incident Atrial Fib"
+    },
+    {
+      "block_id": "B0005",
+      "sha256": "eafd670e5e8d006693114b6b07fff2e35d1e253f0741668df982e744806a95cf",
+      "char_start": 3176,
+      "char_end": 3743,
+      "n_chars": 567,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Biton_2021, title={Atrial fibrillation risk prediction from the 12-lead electrocardiogram using digit"
+    },
+    {
+      "block_id": "B0006",
+      "sha256": "bf0cd891b458b0bf42211dea72b0c8561afb6dc6f26f33b331f71942516b0486",
+      "char_start": 3745,
+      "char_end": 4254,
+      "n_chars": 509,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Habineza_2023, title={End-to-end risk prediction of atrial fibrillation from the 12-Lead ECG by deep "
+    },
+    {
+      "block_id": "B0007",
+      "sha256": "965fc3e4ac97f5ac44c8deb76dafd020616a201475993657d061a163e1acd5f1",
+      "char_start": 4256,
+      "char_end": 4833,
+      "n_chars": 577,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Yuan_2023, title={Deep Learning of Electrocardiograms in Sinus Rhythm From US Veterans to Predict Atr"
+    },
+    {
+      "block_id": "B0008",
+      "sha256": "5f2f989bf0af5356623c366f15a02f1b225f4e674fab0f27313a3ba280342100",
+      "char_start": 4835,
+      "char_end": 5568,
+      "n_chars": 733,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Jabbour_2024, title={Prediction of incident atrial fibrillation using deep learning, clinical models,"
+    },
+    {
+      "block_id": "B0009",
+      "sha256": "7441a6ab2a795d0d7676152ee07246dceb357edc90341494c7e223b00b1d09cd",
+      "char_start": 5570,
+      "char_end": 6246,
+      "n_chars": 676,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Sau_2026, title={Prediction of incident atrial fibrillation: A comprehensive evaluation of convention"
+    },
+    {
+      "block_id": "B0010",
+      "sha256": "7806c7efef183ac9563cac7f8494dee1efa01b7edadbca0ba5317cd5a6ac4688",
+      "char_start": 6248,
+      "char_end": 7025,
+      "n_chars": 777,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Khurshid_2025, title={Artificial intelligence-enabled analysis of handheld single-lead electrocardiog"
+    },
+    {
+      "block_id": "B0011",
+      "sha256": "288de5996ba217bd706391cf350b66606f6c0134e92ce6cb3c7b21a995324af4",
+      "char_start": 7027,
+      "char_end": 7462,
+      "n_chars": 435,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Tsiartas_2025, title={Artificial intelligence capabilities in identifying atrial fibrillation using b"
+    },
+    {
+      "block_id": "B0012",
+      "sha256": "a573149ab71f00fe1c4338445f4312ed3d1acc97ffd20af1ecbf9ce706ba48ac",
+      "char_start": 7464,
+      "char_end": 7851,
+      "n_chars": 387,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Kashou_2021, title={Predicting incident atrial fibrillation in sinus rhythm: more than just trusting "
+    },
+    {
+      "block_id": "B0013",
+      "sha256": "c8d428fa2bbfd7fff27501d498d71ef72d53a334937cd812eedaefb5df59238d",
+      "char_start": 7853,
+      "char_end": 8402,
+      "n_chars": 549,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Saiz_Vivo_2025, title={Artificial intelligence for atrial fibrillation prediction while in sinus rhyt"
+    },
+    {
+      "block_id": "B0014",
+      "sha256": "132a757c8d43dee0aa53b776ce46980f9d2fa58cf0095fe6ecef08a4a3ffd8aa",
+      "char_start": 8404,
+      "char_end": 9203,
+      "n_chars": 799,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Pfeifer_2026, title={Multicenter validation of an artificial intelligence\u2013enabled ECG model to predic"
+    },
+    {
+      "block_id": "B0015",
+      "sha256": "3c3fb4cd7bd28084442cefb026866f9bcae9828d7d26dc3ebfd613f46015d4d2",
+      "char_start": 9205,
+      "char_end": 9710,
+      "n_chars": 505,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Riek_2026, title={Forecasting 1-year atrial fibrillation risk from sinus rhythm electrocardiograms in"
+    },
+    {
+      "block_id": "B0016",
+      "sha256": "f217a67dab45be492a32a1b24f90c025b6787b2e724ed835b0b0999e1f88a788",
+      "char_start": 9712,
+      "char_end": 10354,
+      "n_chars": 642,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Zeidaabadi_2026, title={Image based artificial intelligence-enhanced electrocardiogram prediction of "
+    },
+    {
+      "block_id": "B0017",
+      "sha256": "12d70960aaf8e2134cde1d0e6b7ac9ce772cd2c5c25372ca4db335bb5e563ac3",
+      "char_start": 10356,
+      "char_end": 11527,
+      "n_chars": 1171,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Alonso_2013, title={Simple Risk Model Predicts Incidence of Atrial Fibrillation in a Racially and Geo"
+    },
+    {
+      "block_id": "B0018",
+      "sha256": "7dfa0afe53df2681d5524645b9cf0e8ac66fbe3893913c47547f8694ee58668e",
+      "char_start": 11529,
+      "char_end": 12261,
+      "n_chars": 732,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Schnabel_2009, title={Development of a risk score for atrial fibrillation (Framingham Heart Study): a"
+    },
+    {
+      "block_id": "B0019",
+      "sha256": "a9acb3cc452e22b8db4a33526de2627c079e5f76a264a15670fe55f46e402f6b",
+      "char_start": 12263,
+      "char_end": 12664,
+      "n_chars": 401,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Wolf_1991, title={Atrial fibrillation as an independent risk factor for stroke: the Framingham Study."
+    },
+    {
+      "block_id": "B0020",
+      "sha256": "e61703797fbba665a173253fa4ab090301c879168c8a07d3e0c9207f3031a701",
+      "char_start": 12666,
+      "char_end": 13386,
+      "n_chars": 720,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Schnabel_2015, title={50 year trends in atrial fibrillation prevalence, incidence, risk factors, and "
+    },
+    {
+      "block_id": "B0021",
+      "sha256": "4f629420a8f97c9633ae656c26d02da9fcdcb1493b7588d9010828889bfa0bcc",
+      "char_start": 13388,
+      "char_end": 16525,
+      "n_chars": 3137,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Van_Gelder_2024, title={2024 ESC Guidelines for the management of atrial fibrillation developed in co"
+    },
+    {
+      "block_id": "B0022",
+      "sha256": "5b75419fd235c71f104309e4190f667bfcff889ca3516a2089393fc471cf69dc",
+      "char_start": 16527,
+      "char_end": 17485,
+      "n_chars": 958,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Goette_2016, title={EHRA/HRS/APHRS/SOLAECE expert consensus on Atrial cardiomyopathies: Definition, c"
+    },
+    {
+      "block_id": "B0023",
+      "sha256": "ff35270764cd9b1d74fc5c9a7b02e23de1d0fb6bc33a1222ebe5f06509c22659",
+      "char_start": 17487,
+      "char_end": 17913,
+      "n_chars": 426,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Rudin_2019, title={Stop explaining black box machine learning models for high stakes decisions and us"
+    },
+    {
+      "block_id": "B0024",
+      "sha256": "ddb978080dd0dd57a406c980606dab4401a8bb9961691c05dc6a9647d74efd26",
+      "char_start": 17915,
+      "char_end": 18316,
+      "n_chars": 401,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_1810_03292,"
+    },
+    {
+      "block_id": "B0025",
+      "sha256": "d38ccd261625a783055ce156e9eed7e1abee9d368529d17881617ed2daab58a3",
+      "char_start": 18318,
+      "char_end": 18720,
+      "n_chars": 402,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_1806_10758,"
+    },
+    {
+      "block_id": "B0026",
+      "sha256": "b06ba207bd57a299a69b15d4836116196d67cfb0eba21a181437ad38074b49ea",
+      "char_start": 18722,
+      "char_end": 19131,
+      "n_chars": 409,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_2007_04612,"
+    },
+    {
+      "block_id": "B0027",
+      "sha256": "5c4c5fd16a543bcf78165ef5fc033c83e6b754d42966c8e45334d57c542e3ec3",
+      "char_start": 19133,
+      "char_end": 19545,
+      "n_chars": 412,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_2106_13314,"
+    },
+    {
+      "block_id": "B0028",
+      "sha256": "cd6146c293e5171314bdad17449d33803027450cb593291c85b50aea96d0abc2",
+      "char_start": 19547,
+      "char_end": 19924,
+      "n_chars": 377,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_2205_10268,"
+    },
+    {
+      "block_id": "B0029",
+      "sha256": "2c11f0655dff3d604dcc824cf782e31f5e09f1a6287eb9812e1d3840c6218253",
+      "char_start": 19926,
+      "char_end": 20315,
+      "n_chars": 389,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_2504_02667,"
+    },
+    {
+      "block_id": "B0030",
+      "sha256": "d551c132eae8781372000e0b1f3fd55fdbc68899a3837df96c3e139268a5fd3c",
+      "char_start": 20317,
+      "char_end": 20760,
+      "n_chars": 443,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_2507_16761,"
+    },
+    {
+      "block_id": "B0031",
+      "sha256": "f408b045af79d6251ae592f5bb672491ea4a66440789f10b6501e1fc665052cf",
+      "char_start": 20762,
+      "char_end": 21310,
+      "n_chars": 548,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Arends_2026, title={Signal or noise? Evaluating commonly used attribution methods for explaining deep"
+    },
+    {
+      "block_id": "B0032",
+      "sha256": "c81e4e0506d744c84fd66e035c4012196ee95ea4aa9c16a43155bf4402ac84e0",
+      "char_start": 21312,
+      "char_end": 21769,
+      "n_chars": 457,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Wagner_2024, title={Explaining deep learning for ECG analysis: Building blocks for auditing and knowl"
+    },
+    {
+      "block_id": "B0033",
+      "sha256": "b6530eac6b6cc47e3ee9f12d138a22e3e47910c79c77af0222a6bcb45176d5c3",
+      "char_start": 21771,
+      "char_end": 22453,
+      "n_chars": 682,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Patlatzoglou_2025, title={The cost of explainability in artificial intelligence-enhanced electrocardi"
+    },
+    {
+      "block_id": "B0034",
+      "sha256": "7235c6ab0ad5cd2130a6435a5c145a0a117eaa8b6e934ede4b74adc84e6a1b46",
+      "char_start": 22455,
+      "char_end": 22892,
+      "n_chars": 437,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{De_Lathauwer_2008, title={Decompositions of a Higher-Order Tensor in Block Terms\u2014Part II: Definitions"
+    },
+    {
+      "block_id": "B0035",
+      "sha256": "5a6db93812aca1527938075c9375b89e6cf9ff6ad0570778ec402ea3c67d00b5",
+      "char_start": 22894,
+      "char_end": 23249,
+      "n_chars": 355,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Kolda_2009, title={Tensor Decompositions and Applications}, volume={51}, ISSN={1095-7200}, url={https"
+    },
+    {
+      "block_id": "B0036",
+      "sha256": "8614ed8c636e49b811de3b67a315bddfc8d70b8e0080c344716ea169948b6a5b",
+      "char_start": 23251,
+      "char_end": 23639,
+      "n_chars": 388,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_2010_04963,"
+    },
+    {
+      "block_id": "B0037",
+      "sha256": "e9dea78e1868e27f3fd514d8dc1a275ca5386be473d9e816e3362fbd7a9e470e",
+      "char_start": 23641,
+      "char_end": 24081,
+      "n_chars": 440,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_2511_04292,"
+    },
+    {
+      "block_id": "B0038",
+      "sha256": "8d30bec9e30fd4ec4fda85ea7498bdb7b5ee5ca0a6e9b466049f2d7acc0eae24",
+      "char_start": 24083,
+      "char_end": 24637,
+      "n_chars": 554,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Faes_2024, title={Single Finger Trajectory Prediction From Intracranial Brain Activity Using Block-Te"
+    },
+    {
+      "block_id": "B0039",
+      "sha256": "af04193899f358435d2893eb9991fdcae1c9af556d4a429707eb0aa789ee44e6",
+      "char_start": 24639,
+      "char_end": 25182,
+      "n_chars": 543,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Goulart_2020, title={Alternating Group Lasso for Block-Term Tensor Decomposition and Application to E"
+    },
+    {
+      "block_id": "B0040",
+      "sha256": "24281b623e8b472af4fd9374af380f3c08cfc7d768d30a5544303a61632929e3",
+      "char_start": 25184,
+      "char_end": 25800,
+      "n_chars": 616,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{https://doi.org/10.5281/zenodo.22227432,"
+    },
+    {
+      "block_id": "B0041",
+      "sha256": "c33c9d1da1dde004a7d848f0a7440ab07f8f2c3b4290f0bcfd81c7aabacc2324",
+      "char_start": 25802,
+      "char_end": 26383,
+      "n_chars": 581,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Johnson_2023, title={MIMIC-IV, a freely accessible electronic health record dataset}, volume={10}, IS"
+    },
+    {
+      "block_id": "B0042",
+      "sha256": "48db8dd7cbf33a6e9abb015e29d7bf41491cc81d73f2db898b00de787c1418e2",
+      "char_start": 26385,
+      "char_end": 26995,
+      "n_chars": 610,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{https://doi.org/10.13026/4nqg-sb35,"
+    },
+    {
+      "block_id": "B0043",
+      "sha256": "2b43f9f3a15b69e68cccbc0abd6a83cd507d912a1c9f268495db542aeccd0b7a",
+      "char_start": 26997,
+      "char_end": 27481,
+      "n_chars": 484,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Wagner_2020, title={PTB-XL, a large publicly available electrocardiography dataset}, volume={7}, ISSN"
+    },
+    {
+      "block_id": "B0044",
+      "sha256": "5986c60edf082dfbe8368974fe7fbbcd44df1a916c6d05f126bdf23a178ddd92",
+      "char_start": 27483,
+      "char_end": 28045,
+      "n_chars": 562,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{https://doi.org/10.5281/zenodo.4916206,"
+    },
+    {
+      "block_id": "B0045",
+      "sha256": "0bab9ccfd41668bd047f80894616fc6fdfdab0493edef031527ec1223c1cc85a",
+      "char_start": 28047,
+      "char_end": 28679,
+      "n_chars": 632,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Ribeiro_2020, title={Automatic diagnosis of the 12-lead ECG using a deep neural network}, volume={11}"
+    },
+    {
+      "block_id": "B0046",
+      "sha256": "5ec337ae029c64adf07a3e55680189eb9223aab0f27616da20acf458acc44057",
+      "char_start": 28681,
+      "char_end": 29141,
+      "n_chars": 460,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Valasakis_2026, title={Accuracy of atrial fibrillation labels in the MIMIC-IV ECG database: implicati"
+    },
+    {
+      "block_id": "B0047",
+      "sha256": "9a0e2a8d81d6a1b56601120f2ab4cba0c50691651aed91e2449fae0b20d20afa",
+      "char_start": 29143,
+      "char_end": 29540,
+      "n_chars": 397,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Cox_1972, title={Regression Models and Life-Tables}, volume={34}, ISSN={1467-9868}, url={https://doi."
+    },
+    {
+      "block_id": "B0048",
+      "sha256": "bfa50cddd01e8ba71b3f67ba7c41018468c052a4aeb0c32a714684d506d251dd",
+      "char_start": 29542,
+      "char_end": 30053,
+      "n_chars": 511,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Katzman_2018, title={DeepSurv: personalized treatment recommender system using a Cox proportional haz"
+    },
+    {
+      "block_id": "B0049",
+      "sha256": "b5643f71231ff89aa55ab80efafd95a1f59c5e7635a30de5ce73a21b5f2e2f22",
+      "char_start": 30055,
+      "char_end": 30440,
+      "n_chars": 385,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Vickers_2006, title={Decision Curve Analysis: A Novel Method for Evaluating Prediction Models}, volum"
+    },
+    {
+      "block_id": "B0050",
+      "sha256": "ffe573c121f9085afadae3de30e384efac04498624304e9aff5a477a860b7c63",
+      "char_start": 30442,
+      "char_end": 31511,
+      "n_chars": 1069,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Collins_2024, title={TRIPOD+AI statement: updated guidance for reporting clinical prediction models t"
+    },
+    {
+      "block_id": "B0051",
+      "sha256": "c06dc16dddd3605d059493110827431b4248d708986a41b209de369c9a47fe9b",
+      "char_start": 31513,
+      "char_end": 31893,
+      "n_chars": 380,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Mehari_2022, title={Self-supervised representation learning from 12-lead ECG data}, volume={141}, ISS"
+    },
+    {
+      "block_id": "B0052",
+      "sha256": "6f10da54874a46f3e810889f3def23afc18ed2c45002421a08fa7c8cc4ebef6e",
+      "char_start": 31895,
+      "char_end": 32147,
+      "n_chars": 252,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2005_13249,"
+    },
+    {
+      "block_id": "B0053",
+      "sha256": "06f8f47273adfbcba357ca1587ede2449c54ea66e716f25d9f2a3114f341b6d6",
+      "char_start": 32149,
+      "char_end": 32537,
+      "n_chars": 388,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{McKeen_2025, title={ECG-FM: an open electrocardiogram foundation model}, volume={8}, ISSN={2574-2531}"
+    },
+    {
+      "block_id": "B0054",
+      "sha256": "f358443d80dd4d6d7b178db8faaa29e0ad6fa147cc20f6a3d3c859fb8c9f2ce1",
+      "char_start": 32539,
+      "char_end": 33083,
+      "n_chars": 544,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Yao_2019, title={Sensitivity, specificity, positive and negative predictive values of identifying atr"
+    },
+    {
+      "block_id": "B0055",
+      "sha256": "e53397011dd752b95651e22525c2a4829d02747c9d5398878e2a431af7494b21",
+      "char_start": 33085,
+      "char_end": 33507,
+      "n_chars": 422,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Malmo_2016, title={Validation of self-reported and hospital-diagnosed atrial fibrillation: the HUNT-s"
+    },
+    {
+      "block_id": "B0056",
+      "sha256": "68cc9a5bc23ad00b17c78c1f0f53280ebaa534d54b18c0208a0b2961174dd51d",
+      "char_start": 33509,
+      "char_end": 34026,
+      "n_chars": 517,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Rix_2012, title={Validity of the diagnoses atrial fibrillation and atrial flutter in a Danish patient"
+    },
+    {
+      "block_id": "B0057",
+      "sha256": "04a110a3b6ac3ea51b06e88fcebf88dd237301549eb46ad674ffe2f85a581aab",
+      "char_start": 34028,
+      "char_end": 34403,
+      "n_chars": 375,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Cheng_2009, title={Long-term Outcomes in Individuals With Prolonged PR Interval or First-Degree Atrio"
+    },
+    {
+      "block_id": "B0058",
+      "sha256": "c0e02088d15504a9f437ae5706dff0ece985691f34abca27e6eca13b58941ec6",
+      "char_start": 34405,
+      "char_end": 35119,
+      "n_chars": 714,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Magnani_2013, title={Electrocardiographic PR Interval and Adverse Outcomes in Older Adults: The Healt"
+    },
+    {
+      "block_id": "B0059",
+      "sha256": "7cbd96bf1eae3934b0c9c89c9298d6ae96f0ebb5c1f44d0e2aa3ab6ee35f7b20",
+      "char_start": 35121,
+      "char_end": 35707,
+      "n_chars": 586,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Magnani_2015, title={P-wave indices and atrial fibrillation: Cross-cohort assessments from the Framin"
+    },
+    {
+      "block_id": "B0060",
+      "sha256": "63fc4439c8d1d4f89628fb43e0ec3d661ed05c0a7b30d3c48dae8557ff7cb2c2",
+      "char_start": 35709,
+      "char_end": 36367,
+      "n_chars": 658,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Maezono_2025, title={Electrocardiographic P-wave indices and onset of atrial fibrillation and histolo"
+    },
+    {
+      "block_id": "B0061",
+      "sha256": "9d09ee446e404a2fa9c66d66aef9af28e2be15b5a186c39aa9110fadc09074a6",
+      "char_start": 36369,
+      "char_end": 37040,
+      "n_chars": 671,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Tanaka_2021, title={First-degree atrioventricular block is significantly associated with incident atr"
+    },
+    {
+      "block_id": "B0062",
+      "sha256": "98ccfdbdb651bfe531cf778946b330be41b1cb9c865320ccbb0a3aecc3fd0114",
+      "char_start": 37042,
+      "char_end": 37532,
+      "n_chars": 490,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Ostrowska_2022, title={Short P-Wave Duration Is Associated with Incident Atrial Fibrillation: A Regis"
+    },
+    {
+      "block_id": "B0063",
+      "sha256": "cee2942b62d48b98793d7774f86f70c820cf0c6569dc992cab4a04dea56d7e60",
+      "char_start": 37534,
+      "char_end": 37909,
+      "n_chars": 375,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inbook{Zeiler_2014, title={Visualizing and Understanding Convolutional Networks}, ISBN={9783319105901}, ISSN="
+    },
+    {
+      "block_id": "B0064",
+      "sha256": "91e8b82bfaf4a6c775baec525a49073f1db02a454ca8621abbba4be9a4d10916",
+      "char_start": 37911,
+      "char_end": 38319,
+      "n_chars": 408,
+      "section": "frontmatter",
+      "first_line_excerpt": "@webpage{arxiv_1702_04595,"
+    },
+    {
+      "block_id": "B0065",
+      "sha256": "9d1f8937970372247c4811096c6388b07a1d14f3dc826516adfd12e620dc1004",
+      "char_start": 38321,
+      "char_end": 38719,
+      "n_chars": 398,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Ivanovs_2021, title={Perturbation-based methods for explaining deep neural networks: A survey}, volum"
+    },
+    {
+      "block_id": "B0066",
+      "sha256": "f4a00c86ac6c5e74830992f50af41250e2a11a67c64d84373170a5317aa07a04",
+      "char_start": 38721,
+      "char_end": 39390,
+      "n_chars": 669,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Yogeswaran_2025, title={P\u2010Wave Indices and the Risks of Incident Atrial Fibrillation and Ischemic Str"
+    },
+    {
+      "block_id": "B0067",
+      "sha256": "14e9a84fcc9a5b20686cc4f931ec059e4c682f0a5989d901432eea96dec4971f",
+      "char_start": 39392,
+      "char_end": 39889,
+      "n_chars": 497,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Emmanuela_2026, title={Electrocardiographic P-wave morphology and the risk of new-onset atrial fibril"
+    },
+    {
+      "block_id": "B0068",
+      "sha256": "705a890acbb956fd937a955d820e9841b6db75c872fc49bf32349af5cb3e909c",
+      "char_start": 39891,
+      "char_end": 40348,
+      "n_chars": 457,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{_imi__2025, title={A comprehensive analysis of perturbation methods in explainable AI feature attribu"
+    }
+  ]
+}

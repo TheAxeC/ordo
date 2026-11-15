@@ -1,0 +1,34 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/cover-letter.tex",
+  "base_sha256": "f2218c9c827d1271c849bad6b2261cd9c2b2d9a3b0b1f347bdd634d0a210a114",
+  "round": 1,
+  "n_blocks": 7,
+  "n_blocks_touched": 1,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0006",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D7-2"
+      ],
+      "rationale": "The four itemized confirmations become three sentences that keep each confirmation and the three placeholders word for word, which frees the list's vertical space so the closing and signature fit on page 1; the rest of the letter block is unchanged.",
+      "chars_before": 2222,
+      "chars_after": 2154
+    }
+  ],
+  "blocks_untouched": 6,
+  "roadmap_items_covered": [
+    "D7-2"
+  ],
+  "block_touched_ratio": 0.1429,
+  "preserved_ratio": 0.8571,
+  "char_churn_ratio": 1.7215,
+  "net_growth_chars": -68,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/25-cover-letter.tex.patched",
+  "output_sha256": "bc00f5ba4efdd0f0804e481fcf385db9b97b9ef035a87d6de2dbe2dbe3b41c41"
+}

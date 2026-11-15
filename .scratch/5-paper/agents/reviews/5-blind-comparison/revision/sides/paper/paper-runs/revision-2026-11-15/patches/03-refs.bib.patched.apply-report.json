@@ -1,0 +1,297 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "98be9b3153d986f88782462133cc5bf1cf6a95860a2edcb216d830f39c0ed42a",
+  "round": 1,
+  "n_blocks": 37,
+  "n_blocks_touched": 21,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0004",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The preprint is typed as a preprint with its arXiv identifier once, in place of an article whose journal is 'arXiv preprint' with the identifier repeated in a note.",
+      "chars_before": 331,
+      "chars_after": 302
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0005",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The weights URL leaves the reference note; the manuscript's code and data availability statement now gives it.",
+      "chars_before": 440,
+      "chars_after": 349
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0006",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The entry takes the file's own form: the URL that would print beside the DOI, the ISSN, the publisher and the month field are removed, and the inverted author name is corrected.",
+      "chars_before": 499,
+      "chars_after": 414
+    },
+    {
+      "op_id": "OP004",
+      "kind": "insert_after",
+      "block_id": "B0007",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R1-4",
+        "R3-6",
+        "R2-4",
+        "R3-4"
+      ],
+      "rationale": "New entry for the ECGFounder preprint, whose full text gives the parameter count, the 150 label categories and the pretraining preprocessing that the revised text cites; metadata from lookup.py bibtex 2410.04133.",
+      "chars_before": 254,
+      "chars_after": 384
+    },
+    {
+      "op_id": "OP005",
+      "kind": "insert_after",
+      "block_id": "B0009",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R2-3"
+      ],
+      "rationale": "New entry for the source of the V-measure that the metrics table cites; metadata from lookup.py resolve (Semantic Scholar 5421dbcb7e14766eb3d951910ae8d7892d735a01, venue Conference on Empirical Methods in Natural Language Processing). The record has no DOI.",
+      "chars_before": 318,
+      "chars_after": 317
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The preprint is typed as a preprint with its arXiv identifier once, in place of an article whose journal is 'arXiv preprint' with the identifier repeated in a note.",
+      "chars_before": 322,
+      "chars_after": 293
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The entry had no DOI or identifier; the arXiv identifier 1602.05629 comes from lookup.py resolve (OpenAlex W2541884796 and arXiv).",
+      "chars_before": 397,
+      "chars_after": 450
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The entry had no DOI or identifier; the arXiv identifier 2005.13249 comes from lookup.py resolve (OpenAlex W3107490265 and arXiv).",
+      "chars_before": 332,
+      "chars_after": 385
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The entry had no DOI or identifier; the arXiv identifier 2106.04452 comes from lookup.py resolve (OpenAlex W3172143996, Semantic Scholar and arXiv).",
+      "chars_before": 386,
+      "chars_after": 439
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0022",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R2-1b"
+      ],
+      "rationale": "The entry takes the file's own form with a page range in BibTeX form; the author list is cut to the first six with 'others' as the numbered style does for long lists, which also removes the characters BibTeX cannot sort.",
+      "chars_before": 3138,
+      "chars_after": 513
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R2-1b"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and a page range in BibTeX form.",
+      "chars_before": 551,
+      "chars_after": 452
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R2-3"
+      ],
+      "rationale": "The entry takes the file's own form, writes the accented name in LaTeX, and gives the article number once in place of an undefined month macro and a repeated page.",
+      "chars_before": 442,
+      "chars_after": 356
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R2-3"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or undefined month macro, and a page range in BibTeX form.",
+      "chars_before": 400,
+      "chars_after": 316
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-1"
+      ],
+      "rationale": "The entry takes the file's own form, writes the accented name in LaTeX, protects the acronyms of the title and drops the undefined month macro.",
+      "chars_before": 461,
+      "chars_after": 365
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-1"
+      ],
+      "rationale": "The proceedings paper is typed as a paper in proceedings with its series, which the numbered style prints, in place of a book chapter without pages; the non-ASCII dash and multiplication sign of the booktitle are written in LaTeX.",
+      "chars_before": 435,
+      "chars_after": 458
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-4"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and the acronym of the title protected.",
+      "chars_before": 357,
+      "chars_after": 282
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-4"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and the acronyms of the title protected.",
+      "chars_before": 513,
+      "chars_after": 444
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-4"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or undefined month macro, and the model name protected.",
+      "chars_before": 390,
+      "chars_after": 301
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-1"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, and the acronyms of the title protected.",
+      "chars_before": 467,
+      "chars_after": 366
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-2"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month.",
+      "chars_before": 470,
+      "chars_after": 368
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-2"
+      ],
+      "rationale": "The entry takes the file's own form: no URL beside the DOI, no ISSN, publisher or month, two inverted author names corrected, and the title's acronyms protected.",
+      "chars_before": 621,
+      "chars_after": 555
+    }
+  ],
+  "blocks_untouched": 16,
+  "roadmap_items_covered": [
+    "R1-4",
+    "R2-1b",
+    "R2-3",
+    "R2-4",
+    "R3-1",
+    "R3-14",
+    "R3-2",
+    "R3-4",
+    "R3-6"
+  ],
+  "block_touched_ratio": 0.5676,
+  "preserved_ratio": 0.4324,
+  "char_churn_ratio": 1.1027,
+  "net_growth_chars": -2839,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/03-refs.bib.patched",
+  "output_sha256": "728ddf37fd0b06668702df0a9b963ee235f22bdc23479d90ebf807b9c9ede664"
+}

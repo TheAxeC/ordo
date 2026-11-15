@@ -1,0 +1,405 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-5/manuscript/main.tex",
+  "base_sha256": "d4b27a57785ef6d152c4d5cae1aa51c4b7d8073f9dbb6d5127726c2ff967b739",
+  "round": 1,
+  "n_blocks": 89,
+  "n_blocks_touched": 29,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V8"
+      ],
+      "rationale": "The Abstract says the hand-crafted features have the highest ARI at the 9:1 ratio, ahead of ECGFounder with the values of Section 4.6, in place of 'keep', which misstated the direction of the result.",
+      "chars_before": 1976,
+      "chars_after": 1995
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "V1",
+        "V2",
+        "V9"
+      ],
+      "rationale": "The citations of sslclustering2025 and lookingbeyond2026 take the wording citation-report.md gives as supported (C20, C3, C4): one image-encoder study, and an ARI analysis pooled over four 12-lead datasets with no hand-crafted baseline and no MIT-BIH.",
+      "chars_before": 1159,
+      "chars_after": 1246
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "V8"
+      ],
+      "rationale": "Contribution (iii) says the hand-crafted features have the highest ARI at the 9:1 ratio and retain the largest share under non-IID federation, in place of 'keep the highest', which ECGFounder's balanced-data lead contradicts.",
+      "chars_before": 2235,
+      "chars_after": 2242
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "W14",
+        "V5"
+      ],
+      "rationale": "The contrastive-methods sentence takes the wording C7 gives as supported by its three sources, and the scope sentence names this study's arm 'the conv-AE' in place of 'a reconstruction autoencoder'.",
+      "chars_before": 1598,
+      "chars_after": 1552
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "V3"
+      ],
+      "rationale": "The closest-benchmark paragraph takes the wording C5 gives: the ARI was computed on embeddings pooled over four 12-lead datasets, PTB-XL among them.",
+      "chars_before": 612,
+      "chars_after": 658
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "V4",
+        "V13"
+      ],
+      "rationale": "Under the Decision on C6 the counts 21 799 and 18 869 are given as those of the version 1.0.3 release and no longer attributed to ptbxl2020, which is cited for the database; the likelihood-zero statement gets the citation C34 found in that paper.",
+      "chars_before": 1425,
+      "chars_after": 1481
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "V21"
+      ],
+      "rationale": "The Representations subsection gets a label so that the Limitations can point at it; the heading text is unchanged.",
+      "chars_before": 28,
+      "chars_after": 55
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "V10"
+      ],
+      "rationale": "The clifford2017af sentence says what the source is, a classification challenge for AF detection from a single short lead (C21), in place of 'the established setting'; the challenge's team count is left out because main.tex holds no such number.",
+      "chars_before": 3231,
+      "chars_after": 3262
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "V21"
+      ],
+      "rationale": "The Clustering and evaluation subsection gets a label so that the Results can point at it; the heading text is unchanged.",
+      "chars_before": 38,
+      "chars_after": 60
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "V22"
+      ],
+      "rationale": "The 75-word ceiling-and-seeds paragraph is joined with the scaling, K and imbalance paragraph (B0033, deleted by OP011), under one opening sentence that states what both hold, the controls of the evaluation.",
+      "chars_before": 487,
+      "chars_after": 1282
+    },
+    {
+      "op_id": "OP011",
+      "kind": "delete_block",
+      "block_id": "B0033",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "V22"
+      ],
+      "rationale": "The text of this paragraph now stands, unchanged in wording, at the end of the joined paragraph of OP010.",
+      "chars_before": 710,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0039",
+      "section": "Federated robustness",
+      "roadmap_item_ids": [
+        "V11"
+      ],
+      "rationale": "The fedavg2017 citation now supports only what the source defines, centroid aggregation in the manner of federated averaging (C22); 'standard federated k-means' is gone, and the weighting stays in the later sentence of the paragraph.",
+      "chars_before": 1210,
+      "chars_after": 1239
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V18",
+        "V20"
+      ],
+      "rationale": "4.1 opens with the measured range across representations, without the 'representation more than the algorithm' shape of the Abstract and the Introduction, and the 48-word sentence and the closing list become separate sentences.",
+      "chars_before": 816,
+      "chars_after": 736
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0045",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V21"
+      ],
+      "rationale": "The reference to the floor of the p-value points at the subsection that explains it, Clustering and evaluation, in place of the whole Methods section.",
+      "chars_before": 1187,
+      "chars_after": 1190
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V22"
+      ],
+      "rationale": "The K-sweep paragraph closes with what its values show for the comparison, that the three representations above chance kept their order at every K, from the values it already gives.",
+      "chars_before": 388,
+      "chars_after": 567
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V21"
+      ],
+      "rationale": "The reference to the clusterer settings points at the subsection that gives them, Clustering and evaluation, in place of the whole Methods section.",
+      "chars_before": 608,
+      "chars_after": 611
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V17"
+      ],
+      "rationale": "The phrase 'little label information that a linear probe recovers', already given two sentences earlier in this paragraph and again in 4.2, is replaced in the closing sentence by a shorter reference to it.",
+      "chars_before": 958,
+      "chars_after": 936
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "W14",
+        "V9",
+        "V17"
+      ],
+      "rationale": "The conv-AE is named as this study's arm, the raw arm is referred to by its ceiling without restating its reading from 4.1, and the sslclustering2025 citation takes the wording C20 gives.",
+      "chars_before": 920,
+      "chars_after": 893
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0052",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V17"
+      ],
+      "rationale": "The raw arm's random-forest value is read once here against its clustering ARI, without restating its comparison with the linear ceiling that 4.1 now gives.",
+      "chars_before": 763,
+      "chars_after": 708
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "W37",
+        "W48"
+      ],
+      "rationale": "The degenerate solution's count is stated as the bound the printed fraction gives (1.00 to two decimals on 2 542 records leaves at most 12 outside), and the two closing sentences that restate the Related work point are cut, keeping the 0.89 reference in one shorter sentence, so 4.3 is clearly shorter than 4.4 and 4.5.",
+      "chars_before": 704,
+      "chars_after": 531
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0059",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V21"
+      ],
+      "rationale": "The Feature scaling subsection gets a label so that the Limitations can point at it; the heading text is unchanged.",
+      "chars_before": 51,
+      "chars_after": 70
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0060",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V15"
+      ],
+      "rationale": "The outlier mechanism behind the fall under robust scaling is hedged as a likely reason, and the unmeasured partition collapse is cut, since the text gives no measure of either.",
+      "chars_before": 674,
+      "chars_after": 674
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "section": "Deployment cost",
+      "roadmap_item_ids": [
+        "W11"
+      ],
+      "rationale": "The fourth name of the property, 'the deployability claim', which refers to a claim the paper no longer makes, is replaced by what the cost table adds to the choice between representations.",
+      "chars_before": 662,
+      "chars_after": 691
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0073",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "W23",
+        "V19",
+        "V20"
+      ],
+      "rationale": "The 73-word conditional sentence ends at 'the better choice' and its evidence follows in sentences of its own, the imbalance evidence restricted to the one ratio evaluated and the federated retention given through Table fed in a shape that differs from the Conclusion's.",
+      "chars_before": 1077,
+      "chars_after": 1133
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "W16",
+        "V22"
+      ],
+      "rationale": "The comparison names the hand-crafted features for PTB-XL and the beat-morphology features for MIT-BIH, and the 73-word paragraph closes with what the two pipelines' result means for the original project and for the decision rule above it.",
+      "chars_before": 492,
+      "chars_after": 763
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0078",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "V12",
+        "V21"
+      ],
+      "rationale": "The lookingbeyond2026 citation names the one model it reports to separate by clinical label, ECG-FM (C23), without the 'rather than by dataset' contrast, and the lead reason is pointed at the Representations subsection.",
+      "chars_before": 911,
+      "chars_after": 963
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0080",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "V21"
+      ],
+      "rationale": "The reference to the scaling results points at the Feature scaling subsection in place of the whole Results section.",
+      "chars_before": 942,
+      "chars_after": 942
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0082",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "W23"
+      ],
+      "rationale": "The Conclusion restricts the imbalance statement to the 9:1 ratio, the one imbalanced setting evaluated, in place of the general 'under class imbalance'.",
+      "chars_before": 1080,
+      "chars_after": 1080
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0083",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "V4"
+      ],
+      "rationale": "The availability statement takes the wording C25 gives, so that ptbxl2020 is cited for the database and the version 1.0.3 is the release the study used; the heading is unchanged.",
+      "chars_before": 307,
+      "chars_after": 333
+    }
+  ],
+  "blocks_untouched": 60,
+  "roadmap_items_covered": [
+    "V1",
+    "V10",
+    "V11",
+    "V12",
+    "V13",
+    "V15",
+    "V17",
+    "V18",
+    "V19",
+    "V2",
+    "V20",
+    "V21",
+    "V22",
+    "V3",
+    "V4",
+    "V5",
+    "V8",
+    "V9",
+    "W11",
+    "W14",
+    "W16",
+    "W23",
+    "W37",
+    "W48"
+  ],
+  "block_touched_ratio": 0.3258,
+  "preserved_ratio": 0.6742,
+  "char_churn_ratio": 0.929,
+  "net_growth_chars": 642,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/07-main.tex.patched",
+  "output_sha256": "66c02cb908a9e7b84f37157a7c6c83d69c385b1146518792399a92bc19dce42b"
+}

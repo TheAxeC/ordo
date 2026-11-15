@@ -1,0 +1,663 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "982e0f35e6ff9a406a549bdadfbc451a0f3c0504e13d6887f0a71417ac64dda0",
+  "round": 1,
+  "n_blocks": 115,
+  "n_blocks_touched": 47,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "K14",
+        "K15",
+        "K40"
+      ],
+      "rationale": "Splits the two ideas of the first sentence, says what the 30-day blanking window does where it first appears, and defines the ECG term at its first use; every number and claim kept.",
+      "chfield": 1835,
+      "chfield": 2002
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0014",
+      "section": "Context and problem",
+      "roadmap_item_ids": [
+        "K5",
+        "K6"
+      ],
+      "rationale": "Uses incident AF and AUROC as the one term for each concept and splits the paragraph at its second idea, the outcome definition; numbers and citations unchanged.",
+      "chfield": 910,
+      "chfield": 911
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Research gap",
+      "roadmap_item_ids": [
+        "K42"
+      ],
+      "rationale": "Adds the sentence that connects the guideline statement to the paragraph's claim, through the interpretability barrier the cited review already names.",
+      "chfield": 1260,
+      "chfield": 1435
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "Research gap",
+      "roadmap_item_ids": [
+        "K1",
+        "K16"
+      ],
+      "rationale": "Defines mode, low-rank factor and Grad-CAM at their first appearance; the Grad-CAM clause stays here and its repeat in Related work is reworded in OP016.",
+      "chfield": 1008,
+      "chfield": 1341
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0019",
+      "section": "Aim and contributions",
+      "roadmap_item_ids": [
+        "K7",
+        "K45"
+      ],
+      "rationale": "Names the comparator the clinical model, as elsewhere, and states the authors' decision on ECG-read labels with we.",
+      "chfield": 961,
+      "chfield": 950
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Aim and contributions",
+      "roadmap_item_ids": [
+        "K15",
+        "K38"
+      ],
+      "rationale": "Says what the blanking window does in the cohort contribution and splits the 39-word item into its two independent contributions.",
+      "chfield": 856,
+      "chfield": 996
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "section": "AI-ECG prediction of incident AF",
+      "roadmap_item_ids": [
+        "K6"
+      ],
+      "rationale": "Writes AUC as AUROC, the term defined in the Introduction.",
+      "chfield": 1028,
+      "chfield": 1032
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "AI-ECG prediction of incident AF",
+      "roadmap_item_ids": [
+        "K5",
+        "K6",
+        "K8",
+        "K29"
+      ],
+      "rationale": "Breaks the six repeated 'model reached value' sentences into varied shapes and uses incident AF, AUROC and C-index as the one term for each concept; every value and citation kept.",
+      "chfield": 1048,
+      "chfield": 1011
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "AI-ECG prediction of incident AF",
+      "roadmap_item_ids": [
+        "K2"
+      ],
+      "rationale": "Rewrites the closing gap sentence out of the repeated 'To our knowledge, no...' template, keeping its hedge and its claim.",
+      "chfield": 528,
+      "chfield": 508
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0027",
+      "section": "Clinical risk models and their combination with the ECG",
+      "roadmap_item_ids": [
+        "K8"
+      ],
+      "rationale": "Writes the concordance measure as C-index, the one term used for it.",
+      "chfield": 1024,
+      "chfield": 1020
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Clinical risk models and their combination with the ECG",
+      "roadmap_item_ids": [
+        "K8"
+      ],
+      "rationale": "Writes C statistics as C-indices, the one term used for the concordance measure.",
+      "chfield": 716,
+      "chfield": 713
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "Clinical risk models and their combination with the ECG",
+      "roadmap_item_ids": [
+        "K6"
+      ],
+      "rationale": "Writes AUC as AUROC.",
+      "chfield": 671,
+      "chfield": 673
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "Interpretable models and post-hoc explanation",
+      "roadmap_item_ids": [
+        "K17"
+      ],
+      "rationale": "Defines remove-and-retrain evaluation at its first use from the cited benchmark, whose read passage says ROAR replaces the inputs estimated most important with a fixed uninformative value.",
+      "chfield": 1119,
+      "chfield": 1316
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "Interpretable models and post-hoc explanation",
+      "roadmap_item_ids": [
+        "K18"
+      ],
+      "rationale": "Defines leakage as the encoding of information beyond the named concepts that the paragraph reports, before the term is used.",
+      "chfield": 1108,
+      "chfield": 1168
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "section": "Interpretable models and post-hoc explanation",
+      "roadmap_item_ids": [
+        "K2"
+      ],
+      "rationale": "Rewrites the gap sentence out of the repeated 'To our knowledge, no...' template, scoped to the studies reviewed, with the same claim.",
+      "chfield": 807,
+      "chfield": 795
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "Block-term tensor models",
+      "roadmap_item_ids": [
+        "K1",
+        "K19",
+        "K37"
+      ],
+      "rationale": "Opens on the paragraph's point, defines multilinear rank and the CP and Tucker decompositions (CP and Tucker in the words of the Kolda abstract read in the run), rewords the repeated Grad-CAM clause and drops the 'is a different model' and 'instead of' contrasts.",
+      "chfield": 969,
+      "chfield": 1174
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "Block-term tensor models",
+      "roadmap_item_ids": [
+        "K2",
+        "K6",
+        "K9",
+        "K20"
+      ],
+      "rationale": "Defines deflation, writes ROC-AUC as AUROC, and replaces the second statement of the gap (kept in the Introduction) with the link to the Method that names the block-term layer.",
+      "chfield": 920,
+      "chfield": 1003
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0039",
+      "section": "Spectral tensor and block-term layer",
+      "roadmap_item_ids": [
+        "K28"
+      ],
+      "rationale": "Supports the claim that the magnitude spectrogram needs no beat alignment with the standard shift property of the Fourier transform; the claim itself unchanged.",
+      "chfield": 1146,
+      "chfield": 1260
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Spectral tensor and block-term layer",
+      "roadmap_item_ids": [
+        "K21"
+      ],
+      "rationale": "Defines a mode-n fibre where the mode-n product first uses it.",
+      "chfield": 1054,
+      "chfield": 1149
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Clinical term and readable factors",
+      "roadmap_item_ids": [
+        "K22"
+      ],
+      "rationale": "Defines the anchor age from the MIMIC-IV description already cited (the anchor_age passage and its shifted-year example read in the run).",
+      "chfield": 1020,
+      "chfield": 1111
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Clinical term and readable factors",
+      "roadmap_item_ids": [
+        "K3"
+      ],
+      "rationale": "Removes the second statement that the head's use of the factors is not measured; that limitation and its citation stand once, in the Limitations (OP040).",
+      "chfield": 991,
+      "chfield": 823
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Cohort and labels",
+      "roadmap_item_ids": [
+        "K45"
+      ],
+      "rationale": "States the two outcome decisions of the authors with we.",
+      "chfield": 781,
+      "chfield": 777
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0054",
+      "section": "Baselines, protocol and metrics",
+      "roadmap_item_ids": [
+        "K44"
+      ],
+      "rationale": "Reports the fitting of the CNN in the past tense, as the rest of the paragraph does.",
+      "chfield": 748,
+      "chfield": 749
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0055",
+      "section": "Baselines, protocol and metrics",
+      "roadmap_item_ids": [
+        "K23",
+        "K24",
+        "K35"
+      ],
+      "rationale": "Splits the paragraph at its second idea, the calibration and clinical-use measures, and defines cross-fitting and net benefit (from the decision curve analysis already cited) where they first appear.",
+      "chfield": 1317,
+      "chfield": 1745
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0058",
+      "section": "Occlusion readout",
+      "roadmap_item_ids": [
+        "K4"
+      ],
+      "rationale": "Removes the second idea, how the readout's choices shape the result, whose cited clauses stand once in the Limitations (OP040), and points to that place.",
+      "chfield": 1166,
+      "chfield": 1011
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "K45"
+      ],
+      "rationale": "States the authors' reporting decision with we.",
+      "chfield": 806,
+      "chfield": 803
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "K41"
+      ],
+      "rationale": "Opens on the paragraph's point, that the fused model stays above the clinical Cox model at each horizon; the procedure follows and every value is kept.",
+      "chfield": 922,
+      "chfield": 965
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0069",
+      "section": "Calibration, risk stratification and operating points",
+      "roadmap_item_ids": [
+        "K42",
+        "K43"
+      ],
+      "rationale": "Replaces 'close in most deciles' with the largest gap the paragraph already reports, and follows the Brier scores with what they show; no number added.",
+      "chfield": 921,
+      "chfield": 1134
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "section": "Calibration, risk stratification and operating points",
+      "roadmap_item_ids": [
+        "K34"
+      ],
+      "rationale": "Joins the two short clinical-use paragraphs into one that opens on its point and drops the sentence describing the paragraph; every threshold and value kept.",
+      "chfield": 414,
+      "chfield": 831
+    },
+    {
+      "op_id": "OP030",
+      "kind": "delete_block",
+      "block_id": "B0071",
+      "section": "Calibration, risk stratification and operating points",
+      "roadmap_item_ids": [
+        "K34"
+      ],
+      "rationale": "Its decision-curve content is joined into the paragraph of OP029.",
+      "chfield": 433,
+      "chfield": 0
+    },
+    {
+      "op_id": "OP047",
+      "kind": "replace_block",
+      "block_id": "B0075",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "K41"
+      ],
+      "rationale": "Opens the paragraph on its point, the energy-normalised profile highest in the PR window, and follows it with the raw QRS dominance and its cause; every value, claim and reference kept.",
+      "chfield": 745,
+      "chfield": 763
+    },
+    {
+      "op_id": "OP031",
+      "kind": "delete_block",
+      "block_id": "B0080",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "K10",
+        "K11",
+        "K12"
+      ],
+      "rationale": "Every claim of this paragraph stands in the Results and again in the Conclusion; deleting it ends the mirror of the Conclusion and the terms it cycled.",
+      "chfield": 867,
+      "chfield": 0
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0081",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "K12",
+        "K38"
+      ],
+      "rationale": "Gives the new first paragraph of the Discussion an antecedent for its values, and splits the 33-word foundation-model sentence; claims and citations kept.",
+      "chfield": 959,
+      "chfield": 1029
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0082",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "K11",
+        "K13",
+        "K35"
+      ],
+      "rationale": "Names the fused model in place of the ambiguous 'Its', splits the paragraph at its second idea (ECG-only BTTN against the CNN) and uses the term ECG-only BTTN.",
+      "chfield": 821,
+      "chfield": 844
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0084",
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "roadmap_item_ids": [
+        "K3",
+        "K9"
+      ],
+      "rationale": "Removes the repeat of 'this study reports no reading of the factors', which stands in the Method (OP021), and writes factor layer as block-term layer.",
+      "chfield": 982,
+      "chfield": 905
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0086",
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "roadmap_item_ids": [
+        "K30"
+      ],
+      "rationale": "Replaces the template limits opener with the paragraph's point, keeps the two limits of the agreement in it, and moves the third idea, the hypothesis on the fused gain, to the next paragraph (OP036).",
+      "chfield": 972,
+      "chfield": 688
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0087",
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "roadmap_item_ids": [
+        "K30",
+        "K31"
+      ],
+      "rationale": "Joins the two atrial hypotheses into one paragraph that ends once, and states the authors' offering of them with we; both readings, their hedges and citations kept.",
+      "chfield": 646,
+      "chfield": 963
+    },
+    {
+      "op_id": "OP037",
+      "kind": "replace_block",
+      "block_id": "B0089",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "K26",
+        "K30",
+        "K35"
+      ],
+      "rationale": "Splits the single-database limit from the label limit, states the follow-up requirement as a selection limitation with the counts of the cohort table, and takes in the missing participant table moved from the calibration paragraph.",
+      "chfield": 779,
+      "chfield": 1369
+    },
+    {
+      "op_id": "OP038",
+      "kind": "replace_block",
+      "block_id": "B0090",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "K7",
+        "K30"
+      ],
+      "rationale": "Replaces the template limits opener with the paragraph's point and writes clinical comparator as clinical model; the restating close is folded into the opener.",
+      "chfield": 561,
+      "chfield": 510
+    },
+    {
+      "op_id": "OP039",
+      "kind": "replace_block",
+      "block_id": "B0091",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "K30"
+      ],
+      "rationale": "Replaces the template limits opener with the paragraph's point and moves its second idea, the missing participant table, to OP037.",
+      "chfield": 920,
+      "chfield": 717
+    },
+    {
+      "op_id": "OP040",
+      "kind": "replace_block",
+      "block_id": "B0092",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "K3",
+        "K4",
+        "K27"
+      ],
+      "rationale": "Keeps the cited readout-choice clauses here as their one statement, adds the energy normalisation as an alternative explanation of the window order, stated as a limitation, and splits off the head's use of the factors as its own paragraph.",
+      "chfield": 902,
+      "chfield": 1101
+    },
+    {
+      "op_id": "OP041",
+      "kind": "replace_block",
+      "block_id": "B0094",
+      "section": "Future research",
+      "roadmap_item_ids": [
+        "K7",
+        "K25",
+        "K36"
+      ],
+      "rationale": "Sets the five extensions as a list introduced with a colon, defines transport where it is used, and names the hypothetical comparator a clinical model.",
+      "chfield": 988,
+      "chfield": 1178
+    },
+    {
+      "op_id": "OP042",
+      "kind": "replace_block",
+      "block_id": "B0096",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "K7",
+        "K10",
+        "K12"
+      ],
+      "rationale": "Names the model the fused model, and replaces 'agreed closely in most risk deciles' with the decile values the Results report; no number added.",
+      "chfield": 871,
+      "chfield": 1019
+    },
+    {
+      "op_id": "OP043",
+      "kind": "replace_block",
+      "block_id": "B0097",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "K11"
+      ],
+      "rationale": "Writes 'The ECG term alone' as ECG-only BTTN, the name the Method gives it.",
+      "chfield": 571,
+      "chfield": 566
+    },
+    {
+      "op_id": "OP044",
+      "kind": "replace_block",
+      "block_id": "B0098",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "K7",
+        "K11"
+      ],
+      "rationale": "Writes 'the ECG term alone' as ECG-only BTTN and 'clinical comparator' as clinical model.",
+      "chfield": 651,
+      "chfield": 645
+    },
+    {
+      "op_id": "OP045",
+      "kind": "replace_block",
+      "block_id": "B0111",
+      "section": "Declaration of generative AI and AI-assisted technologies",
+      "roadmap_item_ids": [
+        "K39"
+      ],
+      "rationale": "Words the source of the numbers as the statistical analysis of the study, without the software wording 'saved results'.",
+      "chfield": 228,
+      "chfield": 224
+    },
+    {
+      "op_id": "OP046",
+      "kind": "replace_block",
+      "block_id": "B0113",
+      "section": "Reproducibility statement",
+      "roadmap_item_ids": [
+        "K33"
+      ],
+      "rationale": "Deletes the 'should note that' opener and states the access requirement directly.",
+      "chfield": 674,
+      "chfield": 646
+    }
+  ],
+  "blocks_untouched": 68,
+  "roadmap_items_covered": [
+    "K1",
+    "K10",
+    "K11",
+    "K12",
+    "K13",
+    "K14",
+    "K15",
+    "K16",
+    "K17",
+    "K18",
+    "K19",
+    "K2",
+    "K20",
+    "K21",
+    "K22",
+    "K23",
+    "K24",
+    "K25",
+    "K26",
+    "K27",
+    "K28",
+    "K29",
+    "K3",
+    "K30",
+    "K31",
+    "K33",
+    "K34",
+    "K35",
+    "K36",
+    "K37",
+    "K38",
+    "K39",
+    "K4",
+    "K40",
+    "K41",
+    "K42",
+    "K43",
+    "K44",
+    "K45",
+    "K5",
+    "K6",
+    "K7",
+    "K8",
+    "K9"
+  ],
+  "block_touched_ratio": 0.4087,
+  "preserved_ratio": 0.5913,
+  "char_churn_ratio": 1.347,
+  "net_growth_chars": 1945,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/26-main.tex.result",
+  "output_sha256": "98d806e529c1c0887c461c40c201f696299f415f345af5989bf63ea7ebb5dd1b"
+}

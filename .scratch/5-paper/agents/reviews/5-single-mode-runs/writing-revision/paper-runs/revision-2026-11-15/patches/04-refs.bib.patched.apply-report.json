@@ -1,0 +1,47 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-5/manuscript/refs.bib",
+  "base_sha256": "f2f9f5746282614ead40c66ba4d021621f92dd194e573e3e3d853399fbdc0f19",
+  "round": 1,
+  "n_blocks": 21,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0011",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C1"
+      ],
+      "rationale": "Corrects the author names of wavelettensorecg2018 to Hong He, Yonghong Tan and Jianfeng Xing, as the Crossref and Semantic Scholar records and the publisher's BibTeX for doi 10.1016/j.knosys.2018.09.001 give them.",
+      "chars_before": 375,
+      "chars_after": 380
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C2"
+      ],
+      "rationale": "Reduces the doi field of hdbscan2013 to the bare DOI 10.1007/978-3-642-37456-2_14, which Crossref, OpenAlex and Semantic Scholar resolve; the escaped underscore broke the link.",
+      "chars_before": 355,
+      "chars_after": 354
+    }
+  ],
+  "blocks_untouched": 19,
+  "roadmap_items_covered": [
+    "C1",
+    "C2"
+  ],
+  "block_touched_ratio": 0.0952,
+  "preserved_ratio": 0.9048,
+  "char_churn_ratio": 0.1778,
+  "net_growth_chars": 4,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/04-refs.bib.patched",
+  "output_sha256": "b8a36d39c91a747775562b77b49ddee9a11b779b299ceaec6fc35327cf772a39"
+}

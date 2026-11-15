@@ -1,0 +1,46 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-5/manuscript/refs.bib",
+  "base_sha256": "b8a36d39c91a747775562b77b49ddee9a11b779b299ceaec6fc35327cf772a39",
+  "round": 1,
+  "n_blocks": 21,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "reference-fix"
+      ],
+      "rationale": "check-urls printed 'sklearn2011: no identifier'; the Semantic Scholar record agrees with the entry on title, first author Pedregosa, year 2011 and the Journal of Machine Learning Research and gives arXiv 1201.0490 (its 10.5555 DOI answers HTTP 404 at doi.org), so the eprint field is added and every other byte of the entry is kept",
+      "chars_before": 545,
+      "chars_after": 595
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "reference-fix"
+      ],
+      "rationale": "check-urls printed 'threekg2021: no identifier'; the Semantic Scholar, OpenAlex and arXiv records of arXiv 2106.04452 agree with the entry on title, first author Gopal and year 2021 (Semantic Scholar names the venue ML4H@NeurIPS), so the eprint field is added and every other byte of the entry is kept",
+      "chars_before": 386,
+      "chars_after": 439
+    }
+  ],
+  "blocks_untouched": 19,
+  "roadmap_items_covered": [
+    "reference-fix"
+  ],
+  "block_touched_ratio": 0.0952,
+  "preserved_ratio": 0.9048,
+  "char_churn_ratio": 0.2386,
+  "net_growth_chars": 103,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/09-refs.bib.patched",
+  "output_sha256": "7bfae75a088390081568d9c1e1935f98bd8a68531d301666a231b11fc291ddbe"
+}

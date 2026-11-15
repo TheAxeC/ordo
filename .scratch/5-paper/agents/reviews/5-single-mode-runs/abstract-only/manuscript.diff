@@ -1,0 +1,65 @@
+diff --git a/manuscript/main.tex b/manuscript/main.tex
+index e180b67..44d9b52 100644
+--- a/manuscript/main.tex
++++ b/manuscript/main.tex
+@@ -59,35 +59,34 @@ representations for unsupervised arrhythmia structure}
+ \affiliation[af]{organization={Biomedical Data Sciences, Data Science Institute (DSI) and Biomedical Research Institute (BIOMED), Hasselt University}, city={Hasselt}, country={Belgium}}
+ 
+ \begin{abstract}
+-Unsupervised analysis of the electrocardiogram (ECG) promises label-free
+-discovery of cardiac structure, yet whether clustering succeeds depends less on
+-the algorithm than on how the signal is represented. We benchmark four
+-representation families for unsupervised separation of sinus rhythm (SR) from
+-atrial fibrillation (AF) on PTB-XL: whole-recording raw flattening, a convolutional
+-reconstruction autoencoder, compact hand-crafted rhythm and morphology features,
+-and two frozen foundation-model embeddings (HuBERT-ECG and ECGFounder).
+-Evaluation is chance-corrected (adjusted Rand index, ARI), patient-grouped,
+-\rev{repeated over ten seeds for the clusterers that depend on one}, and bounded by a
+-supervised ceiling. ECGFounder clusters
+-best (ARI up to 0.885), but 16 interpretable hand-crafted features are competitive
+-(0.711) and far ahead of the raw and autoencoder pipelines (ARI $\approx 0$), which
+-match a majority-class assignment despite supervised ceilings well above chance.
+-The same ordering holds on a MIT-BIH beat-morphology task. Two cautions emerge: the
+-silhouette score rewards the degenerate one-cluster solution (silhouette 0.81 at
+-ARI \rev{0.000}) and cannot validate ECG clustering alone, and the feature scaler materially
+-changes the outcome. The ranking is largely expected, since SR and AF differ by
+-definition in rhythm regularity; the contribution is the chance-corrected controls
+-that locate where naive pipelines fail and the finding that the cheap interpretable
+-representation is the more deployable one. Under heavy class imbalance and
+-federation across ten heterogeneous sites, the hand-crafted features are the most
+-robust, overtaking the foundation embedding under imbalance while the embedding's
+-centralized advantage erodes under federation. The representation, not the
+-algorithm, governs label-free ECG structure.
++\rev{How electrocardiogram (ECG) representations compare for label-free clustering under
++chance-corrected metrics has not been measured. We benchmark four representation families for
++separating sinus rhythm (SR) from atrial fibrillation (AF) in 2\,542 PTB-XL records. They are
++raw flattening, a convolutional autoencoder, 16 hand-crafted features and two frozen foundation
++models, HuBERT-ECG and ECGFounder. Five clusterers are scored by the chance-corrected adjusted
++Rand index (ARI). Evaluation is patient-grouped and repeated over ten seeds for the clusterers
++that depend on one. Bracketed values are 95\% bootstrap intervals. ECGFounder clusters best (ARI
++0.885 [0.860, 0.909]) and the hand-crafted features are competitive (0.711 [0.677, 0.746]). Raw
++flattening and the autoencoder match a majority-class assignment (ARI at most 0.013). HuBERT-ECG
++carries the label (supervised linear-probe ceiling 0.899) yet clusters weakly (ARI 0.195). A
++discriminant fitted on other patients raises its held-out ARI from 0.160 to 0.549. The ranking is
++largely expected, since SR and AF differ by definition in rhythm regularity.} The silhouette
++score rewards the degenerate one-cluster solution (silhouette 0.81 at ARI \rev{0.000}) and cannot
++validate ECG clustering alone. \rev{The ordering replicates on MIT-BIH beat morphology, where 21
++hand-crafted features reach ARI 0.783. Under a 9:1 SR:AF imbalance the hand-crafted features
++overtake ECGFounder (ARI 0.265 against 0.063). Under simulated federation across ten
++heterogeneous sites, the two mean ARIs are close (0.591 against 0.612). The hand-crafted features
++retain 0.92 of their centralized ARI against 0.69 for ECGFounder and never fall below 0.455.
++Their extraction is also fifteen times cheaper per record than ECGFounder's. Beyond the closest
++foundation-model benchmark, we add a hand-crafted baseline, supervised ceilings with an
++out-of-fold test, a second dataset and deployment stressors. On these two binary tasks and two
++foundation models, the representation mattered more than the clusterer for recovering the
++classes.}
+ \end{abstract}
+ 
+ \begin{keyword}
+-electrocardiography \sep unsupervised clustering \sep representation learning \sep
+-foundation models \sep adjusted Rand index \sep PTB-XL
++electrocardiography \sep \rev{atrial fibrillation} \sep \rev{hand-crafted features} \sep
++foundation models \sep adjusted Rand index \sep PTB-XL \sep \rev{MIT-BIH}
+ \end{keyword}
+ 
+ \end{frontmatter}

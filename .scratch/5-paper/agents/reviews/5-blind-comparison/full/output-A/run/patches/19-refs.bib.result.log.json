@@ -1,0 +1,169 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "fd23271ff0bf794a9be1b1b76e4926214af60c2c8d341f38f67d1d3557d806ac",
+  "round": 1,
+  "n_blocks": 68,
+  "n_blocks_touched": 12,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Adebayo 2018 becomes a vancouver webpage entry with type, publisher and url, the fields that type prints, so it reads [Preprint]. arXiv:1810.03292; 2018. Available from: its DOI link.",
+      "chfield": 290,
+      "chfield": 401
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Hooker 2018 becomes a webpage entry with type, publisher and url, so it reads [Preprint]. arXiv:1806.10758; 2018. Available from: its DOI link.",
+      "chfield": 291,
+      "chfield": 402
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Koh 2020 becomes a webpage entry: that type starts a new block after the authors, so the list ends et al. with one full stop, and type, publisher and url print [Preprint]. arXiv:2007.04612; 2020 and its DOI link.",
+      "chfield": 298,
+      "chfield": 409
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0027",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Mahinpei 2021 becomes a webpage entry with type, publisher and url, so it reads [Preprint]. arXiv:2106.13314; 2021. Available from: its DOI link.",
+      "chfield": 301,
+      "chfield": 412
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Boehle 2022 becomes a webpage entry with type, publisher and url, so it reads [Preprint]. arXiv:2205.10268; 2022. Available from: its DOI link.",
+      "chfield": 266,
+      "chfield": 377
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Dooms 2025 becomes a webpage entry with type, publisher and url, so it reads [Preprint]. arXiv:2504.02667; 2025. Available from: its DOI link.",
+      "chfield": 278,
+      "chfield": 389
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0030",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Arya 2025 becomes a webpage entry with type, publisher and url, so it reads [Preprint]. arXiv:2507.16761; 2025. Available from: its DOI link.",
+      "chfield": 332,
+      "chfield": 443
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Ye 2020 becomes a webpage entry with type, publisher and url, so it reads [Preprint]. arXiv:2010.04963; 2020. Available from: its DOI link, the form RI6.2 gives.",
+      "chfield": 277,
+      "chfield": 388
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2",
+        "RI6.7"
+      ],
+      "rationale": "Van Den Kerchove 2025 becomes a webpage entry with type, publisher and url (RI6.2), and its authors are written family name first so they print Van Den Kerchove A and Van Hulle MM (RI6.7).",
+      "chfield": 325,
+      "chfield": 440
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "The MIMIC-IV-ECG record becomes a webpage entry with type Dataset: that type starts a new block after the authors, so the list ends et al. with one full stop, and the record keeps PhysioNet, its year and its link.",
+      "chfield": 587,
+      "chfield": 610
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.1"
+      ],
+      "rationale": "The issue field Supplement_1 holds an underscore that stops the typesetting; the Vancouver form Suppl 1 prints European Heart Journal. 2026 Oct;47(Suppl 1).",
+      "chfield": 465,
+      "chfield": 460
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI6.2"
+      ],
+      "rationale": "Zintgraf 2017 becomes a webpage entry with type, publisher and url, so it reads [Preprint]. arXiv:1702.04595; 2017. Available from: its DOI link.",
+      "chfield": 297,
+      "chfield": 408
+    }
+  ],
+  "blocks_untouched": 56,
+  "roadmap_items_covered": [
+    "RI6.1",
+    "RI6.2",
+    "RI6.7"
+  ],
+  "block_touched_ratio": 0.1765,
+  "preserved_ratio": 0.8235,
+  "char_churn_ratio": 0.2332,
+  "net_growth_chars": 1132,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/19-refs.bib.result",
+  "output_sha256": "d7ed910fe2299d3f073f689840bb8ce5e1b07953401d52795603b0ae50459de5"
+}

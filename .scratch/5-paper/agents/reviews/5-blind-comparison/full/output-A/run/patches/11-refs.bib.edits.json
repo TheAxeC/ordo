@@ -1,0 +1,9 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "refs.bib",
+  "base_sha256": "0dda41f90b14caa52394aa3cd06914e05996a22df2ed3cf5ee318b4aba3bd0c5",
+  "round": 1,
+  "ops": [
+    {"op_id": "OP001", "kind": "replace_block", "block_id": "B0036", "old_hash": "70031d609c92127136e7bf21c9ce77c4b46c9cb7fa8ca2b0c786708c7b8a8f68", "roadmap_item_ids": ["RI3.3"], "rationale": "Replaces the Neural Networks entry Ye_2020 by the arXiv 2010.04963 entry that the lookup script bibtex '10.48550/arXiv.2010.04963' printed, with the arXiv DOI added in the form of the other arXiv entries, as the ruling on C2 asks; main.tex cites the new key in 1.2 and 2.4.", "new_text": "@misc{arxiv_2010_04963,\n  title = {Block-term Tensor Neural Networks},\n  author = {Jinmian Ye and Guangxi Li and Di Chen and Haiqin Yang and Shandian Zhe and Zenglin Xu},\n  year = {2020},\n  eprint = {2010.04963},\n  archivePrefix = {arXiv},\n  doi = {10.48550/arXiv.2010.04963}\n}"}
+  ]
+}

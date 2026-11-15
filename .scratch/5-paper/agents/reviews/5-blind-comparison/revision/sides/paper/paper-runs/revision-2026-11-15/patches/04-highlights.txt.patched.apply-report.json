@@ -1,0 +1,42 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/highlights.txt",
+  "base_sha256": "cf588f229bc1d244cdd2501005cf74aa6961a4ceec9de1227190ce27fde608f3",
+  "round": 1,
+  "n_blocks": 2,
+  "n_blocks_touched": 1,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0002",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-8",
+        "R1-4",
+        "R3-6",
+        "R3-5",
+        "R3-9"
+      ],
+      "rationale": "The highlights follow the revised text: the general claim is scoped to the two binary tasks, 'most robust' gives way to the two measured stress-test results with the federation named as simulated, and the terms are those of the manuscript.",
+      "chars_before": 380,
+      "chars_after": 399
+    }
+  ],
+  "blocks_untouched": 1,
+  "roadmap_items_covered": [
+    "R1-4",
+    "R3-5",
+    "R3-6",
+    "R3-8",
+    "R3-9"
+  ],
+  "block_touched_ratio": 0.5,
+  "preserved_ratio": 0.5,
+  "char_churn_ratio": 1.6297,
+  "net_growth_chars": 19,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/04-highlights.txt.patched",
+  "output_sha256": "9bfb326f2c1c501de311d9e82e1b4a59cfaa2871b235f16ded65504d1020ece9"
+}

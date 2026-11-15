@@ -1,0 +1,57 @@
+{
+  "result": "applied",
+  "base_file": "/work/manuscript/refs.bib",
+  "base_sha256": "799ecdd39298e5eefbf3391cf1d3d2921b34cfdb553f7522fb95911a94815e9c",
+  "round": 1,
+  "n_blocks": 21,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0006",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-14"
+      ],
+      "rationale": "The ECGFounder preprint (arXiv 2410.04133) appeared in NEJM AI in 2025 (doi 10.1056/AIoa2401033, resolved in Crossref, OpenAlex and Semantic Scholar); the entry cites that version and keeps the key ecgfounder2024.",
+      "chfield": 493,
+      "chfield": 499
+    },
+    {
+      "op_id": "OP002",
+      "kind": "insert_after",
+      "block_id": "B0021",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R2-1b",
+        "R2-3",
+        "R2-4",
+        "R3-1",
+        "R3-2",
+        "R3-4"
+      ],
+      "rationale": "Adds the sources the items call for: the 2024 ESC AF guideline (R2-1b, R2-4), a single-lead rhythm classification study (R2-1b), NMI and Fowlkes-Mallows (R2-3), four ECG foundation-model benchmark studies (R3-1), six public ECG foundation models and a review of them (R3-4), two multi-class 12-lead datasets (R3-2).",
+      "chfield": 457,
+      "chfield": 9365
+    }
+  ],
+  "blocks_untouched": 19,
+  "roadmap_items_covered": [
+    "R2-1b",
+    "R2-3",
+    "R2-4",
+    "R3-1",
+    "R3-14",
+    "R3-2",
+    "R3-4"
+  ],
+  "block_touched_ratio": 0.0952,
+  "preserved_ratio": 0.9048,
+  "char_churn_ratio": 1.3089,
+  "net_growth_chars": 9373,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/01-refs.bib.result",
+  "output_sha256": "98be9b3153d986f88782462133cc5bf1cf6a95860a2edcb216d830f39c0ed42a"
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "cover-letter.tex",
+  "base_sha256": "ca1a1d7ac70235f8671ac950049d9329a8144ea48c9a92d8a9886695fac9d802",
+  "round": 1,
+  "ops": [
+    {"op_id": "OP001", "kind": "replace_block", "block_id": "B0003", "old_hash": "bff5252979a6f7542841efc54abfad62882054efe0092c42764a1377a90d0697", "roadmap_item_ids": ["RI6.5"], "rationale": "An empty group after each line break of the signature stops the break from reading the next bracketed placeholder as a spacing value; the placeholders stay as text for the authors.", "new_text": "\\signature{[GAP: corresponding author name and title]\\\\{}\n[GAP: department]\\\\{}\n[GAP: institution]\\\\{}\n[GAP: email]\\\\{}\nORCID: [GAP: ORCID]}"}
+  ]
+}

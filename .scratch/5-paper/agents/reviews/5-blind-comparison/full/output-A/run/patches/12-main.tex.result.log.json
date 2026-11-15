@@ -1,0 +1,95 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "0acbc68ed2c308b2fcb323181c51ccd6896f4758be20e8184bf48cc63cda668f",
+  "round": 1,
+  "n_blocks": 115,
+  "n_blocks_touched": 6,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "RI4.1"
+      ],
+      "rationale": "Replaces 'Fitted once as a survival model' by the design as carried out in the survival analysis: one set of cross-validated risks per model, read at every horizon without refitting; the AUROC range and horizon qualifiers are kept.",
+      "chfield": 1746,
+      "chfield": 1835
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Aim and contributions",
+      "roadmap_item_ids": [
+        "RI4.1"
+      ],
+      "rationale": "The third contribution now says the four horizons are read from the same cross-validated risks without refitting, in place of 'with BTTN fitted once as a survival model'.",
+      "chfield": 822,
+      "chfield": 856
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "RI4.1"
+      ],
+      "rationale": "States how the horizon risks were produced (each patient's risk from the fold that held the patient out: mean log-risk of three networks trained on the other four folds, a Cox model fitted on the same folds) and that they were read at every horizon without refitting; all AUROCs unchanged.",
+      "chfield": 851,
+      "chfield": 1166
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "RI4.1"
+      ],
+      "rationale": "The Table 3 caption now says each model's cross-validated risks were read at all four horizons without refitting, in place of 'Each model was fitted once'; the table body is unchanged.",
+      "chfield": 913,
+      "chfield": 949
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0096",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "RI4.1"
+      ],
+      "rationale": "The third sentence of the Conclusion opens 'Without refitting for each horizon' in place of 'Fitted once as a survival model'; the rest of the paragraph is unchanged.",
+      "chfield": 868,
+      "chfield": 871
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0098",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "RI4.2"
+      ],
+      "rationale": "Replaces the by-construction sentence by the design implication the one-year results carry (fused model 0.7776 [0.7664, 0.7888] against the ECG term alone 0.7397 [0.7275, 0.7517], table1_cis.csv rows conv-BTTN + clinical and conv-BTTN (ECG-only)), stated as non-overlapping intervals without a paired interval; the two sentences that follow are kept.",
+      "chfield": 422,
+      "chfield": 651
+    }
+  ],
+  "blocks_untouched": 109,
+  "roadmap_items_covered": [
+    "RI4.1",
+    "RI4.2"
+  ],
+  "block_touched_ratio": 0.0522,
+  "preserved_ratio": 0.9478,
+  "char_churn_ratio": 0.1929,
+  "net_growth_chars": 706,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/12-main.tex.result",
+  "output_sha256": "012a28325f100190f29a9e60cd14bd4f657c25708f8e325d48a47851105a2d19"
+}

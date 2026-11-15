@@ -1,0 +1,8 @@
+Highlights
+(Biomedical Signal Processing and Control format: 3-5 bullets, <=85 characters each)
+
+- On two binary ECG tasks, representation mattered more than clustering algorithm.
+- ECGFounder clusters SR vs AF best (ARI 0.885); hand-crafted close (0.711).
+- Raw and autoencoder ECG pipelines cluster at chance on PTB-XL (ARI ~0).
+- Silhouette rewards the one-cluster trap (0.81 at ARI 0), not real structure.
+- Hand-crafted features overtake ECGFounder under 9:1 imbalance (ARI 0.232 vs 0.060).

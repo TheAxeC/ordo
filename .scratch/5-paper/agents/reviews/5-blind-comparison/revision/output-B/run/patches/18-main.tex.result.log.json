@@ -1,0 +1,46 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "2e4b7c610296fec191510a38c4c97c83fa7398c78c6c815e1348a88dbfa1ba26",
+  "round": 1,
+  "n_blocks": 87,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0012",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull hbox of 1.99pt at main.tex lines 40--41: 'for' becomes 'in' in the opening sentence, which narrows the second printed line by about 4pt so that it ends at '(ECG),' within the text width; every claim, number, citation and gap marker stays.",
+      "chfield": 1125,
+      "chfield": 1124
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0030",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull hbox of 2.80pt at main.tex lines 98--99: 'HuBERT-ECG's' becomes 'the embedding of HuBERT-ECG' in the third criterion, which gives the second printed line of the item a break before 'of' within the text width; the report of the closest benchmark, its citation and the rest of the block stay as they are.",
+      "chfield": 636,
+      "chfield": 651
+    }
+  ],
+  "blocks_untouched": 85,
+  "roadmap_items_covered": [
+    "compile-fix"
+  ],
+  "block_touched_ratio": 0.023,
+  "preserved_ratio": 0.977,
+  "char_churn_ratio": 0.0586,
+  "net_growth_chars": 14,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/18-main.tex.result",
+  "output_sha256": "fce463fa1cf8a030c256ddc21e3dee265da5a898e080784846dfd4961e1a6768"
+}

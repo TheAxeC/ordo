@@ -1,0 +1,241 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "52bcc3a734ca4cc83c96dacc67ebc3ab4fa4ab04f7c414fd7706e4f619784bb5",
+  "round": 1,
+  "n_blocks": 115,
+  "n_blocks_touched": 17,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D3-4",
+        "D3-10"
+      ],
+      "rationale": "Names BTTN with the clinical term as the survival model (D3-4), splits the question and AUROC sentences, and places the coded diagnoses in the MIMIC-IV hospital records linked to MIMIC-IV-ECG (D3-10); every number and qualifier is kept.",
+      "chars_before": 1672,
+      "chars_after": 1746
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "Research gap",
+      "roadmap_item_ids": [
+        "D3-3"
+      ],
+      "rationale": "The Grad-CAM claim rests on arXiv 2010.04963v2, so the sentence now cites the arXiv entry that replaces Ye_2020 in the .bib; the wording is unchanged.",
+      "chars_before": 999,
+      "chars_after": 1008
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Aim and contributions",
+      "roadmap_item_ids": [
+        "D3-4"
+      ],
+      "rationale": "The third contribution used the same unnamed 'one survival model' that D3-4 finds ambiguous; it now names BTTN and says it was fitted once, as multihorizon.py reads all four horizons from one fit.",
+      "chars_before": 793,
+      "chars_after": 822
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "Block-term tensor models",
+      "roadmap_item_ids": [
+        "D3-3"
+      ],
+      "rationale": "The compression and Grad-CAM claim rests on arXiv 2010.04963v2, so the sentence now cites the arXiv entry; the wording is unchanged.",
+      "chars_before": 960,
+      "chars_after": 969
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "Occlusion readout",
+      "roadmap_item_ids": [
+        "D3-11"
+      ],
+      "rationale": "The readout (figures/beat_saliency.py line 84) divides the clipped mean drop by ENG + 0.1 * ENG.mean(); the sentence now says the divisor is the sum of the two terms.",
+      "chars_before": 1035,
+      "chars_after": 1058
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0061",
+      "section": "Study cohort",
+      "roadmap_item_ids": [
+        "D3-2"
+      ],
+      "rationale": "Deletes the 40,306 count, which is read from the ECG reports and which Claims not to make (a) and the ruling on C3 exclude; the 40,960 sentence, which counts recordings, stays.",
+      "chars_before": 662,
+      "chars_after": 598
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Study cohort",
+      "roadmap_item_ids": [
+        "D3-2"
+      ],
+      "rationale": "Deletes the Table 1 row of the 40,306 count read from the ECG reports; every other row is unchanged.",
+      "chars_before": 1044,
+      "chars_after": 954
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "D3-1"
+      ],
+      "rationale": "Deletes the two closing sentences that compare the ECG-only models with a clinical model they do not beat; the paragraph ends on the BTTR comparison and Table 2 keeps every value.",
+      "chars_before": 836,
+      "chars_after": 638
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "D3-4"
+      ],
+      "rationale": "The first sentence now makes the fused model the subject that had the AUROC, fitted once in the survival design, in place of one model giving another its AUROC; the rest is unchanged.",
+      "chars_before": 835,
+      "chars_after": 851
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "D3-4"
+      ],
+      "rationale": "The caption called the three columns 'one survival model', the phrase D3-4 finds unnamed; it now says each model was fitted once and read at all four horizons, as multihorizon.py does.",
+      "chars_before": 864,
+      "chars_after": 913
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0069",
+      "section": "Calibration, risk stratification and operating points",
+      "roadmap_item_ids": [
+        "D3-5"
+      ],
+      "rationale": "States calibration as close in most deciles and gives the largest gap, decile 5 of risk_strata.csv (observed_rate 0.0495, mean_pred 0.0356); the inversion sentence is reworded so 4.95 is not repeated.",
+      "chars_before": 796,
+      "chars_after": 921
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0076",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "D3-9",
+        "D3-11"
+      ],
+      "rationale": "The caption now names the recorded quantity log-risk, the network output that predict_risk returns (D3-9), and states the divisor as the sum of the two energy terms, the same ambiguity D3-11 finds in 4.3 (D3-11).",
+      "chars_before": 1877,
+      "chars_after": 1881
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0080",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "D3-5",
+        "D3-7"
+      ],
+      "rationale": "Drops the count 'Four' and recasts the closing sentences so that the size gives 'small', the horizons give the direction and the overlap bears only on whether the gain is established (D3-7); calibration reads 'agreed closely in most risk deciles' (D3-5).",
+      "chars_before": 873,
+      "chars_after": 854
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0084",
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "roadmap_item_ids": [
+        "D3-6"
+      ],
+      "rationale": "Moves the joint-training sentence after the 'separate parameters' sentence, so that 'therefore' follows the sentence on the factors and the linear term that supports it; no sentence is reworded.",
+      "chars_before": 982,
+      "chars_after": 982
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0096",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "D3-4",
+        "D3-5",
+        "D3-10"
+      ],
+      "rationale": "Calibration reads 'agreed closely in most risk deciles' (D3-5); the unnamed 'One survival model' becomes the network fitted once (D3-4); the labels are placed in the hospital diagnoses linked to MIMIC-IV-ECG, as D3-10 asks of the abstract (D3-10).",
+      "chars_before": 823,
+      "chars_after": 868
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0097",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "D3-8"
+      ],
+      "rationale": "Deletes the sentence that restates the two sentences before it; nothing else changes.",
+      "chars_before": 672,
+      "chars_after": 571
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0098",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "D3-8"
+      ],
+      "rationale": "Opens the paragraph with the design implication alone and deletes the second statement of parity with the compact CNN, which paragraph 2 already gives.",
+      "chars_before": 540,
+      "chars_after": 422
+    }
+  ],
+  "blocks_untouched": 98,
+  "roadmap_items_covered": [
+    "D3-1",
+    "D3-10",
+    "D3-11",
+    "D3-2",
+    "D3-3",
+    "D3-4",
+    "D3-5",
+    "D3-6",
+    "D3-7",
+    "D3-8",
+    "D3-9"
+  ],
+  "block_touched_ratio": 0.1478,
+  "preserved_ratio": 0.8522,
+  "char_churn_ratio": 0.5201,
+  "net_growth_chars": -207,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/10-main.tex.patched",
+  "output_sha256": "0acbc68ed2c308b2fcb323181c51ccd6896f4758be20e8184bf48cc63cda668f"
+}

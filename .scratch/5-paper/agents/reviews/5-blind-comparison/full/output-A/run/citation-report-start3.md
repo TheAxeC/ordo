@@ -1,0 +1,796 @@
+## Citation report
+
+Mode: full, citation check after the expanded revision (draft review rounds 1 and 2). Manuscript: `manuscript/main.tex` (it inputs no other file) with `manuscript/refs.bib`. Citation style: Vancouver, as the Citation style row and settings.md Decisions give; the `\bibliographystyle{vancouver}` line of main.tex agrees with it. DOI checking: mark-only. Domain evidence profile: cs_ml. Discipline: biomedical informatics, a clinical field, so the checks of "Claims in clinical papers" ran.
+
+No correction found in this start has one right answer, so no patch is written: patch 08 (main.tex) and patch 09 (refs.bib) do not exist. Every cited sentence of the current text was judged in this start on passages read in this run.
+
+### Summary
+| Metric | Count |
+|---|---|
+| Cited keys | 64 |
+| Entries in the .bib | 68 |
+| References verified | 64 |
+| References not found or mismatched | 0 |
+| Claims judged | 127 (one row per citation of a key) |
+| Claims not held by their source | 0 |
+| Missing keys | 0 |
+| Unused entries | 4 |
+| Format errors corrected | 0 |
+| Format errors flagged for review | 4 (C17 to C20) |
+| Missing DOIs | 0 |
+| Self-citation ratio | 4.7 percent (6 of 127 citations: Faes_2024 five times, the Zenodo record once), if the author named Faes in the project files is an author; the Authors row is a gap, so no confirmed author list exists |
+| Sources from the last 5 years | 48.4 percent (31 of 64 cited entries dated 2022 to 2026) |
+| References matched only by a preprint server | 0 |
+| References matched by no index | 0 |
+| Sentences that state a listed claim | 0 Critical; 2 sentences come near a listed claim (C3, C4) |
+| Claims not on the list, and intended claims not made | 10 and 2 (C5 to C16) |
+| Passages that repeat an earlier paper | 0 (Earlier papers: none listed) |
+| Sources with a retraction or expression-of-concern notice | 0 |
+
+### Lookups
+Each identifier was looked up in this start with `python3 the lookup script resolve '<DOI or arXiv ID>'`. `resolve` prints the first three authors of a record, so "first authors" below means those three. A year in parentheses is an index's online or preprint year; the entry gives the year of the issue. No call printed a "Crossref notice" line. Semantic Scholar answered HTTP 429 to the first call for 29 identifiers; each was asked again once, and it then answered for 27 of them. For 2507.16761 and 1702.04595 it was still left out ("HTTP 429 after 3 retries"); both references are verified by the arXiv and OpenAlex records.
+
+| Key | Command | Line used | Indexes that matched | Fields confirmed | Verdict |
+|---|---|---|---|---|---|
+| Kashou_2021 | the lookup script resolve '10.1136/heartjnl-2021-319385' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | authors, year, title, venue, DOI | VERIFIED |
+| Wolf_1991 | the lookup script resolve '10.1161/01.str.22.8.983' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | authors, year, title, venue, DOI | VERIFIED |
+| Schnabel_2015 | the lookup script resolve '10.1016/s0140-6736(14)61774-8' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (0.80, another title form) | first authors, year, title, venue, DOI | VERIFIED |
+| Alonso_2013 | the lookup script resolve '10.1161/jaha.112.000102' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Raghunath_2021 | the lookup script resolve '10.1161/circulationaha.120.047829' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Khurshid_2022 | the lookup script resolve '10.1161/circulationaha.121.057480' | Crossref, ratio 1.00 | Crossref, OpenAlex (2021), Semantic Scholar (0.92, 2021) | first authors, year, title, venue, DOI | VERIFIED |
+| Tsiartas_2025 | the lookup script resolve '10.1136/openhrt-2025-003657' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | authors, year, title, venue, DOI | VERIFIED |
+| Saiz_Vivo_2025 | the lookup script resolve '10.1093/ehjdh/ztaf144' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Van_Gelder_2024 | the lookup script resolve '10.1093/eurheartj/ehae176' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Arends_2026 | the lookup script resolve '10.1093/ehjdh/ztag038' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Rudin_2019 | the lookup script resolve '10.1038/s42256-019-0048-x' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (2018) | author, year, title, venue, DOI | VERIFIED |
+| De_Lathauwer_2008 | the lookup script resolve '10.1137/070690729' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (0.99) | author, year, title, venue, DOI | VERIFIED |
+| Ye_2020 | the lookup script resolve '10.1016/j.neunet.2020.05.034' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (names arXiv 2010.04963) | first authors, year, title, venue, DOI | VERIFIED |
+| Faes_2024 | the lookup script resolve '10.1109/tnnls.2022.3216589' | Crossref, ratio 1.00 | Crossref, OpenAlex (2022), Semantic Scholar (2022) | authors, year, title, venue, DOI | VERIFIED |
+| Valasakis_2026 | the lookup script resolve '10.1093/eurheartj/ehag785.598' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | authors, year, title, venue, DOI | VERIFIED |
+| Attia_2019 | the lookup script resolve '10.1016/s0140-6736(19)31721-0' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Yuan_2023 | the lookup script resolve '10.1001/jamacardio.2023.3701' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Jabbour_2024 | the lookup script resolve '10.1093/eurheartj/ehae595' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Sau_2026 | the lookup script resolve '10.1016/j.hrthm.2025.08.024' | Crossref, ratio 1.00 | Crossref, OpenAlex (2025), Semantic Scholar (0.91, 2025) | first authors, year, title, venue, DOI | VERIFIED |
+| Zeidaabadi_2026 | the lookup script resolve '10.1016/j.hrthm.2025.10.024' | Crossref, ratio 1.00 | Crossref, OpenAlex (2025), Semantic Scholar (0.93, 2025) | first authors, year, title, venue, DOI | VERIFIED |
+| Habineza_2023 | the lookup script resolve '10.1016/j.jelectrocard.2023.09.011' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Ribeiro_2020 | the lookup script resolve '10.1038/s41467-020-15432-4' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (2019) | first authors, year, title, venue, DOI | VERIFIED |
+| Riek_2026 | the lookup script resolve '10.1016/j.hroo.2026.09.012' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (0.93) | first authors, year, title, venue, DOI | VERIFIED |
+| Schnabel_2009 | the lookup script resolve '10.1016/s0140-6736(09)60443-8' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (0.74, another title form) | first authors, year, title, venue, DOI | VERIFIED |
+| Cheng_2009 | the lookup script resolve '10.1001/jama.2009.888' | Crossref, ratio 1.00 | Crossref (one author), OpenAlex, Semantic Scholar (0.99) (Cheng, Keyes, Larson et al.) | first author, year, title, venue, DOI; co-authors missing (C17) | VERIFIED |
+| Magnani_2015 | the lookup script resolve '10.1016/j.ahj.2014.10.009' | Crossref, ratio 1.00 | Crossref, OpenAlex (2014), Semantic Scholar (0.97, 2014) | first authors, year, title, venue, DOI | VERIFIED |
+| Christopoulos_2020 | the lookup script resolve '10.1161/circep.120.009355' | Crossref, ratio 1.00 (title without the subtitle) | Crossref, OpenAlex (0.87, with the subtitle), Semantic Scholar (0.87, with the subtitle) | first authors, year, title, venue, DOI | VERIFIED |
+| Khurshid_2025 | the lookup script resolve '10.1038/s41746-025-02164-2' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| Biton_2021 | the lookup script resolve '10.1093/ehjdh/ztab071' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| arxiv_1810_03292 | the lookup script resolve '1810.03292' | arXiv, ratio 1.00 | arXiv, OpenAlex (doi 10.48550/arxiv.1810.03292), Semantic Scholar | first authors, year, title, arXiv ID, DOI | VERIFIED |
+| arxiv_1806_10758 | the lookup script resolve '1806.10758' (asked twice) | arXiv, ratio 1.00 | arXiv, OpenAlex (doi 10.48550/arxiv.1806.10758), Semantic Scholar (second call) | first authors, year, title, arXiv ID, DOI | VERIFIED |
+| Wagner_2024 | the lookup script resolve '10.1016/j.compbiomed.2024.108525' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (2023) | first authors, year, title, venue, DOI | VERIFIED |
+| arxiv_2007_04612 | the lookup script resolve '2007.04612' | arXiv, ratio 1.00 | arXiv, OpenAlex (doi 10.48550/arxiv.2007.04612), Semantic Scholar | first authors, year, title, arXiv ID, DOI | VERIFIED |
+| arxiv_2106_13314 | the lookup script resolve '2106.13314' (asked twice) | arXiv, ratio 1.00 | arXiv, OpenAlex (doi 10.48550/arxiv.2106.13314), Semantic Scholar (second call) | first authors, year, title, arXiv ID, DOI | VERIFIED |
+| arxiv_2205_10268 | the lookup script resolve '2205.10268' | arXiv, ratio 1.00 | arXiv; OpenAlex and Semantic Scholar hold the CVPR 2022 version (doi 10.1109/cvpr52688.2022.01008) | authors, year, title, arXiv ID | VERIFIED |
+| arxiv_2507_16761 | the lookup script resolve '2507.16761' (asked twice) | arXiv, ratio 1.00 | arXiv; OpenAlex holds the LNCS 2026 version (doi 10.1007/978-3-032-38079-1_28); Semantic Scholar left out, HTTP 429 after 3 retries, in both calls | first authors, year, title, arXiv ID | VERIFIED |
+| arxiv_2504_02667 | the lookup script resolve '2504.02667' | arXiv, ratio 1.00 | arXiv, OpenAlex, Semantic Scholar (doi 10.48550/arXiv.2504.02667) | first authors, year, title, arXiv ID, DOI | VERIFIED |
+| Patlatzoglou_2025 | the lookup script resolve '10.1038/s41746-025-02122-y' | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar | first authors, year, title, venue, DOI | VERIFIED |
+| arxiv_2511_04292 | the lookup script resolve '2511.04292' (asked twice) | arXiv, ratio 1.00 | arXiv, OpenAlex (doi 10.48550/arxiv.2511.04292), Semantic Scholar (second call) | first authors, year, title, arXiv ID, DOI | VERIFIED |
+| Kolda_2009 | the lookup script resolve '10.1137/07070111x' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | authors, year, title, venue, DOI | VERIFIED |
+| Goulart_2020 | the lookup script resolve '10.1109/tsp.2020.2985591' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| https://doi.org/10.5281/zenodo.22227432 | the lookup script resolve '10.5281/ZENODO.22227432' (asked twice); the lookup script bibtex '10.5281/zenodo.22227432' | OpenAlex, ratio 1.00 | OpenAlex and the doi.org BibTeX record, which the entry copies (Crossref not found; Semantic Scholar not found in the second call) | authors, year, title, publisher (Zenodo), DOI | VERIFIED |
+| https://doi.org/10.13026/4nqg-sb35 | the lookup script resolve '10.13026/4NQG-SB35' (asked twice); the lookup script bibtex '10.13026/4nqg-sb35' | doi.org BibTeX record (year 2023, DOI 10.13026/4NQG-SB35), which the entry copies | doi.org BibTeX record; OpenAlex (title and first authors agree; it prints year 2022 and DOI 10.13026/b95v-ff39, another version of the data set, and links its open copy to 10.13026/4nqg-sb35); Crossref and Semantic Scholar not found | authors, year, title, publisher, DOI | VERIFIED |
+| Cox_1972 | the lookup script resolve '10.1111/j.2517-6161.1972.tb00899.x' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex (Semantic Scholar not found in the second call) | author, year, title, venue, DOI | VERIFIED |
+| Katzman_2018 | the lookup script resolve '10.1186/s12874-018-0482-1' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (2016, second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Johnson_2023 | the lookup script resolve '10.1038/s41597-022-01899-x' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Rix_2012 | the lookup script resolve '10.3109/14017431.2012.673728' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Vickers_2006 | the lookup script resolve '10.1177/0272989x06295361' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | authors, year, title, venue, DOI | VERIFIED |
+| Collins_2024 | the lookup script resolve '10.1136/bmj-2023-078378' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Zeiler_2014 | the lookup script resolve '10.1007/978-3-319-10590-1_53' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (2013, names arXiv 1311.2901, second call) | authors, year, title, book series, DOI | VERIFIED |
+| Ivanovs_2021 | the lookup script resolve '10.1016/j.patrec.2021.06.030' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | authors, year, title, venue, DOI | VERIFIED |
+| arxiv_1702_04595 | the lookup script resolve '1702.04595' (asked twice) | arXiv, ratio 1.00 | arXiv, OpenAlex (doi 10.48550/arxiv.1702.04595; its venue field names an unrelated journal); Semantic Scholar left out, HTTP 429 after 3 retries, in both calls | first authors, year, title, arXiv ID, DOI | VERIFIED |
+| _imi__2025 | the lookup script resolve '10.1038/s41598-025-09538-2' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | authors, year, title, venue, DOI | VERIFIED |
+| McKeen_2025 | the lookup script resolve '10.1093/jamiaopen/ooaf122' (asked three times) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Pfeifer_2026 | the lookup script resolve '10.1016/j.hrthm.2026.03.1956' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Magnani_2013 | the lookup script resolve '10.1161/circep.112.975342' (asked twice) | Crossref, ratio 1.00 (title without the subtitle) | Crossref, OpenAlex (0.76, 2012, with the subtitle), Semantic Scholar (0.74, 2012, second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Tanaka_2021 | the lookup script resolve '10.1007/s00380-021-01805-2' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Yogeswaran_2025 | the lookup script resolve '10.1161/jaha.125.043590' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Emmanuela_2026 | the lookup script resolve '10.3897/bgcardio.32.e213539' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Ostrowska_2022 | the lookup script resolve '10.1536/ihj.21-797' (asked twice) | Crossref, ratio 1.00 (title without the subtitle) | Crossref, OpenAlex (0.82, with the subtitle), Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Goette_2016 | the lookup script resolve '10.1016/j.joa.2016.05.002' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Maezono_2025 | the lookup script resolve '10.1093/ehjopen/oeaf126' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Yao_2019 | the lookup script resolve '10.2147/clep.s206267' (asked twice) | Crossref, ratio 1.00 (its title holds HTML paragraph markup) | Crossref, OpenAlex (0.97, title without markup, which the entry gives), Semantic Scholar (0.97, second call) | first authors, year, title, venue, DOI | VERIFIED |
+| Malmo_2016 | the lookup script resolve '10.2147/clep.s103346' (asked twice) | Crossref, ratio 1.00 | Crossref, OpenAlex, Semantic Scholar (0.99, second call) | first authors, year, title, venue, DOI | VERIFIED |
+
+Texts read in this run. Full texts fetched earlier in the run and reused after their first pages were read and matched to the cited work: Tsiartas_2025, Van_Gelder_2024 (Erasmus repository copy of the version of record), Rudin_2019 (arXiv 1811.10154v3), Ye_2020 (arXiv 2010.04963v2), Faes_2024 (KU Leuven repository copy), Ribeiro_2020, Khurshid_2025 (the journal's Article in Press PDF), Patlatzoglou_2025, Katzman_2018, Johnson_2023, Collins_2024, Zeiler_2014, Emmanuela_2026, Ostrowska_2022 and the nine arXiv entries (arxiv.org/html). The other 41 cited entries have an abstract file only, each read in full and matched to the cited work; each claim on them is judged on that text and marked "abstract only". The Goette_2016 and Kashou_2021 abstract files hold the opening of the article body. Three sources were fetched again in this start with `python3 the lookup script fetch '<DOI>' '<temporary folder>' '<key>'`: Jabbour_2024, Kashou_2021 and McKeen_2025. None has an open full text (OpenAlex and Semantic Scholar list no open copy of Kashou_2021; the OUP PDF of McKeen_2025 answered HTTP 403), so each claim on them rests on the abstract record the last fetch wrote: Kashou_2021.abstract.txt (3,135 bytes, the opening of the commentary) and McKeen_2025.abstract.txt (2,046 bytes, the structured abstract). Each holds every passage used. No fetched text addresses the agent.
+
+### Claims
+| # | Claim | Source | Section | Verdict | Detail |
+|---|---|---|---|---|---|
+| 1 | AF is a common arrhythmia; in asymptomatic AF the first presentation may be a stroke or heart failure | Kashou_2021 | 1.1 | VERIFIED | abstract only |
+| 2 | In Framingham AF carried a near fivefold excess of stroke; attributable risk rose from 1.5% at 50 to 59 to 23.5% at 80 to 89 | Wolf_1991 | 1.1 | VERIFIED | abstract only |
+| 3 | Over 50 years age-adjusted prevalence rose about fourfold and incidence more than tripled, in part through more intensive surveillance | Schnabel_2015 | 1.1 | VERIFIED | abstract only |
+| 4 | CHARGE-AF estimates AF risk from routine variables | Alonso_2013 | 1.1 | VERIFIED | abstract only |
+| 5 | Clinical scores need time-consuming data abstraction, whereas a model applied to a single ECG at the point of care needs none | Kashou_2021 | 1.1 | VERIFIED | abstract only; both sub-claims held by the abstract record |
+| 6 | A network trained on 1.6 million ECGs reached AUROC 0.85 for new-onset AF within one year | Raghunath_2021 | 1.1 | VERIFIED | abstract only |
+| 7 | ECG network plus CHARGE-AF had the highest discrimination in an internal and two external test sets | Khurshid_2022 | 1.1 | VERIFIED | abstract only |
+| 8 | A review of 14 studies: median AUC 0.740; 0.851 for 31-day against 0.630 for 1-year windows; eleven studies cited misclassification of negative cases | Tsiartas_2025 | 1.1 | VERIFIED | abstract section and Results of the full text |
+| 9 | A commentary on predicting incident AF in sinus rhythm is subtitled "more than just trusting the 'black box'" | Kashou_2021 | 1.2 | VERIFIED | the subtitle is the title the Crossref, OpenAlex and Semantic Scholar records print (Lookups); the commentary form rests on the abstract file |
+| 10 | A narrative review names interpretability as a barrier to clinical use | Saiz_Vivo_2025 | 1.2 | VERIFIED | abstract only |
+| 11 | The 2024 ESC guideline addresses automated AF diagnosis and states that the clinical performance and broad applicability of such algorithms are not yet known | Van_Gelder_2024 | 1.2 | VERIFIED | section 10.2 |
+| 12 | Twelve attribution methods agreed poorly and were moderately consistent across training runs for most methods; weight randomisation did not remove the pattern entirely for some | Arends_2026 | 1.2 | VERIFIED | abstract only |
+| 13 | Rudin argued that a high-stakes model should be interpretable by design | Rudin_2019 | 1.2 | VERIFIED | abstract section of arXiv 1811.10154v3; the claim is also the title of the cited journal article |
+| 14 | A block-term decomposition splits a multiway signal into blocks with low-rank factors per mode | De_Lathauwer_2008 | 1.2 | VERIFIED | abstract only |
+| 15 | Block-term structure has compressed weight matrices, and those networks are explained with Grad-CAM maps instead of through their factors | Ye_2020 | 1.2 | VERIFIED | abstract section and section 4.4.7 of arXiv 2010.04963v2; Grad-CAM is the only interpretation the text gives (its one use of "interpret"); version read differs from the entry (C2) |
+| 16 | Block-term tensor regression, designed for interpretability, predicted finger movements | Faes_2024 | 1.2 | VERIFIED | abstract and section II |
+| 17 | Clinical risk factors complement the ECG | Khurshid_2022 | 1.2 | VERIFIED | abstract only |
+| 18 | A third of a sample of 700 AF-labelled ECGs of MIMIC-IV did not show AF on expert review | Valasakis_2026 | 1.3 | VERIFIED | abstract only |
+| 19 | A CNN developed on 649,931 sinus-rhythm ECGs of 180,922 Mayo Clinic patients, 454,789 in training, identified AF with AUC 0.87, counting prior AF as positive | Attia_2019 | 2.1 | VERIFIED | abstract only |
+| 20 | A network for AF within 31 days reached AUROC 0.86 on held-out VA ECGs and 0.93 at a non-VA site | Yuan_2023 | 2.1 | VERIFIED | abstract only |
+| 21 | Models with 31-day confirmation windows had higher median AUCs than models with 1-year windows | Tsiartas_2025 | 2.1 | VERIFIED | Results |
+| 22 | A narrative review found AI more accurate at shorter event horizons | Saiz_Vivo_2025 | 2.1 | VERIFIED | abstract only |
+| 23 | Raghunath et al. reached AUROC 0.85 for new-onset AF within one year on ECGs from 430,000 patients | Raghunath_2021 | 2.1 | VERIFIED | abstract only; first author and "et al." agree with the entry |
+| 24 | A Montreal cardiac-centre model reached 0.78 at five years and 0.77 on external validation in MIMIC-IV; the abstract does not state the MIMIC-IV label source | Jabbour_2024 | 2.1 | VERIFIED | abstract only |
+| 25 | On the hospital behind MIMIC-IV a CNN with a discrete-time survival loss reached C-index 0.750 | Sau_2026 | 2.1 | VERIFIED | abstract only |
+| 26 | An ECG-image model on the same hospital reached C-statistic 0.754 | Zeidaabadi_2026 | 2.1 | VERIFIED | abstract only |
+| 27 | In Brazilian telehealth data a residual CNN with survival analysis reached AUC 0.845 | Habineza_2023 | 2.1 | VERIFIED | abstract only |
+| 28 | That data is in the data family of an earlier 12-lead diagnostic network | Ribeiro_2020 | 2.1 | VERIFIED | abstract section of the full text |
+| 29 | A gradient-boosting survival model of 417 ECG features reached C-index 0.781, mean follow-up 80 days | Riek_2026 | 2.1 | VERIFIED | abstract only |
+| 30 | Saliency gave the P-wave the greatest influence in one ECG network | Khurshid_2022 | 2.1 | VERIFIED | abstract only |
+| 31 | Saliency of the image model focused on P-wave morphology and the PR interval | Zeidaabadi_2026 | 2.1 | VERIFIED | abstract only |
+| 32 | The feature-based model named lower P-wave amplitude among its predictors | Riek_2026 | 2.1 | VERIFIED | abstract only |
+| 33 | The Framingham score used age, sex, murmur, heart failure, SBP, hypertension treatment, BMI and PR interval, C statistic 0.78, 10-year AF | Schnabel_2009 | 2.2 | VERIFIED | abstract only |
+| 34 | CHARGE-AF reached 0.765 at derivation and 0.664 and 0.705 in validation; ECG variables did not improve discrimination | Alonso_2013 | 2.2 | VERIFIED | abstract only |
+| 35 | In Framingham each 20 ms of PR interval carried an adjusted HR of 1.12 for AF | Cheng_2009 | 2.2 | VERIFIED | abstract only |
+| 36 | Across Framingham and ARIC, P-wave duration above 120 ms had HR 1.55; P-wave indices added little discrimination | Magnani_2015 | 2.2 | VERIFIED | abstract only |
+| 37 | AUROC comparable for CHARGE-AF and an ECG network in three test sets, highest combined at 0.838, 0.777 and 0.746 | Khurshid_2022 | 2.2 | VERIFIED | abstract only |
+| 38 | In an older community cohort AI-ECG and CHARGE-AF both had C 0.69, predicted AF independently, 0.72 together | Christopoulos_2020 | 2.2 | VERIFIED | abstract only |
+| 39 | A single-lead ECG model with age and sex had AUROC 0.695 against 0.679 for CHARGE-AF in trial data | Khurshid_2025 | 2.2 | VERIFIED | abstract of the full text |
+| 40 | A random forest combining demographic, clinical, engineered and deep ECG features reached 0.909 against 0.839 for the best single modality | Biton_2021 | 2.2 | VERIFIED | abstract only |
+| 41 | In 2,301 Montreal patients the ECG model exceeded CHARGE-AF (0.62) and a polygenic score (0.59) | Jabbour_2024 | 2.2 | VERIFIED | abstract only |
+| 42 | An image-based ECG model reached 0.696 against 0.667 for CHARGE-AF, 0.711 combined | Zeidaabadi_2026 | 2.2 | VERIFIED | abstract only |
+| 43 | An ECG model led in hospital patients; CHARGE-AF was the best single predictor in UK Biobank | Sau_2026 | 2.2 | VERIFIED | abstract only |
+| 44 | Parameter and label randomisation showed some saliency methods independent of model and data-generating process | arxiv_1810_03292 | 2.3 | VERIFIED | abstract section and section 1 |
+| 45 | Under remove-and-retrain only VarGrad and SmoothGrad-Squared beat a random assignment of importance | arxiv_1806_10758 | 2.3 | VERIFIED | section 1 |
+| 46 | Twelve ECG attribution methods agreed poorly; self-consistency moderate for most methods, mean correlations 0.41 to 0.65 | Arends_2026 | 2.3 | VERIFIED | abstract only |
+| 47 | Dataset-level auditing with sanity checks aligned saliency with cardiologists' rules and supported knowledge discovery (subtypes of MI) | Wagner_2024 | 2.3 | VERIFIED | abstract only |
+| 48 | Concept bottleneck models predict concepts, then the label, at competitive accuracy; correcting concepts at test time raised accuracy | arxiv_2007_04612 | 2.3 | VERIFIED | abstract section |
+| 49 | Concept representations encode information beyond the named concepts, making the downstream reading misleading | arxiv_2106_13314 | 2.3 | VERIFIED | abstract section |
+| 50 | B-cos networks summarise the full computation as one linear transform at similar ImageNet accuracy | arxiv_2205_10268 | 2.3 | VERIFIED | abstract section |
+| 51 | An anti-aliased B-cos variant gave artifact-free explanations on chest x-rays and kept its performance | arxiv_2507_16761 | 2.3 | VERIFIED | abstract section |
+| 52 | Tensor-network structure combined with deep networks gave weight-based interpretability at equal accuracy, in preliminary results | arxiv_2504_02667 | 2.3 | VERIFIED | abstract section and section 1 |
+| 53 | A study of VAE representations of interpretable ECG features reported a cost of intrinsic explainability | Patlatzoglou_2025 | 2.3 | VERIFIED | abstract section |
+| 54 | A block-term discriminant method reported no cost on EEG decoding, mean accuracy 64.52% against 61.00% for HODA on motor imagery | arxiv_2511_04292 | 2.3 | VERIFIED | abstract section and motor imagery results |
+| 55 | Image networks interpretable by design kept their accuracy (B-cos) | arxiv_2205_10268 | 2.3 | VERIFIED | abstract section |
+| 56 | Image networks interpretable by design kept their accuracy (anti-aliased B-cos) | arxiv_2507_16761 | 2.3 | VERIFIED | abstract section |
+| 57 | A block-term decomposition is a sum of blocks of low multilinear rank and contains CP and Tucker as special cases | De_Lathauwer_2008 | 2.4 | VERIFIED | abstract only |
+| 58 | A survey covers the CP and Tucker decompositions | Kolda_2009 | 2.4 | VERIFIED | abstract only |
+| 59 | Block-term tensor neural networks compress the weight matrices of CNNs and RNNs and are explained with Grad-CAM maps | Ye_2020 | 2.4 | VERIFIED | abstract section and section 4.4.7 of arXiv 2010.04963v2 (C2) |
+| 60 | On AF ECGs a regularised BTD extracted signals interpretable as AF patterns; it separates sources and does not predict risk | Goulart_2020 | 2.4 | VERIFIED | abstract only |
+| 61 | BTTR predicted finger trajectories from intracranial recordings with automatic component extraction | Faes_2024 | 2.4 | VERIFIED | abstract |
+| 62 | A block-term discriminant analysis gave interpretable, efficient dimensionality reduction for BCI, ROC-AUC 91.25% on ERPs | arxiv_2511_04292 | 2.4 | VERIFIED | abstract section |
+| 63 | Linear BTTR has been applied to identification of AF in sinus rhythm on the median beat | https://doi.org/10.5281/zenodo.22227432 | 2.4 | VERIFIED | abstract only; near listed claim (c) (C4) |
+| 64 | Each index ECG is a 10-second, 12-lead recording sampled at 500 Hz | https://doi.org/10.13026/4nqg-sb35 | 3.1 | VERIFIED | abstract only (data set description) |
+| 65 | The projection reduces the modes to the mode-n ranks by which a block term is characterised | De_Lathauwer_2008 | 3.1 | VERIFIED | abstract only |
+| 66 | BTTR fits blocks one at a time by deflation, keeps a score vector per block and predicts with a linear score | Faes_2024 | 3.1 | VERIFIED | sections II and III.B |
+| 67 | BTTR splits the input into blocks with factor matrices, a core and a score vector, fitted by deflation, linear score | Faes_2024 | 3.1, figure caption | VERIFIED | section III.B; the source gives one loading matrix for each mode after the first, two for the three-way tensor drawn |
+| 68 | BTTN is trained with the negative Cox partial log-likelihood | Cox_1972 | 3.2 | VERIFIED | abstract only |
+| 69 | DeepSurv trains a neural network with the Cox partial likelihood | Katzman_2018 | 3.2 | VERIFIED | Methods, DeepSurv |
+| 70 | Age is the anchor age of MIMIC-IV | Johnson_2023 | 3.3 | VERIFIED | section on the patients table |
+| 71 | Whether the nonlinear head uses the factors as a reader would assume is a separate question | arxiv_2106_13314 | 3.3 | VERIFIED | abstract section |
+| 72 | MIMIC-IV-ECG holds about 800,000 ECGs from nearly 160,000 patients | https://doi.org/10.13026/4nqg-sb35 | 4.1 | VERIFIED | abstract only |
+| 73 | MIMIC-IV is drawn from the electronic health record of BIDMC | Johnson_2023 | 4.1 | VERIFIED | abstract section of the full text |
+| 74 | A coded flutter diagnosis did not reliably separate flutter from AF in a registry validation | Rix_2012 | 4.1 | VERIFIED | abstract only |
+| 75 | Only 65.4% of 700 AF-labelled ECGs in MIMIC-IV showed AF on expert review | Valasakis_2026 | 4.1 | VERIFIED | abstract only |
+| 76 | Linear BTTR is the method of the baseline | Faes_2024 | 4.2 | VERIFIED | section III.B |
+| 77 | Decision curves | Vickers_2006 | 4.2 | VERIFIED | abstract only |
+| 78 | The study is reported with reference to TRIPOD+AI | Collins_2024 | 4.2 | VERIFIED | abstract section of the full text |
+| 79 | Occlusion sensitivity covers part of the input and records the change in the output | Zeiler_2014 | 4.3 | VERIFIED | section 4.2, Occlusion Sensitivity |
+| 80 | Occlusion is one of the perturbation-based explanation methods | Ivanovs_2021 | 4.3 | VERIFIED | abstract only; occlusion as row 79 defines it fits the abstract's definition of the class |
+| 81 | The replacement value and the window size shape an occlusion map | arxiv_1702_04595 | 4.3 | VERIFIED | sections 2 and 4 |
+| 82 | The perturbation method and the region size shape the evaluation of attributions on time series | _imi__2025 | 4.3 | VERIFIED | abstract only |
+| 83 | On the hospital behind MIMIC-IV a survival-loss CNN reached C 0.750 | Sau_2026 | 6.1 | VERIFIED | abstract only |
+| 84 | An image-based model there reached 0.754 | Zeidaabadi_2026 | 6.1 | VERIFIED | abstract only |
+| 85 | A Montreal model reached AUROC 0.77 on external validation in MIMIC-IV, with a label source its abstract does not state | Jabbour_2024 | 6.1 | VERIFIED | abstract only |
+| 86 | An AUROC of 0.85 at one year was reported | Raghunath_2021 | 6.1 | VERIFIED | abstract only |
+| 87 | A C-index of 0.781 over a short follow-up was reported | Riek_2026 | 6.1 | VERIFIED | abstract only |
+| 88 | A systematic review shows how far outcome choices move reported values | Tsiartas_2025 | 6.1 | VERIFIED | Results |
+| 89 | Identification studies address another task (Mayo Clinic) | Attia_2019 | 6.1 | VERIFIED | abstract only |
+| 90 | Identification studies address another task (VA, AF within 31 days) | Yuan_2023 | 6.1 | VERIFIED | abstract only |
+| 91 | A foundation model evaluated with a benchmark on MIMIC-IV-ECG reported an AUROC of 0.996 for AF | McKeen_2025 | 6.1 | VERIFIED | abstract only; both sub-claims held by the abstract; the abstract does not name the data set of the 0.996, and neither does the sentence |
+| 92 | ECG and clinical information are complementary | Khurshid_2022 | 6.1 | VERIFIED | abstract only |
+| 93 | ECG and clinical information are complementary | Christopoulos_2020 | 6.1 | VERIFIED | abstract only |
+| 94 | An externally validated model flagged 9.7% of older patients, sensitivity 31%, specificity 92%, chart-confirmed endpoints | Pfeifer_2026 | 6.1 | VERIFIED | abstract only |
+| 95 | A reported accuracy cost of intrinsic interpretability on the ECG | Patlatzoglou_2025 | 6.1 | VERIFIED | abstract section |
+| 96 | Concept representations absorb information beyond their concepts | arxiv_2106_13314 | 6.2 | VERIFIED | abstract section and section 3 |
+| 97 | Saliency pointed to the P-wave | Khurshid_2022 | 6.2 | VERIFIED | abstract only |
+| 98 | Saliency pointed to P-wave morphology and the PR interval | Zeidaabadi_2026 | 6.2 | VERIFIED | abstract only |
+| 99 | In Framingham the PR interval was a predictor in the AF risk score | Schnabel_2009 | 6.2 | VERIFIED | abstract only |
+| 100 | First-degree AV block carried an adjusted HR of 2.06 | Cheng_2009 | 6.2 | VERIFIED | abstract only |
+| 101 | Each SD of PR interval carried HR 1.13 in older Black and White adults | Magnani_2013 | 6.2 | VERIFIED | abstract only |
+| 102 | First-degree block carried HR 1.75 in an older Japanese population | Tanaka_2021 | 6.2 | VERIFIED | abstract only |
+| 103 | In the Jackson Heart Study PR interval, P-wave duration and P-wave terminal force were each associated with AF | Yogeswaran_2025 | 6.2 | VERIFIED | abstract only |
+| 104 | P-wave indices show the same direction (two-cohort study) | Magnani_2015 | 6.2 | VERIFIED | abstract only |
+| 105 | P-wave indices show the same direction, in a meta-analysis of very low certainty in selected populations | Emmanuela_2026 | 6.2 | VERIFIED | abstract and limitations of the full text |
+| 106 | In 70-year-old Swedes the PR interval in V1 was not related to AF; a short P-wave duration was | Ostrowska_2022 | 6.2 | VERIFIED | summary of the full text |
+| 107 | An expert consensus defines atrial cardiomyopathy as structural, architectural, contractile or electrophysiological atrial changes that can produce clinically relevant manifestations, among them arrhythmia | Goette_2016 | 6.2 | VERIFIED | text returned as abstract, introduction and section 1.1 |
+| 108 | In a Japanese community cohort prolonged P-wave duration was associated with incident AF and more left atrial fibrosis at autopsy | Maezono_2025 | 6.2 | VERIFIED | abstract only |
+| 109 | A meta-analysis of 24 studies pooled PPV 88% and sensitivity 80% for administrative AF definitions | Yao_2019 | 6.3 | VERIFIED | abstract only |
+| 110 | A discharge diagnosis found 73.7% of record-verified AF, PPV 88.5% | Malmo_2016 | 6.3 | VERIFIED | abstract only |
+| 111 | A registry found PPV 92.6% for combined AF or flutter | Rix_2012 | 6.3 | VERIFIED | abstract only |
+| 112 | The anchor age of MIMIC-IV is not the age at the index ECG | Johnson_2023 | 6.3 | VERIFIED | section on the patients table |
+| 113 | The clinical factors omit Framingham variables: SBP, hypertension treatment, BMI, heart failure | Schnabel_2009 | 6.3 | VERIFIED | abstract only |
+| 114 | The PR interval is a known AF predictor | Cheng_2009 | 6.3 | VERIFIED | abstract only |
+| 115 | The PR interval is a known AF predictor | Magnani_2013 | 6.3 | VERIFIED | abstract only |
+| 116 | The readout is open to the critiques of post-hoc attribution (randomisation tests) | arxiv_1810_03292 | 6.3 | VERIFIED | abstract section |
+| 117 | The same, remove-and-retrain | arxiv_1806_10758 | 6.3 | VERIFIED | section 1 |
+| 118 | The same, ECG attribution methods | Arends_2026 | 6.3 | VERIFIED | abstract only |
+| 119 | Zero replacement and window size shape the profile, as replacement value and window size shape an occlusion map | arxiv_1702_04595 | 6.3 | VERIFIED | sections 2 and 4 |
+| 120 | The perturbation method and region size shape the evaluation of attributions on time series | _imi__2025 | 6.3 | VERIFIED | abstract only |
+| 121 | Readable factors do not by themselves show that a nonlinear head routes its decision through them | arxiv_2106_13314 | 6.3 | VERIFIED | abstract section |
+| 122 | A test of the factors would use control probes and the removal of top-ranked against bottom-ranked parts, in the manner of remove-and-retrain | arxiv_1806_10758 | 6.4 | VERIFIED | sections 1, 4 and appendix (KAR) |
+| 123 | External validation would be reported with reference to TRIPOD+AI | Collins_2024 | 6.4 | VERIFIED | abstract section of the full text |
+| 124 | Cohort studies of the PR interval tie that part of the cardiac cycle to later AF | Cheng_2009 | 7 | VERIFIED | abstract only |
+| 125 | The same claim, second citation | Magnani_2013 | 7 | VERIFIED | abstract only |
+| 126 | The data come from MIMIC-IV-ECG on PhysioNet | https://doi.org/10.13026/4nqg-sb35 | Data availability | VERIFIED | identification of the data set; the access terms are the authors' statement |
+| 127 | The data come from the hospital module of MIMIC-IV | Johnson_2023 | Data availability | VERIFIED | abstract section of the full text |
+
+Clinical checks (the Discipline row names a clinical field, and cited sentences concern patients). Reference existence: passed for every cited work. Claim anchor: passed for all 127 citations. Population match: passed; rows 1, 18 and 38 keep the source's population (asymptomatic AF, a sample of 700 ECGs, an older community cohort). Outcome match: passed; row 19 states the training count the source gives, row 54 names mean accuracy, rows 21 and 8 keep the confirmation windows. Strength of conclusion: passed; the text keeps "associated", "hypothesis" and "no interval for the difference yet establishes it". Clinical boundary: passed; the text frames its results as research and names validation outside one health system as one of "the next requirements before any clinical use" (Conclusion, last paragraph).
+
+This is research, evidence synthesis, or documentation support only. It is not patient-specific diagnosis, treatment, triage, or clinical decision support.
+
+### Corrections made
+None. Every format check of "Both ways", "The `.bib` entries" and "DOI and URL" passes on the cited entries, or fails in a way the records do not settle (C17 to C21). No patch is written.
+
+Checks run on refs.bib in this start: `grep -c 'dx.doi.org'` printed 0; no `doi` field holds a URL prefix or `doi:` (`grep -c -i -E 'doi *= *\{(https?:|doi:)'` printed 0); no DOI or URL ends in a period (0); every `month` value is a BibTeX month macro. The non-ASCII characters of the file (U+2010, U+2013, U+2014, U+2018, U+2019 and the accented letters <latin small letter c with acute>, <latin small letter c with caron>, <latin small letter e with dot above>, <latin small letter eth>, <latin capital letter s with caron>, <latin small letter u with macron> and others) are each declared in `t1enc.dfu` and `utf8enc.dfu` of the installed TeX Live 2025 (`grep` of `\DeclareUnicodeCharacter` in both files), so none needs a change.
+
+### Items flagged for review
+
+#### Quotations
+| # | Location | Issue | Suggested action |
+|---|---|---|---|
+| C1 | main.tex, 1.2, first sentence (Kashou_2021) | MINOR. The sentence quotes the commentary's subtitle with a plain `\cite`. The quoted words are a title, which every record of the work holds, so the page rule has two readings. | Author's choice: keep `\cite{Kashou_2021}`, or write `\cite[p.~1770]{Kashou_2021}` (the first page the entry gives) if the venue asks for a page with every quotation. |
+
+#### Versions of one work
+| # | Location | Issue | Suggested action |
+|---|---|---|---|
+| C2 | refs.bib, Ye_2020; main.tex 1.2 and 2.4 (rows 15 and 59) | MEDIUM. The entry names the Neural Networks article (DOI 10.1016/j.neunet.2020.05.034); the passages were read in arXiv 2010.04963v2, the only open copy. Whether section 4.4.7 (Grad-CAM) stands in the journal version was not read. | Author's choice, no patch: keep the journal entry and confirm the passages in the journal version, cite the arXiv version with its own entry, or cite both. Rudin_2019 was read in arXiv 1811.10154v3 and its claim is the journal article's title, so it is the same in both versions. Faes_2024 (KU Leuven repository copy) and Khurshid_2025 (the journal's Article in Press PDF) were read in copies of the cited article under its own DOI. |
+
+#### Claims the paper must not make (Claims not to make (a) to (f))
+Every sentence of main.tex was read against (a) to (f). No sentence states a listed claim. Two sentences come near one. Listed claim (f) concerns the study's own numbers against the gold-label result files, which are not inputs of this check; no sentence names the provisional ECG-report labels as the source of a result.
+| # | Location | Issue | Suggested action |
+|---|---|---|---|
+| C3 | main.tex, 5.1 Study cohort, last two sentences of the first paragraph, and the cohort table rows "Controls with a later ECG" and "Controls whose last later ECG was not read as AF" | MEDIUM, near (a). "For 40,306 (96.5\%), the last of these ECGs was not read as AF." The count comes from the machine reads of the ECGs, the provisional ECG-report labels. It describes the controls of the gold-label cohort and is not an outcome. | needs the user: keep it as a description of the controls, or remove the count read from the ECG reports. |
+| C4 | main.tex, 2.4, second paragraph (https://doi.org/10.5281/zenodo.22227432), row 63 | MEDIUM, near (c). "Linear BTTR has also been applied to the identification of AF in sinus rhythm on the median beat". The cited record is the PTB-XL AF-in-sinus-rhythm study; the sentence states no result of it. | needs the user: keep it as a pointer without a result, or remove it. |
+
+#### Claims against the list (intended-claims.md)
+Each entry says only that the draft's text and its list differ; a claim the list does not hold may still be right.
+| # | Location | Issue | Suggested action |
+|---|---|---|---|
+| C5 | main.tex, 2.2, first paragraph | MEDIUM, not on the list: the discrimination of the clinical scores, "with a C statistic of 0.78", "CHARGE-AF reached 0.765 at derivation and 0.664 and 0.705 in two validation cohorts", "P-wave indices added little discrimination beyond traditional risk factors". | Add the claim to the list, or confirm it is meant. |
+| C6 | main.tex, 2.2, third paragraph | MEDIUM, not on the list: "Other studies found the ECG model ahead of the clinical score." and "The ranking of ECG and clinical models also depends on the cohort." | Add the claim to the list, or confirm it is meant. |
+| C7 | main.tex, 2.1, third paragraph | MEDIUM, not on the list: "To our knowledge, none of these reports includes a test of whether the explanation reflects what the model uses to predict." The three sources were read as abstracts only. | Add the claim to the list, or confirm it is meant. |
+| C8 | main.tex, 2.3, third paragraph | MEDIUM, not on the list: "To our knowledge, no study in this literature compares an intrinsically interpretable model with a CNN on incident AF under one protocol." | Add the claim to the list, or confirm it is meant. |
+| C9 | main.tex, 5.1 Study cohort, first paragraph | MEDIUM, not on the list: the cohort results (151,941 eligible patients, 8,775 events of the survival design, events by 1, 2 and 5 years, the follow-up of controls). | Add the claim to the list, or confirm it is meant. |
+| C10 | main.tex, 5.2, horizons paragraph | MEDIUM, not on the list: "One reason for the lower one-year values of the survival design is its control group." | Add the claim to the list, or confirm it is meant. |
+| C11 | main.tex, 5.3, third paragraph | MEDIUM, not on the list: the decision-curve result ("All three models had a net benefit above both treating all and treating none at threshold probabilities from about 0.04 to about 0.1", the fused model's curve "above the other two between about 0.03 and 0.12"). | Add the claim to the list, or confirm it is meant. |
+| C12 | main.tex, 6.1, third paragraph, last sentence | MEDIUM, not on the list: "The CNN has three convolutional layers, so the result says nothing about parity with the large networks of published work." | Add the claim to the list, or confirm it is meant. |
+| C13 | main.tex, 6.2, first paragraph, third sentence | MEDIUM, not on the list (text of the RI2.3 revision): "The fused model is trained as one network, so its factors are fitted beside the clinical term and may differ from those of ECG-only BTTN." | Add the claim to the list, or confirm it is meant. |
+| C14 | main.tex, 6.3, third paragraph | MEDIUM, not on the list (text of the RI1.12 revision): "This proportion exceeds the one-year rate of the survival cohort, 1,855 in 50,545, whose one-year negatives include the patients with onset after one year. The PPVs of Table~\ref{tab:operating} are therefore upper values for that population." | Add the claim to the list, or confirm it is meant. |
+| C15 | intended-claims.md, item 2 | MEDIUM, intended, not made as listed: "The 2024 ESC guideline states that the clinical performance and broad applicability of AI solutions for AF are not yet known." The text (1.2) states it of algorithms for automated AF diagnosis, the narrower claim section 10.2 of the guideline holds (row 11). | Confirm the narrower claim of the text; the list item claims more than the source holds. |
+| C16 | intended-claims.md, item 25 | MEDIUM, intended, not made: "The clinical comparator uses a subset of the CHARGE-AF factors and omits the PR interval, a known AF predictor." The text (6.3, second paragraph) compares the clinical factors with the Framingham score, not CHARGE-AF; the PR-interval half is made. | Confirm which score the comparison names. |
+
+#### The .bib entries
+| # | Location | Issue | Suggested action |
+|---|---|---|---|
+| C17 | refs.bib, Cheng_2009 | MEDIUM, omitted co-authors: `author={Cheng, Susan}` copies the Crossref record, which lists one author; OpenAlex prints "Susan C. Cheng, Michelle J Keyes, Martin G Larson et al." and Semantic Scholar "Susan Cheng, M. Keyes, M. Larson et al.". `resolve` prints three names only, and `lookup bibtex '10.1001/jama.2009.888'` returns the same one-author record, so no record read in this run gives the whole list. `pages={2571}` gives the first page only. | needs the user: the author list and the last page from the article's byline. No patch until a record gives them. |
+| C18 | refs.bib, incomplete entries | MINOR, incomplete: no `pages` field in Christopoulos_2020, Khurshid_2025, Saiz_Vivo_2025, Riek_2026, Alonso_2013, Arends_2026, Patlatzoglou_2025, Johnson_2023, Ribeiro_2020, Valasakis_2026, Katzman_2018, McKeen_2025, Maezono_2025, Yogeswaran_2025 and _imi__2025 (most are article-number journals); the first page only in Cheng_2009 (2571), Yuan_2023 (1131) and Malmo_2016 (185); no `volume` in Riek_2026 and Malmo_2016. `lookup bibtex` for Malmo_2016, Yuan_2023, Riek_2026, Christopoulos_2020 and Cheng_2009 returns the same incomplete fields. | Add the article number or the page range from each article. No record read in this run gives them, so no patch. Ribeiro_2020's full text names its article number, 1760 ("NATURE COMMUNICATIONS | (2020)11:1760"). |
+| C19 | refs.bib, Zeiler_2014 | MINOR: the entry is `@inbook` with a `booktitle` field. `vancouver.bst` prints an `@inbook` entry's title as the book's title and asks for a `chapter`, so the reference list can lose "Computer Vision <en dash> ECCV 2014". The entry has two readings, `@incollection` (a chapter of an LNCS volume) or `@inproceedings` (a paper of the ECCV proceedings). | Author's choice of type; `@inproceedings` with the same fields is the usual form for an ECCV paper. No patch, since there are two readings. |
+| C20 | refs.bib and main.tex, keys | MINOR: two cited keys are URLs (`https://doi.org/10.5281/zenodo.22227432`, `https://doi.org/10.13026/4nqg-sb35`) and one is garbled from a name with diacritics (`_imi__2025`, <latin capital letter s with caron>imi<latin small letter c with acute>). They resolve and compile, but they break the Surname_Year form of the other keys. | Author's choice of names, for example Cornelissen_2026, Gow_2023 and Simic_2025, with each `\cite` rewritten. No patch, since the names are a choice. |
+
+#### DOI and URL
+| # | Location | Issue | Suggested action |
+|---|---|---|---|
+| C21 | refs.bib, 26 cited entries | MINOR. `check-urls` (check-log.md, "expanded revision (after review 2)") gives HTTP 403 for the doi.org link of Kashou_2021, Wolf_1991, Alonso_2013, Raghunath_2021, Khurshid_2022, Tsiartas_2025, Saiz_Vivo_2025, Van_Gelder_2024, Arends_2026, De_Lathauwer_2008, Valasakis_2026, Yuan_2023, Jabbour_2024, Cheng_2009, Christopoulos_2020, Biton_2021, Kolda_2009, Cox_1972, Rix_2012, Vickers_2006, Collins_2024, McKeen_2025, Magnani_2013, Yogeswaran_2025, Goette_2016 and Maezono_2025 (26 of 64; `grep -c ': 403 '` on that section printed 26). Each of these DOIs resolves in Crossref to the entry's title at ratio 1.00 (Lookups), and the same check prints the title ratio against Crossref for every one of them, so the identifier is correct and the 403 is the publisher's site answering the automated request. The other 38 lines are 200 or 202 and none ends in DOI_MISMATCH or "title not checked". | No correction: the record confirms each DOI. The links can be opened in a browser to confirm they serve readers. |
+
+#### The reference list as a whole
+| # | Location | Issue | Suggested action |
+|---|---|---|---|
+| C22 | refs.bib, Rix_2012, Magnani_2013, Magnani_2015, Malmo_2016 | MINOR, currency: older than 10 years and not clearly seminal. Fifteen cited entries are older than 10 years (23.4 percent); the other eleven (Cox_1972, Wolf_1991, Vickers_2006, De_Lathauwer_2008, Cheng_2009, Kolda_2009, Schnabel_2009, Alonso_2013, Zeiler_2014, Schnabel_2015, Goette_2016) are the founding sources of the method, score, consensus or cohort result they are cited for. | Keep each where its cohort or validation result is needed; Yogeswaran_2025 and Tanaka_2021 carry the PR-interval association in newer cohorts, and Yao_2019 pools the validation studies of administrative AF definitions. |
+
+Citation density: every paragraph of the body with no citation describes the method or the study's own analysis (Method 3.2 paragraphs, Results, the first paragraph of 6.1, the calibration paragraph of 6.3, the Conclusion); 6.4 now cites arxiv_1806_10758 and Collins_2024. No sentence carries more than 3 citations (`grep -o '\\cite{[^}]*}'` gives 127 citations; the largest group is `\cite{arxiv_1810_03292,arxiv_1806_10758,Arends_2026}`).
+
+Names and years in sentences: "Raghunath et al." names the entry's first author of 22; "Rudin argued" names the single author; "The 2024 guideline" agrees with Van_Gelder_2024. No other sentence names an author or a year of a cited work.
+
+Predatory-venue screen: no venue a cited entry names shows a record sign (no over-broad name, the indexes spell each venue alike, no date after today, every DOI has the form 10.<digits>/<suffix>, no impossible volume). No venue is listed "not screened". Valasakis_2026 is a congress abstract in a European Heart Journal supplement. OpenAlex's venue field for arxiv_1702_04595 names an unrelated journal; the entry is an arXiv `@misc` and names no venue.
+
+Retractions: the check covers the notices Crossref lists, read from the `resolve` call on each DOI above; Crossref's record of a source can lack a notice a publisher has issued. No call printed a "Crossref notice" line, so no source has a retraction, partial retraction or expression-of-concern notice in Crossref. The nine arXiv entries and the Zenodo and PhysioNet records have no Crossref record.
+
+Both ways: `python3 the lookup script cite-keys 'main.tex' 'refs.bib'`, run in this start, prints no missing key and four unused entries, listed and not removed: Wagner_2020, https://doi.org/10.5281/zenodo.4916206, Mehari_2022, arxiv_2005_13249.
+
+Passages that repeat an earlier paper: none listed (Earlier papers: none), so nothing was compared. A plagiarism tool such as iThenticate, Turnitin or Copyscape can screen the text against the wider literature.
+
+DOI checking is mark-only, so no DOI failure stops the run; no DOI failed `resolve`.
+
+### Passage lines
+Each group is headed by the number of its row in "Claims".
+
+Row 1:
+> [@Kashou_2021, abstract]: "the growing prevalence of atrial fibrillation (AF) is becoming a public health crisis"
+> [@Kashou_2021, abstract]: "the first clinical presentation of those with asymptomatic AF may be an acute ischaemic stroke or decompensated heart failure"
+
+Row 2:
+> [@Wolf_1991, abstract]: "a near fivefold excess when atrial fibrillation was present"
+> [@Wolf_1991, abstract]: "rising from 1.5% for those aged 50-59 years to 23.5% for those aged 80-89 years"
+
+Row 3:
+> [@Schnabel_2015, abstract]: "We observed about a fourfold increase in the age-adjusted prevalence and more than a tripling in age-adjusted incidence of atrial fibrillation"
+> [@Schnabel_2015, abstract]: "observed trends of increased incidence of atrial fibrillation in the community were partially due to enhanced surveillance"
+
+Row 4:
+> [@Alonso_2013, abstract]: "A risk model including variables readily available in primary care settings adequately predicted AF in diverse populations from the United States and Europe."
+
+Row 5:
+> [@Kashou_2021, abstract]: "These approaches, however, require time-intensive data abstraction of multiple variables"
+> [@Kashou_2021, abstract]: "In comparison, the model proposed in this current study could be applied to a single ECG at the point of care without additional data abstraction."
+
+Row 6:
+> [@Raghunath_2021, abstract]: "We used 1.6 M resting 12-lead digital ECG traces from 430 000 patients collected from 1984 to 2019."
+> [@Raghunath_2021, abstract]: "The area under the receiver operating characteristic curve and area under the precision-recall curve were 0.85 and 0.22, respectively, for predicting new-onset AF within 1 year of an ECG."
+
+Row 7:
+> [@Khurshid_2022, abstract]: "in an internal test set and 2 external test sets"
+> [@Khurshid_2022, abstract]: "Area under the receiver operating characteristic curve was highest using CH-AI"
+
+Row 8:
+> [@Tsiartas_2025, abstract section]: "Results 14 studies and 33 AI models were analysed."
+> [@Tsiartas_2025, Results]: "and AUC 0.740 (0.630 to 0.830)"
+> [@Tsiartas_2025, Results]: "median accuracy (31 days vs up to a year: 83.2% vs 56.0%; q=0.010; rb=1) and AUC (31 days vs up to a year: 0.851 vs 0.630; q<0.001; rb=0.80) compared with those where AF was confirmed after this period and within 1 year"
+> [@Tsiartas_2025, abstract section]: "11 studies (78.6%) cited possible negative cases misclassification as a limitation"
+
+Row 9:
+> [@Kashou_2021, abstract]: "The current study by Sanz-Garcia and colleagues, represents an innovative approach to doing just that."
+
+Row 10:
+> [@Saiz_Vivo_2025, abstract]: "Issues such as algorithm interpretability, the requirement for extensive clinical validation, and integration into existing healthcare frameworks remain significant barriers."
+
+Row 11:
+> [@Van_Gelder_2024, section 10.2]: "Algorithms have been created to improve automated AF diagnosis and several algorithms to aid diagnostics are being investigated.1046 However, the clinical performance and broad applicability of these solutions are not yet known."
+
+Row 12:
+> [@Arends_2026, abstract]: "Attribution methods demonstrated low correlation and high variability across inter-method comparisons."
+> [@Arends_2026, abstract]: "Self-consistency across random model initializations was moderate for most methods (mean correlation 0.41<en dash>0.65)."
+> [@Arends_2026, abstract]: "Randomizing model weights led to rapid loss of correlation, although some methods did not converge to zero."
+
+Row 13:
+> [@Rudin_2019, abstract section]: "trying to explain black box models, rather than creating models that are interpretable in the first place, is likely to perpetuate bad practices and can potentially cause catastrophic harm to society."
+
+Row 14:
+> [@De_Lathauwer_2008, abstract]: "we decompose a given tensor block into blocks of smaller size, where the size is characterized by a set of mode-n ranks"
+
+Row 15:
+> [@Ye_2020, abstract section]: "approximate the weight matrices with the low-rank block-term tensors"
+> [@Ye_2020, section 4.4.7]: "For explaining and interpreting the proposed architectures, we apply the Grad-CAM [34] visualization techniques to the proposed architectures."
+
+Row 16:
+> [@Faes_2024, section II]: "we include the proposed model into a deflation-based method for multiway regression, namely BTTR (Block Term Tensor Regression), for high flexibility and interpretability."
+> [@Faes_2024, abstract section]: "we apply BTTR to accurately predict single finger movement trajectories from intracranial recordings in human subjects."
+
+Row 17:
+> [@Khurshid_2022, abstract]: "has similar predictive usefulness to a clinical risk factor model for incident AF and the approaches are complementary."
+
+Row 18:
+> [@Valasakis_2026, abstract]: "Over one-third of ECGs labelled as atrial fibrillation in this sample from MIMIC-IV do not show AF on expert review"
+> [@Valasakis_2026, abstract]: "Of 700 ECGs labelled as atrial fibrillation, only 458 (65.4%) showed AF on expert review."
+
+Row 19:
+> [@Attia_2019, abstract]: "We included 180 922 patients with 649 931 normal sinus rhythm ECGs for analysis: 454 789 ECGs recorded from 126 526 patients in the training dataset"
+> [@Attia_2019, abstract]: "patients in the testing dataset had verified atrial fibrillation before the normal sinus rhythm ECG tested by the model."
+> [@Attia_2019, abstract]: "A single AI-enabled ECG identified atrial fibrillation with an AUC of 0<middle dot>87"
+
+Row 20:
+> [@Yuan_2023, abstract]: "A deep learning model predicted the presence of AF within 31 days of a sinus rhythm ECG on held-out test ECGs at VA sites with an area under the receiver operating characteristic curve (AUROC) of 0.86"
+> [@Yuan_2023, abstract]: "At the non-VA site, AUROC was 0.93"
+
+Row 21:
+> [@Tsiartas_2025, Results]: "Additionally, models where confirmatory AF was captured within 31 days of the AI"
+> [@Tsiartas_2025, Results]: "and AUC (31 days vs up to a year: 0.851 vs 0.630; q<0.001; rb=0.80) compared with those where AF was confirmed after this period and within 1 year"
+
+Row 22:
+> [@Saiz_Vivo_2025, abstract]: "showed a higher accuracy in predicting AF from SR when the event horizon was shorter"
+
+Row 23:
+> [@Raghunath_2021, abstract]: "We used 1.6 M resting 12-lead digital ECG traces from 430 000 patients collected from 1984 to 2019."
+> [@Raghunath_2021, abstract]: "were 0.85 and 0.22, respectively, for predicting new-onset AF within 1 year of an ECG."
+
+Row 24:
+> [@Jabbour_2024, abstract]: "This study introduces an ECG-AI model developed and tested at a tertiary cardiac centre"
+> [@Jabbour_2024, abstract]: "The primary outcome was incident AF at 5 years."
+> [@Jabbour_2024, abstract]: "the ECG-AI model showed an area under the receiver operating characteristic (AUC-ROC) curve of .78"
+> [@Jabbour_2024, abstract]: "ECG-AI model performance remained consistent (AUC-ROC = .77)"
+
+Row 25:
+> [@Sau_2026, abstract]: "a convolutional neural network with a discrete-time survival loss function, was developed to predict incident AF. It was trained using a dataset of 1,163,401 ECGs from 189,539 patients from the Beth Israel Deaconess Medical Center (BIDMC)"
+> [@Sau_2026, abstract]: "In the BIDMC cohort, AIRE-AF predicted incident atrial fibrillation with a C-index of 0.750"
+
+Row 26:
+> [@Zeidaabadi_2026, abstract]: "We used 1,163,401 ECGs from 189,539 patients in the Beth Israel Deaconess Medical Center (BIDMC) dataset"
+> [@Zeidaabadi_2026, abstract]: "The model achieved C-statistics of 0.754"
+
+Row 27:
+> [@Habineza_2023, abstract]: "The cohort is a collection of ECG recordings and annotations by the Telehealth Network of Minas Gerais, in Brazil. A convolutional neural network based on a residual network architecture was implemented"
+> [@Habineza_2023, abstract]: "The probabilities were used to develop a Cox proportional hazards model and a Kaplan-Meier model to carry out survival analysis."
+> [@Habineza_2023, abstract]: "with an AUC score of 0.845"
+
+Row 28:
+> [@Ribeiro_2020, abstract section]: "Here we present a DNN model trained in a dataset with more than 2 million labeled exams analyzed by the Telehealth Network of Minas Gerais and collected under the scope of the CODE (Clinical Outcomes in Digital Electrocardiology) study."
+
+Row 29:
+> [@Riek_2026, abstract]: "From prior ECGs, we extracted 417 features and trained multiple survival models to predict incident AF."
+> [@Riek_2026, abstract]: "average follow-up 80<plus-minus sign>100 days"
+> [@Riek_2026, abstract]: "the gradient boosting survival model achieved highest performance (test C-index 0.781)"
+
+Row 30:
+> [@Khurshid_2022, abstract]: "In saliency analyses, the ECG P-wave had the greatest influence on AI model predictions."
+
+Row 31:
+> [@Zeidaabadi_2026, abstract]: "Saliency mapping indicated the model primarily focused on P-wave morphology and PR interval regions."
+
+Row 32:
+> [@Riek_2026, abstract]: "Predictors included older age, lower P wave amplitude, and increased heart rate variability."
+
+Row 33:
+> [@Schnabel_2009, abstract]: "Multivariable Cox regression related clinical variables to 10-year AF incidence (n=457)."
+> [@Schnabel_2009, abstract]: "Age, sex, significant murmur, heart failure, systolic blood pressure, hypertension treatment, body mass index, and electrocardiographic PR interval were associated with incident AF (p<0.05; clinical model C statistic=0.78"
+
+Row 34:
+> [@Alonso_2013, abstract]: "statistic, 0.765; 95% CI, 0.748 to 0.781)"
+> [@Alonso_2013, abstract]: "Addition of variables from the electrocardiogram did not improve the overall model discrimination"
+> [@Alonso_2013, abstract]: "In the validation cohorts, discrimination was acceptable (AGES C"
+> [@Alonso_2013, abstract]: "statistic, 0.664; 95% CI, 0.632 to 0.697 and RS C"
+> [@Alonso_2013, abstract]: "statistic, 0.705; 95% CI, 0.664 to 0.747) and calibration was adequate."
+
+Row 35:
+> [@Cheng_2009, abstract]: "Prospective, community-based cohort in Framingham, MA."
+> [@Cheng_2009, abstract]: "each 20-millisecond increment in PR was associated with an adjusted hazards ratio (HR) of 1.12"
+
+Row 36:
+> [@Magnani_2015, abstract]: "We examined PWI from the Framingham Heart Study (FHS) and Atherosclerosis Risk in Communities (ARIC) Study."
+> [@Magnani_2015, abstract]: "In meta-analysis, P-wave duration >120 ms was significantly associated with AF (hazard ratio [HR] 1.55"
+> [@Magnani_2015, abstract]: "PWI had a limited contribution towards predictive risk beyond traditional risk factors and markers."
+
+Row 37:
+> [@Khurshid_2022, abstract]: "Area under the receiver operating characteristic curve was comparable using CHARGE-AF"
+> [@Khurshid_2022, abstract]: "Area under the receiver operating characteristic curve was highest using CH-AI (MGH, 0.838 [95% CI, 0.807 to 0.869]; BWH, 0.777 [95% CI, 0.766 to 0.788]; UK Biobank, 0.746 [95% CI, 0.716 to 0.776])."
+
+Row 38:
+> [@Christopoulos_2020, abstract]: "among participants in the population-based Mayo Clinic Study of Aging"
+> [@Christopoulos_2020, abstract]: "A total of 1936 participants with median age 75.8"
+> [@Christopoulos_2020, abstract]: "C statistics were 0.69 (95% CI, 0.66<en dash>0.72) for AI-ECG AF model output, 0.69 (95% CI, 0.66<en dash>0.71) for CHARGE-AF, and 0.72 (95% CI, 0.69<en dash>0.75) for combined AI-ECG and CHARGE-AF score."
+> [@Christopoulos_2020, abstract]: "both the AI-ECG AF model output and CHARGE-AF score independently predicted incident AF."
+
+Row 39:
+> [@Khurshid_2025, abstract of the full text]: "ECG-AI with age/sex (1L ECG-AI AS) had comparable discrimination (area under the"
+> [@Khurshid_2025, abstract of the full text]: "receiver operating characteristic curve [AUROC] 0.695[0.637-0.742]; average precision"
+> [@Khurshid_2025, abstract of the full text]: "[AP] 0.060[0.050-0.078]) to CHARGE-AF (AUROC 0.679[0.623-0.730]"
+
+Row 40:
+> [@Biton_2021, abstract]: "We use features obtained from different modalities, namely demographics, clinical information, engineered features, and features from deep representation learning."
+> [@Biton_2021, abstract]: "The best model performance on the test set was obtained for the model combining features from all modalities with an area under the receiver operating characteristic curve (AUROC) = 0.909 against the best single modality model which had an AUROC = 0.839."
+
+Row 41:
+> [@Jabbour_2024, abstract]: "In a subgroup analysis of 2301 patients, ECG-AI outperformed CHARGE-AF (AUC-ROC = .62) and PGS (AUC-ROC = .59)."
+
+Row 42:
+> [@Zeidaabadi_2026, abstract]: "Compared to the CHARGE-AF risk score, the AI-ECG model showed superior performance (c-statistic 0.696 vs 0.667, p<0.05) and provided significant additive value when combined (c-statistic 0.711, p<0.0001)."
+
+Row 43:
+> [@Sau_2026, abstract]: "AIRE-AF was superior to CHARGE-AF"
+> [@Sau_2026, abstract]: "The single best performing single predictor in the volunteer population (UKB) was CHARGE-AF"
+
+Row 44:
+> [@arxiv_1810_03292, abstract section]: "Through extensive experiments we show that some existing saliency methods are independent both of the model and of the data generating process."
+> [@arxiv_1810_03292, section 1]: "find, consistently, that some of the methods tested are independent of both the model parameters and the labeling of the data that the model was trained on."
+
+Row 45:
+> [@arxiv_1806_10758, section 1]: "The base methods we evaluate are no better or on par with a random estimate at finding the core set of informative features. However, we show that SmoothGrad-Squared (an unpublished variant of Classic SmoothGrad [35]) and Vargrad [3], methods which ensemble a set of estimates produced by basic methods, far outperform both the underlying method and a random guess."
+
+Row 46:
+> [@Arends_2026, abstract]: "Attribution methods demonstrated low correlation and high variability across inter-method comparisons."
+> [@Arends_2026, abstract]: "Self-consistency across random model initializations was moderate for most methods (mean correlation 0.41<en dash>0.65)."
+
+Row 47:
+> [@Wagner_2024, abstract]: "We have established a set of sanity checks to identify saliency as the most sensible attribution method. We provide a dataset-wide analysis across entire patient subgroups"
+> [@Wagner_2024, abstract]: "to establish the first quantitative evidence for the alignment of model behavior with cardiologists' decision rules"
+> [@Wagner_2024, abstract]: "we demonstrate how these XAI techniques can be utilized for knowledge discovery, such as identifying subtypes of myocardial infarction"
+
+Row 48:
+> [@arxiv_2007_04612, abstract section]: "We revisit the classic idea of first predicting concepts that are provided at training time, and then using these concepts to predict the label."
+> [@arxiv_2007_04612, abstract section]: "concept bottleneck models achieve competitive accuracy with standard end-to-end models"
+> [@arxiv_2007_04612, abstract section]: "accuracy improves significantly if we can correct model mistakes on concepts at test time."
+
+Row 49:
+> [@arxiv_2106_13314, abstract section]: "we demonstrate that the concept representations learned by these models encode information beyond the pre-defined concepts, and that natural mitigation strategies do not fully work, rendering the interpretation of the downstream prediction misleading."
+
+Row 50:
+> [@arxiv_2205_10268, abstract section]: "a sequence (network) of such transforms induces a single linear transform that faithfully summarises the full model computations."
+> [@arxiv_2205_10268, abstract section]: "whilst maintaining similar performance on ImageNet."
+
+Row 51:
+> [@arxiv_2507_16761, abstract section]: "In this work, we address this limitation by introducing anti-aliasing strategies using ASAP"
+> [@arxiv_2507_16761, abstract section]: "preserve strong predictive performance while providing faithful and artifact-free explanations suitable for clinical application in multi-class and multi-label settings."
+
+Row 52:
+> [@arxiv_2504_02667, abstract section]: "an intrinsically interpretable architecture combining the compositional multilinear structure of tensor networks with the expressivity and efficiency of deep neural networks."
+> [@arxiv_2504_02667, abstract section]: "retain equal accuracy compared to their baseline counterparts."
+> [@arxiv_2504_02667, abstract section]: "We leverage this toward formal weight-based interpretability and model compression."
+> [@arxiv_2504_02667, section 1]: "This paper presents preliminary results on developing interpretable neural networks while retaining competitive accuracy."
+
+Row 53:
+> [@Patlatzoglou_2025, abstract section]: "we focus on explicit representation learning using variational autoencoders (VAE) to capture inherently interpretable ECG features."
+> [@Patlatzoglou_2025, abstract section]: "demonstrate the cost introduced by intrinsic ECG interpretability"
+
+Row 54:
+> [@arxiv_2511_04292, abstract section]: "For MI, decoding results of HODA, BTTDA and PARAFACDA were subpar, but BTTDA still significantly outperformed HODA (64.52%>61.00%)."
+> [@arxiv_2511_04292, motor imagery results]: "When considering grand average classification accuracies over all evaluated motor imagery datasets as reported in table 2,"
+> [@arxiv_2511_04292, abstract section]: "The block-term structure of BTTDA enables interpretable and more efficient dimensionality reduction without compromising discriminative power."
+> [@arxiv_2511_04292, abstract section]: "Extending Higher Order Discriminant Analysis (HODA)"
+
+Row 55:
+> [@arxiv_2205_10268, abstract section]: "whilst maintaining similar performance on ImageNet."
+
+Row 56:
+> [@arxiv_2507_16761, abstract section]: "preserve strong predictive performance while providing faithful and artifact-free explanations"
+
+Row 57:
+> [@De_Lathauwer_2008, abstract]: "where the size is characterized by a set of mode-n ranks"
+> [@De_Lathauwer_2008, abstract]: "The parallel factor decomposition and Tucker's decomposition can be considered as special cases in the new framework."
+
+Row 58:
+> [@Kolda_2009, abstract]: "This survey provides an overview of higher-order tensor decompositions"
+> [@Kolda_2009, abstract]: "CANDECOMP/PARAFAC (CP) decomposes a tensor as a sum of rank-one tensors, and the Tucker decomposition is a higher-order form of principal component analysis."
+
+Row 59:
+> [@Ye_2020, abstract section]: "approximate the weight matrices with the low-rank block-term tensors"
+> [@Ye_2020, abstract section]: "BT-layers in CNNs and RNNs can achieve a very large compression ratio on the number of parameters"
+> [@Ye_2020, section 4.4.7]: "For explaining and interpreting the proposed architectures, we apply the Grad-CAM [34] visualization techniques to the proposed architectures."
+
+Row 60:
+> [@Goulart_2020, abstract]: "blind source separation can be performed by computing an approximate block-term tensor decomposition (BTD)"
+> [@Goulart_2020, abstract]: "a well-posed mixed-norm regularized tensor approximation problem"
+> [@Goulart_2020, abstract]: "to extract multiple signals which can be physiologically interpreted as atrial fibrillation patterns."
+
+Row 61:
+> [@Faes_2024, abstract section]: "we apply BTTR to accurately predict single finger movement trajectories from intracranial recordings in human subjects."
+> [@Faes_2024, abstract section]: "BTTR accounts for the underlying (hidden) data structure in a fully automatic and computationally-efficient manner"
+
+Row 62:
+> [@arxiv_2511_04292, abstract section]: "resulting in state-of-the art performance (ROC-AUC=91.25%)"
+> [@arxiv_2511_04292, abstract section]: "The block-term structure of BTTDA enables interpretable and more efficient dimensionality reduction without compromising discriminative power."
+
+Row 63:
+> [@https://doi.org/10.5281/zenodo.22227432, abstract]: "On the public PTB-XL database we tensorize the multilead median beat into a samples-by-time-by-lead array and fit block-term tensor regression (BTTR)"
+
+Row 64:
+> [@https://doi.org/10.13026/4nqg-sb35, abstract]: "These diagnostic ECGs use 12 leads and are 10 seconds in length. They are sampled at 500 Hz."
+
+Row 65:
+> [@De_Lathauwer_2008, abstract]: "where the size is characterized by a set of mode-n ranks"
+
+Row 66:
+> [@Faes_2024, section II]: "This is followed by deflation before the next iteration starts."
+> [@Faes_2024, section III.B]: "the kth loading matrix for the n-mode, uk and tk the score vectors, bk the regression coefficient"
+> [@Faes_2024, section III.B]: "we can re-write the above as the well-known linear regression equation ytest = Xtest(1) bBTTR"
+
+Row 67:
+> [@Faes_2024, section III.B]: "the core tensor for the kth-block,"
+> [@Faes_2024, section III.B]: "the kth loading matrix for the n-mode, uk and tk the score vectors, bk the regression coefficient"
+> [@Faes_2024, section III.B]: "BTTR is a deflation-based method in which the maximally correlated representations of X and y are extracted via ACE/ACCoS at each iteration."
+> [@Faes_2024, section III.B]: "well-known linear regression equation ytest = Xtest(1) bBTTR"
+
+Row 68:
+> [@Cox_1972, abstract]: "A conditional likelihood is obtained, leading to inferences about the unknown regression coefficients."
+
+Row 69:
+> [@Katzman_2018, Methods, DeepSurv]: "We train the network by setting the objective function to be the average negative log partial likelihood of Eq. 3 with regularization"
+
+Row 70:
+> [@Johnson_2023, section on the patients table]: "the patient<right single quotation mark>s age is provided in the anchor_age column"
+
+Row 71:
+> [@arxiv_2106_13314, abstract section]: "the concept representations learned by these models encode information beyond the pre-defined concepts"
+
+Row 72:
+> [@https://doi.org/10.13026/4nqg-sb35, abstract]: "The MIMIC-IV-ECG module contains approximately 800,000 diagnostic electrocardiograms across nearly 160,000 unique patients."
+
+Row 73:
+> [@Johnson_2023, abstract section]: "Here we present MIMIC-IV, a publicly available database sourced from the electronic health record of the Beth Israel Deaconess Medical Center."
+
+Row 74:
+> [@Rix_2012, abstract]: "recorded in the Danish National Patient Registry"
+> [@Rix_2012, abstract]: "A specified diagnosis of AFL was rarely used and was not reliable to distinguish between cases of AF and AFL."
+
+Row 75:
+> [@Valasakis_2026, abstract]: "Of 700 ECGs labelled as atrial fibrillation, only 458 (65.4%) showed AF on expert review."
+
+Row 76:
+> [@Faes_2024, section III.B]: "We propose a novel Block-Term Regression (BTTR) model"
+
+Row 77:
+> [@Vickers_2006, abstract]: "The authors describe decision curve analysis, a simple, novel method of evaluating predictive models."
+
+Row 78:
+> [@Collins_2024, abstract section]: "TRIPOD+AI aims to promote the complete, accurate, and transparent reporting of studies that develop a prediction model or evaluate its performance."
+
+Row 79:
+> [@Zeiler_2014, section 4.2, Occlusion Sensitivity]: "Fig. 6 attempts to answer this question by systematically occluding"
+> [@Zeiler_2014, section 4.2, Occlusion Sensitivity]: "portions of the input image with a grey square, and monitoring the output of the"
+
+Row 80:
+> [@Ivanovs_2021, abstract]: "The present survey is concerned with perturbation-based XAI methods, which allow to explore DNN models by perturbing their input and observing changes in the output."
+
+Row 81:
+> [@arxiv_1702_04595, section 2]: "they estimate the importance of input pixels by visualizing the probability of the (correct) class as a function of a gray patch occluding parts of the image."
+> [@arxiv_1702_04595, section 4]: "we replace a feature (patch) with samples taken directly from other images, at the same location."
+> [@arxiv_1702_04595, section 4]: "We can see that conditional sampling leads to results that are more refined in the sense that they concentrate more around the object."
+> [@arxiv_1702_04595, section 4]: "Figure 4 shows how different window sizes influence the resolution of the visualization."
+
+Row 82:
+> [@_imi__2025, abstract]: "Our work includes an extended evaluation of AMs on time series data, that presents the influence and importance of perturbation methods and region size selection in relation to dataset and model characteristics."
+
+Row 83:
+> [@Sau_2026, abstract]: "In the BIDMC cohort, AIRE-AF predicted incident atrial fibrillation with a C-index of 0.750"
+
+Row 84:
+> [@Zeidaabadi_2026, abstract]: "The model achieved C-statistics of 0.754"
+
+Row 85:
+> [@Jabbour_2024, abstract]: "The ECG-AI model was externally validated in the Medical Information Mart for Intensive Care-IV (MIMIC-IV) hospital data set."
+> [@Jabbour_2024, abstract]: "ECG-AI model performance remained consistent (AUC-ROC = .77)"
+
+Row 86:
+> [@Raghunath_2021, abstract]: "were 0.85 and 0.22, respectively, for predicting new-onset AF within 1 year of an ECG."
+
+Row 87:
+> [@Riek_2026, abstract]: "average follow-up 80<plus-minus sign>100 days"
+> [@Riek_2026, abstract]: "the gradient boosting survival model achieved highest performance (test C-index 0.781)"
+
+Row 88:
+> [@Tsiartas_2025, Results]: "and AUC (31 days vs up to a year: 0.851 vs 0.630; q<0.001; rb=0.80) compared with those where AF was confirmed after this period and within 1 year"
+
+Row 89:
+> [@Attia_2019, abstract]: "We classified patients with at least one ECG with a rhythm of atrial fibrillation or atrial flutter as positive for atrial fibrillation."
+
+Row 90:
+> [@Yuan_2023, abstract]: "was trained to predict the presence of AF within 31 days of sinus rhythm ECGs."
+
+Row 91:
+> [@McKeen_2025, abstract]: "introducing an openly available benchmark on the MIMIC-IV-ECG dataset."
+> [@McKeen_2025, abstract]: "achieve high AUROC on salient labels, including atrial fibrillation (0.996)"
+
+Row 92:
+> [@Khurshid_2022, abstract]: "the approaches are complementary."
+
+Row 93:
+> [@Christopoulos_2020, abstract]: "both the AI-ECG AF model output and CHARGE-AF score independently predicted incident AF."
+
+Row 94:
+> [@Pfeifer_2026, abstract]: "This study aimed to externally validate an ECG-AI model for predicting 1-year AF risk."
+> [@Pfeifer_2026, abstract]: "were manually abstracted to define inclusion and exclusion criteria (age 65+ years with no previous AF"
+> [@Pfeifer_2026, abstract]: "result for 391 patients (9.7%), including 74 who developed AF (sensitivity 31%"
+> [@Pfeifer_2026, abstract]: "(specificity 92%"
+
+Row 95:
+> [@Patlatzoglou_2025, abstract section]: "demonstrate the cost introduced by intrinsic ECG interpretability"
+
+Row 96:
+> [@arxiv_2106_13314, abstract section]: "the concept representations learned by these models encode information beyond the pre-defined concepts"
+> [@arxiv_2106_13314, section 3]: "the joint training objective encourages the concept representations to encode for all possible task-relevant information."
+
+Row 97:
+> [@Khurshid_2022, abstract]: "In saliency analyses, the ECG P-wave had the greatest influence on AI model predictions."
+
+Row 98:
+> [@Zeidaabadi_2026, abstract]: "Saliency mapping indicated the model primarily focused on P-wave morphology and PR interval regions."
+
+Row 99:
+> [@Schnabel_2009, abstract]: "and electrocardiographic PR interval were associated with incident AF"
+
+Row 100:
+> [@Cheng_2009, abstract]: "Individuals with first-degree atrioventricular block had a two-fold adjusted risk of AF (HR 2.06"
+
+Row 101:
+> [@Magnani_2013, abstract]: "The Health, Aging, and Body Composition (Health ABC) Study is a prospective, biracial cohort."
+> [@Magnani_2013, abstract]: "51.9% women, and 41% black)"
+> [@Magnani_2013, abstract]: "and a 13% increased risk of incident AF"
+
+Row 102:
+> [@Tanaka_2021, abstract]: "Eligible participants were residents in Kanazawa City, Japan"
+> [@Tanaka_2021, abstract]: "In the fully adjusted model, f-AVB was significantly associated with incident AF (HR, 1.75"
+
+Row 103:
+> [@Yogeswaran_2025, abstract]: "Each SD<hyphen>unit increase in PR interval, P<hyphen>wave duration, and PTFV1 was associated with increased AF risk"
+
+Row 104:
+> [@Magnani_2015, abstract]: "They are associated with AF in cross-cohort meta-analyses"
+
+Row 105:
+> [@Emmanuela_2026, abstract of the full text]: "Prolonged P-wave duration and the presence of interatrial block were associated with the incidence of NOAF."
+> [@Emmanuela_2026, limitations]: "certainty evaluation using the GRADE framework yielded very low ratings for all parameters"
+> [@Emmanuela_2026, limitations]: "a limitation that restricts direct applicability to a general, unselected population."
+
+Row 106:
+> [@Ostrowska_2022, summary]: "(1016 individuals all aged 70 years; 50% women) was used to identify whether the ECG variables P-wave duration (Pdur) and PRduration in lead V1 were related to new-onset AF."
+> [@Ostrowska_2022, summary]: "There was no significant relationship between incident AF and the PR-interval."
+> [@Ostrowska_2022, summary]: "Values below 60 msec were significantly associated with incident AF"
+
+Row 107:
+> [@Goette_2016, abstract]: "The purpose of the present consensus report"
+> [@Goette_2016, abstract]: "Any complex of structural, architectural, contractile or electrophysiological changes affecting the atria with the potential to produce clinically-relevant manifestations"
+> [@Goette_2016, abstract]: "atrial pathologies have a substantial impact on cardiac performance, arrhythmia occurrence, and stroke risk"
+
+Row 108:
+> [@Maezono_2025, abstract]: "in a Japanese community"
+> [@Maezono_2025, abstract]: "Unadjusted incidence rates of AF were significantly higher in participants with P-wave duration"
+> [@Maezono_2025, abstract]: "had a significantly higher age- and sex-adjusted geometric mean percentage of left atrial fibrosis"
+> [@Maezono_2025, abstract]: "Fibrosis in the left atrial posterior wall was pathologically evaluated in 133 autopsied cases"
+
+Row 109:
+> [@Yao_2019, abstract]: "We identified 24 studies"
+> [@Yao_2019, abstract]: "The pooled random effects estimates were: sensitivity 80%"
+> [@Yao_2019, abstract]: "PPV 88%"
+> [@Yao_2019, abstract]: "to assess the validity of AF case definitions in administrative databases"
+
+Row 110:
+> [@Malmo_2016, abstract]: "All AF diagnoses were verified by review of hospital and PC medical records."
+> [@Malmo_2016, abstract]: "The sensitivity of a hospital discharge diagnosis of AF was 73.7%, specificity 99.7%, PPV 88.5%, and NPV 99.2%."
+
+Row 111:
+> [@Rix_2012, abstract]: "The positive predictive value of the combined diagnosis of AF and/or AFL was 92.6%"
+
+Row 112:
+> [@Johnson_2023, section on the patients table]: "the patient<right single quotation mark>s age is provided in the anchor_age column"
+> [@Johnson_2023, section on the patients table]: "then they were 50 years old in the year 2150."
+
+Row 113:
+> [@Schnabel_2009, abstract]: "Age, sex, significant murmur, heart failure, systolic blood pressure, hypertension treatment, body mass index, and electrocardiographic PR interval were associated with incident AF"
+
+Row 114:
+> [@Cheng_2009, abstract]: "PR prolongation is associated with increased risks of AF, pacemaker implantation, and death."
+
+Row 115:
+> [@Magnani_2013, abstract]: "and a 13% increased risk of incident AF"
+
+Row 116:
+> [@arxiv_1810_03292, abstract section]: "Through extensive experiments we show that some existing saliency methods are independent both of the model and of the data generating process."
+
+Row 117:
+> [@arxiv_1806_10758, section 1]: "The base methods we evaluate are no better or on par with a random estimate at finding the core set of informative features."
+
+Row 118:
+> [@Arends_2026, abstract]: "Randomizing model weights led to rapid loss of correlation, although some methods did not converge to zero."
+
+Row 119:
+> [@arxiv_1702_04595, section 4]: "We can see that conditional sampling leads to results that are more refined in the sense that they concentrate more around the object."
+> [@arxiv_1702_04595, section 4]: "Figure 4 shows how different window sizes influence the resolution of the visualization."
+
+Row 120:
+> [@_imi__2025, abstract]: "presents the influence and importance of perturbation methods and region size selection in relation to dataset and model characteristics."
+
+Row 121:
+> [@arxiv_2106_13314, abstract section]: "rendering the interpretation of the downstream prediction misleading."
+
+Row 122:
+> [@arxiv_1806_10758, section 1]: "ROAR replaces the fraction of the pixels estimated to be most important with a fixed uninformative value."
+> [@arxiv_1806_10758, section 4]: "As a control, we compare each estimator to two rankings (a random assignment of importance and a sobel edge filter) that do not depend at all on the model parameters."
+> [@arxiv_1806_10758, appendix, KAR]: "While ROAR removes features by replacing a fraction of inputs estimated to be most important, KAR preserves the inputs considered to be most important."
+
+Row 123:
+> [@Collins_2024, abstract section]: "TRIPOD+AI aims to promote the complete, accurate, and transparent reporting of studies that develop a prediction model or evaluate its performance."
+
+Row 124:
+> [@Cheng_2009, abstract]: "PR prolongation is associated with increased risks of AF, pacemaker implantation, and death."
+
+Row 125:
+> [@Magnani_2013, abstract]: "and a 13% increased risk of incident AF"
+
+Row 126:
+> [@https://doi.org/10.13026/4nqg-sb35, abstract]: "This subset contains all of the ECGs for patients who appear in the MIMIC-IV Clinical Database."
+
+Row 127:
+> [@Johnson_2023, abstract section]: "Here we present MIMIC-IV, a publicly available database sourced from the electronic health record of the Beth Israel Deaconess Medical Center."

@@ -1,0 +1,644 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "73cb9eada24c24cb2de2c33a2cd07dd1159214e9809d214d38e1173f4a36e788",
+  "round": 1,
+  "n_blocks": 112,
+  "n_blocks_touched": 45,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D1-10",
+        "D1-44",
+        "D1-46"
+      ],
+      "rationale": "Scopes the last sentence to an ECG term built on readable factors, says the deciles are read in the survival sample that over-represents AF, and states the shortest horizon from the index ECG (120 days, multihorizon_icd_spectral.csv horizon_days 120).",
+      "chars_before": 1840,
+      "chars_after": 2026
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0013",
+      "section": "Context and problem",
+      "roadmap_item_ids": [
+        "D1-23",
+        "D1-24"
+      ],
+      "rationale": "Restores the source's population (asymptomatic AF) and its scope (a model applied to a single ECG at the point of care), as citation report C70 and C71 give.",
+      "chars_before": 959,
+      "chars_after": 1048
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0014",
+      "section": "Context and problem",
+      "roadmap_item_ids": [
+        "D1-15",
+        "D1-25"
+      ],
+      "rationale": "Words the opening as new-onset AF (C88) and moves the guideline sentence, reworded to automated AF diagnosis, out of the new-onset results into 1.2 (C72).",
+      "chars_before": 1129,
+      "chars_after": 910
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Research gap",
+      "roadmap_item_ids": [
+        "D1-4",
+        "D1-25",
+        "D1-26"
+      ],
+      "rationale": "Rests the commentary sentence on the title the record holds (C67), places the guideline statement on automated AF diagnosis beside the point on clinical use (C72), and restores the hedge 'for most methods' (C73).",
+      "chars_before": 968,
+      "chars_after": 1260
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "Research gap",
+      "roadmap_item_ids": [
+        "D1-14",
+        "D1-27"
+      ],
+      "rationale": "States what Ye_2020 does (Grad-CAM explanation, C74) and what Faes_2024 reports (BTTR designed for interpretability predicted finger movements, C75); the linear, non-survival sentence keeps the gap.",
+      "chars_before": 899,
+      "chars_after": 999
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0019",
+      "section": "Aim and contributions",
+      "roadmap_item_ids": [
+        "D1-28",
+        "D1-50"
+      ],
+      "rationale": "Names the 700-ECG sample of Valasakis_2026 (C76) and drops the binary contrast of the last sentence.",
+      "chars_before": 990,
+      "chars_after": 961
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Aim and contributions",
+      "roadmap_item_ids": [
+        "D1-49"
+      ],
+      "rationale": "Cuts the closing announcement of the four areas reviewed next.",
+      "chars_before": 940,
+      "chars_after": 788
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "section": "AI-ECG prediction of incident AF",
+      "roadmap_item_ids": [
+        "D1-1",
+        "D1-29"
+      ],
+      "rationale": "Uses the wording C64 gives as supported for the Mayo Clinic network (454,789 ECGs in its training set) and states that the review groups models by confirmation window (C77).",
+      "chars_before": 962,
+      "chars_after": 1028
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "AI-ECG prediction of incident AF",
+      "roadmap_item_ids": [
+        "D1-37",
+        "D1-49",
+        "D1-64"
+      ],
+      "rationale": "Hedges the absence claim with 'To our knowledge' (C91) and cuts the two closing announcements, which also removes the section numbers typed by hand.",
+      "chars_before": 694,
+      "chars_after": 528
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Clinical risk models and their combination with the ECG",
+      "roadmap_item_ids": [
+        "D1-30"
+      ],
+      "rationale": "Names the four kinds of input of the 0.909 model (C78).",
+      "chars_before": 694,
+      "chars_after": 716
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "Interpretable models and post-hoc explanation",
+      "roadmap_item_ids": [
+        "D1-26"
+      ],
+      "rationale": "Restores the source's hedge 'for most methods' (C73).",
+      "chars_before": 1102,
+      "chars_after": 1119
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "section": "Interpretable models and post-hoc explanation",
+      "roadmap_item_ids": [
+        "D1-2",
+        "D1-38",
+        "D1-49"
+      ],
+      "rationale": "Reports the motor-imagery values as mean accuracies against higher-order discriminant analysis (C65), hedges the gap claim (C92) and cuts the closing announcement.",
+      "chars_before": 800,
+      "chars_after": 807
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "Block-term tensor models",
+      "roadmap_item_ids": [
+        "D1-27",
+        "D1-31",
+        "D1-10"
+      ],
+      "rationale": "Cites Kolda_2009 for the CP and Tucker decompositions only (C79), states that Ye_2020 explains its networks with Grad-CAM (C74), and says the factors of this paper's model can be read, since no reading is reported.",
+      "chars_before": 776,
+      "chars_after": 960
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "Block-term tensor models",
+      "roadmap_item_ids": [
+        "D1-49"
+      ],
+      "rationale": "Ends the section on the gap sentence and cuts the announcement of the next section.",
+      "chars_before": 965,
+      "chars_after": 920
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0039",
+      "section": "Spectral tensor and block-term layer",
+      "roadmap_item_ids": [
+        "D1-47",
+        "D1-68"
+      ],
+      "rationale": "Adds why the 50 Hz notch leaves 60 Hz mains outside the kept band, and states F = 21 bins (core/preprocess.py _spectral: nperseg 128 at 250 Hz, f <= 40 Hz keeps bins 0 to 20, 1.953 Hz apart).",
+      "chars_before": 999,
+      "chars_after": 1146
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Spectral tensor and block-term layer",
+      "roadmap_item_ids": [
+        "D1-5",
+        "D1-32"
+      ],
+      "rationale": "Defines the mode-n product in the sentence and drops the citation to a passage not read (C68), and words the block-term comparison as the mode-n ranks the source characterises (C80).",
+      "chars_before": 936,
+      "chars_after": 1054
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0041",
+      "section": "Spectral tensor and block-term layer",
+      "roadmap_item_ids": [
+        "D1-33",
+        "D1-10"
+      ],
+      "rationale": "Drops 'fitted by least squares', which the source does not state (C81), and words the factors of BTTN as factors that can be read.",
+      "chars_before": 675,
+      "chars_after": 654
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0044",
+      "section": "Temporal convolution, pooling, head and survival objective",
+      "roadmap_item_ids": [
+        "D1-42"
+      ],
+      "rationale": "Describes the attention pooling as one set of weights over time computed from all channels and shared by them (core/bttn.py: attn = Conv1d(ch_out, 1, 1), softmax over time).",
+      "chars_before": 763,
+      "chars_after": 819
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0045",
+      "section": "Temporal convolution, pooling, head and survival objective",
+      "roadmap_item_ids": [
+        "D1-3"
+      ],
+      "rationale": "Removes the clause that other AF survival models use the Cox likelihood, which the cited discrete-time model does not (C66); 2.1 already states that model's loss.",
+      "chars_before": 1018,
+      "chars_after": 967
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Clinical term and readable factors",
+      "roadmap_item_ids": [
+        "D1-48"
+      ],
+      "rationale": "Separates the measurements used as released from the three computed from released onset and end times (core/cohort.py lines 44 to 46).",
+      "chars_before": 937,
+      "chars_after": 1020
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Clinical term and readable factors",
+      "roadmap_item_ids": [
+        "D1-10",
+        "D1-49",
+        "D1-69"
+      ],
+      "rationale": "Ties 'readable' to the 'interpretable' of the title, states that no reading of the learned factors is reported, and cuts the closing announcement.",
+      "chars_before": 833,
+      "chars_after": 991
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0055",
+      "section": "Baselines, protocol and metrics",
+      "roadmap_item_ids": [
+        "D1-12",
+        "D1-13"
+      ],
+      "rationale": "Renames the PPV rate as the case proportion of the one-year design (config.md Decisions, D1-12 fallback) and states that the characteristics table and missing-value counts are not reported (D1-13 fallback).",
+      "chars_before": 989,
+      "chars_after": 1141
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0058",
+      "section": "Occlusion readout",
+      "roadmap_item_ids": [
+        "D1-34",
+        "D1-40",
+        "D1-41",
+        "D1-49"
+      ],
+      "rationale": "Points to the centres and spans of Table 5, states the clipping of negative mean drops (figures/beat_saliency.py lines 84 and 90), splits the two occlusion sources by what each holds (C82), and cuts the closing announcement.",
+      "chars_before": 582,
+      "chars_after": 857
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0061",
+      "section": "Study cohort",
+      "roadmap_item_ids": [
+        "D1-50"
+      ],
+      "rationale": "States the positive fact and drops the binary contrast.",
+      "chars_before": 697,
+      "chars_after": 662
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "D1-46"
+      ],
+      "rationale": "Labels the shortest horizon from the index ECG, 120 days, as the analysis defines it (multihorizon_icd_spectral.csv horizon_days 120; onset 31 to 120 days).",
+      "chars_before": 792,
+      "chars_after": 835
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "D1-46"
+      ],
+      "rationale": "Relabels the first row 120 days and states in the caption that every horizon counts from the index ECG.",
+      "chars_before": 733,
+      "chars_after": 864
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0069",
+      "section": "Calibration, risk stratification and operating points",
+      "roadmap_item_ids": [
+        "D1-11",
+        "D1-12",
+        "D1-39",
+        "D1-43",
+        "D1-44",
+        "D1-45",
+        "D1-51"
+      ],
+      "rationale": "Splits 5.3 into calibration, operating points and decision curves; scopes calibration to the in-sample recalibration; names the sample of the deciles, the bars of Figure 2 and the renamed PPV rate; writes Brier 0.0390 (clin_eval_operating_points.csv, brier rounded to 4 decimals); reads the decision-curve ranges from the figure.",
+      "chars_before": 1122,
+      "chars_after": 1647
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0071",
+      "section": "Calibration, risk stratification and operating points",
+      "roadmap_item_ids": [
+        "D1-12"
+      ],
+      "rationale": "Renames the rate of the PPV and NNM columns in the caption (config.md Decisions, D1-12 fallback).",
+      "chars_before": 1045,
+      "chars_after": 1106
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0073",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "D1-49"
+      ],
+      "rationale": "Ends 5.4 on the scope of the profile and cuts the announcement of the discussion.",
+      "chars_before": 841,
+      "chars_after": 745
+    },
+    {
+      "op_id": "OP030",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "D1-40"
+      ],
+      "rationale": "Gives the window centres each group holds (figures/beat_saliency.py SEG with centres >= a and < b) in place of the grouping boundaries, and refers the spans to Table 5.",
+      "chars_before": 1539,
+      "chars_after": 1618
+    },
+    {
+      "op_id": "OP031",
+      "kind": "replace_block",
+      "block_id": "B0075",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "D1-40",
+        "D1-41"
+      ],
+      "rationale": "Replaces the grouping boundaries by the window centres and the occluded span of each window, and states in the caption that negative mean drops are set to zero (figures/beat_saliency.py lines 84 and 90; values unchanged from beat_saliency_segments.csv).",
+      "chars_before": 676,
+      "chars_after": 1003
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0078",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "D1-11"
+      ],
+      "rationale": "Replaces 'the fused model was calibrated' by the decile agreement with its in-sample recalibration qualifier.",
+      "chars_before": 774,
+      "chars_after": 873
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0079",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "D1-6",
+        "D1-35",
+        "D1-50"
+      ],
+      "rationale": "Drops the horizon the source does not give for 0.77 (C69), ties the 0.996 to a benchmark on MIMIC-IV-ECG as the abstract does (C83), and drops the binary contrast of the topic sentence.",
+      "chars_before": 868,
+      "chars_after": 885
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0080",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "D1-10"
+      ],
+      "rationale": "States the property as architectural: an ECG term built on readable factors.",
+      "chars_before": 804,
+      "chars_after": 821
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0082",
+      "section": "Implications of a readable ECG term with a separate clinical term",
+      "roadmap_item_ids": [
+        "D1-10"
+      ],
+      "rationale": "Replaces 'A reader can therefore inspect the two sources apart' by the architectural statement and says that no reading of the fitted factors is reported.",
+      "chars_before": 723,
+      "chars_after": 830
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0083",
+      "section": "Implications of a readable ECG term with a separate clinical term",
+      "roadmap_item_ids": [
+        "D1-52"
+      ],
+      "rationale": "Gives each P-wave source its own clause so the meta-analysis has an antecedent.",
+      "chars_before": 1049,
+      "chars_after": 1101
+    },
+    {
+      "op_id": "OP037",
+      "kind": "replace_block",
+      "block_id": "B0084",
+      "section": "Implications of a readable ECG term with a separate clinical term",
+      "roadmap_item_ids": [
+        "D1-40"
+      ],
+      "rationale": "Gives the PR window's centres and occluded span in place of the grouping boundaries, and states what the span holds on the mean beat of Figure 3 (lead II: P wave returns to baseline near 110 ms before the R peak).",
+      "chars_before": 888,
+      "chars_after": 978
+    },
+    {
+      "op_id": "OP038",
+      "kind": "replace_block",
+      "block_id": "B0085",
+      "section": "Implications of a readable ECG term with a separate clinical term",
+      "roadmap_item_ids": [
+        "D1-36"
+      ],
+      "rationale": "Uses the consensus's working definition with its clinically relevant manifestations (C84).",
+      "chars_before": 598,
+      "chars_after": 646
+    },
+    {
+      "op_id": "OP039",
+      "kind": "replace_block",
+      "block_id": "B0088",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "D1-11",
+        "D1-12",
+        "D1-13"
+      ],
+      "rationale": "Moves the PPV sentence into a new limitations paragraph on the evaluation that states the in-sample recalibration, that the one-year design's case proportion (1,855 in 43,625) exceeds the survival cohort's one-year rate (1,855 in 50,545, Table 1) so the PPVs are upper values, and that no characteristics table is reported.",
+      "chars_before": 711,
+      "chars_after": 1473
+    },
+    {
+      "op_id": "OP040",
+      "kind": "replace_block",
+      "block_id": "B0089",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "D1-34"
+      ],
+      "rationale": "Cites each occlusion source for what it holds, as in 4.3 (C82).",
+      "chars_before": 717,
+      "chars_after": 902
+    },
+    {
+      "op_id": "OP041",
+      "kind": "replace_block",
+      "block_id": "B0091",
+      "section": "Future research",
+      "roadmap_item_ids": [
+        "D1-65"
+      ],
+      "rationale": "Cites remove-and-retrain evaluation for the removal test and TRIPOD+AI for the reporting of external validation (C103), both read in this run.",
+      "chars_before": 812,
+      "chars_after": 988
+    },
+    {
+      "op_id": "OP042",
+      "kind": "replace_block",
+      "block_id": "B0093",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "D1-11",
+        "D1-46",
+        "D1-50"
+      ],
+      "rationale": "Keeps the decile statement with its recalibration qualifier in place of 'calibrated', labels the shortest horizon 120 days from the index ECG, and rewords the closing contrast.",
+      "chars_before": 675,
+      "chars_after": 823
+    },
+    {
+      "op_id": "OP043",
+      "kind": "replace_block",
+      "block_id": "B0094",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "D1-10"
+      ],
+      "rationale": "Replaces 'keeps its ECG evidence readable' by the architectural statement that the evidence passes through factors on the predictive path that can be read.",
+      "chars_before": 619,
+      "chars_after": 672
+    },
+    {
+      "op_id": "OP044",
+      "kind": "replace_block",
+      "block_id": "B0095",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "D1-10"
+      ],
+      "rationale": "Rewrites the first sentence to what the results show: a model whose ECG evidence passes through block-term factors reached the discrimination of a compact CNN.",
+      "chars_before": 537,
+      "chars_after": 540
+    },
+    {
+      "op_id": "OP045",
+      "kind": "replace_block",
+      "block_id": "B0110",
+      "section": "Reproducibility statement",
+      "roadmap_item_ids": [
+        "D1-64"
+      ],
+      "rationale": "Names the sections instead of typing their numbers by hand.",
+      "chars_before": 676,
+      "chars_after": 695
+    }
+  ],
+  "blocks_untouched": 67,
+  "roadmap_items_covered": [
+    "D1-1",
+    "D1-10",
+    "D1-11",
+    "D1-12",
+    "D1-13",
+    "D1-14",
+    "D1-15",
+    "D1-2",
+    "D1-23",
+    "D1-24",
+    "D1-25",
+    "D1-26",
+    "D1-27",
+    "D1-28",
+    "D1-29",
+    "D1-3",
+    "D1-30",
+    "D1-31",
+    "D1-32",
+    "D1-33",
+    "D1-34",
+    "D1-35",
+    "D1-36",
+    "D1-37",
+    "D1-38",
+    "D1-39",
+    "D1-4",
+    "D1-40",
+    "D1-41",
+    "D1-42",
+    "D1-43",
+    "D1-44",
+    "D1-45",
+    "D1-46",
+    "D1-47",
+    "D1-48",
+    "D1-49",
+    "D1-5",
+    "D1-50",
+    "D1-51",
+    "D1-52",
+    "D1-6",
+    "D1-64",
+    "D1-65",
+    "D1-68",
+    "D1-69"
+  ],
+  "block_touched_ratio": 0.4018,
+  "preserved_ratio": 0.5982,
+  "char_churn_ratio": 1.4412,
+  "net_growth_chars": 4080,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/05-main.tex.patched",
+  "output_sha256": "2778fe4a80a3210d674d431f3cec36298a01b566c42105a8b70cfd15cad63606"
+}

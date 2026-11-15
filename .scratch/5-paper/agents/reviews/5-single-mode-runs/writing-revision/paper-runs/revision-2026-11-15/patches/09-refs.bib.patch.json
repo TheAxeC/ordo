@@ -1,0 +1,26 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "refs.bib",
+  "base_sha256": "b8a36d39c91a747775562b77b49ddee9a11b779b299ceaec6fc35327cf772a39",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "old_hash": "fa469345010c66503d5d1ae717a1853e5412843bad57116925b9e834cf6d2583",
+      "roadmap_item_ids": ["reference-fix"],
+      "rationale": "check-urls printed 'sklearn2011: no identifier'; the Semantic Scholar record agrees with the entry on title, first author Pedregosa, year 2011 and the Journal of Machine Learning Research and gives arXiv 1201.0490 (its 10.5555 DOI answers HTTP 404 at doi.org), so the eprint field is added and every other byte of the entry is kept",
+      "new_text": "@article{sklearn2011,\n  author  = {Pedregosa, Fabian and Varoquaux, Ga{\\\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre and Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and Duchesnay, {\\'E}douard},\n  title   = {Scikit-learn: Machine learning in {Python}},\n  journal = {Journal of Machine Learning Research},\n  volume  = {12}, pages = {2825--2830}, year = {2011},\n  eprint  = {1201.0490}, archivePrefix = {arXiv}}"
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "old_hash": "e04248460d77fa341e64ab82c358f4cb0902689c712c7172edc3b8ce89bfa932",
+      "roadmap_item_ids": ["reference-fix"],
+      "rationale": "check-urls printed 'threekg2021: no identifier'; the Semantic Scholar, OpenAlex and arXiv records of arXiv 2106.04452 agree with the entry on title, first author Gopal and year 2021 (Semantic Scholar names the venue ML4H@NeurIPS), so the eprint field is added and every other byte of the entry is kept",
+      "new_text": "@inproceedings{threekg2021,\n  author    = {Gopal, Bryan and Han, Ryan and Raghupathi, Gautham and Ng, Andrew Y. and Tison, Geoffrey H. and Rajpurkar, Pranav},\n  title     = {{3KG}: Contrastive Learning of 12-Lead Electrocardiograms using Physiologically-Inspired Augmentations},\n  booktitle = {Proceedings of Machine Learning for Health (ML4H)},\n  pages     = {156--167}, year = {2021},\n  eprint    = {2106.04452}, archivePrefix = {arXiv}}"
+    }
+  ]
+}

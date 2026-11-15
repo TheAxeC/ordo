@@ -1,0 +1,6 @@
+1ebe7f3e2d8aedd2ea6c1a45937cb264246f7511d66a80501492013774e59b99  ./output-A/manuscript/figures/fig-clinical-utility.png
+9f4a958bc2b36d3f0a00fdf7888ba8826c762ca049834d28ee91101cdf07f781  ./output-A/manuscript/figures/fig-bttr-to-bttn.png
+e1147de200b1873309401bbb33b19f8b067ed784cc22ba5b21b10972bf63a5b1  ./output-A/manuscript/figures/fig-beat-saliency.png
+e1147de200b1873309401bbb33b19f8b067ed784cc22ba5b21b10972bf63a5b1  ./output-A/run/figures/beat_saliency.png
+9f4a958bc2b36d3f0a00fdf7888ba8826c762ca049834d28ee91101cdf07f781  ./output-A/run/figures/bttr_vs_bttn.png
+1ebe7f3e2d8aedd2ea6c1a45937cb264246f7511d66a80501492013774e59b99  ./output-A/run/figures/clin_eval.png

@@ -1,0 +1,361 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/revision-1/manuscript/refs.bib",
+  "base_sha256": "54f9882399353503dc5996d41a877860694315aaba47d1d68ed2f9cc6a8abe42",
+  "n_chars": 14454,
+  "n_blocks": 39,
+  "chars_in_blocks": 14377,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "6709eb28511fb901d080bcf06af358c108112acb4aa3edf8386ce5e6823a07ab",
+      "char_start": 0,
+      "char_end": 398,
+      "n_chars": 398,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{ptbxl2020,"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "8cb8a143ecf85cb0af6ad94119b92d7725f6660772cc8e6cd98d775891577b7c",
+      "char_start": 400,
+      "char_end": 697,
+      "n_chars": 297,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{mitbih2001,"
+    },
+    {
+      "block_id": "B0003",
+      "sha256": "13fe1cf4659b49aeb4d080df06de646f41280b5a6810334287da55c1d70c5add",
+      "char_start": 699,
+      "char_end": 1219,
+      "n_chars": 520,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{physionet2000,"
+    },
+    {
+      "block_id": "B0004",
+      "sha256": "bd7c96bd80891ee587163833bbe23a3cbff6c92a8a035967c88707bcad731a12",
+      "char_start": 1221,
+      "char_end": 1523,
+      "n_chars": 302,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{lookingbeyond2026,"
+    },
+    {
+      "block_id": "B0005",
+      "sha256": "6ab198dd9eaada0d1b10c292323a232cbe1e4c1c4640cafb8aa146a7e922f6c6",
+      "char_start": 1525,
+      "char_end": 1874,
+      "n_chars": 349,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hubertecg2024,"
+    },
+    {
+      "block_id": "B0006",
+      "sha256": "aff3391023411a1c4cb512f5be9ddcfe8919f0d812f13581d9e6ceb0e7effa7d",
+      "char_start": 1876,
+      "char_end": 2290,
+      "n_chars": 414,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{ecgfounder2024,"
+    },
+    {
+      "block_id": "B0007",
+      "sha256": "32685472d34c1574222f27cee0134c06796302608b3c699643620db9953cf24a",
+      "char_start": 2292,
+      "char_end": 2546,
+      "n_chars": 254,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hubertarabie1985,"
+    },
+    {
+      "block_id": "B0008",
+      "sha256": "0d9924e09c0df4af67803fc4754ffdf07b449d9f9e7dc8a9204052dfb4fadd54",
+      "char_start": 2548,
+      "char_end": 2932,
+      "n_chars": 384,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2410_04133,"
+    },
+    {
+      "block_id": "B0009",
+      "sha256": "48280fc37ccac6e55d15d5c9874cb1aaad54a70790d9e1db1a0d2131b54ad34f",
+      "char_start": 2934,
+      "char_end": 3263,
+      "n_chars": 329,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{vinh2010,"
+    },
+    {
+      "block_id": "B0010",
+      "sha256": "867b759edc3f1ad4f16333f768f317033e0d506208a1e93703ea9cc675781f4a",
+      "char_start": 3265,
+      "char_end": 3583,
+      "n_chars": 318,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{rousseeuw1987,"
+    },
+    {
+      "block_id": "B0011",
+      "sha256": "bfeb51f901cf8d6a64284a81942c06119bb43b67db3ba8641ca1c6548b63703d",
+      "char_start": 3585,
+      "char_end": 3902,
+      "n_chars": 317,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{rosenberg2007vmeasure,"
+    },
+    {
+      "block_id": "B0012",
+      "sha256": "fa90271fc84eae2f5ccb7284f12ce3022310a90b8bfad5a03940f2d346f9c4b0",
+      "char_start": 3904,
+      "char_end": 4197,
+      "n_chars": 293,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{sslclustering2025,"
+    },
+    {
+      "block_id": "B0013",
+      "sha256": "b2295898d16fb2f52ece287e743c4ad6adc9ce8c0af0b6b318869566bc87ee34",
+      "char_start": 4199,
+      "char_end": 4579,
+      "n_chars": 380,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{wavelettensorecg2018,"
+    },
+    {
+      "block_id": "B0014",
+      "sha256": "bbdf9234cc0b4c70948b89d1731b5df478768e2328d846c6913d95c046671a3a",
+      "char_start": 4581,
+      "char_end": 4984,
+      "n_chars": 403,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hrvstandards1996,"
+    },
+    {
+      "block_id": "B0015",
+      "sha256": "eb51f60178929185cf103a5a5b507d2aba9f7853886f07a969cc9cd58d589b45",
+      "char_start": 4986,
+      "char_end": 5360,
+      "n_chars": 374,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{dechazal2004,"
+    },
+    {
+      "block_id": "B0016",
+      "sha256": "34b13863695e0984a5331cb76d2ba54829a4ad68f861cb5d7cbe42212368f006",
+      "char_start": 5362,
+      "char_end": 5809,
+      "n_chars": 447,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{neurokit2021,"
+    },
+    {
+      "block_id": "B0017",
+      "sha256": "73697216a438239312c91a7656708251adfa52ac1f693ff4110b03ce7e676ba6",
+      "char_start": 5811,
+      "char_end": 6151,
+      "n_chars": 340,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{sklearn2011,"
+    },
+    {
+      "block_id": "B0018",
+      "sha256": "54a51e5ed0c3e1ee9b6d45fbbd0c4d932faaf4be21f11aa1161bb9a0001681d1",
+      "char_start": 6153,
+      "char_end": 6606,
+      "n_chars": 453,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{fedavg2017,"
+    },
+    {
+      "block_id": "B0019",
+      "sha256": "bfd8cbb547ec17cde2e08a777bc9e5053448ecda7af21f5f4c664787b718534a",
+      "char_start": 6608,
+      "char_end": 6993,
+      "n_chars": 385,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{clocs2021,"
+    },
+    {
+      "block_id": "B0020",
+      "sha256": "7ad6e8c72b21e084f56500426307ef56f4e89c3c70da90f8ec013f38f4650cc4",
+      "char_start": 6995,
+      "char_end": 7434,
+      "n_chars": 439,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{threekg2021,"
+    },
+    {
+      "block_id": "B0021",
+      "sha256": "2d872750ed48ca4df993bf73310c3ed124a661cd13acbae1d339fd0fce3dbac4",
+      "char_start": 7436,
+      "char_end": 7740,
+      "n_chars": 304,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{mehari2022ssl,"
+    },
+    {
+      "block_id": "B0022",
+      "sha256": "3592b363dd97fe90a070122bb46b3410d9ffca0af5868be15a2189c441bfbd7a",
+      "char_start": 7742,
+      "char_end": 8096,
+      "n_chars": 354,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{hdbscan2013,"
+    },
+    {
+      "block_id": "B0023",
+      "sha256": "4aee9f40c0c7e881f30d3dc5421a002fd235df7ae09d7e8891842ccf58eb3f20",
+      "char_start": 8098,
+      "char_end": 8555,
+      "n_chars": 457,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{clifford2017af,"
+    },
+    {
+      "block_id": "B0024",
+      "sha256": "27b714cd8368dcee3ba6a4d4e33a92a2d0356f51b622379ad5559019ebc332db",
+      "char_start": 8557,
+      "char_end": 9070,
+      "n_chars": 513,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Van_Gelder_2024,"
+    },
+    {
+      "block_id": "B0025",
+      "sha256": "6dc089ee7fccc789a2e15f9aa1d17a7d7f7c8a465c4100fdda7d356b9cc78f0f",
+      "char_start": 9072,
+      "char_end": 9524,
+      "n_chars": 452,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Hannun_2019,"
+    },
+    {
+      "block_id": "B0026",
+      "sha256": "e5cffa7c0710304bc5c245b783a2b3fb464fbf9a1e350486a8bfe130fff9fd39",
+      "char_start": 9526,
+      "char_end": 9882,
+      "n_chars": 356,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Danon_2005,"
+    },
+    {
+      "block_id": "B0027",
+      "sha256": "fa93df2835d0247585acdf6a74bcf566c2beedb0b471ae7d32f7a777d796b009",
+      "char_start": 9884,
+      "char_end": 10200,
+      "n_chars": 316,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Fowlkes_1983,"
+    },
+    {
+      "block_id": "B0028",
+      "sha256": "4e6db95dc84a9fab43a9b4e7df1a6d339b5b6ac0244304b217d36457743f6a7f",
+      "char_start": 10202,
+      "char_end": 10567,
+      "n_chars": 365,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Lunelli_2026,"
+    },
+    {
+      "block_id": "B0029",
+      "sha256": "23ab1f1f2cdf0b8c4cc47bf3c5318bdd2aab8f27e22d21e9d22ee349f36021c3",
+      "char_start": 10569,
+      "char_end": 10812,
+      "n_chars": 243,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2509_25095,"
+    },
+    {
+      "block_id": "B0030",
+      "sha256": "653b58b661c72eea6e42d2453fde087982d8b2208b512d5b11b15132dc6f6f96",
+      "char_start": 10814,
+      "char_end": 11069,
+      "n_chars": 255,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2602_17531,"
+    },
+    {
+      "block_id": "B0031",
+      "sha256": "85df0e3563b53bb3b3396ff6dcb2fb36ad96b124bfd3177979d328e4232a39e5",
+      "char_start": 11071,
+      "char_end": 11529,
+      "n_chars": 458,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{Xu_2025,"
+    },
+    {
+      "block_id": "B0032",
+      "sha256": "bc40ae39ee59edcccd41380af2a3da2028496c91f90f3009e9e797f162eff52f",
+      "char_start": 11531,
+      "char_end": 11811,
+      "n_chars": 280,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2402_09450,"
+    },
+    {
+      "block_id": "B0033",
+      "sha256": "c019f560b8fb2c312544c3faa9d9df9e7f81c3cf30bd50293fcc7d66b2ecb62a",
+      "char_start": 11813,
+      "char_end": 12095,
+      "n_chars": 282,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Kim_2027,"
+    },
+    {
+      "block_id": "B0034",
+      "sha256": "1c330ffc69c1e2d3caaa9dd2b45ab7e8156434931746a68bd7cf1ffb87c201fe",
+      "char_start": 12097,
+      "char_end": 12409,
+      "n_chars": 312,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2403_06659,"
+    },
+    {
+      "block_id": "B0035",
+      "sha256": "3ef81a48f84f2c0f082dfb8f7ba4aab25fe8d76108f6c874bf34b34bd8abfd99",
+      "char_start": 12411,
+      "char_end": 12855,
+      "n_chars": 444,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Tian_2024,"
+    },
+    {
+      "block_id": "B0036",
+      "sha256": "cce0ea77663afc2c911425222de32a5e899d2bc9e3c10ed02ea21c584c61b219",
+      "char_start": 12857,
+      "char_end": 13158,
+      "n_chars": 301,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{McKeen_2025,"
+    },
+    {
+      "block_id": "B0037",
+      "sha256": "0589f50f7fdd12bd536416a8027ebfffa00af0493265075f5f13cd9f00a3540f",
+      "char_start": 13160,
+      "char_end": 13526,
+      "n_chars": 366,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Han_2026,"
+    },
+    {
+      "block_id": "B0038",
+      "sha256": "91fadfa68a6f3807e9dfd0c5c87c3dbf46dfd582df7e67a981a850fd28f4155c",
+      "char_start": 13528,
+      "char_end": 13896,
+      "n_chars": 368,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Zheng_2020,"
+    },
+    {
+      "block_id": "B0039",
+      "sha256": "3756487f7c5450d51daeed5bdc53f86c2ce1306d6a4c4da6bd724dd706687905",
+      "char_start": 13898,
+      "char_end": 14453,
+      "n_chars": 555,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Perez_Alday_2020,"
+    }
+  ]
+}

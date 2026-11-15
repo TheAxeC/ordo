@@ -1,0 +1,118 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-5/manuscript/main.tex",
+  "base_sha256": "66c02cb908a9e7b84f37157a7c6c83d69c385b1146518792399a92bc19dce42b",
+  "round": 1,
+  "n_blocks": 88,
+  "n_blocks_touched": 8,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 160--162: the first line of item (iv) ends on 'dataset', which has no hyphenation point, so a discretionary hyphen data\\-set gives the line a break that fits the measure; the wording is unchanged.",
+      "chars_before": 2242,
+      "chars_after": 2244
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 231--242: the line opens on the citation and closes on the unbreakable highlighted interval '[-300, +250] ms', and a break inside the interval would cut the highlight box, so 'a window of [-300, +250] ms' is reworded to 'a [-300, +250] ms window', same meaning and numbers, which lets the line end on 'window'.",
+      "chars_before": 903,
+      "chars_after": 900
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 247--255: the first line of the raw-flattening item ends on 'moving-', and TeX does not hyphenate the part of a compound before its explicit hyphen, so a discretionary mov\\-ing gives the line a break that fits; the wording is unchanged.",
+      "chars_before": 3262,
+      "chars_after": 3264
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 480--491: the seven-column tabular of Table tab:main is 83.6pt wider than the 360pt text width at body size, so it is set in \\footnotesize like tab:metrics and tab:cost, with 4pt column padding and no outer padding, which brings it to about 343pt; cells and caption are unchanged.",
+      "chars_before": 1835,
+      "chars_after": 1883
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 678--687: the tabular of Table tab:mitbih is 29.1pt wider than the text width at body size, so it is set in \\footnotesize like the other tables, with no outer padding, which brings it to about 317pt; cells and caption are unchanged.",
+      "chars_before": 668,
+      "chars_after": 688
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 728--738: the tabular of Table tab:fed is 14.6pt wider than the text width at body size, so it is set in \\footnotesize like the other tables, with no outer padding, which brings it to about 304pt; cells and caption are unchanged.",
+      "chars_before": 533,
+      "chars_after": 553
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 829--831: the first line of the fourth item ends on 'beat-morphology', and TeX does not hyphenate the word after an explicit hyphen, so discretionary hyphens in beat-mor\\-phol\\-ogy give the line a break that fits; the wording is unchanged.",
+      "chars_before": 1105,
+      "chars_after": 1109
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0081",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull line at 903--904: the second line of the highlighted Conclusion paragraph runs from 'across' to 'within', and 'within' has no hyphenation point at the default right-hyphen minimum, so a discretionary with\\-in, which soul honours, gives the line a break that fits; the wording is unchanged.",
+      "chars_before": 1080,
+      "chars_after": 1082
+    }
+  ],
+  "blocks_untouched": 80,
+  "roadmap_items_covered": [
+    "compile-fix"
+  ],
+  "block_touched_ratio": 0.0909,
+  "preserved_ratio": 0.9091,
+  "char_churn_ratio": 0.3892,
+  "net_growth_chars": 95,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/11-main.tex.patched",
+  "output_sha256": "b7ee887ee0ac0b289b17fca2019b138d9d4823a890917b8dac0b9aeacd54202e"
+}

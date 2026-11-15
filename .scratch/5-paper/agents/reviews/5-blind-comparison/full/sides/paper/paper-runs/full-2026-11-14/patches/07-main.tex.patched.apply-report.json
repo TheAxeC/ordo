@@ -1,0 +1,163 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "2778fe4a80a3210d674d431f3cec36298a01b566c42105a8b70cfd15cad63606",
+  "round": 1,
+  "n_blocks": 115,
+  "n_blocks_touched": 11,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D2-5"
+      ],
+      "rationale": "Shortens the abstract to about 250 words by merging the block-term and clinical-term sentences, cutting the protocol clause and replacing the restating last sentence, and keeps the survival-sample (D1-44) and 120-days-after-the-ECG (D1-46) qualifiers and every number.",
+      "chars_before": 2026,
+      "chars_after": 1672
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Aim and contributions",
+      "roadmap_item_ids": [
+        "D2-3"
+      ],
+      "rationale": "The first contribution claimed that the clinical term leaves the factors unchanged, the same claim D2-3 finds unshown in 6.2; it now states only that the clinical term does not pass through the factors, which Equation 3 shows.",
+      "chars_before": 788,
+      "chars_after": 793
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "Occlusion readout",
+      "roadmap_item_ids": [
+        "D2-1"
+      ],
+      "rationale": "States the occlusion as carried out in beat_saliency.py lines 33 to 41 at 500 Hz: 12 samples (24 ms), 6 before to 5 after the offset, offsets truncated to a whole sample towards the R peak, so neighbouring windows abut or leave one sample.",
+      "chars_before": 833,
+      "chars_after": 1035
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0058",
+      "section": "Occlusion readout",
+      "roadmap_item_ids": [
+        "D2-1",
+        "D2-4"
+      ],
+      "rationale": "Names the offsets the five windows group and the offsets that belong to no window (SEG and the centres grid of beat_saliency.py lines 21, 30 and 88 to 91; their energy enters ENG.mean() of line 84), and gives the window width as 24 ms.",
+      "chars_before": 857,
+      "chars_after": 1166
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0076",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "D2-1",
+        "D2-4"
+      ],
+      "rationale": "Gives the occlusion width as 12 samples (24 ms) with the rounding of the centres, states that each shaded band spans the 25 ms step around its centre (axvspan of beat_saliency.py line 106), and names the windows that belong to none of the five groups.",
+      "chars_before": 1618,
+      "chars_after": 1877
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0077",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "D2-1"
+      ],
+      "rationale": "Gives the 24 ms width and the spans the occluded samples cover at 500 Hz (offset int(ms/2) samples, samples offset-6 to offset+5, 2 ms each, beat_saliency.py lines 33 to 41), the five pairs D2-1 gives.",
+      "chars_before": 1003,
+      "chars_after": 1041
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0083",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "D2-7"
+      ],
+      "rationale": "The heading names the architectural property, so that a reader who skips 3.3 does not take it for a shown reading of the factors.",
+      "chars_before": 78,
+      "chars_after": 97
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0084",
+      "section": "Implications of a readable ECG term with a separate clinical term",
+      "roadmap_item_ids": [
+        "D2-3"
+      ],
+      "rationale": "Replaces the claim that the factors keep their meaning by the claim Equation 3 supports, and states that the fused model fits its factors beside the clinical term, so they may differ from those of ECG-only BTTN.",
+      "chars_before": 830,
+      "chars_after": 982
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0086",
+      "section": "Implications of a readable ECG term with a separate clinical term",
+      "roadmap_item_ids": [
+        "D2-1"
+      ],
+      "rationale": "Gives the PR-window span the occluded samples cover, 136 to 62 ms before the R peak, as in Table 5; the sentence on the mean beat of Figure 3 holds for this span.",
+      "chars_before": 978,
+      "chars_after": 972
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0091",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "D2-2"
+      ],
+      "rationale": "The patients with onset after one year are events of the survival design that count as negatives at one year, not controls; the sentence now says so.",
+      "chars_before": 910,
+      "chars_after": 920
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0092",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "D2-1"
+      ],
+      "rationale": "Gives the occlusion width as carried out, 24 ms.",
+      "chars_before": 902,
+      "chars_after": 902
+    }
+  ],
+  "blocks_untouched": 104,
+  "roadmap_items_covered": [
+    "D2-1",
+    "D2-2",
+    "D2-3",
+    "D2-4",
+    "D2-5",
+    "D2-7"
+  ],
+  "block_touched_ratio": 0.0957,
+  "preserved_ratio": 0.9043,
+  "char_churn_ratio": 0.3622,
+  "net_growth_chars": 634,
+  "structural_flags": [
+    "heading rewritten: \\subsection{Implications of a readable ECG term with a separate clinical term} becomes \\subsection{Implications of an ECG term built on readable factors, with a separate clinical term}"
+  ],
+  "structural_acknowledged": true,
+  "output_file": "patches/07-main.tex.patched",
+  "output_sha256": "52bcc3a734ca4cc83c96dacc67ebc3ab4fa4ab04f7c414fd7706e4f619784bb5"
+}

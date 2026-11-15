@@ -1,0 +1,10 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "refs.bib",
+  "base_sha256": "f2f9f5746282614ead40c66ba4d021621f92dd194e573e3e3d853399fbdc0f19",
+  "round": 1,
+  "ops": [
+    {"op_id": "OP001", "kind": "replace_block", "block_id": "B0011", "old_hash": "277d3a33431ffe441621ababc12b359fb2ae3f4227f36dbf7b1299cad9d5a9d2", "roadmap_item_ids": ["C1"], "rationale": "Corrects the author names of wavelettensorecg2018 to Hong He, Yonghong Tan and Jianfeng Xing, as the Crossref and Semantic Scholar records and the publisher's BibTeX for doi 10.1016/j.knosys.2018.09.001 give them.", "new_text": "@article{wavelettensorecg2018,\n  author  = {He, Hong and Tan, Yonghong and Xing, Jianfeng},\n  title   = {Unsupervised classification of 12-lead {ECG} signals using wavelet tensor decomposition and two-dimensional Gaussian spectral clustering},\n  journal = {Knowledge-Based Systems},\n  volume  = {163}, pages = {392--403}, year = {2019},\n  doi     = {10.1016/j.knosys.2018.09.001}}"},
+    {"op_id": "OP002", "kind": "replace_block", "block_id": "B0020", "old_hash": "1de8195d4388d5c25769958a35df3b3b72a39f35fca00be838d931072bbe91c4", "roadmap_item_ids": ["C2"], "rationale": "Reduces the doi field of hdbscan2013 to the bare DOI 10.1007/978-3-642-37456-2_14, which Crossref, OpenAlex and Semantic Scholar resolve; the escaped underscore broke the link.", "new_text": "@inproceedings{hdbscan2013,\n  author    = {Campello, Ricardo J. G. B. and Moulavi, Davoud and Sander, J{\\\"o}rg},\n  title     = {Density-based clustering based on hierarchical density estimates},\n  booktitle = {Advances in Knowledge Discovery and Data Mining (PAKDD)},\n  pages     = {160--172}, year = {2013},\n  doi       = {10.1007/978-3-642-37456-2_14}}"}
+  ]
+}

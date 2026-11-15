@@ -1,0 +1,70 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "cff1dde3ffa79acb7a841c5d2b3f135595f288412dd61d02db37cd222cf0bded",
+  "round": 1,
+  "n_blocks": 84,
+  "n_blocks_touched": 4,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0021",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "The first line after the italic run-in heading held the unbreakable model names ECG-FM, ECGFounder and HuBERT-ECG and ran 14.46pt into the margin; the sentence is split so that the first line holds ordinary breakable words and the model names follow in a second sentence, with the same models, datasets and citation.",
+      "chars_before": 949,
+      "chars_after": 987
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "The header words Representation (about 65.5pt at 10pt) and Dimension (about 46.0pt) overflowed their columns of 0.17 and 0.10 of the 360pt line by 4.28pt and 10.01pt; the widths become 0.19, 0.25, 0.14 and 0.34 (68.4pt and 50.4pt for those two columns, 355.2pt in total with the padding), and no cell text changes.",
+      "chars_before": 1512,
+      "chars_after": 1512
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "The seven-column ARI table of tab:main was 410.9pt wide on a 360pt line (50.92pt over); the tabular is set in \\small with 3pt column padding, the setting the other tables of the file use, which brings it to about 341pt, and the caption, the cells and the numbers stay as they were.",
+      "chars_before": 1811,
+      "chars_after": 1846
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Class imbalance and simulated federation",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "The five-column federation table of tab:fed was 385.2pt wide on a 360pt line (25.18pt over); the tabular is set in \\small with 3pt column padding, which brings it to about 332pt, and the caption, the cells and the numbers stay as they were.",
+      "chars_before": 929,
+      "chars_after": 964
+    }
+  ],
+  "blocks_untouched": 80,
+  "roadmap_items_covered": [
+    "compile-fix"
+  ],
+  "block_touched_ratio": 0.0476,
+  "preserved_ratio": 0.9524,
+  "char_churn_ratio": 0.1854,
+  "net_growth_chars": 108,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/14-main.tex.patched",
+  "output_sha256": "4f293f8037e9a9fdbc4b7b4670927484b9f499e531783dd7b53c20cf9fd0c654"
+}

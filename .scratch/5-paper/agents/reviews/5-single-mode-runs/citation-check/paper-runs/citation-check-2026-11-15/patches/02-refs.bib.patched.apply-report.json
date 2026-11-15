@@ -1,0 +1,60 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-3/manuscript/refs.bib",
+  "base_sha256": "f2f9f5746282614ead40c66ba4d021621f92dd194e573e3e3d853399fbdc0f19",
+  "round": 1,
+  "n_blocks": 21,
+  "n_blocks_touched": 3,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0011",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C1"
+      ],
+      "rationale": "The authors' given names are those of the Crossref record and the publisher BibTeX of DOI 10.1016/j.knosys.2018.09.001 (He, Hong; Tan, Yonghong; Xing, Jianfeng); every other field already agrees with that record.",
+      "chars_before": 375,
+      "chars_after": 380
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C3"
+      ],
+      "rationale": "The first author is H. Brendan McMahan in the arXiv record and in the paper's own author line; the entry dropped the initial H.",
+      "chars_before": 397,
+      "chars_after": 400
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C2"
+      ],
+      "rationale": "The doi field held an escaped underscore, so the identifier did not resolve; the bare DOI 10.1007/978-3-642-37456-2_14 is the one Crossref, OpenAlex and Semantic Scholar resolve, and the style prints it inside \\path and \\href, which take a plain underscore.",
+      "chars_before": 355,
+      "chars_after": 354
+    }
+  ],
+  "blocks_untouched": 18,
+  "roadmap_items_covered": [
+    "C1",
+    "C2",
+    "C3"
+  ],
+  "block_touched_ratio": 0.1429,
+  "preserved_ratio": 0.8571,
+  "char_churn_ratio": 0.2746,
+  "net_growth_chars": 7,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/02-refs.bib.patched",
+  "output_sha256": "77e06786afc4128b15cb0d7756181228a25d29dd1f17c37d3e3ddebe49f9b0d2"
+}

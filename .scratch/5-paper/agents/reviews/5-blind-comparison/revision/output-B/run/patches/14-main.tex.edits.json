@@ -1,0 +1,44 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "main.tex",
+  "base_sha256": "cff1dde3ffa79acb7a841c5d2b3f135595f288412dd61d02db37cd222cf0bded",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0021",
+      "old_hash": "36e4a8a75a6d1243367df67a0424b1ce76d9629aa5e6e9e345a0364cdf3ba14d",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "The first line after the italic run-in heading held the unbreakable model names ECG-FM, ECGFounder and HuBERT-ECG and ran 14.46pt into the margin; the sentence is split so that the first line holds ordinary breakable words and the model names follow in a second sentence, with the same models, datasets and citation.",
+      "new_text": "\\paragraph{Closest benchmark.} Filice et al.~\\cite{lookingbeyond2026} evaluate frozen ECG foundation models as feature extractors on four 12-lead datasets, PTB-XL among them. The models are ECG-FM, ECGFounder, HuBERT-ECG in three sizes and the ECG-JEPA of Weimann and Conrad. Beside classifier probes under class-balanced 15-fold cross-validation, they report the ARI of Gaussian-mixture clusters of the embeddings. They find that ECGFounder and ECG-FM separate their embeddings more by clinical label than by dataset, while HuBERT-ECG and ECG-JEPA separate them more by dataset than by label. Their benchmark compares foundation models with one another. It includes no hand-crafted baseline and does not use MIT-BIH. This study adds both. It also reads each clustering score against a supervised ceiling, computed with patient-grouped five-fold cross-validation on the same records and representation. A low clustering score can then be attributed to geometry or to missing information."
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "old_hash": "31091516a4c2e5d69c3c68af7f70f1dc4c0afc33453bdbd7caa04b7d621e9fea",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "The header words Representation (about 65.5pt at 10pt) and Dimension (about 46.0pt) overflowed their columns of 0.17 and 0.10 of the 360pt line by 4.28pt and 10.01pt; the widths become 0.19, 0.25, 0.14 and 0.34 (68.4pt and 50.4pt for those two columns, 355.2pt in total with the padding), and no cell text changes.",
+      "new_text": "\\begin{table}[t]\n\\centering\n\\small\n\\setlength{\\tabcolsep}{3pt}\n\\caption{Properties of the representations. Dimension is the length of the vector passed to the conditioner. Parameter counts and pretraining corpora are those reported by the model papers. Run time and memory were not measured.}\n\\label{tab:repr}\n\\begin{tabular}{p{0.19\\linewidth}p{0.25\\linewidth}p{0.14\\linewidth}p{0.34\\linewidth}}\n\\toprule\nRepresentation & Input & Dimension & Network and pretraining \\\\\n\\midrule\n\\multicolumn{4}{l}{\\emph{PTB-XL, SR-versus-AF}} \\\\\nraw flattening & 12 leads, 10\\,s, 100\\,Hz & $\\sim$2000 & none \\\\\nconv-AE & 12 leads, 10\\,s, resampled to 2500 samples per lead & 32 & convolutional autoencoder trained on the cohort \\\\\nhand-crafted & lead II, 10\\,s, 100\\,Hz & 16 & none (signal processing) \\\\\nHuBERT-ECG & 12 leads, first 5\\,s, 100\\,Hz & 768 & transformer, 93 million parameters (base size), self-supervised on 9.1 million 12-lead ECGs \\cite{hubertecg2024} \\\\\nECGFounder & 12 leads, 10\\,s, resampled to 500\\,Hz & 1024 & convolutional network, 76.3 million parameters, supervised on 10\\,771\\,552 ECGs with 150 label categories \\cite{arxiv_2410_04133} \\\\\n\\midrule\n\\multicolumn{4}{l}{\\emph{MIT-BIH, N-versus-V}} \\\\\nraw beat & 2 leads, 550\\,ms, 360\\,Hz & $\\sim$400 & none \\\\\nhand-crafted beat & 2 leads, 550\\,ms, with RR context & 21 & none (signal processing) \\\\\nconv-AE & 2 leads, 550\\,ms, resampled to 2500 samples per lead & 32 & convolutional autoencoder trained on the beats \\\\\n\\bottomrule\n\\end{tabular}\n\\end{table}"
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "old_hash": "18fa13d2f2e8447d4fd2b903f90da51d307d1f464b9fdc8d4492cc6b7fe65d8f",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "The seven-column ARI table of tab:main was 410.9pt wide on a 360pt line (50.92pt over); the tabular is set in \\small with 3pt column padding, the setting the other tables of the file use, which brings it to about 341pt, and the caption, the cells and the numbers stay as they were.",
+      "new_text": "\\begin{table}[t]\n\\centering\n\\caption{PTB-XL SR-versus-AF on 2\\,542 recordings (1\\,282 SR, 1\\,260 AF): clustering ARI by representation and clusterer under power scaling, and the supervised ceiling. Each $k$-means, spectral and GMM entry is the mean over ten seeds that vary only the initialisation. Each Ward and HDBSCAN entry is one deterministic fit. The seed standard deviation of the $k$-means ARI is 0.000 for raw flattening, the hand-crafted features and HuBERT-ECG, and 0.001 for ECGFounder. The 95\\% half-width over seeds is 0.008 for raw flattening with the GMM and below 0.001 for the other seeded entries of raw flattening and the hand-crafted features. The ceiling is the patient-grouped five-fold accuracy of a balanced logistic regression, against a majority-class baseline of 0.504. The random-labelling ARI is 0.000. Paired Wilcoxon tests compare the representations adjacent in the $k$-means ranking of ECGFounder, the hand-crafted features, HuBERT-ECG and raw flattening. The three contrasts reach $p = 0.002$, the floor for ten paired seeds, with effect sizes, the differences in mean ARI, of 0.242, 0.470 and 0.174. The conv-AE was not tested. The dimension of each representation is given in parentheses.}\n\\label{tab:main}\n\\small\n\\setlength{\\tabcolsep}{3pt}\n\\begin{tabular}{lcccccc}\n\\toprule\nRepresentation & $k$-means & Ward & spectral & GMM & HDBSCAN & ceiling \\\\\n\\midrule\nraw flattening ($\\sim$2000) & 0.000 & 0.000 & 0.000 & 0.013 & 0.000 & 0.519 \\\\\nconv-AE (32)                & 0.004 & 0.008 & 0.001 & 0.005 & 0.000 & 0.678 \\\\\nhand-crafted (16)           & 0.644 & \\textbf{0.711} & 0.672 & 0.544 & 0.060 & 0.942 \\\\\nHuBERT-ECG (768)            & 0.174 & 0.134 & 0.016 & 0.195 & 0.000 & 0.899 \\\\\nECGFounder (1024)           & \\textbf{0.885} & 0.709 & 0.860 & 0.851 & 0.137 & 0.983 \\\\\n\\bottomrule\n\\end{tabular}\n\\end{table}"
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "old_hash": "59bd90b9e548d4e7eb29945b5c964a654e580464ba1515ba48ace48063b3e39e",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "The five-column federation table of tab:fed was 385.2pt wide on a 360pt line (25.18pt over); the tabular is set in \\small with 3pt column padding, which brings it to about 332pt, and the caption, the cells and the numbers stay as they were.",
+      "new_text": "\\begin{table}[t]\n\\centering\n\\caption{Simulated federation on the 2\\,542 PTB-XL recordings split over ten sites: $k$-means ARI as mean (standard deviation) over ten seeds, each seed drawing a new partition and initialisation. Centralized $k$-means uses the same seeds on the pooled records. Retention is the ratio of the non-IID to the centralized mean ARI, given to two decimals. It is not given (n/a) for raw flattening, whose centralized ARI is 0.000.}\n\\label{tab:fed}\n\\small\n\\setlength{\\tabcolsep}{3pt}\n\\begin{tabular}{lcccc}\n\\toprule\nRepresentation & centralized & federated IID & federated non-IID & retention \\\\\n\\midrule\nECGFounder     & 0.885 (0.001) & 0.885 (0.002) & 0.612 (0.350) & 0.69 \\\\\nhand-crafted   & 0.644 (0.000) & 0.643 (0.001) & 0.591 (0.067) & \\textbf{0.92} \\\\\nHuBERT-ECG     & 0.174 (0.000) & 0.172 (0.002) & 0.106 (0.039) & 0.61 \\\\\nraw flattening & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & n/a \\\\\n\\bottomrule\n\\end{tabular}\n\\end{table}"
+    }
+  ]
+}

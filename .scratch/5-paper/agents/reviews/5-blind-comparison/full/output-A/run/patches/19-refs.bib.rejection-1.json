@@ -1,0 +1,7 @@
+{
+  "result": "rejected",
+  "kind": "validation",
+  "problems": [
+    "OP010: old_hash does not match the manifest entry for B0042. Copy it from the manifest, do not compute it. Block starts '@misc{https://doi.org/10.13026/4nqg-sb35,'"
+  ]
+}

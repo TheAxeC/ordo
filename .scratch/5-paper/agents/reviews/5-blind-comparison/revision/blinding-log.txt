@@ -1,0 +1,206 @@
+== paper
+text: final-message.md: 1 x /The review ran through the `writing` skill's four agents/ -> "The review ran through the prose review's four agents"
+text: final-message.md: 1 x /It differed from the skill in two ways/ -> 'It differed from the procedure in two ways'
+text: final-message.md: 1 x /That is the `rebuttal` skill's work\./ -> 'That is separate work.'
+text: final-message.md: 2 x /`lookup\.py / -> '`lookup '
+text: final-message.md: 1 x //writing\b/ -> 'prose review'
+text: final-message.md: 2 x /paper-runs/revision-2026-11-15// -> 'run/'
+text: final-message.md: 1 x /paper-runs// -> 'run/'
+text: final-message.md: 2 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: final-message.md: 2 x /\bitems\.md/ -> 'issues.md'
+text: final-message.md: 2 x /\bchecks\.md/ -> 'check-log.md'
+text: final-message.md: 3 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/revision-2026-11-15/checks.md -> run/check-log.md
+text: run/check-log.md: 12 x /python3 '/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py'/ -> 'lookup'
+text: run/check-log.md: 24 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/check-log.md: 2 x /`lookup\.py / -> '`lookup '
+text: run/check-log.md: 2 x /paper-runs/revision-2026-11-15// -> 'run/'
+path: paper-runs/revision-2026-11-15/citation-report.md -> run/citation-report.md
+text: run/citation-report.md: 2 x /python3 lookup\.py/ -> 'lookup'
+text: run/citation-report.md: 5 x /`lookup\.py / -> '`lookup '
+text: run/citation-report.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/citation-report.md: 3 x /\.patch\.json/ -> '.edits.json'
+path: paper-runs/revision-2026-11-15/compile-1-overfull.txt -> run/compile-1-overfull.txt
+path: paper-runs/revision-2026-11-15/compile-3-overfull.txt -> run/compile-3-overfull.txt
+path: paper-runs/revision-2026-11-15/config.md -> run/settings.md
+text: run/settings.md: 4 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/settings.md: 1 x /`/Users/axelfaes/\.claude/skills/repo-setup/templates/docs/dev/prose-standard\.md` \(the repository has no `docs/dev/prose-standard\.md` and `standards` is empty\), with `/Users/axelfaes/\.claude/skills/writing/references/manuscript-prose-standard\.md`/ -> 'the default prose standard, with the manuscript prose standard'
+text: run/settings.md: 1 x /Effort agent: `ordo-high`\./ -> 'Agent effort: high.'
+text: run/settings.md: 1 x /The skill's own machinery runs: `anchorize_tex\.py` and `apply_tex_patch\.py` apply the patches, `lookup\.py` checks/ -> "The run's own tools run: its anchoring script and its patch script apply the patches, its lookup script checks"
+text: run/settings.md: 1 x /which cannot be found or checked without `lookup\.py`/ -> 'which cannot be found or checked without the lookup script'
+text: run/settings.md: 1 x /the output of `prose_facts\.py`/ -> 'the output of the prose-facts script'
+text: run/settings.md: 1 x /one deviation from the `writing` skill/ -> "one deviation from the prose review's procedure"
+text: run/settings.md: 1 x /The skill has the session paste/ -> 'The procedure has the session paste'
+text: run/settings.md: 1 x /the content each agent receives is the one the skill specifies/ -> 'the content each agent receives is the one the procedure specifies'
+text: run/settings.md: 1 x /The response letter is the `rebuttal` skill's work and is not written by this run/ -> 'The response letter is separate work and is not written by this run'
+text: run/settings.md: 2 x /lookup\.py/ -> 'the lookup script'
+text: run/settings.md: 1 x /`/writing` review/ -> 'prose review'
+text: run/settings.md: 1 x //writing\b/ -> 'prose review'
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/settings.md: 1 x /\bitems\.md/ -> 'issues.md'
+text: run/settings.md: 1 x /literature strategist/ -> 'search agent'
+text: run/settings.md: 1 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/revision-2026-11-15/draft-report.md -> run/draft-report.md
+text: run/draft-report.md: 2 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/draft-report.md: 8 x /`lookup\.py / -> '`lookup '
+text: run/draft-report.md: 2 x /paper-runs/revision-2026-11-15// -> 'run/'
+text: run/draft-report.md: 1 x /revision-2026-11-15// -> 'run/'
+text: run/draft-report.md: 6 x /\.patch\.json/ -> '.edits.json'
+path: paper-runs/revision-2026-11-15/final.md -> run/final.md
+text: run/final.md: 1 x /The review ran as the `writing` skill specifies/ -> "The review ran as the prose review's procedure specifies"
+text: run/final.md: 1 x /The response letter is the `rebuttal` skill's work and is not written by this run/ -> 'The response letter is separate work and is not written by this run'
+text: run/final.md: 3 x /`lookup\.py / -> '`lookup '
+text: run/final.md: 1 x //writing\b/ -> 'prose review'
+text: run/final.md: 1 x /paper-runs/revision-2026-11-15// -> 'run/'
+text: run/final.md: 3 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/final.md: 2 x /\bitems\.md/ -> 'issues.md'
+text: run/final.md: 1 x /\bchecks\.md/ -> 'check-log.md'
+text: run/final.md: 1 x /literature strategist/ -> 'search agent'
+text: run/final.md: 3 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/revision-2026-11-15/intended-claims.md -> run/intended-claims.md
+text: run/intended-claims.md: 1 x //writing\b/ -> 'prose review'
+text: run/intended-claims.md: 1 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/intended-claims.md: 2 x /\bitems\.md/ -> 'issues.md'
+text: run/intended-claims.md: 2 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/revision-2026-11-15/items.md -> run/issues.md
+text: run/issues.md: 3 x /\b[Cc]onfig\.md/ -> 'settings.md'
+text: run/issues.md: 1 x /\bchecks\.md/ -> 'check-log.md'
+text: run/issues.md: 1 x /literature strategist/ -> 'search agent'
+path: paper-runs/revision-2026-11-15/refs.bib -> run/refs.bib
+path: paper-runs/revision-2026-11-15/review.md -> run/review.md
+text: run/review.md: 4 x /`lookup\.py / -> '`lookup '
+text: run/review.md: 1 x /literature strategist/ -> 'search agent'
+path: paper-runs/revision-2026-11-15/patches/01-refs.bib.block-manifest.json -> run/patches/01-refs.bib.blocks.json
+text: run/patches/01-refs.bib.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/01-refs.bib.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/01-refs.bib.patch.json -> run/patches/01-refs.bib.edits.json
+path: paper-runs/revision-2026-11-15/patches/01-refs.bib.patched -> run/patches/01-refs.bib.result
+path: paper-runs/revision-2026-11-15/patches/01-refs.bib.patched.apply-report.json -> run/patches/01-refs.bib.result.log.json
+text: run/patches/01-refs.bib.result.log.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/01-refs.bib.result.log.json: 4 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/01-refs.bib.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/02-main.tex.block-manifest.json -> run/patches/02-main.tex.blocks.json
+text: run/patches/02-main.tex.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/02-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/02-main.tex.patch.json -> run/patches/02-main.tex.edits.json
+path: paper-runs/revision-2026-11-15/patches/02-main.tex.patched -> run/patches/02-main.tex.result
+path: paper-runs/revision-2026-11-15/patches/02-main.tex.patched.apply-report.json -> run/patches/02-main.tex.result.log.json
+text: run/patches/02-main.tex.result.log.json: 78 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/02-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/03-refs.bib.block-manifest.json -> run/patches/03-refs.bib.blocks.json
+text: run/patches/03-refs.bib.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/03-refs.bib.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/03-refs.bib.patch.json -> run/patches/03-refs.bib.edits.json
+text: run/patches/03-refs.bib.edits.json: 5 x /lookup\.py/ -> 'the lookup script'
+path: paper-runs/revision-2026-11-15/patches/03-refs.bib.patched -> run/patches/03-refs.bib.result
+path: paper-runs/revision-2026-11-15/patches/03-refs.bib.patched.apply-report.json -> run/patches/03-refs.bib.result.log.json
+text: run/patches/03-refs.bib.result.log.json: 5 x /lookup\.py/ -> 'the lookup script'
+text: run/patches/03-refs.bib.result.log.json: 42 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/03-refs.bib.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/04-highlights.txt.block-manifest.json -> run/patches/04-highlights.txt.blocks.json
+text: run/patches/04-highlights.txt.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/04-highlights.txt.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/04-highlights.txt.patch.json -> run/patches/04-highlights.txt.edits.json
+path: paper-runs/revision-2026-11-15/patches/04-highlights.txt.patched -> run/patches/04-highlights.txt.result
+path: paper-runs/revision-2026-11-15/patches/04-highlights.txt.patched.apply-report.json -> run/patches/04-highlights.txt.result.log.json
+text: run/patches/04-highlights.txt.result.log.json: 2 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/04-highlights.txt.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/06-refs.bib.block-manifest.json -> run/patches/06-refs.bib.blocks.json
+text: run/patches/06-refs.bib.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/06-refs.bib.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/06-refs.bib.patch.json -> run/patches/06-refs.bib.edits.json
+path: paper-runs/revision-2026-11-15/patches/06-refs.bib.patched -> run/patches/06-refs.bib.result
+path: paper-runs/revision-2026-11-15/patches/06-refs.bib.patched.apply-report.json -> run/patches/06-refs.bib.result.log.json
+text: run/patches/06-refs.bib.result.log.json: 6 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/06-refs.bib.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/09-main.tex.block-manifest.json -> run/patches/09-main.tex.blocks.json
+text: run/patches/09-main.tex.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/09-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/09-main.tex.patch.json -> run/patches/09-main.tex.edits.json
+path: paper-runs/revision-2026-11-15/patches/09-main.tex.patched -> run/patches/09-main.tex.result
+path: paper-runs/revision-2026-11-15/patches/09-main.tex.patched.apply-report.json -> run/patches/09-main.tex.result.log.json
+text: run/patches/09-main.tex.result.log.json: 54 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/09-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/10-refs.bib.block-manifest.json -> run/patches/10-refs.bib.blocks.json
+text: run/patches/10-refs.bib.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/10-refs.bib.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/10-refs.bib.patch.json -> run/patches/10-refs.bib.edits.json
+text: run/patches/10-refs.bib.edits.json: 1 x /lookup\.py/ -> 'the lookup script'
+path: paper-runs/revision-2026-11-15/patches/10-refs.bib.patched -> run/patches/10-refs.bib.result
+path: paper-runs/revision-2026-11-15/patches/10-refs.bib.patched.apply-report.json -> run/patches/10-refs.bib.result.log.json
+text: run/patches/10-refs.bib.result.log.json: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/patches/10-refs.bib.result.log.json: 4 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/10-refs.bib.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/14-main.tex.block-manifest.json -> run/patches/14-main.tex.blocks.json
+text: run/patches/14-main.tex.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/14-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/14-main.tex.patch.json -> run/patches/14-main.tex.edits.json
+path: paper-runs/revision-2026-11-15/patches/14-main.tex.patched -> run/patches/14-main.tex.result
+path: paper-runs/revision-2026-11-15/patches/14-main.tex.patched.apply-report.json -> run/patches/14-main.tex.result.log.json
+text: run/patches/14-main.tex.result.log.json: 8 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/14-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+path: paper-runs/revision-2026-11-15/patches/15-main.tex.block-manifest.json -> run/patches/15-main.tex.blocks.json
+text: run/patches/15-main.tex.blocks.json: 1 x //private/tmp/claude-502/[^\s'"`]*?/gate5/revision-1/ -> '/work'
+text: run/patches/15-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/15-main.tex.patch.json -> run/patches/15-main.tex.edits.json
+text: run/patches/15-main.tex.edits.json: 176 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/revision-2026-11-15/patches/15-main.tex.patched -> run/patches/15-main.tex.result
+path: paper-runs/revision-2026-11-15/patches/15-main.tex.patched.apply-report.json -> run/patches/15-main.tex.result.log.json
+text: run/patches/15-main.tex.result.log.json: 106 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/15-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+text: run/patches/15-main.tex.result.log.json: 232 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: paper-runs/revision-2026-11-15/patches/18-main.tex.block-manifest.json -> run/patches/18-main.tex.blocks.json
+text: run/patches/18-main.tex.blocks.json: 1 x /ars_[a-z_]+/ -> 'field'
+path: paper-runs/revision-2026-11-15/patches/18-main.tex.patch.json -> run/patches/18-main.tex.edits.json
+path: paper-runs/revision-2026-11-15/patches/18-main.tex.patched -> run/patches/18-main.tex.result
+path: paper-runs/revision-2026-11-15/patches/18-main.tex.patched.apply-report.json -> run/patches/18-main.tex.result.log.json
+text: run/patches/18-main.tex.result.log.json: 4 x /ars_[a-z_]+/ -> 'field'
+text: run/patches/18-main.tex.result.log.json: 1 x /\.patched\b/ -> '.result'
+== academic-paper
+text: final-message-turn1.md: 1 x /The skill's revision mode needs/ -> 'The revision procedure needs'
+text: final-message-turn1.md: 1 x /(?m)^# The academic-paper side: the last message of (turn [12]), as it printed it/ -> '# The last message of \\1, as it printed it'
+text: final-message-turn1.md: 1 x /`scripts/ars_anchorize_draft\.py` and `scripts/ars_apply_revision_patch\.py`/ -> 'its anchoring script and its patch script'
+text: final-message-turn1.md: 1 x /`?draft_writer_agent`?/ -> 'draft writer'
+text: final-message-turn1.md: 1 x /`?peer_reviewer_agent`?/ -> 'peer reviewer'
+text: final-message-turn1.md: 1 x /`?citation_compliance_agent`?/ -> 'citation checker'
+text: final-message-turn1.md: 3 x /admin/reviews/revision-round1// -> 'admin/reviews/run/'
+text: final-message-turn1.md: 1 x /the skill's revision mode/ -> 'the revision procedure'
+text: final-message-turn1.md: 1 x /The skill itself forbids this\./ -> 'The procedure itself forbids this.'
+text: final-message-turn1.md: 1 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+text: final-message-turn2.md: 1 x /(?m)^# The academic-paper side: the last message of (turn [12]), as it printed it/ -> '# The last message of \\1, as it printed it'
+text: final-message-turn2.md: 1 x /~/\.claude/projects/[^`\s]*/ -> "<the session's tool folder>"
+text: final-message-turn2.md: 2 x /`?draft_writer_agent`?/ -> 'draft writer'
+text: final-message-turn2.md: 2 x /`?peer_reviewer_agent`?/ -> 'peer reviewer'
+text: final-message-turn2.md: 1 x /`?citation_compliance_agent`?/ -> 'citation checker'
+text: final-message-turn2.md: 2 x /admin/reviews/revision-round1// -> 'admin/reviews/run/'
+text: final-message-turn2.md: 1 x /In the skill's order:/ -> "In the procedure's order:"
+text: final-message-turn2.md: 1 x /the skill's revision mode/ -> 'the revision procedure'
+text: final-message-turn2.md: 1 x /the skill has no such agent/ -> 'the procedure has no such agent'
+path: admin/reviews/revision-round1/citation-audit.md -> admin/reviews/run/citation-audit.md
+text: admin/reviews/run/citation-audit.md: 1 x /`?citation_compliance_agent`?/ -> 'citation checker'
+path: admin/reviews/revision-round1/code-facts.md -> admin/reviews/run/code-facts.md
+text: admin/reviews/run/code-facts.md: 1 x /in the revision-2 working directory/ -> 'in the working directory'
+text: admin/reviews/run/code-facts.md: 25 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: admin/reviews/revision-round1/re-review-report.md -> admin/reviews/run/re-review-report.md
+text: admin/reviews/run/re-review-report.md: 1 x /`\.claude/skills/academic-paper/agents/peer_reviewer_agent\.md`/ -> "the peer reviewer's instructions"
+text: admin/reviews/run/re-review-report.md: 1 x /`\.claude/skills/academic-paper/references/writing_quality_check\.md`/ -> 'the writing-quality checklist'
+text: admin/reviews/run/re-review-report.md: 1 x /Mode: `academic-paper` revision, / -> 'Mode: revision, '
+text: admin/reviews/run/re-review-report.md: 2 x /`?draft_writer_agent`?/ -> 'draft writer'
+text: admin/reviews/run/re-review-report.md: 1 x /`?peer_reviewer_agent`?/ -> 'peer reviewer'
+text: admin/reviews/run/re-review-report.md: 1 x /admin/reviews/revision-round1// -> 'admin/reviews/run/'
+text: admin/reviews/run/re-review-report.md: 18 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: admin/reviews/revision-round1/response-to-reviewers.md -> admin/reviews/run/response-to-reviewers.md
+text: admin/reviews/run/response-to-reviewers.md: 1 x /admin/reviews/revision-round1// -> 'admin/reviews/run/'
+path: admin/reviews/revision-round1/review-report.md -> admin/reviews/run/review-report.md
+text: admin/reviews/run/review-report.md: 1 x /Mode: `academic-paper` revision, / -> 'Mode: revision, '
+text: admin/reviews/run/review-report.md: 1 x /`?draft_writer_agent`?/ -> 'draft writer'
+text: admin/reviews/run/review-report.md: 1 x /`?peer_reviewer_agent`?/ -> 'peer reviewer'
+text: admin/reviews/run/review-report.md: 12 x /`?citation_compliance_agent`?/ -> 'citation checker'
+text: admin/reviews/run/review-report.md: 56 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'
+path: admin/reviews/revision-round1/revision-log.md -> admin/reviews/run/revision-log.md
+text: admin/reviews/run/revision-log.md: 1 x /`?draft_writer_agent`?/ -> 'draft writer'
+text: admin/reviews/run/revision-log.md: 1 x /`?peer_reviewer_agent`?/ -> 'peer reviewer'
+text: admin/reviews/run/revision-log.md: 6 x /`?citation_compliance_agent`?/ -> 'citation checker'
+text: admin/reviews/run/revision-log.md: 2 x /admin/reviews/revision-round1// -> 'admin/reviews/run/'
+text: admin/reviews/run/revision-log.md: 60 x /\bF([0-9]+)\b(?!\s+(?:of\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)/ -> 'K\\1'

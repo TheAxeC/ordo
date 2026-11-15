@@ -1,0 +1,84 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "ad039cb89a49262eaf354f0373cbe9fd8699d4fe668139aba441eeca66f2ad15",
+  "round": 1,
+  "n_blocks": 115,
+  "n_blocks_touched": 5,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0013",
+      "section": "Context and problem",
+      "roadmap_item_ids": [
+        "RI6.6"
+      ],
+      "rationale": "The second sentence names the study the Framingham Heart Study, as the fourth does, so the two cited sentences name one study; both citations stay.",
+      "chfield": 1059,
+      "chfield": 1065
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Study cohort",
+      "roadmap_item_ids": [
+        "RI6.4"
+      ],
+      "rationale": "Table 1 fits the text width: the body is set small with narrower column spacing, the first row label is shortened and the column heads read One-year and Survival, the caption already naming both designs; every count is unchanged.",
+      "chfield": 1174,
+      "chfield": 1190
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "RI6.3"
+      ],
+      "rationale": "The comparison is stated between the fused model and ECG-only BTTN, the separately trained model the interval belongs to, and the overlap sentence names the fused model's interval so no pronoun can be read as the ECG term; all numbers unchanged.",
+      "chfield": 769,
+      "chfield": 806
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "RI6.4"
+      ],
+      "rationale": "Table 3 fits the text width: the body is set small with narrower column spacing, and each interval stands on the line below its estimate, as the caption now says; every value is unchanged.",
+      "chfield": 949,
+      "chfield": 1101
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0077",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "RI6.4"
+      ],
+      "rationale": "Table 5 fits the text width with its body set small and narrower column spacing; every value is unchanged.",
+      "chfield": 1041,
+      "chfield": 1076
+    }
+  ],
+  "blocks_untouched": 110,
+  "roadmap_items_covered": [
+    "RI6.3",
+    "RI6.4",
+    "RI6.6"
+  ],
+  "block_touched_ratio": 0.0435,
+  "preserved_ratio": 0.9565,
+  "char_churn_ratio": 0.1623,
+  "net_growth_chars": 246,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/18-main.tex.result",
+  "output_sha256": "59e9a70e8039e2780158704c22face8431d3396d7165d706fe761fd401693649"
+}

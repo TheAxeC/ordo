@@ -1,0 +1,34 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/cover-letter.tex",
+  "base_sha256": "e4fc5f322c8df9b7cdbc973fd800375cf478f055b76764d3301c6ad2d43a95a2",
+  "round": 1,
+  "n_blocks": 7,
+  "n_blocks_touched": 1,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0006",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D4-3"
+      ],
+      "rationale": "The first sentence of Key findings places the coded hospital diagnoses in the MIMIC-IV records linked to MIMIC-IV-ECG, as the abstract and 4.1 do; every other line of the letter is unchanged.",
+      "chars_before": 2278,
+      "chars_after": 2310
+    }
+  ],
+  "blocks_untouched": 6,
+  "roadmap_items_covered": [
+    "D4-3"
+  ],
+  "block_touched_ratio": 0.1429,
+  "preserved_ratio": 0.8571,
+  "char_churn_ratio": 1.7714,
+  "net_growth_chars": 32,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/13-cover-letter.tex.patched",
+  "output_sha256": "ea0c73fab12ac78c408673e8155aa5a61e8c22e7b1495d74f07affb6358bbae2"
+}

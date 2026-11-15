@@ -1,0 +1,26 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-2/manuscript/main.tex",
+  "base_sha256": "2cbba14422a545b01d0f17d7f01e65778ea41b5995cdf4486599d42d1813364f",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "old_hash": "61f6245dcf98eb7da7a0a9d61e9025b932158985abe7788d9c4f1765e1298233",
+      "roadmap_item_ids": ["abstract-only"],
+      "rationale": "Rewrites the abstract from the revised body: bootstrap intervals, the HuBERT-ECG ceiling and out-of-fold test, the ten-seed imbalance values, federation retention and worst draw, extraction cost, the novelty over the closest benchmark and claims bound to the two tasks and two models; corrects the raw ceiling, which the body puts at 0.519 against a 0.504 majority.",
+      "new_text": "\\begin{abstract}\n\\rev{How electrocardiogram (ECG) representations compare for label-free clustering under\nchance-corrected metrics has not been measured. We benchmark four representation families for\nseparating sinus rhythm (SR) from atrial fibrillation (AF) in 2\\,542 PTB-XL records. They are\nraw flattening, a convolutional autoencoder, 16 hand-crafted features and two frozen foundation\nmodels, HuBERT-ECG and ECGFounder. Five clusterers are scored by the chance-corrected adjusted\nRand index (ARI). Evaluation is patient-grouped and repeated over ten seeds for the clusterers\nthat depend on one. Bracketed values are 95\\% bootstrap intervals. ECGFounder clusters best (ARI\n0.885 [0.860, 0.909]) and the hand-crafted features are competitive (0.711 [0.677, 0.746]). Raw\nflattening and the autoencoder match a majority-class assignment (ARI at most 0.013). HuBERT-ECG\ncarries the label (supervised linear-probe ceiling 0.899) yet clusters weakly (ARI 0.195). A\ndiscriminant fitted on other patients raises its held-out ARI from 0.160 to 0.549. The ranking is\nlargely expected, since SR and AF differ by definition in rhythm regularity.} The silhouette\nscore rewards the degenerate one-cluster solution (silhouette 0.81 at ARI \\rev{0.000}) and cannot\nvalidate ECG clustering alone. \\rev{The ordering replicates on MIT-BIH beat morphology, where 21\nhand-crafted features reach ARI 0.783. Under a 9:1 SR:AF imbalance the hand-crafted features\novertake ECGFounder (ARI 0.265 against 0.063). Under simulated federation across ten\nheterogeneous sites, the two mean ARIs are close (0.591 against 0.612). The hand-crafted features\nretain 0.92 of their centralized ARI against 0.69 for ECGFounder and never fall below 0.455.\nTheir extraction is also fifteen times cheaper per record than ECGFounder's. Beyond the closest\nfoundation-model benchmark, we add a hand-crafted baseline, supervised ceilings with an\nout-of-fold test, a second dataset and deployment stressors. On these two binary tasks and two\nfoundation models, the representation mattered more than the clusterer for recovering the\nclasses.}\n\\end{abstract}"
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0011",
+      "old_hash": "a280af4f5857600e73d9f75ee1e02c0762268b92c4999c1eb8176765a43ef0d5",
+      "roadmap_item_ids": ["abstract-only"],
+      "rationale": "Replaces the two keywords that repeat the title (unsupervised clustering, representation learning) with atrial fibrillation, hand-crafted features and MIT-BIH, so the seven terms complement the title and name the class, the competing representation and the second dataset.",
+      "new_text": "\\begin{keyword}\nelectrocardiography \\sep \\rev{atrial fibrillation} \\sep \\rev{hand-crafted features} \\sep\nfoundation models \\sep adjusted Rand index \\sep PTB-XL \\sep \\rev{MIT-BIH}\n\\end{keyword}"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+diff --git a/manuscript/main.tex b/manuscript/main.tex
+index e180b67..cc83666 100644
+--- a/manuscript/main.tex
++++ b/manuscript/main.tex
+@@ -813,27 +813,26 @@ same holds for multi-class arrhythmia cohorts, for other foundation models and f
+ multi-institution federation is open.}
+ 
+ \section*{Code and data availability}
+-PTB-XL (version 1.0.3) \cite{ptbxl2020} and the MIT-BIH Arrhythmia Database (version 1.0.0) \cite{mitbih2001} are public
+-on PhysioNet. The benchmark code, with the exact cohort
+-definitions, is available at \url{https://github.com/TheAxeC/ecg-representation-clustering}.
++The data that support the findings of this study are openly available on PhysioNet. PTB-XL (version 1.0.3) \cite{ptbxl2020} is available at [GAP: PhysioNet URL or DOI of PTB-XL version 1.0.3]. The MIT-BIH Arrhythmia Database (version 1.0.0) \cite{mitbih2001} is available at [GAP: PhysioNet URL or DOI of the MIT-BIH Arrhythmia Database version 1.0.0]. The benchmark code, with the exact cohort definitions, is available at \url{https://github.com/TheAxeC/ecg-representation-clustering} ([GAP: code DOI or release tag]).
+ 
+ \section*{Ethics}
+-This study uses only de-identified, publicly available databases and required no new
+-human-subjects data collection.
++This study used only de-identified recordings from publicly available databases. The recordings come from PTB-XL \cite{ptbxl2020} and the MIT-BIH Arrhythmia Database \cite{mitbih2001}, both public on PhysioNet. No new data were collected from human participants, and the authors obtained no ethics approval or consent for this study. [GAP: ethics approval and consent obtained by the studies that collected PTB-XL and the MIT-BIH Arrhythmia Database].
+ 
+ \section*{CRediT author contributions}
+-\textbf{Dongho Chun}: methodology, software, investigation, writing -- original draft.
+-\textbf{Axel Faes}: conceptualization, methodology, supervision, writing -- review and
+-editing.
++\textbf{Dongho Chun}: Methodology, Software, Investigation, Writing -- original draft.\par
++\textbf{Axel Faes}: Conceptualization, Methodology, Supervision, Writing -- review \& editing.\par
++[GAP: any CRediT role beyond those the manuscript lists].\par
++[GAP: equal-contribution declaration].
+ 
+ \section*{Funding}
+-This work was supported by the Flanders AI Research Program (FAIR), an Impulse Program of the Flemish Government (Flemish Ministry of Economy, Science and Innovation).
++This work was supported by the Flanders AI Research Program (FAIR), an Impulse Program of the Flemish Government (Flemish Ministry of Economy, Science and Innovation), under Grant No. [GAP: FAIR grant number]. [GAP: any other funder]. [GAP: role of the funder in study design, data collection and analysis, decision to publish, or preparation of the manuscript].
+ 
+ \section*{Declaration of competing interest}
+ The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+ 
+ \section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+-During the preparation of this work the authors used a generative AI assistant (Claude) to support software implementation and to edit and improve the language of the manuscript. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
++During the preparation of this work the authors used a generative AI assistant (Claude) [GAP: AI tools and versions used before this run] to support software implementation [GAP: AI use category Research assistance not confirmed] [GAP: AI use category Drafting assistance not confirmed] [GAP: AI use category Revision assistance not confirmed] [GAP: AI use category Editing assistance not confirmed] [GAP: AI use category Peer review simulation not confirmed]. The authors also used Claude (model claude-opus-5-5) for drafting assistance. This model drafted the statements on code and data availability, ethics, author contributions, funding and the use of generative AI from information the authors supplied. The output of such a tool can be incorrect, incomplete or fabricated. After using Claude, the authors reviewed and edited the content as needed and take full responsibility for the content of the published article. Claude is not an author of this article.\par
++[GAP: AI use category Analysis assistance not confirmed].
+ 
+ \bibliographystyle{elsarticle-num}
+ \bibliography{refs}

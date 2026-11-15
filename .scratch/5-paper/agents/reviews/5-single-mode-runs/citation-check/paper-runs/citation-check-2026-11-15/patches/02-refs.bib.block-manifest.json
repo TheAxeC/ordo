@@ -1,0 +1,199 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-3/manuscript/refs.bib",
+  "base_sha256": "f2f9f5746282614ead40c66ba4d021621f92dd194e573e3e3d853399fbdc0f19",
+  "n_chars": 8233,
+  "n_blocks": 21,
+  "chars_in_blocks": 8192,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "6709eb28511fb901d080bcf06af358c108112acb4aa3edf8386ce5e6823a07ab",
+      "char_start": 0,
+      "char_end": 398,
+      "n_chars": 398,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{ptbxl2020,"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "8cb8a143ecf85cb0af6ad94119b92d7725f6660772cc8e6cd98d775891577b7c",
+      "char_start": 400,
+      "char_end": 697,
+      "n_chars": 297,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{mitbih2001,"
+    },
+    {
+      "block_id": "B0003",
+      "sha256": "13fe1cf4659b49aeb4d080df06de646f41280b5a6810334287da55c1d70c5add",
+      "char_start": 699,
+      "char_end": 1219,
+      "n_chars": 520,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{physionet2000,"
+    },
+    {
+      "block_id": "B0004",
+      "sha256": "bf68dc34a9a09fdcf3ecf6838eb7b86b447fd265cca5697bce108181abad9027",
+      "char_start": 1221,
+      "char_end": 1561,
+      "n_chars": 340,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{lookingbeyond2026,"
+    },
+    {
+      "block_id": "B0005",
+      "sha256": "c885e02425c6eb6a4f94320ff6778b023edf8cea2fcdd4d0b65fd2ca8b89a288",
+      "char_start": 1563,
+      "char_end": 2032,
+      "n_chars": 469,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hubertecg2024,"
+    },
+    {
+      "block_id": "B0006",
+      "sha256": "17718f8e5d6c4c1afedf604ad7494b2fffb5269b0fb4a4ef71a65a4777f973ca",
+      "char_start": 2034,
+      "char_end": 2561,
+      "n_chars": 527,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{ecgfounder2024,"
+    },
+    {
+      "block_id": "B0007",
+      "sha256": "32685472d34c1574222f27cee0134c06796302608b3c699643620db9953cf24a",
+      "char_start": 2563,
+      "char_end": 2817,
+      "n_chars": 254,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hubertarabie1985,"
+    },
+    {
+      "block_id": "B0008",
+      "sha256": "48280fc37ccac6e55d15d5c9874cb1aaad54a70790d9e1db1a0d2131b54ad34f",
+      "char_start": 2819,
+      "char_end": 3148,
+      "n_chars": 329,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{vinh2010,"
+    },
+    {
+      "block_id": "B0009",
+      "sha256": "867b759edc3f1ad4f16333f768f317033e0d506208a1e93703ea9cc675781f4a",
+      "char_start": 3150,
+      "char_end": 3468,
+      "n_chars": 318,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{rousseeuw1987,"
+    },
+    {
+      "block_id": "B0010",
+      "sha256": "4555fc95af6a52b8bdf5813558d067155771bc75da814403d569876ae9c36a39",
+      "char_start": 3470,
+      "char_end": 3801,
+      "n_chars": 331,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{sslclustering2025,"
+    },
+    {
+      "block_id": "B0011",
+      "sha256": "277d3a33431ffe441621ababc12b359fb2ae3f4227f36dbf7b1299cad9d5a9d2",
+      "char_start": 3803,
+      "char_end": 4178,
+      "n_chars": 375,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{wavelettensorecg2018,"
+    },
+    {
+      "block_id": "B0012",
+      "sha256": "bbdf9234cc0b4c70948b89d1731b5df478768e2328d846c6913d95c046671a3a",
+      "char_start": 4180,
+      "char_end": 4583,
+      "n_chars": 403,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hrvstandards1996,"
+    },
+    {
+      "block_id": "B0013",
+      "sha256": "eb51f60178929185cf103a5a5b507d2aba9f7853886f07a969cc9cd58d589b45",
+      "char_start": 4585,
+      "char_end": 4959,
+      "n_chars": 374,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{dechazal2004,"
+    },
+    {
+      "block_id": "B0014",
+      "sha256": "34b13863695e0984a5331cb76d2ba54829a4ad68f861cb5d7cbe42212368f006",
+      "char_start": 4961,
+      "char_end": 5408,
+      "n_chars": 447,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{neurokit2021,"
+    },
+    {
+      "block_id": "B0015",
+      "sha256": "fa469345010c66503d5d1ae717a1853e5412843bad57116925b9e834cf6d2583",
+      "char_start": 5410,
+      "char_end": 5955,
+      "n_chars": 545,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{sklearn2011,"
+    },
+    {
+      "block_id": "B0016",
+      "sha256": "a86e785e3ea2e2f1752faf2edb25989a7386549680b802dcd83e74f9ee60d59a",
+      "char_start": 5957,
+      "char_end": 6354,
+      "n_chars": 397,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{fedavg2017,"
+    },
+    {
+      "block_id": "B0017",
+      "sha256": "5ed6a3790daf0f67c0c0c732de32061565ac2ad0f3eb3d12c05b6804ce088df0",
+      "char_start": 6356,
+      "char_end": 6688,
+      "n_chars": 332,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{clocs2021,"
+    },
+    {
+      "block_id": "B0018",
+      "sha256": "e04248460d77fa341e64ab82c358f4cb0902689c712c7172edc3b8ce89bfa932",
+      "char_start": 6690,
+      "char_end": 7076,
+      "n_chars": 386,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{threekg2021,"
+    },
+    {
+      "block_id": "B0019",
+      "sha256": "2d872750ed48ca4df993bf73310c3ed124a661cd13acbae1d339fd0fce3dbac4",
+      "char_start": 7078,
+      "char_end": 7382,
+      "n_chars": 304,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{mehari2022ssl,"
+    },
+    {
+      "block_id": "B0020",
+      "sha256": "1de8195d4388d5c25769958a35df3b3b72a39f35fca00be838d931072bbe91c4",
+      "char_start": 7384,
+      "char_end": 7739,
+      "n_chars": 355,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{hdbscan2013,"
+    },
+    {
+      "block_id": "B0021",
+      "sha256": "2082528cbdd266396bf0492e25f848348b036e695154bd9514f52fbbab39d41b",
+      "char_start": 7741,
+      "char_end": 8232,
+      "n_chars": 491,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{clifford2017af,"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "2cbba14422a545b01d0f17d7f01e65778ea41b5995cdf4486599d42d1813364f",
+  "round": 1,
+  "n_blocks": 81,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "abstract-only"
+      ],
+      "rationale": "Rewrites the abstract from the revised body: bootstrap intervals, the HuBERT-ECG ceiling and out-of-fold test, the ten-seed imbalance values, federation retention and worst draw, extraction cost, the novelty over the closest benchmark and claims bound to the two tasks and two models; corrects the raw ceiling, which the body puts at 0.519 against a 0.504 majority.",
+      "chars_before": 1884,
+      "chars_after": 2111
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0011",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "abstract-only"
+      ],
+      "rationale": "Replaces the two keywords that repeat the title (unsupervised clustering, representation learning) with atrial fibrillation, hand-crafted features and MIT-BIH, so the seven terms complement the title and name the class, the competing representation and the second dataset.",
+      "chars_before": 167,
+      "chars_after": 192
+    }
+  ],
+  "blocks_untouched": 79,
+  "roadmap_items_covered": [
+    "abstract-only"
+  ],
+  "block_touched_ratio": 0.0247,
+  "preserved_ratio": 0.9753,
+  "char_churn_ratio": 0.0777,
+  "net_growth_chars": 252,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/01-main.tex.patched",
+  "output_sha256": "908d09a26d7d51304bae5fcb15af880b90004cf4624b6fd4dd602feec6d32bf2"
+}

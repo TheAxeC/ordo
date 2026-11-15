@@ -1,0 +1,363 @@
+\documentclass[preprint,11pt]{elsarticle}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\journal{Biomedical Signal Processing and Control}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Which representation clusters? A chance-corrected benchmark of ECG
+representations for unsupervised arrhythmia structure}
+
+\author[uh]{Dongho Chun}
+\author[af]{Axel Faes\corref{cor1}}
+\cortext[cor1]{Corresponding author.}
+\ead{axel.faes@uhasselt.be}
+\affiliation[uh]{organization={Data Science Institute (DSI), Hasselt University}, city={Hasselt}, country={Belgium}}
+\affiliation[af]{organization={Biomedical Data Sciences, Data Science Institute (DSI) and Biomedical Research Institute (BIOMED), Hasselt University}, city={Hasselt}, country={Belgium}}
+
+\begin{abstract}
+Unsupervised analysis of the electrocardiogram (ECG) aims to find cardiac structure without labels. Whether clustering succeeds depends on the algorithm and on how the signal is represented, and this study measures the effect of the representation. We compare five representations for the unsupervised separation of sinus rhythm (SR) from atrial fibrillation (AF) on PTB-XL. They are raw flattening of the whole recording, a convolutional autoencoder, 16 hand-crafted rhythm and morphology features, and the frozen embeddings of two foundation models, HuBERT-ECG and ECGFounder. The evaluation protocol reads each chance-corrected clustering score against the cluster sizes and against a supervised ceiling, computed with patient-grouped cross-validation on the same records and representation. It also sweeps the feature conditioner and repeats each seeded clustering fit over ten seeds. ECGFounder clustered best (adjusted Rand index, ARI, 0.885), and the hand-crafted features reached 0.711. Raw flattening and the autoencoder scored at chance (ARI near 0), although the autoencoder's supervised ceiling (0.678) lay above the majority-class proportion (0.504). On a MIT-BIH beat-morphology task the hand-crafted beat features reached an ARI of 0.783. The silhouette score gave 0.81 to a solution with one dominant cluster and an ARI of 0. The mean ARI of the hand-crafted features fell from 0.63 under standard scaling to 0.23 under quantile scaling. At a 9:1 SR:AF ratio the hand-crafted features reached an ARI of 0.232, against 0.060 for ECGFounder. In a simulated federation of ten sites with skewed class proportions, ECGFounder fell from 0.885 to 0.612 and the hand-crafted features from 0.644 to 0.591. These findings hold for two binary tasks, five clustering algorithms, two named foundation models and a simulated federation.
+\end{abstract}
+
+\begin{keyword}
+electrocardiography \sep unsupervised clustering \sep representation learning \sep
+foundation models \sep adjusted Rand index \sep PTB-XL
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}\label{sec:intro}
+
+Most machine-learning work on the electrocardiogram (ECG) is supervised. Several clinically interesting questions are unsupervised, however: which patients group together, what subtypes exist, and whether structure can be found without labels that are expensive or unavailable. A natural first attempt is to cluster recordings directly. Whether that attempt succeeds is usually attributed to the clustering algorithm. The representation fed to the algorithm may matter more, and this study measures how much.
+
+This study began as a re-examination of a master's project that clustered whole
+12-lead recordings. That pipeline flattened each strip into a long vector, compressed
+it with a dense autoencoder, and clustered the code. It reported high cluster purity
+and a silhouette score near 0.89, but the purity simply equalled the majority-class
+proportion in every setting, and the silhouette was measured on a degenerate solution
+in which almost all points fell into a single cluster. The honest conclusion of that
+work, that the difficulty lies in processing the raw signal rather than in the
+clustering step, is correct and is the starting point here. We make it precise.
+
+A representation can carry information about a label and still fail to cluster by it. Linear separability and clusterability are distinct properties: in self-supervised image models, representations with nearly the same linear-probe accuracy can differ in clustering quality \cite{sslclustering2025}. We read such a gap as a representation placing the discriminative direction away from its dominant axes of variation. A supervised probe then recovers the label while an unsupervised partition does not. This reading is ours, and we treat the distinction itself as background rather than as a finding. What has not been measured, for ECG, is how the common representation families compare on this axis under chance-corrected metrics.
+
+The most directly related work, by Filice et al.~\cite{lookingbeyond2026}, benchmarks ECG foundation models against one another on four 12-lead datasets, PTB-XL among them. Its representation-wise evaluation includes the adjusted Rand index (ARI) of Gaussian-mixture clusters of the frozen embeddings. The ARI measures the agreement between clusters and labels, corrected for chance. The authors state that earlier benchmarks lack a representation-wise evaluation. Their benchmark includes no hand-crafted features and does not use the MIT-BIH database. Hand-crafted features measure named physiological quantities, such as RR intervals and P-wave presence, and need no trained network. MIT-BIH is the canonical morphology benchmark. This study adds both.
+
+We therefore compare five representations for the unsupervised separation of sinus rhythm (SR) from atrial fibrillation (AF), with the controls the original project lacked. Because SR and AF differ by definition in the regularity of the rhythm, we expected representations that encode rhythm to recover the split. The contribution of the study is an evaluation protocol for label-free ECG structure, applied to these representations. It has four parts:
+\begin{enumerate}
+\item Each chance-corrected clustering score is read against the cluster sizes and against a supervised ceiling, computed with patient-grouped five-fold cross-validation on the same records and representation. A high ceiling with a low score then marks a failure of geometry, and a low ceiling marks missing information.
+\item The internal silhouette index and the feature conditioner are tested as sources of misleading results, which explains the original project's numbers.
+\item Hand-crafted features are compared with two named foundation models on PTB-XL. On a MIT-BIH beat-morphology task, which the closest benchmark omits, they are compared with learned and raw representations.
+\item Four of the representations are tested under two deployment stressors, heavy class imbalance and a simulated federation with skewed class proportions.
+\end{enumerate}
+Recent ECG foundation-model benchmarks compare models with one another or with supervised and random baselines (Section~\ref{sec:related}). This protocol adds a label-free reading against a hand-crafted baseline. We propose no new algorithm, we scope every foundation-model statement to the two models tested, and we credit the separability-versus-clusterability effect to prior work.
+
+\section{Related work}\label{sec:related}
+
+\paragraph{Unsupervised ECG and representations.} Hand-crafted features built from RR-interval irregularity and beat morphology encode the defining signatures of common arrhythmias and underpin decades of automatic analysis \cite{hrvstandards1996,dechazal2004}. He et al.~\cite{wavelettensorecg2018} combined wavelet tensor decomposition with spectral clustering for unsupervised 12-lead classification. A reconstruction autoencoder is trained to reproduce its input signal, so its training objective holds no class information. Contrastive self-supervised methods are built on physiologically motivated augmentations and patient- or lead-level invariances. They include CLOCS \cite{clocs2021}, 3KG \cite{threekg2021}, and contrastive predictive coding for 12-lead ECG \cite{mehari2022ssl}. Later foundation models reuse some of these objectives: ECG-FM adopts the multi-segment contrastive objective of CLOCS \cite{McKeen_2025}, and ECG-CPC is pretrained with contrastive predictive coding \cite{arxiv_2509_25095}. Self-supervised and foundation models for ECG, such as HuBERT-ECG \cite{hubertecg2024} and ECGFounder \cite{ecgfounder2024,arxiv_2410_04133}, learn general representations from millions of recordings and are evaluated as frozen feature extractors. The tensor representation of He et al. addresses a related unsupervised goal, and we leave a tensor representation to future work. The five representations studied here range from raw samples, which keep only amplitude and energy, to features that measure the defining criteria of the classes.
+
+\paragraph{Clustering evaluation.} Cluster purity is not chance-corrected: assigning
+every point to the majority class attains a purity equal to that class's prevalence.
+External, chance-corrected indices, the adjusted Rand index \cite{hubertarabie1985} and
+adjusted mutual information \cite{vinh2010}, are near zero for such trivial solutions
+and are the appropriate headline metrics. Internal indices such as the silhouette
+\cite{rousseeuw1987} measure compactness in the embedding being clustered and can be
+maximised by degenerate solutions, so they require cluster-size sanity checks.
+
+\paragraph{ECG foundation-model benchmarks.} Several recent studies benchmark ECG foundation models on supervised downstream tasks. BenchECG, by Lunelli et al.~\cite{Lunelli_2026}, evaluates public models on eight datasets with 1\,674\,704 recordings. Al-Masud et al.~\cite{arxiv_2509_25095} compare eight foundation models on 26 tasks from 12 datasets, fine-tuned and frozen. Xu et al.~\cite{Xu_2025} compare language, general time-series and ECG foundation models with time-series deep-learning models. Berger et al.~\cite{arxiv_2602_17531} report that a randomly initialised encoder with linear evaluation matches pretrained encoders on many tasks. A review of open ECG foundation models names the absence of standardised evaluation frameworks as a challenge \cite{Han_2026}. None of BenchECG, Al-Masud et al. and Berger et al. evaluates clustering of the embeddings or includes a hand-crafted baseline.
+
+\paragraph{Closest benchmark.} Filice et al.~\cite{lookingbeyond2026} evaluate ECG-FM, ECGFounder, HuBERT-ECG in three sizes and the ECG-JEPA of Weimann and Conrad as frozen feature extractors on four 12-lead datasets, PTB-XL among them. Beside classifier probes under class-balanced 15-fold cross-validation, they report the ARI of Gaussian-mixture clusters of the embeddings. They find that ECGFounder and ECG-FM separate their embeddings more by clinical label than by dataset, while HuBERT-ECG and ECG-JEPA separate them more by dataset than by label. Their benchmark compares foundation models with one another. It includes no hand-crafted baseline and does not use MIT-BIH. This study adds both. It also reads each clustering score against a supervised ceiling, computed with patient-grouped five-fold cross-validation on the same records and representation. A low clustering score can then be attributed to geometry or to missing information.
+
+\section{Methods}\label{sec:methods}
+
+\subsection{Data and cohorts}
+
+\paragraph{PTB-XL.} We use PTB-XL, a public database of 10\,s 12-lead recordings, whose data descriptor reports 21\,837 records from 18\,885 patients \cite{ptbxl2020}. Its waveforms are stored in the WaveForm DataBase (WFDB) format as 16-bit samples at a resolution of \SI{1}{\micro\volt} per least significant bit. They are released at 500\,Hz and in a version downsampled to 100\,Hz \cite{ptbxl2020}. The benchmark uses the 100\,Hz version of release 1.0.3 \cite{ptbxl103}. Each record was read with the WFDB reader, which applies the conversion to physical units given in the record header. The signal was stored as a 32-bit floating-point array of 1000 samples by 12 leads. No other conversion precedes the representation steps of Section~\ref{sec:repr}.
+
+Rhythm labels are taken from the statements of the Standard Communication Protocol for computer-assisted electrocardiography (SCP-ECG). The positives are drawn from the records carrying an AF statement, atrial fibrillation (AFIB) or atrial flutter (AFLT), and the controls from the sinus-rhythm records without one. PTB-XL encodes rhythm statements at a likelihood of zero meaning ``present'', so a presence-based rule is required, and a confidence threshold would discard every SR record. The records are taken in random order with one record per patient. The sinus-rhythm records come first, as many as there are patients with an AF record, followed by the AF records of patients not yet included. The resulting balanced, patient-disjoint cohort holds 2\,542 records (1\,282 SR, 1\,260 AF), so the majority-class baseline is 0.504. No patient appears in both classes, and the supervised ceiling uses patient-grouped folds. We study the binary SR-versus-AF task because one clinical criterion defines it. AF is recognised on the ECG by irregular RR intervals and the absence of discernible repeating P waves \cite{Van_Gelder_2024}. With one defining criterion, the supervised ceiling and the chance-corrected score of Section~\ref{sec:clust} can be read against a known class difference.
+
+\paragraph{MIT-BIH.} For generalization we use the MIT-BIH Arrhythmia Database \cite{mitbih2001,physionet2000}, whose two-lead records are sampled at 360\,Hz. The records were read with the WFDB reader into the physical signal and stored at 32-bit precision, in the same way as PTB-XL. Non-beat annotations were excluded. Each annotated beat is segmented into a window of $[-300, +250]$\,ms around the R peak across both leads. We form a balanced task of normal versus premature ventricular beats (N-versus-V). At most 400 beats per record and class were kept, and 1\,500 beats per class were then drawn at random, giving 3\,000 beats from 47 records. The record is the grouping unit. This task is defined by beat shape, and it is a deliberate contrast to the PTB-XL rhythm task.
+
+\subsection{Representations}\label{sec:repr}
+
+We compare five representations on PTB-XL. Table~\ref{tab:repr} gives the input, dimension and pretraining of each.
+\begin{itemize}
+\item \textbf{Raw flattening} reproduces the representation of the original project. Each lead is averaged over non-overlapping windows of six samples, and the 12 leads are concatenated into one real-valued vector of about 2000 values. It keeps amplitude and waveform energy at fixed sample positions, with no alignment of beats across recordings.
+\item \textbf{Convolutional autoencoder} (conv-AE). The 12-lead strip is resampled to 2500 samples per lead and z-scored per lead. Three strided one-dimensional convolution layers, global average pooling and a linear layer map it to a 32-value code. The network is trained to reconstruct its input under the mean squared error, so the code keeps what reconstruction needs. This is a properly specified reconstruction model, in contrast to the collapsed dense autoencoder of the original project.
+\item \textbf{Hand-crafted features} (16 values) are computed from lead II. The signal is cleaned, R peaks are detected and the waves are delineated with the NeuroKit2 toolbox \cite{neurokit2021}, and we selected its discrete wavelet method for the delineation. Eight features describe the RR intervals \cite{hrvstandards1996}. They are the mean RR interval, the standard deviation of the RR intervals (SDNN), the root mean square of successive differences (RMSSD) and the proportion of successive differences above 50\,ms (pNN50). The other four are the coefficient of variation of the RR intervals, the Shannon entropy of their histogram, the mean heart rate and the number of beats. Eight features describe the morphology \cite{dechazal2004}. They are the fraction of beats with a detected P wave, the mean and standard deviation of the P-wave amplitude, and the mean QRS width. The other four are the mean and standard deviation of the R-peak amplitude and of the correlation of each beat with the median beat. They encode the clinical criteria of rhythm regularity, P-wave presence and QRS shape. Missing values from a failed delineation are replaced by the column median.
+\item \textbf{HuBERT-ECG} \cite{hubertecg2024}, a self-supervised transformer modelled on the HuBERT model for speech representation learning, receives the first 5\,s of the 12 leads at 100\,Hz. The leads are concatenated one after another into one sequence of 6000 samples, with no amplitude normalisation. The last hidden layer is averaged over time to 768 values.
+\item \textbf{ECGFounder} \cite{ecgfounder2024,arxiv_2410_04133}, a convolutional network pretrained with supervision on diagnostic labels, receives the 10\,s 12-lead strip resampled from 100\,Hz to its 500\,Hz input (5000 samples per lead). The strip is z-scored with one mean and one standard deviation over all leads. The 1024 time-averaged features of the last convolutional stage are used, with the classification layer removed.
+\end{itemize}
+Both foundation models are used frozen, in evaluation mode, with no fine-tuning. Every representation is then transformed by the conditioner of Section~\ref{sec:clust} before clustering.
+
+Only the hand-crafted features use a single lead. Raw flattening reproduces the 12-lead representation of the original project, and the conv-AE is given the same 12-lead strip. Both foundation models were pretrained on 12-lead input and are given the input they expect. We computed the hand-crafted features from a single lead because the defining signs of AF can be read in one lead. The guideline accepts as diagnostic a single-lead tracing of at least 30\,s that shows them \cite{Van_Gelder_2024}. AF and other rhythm classes have also been classified from single-lead recordings \cite{clifford2017af}. We chose lead II as that lead. Zheng et al.~\cite{Zheng_2020} likewise extracted features such as the atrial rate and the mean and variance of the RR interval from lead II. The single-lead set leaves out inter-lead information, such as the electrical axis and lead-specific morphology, which other diagnoses need. In exchange, it can be computed from a single-lead recording. In this benchmark the single-lead features are compared with representations that see all 12 leads. The effect of adding leads to the hand-crafted set was not tested.
+
+We chose the two foundation models by three criteria. Both have public weights and take 12-lead input. They differ in pretraining and architecture: HuBERT-ECG is a self-supervised transformer and ECGFounder a supervised convolutional network. Both are evaluated in the closest benchmark \cite{lookingbeyond2026}, which reports ECGFounder's embedding as organised by clinical label and HuBERT-ECG's as organised by dataset. We included ECGFounder for that report, so that the hand-crafted features are compared with a model reported to cluster by label.
+
+On MIT-BIH the rhythm features do not apply to single beats, so three beat representations are compared. The raw beat window flattens both leads over the $[-300, +250]$\,ms window into one vector of about 400 values. It keeps the amplitude at fixed positions around the R peak. Heartbeats of the MIT-BIH database have been classified from two-lead feature sets of morphology and RR intervals \cite{dechazal2004}. We defined 21 hand-crafted beat features in these two groups: five RR-context values and eight morphology values per lead. The RR-context values are the previous and next RR intervals, their ratio, the ratio of the previous interval to the local mean of up to six preceding intervals, and that local mean. They measure the prematurity of a beat. The morphology values are the R amplitude, the energy, the QRS width, the maximum, the minimum, the skewness and the kurtosis of the beat window. The eighth is the correlation of the window with the median of all 3\,000 beats of the task. They describe the shape of the beat. The conv-AE is applied to the beat window as on PTB-XL. The 550\,ms two-lead window is resampled to 2500 samples per lead and z-scored per lead before the same network, and the code again keeps what reconstruction needs. The foundation models were not applied to the two-lead beats, because their input is a 12-lead strip.
+
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\caption{Properties of the representations. Dimension is the length of the vector passed to the conditioner. Parameter counts and pretraining corpora are those reported by the model papers. Run time and memory were not measured.}
+\label{tab:repr}
+\begin{tabular}{p{0.17\linewidth}p{0.27\linewidth}p{0.10\linewidth}p{0.36\linewidth}}
+\toprule
+Representation & Input & Dimension & Network and pretraining \\
+\midrule
+\multicolumn{4}{l}{\emph{PTB-XL, SR-versus-AF}} \\
+raw flattening & 12 leads, 10\,s, 100\,Hz & $\sim$2000 & none \\
+conv-AE & 12 leads, 10\,s, resampled to 2500 samples per lead & 32 & convolutional autoencoder trained on the cohort \\
+hand-crafted & lead II, 10\,s, 100\,Hz & 16 & none (signal processing) \\
+HuBERT-ECG & 12 leads, first 5\,s, 100\,Hz & 768 & transformer, 93 million parameters (base size), self-supervised on 9.1 million 12-lead ECGs \cite{hubertecg2024} \\
+ECGFounder & 12 leads, 10\,s, resampled to 500\,Hz & 1024 & convolutional network, 76.3 million parameters, supervised on 10\,771\,552 ECGs with 150 label categories \cite{arxiv_2410_04133} \\
+\midrule
+\multicolumn{4}{l}{\emph{MIT-BIH, N-versus-V}} \\
+raw beat & 2 leads, 550\,ms, 360\,Hz & $\sim$400 & none \\
+hand-crafted beat & 2 leads, 550\,ms, with RR context & 21 & none (signal processing) \\
+conv-AE & 2 leads, 550\,ms, resampled to 2500 samples per lead & 32 & convolutional autoencoder trained on the beats \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Clustering and evaluation}\label{sec:clust}
+
+Each representation is clustered with five algorithms \cite{sklearn2011}: $k$-means, Ward agglomerative clustering (Ward), spectral clustering, a Gaussian mixture model (GMM) and hierarchical density-based spatial clustering of applications with noise (HDBSCAN) \cite{hdbscan2013}. For $k$-means, Ward, spectral clustering and the GMM the number of clusters is set to the number of classes. HDBSCAN is given no cluster count. It labels low-density points as noise and uses a minimum cluster size of the larger of 10 and one fiftieth of the number of records. The noise points keep their own label and are never reassigned to a cluster. For the ARI, the adjusted mutual information (AMI), the normalized mutual information (NMI), the V-measure and the Fowlkes-Mallows index (FMI), they therefore form one additional cluster. A solution that labels most points as noise then scores near zero. Purity counts noise points as misassigned. The silhouette is computed on the non-noise points. The largest-cluster fraction counts only non-noise clusters, over all records. No clusterer setting was tuned against the labels, and Table~\ref{tab:settings} gives the settings of every step. The default conditioner was chosen on a labelled pilot analysis, described below.
+
+Table~\ref{tab:metrics} gives the meaning, formula and range of each metric. The headline metrics are the ARI \cite{hubertarabie1985} and the AMI \cite{vinh2010}, which are corrected for chance. The NMI \cite{Danon_2005}, the V-measure \cite{rosenberg2007vmeasure}, the FMI \cite{Fowlkes_1983}, purity, the silhouette \cite{rousseeuw1987} and the largest-cluster fraction are reported alongside. With the arithmetic-mean normalisation used here, the NMI equals the V-measure, so the two coincide in every result. The ARI is compared with a random labelling, drawn uniformly over the clusters, whose mean ARI over ten seeds is 0.000. Purity is compared with the majority-class proportion, 0.504.
+
+A supervised ceiling measures how much of the label a classifier recovers from the same representation under the default conditioner. It is the accuracy of a balanced logistic regression under stratified, patient-grouped five-fold cross-validation, and its chance level is the majority-class proportion. A random forest on the same folds is reported as a non-linear check. A high ceiling with a low ARI then marks a failure of geometry, and a low ceiling marks missing information.
+
+In the main benchmark each fit of $k$-means, spectral clustering and the GMM is repeated over ten seeds. The cohort, the raw and hand-crafted features, the two foundation-model embeddings and the trained conv-AE are fixed across seeds. The seeds change only the random initialisation of $k$-means, spectral clustering and the GMM. Ward and HDBSCAN are deterministic and are fitted once. The seed spread therefore measures the stability of the clustering step on a fixed cohort, and it does not measure the sampling uncertainty of the cohort. The headline contrasts are tested with a paired, two-sided Wilcoxon signed-rank test on the per-seed $k$-means ARI. With ten paired seeds the smallest attainable p-value is 0.002. A p-value at this floor gives the direction of a contrast and says nothing about its size. The difference in mean ARI is therefore reported as the effect size of each contrast.
+
+Because heavy-tailed features can dominate Euclidean distance, four conditioners are swept: the Yeo-Johnson power transform, standard scaling, a quantile transform to a normal output and robust scaling. Each is fitted on the whole cohort. Power scaling is the default unless stated otherwise. We chose it after a pilot analysis on a smaller, labelled SR-versus-AF set, in which robust scaling collapsed the $k$-means partition of the hand-crafted features. Because this choice used the labels, all four conditioners are reported in the Results. We also report the AMI of $k$-means for $K$ from 2 to 8, with one fit per $K$. Because the AMI is comparable across cluster counts, this checks that fixing the cluster count to the number of classes does not flatter the comparison. The natural SR-to-AF prevalence is imbalanced, so we also evaluate a 9:1 SR:AF subsample. It holds all SR records and one ninth as many AF records, drawn once at random. It is conditioned on its own records and clustered once with $k$-means. The $K$ sweep, the random forest and the imbalance analysis cover raw flattening, the hand-crafted features and the two foundation models.
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Evaluation metrics. For $n$ records, $n_{ij}$ counts the records of class $i$ in cluster $j$, with class sizes $a_i$ and cluster sizes $b_j$. $Y$ is the class labelling and $\hat{Y}$ the cluster labelling, $H$ denotes entropy and $I = I(Y;\hat{Y})$ their mutual information. The last column gives the value under random labelling and the value when all records form one cluster.}
+\label{tab:metrics}
+\begin{tabular}{p{0.13\linewidth}p{0.22\linewidth}p{0.33\linewidth}p{0.09\linewidth}p{0.11\linewidth}}
+\toprule
+Metric & Meaning & Formula & Range & Random; one cluster \\
+\midrule
+ARI \cite{hubertarabie1985} & pairwise agreement of clusters and classes, corrected for chance & $(R - E)/(M - E)$, with $R = \sum_{ij}\binom{n_{ij}}{2}$, $M = \tfrac{1}{2}[\sum_i\binom{a_i}{2} + \sum_j\binom{b_j}{2}]$, $E = \sum_i\binom{a_i}{2}\sum_j\binom{b_j}{2}/\binom{n}{2}$ & at most 1, negative possible & 0; 0 \\
+AMI \cite{vinh2010} & shared information, corrected for chance & $(I - \mathrm{E}[I])/(\tfrac{1}{2}[H(Y) + H(\hat{Y})] - \mathrm{E}[I])$ & at most 1, negative possible & 0; 0 \\
+NMI \cite{Danon_2005} & shared information, normalised & $2I/(H(Y) + H(\hat{Y}))$ & $[0, 1]$ & near 0; 0 \\
+V-measure \cite{rosenberg2007vmeasure} & harmonic mean of homogeneity $h$ and completeness $c$ & $2hc/(h + c)$, with $h = 1 - H(Y|\hat{Y})/H(Y)$, $c = 1 - H(\hat{Y}|Y)/H(\hat{Y})$ & $[0, 1]$ & near 0; 0 \\
+FMI \cite{Fowlkes_1983} & geometric mean of pairwise precision and recall, not corrected for chance & $R/\sqrt{PQ}$, with $P = \sum_j\binom{b_j}{2}$, $Q = \sum_i\binom{a_i}{2}$ & $[0, 1]$ & above 0; 0.707 here \\
+Purity & share of records in the majority class of their cluster & $\frac{1}{n}\sum_j \max_i n_{ij}$, noise clusters excluded from the sum & $[0, 1]$ & near 0.504; 0.504 \\
+Silhouette \cite{rousseeuw1987} & compactness against separation in the conditioned representation & mean over non-noise points of $(d_{\mathrm{out}} - d_{\mathrm{in}})/\max(d_{\mathrm{in}}, d_{\mathrm{out}})$, with Euclidean mean distances to the own and the nearest other cluster & $[-1, 1]$ & near 0; undefined \\
+Largest-cluster fraction & share of all records in the largest non-noise cluster & $\max_j b_j/n$ & $[0, 1]$ & near 0.5; 1 \\
+Supervised ceiling & label information a linear classifier recovers & accuracy of a balanced logistic regression, patient-grouped five-fold cross-validation & $[0, 1]$ & 0.504; not applicable \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Implementation settings. Settings not listed, including the convergence criteria of $k$-means, the GMM and spectral clustering, are the defaults of scikit-learn \cite{sklearn2011}, version 1.3 or later [GAP: exact library versions used for the reported results].}
+\label{tab:settings}
+\begin{tabular}{p{0.20\linewidth}p{0.70\linewidth}}
+\toprule
+Component & Settings \\
+\midrule
+$k$-means & ten initialisations per seed, the best kept by the library \\
+Ward & Ward linkage, Euclidean distance, one fit \\
+Spectral clustering & nearest-neighbour affinity, $k$-means label assignment \\
+GMM & diagonal covariance, covariance regularisation $10^{-4}$ \\
+HDBSCAN & minimum cluster size $\max(10, \lfloor n/50 \rfloor)$, no cluster count, one fit \\
+Conditioners & Yeo-Johnson power transform (default), standard scaling, quantile transform to a normal output, robust scaling, each fitted on the whole cohort \\
+Hand-crafted features & NeuroKit2 toolbox \cite{neurokit2021}: signal cleaning, R-peak detection, and wave delineation by its discrete wavelet method, selected by the study, on lead II. RR entropy from a 16-bin histogram over 200 to 2000\,ms. Beat template window $\pm$250\,ms. Column-median imputation \\
+conv-AE & Adam, learning rate $10^{-3}$, batch 64, at most 50 epochs (40 on MIT-BIH), early stopping after 8 epochs without a validation-loss improvement of $10^{-5}$ on a random 10\% split, trained once \\
+HuBERT-ECG & base weights without the pretraining heads, frozen, evaluation mode, mean of the last hidden layer \\
+ECGFounder & 12-lead checkpoint without the classification layer, frozen, evaluation mode, time-averaged features of the last stage \\
+Supervised ceiling & balanced logistic regression, at most 2000 iterations, stratified patient-grouped five-fold cross-validation, power-conditioned representation \\
+Random forest & 200 trees, balanced class weights, same folds \\
+Cohort & one record per patient, drawn once with a fixed random state \\
+Analyses & $K$ sweep with one $k$-means fit per $K$. Imbalance analysis with one subsample and one $k$-means fit \\
+MIT-BIH & at most 400 beats per record and class, then 1\,500 per class drawn at random, non-beat annotations excluded \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Federated clustering simulation}
+
+To probe deployment under data siloing we use federated $k$-means, with centroid aggregation in the manner of federated averaging (FedAvg) \cite{fedavg2017}. We do not propose a new federated method. The 2\,542 records are assigned by patient to ten simulated sites. In the independent and identically distributed (IID) setting each patient is assigned to a site at random. In the non-IID setting the patients of each class are split across the sites by proportions drawn from a Dirichlet distribution with concentration 0.3. The sites then differ sharply in arrhythmia prevalence. Sites with fewer than two records are dropped. In each of 15 rounds every site runs three local Lloyd iterations from the shared centroids. The server then averages the site centroids, weighted by their cluster counts. Each of ten seeds draws a new partition and a new initialisation. Two steps use the pooled records: the power transform is fitted on all records, and the initial centroids are drawn from all records. The heterogeneity is therefore a simulated class-proportion skew across ten partitions of one dataset. We report the ARI of the final global centroids beside centralized $k$-means with ten initialisations on the same conditioned representation.
+
+\section{Results}\label{sec:results}
+
+\subsection{Clustering by representation and algorithm}
+
+Table~\ref{tab:main} and Fig.~\ref{fig:heatmap} summarise the PTB-XL benchmark. ECGFounder clusters best (ARI up to 0.885 with $k$-means), and the hand-crafted features reach 0.711 with Ward. HuBERT-ECG reaches at most 0.195. Raw flattening and the conv-AE score at chance (ARI at most 0.013). Across the four clusterers given the number of classes, the ARI of the hand-crafted features ranges from 0.544 to 0.711 and that of ECGFounder from 0.709 to 0.885. Across representations, the $k$-means ARI ranges from 0.000 to 0.885. In this setting, the choice of representation changed the result more than the choice of clusterer.
+
+\begin{table}[t]
+\centering
+\caption{PTB-XL SR-versus-AF on 2\,542 recordings (1\,282 SR, 1\,260 AF): clustering ARI by representation and clusterer under power scaling, and the supervised ceiling. Each $k$-means, spectral and GMM entry is the mean over ten seeds that vary only the initialisation. Each Ward and HDBSCAN entry is one deterministic fit. The seed standard deviation of the $k$-means ARI is 0.000 for raw flattening, the hand-crafted features and HuBERT-ECG, and 0.001 for ECGFounder. The 95\% half-width over seeds is 0.008 for raw flattening with the GMM and below 0.001 for the other seeded entries of raw flattening and the hand-crafted features. The ceiling is the patient-grouped five-fold accuracy of a balanced logistic regression, against a majority-class baseline of 0.504. The random-labelling ARI is 0.000. Paired Wilcoxon tests compare the representations adjacent in the $k$-means ranking of ECGFounder, the hand-crafted features, HuBERT-ECG and raw flattening. The three contrasts reach $p = 0.002$, the floor for ten paired seeds, with effect sizes, the differences in mean ARI, of 0.242, 0.470 and 0.174. The conv-AE was not tested. The dimension of each representation is given in parentheses.}
+\label{tab:main}
+\begin{tabular}{lcccccc}
+\toprule
+Representation & $k$-means & Ward & spectral & GMM & HDBSCAN & ceiling \\
+\midrule
+raw flattening ($\sim$2000) & 0.000 & 0.000 & 0.000 & 0.013 & 0.000 & 0.519 \\
+conv-AE (32)                & 0.004 & 0.008 & 0.001 & 0.005 & 0.000 & 0.678 \\
+hand-crafted (16)           & 0.644 & \textbf{0.711} & 0.672 & 0.544 & 0.060 & 0.942 \\
+HuBERT-ECG (768)            & 0.174 & 0.134 & 0.016 & 0.195 & 0.000 & 0.899 \\
+ECGFounder (1024)           & \textbf{0.885} & 0.709 & 0.860 & 0.851 & 0.137 & 0.983 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.78\linewidth]{figures/fig1_ari_heatmap.pdf}
+\caption{PTB-XL SR-versus-AF clustering ARI by representation and clusterer under power scaling, on 2\,542 recordings (1\,282 SR, 1\,260 AF). Each $k$-means, spectral and GMM cell is the mean over ten seeds, and each Ward and HDBSCAN cell is one deterministic fit. The seed spread is given in Table~\ref{tab:main}. The axis labels kmean, agglo, spect, gmm and hdbsc stand for $k$-means, Ward, spectral clustering, the GMM and HDBSCAN, and raw-flatten stands for raw flattening.}
+\label{fig:heatmap}
+\end{figure}
+
+Across ten seeds the $k$-means solutions are stable. The seed standard deviation of their ARI is 0.000 for raw flattening, the hand-crafted features and HuBERT-ECG, and 0.001 for ECGFounder. Because the seeds vary only the initialisation, this spread measures the stability of the clustering step on a fixed cohort. A paired Wilcoxon signed-rank test on the $k$-means seeds compares the representations adjacent in the ranking of ECGFounder, the hand-crafted features, HuBERT-ECG and raw flattening. Each of the three contrasts gives $p = 0.002$, the floor for ten paired samples, and the conv-AE was not tested. The effect sizes are the differences in mean ARI on the chance-corrected scale. ECGFounder exceeds the hand-crafted features by 0.242, the hand-crafted features exceed HuBERT-ECG by 0.470, and HuBERT-ECG exceeds raw flattening by 0.174. The hand-crafted $k$-means partition has a purity of 0.901, against 0.506 for raw flattening and a majority-class proportion of 0.504. The ordering does not depend on fixing the cluster count to the number of classes. With the AMI for $K$ from 2 to 8, ECGFounder leads at every $K$ (0.83 falling to 0.45), and the hand-crafted features follow (0.56 to 0.33). HuBERT-ECG and raw flattening stay low (below 0.14 and near 0).
+
+The two foundation models do not behave as one category. ECGFounder clusters strongly while HuBERT-ECG does not. This matches the report of Filice et al.~\cite{lookingbeyond2026} that some ECG foundation-model embeddings are organised by clinical label and others by dataset. We therefore name each model and do not generalise to foundation models as a class. HDBSCAN labelled every record as noise for raw flattening, the conv-AE and HuBERT-ECG, so these solutions form one cluster and score an ARI of 0. For the hand-crafted features and ECGFounder, its largest cluster held 0.140 and 0.202 of the records. A possible cause of the low spectral scores, such as 0.016 for HuBERT-ECG, is a poorly connected nearest-neighbour affinity graph, which was not checked here. We report both clusterers as fitted, without tuning them.
+
+\subsection{Separability is not clusterability}
+
+The supervised ceilings (last column of Table~\ref{tab:main}, Fig.~\ref{fig:sep}) expose the gap between separability and clusterability. The ceiling is an accuracy whose chance level is the majority-class proportion (0.504). The ARI is corrected for chance, with chance level 0. The two numbers are therefore read against their own chance levels and are not compared directly. Raw flattening carries almost no linearly decodable label information (ceiling 0.519), consistent with its chance-level clustering. The conv-AE is more separable (ceiling 0.678) yet clusters at chance (best ARI 0.008). HuBERT-ECG shows the largest gap between separability and clusterability, with a ceiling of 0.899 and a best ARI of 0.195. ECGFounder and the hand-crafted features achieve both high separability and high clusterability. We read the weaker representations as holding label information that does not lie along their dominant axes of variation. This reading is consistent with the gap between linear-probe accuracy and clustering quality reported for self-supervised image models \cite{sslclustering2025}. A non-linear probe confirms that label information can be present where clustering does not recover it. A random forest on raw flattening reaches an accuracy of 0.71, above its supervised ceiling of 0.519, while its clustering ARI is 0.
+
+Each result has a likely explanation, and the study did not test these mechanisms directly. ECGFounder was pretrained with supervision on 150 label categories that include rhythm descriptions \cite{arxiv_2410_04133}. Its feature space is therefore likely organised by diagnosis, and Filice et al. report its embedding as aligned with the clinical label \cite{lookingbeyond2026}. The hand-crafted features measure the criteria that define AF, irregular RR intervals and absent P waves \cite{Van_Gelder_2024}. The class difference therefore lies along the features' own axes, and their ceiling (0.942) and ARI (0.711) agree.
+
+HuBERT-ECG was pretrained by self-supervision without diagnostic labels \cite{hubertecg2024}, and here it saw only the first 5\,s at 100\,Hz, averaged over time. Its ceiling of 0.899 shows that the label is present. A linear probe can use a direction of small variance that separates the classes, whereas $k$-means and the GMM partition along the directions of largest variance. In this embedding those directions appear to follow other structure than the rhythm class, consistent with the report that HuBERT-ECG's embedding is organised by dataset \cite{lookingbeyond2026}. The embedding thus holds the SR-versus-AF information, but recovering it in this setting needs labels. Whether the shorter, unfiltered input adds to the gap was not tested.
+
+Raw flattening and the conv-AE score at chance for different reasons. With $k$-means, raw flattening places on average 0.967 of the records in one cluster, close to a majority-class assignment. The conv-AE forms two clusters of similar size (the larger holds 0.541 of the records at seed 0) that do not follow the rhythm class. Raw flattening compares samples at fixed positions without beat alignment, and the conv-AE is trained to reconstruct the waveform. Neither therefore places the rhythm difference along its dominant axes.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig3_sep_vs_clust.pdf}
+\caption{Separability and clusterability of the five PTB-XL representations, on the same 2\,542 recordings. Each point is one representation. The horizontal value is its supervised ceiling, the patient-grouped five-fold accuracy of a balanced logistic regression, with chance level 0.504. The vertical value is the mean ARI of its best clusterer, a mean over ten seeds or one fit for Ward and HDBSCAN, with chance level 0. The dashed line, labelled parity, joins equal values on the two axes and is drawn for orientation. Each coordinate is read against its own chance level, 0.504 for the ceiling and 0 for the ARI. Table~\ref{tab:main} gives every clusterer and the seed spread, and Fig.~\ref{fig:trap} shows one marker per fit. The point label raw-flatten stands for raw flattening.}
+\label{fig:sep}
+\end{figure}
+
+\subsection{The silhouette trap}
+
+Internal indices mislead here in a specific, reproducible way. Raw flattening with Ward attains a silhouette of 0.81 while all but a handful of points fall into one cluster (largest-cluster fraction 1.00) and the ARI is 0.000. The hand-crafted features, which recover the classes (ARI 0.711, balanced clusters), have a \emph{lower} silhouette of 0.28 (Fig.~\ref{fig:trap}). A degenerate one-cluster solution maximises compactness while carrying no class information. This is the artefact behind the original project's silhouette of 0.89. Chance-corrected external metrics, read together with cluster-size checks, are needed to detect it.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{figures/fig2_silhouette_trap.pdf}
+\caption{The silhouette trap on the 2\,542 PTB-XL recordings under power scaling. Each marker is one clustering fit: ten seeds for $k$-means, spectral clustering and the GMM, and one fit for Ward and HDBSCAN. The horizontal axis is the internal silhouette score and the vertical axis the chance-corrected ARI. Marker size is the largest-cluster fraction. Fits without a silhouette value, such as an HDBSCAN solution with every record labelled as noise, are not drawn. The degenerate one-cluster solutions (large markers, bottom right) attain a high silhouette at zero ARI. The legend label raw-flatten stands for raw flattening.}
+\label{fig:trap}
+\end{figure}
+
+\subsection{Conditioning matters}
+
+The feature scaler changes the outcome materially. For the hand-crafted features the
+mean ARI over clusterers is 0.63 under standard scaling and 0.61 under power scaling, but
+falls to 0.36 under robust scaling and 0.23 under quantile scaling. The effect is not
+confined to hand-crafted features: ECGFounder's mean ARI drops from 0.87 (standard) to
+0.09 under robust scaling. Robust scaling, a common default for physiological signals,
+leaves heavy arrhythmic tails unbounded so that a few outliers dominate Euclidean
+distance and the partition collapses. Conditioning should be reported and swept, not
+assumed.
+
+\subsection{Generalization to MIT-BIH beat morphology}
+
+The ordering replicates on a different dataset and a different task type (Table~\ref{tab:mitbih}). On the N-versus-V task the 21 hand-crafted beat features cluster well (ARI up to 0.783). The raw beat window does not (ARI at most 0.049), although the beats are aligned on the R peak. The conv-AE again separates without clustering: its supervised ceiling is 0.927, but its ARI is at most 0.127. The same pattern appears for rhythm on PTB-XL and for morphology on MIT-BIH, which supports the representation-level reading for these two tasks.
+
+\begin{table}[t]
+\centering
+\caption{MIT-BIH N-versus-V on 3\,000 beats (1\,500 per class) from 47 records: clustering ARI under power scaling. Each $k$-means and GMM entry is the mean over ten seeds, and each Ward entry is one deterministic fit. Supervised ceilings, against a majority-class baseline of 0.500: hand-crafted beat features 0.925, conv-AE 0.927, raw beat 0.741. The foundation models were not applied to the two-lead beats. The dimension of each representation is given in parentheses.}
+\label{tab:mitbih}
+\begin{tabular}{lccc}
+\toprule
+Clusterer & hand-crafted beat (21) & conv-AE (32) & raw beat ($\sim$400) \\
+\midrule
+$k$-means & 0.750 & 0.110 & 0.018 \\
+Ward      & \textbf{0.783} & 0.071 & 0.049 \\
+GMM       & 0.679 & 0.127 & 0.018 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Class imbalance and simulated federation}
+
+Two stressors closer to deployment change the comparison between ECGFounder and the hand-crafted features. Under class imbalance the hand-crafted features exceed ECGFounder, and under the simulated federation the two come close. The first stressor is class imbalance. At a 9:1 SR:AF ratio (majority 0.90), every representation's ARI falls. The hand-crafted features retain the most structure (ARI 0.232, AMI 0.214) and exceed ECGFounder (ARI 0.060, AMI 0.143), with HuBERT-ECG and raw flattening near zero. ECGFounder's lead on balanced data does not hold under this imbalance. This analysis rests on one random subsample and one $k$-means fit, so it has no seed spread.
+
+The second stressor is the simulated federation (Table~\ref{tab:fed}, Fig.~\ref{fig:fed}). Under the IID split across ten sites, every representation keeps essentially its centralized ARI, which checks the federated procedure. The non-IID class-proportion skew lowers every non-zero result, but unequally. The hand-crafted features keep 0.92 of their centralized ARI (0.644 to 0.591, seed standard deviation 0.067). ECGFounder falls from 0.885 to 0.612 with a seed standard deviation of 0.350, so its federated result varies strongly across partitions and initialisations. Under this skew ECGFounder (0.612) and the hand-crafted features (0.591) come close. In both stress tests the hand-crafted features give the more stable result, within this simulation on one dataset.
+
+\begin{table}[t]
+\centering
+\caption{Simulated federation on the 2\,542 PTB-XL recordings split over ten sites: $k$-means ARI as mean (standard deviation) over ten seeds, each seed drawing a new partition and initialisation. Centralized $k$-means uses the same seeds on the pooled records. Retention is the ratio of the non-IID to the centralized mean ARI, given to two decimals. It is not given (n/a) for raw flattening, whose centralized ARI is 0.000.}
+\label{tab:fed}
+\begin{tabular}{lcccc}
+\toprule
+Representation & centralized & federated IID & federated non-IID & retention \\
+\midrule
+ECGFounder     & 0.885 (0.001) & 0.885 (0.002) & 0.612 (0.350) & 0.69 \\
+hand-crafted   & 0.644 (0.000) & 0.643 (0.001) & 0.591 (0.067) & \textbf{0.92} \\
+HuBERT-ECG     & 0.174 (0.000) & 0.172 (0.002) & 0.106 (0.039) & 0.61 \\
+raw flattening & 0.000 (0.000) & 0.000 (0.000) & 0.000 (0.000) & n/a \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.78\linewidth]{figures/fig4_federated.pdf}
+\caption{Simulated federation on the 2\,542 PTB-XL recordings split over ten sites, which the panel title calls clients. Each bar is the mean $k$-means ARI over ten seeds. The seed standard deviations are given in Table~\ref{tab:fed} and reach 0.350 for ECGFounder under the non-IID split. Under the non-IID class-proportion skew ECGFounder falls from 0.885 to 0.612, while the hand-crafted features keep 0.92 of their centralized ARI. The axis label raw-flatten stands for raw flattening.}
+\label{fig:fed}
+\end{figure}
+
+\section{Discussion}\label{sec:discussion}
+
+The practical reading holds for the settings tested: two binary tasks, five clusterers, two named foundation models and a simulated federation. On balanced PTB-XL data in the 12-lead format, ECGFounder gave the best unsupervised SR-versus-AF separation. Under 9:1 class imbalance the hand-crafted features exceeded it, and under the simulated class-proportion skew the two came close. The hand-crafted features are also the lowest-dimensional representation (16 values against 768 and 1024, Table~\ref{tab:repr}) and are computed from one lead without a neural network. Both foundation models need a forward pass through a network of 76 to 93 million parameters. Run time and memory were not measured, so these properties indicate cost without quantifying it. We judge that the low dimension may also suit distance-based clustering, which this study did not test. The foundation models were not applied to the two-lead MIT-BIH beats, because their input is a 12-lead strip, so the study makes no comparison on other lead sets. Raw flattening and the conv-AE, including the original project's design, scored at chance on PTB-XL with all five clusterers. On MIT-BIH their ARI was at most 0.127.
+
+The result also reframes the original master's project. Its conclusion that the bottleneck is the representation rather than the clustering algorithm holds in this benchmark, and we have quantified it. Its headline metrics were the artefacts of two avoidable choices, purity without a baseline and silhouette on a collapsed embedding. Both are corrected here.
+
+We propose no new algorithm. The gap between linear-probe accuracy and clustering quality has been reported for self-supervised image models \cite{sslclustering2025}, the centroid averaging follows federated averaging \cite{fedavg2017}, and the representations are existing tools. The contribution is the evaluation protocol set out in the Introduction. It reads chance-corrected clustering scores against the cluster sizes and against a patient-grouped supervised ceiling, and it sweeps the conditioner. It compares a hand-crafted baseline with two foundation models on PTB-XL, and with learned and raw representations on a MIT-BIH beat task, and adds two stress tests. Recent benchmarks evaluate foundation models on supervised downstream tasks \cite{Lunelli_2026,arxiv_2509_25095,Xu_2025} or compare their embeddings with one another \cite{lookingbeyond2026}. The protocol here adds a label-free reading against a hand-crafted baseline. Other ECG foundation models with public weights include ST-MEM \cite{arxiv_2402_09450}, ECG-JEPA \cite{Kim_2027}, MERL \cite{arxiv_2403_06659}, ECGFM-KED \cite{Tian_2024,arxiv_2509_25095}, ECG-FM \cite{McKeen_2025} and ECG-CPC \cite{Lunelli_2026}. Recent benchmarks evaluate them with their public weights \cite{arxiv_2509_25095,Lunelli_2026}. Their training objectives differ, from masked reconstruction and joint-embedding prediction to contrastive alignment of signal and report text \cite{arxiv_2509_25095}. Every foundation-model statement here holds for HuBERT-ECG and ECGFounder. The hand-crafted features were compared with a model reported to cluster by label \cite{lookingbeyond2026}, and a model trained with another objective could rank differently.
+
+\section{Limitations}\label{sec:limitations}
+
+ECGFounder expects 500\,Hz input. Because the 500\,Hz records could not be obtained in bulk from the source, the main benchmark embeds the 100\,Hz cohort upsampled to the expected length. A consistency check on a 300-record subset, rather than the full cohort, compares native 500\,Hz with upsampled 100\,Hz input. ECGFounder clusters almost identically in both (ARI 0.896 versus 0.909, a difference of 0.013). Upsampling adds no information, so it cannot inflate the foundation model's lead. The foundation-model inputs were also not filtered as their pretraining data were. HuBERT-ECG was pretrained on 5\,s inputs band-pass filtered to 0.05 to 47\,Hz and rescaled to $[-1, 1]$ \cite{hubertecg2024}, and ECGFounder on filtered inputs z-scored per segment \cite{arxiv_2410_04133}. The effect of matching this preprocessing was not tested. The foundation-model results cover two models with different pretraining. Other public models (Section~\ref{sec:discussion}), including some reported to cluster well \cite{lookingbeyond2026}, are not included, which is why we name the two we test.
+
+Both tasks are binary, and the study makes no claim about multi-class rhythm structure. Public 12-lead databases label rhythms other than SR and AF \cite{Zheng_2020,Perez_Alday_2020,ptbxl2020}. Among such rhythms, RR irregularity alone would not single out AF, since non-AF rhythms can also show irregular RR intervals \cite{clifford2017af}. The MIT-BIH arm omits the foundation models because their input is a 12-lead strip. The federated study simulates class-proportion skew on a single dataset. It fits the conditioner and draws the initial centroids on the pooled records, which a real multi-site deployment could not do.
+
+\section{Conclusion}\label{sec:conclusion}
+
+For unsupervised SR-versus-AF and N-versus-V clustering on PTB-XL and MIT-BIH, the representation changed the result more than the choice among the clustering algorithms tested. Chance-corrected external evaluation was needed to see it. On balanced data ECGFounder led. With 9:1 class imbalance the 16 hand-crafted features exceeded it, and under simulated class-proportion skew they came close (0.591 against 0.612). Raw flattening and the conv-AE scored at chance on PTB-XL with every clusterer tested. Internal indices and feature conditioning changed the apparent result and should be reported. These conclusions hold for two binary tasks, two named foundation models and a simulated federation.
+
+\section*{Code and data availability}
+PTB-XL (version 1.0.3) \cite{ptbxl2020,ptbxl103} and the MIT-BIH Arrhythmia Database (version 1.0.0) \cite{mitbih2001} are public on PhysioNet. The benchmark code, with the exact cohort definitions, the settings of Table~\ref{tab:settings} and the list of software dependencies with their minimum versions, is available at \url{https://github.com/TheAxeC/ecg-representation-clustering}. The pretrained weights of HuBERT-ECG were obtained from \url{https://huggingface.co/Edoardo-BS/hubert-ecg-base} and those of ECGFounder from \url{https://huggingface.co/PKUDigitalHealth/ECGFounder}.
+
+\section*{Ethics}
+This study uses only de-identified, publicly available databases and required no new
+human-subjects data collection.
+
+\section*{CRediT author contributions}
+\textbf{Dongho Chun}: methodology, software, investigation, writing -- original draft.
+\textbf{Axel Faes}: conceptualization, methodology, supervision, writing -- review and
+editing.
+
+\section*{Funding}
+This work was supported by the Flanders AI Research Program (FAIR), an Impulse Program of the Flemish Government (Flemish Ministry of Economy, Science and Innovation).
+
+\section*{Declaration of competing interest}
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\section*{Declaration of generative AI and AI-assisted technologies in the writing process}
+During the preparation of this work the authors used a generative AI assistant (Claude) to support software implementation and to edit and improve the language of the manuscript. During the revision, the authors used Claude (model claude-opus-5-5, Anthropic) for revision assistance: searching and screening the literature, and drafting changes to the manuscript text in response to the referees' comments. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{refs}
+\end{document}

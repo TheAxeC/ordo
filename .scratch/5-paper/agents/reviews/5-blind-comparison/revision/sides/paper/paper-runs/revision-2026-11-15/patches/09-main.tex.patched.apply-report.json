@@ -1,0 +1,386 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "532d0e5b55a6121782f45444bee2ce75e77f8abf4da16299ce45ba42a300126d",
+  "round": 1,
+  "n_blocks": 84,
+  "n_blocks_touched": 27,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V33",
+        "V25"
+      ],
+      "rationale": "The abstract no longer says every fit is repeated over ten seeds (Ward and HDBSCAN are fitted once) and no longer calls the clustering score patient-grouped, since only the ceiling uses patient-grouped folds.",
+      "chars_before": 1809,
+      "chars_after": 1870
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0014",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "V17"
+      ],
+      "rationale": "States what the cited source shows (nearly equal linear-probe accuracy, different clustering quality, in self-supervised image models), gives the dominant-axes mechanism as this paper's reading, and drops the claim that one paper is a literature.",
+      "chars_before": 630,
+      "chars_after": 733
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "V23"
+      ],
+      "rationale": "No source read in the run states that hand-crafted features are the interpretable default of the field, so the sentence states the motivation without the claim about the field.",
+      "chars_before": 740,
+      "chars_after": 755
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "V25"
+      ],
+      "rationale": "The clusterers are fitted on the whole cohort without folds; only the ceiling uses patient-grouped five-fold cross-validation, so the first part of the protocol says so.",
+      "chars_before": 1674,
+      "chars_after": 1716
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "V14",
+        "V18"
+      ],
+      "rationale": "Cites the arXiv version of ECGFounder, where the claim was read, beside the journal version, and replaces the unsupported 'established the pretraining recipes' clause with what the ECG-FM and Al-Masud et al. papers state.",
+      "chars_before": 1404,
+      "chars_after": 1557
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0021",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "V21",
+        "V25"
+      ],
+      "rationale": "Names the ECG-JEPA of Weimann and Conrad so that it is not read as the ECG-JEPA of the Discussion, and states that only the ceiling uses patient-grouped folds.",
+      "chars_before": 845,
+      "chars_after": 949
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "V12"
+      ],
+      "rationale": "Gives the record and patient counts the cited descriptor states (21837 records from 18885 patients), attributed to it, and cites the PhysioNet record of release 1.0.3 for the release used, since no text tied to release 1.0.3 was read that states 21799 and 18869.",
+      "chars_before": 703,
+      "chars_after": 758
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "V31",
+        "V25"
+      ],
+      "rationale": "The cohort draws its AF records from the records with an AF statement, one per patient (benchmark.py:43-54), so the positives are drawn from those records and are not all of them; the folds are named as those of the ceiling.",
+      "chars_before": 1097,
+      "chars_after": 1288
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "V19",
+        "R3-9"
+      ],
+      "rationale": "Cites NeuroKit2 for the toolbox only and states the discrete wavelet delineation as the study's selection; says what HuBERT is, as the HuBERT-ECG paper gives it, since the paper read gives no expansion of the name.",
+      "chars_before": 3045,
+      "chars_after": 3155
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "R2-1b",
+        "V15"
+      ],
+      "rationale": "No passage read in the run states lead II as the conventional rhythm lead, so lead II is stated as the study's choice, with the passage of Zheng et al. that extracts rhythm features from lead II, and the placeholder is removed; Hannun_2019 is removed from the sentence clifford2017af supports alone.",
+      "chars_before": 1062,
+      "chars_after": 1148
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "R2-2b",
+        "V13"
+      ],
+      "rationale": "Completes the three MIT-BIH representations (conv-AE resampling and z-scoring, the correlation with the median of all 3000 beats, what each encodes; mitbih_bench.py:66-97, deep_repr.py:22-40) and attributes to de Chazal et al. only the use of morphology and RR-interval feature groups, the 21 features being the study's own.",
+      "chars_before": 814,
+      "chars_after": 1357
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "R2-2b"
+      ],
+      "rationale": "The MIT-BIH conv-AE row gives the resampling to 2500 samples per lead that the text now states (deep_repr.py:22, mitbih_bench.py:93-97).",
+      "chars_before": 1476,
+      "chars_after": 1512
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "V30"
+      ],
+      "rationale": "Limits the no-tuning statement to the clusterer settings and states that the default conditioner was chosen on a labelled pilot analysis.",
+      "chars_before": 1179,
+      "chars_after": 1260
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "V33"
+      ],
+      "rationale": "The ten seeds repeat only the seeded clusterers; Ward, HDBSCAN, the K sweep and the imbalance analysis are single fits.",
+      "chars_before": 840,
+      "chars_after": 898
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0038",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "V30",
+        "V34"
+      ],
+      "rationale": "States the pilot in the study's terms (a pilot analysis, not a pilot run) and ties the reporting of all four conditioners to the labelled choice of the default.",
+      "chars_before": 1137,
+      "chars_after": 1157
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "V19"
+      ],
+      "rationale": "The settings row cites NeuroKit2 for the toolbox only, states the wavelet delineation as the study's selection (features.py:133-139) and drops 'at their defaults', which the toolbox paper does not state.",
+      "chars_before": 2288,
+      "chars_after": 2329
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "Federated clustering simulation",
+      "roadmap_item_ids": [
+        "V20"
+      ],
+      "rationale": "Drops 'standard', which the federated-averaging source does not state for federated k-means; the aggregation sentence the source supports stays.",
+      "chars_before": 1254,
+      "chars_after": 1245
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "V32"
+      ],
+      "rationale": "The conv-AE lies between HuBERT-ECG and raw flattening in the k-means column, so the caption names the four representations whose adjacent contrasts were tested and says the conv-AE was not tested (run_analyses.py:42-48).",
+      "chars_before": 1676,
+      "chars_after": 1811
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "V32"
+      ],
+      "rationale": "Names the ranking within which the tested contrasts are adjacent and says the conv-AE was not tested.",
+      "chars_before": 1115,
+      "chars_after": 1272
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "V24",
+        "R3-9"
+      ],
+      "rationale": "States the unchecked cause of the low spectral scores as a possible cause, and uses 'foundation-model embeddings', the form used in the Methods.",
+      "chars_before": 807,
+      "chars_after": 825
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "V29",
+        "V17",
+        "R3-9"
+      ],
+      "rationale": "Says that raw flattening lacks linearly decodable label information and that the random forest shows label information clustering does not recover; gives the dominant-axes mechanism as this paper's reading consistent with the source; replaces 'linear ceiling' with 'supervised ceiling'.",
+      "chars_before": 1170,
+      "chars_after": 1336
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0055",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "V27"
+      ],
+      "rationale": "The dashed line joins equal values from 0.5 to 1 (figures.py:93), so the caption calls it an orientation line and reads each coordinate against its own chance level, as the Results do.",
+      "chars_before": 803,
+      "chars_after": 914
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0065",
+      "section": "Class imbalance and simulated federation",
+      "roadmap_item_ids": [
+        "V28"
+      ],
+      "rationale": "States what the two stressors do in this setting: imbalance reverses the order of ECGFounder and the hand-crafted features, and the federation brings them close, which the next paragraph reports.",
+      "chars_before": 538,
+      "chars_after": 670
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0072",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "V26",
+        "V20",
+        "V16",
+        "V17",
+        "V25"
+      ],
+      "rationale": "Corrects the datasets of the foundation-model comparison (PTB-XL only), replaces 'the federated procedure is standard' with what the source supports, cites Al-Masud et al. for ECGFM-KED, states the cited gap as the source states it, and names the ceiling as the patient-grouped step.",
+      "chars_before": 1550,
+      "chars_after": 1701
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "V34"
+      ],
+      "rationale": "Restates the bulk-download limit and the subset check in the study's terms, without wording about streaming, rate limits or re-runs.",
+      "chars_before": 1088,
+      "chars_after": 1087
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0078",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "V12"
+      ],
+      "rationale": "Cites the PhysioNet record of release 1.0.3 beside the descriptor where the release is named.",
+      "chars_before": 614,
+      "chars_after": 623
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0083",
+      "section": "Declaration of competing interest",
+      "roadmap_item_ids": [
+        "V35"
+      ],
+      "rationale": "Restores the authors' complete wording '(Claude)' for the first submission, since the run holds no record of that model version, and keeps the revision sentence.",
+      "chars_before": 715,
+      "chars_after": 640
+    }
+  ],
+  "blocks_untouched": 57,
+  "roadmap_items_covered": [
+    "R2-1b",
+    "R2-2b",
+    "R3-9",
+    "V12",
+    "V13",
+    "V14",
+    "V15",
+    "V16",
+    "V17",
+    "V18",
+    "V19",
+    "V20",
+    "V21",
+    "V23",
+    "V24",
+    "V25",
+    "V26",
+    "V27",
+    "V28",
+    "V29",
+    "V30",
+    "V31",
+    "V32",
+    "V33",
+    "V34",
+    "V35"
+  ],
+  "block_touched_ratio": 0.3214,
+  "preserved_ratio": 0.6786,
+  "char_churn_ratio": 1.2298,
+  "net_growth_chars": 2493,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/09-main.tex.patched",
+  "output_sha256": "cff1dde3ffa79acb7a841c5d2b3f135595f288412dd61d02db37cd222cf0bded"
+}

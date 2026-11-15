@@ -1,0 +1,34 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/cover-letter.tex",
+  "base_sha256": "ca1a1d7ac70235f8671ac950049d9329a8144ea48c9a92d8a9886695fac9d802",
+  "round": 1,
+  "n_blocks": 7,
+  "n_blocks_touched": 1,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0003",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D6-5"
+      ],
+      "rationale": "An empty group after each line break of the signature stops the break from reading the next bracketed placeholder as a spacing value; the placeholders stay as text for the authors.",
+      "chars_before": 132,
+      "chars_after": 140
+    }
+  ],
+  "blocks_untouched": 6,
+  "roadmap_items_covered": [
+    "D6-5"
+  ],
+  "block_touched_ratio": 0.1429,
+  "preserved_ratio": 0.8571,
+  "char_churn_ratio": 0.1073,
+  "net_growth_chars": 8,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/20-cover-letter.tex.patched",
+  "output_sha256": "f2218c9c827d1271c849bad6b2261cd9c2b2d9a3b0b1f347bdd634d0a210a114"
+}

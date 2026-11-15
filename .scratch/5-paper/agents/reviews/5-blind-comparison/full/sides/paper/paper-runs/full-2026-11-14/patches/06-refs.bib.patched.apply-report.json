@@ -1,0 +1,46 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "6023d5aefe9e9657ffe45e988e3965626379b8feb4105aed5f4f10a144945c14",
+  "round": 1,
+  "n_blocks": 68,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D1-53"
+      ],
+      "rationale": "Adds the arXiv DOI of the cited arXiv version, in the form the other arXiv entries carry; lookup.py resolve finds arXiv 2205.10268 at ratio 1.00.",
+      "chars_before": 229,
+      "chars_after": 266
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0030",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D1-53"
+      ],
+      "rationale": "Adds the arXiv DOI of the cited arXiv version, in the form the other arXiv entries carry; lookup.py resolve finds arXiv 2507.16761 at ratio 1.00.",
+      "chars_before": 295,
+      "chars_after": 332
+    }
+  ],
+  "blocks_untouched": 66,
+  "roadmap_items_covered": [
+    "D1-53"
+  ],
+  "block_touched_ratio": 0.0294,
+  "preserved_ratio": 0.9706,
+  "char_churn_ratio": 0.0286,
+  "net_growth_chars": 74,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/06-refs.bib.patched",
+  "output_sha256": "0dda41f90b14caa52394aa3cd06914e05996a22df2ed3cf5ee318b4aba3bd0c5"
+}

@@ -1,0 +1,34 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "0dda41f90b14caa52394aa3cd06914e05996a22df2ed3cf5ee318b4aba3bd0c5",
+  "round": 1,
+  "n_blocks": 68,
+  "n_blocks_touched": 1,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "D3-3"
+      ],
+      "rationale": "Replaces the Neural Networks entry Ye_2020 by the arXiv 2010.04963 entry that lookup.py bibtex '10.48550/arXiv.2010.04963' printed, with the arXiv DOI added in the form of the other arXiv entries, as the ruling on C2 asks; main.tex cites the new key in 1.2 and 2.4.",
+      "chars_before": 375,
+      "chars_after": 277
+    }
+  ],
+  "blocks_untouched": 67,
+  "roadmap_items_covered": [
+    "D3-3"
+  ],
+  "block_touched_ratio": 0.0147,
+  "preserved_ratio": 0.9853,
+  "char_churn_ratio": 0.0166,
+  "net_growth_chars": -98,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/11-refs.bib.patched",
+  "output_sha256": "fd23271ff0bf794a9be1b1b76e4926214af60c2c8d341f38f67d1d3557d806ac"
+}

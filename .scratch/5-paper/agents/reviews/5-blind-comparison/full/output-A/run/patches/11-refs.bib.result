@@ -1,0 +1,235 @@
+ @article{Attia_2019, title={An artificial intelligence-enabled ECG algorithm for the identification of patients with atrial fibrillation during sinus rhythm: a retrospective analysis of outcome prediction}, volume={394}, ISSN={0140-6736}, url={https://doi.org/10.1016/S0140-6736(19)31721-0}, DOI={10.1016/s0140-6736(19)31721-0}, number={10201}, journal={The Lancet}, publisher={Elsevier BV}, author={Attia, Zachi I and Noseworthy, Peter A and Lopez-Jimenez, Francisco and Asirvatham, Samuel J and Deshmukh, Abhishek J and Gersh, Bernard J and Carter, Rickey E and Yao, Xiaoxi and Rabinstein, Alejandro A and Erickson, Brad J and Kapa, Suraj and Friedman, Paul A}, year={2019}, month=sep, pages={861<en dash>867} }
+
+ @article{Raghunath_2021, title={Deep Neural Networks Can Predict New-Onset Atrial Fibrillation From the 12-Lead ECG and Help Identify Those at Risk of Atrial Fibrillation<en dash>Related Stroke}, volume={143}, ISSN={1524-4539}, url={https://doi.org/10.1161/CIRCULATIONAHA.120.047829}, DOI={10.1161/circulationaha.120.047829}, number={13}, journal={Circulation}, publisher={Ovid Technologies (Wolters Kluwer Health)}, author={Raghunath, Sushravya and Pfeifer, John M. and Ulloa-Cerna, Alvaro E. and Nemani, Arun and Carbonati, Tanner and Jing, Linyuan and vanMaanen, David P. and Hartzel, Dustin N. and Ruhl, Jeffery A. and Lagerman, Braxton F. and Rocha, Daniel B. and Stoudt, Nathan J. and Schneider, Gargi and Johnson, Kipp W. and Zimmerman, Noah and Leader, Joseph B. and Kirchner, H. Lester and Griessenauer, Christoph J. and Hafez, Ashraf and Good, Christopher W. and Fornwalt, Brandon K. and Haggerty, Christopher M.}, year={2021}, month=Mar, pages={1287<en dash>1298} }
+
+ @article{Khurshid_2022, title={ECG-Based Deep Learning and Clinical Risk Factors to Predict Atrial Fibrillation}, volume={145}, ISSN={1524-4539}, url={https://doi.org/10.1161/CIRCULATIONAHA.121.057480}, DOI={10.1161/circulationaha.121.057480}, number={2}, journal={Circulation}, publisher={Ovid Technologies (Wolters Kluwer Health)}, author={Khurshid, Shaan and Friedman, Samuel and Reeder, Christopher and Di Achille, Paolo and Diamant, Nathaniel and Singh, Pulkit and Harrington, Lia X. and Wang, Xin and Al-Alusi, Mostafa A. and Sarma, Gopal and Foulkes, Andrea S. and Ellinor, Patrick T. and Anderson, Christopher D. and Ho, Jennifer E. and Philippakis, Anthony A. and Batra, Puneet and Lubitz, Steven A.}, year={2022}, month=Jan, pages={122<en dash>133} }
+
+ @article{Christopoulos_2020, title={Artificial Intelligence<en dash>Electrocardiography to Predict Incident Atrial Fibrillation: A Population-Based Study}, volume={13}, ISSN={1941-3084}, url={https://doi.org/10.1161/CIRCEP.120.009355}, DOI={10.1161/circep.120.009355}, number={12}, journal={Circulation: Arrhythmia and Electrophysiology}, publisher={Ovid Technologies (Wolters Kluwer Health)}, author={Christopoulos, Georgios and Graff-Radford, Jonathan and Lopez, Camden L. and Yao, Xiaoxi and Attia, Zachi I. and Rabinstein, Alejandro A. and Petersen, Ronald C. and Knopman, David S. and Mielke, Michelle M. and Kremers, Walter and Vemuri, Prashanthi and Siontis, Konstantinos C. and Friedman, Paul A. and Noseworthy, Peter A.}, year={2020}, month=Dec }
+
+ @article{Biton_2021, title={Atrial fibrillation risk prediction from the 12-lead electrocardiogram using digital biomarkers and deep representation learning}, volume={2}, ISSN={2634-3916}, url={https://doi.org/10.1093/ehjdh/ztab071}, DOI={10.1093/ehjdh/ztab071}, number={4}, journal={European Heart Journal - Digital Health}, publisher={Oxford University Press (OUP)}, author={Biton, Shany and Gendelman, Sheina and Ribeiro, Ant<latin small letter o with circumflex>nio H and Miana, Gabriela and Moreira, Carla and Ribeiro, Antonio Luiz P and Behar, Joachim A}, year={2021}, month=Aug, pages={576<en dash>585} }
+
+ @article{Habineza_2023, title={End-to-end risk prediction of atrial fibrillation from the 12-Lead ECG by deep neural networks}, volume={81}, ISSN={0022-0736}, url={https://doi.org/10.1016/j.jelectrocard.2023.09.011}, DOI={10.1016/j.jelectrocard.2023.09.011}, journal={Journal of Electrocardiology}, publisher={Elsevier BV}, author={Habineza, Theogene and Ribeiro, Ant<latin small letter o with circumflex>nio H. and Gedon, Daniel and Behar, Joachim A. and Ribeiro, Antonio Luiz P. and Sch<latin small letter o with diaeresis>n, Thomas B.}, year={2023}, month=Nov, pages={193<en dash>200} }
+
+ @article{Yuan_2023, title={Deep Learning of Electrocardiograms in Sinus Rhythm From US Veterans to Predict Atrial Fibrillation}, volume={8}, ISSN={2380-6583}, url={https://doi.org/10.1001/jamacardio.2023.3701}, DOI={10.1001/jamacardio.2023.3701}, number={12}, journal={JAMA Cardiology}, publisher={American Medical Association (AMA)}, author={Yuan, Neal and Duffy, Grant and Dhruva, Sanket S. and Oesterle, Adam and Pellegrini, Cara N. and Theurer, John and Vali, Marzieh and Heidenreich, Paul A. and Keyhani, Salomeh and Ouyang, David}, year={2023}, month=Dec, pages={1131} }
+
+ @article{Jabbour_2024, title={Prediction of incident atrial fibrillation using deep learning, clinical models, and polygenic scores}, volume={45}, ISSN={1522-9645}, url={https://doi.org/10.1093/eurheartj/ehae595}, DOI={10.1093/eurheartj/ehae595}, number={46}, journal={European Heart Journal}, publisher={Oxford University Press (OUP)}, author={Jabbour, Gilbert and Nolin-Lapalme, Alexis and Tastet, Olivier and Corbin, Denis and Jord<latin small letter a with grave>, Paloma and Sowa, Achille and Delfrate, Jacques and Busseuil, David and Hussin, Julie G and Dub<latin small letter e with acute>, Marie-Pierre and Tardif, Jean-Claude and Rivard, L<latin small letter e with acute>na and Macle, Laurent and Cadrin-Tourigny, Julia and Khairy, Paul and Avram, Robert and Tadros, Rafik}, year={2024}, month=sep, pages={4920<en dash>4934} }
+
+ @article{Sau_2026, title={Prediction of incident atrial fibrillation: A comprehensive evaluation of conventional and artificial intelligence-enhanced approaches}, volume={23}, ISSN={1547-5271}, url={https://doi.org/10.1016/j.hrthm.2025.08.024}, DOI={10.1016/j.hrthm.2025.08.024}, number={2}, journal={Heart Rhythm}, publisher={Elsevier BV}, author={Sau, Arunashis and Sieliwonczyk, Ewa and Barker, Joseph and Zeidaabadi, Boroumand and Pastika, Libor and Patlatzoglou, Konstantinos and Khattak, Gul Rukh and McGurk, Kathryn A. and Peters, Nicholas S. and Kramer, Daniel B. and Waks, Jonathan W. and Ware, James S. and Ng, Fu Siong}, year={2026}, month=Feb, pages={e183<en dash>e191} }
+
+ @article{Khurshid_2025, title={Artificial intelligence-enabled analysis of handheld single-lead electrocardiograms to predict incident atrial fibrillation: an analysis of the VITAL-AF randomized trial}, volume={8}, ISSN={2398-6352}, url={https://doi.org/10.1038/s41746-025-02164-2}, DOI={10.1038/s41746-025-02164-2}, number={1}, journal={npj Digital Medicine}, publisher={Springer Science and Business Media LLC}, author={Khurshid, Shaan and Friedman, Sam F. and Al-Alusi, Mostafa A. and Kany, Shinwan and Sommers, Thomas and Anderson, Christopher D. and Ho, Jennifer E. and McManus, David D. and Borowsky, Leila H. and Ashburner, Jeffrey M. and Lubitz, Steven A. and Atlas, Steven J. and Maddah, Mahnaz and Singer, Daniel E. and Ellinor, Patrick T.}, year={2025}, month=Nov }
+
+ @article{Tsiartas_2025, title={Artificial intelligence capabilities in identifying atrial fibrillation using baseline sinus rhythm ECG : a systematic review}, volume={12}, ISSN={2053-3624}, url={https://doi.org/10.1136/openhrt-2025-003657}, DOI={10.1136/openhrt-2025-003657}, number={2}, journal={Open Heart}, publisher={BMJ}, author={Tsiartas, Eirinaios and Nayak, Deepti and Meade, Angela}, year={2025}, month=jul, pages={e003657} }
+
+ @article{Kashou_2021, title={Predicting incident atrial fibrillation in sinus rhythm: more than just trusting the <left single quotation mark>black box<right single quotation mark>}, volume={107}, ISSN={1468-201X}, url={https://doi.org/10.1136/heartjnl-2021-319385}, DOI={10.1136/heartjnl-2021-319385}, number={22}, journal={Heart}, publisher={BMJ}, author={Kashou, Anthony and Noseworthy, Peter}, year={2021}, month=sep, pages={1770<en dash>1771} }
+
+ @article{Saiz_Vivo_2025, title={Artificial intelligence for atrial fibrillation prediction while in sinus rhythm: a narrative review}, volume={7}, ISSN={2634-3916}, url={https://doi.org/10.1093/ehjdh/ztaf144}, DOI={10.1093/ehjdh/ztaf144}, number={2}, journal={European Heart Journal - Digital Health}, publisher={Oxford University Press (OUP)}, author={Saiz-Vivo, Javier and Chakravarthy, Niranjan and Ho, Wilbert Hsien Hao and Ching, Chi Keong and Yeung, Wesley Lok Kin and Lim, Toon Wei and Wang, Xingyao and Yang, Feng}, year={2025}, month=Dec }
+
+ @article{Pfeifer_2026, title={Multicenter validation of an artificial intelligence<en dash>enabled ECG model to predict 1-year risk of atrial fibrillation or flutter}, volume={23}, ISSN={1547-5271}, url={https://doi.org/10.1016/j.hrthm.2026.03.1956}, DOI={10.1016/j.hrthm.2026.03.1956}, number={8}, journal={Heart Rhythm}, publisher={Elsevier BV}, author={Pfeifer, John M. and Lee, Greg and Raghunath, Sushravya and Nemani, Arun and Green, Taylor and Kaufman, Elani and Pogue, Merrit and Banno, Joseph and Boyden, Thomas and Kao, David and Morland, Thomas B. and Schneider, Gargi and Hovanec, Emma and Hui, Larry and Hyun, Seung Won and Islam, Farahnaz and Jones, Michael and Silk, Alain and Chen, Ruijun and Haggerty, Christopher M. and Fornwalt, Brandon K.}, year={2026}, month=Aug, pages={e1474<en dash>e1481} }
+
+ @article{Riek_2026, title={Forecasting 1-year atrial fibrillation risk from sinus rhythm electrocardiograms in arrhythmia-na<latin small letter i with diaeresis>ve patients}, ISSN={2666-5018}, url={https://doi.org/10.1016/j.hroo.2026.09.012}, DOI={10.1016/j.hroo.2026.09.012}, journal={Heart Rhythm O2}, publisher={Elsevier BV}, author={Riek, Nathan T. and Gokhale, Tanmay A. and Ji, Rui Qi and Aktas, Mehmed E. and Dzikowicz, Dillon J. and Akcakaya, Murat and Sejdic, Ervin and Al-Zaiti, Salah S. and Saba, Samir}, year={2026}, month=sep }
+
+ @article{Zeidaabadi_2026, title={Image based artificial intelligence-enhanced electrocardiogram prediction of incident atrial fibrillation}, volume={23}, ISSN={1547-5271}, url={https://doi.org/10.1016/j.hrthm.2025.10.024}, DOI={10.1016/j.hrthm.2025.10.024}, number={3}, journal={Heart Rhythm}, publisher={Elsevier BV}, author={Zeidaabadi, Boroumand and Patlatzoglou, Konstantinos and Barker, Joseph and Pastika, Libor and Khattak, Gul Rukh and Gurnani, Mehak and Da Silva Anjos Machado, Xavier and Peters, Nicholas S. and Kramer, Daniel B. and Waks, Jonathan W. and Ng, Fu Siong and Sau, Arunashis}, year={2026}, month=Mar, pages={515<en dash>524} }
+
+ @article{Alonso_2013, title={Simple Risk Model Predicts Incidence of Atrial Fibrillation in a Racially and Geographically Diverse Population: the CHARGE<hyphen>AF Consortium}, volume={2}, ISSN={2047-9980}, url={https://doi.org/10.1161/JAHA.112.000102}, DOI={10.1161/jaha.112.000102}, number={2}, journal={Journal of the American Heart Association}, publisher={Ovid Technologies (Wolters Kluwer Health)}, author={Alonso, Alvaro and Krijthe, Bouwe P. and Aspelund, Thor and Stepas, Katherine A. and Pencina, Michael J. and Moser, Carlee B. and Sinner, Moritz F. and Sotoodehnia, Nona and Fontes, Jo<latin small letter a with tilde>o D. and Janssens, A. Cecile J. W. and Kronmal, Richard A. and Magnani, Jared W. and Witteman, Jacqueline C. and Chamberlain, Alanna M. and Lubitz, Steven A. and Schnabel, Renate B. and Agarwal, Sunil K. and McManus, David D. and Ellinor, Patrick T. and Larson, Martin G. and Burke, Gregory L. and Launer, Lenore J. and Hofman, Albert and Levy, Daniel and Gottdiener, John S. and K<latin small letter a with diaeresis><latin small letter a with diaeresis>b, Stefan and Couper, David and Harris, Tamara B. and Soliman, Elsayed Z. and Stricker, Bruno H. C. and Gudnason, Vilmundur and Heckbert, Susan R. and Benjamin, Emelia J.}, year={2013}, month=Mar }
+
+ @article{Schnabel_2009, title={Development of a risk score for atrial fibrillation (Framingham Heart Study): a community-based cohort study}, volume={373}, ISSN={0140-6736}, url={https://doi.org/10.1016/S0140-6736(09)60443-8}, DOI={10.1016/s0140-6736(09)60443-8}, number={9665}, journal={The Lancet}, publisher={Elsevier BV}, author={Schnabel, Renate B and Sullivan, Lisa M and Levy, Daniel and Pencina, Michael J and Massaro, Joseph M and D<right single quotation mark>Agostino, Ralph B and Newton-Cheh, Christopher and Yamamoto, Jennifer F and Magnani, Jared W and Tadros, Thomas M and Kannel, William B and Wang, Thomas J and Ellinor, Patrick T and Wolf, Philip A and Vasan, Ramachandran S and Benjamin, Emelia J}, year={2009}, month=Feb, pages={739<en dash>745} }
+
+ @article{Wolf_1991, title={Atrial fibrillation as an independent risk factor for stroke: the Framingham Study.}, volume={22}, ISSN={1524-4628}, url={https://doi.org/10.1161/01.STR.22.8.983}, DOI={10.1161/01.str.22.8.983}, number={8}, journal={Stroke}, publisher={Ovid Technologies (Wolters Kluwer Health)}, author={Wolf, P A and Abbott, R D and Kannel, W B}, year={1991}, month=Aug, pages={983<en dash>988} }
+
+ @article{Schnabel_2015, title={50 year trends in atrial fibrillation prevalence, incidence, risk factors, and mortality in the Framingham Heart Study: a cohort study}, volume={386}, ISSN={0140-6736}, url={https://doi.org/10.1016/S0140-6736(14)61774-8}, DOI={10.1016/s0140-6736(14)61774-8}, number={9989}, journal={The Lancet}, publisher={Elsevier BV}, author={Schnabel, Renate B and Yin, Xiaoyan and Gona, Philimon and Larson, Martin G and Beiser, Alexa S and McManus, David D and Newton-Cheh, Christopher and Lubitz, Steven A and Magnani, Jared W and Ellinor, Patrick T and Seshadri, Sudha and Wolf, Philip A and Vasan, Ramachandran S and Benjamin, Emelia J and Levy, Daniel}, year={2015}, month=jul, pages={154<en dash>162} }
+
+ @article{Van_Gelder_2024, title={2024 ESC Guidelines for the management of atrial fibrillation developed in collaboration with the European Association for Cardio-Thoracic Surgery (EACTS)}, volume={45}, ISSN={1522-9645}, url={https://doi.org/10.1093/eurheartj/ehae176}, DOI={10.1093/eurheartj/ehae176}, number={36}, journal={European Heart Journal}, publisher={Oxford University Press (OUP)}, author={Van Gelder, Isabelle C and Rienstra, Michiel and Bunting, Karina V and Casado-Arroyo, Ruben and Caso, Valeria and Crijns, Harry J G M and De Potter, Tom J R and Dwight, Jeremy and Guasti, Luigina and Hanke, Thorsten and Jaarsma, Tiny and Lettino, Maddalena and L<latin small letter o with stroke>chen, Maja-Lisa and Lumbers, R Thomas and Maesen, Bart and M<latin small letter o with stroke>lgaard, Inge and Rosano, Giuseppe M C and Sanders, Prashanthan and Schnabel, Renate B and Suwalski, Piotr and Svennberg, Emma and Tamargo, Juan and Tica, Otilia and Traykov, Vassil and Tzeis, Stylianos and Kotecha, Dipak and Dagres, Nikolaos and Rocca, Bianca and Ahsan, Syed and Ameri, Pietro and Arbelo, Elena and Bauer, Axel and Borger, Michael A and Buccheri, Sergio and Casadei, Barbara and Chioncel, Ovidiu and Dobrev, Dobromir and Fauchier, Laurent and Gigante, Bruna and Glikson, Michael and Hijazi, Ziad and Hindricks, Gerhard and Husser, Daniela and Ibanez, Borja and James, Stefan and Kaab, Stefan and Kirchhof, Paulus and K<latin small letter o with stroke>ber, Lars and Koskinas, Konstantinos C and Kumler, Thomas and Lip, Gregory Y H and Mandrola, John and Marx, Nikolaus and Mcevoy, John William and Mihaylova, Borislava and Mindham, Richard and Muraru, Denisa and Neubeck, Lis and Nielsen, Jens Cosedis and Oldgren, Jonas and Paciaroni, Maurizio and Pasquet, Agnes A and Prescott, Eva and Rega, Filip and Rossello, Francisco Javier and Rucinski, Marcin and Salzberg, Sacha P and Schulman, Sam and Sommer, Philipp and Svendsen, Jesper Hastrup and ten Berg, Jurrien M and Ten Cate, Hugo and Vaartjes, Ilonca and Vrints, Christiaan Jm and Witkowski, Adam and Zeppenfeld, Katja and Simoni, Leonard and Kichou, Brahim and Sisakian, Hamayak S and Scherr, Daniel and Cools, Frank and Smaji<latin small letter c with acute>, Elnur and Shalganov, Tchavdar and Manola, Sime and Avraamides, Panayiotis and Taborsky, Milos and Brandes, Axel and El-Damaty, Ahmed M and Kampus, Priit and Raatikainen, Pekka and Garcia, Rodrigue and Etsadashvili, Kakhaber and Eckardt, Lars and Kallergis, Eleftherios and Gell<latin small letter e with acute>r, L<latin small letter a with acute>szl<latin small letter o with acute> and Gu<latin small letter eth>mundsson, Kristj<latin small letter a with acute>n and Lyne, Jonathan and Marai, Ibrahim and Colivicchi, Furio and Abdrakhmanov, Ayan Suleimenovich and Bytyci, Ibadete and Kerimkulova, Alina and Kupics, Kaspars and Refaat, Marwan and Bheleel, Osama Abdulmajed and Barysien<latin small letter e with dot above>, J<latin small letter u with macron>rat<latin small letter e with dot above> and Leitz, Patrick and Sammut, Mark A and Grosu, Aurel and Pavlovic, Nikola and Moustaghfir, Abdelhamid and Yap, Sing-Chien and Taleski, Jane and Fink, Trine and Kazmierczak, Jaroslaw and Sanfins, Victor M and Cozma, Dragos and Zavatta, Marco and Kova<latin small letter c with caron>evi<latin small letter c with acute>, Dragan V and Hlivak, Peter and Zupan, Igor and Calvo, David and Bj<latin small letter o with diaeresis>rkenheim, Anna and K<latin small letter u with diaeresis>hne, Michael and Ouali, Sana and Demircan, Sabri and Sychov, Oleg S and Ng, Andre and Kuchkarov, Husniddin}, year={2024}, month=Aug, pages={3314<en dash>3414} }
+
+ @article{Goette_2016, title={EHRA/HRS/APHRS/SOLAECE expert consensus on Atrial cardiomyopathies: Definition, characterisation, and clinical implication}, volume={32}, ISSN={1883-2148}, url={https://doi.org/10.1016/j.joa.2016.05.002}, DOI={10.1016/j.joa.2016.05.002}, number={4}, journal={Journal of Arrhythmia}, publisher={Wiley}, author={Goette, Andreas and Kalman, Jonathan M. and Aguinaga, Luis and Akar, Joseph and Cabrera, Jose Angel and Chen, Shih Ann and Chugh, Sumeet S. and Corradi, Domenico and D<right single quotation mark>Avila, Andre and Dobrev, Dobromir and Fenelon, Guilherme and Gonzalez, Mario and Hatem, Stephane N. and Helm, Robert and Hindricks, Gerhard and Ho, Siew Yen and Hoit, Brian and Jalife, Jose and Kim, Young<hyphen>Hoon and Lip, Gregory Y.H. and Ma, Chang<hyphen>Sheng and Marcus, Gregory M. and Murray, Katherine and Nogami, Akihiko and Sanders, Prashanthan and Uribe, William and Van Wagoner, David R. and Nattel, Stanley}, year={2016}, month=jul, pages={247<en dash>278} }
+
+ @article{Rudin_2019, title={Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead}, volume={1}, ISSN={2522-5839}, url={https://doi.org/10.1038/s42256-019-0048-x}, DOI={10.1038/s42256-019-0048-x}, number={5}, journal={Nature Machine Intelligence}, publisher={Springer Science and Business Media LLC}, author={Rudin, Cynthia}, year={2019}, month=May, pages={206<en dash>215} }
+
+@misc{arxiv_1810_03292,
+  title = {Sanity Checks for Saliency Maps},
+  author = {Julius Adebayo and Justin Gilmer and Michael Muelly and Ian Goodfellow and Moritz Hardt and Been Kim},
+  year = {2018},
+  eprint = {1810.03292},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.1810.03292}
+}
+
+@misc{arxiv_1806_10758,
+  title = {A Benchmark for Interpretability Methods in Deep Neural Networks},
+  author = {Sara Hooker and Dumitru Erhan and Pieter-Jan Kindermans and Been Kim},
+  year = {2018},
+  eprint = {1806.10758},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.1806.10758}
+}
+
+@misc{arxiv_2007_04612,
+  title = {Concept Bottleneck Models},
+  author = {Pang Wei Koh and Thao Nguyen and Yew Siang Tang and Stephen Mussmann and Emma Pierson and Been Kim and Percy Liang},
+  year = {2020},
+  eprint = {2007.04612},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.2007.04612}
+}
+
+@misc{arxiv_2106_13314,
+  title = {Promises and Pitfalls of Black-Box Concept Learning Models},
+  author = {Anita Mahinpei and Justin Clark and Isaac Lage and Finale Doshi-Velez and Weiwei Pan},
+  year = {2021},
+  eprint = {2106.13314},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.2106.13314}
+}
+
+@misc{arxiv_2205_10268,
+  title = {B-cos Networks: Alignment is All We Need for Interpretability},
+  author = {Moritz B<latin small letter o with diaeresis>hle and Mario Fritz and Bernt Schiele},
+  year = {2022},
+  eprint = {2205.10268},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.2205.10268}
+}
+
+@misc{arxiv_2504_02667,
+  title = {Compositionality Unlocks Deep Interpretable Models},
+  author = {Thomas Dooms and Ward Gauderis and Geraint A. Wiggins and Jose Oramas},
+  year = {2025},
+  eprint = {2504.02667},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.2504.02667}
+}
+
+@misc{arxiv_2507_16761,
+  title = {Faithful, Interpretable Chest X-ray Diagnosis with Artifact-free B-cos Networks},
+  author = {Shreyash Arya and Shashank Agnihotri and Marcel Kleinmann and Bernt Schiele and Margret Keuper},
+  year = {2025},
+  eprint = {2507.16761},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.2507.16761}
+}
+
+ @article{Arends_2026, title={Signal or noise? Evaluating commonly used attribution methods for explaining deep neural networks in electrocardiogram classification}, volume={7}, ISSN={2634-3916}, url={https://doi.org/10.1093/ehjdh/ztag038}, DOI={10.1093/ehjdh/ztag038}, number={3}, journal={European Heart Journal - Digital Health}, publisher={Oxford University Press (OUP)}, author={Arends, Bauke K O and van Amsterdam, Wouter A C and van der Harst, Pim and van Smeden, Maarten and van Es, Ren<latin small letter e with acute> and van de Leur, Rutger R}, year={2026}, month=Mar }
+
+ @article{Wagner_2024, title={Explaining deep learning for ECG analysis: Building blocks for auditing and knowledge discovery}, volume={176}, ISSN={0010-4825}, url={https://doi.org/10.1016/j.compbiomed.2024.108525}, DOI={10.1016/j.compbiomed.2024.108525}, journal={Computers in Biology and Medicine}, publisher={Elsevier BV}, author={Wagner, Patrick and Mehari, Temesgen and Haverkamp, Wilhelm and Strodthoff, Nils}, year={2024}, month=jun, pages={108525} }
+
+ @article{Patlatzoglou_2025, title={The cost of explainability in artificial intelligence-enhanced electrocardiogram models}, volume={8}, ISSN={2398-6352}, url={https://doi.org/10.1038/s41746-025-02122-y}, DOI={10.1038/s41746-025-02122-y}, number={1}, journal={npj Digital Medicine}, publisher={Springer Science and Business Media LLC}, author={Patlatzoglou, Konstantinos and Pastika, Libor and Barker, Joseph and Sieliwonczyk, Ewa and Khattak, Gul Rukh and Zeidaabadi, Boroumand and Ribeiro, Ant<latin small letter o with circumflex>nio H. and Ware, James S. and Peters, Nicholas S. and Ribeiro, Antonio Luiz P. and Kramer, Daniel B. and Waks, Jonathan W. and Sau, Arunashis and Ng, Fu Siong}, year={2025}, month=Dec }
+
+ @article{De_Lathauwer_2008, title={Decompositions of a Higher-Order Tensor in Block Terms<em dash>Part II: Definitions and Uniqueness}, volume={30}, ISSN={1095-7162}, url={https://doi.org/10.1137/070690729}, DOI={10.1137/070690729}, number={3}, journal={SIAM Journal on Matrix Analysis and Applications}, publisher={Society for Industrial & Applied Mathematics (SIAM)}, author={De Lathauwer, Lieven}, year={2008}, month=Jan, pages={1033<en dash>1066} }
+
+ @article{Kolda_2009, title={Tensor Decompositions and Applications}, volume={51}, ISSN={1095-7200}, url={https://doi.org/10.1137/07070111X}, DOI={10.1137/07070111x}, number={3}, journal={SIAM Review}, publisher={Society for Industrial & Applied Mathematics (SIAM)}, author={Kolda, Tamara G. and Bader, Brett W.}, year={2009}, month=Aug, pages={455<en dash>500} }
+
+@misc{arxiv_2010_04963,
+  title = {Block-term Tensor Neural Networks},
+  author = {Jinmian Ye and Guangxi Li and Di Chen and Haiqin Yang and Shandian Zhe and Zenglin Xu},
+  year = {2020},
+  eprint = {2010.04963},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.2010.04963}
+}
+
+@misc{arxiv_2511_04292,
+  title = {BTTDA: Block-Term Tensor Discriminant Analysis for Brain-Computer Interfacing},
+  author = {Arne Van Den Kerchove and Hakim Si-Mohammed and Fran<latin small letter c with cedilla>ois Cabestaing and Marc M. Van Hulle},
+  year = {2025},
+  eprint = {2511.04292},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.2511.04292}
+}
+
+ @article{Faes_2024, title={Single Finger Trajectory Prediction From Intracranial Brain Activity Using Block-Term Tensor Regression With Fast and Automatic Component Extraction}, volume={35}, ISSN={2162-2388}, url={https://doi.org/10.1109/tnnls.2022.3216589}, DOI={10.1109/tnnls.2022.3216589}, number={7}, journal={IEEE Transactions on Neural Networks and Learning Systems}, publisher={Institute of Electrical and Electronics Engineers (IEEE)}, author={Faes, Axel and Camarrone, Flavio and Van Hulle, Marc M.}, year={2024}, month=jul, pages={8897<en dash>8908} }
+
+ @article{Goulart_2020, title={Alternating Group Lasso for Block-Term Tensor Decomposition and Application to ECG Source Separation}, volume={68}, ISSN={1941-0476}, url={https://doi.org/10.1109/tsp.2020.2985591}, DOI={10.1109/tsp.2020.2985591}, journal={IEEE Transactions on Signal Processing}, publisher={Institute of Electrical and Electronics Engineers (IEEE)}, author={Goulart, Jose Henrique de Morais and de Oliveira, Pedro Marinho Ramos and Farias, Rodrigo Cabral and Zarzoso, Vicente and Comon, Pierre}, year={2020}, pages={2682<en dash>2696} }
+
+@misc{https://doi.org/10.5281/zenodo.22227432,
+  doi = {10.5281/ZENODO.22227432},
+  url = {https://zenodo.org/doi/10.5281/zenodo.22227432},
+  author = {Cornelissen, Dries and Faes, Axel},
+  keywords = {atrial fibrillation, electrocardiography, block-term tensor decomposition, interpretable machine learning, sinus rhythm},
+  title = {An interpretable tensor model for identifying atrial fibrillation in sinus-rhythm ECG: block-term tensor regression on PTB-XL, benchmarked against deep and foundation models},
+  publisher = {Zenodo},
+  year = {2026},
+  copyright = {Creative Commons Attribution 4.0 International}
+}
+
+ @article{Johnson_2023, title={MIMIC-IV, a freely accessible electronic health record dataset}, volume={10}, ISSN={2052-4463}, url={https://doi.org/10.1038/s41597-022-01899-x}, DOI={10.1038/s41597-022-01899-x}, number={1}, journal={Scientific Data}, publisher={Springer Science and Business Media LLC}, author={Johnson, Alistair E. W. and Bulgarelli, Lucas and Shen, Lu and Gayles, Alvin and Shammout, Ayad and Horng, Steven and Pollard, Tom J. and Hao, Sicheng and Moody, Benjamin and Gow, Brian and Lehman, Li-wei H. and Celi, Leo A. and Mark, Roger G.}, year={2023}, month=Jan }
+
+@misc{https://doi.org/10.13026/4nqg-sb35,
+  doi = {10.13026/4NQG-SB35},
+  url = {https://physionet.org/content/mimic-iv-ecg/1.0/},
+  author = {Gow, Brian and Pollard, Tom and Nathanson, Larry A and Johnson, Alistair and Moody, Benjamin and Fernandes, Chrystinne and Greenbaum, Nathaniel and Waks, Jonathan W and Eslami, Parastou and Carbonati, Tanner and Chaudhari, Ashish and Herbst, Elizabeth and Moukheiber, Dana and Berkowitz, Seth and Mark, Roger and Horng, Steven},
+  title = {MIMIC-IV-ECG: Diagnostic Electrocardiogram Matched Subset},
+  publisher = {PhysioNet},
+  year = {2023}
+}
+
+ @article{Wagner_2020, title={PTB-XL, a large publicly available electrocardiography dataset}, volume={7}, ISSN={2052-4463}, url={https://doi.org/10.1038/s41597-020-0495-6}, DOI={10.1038/s41597-020-0495-6}, number={1}, journal={Scientific Data}, publisher={Springer Science and Business Media LLC}, author={Wagner, Patrick and Strodthoff, Nils and Bousseljot, Ralf-Dieter and Kreiseler, Dieter and Lunze, Fatima I. and Samek, Wojciech and Schaeffter, Tobias}, year={2020}, month=May }
+
+@misc{https://doi.org/10.5281/zenodo.4916206,
+  doi = {10.5281/ZENODO.4916206},
+  url = {https://zenodo.org/doi/10.5281/zenodo.4916206},
+  author = {Ribeiro, Ant<latin small letter o with circumflex>nio H. and Paixao, Gabriela M.M. and Lima, Emilly M. and Horta Ribeiro, Manoel and Pinto Filho, Marcelo M. and Gomes, Paulo R. and Oliveira, Derick M. and Meira Jr, Wagner and Schon, Th<latin small letter o with diaeresis>mas B and Ribeiro, Antonio Luiz P.},
+  title = {CODE-15\%: a large scale annotated dataset of 12-lead ECGs},
+  publisher = {Zenodo},
+  year = {2021},
+  copyright = {Creative Commons Attribution 4.0 International}
+}
+
+ @article{Ribeiro_2020, title={Automatic diagnosis of the 12-lead ECG using a deep neural network}, volume={11}, ISSN={2041-1723}, url={https://doi.org/10.1038/s41467-020-15432-4}, DOI={10.1038/s41467-020-15432-4}, number={1}, journal={Nature Communications}, publisher={Springer Science and Business Media LLC}, author={Ribeiro, Ant<latin small letter o with circumflex>nio H. and Ribeiro, Manoel Horta and Paix<latin small letter a with tilde>o, Gabriela M. M. and Oliveira, Derick M. and Gomes, Paulo R. and Canazart, J<latin small letter e with acute>ssica A. and Ferreira, Milton P. S. and Andersson, Carl R. and Macfarlane, Peter W. and Meira, Wagner and Sch<latin small letter o with diaeresis>n, Thomas B. and Ribeiro, Antonio Luiz P.}, year={2020}, month=Apr }
+
+ @article{Valasakis_2026, title={Accuracy of atrial fibrillation labels in the MIMIC-IV ECG database: implications for artificial intelligence model development}, volume={47}, ISSN={1522-9645}, url={https://doi.org/10.1093/eurheartj/ehag785.598}, DOI={10.1093/eurheartj/ehag785.598}, number={Supplement_1}, journal={European Heart Journal}, publisher={Oxford University Press (OUP)}, author={Valasakis, I and Connelly, D and Macfarlane, P}, year={2026}, month=Oct }
+
+ @article{Cox_1972, title={Regression Models and Life-Tables}, volume={34}, ISSN={1467-9868}, url={https://doi.org/10.1111/j.2517-6161.1972.tb00899.x}, DOI={10.1111/j.2517-6161.1972.tb00899.x}, number={2}, journal={Journal of the Royal Statistical Society Series B: Statistical Methodology}, publisher={Oxford University Press (OUP)}, author={Cox, D. R.}, year={1972}, month=Jan, pages={187<en dash>202} }
+
+ @article{Katzman_2018, title={DeepSurv: personalized treatment recommender system using a Cox proportional hazards deep neural network}, volume={18}, ISSN={1471-2288}, url={https://doi.org/10.1186/s12874-018-0482-1}, DOI={10.1186/s12874-018-0482-1}, number={1}, journal={BMC Medical Research Methodology}, publisher={Springer Science and Business Media LLC}, author={Katzman, Jared L. and Shaham, Uri and Cloninger, Alexander and Bates, Jonathan and Jiang, Tingting and Kluger, Yuval}, year={2018}, month=Feb }
+
+ @article{Vickers_2006, title={Decision Curve Analysis: A Novel Method for Evaluating Prediction Models}, volume={26}, ISSN={1552-681X}, url={https://doi.org/10.1177/0272989X06295361}, DOI={10.1177/0272989x06295361}, number={6}, journal={Medical Decision Making}, publisher={SAGE Publications}, author={Vickers, Andrew J. and Elkin, Elena B.}, year={2006}, month=Nov, pages={565<en dash>574} }
+
+ @article{Collins_2024, title={TRIPOD+AI statement: updated guidance for reporting clinical prediction models that use regression or machine learning methods}, volume={385}, ISSN={1756-1833}, url={https://doi.org/10.1136/bmj-2023-078378}, DOI={10.1136/bmj-2023-078378}, journal={BMJ}, publisher={BMJ}, author={Collins, Gary S and Moons, Karel G M and Dhiman, Paula and Riley, Richard D and Beam, Andrew L and Van Calster, Ben and Ghassemi, Marzyeh and Liu, Xiaoxuan and Reitsma, Johannes B and van Smeden, Maarten and Boulesteix, Anne-Laure and Camaradou, Jennifer Catherine and Celi, Leo Anthony and Denaxas, Spiros and Denniston, Alastair K and Glocker, Ben and Golub, Robert M and Harvey, Hugh and Heinze, Georg and Hoffman, Michael M and Kengne, Andr<latin small letter e with acute> Pascal and Lam, Emily and Lee, Naomi and Loder, Elizabeth W and Maier-Hein, Lena and Mateen, Bilal A and McCradden, Melissa D and Oakden-Rayner, Lauren and Ordish, Johan and Parnell, Richard and Rose, Sherri and Singh, Karandeep and Wynants, Laure and Logullo, Patricia}, year={2024}, month=Apr, pages={e078378} }
+
+ @article{Mehari_2022, title={Self-supervised representation learning from 12-lead ECG data}, volume={141}, ISSN={0010-4825}, url={https://doi.org/10.1016/j.compbiomed.2021.105114}, DOI={10.1016/j.compbiomed.2021.105114}, journal={Computers in Biology and Medicine}, publisher={Elsevier BV}, author={Mehari, Temesgen and Strodthoff, Nils}, year={2022}, month=Feb, pages={105114} }
+
+@misc{arxiv_2005_13249,
+  title = {CLOCS: Contrastive Learning of Cardiac Signals Across Space, Time, and Patients},
+  author = {Dani Kiyasseh and Tingting Zhu and David A. Clifton},
+  year = {2020},
+  eprint = {2005.13249},
+  archivePrefix = {arXiv}
+}
+
+ @article{McKeen_2025, title={ECG-FM: an open electrocardiogram foundation model}, volume={8}, ISSN={2574-2531}, url={https://doi.org/10.1093/jamiaopen/ooaf122}, DOI={10.1093/jamiaopen/ooaf122}, number={5}, journal={JAMIA Open}, publisher={Oxford University Press (OUP)}, author={McKeen, Kaden and Masood, Sameer and Toma, Augustin and Rubin, Barry and Wang, Bo}, year={2025}, month=sep }
+
+ @article{Yao_2019, title={Sensitivity, specificity, positive and negative predictive values of identifying atrial fibrillation using administrative data: a systematic review and meta-analysis}, volume={11}, ISSN={1179-1349}, url={https://doi.org/10.2147/clep.s206267}, DOI={10.2147/clep.s206267}, journal={Clinical Epidemiology}, publisher={Informa UK Limited}, author={Yao, Ren Jie Robert and Andrade, Jason G and Deyell, Marc W and Jackson, Heather and McAlister, Finlay A and Hawkins, Nathaniel M}, year={2019}, month=Aug, pages={753<en dash>767} }
+
+ @article{Malmo_2016, title={Validation of self-reported and hospital-diagnosed atrial fibrillation: the HUNT-study}, ISSN={1179-1349}, url={https://doi.org/10.2147/clep.s103346}, DOI={10.2147/clep.s103346}, journal={Clinical Epidemiology}, publisher={Informa UK Limited}, author={Malmo, Vegard and Langhammer, Arnulf and B<latin small letter o with stroke>naa, Kaare Harald and Loennechen, Jan and Ellekjaer, Hanne}, year={2016}, month=jun, pages={185} }
+
+ @article{Rix_2012, title={Validity of the diagnoses atrial fibrillation and atrial flutter in a Danish patient registry}, volume={46}, ISSN={1651-2006}, url={https://doi.org/10.3109/14017431.2012.673728}, DOI={10.3109/14017431.2012.673728}, number={3}, journal={Scandinavian Cardiovascular Journal}, publisher={Informa UK Limited}, author={Rix, Thomas Andersen and Riahi, Sam and Overvad, Kim and Lundbye-Christensen, S<latin small letter o with stroke>ren and Schmidt, Erik Berg and Joensen, Albert Marni}, year={2012}, month=May, pages={149<en dash>153} }
+
+ @article{Cheng_2009, title={Long-term Outcomes in Individuals With Prolonged PR Interval or First-Degree Atrioventricular Block}, volume={301}, ISSN={0098-7484}, url={https://doi.org/10.1001/jama.2009.888}, DOI={10.1001/jama.2009.888}, number={24}, journal={JAMA}, publisher={American Medical Association (AMA)}, author={Cheng, Susan}, year={2009}, month=jun, pages={2571} }
+
+ @article{Magnani_2013, title={Electrocardiographic PR Interval and Adverse Outcomes in Older Adults: The Health, Aging, and Body Composition Study}, volume={6}, ISSN={1941-3084}, url={https://doi.org/10.1161/circep.112.975342}, DOI={10.1161/circep.112.975342}, number={1}, journal={Circulation: Arrhythmia and Electrophysiology}, publisher={Ovid Technologies (Wolters Kluwer Health)}, author={Magnani, Jared W. and Wang, Na and Nelson, Kerrie P. and Connelly, Stephanie and Deo, Rajat and Rodondi, Nicolas and Schelbert, Erik B. and Garcia, Melissa E. and Phillips, Caroline L. and Shlipak, Michael G. and Harris, Tamara B. and Ellinor, Patrick T. and Benjamin, Emelia J.}, year={2013}, month=Feb, pages={84<en dash>90} }
+
+ @article{Magnani_2015, title={P-wave indices and atrial fibrillation: Cross-cohort assessments from the Framingham Heart Study (FHS) and Atherosclerosis Risk in Communities (ARIC) study}, volume={169}, ISSN={0002-8703}, url={https://doi.org/10.1016/j.ahj.2014.10.009}, DOI={10.1016/j.ahj.2014.10.009}, number={1}, journal={American Heart Journal}, publisher={Elsevier BV}, author={Magnani, Jared W. and Zhu, Lei and Lopez, Faye and Pencina, Michael J. and Agarwal, Sunil K. and Soliman, Elsayed Z. and Benjamin, Emelia J. and Alonso, Alvaro}, year={2015}, month=Jan, pages={53<en dash>61.e1} }
+
+ @article{Maezono_2025, title={Electrocardiographic P-wave indices and onset of atrial fibrillation and histological fibrosis in a general Japanese population: a prospective cohort analysis of the Hisayama Study}, volume={5}, ISSN={2752-4191}, url={https://doi.org/10.1093/ehjopen/oeaf126}, DOI={10.1093/ehjopen/oeaf126}, number={6}, journal={European Heart Journal Open}, publisher={Oxford University Press (OUP)}, author={Maezono, Akihiro and Oishi, Emi and Sasaki, Takaya and Takase, Susumu and Sakata, Satoko and Hata, Jun and Oda, Yoshinao and Kitazono, Takanari and Abe, Kohtaro and Ninomiya, Toshiharu}, editor={B<latin small letter a with diaeresis>ck, Magnus}, year={2025}, month=sep }
+
+ @article{Tanaka_2021, title={First-degree atrioventricular block is significantly associated with incident atrial fibrillation in the population predominantly including participants aged {$\geq$} 60 years}, volume={36}, ISSN={1615-2573}, url={https://doi.org/10.1007/s00380-021-01805-2}, DOI={10.1007/s00380-021-01805-2}, number={9}, journal={Heart and Vessels}, publisher={Springer Science and Business Media LLC}, author={Tanaka, Yoshihiro and Tada, Hayato and Hamaya, Rikuta and Patel, Ravi B. and Hayashi, Kenshi and Yamagami, Kan and Hashiba, Atsushi and Takamura, Masayuki and Kawashiri, Masa-aki and Greenland, Philip}, year={2021}, month=Feb, pages={1401<en dash>1409} }
+
+ @article{Ostrowska_2022, title={Short P-Wave Duration Is Associated with Incident Atrial Fibrillation: A Registry-Based Cohort Study}, volume={63}, ISSN={1349-3299}, url={https://doi.org/10.1536/ihj.21-797}, DOI={10.1536/ihj.21-797}, number={4}, journal={International Heart Journal}, publisher={International Heart Journal (Japanese Heart Journal)}, author={Ostrowska, Bozena and Lind, Lars and Sciaraffia, Elena and Blomstr<latin small letter o with diaeresis>m-Lundqvist, Carina}, year={2022}, month=jul, pages={700<en dash>707} }
+
+ @inbook{Zeiler_2014, title={Visualizing and Understanding Convolutional Networks}, ISBN={9783319105901}, ISSN={1611-3349}, url={https://doi.org/10.1007/978-3-319-10590-1_53}, DOI={10.1007/978-3-319-10590-1_53}, booktitle={Computer Vision <en dash> ECCV 2014}, publisher={Springer International Publishing}, author={Zeiler, Matthew D. and Fergus, Rob}, year={2014}, pages={818<en dash>833} }
+
+@misc{arxiv_1702_04595,
+  title = {Visualizing Deep Neural Network Decisions: Prediction Difference Analysis},
+  author = {Luisa M Zintgraf and Taco S Cohen and Tameem Adel and Max Welling},
+  year = {2017},
+  eprint = {1702.04595},
+  archivePrefix = {arXiv},
+  doi = {10.48550/arXiv.1702.04595}
+}
+
+ @article{Ivanovs_2021, title={Perturbation-based methods for explaining deep neural networks: A survey}, volume={150}, ISSN={0167-8655}, url={https://doi.org/10.1016/j.patrec.2021.06.030}, DOI={10.1016/j.patrec.2021.06.030}, journal={Pattern Recognition Letters}, publisher={Elsevier BV}, author={Ivanovs, Maksims and Kadikis, Roberts and Ozols, Kaspars}, year={2021}, month=Oct, pages={228<en dash>234} }
+
+ @article{Yogeswaran_2025, title={P<hyphen>Wave Indices and the Risks of Incident Atrial Fibrillation and Ischemic Stroke in Black Adults: The Jackson Heart Study}, volume={14}, ISSN={2047-9980}, url={https://doi.org/10.1161/jaha.125.043590}, DOI={10.1161/jaha.125.043590}, number={21}, journal={Journal of the American Heart Association}, publisher={Ovid Technologies (Wolters Kluwer Health)}, author={Yogeswaran, Vidhushei and Wiggins, Kerri L. and Sitlani, Colleen M. and Heckbert, Susan R. and Kamel, Hooman and Benjamin, Emelia J. and Kassahun<hyphen>Yimer, Wondwosen and Kalani, Rizwan and Soliman, Elsayed Z. and Carson, April P. and Floyd, James S.}, year={2025}, month=Nov }
+
+ @article{Emmanuela_2026, title={Electrocardiographic P-wave morphology and the risk of new-onset atrial fibrillation: a systematic review and meta-analysis}, volume={32}, ISSN={1310-7488}, url={https://doi.org/10.3897/bgcardio.32.e213539}, DOI={10.3897/bgcardio.32.e213539}, number={3}, journal={Bulgarian Cardiology}, publisher={Pensoft Publishers}, author={Emmanuela, Mirela and Lee, Jonathan Vincent and Wahjoepramono, Nicolaus N. D. and Lim, Hendyono}, year={2026}, month=Oct, pages={83<en dash>90} }
+
+ @article{_imi__2025, title={A comprehensive analysis of perturbation methods in explainable AI feature attribution validation for neural time series classifiers}, volume={15}, ISSN={2045-2322}, url={https://doi.org/10.1038/s41598-025-09538-2}, DOI={10.1038/s41598-025-09538-2}, number={1}, journal={Scientific Reports}, publisher={Springer Science and Business Media LLC}, author={<latin capital letter s with caron>imi<latin small letter c with acute>, Ilija and Veas, Eduardo and Sabol, Vedran}, year={2025}, month=jul }

@@ -1,0 +1,35 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-3/manuscript/refs.bib",
+  "base_sha256": "f2f9f5746282614ead40c66ba4d021621f92dd194e573e3e3d853399fbdc0f19",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0011",
+      "old_hash": "277d3a33431ffe441621ababc12b359fb2ae3f4227f36dbf7b1299cad9d5a9d2",
+      "roadmap_item_ids": ["C1"],
+      "rationale": "The authors' given names are those of the Crossref record and the publisher BibTeX of DOI 10.1016/j.knosys.2018.09.001 (He, Hong; Tan, Yonghong; Xing, Jianfeng); every other field already agrees with that record.",
+      "new_text": "@article{wavelettensorecg2018,\n  author  = {He, Hong and Tan, Yonghong and Xing, Jianfeng},\n  title   = {Unsupervised classification of 12-lead {ECG} signals using wavelet tensor decomposition and two-dimensional Gaussian spectral clustering},\n  journal = {Knowledge-Based Systems},\n  volume  = {163}, pages = {392--403}, year = {2019},\n  doi     = {10.1016/j.knosys.2018.09.001}}"
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "old_hash": "a86e785e3ea2e2f1752faf2edb25989a7386549680b802dcd83e74f9ee60d59a",
+      "roadmap_item_ids": ["C3"],
+      "rationale": "The first author is H. Brendan McMahan in the arXiv record and in the paper's own author line; the entry dropped the initial H.",
+      "new_text": "@inproceedings{fedavg2017,\n  author    = {McMahan, H. Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and Ag{\\\"u}era y Arcas, Blaise},\n  title     = {Communication-efficient learning of deep networks from decentralized data},\n  booktitle = {Proceedings of the 20th International Conference on Artificial Intelligence and Statistics (AISTATS)},\n  pages     = {1273--1282}, year = {2017}}"
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "old_hash": "1de8195d4388d5c25769958a35df3b3b72a39f35fca00be838d931072bbe91c4",
+      "roadmap_item_ids": ["C2"],
+      "rationale": "The doi field held an escaped underscore, so the identifier did not resolve; the bare DOI 10.1007/978-3-642-37456-2_14 is the one Crossref, OpenAlex and Semantic Scholar resolve, and the style prints it inside \\path and \\href, which take a plain underscore.",
+      "new_text": "@inproceedings{hdbscan2013,\n  author    = {Campello, Ricardo J. G. B. and Moulavi, Davoud and Sander, J{\\\"o}rg},\n  title     = {Density-based clustering based on hierarchical density estimates},\n  booktitle = {Advances in Knowledge Discovery and Data Mining (PAKDD)},\n  pages     = {160--172}, year = {2013},\n  doi       = {10.1007/978-3-642-37456-2_14}}"
+    }
+  ]
+}

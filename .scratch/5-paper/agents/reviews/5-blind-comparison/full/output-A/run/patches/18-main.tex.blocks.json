@@ -1,0 +1,1045 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "ad039cb89a49262eaf354f0373cbe9fd8699d4fe668139aba441eeca66f2ad15",
+  "n_chars": 63025,
+  "n_blocks": 115,
+  "chfield": 62796,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "16de9d3574a4e3297a2eb13781c9a1ffc425c2d07c7978e7e76b11572d081773",
+      "char_start": 0,
+      "char_end": 41,
+      "n_chars": 41,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\documentclass[preprint,12pt]{elsarticle}"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "637acc9dbf155b1cdf78ab7b6ff99b9a5960cb02b2e682a5fa82be9fa27e0699",
+      "char_start": 43,
+      "char_end": 222,
+      "n_chars": 179,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\usepackage[utf8]{inputenc}"
+    },
+    {
+      "block_id": "B0003",
+      "sha256": "07ab5b127b0774de756a36cf59c9a6c9bc1e22047ebef9cfa747047aa713e03d",
+      "char_start": 224,
+      "char_end": 269,
+      "n_chars": 45,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\journal{Artificial Intelligence in Medicine}"
+    },
+    {
+      "block_id": "B0004",
+      "sha256": "49d34b0366eb0a68eb35c75d6d8aeb1d60be3c49779501a7e1cdf4941acdab46",
+      "char_start": 271,
+      "char_end": 287,
+      "n_chars": 16,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{document}"
+    },
+    {
+      "block_id": "B0005",
+      "sha256": "d06853700e4d858e2fe230aa9f034ee840ebc049f8f8bfbd12b251e63c2029f3",
+      "char_start": 289,
+      "char_end": 308,
+      "n_chars": 19,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{frontmatter}"
+    },
+    {
+      "block_id": "B0006",
+      "sha256": "f5d241d6b9603652964f777d92e1235aec3c37e63a68702306922c02f6345096",
+      "char_start": 310,
+      "char_end": 468,
+      "n_chars": 158,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\title{An interpretable block-term tensor network with a separate clinical term for predicting incident atrial"
+    },
+    {
+      "block_id": "B0007",
+      "sha256": "5bdc527d3d298c903ce735138d2cf1fc08a132394e17aeb18082411680d1b3e8",
+      "char_start": 470,
+      "char_end": 660,
+      "n_chars": 190,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\author{[GAP: author names] [GAP: author order] [GAP: ORCIDs]\\corref{cor1}}"
+    },
+    {
+      "block_id": "B0008",
+      "sha256": "c04fa60287f4fa6bbddcdd6ee83cdbb17833b2a308213786ac60435714561df7",
+      "char_start": 662,
+      "char_end": 2497,
+      "n_chars": 1835,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{abstract}"
+    },
+    {
+      "block_id": "B0009",
+      "sha256": "cbe891bdac2ab53a923c64f89d91a1dc2708209626764237d845e0769c7dd035",
+      "char_start": 2499,
+      "char_end": 2690,
+      "n_chars": 191,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{keyword}"
+    },
+    {
+      "block_id": "B0010",
+      "sha256": "ff0ff901883d19b52cd2723e1dda91da1923ce9813431c2d47da377792fba760",
+      "char_start": 2692,
+      "char_end": 2709,
+      "n_chars": 17,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\end{frontmatter}"
+    },
+    {
+      "block_id": "B0011",
+      "sha256": "479ce8267a8dc66449e53b838492edeab11f9f116eed87da087547c1cd388ae6",
+      "char_start": 2711,
+      "char_end": 2733,
+      "n_chars": 22,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\section{Introduction}"
+    },
+    {
+      "block_id": "B0012",
+      "sha256": "2ee24e44c043971ae7decee6b7ae7011f066023f5e33676582e395fb377f75fa",
+      "char_start": 2735,
+      "char_end": 2767,
+      "n_chars": 32,
+      "section": "Introduction",
+      "first_line_excerpt": "\\subsection{Context and problem}"
+    },
+    {
+      "block_id": "B0013",
+      "sha256": "2078197e16d5b95d2f0144605e338634347a751a1cb56d719b76410bdfcf233b",
+      "char_start": 2769,
+      "char_end": 3828,
+      "n_chars": 1059,
+      "section": "Context and problem",
+      "first_line_excerpt": "Atrial fibrillation (AF) is a common arrhythmia, and in people with asymptomatic AF the first presentation may"
+    },
+    {
+      "block_id": "B0014",
+      "sha256": "cca71d327040f529dc129f2c043f8fce8bd8cad6cd1607189f8d971c5624a24e",
+      "char_start": 3830,
+      "char_end": 4740,
+      "n_chars": 910,
+      "section": "Context and problem",
+      "first_line_excerpt": "Deep networks trained on sinus-rhythm ECGs predict new-onset AF. A network trained on 1.6 million ECGs reached"
+    },
+    {
+      "block_id": "B0015",
+      "sha256": "4f59f557721065486271e3805bae47d2ecafc2f90aed7e15ac543ece42b2a7a0",
+      "char_start": 4742,
+      "char_end": 4767,
+      "n_chars": 25,
+      "section": "Context and problem",
+      "first_line_excerpt": "\\subsection{Research gap}"
+    },
+    {
+      "block_id": "B0016",
+      "sha256": "f58743756ac9075814cf9e9a9618e677a338d8ecbdd3b24a0ac1d92ebd46057d",
+      "char_start": 4769,
+      "char_end": 6029,
+      "n_chars": 1260,
+      "section": "Research gap",
+      "first_line_excerpt": "The networks behind these results are black boxes, and their explanations are computed after training. A comme"
+    },
+    {
+      "block_id": "B0017",
+      "sha256": "65398a9e8d40c17fce325ffc9a6d823c0800a78214e5316173151925464ea13c",
+      "char_start": 6031,
+      "char_end": 7039,
+      "n_chars": 1008,
+      "section": "Research gap",
+      "first_line_excerpt": "Block-term tensor models offer one route to such a model. A block-term decomposition splits a multiway signal "
+    },
+    {
+      "block_id": "B0018",
+      "sha256": "bb8df16edd2d4abe997de000d6e92ee4e6a60b17c4ef063fe9e3f85b7375f5ff",
+      "char_start": 7041,
+      "char_end": 7075,
+      "n_chars": 34,
+      "section": "Research gap",
+      "first_line_excerpt": "\\subsection{Aim and contributions}"
+    },
+    {
+      "block_id": "B0019",
+      "sha256": "11b8dd2f61f7bc55ec276247ee23300c44af1cc880ed85cb4b26ed44055a2579",
+      "char_start": 7077,
+      "char_end": 8038,
+      "n_chars": 961,
+      "section": "Aim and contributions",
+      "first_line_excerpt": "This study addresses two questions. The first is whether a block-term tensor network predicts incident AF from"
+    },
+    {
+      "block_id": "B0020",
+      "sha256": "8a447f567dfbbd26d6838bafd3f7271947dfb01ccb8a29186dd333d898293d65",
+      "char_start": 8040,
+      "char_end": 8896,
+      "n_chars": 856,
+      "section": "Aim and contributions",
+      "first_line_excerpt": "The contributions of the study are these:"
+    },
+    {
+      "block_id": "B0021",
+      "sha256": "2d27ca363a395eb1f5a695b37c2a84262bacabbfdebbe073e0037aa0dc2ba70e",
+      "char_start": 8898,
+      "char_end": 8920,
+      "n_chars": 22,
+      "section": "Aim and contributions",
+      "first_line_excerpt": "\\section{Related work}"
+    },
+    {
+      "block_id": "B0022",
+      "sha256": "7a676fc9df7ca97fedb0713932e57a23063a52ac6b788eb2f7f9ba83c0f5ebb7",
+      "char_start": 8922,
+      "char_end": 8967,
+      "n_chars": 45,
+      "section": "Related work",
+      "first_line_excerpt": "\\subsection{AI-ECG prediction of incident AF}"
+    },
+    {
+      "block_id": "B0023",
+      "sha256": "c537f8f2eb8ac7ac035ffc1bf1d5418d56c0d14de5264c151bf17bcbb73c2445",
+      "char_start": 8969,
+      "char_end": 9997,
+      "n_chars": 1028,
+      "section": "AI-ECG prediction of incident AF",
+      "first_line_excerpt": "Two tasks are reported under the heading of AF prediction from the sinus-rhythm ECG, and they differ in what c"
+    },
+    {
+      "block_id": "B0024",
+      "sha256": "5f0b1dbd47c6ce837b26d3bfd31a98b309e376299fbdb6e26c00a374e2eec0c2",
+      "char_start": 9999,
+      "char_end": 11047,
+      "n_chars": 1048,
+      "section": "AI-ECG prediction of incident AF",
+      "first_line_excerpt": "Studies of dated incident AF report lower values. Raghunath et al.\\ reached an AUROC of 0.85 for new-onset AF "
+    },
+    {
+      "block_id": "B0025",
+      "sha256": "dc652636aad362e3aedc9c57c6c96d7b23c6716b0f46b0bb1dfed1fdb49bc51f",
+      "char_start": 11049,
+      "char_end": 11577,
+      "n_chars": 528,
+      "section": "AI-ECG prediction of incident AF",
+      "first_line_excerpt": "The explanations in these studies are computed after training. Saliency mapping gave the P-wave the greatest i"
+    },
+    {
+      "block_id": "B0026",
+      "sha256": "a48ff5a780032a5ce08120953b5b2f9245b9dd4f7ac60e8b33361d542401cbe9",
+      "char_start": 11579,
+      "char_end": 11647,
+      "n_chars": 68,
+      "section": "AI-ECG prediction of incident AF",
+      "first_line_excerpt": "\\subsection{Clinical risk models and their combination with the ECG}"
+    },
+    {
+      "block_id": "B0027",
+      "sha256": "74603cd65abf4d7a9247c3f12e70c6748d5911533ddad2b7a62faa4128924887",
+      "char_start": 11649,
+      "char_end": 12673,
+      "n_chars": 1024,
+      "section": "Clinical risk models and their combination with the ECG",
+      "first_line_excerpt": "Clinical risk models set the comparator that an ECG model has to match. The Framingham score predicted 10-year"
+    },
+    {
+      "block_id": "B0028",
+      "sha256": "00975fb9352cc965702273152b1c6ab62d8200c7637ef935817073fe0f55e8a5",
+      "char_start": 12675,
+      "char_end": 13391,
+      "n_chars": 716,
+      "section": "Clinical risk models and their combination with the ECG",
+      "first_line_excerpt": "Studies that combined an ECG network with clinical factors found the two complementary in most cohorts. AUROC "
+    },
+    {
+      "block_id": "B0029",
+      "sha256": "6ec3cc0735663108b446fb985b4f780494e65faccb764c37151222ea857f354d",
+      "char_start": 13393,
+      "char_end": 14064,
+      "n_chars": 671,
+      "section": "Clinical risk models and their combination with the ECG",
+      "first_line_excerpt": "Other studies found the ECG model ahead of the clinical score. In 2,301 patients of a Montreal cohort, an ECG "
+    },
+    {
+      "block_id": "B0030",
+      "sha256": "8eb4b58247cf6ada7eb4ce50672f3cb33bc6fc6edcac4f971e49c6710b024172",
+      "char_start": 14066,
+      "char_end": 14124,
+      "n_chars": 58,
+      "section": "Clinical risk models and their combination with the ECG",
+      "first_line_excerpt": "\\subsection{Interpretable models and post-hoc explanation}"
+    },
+    {
+      "block_id": "B0031",
+      "sha256": "1650e094ca5443b45b0ed355050821be1615a9ef30d28c7a2b0eacc6f4df675e",
+      "char_start": 14126,
+      "char_end": 15245,
+      "n_chars": 1119,
+      "section": "Interpretable models and post-hoc explanation",
+      "first_line_excerpt": "Post-hoc explanations have been put to tests, and several methods fail them. Tests that randomise the model pa"
+    },
+    {
+      "block_id": "B0032",
+      "sha256": "430393a6386d1503de81bcdea5d18eb3de216d9499da75a9e3a52ec50838b2ec",
+      "char_start": 15247,
+      "char_end": 16355,
+      "n_chars": 1108,
+      "section": "Interpretable models and post-hoc explanation",
+      "first_line_excerpt": "Such models route the prediction through parts that can be read. Concept bottleneck models first predict named"
+    },
+    {
+      "block_id": "B0033",
+      "sha256": "f58d863c16e422252bf6cef01d57235cf8c9cdb12215f1516fe0063bec3b7d15",
+      "char_start": 16357,
+      "char_end": 17164,
+      "n_chars": 807,
+      "section": "Interpretable models and post-hoc explanation",
+      "first_line_excerpt": "Whether intrinsic interpretability costs accuracy on the ECG is contested. A study of variational-autoencoder "
+    },
+    {
+      "block_id": "B0034",
+      "sha256": "5712803ea6ad873d01cd37fa9b78d6dc63c5afe187141b69fe82ea2daf3c6c6e",
+      "char_start": 17166,
+      "char_end": 17203,
+      "n_chars": 37,
+      "section": "Interpretable models and post-hoc explanation",
+      "first_line_excerpt": "\\subsection{Block-term tensor models}"
+    },
+    {
+      "block_id": "B0035",
+      "sha256": "ab2072f23d525c2294245b8d29a4642ec5ba269a5829b58bc279ce4d570b58ab",
+      "char_start": 17205,
+      "char_end": 18174,
+      "n_chars": 969,
+      "section": "Block-term tensor models",
+      "first_line_excerpt": "A block-term decomposition writes a tensor as a sum of blocks of low multilinear rank, and it contains the CP "
+    },
+    {
+      "block_id": "B0036",
+      "sha256": "cb872a26fdceeda0f365f1f0a1c39459e7df84a861d986df6f0b9ac01d3f32f8",
+      "char_start": 18176,
+      "char_end": 19096,
+      "n_chars": 920,
+      "section": "Block-term tensor models",
+      "first_line_excerpt": "Supervised block-term models extract factors that both predict and can be read. Block-term tensor regression ("
+    },
+    {
+      "block_id": "B0037",
+      "sha256": "e525bdc3858efbf63a5635f00b9187ea46a9430a4bed5e1c8ee5fca2a3dc0d65",
+      "char_start": 19098,
+      "char_end": 19114,
+      "n_chars": 16,
+      "section": "Block-term tensor models",
+      "first_line_excerpt": "\\section{Method}"
+    },
+    {
+      "block_id": "B0038",
+      "sha256": "9f12d308abcedb1f2bc5075c42577ede062661d87ee00ebb6a882917a197a394",
+      "char_start": 19116,
+      "char_end": 19165,
+      "n_chars": 49,
+      "section": "Method",
+      "first_line_excerpt": "\\subsection{Spectral tensor and block-term layer}"
+    },
+    {
+      "block_id": "B0039",
+      "sha256": "6c5f2400e2401a0c946364860f18f3a5ae139189facc0ec72c5d24145038ae13",
+      "char_start": 19167,
+      "char_end": 20313,
+      "n_chars": 1146,
+      "section": "Spectral tensor and block-term layer",
+      "first_line_excerpt": "Each index ECG is a 10-second, 12-lead recording sampled at 500 Hz \\cite{https://doi.org/10.13026/4nqg-sb35}. "
+    },
+    {
+      "block_id": "B0040",
+      "sha256": "01954ea4dbeb230df4647313f7b2189bf5c0ecb94cf8f74c740ac80c53e5c683",
+      "char_start": 20315,
+      "char_end": 21369,
+      "n_chars": 1054,
+      "section": "Spectral tensor and block-term layer",
+      "first_line_excerpt": "The block-term layer has $K = 12$ blocks. Block $k$ holds a frequency factor $\\mathbf{A}_k \\in \\mathbb{R}^{F \\"
+    },
+    {
+      "block_id": "B0041",
+      "sha256": "f527092a277738098fac866bf3ad1bf35dcabc7b1155d780598fff1b3da5c28c",
+      "char_start": 21371,
+      "char_end": 22025,
+      "n_chars": 654,
+      "section": "Spectral tensor and block-term layer",
+      "first_line_excerpt": "BTTN generalises linear BTTR \\cite{Faes_2024}. Both models decompose the input into blocks with one factor per"
+    },
+    {
+      "block_id": "B0042",
+      "sha256": "3260da3f864a264333273334a47ad8d5bd1dd92eb9679d1008077f4eb2aa9ffa",
+      "char_start": 22027,
+      "char_end": 23360,
+      "n_chars": 1333,
+      "section": "Spectral tensor and block-term layer",
+      "first_line_excerpt": "\\begin{figure}[htbp]"
+    },
+    {
+      "block_id": "B0043",
+      "sha256": "409edcc1d32eb8719fa68b77208ffb08836f64b70ae5b8f12e1f3b382b606f1e",
+      "char_start": 23362,
+      "char_end": 23454,
+      "n_chars": 92,
+      "section": "Spectral tensor and block-term layer",
+      "first_line_excerpt": "\\subsection{Temporal convolution, pooling, head and survival objective}"
+    },
+    {
+      "block_id": "B0044",
+      "sha256": "68bd5d46dd1a095742629918e48c2c812aa930eb5d0b458c3e2e4a0faded903f",
+      "char_start": 23456,
+      "char_end": 24275,
+      "n_chars": 819,
+      "section": "Temporal convolution, pooling, head and survival objective",
+      "first_line_excerpt": "The 72 time series of the block-term layer pass through depthwise temporal convolutions at three scales. Each "
+    },
+    {
+      "block_id": "B0045",
+      "sha256": "9029fb578fd21f24d662d740f71d88a263e2e5529bee2a66b0866010ab81f5e8",
+      "char_start": 24277,
+      "char_end": 25244,
+      "n_chars": 967,
+      "section": "Temporal convolution, pooling, head and survival objective",
+      "first_line_excerpt": "BTTN is trained with the negative Cox partial log-likelihood \\cite{Cox_1972}, as DeepSurv trains a neural netw"
+    },
+    {
+      "block_id": "B0046",
+      "sha256": "9df38c3c7fe958d92a779ac0e510b8b1c481d1f99f2c910a87df109f4e6a627b",
+      "char_start": 25246,
+      "char_end": 25293,
+      "n_chars": 47,
+      "section": "Temporal convolution, pooling, head and survival objective",
+      "first_line_excerpt": "\\subsection{Clinical term and readable factors}"
+    },
+    {
+      "block_id": "B0047",
+      "sha256": "a68c95e5cbdb1a85ccc430f23512615a3279db375dcf95df9ce66ae6544f2051",
+      "char_start": 25295,
+      "char_end": 26315,
+      "n_chars": 1020,
+      "section": "Clinical term and readable factors",
+      "first_line_excerpt": "The clinical term is a linear function of nine risk factors. They are age, sex, and seven automated measuremen"
+    },
+    {
+      "block_id": "B0048",
+      "sha256": "a47b71fa8a0aa6ca09608cbf0ff940fa0ef7310688700d2ea3f21cb8cb0dd950",
+      "char_start": 26317,
+      "char_end": 27308,
+      "n_chars": 991,
+      "section": "Clinical term and readable factors",
+      "first_line_excerpt": "This construction makes the factors readable by design and keeps the clinical term out of them. In this paper,"
+    },
+    {
+      "block_id": "B0049",
+      "sha256": "196f30403a1dc8e3e2ec38176e7cbbf240a5402b9a7285100dab6a1b27dbaf1c",
+      "char_start": 27310,
+      "char_end": 27331,
+      "n_chars": 21,
+      "section": "Clinical term and readable factors",
+      "first_line_excerpt": "\\section{Experiments}"
+    },
+    {
+      "block_id": "B0050",
+      "sha256": "e52b2c7c996392073a75463da5cdef212fcce66cae741872ca494e6b9de8b5d2",
+      "char_start": 27333,
+      "char_end": 27382,
+      "n_chars": 49,
+      "section": "Experiments",
+      "first_line_excerpt": "\\subsection{Cohort and labels}"
+    },
+    {
+      "block_id": "B0051",
+      "sha256": "963d642365c68a9059bc53901022286cef3dfc76d504c84729efe475f3c0fe09",
+      "char_start": 27384,
+      "char_end": 28165,
+      "n_chars": 781,
+      "section": "Cohort and labels",
+      "first_line_excerpt": "The cohort comes from MIMIC-IV-ECG, about 800,000 diagnostic ECGs from nearly 160,000 patients \\cite{https://d"
+    },
+    {
+      "block_id": "B0052",
+      "sha256": "e83abf2be34912a9dc652d604b68d50da6e73592b521713dff85ea5447da6b61",
+      "char_start": 28167,
+      "char_end": 29043,
+      "n_chars": 876,
+      "section": "Cohort and labels",
+      "first_line_excerpt": "The index ECG is each patient's earliest ECG whose machine report reads sinus rhythm, without AF, flutter, or "
+    },
+    {
+      "block_id": "B0053",
+      "sha256": "1dcc7b52c8091b7bc6bfdbef7295429437ff8478e126690ca5790f08cf46af16",
+      "char_start": 29045,
+      "char_end": 29089,
+      "n_chars": 44,
+      "section": "Cohort and labels",
+      "first_line_excerpt": "\\subsection{Baselines, protocol and metrics}"
+    },
+    {
+      "block_id": "B0054",
+      "sha256": "b42221b03a84ccc9f75ca03f5fdf5ca98b6e5d0c50440a188c940183a2ddaee8",
+      "char_start": 29091,
+      "char_end": 29839,
+      "n_chars": 748,
+      "section": "Baselines, protocol and metrics",
+      "first_line_excerpt": "Three baselines shared the cohort, folds and inputs of BTTN. The clinical model is a class-balanced logistic r"
+    },
+    {
+      "block_id": "B0055",
+      "sha256": "3d9c06e0c8bcd1ad51765b08ac1d8ef7121469964d9b2f4cf544b3bc3d1dfd06",
+      "char_start": 29841,
+      "char_end": 31158,
+      "n_chars": 1317,
+      "section": "Baselines, protocol and metrics",
+      "first_line_excerpt": "The one-year comparison used stratified five-fold cross-validation at the patient level, repeated over five se"
+    },
+    {
+      "block_id": "B0056",
+      "sha256": "5b844c2e35b271324024c8ddc45b63a391c6cd10de623e5b1752e0a2aaff0760",
+      "char_start": 31160,
+      "char_end": 31190,
+      "n_chars": 30,
+      "section": "Baselines, protocol and metrics",
+      "first_line_excerpt": "\\subsection{Occlusion readout}"
+    },
+    {
+      "block_id": "B0057",
+      "sha256": "6dcaeab132e6f8bfc816898a47df1e90424866b340f4f2a6a91521172a810120",
+      "char_start": 31192,
+      "char_end": 32250,
+      "n_chars": 1058,
+      "section": "Occlusion readout",
+      "first_line_excerpt": "Occlusion sensitivity covers part of the input and records the change in the output \\cite{Zeiler_2014}. It is "
+    },
+    {
+      "block_id": "B0058",
+      "sha256": "ee6a3b09db063f08c275a7185fc98159b22b512707cb4394aa3fbb41ef1e7fbd",
+      "char_start": 32252,
+      "char_end": 33418,
+      "n_chars": 1166,
+      "section": "Occlusion readout",
+      "first_line_excerpt": "The offsets from 225 ms before to 375 ms after the R peak were grouped into five windows, the P, PR, QRS, ST a"
+    },
+    {
+      "block_id": "B0059",
+      "sha256": "9c719ddf5cbc9c5a3b851076553353ba832589e2571bc6a3875d991a0f38ffcf",
+      "char_start": 33420,
+      "char_end": 33437,
+      "n_chars": 17,
+      "section": "Occlusion readout",
+      "first_line_excerpt": "\\section{Results}"
+    },
+    {
+      "block_id": "B0060",
+      "sha256": "35e7e1ce15c7f38d8804ded810b4b99e8f00ae5a2cf659606cb9d02df7bc02fd",
+      "char_start": 33439,
+      "char_end": 33464,
+      "n_chars": 25,
+      "section": "Results",
+      "first_line_excerpt": "\\subsection{Study cohort}"
+    },
+    {
+      "block_id": "B0061",
+      "sha256": "7c570aceef0e52ca8282b0a591cc8fc3d4c20ba1a3a90683e8131a944a9d6788",
+      "char_start": 33466,
+      "char_end": 34064,
+      "n_chars": 598,
+      "section": "Study cohort",
+      "first_line_excerpt": "Of 151,941 patients with an eligible sinus-rhythm index ECG, 1,855 developed incident AF within one year and 4"
+    },
+    {
+      "block_id": "B0062",
+      "sha256": "8e39d6a9a06ff621082e267f518fee0168dd42866e047fbd06f82e10dd2b04d7",
+      "char_start": 34066,
+      "char_end": 35240,
+      "n_chars": 1174,
+      "section": "Study cohort",
+      "first_line_excerpt": "\\begin{table}[H]"
+    },
+    {
+      "block_id": "B0063",
+      "sha256": "1ca6952af5ab7ad3108ce394b55f1c8cafdf1b6dd14d45f377bd0b02e963f744",
+      "char_start": 35242,
+      "char_end": 35301,
+      "n_chars": 59,
+      "section": "Study cohort",
+      "first_line_excerpt": "\\subsection{Discrimination at one year and across horizons}"
+    },
+    {
+      "block_id": "B0064",
+      "sha256": "dcebb4690a20a40d6d5d4931594a68828527a74ee144b57014b301b9ec51e8ad",
+      "char_start": 35303,
+      "char_end": 36072,
+      "n_chars": 769,
+      "section": "Discrimination at one year and across horizons",
+      "first_line_excerpt": "In the one-year design, the fused model had the highest AUROC of the methods compared, 0.7776 (95\\% CI [0.7664"
+    },
+    {
+      "block_id": "B0065",
+      "sha256": "20ca9db52d3e3a6a5d8751e60974a4fb50d2b579305585d42a67ea7642ba45c7",
+      "char_start": 36074,
+      "char_end": 36677,
+      "n_chars": 603,
+      "section": "Discrimination at one year and across horizons",
+      "first_line_excerpt": "\\begin{table}[H]"
+    },
+    {
+      "block_id": "B0066",
+      "sha256": "41c885711afa6d33d878d06a0a389a4375e217b657356245c6b18a492ab898aa",
+      "char_start": 36679,
+      "char_end": 37601,
+      "n_chars": 922,
+      "section": "Discrimination at one year and across horizons",
+      "first_line_excerpt": "In the survival design, the same cross-validated risks were read at every horizon without refitting (Table~\\re"
+    },
+    {
+      "block_id": "B0067",
+      "sha256": "76f718c50b7ea817d5371943537d9d79dd6d8bbfa29f47deeecacd57e5ef1fc7",
+      "char_start": 37603,
+      "char_end": 38552,
+      "n_chars": 949,
+      "section": "Discrimination at one year and across horizons",
+      "first_line_excerpt": "\\begin{table}[H]"
+    },
+    {
+      "block_id": "B0068",
+      "sha256": "543ceb33a5c810a79785b171bbb5fbc6c6d5c630327d5eaba71105d377c5d208",
+      "char_start": 38554,
+      "char_end": 38620,
+      "n_chars": 66,
+      "section": "Discrimination at one year and across horizons",
+      "first_line_excerpt": "\\subsection{Calibration, risk stratification and operating points}"
+    },
+    {
+      "block_id": "B0069",
+      "sha256": "bb64162de11c0d1fd1bbf6c2d71b24c3d67b8713e9aca688f8001f23906813b6",
+      "char_start": 38622,
+      "char_end": 39543,
+      "n_chars": 921,
+      "section": "Calibration, risk stratification and operating points",
+      "first_line_excerpt": "After logistic recalibration within the survival sample, predicted and observed one-year proportions of the fu"
+    },
+    {
+      "block_id": "B0070",
+      "sha256": "3c895e1d447e8b12128daf66d3003faa22c0e697cfa04784137832bbc1daddae",
+      "char_start": 39545,
+      "char_end": 39959,
+      "n_chars": 414,
+      "section": "Calibration, risk stratification and operating points",
+      "first_line_excerpt": "At the top 10\\% of risk, the fused model had a sensitivity of 0.272 against 0.240 for the clinical model, at s"
+    },
+    {
+      "block_id": "B0071",
+      "sha256": "b40a999c6a28ec87f1c960a843bcb6dd33bf96314d85d208b48013bb93cb743b",
+      "char_start": 39961,
+      "char_end": 40394,
+      "n_chars": 433,
+      "section": "Calibration, risk stratification and operating points",
+      "first_line_excerpt": "The thresholds in this paragraph are read from the decision curves of Figure~\\ref{fig:clinical-utility}. All t"
+    },
+    {
+      "block_id": "B0072",
+      "sha256": "9daf4a7dc5622d47f98dfaf1003d2d3b51728ad8e605a710c2adbb3280a2d6e1",
+      "char_start": 40396,
+      "char_end": 41781,
+      "n_chars": 1385,
+      "section": "Calibration, risk stratification and operating points",
+      "first_line_excerpt": "\\begin{figure}[htbp]"
+    },
+    {
+      "block_id": "B0073",
+      "sha256": "df537d4105fa6db669e248b03723b2e4d5856ad3d24095696fa94c68b9d477c1",
+      "char_start": 41783,
+      "char_end": 42889,
+      "n_chars": 1106,
+      "section": "Calibration, risk stratification and operating points",
+      "first_line_excerpt": "\\begin{table}[H]"
+    },
+    {
+      "block_id": "B0074",
+      "sha256": "e5b505facc30f59825f3267ca50a0d2358e9c58aa73aa7baf2f2afa8ae9c9b8a",
+      "char_start": 42891,
+      "char_end": 42935,
+      "n_chars": 44,
+      "section": "Calibration, risk stratification and operating points",
+      "first_line_excerpt": "\\subsection{Cardiac-cycle occlusion profile}"
+    },
+    {
+      "block_id": "B0075",
+      "sha256": "9b7760036cf6ab2d319310dcae7e6d79285c6eff77f207c45ee2487308542320",
+      "char_start": 42937,
+      "char_end": 43682,
+      "n_chars": 745,
+      "section": "Cardiac-cycle occlusion profile",
+      "first_line_excerpt": "Raw occlusion of the ECG term was dominated by the QRS window, where the mean drop in log-risk was 0.0232 agai"
+    },
+    {
+      "block_id": "B0076",
+      "sha256": "a2eb5ff5d76b48f9003fc8bb4c2c38eeb6de9e9449001fe82da1143e12be8988",
+      "char_start": 43684,
+      "char_end": 45565,
+      "n_chars": 1881,
+      "section": "Cardiac-cycle occlusion profile",
+      "first_line_excerpt": "\\begin{figure}[htbp]"
+    },
+    {
+      "block_id": "B0077",
+      "sha256": "42d35372dc7926f3cfcd893aec0b5715ca30b038bc80b5914a4845f129019009",
+      "char_start": 45567,
+      "char_end": 46608,
+      "n_chars": 1041,
+      "section": "Cardiac-cycle occlusion profile",
+      "first_line_excerpt": "\\begin{table}[H]"
+    },
+    {
+      "block_id": "B0078",
+      "sha256": "58976efa3464058092cc4a3522580c616942f77223641535c20d5850a915a076",
+      "char_start": 46610,
+      "char_end": 46630,
+      "n_chars": 20,
+      "section": "Cardiac-cycle occlusion profile",
+      "first_line_excerpt": "\\section{Discussion}"
+    },
+    {
+      "block_id": "B0079",
+      "sha256": "7d4fc4d3897414ada33391710a261cf3151703ae12904e4b889bd023d49dcdad",
+      "char_start": 46632,
+      "char_end": 46689,
+      "n_chars": 57,
+      "section": "Discussion",
+      "first_line_excerpt": "\\subsection{Comparison with published incident-AF models}"
+    },
+    {
+      "block_id": "B0080",
+      "sha256": "70c0c41c6d1bdf83d2ac1ac28ea21f7c4a10bb5094dff41b8e3026eb85d23bb3",
+      "char_start": 46691,
+      "char_end": 47558,
+      "n_chars": 867,
+      "section": "Comparison with published incident-AF models",
+      "first_line_excerpt": "These results answer the research question within one health system. BTTN with the clinical term had the highe"
+    },
+    {
+      "block_id": "B0081",
+      "sha256": "51f203a4407f7af7144ed65c9c2ef1632d4974038d3de53a435e47efb4dc8946",
+      "char_start": 47560,
+      "char_end": 48519,
+      "n_chars": 959,
+      "section": "Comparison with published incident-AF models",
+      "first_line_excerpt": "Published results give context for these values. On the hospital behind MIMIC-IV, a survival-loss CNN reached "
+    },
+    {
+      "block_id": "B0082",
+      "sha256": "f7174e9fa7f1ee408521ff459abd4318b8d3de927685c30b79cff0a9c0ac6fd7",
+      "char_start": 48521,
+      "char_end": 49342,
+      "n_chars": 821,
+      "section": "Comparison with published incident-AF models",
+      "first_line_excerpt": "The gain of the fused model over the clinical model agrees with reports that ECG and clinical information are "
+    },
+    {
+      "block_id": "B0083",
+      "sha256": "97e89cfadfc082081b474e7bade25aa0cd5a5e9c599c46b039f76ec4e962d420",
+      "char_start": 49344,
+      "char_end": 49441,
+      "n_chars": 97,
+      "section": "Comparison with published incident-AF models",
+      "first_line_excerpt": "\\subsection{Implications of an ECG term built on readable factors, with a separate clinical term}"
+    },
+    {
+      "block_id": "B0084",
+      "sha256": "469e1a4cb2c6fc164b91a067032c1a08bbee4dc9b6d7fccf81169b8ceb8818ff",
+      "char_start": 49443,
+      "char_end": 50425,
+      "n_chars": 982,
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "first_line_excerpt": "Separating the clinical term from the block-term layer lets the fused model gain discrimination without passin"
+    },
+    {
+      "block_id": "B0085",
+      "sha256": "239b5345c8ba245a5ef5afac98868e60761b4db45e84b5c69228d1a7410e9e78",
+      "char_start": 50427,
+      "char_end": 51528,
+      "n_chars": 1101,
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "first_line_excerpt": "The PR-window concentration of the occlusion profile is in line with saliency reports of other incident-AF mod"
+    },
+    {
+      "block_id": "B0086",
+      "sha256": "798a82a64c0e43679d397215e2440060cdceb714e43ad42870adbba57d86c9d4",
+      "char_start": 51530,
+      "char_end": 52502,
+      "n_chars": 972,
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "first_line_excerpt": "The association is not uniform, and the comparison has a limited scope. In a Swedish cohort of 70-year-olds, t"
+    },
+    {
+      "block_id": "B0087",
+      "sha256": "9eaa485136d38fbc17952a423351cb3697cd99c83a39fba0183c63c275ea174d",
+      "char_start": 52504,
+      "char_end": 53150,
+      "n_chars": 646,
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "first_line_excerpt": "An atrial focus also has a clinical frame. An expert consensus defines atrial cardiomyopathy as structural, ar"
+    },
+    {
+      "block_id": "B0088",
+      "sha256": "d0decde1f4e8cd70496fdbd60b2ab02709d4188d70236a8169f6abe155706000",
+      "char_start": 53152,
+      "char_end": 53176,
+      "n_chars": 24,
+      "section": "Implications of an ECG term built on readable factors, with a separate clinical term",
+      "first_line_excerpt": "\\subsection{Limitations}"
+    },
+    {
+      "block_id": "B0089",
+      "sha256": "461a5eec297e2ce6197efc6b930c559e386d8b91cc5c8af0d47f7319b641d4bd",
+      "char_start": 53178,
+      "char_end": 53957,
+      "n_chars": 779,
+      "section": "Limitations",
+      "first_line_excerpt": "The study used one database from one health system and has no external validation in a cohort with dated outco"
+    },
+    {
+      "block_id": "B0090",
+      "sha256": "a97bf2c6d3b2b402d643d83139da3f453c6504f15f951bce545631155b511ecb",
+      "char_start": 53959,
+      "char_end": 54520,
+      "n_chars": 561,
+      "section": "Limitations",
+      "first_line_excerpt": "The comparator and the covariates have limits of their own. Age is the anchor age of MIMIC-IV, which is not th"
+    },
+    {
+      "block_id": "B0091",
+      "sha256": "4766d64c941baab82b97dece32a14a2a66369783c6ae04071f380bed2605ac6b",
+      "char_start": 54522,
+      "char_end": 55442,
+      "n_chars": 920,
+      "section": "Limitations",
+      "first_line_excerpt": "The evaluation of calibration and operating points has limits as well. The probabilities were recalibrated in "
+    },
+    {
+      "block_id": "B0092",
+      "sha256": "0383c8fb7939c73388d2f0928833fedf8ec91381881478939d0f64f557b1fb04",
+      "char_start": 55444,
+      "char_end": 56346,
+      "n_chars": 902,
+      "section": "Limitations",
+      "first_line_excerpt": "The occlusion readout is a perturbation explanation of the fitted model on 120 high-risk training ECGs. It is "
+    },
+    {
+      "block_id": "B0093",
+      "sha256": "2e0a04b186c2621dce16153cf35aebc08df93ec2598d50a24deecf7cec7e362d",
+      "char_start": 56348,
+      "char_end": 56376,
+      "n_chars": 28,
+      "section": "Limitations",
+      "first_line_excerpt": "\\subsection{Future research}"
+    },
+    {
+      "block_id": "B0094",
+      "sha256": "70455db775424f9c0bd78e7309366a6a485be6e5d53cb77cb0dc77d9a594124f",
+      "char_start": 56378,
+      "char_end": 57366,
+      "n_chars": 988,
+      "section": "Future research",
+      "first_line_excerpt": "Several studies would extend this work. A test of the block factors on ICD-coded labels would measure how far "
+    },
+    {
+      "block_id": "B0095",
+      "sha256": "7c6ffa22d25048eb3151789183257f6e7e30da0e839bc9442905cd1eab2d7122",
+      "char_start": 57368,
+      "char_end": 57388,
+      "n_chars": 20,
+      "section": "Future research",
+      "first_line_excerpt": "\\section{Conclusion}"
+    },
+    {
+      "block_id": "B0096",
+      "sha256": "f141be9c71fcabaeb0b3d88d74caa1167cbbe339178013665d3330de84b68863",
+      "char_start": 57390,
+      "char_end": 58261,
+      "n_chars": 871,
+      "section": "Conclusion",
+      "first_line_excerpt": "On ICD-coded hospital diagnoses linked to MIMIC-IV-ECG, a block-term tensor network with a separate clinical t"
+    },
+    {
+      "block_id": "B0097",
+      "sha256": "eda5876a1e40f8ebde3c3dc578147d0047bee13bca2e03f1840da4247f8e61da",
+      "char_start": 58263,
+      "char_end": 58834,
+      "n_chars": 571,
+      "section": "Conclusion",
+      "first_line_excerpt": "The ECG term alone reached the discrimination of a compact CNN under the same protocol, while its evidence pas"
+    },
+    {
+      "block_id": "B0098",
+      "sha256": "b185a0dd2bcbebd2282886c63aacb31d37c8a7d4989e1bd4228d1530e0c28eee",
+      "char_start": 58836,
+      "char_end": 59487,
+      "n_chars": 651,
+      "section": "Conclusion",
+      "first_line_excerpt": "For the design of ECG risk models, the results suggest that a clinical term kept outside the block-term factor"
+    },
+    {
+      "block_id": "B0099",
+      "sha256": "9ec72d9ce82dfae380d1db513bd496f54bdec61b2eea976c115994ed2bd6c782",
+      "char_start": 59489,
+      "char_end": 59540,
+      "n_chars": 51,
+      "section": "Conclusion",
+      "first_line_excerpt": "\\section*{CRediT authorship contribution statement}"
+    },
+    {
+      "block_id": "B0100",
+      "sha256": "6d1b00fe214577c1861940fc6c281da8081148c612902f7cb041df2faa84cdc1",
+      "char_start": 59542,
+      "char_end": 59576,
+      "n_chars": 34,
+      "section": "CRediT authorship contribution statement",
+      "first_line_excerpt": "[GAP: CRediT roles of each author]"
+    },
+    {
+      "block_id": "B0101",
+      "sha256": "f35cb00285a88f94cf6f049a29f5c11b96f2c513854fef8835a1350ad78c0b7a",
+      "char_start": 59578,
+      "char_end": 59596,
+      "n_chars": 18,
+      "section": "CRediT authorship contribution statement",
+      "first_line_excerpt": "\\section*{Funding}"
+    },
+    {
+      "block_id": "B0102",
+      "sha256": "a1fd2d1a3646dd65b5b6ed746d5069d252feeb1db70473f40fc4e19ca26c9494",
+      "char_start": 59598,
+      "char_end": 59612,
+      "n_chars": 14,
+      "section": "Funding",
+      "first_line_excerpt": "[GAP: funding]"
+    },
+    {
+      "block_id": "B0103",
+      "sha256": "14a48af7380028b266998668e58cb8a08605c18db22bd7fbb6f33d2f8d9b662b",
+      "char_start": 59614,
+      "char_end": 59658,
+      "n_chars": 44,
+      "section": "Funding",
+      "first_line_excerpt": "\\section*{Declaration of competing interest}"
+    },
+    {
+      "block_id": "B0104",
+      "sha256": "7ad267d4bd2fb7eeff268f43096f2c0d3377a855fe1fb3b99bd8e2c9028157a4",
+      "char_start": 59660,
+      "char_end": 59688,
+      "n_chars": 28,
+      "section": "Declaration of competing interest",
+      "first_line_excerpt": "[GAP: conflicts of interest]"
+    },
+    {
+      "block_id": "B0105",
+      "sha256": "4c1f2f34a2954305004209af8e2646bca3c2ff40af00d0b68b2f5f117e6423d2",
+      "char_start": 59690,
+      "char_end": 59718,
+      "n_chars": 28,
+      "section": "Declaration of competing interest",
+      "first_line_excerpt": "\\section*{Data availability}"
+    },
+    {
+      "block_id": "B0106",
+      "sha256": "b3080b7f82165d477f75d684e4d8f859e256f60bd8778747eb41ea9bdd8a5288",
+      "char_start": 59720,
+      "char_end": 60264,
+      "n_chars": 544,
+      "section": "Data availability",
+      "first_line_excerpt": "The data that support the findings of this study are available from PhysioNet, as MIMIC-IV-ECG \\cite{https://d"
+    },
+    {
+      "block_id": "B0107",
+      "sha256": "1bbea8be7f1bd576abd857bb331f038901197c7253866981f561e0a572dea273",
+      "char_start": 60266,
+      "char_end": 60293,
+      "n_chars": 27,
+      "section": "Data availability",
+      "first_line_excerpt": "\\section*{Ethics statement}"
+    },
+    {
+      "block_id": "B0108",
+      "sha256": "2d90947ed164a1f0e9a207ebe5d56cb9cb53e693d4dd8b0bf294b192025565ab",
+      "char_start": 60295,
+      "char_end": 60488,
+      "n_chars": 193,
+      "section": "Ethics statement",
+      "first_line_excerpt": "This study used de-identified data of MIMIC-IV and MIMIC-IV-ECG. This study was approved by [GAP: ethics appro"
+    },
+    {
+      "block_id": "B0109",
+      "sha256": "a9cfc5077d958787de2b1291886d1816806c64f11246b1e5e89da8c307e61835",
+      "char_start": 60490,
+      "char_end": 60721,
+      "n_chars": 231,
+      "section": "Ethics statement",
+      "first_line_excerpt": "% Placement: unnumbered section before the references (generic detailed form; the policy of Artificial Intelli"
+    },
+    {
+      "block_id": "B0110",
+      "sha256": "64624bbb1e3b9457619f5d7c01ea7c7e03f9867a20303567665b3f37ef4311ea",
+      "char_start": 60723,
+      "char_end": 61992,
+      "n_chars": 1269,
+      "section": "Declaration of generative AI and AI-assisted technologies",
+      "first_line_excerpt": "During the preparation of this work the authors used Claude Opus (model identifier claude-opus-5-5) through a "
+    },
+    {
+      "block_id": "B0111",
+      "sha256": "4a079bc6b2d6248a4ace768c0c6da8563a71dc2db7f510a27719ac254399af22",
+      "char_start": 61994,
+      "char_end": 62222,
+      "n_chars": 228,
+      "section": "Declaration of generative AI and AI-assisted technologies",
+      "first_line_excerpt": "Analysis: [GAP: AI use category Analysis assistance not confirmed]. The tool computed no number reported in th"
+    },
+    {
+      "block_id": "B0112",
+      "sha256": "e28704e4ebf39c7b487c2fd54122cfaf6ebbce98ec19db3e2c60faa5aaf5332f",
+      "char_start": 62224,
+      "char_end": 62260,
+      "n_chars": 36,
+      "section": "Declaration of generative AI and AI-assisted technologies",
+      "first_line_excerpt": "\\section*{Reproducibility statement}"
+    },
+    {
+      "block_id": "B0113",
+      "sha256": "5192398eebb10fbfee68f7658f8fcfd6cc343dc7c4e3d06b049072ea252a8d92",
+      "char_start": 62262,
+      "char_end": 62957,
+      "n_chars": 695,
+      "section": "Reproducibility statement",
+      "first_line_excerpt": "The cohort definition, the inclusion and exclusion criteria, the models with their hyperparameters, and the ev"
+    },
+    {
+      "block_id": "B0114",
+      "sha256": "d00c60efe6db0a2848cd00b88f94eb2b7168db435f1b04a8ee5fd1965dcafa44",
+      "char_start": 62959,
+      "char_end": 63008,
+      "n_chars": 49,
+      "section": "Reproducibility statement",
+      "first_line_excerpt": "\\bibliographystyle{vancouver}"
+    },
+    {
+      "block_id": "B0115",
+      "sha256": "2dc670e7ffe1f12aa0326631b39a0b6d72da153425c7f5f9aed627a71c1487d6",
+      "char_start": 63010,
+      "char_end": 63024,
+      "n_chars": 14,
+      "section": "Reproducibility statement",
+      "first_line_excerpt": "\\end{document}"
+    }
+  ]
+}

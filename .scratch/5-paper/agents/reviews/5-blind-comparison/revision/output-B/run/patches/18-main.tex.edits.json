@@ -1,0 +1,26 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "main.tex",
+  "base_sha256": "2e4b7c610296fec191510a38c4c97c83fa7398c78c6c815e1348a88dbfa1ba26",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0012",
+      "old_hash": "2dcc65d6b9ec1151981432cc43cea0146a21157d689427db3a81d44063b071d8",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "Overfull hbox of 1.99pt at main.tex lines 40--41: 'for' becomes 'in' in the opening sentence, which narrows the second printed line by about 4pt so that it ends at '(ECG),' within the text width; every claim, number, citation and gap marker stays.",
+      "new_text": "The representation fed to a clustering algorithm may matter more than the algorithm itself in unsupervised analysis of the electrocardiogram (ECG), and this study measures how much it matters. Several clinically interesting questions are unsupervised: which patients group together, what subtypes exist, and whether structure can be found without labels that are expensive or unavailable. A natural first attempt is to cluster ECG records directly. This study began as a re-examination of a master's project that clustered whole 12-lead records in this way. The project flattened each strip into a long vector, compressed it with a dense autoencoder, and clustered the code. It reported high cluster purity and a silhouette score of 0.89 [GAP: source of the master's project results]. The purity equalled the majority-class proportion in every setting. The silhouette was measured on a degenerate solution in which almost all points fell into a single cluster. The conclusion of that work, that the difficulty lies in processing the raw signal rather than in the clustering step, is the starting point that this study tests."
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0030",
+      "old_hash": "5dadc810a0b5d00c95d8d5be9c68e430e5bc616b0bf425512889e99c809778b8",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "Overfull hbox of 2.80pt at main.tex lines 98--99: 'HuBERT-ECG's' becomes 'the embedding of HuBERT-ECG' in the third criterion, which gives the second printed line of the item a break before 'of' within the text width; the report of the closest benchmark, its citation and the rest of the block stay as they are.",
+      "new_text": "We chose the two foundation models by three criteria:\n\\begin{enumerate}\n\\item Both have public weights and take 12-lead input.\n\\item They differ in pretraining and architecture: HuBERT-ECG is a self-supervised transformer and ECGFounder a supervised convolutional network.\n\\item Both are evaluated in the closest benchmark \\cite{lookingbeyond2026}, which reports ECGFounder's embedding as organised by clinical label and the embedding of HuBERT-ECG as organised by dataset.\n\\end{enumerate}\nWe included ECGFounder because of that report, so that the hand-crafted features are compared with a foundation model whose embedding follows the clinical label."
+    }
+  ]
+}

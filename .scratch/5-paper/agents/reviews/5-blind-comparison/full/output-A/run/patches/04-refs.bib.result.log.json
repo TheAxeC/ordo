@@ -1,0 +1,842 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "5b70426d2f07a69b9a22747cd07863485c88f18d49c7c32306fc1d19f0a89b4f",
+  "round": 1,
+  "n_blocks": 68,
+  "n_blocks_touched": 63,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0001",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C1"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month Sept, an undefined BibTeX macro, to sep",
+      "chfield": 709,
+      "chfield": 706
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0002",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C2"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 963,
+      "chfield": 961
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0003",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C3"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 755,
+      "chfield": 753
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0004",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C4"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 750,
+      "chfield": 748
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0005",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C5"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 569,
+      "chfield": 567
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0006",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C6"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 511,
+      "chfield": 509
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0007",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C7"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 579,
+      "chfield": 577
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C8"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month Sept, an undefined BibTeX macro, to sep",
+      "chfield": 736,
+      "chfield": 733
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0009",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C9"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 678,
+      "chfield": 676
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C10"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 779,
+      "chfield": 777
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0011",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C11"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month July, an undefined BibTeX macro, to jul",
+      "chfield": 438,
+      "chfield": 435
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0012",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C12"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month Sept, an undefined BibTeX macro, to sep",
+      "chfield": 390,
+      "chfield": 387
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0013",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C13"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 551,
+      "chfield": 549
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0014",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C14"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 801,
+      "chfield": 799
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C15"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month Sept, an undefined BibTeX macro, to sep",
+      "chfield": 508,
+      "chfield": 505
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C16"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 644,
+      "chfield": 642
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C17"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 1173,
+      "chfield": 1171
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C18"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 734,
+      "chfield": 732
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0019",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C19"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 403,
+      "chfield": 401
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C20"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month July, an undefined BibTeX macro, to jul",
+      "chfield": 723,
+      "chfield": 720
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0021",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C21"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 3139,
+      "chfield": 3137
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0022",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C22"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month July to jul; empty last author removed",
+      "chfield": 966,
+      "chfield": 958
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C23"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 428,
+      "chfield": 426
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C24"
+      ],
+      "rationale": "adds the missing DOI that the OpenAlex record of the title gives",
+      "chfield": 253,
+      "chfield": 290
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C25"
+      ],
+      "rationale": "adds the missing DOI that the OpenAlex record of the title gives",
+      "chfield": 254,
+      "chfield": 291
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C26"
+      ],
+      "rationale": "adds the missing DOI that the OpenAlex and Semantic Scholar records of the title give",
+      "chfield": 261,
+      "chfield": 298
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0027",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C27"
+      ],
+      "rationale": "adds the missing DOI that the OpenAlex and Semantic Scholar records of the title give",
+      "chfield": 264,
+      "chfield": 301
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C28"
+      ],
+      "rationale": "adds the missing DOI that the OpenAlex and Semantic Scholar records of the arXiv ID and the title give",
+      "chfield": 241,
+      "chfield": 278
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C29"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 550,
+      "chfield": 548
+    },
+    {
+      "op_id": "OP030",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C30"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month June, an undefined BibTeX macro, to jun",
+      "chfield": 460,
+      "chfield": 457
+    },
+    {
+      "op_id": "OP031",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C31"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 684,
+      "chfield": 682
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C32"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 439,
+      "chfield": 437
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C33"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 357,
+      "chfield": 355
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C34"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 377,
+      "chfield": 375
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C35"
+      ],
+      "rationale": "adds the missing DOI that the OpenAlex record of the title gives",
+      "chfield": 288,
+      "chfield": 325
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0038",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C36"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month July, an undefined BibTeX macro, to jul",
+      "chfield": 557,
+      "chfield": 554
+    },
+    {
+      "op_id": "OP037",
+      "kind": "replace_block",
+      "block_id": "B0039",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C37"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 545,
+      "chfield": 543
+    },
+    {
+      "op_id": "OP038",
+      "kind": "replace_block",
+      "block_id": "B0041",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C38"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 583,
+      "chfield": 581
+    },
+    {
+      "op_id": "OP039",
+      "kind": "replace_block",
+      "block_id": "B0043",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C39"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org in this unused entry",
+      "chfield": 486,
+      "chfield": 484
+    },
+    {
+      "op_id": "OP040",
+      "kind": "replace_block",
+      "block_id": "B0044",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C40"
+      ],
+      "rationale": "escapes the percent sign of the title, which LaTeX reads as a comment, in this unused entry",
+      "chfield": 561,
+      "chfield": 562
+    },
+    {
+      "op_id": "OP041",
+      "kind": "replace_block",
+      "block_id": "B0045",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C41"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 634,
+      "chfield": 632
+    },
+    {
+      "op_id": "OP042",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C42"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 467,
+      "chfield": 465
+    },
+    {
+      "op_id": "OP043",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C43"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 399,
+      "chfield": 397
+    },
+    {
+      "op_id": "OP044",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C44"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 513,
+      "chfield": 511
+    },
+    {
+      "op_id": "OP045",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C45"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 387,
+      "chfield": 385
+    },
+    {
+      "op_id": "OP046",
+      "kind": "replace_block",
+      "block_id": "B0050",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C46"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 1071,
+      "chfield": 1069
+    },
+    {
+      "op_id": "OP047",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C47"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org in this unused entry",
+      "chfield": 382,
+      "chfield": 380
+    },
+    {
+      "op_id": "OP048",
+      "kind": "replace_block",
+      "block_id": "B0053",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C48"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month Sept, an undefined BibTeX macro, to sep",
+      "chfield": 391,
+      "chfield": 388
+    },
+    {
+      "op_id": "OP049",
+      "kind": "replace_block",
+      "block_id": "B0054",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C49"
+      ],
+      "rationale": "url to https://doi.org; title without the HTML paragraph markup, whose & stops the compile, as the OpenAlex and Semantic Scholar records give it; volume without the word Volume",
+      "chfield": 572,
+      "chfield": 544
+    },
+    {
+      "op_id": "OP050",
+      "kind": "replace_block",
+      "block_id": "B0055",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C50"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month June, an undefined BibTeX macro, to jun",
+      "chfield": 425,
+      "chfield": 422
+    },
+    {
+      "op_id": "OP051",
+      "kind": "replace_block",
+      "block_id": "B0056",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C51"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 519,
+      "chfield": 517
+    },
+    {
+      "op_id": "OP052",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C52"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month June, an undefined BibTeX macro, to jun",
+      "chfield": 378,
+      "chfield": 375
+    },
+    {
+      "op_id": "OP053",
+      "kind": "replace_block",
+      "block_id": "B0058",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C53"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; empty last author removed",
+      "chfield": 721,
+      "chfield": 714
+    },
+    {
+      "op_id": "OP054",
+      "kind": "replace_block",
+      "block_id": "B0059",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C54"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 588,
+      "chfield": 586
+    },
+    {
+      "op_id": "OP055",
+      "kind": "replace_block",
+      "block_id": "B0060",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C55"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month Sept, an undefined BibTeX macro, to sep",
+      "chfield": 661,
+      "chfield": 658
+    },
+    {
+      "op_id": "OP056",
+      "kind": "replace_block",
+      "block_id": "B0061",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C56"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; the sign U+2265 and the thin spaces U+2009, which pdfLaTeX cannot typeset, written as math and plain spaces, and the no-break space before years as a plain space",
+      "chfield": 666,
+      "chfield": 671
+    },
+    {
+      "op_id": "OP057",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C57"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month July, an undefined BibTeX macro, to jul",
+      "chfield": 493,
+      "chfield": 490
+    },
+    {
+      "op_id": "OP058",
+      "kind": "replace_block",
+      "block_id": "B0063",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C58"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 377,
+      "chfield": 375
+    },
+    {
+      "op_id": "OP059",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C59"
+      ],
+      "rationale": "adds the missing DOI that the OpenAlex and Semantic Scholar records of the title give",
+      "chfield": 260,
+      "chfield": 297
+    },
+    {
+      "op_id": "OP060",
+      "kind": "replace_block",
+      "block_id": "B0065",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C60"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 400,
+      "chfield": 398
+    },
+    {
+      "op_id": "OP061",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C61"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 671,
+      "chfield": 669
+    },
+    {
+      "op_id": "OP062",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C62"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org",
+      "chfield": 499,
+      "chfield": 497
+    },
+    {
+      "op_id": "OP063",
+      "kind": "replace_block",
+      "block_id": "B0068",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "C63"
+      ],
+      "rationale": "url from dx.doi.org to https://doi.org; month July, an undefined BibTeX macro, to jul",
+      "chfield": 460,
+      "chfield": 457
+    }
+  ],
+  "blocks_untouched": 5,
+  "roadmap_items_covered": [
+    "C1",
+    "C10",
+    "C11",
+    "C12",
+    "C13",
+    "C14",
+    "C15",
+    "C16",
+    "C17",
+    "C18",
+    "C19",
+    "C2",
+    "C20",
+    "C21",
+    "C22",
+    "C23",
+    "C24",
+    "C25",
+    "C26",
+    "C27",
+    "C28",
+    "C29",
+    "C3",
+    "C30",
+    "C31",
+    "C32",
+    "C33",
+    "C34",
+    "C35",
+    "C36",
+    "C37",
+    "C38",
+    "C39",
+    "C4",
+    "C40",
+    "C41",
+    "C42",
+    "C43",
+    "C44",
+    "C45",
+    "C46",
+    "C47",
+    "C48",
+    "C49",
+    "C5",
+    "C50",
+    "C51",
+    "C52",
+    "C53",
+    "C54",
+    "C55",
+    "C56",
+    "C57",
+    "C58",
+    "C59",
+    "C6",
+    "C60",
+    "C61",
+    "C62",
+    "C63",
+    "C7",
+    "C8",
+    "C9"
+  ],
+  "block_touched_ratio": 0.9265,
+  "preserved_ratio": 0.0735,
+  "char_churn_ratio": 1.8947,
+  "net_growth_chars": 106,
+  "structural_flags": [
+    "block_touched_ratio 0.926 (63 of 68 blocks) exceeds 0.6"
+  ],
+  "structural_acknowledged": true,
+  "output_file": "patches/04-refs.bib.result",
+  "output_sha256": "6023d5aefe9e9657ffe45e988e3965626379b8feb4105aed5f4f10a144945c14"
+}

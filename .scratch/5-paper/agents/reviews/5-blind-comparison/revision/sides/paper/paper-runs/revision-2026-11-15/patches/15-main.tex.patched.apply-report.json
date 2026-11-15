@@ -1,0 +1,841 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "4f293f8037e9a9fdbc4b7b4670927484b9f499e531783dd7b53c20cf9fd0c654",
+  "round": 1,
+  "n_blocks": 84,
+  "n_blocks_touched": 53,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "F2",
+        "F8",
+        "F12",
+        "F13",
+        "F20",
+        "F34",
+        "F43"
+      ],
+      "rationale": "Names the positive class as atrial fibrillation or flutter, defines the conditioner at first use, uses one term each for records, clustering algorithms and the quantile transform, gives the number in place of 'near 0', states the single subsample behind the imbalance result, and rewords the closing scope sentence so it differs in shape from the Discussion and the Conclusion while keeping the scope.",
+      "chars_before": 1870,
+      "chars_after": 2020
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0012",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F12",
+        "F23",
+        "F24",
+        "F38",
+        "F41",
+        "F46"
+      ],
+      "rationale": "Opens on the paragraph's point, drops the two unsourced claims about the field, joins the short opening paragraph with the paragraph on the master's project, splits the 41-word sentence, removes 'simply', 'near' and the closing 'We make it precise', and marks the missing source of the master's project results.",
+      "chars_before": 508,
+      "chars_after": 1125
+    },
+    {
+      "op_id": "OP003",
+      "kind": "delete_block",
+      "block_id": "B0013",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F38",
+        "F41",
+        "F46"
+      ],
+      "rationale": "The paragraph on the master's project is carried, rewritten, into B0012 (OP002), which joins it with the short opening paragraph.",
+      "chars_before": 664,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0014",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F11",
+        "F16"
+      ],
+      "rationale": "Replaces 'supervised probe' with 'linear classifier', the term the Methods use for the ceiling, and names the distinction that 'this axis' pointed to.",
+      "chars_before": 733,
+      "chars_after": 756
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F3",
+        "F21",
+        "F25",
+        "F50",
+        "F56"
+      ],
+      "rationale": "Opens on the gap and the claim to fill it, which Related work no longer repeats, defines representation-wise evaluation from the benchmark's own text, reports the benchmark in the past tense, and replaces 'the canonical morphology benchmark' with what the MIT-BIH paper and de Chazal et al. state.",
+      "chars_before": 755,
+      "chars_after": 1099
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F1",
+        "F4",
+        "F13",
+        "F17",
+        "F20",
+        "F46"
+      ],
+      "rationale": "Names the positive class precisely, moves the short trailing paragraph before the list and keeps one statement of 'no new algorithm', defines the conditioner at its first use in the body, names what accounts for each of the original project's numbers, and points to the Methods for the ceiling instead of repeating its definition and its reading.",
+      "chars_before": 1716,
+      "chars_after": 1820
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F12",
+        "F52"
+      ],
+      "rationale": "Replaces 'millions of recordings' with the pretraining corpus sizes that Table repr gives from the two model papers.",
+      "chars_before": 1557,
+      "chars_after": 1547
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0019",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F43"
+      ],
+      "rationale": "Replaces 'near zero' with the values the metrics table gives: expectation 0 under random labelling and 0 for the one-cluster solution.",
+      "chars_before": 589,
+      "chars_after": 667
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F44"
+      ],
+      "rationale": "Replaces 'on many tasks' in the present tense with the specific past-tense result Berger et al. report: five pretrained encoders, and a random encoder consistently competitive with CLOCS and HeartLang.",
+      "chars_before": 906,
+      "chars_after": 988
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0021",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F1",
+        "F3",
+        "F56"
+      ],
+      "rationale": "Reports the benchmark in the past tense, drops the gap sentence that the Introduction states, and refers to the ceiling of the Methods instead of restating its definition; the first line after the run-in heading keeps the breakable words of the compile fix.",
+      "chars_before": 987,
+      "chars_after": 853
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "F12",
+        "F56"
+      ],
+      "rationale": "Puts what the study did in the past tense and calls the PTB-XL items records.",
+      "chars_before": 758,
+      "chars_after": 756
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "F9",
+        "F13",
+        "F39",
+        "F47",
+        "F56"
+      ],
+      "rationale": "Splits cohort construction from the reason for the binary task, states that the AF class pools atrial fibrillation and flutter and that the guideline criterion covers atrial fibrillation only, cites the PTB-XL descriptor for the zero likelihood of rhythm statements, uses 'majority-class proportion', and puts the procedure in the past tense.",
+      "chars_before": 1288,
+      "chars_after": 1549
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "F56"
+      ],
+      "rationale": "Puts the MIT-BIH procedure in the past tense.",
+      "chars_before": 779,
+      "chars_after": 784
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F12",
+        "F18",
+        "F26",
+        "F45",
+        "F46",
+        "F53",
+        "F56"
+      ],
+      "rationale": "Joins the 25-word paragraph after the list into the lead-in, gives the exact raw-flattening dimension that the six-sample window fixes for 1000 samples and 12 leads, sets the 16 features as a list, gives 'They encode' its antecedent, replaces 'properly specified' with a statement the text supports, and puts the procedure in the past tense.",
+      "chars_before": 3155,
+      "chars_after": 3212
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F13",
+        "F27",
+        "F56",
+        "F57"
+      ],
+      "rationale": "Corrects 'given the input they expect' to what the Methods and Limitations state (all 12 leads, but no filtering, no amplitude rescaling for HuBERT-ECG, upsampling for ECGFounder), spells out atrial fibrillation where a source means it, and gives the untested lead effect to 'we'.",
+      "chars_before": 1148,
+      "chars_after": 1412
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0030",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F5",
+        "F45",
+        "F46"
+      ],
+      "rationale": "Sets the three selection criteria as a numbered list introduced with a colon, and states the closest benchmark's report once here, where the selection rests on it.",
+      "chars_before": 552,
+      "chars_after": 636
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F6",
+        "F45",
+        "F53",
+        "F56",
+        "F57"
+      ],
+      "rationale": "Gives the exact raw-beat dimension that the window and 360 Hz fix, sets the 21 beat features as a list, puts the procedure in the past tense, and states the omission of the foundation models once in the Methods, with 'we'.",
+      "chars_before": 1357,
+      "chars_after": 1351
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F53",
+        "F57"
+      ],
+      "rationale": "Gives the exact dimensions 1992 and 396 in place of the approximate ones, and gives the unmeasured run time and memory to 'we'; the column widths of the compile fix stay.",
+      "chars_before": 1512,
+      "chars_after": 1500
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F10",
+        "F56",
+        "F57"
+      ],
+      "rationale": "Uses 'clustering algorithm' for the five methods, puts the procedure in the past tense, and gives the authors' choices (minimum cluster size, no tuning, the default conditioner) to 'we'.",
+      "chars_before": 1260,
+      "chars_after": 1292
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F50"
+      ],
+      "rationale": "Opens on the paragraph's point, the headline metrics and the reference values each metric is read against, and moves the pointer to the metrics table after it.",
+      "chars_before": 694,
+      "chars_after": 812
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F1",
+        "F11",
+        "F46"
+      ],
+      "rationale": "Keeps the one statement of how the ceiling and the ARI are read where the ceiling is defined, defines 'failure of geometry', hedges both readings and names the non-linear and conditioner cases that qualify them, which brings the paragraph into the length range.",
+      "chars_before": 481,
+      "chars_after": 987
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F56"
+      ],
+      "rationale": "Puts the seed procedure and the tests in the past tense.",
+      "chars_before": 898,
+      "chars_after": 903
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0038",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F8",
+        "F47",
+        "F56"
+      ],
+      "rationale": "Splits the conditioner sweep from the two single-fit analyses, names the default 'the power transform' as everywhere else, and puts the procedure in the past tense.",
+      "chars_before": 1157,
+      "chars_after": 1244
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F8",
+        "F57"
+      ],
+      "rationale": "Gives the choice of the wavelet delineation to 'we' and names the ceiling's conditioner 'the power transform'; the placeholder for the exact library versions stays, since no record of them exists in the materials.",
+      "chars_before": 2329,
+      "chars_after": 2333
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "Federated clustering simulation",
+      "roadmap_item_ids": [
+        "F4",
+        "F22",
+        "F56"
+      ],
+      "rationale": "Defines the local iterations of Lloyd's algorithm by what each does, drops the repeated 'no new method' statement that the FedAvg credit already makes, and puts the procedure in the past tense.",
+      "chars_before": 1245,
+      "chars_after": 1349
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0045",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "F10",
+        "F47",
+        "F50",
+        "F56"
+      ],
+      "rationale": "Opens on the point, that the representation changed the ARI more than the clustering algorithm, reports in the past tense, uses 'clustering algorithm', and takes in the observation that the two foundation models differ, moved here from the paragraph on HDBSCAN and spectral clustering.",
+      "chars_before": 627,
+      "chars_after": 685
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "F7",
+        "F8",
+        "F9",
+        "F10",
+        "F12",
+        "F53"
+      ],
+      "rationale": "Leaves the Wilcoxon contrasts and their effect sizes to the text so caption and text no longer repeat each other, gives the untested conv-AE to 'we', uses records, clustering algorithm, the power transform and majority-class proportion, and gives the exact dimension 1992; the \\small setting of the compile fix stays.",
+      "chars_before": 1846,
+      "chars_after": 1634
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "F8",
+        "F10",
+        "F12"
+      ],
+      "rationale": "Uses records, clustering algorithm and the power transform in the caption.",
+      "chars_before": 609,
+      "chars_after": 623
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "F7",
+        "F47",
+        "F51",
+        "F56"
+      ],
+      "rationale": "Splits seed stability and the tested contrasts from the purity and K-sweep checks, drops the seed values and the stability sentence that the caption and Methods hold, keeps the effect sizes with their meaning on the ARI scale, follows the purity values with what they mean, and reports in the past tense.",
+      "chars_before": 1272,
+      "chars_after": 1458
+    },
+    {
+      "op_id": "OP030",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "F4",
+        "F5",
+        "F10",
+        "F47",
+        "F51",
+        "F56",
+        "F57"
+      ],
+      "rationale": "Keeps one idea, the low scores of HDBSCAN and spectral clustering, with the foundation-model contrast moved to B0045 and the repeated report and scope sentences removed; follows the HDBSCAN cluster sizes with what they mean, gives the unchecked cause to 'we', and reports in the past tense.",
+      "chars_before": 825,
+      "chars_after": 736
+    },
+    {
+      "op_id": "OP031",
+      "kind": "replace_block",
+      "block_id": "B0050",
+      "section": "Clustering by representation and algorithm",
+      "roadmap_item_ids": [
+        "F42"
+      ],
+      "rationale": "Structural: the heading becomes a label rather than a sentence, and gains a label that the Methods refer to.",
+      "chars_before": 47,
+      "chars_after": 59
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "F11",
+        "F14",
+        "F56"
+      ],
+      "rationale": "Names the conv-AE and HuBERT-ECG in place of 'the weaker representations', calls the non-linear check the random forest, and reports in the past tense.",
+      "chars_before": 1336,
+      "chars_after": 1325
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0052",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "F5",
+        "F13",
+        "F19",
+        "F28",
+        "F56"
+      ],
+      "rationale": "Opens on the paragraph's point with 'we' and without a forward-pointing pronoun, hedges the hand-crafted mechanism and drops the direct comparison of ceiling and ARI, rewords the closest benchmark's report as what the mechanism would explain, and spells out atrial fibrillation where the guideline means it.",
+      "chars_before": 622,
+      "chars_after": 783
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0053",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "F5",
+        "F11",
+        "F50",
+        "F56",
+        "F57"
+      ],
+      "rationale": "Opens on the point that the label is present but off the dominant directions, calls the probe the logistic regression of the ceiling, rewords the closest benchmark's report as agreement, gives the untested input effect to 'we', and reports in the past tense.",
+      "chars_before": 747,
+      "chars_after": 880
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0054",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "F35",
+        "F56"
+      ],
+      "rationale": "States the untested mechanism as the authors' reading and reports the cluster sizes in the past tense.",
+      "chars_before": 530,
+      "chars_after": 594
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0055",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "F10",
+        "F12"
+      ],
+      "rationale": "Uses records and clustering algorithm in the caption.",
+      "chars_before": 914,
+      "chars_after": 933
+    },
+    {
+      "op_id": "OP037",
+      "kind": "replace_block",
+      "block_id": "B0056",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "F42"
+      ],
+      "rationale": "Structural: the figurative heading 'The silhouette trap' becomes a label of its content.",
+      "chars_before": 32,
+      "chars_after": 48
+    },
+    {
+      "op_id": "OP038",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "F29",
+        "F49"
+      ],
+      "rationale": "Replaces the unsupported 'specific, reproducible way' with the observed result, replaces 'all but a handful of points' with the largest-cluster fraction as the saved results give it, and reports in the past tense.",
+      "chars_before": 637,
+      "chars_after": 657
+    },
+    {
+      "op_id": "OP039",
+      "kind": "replace_block",
+      "block_id": "B0058",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "F8",
+        "F12",
+        "F42"
+      ],
+      "rationale": "Drops the figurative 'trap' from the caption with the heading, and uses records and the power transform.",
+      "chars_before": 761,
+      "chars_after": 767
+    },
+    {
+      "op_id": "OP040",
+      "kind": "replace_block",
+      "block_id": "B0059",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "F42"
+      ],
+      "rationale": "Structural: the sentence heading 'Conditioning matters' becomes a label, with a label that the Methods refer to.",
+      "chars_before": 33,
+      "chars_after": 54
+    },
+    {
+      "op_id": "OP041",
+      "kind": "replace_block",
+      "block_id": "B0060",
+      "section": "Conditioning matters",
+      "roadmap_item_ids": [
+        "F8",
+        "F10",
+        "F30",
+        "F41",
+        "F56"
+      ],
+      "rationale": "Uses 'conditioner' and the conditioner names of the Methods, says what the mean is taken over, drops the unsourced 'common default', states the untested mechanism as a possible cause tied to the pilot analysis, removes the closing slogan, and reports in the past tense.",
+      "chars_before": 610,
+      "chars_after": 785
+    },
+    {
+      "op_id": "OP042",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "F36",
+        "F48",
+        "F56"
+      ],
+      "rationale": "Scopes the opening sentence to the three representations of the beat task in place of 'replicates', cuts the closing sentence that restated it, and reports in the past tense.",
+      "chars_before": 540,
+      "chars_after": 409
+    },
+    {
+      "op_id": "OP043",
+      "kind": "replace_block",
+      "block_id": "B0063",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "F6",
+        "F8",
+        "F9",
+        "F10",
+        "F53"
+      ],
+      "rationale": "Rewords the caption's note on the foundation models so it does not repeat the Methods sentence, uses the power transform, majority-class proportion and clustering algorithm, and gives the exact raw-beat dimension 396.",
+      "chars_before": 794,
+      "chars_after": 851
+    },
+    {
+      "op_id": "OP044",
+      "kind": "replace_block",
+      "block_id": "B0065",
+      "section": "Class imbalance and simulated federation",
+      "roadmap_item_ids": [
+        "F9",
+        "F34",
+        "F37",
+        "F56"
+      ],
+      "rationale": "States the single subsample in the opening summary, hedges the loss of ECGFounder's lead as a result that needs replication, uses 'majority-class proportion', and reports in the past tense.",
+      "chars_before": 670,
+      "chars_after": 761
+    },
+    {
+      "op_id": "OP045",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Class imbalance and simulated federation",
+      "roadmap_item_ids": [
+        "F31",
+        "F56"
+      ],
+      "rationale": "Limits the stability claim to the federation, where a seed spread exists, and gives the two standard deviations that support it; reports in the past tense.",
+      "chars_before": 772,
+      "chars_after": 778
+    },
+    {
+      "op_id": "OP046",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Class imbalance and simulated federation",
+      "roadmap_item_ids": [
+        "F12"
+      ],
+      "rationale": "Calls the 2542 items records in the caption; the \\small setting of the compile fix stays.",
+      "chars_before": 964,
+      "chars_after": 961
+    },
+    {
+      "op_id": "OP047",
+      "kind": "replace_block",
+      "block_id": "B0068",
+      "section": "Class imbalance and simulated federation",
+      "roadmap_item_ids": [
+        "F12"
+      ],
+      "rationale": "Calls the 2542 items records in the caption.",
+      "chars_before": 615,
+      "chars_after": 612
+    },
+    {
+      "op_id": "OP048",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F2",
+        "F6",
+        "F10",
+        "F32",
+        "F34",
+        "F47",
+        "F51",
+        "F57"
+      ],
+      "rationale": "Opens the Discussion on a sentence with its own subject that keeps the scope, splits the ranking from the cost properties, states the single imbalance subsample, corrects 'including the original project's design' to the representation the study reproduced, follows the MIT-BIH score with what it means, keeps the lead-set scope in one sentence, and gives the unmeasured cost and the untested judgment to 'we'.",
+      "chars_before": 1192,
+      "chars_after": 1569
+    },
+    {
+      "op_id": "OP049",
+      "kind": "delete_block",
+      "block_id": "B0071",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F40"
+      ],
+      "rationale": "The paragraph restates the Introduction and the silhouette result; its one further point, that the result agrees with the original project's conclusion, now stands in the first Discussion paragraph (OP048).",
+      "chars_before": 359,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP050",
+      "kind": "replace_block",
+      "block_id": "B0072",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F4",
+        "F5",
+        "F47"
+      ],
+      "rationale": "Opens on the contribution in place of what the study does not do, leaves 'no new algorithm' to the Introduction, splits the contribution from the other foundation models, and words the selection of ECGFounder by reference to the Methods instead of repeating the closest benchmark's report.",
+      "chars_before": 1701,
+      "chars_after": 1820
+    },
+    {
+      "op_id": "OP051",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F15",
+        "F27",
+        "F33",
+        "F57"
+      ],
+      "rationale": "Names PhysioNet as the source, reports the consistency check in the order its numbers have and corrects 'cannot inflate the lead' to what the check shows, states the missing amplitude rescaling of HuBERT-ECG beside the filtering, gives the authors' choices to 'we', and moves the model-coverage sentences to B0075.",
+      "chars_before": 1087,
+      "chars_after": 1180
+    },
+    {
+      "op_id": "OP052",
+      "kind": "replace_block",
+      "block_id": "B0075",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F4",
+        "F5",
+        "F6",
+        "F13",
+        "F34",
+        "F55"
+      ],
+      "rationale": "Takes the model-coverage sentences from B0074 and names ECG-FM in place of 'some reported to cluster well', drops the repeated statement on the MIT-BIH foundation models, adds the flutter records of the AF class and the single imbalance subsample to the limitations, and spells out atrial fibrillation where the source means it.",
+      "chars_before": 626,
+      "chars_after": 1109
+    },
+    {
+      "op_id": "OP053",
+      "kind": "replace_block",
+      "block_id": "B0077",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "F2",
+        "F10",
+        "F34"
+      ],
+      "rationale": "Carries the scope into the opening and closing sentences in a shape that differs from the abstract and the Discussion, states the single imbalance subsample, uses 'clustering algorithm', and names the silhouette as the internal index tested.",
+      "chars_before": 699,
+      "chars_after": 828
+    }
+  ],
+  "blocks_untouched": 31,
+  "roadmap_items_covered": [
+    "F1",
+    "F10",
+    "F11",
+    "F12",
+    "F13",
+    "F14",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F2",
+    "F20",
+    "F21",
+    "F22",
+    "F23",
+    "F24",
+    "F25",
+    "F26",
+    "F27",
+    "F28",
+    "F29",
+    "F3",
+    "F30",
+    "F31",
+    "F32",
+    "F33",
+    "F34",
+    "F35",
+    "F36",
+    "F37",
+    "F38",
+    "F39",
+    "F4",
+    "F40",
+    "F41",
+    "F42",
+    "F43",
+    "F44",
+    "F45",
+    "F46",
+    "F47",
+    "F48",
+    "F49",
+    "F5",
+    "F50",
+    "F51",
+    "F52",
+    "F53",
+    "F55",
+    "F56",
+    "F57",
+    "F6",
+    "F7",
+    "F8",
+    "F9"
+  ],
+  "block_touched_ratio": 0.631,
+  "preserved_ratio": 0.369,
+  "char_churn_ratio": 1.8359,
+  "net_growth_chars": 3525,
+  "structural_flags": [
+    "block_touched_ratio 0.631 (53 of 84 blocks) exceeds 0.6",
+    "heading rewritten: \\subsection{Separability is not clusterability} becomes \\subsection{Separability and clusterability}",
+    "heading rewritten: \\subsection{The silhouette trap} becomes \\subsection{Silhouette and degenerate solutions}",
+    "heading rewritten: \\subsection{Conditioning matters} becomes \\subsection{Effect of the conditioner}"
+  ],
+  "structural_acknowledged": true,
+  "output_file": "patches/15-main.tex.patched",
+  "output_sha256": "2e4b7c610296fec191510a38c4c97c83fa7398c78c6c815e1348a88dbfa1ba26"
+}

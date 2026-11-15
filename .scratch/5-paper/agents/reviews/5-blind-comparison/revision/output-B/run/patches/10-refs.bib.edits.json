@@ -1,0 +1,25 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "refs.bib",
+  "base_sha256": "54f9882399353503dc5996d41a877860694315aaba47d1d68ed2f9cc6a8abe42",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "insert_after",
+      "block_id": "B0001",
+      "old_hash": "6709eb28511fb901d080bcf06af358c108112acb4aa3edf8386ce5e6823a07ab",
+      "roadmap_item_ids": ["V12"],
+      "rationale": "Adds the PhysioNet record of PTB-XL release 1.0.3 (DOI 10.13026/kfzx-aw45, from the lookup script bibtex, whose url names release 1.0.3) for the sentence that states the release the study used.",
+      "new_text": "@misc{ptbxl103,\n  author       = {Wagner, Patrick and Strodthoff, Nils and Bousseljot, Ralf-Dieter and Samek, Wojciech and Schaeffter, Tobias},\n  title        = {{PTB-XL}, a large publicly available electrocardiography dataset},\n  howpublished = {PhysioNet},\n  note         = {Version 1.0.3},\n  year         = {2022},\n  doi          = {10.13026/KFZX-AW45}}"
+    },
+    {
+      "op_id": "OP002",
+      "kind": "delete_block",
+      "block_id": "B0025",
+      "old_hash": "6dc089ee7fccc789a2e15f9aa1d17a7d7f7c8a465c4100fdda7d356b9cc78f0f",
+      "roadmap_item_ids": ["V15"],
+      "rationale": "Removes the Hannun_2019 entry, which this run added for the one sentence the main patch removes it from, so that every entry stays cited."
+    }
+  ]
+}

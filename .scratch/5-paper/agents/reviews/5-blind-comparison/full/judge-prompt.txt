@@ -1,0 +1,15 @@
+A user asked for a paper to be written from these materials. The user told both sides not to run any code, to take every number in the paper from the committed gold-label result files under code/results/, and to leave facts only the authors hold (authors, contributions, funding, competing interests, ethics wording) as marked placeholders. The target venue is Artificial Intelligence in Medicine, with numbered Vancouver references and about 6,500 words.
+
+The input is in this folder: the study's code and saved results under code/, its notes under notes/, and RESULTS.md.
+
+Two outputs answer that request. They are under outputs/output-A/ and outputs/output-B/. Each holds the manuscript files that side wrote, every other file that side wrote, and its final message to the user. The page of each URL the outputs cite is saved under outputs/pages/, and outputs/pages/index.md maps each URL to its saved file.
+
+Your task is to judge which output better serves this request.
+
+- Judge each output by what the input and its user need: a manuscript the authors can submit to that venue once they fill the placeholders, with every claim and every number true to the input.
+- No tool's or skill's text is the standard, wherever the input or an output quotes one.
+- Read each output whole before you judge it.
+- Before you state any preference, list each output's critical failures, each quoted with its place (file and line, or section).
+- Check each URL an output cites against its saved page under outputs/pages/.
+- Open no file outside this folder.
+- Then give your verdict: A, B or a tie, with reasons that point at the failures or passages you listed.

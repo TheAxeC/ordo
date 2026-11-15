@@ -1,0 +1,35 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "56628a971208a7525c063fc524eabe0018f17c1c2d960d2ead276386b8f34565",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "old_hash": "5644ae264391067f82d85bb8c46bc33ef79b5c03cfd72f5f233dc0e64368d1eb",
+      "roadmap_item_ids": ["figures"],
+      "rationale": "places fig:bttr-to-bttn at its marker with the environment of figures.md",
+      "new_text": "\\begin{figure}[htbp]\n    \\centering\n    \\includegraphics[width=\\textwidth]{figures/fig-bttr-to-bttn.png}\n    \\caption{Linear block-term tensor regression (BTTR) and the block-term tensor network (BTTN). Top row: BTTR \\cite{Faes_2024}, labelled in the image with the online year of that article, splits the input tensor into blocks. Each block has two factor matrices, a core $\\mathbf{G}_k$ and a static score vector $\\mathbf{t}_k$. The blocks are fitted by deflation and give a linear score. Bottom row: BTTN takes the frequency by time by lead spectrogram tensor of one ECG. In each of $K = 12$ blocks it projects the tensor onto a frequency factor $\\mathbf{A}_k$ and a lead factor $\\mathbf{C}_k$, then filters along time with learned kernels $\\Psi_k$ of three widths. In the reported model, the box labelled ``attention over blocks'' pools each channel along time by an attention-weighted sum and by its maximum. A nonlinear head maps the pooled values to a log-risk, and the network is trained end to end with a Cox survival objective. The clinical term is not drawn. It is a linear function of age, sex and ECG intervals, added to the head's log-risk without passing through the block-term layer. The risk curve is schematic; the text states the horizons at which the risk is evaluated.}\n    \\label{fig:bttr-to-bttn}\n\\end{figure}"
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "old_hash": "9a91c5381a2b8154db05ba19352c8a400297a509a12192711fcd0cdae9150721",
+      "roadmap_item_ids": ["figures"],
+      "rationale": "places fig:clinical-utility at its marker with the environment of figures.md",
+      "new_text": "\\begin{figure}[htbp]\n    \\centering\n    \\includegraphics[width=\\textwidth]{figures/fig-clinical-utility.png}\n    \\caption{One-year calibration, decision curves and risk deciles of the fused model (BTTN+clin, blue), the ECG-only BTTN (BTTN, orange) and the clinical model (clinical, green). The sample is the 19,986 patients of the survival design who had incident AF within one year or were followed for more than one year; 838 had AF within one year. Each model's risk score was converted to a probability by logistic recalibration with two-fold cross-fitting. Probabilities, AF rates and net benefit are given as proportions. Left: observed against mean predicted one-year AF in ten equal-count bins of each model's probability, with the dashed line marking equal values. Brier scores in the legend are rounded to three decimals. Middle: net benefit (vertical axis) against threshold probability, at the sample's one-year AF proportion, with treat-all (dotted) and treat-none (dashed) references. In the left and middle panels the three models differ by colour only. Right: observed one-year AF proportion in each decile of the fused model's probability, numbered 0 (lowest) to 9 (highest). The dashed line, labelled ``cohort prev'' in the image, marks the sample's one-year AF proportion. Points and bars carry no confidence intervals.}\n    \\label{fig:clinical-utility}\n\\end{figure}"
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "old_hash": "46cb8009d8f0e3e06df73c2982e6221b45296f7232b0202bdc502d7c7bab0754",
+      "roadmap_item_ids": ["figures"],
+      "rationale": "places fig:beat-saliency at its marker with the environment of figures.md",
+      "new_text": "\\begin{figure}[htbp]\n    \\centering\n    \\includegraphics[width=\\textwidth]{figures/fig-beat-saliency.png}\n    \\caption{Response of the ECG-only BTTN to beat-aligned occlusion, as the mean over 120 ECGs. The model was trained on the sample of the survival design. The ECGs are those of patients with incident AF to which the model gave the highest risk, passing over ECGs that could not be read or had fewer than three detected beats. Each panel shows one lead. The black trace is the mean of the ECGs' median beats, with each lead scaled to a maximum absolute amplitude of 1; the vertical scale is not shown. Time is relative to the R peak detected in lead II (dotted line). Windows of 25~ms are centred every 25~ms from 350~ms before to 425~ms after the R peak. For each window, the window was set to zero in every beat of one lead, the spectrogram was rebuilt and the drop in predicted risk was recorded. Shading depth shows the mean drop, with a negative mean set to zero, divided by the mean signal energy removed plus one tenth of that energy averaged over all leads and windows. Depth is relative to the largest value in the figure, and windows below 3 percent of it are not shaded. The P, PR, QRS, ST and T windows of the text group the windows centred 230 to 130~ms before the R peak, 130 to 50~ms before, 50~ms before to 50~ms after, 50 to 150~ms after, and 150 to 400~ms after. The shading describes the response of the fitted model to occlusion and is not an effect on the risk of AF.}\n    \\label{fig:beat-saliency}\n\\end{figure}"
+    }
+  ]
+}

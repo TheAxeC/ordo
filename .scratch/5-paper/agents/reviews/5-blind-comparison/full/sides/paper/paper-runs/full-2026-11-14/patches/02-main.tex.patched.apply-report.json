@@ -1,0 +1,58 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "56628a971208a7525c063fc524eabe0018f17c1c2d960d2ead276386b8f34565",
+  "round": 1,
+  "n_blocks": 112,
+  "n_blocks_touched": 3,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "Spectral tensor and block-term layer",
+      "roadmap_item_ids": [
+        "figures"
+      ],
+      "rationale": "places fig:bttr-to-bttn at its marker with the environment of figures.md",
+      "chars_before": 22,
+      "chars_after": 1333
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "section": "Calibration, risk stratification and operating points",
+      "roadmap_item_ids": [
+        "figures"
+      ],
+      "rationale": "places fig:clinical-utility at its marker with the environment of figures.md",
+      "chars_before": 26,
+      "chars_after": 1385
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Cardiac-cycle occlusion profile",
+      "roadmap_item_ids": [
+        "figures"
+      ],
+      "rationale": "places fig:beat-saliency at its marker with the environment of figures.md",
+      "chars_before": 23,
+      "chars_after": 1539
+    }
+  ],
+  "blocks_untouched": 109,
+  "roadmap_items_covered": [
+    "figures"
+  ],
+  "block_touched_ratio": 0.0268,
+  "preserved_ratio": 0.9732,
+  "char_churn_ratio": 0.0813,
+  "net_growth_chars": 4186,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/02-main.tex.patched",
+  "output_sha256": "73cb9eada24c24cb2de2c33a2cd07dd1159214e9809d214d38e1173f4a36e788"
+}

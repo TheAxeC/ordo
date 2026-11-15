@@ -1,0 +1,193 @@
+@article{ptbxl2020,
+  author  = {Wagner, Patrick and Strodthoff, Nils and Bousseljot, Ralf-Dieter and Kreiseler, Dieter and Lunze, Fatima I. and Samek, Wojciech and Schaeffter, Tobias},
+  title   = {{PTB-XL}, a large publicly available electrocardiography dataset},
+  journal = {Scientific Data},
+  volume  = {7}, number = {1}, pages = {154}, year = {2020},
+  doi     = {10.1038/s41597-020-0495-6}}
+
+@article{mitbih2001,
+  author  = {Moody, George B. and Mark, Roger G.},
+  title   = {The impact of the {MIT-BIH} Arrhythmia Database},
+  journal = {IEEE Engineering in Medicine and Biology Magazine},
+  volume  = {20}, number = {3}, pages = {45--50}, year = {2001},
+  doi     = {10.1109/51.932724}}
+
+@article{physionet2000,
+  author  = {Goldberger, Ary L. and Amaral, Luis A. N. and Glass, Leon and Hausdorff, Jeffrey M. and Ivanov, Plamen Ch. and Mark, Roger G. and Mietus, Joseph E. and Moody, George B. and Peng, Chung-Kang and Stanley, H. Eugene},
+  title   = {{PhysioBank, PhysioToolkit, and PhysioNet}: components of a new research resource for complex physiologic signals},
+  journal = {Circulation},
+  volume  = {101}, number = {23}, pages = {e215--e220}, year = {2000},
+  doi     = {10.1161/01.CIR.101.23.e215}}
+
+@article{lookingbeyond2026,
+  author  = {Filice, Francesca and De Rose, Edoardo and Bartucci, Simone and Calimeri, Francesco and Perri, Simona},
+  title   = {Looking Beyond Accuracy: A Holistic Benchmark of {ECG} Foundation Models},
+  journal = {arXiv preprint arXiv:2601.21830},
+  year    = {2026},
+  note    = {arXiv:2601.21830}}
+
+@article{hubertecg2024,
+  author  = {Coppola, Edoardo and Savardi, Mattia and Massussi, Mauro and Adamo, Marianna and Metra, Marco and Signoroni, Alberto},
+  title   = {{HuBERT-ECG}: a self-supervised foundation model for broad and scalable cardiac applications},
+  journal = {medRxiv},
+  year    = {2024},
+  doi     = {10.1101/2024.11.14.24317328},
+  note    = {Pretrained weights: \url{https://huggingface.co/Edoardo-BS/hubert-ecg-base}}}
+
+@article{ecgfounder2024, title={An Electrocardiogram Foundation Model Built on over 10 Million Recordings}, volume={2}, ISSN={2836-9386}, url={http://dx.doi.org/10.1056/AIoa2401033}, DOI={10.1056/aioa2401033}, number={7}, journal={NEJM AI}, publisher={Massachusetts Medical Society}, author={Li, Jun and Aguirre, Aaron D. and Junior, Valdery Moura and Jin, Jiarui and Liu, Che and Zhong, Lanhai and Sun, Chenxi and Clifford, Gari and Brandon Westover, M. and Hong, Shenda}, year={2025}, month=June }
+
+@article{hubertarabie1985,
+  author  = {Hubert, Lawrence and Arabie, Phipps},
+  title   = {Comparing partitions},
+  journal = {Journal of Classification},
+  volume  = {2}, number = {1}, pages = {193--218}, year = {1985},
+  doi     = {10.1007/BF01908075}}
+
+@article{vinh2010,
+  author  = {Vinh, Nguyen Xuan and Epps, Julien and Bailey, James},
+  title   = {Information theoretic measures for clusterings comparison: variants, properties, normalization and correction for chance},
+  journal = {Journal of Machine Learning Research},
+  volume  = {11}, pages = {2837--2854}, year = {2010}}
+
+@article{rousseeuw1987,
+  author  = {Rousseeuw, Peter J.},
+  title   = {Silhouettes: a graphical aid to the interpretation and validation of cluster analysis},
+  journal = {Journal of Computational and Applied Mathematics},
+  volume  = {20}, pages = {53--65}, year = {1987},
+  doi     = {10.1016/0377-0427(87)90125-7}}
+
+@article{sslclustering2025,
+  author  = {Weng, Xi and An, Jianing and Ma, Xudong and Qi, Binhang and Luo, Jie and Yang, Xi and Dong, Jin Song and Huang, Lei},
+  title   = {Clustering Properties of Self-Supervised Learning},
+  journal = {arXiv preprint arXiv:2501.18452},
+  year    = {2025},
+  note    = {arXiv:2501.18452}}
+
+@article{wavelettensorecg2018,
+  author  = {He, Houshou and Tan, Yujie and Xing, Jun},
+  title   = {Unsupervised classification of 12-lead {ECG} signals using wavelet tensor decomposition and two-dimensional Gaussian spectral clustering},
+  journal = {Knowledge-Based Systems},
+  volume  = {163}, pages = {392--403}, year = {2019},
+  doi     = {10.1016/j.knosys.2018.09.001}}
+
+@article{hrvstandards1996,
+  author  = {{Task Force of the European Society of Cardiology and the North American Society of Pacing and Electrophysiology}},
+  title   = {Heart rate variability: standards of measurement, physiological interpretation, and clinical use},
+  journal = {Circulation},
+  volume  = {93}, number = {5}, pages = {1043--1065}, year = {1996},
+  doi     = {10.1161/01.CIR.93.5.1043}}
+
+@article{dechazal2004,
+  author  = {de Chazal, Philip and O'Dwyer, Maria and Reilly, Richard B.},
+  title   = {Automatic classification of heartbeats using {ECG} morphology and heartbeat interval features},
+  journal = {IEEE Transactions on Biomedical Engineering},
+  volume  = {51}, number = {7}, pages = {1196--1206}, year = {2004},
+  doi     = {10.1109/TBME.2004.827359}}
+
+@article{neurokit2021,
+  author  = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
+  title   = {{NeuroKit2}: A {Python} toolbox for neurophysiological signal processing},
+  journal = {Behavior Research Methods},
+  volume  = {53}, number = {4}, pages = {1689--1696}, year = {2021},
+  doi     = {10.3758/s13428-020-01516-y}}
+
+@article{sklearn2011,
+  author  = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and others},
+  title   = {Scikit-learn: Machine learning in {Python}},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12}, pages = {2825--2830}, year = {2011}}
+
+@inproceedings{fedavg2017,
+  author    = {McMahan, Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and Ag{\"u}era y Arcas, Blaise},
+  title     = {Communication-efficient learning of deep networks from decentralized data},
+  booktitle = {Proceedings of the 20th International Conference on Artificial Intelligence and Statistics (AISTATS)},
+  pages     = {1273--1282}, year = {2017}}
+
+@inproceedings{clocs2021,
+  author    = {Kiyasseh, Dani and Zhu, Tingting and Clifton, David A.},
+  title     = {{CLOCS}: Contrastive Learning of Cardiac Signals Across Space, Time, and Patients},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning (ICML)},
+  pages     = {5606--5615}, year = {2021}}
+
+@inproceedings{threekg2021,
+  author    = {Gopal, Bryan and Han, Ryan and Raghupathi, Gautham and Ng, Andrew Y. and Tison, Geoffrey H. and Rajpurkar, Pranav},
+  title     = {{3KG}: Contrastive Learning of 12-Lead Electrocardiograms using Physiologically-Inspired Augmentations},
+  booktitle = {Proceedings of Machine Learning for Health (ML4H)},
+  pages     = {156--167}, year = {2021}}
+
+@article{mehari2022ssl,
+  author  = {Mehari, Temesgen and Strodthoff, Nils},
+  title   = {Self-supervised representation learning from 12-lead {ECG} data},
+  journal = {Computers in Biology and Medicine},
+  volume  = {141}, pages = {105114}, year = {2022},
+  doi     = {10.1016/j.compbiomed.2021.105114}}
+
+@inproceedings{hdbscan2013,
+  author    = {Campello, Ricardo J. G. B. and Moulavi, Davoud and Sander, J{\"o}rg},
+  title     = {Density-based clustering based on hierarchical density estimates},
+  booktitle = {Advances in Knowledge Discovery and Data Mining (PAKDD)},
+  pages     = {160--172}, year = {2013},
+  doi       = {10.1007/978-3-642-37456-2\_14}}
+
+@article{clifford2017af,
+  author  = {Clifford, Gari D. and Liu, Chengyu and Moody, Benjamin and Lehman, Li-wei H. and Silva, Ikaro and Li, Qiao and Johnson, Alistair E. W. and Mark, Roger G.},
+  title   = {{AF} classification from a short single lead {ECG} recording: the {PhysioNet/Computing} in {Cardiology} Challenge 2017},
+  journal = {Computing in Cardiology},
+  volume  = {44}, pages = {1--4}, year = {2017},
+  doi     = {10.22489/CinC.2017.065-469}}
+
+@article{Van_Gelder_2024, title={2024 ESC Guidelines for the management of atrial fibrillation developed in collaboration with the European Association for Cardio-Thoracic Surgery (EACTS)}, volume={45}, ISSN={1522-9645}, url={http://dx.doi.org/10.1093/eurheartj/ehae176}, DOI={10.1093/eurheartj/ehae176}, number={36}, journal={European Heart Journal}, publisher={Oxford University Press (OUP)}, author={Van Gelder, Isabelle C and Rienstra, Michiel and Bunting, Karina V and Casado-Arroyo, Ruben and Caso, Valeria and Crijns, Harry J G M and De Potter, Tom J R and Dwight, Jeremy and Guasti, Luigina and Hanke, Thorsten and Jaarsma, Tiny and Lettino, Maddalena and L<latin small letter o with stroke>chen, Maja-Lisa and Lumbers, R Thomas and Maesen, Bart and M<latin small letter o with stroke>lgaard, Inge and Rosano, Giuseppe M C and Sanders, Prashanthan and Schnabel, Renate B and Suwalski, Piotr and Svennberg, Emma and Tamargo, Juan and Tica, Otilia and Traykov, Vassil and Tzeis, Stylianos and Kotecha, Dipak and Dagres, Nikolaos and Rocca, Bianca and Ahsan, Syed and Ameri, Pietro and Arbelo, Elena and Bauer, Axel and Borger, Michael A and Buccheri, Sergio and Casadei, Barbara and Chioncel, Ovidiu and Dobrev, Dobromir and Fauchier, Laurent and Gigante, Bruna and Glikson, Michael and Hijazi, Ziad and Hindricks, Gerhard and Husser, Daniela and Ibanez, Borja and James, Stefan and Kaab, Stefan and Kirchhof, Paulus and K<latin small letter o with stroke>ber, Lars and Koskinas, Konstantinos C and Kumler, Thomas and Lip, Gregory Y H and Mandrola, John and Marx, Nikolaus and Mcevoy, John William and Mihaylova, Borislava and Mindham, Richard and Muraru, Denisa and Neubeck, Lis and Nielsen, Jens Cosedis and Oldgren, Jonas and Paciaroni, Maurizio and Pasquet, Agnes A and Prescott, Eva and Rega, Filip and Rossello, Francisco Javier and Rucinski, Marcin and Salzberg, Sacha P and Schulman, Sam and Sommer, Philipp and Svendsen, Jesper Hastrup and ten Berg, Jurrien M and Ten Cate, Hugo and Vaartjes, Ilonca and Vrints, Christiaan Jm and Witkowski, Adam and Zeppenfeld, Katja and Simoni, Leonard and Kichou, Brahim and Sisakian, Hamayak S and Scherr, Daniel and Cools, Frank and Smaji<latin small letter c with acute>, Elnur and Shalganov, Tchavdar and Manola, Sime and Avraamides, Panayiotis and Taborsky, Milos and Brandes, Axel and El-Damaty, Ahmed M and Kampus, Priit and Raatikainen, Pekka and Garcia, Rodrigue and Etsadashvili, Kakhaber and Eckardt, Lars and Kallergis, Eleftherios and Gell<latin small letter e with acute>r, L<latin small letter a with acute>szl<latin small letter o with acute> and Gu<latin small letter eth>mundsson, Kristj<latin small letter a with acute>n and Lyne, Jonathan and Marai, Ibrahim and Colivicchi, Furio and Abdrakhmanov, Ayan Suleimenovich and Bytyci, Ibadete and Kerimkulova, Alina and Kupics, Kaspars and Refaat, Marwan and Bheleel, Osama Abdulmajed and Barysien<latin small letter e with dot above>, J<latin small letter u with macron>rat<latin small letter e with dot above> and Leitz, Patrick and Sammut, Mark A and Grosu, Aurel and Pavlovic, Nikola and Moustaghfir, Abdelhamid and Yap, Sing-Chien and Taleski, Jane and Fink, Trine and Kazmierczak, Jaroslaw and Sanfins, Victor M and Cozma, Dragos and Zavatta, Marco and Kova<latin small letter c with caron>evi<latin small letter c with acute>, Dragan V and Hlivak, Peter and Zupan, Igor and Calvo, David and Bj<latin small letter o with diaeresis>rkenheim, Anna and K<latin small letter u with diaeresis>hne, Michael and Ouali, Sana and Demircan, Sabri and Sychov, Oleg S and Ng, Andre and Kuchkarov, Husniddin}, year={2024}, month=Aug, pages={3314<en dash>3414} }
+
+@article{Hannun_2019, title={Cardiologist-level arrhythmia detection and classification in ambulatory electrocardiograms using a deep neural network}, volume={25}, ISSN={1546-170X}, url={http://dx.doi.org/10.1038/s41591-018-0268-3}, DOI={10.1038/s41591-018-0268-3}, number={1}, journal={Nature Medicine}, publisher={Springer Science and Business Media LLC}, author={Hannun, Awni Y. and Rajpurkar, Pranav and Haghpanahi, Masoumeh and Tison, Geoffrey H. and Bourn, Codie and Turakhia, Mintu P. and Ng, Andrew Y.}, year={2019}, month=Jan, pages={65<en dash>69} }
+
+@article{Danon_2005, title={Comparing community structure identification}, volume={2005}, ISSN={1742-5468}, url={http://dx.doi.org/10.1088/1742-5468/2005/09/P09008}, DOI={10.1088/1742-5468/2005/09/p09008}, number={09}, journal={Journal of Statistical Mechanics: Theory and Experiment}, publisher={IOP Publishing}, author={Danon, Leon and D<latin small letter i with acute>az-Guilera, Albert and Duch, Jordi and Arenas, Alex}, year={2005}, month=Sept, pages={P09008<en dash>P09008} }
+
+@article{Fowlkes_1983, title={A Method for Comparing Two Hierarchical Clusterings}, volume={78}, ISSN={1537-274X}, url={http://dx.doi.org/10.1080/01621459.1983.10478008}, DOI={10.1080/01621459.1983.10478008}, number={383}, journal={Journal of the American Statistical Association}, publisher={Informa UK Limited}, author={Fowlkes, E. B. and Mallows, C. L.}, year={1983}, month=Sept, pages={553<en dash>569} }
+
+@article{Lunelli_2026, title={BenchECG and xECG: a benchmark and baseline for ECG foundation models}, ISSN={2398-6352}, url={http://dx.doi.org/10.1038/s41746-026-03196-y}, DOI={10.1038/s41746-026-03196-y}, journal={npj Digital Medicine}, publisher={Springer Science and Business Media LLC}, author={Lunelli, Riccardo and Nicolson, Angus and Pr<latin small letter o with diaeresis>ll, Samuel Martin and Reinstadler, Sebastian Johannes and Bauer, Axel and Dlaska, Clemens}, year={2026}, month=Sept }
+
+@misc{arxiv_2509_25095,
+  title = {Benchmarking ECG FMs: A Reality Check Across Clinical Tasks},
+  author = {M A Al-Masud and Juan Miguel Lopez Alcaraz and Nils Strodthoff},
+  year = {2025},
+  eprint = {2509.25095},
+  archivePrefix = {arXiv}
+}
+
+@misc{arxiv_2602_17531,
+  title = {Position: Evaluation of ECG Representations Must Be Fixed},
+  author = {Zachary Berger and Daniel Prakah-Asante and John Guttag and Collin M. Stultz},
+  year = {2026},
+  eprint = {2602.17531},
+  archivePrefix = {arXiv}
+}
+
+@inbook{Xu_2025, title={An Electrocardiogram Multi-Task Benchmark with Comprehensive Evaluations and Insightful Findings}, ISBN={9781643686080}, ISSN={1879-8365}, url={http://dx.doi.org/10.3233/SHTI251036}, DOI={10.3233/shti251036}, booktitle={MEDINFO 2025 <em dash> Healthcare Smart <multiplication sign> Medicine Deep}, publisher={IOS Press}, author={Xu, Yuhao and Lu, Jiaying and Ding, Sirui and Cao, Defu and Hu, Xiao and Yang, Carl}, year={2025}, month=Aug }
+
+@misc{arxiv_2402_09450,
+  title = {Guiding Masked Representation Learning to Capture Spatio-Temporal Relationship of Electrocardiogram},
+  author = {Yeongyeon Na and Minje Park and Yunwon Tae and Sunghoon Joo},
+  year = {2024},
+  eprint = {2402.09450},
+  archivePrefix = {arXiv}
+}
+
+@article{Kim_2027, title={Learning general representation of 12-lead ECG with a joint-embedding predictive architecture}, volume={205}, ISSN={0893-6080}, url={http://dx.doi.org/10.1016/j.neunet.2026.109334}, DOI={10.1016/j.neunet.2026.109334}, journal={Neural Networks}, publisher={Elsevier BV}, author={Kim, Sehun}, year={2027}, month=Jan, pages={109334} }
+
+@misc{arxiv_2403_06659,
+  title = {Zero-Shot ECG Classification with Multimodal Learning and Test-time Clinical Knowledge Enhancement},
+  author = {Che Liu and Zhongwei Wan and Cheng Ouyang and Anand Shah and Wenjia Bai and Rossella Arcucci},
+  year = {2024},
+  eprint = {2403.06659},
+  archivePrefix = {arXiv}
+}
+
+@article{Tian_2024, title={Foundation model of ECG diagnosis: Diagnostics and explanations of any form and rhythm on ECG}, volume={5}, ISSN={2666-3791}, url={http://dx.doi.org/10.1016/j.xcrm.2024.101875}, DOI={10.1016/j.xcrm.2024.101875}, number={12}, journal={Cell Reports Medicine}, publisher={Elsevier BV}, author={Tian, Yuanyuan and Li, Zhiyuan and Jin, Yanrui and Wang, Mengxiao and Wei, Xiaoyang and Zhao, Liqun and Liu, Yunqing and Liu, Jinlei and Liu, Chengliang}, year={2024}, month=Dec, pages={101875} }
+
+@article{McKeen_2025, title={ECG-FM: an open electrocardiogram foundation model}, volume={8}, ISSN={2574-2531}, url={http://dx.doi.org/10.1093/jamiaopen/ooaf122}, DOI={10.1093/jamiaopen/ooaf122}, number={5}, journal={JAMIA Open}, publisher={Oxford University Press (OUP)}, author={McKeen, Kaden and Masood, Sameer and Toma, Augustin and Rubin, Barry and Wang, Bo}, year={2025}, month=Sept }
+
+@article{Han_2026, title={Review of open foundation models and datasets for ECG and PPG waveforms}, ISSN={2398-6352}, url={http://dx.doi.org/10.1038/s41746-026-03101-7}, DOI={10.1038/s41746-026-03101-7}, journal={npj Digital Medicine}, publisher={Springer Science and Business Media LLC}, author={Han, Ahram and Tohyama, Takeshi and Yoon, Dukyong and Paik, Kenneth and Gow, Brian and Celi, Leo Anthony and Lee, Hyeonhoon and Lee, Hyung-Chul}, year={2026}, month=Aug }
+
+@article{Zheng_2020, title={A 12-lead electrocardiogram database for arrhythmia research covering more than 10,000 patients}, volume={7}, ISSN={2052-4463}, url={http://dx.doi.org/10.1038/s41597-020-0386-x}, DOI={10.1038/s41597-020-0386-x}, number={1}, journal={Scientific Data}, publisher={Springer Science and Business Media LLC}, author={Zheng, Jianwei and Zhang, Jianming and Danioko, Sidy and Yao, Hai and Guo, Hangyuan and Rakovski, Cyril}, year={2020}, month=Feb }
+
+@article{Perez_Alday_2020, title={Classification of 12-lead ECGs: the PhysioNet/Computing in Cardiology Challenge 2020}, volume={41}, ISSN={1361-6579}, url={http://dx.doi.org/10.1088/1361-6579/abc960}, DOI={10.1088/1361-6579/abc960}, number={12}, journal={Physiological Measurement}, publisher={IOP Publishing}, author={Perez Alday, Erick A and Gu, Annie and J Shah, Amit and Robichaux, Chad and Ian Wong, An-Kwok and Liu, Chengyu and Liu, Feifei and Bahrami Rad, Ali and Elola, Andoni and Seyedi, Salman and Li, Qiao and Sharma, Ashish and Clifford, Gari D and Reyna, Matthew A}, year={2020}, month=Dec, pages={124003} }

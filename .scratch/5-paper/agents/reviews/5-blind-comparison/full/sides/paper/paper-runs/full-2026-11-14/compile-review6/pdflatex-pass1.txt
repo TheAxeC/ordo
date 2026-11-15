@@ -1,0 +1,1124 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./main.tex
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
+(/usr/local/texlive/2025/texmf-dist/tex/latex/elsarticle/elsarticle.cls
+Document Class: elsarticle 2025/01/11, 3.4c: Elsevier Ltd
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3kernel/expl3.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3packages/xparse/xparse.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/etoolbox/etoolbox.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2024/06/29 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/size12.clo))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics-cfg/graphics.cfg)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics-def/pdftex.def)))
+(/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275
+-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026-11-14/compile-review
+6/main.spl) (/usr/local/texlive/2025/texmf-dist/tex/latex/natbib/natbib.sty))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/inputenc.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/booktabs/booktabs.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/float/float.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/hyperref.sty
+(/usr/local/texlive/2025/texmf-dist/tex/generic/iftex/iftex.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+(/usr/local/texlive/2025/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+(/usr/local/texlive/2025/texmf-dist/tex/generic/infwarerr/infwarerr.sty)))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/hycolor/hycolor.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/nameref.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/refcount/refcount.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty (/usr/local/texlive/2025/texmf-dist/tex/latex/kvoptions/kvoptions.sty)))
+(/usr/local/texlive/2025/texmf-dist/tex/generic/stringenc/stringenc.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/pd1enc.def)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/intcalc/intcalc.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/puenc.def)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/url/url.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/bitset/bitset.sty
+(/usr/local/texlive/2025/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/atbegshi-ltx.sty))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/hyperref/hpdftex.def
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/atveryend-ltx.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+
+(/usr/local/texlive/2025/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+)))
+(/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275
+-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026-11-14/compile-review
+6/main.aux)
+(/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275
+-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026-11-14/compile-review
+6/main.out)
+(/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275
+-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026-11-14/compile-review
+6/main.out) (/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/amsfonts/umsb.fd)
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<def>-command' on input line 32.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\cnotenum' on input line 32.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\<def>-command' on input line 32.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `\@corref' on input line 32.
+
+[1{/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/l
+ocal/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+[2]
+[3]
+
+Package natbib Warning: Citation `Attia_2019' on page 4 undefined on input line
+ 65.
+
+
+Package natbib Warning: Citation `Yuan_2023' on page 4 undefined on input line 
+65.
+
+
+[4{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
+}]
+
+Package natbib Warning: Citation `Jabbour_2024' on page 5 undefined on input li
+ne 67.
+
+
+Package natbib Warning: Citation `Sau_2026' on page 5 undefined on input line 6
+7.
+
+
+Package natbib Warning: Citation `Zeidaabadi_2026' on page 5 undefined on input
+ line 67.
+
+
+Package natbib Warning: Citation `Habineza_2023' on page 5 undefined on input l
+ine 67.
+
+
+Package natbib Warning: Citation `Ribeiro_2020' on page 5 undefined on input li
+ne 67.
+
+
+Package natbib Warning: Citation `Riek_2026' on page 5 undefined on input line 
+67.
+
+
+Package natbib Warning: Citation `Zeidaabadi_2026' on page 5 undefined on input
+ line 69.
+
+
+Package natbib Warning: Citation `Riek_2026' on page 5 undefined on input line 
+69.
+
+
+Package natbib Warning: Citation `Schnabel_2009' on page 5 undefined on input l
+ine 73.
+
+
+Package natbib Warning: Citation `Cheng_2009' on page 5 undefined on input line
+ 73.
+
+
+Package natbib Warning: Citation `Magnani_2015' on page 5 undefined on input li
+ne 73.
+
+
+[5]
+
+Package natbib Warning: Citation `Christopoulos_2020' on page 6 undefined on in
+put line 75.
+
+
+Package natbib Warning: Citation `Khurshid_2025' on page 6 undefined on input l
+ine 75.
+
+
+Package natbib Warning: Citation `Biton_2021' on page 6 undefined on input line
+ 75.
+
+
+Package natbib Warning: Citation `Jabbour_2024' on page 6 undefined on input li
+ne 77.
+
+
+Package natbib Warning: Citation `Zeidaabadi_2026' on page 6 undefined on input
+ line 77.
+
+
+Package natbib Warning: Citation `Sau_2026' on page 6 undefined on input line 7
+7.
+
+
+Package natbib Warning: Citation `arxiv_1810_03292' on page 6 undefined on inpu
+t line 81.
+
+
+Package natbib Warning: Citation `arxiv_1806_10758' on page 6 undefined on inpu
+t line 81.
+
+
+Package natbib Warning: Citation `Wagner_2024' on page 6 undefined on input lin
+e 81.
+
+
+Package natbib Warning: Citation `arxiv_2007_04612' on page 6 undefined on inpu
+t line 83.
+
+
+Package natbib Warning: Citation `arxiv_2106_13314' on page 6 undefined on inpu
+t line 83.
+
+
+Package natbib Warning: Citation `arxiv_2205_10268' on page 6 undefined on inpu
+t line 83.
+
+
+Package natbib Warning: Citation `arxiv_2507_16761' on page 6 undefined on inpu
+t line 83.
+
+
+Package natbib Warning: Citation `arxiv_2504_02667' on page 6 undefined on inpu
+t line 83.
+
+
+[6]
+
+Package natbib Warning: Citation `Patlatzoglou_2025' on page 7 undefined on inp
+ut line 85.
+
+
+Package natbib Warning: Citation `arxiv_2511_04292' on page 7 undefined on inpu
+t line 85.
+
+
+Package natbib Warning: Citation `arxiv_2205_10268' on page 7 undefined on inpu
+t line 85.
+
+
+Package natbib Warning: Citation `arxiv_2507_16761' on page 7 undefined on inpu
+t line 85.
+
+
+Package natbib Warning: Citation `Kolda_2009' on page 7 undefined on input line
+ 89.
+
+
+Package natbib Warning: Citation `Goulart_2020' on page 7 undefined on input li
+ne 89.
+
+
+Package natbib Warning: Citation `arxiv_2511_04292' on page 7 undefined on inpu
+t line 91.
+
+
+Package natbib Warning: Citation `https://doi.org/10.5281/zenodo.22227432' on p
+age 7 undefined on input line 91.
+
+
+[7]
+
+Package natbib Warning: Citation `https://doi.org/10.13026/4nqg-sb35' on page 8
+ undefined on input line 97.
+
+
+[8]
+
+Package natbib Warning: Citation `Cox_1972' on page 9 undefined on input line 1
+20.
+
+
+Package natbib Warning: Citation `Katzman_2018' on page 9 undefined on input li
+ne 120.
+
+
+[9]
+[10 <./figures/fig-bttr-to-bttn.png>]
+
+Package natbib Warning: Citation `Johnson_2023' on page 11 undefined on input l
+ine 129.
+
+
+Package natbib Warning: Citation `arxiv_2106_13314' on page 11 undefined on inp
+ut line 136.
+
+
+Package natbib Warning: Citation `https://doi.org/10.13026/4nqg-sb35' on page 1
+1 undefined on input line 143.
+
+
+Package natbib Warning: Citation `Johnson_2023' on page 11 undefined on input l
+ine 143.
+
+
+Package natbib Warning: Citation `Rix_2012' on page 11 undefined on input line 
+143.
+
+
+[11]
+
+Package natbib Warning: Citation `Vickers_2006' on page 12 undefined on input l
+ine 151.
+
+
+Package natbib Warning: Citation `Collins_2024' on page 12 undefined on input l
+ine 151.
+
+
+[12]
+
+Package natbib Warning: Citation `Zeiler_2014' on page 13 undefined on input li
+ne 155.
+
+
+Package natbib Warning: Citation `Ivanovs_2021' on page 13 undefined on input l
+ine 155.
+
+
+Package natbib Warning: Citation `arxiv_1702_04595' on page 13 undefined on inp
+ut line 157.
+
+
+Package natbib Warning: Citation `_imi__2025' on page 13 undefined on input lin
+e 157.
+
+
+[13]
+Overfull \hbox (58.20468pt too wide) in paragraph at lines 169--186
+ [][] 
+
+[14]
+[15]
+Overfull \hbox (56.37222pt too wide) in paragraph at lines 215--225
+ [][] 
+
+[16]
+[17]
+[18 <./figures/fig-clinical-utility.png>]
+Overfull \hbox (15.70381pt too wide) in paragraph at lines 281--292
+ [][] 
+
+[19]
+[20 <./figures/fig-beat-saliency.png>]
+
+Package natbib Warning: Citation `Sau_2026' on page 21 undefined on input line 
+300.
+
+
+Package natbib Warning: Citation `Zeidaabadi_2026' on page 21 undefined on inpu
+t line 300.
+
+
+Package natbib Warning: Citation `Jabbour_2024' on page 21 undefined on input l
+ine 300.
+
+
+Package natbib Warning: Citation `Riek_2026' on page 21 undefined on input line
+ 300.
+
+
+Package natbib Warning: Citation `Attia_2019' on page 21 undefined on input lin
+e 300.
+
+
+Package natbib Warning: Citation `Yuan_2023' on page 21 undefined on input line
+ 300.
+
+
+Package natbib Warning: Citation `McKeen_2025' on page 21 undefined on input li
+ne 300.
+
+
+[21]
+
+Package natbib Warning: Citation `Christopoulos_2020' on page 22 undefined on i
+nput line 302.
+
+
+Package natbib Warning: Citation `Pfeifer_2026' on page 22 undefined on input l
+ine 302.
+
+
+Package natbib Warning: Citation `Patlatzoglou_2025' on page 22 undefined on in
+put line 302.
+
+
+Package natbib Warning: Citation `arxiv_2106_13314' on page 22 undefined on inp
+ut line 306.
+
+
+Package natbib Warning: Citation `Zeidaabadi_2026' on page 22 undefined on inpu
+t line 308.
+
+
+Package natbib Warning: Citation `Schnabel_2009' on page 22 undefined on input 
+line 308.
+
+
+Package natbib Warning: Citation `Cheng_2009' on page 22 undefined on input lin
+e 308.
+
+
+Package natbib Warning: Citation `Magnani_2013' on page 22 undefined on input l
+ine 308.
+
+
+Package natbib Warning: Citation `Tanaka_2021' on page 22 undefined on input li
+ne 308.
+
+
+Package natbib Warning: Citation `Yogeswaran_2025' on page 22 undefined on inpu
+t line 308.
+
+
+Package natbib Warning: Citation `Magnani_2015' on page 22 undefined on input l
+ine 308.
+
+
+Package natbib Warning: Citation `Emmanuela_2026' on page 22 undefined on input
+ line 308.
+
+
+[22]
+
+Package natbib Warning: Citation `Ostrowska_2022' on page 23 undefined on input
+ line 310.
+
+
+Package natbib Warning: Citation `Goette_2016' on page 23 undefined on input li
+ne 312.
+
+
+Package natbib Warning: Citation `Maezono_2025' on page 23 undefined on input l
+ine 312.
+
+
+Package natbib Warning: Citation `Yao_2019' on page 23 undefined on input line 
+316.
+
+
+Package natbib Warning: Citation `Malmo_2016' on page 23 undefined on input lin
+e 316.
+
+
+Package natbib Warning: Citation `Rix_2012' on page 23 undefined on input line 
+316.
+
+
+[23]
+
+Package natbib Warning: Citation `Johnson_2023' on page 24 undefined on input l
+ine 318.
+
+
+Package natbib Warning: Citation `Schnabel_2009' on page 24 undefined on input 
+line 318.
+
+
+Package natbib Warning: Citation `Cheng_2009' on page 24 undefined on input lin
+e 318.
+
+
+Package natbib Warning: Citation `Magnani_2013' on page 24 undefined on input l
+ine 318.
+
+
+Package natbib Warning: Citation `arxiv_1810_03292' on page 24 undefined on inp
+ut line 322.
+
+
+Package natbib Warning: Citation `arxiv_1806_10758' on page 24 undefined on inp
+ut line 322.
+
+
+Package natbib Warning: Citation `arxiv_1702_04595' on page 24 undefined on inp
+ut line 322.
+
+
+Package natbib Warning: Citation `_imi__2025' on page 24 undefined on input lin
+e 322.
+
+
+Package natbib Warning: Citation `arxiv_2106_13314' on page 24 undefined on inp
+ut line 322.
+
+
+Package natbib Warning: Citation `arxiv_1806_10758' on page 24 undefined on inp
+ut line 326.
+
+
+Package natbib Warning: Citation `Collins_2024' on page 24 undefined on input l
+ine 326.
+
+
+[24]
+
+Package natbib Warning: Citation `Cheng_2009' on page 25 undefined on input lin
+e 332.
+
+
+Package natbib Warning: Citation `Magnani_2013' on page 25 undefined on input l
+ine 332.
+
+
+[25]
+
+Package natbib Warning: Citation `https://doi.org/10.13026/4nqg-sb35' on page 2
+6 undefined on input line 350.
+
+
+Package natbib Warning: Citation `Johnson_2023' on page 26 undefined on input l
+ine 350.
+
+
+[26]
+Overfull \hbox (30.26068pt too wide) in paragraph at lines 365--366
+\T1/cmr/m/n/12 Method and Ex-per-i-ments sec-tions. The AI-assisted com-po-nent
+s of the manuscript's
+
+(/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275
+-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026-11-14/compile-review
+6/main.bbl
+[27]
+Underfull \hbox (badness 1292) in paragraph at lines 32--39
+\T1/cmr/m/n/12 at Risk of Atrial Fib-ril-la-tion^^URelated Stroke.  Cir-cu-la-t
+ion. 2021
+
+[28]
+Underfull \hbox (badness 1048) in paragraph at lines 99--106
+\T1/cmr/m/n/12 sor Re-gres-sion With Fast and Au-to-matic Com-po-nent Ex-trac-t
+ion.
+! Missing $ inserted.
+<inserted text> 
+                $
+l.111 ...an Heart Journal. 2026 Oct;47(Supplement_
+                                                  1).
+
+! LaTeX Error: Command $ invalid in math mode.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+
+! LaTeX Error: Command \ttfamily invalid in math mode.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Missing } inserted.
+<inserted text> 
+                }
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Undefined control sequence.
+\Url@FormatString ...ndafter \UrlLeft \Url@String 
+                                                  \UrlRight \m@th $
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Extra }, or forgotten $.
+<recently read> }
+                 
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Missing $ inserted.
+<inserted text> 
+                $
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Extra \endgroup.
+\Hy@endcolorlink ->\endgroup 
+                             
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+! Extra \endgroup.
+\hyper@linkurl ...ce@end \close@pdflink \endgroup 
+                                                  
+l.112 ...://doi.org/10.1093/eurheartj/ehag785.598}
+                                                  .
+
+Overfull \hbox (31.33768pt too wide) in paragraph at lines 108--113
+\T1/cmr/m/n/12 de-vel-op-ment.  Eu-ro-pean Heart Jour-nal. 2026 Oct;47(Suppleme
+nt$[]\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 : Availablefrom \OT1/cmr/m/n/12 :
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.114 \bibitem{Attia_2019}
+                          
+
+Overfull \hbox (31.22157pt too wide) in paragraph at lines 115--122
+\T1/cmr/m/n/12 spec-tive anal-y-sis of out-come pre-dic-tion.  The Lancet. 2019
+ Sep;394(10201):861^^U867.
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.123 \bibitem{Yuan_2023}
+                         
+
+[29]
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.130 \bibitem{Jabbour_2024}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.137 \bibitem{Sau_2026}
+                        
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.145 \bibitem{Zeidaabadi_2026}
+                               
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.153 \bibitem{Habineza_2023}
+                             
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.161 \bibitem{Ribeiro_2020}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.167 \bibitem{Riek_2026}
+                         
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.174 \bibitem{Schnabel_2009}
+                             
+
+Overfull \hbox (50.53273pt too wide) in paragraph at lines 175--181
+\T1/cmr/m/n/12 Feb;373(9665):739^^U745.  Avail-able from: []$\T1/cmtt/m/n/12 ht
+tps : / / doi . org / 10 . 1016 / S0140-[]6736(09 )
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.182 \bibitem{Cheng_2009}
+                          
+
+[30]
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.189 \bibitem{Magnani_2015}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.197 \bibitem{Christopoulos_2020}
+                                  
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.205 \bibitem{Khurshid_2025}
+                             
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.213 \bibitem{Biton_2021}
+                          
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.220 \bibitem{arxiv_1810_03292}
+                                
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.224 \bibitem{arxiv_1806_10758}
+                                
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.228 \bibitem{Wagner_2024}
+                           
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.236 \bibitem{arxiv_2007_04612}
+                                
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.240 \bibitem{arxiv_2106_13314}
+                                
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.244 \bibitem{arxiv_2205_10268}
+                                
+
+[31]
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.248 \bibitem{arxiv_2507_16761}
+                                
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.252 \bibitem{arxiv_2504_02667}
+                                
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.256 \bibitem{Patlatzoglou_2025}
+                                 
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.264 \bibitem{arxiv_2511_04292}
+                                
+
+Overfull \hbox (2.72624pt too wide) in paragraph at lines 265--267
+[]\T1/cmr/m/n/12 Kerchove AVD, Si-Mohammed H, Cabestaing F, Hulle MMV. BTTDA: B
+lock-
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.268 \bibitem{Kolda_2009}
+                          
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.274 \bibitem{Goulart_2020}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.281 ...{https://doi.org/10.5281/zenodo.22227432}
+                                                  
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.287 \bibitem{https://doi.org/10.13026/4nqg-sb35}
+                                                  
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.293 \bibitem{Cox_1972}
+                        
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.301 \bibitem{Katzman_2018}
+                            
+
+Overfull \hbox (5.44398pt too wide) in paragraph at lines 302--307
+\T1/cmr/m/n/12 Feb;18(1).  Avail-able from: []$\T1/cmtt/m/n/12 https : / / doi 
+. org / 10 . 1186 / s12874-[]018-[]0482-[]1$[]\T1/cmr/m/n/12 . 
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.308 \bibitem{Johnson_2023}
+                            
+
+[32]
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.314 \bibitem{Rix_2012}
+                        
+
+Overfull \hbox (17.12073pt too wide) in paragraph at lines 315--320
+\T1/cmr/m/n/12 pa-tient reg-istry.  Scan-di-na-vian Car-dio-vas-cu-lar Jour-nal
+. 2012 May;46(3):149^^U153.
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.321 \bibitem{Vickers_2006}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.328 \bibitem{Collins_2024}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.335 \bibitem{Zeiler_2014}
+                           
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.341 \bibitem{Ivanovs_2021}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.348 \bibitem{arxiv_1702_04595}
+                                
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.352 \bibitem{_imi__2025}
+                          
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.359 \bibitem{McKeen_2025}
+                           
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.365 \bibitem{Pfeifer_2026}
+                            
+
+[33]
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.372 \bibitem{Magnani_2013}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.379 \bibitem{Tanaka_2021}
+                           
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.387 \bibitem{Yogeswaran_2025}
+                               
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.394 \bibitem{Emmanuela_2026}
+                              
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.401 \bibitem{Ostrowska_2022}
+                              
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.408 \bibitem{Goette_2016}
+                           
+
+Overfull \hbox (13.20566pt too wide) in paragraph at lines 409--414
+\T1/cmr/m/n/12 EHRA/HRS/APHRS/SOLAECE ex-pert con-sen-sus on Atrial car-diomy-o
+pathies:
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.415 \bibitem{Maezono_2025}
+                            
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.423 \bibitem{Yao_2019}
+                        
+
+[34]
+
+! LaTeX Error: Lonely \item--perhaps a missing list environment.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.431 \bibitem{Malmo_2016}
+                          
+
+! LaTeX Error: \begin{document} ended by \end{thebibliography}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.438 \end{thebibliography}
+                           
+! Extra \endgroup.
+\end  ...end#1\endcsname \@checkend {#1}\endgroup 
+                                                  \UseHook {env/#1/after}\if...
+l.438 \end{thebibliography}
+                           
+)
+
+Package natbib Warning: There were undefined citations.
+
+
+[35]
+(/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275
+-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026-11-14/compile-review
+6/main.aux
+
+Package natbib Warning: Citation(s) may have changed.
+(natbib)                Rerun to get citations correct.
+
+) )
+(see the transcript file for additional information)</usr/local/texlive/2025/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2025/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2025/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2025/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2025/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2025/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2025/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2025/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2025/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pu
+blic/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type
+1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/
+public/cm-super/sfrm1000.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/pu
+blic/cm-super/sfrm1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/publ
+ic/cm-super/sfrm1728.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public
+/cm-super/sfti1000.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/c
+m-super/sfti1200.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-
+super/sftt1200.pfb>
+Output written on /private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c8
+00-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026-11-
+14/compile-review6/main.pdf (35 pages, 891409 bytes).
+Transcript written on /private/tmp/claude-502/-Users-axelfaes-workspace-ordo/39
+98c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026
+-11-14/compile-review6/main.log.

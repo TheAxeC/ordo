@@ -1,0 +1,17 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "highlights.txt",
+  "base_sha256": "cf588f229bc1d244cdd2501005cf74aa6961a4ceec9de1227190ce27fde608f3",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0002",
+      "old_hash": "6f0593e6f459dfcc3cf3418fbd765626a55c1e64487b96ccb0b4a5b74c5b64eb",
+      "roadmap_item_ids": ["R3-8", "R1-4", "R3-6", "R3-5", "R3-9"],
+      "rationale": "The highlights follow the revised text: the general claim is scoped to the two binary tasks, 'most robust' gives way to the two measured stress-test results with the federation named as simulated, and the terms are those of the manuscript.",
+      "new_text": "- Representation mattered more than the clustering algorithm on two binary ECG tasks.\n- ECGFounder clustered SR vs AF best (ARI 0.885), hand-crafted features 0.711.\n- Raw flattening and a convolutional autoencoder clustered at chance (ARI ~0).\n- Silhouette scored a one-cluster solution at 0.81 while its ARI was 0.\n- Hand-crafted features led at 9:1 imbalance and kept 92% of ARI in simulated skew."
+    }
+  ]
+}

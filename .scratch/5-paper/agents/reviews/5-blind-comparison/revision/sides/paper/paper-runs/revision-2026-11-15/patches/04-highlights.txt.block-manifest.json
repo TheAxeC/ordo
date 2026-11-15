@@ -1,0 +1,28 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/revision-1/manuscript/highlights.txt",
+  "base_sha256": "cf588f229bc1d244cdd2501005cf74aa6961a4ceec9de1227190ce27fde608f3",
+  "n_chars": 478,
+  "n_blocks": 2,
+  "chars_in_blocks": 475,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "fcbb3e8af577a96abc71f4916584d48130165967aadb6fa0257dcf9142ee44a3",
+      "char_start": 0,
+      "char_end": 95,
+      "n_chars": 95,
+      "section": "frontmatter",
+      "first_line_excerpt": "Highlights"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "6f0593e6f459dfcc3cf3418fbd765626a55c1e64487b96ccb0b4a5b74c5b64eb",
+      "char_start": 97,
+      "char_end": 477,
+      "n_chars": 380,
+      "section": "frontmatter",
+      "first_line_excerpt": "- Representation, not the clustering algorithm, governs label-free ECG structure."
+    }
+  ]
+}

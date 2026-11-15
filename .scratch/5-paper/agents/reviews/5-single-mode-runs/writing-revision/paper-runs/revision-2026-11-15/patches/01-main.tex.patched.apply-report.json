@@ -1,0 +1,772 @@
+{
+  "result": "applied",
+  "base_file": "/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/single-5/manuscript/main.tex",
+  "base_sha256": "2cbba14422a545b01d0f17d7f01e65778ea41b5995cdf4486599d42d1813364f",
+  "round": 1,
+  "n_blocks": 81,
+  "n_blocks_touched": 47,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "W29"
+      ],
+      "rationale": "The title drops its opening question and becomes a label.",
+      "chars_before": 128,
+      "chars_after": 103
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "W1",
+        "W10",
+        "W11",
+        "W12",
+        "W13",
+        "W14",
+        "W18",
+        "W20",
+        "W21",
+        "W34"
+      ],
+      "rationale": "The abstract defines the ceiling and feature scaling, ties the above-chance ceiling to the conv-AE only, gives the scaling and stressor results by their measures, names ECGFounder and the conv-AE, states the contribution without the ranking shape and cuts the unhedged closing sentence.",
+      "chars_before": 1884,
+      "chars_after": 1976
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0014",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "W13",
+        "W20",
+        "W22",
+        "W32",
+        "W40"
+      ],
+      "rationale": "Joins the first two Introduction paragraphs, opens on the point, drops the unsupported claims about most ECG work and the usual attribution, names the specific questions, uses record for one ECG, glosses purity and the silhouette, cuts simply and describes the master's project as unpublished in place of a citation.",
+      "chars_before": 477,
+      "chars_after": 1258
+    },
+    {
+      "op_id": "OP004",
+      "kind": "delete_block",
+      "block_id": "B0015",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "W13",
+        "W20",
+        "W22",
+        "W32",
+        "W40"
+      ],
+      "rationale": "Its content now stands, rewritten, in the joined paragraph of OP003.",
+      "chars_before": 664,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "W22",
+        "W40"
+      ],
+      "rationale": "Joins the short paragraph on the closest benchmark to the paragraph on the gap, and replaces the self-assessment and the unsupported default and canonical claims with the two additions and their held citations.",
+      "chars_before": 630,
+      "chars_after": 1159
+    },
+    {
+      "op_id": "OP006",
+      "kind": "delete_block",
+      "block_id": "B0017",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "W22",
+        "W40"
+      ],
+      "rationale": "Its content now stands, rewritten, in the joined paragraph of OP005.",
+      "chars_before": 544,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "W1",
+        "W2",
+        "W3",
+        "W4",
+        "W9",
+        "W10",
+        "W14",
+        "W15",
+        "W20",
+        "W34",
+        "W39"
+      ],
+      "rationale": "Keeps the one statement that the ordering is expected, sets the four contributions as a list, defines patient-grouped, the ceiling, internal indices and feature scaling, names the conv-AE and the non-IID sites, gives the stressor result by its measures and words the model scope once.",
+      "chars_before": 1669,
+      "chars_after": 2235
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "W20",
+        "W22",
+        "W35"
+      ],
+      "rationale": "Replaces the unsupported autoencoder claim with what the objective holds by definition, says what the undefined spectrum phrase means, and splits the sentence at the semicolon.",
+      "chars_before": 1428,
+      "chars_after": 1598
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0021",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "W33"
+      ],
+      "rationale": "Replaces near zero with the exact values of ARI and AMI for the one-cluster solution and under random assignment.",
+      "chars_before": 589,
+      "chars_after": 651
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0022",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "W35",
+        "W49"
+      ],
+      "rationale": "Reports the closest benchmark's results in the past tense, splits the sentence at the semicolon and avoids repeating the both-gaps statement of the Introduction.",
+      "chars_before": 585,
+      "chars_after": 612
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "W13",
+        "W20",
+        "W35",
+        "W45",
+        "W46",
+        "W49"
+      ],
+      "rationale": "Past tense for the method, expands AFIB and AFLT and says both count as AF, states the input in the field's terms without the function name and data-type identifier, rewords the load-time phrase and removes the two semicolons.",
+      "chars_before": 1272,
+      "chars_after": 1425
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "W40",
+        "W49"
+      ],
+      "rationale": "Develops the short MIT-BIH paragraph with the cohort details main.tex already holds (window dimension, grouping, how the task differs, the three clusterers), in the past tense.",
+      "chars_before": 455,
+      "chars_after": 903
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "W13",
+        "W20",
+        "W21",
+        "W30",
+        "W35",
+        "W36",
+        "W40",
+        "W44",
+        "W45",
+        "W49"
+      ],
+      "rationale": "Cuts the announcing sentence and introduces the list with a colon, drops the data-type identifiers, rewrites the four principle sentences by content, splits the lead-set and lead II sentences, words the MIT-BIH carry-over as feature logic, marks the missing definition of beat-template consistency, uses record for one ECG and moves the MIT-BIH paragraph into the lead-set paragraph of OP014.",
+      "chars_before": 3661,
+      "chars_after": 3231
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "W5",
+        "W13",
+        "W16",
+        "W21",
+        "W24",
+        "W35",
+        "W40"
+      ],
+      "rationale": "Joins the two short lead-set paragraphs, keeps the one statement of the 12-lead constraint, words the MIT-BIH carry-over as feature logic, hedges the lead-set reading with the 1992-dimensional alternative and removes the semicolons.",
+      "chars_before": 421,
+      "chars_after": 850
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "W10",
+        "W35",
+        "W39",
+        "W41",
+        "W46",
+        "W49"
+      ],
+      "rationale": "Splits the 583-word paragraph by idea in the past tense, sets the clusterer settings and the metric notation as lists, uses feature scaling and scaler throughout, rewords the evaluation-mode phrase and removes the semicolons.",
+      "chars_before": 4208,
+      "chars_after": 4428
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "W49"
+      ],
+      "rationale": "Puts the description of how the metrics treated the HDBSCAN noise label in the past tense, matching the rest of Section 3.3.",
+      "chars_before": 904,
+      "chars_after": 913
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "W17",
+        "W23",
+        "W49"
+      ],
+      "rationale": "Names the interval the patient-grouped bootstrap, states that holding the partitions fixed leaves out the variation of refitting the clustering, and puts the procedure in the past tense.",
+      "chars_before": 1245,
+      "chars_after": 1401
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "W49"
+      ],
+      "rationale": "Past tense for what was reported, keeping the one explanation of the p-value floor that the Results now refer to.",
+      "chars_before": 617,
+      "chars_after": 618
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "section": "Federated robustness",
+      "roadmap_item_ids": [
+        "W3",
+        "W10",
+        "W35",
+        "W46",
+        "W49"
+      ],
+      "rationale": "Cuts the repeated no-new-method clause with its semicolon, uses feature scaling, rewords the run sentence as a description of each federated clustering, in the past tense.",
+      "chars_before": 1213,
+      "chars_after": 1210
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0039",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "W27"
+      ],
+      "rationale": "Replaces the sentence heading with a label.",
+      "chars_before": 66,
+      "chars_after": 53
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "W40",
+        "W49"
+      ],
+      "rationale": "Opens with the point, gives the spreads across representations and across clusterers from Table main that support it, and reports the values in the past tense.",
+      "chars_before": 512,
+      "chars_after": 816
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0041",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "W17",
+        "W35"
+      ],
+      "rationale": "The caption names the interval the patient-grouped bootstrap intervals and drops its two semicolons; the table body is unchanged.",
+      "chars_before": 1817,
+      "chars_after": 1835
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0043",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "W6",
+        "W9",
+        "W17",
+        "W35",
+        "W41"
+      ],
+      "rationale": "Splits the paragraph into the contrasts, opened by their point, and the K sweep, refers to the Methods for the p-value floor in place of repeating it, names the patient-grouped bootstrap, uses ordering in place of ranked and removes the semicolons.",
+      "chars_before": 1553,
+      "chars_after": 1577
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0044",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "W4",
+        "W22",
+        "W35",
+        "W47",
+        "W49"
+      ],
+      "rationale": "Cuts the repeated scope sentence, replaces the unmeasured connectivity cause with the observed spectral values, uses formal wording for the tuning clause, in the past tense and without the semicolon.",
+      "chars_before": 542,
+      "chars_after": 608
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0045",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "W13",
+        "W21",
+        "W24",
+        "W35",
+        "W36"
+      ],
+      "rationale": "Splits the paragraph into the representations that cluster and the two that fail, says the raw space holds little linearly recoverable label information while a random forest reaches 0.714, hedges the fixed-offset reason, uses records, cuts the sentence announcing the next subsection and removes the semicolon.",
+      "chars_before": 1519,
+      "chars_after": 1693
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "W29"
+      ],
+      "rationale": "Replaces the sentence heading with a label.",
+      "chars_before": 47,
+      "chars_after": 95
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "W21",
+        "W25",
+        "W32",
+        "W35"
+      ],
+      "rationale": "Says the raw pipeline carried little linearly recoverable label information, cuts simply, interprets the random-forest values on the hand-crafted features and ECGFounder, splits the paragraph at the probe test, in the past tense and without the semicolons.",
+      "chars_before": 1482,
+      "chars_after": 1685
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "W23",
+        "W35",
+        "W43"
+      ],
+      "rationale": "Opens with the out-of-fold result in place of the cold-open reading, adds the 5 s input window as a possible contributor to HuBERT-ECG's low ARI, splits procedure from interpretation, in the past tense and without the semicolons.",
+      "chars_before": 1773,
+      "chars_after": 1988
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "W29",
+        "W35"
+      ],
+      "rationale": "The caption drops the sentence it shared with the old heading and its two semicolons; caption text only.",
+      "chars_before": 705,
+      "chars_after": 669
+    },
+    {
+      "op_id": "OP030",
+      "kind": "replace_block",
+      "block_id": "B0050",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "W27"
+      ],
+      "rationale": "Replaces the cutesy heading with a label.",
+      "chars_before": 32,
+      "chars_after": 71
+    },
+    {
+      "op_id": "OP031",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "W13",
+        "W37",
+        "W48",
+        "W49"
+      ],
+      "rationale": "Opens with the point, replaces a handful with the largest-cluster fraction the text holds, reports in the past tense and shortens the paragraph.",
+      "chars_before": 682,
+      "chars_after": 704
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0052",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "W27",
+        "W35"
+      ],
+      "rationale": "The caption drops the cutesy opening it shared with the old heading and its semicolon; caption text only.",
+      "chars_before": 816,
+      "chars_after": 810
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0053",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "W10",
+        "W27"
+      ],
+      "rationale": "Replaces the sentence heading with a label in the one term chosen for the operation.",
+      "chars_before": 33,
+      "chars_after": 51
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0054",
+      "section": "Conditioning matters",
+      "roadmap_item_ids": [
+        "W10",
+        "W22",
+        "W28",
+        "W37"
+      ],
+      "rationale": "Uses feature scaling, replaces materially with a wide margin backed by the figures that follow, writes the Results in the past tense, cuts the unsupported common-default clause and replaces the punchy closing contrast with a plain statement of what follows.",
+      "chars_before": 652,
+      "chars_after": 674
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0056",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "W9",
+        "W16",
+        "W37"
+      ],
+      "rationale": "Past tense for replicated, names the 21-dimensional set beat-morphology features to keep hand-crafted for the 16 PTB-XL features, and develops the paragraph with the raw-beat ceiling so its length differs from its neighbours.",
+      "chars_before": 647,
+      "chars_after": 837
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "W35"
+      ],
+      "rationale": "The caption replaces its semicolon with a comma; the table body is unchanged.",
+      "chars_before": 664,
+      "chars_after": 668
+    },
+    {
+      "op_id": "OP037",
+      "kind": "replace_block",
+      "block_id": "B0059",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "W11",
+        "W12",
+        "W21",
+        "W22",
+        "W23",
+        "W25",
+        "W35",
+        "W42"
+      ],
+      "rationale": "States what each stressor did in place of the claim the table contradicts, names ECGFounder and the hand-crafted features, joins the label fragment, cuts the intrinsically-hard claim, splits the 65-word sentence, names the scaler and marks the clusterer the manuscript does not name, interprets equal ARI at lower AMI, limits the reversal to the setting evaluated and cuts the restating close.",
+      "chars_before": 1062,
+      "chars_after": 1153
+    },
+    {
+      "op_id": "OP038",
+      "kind": "replace_block",
+      "block_id": "B0060",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "W11",
+        "W15",
+        "W19",
+        "W22",
+        "W35",
+        "W42",
+        "W49"
+      ],
+      "rationale": "Opens with the non-IID result restricted to the three representations above chance and says raw flattening stays at 0.000, uses sites, names ECGFounder's ARI and its lead as separate quantities, replaces robust with the share retained, states the worst-draw criterion with its reason in the authors' voice, cuts the restating and undefined phenotyping close, in the past tense.",
+      "chars_before": 1138,
+      "chars_after": 1311
+    },
+    {
+      "op_id": "OP039",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "W12"
+      ],
+      "rationale": "The caption names ECGFounder and gives the hand-crafted retention; caption text only.",
+      "chars_before": 669,
+      "chars_after": 681
+    },
+    {
+      "op_id": "OP040",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "Deployment cost",
+      "roadmap_item_ids": [
+        "W7",
+        "W49"
+      ],
+      "rationale": "Keeps the one full statement of the cost comparison here, names the two quantities ordered against each other and reports in the past tense.",
+      "chars_before": 636,
+      "chars_after": 662
+    },
+    {
+      "op_id": "OP041",
+      "kind": "replace_block",
+      "block_id": "B0065",
+      "section": "Deployment cost",
+      "roadmap_item_ids": [
+        "W13",
+        "W35",
+        "W46"
+      ],
+      "rationale": "The caption describes peak memory as a measurement of the inference without the process wording, uses record for one ECG and drops its semicolon; the table body is unchanged.",
+      "chars_before": 1595,
+      "chars_after": 1592
+    },
+    {
+      "op_id": "OP042",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "W2",
+        "W5",
+        "W7",
+        "W8",
+        "W14",
+        "W21",
+        "W41"
+      ],
+      "rationale": "Names the two tasks in a new shape, gives the comparison through its results instead of the Introduction's phrase, states only what cost and the lead constraint add to the rule, words the MIT-BIH carry-over as feature logic, restricts all five clusterers to PTB-XL with the MIT-BIH values in place of not viable, names the conv-AE, and splits the 236-word paragraph.",
+      "chars_before": 1534,
+      "chars_after": 1571
+    },
+    {
+      "op_id": "OP043",
+      "kind": "delete_block",
+      "block_id": "B0068",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "W22",
+        "W26"
+      ],
+      "rationale": "The paragraph repeats the Introduction and Section 4.3, and its one new claim is unsupported, so it is deleted.",
+      "chars_before": 434,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP044",
+      "kind": "replace_block",
+      "block_id": "B0069",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "W1",
+        "W3",
+        "W9",
+        "W10",
+        "W39"
+      ],
+      "rationale": "Opens with what separates the study from the closest benchmark, sets the six differences as a list of full sentences, cuts the repeated no-novelty statements and the restating close, and uses ordering and feature scaling.",
+      "chars_before": 1211,
+      "chars_after": 1105
+    },
+    {
+      "op_id": "OP045",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "W4",
+        "W21"
+      ],
+      "rationale": "Keeps the full scope statement here and gives the two models' best ARIs without calling them the ends of the measured range.",
+      "chars_before": 1145,
+      "chars_after": 1096
+    },
+    {
+      "op_id": "OP046",
+      "kind": "replace_block",
+      "block_id": "B0072",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "W4",
+        "W5",
+        "W10",
+        "W20",
+        "W21",
+        "W23",
+        "W35",
+        "W38",
+        "W41",
+        "W46"
+      ],
+      "rationale": "Splits the 335-word paragraph into the foundation-model arm, the task definition and the federated simulation, states the upsampling result as a possible gain of 0.013, replaces foundation family and the software wording, cuts the repeated scope and lead clauses and two binary contrasts, and adds the flutter and pooled-scaling limitations.",
+      "chars_before": 2230,
+      "chars_after": 2670
+    },
+    {
+      "op_id": "OP047",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "W8",
+        "W10",
+        "W14",
+        "W18",
+        "W31",
+        "W35"
+      ],
+      "rationale": "Replaces the representation-not-algorithm shape with the spread comparison it rests on, keeps the full scope statement here, names the conv-AE, restricts all five clusterers to PTB-XL, uses feature scaling, cuts the restating clause and keeps the open questions as a sentence of their own, without semicolons.",
+      "chars_before": 1176,
+      "chars_after": 1080
+    }
+  ],
+  "blocks_untouched": 34,
+  "roadmap_items_covered": [
+    "W1",
+    "W10",
+    "W11",
+    "W12",
+    "W13",
+    "W14",
+    "W15",
+    "W16",
+    "W17",
+    "W18",
+    "W19",
+    "W2",
+    "W20",
+    "W21",
+    "W22",
+    "W23",
+    "W24",
+    "W25",
+    "W26",
+    "W27",
+    "W28",
+    "W29",
+    "W3",
+    "W30",
+    "W31",
+    "W32",
+    "W33",
+    "W34",
+    "W35",
+    "W36",
+    "W37",
+    "W38",
+    "W39",
+    "W4",
+    "W40",
+    "W41",
+    "W42",
+    "W43",
+    "W44",
+    "W45",
+    "W46",
+    "W47",
+    "W48",
+    "W49",
+    "W5",
+    "W6",
+    "W7",
+    "W8",
+    "W9"
+  ],
+  "block_touched_ratio": 0.5802,
+  "preserved_ratio": 0.4198,
+  "char_churn_ratio": 1.8088,
+  "net_growth_chars": 3354,
+  "structural_flags": [
+    "section count changes from 24 to 20"
+  ],
+  "structural_acknowledged": true,
+  "output_file": "patches/01-main.tex.patched",
+  "output_sha256": "d4b27a57785ef6d152c4d5cae1aa51c4b7d8073f9dbb6d5127726c2ff967b739"
+}

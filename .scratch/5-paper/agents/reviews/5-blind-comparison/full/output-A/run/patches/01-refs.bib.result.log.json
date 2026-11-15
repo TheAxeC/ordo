@@ -1,0 +1,34 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "4326d8eee9ff732aae9976b6975102214cea1d25c27b260e4260a51f9bbbd011",
+  "round": 1,
+  "n_blocks": 53,
+  "n_blocks_touched": 1,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "insert_after",
+      "block_id": "B0053",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "full"
+      ],
+      "rationale": "adds the 15 entries found for the outline items 6.3, 6.2 and 4.2 marked needs literature",
+      "chfield": 391,
+      "chfield": 7718
+    }
+  ],
+  "blocks_untouched": 52,
+  "roadmap_items_covered": [
+    "full"
+  ],
+  "block_touched_ratio": 0.0189,
+  "preserved_ratio": 0.9811,
+  "char_churn_ratio": 0.2457,
+  "net_growth_chars": 7720,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/01-refs.bib.result",
+  "output_sha256": "5b70426d2f07a69b9a22747cd07863485c88f18d49c7c32306fc1d19f0a89b4f"
+}

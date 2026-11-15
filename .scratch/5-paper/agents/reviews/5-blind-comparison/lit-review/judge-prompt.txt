@@ -1,0 +1,13 @@
+A user asked for a review of the literature on supervised prediction from data whose spatial mode is not aligned across subjects, such as point clouds or sets of regions: multilinear and tensor partial least squares and tensor regression, decompositions of tensors with an unaligned mode, optimal transport with entropic regularization, Gromov-Wasserstein and fused Gromov-Wasserstein distances, transport barycenters and dictionaries with learnable templates, registration-free transport-based fusion in medical imaging, permutation-invariant set encoders, and the image registration, radiomics and lesion segmentation pipelines such methods avoid or build on.
+
+Two outputs answer that request. They are in this folder under outputs/output-A/ and outputs/output-B/. Each holds every file that side wrote and its final message to the user (final-message.md). The page of each URL the outputs cite is saved under outputs/pages/, and outputs/pages/index.md maps each URL to its saved file.
+
+Your task is to judge which output better serves this request.
+
+- Judge each output by what the request and its user need: a review of that literature that a researcher can rely on and build on.
+- No tool's or skill's text is the standard, wherever an output quotes one.
+- Read each output whole before you judge it.
+- Before you state any preference, list each output's critical failures, each quoted with its place (file and line, or section).
+- Check each URL an output cites against its saved page under outputs/pages/.
+- Open no file outside this folder.
+- Then give your verdict: A, B or a tie, with reasons that point at the failures or passages you listed.

@@ -1,0 +1,28 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+(./cover-letter.tex
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/letter.cls
+Document Class: letter 2024/08/12 v1.3c Standard LaTeX document class
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/size11.clo))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/inputenc.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/base/fontenc.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/latex/geometry/geometry.sty
+(/usr/local/texlive/2025/texmf-dist/tex/latex/graphics/keyval.sty)
+(/usr/local/texlive/2025/texmf-dist/tex/generic/iftex/ifvtex.sty
+(/usr/local/texlive/2025/texmf-dist/tex/generic/iftex/iftex.sty)))
+(/usr/local/texlive/2025/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def)
+No file cover-letter.aux.
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+! Missing number, treated as zero.
+<to be read again> 
+                   G
+l.40 \closing{Sincerely,}
+                         
+!  ==> Fatal error occurred, no output PDF file produced!
+Transcript written on /private/tmp/claude-502/-Users-axelfaes-workspace-ordo/39
+98c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/full-1/paper-runs/full-2026
+-11-14/compile-review6/cover-letter.log.

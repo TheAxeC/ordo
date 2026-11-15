@@ -1,0 +1,8 @@
+Highlights
+(Biomedical Signal Processing and Control format: 3-5 bullets, <=85 characters each)
+
+- Representation mattered more than the clustering algorithm on two binary ECG tasks.
+- ECGFounder clustered SR vs AF best (ARI 0.885), hand-crafted features 0.711.
+- Raw flattening and a convolutional autoencoder clustered at chance (ARI ~0).
+- Silhouette scored a one-cluster solution at 0.81 while its ARI was 0.
+- Hand-crafted features led at 9:1 imbalance and kept 92% of ARI in simulated skew.

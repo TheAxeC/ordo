@@ -1,0 +1,626 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "1e9e7de7bf5706ecabfc23b1e0b9de5c723e1fcfd92d8060ba74733efb86ad73",
+  "round": 1,
+  "n_blocks": 68,
+  "n_blocks_touched": 39,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0008",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "R3-8",
+        "R3-1",
+        "R1-4",
+        "R3-6",
+        "R3-5",
+        "R3-2",
+        "R3-9"
+      ],
+      "rationale": "The abstract states the protocol as the contribution, scopes every finding to the settings tested, calls the federation simulated, corrects the claim that raw flattening has a ceiling well above chance and drops the unsupported deployability wording.",
+      "chars_before": 1830,
+      "chars_after": 1809
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0012",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "R3-8"
+      ],
+      "rationale": "The opening paragraph states as a question to be measured what it stated before as a general fact.",
+      "chars_before": 477,
+      "chars_after": 508
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "R3-1",
+        "R3-14",
+        "R3-9",
+        "R1-4"
+      ],
+      "rationale": "The closest benchmark is named by its authors and described only as far as its passages state, ARI is defined at its first use in the body, and the self-assessment and cost wording are removed.",
+      "chars_before": 544,
+      "chars_after": 740
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "R3-1",
+        "R3-9",
+        "R3-5",
+        "R3-8"
+      ],
+      "rationale": "The contribution is stated as a specific evaluation protocol in place of 'modest and empirical', SR and AF are defined at first use, and the stress tests are described as simulated.",
+      "chars_before": 1530,
+      "chars_after": 1674
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "R3-14",
+        "R3-8",
+        "R3-9"
+      ],
+      "rationale": "The citation used as a noun names its authors, the autoencoder sentence states the training objective as a definition, and the closing sentence matches the five representations.",
+      "chars_before": 1428,
+      "chars_after": 1404
+    },
+    {
+      "op_id": "OP006",
+      "kind": "insert_after",
+      "block_id": "B0019",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "R3-1"
+      ],
+      "rationale": "The related work compares the study with the recent ECG foundation-model benchmark studies by name, saying what each measures.",
+      "chars_before": 589,
+      "chars_after": 906
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "R3-1",
+        "R3-14",
+        "R3-4"
+      ],
+      "rationale": "The closest benchmark is cited by its authors' names and described from its passages: models, datasets, probes, the GMM-based ARI and its label-versus-dataset finding.",
+      "chars_before": 585,
+      "chars_after": 845
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0023",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "R2-1a",
+        "R2-2a",
+        "R3-2",
+        "R3-9",
+        "R3-7"
+      ],
+      "rationale": "States the PTB-XL release, rate, WFDB reading, data type and array shape, defines SCP-ECG, AFIB and AFLT, moves the lead statement to the representation it concerns, and justifies the binary design.",
+      "chars_before": 774,
+      "chars_after": 1802
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "R2-1a",
+        "R3-7",
+        "R3-9",
+        "R3-2"
+      ],
+      "rationale": "States the MIT-BIH rate, leads, reading and data type, the excluded annotations and the beat sampling, and defines N-versus-V.",
+      "chars_before": 455,
+      "chars_after": 779
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "R2-1a"
+      ],
+      "rationale": "Adds a label so that Section 3.1 can refer to the representation steps.",
+      "chars_before": 28,
+      "chars_after": 44
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0026",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "R2-2a",
+        "R2-2b",
+        "R2-1b",
+        "R3-4",
+        "R1-4",
+        "R3-6",
+        "R3-7",
+        "R3-8",
+        "R3-9"
+      ],
+      "rationale": "Gives each representation's input, transformation, output and principle with all 16 features named, states which representation uses lead II and why, gives the model selection criteria, and adds the table of properties that need no measurement.",
+      "chars_before": 1517,
+      "chars_after": 6957
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0027",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "R2-2b"
+      ],
+      "rationale": "Adds a label so that the representation and data sections can refer to the conditioner and the metrics.",
+      "chars_before": 38,
+      "chars_after": 55
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "R1-3",
+        "R2-3",
+        "R1-1",
+        "R1-2",
+        "R3-3",
+        "R3-7",
+        "R3-9",
+        "R3-14"
+      ],
+      "rationale": "States HDBSCAN's noise handling and that it takes no cluster count, gives each metric's meaning, formula and range, states the baselines actually computed, what the seeds vary, what the Wilcoxon floor means, the pilot behind the default conditioner, and every implementation setting.",
+      "chars_before": 1549,
+      "chars_after": 9165
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "R3-5"
+      ],
+      "rationale": "The heading names the federation as a simulation and drops 'robustness', which the simulation does not establish beyond its setting.",
+      "chars_before": 33,
+      "chars_after": 44
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0030",
+      "section": "Federated robustness",
+      "roadmap_item_ids": [
+        "R3-5",
+        "R3-7",
+        "R3-9"
+      ],
+      "rationale": "Describes the simulation in full, discloses the two steps that use the pooled records, names the heterogeneity as simulated class-proportion skew, and defines FedAvg and IID.",
+      "chars_before": 525,
+      "chars_after": 1254
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0032",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "R3-8"
+      ],
+      "rationale": "The heading states the topic of the subsection in place of a general conclusion that the two tasks cannot carry.",
+      "chars_before": 66,
+      "chars_after": 55
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0033",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "R3-8",
+        "R3-9",
+        "R3-13"
+      ],
+      "rationale": "Scopes 'the representation is the deciding factor' to this setting with the within- and across-representation ranges from Table 1, and uses the chosen terms.",
+      "chars_before": 512,
+      "chars_after": 627
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0034",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "R1-1",
+        "R1-2",
+        "R3-3",
+        "R3-11",
+        "R3-12",
+        "R3-13",
+        "R3-9"
+      ],
+      "rationale": "The caption gives the sample size, what each entry averages, the seed spread and saved half-widths as they stand, the p-value floor with the effect sizes, and the headers and row labels use the defined terms.",
+      "chars_before": 1077,
+      "chars_after": 1676
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "R3-11",
+        "R3-12",
+        "R3-9"
+      ],
+      "rationale": "The caption gives the number of recordings and of seeds or fits per cell, points to the seed spread, and states the correspondence between the figure's axis labels and the text's terms.",
+      "chars_before": 220,
+      "chars_after": 609
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0036",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "R1-1",
+        "R1-2",
+        "R3-3",
+        "R3-9"
+      ],
+      "rationale": "Restricts the stability statement to the k-means solutions it was measured on, states what the seed spread measures, names the mean differences as effect sizes on the ARI scale, and adds the purities against the majority proportion.",
+      "chars_before": 782,
+      "chars_after": 1115
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0037",
+      "section": "Representation, not algorithm, governs clusterability",
+      "roadmap_item_ids": [
+        "R1-3",
+        "R3-4",
+        "R3-14"
+      ],
+      "rationale": "States from the saved rows that HDBSCAN formed no cluster for three representations and the size of its largest cluster for the other two, and cites the closest benchmark by its authors.",
+      "chars_before": 542,
+      "chars_after": 807
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0039",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "R2-4",
+        "R2-5",
+        "R3-13",
+        "R3-9"
+      ],
+      "rationale": "States that the ceiling and the ARI have different chance levels, removes 'the sharpest case', gives the table's values at its precision, and explains the result of each representation with its evidence, marking the untested mechanisms as interpretations.",
+      "chars_before": 1067,
+      "chars_after": 3075
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Separability is not clusterability",
+      "roadmap_item_ids": [
+        "R1-5",
+        "R3-10",
+        "R3-11",
+        "R3-12",
+        "R2-5",
+        "R3-9"
+      ],
+      "rationale": "Enlarges the printed figure, and the caption says what each point is, how many recordings and fits stand behind it, that the axes have different chance levels, and where the per-fit spread is shown.",
+      "chars_before": 299,
+      "chars_after": 803
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0042",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "R3-9"
+      ],
+      "rationale": "Uses the defined term Ward and splits the closing sentence.",
+      "chars_before": 682,
+      "chars_after": 637
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0043",
+      "section": "The silhouette trap",
+      "roadmap_item_ids": [
+        "R3-10",
+        "R3-11",
+        "R1-5",
+        "R3-9"
+      ],
+      "rationale": "Enlarges the printed figure, and the caption states the recordings and the fits behind the markers and places the degenerate markers where the axes put them, at the bottom right.",
+      "chars_before": 362,
+      "chars_after": 761
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "R3-13",
+        "R3-8",
+        "R3-9"
+      ],
+      "rationale": "Gives the table's values at three decimals and scopes the representation-level reading to the two tasks.",
+      "chars_before": 543,
+      "chars_after": 540
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "R3-11",
+        "R3-13",
+        "R3-8",
+        "R3-9"
+      ],
+      "rationale": "The caption gives the beats, records and fits, the ceilings at three decimals with the majority baseline, and states that the foundation models were not applied, and the headers use the defined terms.",
+      "chars_before": 548,
+      "chars_after": 794
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "R3-5",
+        "R3-8"
+      ],
+      "rationale": "The heading names the two stress tests and calls the federation simulated.",
+      "chars_before": 73,
+      "chars_after": 53
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0050",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "R1-4",
+        "R3-6",
+        "R3-8",
+        "R3-7",
+        "R3-9"
+      ],
+      "rationale": "Removes 'cheap features' and the unsupported causal clause, uses the defined terms, and states that the imbalance result rests on one subsample and one fit.",
+      "chars_before": 590,
+      "chars_after": 538
+    },
+    {
+      "op_id": "OP030",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "R3-5",
+        "R1-4",
+        "R3-6",
+        "R3-8",
+        "R3-12",
+        "R3-9"
+      ],
+      "rationale": "Calls the heterogeneity simulated class-proportion skew, adds the saved seed standard deviations, and replaces the multi-site phenotyping claim with a statement scoped to this simulation.",
+      "chars_before": 737,
+      "chars_after": 772
+    },
+    {
+      "op_id": "OP031",
+      "kind": "replace_block",
+      "block_id": "B0052",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "R3-5",
+        "R3-12",
+        "R3-13",
+        "R3-11",
+        "R1-1",
+        "R3-9"
+      ],
+      "rationale": "Adds the saved seed standard deviations of every federated row, states the sample size and what each seed draws, and explains the two-decimal retention column and its n/a entry.",
+      "chars_before": 533,
+      "chars_after": 929
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0053",
+      "section": "Robustness under deployment stress: imbalance and federation",
+      "roadmap_item_ids": [
+        "R3-11",
+        "R3-12",
+        "R3-5",
+        "R3-9"
+      ],
+      "rationale": "The caption gives the recordings, sites and seeds, points to the saved standard deviations, and calls the heterogeneity simulated.",
+      "chars_before": 289,
+      "chars_after": 615
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0055",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "R3-8",
+        "R1-4",
+        "R3-6",
+        "R3-5",
+        "R2-4"
+      ],
+      "rationale": "Replaces the decision rule with observations scoped to the settings tested, discusses the dimensions and parameter counts of the property table without time or memory figures, and removes the claims about other lead sets and viability.",
+      "chars_before": 935,
+      "chars_after": 1192
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0056",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "R3-8",
+        "R3-1"
+      ],
+      "rationale": "Removes the unsourced claim that both errors recur often enough to be worth stating, and the self-assessment 'honestly'.",
+      "chars_before": 434,
+      "chars_after": 359
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "R3-1",
+        "R3-4",
+        "R3-8"
+      ],
+      "rationale": "States the contribution of the protocol against the recent benchmarks in place of 'no methodological novelty' and 'careful, honest benchmark', and names the other public ECG foundation models with how the conclusions depend on the two tested.",
+      "chars_before": 608,
+      "chars_after": 1550
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0059",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "R3-2",
+        "R3-4",
+        "R3-5",
+        "R2-1b",
+        "R3-8"
+      ],
+      "rationale": "Adds the preprocessing mismatch of the foundation models, replaces 'harder and out of scope' with a statement of scope that names multi-class databases, defines the foundation-model scope, and discloses the pooled steps of the federated simulation.",
+      "chars_before": 1079,
+      "chars_after": 1716
+    },
+    {
+      "op_id": "OP037",
+      "kind": "replace_block",
+      "block_id": "B0061",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "R3-8",
+        "R3-2",
+        "R1-4",
+        "R3-6",
+        "R3-5",
+        "R3-4"
+      ],
+      "rationale": "Scopes each conclusion to the two tasks, the clusterers tested, two named foundation models and a simulated federation, and corrects 'overtake under site heterogeneity' to the result of the federated table.",
+      "chars_before": 773,
+      "chars_after": 699
+    },
+    {
+      "op_id": "OP038",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "R3-7",
+        "R3-14"
+      ],
+      "rationale": "Points to the settings table and the dependency list of the code repository, and gives the sources of the pretrained weights that the HuBERT-ECG reference note held before.",
+      "chars_before": 307,
+      "chars_after": 614
+    },
+    {
+      "op_id": "OP039",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Declaration of competing interest",
+      "roadmap_item_ids": [
+        "disclosure"
+      ],
+      "rationale": "Adds the revision assistance of this run with its model, and marks the unknown model version of the earlier use; the authors' statement is otherwise kept as written.",
+      "chars_before": 412,
+      "chars_after": 715
+    }
+  ],
+  "blocks_untouched": 29,
+  "roadmap_items_covered": [
+    "R1-1",
+    "R1-2",
+    "R1-3",
+    "R1-4",
+    "R1-5",
+    "R2-1a",
+    "R2-1b",
+    "R2-2a",
+    "R2-2b",
+    "R2-3",
+    "R2-4",
+    "R2-5",
+    "R3-1",
+    "R3-10",
+    "R3-11",
+    "R3-12",
+    "R3-13",
+    "R3-14",
+    "R3-2",
+    "R3-3",
+    "R3-4",
+    "R3-5",
+    "R3-6",
+    "R3-7",
+    "R3-8",
+    "R3-9",
+    "disclosure"
+  ],
+  "block_touched_ratio": 0.5735,
+  "preserved_ratio": 0.4265,
+  "char_churn_ratio": 2.4895,
+  "net_growth_chars": 24456,
+  "structural_flags": [
+    "heading rewritten: \\subsection{Federated robustness} becomes \\subsection{Federated clustering simulation}",
+    "heading rewritten: \\subsection{Representation, not algorithm, governs clusterability} becomes \\subsection{Clustering by representation and algorithm}",
+    "heading rewritten: \\subsection{Robustness under deployment stress: imbalance and federation} becomes \\subsection{Class imbalance and simulated federation}"
+  ],
+  "structural_acknowledged": true,
+  "output_file": "patches/02-main.tex.patched",
+  "output_sha256": "532d0e5b55a6121782f45444bee2ce75e77f8abf4da16299ce45ba42a300126d"
+}

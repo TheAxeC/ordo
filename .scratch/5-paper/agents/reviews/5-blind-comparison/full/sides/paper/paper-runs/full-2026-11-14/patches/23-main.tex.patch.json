@@ -1,0 +1,9 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "59e9a70e8039e2780158704c22face8431d3396d7165d706fe761fd401693649",
+  "round": 1,
+  "ops": [
+    {"op_id": "OP001", "kind": "replace_block", "block_id": "B0113", "old_hash": "5192398eebb10fbfee68f7658f8fcfd6cc343dc7c4e3d06b049072ea252a8d92", "roadmap_item_ids": ["D7-1"], "rationale": "The second sentence of the Reproducibility statement is split in two and loses the possessive manuscript's, the unbreakable word at the end of the overfull line; both statements it made are kept and the rest of the paragraph is unchanged.", "new_text": "The cohort definition, the inclusion and exclusion criteria, the models with their hyperparameters, and the evaluation are documented in the Method and Experiments sections. The declaration of generative AI use describes the AI assistance used to prepare the manuscript. The reported numbers come from the analysis of the study. Researchers wishing to replicate or extend this work should note that MIMIC-IV and MIMIC-IV-ECG require credentialed access under the PhysioNet data use agreement. The sampling of controls, the cross-validation folds and the initialisations of the networks are seeded. The code is available under the MIT licence at [GAP: repository URL or DOI]."}
+  ]
+}

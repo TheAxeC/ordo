@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2025)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+The style file: vancouver.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: refs.bib
+Warning--empty author and editor in https://doi.org/10.5281/zenodo.22227432
+Warning--empty chapter in Zeiler_2014
+You've used 64 entries,
+            3507 wiz_defined-function locations,
+            1233 strings with 33174 characters,
+and the built_in function-call counts, 232871 in all, are:
+= -- 26805
+> -- 1845
+< -- 738
++ -- 827
+- -- 333
+* -- 20849
+:= -- 24976
+add.period$ -- 294
+call.type$ -- 64
+change.case$ -- 2
+chr.to.int$ -- 1890
+cite$ -- 66
+duplicate$ -- 14349
+empty$ -- 23502
+format.name$ -- 393
+if$ -- 54145
+int.to.chr$ -- 0
+int.to.str$ -- 64
+missing$ -- 779
+newline$ -- 373
+num.names$ -- 64
+pop$ -- 1817
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1667
+stack$ -- 0
+substring$ -- 53284
+swap$ -- 2041
+text.length$ -- 128
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 700
+width$ -- 66
+write$ -- 807
+(There were 2 warnings)

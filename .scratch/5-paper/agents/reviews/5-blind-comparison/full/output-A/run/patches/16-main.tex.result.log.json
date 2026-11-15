@@ -1,0 +1,111 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "012a28325f100190f29a9e60cd14bd4f657c25708f8e325d48a47851105a2d19",
+  "round": 1,
+  "n_blocks": 115,
+  "n_blocks_touched": 7,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0013",
+      "section": "Context and problem",
+      "roadmap_item_ids": [
+        "RI5.1"
+      ],
+      "rationale": "Takes the wording of citation report C1: the 50-year trends are tied to the Framingham Heart Study (n=9511, Schnabel_2015 abstract) instead of to the Wolf_1991 sample; the citation is kept.",
+      "chfield": 1048,
+      "chfield": 1059
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0055",
+      "section": "Baselines, protocol and metrics",
+      "roadmap_item_ids": [
+        "RI5.5"
+      ],
+      "rationale": "Moves the survival design's fold sentences from 5.2 to the protocol paragraph of 4.2; per experiments/multihorizon.py lines 92 to 114 each test fold's risks come from models fitted on the other folds, and the penalised Cox model is fitted on the same training folds.",
+      "chfield": 1141,
+      "chfield": 1317
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Study cohort",
+      "roadmap_item_ids": [
+        "RI5.3"
+      ],
+      "rationale": "States the criterion of the 14,469 exclusion where the count stands, as settings.md Decisions (C5) rules: cohort_flow.txt (source=icd) gives the count, and core/cohort.py lines 118 to 121 exclude an AF diagnosis or an AF-read ECG up to the end of the blanking window; table body unchanged.",
+      "chfield": 954,
+      "chfield": 1174
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0064",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "RI5.6"
+      ],
+      "rationale": "States in the Results the comparison the Conclusion rests on: in table1_cis.csv the fused model's interval [0.7664, 0.7888] lies above ECG-only BTTN's [0.7275, 0.7517]; the CNN sentence is reworded so the ECG-only interval is given once.",
+      "chfield": 638,
+      "chfield": 769
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Discrimination at one year and across horizons",
+      "roadmap_item_ids": [
+        "RI5.5"
+      ],
+      "rationale": "Removes the three method sentences that open the Results paragraph (moved to 4.2 by OP002, the three-network mean already in 3.2) and opens on the one sentence that the same risks were read at every horizon; the rest of the paragraph is unchanged.",
+      "chfield": 1166,
+      "chfield": 922
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0080",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "RI5.4"
+      ],
+      "rationale": "Replaces 'read from one survival model', which reads as one fit, by the cross-validated risks that 5.2 and the survival analysis (five folds, three networks per fold) describe.",
+      "chfield": 854,
+      "chfield": 867
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0081",
+      "section": "Comparison with published incident-AF models",
+      "roadmap_item_ids": [
+        "RI5.2"
+      ],
+      "rationale": "Takes the wording of citation report C2: the McKeen_2025 abstract states the AF AUROC of 0.996 and the MIMIC-IV-ECG benchmark but not the data of that value, so the two facts are stated apart; the citation is kept.",
+      "chfield": 885,
+      "chfield": 959
+    }
+  ],
+  "blocks_untouched": 108,
+  "roadmap_items_covered": [
+    "RI5.1",
+    "RI5.2",
+    "RI5.3",
+    "RI5.4",
+    "RI5.5",
+    "RI5.6"
+  ],
+  "block_touched_ratio": 0.0609,
+  "preserved_ratio": 0.9391,
+  "char_churn_ratio": 0.2195,
+  "net_growth_chars": 381,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/16-main.tex.result",
+  "output_sha256": "ad039cb89a49262eaf354f0373cbe9fd8699d4fe668139aba441eeca66f2ad15"
+}

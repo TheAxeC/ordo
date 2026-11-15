@@ -1,0 +1,73 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "../../manuscript/cover-letter.tex",
+  "base_sha256": "f2218c9c827d1271c849bad6b2261cd9c2b2d9a3b0b1f347bdd634d0a210a114",
+  "n_chars": 2542,
+  "n_blocks": 7,
+  "chars_in_blocks": 2529,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "bf0cb4c3547513d5463cd620ae5b193d069fd69a8336fb8e00333f6ea2d8c098",
+      "char_start": 0,
+      "char_end": 28,
+      "n_chars": 28,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\documentclass[11pt]{letter}"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "2221ef8d7685913e6455631d6c908ee6e2d4f99e5aecfeebd9196befce84da30",
+      "char_start": 30,
+      "char_end": 116,
+      "n_chars": 86,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\usepackage[utf8]{inputenc}"
+    },
+    {
+      "block_id": "B0003",
+      "sha256": "bb1617d27ad982c6e1ea28d8d8af586633e431b5404ee9ff2d3e49a51d5ca47f",
+      "char_start": 118,
+      "char_end": 258,
+      "n_chars": 140,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\signature{[GAP: corresponding author name and title]\\\\{}"
+    },
+    {
+      "block_id": "B0004",
+      "sha256": "68a77179f27df2ed85513f5f8069c7f1392cde9c2030290736905c39c4297ce6",
+      "char_start": 260,
+      "char_end": 283,
+      "n_chars": 23,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\date{14 November 2026}"
+    },
+    {
+      "block_id": "B0005",
+      "sha256": "49d34b0366eb0a68eb35c75d6d8aeb1d60be3c49779501a7e1cdf4941acdab46",
+      "char_start": 285,
+      "char_end": 301,
+      "n_chars": 16,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{document}"
+    },
+    {
+      "block_id": "B0006",
+      "sha256": "60b7e2eddebb4ee04ac06b70e4edadd7a703af5d47526e61cd80797193f43ef7",
+      "char_start": 303,
+      "char_end": 2525,
+      "n_chars": 2222,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\begin{letter}{Editor-in-Chief\\\\"
+    },
+    {
+      "block_id": "B0007",
+      "sha256": "2dc670e7ffe1f12aa0326631b39a0b6d72da153425c7f5f9aed627a71c1487d6",
+      "char_start": 2527,
+      "char_end": 2541,
+      "n_chars": 14,
+      "section": "frontmatter",
+      "first_line_excerpt": "\\end{document}"
+    }
+  ]
+}

@@ -1,0 +1,456 @@
+\begin{thebibliography}{10}
+
+\bibitem{Kashou_2021}
+Kashou A, Noseworthy P.
+\newblock Predicting incident atrial fibrillation in sinus rhythm: more than
+  just trusting the <left single quotation mark>black box<right single quotation mark>.
+\newblock Heart. 2021 Sep;107(22):1770<en dash>1771.
+\newblock Available from: \url{https://doi.org/10.1136/heartjnl-2021-319385}.
+
+\bibitem{Wolf_1991}
+Wolf PA, Abbott RD, Kannel WB.
+\newblock Atrial fibrillation as an independent risk factor for stroke: the
+  Framingham Study.
+\newblock Stroke. 1991 Aug;22(8):983<en dash>988.
+\newblock Available from: \url{https://doi.org/10.1161/01.STR.22.8.983}.
+
+\bibitem{Schnabel_2015}
+Schnabel RB, Yin X, Gona P, Larson MG, Beiser AS, McManus DD, et~al.
+\newblock 50 year trends in atrial fibrillation prevalence, incidence, risk
+  factors, and mortality in the Framingham Heart Study: a cohort study.
+\newblock The Lancet. 2015 Jul;386(9989):154<en dash>162.
+\newblock Available from: \url{https://doi.org/10.1016/S0140-6736(14)61774-8}.
+
+\bibitem{Alonso_2013}
+Alonso A, Krijthe BP, Aspelund T, Stepas KA, Pencina MJ, Moser CB, et~al.
+\newblock Simple Risk Model Predicts Incidence of Atrial Fibrillation in a
+  Racially and Geographically Diverse Population: the CHARGE<hyphen>AF Consortium.
+\newblock Journal of the American Heart Association. 2013 Mar;2(2).
+\newblock Available from: \url{https://doi.org/10.1161/JAHA.112.000102}.
+
+\bibitem{Raghunath_2021}
+Raghunath S, Pfeifer JM, Ulloa-Cerna AE, Nemani A, Carbonati T, Jing L, et~al.
+\newblock Deep Neural Networks Can Predict New-Onset Atrial Fibrillation From
+  the 12-Lead ECG and Help Identify Those at Risk of Atrial
+  Fibrillation<en dash>Related Stroke.
+\newblock Circulation. 2021 Mar;143(13):1287<en dash>1298.
+\newblock Available from:
+  \url{https://doi.org/10.1161/CIRCULATIONAHA.120.047829}.
+
+\bibitem{Khurshid_2022}
+Khurshid S, Friedman S, Reeder C, Di~Achille P, Diamant N, Singh P, et~al.
+\newblock ECG-Based Deep Learning and Clinical Risk Factors to Predict Atrial
+  Fibrillation.
+\newblock Circulation. 2022 Jan;145(2):122<en dash>133.
+\newblock Available from:
+  \url{https://doi.org/10.1161/CIRCULATIONAHA.121.057480}.
+
+\bibitem{Tsiartas_2025}
+Tsiartas E, Nayak D, Meade A.
+\newblock Artificial intelligence capabilities in identifying atrial
+  fibrillation using baseline sinus rhythm ECG : a systematic review.
+\newblock Open Heart. 2025 Jul;12(2):e003657.
+\newblock Available from: \url{https://doi.org/10.1136/openhrt-2025-003657}.
+
+\bibitem{Saiz_Vivo_2025}
+Saiz-Vivo J, Chakravarthy N, Ho WHH, Ching CK, Yeung WLK, Lim TW, et~al.
+\newblock Artificial intelligence for atrial fibrillation prediction while in
+  sinus rhythm: a narrative review.
+\newblock European Heart Journal - Digital Health. 2025 Dec;7(2).
+\newblock Available from: \url{https://doi.org/10.1093/ehjdh/ztaf144}.
+
+\bibitem{Van_Gelder_2024}
+Van~Gelder IC, Rienstra M, Bunting KV, Casado-Arroyo R, Caso V, Crijns HJGM,
+  et~al.
+\newblock 2024 ESC Guidelines for the management of atrial fibrillation
+  developed in collaboration with the European Association for Cardio-Thoracic
+  Surgery (EACTS).
+\newblock European Heart Journal. 2024 Aug;45(36):3314<en dash>3414.
+\newblock Available from: \url{https://doi.org/10.1093/eurheartj/ehae176}.
+
+\bibitem{Arends_2026}
+Arends BKO, van Amsterdam WAC, van~der Harst P, van Smeden M, van Es R, van~de
+  Leur RR.
+\newblock Signal or noise? Evaluating commonly used attribution methods for
+  explaining deep neural networks in electrocardiogram classification.
+\newblock European Heart Journal - Digital Health. 2026 Mar;7(3).
+\newblock Available from: \url{https://doi.org/10.1093/ehjdh/ztag038}.
+
+\bibitem{Rudin_2019}
+Rudin C.
+\newblock Stop explaining black box machine learning models for high stakes
+  decisions and use interpretable models instead.
+\newblock Nature Machine Intelligence. 2019 May;1(5):206<en dash>215.
+\newblock Available from: \url{https://doi.org/10.1038/s42256-019-0048-x}.
+
+\bibitem{De_Lathauwer_2008}
+De~Lathauwer L.
+\newblock Decompositions of a Higher-Order Tensor in Block Terms<em dash>Part II:
+  Definitions and Uniqueness.
+\newblock SIAM Journal on Matrix Analysis and Applications. 2008
+  Jan;30(3):1033<en dash>1066.
+\newblock Available from: \url{https://doi.org/10.1137/070690729}.
+
+\bibitem{arxiv_2010_04963}
+Ye J, Li G, Chen D, Yang H, Zhe S, Xu Z.
+\newblock Block-term Tensor Neural Networks [Preprint]. arXiv:2010.04963; 2020.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.2010.04963}.
+
+\bibitem{Faes_2024}
+Faes A, Camarrone F, Van~Hulle MM.
+\newblock Single Finger Trajectory Prediction From Intracranial Brain Activity
+  Using Block-Term Tensor Regression With Fast and Automatic Component
+  Extraction.
+\newblock IEEE Transactions on Neural Networks and Learning Systems. 2024
+  Jul;35(7):8897<en dash>8908.
+\newblock Available from: \url{https://doi.org/10.1109/tnnls.2022.3216589}.
+
+\bibitem{Valasakis_2026}
+Valasakis I, Connelly D, Macfarlane P.
+\newblock Accuracy of atrial fibrillation labels in the MIMIC-IV ECG database:
+  implications for artificial intelligence model development.
+\newblock European Heart Journal. 2026 Oct;47(Suppl 1).
+\newblock Available from: \url{https://doi.org/10.1093/eurheartj/ehag785.598}.
+
+\bibitem{Attia_2019}
+Attia ZI, Noseworthy PA, Lopez-Jimenez F, Asirvatham SJ, Deshmukh AJ, Gersh BJ,
+  et~al.
+\newblock An artificial intelligence-enabled ECG algorithm for the
+  identification of patients with atrial fibrillation during sinus rhythm: a
+  retrospective analysis of outcome prediction.
+\newblock The Lancet. 2019 Sep;394(10201):861<en dash>867.
+\newblock Available from: \url{https://doi.org/10.1016/S0140-6736(19)31721-0}.
+
+\bibitem{Yuan_2023}
+Yuan N, Duffy G, Dhruva SS, Oesterle A, Pellegrini CN, Theurer J, et~al.
+\newblock Deep Learning of Electrocardiograms in Sinus Rhythm From US Veterans
+  to Predict Atrial Fibrillation.
+\newblock JAMA Cardiology. 2023 Dec;8(12):1131.
+\newblock Available from: \url{https://doi.org/10.1001/jamacardio.2023.3701}.
+
+\bibitem{Jabbour_2024}
+Jabbour G, Nolin-Lapalme A, Tastet O, Corbin D, Jord<latin small letter a with grave> P, Sowa A, et~al.
+\newblock Prediction of incident atrial fibrillation using deep learning,
+  clinical models, and polygenic scores.
+\newblock European Heart Journal. 2024 Sep;45(46):4920<en dash>4934.
+\newblock Available from: \url{https://doi.org/10.1093/eurheartj/ehae595}.
+
+\bibitem{Sau_2026}
+Sau A, Sieliwonczyk E, Barker J, Zeidaabadi B, Pastika L, Patlatzoglou K,
+  et~al.
+\newblock Prediction of incident atrial fibrillation: A comprehensive
+  evaluation of conventional and artificial intelligence-enhanced approaches.
+\newblock Heart Rhythm. 2026 Feb;23(2):e183<en dash>e191.
+\newblock Available from: \url{https://doi.org/10.1016/j.hrthm.2025.08.024}.
+
+\bibitem{Zeidaabadi_2026}
+Zeidaabadi B, Patlatzoglou K, Barker J, Pastika L, Khattak GR, Gurnani M,
+  et~al.
+\newblock Image based artificial intelligence-enhanced electrocardiogram
+  prediction of incident atrial fibrillation.
+\newblock Heart Rhythm. 2026 Mar;23(3):515<en dash>524.
+\newblock Available from: \url{https://doi.org/10.1016/j.hrthm.2025.10.024}.
+
+\bibitem{Habineza_2023}
+Habineza T, Ribeiro AH, Gedon D, Behar JA, Ribeiro ALP, Sch<latin small letter o with diaeresis>n TB.
+\newblock End-to-end risk prediction of atrial fibrillation from the 12-Lead
+  ECG by deep neural networks.
+\newblock Journal of Electrocardiology. 2023 Nov;81:193<en dash>200.
+\newblock Available from:
+  \url{https://doi.org/10.1016/j.jelectrocard.2023.09.011}.
+
+\bibitem{Ribeiro_2020}
+Ribeiro AH, Ribeiro MH, Paix<latin small letter a with tilde>o GMM, Oliveira DM, Gomes PR, Canazart JA, et~al.
+\newblock Automatic diagnosis of the 12-lead ECG using a deep neural network.
+\newblock Nature Communications. 2020 Apr;11(1).
+\newblock Available from: \url{https://doi.org/10.1038/s41467-020-15432-4}.
+
+\bibitem{Riek_2026}
+Riek NT, Gokhale TA, Ji RQ, Aktas ME, Dzikowicz DJ, Akcakaya M, et~al.
+\newblock Forecasting 1-year atrial fibrillation risk from sinus rhythm
+  electrocardiograms in arrhythmia-na<latin small letter i with diaeresis>ve patients.
+\newblock Heart Rhythm O2. 2026 Sep.
+\newblock Available from: \url{https://doi.org/10.1016/j.hroo.2026.09.012}.
+
+\bibitem{Schnabel_2009}
+Schnabel RB, Sullivan LM, Levy D, Pencina MJ, Massaro JM, D<right single quotation mark>Agostino RB,
+  et~al.
+\newblock Development of a risk score for atrial fibrillation (Framingham Heart
+  Study): a community-based cohort study.
+\newblock The Lancet. 2009 Feb;373(9665):739<en dash>745.
+\newblock Available from: \url{https://doi.org/10.1016/S0140-6736(09)60443-8}.
+
+\bibitem{Cheng_2009}
+Cheng S.
+\newblock Long-term Outcomes in Individuals With Prolonged PR Interval or
+  First-Degree Atrioventricular Block.
+\newblock JAMA. 2009 Jun;301(24):2571.
+\newblock Available from: \url{https://doi.org/10.1001/jama.2009.888}.
+
+\bibitem{Magnani_2015}
+Magnani JW, Zhu L, Lopez F, Pencina MJ, Agarwal SK, Soliman EZ, et~al.
+\newblock P-wave indices and atrial fibrillation: Cross-cohort assessments from
+  the Framingham Heart Study (FHS) and Atherosclerosis Risk in Communities
+  (ARIC) study.
+\newblock American Heart Journal. 2015 Jan;169(1):53<en dash>61.e1.
+\newblock Available from: \url{https://doi.org/10.1016/j.ahj.2014.10.009}.
+
+\bibitem{Christopoulos_2020}
+Christopoulos G, Graff-Radford J, Lopez CL, Yao X, Attia ZI, Rabinstein AA,
+  et~al.
+\newblock Artificial Intelligence<en dash>Electrocardiography to Predict Incident
+  Atrial Fibrillation: A Population-Based Study.
+\newblock Circulation: Arrhythmia and Electrophysiology. 2020 Dec;13(12).
+\newblock Available from: \url{https://doi.org/10.1161/CIRCEP.120.009355}.
+
+\bibitem{Khurshid_2025}
+Khurshid S, Friedman SF, Al-Alusi MA, Kany S, Sommers T, Anderson CD, et~al.
+\newblock Artificial intelligence-enabled analysis of handheld single-lead
+  electrocardiograms to predict incident atrial fibrillation: an analysis of
+  the VITAL-AF randomized trial.
+\newblock npj Digital Medicine. 2025 Nov;8(1).
+\newblock Available from: \url{https://doi.org/10.1038/s41746-025-02164-2}.
+
+\bibitem{Biton_2021}
+Biton S, Gendelman S, Ribeiro AH, Miana G, Moreira C, Ribeiro ALP, et~al.
+\newblock Atrial fibrillation risk prediction from the 12-lead
+  electrocardiogram using digital biomarkers and deep representation learning.
+\newblock European Heart Journal - Digital Health. 2021 Aug;2(4):576<en dash>585.
+\newblock Available from: \url{https://doi.org/10.1093/ehjdh/ztab071}.
+
+\bibitem{arxiv_1810_03292}
+Adebayo J, Gilmer J, Muelly M, Goodfellow I, Hardt M, Kim B.
+\newblock Sanity Checks for Saliency Maps [Preprint]. arXiv:1810.03292; 2018.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.1810.03292}.
+
+\bibitem{arxiv_1806_10758}
+Hooker S, Erhan D, Kindermans PJ, Kim B.
+\newblock A Benchmark for Interpretability Methods in Deep Neural Networks
+  [Preprint]. arXiv:1806.10758; 2018.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.1806.10758}.
+
+\bibitem{Wagner_2024}
+Wagner P, Mehari T, Haverkamp W, Strodthoff N.
+\newblock Explaining deep learning for ECG analysis: Building blocks for
+  auditing and knowledge discovery.
+\newblock Computers in Biology and Medicine. 2024 Jun;176:108525.
+\newblock Available from:
+  \url{https://doi.org/10.1016/j.compbiomed.2024.108525}.
+
+\bibitem{arxiv_2007_04612}
+Koh PW, Nguyen T, Tang YS, Mussmann S, Pierson E, Kim B, et~al.
+\newblock Concept Bottleneck Models [Preprint]. arXiv:2007.04612; 2020.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.2007.04612}.
+
+\bibitem{arxiv_2106_13314}
+Mahinpei A, Clark J, Lage I, Doshi-Velez F, Pan W.
+\newblock Promises and Pitfalls of Black-Box Concept Learning Models
+  [Preprint]. arXiv:2106.13314; 2021.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.2106.13314}.
+
+\bibitem{arxiv_2205_10268}
+B<latin small letter o with diaeresis>hle M, Fritz M, Schiele B.
+\newblock B-cos Networks: Alignment is All We Need for Interpretability
+  [Preprint]. arXiv:2205.10268; 2022.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.2205.10268}.
+
+\bibitem{arxiv_2507_16761}
+Arya S, Agnihotri S, Kleinmann M, Schiele B, Keuper M.
+\newblock Faithful, Interpretable Chest X-ray Diagnosis with Artifact-free
+  B-cos Networks [Preprint]. arXiv:2507.16761; 2025.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.2507.16761}.
+
+\bibitem{arxiv_2504_02667}
+Dooms T, Gauderis W, Wiggins GA, Oramas J.
+\newblock Compositionality Unlocks Deep Interpretable Models [Preprint].
+  arXiv:2504.02667; 2025.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.2504.02667}.
+
+\bibitem{Patlatzoglou_2025}
+Patlatzoglou K, Pastika L, Barker J, Sieliwonczyk E, Khattak GR, Zeidaabadi B,
+  et~al.
+\newblock The cost of explainability in artificial intelligence-enhanced
+  electrocardiogram models.
+\newblock npj Digital Medicine. 2025 Dec;8(1).
+\newblock Available from: \url{https://doi.org/10.1038/s41746-025-02122-y}.
+
+\bibitem{arxiv_2511_04292}
+Van Den~Kerchove A, Si-Mohammed H, Cabestaing F, Van~Hulle MM.
+\newblock BTTDA: Block-Term Tensor Discriminant Analysis for Brain-Computer
+  Interfacing [Preprint]. arXiv:2511.04292; 2025.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.2511.04292}.
+
+\bibitem{Kolda_2009}
+Kolda TG, Bader BW.
+\newblock Tensor Decompositions and Applications.
+\newblock SIAM Review. 2009 Aug;51(3):455<en dash>500.
+\newblock Available from: \url{https://doi.org/10.1137/07070111X}.
+
+\bibitem{Goulart_2020}
+Goulart JHdM, de~Oliveira PMR, Farias RC, Zarzoso V, Comon P.
+\newblock Alternating Group Lasso for Block-Term Tensor Decomposition and
+  Application to ECG Source Separation.
+\newblock IEEE Transactions on Signal Processing. 2020;68:2682<en dash>2696.
+\newblock Available from: \url{https://doi.org/10.1109/tsp.2020.2985591}.
+
+\bibitem{https://doi.org/10.5281/zenodo.22227432}
+Cornelissen D, Faes A. An interpretable tensor model for identifying atrial
+  fibrillation in sinus-rhythm ECG: block-term tensor regression on PTB-XL,
+  benchmarked against deep and foundation models. Zenodo; 2026.
+\newblock Available from: \url{https://zenodo.org/doi/10.5281/zenodo.22227432}.
+
+\bibitem{https://doi.org/10.13026/4nqg-sb35}
+Gow B, Pollard T, Nathanson LA, Johnson A, Moody B, Fernandes C, et~al.
+\newblock MIMIC-IV-ECG: Diagnostic Electrocardiogram Matched Subset [Dataset].
+  PhysioNet; 2023.
+\newblock Available from:
+  \url{https://physionet.org/content/mimic-iv-ecg/1.0/}.
+
+\bibitem{Cox_1972}
+Cox DR.
+\newblock Regression Models and Life-Tables.
+\newblock Journal of the Royal Statistical Society Series B: Statistical
+  Methodology. 1972 Jan;34(2):187<en dash>202.
+\newblock Available from:
+  \url{https://doi.org/10.1111/j.2517-6161.1972.tb00899.x}.
+
+\bibitem{Katzman_2018}
+Katzman JL, Shaham U, Cloninger A, Bates J, Jiang T, Kluger Y.
+\newblock DeepSurv: personalized treatment recommender system using a Cox
+  proportional hazards deep neural network.
+\newblock BMC Medical Research Methodology. 2018 Feb;18(1).
+\newblock Available from: \url{https://doi.org/10.1186/s12874-018-0482-1}.
+
+\bibitem{Johnson_2023}
+Johnson AEW, Bulgarelli L, Shen L, Gayles A, Shammout A, Horng S, et~al.
+\newblock MIMIC-IV, a freely accessible electronic health record dataset.
+\newblock Scientific Data. 2023 Jan;10(1).
+\newblock Available from: \url{https://doi.org/10.1038/s41597-022-01899-x}.
+
+\bibitem{Rix_2012}
+Rix TA, Riahi S, Overvad K, Lundbye-Christensen S, Schmidt EB, Joensen AM.
+\newblock Validity of the diagnoses atrial fibrillation and atrial flutter in a
+  Danish patient registry.
+\newblock Scandinavian Cardiovascular Journal. 2012 May;46(3):149<en dash>153.
+\newblock Available from: \url{https://doi.org/10.3109/14017431.2012.673728}.
+
+\bibitem{Vickers_2006}
+Vickers AJ, Elkin EB.
+\newblock Decision Curve Analysis: A Novel Method for Evaluating Prediction
+  Models.
+\newblock Medical Decision Making. 2006 Nov;26(6):565<en dash>574.
+\newblock Available from: \url{https://doi.org/10.1177/0272989X06295361}.
+
+\bibitem{Collins_2024}
+Collins GS, Moons KGM, Dhiman P, Riley RD, Beam AL, Van~Calster B, et~al.
+\newblock TRIPOD+AI statement: updated guidance for reporting clinical
+  prediction models that use regression or machine learning methods.
+\newblock BMJ. 2024 Apr;385:e078378.
+\newblock Available from: \url{https://doi.org/10.1136/bmj-2023-078378}.
+
+\bibitem{Zeiler_2014}
+Zeiler MD, Fergus R.
+\newblock In: Visualizing and Understanding Convolutional Networks. Springer
+  International Publishing; 2014. p. 818<en dash>833.
+\newblock Available from: \url{https://doi.org/10.1007/978-3-319-10590-1_53}.
+
+\bibitem{Ivanovs_2021}
+Ivanovs M, Kadikis R, Ozols K.
+\newblock Perturbation-based methods for explaining deep neural networks: A
+  survey.
+\newblock Pattern Recognition Letters. 2021 Oct;150:228<en dash>234.
+\newblock Available from: \url{https://doi.org/10.1016/j.patrec.2021.06.030}.
+
+\bibitem{arxiv_1702_04595}
+Zintgraf LM, Cohen TS, Adel T, Welling M.
+\newblock Visualizing Deep Neural Network Decisions: Prediction Difference
+  Analysis [Preprint]. arXiv:1702.04595; 2017.
+\newblock Available from: \url{https://doi.org/10.48550/arXiv.1702.04595}.
+
+\bibitem{_imi__2025}
+<latin capital letter s with caron>imi<latin small letter c with acute> I, Veas E, Sabol V.
+\newblock A comprehensive analysis of perturbation methods in explainable AI
+  feature attribution validation for neural time series classifiers.
+\newblock Scientific Reports. 2025 Jul;15(1).
+\newblock Available from: \url{https://doi.org/10.1038/s41598-025-09538-2}.
+
+\bibitem{McKeen_2025}
+McKeen K, Masood S, Toma A, Rubin B, Wang B.
+\newblock ECG-FM: an open electrocardiogram foundation model.
+\newblock JAMIA Open. 2025 Sep;8(5).
+\newblock Available from: \url{https://doi.org/10.1093/jamiaopen/ooaf122}.
+
+\bibitem{Pfeifer_2026}
+Pfeifer JM, Lee G, Raghunath S, Nemani A, Green T, Kaufman E, et~al.
+\newblock Multicenter validation of an artificial intelligence<en dash>enabled ECG
+  model to predict 1-year risk of atrial fibrillation or flutter.
+\newblock Heart Rhythm. 2026 Aug;23(8):e1474<en dash>e1481.
+\newblock Available from: \url{https://doi.org/10.1016/j.hrthm.2026.03.1956}.
+
+\bibitem{Magnani_2013}
+Magnani JW, Wang N, Nelson KP, Connelly S, Deo R, Rodondi N, et~al.
+\newblock Electrocardiographic PR Interval and Adverse Outcomes in Older
+  Adults: The Health, Aging, and Body Composition Study.
+\newblock Circulation: Arrhythmia and Electrophysiology. 2013 Feb;6(1):84<en dash>90.
+\newblock Available from: \url{https://doi.org/10.1161/circep.112.975342}.
+
+\bibitem{Tanaka_2021}
+Tanaka Y, Tada H, Hamaya R, Patel RB, Hayashi K, Yamagami K, et~al.
+\newblock First-degree atrioventricular block is significantly associated with
+  incident atrial fibrillation in the population predominantly including
+  participants aged {$\geq$} 60 years.
+\newblock Heart and Vessels. 2021 Feb;36(9):1401<en dash>1409.
+\newblock Available from: \url{https://doi.org/10.1007/s00380-021-01805-2}.
+
+\bibitem{Yogeswaran_2025}
+Yogeswaran V, Wiggins KL, Sitlani CM, Heckbert SR, Kamel H, Benjamin EJ, et~al.
+\newblock P<hyphen>Wave Indices and the Risks of Incident Atrial Fibrillation and
+  Ischemic Stroke in Black Adults: The Jackson Heart Study.
+\newblock Journal of the American Heart Association. 2025 Nov;14(21).
+\newblock Available from: \url{https://doi.org/10.1161/jaha.125.043590}.
+
+\bibitem{Emmanuela_2026}
+Emmanuela M, Lee JV, Wahjoepramono NND, Lim H.
+\newblock Electrocardiographic P-wave morphology and the risk of new-onset
+  atrial fibrillation: a systematic review and meta-analysis.
+\newblock Bulgarian Cardiology. 2026 Oct;32(3):83<en dash>90.
+\newblock Available from: \url{https://doi.org/10.3897/bgcardio.32.e213539}.
+
+\bibitem{Ostrowska_2022}
+Ostrowska B, Lind L, Sciaraffia E, Blomstr<latin small letter o with diaeresis>m-Lundqvist C.
+\newblock Short P-Wave Duration Is Associated with Incident Atrial
+  Fibrillation: A Registry-Based Cohort Study.
+\newblock International Heart Journal. 2022 Jul;63(4):700<en dash>707.
+\newblock Available from: \url{https://doi.org/10.1536/ihj.21-797}.
+
+\bibitem{Goette_2016}
+Goette A, Kalman JM, Aguinaga L, Akar J, Cabrera JA, Chen SA, et~al.
+\newblock EHRA/HRS/APHRS/SOLAECE expert consensus on Atrial cardiomyopathies:
+  Definition, characterisation, and clinical implication.
+\newblock Journal of Arrhythmia. 2016 Jul;32(4):247<en dash>278.
+\newblock Available from: \url{https://doi.org/10.1016/j.joa.2016.05.002}.
+
+\bibitem{Maezono_2025}
+Maezono A, Oishi E, Sasaki T, Takase S, Sakata S, Hata J, et~al.
+\newblock Electrocardiographic P-wave indices and onset of atrial fibrillation
+  and histological fibrosis in a general Japanese population: a prospective
+  cohort analysis of the Hisayama Study.
+\newblock European Heart Journal Open. 2025 Sep;5(6).
+\newblock Available from: \url{https://doi.org/10.1093/ehjopen/oeaf126}.
+
+\bibitem{Yao_2019}
+Yao RJR, Andrade JG, Deyell MW, Jackson H, McAlister FA, Hawkins NM.
+\newblock Sensitivity, specificity, positive and negative predictive values of
+  identifying atrial fibrillation using administrative data: a systematic
+  review and meta-analysis.
+\newblock Clinical Epidemiology. 2019 Aug;11:753<en dash>767.
+\newblock Available from: \url{https://doi.org/10.2147/clep.s206267}.
+
+\bibitem{Malmo_2016}
+Malmo V, Langhammer A, B<latin small letter o with stroke>naa KH, Loennechen J, Ellekjaer H.
+\newblock Validation of self-reported and hospital-diagnosed atrial
+  fibrillation: the HUNT-study.
+\newblock Clinical Epidemiology. 2016 Jun:185.
+\newblock Available from: \url{https://doi.org/10.2147/clep.s103346}.
+
+\end{thebibliography}

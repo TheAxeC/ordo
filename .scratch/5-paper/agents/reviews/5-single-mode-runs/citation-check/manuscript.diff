@@ -1,0 +1,31 @@
+diff --git a/manuscript/refs.bib b/manuscript/refs.bib
+index fd2aea2..fc5cd39 100644
+--- a/manuscript/refs.bib
++++ b/manuscript/refs.bib
+@@ -70,7 +70,7 @@
+   doi     = {10.48550/arXiv.2501.18452}}
+ 
+ @article{wavelettensorecg2018,
+-  author  = {He, Houshou and Tan, Yujie and Xing, Jun},
++  author  = {He, Hong and Tan, Yonghong and Xing, Jianfeng},
+   title   = {Unsupervised classification of 12-lead {ECG} signals using wavelet tensor decomposition and two-dimensional Gaussian spectral clustering},
+   journal = {Knowledge-Based Systems},
+   volume  = {163}, pages = {392--403}, year = {2019},
+@@ -104,7 +104,7 @@
+   volume  = {12}, pages = {2825--2830}, year = {2011}}
+ 
+ @inproceedings{fedavg2017,
+-  author    = {McMahan, Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and Ag{\"u}era y Arcas, Blaise},
++  author    = {McMahan, H. Brendan and Moore, Eider and Ramage, Daniel and Hampson, Seth and Ag{\"u}era y Arcas, Blaise},
+   title     = {Communication-efficient learning of deep networks from decentralized data},
+   booktitle = {Proceedings of the 20th International Conference on Artificial Intelligence and Statistics (AISTATS)},
+   pages     = {1273--1282}, year = {2017}}
+@@ -133,7 +133,7 @@
+   title     = {Density-based clustering based on hierarchical density estimates},
+   booktitle = {Advances in Knowledge Discovery and Data Mining (PAKDD)},
+   pages     = {160--172}, year = {2013},
+-  doi       = {10.1007/978-3-642-37456-2\_14}}
++  doi       = {10.1007/978-3-642-37456-2_14}}
+ 
+ @inproceedings{clifford2017af,
+   author    = {Clifford, Gari D. and Liu, Chengyu and Moody, Benjamin and Lehman, Li-wei H. and Silva, Ikaro and Li, Qiao and Johnson, Alistair E. W. and Mark, Roger G.},

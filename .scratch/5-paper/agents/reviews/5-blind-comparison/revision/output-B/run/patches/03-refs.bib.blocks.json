@@ -1,0 +1,343 @@
+{
+  "schema": "tex_block_manifest/1",
+  "base_file": "/work/manuscript/refs.bib",
+  "base_sha256": "98be9b3153d986f88782462133cc5bf1cf6a95860a2edcb216d830f39c0ed42a",
+  "n_chars": 17286,
+  "n_blocks": 37,
+  "chfield": 17213,
+  "blocks": [
+    {
+      "block_id": "B0001",
+      "sha256": "6709eb28511fb901d080bcf06af358c108112acb4aa3edf8386ce5e6823a07ab",
+      "char_start": 0,
+      "char_end": 398,
+      "n_chars": 398,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{ptbxl2020,"
+    },
+    {
+      "block_id": "B0002",
+      "sha256": "8cb8a143ecf85cb0af6ad94119b92d7725f6660772cc8e6cd98d775891577b7c",
+      "char_start": 400,
+      "char_end": 697,
+      "n_chars": 297,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{mitbih2001,"
+    },
+    {
+      "block_id": "B0003",
+      "sha256": "13fe1cf4659b49aeb4d080df06de646f41280b5a6810334287da55c1d70c5add",
+      "char_start": 699,
+      "char_end": 1219,
+      "n_chars": 520,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{physionet2000,"
+    },
+    {
+      "block_id": "B0004",
+      "sha256": "b81b8752ef7fbbcf09aa61c4d65d47273a23e6ce3f3c697fa2ad7d89e01dec6e",
+      "char_start": 1221,
+      "char_end": 1552,
+      "n_chars": 331,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{lookingbeyond2026,"
+    },
+    {
+      "block_id": "B0005",
+      "sha256": "8de86a0ea15860a139046b31ca2b033c84a8a0f67fe0f4e4c652a5041599b536",
+      "char_start": 1554,
+      "char_end": 1994,
+      "n_chars": 440,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hubertecg2024,"
+    },
+    {
+      "block_id": "B0006",
+      "sha256": "a55c7353175ec8e0d3dc0fc12c46d70afccc3d39ce7b8a63d25b5baee8b73d5f",
+      "char_start": 1996,
+      "char_end": 2495,
+      "n_chars": 499,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{ecgfounder2024, title={An Electrocardiogram Foundation Model Built on over 10 Million Recordings}, vo"
+    },
+    {
+      "block_id": "B0007",
+      "sha256": "32685472d34c1574222f27cee0134c06796302608b3c699643620db9953cf24a",
+      "char_start": 2497,
+      "char_end": 2751,
+      "n_chars": 254,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hubertarabie1985,"
+    },
+    {
+      "block_id": "B0008",
+      "sha256": "48280fc37ccac6e55d15d5c9874cb1aaad54a70790d9e1db1a0d2131b54ad34f",
+      "char_start": 2753,
+      "char_end": 3082,
+      "n_chars": 329,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{vinh2010,"
+    },
+    {
+      "block_id": "B0009",
+      "sha256": "867b759edc3f1ad4f16333f768f317033e0d506208a1e93703ea9cc675781f4a",
+      "char_start": 3084,
+      "char_end": 3402,
+      "n_chars": 318,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{rousseeuw1987,"
+    },
+    {
+      "block_id": "B0010",
+      "sha256": "1d1267a57fd2f8319aeafcf7b811b6082a36d668dbc00adb39cb7e5a3edd8e1e",
+      "char_start": 3404,
+      "char_end": 3726,
+      "n_chars": 322,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{sslclustering2025,"
+    },
+    {
+      "block_id": "B0011",
+      "sha256": "277d3a33431ffe441621ababc12b359fb2ae3f4227f36dbf7b1299cad9d5a9d2",
+      "char_start": 3728,
+      "char_end": 4103,
+      "n_chars": 375,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{wavelettensorecg2018,"
+    },
+    {
+      "block_id": "B0012",
+      "sha256": "bbdf9234cc0b4c70948b89d1731b5df478768e2328d846c6913d95c046671a3a",
+      "char_start": 4105,
+      "char_end": 4508,
+      "n_chars": 403,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{hrvstandards1996,"
+    },
+    {
+      "block_id": "B0013",
+      "sha256": "eb51f60178929185cf103a5a5b507d2aba9f7853886f07a969cc9cd58d589b45",
+      "char_start": 4510,
+      "char_end": 4884,
+      "n_chars": 374,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{dechazal2004,"
+    },
+    {
+      "block_id": "B0014",
+      "sha256": "34b13863695e0984a5331cb76d2ba54829a4ad68f861cb5d7cbe42212368f006",
+      "char_start": 4886,
+      "char_end": 5333,
+      "n_chars": 447,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{neurokit2021,"
+    },
+    {
+      "block_id": "B0015",
+      "sha256": "73697216a438239312c91a7656708251adfa52ac1f693ff4110b03ce7e676ba6",
+      "char_start": 5335,
+      "char_end": 5675,
+      "n_chars": 340,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{sklearn2011,"
+    },
+    {
+      "block_id": "B0016",
+      "sha256": "a86e785e3ea2e2f1752faf2edb25989a7386549680b802dcd83e74f9ee60d59a",
+      "char_start": 5677,
+      "char_end": 6074,
+      "n_chars": 397,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{fedavg2017,"
+    },
+    {
+      "block_id": "B0017",
+      "sha256": "5ed6a3790daf0f67c0c0c732de32061565ac2ad0f3eb3d12c05b6804ce088df0",
+      "char_start": 6076,
+      "char_end": 6408,
+      "n_chars": 332,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{clocs2021,"
+    },
+    {
+      "block_id": "B0018",
+      "sha256": "e04248460d77fa341e64ab82c358f4cb0902689c712c7172edc3b8ce89bfa932",
+      "char_start": 6410,
+      "char_end": 6796,
+      "n_chars": 386,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{threekg2021,"
+    },
+    {
+      "block_id": "B0019",
+      "sha256": "2d872750ed48ca4df993bf73310c3ed124a661cd13acbae1d339fd0fce3dbac4",
+      "char_start": 6798,
+      "char_end": 7102,
+      "n_chars": 304,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{mehari2022ssl,"
+    },
+    {
+      "block_id": "B0020",
+      "sha256": "1de8195d4388d5c25769958a35df3b3b72a39f35fca00be838d931072bbe91c4",
+      "char_start": 7104,
+      "char_end": 7459,
+      "n_chars": 355,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inproceedings{hdbscan2013,"
+    },
+    {
+      "block_id": "B0021",
+      "sha256": "4aee9f40c0c7e881f30d3dc5421a002fd235df7ae09d7e8891842ccf58eb3f20",
+      "char_start": 7461,
+      "char_end": 7918,
+      "n_chars": 457,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{clifford2017af,"
+    },
+    {
+      "block_id": "B0022",
+      "sha256": "b021cdfa15526ccd56ad33d29636cf3f41c44849fe3fde52d9219ac88a0ef7c1",
+      "char_start": 7920,
+      "char_end": 11058,
+      "n_chars": 3138,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Van_Gelder_2024, title={2024 ESC Guidelines for the management of atrial fibrillation developed in co"
+    },
+    {
+      "block_id": "B0023",
+      "sha256": "3bf2116e7cfaa2fbc6aeaa76159e0d185815999800fd2a3c16a1359b5f956f8e",
+      "char_start": 11060,
+      "char_end": 11611,
+      "n_chars": 551,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Hannun_2019, title={Cardiologist-level arrhythmia detection and classification in ambulatory electroc"
+    },
+    {
+      "block_id": "B0024",
+      "sha256": "74184d191d7e8c562c96014ac2e334b8b6df28ebfdd455731b75b81e33093178",
+      "char_start": 11613,
+      "char_end": 12055,
+      "n_chars": 442,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Danon_2005, title={Comparing community structure identification}, volume={2005}, ISSN={1742-5468}, ur"
+    },
+    {
+      "block_id": "B0025",
+      "sha256": "b093a215318c77cf94d819b9ace275503a6a64ec5ed947bbcef0316be833c678",
+      "char_start": 12057,
+      "char_end": 12457,
+      "n_chars": 400,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Fowlkes_1983, title={A Method for Comparing Two Hierarchical Clusterings}, volume={78}, ISSN={1537-27"
+    },
+    {
+      "block_id": "B0026",
+      "sha256": "b1c3df98ecf08b4223de65cc8d038bcff7b558eb1b42bd22942c42e985091812",
+      "char_start": 12459,
+      "char_end": 12920,
+      "n_chars": 461,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Lunelli_2026, title={BenchECG and xECG: a benchmark and baseline for ECG foundation models}, ISSN={23"
+    },
+    {
+      "block_id": "B0027",
+      "sha256": "23ab1f1f2cdf0b8c4cc47bf3c5318bdd2aab8f27e22d21e9d22ee349f36021c3",
+      "char_start": 12922,
+      "char_end": 13165,
+      "n_chars": 243,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2509_25095,"
+    },
+    {
+      "block_id": "B0028",
+      "sha256": "653b58b661c72eea6e42d2453fde087982d8b2208b512d5b11b15132dc6f6f96",
+      "char_start": 13167,
+      "char_end": 13422,
+      "n_chars": 255,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2602_17531,"
+    },
+    {
+      "block_id": "B0029",
+      "sha256": "725909605670fe7e4572c3fbad9f3aafae287576ab2f16df975c468b23ea0f53",
+      "char_start": 13424,
+      "char_end": 13859,
+      "n_chars": 435,
+      "section": "frontmatter",
+      "first_line_excerpt": "@inbook{Xu_2025, title={An Electrocardiogram Multi-Task Benchmark with Comprehensive Evaluations and Insightfu"
+    },
+    {
+      "block_id": "B0030",
+      "sha256": "bc40ae39ee59edcccd41380af2a3da2028496c91f90f3009e9e797f162eff52f",
+      "char_start": 13861,
+      "char_end": 14141,
+      "n_chars": 280,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2402_09450,"
+    },
+    {
+      "block_id": "B0031",
+      "sha256": "a7bd613aba67ebe621c9f7b43dfa3f8f85272c28ee186307999131b0c8961d39",
+      "char_start": 14143,
+      "char_end": 14500,
+      "n_chars": 357,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Kim_2027, title={Learning general representation of 12-lead ECG with a joint-embedding predictive arc"
+    },
+    {
+      "block_id": "B0032",
+      "sha256": "1c330ffc69c1e2d3caaa9dd2b45ab7e8156434931746a68bd7cf1ffb87c201fe",
+      "char_start": 14502,
+      "char_end": 14814,
+      "n_chars": 312,
+      "section": "frontmatter",
+      "first_line_excerpt": "@misc{arxiv_2403_06659,"
+    },
+    {
+      "block_id": "B0033",
+      "sha256": "c71eaad5492935b291d496345c69f98436fc52a9a357127113270768b1d0d7cf",
+      "char_start": 14816,
+      "char_end": 15329,
+      "n_chars": 513,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Tian_2024, title={Foundation model of ECG diagnosis: Diagnostics and explanations of any form and rhy"
+    },
+    {
+      "block_id": "B0034",
+      "sha256": "db01f3dcaa7488b2670b83591c769a04078c943dbaaab4a12805a9abb6e0f79a",
+      "char_start": 15331,
+      "char_end": 15721,
+      "n_chars": 390,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{McKeen_2025, title={ECG-FM: an open electrocardiogram foundation model}, volume={8}, ISSN={2574-2531}"
+    },
+    {
+      "block_id": "B0035",
+      "sha256": "b7bbce0ff2486c16c68ddaee3f65c2cff27593ae751452c2ab596fe504a532cf",
+      "char_start": 15723,
+      "char_end": 16190,
+      "n_chars": 467,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Han_2026, title={Review of open foundation models and datasets for ECG and PPG waveforms}, ISSN={2398"
+    },
+    {
+      "block_id": "B0036",
+      "sha256": "67263bef25d748df3bc639057498edf0f134b917ceebe6bd8ac7223f39fc5c61",
+      "char_start": 16192,
+      "char_end": 16662,
+      "n_chars": 470,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Zheng_2020, title={A 12-lead electrocardiogram database for arrhythmia research covering more than 10"
+    },
+    {
+      "block_id": "B0037",
+      "sha256": "c729b43fbe528e8cc2d1d5d3434a41fa19d36b9c341d2f41d0c1a779a3a3cf51",
+      "char_start": 16664,
+      "char_end": 17285,
+      "n_chars": 621,
+      "section": "frontmatter",
+      "first_line_excerpt": "@article{Perez_Alday_2020, title={Classification of 12-lead ECGs: the PhysioNet/Computing in Cardiology Challe"
+    }
+  ]
+}
