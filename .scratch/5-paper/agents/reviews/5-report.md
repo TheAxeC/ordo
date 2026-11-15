@@ -37,7 +37,7 @@ Run on the tree at the launch commit 6016155, before any change:
 | C7 | met | two judgments per comparison with the order swapped, read through `5-blind-comparison-key.md` |
 | C8 | unmet | Kolda_2009, Agueh_2011 and Bonneel_2016 do not resolve by title (OpenAlex and Semantic Scholar answered HTTP 429); a direct Crossref lookup of each DOI matches the entry |
 | C9 | met | every `paper` run stopped first at its intake confirmation, a stop in its mode's list; each later stop, taken under the answer's last sentence, is named with the stop of the mode's list it is |
-| C10 | met | each run left its output, and patch 12 applies or lists each of the 39 findings; Axel adopted the record's readings as his own (ruling "The reading of the single-mode outputs") |
+| C10 | met | each run left its output, and patch 12 applies or lists each of the 39 findings; Axel adopted the record's readings as their own (ruling "The reading of the single-mode outputs") |
 | C11 | met | the scan of every `tool_use` input in the 118 transcripts under `~/.claude/projects/*gate5*` (sides, runs, judges and their subagents) printed "tool calls naming research-hub: 0"; the `git -C ../research-hub status --short -- ...` of the case prints nothing |
 | C12 | met | the character-set check below prints nothing and exits 0; the record holds Axel's calls |
 | C13 | met | no judge's tool call reads a path outside its copy (`facts.py`) |

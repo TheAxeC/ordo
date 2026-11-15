@@ -92,4 +92,4 @@ Causes read in these outputs that the repair step of `paper` ends, beside those 
 
 ## Axel's reading
 
-Axel adopted as his own the readings this record gives of the four single-mode outputs and of the applied `/writing` findings (2026-11-15, "(b)"; `plan.md` Rulings, "The reading of the single-mode outputs").
+Axel adopted as their own the readings this record gives of the four single-mode outputs and of the applied `/writing` findings (2026-11-15, "(b)"; `plan.md` Rulings, "The reading of the single-mode outputs").
