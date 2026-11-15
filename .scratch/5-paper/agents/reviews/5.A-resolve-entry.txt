@@ -1,0 +1,672 @@
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Zhou_2013'
+Crossref: ratio 1.00: Tensor Regression with Applications in Neuroimaging Data Analysis | Hua Zhou, Lexin Li, Hongtu Zhu | 2013 | Journal of the American Statistical Association | doi 10.1080/01621459.2013.776499
+OpenAlex: ratio 1.00: Tensor Regression with Applications in Neuroimaging Data Analysis | Hua Zhou, Lexin Li, Hongtu Zhu B | 2013 | Journal of the American Statistical Association | doi 10.1080/01621459.2013.776499 | OpenAlex W2136002544 | open access http://europepmc.org/articles/PMC4004091
+Semantic Scholar: ratio 1.00: Tensor Regression with Applications in Neuroimaging Data Analysis | Hua Zhou, Le-Xin Li, Hong-Tu Zhu | 2012 | Journal of the American Statistical Association | doi 10.1080/01621459.2013.776499 | arXiv 1203.3209 | Semantic Scholar cae78de351d5cbd5bd7fd853cf07034ca2e6659c | open access http://europepmc.org/articles/PMC4004091
+arXiv: left out, the input has no arXiv ID
+Zhou_2013: CONFIRMED against Crossref, ratio 1.00, year 2013
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Qibin_Zhao_2013'
+Crossref: ratio 1.00: Higher Order Partial Least Squares (HOPLS): A Generalized Multilinear Regression Method | Qibin Zhao, C. F. Caiafa, D. P. Mandic et al. | 2013 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/tpami.2012.254
+OpenAlex: ratio 1.00: Higher Order Partial Least Squares (HOPLS): A Generalized Multilinear Regression Method | Qibin Zhao, Cesar Federico Caiafa, Danilo P. Mandic et al. | 2012 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/tpami.2012.254 | OpenAlex W1967696752 | open access https://arxiv.org/pdf/1207.1230
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Qibin_Zhao_2013: CONFIRMED against Crossref, ratio 1.00, year 2013
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Kolda_2009'
+Crossref: ratio 1.00: Tensor Decompositions and Applications | Tamara G. Kolda, Brett W. Bader | 2009 | SIAM Review | doi 10.1137/07070111x
+OpenAlex: ratio 1.00: Tensor Decompositions and Applications | Tamara G. Kolda, Brett W. Bader | 2009 | SIAM Review | doi 10.1137/07070111x | OpenAlex W2024165284
+Semantic Scholar: ratio 1.00: Tensor Decompositions and Applications | T. Kolda, B. Bader | 2009 | SIAM Review | doi 10.1137/07070111X | Semantic Scholar 87e43e9eba01a4eb03436c9946bf6aa031a5d5af
+arXiv: left out, the input has no arXiv ID
+Kolda_2009: CONFIRMED against Crossref, ratio 1.00, year 2009
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Li_2018'
+Crossref: ratio 1.00: Tucker Tensor Regression and Neuroimaging Analysis | Xiaoshan Li, Da Xu, Hua Zhou et al. | 2018 | Statistics in Biosciences | doi 10.1007/s12561-018-9215-6
+OpenAlex: ratio 1.00: Tucker Tensor Regression and Neuroimaging Analysis | Xiaoshan Li, Da Xu, Hua Zhou et al. | 2018 | Statistics in Biosciences | doi 10.1007/s12561-018-9215-6 | OpenAlex W1580176742 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC8336908/
+Semantic Scholar: ratio 1.00: Tucker Tensor Regression and Neuroimaging Analysis | Xiao-Shan Li, Da Xu, Hua Zhou et al. | 2013 | Statistics in Biosciences | doi 10.1007/s12561-018-9215-6 | arXiv 1304.5637 | Semantic Scholar 99163e795fb486abbee830608383b6a142cdf434 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC8336908/
+arXiv: left out, the input has no arXiv ID
+Li_2018: CONFIRMED against Crossref, ratio 1.00, year 2018
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Zhang_2017'
+Crossref: ratio 1.00: Tensor Envelope Partial Least-Squares Regression | Xin Zhang, Lexin Li | 2017 | Technometrics | doi 10.1080/00401706.2016.1272495
+OpenAlex: ratio 1.00: Tensor Envelope Partial Least-Squares Regression | Xin Zhang, Lexin Li | 2016 | Technometrics | doi 10.1080/00401706.2016.1272495 | OpenAlex W2563339771 | open access https://figshare.com/articles/journal_contribution/Tensor_Envelope_Partial_Least_Squares_Regression/4483862
+Semantic Scholar: ratio 1.00: Tensor Envelope Partial Least-Squares Regression | Xin Zhang, Le-Xin Li | 2017 | Technometrics | doi 10.1080/00401706.2016.1272495 | Semantic Scholar 2bccb3e85ce49104a85f2e7c6cf30999e260fc46 | open access https://figshare.com/articles/journal_contribution/Tensor_Envelope_Partial_Least_Squares_Regression/4483862
+arXiv: left out, the input has no arXiv ID
+Zhang_2017: CONFIRMED against Crossref, ratio 1.00, year 2017
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Yan_2019'
+Crossref: ratio 1.00: Structured Point Cloud Data Analysis Via Regularized Tensor Regression for Process Modeling and Optimization | Hao Yan, Kamran Paynabar, Massimo Pacella | 2019 | Technometrics | doi 10.1080/00401706.2018.1529628
+OpenAlex: ratio 1.00: Structured Point Cloud Data Analysis Via Regularized Tensor Regression for Process Modeling and Optimization | Hao Yan, Kamran Paynabar, Massimo Pacella | 2018 | Technometrics | doi 10.1080/00401706.2018.1529628 | OpenAlex W2964154549 | open access https://arxiv.org/pdf/1807.10278
+Semantic Scholar: ratio 1.00: Structured Point Cloud Data Analysis Via Regularized Tensor Regression for Process Modeling and Optimization | Hao Yan, K. Paynabar, M. Pacella | 2018 | Technometrics | doi 10.1080/00401706.2018.1529628 | arXiv 1807.10278 | Semantic Scholar ca7efbd867175c9f24781d4a9367e427501172dc | open access https://arxiv.org/pdf/1807.10278
+arXiv: left out, the input has no arXiv ID
+Yan_2019: CONFIRMED against Crossref, ratio 1.00, year 2019
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Tang_2026'
+Crossref: ratio 1.00: Tensor Decomposition with Unaligned Observations | Runshi Tang, Tamara G. Kolda, Anru R. Zhang | 2026 | SIAM Journal on Matrix Analysis and Applications | doi 10.1137/24m1692836
+OpenAlex: ratio 1.00: Tensor Decomposition with Unaligned Observations | Runshi Tang, Tamara G. Kolda, Anru R. Zhang | 2026 | SIAM Journal on Matrix Analysis and Applications | doi 10.1137/24m1692836 | OpenAlex W7127277482 | open access https://arxiv.org/pdf/2410.14046
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Tang_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Perros_2017'
+Crossref: ratio 1.00: SPARTan | Ioakeim Perros, Evangelos E. Papalexakis, Fei Wang et al. | 2017 | Proceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining | doi 10.1145/3097983.3098014
+OpenAlex: DOI_MISMATCH, ratio 0.26: SPARTan: Scalable PARAFAC2 for Large & Sparse Data | Ioakeim Perros, Evangelos E. Papalexakis, Fei Wang et al. | 2017 | ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD) | doi 10.1145/3097983.3098014 | OpenAlex W2604652149
+Semantic Scholar: DOI_MISMATCH, ratio 0.26: SPARTan: Scalable PARAFAC2 for Large & Sparse Data | Ioakeim Perros, E. Papalexakis, Fei Wang et al. | 2017 | Knowledge Discovery and Data Mining | doi 10.1145/3097983.3098014 | arXiv 1703.04219 | Semantic Scholar 143a2335d35c669aabb983448a3113d3abe1a8dc
+arXiv: left out, the input has no arXiv ID
+Perros_2017: CONFIRMED against OpenAlex, ratio 0.96, year 2017
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2208_00993'
+Crossref: not found
+OpenAlex: ratio 1.00: MULTIPAR: Supervised Irregular Tensor Factorization with Multi-task Learning | Yifei Ren, Jian Lou, Xiong Li et al. | 2022 | arXiv (Cornell University) | doi 10.48550/arxiv.2208.00993 | arXiv 2208.00993 | OpenAlex W4289597181 | open access https://arxiv.org/pdf/2208.00993
+Semantic Scholar: ratio 1.00: MULTIPAR: Supervised Irregular Tensor Factorization with Multi-task Learning | Yi-Fei Ren, Jian Lou, Li Xiong et al. | 2022 | arXiv.org | doi 10.48550/arXiv.2208.00993 | arXiv 2208.00993 | Semantic Scholar e8aa9a0fe21c23d18c872475a1f92ef9ab7cd4b7 | open access http://arxiv.org/pdf/2208.00993
+arXiv: ratio 1.00: MULTIPAR: Supervised Irregular Tensor Factorization with Multi-task Learning | Yifei Ren, Jian Lou, Li Xiong et al. | 2022 | arXiv 2208.00993
+arxiv_2208_00993: CONFIRMED against OpenAlex, ratio 1.00, year 2022
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2609_23705'
+Crossref: not found
+OpenAlex: ratio 1.00: PAR2COX: Survival-Informed Tensor Decomposition for Phenotyping and Risk Prediction from Irregular Longitudinal Data | Mariafrancesca Patalano, Elif Konyar, Kamran Paynabar | 2026 | arXiv (Cornell University) | doi 10.48550/arxiv.2609.23705 | arXiv 2609.23705 | OpenAlex W7214014480 | open access https://arxiv.org/pdf/2609.23705
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: PAR2COX: Survival-Informed Tensor Decomposition for Phenotyping and Risk Prediction from Irregular Longitudinal Data | Mariafrancesca Patalano, Elif Konyar, Kamran Paynabar | 2026 | arXiv 2609.23705
+arxiv_2609_23705: CONFIRMED against OpenAlex, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Wang_2026'
+Crossref: ratio 1.00: A Bayesian Sparse Kronecker Product Decomposition Framework for Tensor Predictors With Mixed<hyphen>Type Responses: Applications to Neuroimaging Data Mining | Shao<hyphen>Hsuan Wang, Hsin<hyphen>Hsiung Huang | 2026 | Statistical Analysis and Data Mining: An ASA Data Science Journal | doi 10.1002/sam.70106
+OpenAlex: ratio 1.00: A Bayesian Sparse Kronecker Product Decomposition Framework for Tensor Predictors With Mixed<hyphen>Type Responses: Applications to Neuroimaging Data Mining | Shao-Hsuan Wang, Hsin<hyphen>Hsiung Huang | 2026 | Statistical Analysis and Data Mining The ASA Data Science Journal | doi 10.1002/sam.70106 | OpenAlex W7172511225 | open access https://arxiv.org/pdf/2505.13821
+Semantic Scholar: ratio 1.00: A Bayesian Sparse Kronecker Product Decomposition Framework for Tensor Predictors With Mixed-Type Responses: Applications to Neuroimaging Data Mining | Shao-Hsuan Wang, Hsin-Hsiung Huang | 2026 | Statistical analysis and data mining | doi 10.1002/sam.70106 | Semantic Scholar a9b79092a5a65242592e99f6fd891b94e15f1706 | open access https://arxiv.org/pdf/2505.13821
+arXiv: left out, the input has no arXiv ID
+Wang_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'He_2026'
+Crossref: ratio 1.00: An ensemble approach to tensor learning | Jiaxin He, Jialiang Li | 2026 | Statistical Methods in Medical Research | doi 10.1177/09622802261424654
+OpenAlex: ratio 1.00: An ensemble approach to tensor learning | Jiaxin He, Jialiang Li | 2026 | Statistical Methods in Medical Research | doi 10.1177/09622802261424654 | OpenAlex W7133327484
+Semantic Scholar: ratio 1.00: An ensemble approach to tensor learning | Jiaxing He, Jia-Liang Li | 2026 | Statistical Methods in Medical Research | doi 10.1177/09622802261424654 | Semantic Scholar cfe7cbf500469c1bb7a2c0a8b745772a308c5862
+arXiv: left out, the input has no arXiv ID
+He_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Pietrosanu_2026'
+Crossref: ratio 1.00: Regularized Tensor Quantile Regression With Applications to Neuroimaging Data Analysis | Matthew Pietrosanu, Dengdeng Yu, Ivan Mizera et al. | 2026 | Statistics in Medicine | doi 10.1002/sim.70582
+OpenAlex: ratio 1.00: Regularized Tensor Quantile Regression With Applications to Neuroimaging Data Analysis | Matthew Pietrosanu, Dengdeng Yu, Ivan Mizera et al. | 2026 | Statistics in Medicine | doi 10.1002/sim.70582 | OpenAlex W7161572791 | open access https://doi.org/10.1002/sim.70582
+Semantic Scholar: ratio 1.00: Regularized Tensor Quantile Regression With Applications to Neuroimaging Data Analysis | Matthew Pietrosanu, Dengdeng Yu, I. Mizera et al. | 2026 | Statistics in Medicine | doi 10.1002/sim.70582 | Semantic Scholar c357f4720c1943ae86c264a59bcfdf4c1e1cb3a8 | open access https://doi.org/10.1002/sim.70582
+arXiv: left out, the input has no arXiv ID
+Pietrosanu_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Konyar_2025'
+Crossref: ratio 1.00: Semi-Supervised PARAFAC2 Decomposition for Computational Phenotyping Using Electronic Health Records | Elif Konyar, Mostafa Reisi Gahrooei | 2025 | IEEE Journal of Biomedical and Health Informatics | doi 10.1109/jbhi.2025.3530271
+OpenAlex: ratio 1.00: Semi-Supervised PARAFAC2 Decomposition for Computational Phenotyping Using Electronic Health Records | Elif Konyar, Mostafa Reisi Gahrooei | 2025 | IEEE Journal of Biomedical and Health Informatics | doi 10.1109/jbhi.2025.3530271 | OpenAlex W4406418094
+Semantic Scholar: ratio 1.00: Semi-Supervised PARAFAC2 Decomposition for Computational Phenotyping Using Electronic Health Records | Elif Konyar, M. Gahrooei | 2025 | IEEE journal of biomedical and health informatics | doi 10.1109/JBHI.2025.3530271 | Semantic Scholar af4b6e676f4977a4273cbf12be569df2f78884a5
+arXiv: left out, the input has no arXiv ID
+Konyar_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2505_12113'
+Crossref: not found
+OpenAlex: ratio 1.00: Cyclic-Shift Sparse Kronecker Tensor Classifier for Signal-Region Detection in Neuroimaging | Hsin<hyphen>Hsiung Huang, Chen, Yuh-Haur, Teng Zhang | 2025 | arXiv (Cornell University) | doi 10.48550/arxiv.2505.12113 | arXiv 2505.12113 | OpenAlex W4417300479 | open access https://arxiv.org/pdf/2505.12113
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Cyclic-Shift Sparse Kronecker Tensor Classifier for Signal-Region Detection in Neuroimaging | Hsin-Hsiung Huang, Yuh-Haur Chen, Teng Zhang | 2025 | arXiv 2505.12113
+arxiv_2505_12113: CONFIRMED against OpenAlex, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2506_20065'
+Crossref: not found
+OpenAlex: ratio 1.00: Supervised Coupled Matrix-Tensor Factorization (SCMTF) for Computational Phenotyping of Patient Reported Outcomes in Ulcerative Colitis | Cristian Minoccheri, Sophia Tesic, Kayvan Najarian et al. | 2025 | arXiv (Cornell University) | doi 10.48550/arxiv.2506.20065 | arXiv 2506.20065 | OpenAlex W4414988561 | open access https://arxiv.org/pdf/2506.20065
+Semantic Scholar: ratio 1.00: Supervised Coupled Matrix-Tensor Factorization (SCMTF) for Computational Phenotyping of Patient Reported Outcomes in Ulcerative Colitis | C. Minoccheri, Sophia Tesic, K. Najarian et al. | 2025 | arXiv.org | doi 10.48550/arXiv.2506.20065 | arXiv 2506.20065 | Semantic Scholar 10506b9250a48eb0c14c8b8034467ad169b05dfd
+arXiv: ratio 1.00: Supervised Coupled Matrix-Tensor Factorization (SCMTF) for Computational Phenotyping of Patient Reported Outcomes in Ulcerative Colitis | Cristian Minoccheri, Sophia Tesic, Kayvan Najarian et al. | 2025 | arXiv 2506.20065
+arxiv_2506_20065: CONFIRMED against OpenAlex, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1306_0895'
+Crossref: not found
+OpenAlex: ratio 1.00: Sinkhorn Distances: Lightspeed Computation of Optimal Transportation Distances | Marco Cuturi | 2013 | arXiv (Cornell University) | doi 10.48550/arxiv.1306.0895 | arXiv 1306.0895 | OpenAlex W1511358834 | open access https://arxiv.org/pdf/1306.0895
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Sinkhorn Distances: Lightspeed Computation of Optimal Transportation Distances | Marco Cuturi | 2013 | arXiv 1306.0895
+arxiv_1306_0895: CONFIRMED against OpenAlex, ratio 1.00, year 2013
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Peyr__2019'
+Crossref: ratio 1.00: Computational Optimal Transport with Applications to Data Sciences | Gabriel Peyr<latin small letter e with acute>, Marco Cuturi | 2019 | Foundations and Trends<registered sign> in Machine Learning | doi 10.1561/2200000073
+OpenAlex: ratio 1.00: Computational Optimal Transport with Applications to Data Sciences | Gabriel Peyr<latin small letter e with acute> A, Marco Cuturi | 2019 | Foundations and Trends<registered sign> in Machine Learning | doi 10.1561/2200000073 | OpenAlex W3039256091
+Semantic Scholar: DOI_MISMATCH, ratio 0.64: Computational Optimal Transport | G. Peyr<latin small letter e with acute>, Marco Cuturi | 2018 | Found. Trends Mach. Learn. | doi 10.1561/2200000073 | arXiv 1803.00567 | Semantic Scholar 8e51d68250db5637cd6bc1de98a99396441399b2 | open access https://arxiv.org/pdf/1803.00567
+arXiv: left out, the input has no arXiv ID
+Peyr__2019: CONFIRMED against Crossref, ratio 1.00, year 2019
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Benamou_2015'
+Crossref: ratio 1.00: Iterative Bregman Projections for Regularized Transportation Problems | Jean-David Benamou, Guillaume Carlier, Marco Cuturi et al. | 2015 | SIAM Journal on Scientific Computing | doi 10.1137/141000439
+OpenAlex: ratio 1.00: Iterative Bregman Projections for Regularized Transportation Problems | Jean<hyphen>David Benamou, Guillaume Carlier, Marco Cuturi et al. | 2015 | SIAM Journal on Scientific Computing | doi 10.1137/141000439 | OpenAlex W2036996178 | open access https://arxiv.org/pdf/1412.5154
+Semantic Scholar: ratio 1.00: Iterative Bregman Projections for Regularized Transportation Problems | J. Benamou, G. Carlier, Marco Cuturi et al. | 2014 | SIAM Journal on Scientific Computing | doi 10.1137/141000439 | arXiv 1412.5154 | Semantic Scholar d3831561301ef27a6ba0d3c68d30bdf0f27eef63 | open access https://arxiv.org/pdf/1412.5154
+arXiv: left out, the input has no arXiv ID
+Benamou_2015: CONFIRMED against Crossref, ratio 1.00, year 2015
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1810_08278'
+Crossref: not found
+OpenAlex: ratio 1.00: Interpolating between Optimal Transport and MMD using Sinkhorn Divergences | Jean Feydy, Thibault S<latin small letter e with acute>journ<latin small letter e with acute>, Fran<latin small letter c with cedilla>ois<hyphen>Xavier Vialard et al. | 2018 | arXiv (Cornell University) | doi 10.48550/arxiv.1810.08278 | arXiv 1810.08278 | OpenAlex W2897105053 | open access https://arxiv.org/pdf/1810.08278
+Semantic Scholar: ratio 1.00: Interpolating between Optimal Transport and MMD using Sinkhorn Divergences | Jean Feydy, Thibault S<latin small letter e with acute>journ<latin small letter e with acute>, Fran<latin small letter c with cedilla>ois-Xavier Vialard et al. | 2018 | International Conference on Artificial Intelligence and Statistics | arXiv 1810.08278 | Semantic Scholar dafb021ba04731669e9473477688345ef4962e63
+arXiv: ratio 1.00: Interpolating between Optimal Transport and MMD using Sinkhorn Divergences | Jean Feydy, Thibault S<latin small letter e with acute>journ<latin small letter e with acute>, Fran<latin small letter c with cedilla>ois-Xavier Vialard et al. | 2018 | arXiv 1810.08278
+arxiv_1810_08278: CONFIRMED against OpenAlex, ratio 1.00, year 2018
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Montesuma_2025'
+Crossref: ratio 1.00: Recent Advances in Optimal Transport for Machine Learning | Eduardo Fernandes Montesuma, Fred Maurice Ngol<latin small letter e with grave> Mboula, Antoine Souloumiac | 2025 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/tpami.2024.3489030
+OpenAlex: ratio 1.00: Recent Advances in Optimal Transport for Machine Learning | Eduardo Fernandes Montesuma, Fred Ngol<latin small letter e with grave> Mboula, Antoine Souloumiac | 2024 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/tpami.2024.3489030 | OpenAlex W4403938299 | open access https://arxiv.org/pdf/2306.16156
+Semantic Scholar: ratio 1.00: Recent Advances in Optimal Transport for Machine Learning | Eduardo Fernandes Montesuma, Fred Ngol<latin small letter e with grave> Mboula, A. Souloumiac | 2023 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/TPAMI.2024.3489030 | arXiv 2306.16156 | Semantic Scholar ea44ca3dc7c0aa8d2c5bd3966ecfb56628662cd4 | open access https://arxiv.org/pdf/2306.16156
+arXiv: left out, the input has no arXiv ID
+Montesuma_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1805_09114'
+Crossref: not found
+OpenAlex: ratio 1.00: Optimal Transport for structured data with application on graphs | Titouan Vayer, La<latin small letter e with diaeresis>titia Chapel, R<latin small letter e with acute>mi Flamary et al. | 2018 | HAL | doi 10.48550/arxiv.1805.09114 | arXiv 1805.09114 | OpenAlex W2911397097 | open access http://arxiv.org/pdf/1805.09114
+Semantic Scholar: ratio 1.00: Optimal Transport for structured data with application on graphs | Titouan Vayer, Laetitia Chapel, R<latin small letter e with acute>mi Flamary et al. | 2018 | International Conference on Machine Learning | arXiv 1805.09114 | Semantic Scholar 6f9de3cd77ac32ce00da3ba6b71e2360b5b2a81c
+arXiv: ratio 1.00: Optimal Transport for structured data with application on graphs | Titouan Vayer, Laetitia Chapel, R<latin small letter e with acute>mi Flamary et al. | 2018 | arXiv 1805.09114
+arxiv_1805_09114: CONFIRMED against OpenAlex, ratio 1.00, year 2018
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Vayer_2020'
+Crossref: ratio 1.00: Fused Gromov-Wasserstein Distance for Structured Objects | Titouan Vayer, Laetitia Chapel, Remi Flamary et al. | 2020 | Algorithms | doi 10.3390/a13090212
+OpenAlex: ratio 1.00: Fused Gromov-Wasserstein Distance for Structured Objects | Titouan Vayer, La<latin small letter e with diaeresis>titia Chapel, R<latin small letter e with acute>mi Flamary et al. | 2020 | Algorithms | doi 10.3390/a13090212 | OpenAlex W3082556740 | open access https://www.mdpi.com/1999-4893/13/9/212/pdf?version=1599119885
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Vayer_2020: CONFIRMED against Crossref, ratio 1.00, year 2020
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2009_04266'
+Crossref: not found
+OpenAlex: ratio 1.00: The Unbalanced Gromov Wasserstein Distance: Conic Formulation and Relaxation | Thibault S<latin small letter e with acute>journ<latin small letter e with acute>, Fran<latin small letter c with cedilla>ois<hyphen>Xavier Vialard, Gabriel Peyr<latin small letter e with acute> A | 2020 | arXiv (Cornell University) | doi 10.48550/arxiv.2009.04266 | arXiv 2009.04266 | OpenAlex W3084165997 | open access https://arxiv.org/pdf/2009.04266
+Semantic Scholar: ratio 1.00: The Unbalanced Gromov Wasserstein Distance: Conic Formulation and Relaxation | Thibault S<latin small letter e with acute>journ<latin small letter e with acute>, Fran<latin small letter c with cedilla>ois-Xavier Vialard, Gabriel Peyr<latin small letter e with acute> | 2020 | Neural Information Processing Systems | arXiv 2009.04266 | Semantic Scholar a772118cb42eaa6648a435db201cf9b2090b4648
+arXiv: ratio 1.00: The Unbalanced Gromov Wasserstein Distance: Conic Formulation and Relaxation | Thibault S<latin small letter e with acute>journ<latin small letter e with acute>, Fran<latin small letter c with cedilla>ois-Xavier Vialard, Gabriel Peyr<latin small letter e with acute> | 2020 | arXiv 2009.04266
+arxiv_2009_04266: CONFIRMED against OpenAlex, ratio 1.00, year 2020
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Zhang_2024'
+Crossref: ratio 1.00: Gromov<en dash>Wasserstein distances: Entropic regularization, duality and sample complexity | Zhengxin Zhang, Ziv Goldfeld, Youssef Mroueh et al. | 2024 | The Annals of Statistics | doi 10.1214/24-aos2406
+OpenAlex: ratio 1.00: Gromov<en dash>Wasserstein distances: Entropic regularization, duality and sample complexity | Zhengxin Zhang, Ziv Goldfeld, Youssef Mroueh et al. | 2024 | The Annals of Statistics | doi 10.1214/24-aos2406 | OpenAlex W4403142246 | open access https://arxiv.org/pdf/2212.12848
+Semantic Scholar: ratio 1.00: Gromov<en dash>Wasserstein distances: Entropic regularization, duality and sample complexity | Zheng-Xin Zhang, Ziv Goldfeld, Youssef Mroueh et al. | 2022 | Annals of Statistics | doi 10.1214/24-aos2406 | arXiv 2212.12848 | Semantic Scholar 08e4d21d0f3d1752cc8fb9ef38c38c5eba91faca | open access https://arxiv.org/pdf/2212.12848
+arXiv: left out, the input has no arXiv ID
+Zhang_2024: CONFIRMED against Crossref, ratio 1.00, year 2024
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1906_01277'
+Crossref: not found
+OpenAlex: ratio 1.00: Wasserstein Weisfeiler-Lehman Graph Kernels | Matteo Togninalli, Elisabetta Ghisu, Felipe Llinares-L<latin small letter o with acute>pez et al. | 2019 | arXiv (Cornell University) | doi 10.3929/ethz-b-000420933 | OpenAlex W2970823238 | open access https://arxiv.org/pdf/1906.01277
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Wasserstein Weisfeiler-Lehman Graph Kernels | Matteo Togninalli, Elisabetta Ghisu, Felipe Llinares-L<latin small letter o with acute>pez et al. | 2019 | arXiv 1906.01277
+arxiv_1906_01277: CONFIRMED against OpenAlex, ratio 1.00, year 2019
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Cang_2025'
+Crossref: ratio 1.00: Supervised Gromov<en dash>Wasserstein Optimal Transport with Metric-Preserving Constraints | Zixuan Cang, Yaqi Wu, Yanxiang Zhao | 2025 | SIAM Journal on Mathematics of Data Science | doi 10.1137/24m1630499
+OpenAlex: ratio 1.00: Supervised Gromov<en dash>Wasserstein Optimal Transport with Metric-Preserving Constraints | Zixuan Cang, Yaqi Wu, Yanxiang Zhao | 2025 | SIAM Journal on Mathematics of Data Science | doi 10.1137/24m1630499 | OpenAlex W4407793173 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC12395365/pdf/nihms-2075546.pdf
+Semantic Scholar: ratio 1.00: Supervised Gromov<en dash>Wasserstein Optimal Transport with Metric-Preserving Constraints | Zixuan Cang, Yaqi Wu, Yan-Xiang Zhao | 2025 | SIAM Journal on Mathematics of Data Science | doi 10.1137/24m1630499 | Semantic Scholar 7b3986873aabfdbb2bd40ff5f9aeb05d2a2870a6 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC12395365/pdf/nihms-2075546.pdf
+arXiv: left out, the input has no arXiv ID
+Cang_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Seyedi_2026'
+Crossref: ratio 1.00: Conditional Gromov<en dash>Wasserstein matching across contexts: theory, regularization, and applications to brain connectivity | Iman Seyedi, Francesco Archetti | 2026 | Brain Informatics | doi 10.1186/s40708-026-00336-8
+OpenAlex: ratio 1.00: Conditional Gromov<en dash>Wasserstein matching across contexts: theory, regularization, and applications to brain connectivity | Iman Seyedi, Francesco Archetti | 2026 | Brain Informatics | doi 10.1186/s40708-026-00336-8 | OpenAlex W7223663935 | open access https://doi.org/10.1186/s40708-026-00336-8
+Semantic Scholar: ratio 1.00: Conditional Gromov<en dash>Wasserstein matching across contexts: theory, regularization, and applications to brain connectivity | Iman Seyedi, F. Archetti | 2026 | Brain Informatics | doi 10.1186/s40708-026-00336-8 | Semantic Scholar e7c1c02a462519b12b683b93b3dc1d95241ef519 | open access https://doi.org/10.1186/s40708-026-00336-8
+arXiv: left out, the input has no arXiv ID
+Seyedi_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Wang_2026a'
+Crossref: ratio 1.00: Neural Entropic Optimal Transport and Gromov<en dash>Wasserstein Alignment | Tao Wang, Ziv Goldfeld | 2026 | IEEE Transactions on Information Theory | doi 10.1109/tit.2026.3661439
+OpenAlex: ratio 1.00: Neural Entropic Optimal Transport and Gromov<en dash>Wasserstein Alignment | Tao Wang, Ziv Goldfeld | 2026 | IEEE Transactions on Information Theory | doi 10.1109/tit.2026.3661439 | OpenAlex W4389712776 | open access https://arxiv.org/pdf/2312.07397
+Semantic Scholar: ratio 1.00: Neural Entropic Optimal Transport and Gromov<en dash>Wasserstein Alignment | Tao Wang, Ziv Goldfeld | 2023 | IEEE Transactions on Information Theory | doi 10.1109/TIT.2026.3661439 | arXiv 2312.07397 | Semantic Scholar 6e38b38be0cf93bdef968d574329cd3e67cd8ee1 | open access https://arxiv.org/pdf/2312.07397
+arXiv: left out, the input has no arXiv ID
+Wang_2026a: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Takeda_2025'
+Crossref: ratio 1.00: Unsupervised alignment in neuroscience: Introducing a toolbox for Gromov<en dash>Wasserstein optimal transport | Ken Takeda, Masaru Sasaki, Kota Abe et al. | 2025 | Journal of Neuroscience Methods | doi 10.1016/j.jneumeth.2025.110443
+OpenAlex: ratio 1.00: Unsupervised alignment in neuroscience: Introducing a toolbox for Gromov<en dash>Wasserstein optimal transport | Ken Takeda, Masaru Sasaki, Kota Abe et al. | 2025 | Journal of Neuroscience Methods | doi 10.1016/j.jneumeth.2025.110443 | OpenAlex W4409417786 | open access https://doi.org/10.1016/j.jneumeth.2025.110443
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Takeda_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Agueh_2011'
+Crossref: ratio 1.00: Barycenters in the Wasserstein Space | Martial Agueh, Guillaume Carlier | 2011 | SIAM Journal on Mathematical Analysis | doi 10.1137/100805741
+OpenAlex: ratio 1.00: Barycenters in the Wasserstein Space | Martial Agueh, Guillaume Carlier | 2011 | SIAM Journal on Mathematical Analysis | doi 10.1137/100805741 | OpenAlex W1968333723 | open access https://hal.science/hal-00637399
+Semantic Scholar: ratio 1.00: Barycenters in the Wasserstein Space | M. Agueh, G. Carlier | 2011 | SIAM Journal on Mathematical Analysis | doi 10.1137/100805741 | Semantic Scholar 751ee5e11cb826a315d8737f6a5f34423d95fae9 | open access https://hal.science/hal-00637399
+arXiv: left out, the input has no arXiv ID
+Agueh_2011: CONFIRMED against Crossref, ratio 1.00, year 2011
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1310_4375'
+Crossref: not found
+OpenAlex: ratio 1.00: Fast Computation of Wasserstein Barycenters | Marco Cuturi, Arnaud Doucet B | 2013 | arXiv (Cornell University) | doi 10.48550/arxiv.1310.4375 | arXiv 1310.4375 | OpenAlex W1629559917 | open access https://arxiv.org/pdf/1310.4375
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Fast Computation of Wasserstein Barycenters | Marco Cuturi, Arnaud Doucet | 2013 | arXiv 1310.4375
+arxiv_1310_4375: CONFIRMED against OpenAlex, ratio 1.00, year 2013
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Bonneel_2016'
+Crossref: ratio 1.00: Wasserstein barycentric coordinates | Nicolas Bonneel, Gabriel Peyr<latin small letter e with acute>, Marco Cuturi | 2016 | ACM Transactions on Graphics | doi 10.1145/2897824.2925918
+OpenAlex: DOI_MISMATCH, ratio 0.61: Wasserstein barycentric coordinates: histogram regression using optimal transport | Nicolas Bonneel, Gabriel Peyr<latin small letter e with acute> A, Marco Cuturi | 2016 | ACM Transactions on Graphics | doi 10.1145/2897824.2925918 | OpenAlex W2464628725 | open access https://hal.science/hal-01303148
+Semantic Scholar: ratio 1.00: Wasserstein barycentric coordinates | Nicolas Bonneel, G. Peyr<latin small letter e with acute>, Marco Cuturi | 2016 | ACM Transactions on Graphics | doi 10.1145/2897824.2925918 | Semantic Scholar 28886e910abdfa28311f886db4cb7f9f0b14c17e | open access https://hal.science/hal-01303148
+arXiv: left out, the input has no arXiv ID
+Bonneel_2016: CONFIRMED against OpenAlex, ratio 1.00, year 2016
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Schmitz_2018'
+Crossref: ratio 1.00: Wasserstein Dictionary Learning: Optimal Transport-Based Unsupervised Nonlinear Dictionary Learning | Morgan A. Schmitz, Matthieu Heitz, Nicolas Bonneel et al. | 2018 | SIAM Journal on Imaging Sciences | doi 10.1137/17m1140431
+OpenAlex: ratio 1.00: Wasserstein Dictionary Learning: Optimal Transport-Based Unsupervised Nonlinear Dictionary Learning | Morgan A. Schmitz, Matthieu Heitz, Nicolas Bonneel et al. | 2018 | SIAM Journal on Imaging Sciences | doi 10.1137/17m1140431 | OpenAlex W2744110160 | open access https://arxiv.org/pdf/1708.01955
+Semantic Scholar: ratio 1.00: Wasserstein Dictionary Learning: Optimal Transport-based unsupervised non-linear dictionary learning | M. Schmitz, Matthieu Heitz, Nicolas Bonneel et al. | 2017 | SIAM Journal of Imaging Sciences | doi 10.1137/17M1140431 | arXiv 1708.01955 | Semantic Scholar fd3d9ad8cecbb201a1ca82338681c92ca6174839 | open access https://arxiv.org/pdf/1708.01955
+arXiv: left out, the input has no arXiv ID
+Schmitz_2018: CONFIRMED against Crossref, ratio 1.00, year 2018
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2102_06555'
+Crossref: not found
+OpenAlex: ratio 1.00: Online Graph Dictionary Learning | C<latin small letter e with acute>dric Vincent-Cuaz, Titouan Vayer, R<latin small letter e with acute>mi Flamary et al. | 2021 | arXiv (Cornell University) | doi 10.48550/arxiv.2102.06555 | arXiv 2102.06555 | OpenAlex W3131640093 | open access https://arxiv.org/pdf/2102.06555
+Semantic Scholar: ratio 1.00: Online Graph Dictionary Learning | C<latin small letter e with acute>dric Vincent-Cuaz, Titouan Vayer, R<latin small letter e with acute>mi Flamary et al. | 2021 | International Conference on Machine Learning | doi 10.48550/arXiv.2102.06555 | arXiv 2102.06555 | Semantic Scholar 9e9017a874024e3f7d8ff5a3aff171afb52beccc
+arXiv: ratio 1.00: Online Graph Dictionary Learning | C<latin small letter e with acute>dric Vincent-Cuaz, Titouan Vayer, R<latin small letter e with acute>mi Flamary et al. | 2021 | arXiv 2102.06555
+arxiv_2102_06555: CONFIRMED against OpenAlex, ratio 1.00, year 2021
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2205_15733'
+Crossref: not found
+OpenAlex: ratio 1.00: Template based Graph Neural Network with Optimal Transport Distances | C<latin small letter e with acute>dric Vincent-Cuaz, R<latin small letter e with acute>mi Flamary, Marco Corneli et al. | 2022 | arXiv (Cornell University) | doi 10.48550/arxiv.2205.15733 | arXiv 2205.15733 | OpenAlex W4281642565 | open access https://arxiv.org/pdf/2205.15733
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Template based Graph Neural Network with Optimal Transport Distances | C<latin small letter e with acute>dric Vincent-Cuaz, R<latin small letter e with acute>mi Flamary, Marco Corneli et al. | 2022 | arXiv 2205.15733
+arxiv_2205_15733: CONFIRMED against OpenAlex, ratio 1.00, year 2022
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2202_03813'
+Crossref: not found
+OpenAlex: ratio 1.00: Learning to Predict Graphs with Fused Gromov-Wasserstein Barycenters | Luc Brogat-Motte, R<latin small letter e with acute>mi Flamary, C<latin small letter e with acute>line Brouard et al. | 2022 | arXiv (Cornell University) | doi 10.48550/arxiv.2202.03813 | arXiv 2202.03813 | OpenAlex W4221153250 | open access https://arxiv.org/pdf/2202.03813
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Learning to Predict Graphs with Fused Gromov-Wasserstein Barycenters | Luc Brogat-Motte, R<latin small letter e with acute>mi Flamary, C<latin small letter e with acute>line Brouard et al. | 2022 | arXiv 2202.03813
+arxiv_2202_03813: CONFIRMED against OpenAlex, ratio 1.00, year 2022
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Zhang_2024a'
+Crossref: ratio 1.00: Wasserstein Discriminant Dictionary Learning for Graph Representation | Tong Zhang, Guangbu Liu, Zhen Cui et al. | 2024 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/tpami.2024.3409772
+OpenAlex: ratio 1.00: Wasserstein Discriminant Dictionary Learning for Graph Representation | Tong Zhang, Guangbu Liu, Zhen Cui et al. | 2024 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/tpami.2024.3409772 | OpenAlex W4399373692
+Semantic Scholar: ratio 1.00: Wasserstein Discriminant Dictionary Learning for Graph Representation | Tong Zhang, Guangbu Liu, Zhen Cui et al. | 2024 | IEEE Transactions on Pattern Analysis and Machine Intelligence | doi 10.1109/TPAMI.2024.3409772 | Semantic Scholar 9ce07ee913a43b79c2b8d8edfff420869ac4b203
+arXiv: left out, the input has no arXiv ID
+Zhang_2024a: CONFIRMED against Crossref, ratio 1.00, year 2024
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2006_12065'
+Crossref: not found
+OpenAlex: ratio 1.00: A Trainable Optimal Transport Embedding for Feature Aggregation and its Relationship to Attention | Gr<latin small letter e with acute>goire Mialon, Dexiong Chen, Alexandre d<right single quotation mark>Aspremont et al. | 2020 | arXiv (Cornell University) | doi 10.48550/arxiv.2006.12065 | arXiv 2006.12065 | OpenAlex W3127760629 | open access https://arxiv.org/pdf/2006.12065
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: A Trainable Optimal Transport Embedding for Feature Aggregation and its Relationship to Attention | Gr<latin small letter e with acute>goire Mialon, Dexiong Chen, Alexandre d'Aspremont et al. | 2020 | arXiv 2006.12065
+arxiv_2006_12065: CONFIRMED against OpenAlex, ratio 1.00, year 2020
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2006_04804'
+Crossref: not found
+OpenAlex: ratio 1.00: Optimal Transport Graph Neural Networks | Benson Chen, Gary B<latin small letter e with acute>cigneul, Octavian-Eugen Ganea et al. | 2020 | arXiv (Cornell University) | doi 10.48550/arxiv.2006.04804 | arXiv 2006.04804 | OpenAlex W3034902920 | open access https://arxiv.org/pdf/2006.04804
+Semantic Scholar: ratio 1.00: Optimal Transport Graph Neural Networks | Gary B'ecigneul, O. Ganea, Benson Chen et al. | 2020 | arXiv.org | doi 10.48550/arXiv.2006.04804 | arXiv 2006.04804 | Semantic Scholar b1855cdc5a18d99107843d5884048f804c8f2585
+arXiv: ratio 1.00: Optimal Transport Graph Neural Networks | Benson Chen, Gary B<latin small letter e with acute>cigneul, Octavian-Eugen Ganea et al. | 2020 | arXiv 2006.04804
+arxiv_2006_04804: CONFIRMED against OpenAlex, ratio 1.00, year 2020
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Beier_2025'
+Crossref: ratio 1.00: Tangential Fixpoint Iterations for Gromov<en dash>Wasserstein Barycenters | Florian Beier, Robert Beinert | 2025 | SIAM Journal on Imaging Sciences | doi 10.1137/24m1654804
+OpenAlex: ratio 1.00: Tangential Fixpoint Iterations for Gromov<en dash>Wasserstein Barycenters | Florian Beier, Robert Beinert | 2025 | SIAM Journal on Imaging Sciences | doi 10.1137/24m1654804 | OpenAlex W4409899096 | open access https://arxiv.org/pdf/2403.08612
+Semantic Scholar: ratio 1.00: Tangential Fixpoint Iterations for Gromov-Wasserstein Barycenters | F. Beier, R. Beinert | 2025 | SIAM Journal of Imaging Sciences | doi 10.1137/24m1654804 | Semantic Scholar cc6e0b15036249740a728cf78a5787129bae499c | open access https://arxiv.org/pdf/2403.08612
+arXiv: left out, the input has no arXiv ID
+Beier_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1703_06114'
+Crossref: not found
+OpenAlex: ratio 1.00: Deep Sets | Manzil Zaheer, Satwik Kottur, Siamak Ravanbakhsh et al. | 2017 | arXiv (Cornell University) | doi 10.48550/arxiv.1703.06114 | arXiv 1703.06114 | OpenAlex W4299457904 | open access https://arxiv.org/pdf/1703.06114
+Semantic Scholar: ratio 1.00: Deep Sets | M. Zaheer, S. Kottur, Siamak Ravanbakhsh et al. | 2017 | arXiv 1703.06114 | Semantic Scholar de4edcddc028b0088f7ee44ae6e4be261f20b6f6
+arXiv: ratio 1.00: Deep Sets | Manzil Zaheer, Satwik Kottur, Siamak Ravanbakhsh et al. | 2017 | arXiv 1703.06114
+arxiv_1703_06114: CONFIRMED against OpenAlex, ratio 1.00, year 2017
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Charles_2017'
+Crossref: ratio 1.00: PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation | R. Qi Charles, Hao Su, Mo Kaichun et al. | 2017 | 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR) | doi 10.1109/cvpr.2017.16
+OpenAlex: ratio 1.00: PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation | Raffaelli Charles, Hao Su, Kaichun Mo et al. | 2017 | IEEE Computer Society Conference on Computer Vision and Pattern Recognition/Proceedings - IEEE Computer Society Conference on Computer Vision and Pattern Recognition/Proceedings | doi 10.1109/cvpr.2017.16 | OpenAlex W2560609797
+Semantic Scholar: ratio 1.00: PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation | R. Charles, Hao Su, K. Mo et al. | 2016 | Computer Vision and Pattern Recognition | doi 10.1109/CVPR.2017.16 | arXiv 1612.00593 | Semantic Scholar d997beefc0922d97202789d2ac307c55c2c52fba
+arXiv: left out, the input has no arXiv ID
+Charles_2017: CONFIRMED against Crossref, ratio 1.00, year 2017
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1810_00825'
+Crossref: not found
+OpenAlex: ratio 1.00: Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks | Juho Lee, Yoonho Lee, Jungtaek Kim et al. | 2018 | arXiv (Cornell University) | doi 10.48550/arxiv.1810.00825 | arXiv 1810.00825 | OpenAlex W2894384847 | open access https://arxiv.org/pdf/1810.00825
+Semantic Scholar: DOI_MISMATCH, ratio 0.31: Set Transformer | Juho Lee, Yoonho Lee, Jungtaek Kim et al. | 2018 | International Conference on Machine Learning | doi 10.48550/arXiv.1810.00825 | arXiv 1810.00825 | Semantic Scholar 512b8ef0002e0bfd0ecb5ab17d533c1762eb9786
+arXiv: ratio 1.00: Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks | Juho Lee, Yoonho Lee, Jungtaek Kim et al. | 2018 | arXiv 1810.00825
+arxiv_1810_00825: CONFIRMED against OpenAlex, ratio 1.00, year 2018
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_1802_04712'
+Crossref: not found
+OpenAlex: ratio 1.00: Attention-based Deep Multiple Instance Learning | Maximilian Ilse, Jakub M. Tomczak, Max Welling | 2018 | arXiv (Cornell University) | doi 10.48550/arxiv.1802.04712 | arXiv 1802.04712 | OpenAlex W2785934082 | open access https://arxiv.org/pdf/1802.04712
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Attention-based Deep Multiple Instance Learning | Maximilian Ilse, Jakub M. Tomczak, Max Welling | 2018 | arXiv 1802.04712
+arxiv_1802_04712: CONFIRMED against OpenAlex, ratio 1.00, year 2018
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2103_03892'
+Crossref: not found
+OpenAlex: ratio 1.00: Set Representation Learning with Generalized Sliced-Wasserstein Embeddings | Navid Naderializadeh, Soheil Kolouri, Joseph F. Comer et al. | 2021 | arXiv (Cornell University) | doi 10.48550/arxiv.2103.03892 | arXiv 2103.03892 | OpenAlex W3135369622 | open access https://arxiv.org/pdf/2103.03892
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Set Representation Learning with Generalized Sliced-Wasserstein Embeddings | Navid Naderializadeh, Soheil Kolouri, Joseph F. Comer et al. | 2021 | arXiv 2103.03892
+arxiv_2103_03892: CONFIRMED against OpenAlex, ratio 1.00, year 2021
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Moosm_ller_2022'
+Crossref: ratio 1.00: Linear optimal transport embedding: provable Wasserstein classification for certain rigid transformations and perturbations | Caroline Moosm<latin small letter u with diaeresis>ller, Alexander Cloninger | 2022 | Information and Inference: A Journal of the IMA | doi 10.1093/imaiai/iaac023
+OpenAlex: ratio 1.00: Linear optimal transport embedding: provable Wasserstein classification for certain rigid transformations and perturbations | Caroline Moosm<latin small letter u with diaeresis>ller, Alexander Cloninger | 2022 | Information and Inference A Journal of the IMA | doi 10.1093/imaiai/iaac023 | OpenAlex W3165102544 | open access https://arxiv.org/pdf/2008.09165
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Moosm_ller_2022: CONFIRMED against Crossref, ratio 1.00, year 2022
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Wang_2012'
+Crossref: ratio 1.00: A Linear Optimal Transportation Framework for Quantifying and Visualizing Variations in Sets of Images | Wei Wang, Dejan Slep<latin small letter c with caron>ev, Saurav Basu et al. | 2012 | International Journal of Computer Vision | doi 10.1007/s11263-012-0566-z
+OpenAlex: ratio 1.00: A Linear Optimal Transportation Framework for Quantifying and Visualizing Variations in Sets of Images | Wei Wang, Dejan Slep<latin small letter c with caron>ev, Saurav Basu et al. | 2012 | International Journal of Computer Vision | doi 10.1007/s11263-012-0566-z | OpenAlex W2094100343 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC3667970/
+Semantic Scholar: ratio 1.00: A linear optimal transportation framework for quantifying and visualizing variations in sets of images | Wei Wang, D. Slep<latin small letter c with caron>ev, Saurav Basu et al. | 2012 | International Journal of Computer Vision | doi 10.1007/s11263-012-0566-z | Semantic Scholar 3b1f93716ef525f2b47dcc2faec8292a686e1086 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC3667970/
+arXiv: left out, the input has no arXiv ID
+Wang_2012: CONFIRMED against Crossref, ratio 1.00, year 2012
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2401_01460'
+Crossref: not found
+OpenAlex: ratio 1.00: Point Cloud Classification via Deep Set Linearized Optimal Transport | Scott P. Mahan, Caroline Moosm<latin small letter u with diaeresis>ller, Alexander Cloninger | 2024 | arXiv (Cornell University) | doi 10.48550/arxiv.2401.01460 | arXiv 2401.01460 | OpenAlex W4390601194 | open access https://arxiv.org/pdf/2401.01460
+Semantic Scholar: ratio 1.00: Point Cloud Classification via Deep Set Linearized Optimal Transport | Scott Mahan, Caroline Moosm<latin small letter u with diaeresis>ller, Alexander Cloninger | 2024 | arXiv.org | doi 10.48550/arXiv.2401.01460 | arXiv 2401.01460 | Semantic Scholar cd9333c9ca648d0c10dfa02982268ebef06fa4f1
+arXiv: ratio 1.00: Point Cloud Classification via Deep Set Linearized Optimal Transport | Scott Mahan, Caroline Moosm<latin small letter u with diaeresis>ller, Alexander Cloninger | 2024 | arXiv 2401.01460
+arxiv_2401_01460: CONFIRMED against OpenAlex, ratio 1.00, year 2024
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2202_03926'
+Crossref: not found
+OpenAlex: ratio 1.00: Distribution Regression with Sliced Wasserstein Kernels | Dimitri Meunier, Massimiliano Pontil, Carlo Ciliberto | 2022 | arXiv (Cornell University) | doi 10.48550/arxiv.2202.03926 | arXiv 2202.03926 | OpenAlex W4221146393 | open access https://arxiv.org/pdf/2202.03926
+Semantic Scholar: ratio 1.00: Distribution Regression with Sliced Wasserstein Kernels | D. Meunier, M. Pontil, C. Ciliberto | 2022 | International Conference on Machine Learning | doi 10.48550/arXiv.2202.03926 | arXiv 2202.03926 | Semantic Scholar d8619700f8a4def5786f9c36d0c8420839f9ba5b | open access https://arxiv.org/pdf/2202.03926
+arXiv: ratio 1.00: Distribution Regression with Sliced Wasserstein Kernels | Dimitri Meunier, Massimiliano Pontil, Carlo Ciliberto | 2022 | arXiv 2202.03926
+arxiv_2202_03926: CONFIRMED against OpenAlex, ratio 1.00, year 2022
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Shifat_E_Rabbi_2025'
+Crossref: ratio 1.00: Linear Optimal Transport Subspaces for Point Set Classification | Mohammad Shifat-E-Rabbi, Naqib Sad Pathan, Shiying Li et al. | 2025 | Journal of Mathematical Imaging and Vision | doi 10.1007/s10851-025-01261-x
+OpenAlex: ratio 1.00: Linear Optimal Transport Subspaces for Point Set Classification | Mohammad Shifat<hyphen>E<hyphen>Rabbi, Naqib Sad Pathan, Shiying Li et al. | 2025 | Journal of Mathematical Imaging and Vision | doi 10.1007/s10851-025-01261-x | OpenAlex W4412438080 | open access https://www.researchsquare.com/article/rs-4106387/latest.pdf
+Semantic Scholar: ratio 1.00: Linear Optimal Transport Subspaces for Point Set Classification | Mohammad Shifat-E.-Rabbi, Naqib Sad Pathan, Shi-Ying Li et al. | 2025 | Journal of Mathematical Imaging and Vision | doi 10.1007/s10851-025-01261-x | Semantic Scholar 86d841a3ee340dcea113d278c1dfbbfbbe8c4ce9 | open access https://www.researchsquare.com/article/rs-4106387/latest.pdf
+arXiv: left out, the input has no arXiv ID
+Shifat_E_Rabbi_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Beckmann_2026'
+Crossref: ratio 1.00: Normalized Radon Cumulative Distribution Transforms for Invariance and Robustness in Optimal Transport Based Image Classification | Matthias Beckmann, Robert Beinert, Jonas Bresch | 2026 | SIAM Journal on Imaging Sciences | doi 10.1137/25m1767741
+OpenAlex: ratio 1.00: Normalized Radon Cumulative Distribution Transforms for Invariance and Robustness in Optimal Transport Based Image Classification | Matthias Beckmann, Robert Beinert, Jonas Bresch | 2026 | SIAM Journal on Imaging Sciences | doi 10.1137/25m1767741 | OpenAlex W4417136953 | open access https://arxiv.org/pdf/2506.08761
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Beckmann_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2510_22033'
+Crossref: not found
+OpenAlex: ratio 1.00: Linearized Optimal Transport for Analysis of High-Dimensional Point-Cloud and Single-Cell Data | Wang, Tianxiang, Ke, Yingtong, Dhananjay Bhaskar et al. | 2025 | arXiv (Cornell University) | doi 10.48550/arxiv.2510.22033 | arXiv 2510.22033 | OpenAlex W7101579638 | open access https://arxiv.org/pdf/2510.22033
+Semantic Scholar: ratio 1.00: Linearized Optimal Transport for Analysis of High-Dimensional Point-Cloud and Single-Cell Data | Tian-Xiang Wang, Yingtong Ke, Dhananjay Bhaskar et al. | 2025 | arXiv.org | doi 10.48550/arXiv.2510.22033 | arXiv 2510.22033 | Semantic Scholar e0e8e29e4579991ec2c07a8baf7624de32135e77
+arXiv: ratio 1.00: Linearized Optimal Transport for Analysis of High-Dimensional Point-Cloud and Single-Cell Data | Tianxiang Wang, Yingtong Ke, Dhananjay Bhaskar et al. | 2025 | arXiv 2510.22033
+arxiv_2510_22033: CONFIRMED against OpenAlex, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2609_17906'
+Crossref: not found
+OpenAlex: not found
+Semantic Scholar: ratio 1.00: FlowLOT: Linearized Optimal Transport for Flow Cytometry Analysis. | Naqib Sad Pathan, Mohammad Shifat-E.-Rabbi, Kristofor E. Pas et al. | 2026 | arXiv.org | arXiv 2609.17906 | Semantic Scholar faa21763f8cd65dd6f102b1b312c68b2ce82a61d
+arXiv: ratio 1.00: FlowLOT: Linearized Optimal Transport for Flow Cytometry Analysis | Naqib Sad Pathan, Mohammad Shifat-E-Rabbi, Kristofor E. Pas et al. | 2026 | arXiv 2609.17906
+arxiv_2609_17906: CONFIRMED against Semantic Scholar, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Gramfort_2015'
+Crossref: ratio 1.00: Fast Optimal Transport Averaging of Neuroimaging Data | A. Gramfort, G. Peyr<latin small letter e with acute>, M. Cuturi | 2015 | Lecture Notes in Computer Science | doi 10.1007/978-3-319-19992-4_20
+OpenAlex: ratio 1.00: Fast Optimal Transport Averaging of Neuroimaging Data | Alexandre Gramfort, Gabriel Peyr<latin small letter e with acute> A, Marco Cuturi | 2015 | Lecture notes in computer science | doi 10.1007/978-3-319-19992-4_20 | OpenAlex W2111725927 | open access https://arxiv.org/pdf/1503.08596
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Gramfort_2015: CONFIRMED against Crossref, ratio 1.00, year 2015
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Gerber_2018'
+Crossref: ratio 1.00: Exploratory Population Analysis with Unbalanced Optimal Transport | Samuel Gerber, Marc Niethammer, Martin Styner et al. | 2018 | Lecture Notes in Computer Science | doi 10.1007/978-3-030-00931-1_53
+OpenAlex: ratio 1.00: Exploratory Population Analysis with Unbalanced Optimal Transport | Samuel Gerber, Marc Niethammer, Martin Andreas Styner et al. | 2018 | Lecture notes in computer science | doi 10.1007/978-3-030-00931-1_53 | OpenAlex W2891515476 | open access https://link.springer.com/content/pdf/10.1007/978-3-030-00931-1_53.pdf
+Semantic Scholar: ratio 1.00: Exploratory Population Analysis with Unbalanced Optimal Transport | Samuel Gerber, M. Niethammer, M. Styner et al. | 2018 | International Conference on Medical Image Computing and Computer-Assisted Intervention | doi 10.1007/978-3-030-00931-1_53 | Semantic Scholar c6a3d4e4b42d25e1a3008b5f8c7e439b404b886a | open access https://link.springer.com/content/pdf/10.1007/978-3-030-00931-1_53.pdf
+arXiv: left out, the input has no arXiv ID
+Gerber_2018: CONFIRMED against Crossref, ratio 1.00, year 2018
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Gerber_2023'
+Crossref: ratio 1.00: Optimal transport features for morphometric population analysis | Samuel Gerber, Marc Niethammer, Ebrahim Ebrahim et al. | 2023 | Medical Image Analysis | doi 10.1016/j.media.2022.102696
+OpenAlex: ratio 1.00: Optimal transport features for morphometric population analysis | Samuel Gerber, Marc Niethammer, Ebrahim Ebrahim et al. | 2022 | Medical Image Analysis | doi 10.1016/j.media.2022.102696 | OpenAlex W4309763215 | open access https://www.sciencedirect.com/science/article/am/pii/S1361841522003243
+Semantic Scholar: not found
+arXiv: left out, the input has no arXiv ID
+Gerber_2023: CONFIRMED against Crossref, ratio 1.00, year 2023
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Thual_2022'
+Crossref: ratio 1.00: Aligning Individual Brains with Fused Unbalanced Gromov Wasserstein | Alexis Thual, Quang Huy Tran, Tatiana Zemskova et al. | 2022 | Advances in Neural Information Processing Systems 35 | doi 10.52202/068431-1584
+OpenAlex: ratio 1.00: Aligning Individual Brains with Fused Unbalanced Gromov Wasserstein | Alexis Thual, Quang Huy Tran, Tatiana Zemskova et al. | 2022 | neural information processing systems | doi 10.52202/068431-1584 | OpenAlex W7133227349
+Semantic Scholar: ratio 1.00: Aligning individual brains with fused unbalanced Gromov Wasserstein | A. Thual, Quang-Huy Tran, T. Zemskova et al. | 2022 | Neural Information Processing Systems | doi 10.52202/068431-1584 | arXiv 2206.09398 | Semantic Scholar d67dcbf457ce55336f5c6c5c4c996ca3fda0d477
+arXiv: left out, the input has no arXiv ID
+Thual_2022: CONFIRMED against Crossref, ratio 1.00, year 2022
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2605_20883'
+Crossref: not found
+OpenAlex: ratio 1.00: Learning fMRI activations dictionaries across individual geometries via optimal transport | Sonia Mazelet, R<latin small letter e with acute>mi Flamary, Bertrand Thirion | 2026 | arXiv (Cornell University) | doi 10.48550/arxiv.2605.20883 | arXiv 2605.20883 | OpenAlex W7161973664 | open access https://arxiv.org/pdf/2605.20883
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: Learning fMRI activations dictionaries across individual geometries via optimal transport | Sonia Mazelet, R<latin small letter e with acute>mi Flamary, Bertrand Thirion | 2026 | arXiv 2605.20883
+arxiv_2605_20883: CONFIRMED against OpenAlex, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Qahqaie_2026'
+Crossref: ratio 1.00: Unbalanced Optimal Transport for Robust Longitudinal Lesion Evolution with Registration-Aware and Appearance-Guided Priors | Melika Qahqaie, Dominik Neumann, Tobias Heimann et al. | 2026 | 2026 IEEE 23rd International Symposium on Biomedical Imaging (ISBI) | doi 10.1109/isbi61048.2026.11516053
+OpenAlex: ratio 1.00: Unbalanced Optimal Transport for Robust Longitudinal Lesion Evolution with Registration-Aware and Appearance-Guided Priors | Melika Qahqaie, Dominik Neumann, Tobias Heimann et al. | 2026 | IEEE International Symposium on Biomedical Imaging (ISBI) | doi 10.1109/isbi61048.2026.11516053 | OpenAlex W7161792725 | open access https://arxiv.org/pdf/2602.09933
+Semantic Scholar: ratio 1.00: Unbalanced Optimal Transport for Robust Longitudinal Lesion Evolution with Registration-Aware and Appearance-Guided Priors | Melika Qahqaie, Dominik Neumann, Tobias Heimann et al. | 2026 | IEEE International Symposium on Biomedical Imaging | doi 10.1109/ISBI61048.2026.11516053 | arXiv 2602.09933 | Semantic Scholar 63b626e5debc3e636866c5faa73952b606e53433 | open access https://arxiv.org/pdf/2602.09933
+arXiv: left out, the input has no arXiv ID
+Qahqaie_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'arxiv_2602_07260'
+Crossref: not found
+OpenAlex: ratio 1.00: 3D Transport-based Morphometry (3D-TBM) for medical image analysis | Hongyu Kan, Kristofor E. Pas, Iv<latin small letter a with acute>n Medri et al. | 2026 | arXiv (Cornell University) | doi 10.48550/arxiv.2602.07260 | arXiv 2602.07260 | OpenAlex W7128494666 | open access https://arxiv.org/pdf/2602.07260
+Semantic Scholar: left out, HTTP 429 after 3 retries
+arXiv: ratio 1.00: 3D Transport-based Morphometry (3D-TBM) for medical image analysis | Hongyu Kan, Kristofor Pas, Ivan Medri et al. | 2026 | arXiv 2602.07260
+arxiv_2602_07260: CONFIRMED against OpenAlex, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Xu_2023'
+Crossref: ratio 1.00: Multimodal Optimal Transport-based Co-Attention Transformer with Global Structure Consistency for Survival Prediction | Yingxue Xu, Hao Chen | 2023 | 2023 IEEE/CVF International Conference on Computer Vision (ICCV) | doi 10.1109/iccv51070.2023.01942
+OpenAlex: ratio 1.00: Multimodal Optimal Transport-based Co-Attention Transformer with Global Structure Consistency for Survival Prediction | Yingxue Xu, Hao Chen | 2023 | IEEE/CVF International Conference on Computer Vision (ICCV) | doi 10.1109/iccv51070.2023.01942 | OpenAlex W4390872461 | open access https://arxiv.org/pdf/2306.08330
+Semantic Scholar: ratio 1.00: Multimodal Optimal Transport-based Co-Attention Transformer with Global Structure Consistency for Survival Prediction | Ying-Xue Xu, Hao Chen | 2023 | IEEE International Conference on Computer Vision | doi 10.1109/ICCV51070.2023.01942 | arXiv 2306.08330 | Semantic Scholar 7f891be2747c95d6b2499d1bd00c427ccea55b61 | open access https://arxiv.org/pdf/2306.08330
+arXiv: left out, the input has no arXiv ID
+Xu_2023: CONFIRMED against Crossref, ratio 1.00, year 2023
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Balakrishnan_2019'
+Crossref: ratio 1.00: VoxelMorph: A Learning Framework for Deformable Medical Image Registration | Guha Balakrishnan, Amy Zhao, Mert R. Sabuncu et al. | 2019 | IEEE Transactions on Medical Imaging | doi 10.1109/tmi.2019.2897538
+OpenAlex: ratio 1.00: VoxelMorph: A Learning Framework for Deformable Medical Image Registration | Guha Balakrishnan, Amy Zhao, Mert Rory Sabuncu et al. | 2019 | IEEE Transactions on Medical Imaging | doi 10.1109/tmi.2019.2897538 | OpenAlex W2891631795 | open access https://arxiv.org/pdf/1809.05231
+Semantic Scholar: ratio 1.00: VoxelMorph: A Learning Framework for Deformable Medical Image Registration | Guha Balakrishnan, Amy Zhao, M. Sabuncu et al. | 2018 | IEEE Transactions on Medical Imaging | doi 10.1109/TMI.2019.2897538 | arXiv 1809.05231 | Semantic Scholar 6a88c8abd298b5e9ea7485f41a6a1b1e43b16d5f | open access https://arxiv.org/pdf/1809.05231
+arXiv: left out, the input has no arXiv ID
+Balakrishnan_2019: CONFIRMED against Crossref, ratio 1.00, year 2019
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Sotiras_2013'
+Crossref: ratio 1.00: Deformable Medical Image Registration: A Survey | A. Sotiras, C. Davatzikos, N. Paragios | 2013 | IEEE Transactions on Medical Imaging | doi 10.1109/tmi.2013.2265603
+OpenAlex: ratio 1.00: Deformable Medical Image Registration: A Survey | Aristeidis Sotiras, Christos A. Davatzikos, Nikos Paragios A | 2013 | IEEE Transactions on Medical Imaging | doi 10.1109/tmi.2013.2265603 | OpenAlex W2115167851 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC3745275/
+Semantic Scholar: ratio 1.00: Deformable Medical Image Registration: A Survey | Aristeidis Sotiras, C. Davatzikos, N. Paragios | 2013 | IEEE Transactions on Medical Imaging | doi 10.1109/TMI.2013.2265603 | Semantic Scholar 681f3b92ee2e53dc10c11238a8da353e5c58de2c | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC3745275/
+arXiv: left out, the input has no arXiv ID
+Sotiras_2013: CONFIRMED against Crossref, ratio 1.00, year 2013
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Hu_2019'
+Crossref: ratio 1.00: Conditional Segmentation in Lieu of Image Registration | Yipeng Hu, Eli Gibson, Dean C. Barratt et al. | 2019 | Lecture Notes in Computer Science | doi 10.1007/978-3-030-32245-8_45
+OpenAlex: ratio 1.00: Conditional Segmentation in Lieu of Image Registration | Yipeng Hu, Eli Gibson, Dean C. Barratt et al. | 2019 | Lecture notes in computer science | doi 10.1007/978-3-030-32245-8_45 | OpenAlex W2953639727 | open access https://ora.ox.ac.uk/objects/uuid:2ec1b884-a5e5-4b19-833e-3e47dfd603aa/files/sjm214p12r
+Semantic Scholar: ratio 1.00: Conditional Segmentation in Lieu of Image Registration | Yi-Peng Hu, E. Gibson, D. Barratt et al. | 2019 | International Conference on Medical Image Computing and Computer-Assisted Intervention | doi 10.1007/978-3-030-32245-8_45 | arXiv 1907.00438 | Semantic Scholar 3b1b88ee78e7b7fcf02bfbe36b7270a63d063d7e | open access https://ora.ox.ac.uk/objects/uuid:2ec1b884-a5e5-4b19-833e-3e47dfd603aa/files/sjm214p12r
+arXiv: left out, the input has no arXiv ID
+Hu_2019: CONFIRMED against Crossref, ratio 1.00, year 2019
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Gillies_2016'
+Crossref: ratio 1.00: Radiomics: Images Are More than Pictures, They Are Data | Robert J. Gillies, Paul E. Kinahan, Hedvig Hricak | 2016 | Radiology | doi 10.1148/radiol.2015151169
+OpenAlex: ratio 1.00: Radiomics: Images Are More than Pictures, They Are Data | Robert J. Gillies, Paul E. Kinahan, Hedvig Hricak | 2015 | Radiology | doi 10.1148/radiol.2015151169 | OpenAlex W2174661749 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC4734157/pdf/
+Semantic Scholar: ratio 1.00: Radiomics: Images Are More than Pictures, They Are Data | R. Gillies, Paul Kinahan, H. Hricak | 2015 | Radiology | doi 10.1148/radiol.2015151169 | Semantic Scholar dcd99d49af33bd14e9e0750bcf854e7b306c808a | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC4734157/pdf/
+arXiv: left out, the input has no arXiv ID
+Gillies_2016: CONFIRMED against Crossref, ratio 1.00, year 2016
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'van_Griethuysen_2017'
+Crossref: ratio 1.00: Computational Radiomics System to Decode the Radiographic Phenotype | Joost J.M. van Griethuysen, Andriy Fedorov, Chintan Parmar et al. | 2017 | Cancer Research | doi 10.1158/0008-5472.can-17-0339
+OpenAlex: ratio 1.00: Computational Radiomics System to Decode the Radiographic Phenotype | Joost J. M. van Griethuysen, Andriy Fedorov, Chintan Parmar et al. | 2017 | Cancer Research | doi 10.1158/0008-5472.can-17-0339 | OpenAlex W2767128594 | open access https://cancerres.aacrjournals.org/content/canres/77/21/e104.full.pdf
+Semantic Scholar: ratio 1.00: Computational Radiomics System to Decode the Radiographic Phenotype | J. V. van Griethuysen, Andrey Fedorov, C. Parmar et al. | 2017 | Cancer Research | doi 10.1158/0008-5472.CAN-17-0339 | Semantic Scholar c53fa445bee435f567828db3a0ede0f08abdd0d5 | open access https://cancerres.aacrjournals.org/content/canres/77/21/e104.full.pdf
+arXiv: left out, the input has no arXiv ID
+van_Griethuysen_2017: CONFIRMED against Crossref, ratio 1.00, year 2017
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Isensee_2020'
+Crossref: ratio 1.00: nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation | Fabian Isensee, Paul F. Jaeger, Simon A. A. Kohl et al. | 2020 | Nature Methods | doi 10.1038/s41592-020-01008-z
+OpenAlex: ratio 1.00: nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation | Fabian Isensee, Paul F. Jaeger, Simon A. A. Kohl et al. | 2020 | Nature Methods | doi 10.1038/s41592-020-01008-z | OpenAlex W3014974815 | open access https://arxiv.org/pdf/1904.08128
+Semantic Scholar: ratio 1.00: nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation | F. Isensee, P. Jaeger, S. Kohl et al. | 2020 | Nature Methods | doi 10.1038/s41592-020-01008-z | Semantic Scholar f28e387d4229c5f690ce4570a391c0f47e7155c7 | open access https://arxiv.org/pdf/1904.08128
+arXiv: left out, the input has no arXiv ID
+Isensee_2020: CONFIRMED against Crossref, ratio 1.00, year 2020
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Quellec_2017'
+Crossref: ratio 1.00: Multiple-Instance Learning for Medical Image and Video Analysis | Gwenole Quellec, Guy Cazuguel, Beatrice Cochener et al. | 2017 | IEEE Reviews in Biomedical Engineering | doi 10.1109/rbme.2017.2651164
+OpenAlex: ratio 1.00: Multiple-Instance Learning for Medical Image and Video Analysis | Gwenol<latin small letter e with acute> Quellec, Guy Cazuguel, B<latin small letter e with acute>atrice Cochener et al. | 2017 | IEEE Reviews in Biomedical Engineering | doi 10.1109/rbme.2017.2651164 | OpenAlex W2571156573
+Semantic Scholar: ratio 1.00: Multiple-Instance Learning for Medical Image and Video Analysis | G. Quellec, G. Cazuguel, B. Cochener et al. | 2017 | IEEE Reviews in Biomedical Engineering | doi 10.1109/RBME.2017.2651164 | Semantic Scholar 3ef6b412e0bd53198eee89f274e268f2c4031182
+arXiv: left out, the input has no arXiv ID
+Quellec_2017: CONFIRMED against Crossref, ratio 1.00, year 2017
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Chen_2021'
+Crossref: ratio 1.00: AMINN: Autoencoder-Based Multiple Instance Neural Network Improves Outcome Prediction in Multifocal Liver Metastases | Jianan Chen, Helen M. C. Cheung, Laurent Milot et al. | 2021 | Lecture Notes in Computer Science | doi 10.1007/978-3-030-87240-3_72
+OpenAlex: ratio 1.00: AMINN: Autoencoder-Based Multiple Instance Neural Network Improves Outcome Prediction in Multifocal Liver Metastases | Jianan Chen, Helen Cheung, Laurent M. Milot et al. | 2021 | Lecture notes in computer science | doi 10.1007/978-3-030-87240-3_72 | OpenAlex W3202344381
+Semantic Scholar: ratio 1.00: AMINN: Autoencoder-Based Multiple Instance Neural Network Improves Outcome Prediction in Multifocal Liver Metastases | Jia-Nan Chen, H. Cheung, L. Milot et al. | 2020 | International Conference on Medical Image Computing and Computer-Assisted Intervention | doi 10.1007/978-3-030-87240-3_72 | arXiv 2012.06875 | Semantic Scholar 6ede03256f54d773b3ba822e4824a8f0416b18a1 | open access http://arxiv.org/pdf/2012.06875
+arXiv: left out, the input has no arXiv ID
+Chen_2021: CONFIRMED against Crossref, ratio 1.00, year 2021
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Karimzadeh_2026'
+Crossref: ratio 1.00: Revisiting multi-nodal radiomics with advanced feature learning for lymphoma classification: a multi-center study | Reza Karimzadeh, Setareh Hasanabadi, Maryam Cheraghi et al. | 2026 | Physics in Medicine &amp; Biology | doi 10.1088/1361-6560/ae7955
+OpenAlex: ratio 1.00: Revisiting multi-nodal radiomics with advanced feature learning for lymphoma classification: a multi-center study | Reza Karimzadeh, Saeed Shafiee Hasanabadi, Maryam Cheraghi et al. | 2026 | Physics in Medicine and Biology | doi 10.1088/1361-6560/ae7955 | OpenAlex W7163639403 | open access https://iopscience.iop.org/article/10.1088/1361-6560/ae7955/pdf
+Semantic Scholar: ratio 1.00: Revisiting multi-nodal radiomics with advanced feature learning for lymphoma classification: a multi-center study | Reza Karimzadeh, S. Hasanabadi, Maryam Cheraghi et al. | 2026 | Physics in Medicine and Biology | doi 10.1088/1361-6560/ae7955 | Semantic Scholar 74f3f1dd7f19a09b1361f61914d94094d2817f7f | open access https://iopscience.iop.org/article/10.1088/1361-6560/ae7955/pdf
+arXiv: left out, the input has no arXiv ID
+Karimzadeh_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Jajroudi_2026'
+Crossref: ratio 1.00: A deep learning framework for lesion-level treatment response prediction in hodgkin lymphoma using PET/CT tensor radiomics | Mahdie Jajroudi, Hossein Jamalirad, Milad Enferadi et al. | 2026 | EJNMMI Physics | doi 10.1186/s40658-026-00838-8
+OpenAlex: ratio 1.00: A deep learning framework for lesion-level treatment response prediction in hodgkin lymphoma using PET/CT tensor radiomics | Mahdie Jajroudi, Hossein Jamalirad, Milad Enferadi et al. | 2026 | EJNMMI Physics | doi 10.1186/s40658-026-00838-8 | OpenAlex W7164803910 | open access https://link.springer.com/content/pdf/10.1186/s40658-026-00838-8.pdf
+Semantic Scholar: ratio 1.00: A deep learning framework for lesion-level treatment response prediction in hodgkin lymphoma using PET/CT tensor radiomics | M. Jajroudi, H. Jamalirad, M. Enferadi et al. | 2026 | EJNMMI Physics | doi 10.1186/s40658-026-00838-8 | Semantic Scholar dfb80951002d3ddbf50c54c97b86fa4266c93912 | open access https://link.springer.com/content/pdf/10.1186/s40658-026-00838-8.pdf
+arXiv: left out, the input has no arXiv ID
+Jajroudi_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Chang_2020'
+Crossref: ratio 1.00: Automatic cardiac MRI segmentation and permutation-invariant pathology classification using deep neural networks and point clouds | Yakun Chang, Cheolkon Jung | 2020 | Neurocomputing | doi 10.1016/j.neucom.2020.08.030
+OpenAlex: ratio 1.00: Automatic cardiac MRI segmentation and permutation-invariant pathology classification using deep neural networks and point clouds | Yakun Chang, Cheolkon Jung | 2020 | Neurocomputing | doi 10.1016/j.neucom.2020.08.030 | OpenAlex W3082127558
+Semantic Scholar: ratio 1.00: Automatic cardiac MRI segmentation and permutation-invariant pathology classification using deep neural networks and point clouds | Yakun Chang, Cheolkon Jung | 2020 | Neurocomputing | doi 10.1016/j.neucom.2020.08.030 | Semantic Scholar 8b31278fb1307c2a895d825dc793bd48edba8c28
+arXiv: left out, the input has no arXiv ID
+Chang_2020: CONFIRMED against Crossref, ratio 1.00, year 2020
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Ktena_2017'
+Crossref: ratio 1.00: Distance Metric Learning Using Graph Convolutional Networks: Application to Functional Brain Networks | Sofia Ira Ktena, Sarah Parisot, Enzo Ferrante et al. | 2017 | Lecture Notes in Computer Science | doi 10.1007/978-3-319-66182-7_54
+OpenAlex: ratio 1.00: Distance Metric Learning Using Graph Convolutional Networks: Application to Functional Brain Networks | Sofia Ira Ktena, Sarah Parisot, Enzo Ferrante et al. | 2017 | Lecture notes in computer science | doi 10.1007/978-3-319-66182-7_54 | OpenAlex W2591711955 | open access https://arxiv.org/pdf/1703.02161
+Semantic Scholar: ratio 1.00: Distance Metric Learning Using Graph Convolutional Networks: Application to Functional Brain Networks | S. Ktena, Sarah Parisot, Enzo Ferrante et al. | 2017 | International Conference on Medical Image Computing and Computer-Assisted Intervention | doi 10.1007/978-3-319-66182-7_54 | arXiv 1703.02161 | Semantic Scholar dbbef7c54b88ed4814954062d0922fbf0cc34b28 | open access https://arxiv.org/pdf/1703.02161
+arXiv: left out, the input has no arXiv ID
+Ktena_2017: CONFIRMED against Crossref, ratio 1.00, year 2017
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Xiao_2025'
+Crossref: ratio 1.00: Optimal Transport for Brain-Image Alignment: Unveiling Redundancy and Synergy in Neural Information Processing | Yang Xiao, Wang Lu, Jie Ji et al. | 2025 | 2025 IEEE/CVF International Conference on Computer Vision (ICCV) | doi 10.1109/iccv51701.2025.01901
+OpenAlex: ratio 1.00: Optimal Transport for Brain-Image Alignment: Unveiling Redundancy and Synergy in Neural Information Processing | Yang Xiao, Lu Wang, Jie Ji et al. | 2025 | IEEE/CVF International Conference on Computer Vision (ICCV) | doi 10.1109/iccv51701.2025.01901 | OpenAlex W4417280484 | open access https://arxiv.org/pdf/2503.10663
+Semantic Scholar: ratio 1.00: Optimal Transport for Brain-Image Alignment: Unveiling Redundancy and Synergy in Neural Information Processing | Yang Xiao, Wang Lu, Jie Ji et al. | 2025 | IEEE International Conference on Computer Vision | doi 10.1109/ICCV51701.2025.01901 | arXiv 2503.10663 | Semantic Scholar c5785adfb13f12746ebd8a93b7e1983b5cd97776 | open access https://arxiv.org/pdf/2503.10663
+arXiv: left out, the input has no arXiv ID
+Xiao_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Shifat_E_Rabbi_2025a'
+Crossref: ratio 1.00: Quantifying Nuclear Structures of Digital Pathology Images Across Cancers Using Transport<hyphen>Based Morphometry | Mohammad Shifat<hyphen>E<hyphen>Rabbi, Natasha Ironside, Naqib Sad Pathan et al. | 2025 | Cytometry Part A | doi 10.1002/cyto.a.24917
+OpenAlex: ratio 1.00: Quantifying Nuclear Structures of Digital Pathology Images Across Cancers Using Transport<hyphen>Based Morphometry | Mohammad Shifat<hyphen>E<hyphen>Rabbi, Natasha T. Ironside, Naqib Sad Pathan et al. | 2025 | Cytometry Part A | doi 10.1002/cyto.a.24917 | OpenAlex W4407845424 | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC13298727/
+Semantic Scholar: ratio 1.00: Quantifying Nuclear Structures of Digital Pathology Images Across Cancers Using Transport-Based Morphometry | Mohammad Shifat-E.-Rabbi, Natasha Ironside, Naqib Sad Pathan et al. | 2025 | Cytometry Part A | doi 10.1002/cyto.a.24917 | Semantic Scholar c7f4ca22270d1c951c52852e420ab41b55f66e3c | open access https://pmc.ncbi.nlm.nih.gov/articles/PMC13298727/
+arXiv: left out, the input has no arXiv ID
+Shifat_E_Rabbi_2025a: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Lopes_2024'
+Crossref: ratio 1.00: Cell Classification Based on Superpixel Segmentation and Transport-Based Morphometry | Gustavo Lopes, Gabriel Fonseca, Giulia Novais et al. | 2024 | 2024 37th SIBGRAPI Conference on Graphics, Patterns and Images (SIBGRAPI) | doi 10.1109/sibgrapi62404.2024.10716334
+OpenAlex: ratio 1.00: Cell Classification Based on Superpixel Segmentation and Transport-Based Morphometry | Gustavo Lopes, Gabriel Barbosa da Fonseca, Giulia Barcelos Rossi de Almeida Bastos Novais et al. | 2024 | SIBGRAPI Conference on Graphics, Patterns and Images (SIBGRAPI) | doi 10.1109/sibgrapi62404.2024.10716334 | OpenAlex W4403534785
+Semantic Scholar: ratio 1.00: Cell Classification Based on Superpixel Segmentation and Transport-Based Morphometry | Gustavo Lopes, Gabriel Fonseca, Giulia Novais et al. | 2024 | SIBGRAPI Conference on Graphics, Patterns and Images | doi 10.1109/SIBGRAPI62404.2024.10716334 | Semantic Scholar e406b7918a50eca6ad1b4f9af8f7e9d2821abeca
+arXiv: left out, the input has no arXiv ID
+Lopes_2024: CONFIRMED against Crossref, ratio 1.00, year 2024
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Barbarant_2026'
+Crossref: ratio 1.00: Functional Templates in fMRI: Building Accurate and Interpretable Group-Level Decoders | Pierre-Louis Barbarant, Florent Meyniel, Bertrand Thirion | 2026 | doi 10.64898/2026.05.21.726781
+OpenAlex: ratio 1.00: Functional Templates in fMRI: Building Accurate and Interpretable Group-Level Decoders | Pierre-Louis Barbarant, Florent Meyniel, Bertrand Thirion | 2026 | bioRxiv (Cold Spring Harbor Laboratory) | doi 10.64898/2026.05.21.726781 | OpenAlex W7162393221 | open access https://doi.org/10.64898/2026.05.21.726781
+Semantic Scholar: ratio 1.00: Functional Templates in fMRI: Building Accurate and Interpretable Group-Level Decoders | Pierre-Louis Barbarant, F. Meyniel, Bertrand Thirion | 2026 | bioRxiv | doi 10.64898/2026.05.21.726781 | Semantic Scholar a7be9d88b1f97a6f7b7df169d4a269bde4ff7811 | open access https://doi.org/10.64898/2026.05.21.726781
+arXiv: left out, the input has no arXiv ID
+Barbarant_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Koch_2026'
+Crossref: ratio 1.00: Probabilistic mouse-human brain correspondence by multimodal optimal transport | Stefan P Koch, Mario Perales, Tanmoy Sil et al. | 2026 | doi 10.64898/2026.08.24.746652
+OpenAlex: ratio 1.00: Probabilistic mouse-human brain correspondence by multimodal optimal transport | Stefan Koch, Mario Perales, Tanmoy Sil et al. | 2026 | bioRxiv (Cold Spring Harbor Laboratory) | doi 10.64898/2026.08.24.746652 | OpenAlex W7204455907 | open access https://www.biorxiv.org/content/biorxiv/early/2026/08/27/2026.08.24.746652.full.pdf
+Semantic Scholar: ratio 1.00: Probabilistic mouse<en dash>human brain correspondence by multimodal optimal transport | S. P. Koch, Mario Perales, Tanmoy Sil et al. | 2026 | bioRxiv | doi 10.64898/2026.08.24.746652 | Semantic Scholar 89a6b2770736f3f5515f2ed311b2c4292a92a003 | open access https://www.biorxiv.org/content/biorxiv/early/2026/08/27/2026.08.24.746652.full.pdf
+arXiv: left out, the input has no arXiv ID
+Koch_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Diao_2024'
+Crossref: ratio 1.00: A multi-instance tumor subtype classification method for small PET datasets using RA-DL attention module guided deep feature extraction with radiomics features | Zhaoshuo Diao, Huiyan Jiang | 2024 | Computers in Biology and Medicine | doi 10.1016/j.compbiomed.2024.108461
+OpenAlex: ratio 1.00: A multi-instance tumor subtype classification method for small PET datasets using RA-DL attention module guided deep feature extraction with radiomics features | Zhaoshuo Diao, Huiyan Jiang | 2024 | Computers in Biology and Medicine | doi 10.1016/j.compbiomed.2024.108461 | OpenAlex W4394602543
+Semantic Scholar: ratio 1.00: A multi-instance tumor subtype classification method for small PET datasets using RA-DL attention module guided deep feature extraction with radiomics features | Zhao-Shuo Diao, Hui-Yan Jiang | 2024 | Comput. Biol. Medicine | doi 10.1016/j.compbiomed.2024.108461 | Semantic Scholar 02f269347bc41db4fb65f47f12955ec92c28d013
+arXiv: left out, the input has no arXiv ID
+Diao_2024: CONFIRMED against Crossref, ratio 1.00, year 2024
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Winzell_2025'
+Crossref: ratio 1.00: Longitudinal outcome prediction of prostate cancer patients on active surveillance using multiple instance learning | Filip Winzell, Ida Arvidsson, Kalle <latin capital letter a with ring above>str<latin small letter o with diaeresis>m et al. | 2025 | Journal of Medical Imaging | doi 10.1117/1.jmi.12.6.061408
+OpenAlex: ratio 1.00: Longitudinal outcome prediction of prostate cancer patients on active surveillance using multiple instance learning | Filip Winzell, Ida Arvidsson, Kalle <latin capital letter a with ring above>str<latin small letter o with diaeresis>m et al. | 2025 | Journal of medical imaging | doi 10.1117/1.jmi.12.6.061408 | OpenAlex W4415176437 | open access https://www.spiedigitallibrary.org/journals/journal-of-medical-imaging/volume-12/issue-6/061408/Longitudinal-outcome-prediction-of-prostate-cancer-patients-on-active-surveillance/10.1117/1.JMI.12.6.061408.pdf
+Semantic Scholar: ratio 1.00: Longitudinal outcome prediction of prostate cancer patients on active surveillance using multiple instance learning | Filip Winzell, Ida Arvidsson, Kalle <latin capital letter a with ring above>str<latin small letter o with diaeresis>m et al. | 2025 | Journal of Medical Imaging | doi 10.1117/1.JMI.12.6.061408 | Semantic Scholar 1ee72e6a7536768c2bffe071c51a042803ddc9c1 | open access https://www.spiedigitallibrary.org/journals/journal-of-medical-imaging/volume-12/issue-6/061408/Longitudinal-outcome-prediction-of-prostate-cancer-patients-on-active-surveillance/10.1117/1.JMI.12.6.061408.pdf
+arXiv: left out, the input has no arXiv ID
+Winzell_2025: CONFIRMED against Crossref, ratio 1.00, year 2025
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Xia_2024'
+Crossref: ratio 1.00: Multicenter Evaluation of a Weakly Supervised Deep Learning Model for Lymph Node Diagnosis in Rectal Cancer at MRI | Wei Xia, Dandan Li, Wenguang He et al. | 2024 | Radiology: Artificial Intelligence | doi 10.1148/ryai.230152
+OpenAlex: ratio 1.00: Multicenter Evaluation of a Weakly Supervised Deep Learning Model for Lymph Node Diagnosis in Rectal Cancer at MRI | Wei Xia, Dandan Li, Wenguang He et al. | 2024 | Radiology Artificial Intelligence | doi 10.1148/ryai.230152 | OpenAlex W4391811185 | open access https://doi.org/10.1148/ryai.230152
+Semantic Scholar: ratio 1.00: Multicenter Evaluation of a Weakly Supervised Deep Learning Model for Lymph Node Diagnosis in Rectal Cancer at MRI | W. Xia, Dandan Li, Wen-Guang He et al. | 2024 | Radiology: Artificial Intelligence | doi 10.1148/ryai.230152 | Semantic Scholar ebe930b4b77f018c6a838700c91486e0ae300777 | open access https://doi.org/10.1148/ryai.230152
+arXiv: left out, the input has no arXiv ID
+Xia_2024: CONFIRMED against Crossref, ratio 1.00, year 2024
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Gacheva_2026'
+Crossref: ratio 1.00: Multiple instance learning for differentiating neoplastic and non-neoplastic brain lesions using MR spectroscopy | Iskra Gacheva, Diyuan Lu, Gerhard Kurz et al. | 2026 | NeuroImage: Reports | doi 10.1016/j.ynirp.2026.100418
+OpenAlex: ratio 1.00: Multiple instance learning for differentiating neoplastic and non-neoplastic brain lesions using MR spectroscopy | Iskra Gacheva, Diyuan Lu, Gerhard Kurz et al. | 2026 | Neuroimage Reports | doi 10.1016/j.ynirp.2026.100418 | OpenAlex W7222783581 | open access https://doi.org/10.1016/j.ynirp.2026.100418
+Semantic Scholar: ratio 1.00: Multiple instance learning for differentiating neoplastic and non-neoplastic brain lesions using MR spectroscopy | Iskra Gacheva, D. Lu, G. Kurz et al. | 2026 | Neuroimage: Reports | doi 10.1016/j.ynirp.2026.100418 | Semantic Scholar ed0adae582beda0105d9ca40c6bef68c84ae3b42 | open access https://doi.org/10.1016/j.ynirp.2026.100418
+arXiv: left out, the input has no arXiv ID
+Gacheva_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
+$ python3 skills/paper/templates/lookup.py resolve --entry '/private/tmp/claude-502/-Users-axelfaes-workspace-ordo/3998c800-ada6-47cd-b275-1266deb72cda/scratchpad/gate5/lit-review-1/paper-runs/lit-review-2026-11-15/refs.bib' 'Li_2026'
+Crossref: ratio 1.00: Revisiting Dual-Encoder Fusion and Optimal Transport Regularization in PET-CT Tumor Segmentation: A Matched-Control Study under Extended Training | Man Li, Yongwei Tang, Xiaoqing Zhao et al. | 2026 | AI Medicine | doi 10.53941/aim.2026.100012
+OpenAlex: ratio 1.00: Revisiting Dual-Encoder Fusion and Optimal Transport Regularization in PET-CT Tumor Segmentation: A Matched-Control Study under Extended Training | Man Li, Yongwei Tang, Xiaoqing Zhao et al. | 2026 | AI medicine. | doi 10.53941/aim.2026.100012 | OpenAlex W7224948766 | open access https://media.sciltp.com/articles/2610005423/2610005423.pdf
+Semantic Scholar: ratio 1.00: Revisiting Dual-Encoder Fusion and Optimal Transport Regularization in PET-CT Tumor Segmentation: A Matched-Control Study under Extended Training | Man Li, Yong-Wei Tang, Xiao-Qing Zhao et al. | 2026 | AI Medicine | doi 10.53941/aim.2026.100012 | Semantic Scholar dea1ecf1150f7ec2a70c87648f51777c68c5f3de | open access https://media.sciltp.com/articles/2610005423/2610005423.pdf
+arXiv: left out, the input has no arXiv ID
+Li_2026: CONFIRMED against Crossref, ratio 1.00, year 2026
+exit status: 0
+
