@@ -1,0 +1,442 @@
+{
+ "paths": [
+  [
+   "paper/phase0/paper_configuration_record.md",
+   "run/intake/intake-record.md"
+  ],
+  [
+   "paper/phase0/",
+   "run/intake/"
+  ],
+  [
+   "paper/phase1/",
+   "run/search/"
+  ],
+  [
+   "paper/phase2/",
+   "run/outline/"
+  ],
+  [
+   "paper/phase3/",
+   "run/arguments/"
+  ],
+  [
+   "paper/phase4/",
+   "run/draft/"
+  ],
+  [
+   "paper/phase5/",
+   "run/citations/"
+  ],
+  [
+   "paper/phase6/",
+   "run/review/"
+  ],
+  [
+   "paper/",
+   "run/"
+  ],
+  [
+   "phase4a_output.md",
+   "writer-plan.md"
+  ],
+  [
+   "phase4b_round1_output.md",
+   "writer-draft-round1.md"
+  ],
+  [
+   "phase4b_output.md",
+   "writer-draft.md"
+  ],
+  [
+   "phase6a_output.md",
+   "reviewer-plan.md"
+  ],
+  [
+   "phase6b_round1.md",
+   "reviewer-round1.md"
+  ],
+  [
+   "phase6b_round2.md",
+   "reviewer-round2.md"
+  ],
+  [
+   "config.md",
+   "settings.md"
+  ]
+ ],
+ "text": [
+  [
+   "/private/tmp/claude-502/[^\\s'\\\"`)]*?/gate5/full-[12]",
+   "/work"
+  ],
+  [
+   "/Users/axelfaes/\\.claude/projects/[^\\s`'\\\"]*",
+   "<the session's tool folder>"
+  ],
+  [
+   "/private/tmp/claude-502/-private-tmp-claude-502[^\\s`'\\\"]*",
+   "<the session's tool folder>"
+  ],
+  [
+   "/var/folders/[^\\s`'\\\"]*",
+   "<a temporary folder>"
+  ],
+  [
+   "Effort agent: `?ordo-high`?\\.",
+   "Agent effort: high."
+  ],
+  [
+   "`?ordo-high`?",
+   "a high-effort agent"
+  ],
+  [
+   "through the agents of the academic-paper skill",
+   "through AI agents"
+  ],
+  [
+   "What the agents of the academic-paper skill did",
+   "What the AI agents did"
+  ],
+  [
+   "AI agents of the academic-paper skill \\(Claude\\)",
+   "AI agents (Claude)"
+  ],
+  [
+   "paper/phase0/paper_configuration_record\\.md",
+   "run/intake/intake-record.md"
+  ],
+  [
+   "paper_configuration_record\\.md",
+   "intake-record.md"
+  ],
+  [
+   "paper/phase0",
+   "run/intake"
+  ],
+  [
+   "paper/phase1",
+   "run/search"
+  ],
+  [
+   "paper/phase2",
+   "run/outline"
+  ],
+  [
+   "paper/phase3",
+   "run/arguments"
+  ],
+  [
+   "paper/phase4",
+   "run/draft"
+  ],
+  [
+   "paper/phase5",
+   "run/citations"
+  ],
+  [
+   "paper/phase6",
+   "run/review"
+  ],
+  [
+   "`paper/",
+   "`run/"
+  ],
+  [
+   "(?<![A-Za-z_/.-])paper/(?=[a-z])",
+   "run/"
+  ],
+  [
+   "phase4a_output\\.md",
+   "writer-plan.md"
+  ],
+  [
+   "phase4b_round1_output\\.md",
+   "writer-draft-round1.md"
+  ],
+  [
+   "phase4b_output\\.md",
+   "writer-draft.md"
+  ],
+  [
+   "phase6a_output\\.md",
+   "reviewer-plan.md"
+  ],
+  [
+   "phase6b_round1\\.md",
+   "reviewer-round1.md"
+  ],
+  [
+   "phase6b_round2\\.md",
+   "reviewer-round2.md"
+  ],
+  [
+   "\\b[Cc]onfig\\.md",
+   "settings.md"
+  ],
+  [
+   "# Run configuration and decisions: academic-paper full mode",
+   "# Run configuration and decisions"
+  ],
+  [
+   ", then draft via the `academic-paper` skill\\.",
+   ", then draft the paper."
+  ],
+  [
+   " of the `academic-paper` skill",
+   ""
+  ],
+  [
+   " of the academic-paper skill",
+   ""
+  ],
+  [
+   " of `academic-paper`",
+   ""
+  ],
+  [
+   "`academic-pipeline`",
+   "another tool"
+  ],
+  [
+   "academic-pipeline",
+   "another tool"
+  ],
+  [
+   "[Dd]epartures from the skill's own procedure",
+   "departures from the procedure"
+  ],
+  [
+   "`?(?:references/)?writing_quality_check\\.md`?",
+   "the writing-quality checklist"
+  ],
+  [
+   "outside `\\.claude/`",
+   "outside the tool folder"
+  ],
+  [
+   "`phase2_investigation/version_records\\.yaml`",
+   "a version-records file"
+  ],
+  [
+   "`?(?:\\.claude/skills/academic-paper/)?(?:agents/)?literature_strategist_agent\\.md`?",
+   "the search agent's instructions"
+  ],
+  [
+   "`?literature_strategist_agent`?",
+   "the search agent"
+  ],
+  [
+   "`?(?:\\.claude/skills/academic-paper/)?(?:agents/)?([a-z_]+)_agent\\.md`?",
+   "the \\1 instructions"
+  ],
+  [
+   "`([a-z_]+)_agent`",
+   "the \\1 agent"
+  ],
+  [
+   "\\b([a-z]+)_([a-z]+)_agent\\b",
+   "\\1 \\2 agent"
+  ],
+  [
+   "\\b([a-z]+)_agent\\b",
+   "\\1 agent"
+  ],
+  [
+   "the ([a-z]+)_([a-z]+) (instructions|agent)",
+   "the \\1 \\2 \\3"
+  ],
+  [
+   "\\.claude/skills/academic-paper/templates/latex_article_template\\.tex",
+   "the LaTeX article template"
+  ],
+  [
+   "`?(?:references/)?disclosure_mode_protocol\\.md`?",
+   "the disclosure procedure"
+  ],
+  [
+   "`?(?:references/)?([a-z_]+)_mode_protocol(?:\\.md)?`?",
+   "the \\1 procedure"
+  ],
+  [
+   "`?shared/contracts/(writer|evaluator)/full\\.json`?",
+   "the \\1 contract"
+  ],
+  [
+   "academic-paper `?SKILL\\.md`?",
+   "the procedure"
+  ],
+  [
+   "`?SKILL\\.md`?",
+   "the procedure"
+  ],
+  [
+   "the academic-paper skill",
+   "the procedure"
+  ],
+  [
+   "academic-paper",
+   "the procedure"
+  ],
+  [
+   "The skill's",
+   "The procedure's"
+  ],
+  [
+   "the skill's",
+   "the procedure's"
+  ],
+  [
+   "the skill files",
+   "the procedure's files"
+  ],
+  [
+   "the skill scripts",
+   "the procedure's scripts"
+  ],
+  [
+   "skill helper script",
+   "helper script"
+  ],
+  [
+   "Every skill phase",
+   "Every stage"
+  ],
+  [
+   "the skill names",
+   "the procedure names"
+  ],
+  [
+   "The skill lists",
+   "The procedure lists"
+  ],
+  [
+   "Missing skill infrastructure",
+   "Missing procedure files"
+  ],
+  [
+   "Departures from the skill's own procedure",
+   "Departures from the procedure"
+  ],
+  [
+   "the skill",
+   "the procedure"
+  ],
+  [
+   "The skill",
+   "The procedure"
+  ],
+  [
+   "Phase 0",
+   "the intake stage"
+  ],
+  [
+   "Phase 1",
+   "the search stage"
+  ],
+  [
+   "Phase 2",
+   "the outline stage"
+  ],
+  [
+   "Phase 3",
+   "the argument stage"
+  ],
+  [
+   "Phases 4a, 4b",
+   "the writer stages"
+  ],
+  [
+   "Phase 4a",
+   "the writer's plan stage"
+  ],
+  [
+   "Phase 4b",
+   "the writer's draft stage"
+  ],
+  [
+   "Phase 4",
+   "the draft stage"
+  ],
+  [
+   "Phase 5a",
+   "the citation stage"
+  ],
+  [
+   "Phase 5b",
+   "the abstract stage"
+  ],
+  [
+   "Phase 5",
+   "the citation and abstract stage"
+  ],
+  [
+   "Phase 6a",
+   "the reviewer's plan stage"
+  ],
+  [
+   "Phase 6b",
+   "the reviewer's scoring stage"
+  ],
+  [
+   "Phase 6",
+   "the internal review stage"
+  ],
+  [
+   "Phase 7",
+   "the formatting stage"
+  ],
+  [
+   "\\bphase([0-9])\\b",
+   "stage\\1"
+  ],
+  [
+   "GAP-F([0-9])",
+   "GAP-FT\\1"
+  ],
+  [
+   "(GAP-FT[0-9]) to F([0-9])",
+   "\\1 to FT\\2"
+  ],
+  [
+   "\\bF([0-9]) to F([0-9]) name a run",
+   "FT\\1 to FT\\2 name a run"
+  ],
+  [
+   "(?m)^(- \\[[ x]\\]) F([0-9])\\.",
+   "\\1 FM\\2."
+  ],
+  [
+   "\\| F([0-9]) \\| Line",
+   "| CA\\1 | Line"
+  ],
+  [
+   "Citation audit F([0-9])",
+   "Citation audit CA\\1"
+  ],
+  [
+   "flags F([0-9]) to F([0-9])",
+   "flags CA\\1 to CA\\2"
+  ],
+  [
+   "Items F([0-9]) to F([0-9]) are not number errors",
+   "Items CA\\1 to CA\\2 are not number errors"
+  ],
+  [
+   "\\bF-condition",
+   "failure-condition"
+  ],
+  [
+   "\\bF([0-9])\\b(?! above| for AF)",
+   "FC\\1"
+  ],
+  [
+   "\\bW([0-9]+)\\b",
+   "WS\\1"
+  ],
+  [
+   "\\bthe the ",
+   "the "
+  ]
+ ]
+}

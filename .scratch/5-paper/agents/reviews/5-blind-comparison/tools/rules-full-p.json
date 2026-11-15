@@ -1,0 +1,258 @@
+{
+ "paths": [
+  [
+   "paper-runs/full-2026-11-14/",
+   "run/"
+  ],
+  [
+   ".patched.apply-report.json",
+   ".result.log.json"
+  ],
+  [
+   ".block-manifest.json",
+   ".blocks.json"
+  ],
+  [
+   ".patch-rejected-",
+   ".edits-rejected-"
+  ],
+  [
+   ".patch.json",
+   ".edits.json"
+  ],
+  [
+   ".patched",
+   ".result"
+  ],
+  [
+   "config.md",
+   "settings.md"
+  ],
+  [
+   "checks.md",
+   "check-log.md"
+  ]
+ ],
+ "text": [
+  [
+   "/private/tmp/claude-502/[^\\s'\\\"`)]*?/gate5/full-[12]",
+   "/work"
+  ],
+  [
+   "/Users/axelfaes/\\.claude/projects/[^\\s`'\\\"]*",
+   "<the session's tool folder>"
+  ],
+  [
+   "/private/tmp/claude-502/-private-tmp-claude-502[^\\s`'\\\"]*",
+   "<the session's tool folder>"
+  ],
+  [
+   "/var/folders/[^\\s`'\\\"]*",
+   "<a temporary folder>"
+  ],
+  [
+   "Effort agent: `?ordo-high`?\\.",
+   "Agent effort: high."
+  ],
+  [
+   "`?ordo-high`?",
+   "a high-effort agent"
+  ],
+  [
+   "through the `?/paper`? skill",
+   "through AI agents"
+  ],
+  [
+   "python3 '?/Users/axelfaes/\\.claude/skills/paper/templates/lookup\\.py'?",
+   "lookup"
+  ],
+  [
+   "/Users/axelfaes/\\.claude/skills/repo-setup/templates/docs/dev/prose-standard\\.md",
+   "the default prose standard"
+  ],
+  [
+   "/Users/axelfaes/\\.claude/skills/writing/references/manuscript-prose-standard\\.md",
+   "the manuscript prose standard"
+  ],
+  [
+   "/Users/axelfaes/\\.claude/skills/[A-Za-z0-9_./-]*",
+   "<a tool file>"
+  ],
+  [
+   "~/\\.claude/skills/[A-Za-z0-9_./-]*",
+   "<a tool file>"
+  ],
+  [
+   "`anchorize_tex\\.py`",
+   "its anchoring script"
+  ],
+  [
+   "anchorize_tex\\.py",
+   "the anchoring script"
+  ],
+  [
+   "`apply_tex_patch\\.py`",
+   "its patch script"
+  ],
+  [
+   "apply_tex_patch\\.py",
+   "the patch script"
+  ],
+  [
+   "`prose_facts\\.py`",
+   "the prose-facts script"
+  ],
+  [
+   "prose_facts\\.py",
+   "the prose-facts script"
+  ],
+  [
+   "`lookup\\.py ",
+   "`lookup "
+  ],
+  [
+   "lookup\\.py",
+   "the lookup script"
+  ],
+  [
+   "the `writing` skill's",
+   "the prose review's"
+  ],
+  [
+   "the `writing` skill",
+   "the prose review"
+  ],
+  [
+   "`/writing` review",
+   "prose review"
+  ],
+  [
+   "`/writing`",
+   "prose review"
+  ],
+  [
+   "/writing\\b",
+   "prose review"
+  ],
+  [
+   "## Departures? from the skills",
+   "## Departures from the procedure"
+  ],
+  [
+   "The skill's own tooling",
+   "The run's own tooling"
+  ],
+  [
+   "the skill's bullets",
+   "the procedure's bullets"
+  ],
+  [
+   "anchorized",
+   "anchored"
+  ],
+  [
+   "[Tt]he anchorizer",
+   "The anchoring script"
+  ],
+  [
+   "anchorizer",
+   "anchoring script"
+  ],
+  [
+   "the literature strategist",
+   "the search agent"
+  ],
+  [
+   "The literature strategist",
+   "The search agent"
+  ],
+  [
+   "the strategist",
+   "the search agent"
+  ],
+  [
+   "The strategist",
+   "The search agent"
+  ],
+  [
+   "strategist",
+   "search agent"
+  ],
+  [
+   "paper-runs/full-2026-11-14/",
+   "run/"
+  ],
+  [
+   "paper-runs/",
+   "run/"
+  ],
+  [
+   "full-2026-11-14/?",
+   "run/"
+  ],
+  [
+   "\\.patched\\.apply-report\\.json",
+   ".result.log.json"
+  ],
+  [
+   "\\.block-manifest\\.json",
+   ".blocks.json"
+  ],
+  [
+   "\\.patch-rejected-",
+   ".edits-rejected-"
+  ],
+  [
+   "\\.patch\\.json",
+   ".edits.json"
+  ],
+  [
+   "\\.patched\\b",
+   ".result"
+  ],
+  [
+   "apply-report",
+   "result log"
+  ],
+  [
+   "block-manifest",
+   "block list"
+  ],
+  [
+   "\\b[Cc]onfig\\.md",
+   "settings.md"
+  ],
+  [
+   "\\bchecks\\.md",
+   "check-log.md"
+  ],
+  [
+   "\\bitems\\.md",
+   "issues.md"
+  ],
+  [
+   "\"ars_before\"",
+   "\"before\""
+  ],
+  [
+   "\"ars_after\"",
+   "\"after\""
+  ],
+  [
+   "\"ars_in_blocks\"",
+   "\"in_blocks\""
+  ],
+  [
+   "ars_[a-z_]+",
+   "field"
+  ],
+  [
+   "\\bD([0-9]+)-([0-9]+)\\b",
+   "RI\\1.\\2"
+  ],
+  [
+   "\\bF([0-9]+)\\b(?!\\s+(?:of\\s+[0-9]|score|than|was|among|=|[0-9]))(?<!Macro F1)(?<!average F1)(?<!an F1)(?<!detection F1)(?<!level F1)(?<!component F1)(?<!graph F1)",
+   "K\\1"
+  ]
+ ]
+}

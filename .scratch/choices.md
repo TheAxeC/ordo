@@ -2,7 +2,7 @@
 
 Each choice the orchestrator took under self-rule waits here for the user's review, grouped by roadmap entry. The user agrees with a choice by typing `C<n> Agree`, or replaces it by typing `C<n> => <ruling>`, in any session on the repository. A reviewed choice leaves this file.
 
-Last number: C109
+Last number: C110
 
 # Entry 2.I Several plans in one session
 
@@ -474,4 +474,15 @@ step 5, raised by C14 on the lit-review judges (`.scratch/5-paper/agents/reviews
 
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md:207` (Open item BC, step 5's judges run without `--restricted`)
+Builds on it: step 5
+
+## C110. Item 8's pick of the closing `/writing` findings (2026-11-15)
+
+step 5, raised by `.scratch/5-paper/agents/reviews/5-refuter.md` Spec 2 as open item BE: item 8's revision run took the autonomous writer pass, so D40's one-line pick applied by the draft writer was not run; the user answered that the reply is the orchestrator's under "Step 5's stops answered by the orchestrator".
+  - (a) Run item 8's revision process again on a fresh copy with the same `writing-report.md`, its intake answer saying not to stop except at the reply to the closing `/writing` report, which the orchestrator gives in one line; the draft writer applies each accepted finding or lists it as not applied with its reason. Pro: D40's route is run by the gate. Con: one more revision run.
+  - (b) Record the autonomous pass as item 8's result and the pick route as not checked. Pro: no run. Con: the route a user takes when they answer stays untested before the closing. This is the lazy option.
+  - Recommendation: (a).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md:214` (Open item BE)
 Builds on it: step 5

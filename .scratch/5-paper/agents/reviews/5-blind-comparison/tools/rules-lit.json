@@ -1,0 +1,190 @@
+{
+ "paths": [
+  [
+   "paper-runs/lit-review-2026-11-15/",
+   "run/"
+  ],
+  [
+   "config.md",
+   "settings.md"
+  ],
+  [
+   "phase0_paper_configuration_record.md",
+   "intake-record.md"
+  ],
+  [
+   "phase1_literature/",
+   "search/"
+  ],
+  [
+   "phase7_formatting/",
+   "output/"
+  ]
+ ],
+ "text": [
+  [
+   "/private/tmp/claude-502/[^ \\n\"'}]*?/gate5/lit-review-[12]",
+   "/work"
+  ],
+  [
+   "/Users/axelfaes/\\.claude/skills/repo-setup/templates/docs/dev/prose-standard\\.md \\(standards is empty and docs/dev/prose-standard\\.md does not exist\\)",
+   "the default prose standard"
+  ],
+  [
+   "paper-runs/lit-review-2026-11-15/",
+   "run/"
+  ],
+  [
+   "paper-runs/",
+   "run/"
+  ],
+  [
+   "phase0_paper_configuration_record\\.md",
+   "intake-record.md"
+  ],
+  [
+   "phase1_literature",
+   "search"
+  ],
+  [
+   "phase7_formatting",
+   "output"
+  ],
+  [
+   "config\\.md",
+   "settings.md"
+  ],
+  [
+   "# Final message: /paper lit-review, ",
+   "# Final message, "
+  ],
+  [
+   "/paper lit-review, literature strategist on",
+   "a search agent on"
+  ],
+  [
+   "The literature strategist \\(agent [0-9a-f]+, ordo-high, served model",
+   "The search agent (served model"
+  ],
+  [
+   "Effort agent: ordo-high\\.",
+   "Agent effort: high."
+  ],
+  [
+   "A later resumption of the strategist",
+   "A later resumption of the search agent"
+  ],
+  [
+   "this run's strategist",
+   "this run's search agent"
+  ],
+  [
+   "lookup\\.py",
+   "the lookup script"
+  ],
+  [
+   "`ls \\.claude/skills ~/\\.claude/skills` lists only `academic-paper` under `\\.claude/skills`, and `~/\\.claude/skills` holds code-comments, diagnose, grill, land, ordo-help, ordo-init, paper, plan, plan-orchestration, plan-retro, refute, repo-setup, roadmap, session-retro, spec, synced and writing, none of which is `academic-paper-reviewer`\\.",
+   "no review tool is installed."
+  ],
+  [
+   "The `academic-paper-reviewer` skill is not installed:",
+   "The review tool is not installed:"
+  ],
+  [
+   "`academic-paper-reviewer` skill",
+   "review tool"
+  ],
+  [
+   "academic-paper-reviewer",
+   "review tool"
+  ],
+  [
+   "AI agents of the academic-paper skill \\(Claude\\)",
+   "AI agents (Claude)"
+  ],
+  [
+   "the formatter agent of the same skill",
+   "a formatting agent"
+  ],
+  [
+   "literature_strategist_agent\\.md",
+   "the search agent's instructions"
+  ],
+  [
+   "literature_strategist_agent",
+   "search agent"
+  ],
+  [
+   "intake_agent\\.md",
+   "the intake instructions"
+  ],
+  [
+   "intake_agent",
+   "intake agent"
+  ],
+  [
+   "formatter_agent",
+   "formatting agent"
+  ],
+  [
+   "abstract_bilingual_agent",
+   "abstract agent"
+  ],
+  [
+   "mode_selection_guide\\.md",
+   "the mode guide"
+  ],
+  [
+   "\\| F([1-7]) \\|",
+   "| PM\\1 |"
+  ],
+  [
+   "\\bF([1-7]): (?=[0-9])",
+   "PM\\1: "
+  ],
+  [
+   "\\bF([1-7]) (also returned|limits|confirms)",
+   "PM\\1 \\2"
+  ],
+  [
+   "\\bF1 and F3 confirm",
+   "PM1 and PM3 confirm"
+  ],
+  [
+   "\\| W([1-9]) \\| WebSearch",
+   "| WS\\1 | WebSearch"
+  ],
+  [
+   "Phase 0 Paper Configuration Record",
+   "Intake record"
+  ],
+  [
+   "Paper Configuration Record",
+   "intake record"
+  ],
+  [
+   "(?m)^Phase 1",
+   "The search stage"
+  ],
+  [
+   "(?<=\\. )Phase 1",
+   "The search stage"
+  ],
+  [
+   "Phase 1",
+   "the search stage"
+  ],
+  [
+   "The literature strategist ran as `ordo-high`",
+   "The search agent ran at high effort"
+  ],
+  [
+   "The strategist's",
+   "The search agent's"
+  ],
+  [
+   "the strategist",
+   "the search agent"
+  ]
+ ]
+}
