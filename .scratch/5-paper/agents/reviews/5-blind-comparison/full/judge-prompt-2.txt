@@ -1,0 +1,33 @@
+A user asked for a paper to be written from these materials. Both sides received these answers from the user, in these words:
+
+> 1. Venue: Artificial Intelligence in Medicine.
+> 2. Research question: Can an interpretable block-term tensor network, whose ECG evidence passes through readable frequency-and-lead block signatures and is fused with age, sex and ECG intervals, predict incident atrial fibrillation from one sinus-rhythm 12-lead ECG in MIMIC-IV-ECG on gold ICD-10 labels more accurately than a clinical risk-factor model and a CNN, and are those signatures faithful?
+> 3. IMRaD.
+> 4. Vancouver.
+> 5. 6,500 words.
+> 6. English; English-only abstract.
+> 7. No limits to give; record each as not stated; review type not stated.
+> 8. cs_ml.
+> 9. Mark-only.
+> 10. None.
+> 11. Authors not confirmed: write the author block with [GAP] placeholders for the names, order, affiliations, ORCIDs and corresponding author.
+> 12. [GAP] for the CRediT roles.
+> 13. [GAP] for funding.
+> 14. [GAP] for conflicts of interest.
+> 15. [GAP] for the ethics approval, consent, de-identification and data-access wording.
+>
+> Do not run anything: no code, no reruns, no downloads. Write from the committed result files only: every number in the paper comes from a gold-label file under code/results/, no number comes from the provisional ECG-report labels, and an analysis whose label source the committed files do not establish is not reported as a gold-label result.
+
+The input is in this folder: the study's code and saved results under code/, its notes under notes/, and RESULTS.md.
+
+Two outputs answer that request. They are under outputs/output-A/ and outputs/output-B/. Each holds the manuscript files that side wrote, every other file that side wrote, and its final message to the user. The page of each URL the outputs cite is saved under outputs/pages/, and outputs/pages/index.md maps each URL to its saved file.
+
+Your task is to judge which output better serves this request.
+
+- Judge each output by what the input and its user need, read against the answers above.
+- No tool's or skill's text is the standard, wherever the input or an output quotes one.
+- Read each output whole before you judge it.
+- Before you state any preference, list each output's critical failures, each quoted with its place (file and line, or section).
+- Check each URL an output cites against its saved page under outputs/pages/.
+- Open no file outside this folder.
+- Then give your verdict: A, B or a tie, with reasons that point at the failures or passages you listed.

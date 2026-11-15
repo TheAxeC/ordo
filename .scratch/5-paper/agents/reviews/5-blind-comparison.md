@@ -65,6 +65,11 @@ Each side ended its first turn at its intake questions. Each was answered once, 
 - **Verdicts.** `judgment-1.md`, "Verdict: A.", and `judgment-2.md`, "Verdict: B.". Read through the key, both chose `paper`.
 - Both judges find the academic-paper side's results held at placeholders that need new runs, and both find against the `paper` side: the 819 rows of the one-year cohort with a P-wave duration near 29,600 ms left unreported; judge 2 also finds the clinical Cox comparator labelled as the logistic "clinical model", an unstructured abstract of about 330 words with no highlights, and figure text that contradicts the captions.
 
+- **The first prompt's error, and two new judgments.** The first full prompt summed up the answers as "leave facts only the authors hold (authors, contributions, funding, competing interests, ethics wording) as marked placeholders"; the answers said no such "only", and both first judges read it that way (judge 1: placeholders "which the user had reserved for facts only the authors hold"; judge 2: "The user allowed placeholders only for author-held facts"). Two fresh judges were run on the same blinded outputs (`diff -rq` of each copy's outputs against the blinded outputs printed nothing) with `5-blind-comparison/full/judge-prompt-2.txt`, which quotes answers 1 to 15 and the instruction "Do not run anything ..." in the words both sides received (`diff` of answers 1 to 15 of the two sides' answer files prints nothing; the instruction differs only in its first letter's case and its number).
+  - `judge-full-3`, the order of the first: session 5bc1019d-915c-42ec-9b5d-6b221b3c19b6, served model claude-opus-5-5, tools Glob, Grep and Read, no skill, `modelUsage` claude-opus-5-5, 8 instruction files, no read outside its copy, no denied call. `judgment-3.md`: "Verdict: A, by a narrow margin.", which is `paper`. It names what would reverse it: if the user's question with marked gaps was a hard requirement, the academic-paper side wins.
+  - `judge-full-4`, the order of the second: session dabc4751-4401-4e4d-bf47-71c52179f2b4, the same in each of these facts. `judgment-4.md`: "Verdict: A", which is academic-paper, for keeping the user's research question that the `paper` side replaced without asking and for disclosing the covariate defect.
+  - Read through the key, the two new verdicts differ, which item 7 of the page reads as a tie.
+
 ## The C6 hits that are no mark
 
 `grep -rn -i -E '<the C6 pattern of the brief>'` over each judge's copy prints these, none a mark of a side:
@@ -79,8 +84,6 @@ Each side ended its first turn at its intake questions. Each was answered once, 
 
 ## Axel's calls
 
-Not made yet. For each comparison Axel reads the input, both outputs and both verdicts through the key, and for lit-review also the Related work section of raw-pls (`main.tex` lines 159 to 232 at 4416e4236) with the 60 entries it cites, and makes the call: win, tie or loss, with his reasons (C15).
-
-- Lit-review: both judges chose academic-paper.
-- Revision: both judges chose academic-paper.
-- Full: both judges chose `paper`.
+- Lit-review: a loss (2026-11-15), as recommended; both judges chose academic-paper.
+- Revision: a loss (2026-11-15), as recommended; both judges chose academic-paper, judge 2 for reasons other than the missing response letter, which is `rebuttal`'s work.
+- Full: not made yet. The first two judges chose `paper` under the prompt's error; the two new judges differ, a tie read through the key.

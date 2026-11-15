@@ -22,3 +22,5 @@ Given to no judge. "new" is the `paper` side, "old" the academic-paper side.
 - Output: `new is A`
 - First judge (`judge-full-1`): output-A is `paper`, output-B is academic-paper.
 - Second judge (`judge-full-2`), the order swapped: output-A is academic-paper, output-B is `paper`.
+- Third judge (`judge-full-3`), the prompt quoting the answers word for word, the order of the first: output-A is `paper`, output-B is academic-paper.
+- Fourth judge (`judge-full-4`), the same prompt, the order of the second: output-A is academic-paper, output-B is `paper`.
