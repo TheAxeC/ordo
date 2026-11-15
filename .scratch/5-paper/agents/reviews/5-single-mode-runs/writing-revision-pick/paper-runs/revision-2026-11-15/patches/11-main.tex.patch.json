@@ -1,0 +1,53 @@
+{
+  "schema": "tex_revision_patch/1",
+  "base_file": "main.tex",
+  "base_sha256": "edfcc221b15578e9c1772cb8cb29ebe0eff29870afc4c1e8467e572047d6fd32",
+  "round": 1,
+  "ops": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "old_hash": "3b30c8a3eb2f50932e5f52a002319961471d594e584c6bf047ea18298191cc5c",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "Overfull 4.06pt at lines 92-93: TeX has no hyphenation point in 'dataset', so a discretionary hyphen data\\-set lets the first line of the fourth contribution item break; the wording is unchanged and the item stays inside its revblock.",
+      "new_text": "\\rev{We therefore benchmarked four representation families for unsupervised SR-versus-AF separation (sinus rhythm versus atrial fibrillation), with the controls the original project lacked. The ordering of the representations follows from the class definitions and is not the contribution. SR and AF differ by definition in the regularity of the rhythm, so it is expected that compact hand-crafted features and a large foundation model both recover the split. The benchmark adds what its controls reveal and how the representations behave under deployment stress. The contributions are empirical:}\n\\begin{revblock}\n\\begin{enumerate}\n\\item A clustering benchmark of raw, convolutional autoencoder (conv-AE), hand-crafted and two frozen foundation-model representations. It is chance-corrected and significance-tested, and it is patient-grouped: every record of a patient stays in one fold. A supervised classifier trained on each representation sets its supervised ceiling, against which its clustering is read. The ordering is shown stable across the assumed number of clusters.\n\\item Two reproducible methodological cautions that explain the original project's misleading numbers. Internal validity indices, which score a partition from the data alone without labels, reward the degenerate one-cluster solution. Feature scaling, the per-feature transformation applied before clustering, changes the result by a wide margin.\n\\item A deployment comparison under two independent stressors: heavy class imbalance, and federation across sites that differ sharply in arrhythmia prevalence. The 16 hand-crafted features overtake ECGFounder, the stronger foundation model on balanced data, under imbalance. Across the federated sites they keep a larger share of the adjusted Rand index (ARI) they reach without federation than either foundation model does.\n\\item A generalization check on a MIT-BIH beat-morphology task, the data\\-set the closest prior benchmark omits.\n\\end{enumerate}\n\\end{revblock}\n\\rev{We propose no new method, and we credit the separability-versus-clusterability phenomenon to prior work. Every statement about a foundation model is scoped to the two models tested, for the reasons given in Section~\\ref{sec:discussion}.}"
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0044",
+      "old_hash": "ff36cce99aad3bbcc2a7090d828cd24c5e7bdcc4ae2b4dedf512cb2a180f7b3b",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "Overfull 83.59pt at lines 230-241: the tabular of Table tab:main is set in \\footnotesize with \\tabcolsep 4pt, no outer column padding, and the header 'sup. ceiling' on two lines; every value, header and label is unchanged.",
+      "new_text": "\\begin{table}[t]\n\\centering\n\\caption{PTB-XL SR-vs-AF: clustering ARI (power scaling) and the\nsupervised ceiling (patient-grouped logistic-regression accuracy). \\rev{The $k$-means, spectral\nand Gaussian-mixture columns are means over ten seeds, and the agglomerative and HDBSCAN columns\nare single deterministic fits.} Majority-class baseline\n0.504\\rev{, random} ARI $\\approx 0$. \\rev{Patient-bootstrap intervals on the best clusterer of each\nrepresentation: ECGFounder 0.885 [0.860, 0.909], hand-crafted 0.711 [0.677, 0.746], HuBERT-ECG\n0.195 [0.166, 0.227], raw-flatten 0.013 [0.007, 0.019] and conv-AE 0.008 [0.002, 0.016]. Only\nthe raw-flatten and conv-AE intervals overlap. Seed variation is the smaller of the two\nquantities: across the ten seeds the $k$-means solutions move by less than 0.002 in ARI and are\nidentical for the hand-crafted and HuBERT-ECG matrices, the Gaussian mixture is the one\nseed-sensitive clusterer (seed standard deviation 0.013 on raw-flatten and 0.012 on\nECGFounder), and the agglomerative and HDBSCAN columns have no seed interval.}\nAll adjacent $k$-means contrasts are significant at $p=0.002$ (paired Wilcoxon, the ten-seed\nfloor). The ordering holds for $K=2$ to $8$ under adjusted mutual information.}\n\\label{tab:main}\n\\footnotesize\n\\setlength{\\tabcolsep}{4pt}\n\\begin{tabular}{@{}lcccccc@{}}\n\\toprule\n & & & & & & sup. \\\\\nRepresentation & $k$-means & agglom. & spectral & GMM & HDBSCAN & ceiling \\\\\n\\midrule\nraw-flatten ($\\sim$2000-d) & 0.000 & 0.000 & 0.000 & 0.013 & 0.000 & 0.519 \\\\\nconv-AE (32-d)             & 0.004 & 0.008 & 0.001 & 0.005 & 0.000 & 0.678 \\\\\nhand-crafted (16-d)        & 0.644 & \\textbf{0.711} & 0.672 & 0.544 & 0.060 & 0.942 \\\\\nHuBERT-ECG (768-d)         & 0.174 & 0.134 & 0.016 & 0.195 & 0.000 & 0.899 \\\\\nECGFounder (1024-d)        & \\textbf{0.885} & 0.709 & 0.860 & 0.851 & 0.137 & 0.983 \\\\\n\\bottomrule\n\\end{tabular}\n\\end{table}"
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0063",
+      "old_hash": "5e78dd105d73a7d39b377e8c60ae9b4af414fa32f97b443b94b4390406c8e5b7",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "Overfull 29.06pt at lines 314-323: the three representation headers of Table tab:mitbih are set on two lines, name above dimension; every value, header and label is unchanged.",
+      "new_text": "\\begin{table}[t]\n\\centering\n\\caption{MIT-BIH N-vs-V beat morphology: clustering ARI (power scaling). \\rev{The $k$-means\nand Gaussian-mixture rows are means over ten seeds, and the agglomerative row is a single\ndeterministic fit.}\nSupervised ceilings: beat-morphology 0.925, conv-AE 0.927, raw-beat 0.741. \\rev{The 12-lead\nfoundation-model versions used were not applied to the 2-lead beats.}}\n\\label{tab:mitbih}\n\\begin{tabular}{lccc}\n\\toprule\n & beat-morphology & conv-AE & raw-beat \\\\\nClusterer & (21-d) & (32-d) & ($\\sim$400-d) \\\\\n\\midrule\n$k$-means     & 0.750 & 0.110 & 0.018 \\\\\nagglomerative & \\textbf{0.783} & 0.071 & 0.049 \\\\\nGMM           & 0.679 & 0.127 & 0.018 \\\\\n\\bottomrule\n\\end{tabular}\n\\end{table}"
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "old_hash": "e2c8364273bd027a6379f8dd8edbb3ba8390e1e80ca8d1358ff1bcca49d83ef1",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "Overfull 0.47pt at lines 329-330: 'every' becomes 'each' in the opening sentence, which shortens the first line by about 4pt with the same meaning; every number is unchanged and the paragraph stays inside its \\rev.",
+      "new_text": "\\rev{Non-IID site heterogeneity reduced the ARI of each representation whose centralized ARI is above zero, and it did so unequally. Under IID federation across ten sites every representation retained essentially its centralized ARI, which validates the federated procedure (Table~\\ref{tab:fed} and Fig.~\\ref{fig:fed}). Under non-IID federation the hand-crafted features retained 92\\% of their centralized ARI (0.644 to 0.591), while the ARI of ECGFounder fell from 0.885 to 0.612. The two means were close, 0.612 against 0.591, and they did not carry the same risk. Across the ten redrawn site partitions the seed bootstrap interval of the hand-crafted features was [0.546, 0.631] and their worst single partition still returned 0.455. The interval of ECGFounder was [0.382, 0.796], and three of its ten partitions fell to 0.132 or below, one of them to chance. This study takes the worst site draw as its deployment criterion, because a deployment meets a single site partition, and the mean over ten draws does not show how low that partition can fall. On that criterion the hand-crafted features retained more of their clustering ARI than ECGFounder under simulated site heterogeneity on PTB-XL.}"
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "old_hash": "af5438a05ed7853e9ecfee03b5e2529372f7f174fb746e3ac2ea8a1d37e1038e",
+      "roadmap_item_ids": ["compile-fix"],
+      "rationale": "Overfull 14.60pt at lines 336-346: the headers 'federated IID' and 'federated non-IID' of Table tab:fed are set on two lines; every value, header and label is unchanged.",
+      "new_text": "\\begin{table}[t]\n\\centering\n\\caption{\\rev{Federated clustering:} mean ARI over ten seeds and ten simulated sites.\nRetention is the ratio of non-IID to centralized ARI.}\n\\label{tab:fed}\n\\begin{tabular}{lcccc}\n\\toprule\n & & federated & federated & \\\\\nRepresentation & centralized & IID & non-IID & retention \\\\\n\\midrule\nECGFounder   & 0.885 & 0.885 & 0.612 & 0.69 \\\\\nhand-crafted & 0.644 & 0.643 & 0.591 & \\textbf{0.92} \\\\\nHuBERT-ECG   & 0.174 & 0.172 & 0.106 & 0.61 \\\\\nraw-flatten  & 0.000 & 0.000 & 0.000 & N/A \\\\\n\\bottomrule\n\\end{tabular}\n\\end{table}"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "edfcc221b15578e9c1772cb8cb29ebe0eff29870afc4c1e8467e572047d6fd32",
+  "round": 1,
+  "n_blocks": 91,
+  "n_blocks_touched": 5,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull 4.06pt at lines 92-93: TeX has no hyphenation point in 'dataset', so a discretionary hyphen data\\-set lets the first line of the fourth contribution item break; the wording is unchanged and the item stays inside its revblock.",
+      "chars_before": 2234,
+      "chars_after": 2236
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0044",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull 83.59pt at lines 230-241: the tabular of Table tab:main is set in \\footnotesize with \\tabcolsep 4pt, no outer column padding, and the header 'sup. ceiling' on two lines; every value, header and label is unchanged.",
+      "chars_before": 1827,
+      "chars_after": 1890
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0063",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull 29.06pt at lines 314-323: the three representation headers of Table tab:mitbih are set on two lines, name above dimension; every value, header and label is unchanged.",
+      "chars_before": 701,
+      "chars_after": 711
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0066",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull 0.47pt at lines 329-330: 'every' becomes 'each' in the opening sentence, which shortens the first line by about 4pt with the same meaning; every number is unchanged and the paragraph stays inside its \\rev.",
+      "chars_before": 1201,
+      "chars_after": 1200
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0067",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Overfull 14.60pt at lines 336-346: the headers 'federated IID' and 'federated non-IID' of Table tab:fed are set on two lines; every value, header and label is unchanged.",
+      "chars_before": 539,
+      "chars_after": 551
+    }
+  ],
+  "blocks_untouched": 86,
+  "roadmap_items_covered": [
+    "compile-fix"
+  ],
+  "block_touched_ratio": 0.0549,
+  "preserved_ratio": 0.9451,
+  "char_churn_ratio": 0.2101,
+  "net_growth_chars": 86,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/11-main.tex.patched",
+  "output_sha256": "566fa6f2069242a9651f7b497436bfc3f8953e2565568d31eb1464c32b6fa17b"
+}

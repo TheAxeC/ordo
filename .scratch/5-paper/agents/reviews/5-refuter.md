@@ -247,3 +247,4 @@ Step 5 runs inline, so each finding is fixed in the step's records by the orches
 - Standards 1: fixed; the report ends with every file changed and its line counts.
 - Standards 2: fixed; the ruling reads "Open item BC (2026-11-15): step 5's judges run without `--restricted`", and the Closed items log BC as closed under self-rule, C109.
 - Behaviour 1: fixed; the state file's position names step 5's end state, step 5.A and open items BD to BF, and the Closed items log the rulings of 2026-11-15.
+- After the rulings of 2026-11-15: Spec 1 closed by open item BD (a), the pass counted as part of the `paper` run; Spec 2 closed by open item BE, item 8 run again as single-6 with the orchestrator's one-line pick, and the report books item 8 DONE (`5-single-mode-runs.md`, "The one-line pick"); Spec 3 closed by open item BF (a), the seven scripts kept in `5-blind-comparison/tools/` and their outputs standing.

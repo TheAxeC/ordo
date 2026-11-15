@@ -1,0 +1,29 @@
+510:Overfull \hbox (4.05612pt too wide) in paragraph at lines 92--93
+511-[]\T1/cmr/m/n/10.95 A gen-er-al-iza-tion check on a MIT-BIH beat-morphology tas
+512-k, the dataset
+513- []
+514-
+--
+540:Overfull \hbox (83.58578pt too wide) in paragraph at lines 230--241
+541- [][] 
+542- []
+543-
+544-<figures/fig1_ari_heatmap.pdf, id=219, 490.00963pt x 258.7104pt>
+--
+574:Overfull \hbox (29.06076pt too wide) in paragraph at lines 314--323
+575- [][] 
+576- []
+577-
+578-
+--
+581:Overfull \hbox (0.46765pt too wide) in paragraph at lines 329--330
+582-[][]\T1/cmr/m/n/10.95 Non[]-[]IID[] [][][]site[] [][][]het[]-[]ero[]-[]gene[]-[
+583-]ity[] [][][]re[]-[]duced[] [][][]the[] [][][]ARI[] [][][]of[] [][][]ev[]-[]ery
+584-[] [][][]rep[]-[]re[]-[]sen[]-[]ta[]-[]tion[] [][][]whose[]
+585- []
+--
+588:Overfull \hbox (14.59796pt too wide) in paragraph at lines 336--346
+589- [][] 
+590- []
+591-
+592-<figures/fig4_federated.pdf, id=450, 421.80272pt x 282.46214pt>

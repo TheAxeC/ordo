@@ -1,0 +1,46 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "a5923df837d954d4e01fdae520d652cf36b7949752d2ae4040fe73b6a93276d3",
+  "round": 1,
+  "n_blocks": 93,
+  "n_blocks_touched": 2,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Removes the 1.74 pt overfull vbox of the shaded box at line 90 by marking each contribution with \\rev instead of a snugshade revblock, and removes the 4.76 pt overfull hbox at lines 87--88 by rewording 'a 9:1 SR:AF class imbalance' to 'a class imbalance of 9:1 SR:AF' so the first line has break points; 'data\\-set' becomes 'database', the term the introduction uses for MIT-BIH, so soul gets no discretionary hyphen; every number, claim and label is kept.",
+      "chars_before": 2419,
+      "chars_after": 2413
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0028",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "compile-fix"
+      ],
+      "rationale": "Removes the 4.84 pt overfull hbox at lines 127--128: 'the' before 'mean-pooled hidden states' lets the first line break before 'states', and matches 'the 1024-d pooled features' later in the sentence; every number, citation and claim is kept, and the item stays inside revblock.",
+      "chars_before": 3473,
+      "chars_after": 3477
+    }
+  ],
+  "blocks_untouched": 91,
+  "roadmap_items_covered": [
+    "compile-fix"
+  ],
+  "block_touched_ratio": 0.0215,
+  "preserved_ratio": 0.9785,
+  "char_churn_ratio": 0.1864,
+  "net_growth_chars": -2,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/14-main.tex.patched",
+  "output_sha256": "7c06b1dccf5c9d02755530c176a0f94b219afb346ef672772cad3f92359e6cd0"
+}

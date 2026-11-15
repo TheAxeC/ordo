@@ -1,0 +1,322 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "052812cc1805de9551672b20ddd49bb0b6e31c277d20826b817d2115aac6d545",
+  "round": 1,
+  "n_blocks": 91,
+  "n_blocks_touched": 22,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V23",
+        "V24",
+        "V28"
+      ],
+      "rationale": "Scopes the abstract's gap to the comparison across representation families with hand-crafted features among them, names the clusterer of 0.885, 0.711 and the federated values, and gives the extraction cost its own sentence.",
+      "chars_before": 2142,
+      "chars_after": 2322
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "V1",
+        "V3"
+      ],
+      "rationale": "States of the closest benchmark only what it says (foundation models compared with one another, separability pooled over 12-lead datasets with PTB-XL among them, no hand-crafted features, no MIT-BIH), and cites the image-model result for the separability-clusterability gap while the dominant-axes sentence stays the authors' own.",
+      "chars_before": 1118,
+      "chars_after": 1185
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "V25"
+      ],
+      "rationale": "Gives the patient-grouped rule and the supervised ceiling in the first contribution in a form of its own, so that it no longer copies the abstract's definitions word for word.",
+      "chars_before": 2245,
+      "chars_after": 2234
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0019",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "V5",
+        "V26"
+      ],
+      "rationale": "Says the contrastive methods preceded the foundation models and describes CLOCS, 3KG and contrastive predictive coding each by what its source holds, names the four families of the study with the foundation models placed among them, and gives the tensor arm its own sentence.",
+      "chars_before": 1639,
+      "chars_after": 1877
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0021",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "V4"
+      ],
+      "rationale": "The source computes the ARI over 12-lead datasets pooled, PTB-XL one of them, and not on PTB-XL alone.",
+      "chars_before": 598,
+      "chars_after": 637
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "V2",
+        "V25"
+      ],
+      "rationale": "Attributes 21 799 records from 18 869 patients to version 1.0.3, the version the availability statement names, gives the descriptor's 21 837 and 18 885 as what the cited paper reports, and states the patient grouping as the cohort's procedure.",
+      "chars_before": 1342,
+      "chars_after": 1464
+    },
+    {
+      "op_id": "OP007",
+      "kind": "replace_block",
+      "block_id": "B0025",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "V13"
+      ],
+      "rationale": "Cites the database for itself and PhysioNet for the route by which it is distributed.",
+      "chars_before": 766,
+      "chars_after": 804
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0027",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "W21",
+        "V6",
+        "V7"
+      ],
+      "rationale": "Drops the claim that a single-lead definition is what suited the two-lead beats, words the Challenge citation as its source states it, and scopes the lead set to the 12-lead versions used, with the reason for leaving the foundation models off MIT-BIH given here once.",
+      "chars_before": 3815,
+      "chars_after": 3828
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "V8"
+      ],
+      "rationale": "The source defines FedAvg for locally trained models, so the federated k-means is described as weighted averaging of the site centroids by analogy with it, without calling it standard.",
+      "chars_before": 1334,
+      "chars_after": 1391
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "W24"
+      ],
+      "rationale": "The random forest shows only that a non-linear readout recovers what the linear probe missed, so the link to misalignment is stated as consistent with it and not as shown.",
+      "chars_before": 937,
+      "chars_after": 1014
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "V9"
+      ],
+      "rationale": "States the off-axis reading as this study's own, tested out of fold, and cites the source only for a comparable gap in self-supervised image models.",
+      "chars_before": 899,
+      "chars_after": 1009
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "W37",
+        "W48"
+      ],
+      "rationale": "Says the fraction 1.00 is rounded to two decimals and bounds the records outside the largest cluster at 12 of 2 542 from that rounding, and gives the paragraph the count of the silhouette panel so that its length follows its own content.",
+      "chars_before": 658,
+      "chars_after": 1087
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "W37"
+      ],
+      "rationale": "Brings the MIT-BIH ceilings of the table caption into the text with what the raw-beat ceiling means, so that the paragraph's length follows its content.",
+      "chars_before": 695,
+      "chars_after": 930
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0063",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "V7"
+      ],
+      "rationale": "Scopes the caption's statement to the 12-lead versions used, since the published ECGFounder also has a single-lead model.",
+      "chars_before": 668,
+      "chars_after": 701
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "section": "Deployment cost",
+      "roadmap_item_ids": [
+        "V28"
+      ],
+      "rationale": "Gives the memory comparison and the absence of learned parameters each its own sentence.",
+      "chars_before": 651,
+      "chars_after": 645
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0073",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "V7",
+        "V27"
+      ],
+      "rationale": "Scopes both lead clauses of the decision rule to the versions tested and joins the cost paragraph to the rule it supports.",
+      "chars_before": 721,
+      "chars_after": 1198
+    },
+    {
+      "op_id": "OP017",
+      "kind": "delete_block",
+      "block_id": "B0074",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "V27"
+      ],
+      "rationale": "The cost paragraph now stands, word for word, at the end of the decision-rule paragraph (OP016).",
+      "chars_before": 415,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0075",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "W21",
+        "V7"
+      ],
+      "rationale": "Scopes the MIT-BIH statement to the foundation-model versions tested and drops single-lead as the reason the hand-crafted design carried over, since the lead set of the 21-dimensional features is not stated.",
+      "chars_before": 615,
+      "chars_after": 611
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0076",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "V10",
+        "V11"
+      ],
+      "rationale": "Describes the source as a benchmark of ECG foundation models that includes a cluster-separability analysis, and cites FedAvg for the weighted averaging the centroid aggregation follows.",
+      "chars_before": 1319,
+      "chars_after": 1390
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0080",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "W41",
+        "V12"
+      ],
+      "rationale": "Names ECG-FM as the model not included that the source reports to separate clinical labels, and moves here the missing MIT-BIH arm, which concerns the coverage of the foundation-model arm.",
+      "chars_before": 622,
+      "chars_after": 835
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0081",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "W41"
+      ],
+      "rationale": "Splits the paragraph by limitation: the binary tasks keep their paragraph, the flutter positives get one of their own, and the MIT-BIH sentence stands in the foundation-model paragraph (OP020).",
+      "chars_before": 1009,
+      "chars_after": 1239
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0085",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "V14"
+      ],
+      "rationale": "Cites PhysioNet for the access route the sentence names.",
+      "chars_before": 307,
+      "chars_after": 334
+    }
+  ],
+  "blocks_untouched": 69,
+  "roadmap_items_covered": [
+    "V1",
+    "V10",
+    "V11",
+    "V12",
+    "V13",
+    "V14",
+    "V2",
+    "V23",
+    "V24",
+    "V25",
+    "V26",
+    "V27",
+    "V28",
+    "V3",
+    "V4",
+    "V5",
+    "V6",
+    "V7",
+    "V8",
+    "V9",
+    "W21",
+    "W24",
+    "W37",
+    "W41",
+    "W48"
+  ],
+  "block_touched_ratio": 0.2418,
+  "preserved_ratio": 0.7582,
+  "char_churn_ratio": 0.853,
+  "net_growth_chars": 2218,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/07-main.tex.patched",
+  "output_sha256": "edfcc221b15578e9c1772cb8cb29ebe0eff29870afc4c1e8467e572047d6fd32"
+}

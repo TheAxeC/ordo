@@ -1,0 +1,516 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/main.tex",
+  "base_sha256": "566fa6f2069242a9651f7b497436bfc3f8953e2565568d31eb1464c32b6fa17b",
+  "round": 1,
+  "n_blocks": 91,
+  "n_blocks_touched": 36,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0010",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "F1",
+        "F4",
+        "F22"
+      ],
+      "rationale": "Abstract: the MIT-BIH sentence states the three MIT-BIH ARIs in place of 'the same ordering' (F4), the imbalance is named as the 9:1 SR:AF ratio with its ARIs (F22), and the raw representation and the chance outcome take the one term used throughout (F1).",
+      "chars_before": 2322,
+      "chars_after": 2474
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F11"
+      ],
+      "rationale": "The one-line summary 'That conclusion is correct, and we make it precise.' is replaced by the plain statement of what the study does with that conclusion.",
+      "chars_before": 800,
+      "chars_after": 858
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F1",
+        "F2",
+        "F3",
+        "F9",
+        "F15",
+        "F22"
+      ],
+      "rationale": "Split into a paragraph on separability and clusterability and one on the closest benchmark (F15); defines linear separability, clusterability and the probe at first use (F1, F2); replaces 'this axis' (F3) and the vague 'differ notably' by what the source reports (F22); takes the one point only the deleted Related-work paragraph held, the source's note on earlier benchmarks (F9); drops 'cluster-separability' (F1).",
+      "chars_before": 1185,
+      "chars_after": 1661
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "Introduction",
+      "roadmap_item_ids": [
+        "F7",
+        "F16",
+        "F22",
+        "F24"
+      ],
+      "rationale": "The two-sentence paragraph after the list joins the paragraph before it (F16); contribution 1 states the stability result with 'we' (F24); contribution 2 names the silhouette as the index measured (F7) and gives the scaling effect by its ARIs (F22); contribution 3 names the 9:1 ratio and the Dirichlet partitioning in place of 'heavy' and 'sharply' (F22); ARI is now defined at its first use in the list.",
+      "chars_before": 2236,
+      "chars_after": 2419
+    },
+    {
+      "op_id": "OP005",
+      "kind": "replace_block",
+      "block_id": "B0019",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F8",
+        "F15",
+        "F24"
+      ],
+      "rationale": "Split the survey of prior representations from the study's own four families (F15); the uncited autoencoder claim is restated from the definition of the reconstruction objective and pointed at the study's conv-AE result (F8); the tensor decision takes 'we' (F24).",
+      "chars_before": 1877,
+      "chars_after": 1923
+    },
+    {
+      "op_id": "OP006",
+      "kind": "replace_block",
+      "block_id": "B0020",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F18"
+      ],
+      "rationale": "The 41-word sentence is split into the definition of the two indices, the reason they are zero for one cluster, and the claim that they are the appropriate headline metrics.",
+      "chars_before": 688,
+      "chars_after": 713
+    },
+    {
+      "op_id": "OP007",
+      "kind": "delete_block",
+      "block_id": "B0021",
+      "section": "Related work",
+      "roadmap_item_ids": [
+        "F1",
+        "F9"
+      ],
+      "rationale": "The 'Closest benchmark' paragraph repeats the Introduction (the benchmark and its omissions), the Results and Limitations (label against dataset grouping) and the supervised-ceiling rationale of the Methods; its one unique point, the source's note on earlier benchmarks, now stands in the Introduction (OP003), and the term 'cluster-separability' goes with it.",
+      "chars_before": 637,
+      "chars_after": 0
+    },
+    {
+      "op_id": "OP008",
+      "kind": "replace_block",
+      "block_id": "B0024",
+      "section": "Data and cohorts",
+      "roadmap_item_ids": [
+        "F24"
+      ],
+      "rationale": "The authors' choice of lead set takes 'we' in place of the passive; the rest of the paragraph is unchanged.",
+      "chars_before": 1464,
+      "chars_after": 1493
+    },
+    {
+      "op_id": "OP009",
+      "kind": "replace_block",
+      "block_id": "B0027",
+      "section": "Representations",
+      "roadmap_item_ids": [
+        "F1",
+        "F4",
+        "F8",
+        "F15",
+        "F22"
+      ],
+      "rationale": "conv-AE item: 'properly specified' and 'collapsed' are replaced by the evidence the Introduction gives for the original model (F4); hand-crafted item: the uncited clinical-convention claim on lead II becomes the study's choice of lead (F8); 'Foundation embeddings' takes the one name of that family (F1); the closing paragraph is split at the lead sets (F15), gives the input lengths 5 s and 10 s in place of 'several seconds' (F22), names raw flattening and the hand-crafted features in place of 'arm' and 'raw vector' and uses 'chance level' (F1), and states the uncited dimensionality point as an untested alternative (F8).",
+      "chars_before": 3828,
+      "chars_after": 4048
+    },
+    {
+      "op_id": "OP010",
+      "kind": "replace_block",
+      "block_id": "B0029",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F16"
+      ],
+      "rationale": "The two-sentence paragraph on tolerances and deterministic fits leaves the end of this block and joins the next paragraph (OP011); the list of clusterers is unchanged.",
+      "chars_before": 1089,
+      "chars_after": 838
+    },
+    {
+      "op_id": "OP011",
+      "kind": "replace_block",
+      "block_id": "B0030",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F16"
+      ],
+      "rationale": "Joins the two sentences on the clusterers' fitting settings to the paragraph on how the encoders were trained and extracted, so that one paragraph gives how every model was fitted.",
+      "chars_before": 582,
+      "chars_after": 840
+    },
+    {
+      "op_id": "OP012",
+      "kind": "replace_block",
+      "block_id": "B0031",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F1",
+        "F16"
+      ],
+      "rationale": "The two-sentence paragraph on units joins the paragraph that introduces the metrics, before the notation list, with its wording unchanged (F16); one sentence defines chance level from the two baselines, so that the one term the text uses for the ARI near zero names both (F1).",
+      "chars_before": 1543,
+      "chars_after": 1679
+    },
+    {
+      "op_id": "OP013",
+      "kind": "replace_block",
+      "block_id": "B0035",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F1",
+        "F20"
+      ],
+      "rationale": "'Sat at the bottom' is replaced by the formal statement of what Table 2 shows, the lowest ARI of the five clusterers or a share of it on each representation (F20); 'the raw ... matrices' names raw flattening (F1).",
+      "chars_before": 926,
+      "chars_after": 983
+    },
+    {
+      "op_id": "OP014",
+      "kind": "replace_block",
+      "block_id": "B0040",
+      "section": "Clustering and evaluation",
+      "roadmap_item_ids": [
+        "F19"
+      ],
+      "rationale": "The global initialisation of the centroids becomes its own sentence placed before the rounds, and the aggregation rule keeps its own sentence; the rest is unchanged.",
+      "chars_before": 1391,
+      "chars_after": 1410
+    },
+    {
+      "op_id": "OP015",
+      "kind": "replace_block",
+      "block_id": "B0043",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1",
+        "F22"
+      ],
+      "rationale": "'Fell on some representations, such as HuBERT-ECG' is replaced by the spectral ARI on HuBERT-ECG against the other two seeded clusterers, the one representation where Table 2 shows the fall (F22); the chance outcome takes the term 'chance level' (F1).",
+      "chars_before": 952,
+      "chars_after": 982
+    },
+    {
+      "op_id": "OP016",
+      "kind": "replace_block",
+      "block_id": "B0044",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1",
+        "F18"
+      ],
+      "rationale": "The 60-word seed sentence of the caption is split into three, and its last clause on the agglomerative and HDBSCAN columns is cut because the caption's second sentence already says they are single fits (F18); 'raw-flatten' in the caption prose becomes 'raw flattening' (F1); the tabular is unchanged.",
+      "chars_before": 1890,
+      "chars_after": 1862
+    },
+    {
+      "op_id": "OP017",
+      "kind": "replace_block",
+      "block_id": "B0046",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1"
+      ],
+      "rationale": "'raw-flatten from conv-AE' takes the one name of the raw representation; the rest is unchanged.",
+      "chars_before": 947,
+      "chars_after": 954
+    },
+    {
+      "op_id": "OP018",
+      "kind": "replace_block",
+      "block_id": "B0047",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1",
+        "F12"
+      ],
+      "rationale": "The '[subject] thus [consequence]' close is rewritten as a 'because' sentence (F12); 'the raw representation' becomes 'raw flattening' (F1).",
+      "chars_before": 532,
+      "chars_after": 524
+    },
+    {
+      "op_id": "OP019",
+      "kind": "replace_block",
+      "block_id": "B0048",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F12"
+      ],
+      "rationale": "'The two foundation models thus did not behave as one category' is rewritten with the difference as subject, keeping the citation and its reading.",
+      "chars_before": 941,
+      "chars_after": 922
+    },
+    {
+      "op_id": "OP020",
+      "kind": "replace_block",
+      "block_id": "B0049",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1",
+        "F3",
+        "F5",
+        "F12",
+        "F17"
+      ],
+      "rationale": "Opening and terms use 'raw flattening' and 'chance level' (F1); the conv-AE sentence names its subject in each clause (F3); the dimensionality of the vector against the cohort size is given as a second possible cause of the linear failure, and the random-forest result is read as consistent with both (F5); the 'thus' sentence is rewritten (F12); the restating close is cut (F17).",
+      "chars_before": 1014,
+      "chars_after": 991
+    },
+    {
+      "op_id": "OP021",
+      "kind": "replace_block",
+      "block_id": "B0051",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1",
+        "F9",
+        "F24"
+      ],
+      "rationale": "The paragraph no longer repeats the ceilings and ARIs of the preceding subsection or the citation of the Introduction (F9); it keeps what only it held, the reference to Fig. 3 and the geometric reading that the out-of-fold test examines, now with 'we' (F24) and with 'chance-level' and 'raw representation' gone (F1).",
+      "chars_before": 1009,
+      "chars_after": 580
+    },
+    {
+      "op_id": "OP022",
+      "kind": "replace_block",
+      "block_id": "B0052",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F1"
+      ],
+      "rationale": "'the raw features' takes the one name of the raw representation, as the finding asks of its other names; the rest is unchanged.",
+      "chars_before": 902,
+      "chars_after": 900
+    },
+    {
+      "op_id": "OP023",
+      "kind": "replace_block",
+      "block_id": "B0054",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F7"
+      ],
+      "rationale": "The general claim that no single direction separates the classes is limited to the one direction tested, the fitted linear discriminant, and hedged.",
+      "chars_before": 745,
+      "chars_after": 816
+    },
+    {
+      "op_id": "OP024",
+      "kind": "replace_block",
+      "block_id": "B0057",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F7"
+      ],
+      "rationale": "'Internal indices misled here' is limited to the silhouette, the one internal index measured, and states what it did; the evidence that follows is unchanged.",
+      "chars_before": 1087,
+      "chars_after": 1150
+    },
+    {
+      "op_id": "OP025",
+      "kind": "replace_block",
+      "block_id": "B0060",
+      "section": "Results",
+      "roadmap_item_ids": [
+        "F5"
+      ],
+      "rationale": "The one untested cause is limited to the hand-crafted features and stated as untested, and the text says that it does not account for the drop of ECGFounder, whose coordinates are not arrhythmic quantities.",
+      "chars_before": 637,
+      "chars_after": 905
+    },
+    {
+      "op_id": "OP026",
+      "kind": "replace_block",
+      "block_id": "B0062",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "F4",
+        "F12",
+        "F17"
+      ],
+      "rationale": "'The ordering of the representations replicated' is replaced by what Table 3 shows for the three representations tested, and the closing sentence states that the conv-AE ranked above the raw beat window there although the two overlapped on PTB-XL (F4); the 'thus' sentence is rewritten (F12); the restating close is cut (F17).",
+      "chars_before": 930,
+      "chars_after": 856
+    },
+    {
+      "op_id": "OP027",
+      "kind": "replace_block",
+      "block_id": "B0065",
+      "section": "Generalization to MIT-BIH beat morphology",
+      "roadmap_item_ids": [
+        "F1",
+        "F8",
+        "F12",
+        "F21"
+      ],
+      "rationale": "The paragraph opens on its point, the imbalance result, and leaves federation to the next paragraph (F21); the uncited partitional-method clause becomes a stated, untested possibility that names no clusterer (F8); the 'thus' sentence is rewritten (F12); 'at chance' takes 'chance level' (F1).",
+      "chars_before": 1142,
+      "chars_after": 1058
+    },
+    {
+      "op_id": "OP028",
+      "kind": "replace_block",
+      "block_id": "B0070",
+      "section": "Deployment cost",
+      "roadmap_item_ids": [
+        "F21"
+      ],
+      "rationale": "The opening sentence now states the cost comparison the paragraph makes, with the table cited at its end, in place of a pointer to the table.",
+      "chars_before": 645,
+      "chars_after": 615
+    },
+    {
+      "op_id": "OP029",
+      "kind": "replace_block",
+      "block_id": "B0073",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F7",
+        "F11",
+        "F17",
+        "F22"
+      ],
+      "rationale": "The rule for imbalanced or siloed data is scoped to the two stress settings tested (F7); 'come within reach' is replaced by 0.711 against 0.885 (F22); the restating close is cut (F17); the evidence for the lead clause moves here from the next paragraph, whose first sentence was a one-line summary covering a second idea (F11).",
+      "chars_before": 1198,
+      "chars_after": 1393
+    },
+    {
+      "op_id": "OP030",
+      "kind": "replace_block",
+      "block_id": "B0074",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F1",
+        "F6",
+        "F11"
+      ],
+      "rationale": "The one-line opener is cut and the lead evidence moved to the decision-rule paragraph, so this paragraph covers one idea and opens on it (F11); the claim on the conv-AE is scoped to the one configuration tested, stated as the study's scope (F6); 'indistinguishable from predicting the majority class' takes 'chance level' (F1).",
+      "chars_before": 611,
+      "chars_after": 602
+    },
+    {
+      "op_id": "OP031",
+      "kind": "replace_block",
+      "block_id": "B0075",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F1",
+        "F9"
+      ],
+      "rationale": "'cluster-separability analysis' and 'hand-crafted axis' take the paper's terms (F1); the one-sentence paragraph on existing tools is removed because it repeats the Introduction and the Methods, and the key sslclustering2025 stays cited in the Introduction (F9).",
+      "chars_before": 1390,
+      "chars_after": 1222
+    },
+    {
+      "op_id": "OP032",
+      "kind": "replace_block",
+      "block_id": "B0076",
+      "section": "Discussion",
+      "roadmap_item_ids": [
+        "F1",
+        "F18"
+      ],
+      "rationale": "'foundation-model axis' and 'foundation arm' take the one name of that family (F1); the 48-word sentence is split into the reason the two models suit a frozen benchmark and the way they differ (F18).",
+      "chars_before": 1117,
+      "chars_after": 1183
+    },
+    {
+      "op_id": "OP033",
+      "kind": "replace_block",
+      "block_id": "B0079",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F1",
+        "F12",
+        "F24"
+      ],
+      "rationale": "The decision not to include other models takes 'we' (F24); the 'thus' sentence becomes a clause of the sentence before it (F12); 'arm' and 'raw representations' take the paper's terms (F1).",
+      "chars_before": 835,
+      "chars_after": 874
+    },
+    {
+      "op_id": "OP034",
+      "kind": "replace_block",
+      "block_id": "B0081",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F8"
+      ],
+      "rationale": "The uncited clinical claim that flutter need not show an irregular rhythm is replaced by what the study can state: its reading rests on AF being defined by an irregular rhythm, and it did not check the flutter records for that irregularity.",
+      "chars_before": 633,
+      "chars_after": 694
+    },
+    {
+      "op_id": "OP035",
+      "kind": "replace_block",
+      "block_id": "B0082",
+      "section": "Limitations",
+      "roadmap_item_ids": [
+        "F22"
+      ],
+      "rationale": "'by a wide margin' is replaced by the largest change the Results report, ECGFounder from 0.866 to 0.093; the rest is unchanged.",
+      "chars_before": 1011,
+      "chars_after": 1091
+    },
+    {
+      "op_id": "OP036",
+      "kind": "replace_block",
+      "block_id": "B0084",
+      "section": "Conclusion",
+      "roadmap_item_ids": [
+        "F1",
+        "F7"
+      ],
+      "rationale": "The imbalance claim is limited to the one ratio tested, 9:1 SR:AF (F7); 'sit at chance' takes 'clustered at chance level' and raw flattening its one name (F1); the federation results move to the past tense of the sentence before them.",
+      "chars_before": 912,
+      "chars_after": 956
+    }
+  ],
+  "blocks_untouched": 55,
+  "roadmap_items_covered": [
+    "F1",
+    "F11",
+    "F12",
+    "F15",
+    "F16",
+    "F17",
+    "F18",
+    "F19",
+    "F2",
+    "F20",
+    "F21",
+    "F22",
+    "F24",
+    "F3",
+    "F4",
+    "F5",
+    "F6",
+    "F7",
+    "F8",
+    "F9"
+  ],
+  "block_touched_ratio": 0.3956,
+  "preserved_ratio": 0.6044,
+  "char_churn_ratio": 1.3483,
+  "net_growth_chars": 819,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/12-main.tex.patched",
+  "output_sha256": "a5923df837d954d4e01fdae520d652cf36b7949752d2ae4040fe73b6a93276d3"
+}

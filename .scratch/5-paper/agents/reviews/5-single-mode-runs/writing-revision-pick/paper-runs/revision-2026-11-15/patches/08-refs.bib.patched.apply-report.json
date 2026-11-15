@@ -1,0 +1,73 @@
+{
+  "result": "applied",
+  "base_file": "../../manuscript/refs.bib",
+  "base_sha256": "77e06786afc4128b15cb0d7756181228a25d29dd1f17c37d3e3ddebe49f9b0d2",
+  "round": 1,
+  "n_blocks": 21,
+  "n_blocks_touched": 4,
+  "ops_applied": [
+    {
+      "op_id": "OP001",
+      "kind": "replace_block",
+      "block_id": "B0015",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V21"
+      ],
+      "rationale": "Adds arXiv 1201.0490, which lookup.py resolve gives for this title and these authors (arXiv and OpenAlex, ratio 1.00), as the entry's working identifier.",
+      "chars_before": 545,
+      "chars_after": 595
+    },
+    {
+      "op_id": "OP002",
+      "kind": "replace_block",
+      "block_id": "B0016",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V22"
+      ],
+      "rationale": "Adds arXiv 1602.05629, which lookup.py resolve gives for this title and these authors (arXiv and OpenAlex, ratio 1.00), as the entry's working identifier.",
+      "chars_before": 400,
+      "chars_after": 453
+    },
+    {
+      "op_id": "OP003",
+      "kind": "replace_block",
+      "block_id": "B0017",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V18"
+      ],
+      "rationale": "Adds arXiv 2005.13249, which lookup.py resolve gives for this title and these authors (arXiv and OpenAlex, ratio 1.00), as the entry's working identifier.",
+      "chars_before": 332,
+      "chars_after": 385
+    },
+    {
+      "op_id": "OP004",
+      "kind": "replace_block",
+      "block_id": "B0018",
+      "section": "frontmatter",
+      "roadmap_item_ids": [
+        "V19"
+      ],
+      "rationale": "Adds arXiv 2106.04452, which lookup.py resolve gives for this title and these authors (arXiv and OpenAlex, ratio 1.00), as the entry's working identifier.",
+      "chars_before": 386,
+      "chars_after": 439
+    }
+  ],
+  "blocks_untouched": 17,
+  "roadmap_items_covered": [
+    "V18",
+    "V19",
+    "V21",
+    "V22"
+  ],
+  "block_touched_ratio": 0.1905,
+  "preserved_ratio": 0.8095,
+  "char_churn_ratio": 0.429,
+  "net_growth_chars": 209,
+  "structural_flags": [],
+  "structural_acknowledged": false,
+  "output_file": "patches/08-refs.bib.patched",
+  "output_sha256": "0d7c7f59c10b349a889169fe0e04ea0734f6fbdbac4d51fdce86fdcdb41aeaa2"
+}

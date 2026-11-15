@@ -1,23 +1,10 @@
 # Report: step 5 of plan 5, the gate's comparisons
 
-NOT done: C15, since Axel called lit-review and revision losses and full a tie; C8, since three entries of the lit-review `refs.bib` (Kolda_2009, Agueh_2011, Bonneel_2016) do not resolve. Both are handed to step 5.A by the rulings "The calls and the repair's scope" and "The full call" (`plan.md` Rulings). Item 8's route, Axel's one-line pick of the closing `/writing` findings, was not run (open item BE). The `/writing` findings applied inside the revision and full comparisons (open item BD) and the scripts written for the step with no approving ruling (open item BF) wait on Axel's rulings, and nothing those scripts produced is used until then. Everything else in the brief is done.
+NOT done: C15, since Axel called lit-review and revision losses and full a tie; C8, since three entries of the lit-review `refs.bib` (Kolda_2009, Agueh_2011, Bonneel_2016) do not resolve. Both are handed to step 5.A by the rulings "The calls and the repair's scope" and "The full call" (`plan.md` Rulings). Item 8's route, a one-line pick of the closing `/writing` findings applied by the draft writer, was run in single-6 under open item BE. Open items BD and BF are ruled (a), so the `/writing` pass inside the revision and full comparisons counts as part of the `paper` run and the outputs of the seven scripts stand. Everything else in the brief is done.
 
 ## Open items of the state file
 
-Verbatim from `.scratch/5-paper/orchestrator-state.md`, "Open items":
-
-- Open item BD (2026-11-15), raised by `agents/reviews/5-refuter.md` Spec 1: the revision and the full `paper` sides took the autonomous writer pass at the reply to their closing `/writing` report, under the answer's last sentence ("From here on, do not stop for a choice whose recommendation you would take ..."), so the `/writing` findings were applied inside the comparison (revision patch 15, full patch 26) and judged with them; the brief's item 4 has the findings applied only in item 8, and its Decision 7 gives neither side a further pass the other did not. The lit-review side has no `/writing` review. The calls stand as revision a loss and full a tie with the pass in.
-  - (a) Count the pass as part of the `paper` run: it is the skill's own last step, the one `SKILL.md` Steps 13 takes when the user says not to stop, so the outputs as judged are what `paper` gives that user; the calls stand, and step 5.A's reruns give the same answers, so the pass runs again and the record says so. Pro: the comparison measures the whole `paper` run for the answers both sides got. Con: it sets aside the brief's item 4 and Decision 7, which is a change of a ruling you approved.
-  - (b) Take the pass out: rejudge revision and full on the outputs before patches 15 and 26, and end the `paper` sides of 5.A's reruns at the closing report. Pro: it keeps item 4 and Decision 7 as written. Con: it judges a `paper` run cut before its own last step, which no user who said not to stop would get, and it needs the outputs before the pass rebuilt from the patches and four fresh judges.
-  - Recommendation: (a), as a judgment, since the pass is part of what `paper` does for these answers and it could only help the `paper` side, whose calls are a loss and a tie with it. The lazy option was leaving the pass unstated in the record, which the record now states.
-- Open item BE (2026-11-15), raised by `agents/reviews/5-refuter.md` Spec 2: item 8's route, your one-line pick of the closing `/writing` findings applied by the draft writer (D40, open item E), was never run: single-5's answer ended with the no-stop sentence, so the run took the autonomous writer pass in place of your pick. Your adopted reading covers the pass, not the pick.
-  - (a) Run item 8's revision process again on a fresh copy of the same input with the same `writing-report.md`, its intake answer saying not to stop for a choice whose recommendation it would take except the reply to the closing `/writing` report; you then answer that report in one line, the draft writer applies each finding you accept or lists it as not applied with its reason, and you read the diff and the apply reports. Pro: D40's route is checked by the gate as the brief asks. Con: one more revision run, about an hour, and your reading of about 40 findings.
-  - (b) Record the autonomous pass as item 8's result and D40's pick as not checked. Pro: no run and no reading. Con: the route a user takes when they do answer stays untested before the closing. This is the lazy option.
-  - Recommendation: (a).
-- Open item BF (2026-11-15), raised by `agents/reviews/5-refuter.md` Spec 3: seven scripts in the session's scratchpad `tools/` were written for step 5 with no approving ruling: `blind.py` (rewrites each side mark by the rules of `rules-lit.json`, `rules-rev.json`, `rules-full-p.json` and `rules-full-q.json`, which `mk-rules-full.py` writes), `to_charset.py` (writes each character outside the rules file's set by its name in angle brackets), `resolve_all.py` (runs `lookup.py resolve` on each `.bib` entry), `resolve_record.py` (writes each output into the record with the 0.70 ratio and DOI test of item 6), `facts.py` (prints a session's id, model, Skill and Agent calls, denials, `modelUsage`, instruction files and reads outside its copy) and `audit.py` (lists tool calls that name a path outside a copy). Their outputs are the blinded outputs the judges read, the ledger copies, the resolve record and the session facts of the records; the reviewer reproduced each result with its own read-only commands (`5-refuter.md`, "Verification"). Until you rule, nothing they produced is used.
-  - (a) Approve what each computes, as listed, each a fact with one right answer; copy the seven scripts and the four rules files into `agents/reviews/5-blind-comparison/tools/`, so the evidence the records cite can be rerun after the scratchpad is cleared; the outputs stand. Pro: the results stand on the reviewer's independent reproduction, and the records become checkable. Con: it approves the scripts after the fact.
-  - (b) Discard their outputs and redo the blinding, the conversion, the resolve and the facts with commands typed whole, then rejudge where an output differs. Pro: the brief's rule is kept as written. Con: the same facts computed again, with no gain in what they show, since the reviewer's own commands already gave the same results.
-  - Recommendation: (a), as a judgment. The lazy option would be approving the scripts without keeping them where the records can be rerun.
+None. `.scratch/5-paper/orchestrator-state.md`, "Open items", holds no item: BD and BF are ruled (a) by the user and BE is closed under self-rule (C110), each in `plan.md` Rulings and the state file's closed items.
 
 ## The cases' first run
 
@@ -34,23 +21,23 @@ Run on the tree at the launch commit 6016155, before any change:
 | 1 The release candidate | DONE | `git tag v8.4.0-rc.2 678a5a7`; the pin and the check below; `git -C ~/.local/share/ordo-stable describe --tags` prints `v8.4.0-rc.2` |
 | 2 The working folder | DONE | every copy, side, run and judge under `gate5/`; 31 run transcripts there |
 | 3 The sides and the runs | DONE | commands and sessions in `5-blind-comparison.md` "Commands" and each comparison's "Sides", and in `5-single-mode-runs.md` |
-| 4 The stops | NOT DONE | the stops and answers are recorded (`5-blind-comparison.md` "Answers to the sides" and "The stops of the `paper` sides (C9)", `5-single-mode-runs.md`), and each path outside a copy is in `5-blind-comparison/outside-paths.md`; the `/writing` findings were applied inside two comparisons against "the `/writing` findings are applied only in item 8" (open item BD) |
-| 5 The comparison | DONE, its blinding waiting on open item BF | three comparisons, each with two judgments and the order swapped; full with two more judgments under a corrected prompt |
-| 6 The lit-review entries | NOT DONE | 81 of 84 entries resolve (`5-lit-review-resolve.md`); the three that do not go to step 5.A; the resolve ran through `resolve_all.py` (open item BF) |
+| 4 The stops | DONE | the stops and answers are recorded (`5-blind-comparison.md` "Answers to the sides" and "The stops of the `paper` sides (C9)", `5-single-mode-runs.md`), and each path outside a copy is in `5-blind-comparison/outside-paths.md`; the `/writing` findings applied inside the revision and full comparisons count as part of the `paper` run (open item BD (a)), which sets aside the item's sentence that they are applied only in item 8 |
+| 5 The comparison | DONE | three comparisons, each with two judgments and the order swapped; full with two more judgments under a corrected prompt |
+| 6 The lit-review entries | NOT DONE | 81 of 84 entries resolve (`5-lit-review-resolve.md`); the three that do not go to step 5.A; the resolve ran through `resolve_all.py`, approved by open item BF (a) |
 | 7 The four single-mode runs | DONE | `5-single-mode-runs.md`, with Axel's reading under "Axel's reading" |
-| 8 The `/writing` findings | NOT DONE | the `/writing` report and the revision run took the autonomous writer pass (patch 12 answers findings 1 to 39); Axel's one-line pick was not given (open item BE) |
-| 9 The records | DONE, the ledger copies waiting on open item BF | the six records, `outside-paths.md` and the outputs as judged; the ledger copies were converted by `to_charset.py` |
+| 8 The `/writing` findings | DONE | single-6 (open item BE): the run stopped at the reply to its closing `/writing` report (24 findings), the orchestrator answered `all but 13, 14, 23`, and patch 12 (36 ops) answers every picked finding but 10, which needs values the manuscript does not hold and is listed as not applied; `5-single-mode-runs.md` "The one-line pick" |
+| 9 The records | DONE | the six records, `outside-paths.md` and the outputs as judged; the ledger copies were converted by `to_charset.py` |
 | 10 Nothing written in research-hub, nothing pushed, no money spent | DONE | C11 below; no `git push` ran; `lookup.py` ran on public indexes without keys |
 | C1 | met | `git tag --list v8.4.0-rc.2` prints `v8.4.0-rc.2`; `git rev-list -n1 v8.4.0-rc.2` prints `678a5a74694766e8d56046cf6e9bd783ed3de2df`; `describe --tags` prints `v8.4.0-rc.2`; `pin.sh` exit 0 |
 | C2 | met | each `init` message reads claude-opus-5-5 (the records list each session's served model) |
-| C3 | met | `diff -r -x .git -x .agents -x .claude` against fresh `git archive` copies printed "C3 full-1 diff exit=0", "C3 full-2 diff exit=0", "C3 exit=0" (revision), "C3 code exit=0" (revision `code/` before the resume), and "single-1 C3 exit=0" to "single-5 C3 exit=0"; the lit-review copies are empty folders |
+| C3 | met | `diff -r -x .git -x .agents -x .claude` against fresh `git archive` copies printed "C3 full-1 diff exit=0", "C3 full-2 diff exit=0", "C3 exit=0" (revision), "C3 code exit=0" (revision `code/` before the resume), "single-1 C3 exit=0" to "single-5 C3 exit=0", and for single-6 `diff -r` against an archive of 576eca5 exit 0; the lit-review copies are empty folders |
 | C4 | met | each `paper` side loads `/Users/axelfaes/.claude/skills/paper`, linked into `~/.local/share/ordo-stable/skills/paper` at v8.4.0-rc.2 (version 2.1.0); its Skill calls name only `writing`; each academic-paper side's `init` lists no skill |
-| C5 | met | each side's questions and the one answer it got are in the ledger under `sides/<side>/` and `5-single-mode-runs/<mode>/`; the matched questions got the same words; each denied call of a `result` message's `permission_denials` is named in the records, single-1's one Monitor call and single-5's two among them |
+| C5 | met | each side's questions and the one answer it got are in the ledger under `sides/<side>/` and `5-single-mode-runs/<mode>/`; the matched questions got the same words; each denied call of a `result` message's `permission_denials` is named in the records, single-1's one Monitor call and single-5's two among them; single-6's three turns have none |
 | C6 | met | each hit of the pattern is named in `5-blind-comparison.md` "The C6 hits that are no mark" with why it is no mark, the hits inside saved pages ("Gordon", a base64 run, a DOI, image URLs, a navigation id) among them |
 | C7 | met | two judgments per comparison with the order swapped, read through `5-blind-comparison-key.md` |
 | C8 | unmet | Kolda_2009, Agueh_2011 and Bonneel_2016 do not resolve by title (OpenAlex and Semantic Scholar answered HTTP 429); a direct Crossref lookup of each DOI returns the entry's work, with the same year and venue; for Bonneel_2016 Crossref's title "Wasserstein barycentric coordinates" lacks the entry's subtitle "histogram regression using optimal transport" |
 | C9 | met | `5-blind-comparison.md` "The stops of the `paper` sides (C9)" and `5-single-mode-runs.md` "Stops, questions and answers": each side's first stop is the intake confirmation, its questions the rows of the intake table for its mode; each later stop is named with the stop of its mode's list it is; the full planner's narrowing of the research question, which no stop of the list covers, goes to step 5.A's new stop |
-| C10 | met | each run left its output, and patch 12 applies or lists each of the 39 findings; Axel adopted the record's readings as their own (ruling "The reading of the single-mode outputs"); the pick of item 8 is open item BE |
+| C10 | met | each run left its output; single-5's patch 12 applies or lists each of its 39 findings, and single-6's patch 12 applies or lists each finding of the one-line pick; Axel adopted the record's readings of the single-mode outputs and of the applied findings as their own (ruling "The reading of the single-mode outputs"); the orchestrator read single-6's whole diff (`5-single-mode-runs.md` "The one-line pick") |
 | C11 | met | the scan of every `tool_use` input in the 118 transcripts under `~/.claude/projects/*gate5*` (sides, runs, judges and their subagents) printed "tool calls naming research-hub: 0"; the `git -C ../research-hub status --short -- ...` of the case prints nothing |
 | C12 | met | the character-set check below prints nothing and exits 0; `5-blind-comparison.md` "Axel's calls" gives each call with Axel's words ("Open item 1: Agreed", "(a)") |
 | C13 | met | no judge's tool call reads a path outside its copy, read from each judge's transcript; the reviewer's own scan gives the same |
@@ -98,7 +85,7 @@ The last two print nothing. The plan's whole verify list runs once, at landing o
 - Eleven strings the URL search found in the full outputs were set aside as no citation (`gate5/full-urls-dropped.txt`).
 - The lit-review academic-paper PDF given to the judges was rebuilt from the blinded `.tex`, since the side's own PDF names the skill.
 - The full comparison was judged a second time with a prompt that quotes the answers word for word, on Axel's agreement to the recommendation.
-- single-5's reply to the closing `/writing` report was taken as the autonomous writer pass under the answer's last sentence; no one-line pick from Axel was given (open item BE).
+- single-5's reply to the closing `/writing` report was taken as the autonomous writer pass under the answer's last sentence. Item 8 was run again as single-6, whose answer kept that one stop, and the orchestrator gave the one-line pick under open item BE, with its reasons in `5-single-mode-runs/writing-revision-pick/pick.md`.
 
 ## Host- and user-visible changes
 
@@ -677,10 +664,23 @@ The last two print nothing. The plan's whole verify list runs once, at landing o
 +46 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/revision/sides/paper/paper-runs/revision-2026-11-15/patches/18-main.tex.patched.apply-report.json
 +57 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/revision/sides/paper/paper-runs/revision-2026-11-15/refs.bib
 +396 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/revision/sides/paper/paper-runs/revision-2026-11-15/review.md
++20 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/audit.py
++20 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/blind.py
++37 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/facts.py
++106 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/mk-rules-full.py
++30 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/resolve_all.py
++24 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/resolve_record.py
++258 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/rules-full-p.json
++442 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/rules-full-q.json
++190 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/rules-lit.json
++266 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/rules-rev.json
++19 -0 .scratch/5-paper/agents/reviews/5-blind-comparison/tools/to_charset.py
++46 -0 .scratch/5-paper/agents/reviews/5-landing.md
 +1028 -0 .scratch/5-paper/agents/reviews/5-lit-review-resolve.md
-+227 -0 .scratch/5-paper/agents/reviews/5-refuter.md
-+116 -0 .scratch/5-paper/agents/reviews/5-report.md
-+95 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs.md
++250 -0 .scratch/5-paper/agents/reviews/5-refuter.md
++105 -0 .scratch/5-paper/agents/reviews/5-report.md
++17 -0 .scratch/5-paper/agents/reviews/5-revision-fault-trace.md
++107 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs.md
 +43 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/abstract-only/final-message.md
 +11 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/abstract-only/intake-answer.md
 +24 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/abstract-only/intake-questions.md
@@ -724,6 +724,48 @@ The last two print nothing. The plan's whole verify list runs once, at landing o
 +413 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/outline-only/paper-runs/outline-only-2026-11-15/outline.md
 +191 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/outline-only/paper-runs/outline-only-2026-11-15/refs.bib
 +993 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/outline-only/paper-runs/outline-only-2026-11-15/review.md
++247 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/closing-report.md
++21 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/final-message.md
++17 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/intake-answer.md
++35 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/intake-questions.md
++944 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/manuscript.diff
++205 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/checks.md
++294 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/citation-report.md
++29 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/compile-1-overfull.txt
++20 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/compile-2-overfull.txt
++43 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/config.md
++289 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/final.md
++67 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/intended-claims.md
++1070 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/items.md
++739 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/01-main.tex.block-manifest.json
++109 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/01-main.tex.patch.json
++474 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/01-main.tex.patched
++831 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/01-main.tex.patched.apply-report.json
++199 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/04-refs.bib.block-manifest.json
++11 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/04-refs.bib.patch.json
++143 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/04-refs.bib.patched
++60 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/04-refs.bib.patched.apply-report.json
++829 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/07-main.tex.block-manifest.json
++51 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/07-main.tex.patch.json
++465 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/07-main.tex.patched
++322 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/07-main.tex.patched.apply-report.json
++199 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/08-refs.bib.block-manifest.json
++15 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/08-refs.bib.patch.json
++147 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/08-refs.bib.patched
++73 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/08-refs.bib.patched.apply-report.json
++829 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/11-main.tex.block-manifest.json
++53 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/11-main.tex.patch.json
++470 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/11-main.tex.patched
++82 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/11-main.tex.patched.apply-report.json
++829 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/12-main.tex.block-manifest.json
++331 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/12-main.tex.patch.json
++460 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/12-main.tex.patched
++516 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/12-main.tex.patched.apply-report.json
++847 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/14-main.tex.block-manifest.json
++26 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/14-main.tex.patch.json
++458 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/14-main.tex.patched
++46 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/paper-runs/revision-2026-11-15/patches/14-main.tex.patched.apply-report.json
++8 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision-pick/pick.md
 +363 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision/final-message.md
 +19 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision/intake-answer.md
 +41 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision/intake-questions.md
@@ -761,7 +803,7 @@ The last two print nothing. The plan's whole verify list runs once, at landing o
 +267 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision/paper-runs/revision-2026-11-15/writing-review.md
 +335 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision/writing-report.md
 +335 -0 .scratch/5-paper/agents/reviews/5-single-mode-runs/writing-revision/writing-run-final-message.md
-+28 -4 .scratch/5-paper/orchestrator-state.md
-+8 -0 .scratch/5-paper/plan.md
-+12 -1 .scratch/choices.md
++6 -7 .scratch/5-paper/orchestrator-state.md
++28 -1 .scratch/5-paper/plan.md
++23 -1 .scratch/choices.md
 ```

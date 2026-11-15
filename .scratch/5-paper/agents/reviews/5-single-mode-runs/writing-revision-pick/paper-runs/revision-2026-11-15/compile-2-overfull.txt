@@ -1,0 +1,20 @@
+
+[2]
+Overfull \hbox (4.75609pt too wide) in paragraph at lines 87--88
+[]\T1/cmr/m/n/10.95 A de-ploy-ment com-par-i-son un-der two in-de-pen-dent stre
+s-sors: a 9:1 SR:AF
+ []
+
+
+Overfull \vbox (1.7392pt too high) detected at line 90
+ []
+
+
+
+[3]
+
+[4]
+
+[5]
+Overfull \hbox (4.83821pt too wide) in paragraph at lines 127--128
+[]\T1/cmr/bx/n/10.95 Foundation-model em-bed-dings \T1/cmr/m/n/10.95 (frozen): 
