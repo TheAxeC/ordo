@@ -396,7 +396,7 @@ The report holds this table, with a value for each row:
 - A gap of a statement stands once, in the list after the statement, and no gap stands inside a sentence (`references/statements.md`, "Facts and gaps").
 - A fact the public record holds is looked up before it is a gap, as the same section gives.
 - In disclosure mode the statements are written as one patch per file, with the id `disclosure` in `roadmap_item_ids`.
-- The AI disclosure names the model by the identifier the session gives in the prompt, which is the identifier the configured alias names at the run's start. The agent never writes one from its own runtime or from memory.
+- The AI disclosure names the model by the identifier the session gives in the prompt, which is the identifier the runner's model list gives for opus at the run's start. The agent never writes one from its own runtime or from memory.
 - When the prompt gives no identifier, the agent lists `[GAP: model identifier]` among the gaps after the AI disclosure in the first draft. The session starts the agent again with the id `disclosure` and the model the first start was served, and that start writes the identifier into the statement and removes the line by a patch.
 - In disclosure mode the agent also writes `disclosure.md` in the run folder. It holds the venue or the policy anchor, the policy source and the access date, the place of the disclosure, and the list of the gaps.
 

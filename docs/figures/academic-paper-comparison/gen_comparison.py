@@ -81,6 +81,23 @@ DETAILED_LEGEND = (
     L("choice", "Rounded box: a decision the run takes"),
 )
 
+RULED_MAYBE_LEGEND = L(
+    "ruled_maybe", "Dashed indigo box: a ruled agent start that runs only when needed"
+)
+
+
+def detailed_legend(panels: Sequence[gf.Panel]) -> tuple[gf.Legend, ...]:
+    """The legend of a detailed figure, with the dashed indigo row when a box uses it."""
+    kinds = {
+        node.kind
+        for panel in panels
+        for node in (*panel.graph.nodes, *panel.graph.floating)
+    }
+    if "ruled_maybe" in kinds:
+        return (*DETAILED_LEGEND, RULED_MAYBE_LEGEND)
+    return DETAILED_LEGEND
+
+
 PIPELINE_LEGEND = (
     L("ap", "Green: academic-paper"),
     L("rev", "Purple: academic-paper-reviewer"),
@@ -146,7 +163,7 @@ def ap_full_simple() -> gf.Graph:
         E("P", "WR", "Minor or Major: round 2, once", "dotted"),
         E("WR", "P", "", "back"),
         E("P", "RA"),
-        E("P", "SD", "Reject, or a Critical issue after round 2"),
+        E("P", "SD", "Reject in round 1, or after round 2 a score under 6.5 with a Critical issue open"),
         E("RA", "F"),
         E("V", "F"),
         E("F", "F", "a checklist item fails, no cap", "back"),
@@ -468,8 +485,8 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N(
             "NP",
-            "The draft review does not pass: accept, an expanded revision by root cause, "
-            "revise by hand and resubmit, lower the venue, or end [AD3, AV4]",
+            "The draft review does not pass: accept, the recommendation; an expanded "
+            "revision by root cause, only when you choose it; or end [AD3, 5.C (3)]",
             "stop",
         ),
         N("W1", "Draft writer: round 1 issues, a patch [C]", "ruled"),
@@ -502,7 +519,7 @@ def paper_full_detailed() -> gf.Graph:
         ),
         N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
         N("CP2", "Session: compile once more, the rest named [M]", "ruled"),
-        N("WR", "/writing review: 4 agents [D46]", "ruled"),
+        N("WR", "/writing review: 4 agents, unless you said no at intake [D46, 5.C (2)]", "ruled_maybe"),
         N(
             "FM",
             "End: the final message with the numbered report, the sources only a preprint "
@@ -586,15 +603,16 @@ def paper_full_detailed() -> gf.Graph:
         E(
             "NP",
             "PL",
-            "an expanded revision, back to the step the cause names, no cap [AD3]",
+            "an expanded revision, only when you choose it, back to the step the cause "
+            "names [AD3]",
             "back",
         ),
-        E("NP", "R1", "lower the venue: a new review, no cap [AV4]", "back"),
+        E("NP", "RC", "accept: the issues left become limitations [5.C (3)]"),
         E("R1", "NP", "Reject"),
         E("R1", "W1", "Minor or Major"),
         E("W1", "IC"),
         E("IC", "R2", "round 2, the last", "dotted"),
-        E("R2", "NP", "a Critical issue unresolved"),
+        E("R2", "NP", "a score under 6.5 with a Critical issue unresolved [5.C (3)]"),
         E("R2", "RC", "otherwise: the rest become limitations [U]"),
         E("R1", "RC", "Accept"),
         E("RC", "RF", "a failure"),
@@ -607,6 +625,8 @@ def paper_full_detailed() -> gf.Graph:
         E("CP", "WR"),
         E("CP2", "WR"),
         E("WR", "FM"),
+        E("CP", "FM", "no /writing review [5.C (2)]"),
+        E("CP2", "FM"),
         E(
             "FM",
             "WA",
@@ -749,7 +769,7 @@ def paper_revision_detailed() -> gf.Graph:
         ),
         N("CF", "Draft writer: compile-fix, once [M]", "ruled"),
         N("CP2", "Session: compile once more, the rest named [M]", "ruled"),
-        N("WR", "/writing review: 4 agents [D46]", "ruled"),
+        N("WR", "/writing review: 4 agents, unless you said no at intake [D46, 5.C (2)]", "ruled_maybe"),
         N(
             "FM",
             "End: the final message with the numbered report, the sources only a preprint "
@@ -840,6 +860,8 @@ def paper_revision_detailed() -> gf.Graph:
         E("CP", "WR"),
         E("CP2", "WR"),
         E("WR", "FM"),
+        E("CP", "FM", "no /writing review [5.C (2)]"),
+        E("CP2", "FM"),
         E(
             "FM",
             "WA",
@@ -1243,9 +1265,9 @@ def paper_disclosure_detailed() -> gf.Graph:
         N("VL", "the venue listed?", "choice"),
         N(
             "MI",
-            "Session: the model the alias claude:opus points to today, such as "
+            "Session: the identifier the runner's model list gives for opus, such as "
             "claude-opus-5-5, or the model the first agent was served when the list gives "
-            "none [N]",
+            "none [N, 5.C (6)]",
             "ruled",
         ),
         N(
@@ -2011,7 +2033,7 @@ def figures() -> tuple[tuple[str, str], ...]:
                     f"{mode}-detailed.svg",
                     gf.describe(f"The {mode} mode, detailed view", panels),
                     panels,
-                    DETAILED_LEGEND,
+                    detailed_legend(panels),
                     note,
                 ),
             )

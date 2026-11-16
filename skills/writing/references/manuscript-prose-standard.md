@@ -1,6 +1,6 @@
 # The manuscript prose standard
 
-The prose of a manuscript is held to the prose standard, read where `SKILL.md` "What it reads" 2 finds it, with the differences this page lists. The prose of a manuscript is the text of a paper, its abstract, its statements and its cover letter. The page holds no copy of the prose standard's rules. A rule of the prose standard that this page does not name holds for a manuscript as the prose standard states it.
+The prose of a manuscript is held to the prose standard, read where `SKILL.md` "What it reads" 1 finds it, with the differences this page lists. The prose of a manuscript is the text of a paper, its abstract, its statements and its cover letter. The page holds no copy of the prose standard's rules. A rule of the prose standard that this page does not name holds for a manuscript as the prose standard states it.
 
 ## Rules left out
 

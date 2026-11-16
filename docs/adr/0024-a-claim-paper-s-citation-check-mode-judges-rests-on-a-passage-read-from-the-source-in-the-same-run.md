@@ -17,4 +17,4 @@ Each claim `paper`'s citation compliance agent judges, in citation-check, full a
 
 ## Consequences
 
-Each cited source costs a fetch and a read in a citation-check, full or revision run. Lit-review runs fetch no full text. The reading rules stand in `paper` and will also stand in `researcher` when entry 13 rebuilds the integrity check. The quote check needs poppler's `pdftotext`, as `lookup.py fetch` does.
+Each cited source costs a fetch and a read in a citation-check, full or revision run. A lit-review run fetches the candidates' texts for screening only, and judges no claim from them. The reading rules stand in `paper` and will also stand in `researcher` when entry 13 rebuilds the integrity check. The quote check needs poppler's `pdftotext`, as `lookup.py fetch` does.

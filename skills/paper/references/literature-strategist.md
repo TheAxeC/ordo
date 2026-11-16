@@ -1,6 +1,6 @@
 # Literature strategist
 
-The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` for each list of the screened `.bib` block that holds more than 50 entries, and changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. It does all of this in one start. The session resumes the same agent by a second message in four cases. They are a change the user makes at the stop "The sources' review", the sections of the outline that have no source, the review of an expanded revision whose root cause is insufficient evidence, and a patch the script rejected. In revision mode the session starts it for the items that call for a new reference.
+The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` for each list of the screened `.bib` block that holds more than 50 entries. Besides the texts `lookup.py fetch` writes into the run's temporary folder, it changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. It does all of this in one start. The session resumes the same agent by a second message in four cases. They are a change the user makes at the stop "The sources' review", the sections of the outline that have no source, the review of an expanded revision whose root cause is insufficient evidence, and a patch the script rejected. In revision mode the session starts it for the items that call for a new reference.
 
 ## What the agent reads
 
@@ -8,6 +8,7 @@ The literature strategist agent reads this page to design the search, screen the
 - In revision mode, the items that call for a new reference stand in place of the Topic and the Research question, which that mode does not ask.
 - The sources given: the manuscript's `.bib`, when the call gives one, and the `.bib`, the annotated bibliography or the earlier review that the Materials in hand row names. A research report that row names gives the question, the discipline and the method that the session filled at intake.
 - Every lookup is made with `lookup.py` and never with a web search, a fetch of a web page or `curl`.
+- The run's temporary folder, which the session gives, for the texts `lookup.py fetch` writes ("Reading a candidate").
 - `references/citation-compliance.md`, "Looking a reference up": how a line of `resolve` is read, and how a year and a venue are confirmed.
 - In full mode given an earlier plan run, that run's `chapter-plan.md` and `insights.md` ("Starting from a plan run").
 - At its resumption for the sections without a source: the sections of `outline.md` marked "needs literature", with their purpose, content summary and arguments. Also the files the agent wrote before when it ran in this run.
@@ -69,7 +70,7 @@ The domain evidence profile of `config.md` decides which evidence types the crit
 When the call gives a `.bib`, the searching starts there. In full mode that is the manuscript's `refs.bib` when one stands, and otherwise the `.bib` the Materials in hand row names. An earlier lit-review run's `refs.bib` that intake took for outline-only mode is screened the same way.
 
 - Every entry is screened under the criteria above, the same as an external result. No entry is pre-approved.
-- An entry's title is always available, and its abstract is read when the `.bib` holds one. A missing field narrows the screening and does not skip the entry.
+- An entry's title is always available, and an entry may hold an `abstract` field. Whether an entry is fetched is as "Reading a candidate" says. A missing field narrows the screening and does not skip the entry.
 - An entry is skipped only when the criteria cannot be applied at all. Every skipped entry is listed in `review.md` with its reason, and no entry is dropped without a line.
 - The entries of the `.bib` are never changed or removed. The new entries are only added.
 - The report opens its search strategy with a block of this form, and a list of more than 50 entries is cut as the bullets after the block say:
@@ -128,20 +129,31 @@ Screened from the manuscript's .bib:
 Records that share a DOI or an arXiv ID are one source, and duplicates are removed before screening. Screening has two stages.
 
 - **Title and abstract.** Each record is tagged Include, Exclude or Maybe against the criteria. The stage narrows the set to 30 to 50 candidates.
-- **Full-text assessment.** The abstract and key sections of each Include and Maybe source are read for relevance, quality and strength of evidence. The stage ends on 15 to 30 final sources, a number that varies by paper type.
+- **Full-text assessment.** The abstract and key sections of each Include and Maybe source are read for relevance, quality and strength of evidence, from the file `fetch` wrote for it, as "Reading a candidate" says. A source for which no such file exists is the case "A candidate that cannot be read", and the stage assesses it from what that block leaves. The stage ends on 15 to 30 final sources, a number that varies by paper type.
 
-- **A candidate that cannot be read.** A candidate whose abstract and text the agent could not read with the lookups of this page is looked up again before it leaves the set.
+- **Reading a candidate.** A candidate's abstract is read from the file `lookup.py fetch` writes for it.
+  - At the stage "Title and abstract", a candidate the title alone excludes is not fetched.
+  - Every other candidate is fetched into the run's temporary folder before its abstract is read, with `lookup.py fetch '<input>' '<temporary folder>' '<input>'`.
+  - The input is the candidate's DOI, else its arXiv ID, else its Semantic Scholar ID, else its OpenAlex ID. The key is the same identifier, so no two candidates share a file.
+  - The candidate is screened and annotated from `<stem>.txt`, the full text `fetch` writes, read with the Read tool. `<stem>` is the key with each `/` and `:` written `_`.
+  - An exit 1 of `fetch` with `<stem>.abstract.txt` written is the abstract case: the candidate is screened and annotated from that file, read with the Read tool.
+  - The same holds when `pdftotext` is missing: `fetch` goes on to the next URL and then to the abstract.
+  - A source given as a `.bib` entry with an `abstract` field is screened from that field at the stage "Title and abstract", and is not fetched for that stage.
+  - A `.bib` entry that the stage "Title and abstract" kept as Include or Maybe without a fetch is fetched before the stage "Full-text assessment" reads it, as every other candidate is.
+
+- **A candidate that cannot be read.** A candidate whose `fetch` wrote neither `<stem>.txt` nor `<stem>.abstract.txt`, or that has none of the four identifiers, is looked up again before it leaves the set.
   - `lookup.py resolve` runs on each identifier the candidate has: its DOI, its arXiv ID and its title. Each index that holds the candidate prints its record and its identifiers.
   - A candidate that stays unread is screened on its record and its `cited-by` count.
   - An unread candidate that layer 2 marked "must include", or that the seminal rule of node 2 below admits, is included and annotated "abstract not read", with the lookups tried.
   - Any other unread candidate is excluded, and `review.md` names the lookups tried for it.
-  - No lookup leaves `lookup.py`, and lit-review mode fetches no full text.
+  - `review.md` names, for each such candidate, the URLs `fetch` printed for it, or "no identifier to fetch".
+  - No lookup leaves `lookup.py`.
 
 A candidate source passes this tree in order. A "no" ends it at Exclude unless the node says otherwise.
 
 1. Is it peer-reviewed? If not, it is included as grey literature when it is a government report or white paper that addresses the research question directly. Otherwise it goes on only when the profile admits it, tagged by its evidence type, and it still passes the nodes below.
 2. Is it within the time range? If not, it is included as a seminal work when it is a foundational work of the field cited more than 100 times, counted from the `cited-by` listing. Otherwise it is excluded.
-3. Does its abstract address at least one aspect of the research question? If not, it is excluded. A candidate that "A candidate that cannot be read" included as "abstract not read" is not excluded here and goes on to node 4.
+3. Does its abstract, read from the file `fetch` wrote or from its `.bib` entry's `abstract` field ("Reading a candidate"), address at least one aspect of the research question? If not, it is excluded. A candidate that "A candidate that cannot be read" included as "abstract not read" is not excluded here and goes on to node 4.
 4. Is its methodology reliable, with a reasonable sample size and no obvious design flaw? If that cannot be determined, it is tagged Maybe and goes to the full-text stage. If it is not reliable, it is excluded, unless it is an important opposing viewpoint. Otherwise it is included.
 
 Each included source is scored on five items from 1 to 3 points:
@@ -212,7 +224,7 @@ Each included source has this annotation:
 ```
 
 - The annotation does not say whether the source came from the `.bib` or from a search.
-- Every annotation is written from the abstract or the full text the agent read, and a field it could not fill is left as "[GAP: <field>]".
+- Every annotation is written from the file `fetch` wrote, the full text or the abstract, or from the `.bib` entry's `abstract` field ("Reading a candidate"), and a field it could not fill is left as "[GAP: <field>]".
 - The annotation of an included source whose abstract was not read says "abstract not read" and names the lookups tried. Its fields come from the record and the `cited-by` count only.
 
 ## The literature matrix

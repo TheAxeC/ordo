@@ -11,7 +11,7 @@ Usage:
     lookup.py bibtex <DOI | arXiv ID>
     lookup.py cite-keys <main.tex> <file.bib>
     lookup.py check-urls <main.tex> <file.bib>
-    lookup.py fetch <DOI | arXiv ID> <folder> <key>
+    lookup.py fetch <DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID> <folder> <key>
     lookup.py quote-check <citation report> <file.bib> <folder>
 
 Every command prints plain text for a person, one line per record or result, and never JSON.
@@ -28,7 +28,7 @@ Commands:
 - cite-keys reads the keys the .tex cites (see "The keys a .tex cites") and the keys of the .bib. It prints "missing: <key>" for each cited key the .bib lacks, in the order the keys first occur in the .tex, then "unused: <key>" for each .bib entry no cited key names, in the order of the .bib. It prints nothing when every cited key has an entry and every entry is cited.
 - check-urls reads the keys the .tex cites and the .bib. For each cited key it prints the HTTP status, after redirects, of the key's doi (as https://doi.org/<doi>), else its eprint (as https://arxiv.org/abs/<id>), else its url. A cited key with none of the three is printed as "no identifier", a cited key the .bib lacks as "no entry in <the .bib's file name>", and a URL that gives no answer as "failed, <reason>". A .tex that cites no key prints "the .tex cites no key".
 - check-urls also checks the title of a key whose entry has a doi. The doi is stripped to the bare DOI and percent-encoded as resolve does, and the entry's title is compared, by the title ratio of resolve, with the title of the first record the doi resolves to. The indexes are asked in the order Crossref, OpenAlex, Semantic Scholar, and the next one is asked when an index answers "not found" or is left out. The line of the key then ends with ", ratio <r> against <index>", the ratio written as resolve writes it, followed by ", DOI_MISMATCH" when the ratio is below 0.70. It ends with ", doi not found in Crossref, OpenAlex or Semantic Scholar" when each of the three answered "not found", and with ", title not checked: <index> left out, <reason>" when no index gave a record and one or more was left out, one clause for each index left out, the clauses separated by "; ". A key whose URL gave no answer gets the same ending after its "failed, <reason>". A key with a doi costs up to three requests more than its status request.
-- fetch writes the full text of a source into <folder>, named from <key> with each / and : written _ (<stem>). It tries, in order, https://arxiv.org/html/<id> and https://arxiv.org/pdf/<id> when the input holds an arXiv ID, the open_access.oa_url of OpenAlex and the openAccessPdf.url of Semantic Scholar. HTML counts only from arxiv.org/html. From every other source only a body starting %PDF- counts. The first that counts is written as <stem>.html or <stem>.pdf, and its text as <stem>.txt, by pdftotext (called with its arguments as a list) for a PDF, with the tags removed by html.parser and the text of script and style elements left out for HTML. A PDF whose text pdftotext cannot make or makes empty counts as no text and is removed, and the next URL is tried. When no full text is found, the abstract the indexes return (the arXiv summary, else the Semantic Scholar abstract, else the OpenAlex abstract_inverted_index put back in word order) is written as <stem>.abstract.txt. fetch prints each lookup and each URL tried with its status, and exits 1 when no full text was found.
+- fetch writes the full text of a source into <folder>, named from <key> with each / and : written _ (<stem>). It tries, in order, https://arxiv.org/html/<id> and https://arxiv.org/pdf/<id> when the input holds an arXiv ID, the open_access.oa_url of OpenAlex and the openAccessPdf.url of Semantic Scholar. HTML counts only from arxiv.org/html. From every other source only a body starting %PDF- counts. The first that counts is written as <stem>.html or <stem>.pdf, and its text as <stem>.txt, by pdftotext (called with its arguments as a list) for a PDF, with the tags removed by html.parser and the text of script and style elements left out for HTML. A PDF whose text pdftotext cannot make or makes empty counts as no text and is removed, and the next URL is tried. When no full text is found, the abstract the indexes return (the arXiv summary, else the Semantic Scholar abstract, else the OpenAlex abstract_inverted_index put back in word order) is written as <stem>.abstract.txt. Given a Semantic Scholar ID (40 hexadecimal digits) or an OpenAlex ID (W...), fetch asks only the index the ID belongs to for the work's record. When the record gives a DOI, or else an arXiv ID, fetch goes on as for that input. Otherwise it tries the record's open-access URL, and when no full text is found it writes that index's abstract as <stem>.abstract.txt. fetch prints each lookup and each URL tried with its status, and exits 1 when no full text was found.
 - quote-check reads the citation report, the .bib and the texts in <folder>. For each passage line "> [@<key>, <locator>]: "<passage>"" of the report it prints found or not found ("not found, no <file>" when the text file is missing); the passage is the text between the first " after "]: " and the last " of the line. It looks the passage up in <folder>/<stem>.txt, or in <folder>/<stem>.abstract.txt when the locator is abstract. Both texts are normalised first: every hyphen at a line end is removed with its line break, every hyphen between two letters is removed, then each run of whitespace becomes one space. A passage is found when the normalised passage occurs in the normalised text, and an empty passage is never found. A line that starts "> [@" and does not have the form of a passage line is printed as malformed. It also prints each cited key with no passage line ("no passage"), each cited key the .bib lacks ("no entry") and each cited key with neither <stem>.txt nor <stem>.abstract.txt in the folder ("no text"). A report that cites no key prints "the citation report cites no key".
 
 A citation in a citation report is [@<key>, <locator>] or [@<a>; @<b>, <locator>]. A line that is a passage line contributes the key of its leading citation only; the passage is not searched for citations.
@@ -48,7 +48,7 @@ Pacing and failures:
 - A lock file that cannot be opened, locked or read, or that holds text other than a time, makes the request wait the full gap. An empty file, as a new one is, makes it wait not at all.
 - api.crossref.org is paced by the lock file ordo-lookup-crossref, with a gap of 1 second, or 0.35 second when CROSSREF_POLITE_EMAIL is set.
 - api.openalex.org is paced by the lock file ordo-lookup-openalex, with a gap of 1.05 seconds, or 0.21 second when OPENALEX_API_KEY is set.
-- api.semanticscholar.org is paced by the lock file ordo-lookup-semanticscholar, with a gap of 1.05 seconds.
+- api.semanticscholar.org is paced by the lock file ordo-lookup-semanticscholar, with a gap of 2 seconds, with S2_API_KEY set or not.
 - arxiv.org, www.arxiv.org and export.arxiv.org are paced together by the lock file ordo-lookup-arxiv, with a gap of 3 seconds.
 - Every other host (doi.org, a publisher's site, an open-access URL) is not paced.
 - An HTTP 429 is retried at most 3 times, each retry in a new turn of its host. The wait runs after the host's lock is released.
@@ -101,8 +101,8 @@ Errors, each printed as one line on standard error:
 - "error: --entry cannot be used with --year" and "error: --entry takes <file.bib> <key>", for resolve --entry with --year, with fewer or more than the two values, or after another argument.
 - "error: the key holds a line break", "error: <key>: the .bib has no entry with this key", "error: <key>: the entry has no title", "error: <key>: the entry has no year" and "error: <key>: the year of the entry is not four digits", for resolve --entry.
 - "error: unknown option <option>", "error: <command> needs a value after <option>", "error: --year needs a four-digit year" and "error: --limit needs a whole number from 1 to 100".
-- "error: <value> is not a DOI or an arXiv ID", for bibtex and fetch.
-- "error: <value> is not a DOI, an arXiv ID, a Semantic Scholar ID or an OpenAlex ID", for refs and cited-by.
+- "error: <value> is not a DOI or an arXiv ID", for bibtex.
+- "error: <value> is not a DOI, an arXiv ID, a Semantic Scholar ID or an OpenAlex ID", for refs, cited-by and fetch.
 - "error: the key is empty", for fetch.
 - "error: <folder>: not a folder", for fetch and quote-check.
 - "error: <path>: <reason>", for a .tex, an \input or \include file, a .bib (the one of resolve --entry included) or a citation report that cannot be read (the reason is the operating system's, or "not valid UTF-8"), and for a file fetch cannot write. The path of an \input or \include file is the main file's folder joined with the name, with .tex added when the name has no extension.
@@ -157,7 +157,7 @@ ARXIV_HOSTS = ("arxiv.org", "export.arxiv.org", "www.arxiv.org")
 PACED_HOSTS = {
     "api.crossref.org": ("crossref", 1.0, 0.35),
     "api.openalex.org": ("openalex", 1.05, 0.21),
-    "api.semanticscholar.org": ("semanticscholar", 1.05, 1.05),
+    "api.semanticscholar.org": ("semanticscholar", 2.0, 2.0),
 }
 # The hosts of the four indexes with the name of each in the skip files: a 429 from one of them that asks a long wait is written to its skip file, and its 200 replies are cached.
 API_HOSTS = {**{host: name for host, (name, _, _) in PACED_HOSTS.items()}, "export.arxiv.org": "arxiv"}
@@ -1638,6 +1638,16 @@ class FetchRun:
         self.out.append(f"tried {url}: HTTP {reply.status}, full text")
         return True
 
+    def abstract(self, outcomes):
+        """Write the first abstract of the outcomes' records as <stem>.abstract.txt; the exit status of a fetch with no full text."""
+        abstract = next((record.abstract for outcome in outcomes for record in outcome.records if record.abstract), "")
+        if abstract:
+            path = self.write(".abstract.txt", (abstract + "\n").encode("utf-8"))
+            self.out.append(f"no full text; the abstract is in {os.path.basename(path)}")
+        else:
+            self.out.append("no full text and no abstract")
+        return 1
+
     def note(self, name, outcome, what):
         if outcome.left_out:
             self.out.append(f"lookup {name}: left out, {outcome.left_out}")
@@ -1649,16 +1659,45 @@ class FetchRun:
             self.out.append(f"lookup {name}: found")
 
 
+def lookup_by_id(client, text):
+    """(the index's name, its outcome) for the record of a Semantic Scholar ID or an OpenAlex ID, asked of that index alone, with the abstract."""
+    if OPENALEX_ID.match(text):
+        url = f"https://api.openalex.org/works/{text}?select={OPENALEX_FIELDS},abstract_inverted_index"
+        return "OpenAlex", outcome_of(lambda: get_parsed(client, url, parse_openalex_work))
+    url = f"https://api.semanticscholar.org/graph/v1/paper/{text}?fields={S2_FIELDS},abstract"
+    return "Semantic Scholar", outcome_of(lambda: get_parsed(client, url, parse_s2_paper))
+
+
 def run_fetch(client, arguments, out):
     positional, _ = parse_options(arguments, (), "fetch")
-    expect_arguments(positional, 3, "fetch", "<DOI | arXiv ID> <folder> <key>")
-    identifier = require_identifier(positional[0])
+    expect_arguments(positional, 3, "fetch", "<DOI | arXiv ID | Semantic Scholar ID | OpenAlex ID> <folder> <key>")
+    text = positional[0].strip()
+    identifier = require_identifier(text, with_ids=True)
     folder, key = positional[1], positional[2]
     if not key.strip():
         raise UsageError("the key is empty")
     if not os.path.isdir(folder):
         raise UsageError(f"{folder}: not a folder")
     run = FetchRun(client, folder, file_stem(key), out)
+    if identifier.kind != "id":
+        return fetch_identifier(run, client, identifier)
+    name, outcome = lookup_by_id(client, text)
+    if not outcome.records:
+        run.note(f"{name} {text}", outcome, [])
+        return run.abstract([])
+    record = outcome.records[0]
+    given = [found for found in (classify(record.doi), classify(record.arxiv_id)) if found.kind != "title"]
+    if given:
+        out.append(f"lookup {name} {text}: found, {'doi' if given[0].kind == 'doi' else 'arXiv'} {given[0].text}")
+        return fetch_identifier(run, client, given[0])
+    out.append(f"lookup {name} {text}: found, no DOI and no arXiv ID" + ("" if record.oa_urls else ", no open-access URL"))
+    if any(run.attempt(url, "pdf") for url in record.oa_urls):
+        return 0
+    return run.abstract([outcome])
+
+
+def fetch_identifier(run, client, identifier):
+    """The full text of a DOI or an arXiv ID, else its abstract, written by run; the exit status of fetch."""
     if identifier.arxiv_id:
         quoted = urllib.parse.quote(identifier.arxiv_id, safe="/.")
         if run.attempt(f"https://arxiv.org/html/{quoted}", "html") or run.attempt(f"https://arxiv.org/pdf/{quoted}", "pdf"):
@@ -1671,14 +1710,7 @@ def run_fetch(client, arguments, out):
         if any(run.attempt(url, "pdf") for url in urls):
             return 0
     abstracts = [lookup_arxiv(client, identifier)] if identifier.arxiv_id else []
-    abstracts += [s2, openalex]
-    abstract = next((record.abstract for outcome in abstracts for record in outcome.records if record.abstract), "")
-    if abstract:
-        path = run.write(".abstract.txt", (abstract + "\n").encode("utf-8"))
-        out.append(f"no full text; the abstract is in {os.path.basename(path)}")
-    else:
-        out.append("no full text and no abstract")
-    return 1
+    return run.abstract(abstracts + [s2, openalex])
 
 
 HANDLERS = {

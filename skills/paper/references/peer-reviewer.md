@@ -163,10 +163,10 @@ In full and revision mode the agent checks each number the draft states against 
 | 8.0 to 10.0 | Accept | The run goes on. |
 | 6.5 to 7.9 | Minor Revision | The draft goes back to the draft writer, and the second draft review round reads it again. |
 | 4.0 to 6.4 | Major Revision | The draft goes back to the draft writer, and the second draft review round reads it again. A second return follows only as "The second draft review round" says. |
-| 1.0 to 3.9 | Reject | The run stops for the user at the stop "The draft review does not pass". |
+| 1.0 to 3.9 | Reject | In draft review round 1, the run stops for the user at the stop "The draft review does not pass". |
 
-- The table gives the verdict of draft review round 1. A verdict Reject in either draft review round is the stop.
-- After draft review round 2 the rule of "The second draft review round" decides what follows a verdict other than Reject.
+- The table gives the verdict of draft review round 1. A verdict Reject in draft review round 1 is the stop.
+- After draft review round 2 the rule of "The second draft review round" decides what follows, whatever the verdict, Reject included.
 
 ### The process
 
@@ -212,7 +212,8 @@ In full and revision mode the agent checks each number the draft states against 
 - The effort is Quick fix (under 10 minutes), Moderate (10 to 30 minutes), Significant (30 to 60 minutes) or Major rework (over 60 minutes).
 - A suggested fix is specific. "Improve the writing" is not one, and the agent names the paragraphs, the problem and the approach.
 - An issue that only the user can resolve, such as a `[GAP: ...]` placeholder or an `unused:` entry of the `.bib`, is marked "needs the user" and is not sent back to the draft writer. It goes to the final message.
-- An empty section or one that holds only a placeholder is a Critical issue, and the score rests on the completed parts.
+- In every mode, a `[GAP: ...]` placeholder of a statement only the authors can give, one of the statements `references/statements.md` names, is "needs the user" with no severity, and it does not lower the score. The final message lists it among the gaps as the authors' fact to fill in.
+- An empty section or one that holds only a placeholder is a Critical issue, and the score rests on the completed parts. A placeholder of the bullet above is no such issue.
 - A word count more than 30 percent off the target is a Critical issue listed first.
 - A register that is extremely inconsistent is penalized in Writing Quality, and the review acknowledges the strengths of the content.
 - The strengths are at least 3, each citing a specific passage. A generic praise is not a strength.
@@ -278,21 +279,22 @@ The second draft review round re-reads the revised sections and what the first d
 - It reads the numbers and the data-handling descriptions the patches wrote, as "Numbers and data handling" says. It also reads the `citation-report-<nn>.md` of those patches.
 - It reads each sentence that answers an issue about the data handling. The sentence must state what the files hold and its effect on the results, or state what the files hold with a `[GAP: the effect of <what the files hold> on <result>]` after it. A sentence that only deletes or softens the description leaves the issue open.
 - It re-scores only the dimensions that changed, and updates the overall score and the verdict.
-- A verdict Reject in either draft review round stops the run at the stop "The draft review does not pass".
-- After draft review round 2, a Critical issue left unresolved stops the run at the same stop, whatever the score. A description of the data handling that the result files contradict is such an issue.
-- Otherwise the issues that remain go to the final message as acknowledged limitations, and no writer pass follows draft review round 2.
+- After draft review round 2 the overall score alone decides what follows, whatever the verdict, Reject included:
+  - a score of 6.5 or more: the run goes on, and the issues that remain go to the final message as acknowledged limitations.
+  - a score below 6.5 with every Critical issue resolved: the run goes on, with the issues that remain as acknowledged limitations.
+  - a score below 6.5 with a Critical issue unresolved: the run stops at the stop "The draft review does not pass". A description of the data handling that the result files contradict is such an issue.
+- No writer pass follows draft review round 2.
 - The agent adds the likely root cause to the report at the stop, and the step the session returns to if the user asks for an expanded revision:
   - a structural problem, for which the outline needs rework, and the run returns to the outline.
   - insufficient evidence, for which the literature or the data need supplementing, and the run returns to the literature.
   - a writing problem, for which the sections need rewriting, and the run returns to the sections.
   - an originality problem, for which the contribution needs repositioning, and the run returns to the outline.
-- The agent adds the estimate of the additional work for the expanded revision: Moderate, Significant or Major Rework. It adds nothing for the other answers. For the answer to lower the venue it names the venue limits of `config.md` that the draft misses, so that the user can name a venue the draft meets.
-- The stop offers five answers:
+- The agent adds the estimate of the additional work for the expanded revision: Moderate, Significant or Major Rework. It adds nothing for the other answers.
+- The stop offers three answers, and its recommendation is accept:
   - accept with the issues as acknowledged limitations.
-  - an expanded revision that runs again from the step the root cause names in the same run folder. The pass it starts is reviewed as a new draft review round 1 and round 2, and its reviews are numbered on.
-  - revise by hand and resubmit: the run ends with its records, and the user revises the manuscript outside the run. A later revision run takes the revised manuscript, with the review of this run among its materials.
-  - lower the venue: the user names another venue. The session records the new answer in the Venue row and states the venue's limits in the Venue limits row, as intake does, and shows the record for confirmation. The draft review then runs again against the new venue's bar, with the draft as it stands. It runs as a new draft review round 1 and round 2, whose reviews are numbered on.
+  - an expanded revision that runs again from the step the root cause names in the same run folder, made only when the user chooses it. The pass it starts is reviewed as a new draft review round 1 and round 2, and its reviews are numbered on.
   - end the run.
+- A verdict Reject in draft review round 1 reaches the same stop, with the same three answers.
 - The draft goes back to the draft writer once after draft review round 1 of a pass, with the ids `D<r>-<m>` of that review.
 
 ### The draft-review call

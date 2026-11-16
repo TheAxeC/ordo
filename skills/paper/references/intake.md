@@ -56,6 +56,7 @@ The modes are full, outline-only, revision, abstract-only, lit-review, citation-
 | Claims not to make | The claims the paper must not make, each as a sentence, or "none". | full, revision, abstract-only, citation-check, draft-review |
 | Earlier papers | The authors' earlier papers that the paper may repeat passages of, each as a path, a DOI or a citation, or "none". | full, revision, citation-check |
 | Internal only | Whether the user asks for the manuscript as an internal record, such as a record of every attempt, and not as work to publish. Default: no. The session never sets it from the materials. | full, outline-only, revision, abstract-only, draft-review |
+| Closing review | Whether the run ends with the `/writing` review of the manuscript, whose report a one-line reply answers (SKILL.md, Steps 13). With no, the run ends after the compile, and the final message names `/writing` and `/paper revision <main.tex> <report>` for a later review. Default: yes. | full, revision |
 | Existing main.tex | Asked only when a `main.tex` stands in the manuscript's folder. The session states that the first draft replaces it and that the original is kept in the run folder as `existing-main.tex`. Its text is read as existing draft sections. | full |
 | Earlier run record | The path of the latest earlier `config.md`, when one stands. A paused plan run's `config.md` is the record a continued plan run takes. | every mode |
 

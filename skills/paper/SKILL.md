@@ -24,7 +24,6 @@ metadata:
 /paper draft-review <main.tex>                                        review the draft as its author's own reviewer, writing one review and changing nothing
 /paper figures <main.tex>                                             draw the figures of an existing manuscript and place them by patch
 /paper <request in plain words>                                       pick the mode from the request, as references/modes.md says
-/paper <project> <mode> ...                                           the same when .agents/plan.yaml has the projects: form; <project> names the project whose keys are read
 ```
 
 A file or folder argument is a path, or words that name it, such as a name or a description (Steps 2). The `<manuscript>` of format-convert is a main `.tex`, a `.md`, a `.docx` or a `.bib`. Its `<target>` names one or more of `docx`, `pdf`, `markdown` and `latex`, a citation style of the table in `references/intake.md`, or a venue. A `.bib` takes one citation style with `docx` or `markdown`. A call with no target takes Markdown, and the intake confirmation shows it.
@@ -43,30 +42,27 @@ A file or folder argument is a path, or words that name it, such as a name or a 
 
 ## What it reads
 
-1. `.agents/plan.yaml` of the repository the session is in: `reviewer`, `reviewer_effort` (`high` when absent) and `standards` (`[]` when absent).
-   - A missing file, or a file without `reviewer`, is a refusal that names `/ordo-init`.
-   - In the `projects:` form the first argument of the call names the project whose keys are read, and the mode follows it. A name no project has is a refusal that lists the projects.
-2. The prose standard, from the first of these three places that holds it, and the writing pages.
-   - The page of `standards` whose file name is `prose-standard.md`, then `docs/dev/prose-standard.md`, then `templates/docs/dev/prose-standard.md` in the `repo-setup` skill's folder, which stands beside this skill's folder. None of the three is a refusal that names the three paths.
+1. The prose standard, from the first of these two places that holds it, and the writing pages.
+   - `docs/dev/prose-standard.md` of the repository the session runs in, then `templates/docs/dev/prose-standard.md` in the `repo-setup` skill's folder, which stands beside this skill's folder. Neither is a refusal that names both paths.
    - The writing pages are `references/manuscript-prose-standard.md`, `references/rules.md` and `references/registers.md` in the `writing` skill's folder, standing beside this skill's folder. A missing page is a refusal that names the path.
    - The manuscript prose standard is the prose standard with the differences `references/manuscript-prose-standard.md` lists. It is the prose standard of every role of this skill and of the `/writing` review of Steps 13.
-3. The arguments of the mode, as Quick start gives them.
+2. The arguments of the mode, as Quick start gives them.
    - A first word that is not the name of a mode or a call makes the call a plain request, and `references/modes.md` gives the mode and the arguments.
    - A file or folder argument is a path, or words that name it. Steps 2 finds what the words name.
    - An argument that names nothing the search finds is a refusal that names what was looked for, and so is a missing argument.
    - Revision's second argument is the comments file when it names an existing file. It is also the comments file when its words describe a file of referee comments or a `/writing` report and the search finds one. It is the instructions as text otherwise.
-4. For a mode or call given a main `.tex`, the files it inputs and includes, found as the `writing` skill's Steps 3 lists them. For format-convert given a `.md` or a `.docx`, the file itself, which `pandoc` reads, and given a `.bib`, the file itself, which `bibtex` reads.
-5. For revision, citation-check, draft-review, lit-review and format-convert given a `.tex`, its `.bib`.
+3. For a mode or call given a main `.tex`, the files it inputs and includes, found as the `writing` skill's Steps 3 lists them. For format-convert given a `.md` or a `.docx`, the file itself, which `pandoc` reads, and given a `.bib`, the file itself, which `bibtex` reads.
+4. For revision, citation-check, draft-review, lit-review and format-convert given a `.tex`, its `.bib`.
    - The lines are those of the main file and the files it inputs, with the text after an unescaped `%` left out.
    - The `.bib` is named by the one `\bibliography{...}` or `\addbibresource{...}` line of those. A `\bibliographystyle` line is not such a line.
    - The name is resolved against the main file's folder, and `.bib` is added to a name without it.
    - No such line, more than one such line, or a line that names more than one file is a refusal that names the lines.
    - A named file that does not exist is a refusal that names it.
    - Abstract-only, disclosure and figures read no `.bib`, full mode writes its own, and format-convert given a `.md` or a `.docx` has the formatter write one. Format-convert given a `.bib` reads that file and no `.tex`.
-6. For full mode, the folder `<project folder>/manuscript/`. Plan mode names that folder only to place its run folder, and writes nothing in it.
+5. For full mode, the folder `<project folder>/manuscript/`. Plan mode names that folder only to place its run folder, and writes nothing in it.
    - An existing `main.tex` there is read as existing draft sections (intake's Materials in hand). The first draft replaces it only after the user confirms that at the intake confirmation.
    - An existing `refs.bib` is kept and changed only by a patch.
-7. The runs beside the same manuscript, in the `paper-runs/` folder of the run folder's parent (Steps 5).
+6. The runs beside the same manuscript, in the `paper-runs/` folder of the run folder's parent (Steps 5).
    - The latest run is the folder `paper-runs/*/` with the latest date, and of those the highest number, a folder with no number counting as 1.
    - Its `config.md` is offered at intake for the user to confirm or change.
    - A latest run whose folder holds no `final.md` is an unfinished run (Steps 5).
@@ -74,23 +70,23 @@ A file or folder argument is a path, or words that name it, such as a name or a 
    - For full, the latest finished plan run's `chapter-plan.md`, `insights.md`, `dialogue.md`, `outline.md` and `arguments.md`, found in `<project folder>/paper-runs/`. Intake offers them.
    - A finished plan run is one with a `final.md` and a `chapter-plan.md`.
    - For disclosure, the records of every run in `paper-runs/` beside the manuscript, which intake reads to mark the categories of AI use (`references/intake.md`, "Disclosure records").
-8. The environment variables `S2_API_KEY`, `OPENALEX_API_KEY` and `CROSSREF_POLITE_EMAIL`, each optional, never printed, read by `templates/lookup.py`.
-9. The model identifier that the runner's model list gives for the alias `reviewer` names, such as `claude-opus-5-5` for `claude:opus` (Steps 4).
-10. `references/intake.md`, read by the session at intake, `references/patch-file.md`, read by the session at Steps 9, and `references/modes.md` for a plain request and for an argument given in words. Each role agent reads the page of its own role (Agent prompts).
-11. For format-convert, the programs `pandoc`, `latexmk`, `pdftotext` and `pdftocairo`, and for a `.bib` given also `latex` and `bibtex`, each optional, found on the PATH with `command -v`. A missing one is named in the final message with the output it would have made, and the run goes on with the other targets.
+7. The environment variables `S2_API_KEY`, `OPENALEX_API_KEY` and `CROSSREF_POLITE_EMAIL`, each optional, never printed, read by `templates/lookup.py`.
+8. The model identifiers the runner's model list gives for opus, the model of every role but the formatter, and for sonnet, the formatter's model, such as `claude-opus-5-5` for opus (Steps 4). Every role runs as the effort agent `ordo-medium`.
+9. `references/intake.md`, read by the session at intake, `references/patch-file.md`, read by the session at Steps 9, and `references/modes.md` for a plain request and for an argument given in words. Each role agent reads the page of its own role (Agent prompts).
+10. For format-convert, the programs `pandoc`, `latexmk`, `pdftotext` and `pdftocairo`, and for a `.bib` given also `latex` and `bibtex`, each optional, found on the PATH with `command -v`. A missing one is named in the final message with the output it would have made, and the run goes on with the other targets.
 
 ## Steps
 
-Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 runs in full, revision, citation-check, format-convert and figures. Steps 8 to 14 are named from the items of the modes at the point they apply.
+Steps 1 to 6 run once, in order, before the items of the mode. Steps 7 runs in full, outline-only, revision, lit-review, citation-check, format-convert and figures. Steps 8 to 14 are named from the items of the modes at the point they apply.
 
 The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`, where `<script>` is `anchorize_tex.py`, `apply_tex_patch.py`, `lookup.py`, `calibration_counts.py` or `reference_docx.py`. Format-convert also has the session run `pandoc`, `latexmk`, `pdftocairo` and `pdftotext`, and for a `.bib` given `latex` and `bibtex`, which are programs of the runner and not scripts of this skill.
 
-1. Read the call and the configuration as "What it reads" 1, 3, 5 and 6 say.
+1. Read the call as "What it reads" 2, 4 and 5 say.
    - A plain request gets its mode and arguments from `references/modes.md`. A request that fits two modes is the stop "The mode to run", raised before intake.
    - A mode or call outside the nine modes and the two calls is the refusal "Unknown mode", which lists the nine modes and the two calls.
    - `/paper revision-coach`, `/paper rebuttal-audit` and a request for referee comments to parse or to audit are that refusal, and its text names `rebuttal` as the skill that takes them.
    - A call with fewer or more arguments than the mode's line of Quick start gives is the refusal "An argument that does not exist", which shows that line. Unquoted words after the mode name make one argument when the line takes one, and quotes separate the arguments of a line that takes two.
-   - Done when the mode, `reviewer`, `reviewer_effort`, `standards` and, where "What it reads" 5 applies, the `.bib` are known, or the refusal or the stop is raised.
+   - Done when the mode and, where "What it reads" 4 applies, the `.bib` are known, or the refusal or the stop is raised.
 2. Find what the arguments name, and quote what reaches a command.
    - An argument that is an existing path is taken as it stands.
    - Any other file or folder argument is taken as words. The session searches for what they name with `find`, `ls` and `grep`, and reads the content of the files it finds.
@@ -103,22 +99,23 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
    - A single quote inside a value is written `'\''`, so the shell expands nothing in it.
    - Done when each file or folder argument is the absolute path of an existing file or folder, the candidates are listed for the choice, or the refusal is raised.
    - The step is also done only when each command line of the run holds each path and each user value as one single-quoted argument.
-3. Find the prose standard and the writing pages as "What it reads" 2 says.
+3. Find the prose standard and the writing pages as "What it reads" 1 says.
    - Done when the absolute path of the prose standard and of each of the three pages is known, or the refusal is raised.
-4. Check the runner, and read the model identifier.
-   - Check that the runner lists the effort agent `ordo-<reviewer_effort>` among its agent types and that `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1, as the `refute` skill's Steps 1 checks.
+4. Check the runner, and read the model identifiers.
+   - Check that the runner lists the effort agent `ordo-medium` among its agent types and that `printenv CLAUDE_CODE_EFFORT_LEVEL` exits 1.
    - Either check failing is the refusal "The configured effort cannot apply" ("Stops"), before any agent starts and any file is written.
-   - Read the identifier of the model that `reviewer` names from the runner's model list. The draft writer's prompt gives it, and the AI disclosure names it.
-   - A model list that gives no identifier for the alias leaves it to the first agent. Steps 8 reads the model that agent was served and checks that it is a model of the alias's family. Its identifier becomes the run's identifier.
-   - A runner that gives no served model leaves the identifier a gap: the AI disclosure then lists `[GAP: model identifier]` among its gaps, and the final message lists it.
-   - Done when both checks hold and the identifier is known, left to the first agent or recorded as a gap, or the refusal is raised.
+   - Read from the runner's model list the identifier of each model the run starts: opus for every role but the formatter, and sonnet for the formatter, which only format-convert starts.
+   - The opus identifier is the one the draft writer's prompt gives and the AI disclosure names.
+   - A model list that gives no identifier for a model leaves it to the first agent the run starts on that model. Steps 8 reads the model that agent was served and checks that it is a model of that family. Its identifier becomes the run's identifier of that model.
+   - A runner that gives no served model leaves the opus identifier a gap: the AI disclosure then lists `[GAP: model identifier]` among its gaps, and the final message lists it.
+   - Done when both checks hold and each identifier is known, left to the first agent or recorded as a gap, or the refusal is raised.
 5. Make the run folder, or take up the unfinished run.
    - The date is the local date, `date +%Y-%m-%d`.
    - The run folder is `paper-runs/<mode>-<date>/` in the parent of the manuscript's folder.
    - The manuscript's folder is `<project folder>/manuscript` for full, outline-only and plan, the folder of the manuscript given for format-convert, and the folder of the main `.tex` for the other modes and the calls.
    - Plan mode's run folder is therefore `<project folder>/paper-runs/plan-<date>/`.
    - Lit-review without a `.tex` has no manuscript, and its run folder is `paper-runs/lit-review-<date>/` in the folder the session runs in.
-   - Before the folder is made, read the latest run beside the manuscript, of whatever mode, as "What it reads" 7 says. A latest run with no `final.md` is raised as the stop "An unfinished run", which asks once whether to continue it or start a new run.
+   - Before the folder is made, read the latest run beside the manuscript, of whatever mode, as "What it reads" 6 says. A latest run with no `final.md` is raised as the stop "An unfinished run", which asks once whether to continue it or start a new run.
    - A continued run takes that run's mode, folder and arguments from its `config.md`.
    - In a continued run each item whose output stands in the folder and whose done criterion holds is skipped.
    - A plan run that a pause or the user's leaving ended has `paused.md` and no `final.md`, so it is the unfinished run this step offers.
@@ -129,26 +126,27 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
    - Full mode also makes `<project folder>/manuscript/` when it does not exist.
    - Done when the run folder exists and is empty, or is the continued run's folder.
 6. Run intake, the session's interview.
-   - Read `references/intake.md`, and ask the questions of its table marked for the mode, all in one message, with the `config.md` of "What it reads" 7 offered as the answers.
+   - Read `references/intake.md`, and ask the questions of its table marked for the mode, all in one message, with the `config.md` of "What it reads" 6 offered as the answers.
    - Write the answers to `config.md` in the run folder, in the form `references/intake.md` gives under "The record", and show it whole.
    - The user may change the record as often as the user wants, and the record the user confirms ends the stop.
    - Done when the user has confirmed the record at the stop "The intake confirmation".
 7. Make the temporary folder.
-   - It is made with `mktemp -d` before the first compile or fetch.
-   - Full, revision and figures use it for each compile copy (Steps 11), and full, revision and citation-check for the fetched texts (Steps 12).
+   - It is made with `mktemp -d` before the first compile, the first fetch or the first start of the literature strategist.
+   - Full, revision and figures use it for each compile copy (Steps 11), and full, revision and citation-check for the texts the citation compliance agent fetches (Steps 12).
+   - Full, outline-only, revision and lit-review give it to the literature strategist, which fetches into it the texts of the candidates it screens (`references/literature-strategist.md`, "Screening").
    - The run folder holds no compile copy. Every compile of the run, also in an expanded revision, is made in a folder of the temporary folder.
    - Format-convert uses it for the copies of the manuscript's folder in which it converts and compiles (`convert/` and `pdf/`).
    - It is removed with `rm -r` on every path that ends the run: delivery, or the user ending the run at a stop.
-   - A temporary folder that is gone when an incremental check or a compile is due (Steps 12) is made again with `mktemp -d`, and the run goes on with its path.
+   - A temporary folder that is gone when an incremental check, a compile or a start or resumption of the literature strategist is due is made again with `mktemp -d`, and the run goes on with its path.
    - A reply after the end makes a new temporary folder for the incremental check and the compile of the findings pass, and removes it (Steps 13).
    - Done when the folder's absolute path is known.
 8. Start a role agent, or resume one.
-   - Start it as a fresh agent through the Agent tool, as `ordo-<reviewer_effort>` on the model `reviewer` names, with the prompt of "Agent prompts" for its role.
-   - Start one agent at a time and wait for the runner to report that it ended, except where an item starts two together.
+   - Start it as a fresh agent through the Agent tool, as `ordo-medium` on opus, or for the formatter as `ordo-medium` on sonnet, with the prompt of "Agent prompts" for its role.
+   - Start one agent at a time and wait for the runner to report that it ended, except in full item 7 and revision items 3 and 4, which start two together.
    - Right after the start, read the agent's id and the model the runner served it, from the runner's record of the agent as the `plan-orchestration` skill's "Launching a builder" says.
-   - A served model that differs from the identifier of Steps 4 is the stop "A model other than the configured one". On that stop every agent of the run still running is stopped through the runner's stop tool, and nothing any of them wrote is used.
-   - With no identifier in the model list, the first agent's served model decides. An identifier that names another family than the alias's (`opus`, `sonnet` or `haiku`) is the same stop. Any other identifier becomes the run's identifier, which the session records in the Notes of `config.md` and compares with every later start.
-   - A draft writer started before the run had an identifier listed `[GAP: model identifier]` in the gaps after its disclosure. When its served model is accepted, the session starts the draft writer once more (Steps 8 and 9) with the identifier and the patch id `disclosure`. That start writes the identifier into the statement and removes the gap line.
+   - A served model that differs from the identifier of Steps 4 for the agent's own model, opus for a role and sonnet for the formatter, is the stop "A model other than the configured one". On that stop every agent of the run still running is stopped through the runner's stop tool, and nothing any of them wrote is used.
+   - With no identifier in the model list for a model, the served model of the first agent the run starts on it decides. An identifier that names another family than that model's (`opus` or `sonnet`) is the same stop. Any other identifier becomes the run's identifier of that model, which the session records in the Notes of `config.md` and compares with every later start on that model.
+   - A draft writer started before the run had an opus identifier listed `[GAP: model identifier]` in the gaps after its disclosure. When its served model is accepted, the session starts the draft writer once more (Steps 8 and 9) with the identifier and the patch id `disclosure`. That start writes the identifier into the statement and removes the gap line.
    - Resume an agent by sending it a second message with the runner's message tool on its agent id. The agent keeps its context, no new agent starts, and the message holds the new input and the files the agent writes again. Rules lists the cases.
    - When the agent has ended, read its final message whole.
    - A line of the report that says the session returns something to the user is shown at the next stop of the run and in the final message.
@@ -237,8 +235,9 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
       - The stops and the cases above apply to `citation-report-<nn>.md` as to `citation-report.md`.
       - The patches of an incremental check get no further incremental check.
     - Done when `citation-report.md` exists, its patches are applied, and `checks.md` holds both runs of the checks, or the first run printed no failure. An incremental check is done when `citation-report-<nn>.md` exists, its patches are applied and `checks.md` holds the runs, or when `checks.md` says the patch holds no cited sentence.
-13. Review the manuscript with `/writing`, and end with its report.
-    - Invoke `/writing` through the Skill tool on the main `.tex`, with the project name first in the `projects:` form.
+13. Review the manuscript with `/writing`, and end with its report, when the row Closing review of `config.md` is yes.
+    - With the row no, nothing of this step runs: the run ends after the compile of Steps 11, and the final message says, in a sentence of its own, that `/writing` can be run on the manuscript and that `/paper revision <main.tex> <report>` takes its report.
+    - Invoke `/writing` through the Skill tool on the main `.tex`.
     - The final message (Steps 14) shows its numbered report whole, with the numbers `/writing` prints before its findings.
     - The final message says, in a sentence of its own, what a one-line reply starts. In full and revision mode it starts the draft writer for those findings, the incremental citation check of its patches, the reading of the findings pass with one writer pass for the items that reading records, and the compile again. In the other modes it starts the draft writer for those findings and the compile again. The sentence gives the forms `all`, `all but 3, 7`, `2, 5` and `none`.
     - The final message says, in a sentence of its own, that the user can instead ask for an autonomous writer pass. In that pass the draft writer judges each finding, applies the ones it accepts and lists the rest with its reason.
@@ -251,17 +250,17 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
     - An item the reading records goes once to the draft writer (Steps 8 and 9) as patches whose operations name the item. Apply them (Steps 10), run the incremental check of Steps 12 on them, and compile once as Steps 11 says. An item still open after that goes to the final message. Each start is a fresh agent.
     - A number the report does not have is answered by naming the numbers it has, up to 3 answers in all. A third answer with a number the report does not have is taken as `none`.
     - The message that ends a reply is appended to `final.md`.
-    - Done when the final message holds the report and the two sentences, and each finding a reply names is applied or listed as not applied.
+    - Done when the final message holds the report and the two sentences, and each finding a reply names is applied or listed as not applied, or, with the row Closing review no, when the final message holds the sentence on `/writing`.
     - In full and revision it is also done when the reading of the findings pass is written and its items are applied or named in the final message.
 14. End the run.
-    - In full and revision, when the blind-review model of the Venue limits row is double-blind, start the draft writer (Steps 8) once, with the model and files of its last start. It writes the anonymous copy `<main>-anonymous.tex` beside the final main `.tex`, as `references/draft-writer.md` gives under "The anonymous copy". The main `.tex` is `main.tex` in full mode and the main `.tex` the call gives in revision, and `<main>` is its name without `.tex`. This start runs after the last change to the main `.tex`, which is the findings pass of Steps 13, or the writer pass for the items of its reading, when a reply asked for one. It runs again after any later reply that changed the main `.tex`. It writes no patch, and the main `.tex` stays as it is.
+    - In full and revision, when the blind-review model of the Venue limits row is double-blind, start the draft writer (Steps 8) once, with the model and files of its last start. It writes the anonymous copy `<main>-anonymous.tex` beside the final main `.tex`, as `references/draft-writer.md` gives under "The anonymous copy". The main `.tex` is `main.tex` in full mode and the main `.tex` the call gives in revision, and `<main>` is its name without `.tex`. This start runs after the last change to the main `.tex`, which is the findings pass of Steps 13, or the writer pass for the items of its reading, when a reply asked for one. With the row Closing review no, it runs after the compile of Steps 11, since no findings pass follows. It runs again after any later reply that changed the main `.tex`. It writes no patch, and the main `.tex` stays as it is.
     - Remove the temporary folder with `rm -r` when the run made one.
     - Remove each folder that `find '<run folder>' -maxdepth 1 -type d -name 'compile*'` lists, with `rm -r`, before the final message, and name each in the message. A file such as `compile-1-overfull.txt` stays.
     - End with the final message, which lists the run folder and its files, and write the same message to `final.md` in the run folder.
     - A plan run that a pause or the user's leaving ends writes the message to `paused.md` in place of `final.md`, so the run stays unfinished (plan mode, item 7).
     - When the draft writer wrote `cover-letter.tex` or `<main>-anonymous.tex`, it names each file, and for the anonymous copy says that the camera-ready version is the main `.tex`.
     - In full and revision it lists each `citation-report-<nn>.md` the run wrote.
-    - It also lists every issue that goes to the user: `unused:` lines, references and checks left failing, acknowledged limitations, items marked "needs the user", gaps, venues not screened, entries the literature strategist took out of `refs.bib` with their lines, and every change not applied.
+    - It also lists every issue that goes to the user: `unused:` lines, references and checks left failing, acknowledged limitations, items marked "needs the user", gaps, each `[GAP: ...]` of a statement only the authors can give as the authors' fact to fill in (`references/peer-reviewer.md`, "The issues"), venues not screened, entries the literature strategist took out of `refs.bib` with their lines, and every change not applied.
     - The final message of full and revision also lists the sources that only a preprint server or no index matched. It takes them from the Summary and the Lookups table of `citation-report.md`. It says when the citations were not checked against their sources, and in full mode it says when the last draft review's verdict was not Accept.
     - When the visualization agent ran under the permission "the project's figure script edited and run", the final message lists each file outside the run folder that the script or the agent wrote or changed. The list comes from `figures.md` "Names".
     - Done when the temporary folder and every `compile*` folder of the run folder no longer exist, `final.md` exists (`paused.md` for a paused plan run) and the final message is shown.
@@ -271,7 +270,7 @@ The five scripts are run as `python3 '<this skill's folder>/templates/<script>'`
 Stops this mode can reach: the mode to run (only for a plain request), an unfinished run, the intake confirmation, the sources' review, a research question the materials do not answer, the outline's approval, a claim the run cannot support, a reference that cannot be confirmed, the citation style to confirm, the draft review does not pass, a structural patch, a patch that does not apply, a script failed, and a model other than the configured one.
 
 1. Start the literature strategist (Steps 8), unless intake recorded that the search is skipped or took an earlier run's outputs.
-   - It is given `config.md` and the sources given: the `refs.bib` of `<project folder>/manuscript/` with its manifest (Steps 9) when one stands, and the `.bib` the Materials in hand row names.
+   - It is given `config.md`, the temporary folder (Steps 7) and the sources given: the `refs.bib` of `<project folder>/manuscript/` with its manifest (Steps 9) when one stands, and the `.bib` the Materials in hand row names.
    - It screens the sources given and searches for what they miss, with its search inside its start, which ends as `references/literature-strategist.md` gives under "The four searches". It runs `lookup.py resolve --entry` on each entry it writes. It writes `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` beside them for each list of a screened `.bib` that holds more than 50 entries. For an existing `refs.bib` it writes a patch with the id `full` that adds the new entries.
    - An earlier lit-review run taken at intake gives its `review.md` and `refs.bib`, copied into the run folder with `cp` and checked with `cmp`, and the strategist is not started.
    - An earlier outline-only run taken at intake gives its `review.md` and `refs.bib` as well, since that mode always runs the strategist, and the strategist is not started.
@@ -304,7 +303,7 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
 5. Send each section that needs literature and has no source back to the literature strategist.
    - Read `outline.md` for the sections the planner marks "needs literature" (`references/planner.md`). With none, skip this item.
    - Resume the strategist (Steps 8) when item 1 started it in this run, with those sections to search sources for, its search ending as `references/literature-strategist.md` gives under "The four searches". It updates `review.md`, `refs.bib` and its patch, and runs `lookup.py resolve --entry` on each entry it adds.
-   - When intake took an earlier lit-review run, start the strategist as a fresh agent, given those sections and the run folder's `review.md` and `refs.bib` as the sources given. It updates both files and writes the patch where item 1 would have written one.
+   - When intake took an earlier lit-review run, start the strategist as a fresh agent, given those sections, the temporary folder and the run folder's `review.md` and `refs.bib` as the sources given. It updates both files and writes the patch where item 1 would have written one.
    - When intake skipped the search, this item is skipped, and the sections stay "needs literature".
    - Put the new entries in the manuscript's `.bib` as item 3 says.
    - Start the planner again as a fresh agent, given `review.md` and its earlier files. It assigns what was found and writes `outline.md` and `arguments.md` again.
@@ -336,19 +335,21 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
    - Done when the done criterion of Steps 12 holds.
 10. Start the peer reviewer (Steps 8) for draft review round 1, given the closing checks below and the last outputs of `cite-keys` and `check-urls`. It is also given `citation-report.md`, `config.md`, `outline.md`, `arguments.md` and the draft writer's report. It writes `review-1.md`.
     - A verdict Accept goes on to item 12.
-    - A verdict Reject in either draft review round is the stop "The draft review does not pass".
+    - A verdict Reject in draft review round 1 is the stop "The draft review does not pass", with the answers and the recommendation of item 11.
     - A verdict Minor Revision or Major Revision sends the issues to the draft writer (Steps 8 and 9) with the ids `D1-<m>`, applied as Steps 10 says, and the incremental check of Steps 12 follows. The peer reviewer is then started again as a fresh agent for draft review round 2, given `review-1.md`, the draft writer's revision log, the apply reports and `citation-report-<nn>.md` of those patches. It writes `review-2.md`.
     - An issue marked "needs the user" is not sent to the draft writer and goes to the final message.
-    - Done when the last verdict lets the run go on, or the stop is raised.
-11. Decide after draft review round 2.
-    - A Critical issue left unresolved is the stop "The draft review does not pass", whatever the score. A description of how the data were handled that the result files contradict is such an issue, as `references/peer-reviewer.md` gives.
-    - Otherwise the issues that remain go to the final message as acknowledged limitations, and no writer pass follows.
-    - At the stop the user chooses one of five answers.
+    - Done when the verdict of round 1 is Accept, `review-2.md` exists, or the stop is raised.
+11. Decide after draft review round 2, by the overall score of `review-2.md` alone, whatever its verdict, Reject included.
+    - A score of 6.5 or more: the run goes on, and the issues that remain go to the final message as acknowledged limitations.
+    - A score below 6.5 with every Critical issue resolved: the run goes on, with the issues that remain as acknowledged limitations.
+    - A score below 6.5 with a Critical issue unresolved is the stop "The draft review does not pass". A description of how the data were handled that the result files contradict is such an issue, as `references/peer-reviewer.md` gives.
+    - No writer pass follows draft review round 2.
+    - At the stop the user chooses one of three answers, and the stop shows Accept as its recommendation.
       - Accept: the run goes on with the issues listed as acknowledged limitations.
       - An expanded revision: the run goes back to the step the root cause in the review names, and runs again from there in the same run folder. The reviews are numbered on (`review-3.md`, `review-4.md`, ids `D3-<m>`, `D4-<m>`). The review also states the additional work as Moderate, Significant or Major Rework.
-      - Revise by hand and resubmit: the run ends at once (Steps 14) with its records. The final message says that a later revision run takes the revised manuscript with this run's `review-<r>.md` among its materials.
-      - Lower the venue: the session asks the Venue and Venue limits questions of intake again and writes the answers to `config.md`. It shows the record at the stop "The intake confirmation". The draft review then runs again against the new venue's bar. Item 10 starts the peer reviewer as a fresh agent for a new draft review round 1, with the reviews numbered on. Item 11 decides after the round 2 that follows it. The manuscript is not changed by the new venue alone, and the issues of the new review go to the draft writer as item 10 says.
       - End the run.
+    - An expanded revision is made only when the user chooses it at the stop.
+    - The stop stays a stop under an instruction not to stop that intake recorded in the Notes, as the lead of "Stops" says.
     - A root cause that is structural or one of originality returns to item 4. The session first copies `main.tex` to `main-before-<r>.tex` in the run folder, with `<r>` the number of the last review. It resumes the planner's latest start (Steps 8) with the review as a second message, and the planner writes `outline.md` and `arguments.md` again. Items 5 and 6 run again, and the first draft of item 7 replaces `main.tex`.
     - A root cause that is insufficient evidence returns to item 1. The session resumes the strategist (Steps 8) with the review as a second message, and the strategist updates `review.md`, `refs.bib` and its patch. The stop of item 2 then runs again.
     - A root cause that is the writing returns to the sections. The draft writer rewrites the sections the issues name, as patches with the ids `D<r>-<m>` of the last review, and items 9 and 10 run again. Every compile copy of an expanded revision is made in the temporary folder (Steps 11).
@@ -356,13 +357,13 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
     - Done when the stop is raised and answered, or the run has gone on.
 12. Check the references after the last writer pass (Steps 11), then compile (Steps 11).
     - Done when the done criteria of Steps 11 hold.
-13. Review the manuscript with `/writing` (Steps 13).
+13. Review the manuscript with `/writing` (Steps 13) when the row Closing review is yes.
     - Done when the done criterion of Steps 13 holds.
 14. End the run (Steps 14).
 
 The closing checks are given to the peer reviewer in each draft review round, and each check that fails is an issue of its report:
 
-- Every section of the outline stands in the draft and holds text, not a placeholder (full mode).
+- Every section of the outline stands in the draft and holds text, not a placeholder (full mode). A `[GAP: ...]` of a statement only the authors can give is "needs the user", as `references/peer-reviewer.md` gives under "The issues".
 - Every `\includegraphics` path names a file that exists.
 - Every cited key has an entry in the `.bib`, as the output of `lookup.py cite-keys` shows, and a `check-urls` line that fails the status rules of `references/citation-compliance.md` is an issue.
 - An `unused:` line of that output is an issue marked "needs the user", which is not sent to the draft writer and goes to the final message (Steps 11).
@@ -388,7 +389,7 @@ The closing checks are given to the peer reviewer in each draft review round, an
 
 Stops this mode can reach: the mode to run (only for a plain request), an unfinished run, the intake confirmation, the sources' review, the outline's approval, and a model other than the configured one.
 
-1. Start the literature strategist (Steps 8), always. It is given `config.md`, the sources of an earlier lit-review run that intake took, if any, and the `.bib` the Materials in hand row names, which it screens. It writes `review.md` and `refs.bib` in the run folder.
+1. Start the literature strategist (Steps 8), always. It is given `config.md`, the temporary folder (Steps 7), the sources of an earlier lit-review run that intake took, if any, and the `.bib` the Materials in hand row names, which it screens. It writes `review.md` and `refs.bib` in the run folder.
    - Done when `review.md` exists.
 2. Raise the stop "The sources' review" as item 2 of full mode says.
    - Done when the user has gone on.
@@ -419,15 +420,15 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
    - Show `items.md`. The user drops items or adds items, and the agent for the added ones is the peer reviewer started again as a fresh agent, given the additions.
    - No patch is written before the user approves the items, and the changes have no cap. The user ends the stop by approving the items or ending the run.
    - Done when the user has approved the items, or the item was skipped.
-3. Start the literature strategist (Steps 8) when an item calls for a new reference and intake allowed new references.
-   - It is given `config.md`, the items that call for it, the `.bib` and its manifest (Steps 9). It writes the entries as a `.bib` patch whose ops name the items, with its search inside its start, which ends as `references/literature-strategist.md` gives under "The four searches". It runs `lookup.py resolve --entry` on each entry it adds. Apply it (Steps 10).
+3. Start the literature strategist (Steps 8) when an item calls for a new reference and intake allowed new references. When item 4 applies too, start it together with the visualization agent of item 4.
+   - It is given `config.md`, the items that call for it, the temporary folder (Steps 7), the `.bib` and its manifest (Steps 9). It writes the entries as a `.bib` patch whose ops name the items, with its search inside its start, which ends as `references/literature-strategist.md` gives under "The four searches". It runs `lookup.py resolve --entry` on each entry it adds. Apply it (Steps 10).
    - Done when the patch is applied, or the item was skipped.
-4. Start the visualization agent (Steps 8) when an item calls for a figure change and intake allowed figure changes.
+4. Start the visualization agent (Steps 8) when an item calls for a figure change and intake allowed figure changes. When item 3 applies too, it starts together with the literature strategist, and each agent is read as Steps 8 says when it ends.
    - It is given `config.md`, the items that call for it, the permission intake gave (the project's figure script edited and run, or a copy in the run folder) and the file names of the manuscript's folder and its `figures/` folder. It works within that permission, with its rendered-figure check of at most 2 fix passes inside its start, and writes `figures/` and `figures.md`.
    - Under "the project's figure script edited and run" the files outside the run folder that may change are the script and the files it writes. The agent records each of them in `figures.md` "Names" with its `shasum -a 256` before and after. Under "a copy in the run folder" nothing outside the run folder changes.
    - Copy each image it drew to `<project folder>/manuscript/figures/` under the name `figures.md` gives, with `cp -n`.
    - Done when `figures.md` exists, or the item was skipped.
-5. Start the draft writer (Steps 8 and 9), given `config.md`, `items.md` and the draft's files, with `figures.md` and `refs.bib` where items 3 and 4 ran. It writes `intended-claims.md` in the run folder before its first patch when an item adds or changes a claim, with the field `| result:` on each line that states a number (`references/draft-writer.md`, "Setup"). It then writes one patch per item or group of items, and its patches name the ids of the items they answer. A patch that writes a number the list does not hold appends the number's line to the list.
+5. Start the draft writer (Steps 8 and 9) after the agents of items 3 and 4 have ended, given `config.md`, `items.md` and the draft's files, with `figures.md` and `refs.bib` where items 3 and 4 ran. It writes `intended-claims.md` in the run folder before its first patch when an item adds or changes a claim, with the field `| result:` on each line that states a number (`references/draft-writer.md`, "Setup"). It then writes one patch per item or group of items, and its patches name the ids of the items they answer. A patch that writes a number the list does not hold appends the number's line to the list.
    - A number computed from saved results is written only when intake allowed it and only from the files intake named.
    - An item that needs what intake did not allow is left unchanged and named in the draft writer's report with the permission it lacks.
    - Apply the patches (Steps 10).
@@ -442,7 +443,7 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
 9. After reading 2 a reference failure left starts the draft writer once with the patch id `reference-fix` (Steps 11), and the checks run again. The incremental check of Steps 12 follows a patch that adds or changes a cited sentence.
    - A failure left is named in the final message and in `checks.md` under mark-only, and under strict is the stop "A reference that cannot be confirmed".
    - Done when the checks hold or the failure is named or raised.
-10. Compile (Steps 11), then review the manuscript with `/writing` (Steps 13).
+10. Compile (Steps 11), then review the manuscript with `/writing` (Steps 13) when the row Closing review is yes.
     - Done when the done criteria of Steps 11 and Steps 13 hold.
 11. End the run (Steps 14).
 
@@ -460,7 +461,7 @@ Stops this mode can reach: the mode to run (only for a plain request), an unfini
 
 Stops this mode can reach: the mode to run (only for a plain request), an unfinished run, the intake confirmation, the sources' review, a reference that cannot be confirmed (under strict), a structural patch, a patch that does not apply, a script failed, and a model other than the configured one.
 
-1. Start the literature strategist (Steps 8) once, given `config.md`, the topic, the research question and the `.bib` and its manifest when a `.tex` is given (Steps 9). It writes `review.md` and `refs.bib`, and `screened-<list>.txt` for each list of a screened `.bib` that holds more than 50 entries. Given a `.tex`, it writes the patch with the id `lit-review` that adds the entries after the last block of the `.bib`.
+1. Start the literature strategist (Steps 8) once, given `config.md`, the temporary folder (Steps 7), the topic, the research question and the `.bib` and its manifest when a `.tex` is given (Steps 9). It writes `review.md` and `refs.bib`, and `screened-<list>.txt` for each list of a screened `.bib` that holds more than 50 entries. Given a `.tex`, it writes the patch with the id `lit-review` that adds the entries after the last block of the `.bib`.
    - It does not start the search without a research question (`references/literature-strategist.md`).
    - Its search runs inside its start and ends as `references/literature-strategist.md` gives under "The four searches".
    - After each pass the search ends when at least 3 of the 5 conditions hold and the condition that the latest pass added under 10 percent is among them. Otherwise it ends after pass 8, or after pass 4 when no condition holds.
@@ -729,7 +730,7 @@ Stops this call can reach: the mode to run (only for a plain request), an unfini
 
 ## Agent prompts
 
-The prompt of each role agent holds these pieces:
+Each role agent starts as `ordo-medium` on opus, and the formatter as `ordo-medium` on sonnet (Steps 8). The prompt of each role agent holds these pieces:
 
 - The absolute path of the agent's page under `references/`, with the instruction to read it whole first.
 - The absolute paths of `config.md` and of the other files the table below lists for the role.
@@ -747,7 +748,7 @@ Role agents run the read-only commands of `lookup.py` themselves: `resolve` (als
 
 | Role | Page | The prompt adds | Writes |
 |---|---|---|---|
-| Literature strategist | `references/literature-strategist.md`, `references/patch-file.md` and "Looking a reference up" of `references/citation-compliance.md` | The sources given, the manuscript's `.bib` and its manifest when one is given, and the commands `resolve`, `resolve --entry`, `search`, `refs`, `cited-by` and `bibtex`; for its resumption, the user's additions and removals, the sections of the outline that need literature, the review of an expanded revision, or the rejection of a patch | `review.md`, `refs.bib`, `screened-<list>.txt` for a list of more than 50 entries, a patch for the `.bib` |
+| Literature strategist | `references/literature-strategist.md`, `references/patch-file.md` and "Looking a reference up" of `references/citation-compliance.md` | The sources given, the manuscript's `.bib` and its manifest when one is given, the temporary folder, and the commands `resolve`, `resolve --entry`, `search`, `refs`, `cited-by`, `fetch` and `bibtex`; for its resumption, the user's additions and removals, the sections of the outline that need literature, the review of an expanded revision, or the rejection of a patch | `review.md`, `refs.bib`, `screened-<list>.txt` for a list of more than 50 entries, a patch for the `.bib` |
 | Planner | `references/planner.md` | `review.md`, the user's changes to the outline, the structure chosen or insisted on, the sources found for sections that needed literature, and the files it wrote before; for its resumption, the review of an expanded revision; in plan mode, `chapter-summaries.md` and `insights.md` for the outline, `arguments.md` with the mentor's question and the user's answer for an evaluation, and every file of the run for the chapter plan; in full mode given a plan run, that run's files | `outline.md`, `arguments.md`, `structure-options.md`; in plan mode `stress-test.md` and `chapter-plan.md` |
 | Draft writer | `references/draft-writer.md`, `references/latex-template.md` and `references/patch-file.md` | The outline, the argument and the sources for a first draft with `existing-main.tex` when one stands, `references/statements.md`, `references/ai-disclosure.md` and the model identifier of Steps 4; the items, issues, findings or failing lines, and the files with their manifests, for a patch; the abstract-only and disclosure inputs; the final main `.tex` for the anonymous copy | `main.tex` whole for the first draft, `intended-claims.md`, `cover-letter.tex` for a journal venue, `<main>-anonymous.tex` for a double-blind venue, patches, `disclosure.md` |
 | Visualization | `references/visualization.md` and, for its placement patch, `references/patch-file.md` | `outline.md`, `arguments.md`, the file names in the manuscript's folder and its `figures/` folder; in revision, the items and intake's permission; in the figures call, the manifest of the `.tex` and the patch path; for its resumption in full mode, the manifest of `main.tex` and the patch path, or the rejection of a patch | `figures/`, `figures.md`, the patch with the id `figures`; under the permission "the project's figure script edited and run", also the script and the files it writes outside the run folder, each recorded in `figures.md` "Names" with `shasum -a 256` before and after |
@@ -775,19 +776,17 @@ A run stops only at the stops its mode lists under its heading in "Steps". Any o
 | The citation style to confirm | Full, revision and citation-check: the citation compliance agent reports a format error in more than half of the cited entries | The pattern as the report states it, the Citation style row and the style the entries follow | The user confirms the style or gives another; the agent starts again as a fresh agent and the run goes on |
 | A reference that cannot be confirmed | Full, revision and citation-check: no lookup confirms a reference, or under strict a DOI fails or a failure is left after the reference fix. Lit-review under strict: a failure left after the reference fix | The reference, each lookup tried and each index left out with its reason | A corrected identifier, the removal of the reference, or an override with reasons recorded under "Decisions"; the run goes on |
 | A claim the run cannot support | Full, revision and citation-check: the passage read for a cited claim does not hold it, a source cannot be fetched, or a sentence states a claim of the row Claims not to make | The claim, the evidence that is missing and the URLs tried | The user supplies the evidence, revises the passage, or overrides with reasons recorded under "Decisions"; the run goes on |
-| The draft review does not pass | The verdict of a draft review round is Reject, or a Critical issue stays unresolved after draft review round 2 | `review-<r>.md`, the likely root cause, the estimate of the additional work and the venue limits the draft misses | The user accepts with the issues as acknowledged limitations, asks for an expanded revision that returns to the step the root cause names, revises by hand and resubmits (the run ends), lowers the venue (the draft review runs again against the new venue), or ends the run |
+| The draft review does not pass | The verdict of draft review round 1 is Reject, or after draft review round 2 the overall score is below 6.5 with a Critical issue unresolved (full items 10 and 11) | `review-<r>.md`, the likely root cause, the estimate of the additional work, and Accept as the recommendation | The user accepts with the issues as acknowledged limitations, asks for an expanded revision that returns to the step the root cause names, or ends the run |
 | A structural patch | `apply_tex_patch.py` exits 3 (Steps 10) | The structural flags as printed | The user acknowledges the patch or refuses it; the run goes on |
 | A patch that does not apply | A second rejection with the field `kind` set to `validation`, `schema` or `stale-manifest` (Steps 10) | The rejection as printed and the ids of the patch | The user lists the change as not applied, or asks for one more try with a fresh anchorize and a new patch; the run goes on |
 | A script failed | `anchorize_tex.py` or `apply_tex_patch.py` exits 1, or `apply_tex_patch.py` exits 4 | The output as printed and the file left as it was | The cause put right, then `/paper` again |
-| A model other than the configured one | The runner served an agent a model that differs from the identifier of Steps 4, or from the alias's family when the list gave none (Steps 8) | The configured model, the served model and the Claude Code version, as plain text | The user's decision, then `/paper` again |
+| A model other than the configured one | The runner served an agent a model that differs from the identifier of Steps 4 for its own model, opus for a role and sonnet for the formatter, or from that model's family when the list gave none (Steps 8) | The configured model, the served model and the Claude Code version, as plain text | The user's decision, then `/paper` again |
 | A research question the materials do not answer | Full: the planner's report names a part of the research question with no result the run may use. Revision: an item of the peer reviewer names such a part | The part, why (the files and lines that show it), what would answer it as concretely as the materials allow, and three options: the user gives the results, the question is kept with a placeholder `[GAP: <result>, from <what fills it>]` for each missing result, or the question is narrowed (on the user's yes only) | The user's choice, appended to `config.md` under "Decisions"; under an instruction not to stop that intake recorded in the Notes, the second option is taken, the final message repeats what would answer the open part, and the run goes on |
-| No plan configuration | `.agents/plan.yaml` is missing, or has no `reviewer` | A refusal that names `/ordo-init` | `/ordo-init`, then `/paper` again |
-| Unknown project | In the `projects:` form, the first argument names no project | The projects the file lists | `/paper` again with a listed project |
 | Unknown mode | The mode is none of the nine modes or the two calls, or the request is about something other than a paper | The nine modes and the two calls, and for referee comments the skill `rebuttal` | `/paper` again with a listed mode |
 | An argument that does not exist | An argument is missing, or names a file or folder that does not exist and that no search of its words finds | What was looked for, or the mode's line of Quick start | The call corrected, then `/paper` again |
-| The `.bib` is not one file | The lines of "What it reads" 5 name none, more than one, or a file that does not exist | The lines, or the missing file | The manuscript corrected, then `/paper` again |
-| No prose standard | None of the three places of "What it reads" 2 holds the prose standard, or a page of the `writing` folder that it names is missing | The three paths, or the path of the page | A prose standard at one of them, or the `writing` skill installed, then `/paper` again |
-| The configured effort cannot apply | The runner lists no `ordo-<level>` agent for the level `reviewer_effort` names, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 4) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/paper` again in a new session |
+| The `.bib` is not one file | The lines of "What it reads" 4 name none, more than one, or a file that does not exist | The lines, or the missing file | The manuscript corrected, then `/paper` again |
+| No prose standard | Neither of the two places of "What it reads" 1 holds the prose standard, or a page of the `writing` folder that it names is missing | Both paths, or the path of the page | A prose standard at one of them, or the `writing` skill installed, then `/paper` again |
+| The configured effort cannot apply | The runner lists no `ordo-medium` agent, or `CLAUDE_CODE_EFFORT_LEVEL` is set, which runs every agent at its level whatever the definition says (Steps 4) | The missing agent, or the variable's value | The effort agents installed as the plan skills are, or the variable unset, then `/paper` again in a new session |
 
 ## Anti-patterns
 
@@ -802,7 +801,6 @@ A run stops only at the stops its mode lists under its heading in "Steps". Any o
 | Fetched texts kept in the project | The papers are published and the project does not keep them | Fetch into the temporary folder (Steps 7) and remove it at the end of the run |
 | An `unused:` entry removed from the `.bib` | The entry may be cited in a part of the paper not written yet | Name it in the final message and let the user decide |
 | Every `/writing` finding applied without the user's reply or a call for the autonomous pass | The decision on each finding is the user's | Show the report with the two sentences of Steps 13, and apply the findings the user names or the ones the draft writer accepts in the autonomous pass |
-| A role agent started on another model or at another effort than the configuration names | The run no longer uses the reviewer the user configured | Start it as Steps 8 says and read its served model |
 | An existing `main.tex` replaced by the first draft without the user's confirmation | The user's text is lost | Read it as existing draft sections, copy it to the run folder, and replace it only after the confirmation (full mode, item 7) |
 | A PDF made from a `.docx`, by any route | A PDF of a Word document is the user's own export, and a PDF of a `.tex` made from a `.docx` is not a PDF of the manuscript | Make a PDF only from the `.tex` with `latexmk`, and say in the final message why a `.docx` given gets none |
 | A word-count threshold on a conversion | The readers count the title, the abstract and the keywords differently, so a threshold flags a conversion that lost nothing | Count the headings, figures and tables of each output, and show the word counts |
