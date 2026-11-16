@@ -1,6 +1,6 @@
 # 0024. A claim paper's citation-check mode judges rests on a passage read from the source in the same run
 
-Status: proposed
+Status: proposed; superseded by 0033 in the part that makes `lookup.py fetch` the only way the full text is obtained
 
 ## Context
 

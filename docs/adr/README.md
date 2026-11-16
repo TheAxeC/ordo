@@ -39,3 +39,4 @@ A record is `NNNN-<decision-as-a-phrase>.md` from `template.md`, numbered in ord
 | [0030](0030-paper-and-writing-name-the-model-and-effort-of-each-agent-and-read-no-plan-configuration.md) | Paper and writing name the model and effort of each agent and read no plan configuration |
 | [0031](0031-paper-asks-at-intake-whether-full-and-revision-end-with-the-writing-review.md) | Paper asks at intake whether full and revision end with the writing review |
 | [0032](0032-the-literature-strategist-finds-and-reads-sources-where-academic-paper-does-and-lookup-py-checks-every-reference-it-keeps.md) | The literature strategist finds and reads sources where academic-paper does, and lookup.py checks every reference it keeps |
+| [0033](0033-the-citation-compliance-agent-reads-a-source-s-text-from-every-page-it-can-reach-and-quote-check-checks-each-passage.md) | The citation compliance agent reads a source's text from every page it can reach, and quote-check checks each passage |
