@@ -49,10 +49,11 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
-- BK (2026-11-16), the call on the lit-review comparison of step 5.A's check, and what follows it. Both fresh judges chose academic-paper (`agents/reviews/5.A-check-blind-comparison.md`, "Lit-review"), so the check stops here, at its first lost verdict, and the revision, full and disclosure comparisons were not run. (a) The call is a loss. (b) A tie. (c) A win. Recommendation (a), since both judges, in either order, chose academic-paper, each for coverage. What follows a loss, the gate of step 5 not being met, is the user's ruling.
 
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-11-16: Open item BK, the call on the lit-review comparison of step 5.A's check: ruled (a), a loss, by the user, booked in plan.md's Rulings.
 
 - 2026-11-16: Open item BJ, the source texts of the lit-review judges: ruled (a) by the user, booked in plan.md's Rulings.
 - 2026-11-15: Step 5.A landed; the first run's findings closed in repair round 1, the three of the run over round 1 and one of the orchestrator's read fixed at landing.
