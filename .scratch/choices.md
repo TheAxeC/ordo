@@ -486,3 +486,14 @@ step 5, raised by `.scratch/5-paper/agents/reviews/5-refuter.md` Spec 2 as open 
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md:214` (Open item BE)
 Builds on it: step 5
+
+## C111. What the cache of step 5.B holds (2026-11-16)
+
+step 5.B, raised by the user's question on ruling "The lookups of lookup.py": whether the reply cache holds lookups by DOI only, or every metadata reply of the indexes.
+  - (a) Every HTTP 200 reply of an index's metadata interface: a record by DOI or arXiv ID, a title or topic search, references and cited-by; never `check-urls` (a URL's liveness is what it checks) nor `fetch` (ADR 0029 has each citation check fetch its sources again); never a reply other than 200. Pro: the repeated title searches, refs and cited-by calls, where most of the 429s of 2026-11-15 came from, cost one request each. Con: a record an index corrects within 30 days is read from the cache until then.
+  - (b) Lookups by DOI only. Pro: the smallest cache. Con: the title searches, refs and cited-by calls stay uncached. This is the lazy option.
+  - Recommendation: (a).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md` step 5.B, (3)
+Builds on it: step 5.B
