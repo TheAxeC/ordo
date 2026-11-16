@@ -530,3 +530,15 @@ step 5.E, raised by `.scratch/5-paper/agents/reviews/5.E-brief-check.md` "Declin
 Taken: (a)
 Booked: `.scratch/5-paper/agents/briefs/5.E.md` "Decisions taken in this brief" 7; `docs/adr/0035-*.md`
 Builds on it: step 5.E
+
+## C115. The OpenAlex field list and test U1 in step 5.E (2026-11-16)
+
+step 5.E, handed back by its builder at the first run: case T11 says the existing tests pass unchanged, and item 3 adds `ids` to `OPENALEX_FIELDS`, which changes the OpenAlex URLs test U1 pins.
+  - (a) Add `ids` to `OPENALEX_FIELDS` and to U1's URLs. Pro: one field list for every OpenAlex request; the PMCID is read for a DOI, an arXiv ID and a title alike. Con: the cached OpenAlex replies are asked once more under their new URLs.
+  - (b) A second field list for `resolve` alone. Pro: fewer cache keys change. Con: a second code path for one field, and a title `resolve` shares its search with `search`.
+  - Recommendation: (a). The lazy option was dropping the `pmcid:` line, which leaves R1 and R17 unmet.
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.E-cases.md` 1
+Builds on it: step 5.E
+
