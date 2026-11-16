@@ -1,0 +1,98 @@
+== paper
+text: final-message.md: 1 x /\*\*Not done, or done differently from the skill:\*\*/ -> '**Not done, or done differently from the instructions:**'
+text: final-message.md: 1 x /The skill keeps the intake confirmation/ -> 'Its instructions keep the intake confirmation'
+text: final-message.md: 1 x /4 of the skill's 5 stopping conditions/ -> '4 of its 5 stopping conditions'
+text: final-message.md: 1 x /paper-runs/lit-review-2026-11-16// -> 'run/'
+text: final-message.md: 2 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /lookup\.py/ -> 'the lookup script'
+path: run/config.md -> run/settings.md
+text: run/settings.md: 1 x /- Roles run as the agent `ordo-medium`, at the effort it sets \(`CLAUDE_CODE_EFFORT_LEVEL` unset\)\. Opus identifier from the runner's model list: `claude-opus-5-5`\./ -> "- Model of the role agents: opus, identifier `claude-opus-5-5` from the runner's model list; agent effort medium."
+text: run/settings.md: 1 x /Literature strategist served `claude-opus-5-5` \(agent a86e9f951aecaeac0\), the configured identifier\./ -> 'The search agent served `claude-opus-5-5`, the configured identifier.'
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 1 x /config\.md/ -> 'settings.md'
+text: run/settings.md: 1 x /\| Mode \| lit-review \|/ -> '| Task | literature review |'
+text: run/settings.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/final.md: 1 x /# lit-review 2026-11-16: final message/ -> '# Final message, 2026-11-16'
+text: run/final.md: 1 x /paper-runs/lit-review-2026-11-16// -> 'run/'
+text: run/final.md: 2 x /config\.md/ -> 'settings.md'
+text: run/final.md: 1 x /lookup\.py/ -> 'the lookup script'
+text: run/review.md: 62 x /lookup\.py/ -> 'the lookup script'
+== paper
+text: index.md: 60 x (?^:tmp\.uwTOVWPUog)
+text: source-002.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-003.txt: 1 x (?^:/private/tmp/claude-502/\S*?/gate5a/lit-review-1)
+text: source-003.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-003.txt: 5 x (?^:\baxelfaes\b)
+text: source-003.txt: 2 x (?^:config\.md)
+text: source-003.txt: 1 x (?^:ordo-medium)
+text: source-003.txt: 1 x (?^:paper-runs/)
+text: source-003.txt: 1 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-003.txt: 2 x (?^:tmp\.uwTOVWPUog)
+text: source-004.txt: 3 x (?^:[Ll]iterature strategist)
+text: source-004.txt: 4 x (?^:config\.md)
+text: source-004.txt: 29 x (?^:lookup\.py)
+text: source-005.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-005.txt: 5 x (?^:tmp\.uwTOVWPUog)
+text: source-006.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-008.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-008.txt: 2 x (?^:tmp\.uwTOVWPUog)
+text: source-009.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-010.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-010.txt: 4 x (?^:tmp\.uwTOVWPUog)
+text: source-011.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-012.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-013.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-015.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-016.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-017.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-018.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-019.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-020.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-021.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-022.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-023.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-024.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-025.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-026.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-027.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-027.txt: 2 x (?^:tmp\.uwTOVWPUog)
+text: source-028.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-029.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-030.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-031.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-032.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-033.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-034.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-035.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-036.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-037.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-038.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-039.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-040.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-041.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-042.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-043.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-044.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-045.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-046.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-048.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-049.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-050.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-051.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-052.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-053.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-054.txt: 10 x (?^:lookup\.py)
+text: source-054.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-055.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-056.txt: 1 x (?^:lookup\.py)
+text: source-056.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-057.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-058.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-059.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-060.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-061.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-063.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-064.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-065.txt: 1 x (?^:tmp\.uwTOVWPUog)
+text: source-066.txt: 1 x (?^:tmp\.uwTOVWPUog)
+removed: source-004.txt (the search agent's own instruction page), which is the side's instructions, not a text of its sources
