@@ -42,8 +42,40 @@ The keys a .tex cites, read by cite-keys and check-urls:
 
 Pacing and failures:
 
-- Requests to arxiv.org, www.arxiv.org and export.arxiv.org are made one at a time, with at least 3 seconds between the end of one and the start of the next, a redirect included, across every lookup.py process that uses the same temporary folder. Each is made while holding an exclusive flock on the file ordo-lookup-arxiv in the temporary folder (tempfile.gettempdir()), which holds the time the last arXiv request ended. A file that cannot be opened, locked or read, or that holds text other than a time, makes the request wait the full 3 seconds; an empty file, as a new one is, makes it wait not at all.
-- An HTTP 429 waits 2 seconds and is retried, at most 3 times. After that the index is left out with the reason "HTTP 429 after 3 retries", fetch prints that reason for the URL, and check-urls prints the status 429 for a key's URL and names that reason for an index of its title check.
+- Requests to a paced host (listed below) are made one at a time, across every lookup.py process that uses the same temporary folder (tempfile.gettempdir()). At least the host's gap passes between the end of one request and the start of the next.
+- A redirect is a request to the host it goes to and takes that host's turn.
+- Each request is made while holding an exclusive flock on the host's lock file in the temporary folder. The file holds the time the last request to the host ended.
+- A lock file that cannot be opened, locked or read, or that holds text other than a time, makes the request wait the full gap. An empty file, as a new one is, makes it wait not at all.
+- api.crossref.org is paced by the lock file ordo-lookup-crossref, with a gap of 1 second, or 0.35 second when CROSSREF_POLITE_EMAIL is set.
+- api.openalex.org is paced by the lock file ordo-lookup-openalex, with a gap of 1.05 seconds, or 0.21 second when OPENALEX_API_KEY is set.
+- api.semanticscholar.org is paced by the lock file ordo-lookup-semanticscholar, with a gap of 1.05 seconds.
+- arxiv.org, www.arxiv.org and export.arxiv.org are paced together by the lock file ordo-lookup-arxiv, with a gap of 3 seconds.
+- Every other host (doi.org, a publisher's site, an open-access URL) is not paced.
+- An HTTP 429 is retried at most 3 times, each retry in a new turn of its host. The wait runs after the host's lock is released.
+- A 429 whose Retry-After holds a whole number of seconds from 0 to 60 waits that many seconds, and a value below 1 waits 1 second.
+- A 429 whose Retry-After holds an HTTP date waits the seconds from now to that date, rounded up. A date in the past waits 1 second, and a date with no zone is read as GMT.
+- A 429 with no Retry-After, or with any other text in it (a fraction such as 2.5, a negative number, a word), waits 2, then 4, then 8 seconds.
+- After the third retry the index is left out with the reason "HTTP 429 after 3 retries".
+- A 429 whose Retry-After holds a whole number, or a date, more than 60 seconds ahead is not retried. The request is left out at once with the reason "HTTP 429, retry after <n> s", <n> being the seconds of Retry-After rounded up.
+- The API hosts are api.crossref.org, api.openalex.org, api.semanticscholar.org and export.arxiv.org. Such a 429 from an API host also writes the time of the reset to the skip file of the host in the temporary folder. From any other host it writes no file.
+- The time of the reset is now plus <n> seconds, with <n> capped at 86400.
+- The skip file is ordo-lookup-skip-<name>, <name> being crossref, openalex, semanticscholar or arxiv. -key is appended to it when the credential of that host is set (CROSSREF_POLITE_EMAIL, OPENALEX_API_KEY or S2_API_KEY), since a budget is per key.
+- The skip file is written to a temporary file of the folder with mode 600 and moved into place, so a reader sees a whole time or no file.
+- While the time in a skip file is in the future, a request to its host is not sent. It is left out with the reason "HTTP 429, retry after <n> s", <n> being the whole seconds left, rounded up.
+- A reply that the cache holds is used before the skip is read. The skip never applies to arxiv.org and www.arxiv.org.
+- A skip file that cannot be read, or that holds text other than a time, is ignored.
+- A skip is cleared by deleting its file, for example with rm ordo-lookup-skip-* in the temporary folder.
+- fetch prints the reason of a 429 for the URL it tried, and bibtex prints "doi.org: <reason>, not a BibTeX entry".
+- A redirect can lead to another host than that of the URL the call was given. A long 429 or a skip met on that host gives the reason "HTTP 429 at <host>, retry after <n> s", which names it. On the URL's own host the reason stays "HTTP 429, retry after <n> s".
+- check-urls prints the status 429 for a key's URL, and "failed, <reason>" for a URL whose request a skip prevented. It names the reason for an index of its title check.
+- resolve (resolve --entry included), search, refs and cited-by store each reply that an API host answers with status 200 and a body the script parses. A 200 that parses to no result is stored too.
+- A stored reply is used for 30 days. The same URL asked again by any lookup.py process of these four commands sends no request.
+- Nothing else is stored: no other status, no body that does not parse, no other host.
+- bibtex, check-urls and fetch neither read nor write the cache, so a BibTeX entry, a title check and an abstract come from the replies of the run.
+- The cache is the folder ordo-lookup under XDG_CACHE_HOME when that is an absolute path, else under ~/.cache. It is made with mode 700. When the home folder cannot be resolved to an absolute path and XDG_CACHE_HOME is not absolute, the cache is off for the run.
+- Each entry is a file with mode 600, named by the SHA-256 hexadecimal digest of the URL, that holds the URL, the time stored and the body. The URL holds no credential. The file is written to a temporary file of the folder and moved into place.
+- A folder that cannot be made or written, an entry that cannot be read or parsed, and a temporary file are treated as no entry. The request is sent and no error is printed.
+- At its first store, a process removes the entries older than 30 days and the temporary files older than 1 day. The cache is cleared by deleting the folder.
 - An index that answers 404, or 200 with no result, is "not found". An index that answers any other status, fails to connect, or answers a body that does not parse or lacks a field the script reads is left out with its reason, and the other indexes and the records already found go on. No field is written for a lookup that failed.
 - Only http and https URLs are requested, including every URL an index returns and every redirect.
 
@@ -51,12 +83,16 @@ Reads:
 
 - The arguments of the call.
 - The environment variables S2_API_KEY (sent in the x-api-key header to api.semanticscholar.org), OPENALEX_API_KEY (sent as the api_key parameter to api.openalex.org) and CROSSREF_POLITE_EMAIL (sent as the mailto parameter and in the User-Agent to api.crossref.org). Each is optional, and no value is ever printed.
+- The environment variables XDG_CACHE_HOME and HOME, which place the cache folder.
+- The header Retry-After of a 429 reply.
 - The indexes at https://api.crossref.org, https://api.openalex.org, https://api.semanticscholar.org/graph/v1 and https://export.arxiv.org, https://doi.org, https://arxiv.org, and each URL an index returns for an open-access copy.
 - For resolve --entry: the .bib. For cite-keys and check-urls: the main .tex, each file it inputs or includes, and the .bib. For quote-check: the citation report, the .bib, <folder>/<stem>.txt and <folder>/<stem>.abstract.txt.
 - For fetch: the program pdftotext, which it runs on the PDF it wrote.
-- For every request to arXiv: the file ordo-lookup-arxiv in the temporary folder.
+- For every request to a paced host: its lock file (ordo-lookup-crossref, ordo-lookup-openalex, ordo-lookup-semanticscholar or ordo-lookup-arxiv) in the temporary folder.
+- For every request to an API host: the host's skip file ordo-lookup-skip-<name>, with -key appended when the host's credential is set, in the temporary folder.
+- For resolve, search, refs and cited-by: the files of the cache folder.
 
-Writes: fetch writes <stem>.html, <stem>.pdf, <stem>.txt and <stem>.abstract.txt inside <folder>, and nothing else outside it. Every request to arXiv writes the time it ended to ordo-lookup-arxiv in the temporary folder when it could open the file, and creates the file with mode 600 when it is absent.
+Writes: fetch writes <stem>.html, <stem>.pdf, <stem>.txt and <stem>.abstract.txt inside <folder>. Every request to a paced host writes the time it ended to the host's lock file in the temporary folder, when it could open the file. It creates the file with mode 600 when it is absent. A 429 that names more than 60 seconds, from an API host, writes that host's skip file in the temporary folder, with mode 600. resolve, search, refs and cited-by write the cache entries with mode 600 in the cache folder, which they make with mode 700, making any missing parent folder with the default mode. At their first store they remove the old entries and temporary files of that folder. Nothing else is written.
 
 Errors, each printed as one line on standard error:
 
@@ -74,10 +110,14 @@ Errors, each printed as one line on standard error:
 Exit status: 0 when the command ran and found nothing to fail; 1 when resolve --entry printed NOT_CONFIRMED, when bibtex got no BibTeX entry, when cite-keys printed a line, when check-urls or quote-check found a failure (a URL not ending in a 2xx status or giving no answer, a key printed as having no identifier, no entry, no passage or no text, a title flagged DOI_MISMATCH, a doi not found, a title not checked, a passage not found, a malformed passage line), or when fetch found no full text; 2 for a call it cannot read (every error line above).
 """
 
+import datetime
 import difflib
+import email.utils
 import fcntl
+import hashlib
 import http.client
 import json
+import math
 import os
 import re
 import subprocess
@@ -93,9 +133,17 @@ from html.parser import HTMLParser
 
 MATCH_THRESHOLD = 0.70
 ARXIV_SPACING = 3.0
-ARXIV_LOCK_NAME = "ordo-lookup-arxiv"
-RETRY_WAIT = 2.0
-RETRIES = 3
+LOCK_PREFIX = "ordo-lookup-"
+ARXIV_LOCK_NAME = LOCK_PREFIX + "arxiv"
+SKIP_PREFIX = "ordo-lookup-skip-"
+RETRY_WAITS = (2.0, 4.0, 8.0)
+RETRIES = len(RETRY_WAITS)
+LONG_WAIT = 60
+SKIP_CAP = 86400
+CACHE_NAME = "ordo-lookup"
+CACHE_AGE = 30 * 86400
+TEMPORARY_AGE = 86400
+TEMPORARY_PREFIX = "tmp."
 TIMEOUT = 30
 MAX_REDIRECTS = 10
 TITLE_CANDIDATES = 5
@@ -105,6 +153,15 @@ REFERENCE_PAGE = 100
 OPENALEX_BATCH = 50
 INDEX_NAMES = ("Crossref", "OpenAlex", "Semantic Scholar", "arXiv")
 ARXIV_HOSTS = ("arxiv.org", "export.arxiv.org", "www.arxiv.org")
+# host: (name, seconds from the end of one request to the start of the next, the same when the host's credential is set). The arXiv hosts are paced by arxiv_turn.
+PACED_HOSTS = {
+    "api.crossref.org": ("crossref", 1.0, 0.35),
+    "api.openalex.org": ("openalex", 1.05, 0.21),
+    "api.semanticscholar.org": ("semanticscholar", 1.05, 1.05),
+}
+# The hosts of the four indexes with the name of each in the skip files: a 429 from one of them that asks a long wait is written to its skip file, and its 200 replies are cached.
+API_HOSTS = {**{host: name for host, (name, _, _) in PACED_HOSTS.items()}, "export.arxiv.org": "arxiv"}
+CACHED_COMMANDS = ("resolve", "search", "refs", "cited-by")
 USER_AGENT = "lookup.py (the paper skill of Ordo)"
 ATOM = "{http://www.w3.org/2005/Atom}"
 ARXIV_ATOM = "{http://arxiv.org/schemas/atom}"
@@ -192,6 +249,7 @@ class Reply:
     body: bytes
     url: str
     content_type: str = ""
+    reason: str = ""  # what to print for the status when it is not just "HTTP <status>"
 
     def text(self):
         match = re.search(r"charset=([\w-]+)", self.content_type or "", re.IGNORECASE)
@@ -807,24 +865,32 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def arxiv_turn(call):
-    """Run call, one request to arXiv, so that it starts at least 3 seconds after the last arXiv request of any lookup.py process that uses the same temporary folder ended.
+def read_time(text):
+    """The time that text holds, as a lock file or a skip file holds one; ValueError when text is not a finite number."""
+    value = float(text)
+    if not math.isfinite(value):
+        raise ValueError(text)
+    return value
 
-    The turn is an exclusive flock on a file named ARXIV_LOCK_NAME in the temporary folder. The file holds the time the last request ended.
-    A file that cannot be opened, locked or read leaves the request to wait the full 3 seconds.
+
+def host_turn(lock_name, gap, call):
+    """Run call, one request to a paced host, so that it starts at least gap seconds after the last request to that host of any lookup.py process that uses the same temporary folder ended.
+
+    The turn is an exclusive flock on a file named lock_name in the temporary folder. The file holds the time the last request ended.
+    A file that cannot be opened, locked or read, or that holds text other than a time, leaves the request to wait the full gap.
     """
-    path = os.path.join(tempfile.gettempdir(), ARXIV_LOCK_NAME)
+    path = os.path.join(tempfile.gettempdir(), lock_name)
     descriptor, last = None, None
     try:
         descriptor = os.open(path, os.O_RDWR | os.O_CREAT, 0o600)
         fcntl.flock(descriptor, fcntl.LOCK_EX)
         recorded = os.read(descriptor, 64).decode("ascii", "replace").strip()
-        last = float(recorded) if recorded else None
+        last = read_time(recorded) if recorded else None
     except (OSError, ValueError):
         last = time.time()
     try:
         while last is not None:
-            wait = min(ARXIV_SPACING, ARXIV_SPACING - (time.time() - last))
+            wait = min(gap, gap - (time.time() - last))
             if wait <= 0:
                 break
             time.sleep(wait)
@@ -840,14 +906,114 @@ def arxiv_turn(call):
             os.close(descriptor)
 
 
-class Client:
-    """The requests of one run, with the optional credentials of the environment."""
+def arxiv_turn(call):
+    """Run call, one request to an arXiv host, in the turn of arXiv: ARXIV_SPACING seconds after the last arXiv request of any process that shares the temporary folder ended."""
+    return host_turn(ARXIV_LOCK_NAME, ARXIV_SPACING, call)
 
-    def __init__(self, environment):
+
+def write_atomically(folder, path, data):
+    """Write data, as bytes, to a new file of the folder with mode 600 and move it to path, so that a reader sees all of data or no file. OSError when it cannot be written."""
+    descriptor, temporary = tempfile.mkstemp(prefix=TEMPORARY_PREFIX, dir=folder)
+    try:
+        with os.fdopen(descriptor, "wb") as handle:
+            handle.write(data)
+        os.replace(temporary, path)
+    except OSError:
+        try:
+            os.remove(temporary)
+        except OSError:
+            pass
+        raise
+
+
+def retry_after(text):
+    """The whole seconds, rounded up, that the text of a Retry-After header asks to wait, from now when it is an HTTP date; None when it is neither a whole number nor a date. A date with no zone is read as GMT."""
+    text = (text or "").strip()
+    if re.fullmatch("[0-9]+", text):
+        try:
+            return int(text)
+        except ValueError:
+            return None
+    try:
+        moment = email.utils.parsedate_to_datetime(text)
+    except (TypeError, ValueError, OverflowError):
+        return None
+    if moment.tzinfo is None:
+        moment = moment.replace(tzinfo=datetime.timezone.utc)
+    return math.ceil((moment - datetime.datetime.fromtimestamp(time.time(), datetime.timezone.utc)).total_seconds())
+
+
+def long_reason(seconds, host, origin):
+    """The reason of a 429 that asks a long wait: it names the host when that is not origin, the host of the URL the call was given."""
+    where = f" at {host}" if host != origin else ""
+    return f"HTTP 429{where}, retry after {seconds} s"
+
+
+class ReplyCache:
+    """The 200 replies of the API hosts, stored on disk as one file for each URL and used for 30 days."""
+
+    def __init__(self, folder):
+        self.folder, self.pruned = folder, False
+
+    def path(self, url):
+        return os.path.join(self.folder, hashlib.sha256(url.encode("utf-8")).hexdigest())
+
+    def load(self, url):
+        """The body stored for url less than 30 days ago; None when there is no such entry or it cannot be read."""
+        try:
+            with open(self.path(url), encoding="ascii") as handle:
+                entry = json.load(handle)
+            if entry["url"] == url and time.time() - entry["stored"] < CACHE_AGE and isinstance(entry["body"], str):
+                return entry["body"]
+        except (OSError, ValueError, KeyError, TypeError):
+            pass
+        return None
+
+    def store(self, url, body):
+        """Store body as the reply of url, after the first store of the process has removed what is too old. A folder that cannot be made or written stores nothing."""
+        try:
+            os.makedirs(self.folder, mode=0o700, exist_ok=True)
+            if not self.pruned:
+                self.pruned = True
+                self.prune()
+            write_atomically(self.folder, self.path(url), json.dumps({"url": url, "stored": time.time(), "body": body}).encode("ascii"))
+        except OSError:
+            pass
+
+    def prune(self):
+        """Remove the entries older than 30 days and the temporary files older than 1 day; a file this cache did not name stays."""
+        now = time.time()
+        for name in os.listdir(self.folder):
+            temporary = name.startswith(TEMPORARY_PREFIX)
+            if not temporary and not re.fullmatch("[0-9a-f]{64}", name):
+                continue
+            path = os.path.join(self.folder, name)
+            try:
+                if now - os.path.getmtime(path) > (TEMPORARY_AGE if temporary else CACHE_AGE):
+                    os.remove(path)
+            except OSError:
+                continue  # another process removed it first
+
+
+def cache_folder(environment):
+    """$XDG_CACHE_HOME/ordo-lookup when XDG_CACHE_HOME is an absolute path, else ~/.cache/ordo-lookup."""
+    base = environment.get("XDG_CACHE_HOME", "")
+    if not os.path.isabs(base):
+        base = os.path.join(os.path.expanduser("~"), ".cache")
+    return os.path.join(base, CACHE_NAME)
+
+
+class Client:
+    """The requests of one run, with the optional credentials of the environment. With cache on, get_parsed stores and reads the replies of the API hosts."""
+
+    def __init__(self, environment, cache=False):
         self.s2_key = environment.get("S2_API_KEY", "")
         self.openalex_key = environment.get("OPENALEX_API_KEY", "")
         self.crossref_email = environment.get("CROSSREF_POLITE_EMAIL", "")
         self.opener = urllib.request.build_opener(NoRedirect)
+        folder = cache_folder(environment) if cache else ""
+        # A home folder that cannot be resolved leaves a relative folder, which would put the cache in the working directory: the cache stays off.
+        self.cache = ReplyCache(folder) if os.path.isabs(folder) else None
 
     def prepare(self, url, accept):
         """The URL and headers of one request: the credentials go only to the host they belong to."""
@@ -862,6 +1028,34 @@ class Client:
             url += ("&" if "?" in url else "?") + urllib.parse.urlencode({"mailto": self.crossref_email})
         return url, headers, host
 
+    def credential(self, host):
+        """The credential this client holds for the host; an empty string when the host has none or the client has none for it."""
+        return {"api.crossref.org": self.crossref_email, "api.openalex.org": self.openalex_key, "api.semanticscholar.org": self.s2_key}.get(host, "")
+
+    def skip_path(self, host):
+        """The skip file of an API host: one for each host, and a second for the runs that hold the host's credential, since a budget is per key."""
+        return os.path.join(tempfile.gettempdir(), SKIP_PREFIX + API_HOSTS[host] + ("-key" if self.credential(host) else ""))
+
+    def skip_left(self, host):
+        """The whole seconds, rounded up, that the skip file of an API host still holds the host back; 0 for a host that is not an API host, for no file, and for a file that holds no time."""
+        if host not in API_HOSTS:
+            return 0
+        try:
+            with open(self.skip_path(host), encoding="ascii") as handle:
+                until = read_time(handle.read(64).strip())
+        except (OSError, ValueError):
+            return 0
+        return max(0, math.ceil(until - time.time()))
+
+    def write_skip(self, host, seconds):
+        """Write the time a wait of that many seconds ends, at most SKIP_CAP seconds from now, to the skip file of an API host. A file that cannot be written is not written."""
+        if host not in API_HOSTS:
+            return
+        try:
+            write_atomically(tempfile.gettempdir(), self.skip_path(host), repr(time.time() + min(seconds, SKIP_CAP)).encode("ascii"))
+        except OSError:
+            pass
+
     def send(self, url, headers, read_body):
         try:
             try:
@@ -875,22 +1069,43 @@ class Client:
             raise LeftOut(f"no answer ({type(error).__name__})") from None
         return result
 
-    def once(self, url, accept, read_body):
+    def once(self, url, accept, read_body, origin):
+        """One request, in its host's turn when the host is paced; LeftOut with the skip's reason, and no request, while the host's skip file holds a time in the future.
+        origin is the host of the URL the call was given, which the reason names when the request goes to another host."""
         url, headers, host = self.prepare(url, accept)
+        seconds = self.skip_left(host)
+        if seconds:
+            raise LeftOut(long_reason(seconds, host, origin))
+
+        def request():
+            return self.send(url, headers, read_body)
+
         if host in ARXIV_HOSTS:
-            return arxiv_turn(lambda: self.send(url, headers, read_body))
-        return self.send(url, headers, read_body)
+            return arxiv_turn(request)
+        if host in PACED_HOSTS:
+            name, gap, credential_gap = PACED_HOSTS[host]
+            return host_turn(LOCK_PREFIX + name, credential_gap if self.credential(host) else gap, request)
+        return request()
 
     def get(self, url, accept="*/*", read_body=True):
-        """A Reply for a GET, redirects followed (at most 10) and a 429 retried 3 times after 2 seconds each; LeftOut when no answer comes."""
+        """A Reply for a GET, redirects followed (at most 10). A 429 is retried at most 3 times, after its Retry-After seconds, or after 2, 4 and 8 seconds when it names none,
+        and a 429 that names more than 60 seconds is not retried: its Reply carries the reason, and an API host's skip file is written. LeftOut when no answer comes."""
+        origin = urllib.parse.urlsplit(url).hostname or ""
         for _ in range(MAX_REDIRECTS + 1):
             if urllib.parse.urlsplit(url).scheme not in ("http", "https"):
                 raise LeftOut("not an http or https URL")
             for attempt in range(RETRIES + 1):
-                status, body, headers = self.once(url, accept, read_body)
-                if status != 429 or attempt == RETRIES:
+                status, body, headers = self.once(url, accept, read_body, origin)
+                if status != 429:
                     break
-                time.sleep(RETRY_WAIT)
+                seconds = retry_after(headers.get("Retry-After"))
+                if seconds is not None and seconds > LONG_WAIT:
+                    host = urllib.parse.urlsplit(url).hostname or ""
+                    self.write_skip(host, seconds)
+                    return Reply(status, body, url, headers.get("Content-Type", ""), long_reason(seconds, host, origin))
+                if attempt == RETRIES:
+                    break
+                time.sleep(RETRY_WAITS[attempt] if seconds is None else max(seconds, 1))
             if status in (301, 302, 303, 307, 308) and headers.get("Location"):
                 url = urllib.parse.urljoin(url, headers["Location"])
                 continue
@@ -899,20 +1114,37 @@ class Client:
 
 
 def status_reason(reply):
+    if reply.reason:
+        return reply.reason
     return "HTTP 429 after 3 retries" if reply.status == 429 else f"HTTP {reply.status}"
 
 
 def get_parsed(client, url, parse):
-    """What parse makes of a 200 answer from url; None for a 404. LeftOut for any other status and for a body that does not parse."""
+    """What parse makes of a 200 answer from url; None for a 404. LeftOut for any other status and for a body that does not parse.
+
+    When the client's cache is on and url is on an API host, a stored answer that parses is used with no request, and a 200 answer that parses is stored.
+    """
+    cache = client.cache if urllib.parse.urlsplit(url).hostname in API_HOSTS else None
+    if cache is not None:
+        body = cache.load(url)
+        if body is not None:
+            try:
+                return parse(body)
+            except PARSE_ERRORS:
+                pass  # an entry that does not parse is no entry
     reply = client.get(url)
     if reply.status == 404:
         return None
     if reply.status != 200:
         raise LeftOut(status_reason(reply))
+    text = reply.text()
     try:
-        return parse(reply.text())
+        found = parse(text)
     except PARSE_ERRORS:
         raise LeftOut(f"HTTP {reply.status}, the body does not parse") from None
+    if cache is not None:
+        cache.store(url, text)
+    return found
 
 
 def outcome_of(call):
@@ -1475,7 +1707,7 @@ def main(argv):
         return 2
     out = []
     try:
-        status = run_command(Client(os.environ), argv[0], argv[1:], out)
+        status = run_command(Client(os.environ, cache=argv[0] in CACHED_COMMANDS), argv[0], argv[1:], out)
     except UsageError as error:
         for line in out:
             print(line)

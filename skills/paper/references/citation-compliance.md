@@ -156,7 +156,7 @@ The three queries are these:
 
 - A MISMATCH issue gives the correct publication's details from the record. A correction from a record whose title, first author and year agree with the entry is a patch.
 - A MISMATCH without such a record is flagged as unconfirmed.
-- An index printed as left out is asked again once.
+- An index printed as left out is asked again once. An index left out with a reason that names a wait ("retry after <n> s") is not asked again and is not waited for: the next bullet applies at once.
 - If the index is still left out, the entry is resolved again by its DOI or arXiv ID as "Looking a reference up" says. If no answering index then agrees with the entry, the reference cannot be confirmed. The report names each index that was left out and the reason as printed, and the reference goes to the stop "A reference that cannot be confirmed".
 - A reference with the verdict NOT_FOUND, and a MISMATCH flagged as unconfirmed, go through the same stop. The `DOI checking` row does not change this, since a reference with no record at all cannot be confirmed in either mode.
 - A VERIFIED reference with an exact DOI or arXiv ID that fails `resolve` is a citation whose DOI fails the check. The `DOI checking` row decides what happens:
@@ -245,7 +245,7 @@ Each cited sentence of the manuscript rests on a passage that the agent reads in
 |---|---|---|
 | Only the abstract was read | `<stem>.abstract.txt` exists | The locator is `abstract`, and the claim is marked "abstract only". The source supports what the abstract says and nothing beyond it. |
 | An access restriction | Every index that answered lists no open copy, or a URL answers 402 or 403 | The verdict is UNVERIFIABLE_ACCESS. The claim goes to the user through the stop "A claim the run cannot support", with the URLs tried. |
-| An outage | An index is left out, or a URL fails to connect or answers 429 or a 5xx status | The agent fetches again once. If it still fails, the claim is marked "tool failure" with the reason as printed, and goes to the user with the URLs tried. The second start judges it again. |
+| An outage | An index is left out, or a URL fails to connect or answers 429 or a 5xx status | The agent fetches again once. A URL or an index left out with a reason "retry after <n> s" is not fetched again and is not waited for. If the fetch again fails, or is not made for that reason, the claim is marked "tool failure" with the reason as printed, and goes to the user with the URLs tried. The second start judges it again. |
 
 - The agent never judges a source it did not read, and it never says it read a source that the fetch did not return.
 - A source that cannot be fetched supports nothing, whatever the abstract suggests about the rest.

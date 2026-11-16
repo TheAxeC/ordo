@@ -1,5 +1,5 @@
 #!/bin/sh
-# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve --entry: the entry read from a .bib (a doi or DOI field, a space before the @, the first of two entries with one key), the input it resolves by (its doi, else its arXiv ID, else its title with its year), the verdict line that confirms the entry by the first record whose title and year agree and prints NOT_CONFIRMED for a year or a title that differs, a record with no year and an entry no index holds, its exit status, the one-line error and exit status 2 for a call or an entry it cannot read, and resolve without --entry printing what it printed. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
+# Offline proof of the parts of lookup.py that compute facts without the network: title matching, the choice among candidates, the DOI mismatch flag, record merging, passage lines, passage normalisation, abstract reassembly, the arXiv query syntax, the OpenAlex query text, the arXiv spacing across processes, the arXiv turn of every request to an arXiv host, the refusal of a URL other than http and https, an index whose body does not parse, the not found lines, the file name made from a key, the DOI in a URL, the PDF and arXiv HTML tests, the credentials each host gets, the URL check-urls requests, the BibTeX of an arXiv record, the BibTeX body test, the text of an HTML page, the keys a .tex cites with the commands of natbib and biblatex and the files it inputs, the output of cite-keys, the title check of check-urls against the record a doi resolves to, the error line for an input file that does not exist, the .bib check-urls names and the .bib quote-check reads, both the one named on the command line, the refusal of the one-argument form of check-urls and of the two-argument form of quote-check, the retraction and expression-of-concern notice lines of resolve, and resolve --entry: the entry read from a .bib (a doi or DOI field, a space before the @, the first of two entries with one key), the input it resolves by (its doi, else its arXiv ID, else its title with its year), the verdict line that confirms the entry by the first record whose title and year agree and prints NOT_CONFIRMED for a year or a title that differs, a record with no year and an entry no index holds, its exit status, the one-line error and exit status 2 for a call or an entry it cannot read, and resolve without --entry printing what it printed. It also proves the pacing of each index across processes (the gap of each host with and without its credential, a redirect that takes the turn of the host it goes to, doi.org that takes none, a lock file that holds inf or nan), a 429 waited out by the Retry-After it names in each form it can take, the 429 that names more than 60 seconds left out at once with its reason and the skip file of its host (named by host and credential, mode 600, capped at 86400 seconds, ignored when it holds no time, read by a request that no cached reply answers, and never written for a host that is not an API host), the reasons bibtex prints for a 429, the host a reason names when the 429 is met on a redirect hop, and the reply cache of resolve, search, refs and cited-by (a reply sent once for the same URL in one process and in another, the replies that are not stored, the 30 days, the pruning, no credential in any file, a cache folder that cannot be made or written, an entry that cannot be used, the cache folder under XDG_CACHE_HOME or under HOME, the modes of its files). Every case runs on scratch temporary, cache and home folders set before lookup is imported, with time.sleep and time.time stubbed together as one clock where a wait is checked. Response bodies are recorded below in the shapes the indexes answer. Prints a last line starting PASS: and exits 0, or prints a line starting FAIL: and exits 1.
 set -u
 
 here=$(cd "$(dirname "$0")" && pwd)
@@ -11,12 +11,31 @@ fi
 
 output=$(python3 -B -I - "$here" 2>&1 <<'PYTHON'
 import atexit
+import contextlib
+import email.utils
+import fractions
+import io
+import itertools
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import time
+import urllib.parse
+
+# The temporary folder, the cache folder and the home folder are scratch folders under the temporary folder, set before lookup is imported and removed at exit,
+# so that no case reads or writes the real ordo-lookup-* files or the real cache.
+SCRATCH = tempfile.mkdtemp()
+atexit.register(shutil.rmtree, SCRATCH, True)
+os.makedirs(os.path.join(SCRATCH, "tmp"))
+os.makedirs(os.path.join(SCRATCH, "home"))
+os.environ["TMPDIR"] = os.path.join(SCRATCH, "tmp")
+os.environ["XDG_CACHE_HOME"] = os.path.join(SCRATCH, "cache")
+os.environ["HOME"] = os.path.join(SCRATCH, "home")
+tempfile.tempdir = None
 
 sys.path.insert(0, sys.argv[1])
 import lookup
@@ -180,8 +199,13 @@ print(t0, start, end)
 """
 
 
+def child_env(temporary_folder):
+    """The environment of every child process: its own temporary folder and the scratch cache and home folders."""
+    return {"TMPDIR": temporary_folder, "XDG_CACHE_HOME": os.environ["XDG_CACHE_HOME"], "HOME": os.environ["HOME"]}
+
+
 def spawn(folder):
-    return subprocess.Popen([sys.executable, "-B", "-I", "-c", CHILD, sys.argv[1]], env={"TMPDIR": folder}, stdout=subprocess.PIPE, text=True)
+    return subprocess.Popen([sys.executable, "-B", "-I", "-c", CHILD, sys.argv[1]], env=child_env(folder), stdout=subprocess.PIPE, text=True)
 
 
 shared, unreadable = tempfile.mkdtemp(), tempfile.mkdtemp()
@@ -236,6 +260,8 @@ lookup.arxiv_turn, lookup.Client.send = real_turn, real_send
 
 # A body that does not parse leaves one index out and keeps the other's records.
 class StubClient:
+    cache = None
+
     def __init__(self, replies):
         self.replies = replies
 
@@ -413,6 +439,8 @@ check("L4 missing input file", result == (2, [], [f"error: {named}: No such file
 
 class RecordingClient:
     """Answers a request with the reply of the first part found in its URL, raises a reply that is an exception, and keeps the URLs asked."""
+
+    cache = None
 
     def __init__(self, replies):
         self.replies, self.requested = replies, []
@@ -678,6 +706,620 @@ result = entry_run(duplicate, "dup", [("api.crossref.org/works/10.1000/first", c
 check("E13 the first entry", result[0] == 0 and result[1][-1] == "dup: CONFIRMED against Crossref, ratio 1.00, year 2001" and not any("second" in url for url in result[2]), repr(result))
 
 
+# Pacing, 429 handling and the reply cache. Each case runs on a new scratch temporary folder and cache folder. Where a wait is checked, time.sleep and time.time are
+# stubbed together as one fake clock, and Client.send answers from a script.
+CREDENTIALS = ("S2_API_KEY", "OPENALEX_API_KEY", "CROSSREF_POLITE_EMAIL")
+case_numbers = itertools.count()
+DOI = "10.1103/PhysRevE.69.066138"
+IDENTIFIER = lookup.classify(DOI)
+CROSSREF, OPENALEX, SEMANTIC_SCHOLAR, ARXIV = "api.crossref.org", "api.openalex.org", "api.semanticscholar.org", "export.arxiv.org"
+NO_RESULT = {
+    CROSSREF: '{"message":{"items":[]}}',
+    OPENALEX: '{"results":[]}',
+    SEMANTIC_SCHOLAR: '{"data":[]}',
+    ARXIV: '<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom"></feed>',
+}
+
+
+def scratch_case(credentials=None):
+    """New empty temporary and cache folders for one case, with the given credentials set in the environment and the others unset; (the temporary folder, the cache folder)."""
+    folder = os.path.join(SCRATCH, "case%d" % next(case_numbers))
+    temporary = os.path.join(folder, "tmp")
+    os.makedirs(temporary)
+    tempfile.tempdir = temporary
+    os.environ["TMPDIR"] = temporary
+    os.environ["XDG_CACHE_HOME"] = os.path.join(folder, "cache")
+    for name in CREDENTIALS:
+        os.environ.pop(name, None)
+    os.environ.update(credentials or {})
+    return temporary, os.path.join(folder, "cache", "ordo-lookup")
+
+
+class FakeClock:
+    """time.time and time.sleep as one clock: a sleep moves the time, so a wait loop that reads the clock ends. sleeps lists each wait, and a sleep after the first limit ones raises TooManySleeps when limit is set.
+    The time is kept exactly, so that a wait shorter than the spacing of floats near the epoch still moves the time that time() reports."""
+
+    def __init__(self, limit=None):
+        self.exact = fractions.Fraction(int(time.time()))
+        self.sleeps, self.limit = [], limit
+
+    @property
+    def now(self):
+        return float(self.exact)
+
+    @now.setter
+    def now(self, value):
+        self.exact = fractions.Fraction(value)
+
+    def time(self):
+        return self.now
+
+    def sleep(self, seconds):
+        if self.limit is not None and len(self.sleeps) >= self.limit:
+            raise TooManySleeps(f"more than {self.limit} sleeps")
+        self.sleeps.append(seconds)
+        self.exact += fractions.Fraction(seconds)
+
+
+class TooManySleeps(Exception):
+    """A wait that does not end: a FakeClock with a limit raises it at the sleep after the last one it allows."""
+
+
+@contextlib.contextmanager
+def fake_clock(limit=None):
+    clock = FakeClock(limit)
+    real = time.time, time.sleep
+    time.time, time.sleep = clock.time, clock.sleep
+    try:
+        yield clock
+    finally:
+        time.time, time.sleep = real
+
+
+def says(status, body="", **headers):
+    return (status, body, {name.replace("_", "-"): value for name, value in headers.items()})
+
+
+class Script:
+    """Answers Client.send from a list of replies for each host: the n-th request to a host gets the n-th reply and the last reply repeats. A host with no list gets 404."""
+
+    def __init__(self, replies):
+        self.replies = {host: list(items) for host, items in replies.items()}
+        self.urls, self.times = [], []
+
+    def send(self, url, headers, read_body):
+        self.urls.append(url)
+        self.times.append(time.time())
+        items = self.replies.get(urllib.parse.urlsplit(url).hostname)
+        if not items:
+            return 404, b"", {}
+        status, body, header = items.pop(0) if len(items) > 1 else items[0]
+        return status, body.encode("utf-8"), dict(header)
+
+    def asked(self, host):
+        return sum(1 for url in self.urls if urllib.parse.urlsplit(url).hostname == host)
+
+
+@contextlib.contextmanager
+def serving(script):
+    real = lookup.Client.send
+    lookup.Client.send = lambda self, url, headers, read_body: script.send(url, headers, read_body)
+    try:
+        yield script
+    finally:
+        lookup.Client.send = real
+
+
+def run_main(arguments, script):
+    """(exit status, standard output lines, standard error text) of lookup.main in this process, answered from the script."""
+    out, err = io.StringIO(), io.StringIO()
+    with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err), serving(script):
+        status = lookup.main(arguments)
+    return status, out.getvalue().splitlines(), err.getvalue()
+
+
+DRIVER = """
+import contextlib, io, json, sys, urllib.parse
+sys.path.insert(0, sys.argv[1])
+import lookup
+config = json.loads(sys.argv[2])
+requests = []
+def send(self, url, headers, read_body):
+    requests.append(url)
+    status, body, header = config["replies"].get(urllib.parse.urlsplit(url).hostname, [404, "", {}])
+    return status, body.encode("utf-8"), header
+lookup.Client.send = send
+out = io.StringIO()
+with contextlib.redirect_stdout(out):
+    status = lookup.main(config["arguments"])
+print(json.dumps({"status": status, "lines": out.getvalue().splitlines(), "requests": requests}))
+"""
+
+
+def run_child(arguments, replies):
+    """The result of lookup.main in another process that shares the scratch folders; replies maps a host to its one reply (status, body, headers)."""
+    done = subprocess.run([sys.executable, "-B", "-I", "-c", DRIVER, sys.argv[1], json.dumps({"arguments": arguments, "replies": replies})], env=child_env(tempfile.gettempdir()), capture_output=True, text=True)
+    return json.loads(done.stdout) if done.returncode == 0 else {"status": done.returncode, "lines": [], "requests": [], "stderr": done.stderr}
+
+
+@contextlib.contextmanager
+def attempt(name):
+    """A case that raises is a failure of that case, not the end of the run."""
+    try:
+        yield
+    except Exception as error:
+        failures.append(f"{name} raised {type(error).__name__}: {error}")
+
+
+def brief(outcome):
+    return [record.title for record in outcome.records], outcome.left_out
+
+
+def hosts_of(script):
+    return [urllib.parse.urlsplit(url).hostname for url in script.urls]
+
+
+def head(lines):
+    return [line[:30] for line in lines]
+
+
+def files_under(folder):
+    return [os.path.join(top, name) for top, _, names in os.walk(folder) for name in names]
+
+
+def read_text(path):
+    with open(path) as handle:
+        return handle.read()
+
+
+def read_bytes(path):
+    with open(path, "rb") as handle:
+        return handle.read()
+
+
+def skip_files(temporary):
+    return sorted(name for name in os.listdir(temporary) if name.startswith("ordo-lookup-skip-"))
+
+
+def mode_of(path):
+    return os.stat(path).st_mode & 0o777 if os.path.exists(path) else None
+
+
+def listing(folder):
+    return sorted(os.listdir(folder)) if os.path.isdir(folder) else []
+
+
+# P1: each API host is paced across processes. Two processes each make one request to the host, sharing a temporary folder.
+PACED_CHILD = """
+import sys, time
+sys.path.insert(0, sys.argv[1])
+import lookup
+t0 = time.time()
+span = []
+def send(self, url, headers, read_body):
+    span.append(time.time())
+    time.sleep(0.2)
+    span.append(time.time())
+    return 200, b"{}", {}
+lookup.Client.send = send
+lookup.Client({}).get(sys.argv[2])
+print(t0, *span)
+"""
+with attempt("P1"):
+    started = {}
+    for host, url, gap in ((CROSSREF, "https://api.crossref.org/works/10.1000/x", 1.0), (OPENALEX, "https://api.openalex.org/works/doi:10.1000/x", 1.05), (SEMANTIC_SCHOLAR, "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/x", 1.05)):
+        folder, _ = scratch_case()
+        started[host] = (gap, [subprocess.Popen([sys.executable, "-B", "-I", "-c", PACED_CHILD, sys.argv[1], url], env=child_env(folder), stdout=subprocess.PIPE, text=True) for _ in range(2)])
+    for host, (gap, children) in started.items():
+        times = [tuple(float(number) for number in child.communicate()[0].split()) for child in children]
+        first, second = sorted(times, key=lambda row: row[1])
+        check(f"P1 {host}: the second process starts {gap} seconds after the first ended", second[1] >= first[2] + gap, repr(times))
+        check(f"P1 {host}: the first process does not wait", first[1] - first[0] < gap, repr(times))
+
+# P2: the gap of each host by its environment, seen as the wait of a second request that follows the first at once. The fake clock's float time near the epoch can add a wait of a few
+# millionths of a second to the gap, so the waits are summed.
+for host, url, credentials, gap in (
+    (CROSSREF, "https://api.crossref.org/works/10.1000/x", {}, 1.0),
+    (CROSSREF, "https://api.crossref.org/works/10.1000/x", {"CROSSREF_POLITE_EMAIL": "me@example.org"}, 0.35),
+    (OPENALEX, "https://api.openalex.org/works/doi:10.1000/x", {}, 1.05),
+    (OPENALEX, "https://api.openalex.org/works/doi:10.1000/x", {"OPENALEX_API_KEY": "key"}, 0.21),
+    (SEMANTIC_SCHOLAR, "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/x", {}, 1.05),
+    (SEMANTIC_SCHOLAR, "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1000/x", {"S2_API_KEY": "key"}, 1.05),
+    (ARXIV, "https://export.arxiv.org/api/query?id_list=2511.18945", {}, 3.0),
+    ("arxiv.org", "https://arxiv.org/abs/2511.18945", {}, 3.0),
+):
+    with attempt(f"P2 {host}"):
+        scratch_case()
+        script = Script({host: [says(200, "{}")]})
+        with fake_clock() as clock, serving(script):
+            client = lookup.Client(credentials)
+            client.get(url)
+            client.get(url)
+        check(f"P2 {host} {sorted(credentials)}: the gap is {gap}", abs(sum(clock.sleeps) - gap) < 1e-6 and clock.sleeps[0] > gap - 1e-6, repr(clock.sleeps))
+
+# P3: a request to doi.org takes no turn, and a redirect from it to Crossref takes Crossref's turn.
+with attempt("P3"):
+    temporary, _ = scratch_case()
+    script = Script({"doi.org": [says(200, "{}")]})
+    with fake_clock() as clock, serving(script):
+        lookup.Client({}).get("https://doi.org/10.1000/y")
+        lookup.Client({}).get("https://doi.org/10.1000/y")
+    check("P3 doi.org alone takes no turn and leaves no lock file", clock.sleeps == [] and os.listdir(temporary) == [], repr((clock.sleeps, os.listdir(temporary))))
+    temporary, _ = scratch_case()
+    script = Script({"doi.org": [says(302, Location="https://api.crossref.org/works/10.1000/x")], CROSSREF: [says(200, "{}")]})
+    with fake_clock() as clock, serving(script):
+        lookup.Client({}).get("https://doi.org/10.1000/y")
+        lookup.Client({}).get("https://doi.org/10.1000/y")
+    check("P3 a redirect from doi.org takes Crossref's turn", script.asked("doi.org") == 2 and len(clock.sleeps) == 1 and abs(clock.sleeps[0] - 1.0) < 1e-9 and os.listdir(temporary) == ["ordo-lookup-crossref"], repr((clock.sleeps, os.listdir(temporary))))
+
+
+# P5: a lock file that holds inf or nan is no time: the request waits the full gap once and is then sent. The clock allows 10 sleeps, so a wait that never ends fails the case.
+for lock, host, url, gap in (
+    (lookup.ARXIV_LOCK_NAME, ARXIV, "https://export.arxiv.org/api/query?id_list=2511.18945", 3.0),
+    ("ordo-lookup-crossref", CROSSREF, "https://api.crossref.org/works/10.1000/x", 1.0),
+):
+    for text in ("inf", "nan"):
+        with attempt(f"P5 {lock} {text}"):
+            temporary, _ = scratch_case()
+            with open(os.path.join(temporary, lock), "w") as handle:
+                handle.write(text)
+            script = Script({host: [says(200, "{}")]})
+            ended = None
+            with fake_clock(10) as clock, serving(script):
+                try:
+                    lookup.Client({}).get(url)
+                except TooManySleeps as error:
+                    ended = str(error)
+            check(f"P5 {lock} holding {text!r}: the full gap once, then the request", ended is None and script.asked(host) == 1 and abs(sum(clock.sleeps) - gap) < 1e-6 and clock.sleeps[0] > gap - 1e-6, repr((ended, clock.sleeps, hosts_of(script))))
+
+
+def crossref_run(first, then):
+    """(the clock, the outcome of a Crossref lookup, the script) when Crossref answers first and then then; first is a function of the clock's start when it holds a date."""
+    scratch_case()
+    with fake_clock() as clock:
+        script = Script({CROSSREF: [first(clock.now) if callable(first) else first, then]})
+        with serving(script):
+            outcome = lookup.lookup_crossref(lookup.Client({}), IDENTIFIER)
+    return clock, outcome, script
+
+
+# R1 and R1b: a 429 with Retry-After is retried after that many seconds, at most 3 times.
+with attempt("R1"):
+    clock, outcome, script = crossref_run(says(429, Retry_After="5"), says(200, CROSSREF_BODY))
+    check("R1 one wait of 5 seconds, then the record", clock.sleeps == [5.0] and [record.title for record in outcome.records] == ["Estimating mutual information"] and not outcome.left_out, repr((clock.sleeps, brief(outcome))))
+    clock, outcome, script = crossref_run(says(429, Retry_After="5"), says(429, Retry_After="5"))
+    check("R1b four 429s: waits of 5, 5 and 5 seconds, then the 3 retries reason", clock.sleeps == [5.0, 5.0, 5.0] and outcome.left_out == "HTTP 429 after 3 retries" and len(script.urls) == 4, repr((clock.sleeps, brief(outcome), hosts_of(script))))
+
+# R2 and R3: a Retry-After above 60 seconds is left out at once and written to the skip file of the host, which later requests and processes read.
+OPENALEX_LONG = {OPENALEX: [says(429, Retry_After="4356"), says(200, OPENALEX_BODY)], CROSSREF: [says(404)], SEMANTIC_SCHOLAR: [says(404)]}
+with attempt("R2"):
+    temporary, _ = scratch_case()
+    script = Script(OPENALEX_LONG)
+    with fake_clock() as clock:
+        start = clock.now
+        status, lines, _ = run_main(["resolve", DOI], script)
+    check("R2 left out at once with the seconds named", "OpenAlex: left out, HTTP 429, retry after 4356 s" in lines and script.asked(OPENALEX) == 1 and clock.sleeps == [], repr((head(lines), hosts_of(script), clock.sleeps)))
+    check("R2 the skip file of OpenAlex without a key", skip_files(temporary) == ["ordo-lookup-skip-openalex"], repr(os.listdir(temporary)))
+    path = os.path.join(temporary, "ordo-lookup-skip-openalex")
+    check("R2 the skip file holds the time of the reset", os.path.exists(path) and float(read_text(path)) == start + 4356, repr(os.listdir(temporary)))
+    check("R2 the skip file has mode 600", mode_of(path) == 0o600, repr(mode_of(path)))
+    temporary, _ = scratch_case({"OPENALEX_API_KEY": "key"})
+    with fake_clock():
+        run_main(["resolve", DOI], Script(OPENALEX_LONG))
+    check("R2 the skip file with a key has -key appended", skip_files(temporary) == ["ordo-lookup-skip-openalex-key"], repr(os.listdir(temporary)))
+
+with attempt("R3"):
+    temporary, _ = scratch_case()
+    script = Script(OPENALEX_LONG)
+    with fake_clock() as clock, serving(script):
+        start = clock.now
+        lookup.lookup_openalex(lookup.Client({}), IDENTIFIER)
+        clock.now = start + 0.4
+        outcome = lookup.lookup_openalex(lookup.Client({}), IDENTIFIER)
+        check("R3 a second client sends no request and names the seconds left, rounded up", script.asked(OPENALEX) == 1 and outcome.left_out == "HTTP 429, retry after 4356 s", repr((brief(outcome), hosts_of(script))))
+        clock.now = start + 4355.5
+        outcome = lookup.lookup_openalex(lookup.Client({}), IDENTIFIER)
+        check("R3 half a second left is one second", script.asked(OPENALEX) == 1 and outcome.left_out == "HTTP 429, retry after 1 s", repr((brief(outcome), hosts_of(script))))
+        clock.now = start + 0.4
+        outcome = lookup.lookup_openalex(lookup.Client({"OPENALEX_API_KEY": "key"}), IDENTIFIER)
+        check("R3 a run with the key is not skipped by the file written without it", script.asked(OPENALEX) == 2 and len(outcome.records) == 1, repr((brief(outcome), hosts_of(script))))
+        clock.now = start + 4356
+        outcome = lookup.lookup_openalex(lookup.Client({}), IDENTIFIER)
+        check("R3 past the reset the request is sent", script.asked(OPENALEX) == 3 and len(outcome.records) == 1, repr((brief(outcome), hosts_of(script))))
+    skipped = run_child(["resolve", DOI], {host: [200, "{}", {}] for host in (CROSSREF, OPENALEX, SEMANTIC_SCHOLAR)})
+    seconds = [int(number) for line in skipped["lines"] for number in re.findall(r"OpenAlex: left out, HTTP 429, retry after (\d+) s", line)]
+    check("R3 a process of its own sends no request to OpenAlex and names the seconds left", not any(OPENALEX in url for url in skipped["requests"]) and len(seconds) == 1 and 4340 <= seconds[0] <= 4356, repr({key: (head(value) if key == 'lines' else value) for key, value in skipped.items()}))
+
+# R4: 429s with no Retry-After wait 2, 4 and 8 seconds, apart from the turn's waits, on a host whose gap is under 2 seconds.
+with attempt("R4"):
+    scratch_case()
+    script = Script({OPENALEX: [says(429)]})
+    with fake_clock() as clock, serving(script):
+        outcome = lookup.lookup_openalex(lookup.Client({"OPENALEX_API_KEY": "key"}), IDENTIFIER)
+    check("R4 retry waits of 2, 4 and 8 seconds, then the 3 retries reason", clock.sleeps == [2.0, 4.0, 8.0] and outcome.left_out == "HTTP 429 after 3 retries" and len(script.urls) == 4, repr((clock.sleeps, brief(outcome))))
+
+# R5: the forms of Retry-After. again is True where the reply repeats, so that the schedule of waits runs out; else a 200 follows.
+def ahead(seconds, zone=" GMT"):
+    return lambda now: says(429, Retry_After=email.utils.formatdate(now + seconds, usegmt=True).replace(" GMT", zone))
+
+
+SCHEDULE = [2.0, 4.0, 8.0]
+FORMS = (
+    ("a date 30 seconds ahead", ahead(30), False, [30.0], ""),
+    ("a date in the past", ahead(-100), False, [1.0], ""),
+    ("a date 4356 seconds ahead", ahead(4356), False, [], "HTTP 429, retry after 4356 s"),
+    ("a date with no zone", ahead(30, ""), False, [30.0], ""),
+    ("soon", says(429, Retry_After="soon"), True, SCHEDULE, "HTTP 429 after 3 retries"),
+    ("2.5", says(429, Retry_After="2.5"), True, SCHEDULE, "HTTP 429 after 3 retries"),
+    ("-5", says(429, Retry_After="-5"), True, SCHEDULE, "HTTP 429 after 3 retries"),
+    ("0", says(429, Retry_After="0"), False, [1.0], ""),
+    ("60", says(429, Retry_After="60"), False, [60.0], ""),
+    ("61", says(429, Retry_After="61"), False, [], "HTTP 429, retry after 61 s"),
+)
+for name, first, again, sleeps, reason in FORMS:
+    with attempt("R5 " + name):
+        clock, outcome, script = crossref_run(first, first if again else says(200, CROSSREF_BODY))
+        check(f"R5 {name}", clock.sleeps == sleeps and outcome.left_out == reason, repr((clock.sleeps, brief(outcome))))
+
+# R6: a skip file that holds no time is ignored, and a huge Retry-After is capped at 86400 seconds.
+with attempt("R6"):
+    for text in ("not a time", "inf", "nan", ""):
+        temporary, _ = scratch_case()
+        with open(os.path.join(temporary, "ordo-lookup-skip-openalex"), "w") as handle:
+            handle.write(text)
+        script = Script({OPENALEX: [says(200, OPENALEX_BODY)]})
+        with fake_clock(), serving(script):
+            outcome = lookup.lookup_openalex(lookup.Client({}), IDENTIFIER)
+        check(f"R6 a skip file holding {text!r} is ignored", script.asked(OPENALEX) == 1 and len(outcome.records) == 1, repr((brief(outcome), hosts_of(script))))
+    temporary, _ = scratch_case()
+    script = Script({OPENALEX: [says(429, Retry_After="999999999")]})
+    with fake_clock() as clock, serving(script):
+        start = clock.now
+        outcome = lookup.lookup_openalex(lookup.Client({}), IDENTIFIER)
+    check("R6 the skip file holds a time 86400 seconds ahead", [float(read_text(os.path.join(temporary, name))) for name in skip_files(temporary)] == [start + 86400] and outcome.left_out == "HTTP 429, retry after 999999999 s", repr((skip_files(temporary), start, brief(outcome))))
+
+# R7: a Retry-After above 60 seconds from a host that is not an API host is left out with its reason and writes no skip file.
+with attempt("R7"):
+    temporary, _ = scratch_case()
+    script = Script({"doi.org": [says(429, Retry_After="4356")]})
+    with fake_clock():
+        status, lines, _ = run_main(["bibtex", "10.1000/xyz"], script)
+    check("R7 bibtex prints the reason of the 429", status == 1 and lines == ["doi.org: HTTP 429, retry after 4356 s, not a BibTeX entry"] and script.asked("doi.org") == 1, repr((status, head(lines), hosts_of(script))))
+    check("R7 no skip file is written", skip_files(temporary) == [], repr(os.listdir(temporary)))
+
+# R8: a skip active for OpenAlex and its reply in the cache: the cached records are printed and no reason.
+with attempt("R8"):
+    temporary, _ = scratch_case()
+    script = Script({CROSSREF: [says(200, CROSSREF_BODY)], OPENALEX: [says(200, OPENALEX_BODY)], SEMANTIC_SCHOLAR: [says(404)]})
+    with fake_clock() as clock:
+        status, first_lines, _ = run_main(["resolve", DOI], script)
+        with open(os.path.join(temporary, "ordo-lookup-skip-openalex"), "w") as handle:
+            handle.write(repr(clock.now + 1000))
+        status, lines, _ = run_main(["resolve", DOI], script)
+    check("R8 the cached records are printed and no reason", lines == first_lines and not any(line.startswith("OpenAlex: left out") for line in lines) and script.asked(OPENALEX) == 1, repr((head(lines), head(first_lines), hosts_of(script))))
+
+# R9: a 429 met on a redirect hop names the host of the hop: doi.org answers 302 to Crossref, and Crossref's skip is active, or Crossref answers 429 with a long Retry-After.
+BIBTEX_REDIRECT = says(302, Location="https://api.crossref.org/v1/works/10.1103%2FPhysRevE.69.066138/transform")
+with attempt("R9"):
+    temporary, _ = scratch_case()
+    with fake_clock() as clock:
+        with open(os.path.join(temporary, "ordo-lookup-skip-crossref"), "w") as handle:
+            handle.write(repr(clock.now + 500))
+        script = Script({"doi.org": [BIBTEX_REDIRECT]})
+        status, lines, _ = run_main(["bibtex", DOI], script)
+    check("R9 a skip met on the hop to Crossref is named with its host and no request goes to Crossref", status == 1 and lines == ["doi.org: left out, HTTP 429 at api.crossref.org, retry after 500 s"] and script.asked(CROSSREF) == 0 and script.asked("doi.org") == 1, repr((status, lines, hosts_of(script))))
+    temporary, _ = scratch_case()
+    script = Script({"doi.org": [BIBTEX_REDIRECT], CROSSREF: [says(429, Retry_After="4356")]})
+    with fake_clock():
+        status, lines, _ = run_main(["bibtex", DOI], script)
+    check("R9 a 429 reply on the hop to Crossref is named with its host", status == 1 and lines == ["doi.org: HTTP 429 at api.crossref.org, retry after 4356 s, not a BibTeX entry"] and script.asked(CROSSREF) == 1, repr((status, lines, hosts_of(script))))
+    check("R9 the 429 of the hop writes Crossref's skip file", skip_files(temporary) == ["ordo-lookup-skip-crossref"], repr(os.listdir(temporary)))
+
+# K1: with the cache on, the same index URL is sent once, in this process and in another.
+THREE_BODIES = {CROSSREF: [says(200, CROSSREF_BODY)], OPENALEX: [says(200, OPENALEX_BODY)], SEMANTIC_SCHOLAR: [says(200, S2_BODY)]}
+CHILD_BODIES = {CROSSREF: [200, CROSSREF_BODY, {}], OPENALEX: [200, OPENALEX_BODY, {}], SEMANTIC_SCHOLAR: [200, S2_BODY, {}]}
+baseline = []
+with attempt("K1"):
+    scratch_case()
+    script = Script(THREE_BODIES)
+    with fake_clock():
+        status, lines, _ = run_main(["resolve", DOI], script)
+        sent_first = len(script.urls)
+        status, again, _ = run_main(["resolve", DOI], script)
+    baseline = lines
+    check("K1 the first run sends one request to each index", sent_first == 3, repr(hosts_of(script)))
+    check("K1 the same URLs again in the same process send nothing and print the same records", len(script.urls) == 3 and again == lines, repr((hosts_of(script), head(again), head(lines))))
+    other = run_child(["resolve", DOI], CHILD_BODIES)
+    check("K1 another process sends nothing and prints the same records", other["requests"] == [] and other["lines"] == lines, repr({key: (head(value) if key == 'lines' else value) for key, value in other.items()}))
+
+# K2: what is not stored. The control is a 200 search with no result, which is stored and read back as not found.
+INDEX_ONLY = [CROSSREF, OPENALEX, SEMANTIC_SCHOLAR]
+with attempt("K2 404"):
+    scratch_case()
+    script = Script({host: [says(404)] for host in INDEX_ONLY})
+    with fake_clock():
+        run_main(["resolve", DOI], script)
+        run_main(["resolve", DOI], script)
+    check("K2 a 404 is not stored", script.asked(CROSSREF) == 2, repr(hosts_of(script)))
+with attempt("K2 429"):
+    scratch_case()
+    script = Script({CROSSREF: [says(429)]})
+    with fake_clock():
+        run_main(["resolve", DOI], script)
+        run_main(["resolve", DOI], script)
+    check("K2 a 429 is not stored", script.asked(CROSSREF) == 8, repr(hosts_of(script)))
+with attempt("K2 body"):
+    scratch_case()
+    script = Script({CROSSREF: [says(200, "<html>Maintenance</html>")]})
+    with fake_clock():
+        status, lines, _ = run_main(["resolve", DOI], script)
+        run_main(["resolve", DOI], script)
+    check("K2 a 200 whose body does not parse is not stored", script.asked(CROSSREF) == 2 and "Crossref: left out, HTTP 200, the body does not parse" in lines, repr((hosts_of(script), head(lines))))
+with attempt("K2 host"):
+    temporary, cache = scratch_case()
+    script = Script({"example.org": [says(200, "{}")], CROSSREF: [says(200, "{}")]})
+    with fake_clock(), serving(script):
+        client = lookup.Client(os.environ, cache=True)
+        for _ in range(2):
+            lookup.get_parsed(client, "https://example.org/x", json.loads)
+        check("K2 a 200 from a host that is not one of the four is not stored", script.asked("example.org") == 2, repr(hosts_of(script)))
+        for _ in range(2):
+            lookup.get_parsed(client, "https://api.crossref.org/works/x", json.loads)
+        check("K2 control: a 200 from an API host is stored", script.asked(CROSSREF) == 1, repr(hosts_of(script)))
+with attempt("K2 bibtex"):
+    scratch_case()
+    script = Script({ARXIV: [says(200, ARXIV_FEED)]})
+    with fake_clock():
+        run_main(["bibtex", "2511.18945"], script)
+        run_main(["bibtex", "2511.18945"], script)
+    check("K2 bibtex of an arXiv ID neither reads nor writes the cache", script.asked(ARXIV) == 2, repr(hosts_of(script)))
+with attempt("K2 check-urls"):
+    temporary, _ = scratch_case()
+    tex = put("k2/main.tex", "Text \\cite{k}.\n")
+    bib = put("k2/refs.bib", DOI_ENTRY)
+    script = Script({"doi.org": [says(200)], CROSSREF: [says(200, CROSSREF_BODY)]})
+    with fake_clock():
+        status, lines, _ = run_main(["check-urls", tex, bib], script)
+        run_main(["check-urls", tex, bib], script)
+    check("K2 the title check of check-urls neither reads nor writes the cache", script.asked(CROSSREF) == 2 and lines == [f"k: 200 {DOI_URL}, ratio 1.00 against Crossref"], repr((hosts_of(script), head(lines))))
+with attempt("K2 fetch"):
+    temporary, _ = scratch_case()
+    folder = put("k2/fetched/.keep", "")
+    script = Script({OPENALEX: [says(200, OPENALEX_BODY)], SEMANTIC_SCHOLAR: [says(200, S2_BODY)]})
+    with fake_clock():
+        run_main(["fetch", DOI, os.path.dirname(folder), "k"], script)
+        run_main(["fetch", DOI, os.path.dirname(folder), "k"], script)
+    check("K2 fetch neither reads nor writes the cache", script.asked(OPENALEX) == 2 and script.asked(SEMANTIC_SCHOLAR) == 2, repr(hosts_of(script)))
+with attempt("K2 no result"):
+    scratch_case()
+    script = Script({host: [says(200, body)] for host, body in NO_RESULT.items()})
+    with fake_clock():
+        status, lines, _ = run_main(["search", "zzz"], script)
+        sent = len(script.urls)
+        status, again, _ = run_main(["search", "zzz"], script)
+    check("K2 a 200 search with no result is stored and read back as not found", sent == 4 and len(script.urls) == 4 and again == lines == ["Crossref: not found", "OpenAlex: not found", "Semantic Scholar: not found", "arXiv: not found"], repr((hosts_of(script), head(lines), head(again))))
+
+# K3: an entry older than 30 days is not used and is replaced, and the first store removes entries older than 30 days and temporary files older than 1 day.
+DAY = 86400
+with attempt("K3 age"):
+    scratch_case()
+    script = Script(THREE_BODIES)
+    with fake_clock() as clock:
+        start = clock.now
+        run_main(["resolve", DOI], script)
+        clock.now = start + 30 * DAY - 1
+        run_main(["resolve", DOI], script)
+        check("K3 an entry of 30 days less a second is used", len(script.urls) == 3, repr(hosts_of(script)))
+        clock.now = start + 30 * DAY + 1
+        run_main(["resolve", DOI], script)
+        check("K3 an entry older than 30 days is not used", len(script.urls) == 6, repr(hosts_of(script)))
+        clock.now = start + 30 * DAY + 2
+        run_main(["resolve", DOI], script)
+        check("K3 the old entry was replaced by the new reply", len(script.urls) == 6, repr(hosts_of(script)))
+with attempt("K3 pruning"):
+    temporary, cache = scratch_case()
+    os.makedirs(cache, mode=0o700)
+    script = Script(THREE_BODIES)
+    with fake_clock() as clock:
+        planted = {"a" * 64: 31 * DAY, "b" * 64: 29 * DAY, "tmp.old": 2 * DAY, "tmp.young": 3600}
+        for name, age in planted.items():
+            path = os.path.join(cache, name)
+            with open(path, "w") as handle:
+                handle.write("{}")
+            os.utime(path, (clock.now - age, clock.now - age))
+        run_main(["resolve", DOI], script)
+    left = {name for name in planted if os.path.exists(os.path.join(cache, name))}
+    check("K3 the first store removes the entry older than 30 days and the temporary file older than 1 day only", left == {"b" * 64, "tmp.young"}, repr(sorted(os.listdir(cache))))
+
+# K4: no file of the cache folder or the temporary folder holds a credential.
+with attempt("K4"):
+    secrets = {"S2_API_KEY": "s2-marker-one", "OPENALEX_API_KEY": "oa-marker-two", "CROSSREF_POLITE_EMAIL": "cr-marker-three@example.org"}
+    temporary, cache = scratch_case(secrets)
+    script = Script(THREE_BODIES)
+    with fake_clock():
+        run_main(["resolve", DOI], script)
+        script = Script({OPENALEX: [says(429, Retry_After="4356")], CROSSREF: [says(404)], SEMANTIC_SCHOLAR: [says(404)]})
+        run_main(["search", "marker query"], script)
+    sent_with_secrets = any("oa-marker-two" in url for url in script.urls)
+    found = [path for path in files_under(os.path.dirname(cache)) + files_under(temporary) for value in ("s2-marker-one", "oa-marker-two", "cr-marker-three") if value in path or value.encode() in read_bytes(path)]
+    check("K4 the requests did carry the credentials", sent_with_secrets, repr(hosts_of(script)))
+    check("K4 the cache holds the three entries and the skip file is the one of the key", len(listing(cache)) == 3 and skip_files(temporary) == ["ordo-lookup-skip-openalex-key"], repr((skip_files(temporary), listing(cache))))
+    check("K4 no file holds a credential", found == [], repr(found))
+
+# K5: a cache that cannot be used leaves the output as it is, with no error line.
+with attempt("K5"):
+    for what in ("folder that cannot be made", "folder that cannot be written", "invalid entries", "temporary files"):
+        temporary, cache = scratch_case()
+        script = Script(THREE_BODIES)
+        with fake_clock():
+            if what == "folder that cannot be made":
+                blocker = os.path.join(temporary, "a-file")
+                with open(blocker, "w") as handle:
+                    handle.write("x")
+                os.environ["XDG_CACHE_HOME"] = os.path.join(blocker, "inside")
+            elif what == "folder that cannot be written":
+                os.makedirs(cache, mode=0o700)
+                os.chmod(cache, 0o500)
+            else:
+                run_main(["resolve", DOI], Script(THREE_BODIES))
+                check(f"K5 {what}: the cache held the entries", len(listing(cache)) == 3, repr(listing(cache)))
+                for name in listing(cache):
+                    path = os.path.join(cache, name)
+                    if what == "invalid entries":
+                        with open(path, "w") as handle:
+                            handle.write("{")
+                    else:
+                        os.rename(path, os.path.join(cache, "tmp." + name))
+            try:
+                status, lines, err = run_main(["resolve", DOI], script)
+            finally:
+                if what == "folder that cannot be written":
+                    os.chmod(cache, 0o700)
+        if what == "folder that cannot be written":
+            check(f"K5 {what}: no entry was written", listing(cache) == [], repr(listing(cache)))
+        check(f"K5 {what}: the request is sent and the output is the uncached output", len(script.urls) == 3 and lines == baseline and err == "", repr((hosts_of(script), head(lines), head(baseline), err)))
+
+# K6: the cache folder is under an absolute XDG_CACHE_HOME, else under ~/.cache.
+with attempt("K6"):
+    for what in ("absolute", "relative", "unset", "empty"):
+        temporary, cache = scratch_case()
+        home = os.path.join(os.path.dirname(temporary), "home")
+        elsewhere = os.path.join(os.path.dirname(temporary), "elsewhere")
+        os.makedirs(elsewhere)
+        real_home, real_directory = os.environ["HOME"], os.getcwd()
+        try:
+            os.environ["HOME"] = home
+            os.chdir(elsewhere)
+            if what == "relative":
+                os.environ["XDG_CACHE_HOME"] = "relative-cache"
+            elif what == "unset":
+                del os.environ["XDG_CACHE_HOME"]
+            elif what == "empty":
+                os.environ["XDG_CACHE_HOME"] = ""
+            with fake_clock():
+                run_main(["resolve", DOI], Script(THREE_BODIES))
+        finally:
+            os.environ["HOME"] = real_home
+            os.chdir(real_directory)
+        wanted = cache if what == "absolute" else os.path.join(home, ".cache", "ordo-lookup")
+        check(f"K6 {what} XDG_CACHE_HOME: the entries are under {os.path.relpath(wanted, os.path.dirname(temporary))}", len(listing(wanted)) == 3 and os.listdir(elsewhere) == [], repr((wanted, listing(wanted), os.listdir(elsewhere))))
+
+# K7: the cache folder has mode 700, and each entry, skip file and lock file mode 600.
+with attempt("K7"):
+    real_mask = os.umask(0)
+    try:
+        temporary, cache = scratch_case()
+        with fake_clock():
+            run_main(["resolve", DOI], Script(THREE_BODIES))
+            run_main(["search", "mode query"], Script({OPENALEX: [says(429, Retry_After="4356")]}))
+    finally:
+        os.umask(real_mask)
+    entries = [os.path.join(cache, name) for name in listing(cache)]
+    locks = [os.path.join(temporary, name) for name in os.listdir(temporary)]
+    check("K7 the cache folder has mode 700", mode_of(cache) == 0o700, repr(mode_of(cache)))
+    check("K7 each entry, skip file and lock file has mode 600", len(entries) == 3 and locks and all(mode_of(path) == 0o600 for path in entries + locks) and len(skip_files(temporary)) == 1, repr([(path, mode_of(path)) for path in entries + locks]))
+
+
 for failure in failures:
     print(failure)
 sys.exit(1 if failures else 0)
@@ -691,4 +1333,4 @@ if [ "$status" -ne 0 ]; then
     exit 1
 fi
 
-echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, and resolves an entry of a .bib by its doi, its arXiv ID or its title and prints a verdict that CONFIRMED or NOT_CONFIRMED the entry with exit status 0 or 1, refuses a call or an entry it cannot read with exit status 2, and leaves the output of resolve without --entry as it was"
+echo "PASS: lookup.py parses recorded bodies, matches titles, merges records, reads passage lines, finds passages, rebuilds abstracts, writes arXiv and OpenAlex queries, paces every arXiv request across processes, requests only http and https URLs, leaves out an index whose body does not parse, prints not found, names files, URLs and credentials safely, reads BibTeX and HTML, reads the keys a .tex cites with the commands of natbib and biblatex and the files it inputs and prints the keys the .bib lacks and the entries no key cites, compares the title of a key with a doi with the record the doi resolves to and names an index that was left out, reports an input file that does not exist, reads the .bib named on the command line in check-urls and quote-check, refuses the one-argument check-urls and the two-argument quote-check, prints the retraction and expression-of-concern notices of a Crossref record and none for a correction, an erratum or a work without a notice, and resolves an entry of a .bib by its doi, its arXiv ID or its title and prints a verdict that CONFIRMED or NOT_CONFIRMED the entry with exit status 0 or 1, refuses a call or an entry it cannot read with exit status 2, and leaves the output of resolve without --entry as it was, paces every API host across processes, waits out a 429 by its Retry-After, leaves a 429 that names more than 60 seconds out at once with its reason, names the host of a redirect hop that met it, and writes the skip file of the host, and caches the index replies of resolve, search, refs and cited-by on disk for 30 days"
