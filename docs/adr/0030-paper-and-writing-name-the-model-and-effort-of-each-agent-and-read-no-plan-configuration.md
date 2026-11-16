@@ -1,6 +1,6 @@
 # 0030. Paper and writing name the model and effort of each agent and read no plan configuration
 
-Status: proposed
+Status: proposed; superseded by 0035 in the part that makes `ordo-medium` the only agent a role of `paper` or an agent of `writing` starts as
 
 ## Context
 

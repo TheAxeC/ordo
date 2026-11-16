@@ -497,3 +497,36 @@ step 5.B, raised by the user's question on ruling "The lookups of lookup.py": wh
 Taken: (a)
 Booked: `.scratch/5-paper/plan.md` step 5.B, (3)
 Builds on it: step 5.B
+
+## C112. The earlier papers in step 5.E (2026-11-16)
+
+step 5.E, raised at the brief of step 5.E: the citation compliance agent compares the manuscript with the authors' earlier papers only when `lookup.py fetch` gets their text (`references/citation-compliance.md:382`-`:386`), the route the ruling The fourth repair of paper replaces for cited sources.
+  - (a) The comparison reads an earlier paper the same way as a cited source, in step 5.E. Pro: an earlier paper on Europe PMC, PMC, its DOI page or its venue page is compared. Con: a few more saved pages per run.
+  - (b) The comparison stays on `lookup.py fetch` alone. Pro: no change. Con: an open earlier paper is listed "not compared". This is the lazy option.
+  - Recommendation: (a).
+
+Taken: (a)
+Booked: `.scratch/5-paper/plan.md` (ruling The earlier papers in step 5.E)
+Builds on it: step 5.E
+
+## C113. Where the citation compliance agent gets a source's PMCID (2026-11-16)
+
+step 5.E, raised by `.scratch/5-paper/agents/reviews/5.E-brief-check.md` check 7: a Europe PMC search by DOI run with `curl` is a reference lookup outside `lookup.py`, against ADR 0017 and the plan's Goal.
+  - (a) `lookup.py resolve` prints a `pmcid:` line from OpenAlex's record, and the agent saves the PMC and Europe PMC pages at addresses built from it. Pro: every lookup stays in `lookup.py`; ADR 0017 and the Goal hold. Con: a source OpenAlex holds no PMCID for skips PMC and goes on to the DOI's page.
+  - (b) The agent queries Europe PMC's search with `curl -G --data-urlencode`. Pro: finds a PMCID OpenAlex lacks. Con: a lookup outside `lookup.py`, needing ADR 0017 superseded and the Goal reworded. This is the lazy option, since it moves the lookup out of the script instead of adding it there.
+  - Recommendation: (a).
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.E.md` "Decisions taken in this brief" 4
+Builds on it: step 5.E
+
+## C114. The effort of a role on the default agent (2026-11-16)
+
+step 5.E, raised by `.scratch/5-paper/agents/reviews/5.E-brief-check.md` "Declined to judge": under ruling Open item BN a role runs on the default agent, and the run must name the effort it ran at.
+  - (a) Start the role with the Agent tool's `effort` set to `medium`, and name `medium` (or `CLAUDE_CODE_EFFORT_LEVEL`'s value when set). Pro: the roles run at the effort `ordo-medium` gives, and the run names a value it knows. Con: none found.
+  - (b) Start it with no `effort`, and name "the session's effort". Pro: no argument. Con: the run names a value it never reads, and the effort follows whatever the session runs at. This is the lazy option.
+  - Recommendation: (a).
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.E.md` "Decisions taken in this brief" 7; `docs/adr/0035-*.md`
+Builds on it: step 5.E
