@@ -1,0 +1,424 @@
+text: final-message.md: 1 x /strategist agents/ -> 'search agents'
+text: final-message.md: 1 x /paper-runs/lit-review-2026-11-16// -> 'run/'
+text: final-message.md: 2 x /review-theme-/ -> 'theme-report-'
+text: final-message.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: final-message.md: 4 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /lit-review/ -> 'literature review'
+path: run/config.md -> run/settings.md
+text: run/settings.md: 1 x /- Roles run as the agent `ordo-medium`, at the effort it sets \(`CLAUDE_CODE_EFFORT_LEVEL` unset\)\.\n- Opus identifier from the runner's model list: `claude-opus-5-5`\./ -> "- Model of the role agents: opus, identifier `claude-opus-5-5` from the runner's model list; agent effort medium."
+text: run/settings.md: 1 x /\(`/private/tmp/claude-502/-Users-axelfaes-workspace-ordo-[^`]*`, slashes written as hyphens\)/ -> "(the run folder's path with its slashes written as hyphens)"
+text: run/settings.md: 1 x /`/paper lit-review`/ -> 'this literature review'
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 1 x /review-theme-/ -> 'theme-report-'
+text: run/settings.md: 1 x /refs-theme-/ -> 'theme-refs-'
+text: run/settings.md: 3 x /config\.md/ -> 'settings.md'
+text: run/settings.md: 1 x /[Ss]earch themes/ -> 'themes'
+text: run/settings.md: 1 x /the literature strategist/ -> 'the search agent'
+text: run/settings.md: 1 x /\| Mode \| lit-review \|/ -> '| Task | literature review |'
+text: run/settings.md: 1 x /lit-review/ -> 'literature review'
+text: run/final.md: 2 x /review-theme-/ -> 'theme-report-'
+text: run/final.md: 3 x /refs-theme-/ -> 'theme-refs-'
+text: run/final.md: 3 x /config\.md/ -> 'settings.md'
+text: run/final.md: 1 x /lit-review/ -> 'literature review'
+path: run/refs-theme-1.bib -> run/theme-refs-1.bib
+path: run/refs-theme-2.bib -> run/theme-refs-2.bib
+path: run/refs-theme-3.bib -> run/theme-refs-3.bib
+path: run/refs-theme-4.bib -> run/theme-refs-4.bib
+path: run/review-theme-1.md -> run/theme-report-1.md
+text: run/theme-report-1.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: run/theme-report-1.md: 4 x /config\.md/ -> 'settings.md'
+text: run/theme-report-1.md: 44 x /lookup\.py/ -> 'the lookup script'
+text: run/theme-report-1.md: 1 x /Search theme/ -> 'Theme'
+text: run/theme-report-1.md: 3 x /search theme/ -> 'theme'
+text: run/theme-report-1.md: 1 x /strategist/ -> 'search agent'
+path: run/review-theme-2.md -> run/theme-report-2.md
+text: run/theme-report-2.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: run/theme-report-2.md: 2 x /config\.md/ -> 'settings.md'
+text: run/theme-report-2.md: 17 x /lookup\.py/ -> 'the lookup script'
+text: run/theme-report-2.md: 1 x /Search theme/ -> 'Theme'
+text: run/theme-report-2.md: 2 x /search theme/ -> 'theme'
+text: run/theme-report-2.md: 2 x /strategist/ -> 'search agent'
+path: run/review-theme-3.md -> run/theme-report-3.md
+text: run/theme-report-3.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: run/theme-report-3.md: 2 x /config\.md/ -> 'settings.md'
+text: run/theme-report-3.md: 30 x /lookup\.py/ -> 'the lookup script'
+text: run/theme-report-3.md: 1 x /[Ss]earch themes/ -> 'themes'
+text: run/theme-report-3.md: 1 x /Search theme/ -> 'Theme'
+text: run/theme-report-3.md: 3 x /search theme/ -> 'theme'
+text: run/theme-report-3.md: 4 x /the strategist/ -> 'the search agent'
+text: run/theme-report-3.md: 1 x /\blit-review mode\b/ -> 'literature review'
+path: run/review-theme-4.md -> run/theme-report-4.md
+text: run/theme-report-4.md: 2 x /refs-theme-/ -> 'theme-refs-'
+text: run/theme-report-4.md: 3 x /config\.md/ -> 'settings.md'
+text: run/theme-report-4.md: 29 x /lookup\.py/ -> 'the lookup script'
+text: run/theme-report-4.md: 1 x /[Ss]earch themes/ -> 'themes'
+text: run/theme-report-4.md: 1 x /Search theme/ -> 'Theme'
+text: run/theme-report-4.md: 4 x /search theme/ -> 'theme'
+text: run/theme-report-4.md: 1 x /lit-review/ -> 'literature review'
+text: run/review.md: 1 x /the `/paper lit-review` skill/ -> 'a literature review tool'
+text: run/review.md: 1 x /`/paper lit-review`/ -> 'this literature review'
+text: run/review.md: 3 x /config\.md/ -> 'settings.md'
+text: run/review.md: 180 x /lookup\.py/ -> 'the lookup script'
+text: run/review.md: 6 x /[Ss]earch themes/ -> 'themes'
+text: run/review.md: 3 x /Search theme/ -> 'Theme'
+text: run/review.md: 5 x /search theme/ -> 'theme'
+text: run/review.md: 1 x /strategist/ -> 'search agent'
+text: final-message.md: 1 x /\bthe Phase 1\b/ -> 'the search stage'
+text: final-message.md: 2 x /the skill's/ -> "its instructions'"
+text: final-message.md: 1 x /phase7_format// -> 'output/'
+text: final-message.md: 3 x /lit-review/(?=search|output|settings|config|tools)/ -> ''
+text: final-message.md: 1 x /\blit-review mode\b/ -> 'literature review'
+text: final-message.md: 2 x /lit-review/ -> 'literature review'
+text: final-message.md: 1 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /formatter_agent/ -> 'formatting agent'
+text: final-message.md: 1 x /Phase 1/ -> 'the search stage'
+read as UTF-8: intake-record.md
+text: intake-record.md: 2 x /the skill's/ -> "its instructions'"
+text: intake-record.md: 1 x /lit-review/(?=search|output|settings|config|tools)/ -> ''
+text: intake-record.md: 1 x /\blit-review mode\b/ -> 'literature review'
+text: intake-record.md: 1 x /\bLit-review\b/ -> 'Literature review'
+text: intake-record.md: 2 x /lit-review/ -> 'literature review'
+text: intake-record.md: 6 x /config\.md/ -> 'settings.md'
+text: intake-record.md: 1 x /literature_strategist_agent/ -> 'search agent'
+text: intake-record.md: 1 x /formatter_agent/ -> 'formatting agent'
+text: intake-record.md: 1 x /Paper Configuration Record/ -> 'intake record'
+text: intake-record.md: 1 x /(?<=\. )Phase 1/ -> 'The search stage'
+text: intake-record.md: 1 x /Phase 1/ -> 'the search stage'
+read as UTF-8: settings.md
+text: settings.md: 1 x /Skill: academic-paper, mode `lit-review`/ -> 'Task: literature review'
+text: settings.md: 1 x /\(`ls \.claude/skills/academic-paper/` lists agents, examples, references, SKILL\.md, templates\)/ -> '(no such folder is present)'
+text: settings.md: 1 x /[Tt]he literature strategist's Phase Boundary forbids Phase 7 formatting/ -> "the search agent's instructions forbid formatting"
+text: settings.md: 1 x /which breaks its Phase Boundary/ -> 'which breaks its instructions'
+text: settings.md: 1 x /by one agent of the same skill/ -> 'by one agent of the same instructions'
+text: settings.md: 1 x /The skill's text/ -> 'Its instructions'
+text: settings.md: 6 x /the skill's/ -> "its instructions'"
+text: settings.md: 1 x /this copy of the skill/ -> 'this copy of its instructions'
+text: settings.md: 1 x /`phase7_\*` folders/ -> 'its output folder'
+text: settings.md: 2 x /literature strategist/ -> 'search agent'
+text: settings.md: 2 x /phase1_literature// -> 'search/'
+text: settings.md: 1 x /phase7_format// -> 'output/'
+text: settings.md: 1 x /lit-review/(?=search|output|settings|config|tools)/ -> ''
+text: settings.md: 1 x /\blit-review mode\b/ -> 'literature review'
+text: settings.md: 3 x /\bLit-review\b/ -> 'Literature review'
+text: settings.md: 4 x /lit-review/ -> 'literature review'
+text: settings.md: 4 x /literature_strategist_agent/ -> 'search agent'
+text: settings.md: 2 x /intake_agent/ -> 'intake agent'
+text: settings.md: 2 x /formatter_agent/ -> 'formatting agent'
+text: settings.md: 2 x /abstract_bilingual_agent/ -> 'abstract agent'
+text: settings.md: 2 x /Phase 1/ -> 'the search stage'
+binary kept whole: output/literature_review.pdf
+read as UTF-8: output/literature_review.tex
+text: output/literature_review.tex: 1 x /\(academic-paper, Phase 7\)/ -> ''
+text: output/literature_review.tex: 1 x /the academic-paper literature strategist/ -> 'the search agent'
+text: output/literature_review.tex: 1 x /phase1_literature// -> 'search/'
+text: output/literature_review.tex: 1 x /\bthe academic-paper skill\b/ -> 'its instructions'
+text: output/literature_review.tex: 2 x /\blit-review mode\b/ -> 'literature review'
+text: output/literature_review.tex: 1 x /lit-review/ -> 'literature review'
+text: output/literature_review.tex: 1 x /config\.md/ -> 'settings.md'
+text: output/literature_review.tex: 1 x /formatter_agent/ -> 'formatting agent'
+text: output/literature_review.tex: 1 x /Paper Configuration Record/ -> 'intake record'
+read as UTF-8: search/id_check_all_themes.txt
+read as UTF-8: search/id_check_merged.txt
+read as UTF-8: search/literature_search_report.md
+text: search/literature_search_report.md: 1 x /the academic-paper literature strategist/ -> 'the search agent'
+text: search/literature_search_report.md: 1 x /\blit-review mode\b/ -> 'literature review'
+text: search/literature_search_report.md: 1 x /config\.md/ -> 'settings.md'
+read as UTF-8: search/T1_tensor/theme_report.md
+text: search/T1_tensor/theme_report.md: 1 x /\(academic-paper, Phase 1, lit-review mode\)/ -> '(search stage)'
+text: search/T1_tensor/theme_report.md: 1 x /lit-review/ -> 'literature review'
+text: search/T1_tensor/theme_report.md: 2 x /config\.md/ -> 'settings.md'
+text: search/T1_tensor/theme_report.md: 1 x /literature_strategist_agent/ -> 'search agent'
+read as UTF-8: search/T2_transport/theme_report.md
+text: search/T2_transport/theme_report.md: 1 x /\(academic-paper, Phase 1, lit-review mode\)/ -> '(search stage)'
+text: search/T2_transport/theme_report.md: 1 x /lit-review/ -> 'literature review'
+text: search/T2_transport/theme_report.md: 3 x /config\.md/ -> 'settings.md'
+text: search/T2_transport/theme_report.md: 1 x /literature_strategist_agent/ -> 'search agent'
+read as UTF-8: search/T5_medical/theme_report.md
+text: search/T5_medical/theme_report.md: 1 x /\(academic-paper, Phase 1, lit-review mode\)/ -> '(search stage)'
+text: search/T5_medical/theme_report.md: 1 x /lit-review/ -> 'literature review'
+text: search/T5_medical/theme_report.md: 3 x /config\.md/ -> 'settings.md'
+text: search/T5_medical/theme_report.md: 1 x /literature_strategist_agent/ -> 'search agent'
+read as UTF-8: search/T4_sets/theme_report.md
+text: search/T4_sets/theme_report.md: 1 x /\(academic-paper, Phase 1, lit-review mode\)/ -> '(search stage)'
+text: search/T4_sets/theme_report.md: 1 x /lit-review/ -> 'literature review'
+text: search/T4_sets/theme_report.md: 2 x /config\.md/ -> 'settings.md'
+text: search/T4_sets/theme_report.md: 1 x /literature_strategist_agent/ -> 'search agent'
+read as UTF-8: search/T3_barycenters/theme_report.md
+text: search/T3_barycenters/theme_report.md: 1 x /`lit-review`/ -> 'literature review'
+text: search/T3_barycenters/theme_report.md: 1 x /lit-review/ -> 'literature review'
+text: search/T3_barycenters/theme_report.md: 3 x /config\.md/ -> 'settings.md'
+text: search/T3_barycenters/theme_report.md: 1 x /Phase 1/ -> 'the search stage'
+== paper
+text: index.md: 12 x (?^:tmp\.mXCO9tvk05)
+text: source-001.txt: 2 x (?^:/private/tmp/claude-502/[^\s`'")]*)
+text: source-001.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-001.txt: 1 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-001.txt: 1 x (?^:refs-theme-)
+text: source-001.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-003.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-003.txt: 13 x (?^:\baxelfaes\b)
+text: source-003.txt: 1 x (?^:config\.md)
+text: source-003.txt: 1 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-003.txt: 4 x (?^:refs-theme-)
+text: source-003.txt: 4 x (?^:review-theme-)
+text: source-004.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-005.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-005.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-005.txt: 1 x (?^:[Ll]iterature strategist)
+text: source-005.txt: 1 x (?^:[Ss]earch themes)
+text: source-005.txt: 9 x (?^:\baxelfaes\b)
+text: source-005.txt: 2 x (?^:config\.md)
+text: source-005.txt: 1 x (?^:ordo-medium)
+text: source-005.txt: 1 x (?^:paper-runs/)
+text: source-005.txt: 1 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-005.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-016.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-016.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-018.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-018.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-024.txt: 1 x (?^:/Users/axelfaes/)
+text: source-024.txt: 2 x (?^:/Users/axelfaes/\.claude/skills/paper/templates/lookup\.py)
+text: source-024.txt: 5 x (?^:\baxelfaes\b)
+text: source-026.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-026.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-075.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-075.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-076.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-076.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-078.txt: 2 x (?^:lookup\.py)
+text: source-079.txt: 6 x (?^:lookup\.py)
+text: source-080.txt: 7 x (?^:lookup\.py)
+text: source-085.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-093.txt: 1 x (?^:lookup\.py)
+text: source-097.txt: 1 x (?^:config\.md)
+text: source-097.txt: 1 x (?^:lookup\.py)
+text: source-098.txt: 16 x (?^:lookup\.py)
+text: source-098.txt: 11 x (?^:ordo-lookup-[A-Za-z0-9_]+)
+text: source-102.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-102.txt: 3 x (?^:tmp\.mXCO9tvk05)
+text: source-105.txt: 10 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-105.txt: 10 x (?^:tmp\.mXCO9tvk05)
+text: source-107.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-107.txt: 3 x (?^:tmp\.mXCO9tvk05)
+text: source-109.txt: 54 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-109.txt: 54 x (?^:tmp\.mXCO9tvk05)
+text: source-127.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-127.txt: 4 x (?^:tmp\.mXCO9tvk05)
+text: source-140.txt: 4 x (?^:lookup\.py)
+text: source-155.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-155.txt: 2 x (?^:tmp\.mXCO9tvk05)
+text: source-156.txt: 11 x (?^:\baxelfaes\b)
+text: source-156.txt: 1 x (?^:config\.md)
+text: source-156.txt: 4 x (?^:refs-theme-)
+text: source-156.txt: 4 x (?^:review-theme-)
+text: source-157.txt: 14 x (?^:lookup\.py)
+text: source-157.txt: 6 x (?^:ordo-lookup-[A-Za-z0-9_]+)
+text: source-158.txt: 13 x (?^:lookup\.py)
+text: source-159.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-161.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-161.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-161.txt: 1 x (?^:paper-runs/)
+text: source-164.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-164.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-164.txt: 1 x (?^:paper-runs/)
+text: source-166.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-169.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-169.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-169.txt: 1 x (?^:paper-runs/)
+text: source-171.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-171.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-171.txt: 1 x (?^:paper-runs/)
+text: source-176.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-176.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-176.txt: 1 x (?^:paper-runs/)
+text: source-177.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-179.txt: 2 x (?^:lookup\.py)
+text: source-181.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-181.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-181.txt: 1 x (?^:paper-runs/)
+text: source-183.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-183.txt: 1 x (?^:\bstrategist\b)
+text: source-183.txt: 4 x (?^:tmp\.mXCO9tvk05)
+text: source-184.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-184.txt: 2 x (?^:tmp\.mXCO9tvk05)
+text: source-189.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-189.txt: 4 x (?^:tmp\.mXCO9tvk05)
+text: source-190.txt: 1 x (?^:[Ss]earch theme)
+text: source-190.txt: 1 x (?^:lookup\.py)
+text: source-191.txt: 1 x (?^:lookup\.py)
+text: source-192.txt: 1 x (?^:lookup\.py)
+text: source-207.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-207.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-207.txt: 1 x (?^:paper-runs/)
+text: source-219.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-220.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-220.txt: 3 x (?^:tmp\.mXCO9tvk05)
+text: source-221.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-222.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-225.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-227.txt: 1 x (?^:config\.md)
+text: source-227.txt: 4 x (?^:refs-theme-)
+text: source-227.txt: 4 x (?^:review-theme-)
+text: source-232.txt: 2 x (?^:[Ss]earch theme)
+text: source-232.txt: 5 x (?^:lookup\.py)
+text: source-234.txt: 2 x (?^:lookup\.py)
+text: source-235.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-240.txt: 3 x (?^:lookup\.py)
+text: source-241.txt: 1 x (?^:lookup\.py)
+text: source-242.txt: 4 x (?^:lookup\.py)
+text: source-253.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-254.txt: 1 x (?^:lookup\.py)
+text: source-277.txt: 3 x (?^:lookup\.py)
+text: source-281.txt: 2 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-281.txt: 2 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-284.txt: 2 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-284.txt: 2 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-293.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-293.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-293.txt: 1 x (?^:paper-runs/)
+text: source-294.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-294.txt: 4 x (?^:lookup\.py)
+text: source-294.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-296.txt: 1 x (?^:[Ss]earch themes)
+text: source-296.txt: 10 x (?^:lookup\.py)
+text: source-298.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-298.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-303.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-303.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-306.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-315.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-315.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-339.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-340.txt: 2 x (?^:lookup\.py)
+text: source-342.txt: 35 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-342.txt: 35 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-342.txt: 35 x (?^:review-theme-)
+text: source-350.txt: 13 x (?^:lookup\.py)
+text: source-351.txt: 1 x (?^:lookup\.py)
+text: source-353.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-353.txt: 1 x (?^:lookup\.py)
+text: source-353.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-354.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-354.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-357.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-357.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-358.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-358.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-359.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-359.txt: 1 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-363.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-363.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-363.txt: 1 x (?^:[Ll]iterature strategist)
+text: source-363.txt: 1 x (?^:[Ss]earch themes)
+text: source-363.txt: 9 x (?^:\baxelfaes\b)
+text: source-363.txt: 2 x (?^:config\.md)
+text: source-363.txt: 1 x (?^:ordo-medium)
+text: source-363.txt: 1 x (?^:paper-runs/)
+text: source-363.txt: 1 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-363.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-364.txt: 3 x (?^:[Ll]iterature strategist)
+text: source-364.txt: 16 x (?^:[Ss]earch theme)
+text: source-364.txt: 3 x (?^:[Ss]earch themes)
+text: source-364.txt: 6 x (?^:\bstrategist\b)
+text: source-364.txt: 2 x (?^:academic-paper)
+text: source-364.txt: 6 x (?^:config\.md)
+text: source-364.txt: 32 x (?^:lookup\.py)
+text: source-364.txt: 3 x (?^:refs-theme-)
+text: source-364.txt: 3 x (?^:review-theme-)
+text: source-365.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-365.txt: 4 x (?^:tmp\.mXCO9tvk05)
+text: source-368.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-368.txt: 3 x (?^:tmp\.mXCO9tvk05)
+text: source-369.txt: 161 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-369.txt: 161 x (?^:tmp\.mXCO9tvk05)
+text: source-371.txt: 161 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-371.txt: 161 x (?^:tmp\.mXCO9tvk05)
+text: source-380.txt: 10 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-380.txt: 10 x (?^:tmp\.mXCO9tvk05)
+text: source-382.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-383.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-383.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-386.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-386.txt: 4 x (?^:tmp\.mXCO9tvk05)
+text: source-392.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-397.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-397.txt: 4 x (?^:tmp\.mXCO9tvk05)
+text: source-398.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-398.txt: 4 x (?^:tmp\.mXCO9tvk05)
+text: source-409.txt: 3 x (?^:lookup\.py)
+text: source-410.txt: 1 x (?^:lookup\.py)
+text: source-413.txt: 5 x (?^:/private/tmp/claude-502/[^\s`'")]*)
+text: source-416.txt: 7 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-416.txt: 7 x (?^:tmp\.mXCO9tvk05)
+text: source-427.txt: 7 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-427.txt: 7 x (?^:tmp\.mXCO9tvk05)
+text: source-433.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5c/lit-review-rc8)
+text: source-433.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-433.txt: 1 x (?^:[Ll]iterature strategist)
+text: source-433.txt: 1 x (?^:[Ss]earch themes)
+text: source-433.txt: 5 x (?^:\baxelfaes\b)
+text: source-433.txt: 2 x (?^:config\.md)
+text: source-433.txt: 1 x (?^:ordo-medium)
+text: source-433.txt: 1 x (?^:paper-runs/)
+text: source-433.txt: 1 x (?^:paper-runs/lit-review-2026-11-16/)
+text: source-433.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-434.txt: 3 x (?^:[Ll]iterature strategist)
+text: source-434.txt: 16 x (?^:[Ss]earch theme)
+text: source-434.txt: 3 x (?^:[Ss]earch themes)
+text: source-434.txt: 6 x (?^:\bstrategist\b)
+text: source-434.txt: 2 x (?^:academic-paper)
+text: source-434.txt: 6 x (?^:config\.md)
+text: source-434.txt: 32 x (?^:lookup\.py)
+text: source-434.txt: 3 x (?^:refs-theme-)
+text: source-434.txt: 3 x (?^:review-theme-)
+text: source-438.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-438.txt: 3 x (?^:tmp\.mXCO9tvk05)
+text: source-448.txt: 17 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-448.txt: 17 x (?^:tmp\.mXCO9tvk05)
+text: source-533.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-533.txt: 2 x (?^:tmp\.mXCO9tvk05)
+text: source-534.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-534.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-547.txt: 2 x (?^:lookup\.py)
+text: source-551.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-551.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-552.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-552.txt: 1 x (?^:tmp\.mXCO9tvk05)
+text: source-556.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-556.txt: 2 x (?^:tmp\.mXCO9tvk05)
+== ap2
+text: source-029.txt: 28 x (?^:/Users/axelfaes/)
+text: source-031.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-031.txt: 1 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5b/lit-review-ap2(/lit-review)?)
+text: source-052.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-053.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-054.txt: 3 x (?^:\baxelfaes\b)
+text: source-079.txt: 4 x (?^:/Users/axelfaes/)
+text: source-093.txt: 1 x (?^:\baxelfaes\b)
+text: source-135.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-149.txt: 32 x (?^:/Users/axelfaes/)
+text: source-175.txt: 1 x (?^:/Users/axelfaes/)
+text: source-176.txt: 2 x (?^:/Users/axelfaes/)
+text: source-194.txt: 4 x (?^:/Users/axelfaes/)
+text: source-200.txt: 1 x (?^:/Users/axelfaes/)
+text: source-200.txt: 2 x (?^:/private/tmp/claude-502/[^\s`'"]*?/gate5b/lit-review-ap2(/lit-review)?)
+text: source-200.txt: 4 x (?^:\baxelfaes\b)
+text: source-200.txt: 1 x (?^:config\.md)
+text: source-200.txt: 1 x (?^:phase0_config)
+text: source-200.txt: 1 x (?^:phase1_literature)
+text: source-212.txt: 2 x (?^:/Users/axelfaes/)
+text: source-214.txt: 2 x (?^:/Users/axelfaes/)
+text: source-229.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-245.txt: 1 x (?^:\baxelfaes\b)
+text: source-260.txt: 32 x (?^:/Users/axelfaes/)
+text: source-280.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-281.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-288.txt: 3 x (?^:\baxelfaes\b)
+text: source-289.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-290.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-322.txt: 2 x (?^:/Users/axelfaes/)
+text: source-354.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-355.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-363.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+removed: paper source-098.txt (the side's own lookup script), source-364.txt and source-434.txt (the search agent's own instruction page): the side's instructions, not texts of its sources
+text: every remaining /var/folders/... and /private/tmp/... path written as <a temporary folder> or <a scratch folder>

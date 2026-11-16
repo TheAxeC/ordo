@@ -10,11 +10,16 @@ for root, _, files in os.walk(src):
             new = new.replace(old, rep)
         out = os.path.join(dst, new); os.makedirs(os.path.dirname(out), exist_ok=True)
         if new != rel: log.write(f"path: {rel} -> {new}\n")
+        enc = 'ascii'
         try:
             t = open(p, encoding='ascii').read()
         except UnicodeDecodeError:
-            shutil.copy(p, out); log.write(f"binary kept whole: {new}\n"); continue
+            try:
+                t = open(p, encoding='utf-8').read(); enc = 'utf-8'
+                log.write(f"read as UTF-8: {new}\n")
+            except UnicodeDecodeError:
+                shutil.copy(p, out); log.write(f"binary kept whole: {new}\n"); continue
         for rx, rep in rules['text']:
             t, n = re.subn(rx, rep, t)
             if n: log.write(f"text: {new}: {n} x /{rx}/ -> {rep!r}\n")
-        open(out, 'w', encoding='ascii').write(t)
+        open(out, 'w', encoding=enc).write(t)

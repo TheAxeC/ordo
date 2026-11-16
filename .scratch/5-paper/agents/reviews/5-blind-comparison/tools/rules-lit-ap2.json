@@ -1,0 +1,322 @@
+{
+ "paths": [
+  [
+   "config.md",
+   "settings.md"
+  ]
+ ],
+ "text": [
+  [
+   "\\bthe Phase 1\\b",
+   "the search stage"
+  ],
+  [
+   "\\bThe Phase 1\\b",
+   "The search stage"
+  ],
+  [
+   "Skill: academic-paper, mode `lit-review`",
+   "Task: literature review"
+  ],
+  [
+   "\\(`ls \\.claude/skills/academic-paper/` lists agents, examples, references, SKILL\\.md, templates\\)",
+   "(no such folder is present)"
+  ],
+  [
+   "\\(academic-paper, Phase 7\\)",
+   ""
+  ],
+  [
+   "\\(academic-paper, Phase 1, lit-review mode\\)",
+   "(search stage)"
+  ],
+  [
+   "the academic-paper literature strategist",
+   "the search agent"
+  ],
+  [
+   "[Tt]he literature strategist's Phase Boundary forbids Phase 7 formatting",
+   "the search agent's instructions forbid formatting"
+  ],
+  [
+   "which breaks its Phase Boundary",
+   "which breaks its instructions"
+  ],
+  [
+   "Phase Boundary",
+   "stage boundary"
+  ],
+  [
+   "by one agent of the same skill",
+   "by one agent of the same instructions"
+  ],
+  [
+   "The skill's text",
+   "Its instructions"
+  ],
+  [
+   "the skill's",
+   "its instructions'"
+  ],
+  [
+   "The skill's",
+   "Its instructions'"
+  ],
+  [
+   "this copy of the skill",
+   "this copy of its instructions"
+  ],
+  [
+   "`phase7_\\*` folders",
+   "its output folder"
+  ],
+  [
+   "literature strategist",
+   "search agent"
+  ],
+  [
+   "Phase 7",
+   "the formatting stage"
+  ],
+  [
+   "/private/tmp/claude-502/[^ \\n\\\"'}`)]*?/gate5b/lit-review-ap2(/lit-review)?",
+   "/work"
+  ],
+  [
+   "phase0_config/paper_configuration_record\\.md",
+   "intake-record.md"
+  ],
+  [
+   "paper_configuration_record\\.md",
+   "intake-record.md"
+  ],
+  [
+   "phase1_literature/",
+   "search/"
+  ],
+  [
+   "phase1_literature",
+   "search"
+  ],
+  [
+   "phase7_format/",
+   "output/"
+  ],
+  [
+   "phase7_format",
+   "output"
+  ],
+  [
+   "lit-review/(?=search|output|settings|config|tools)",
+   ""
+  ],
+  [
+   "\\(agent a[0-9a-f]{16}[^)]*\\)",
+   ""
+  ],
+  [
+   "\\bagent a[0-9a-f]{16}\\b",
+   "agent"
+  ],
+  [
+   "\\bthe academic-paper skill\\b",
+   "its instructions"
+  ],
+  [
+   "academic-paper skill",
+   "instructions"
+  ],
+  [
+   "academic-paper",
+   "the instructions"
+  ],
+  [
+   "\\bthe skill's\\b",
+   "its instructions'"
+  ],
+  [
+   "\\bthe skill\\b",
+   "its instructions"
+  ],
+  [
+   "\\blit-review mode\\b",
+   "literature review"
+  ],
+  [
+   "`lit-review`",
+   "literature review"
+  ],
+  [
+   "\\bLit-review\\b",
+   "Literature review"
+  ],
+  [
+   "lit-review",
+   "literature review"
+  ],
+  [
+   "/private/tmp/claude-502/[^ \\n\"'}]*?/gate5/lit-review-[12]",
+   "/work"
+  ],
+  [
+   "/Users/axelfaes/\\.claude/skills/repo-setup/templates/docs/dev/prose-standard\\.md \\(standards is empty and docs/dev/prose-standard\\.md does not exist\\)",
+   "the default prose standard"
+  ],
+  [
+   "paper-runs/lit-review-2026-11-15/",
+   "run/"
+  ],
+  [
+   "paper-runs/",
+   "run/"
+  ],
+  [
+   "phase0_paper_configuration_record\\.md",
+   "intake-record.md"
+  ],
+  [
+   "phase1_literature",
+   "search"
+  ],
+  [
+   "phase7_formatting",
+   "output"
+  ],
+  [
+   "config\\.md",
+   "settings.md"
+  ],
+  [
+   "# Final message: /paper lit-review, ",
+   "# Final message, "
+  ],
+  [
+   "/paper lit-review, literature strategist on",
+   "a search agent on"
+  ],
+  [
+   "The literature strategist \\(agent [0-9a-f]+, ordo-high, served model",
+   "The search agent (served model"
+  ],
+  [
+   "Effort agent: ordo-high\\.",
+   "Agent effort: high."
+  ],
+  [
+   "A later resumption of the strategist",
+   "A later resumption of the search agent"
+  ],
+  [
+   "this run's strategist",
+   "this run's search agent"
+  ],
+  [
+   "lookup\\.py",
+   "the lookup script"
+  ],
+  [
+   "`ls \\.claude/skills ~/\\.claude/skills` lists only `academic-paper` under `\\.claude/skills`, and `~/\\.claude/skills` holds code-comments, diagnose, grill, land, ordo-help, ordo-init, paper, plan, plan-orchestration, plan-retro, refute, repo-setup, roadmap, session-retro, spec, synced and writing, none of which is `academic-paper-reviewer`\\.",
+   "no review tool is installed."
+  ],
+  [
+   "The `academic-paper-reviewer` skill is not installed:",
+   "The review tool is not installed:"
+  ],
+  [
+   "`academic-paper-reviewer` skill",
+   "review tool"
+  ],
+  [
+   "academic-paper-reviewer",
+   "review tool"
+  ],
+  [
+   "AI agents of the academic-paper skill \\(Claude\\)",
+   "AI agents (Claude)"
+  ],
+  [
+   "the formatter agent of the same skill",
+   "a formatting agent"
+  ],
+  [
+   "literature_strategist_agent\\.md",
+   "the search agent's instructions"
+  ],
+  [
+   "literature_strategist_agent",
+   "search agent"
+  ],
+  [
+   "intake_agent\\.md",
+   "the intake instructions"
+  ],
+  [
+   "intake_agent",
+   "intake agent"
+  ],
+  [
+   "formatter_agent",
+   "formatting agent"
+  ],
+  [
+   "abstract_bilingual_agent",
+   "abstract agent"
+  ],
+  [
+   "mode_selection_guide\\.md",
+   "the mode guide"
+  ],
+  [
+   "\\| F([1-7]) \\|",
+   "| PM\\1 |"
+  ],
+  [
+   "\\bF([1-7]): (?=[0-9])",
+   "PM\\1: "
+  ],
+  [
+   "\\bF([1-7]) (also returned|limits|confirms)",
+   "PM\\1 \\2"
+  ],
+  [
+   "\\bF1 and F3 confirm",
+   "PM1 and PM3 confirm"
+  ],
+  [
+   "\\| W([1-9]) \\| WebSearch",
+   "| WS\\1 | WebSearch"
+  ],
+  [
+   "Phase 0 Paper Configuration Record",
+   "Intake record"
+  ],
+  [
+   "Paper Configuration Record",
+   "intake record"
+  ],
+  [
+   "(?m)^Phase 1",
+   "The search stage"
+  ],
+  [
+   "(?<=\\. )Phase 1",
+   "The search stage"
+  ],
+  [
+   "Phase 1",
+   "the search stage"
+  ],
+  [
+   "The literature strategist ran as `ordo-high`",
+   "The search agent ran at high effort"
+  ],
+  [
+   "The strategist's",
+   "The search agent's"
+  ],
+  [
+   "the strategist",
+   "the search agent"
+  ]
+ ]
+}
