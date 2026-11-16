@@ -51,6 +51,8 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 
 - BQ (2026-11-16): the lit-review comparison on `v8.4.0-rc.6` (`agents/reviews/5.D-check-blind-comparison.md`): academic-paper's output won with both judges, in both orders. The user's call on it under the ruling The check after the third repair. Ruled so far: Open item BL reopened (a), the one-start rule of the literature strategist removed, not yet carried by a step since the user has not given the go; an audit of every other rule of `paper` that departs from academic-paper while its record claims equivalence is running. No comparison runs again after step 5.E (the user).
 
+- BR (2026-11-16): the audit of `paper` against academic-paper 3.2.0 (`agents/reviews/5-audit-equivalence.md`, agent a8b70597bb7b81e60): eight rules depart from academic-paper while their record claims equivalence (A1 the strategist's one start, ruled under BL; A2 the visualization agent's one start; A3 the stop after draft review round 2 and the round-1 Reject; A4 the strategist's databases and citing layers; A5 pdfLaTeX for elsarticle, IEEEtran and acmart; A6 the anonymous copy; A7 the black outline; A8 the one retry of a patch that does not apply). Rule 23: each is kept only as an openly recorded deviation that improves `paper`, or brought back to academic-paper. Ruling AV4 (offer revise-by-hand and lower the venue) and the ruling The second repair of paper (3) disagree. Not yet carried by a step: the user has not given the go.
+
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -124,6 +126,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-16. Step 5.E, the eleventh of 12 steps, the fourth repair of paper, landed and booked in `plan.md` ("Step 5.E, the fourth repair of paper"); the landing report is `agents/reviews/5.E-landing.md`.
-- Next: open item BQ; step 6, the closing, waits for the user's go. No comparison runs again after step 5.E (the user).
+- Next: the gate is not met (the lit-review comparison on rc.6 lost), so step 6, the closing, cannot run. Next is a step that carries open items BL and BR, on the user's go.
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.
