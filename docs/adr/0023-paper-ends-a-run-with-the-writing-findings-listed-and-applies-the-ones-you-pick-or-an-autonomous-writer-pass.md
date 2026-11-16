@@ -1,6 +1,6 @@
 # 0023. Paper ends a run with the writing findings listed, and applies the ones you pick or an autonomous writer pass
 
-Status: proposed; superseded by 0029 in what follows the findings pass
+Status: proposed; superseded by 0029 in what follows the findings pass; superseded by 0031 in that full and revision mode always invoke `/writing`
 
 ## Context
 

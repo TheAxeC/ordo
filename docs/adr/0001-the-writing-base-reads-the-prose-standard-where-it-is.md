@@ -1,6 +1,6 @@
 # 0001. The writing base reads the prose standard where it is
 
-Status: proposed
+Status: proposed; superseded by 0030 in the `standards` key
 
 ## Context
 
