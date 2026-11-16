@@ -1,0 +1,21 @@
+{
+ "paths": [
+  ["config.md", "settings.md"]
+ ],
+ "text": [
+  ["paper-runs/lit-review-2026-11-16/", "run/"],
+  ["paper-runs/", "run/"],
+  ["config\\.md", "settings.md"],
+  ["# Final message: lit-review 2026-11-16", "# Final message, 2026-11-16"],
+  ["Every item of the lit-review mode ran\\.", "Every item of the review ran."],
+  ["\\| Mode \\| lit-review \\|", "| Task | literature review |"],
+  ["effort agent `ordo-medium`", "agent effort medium"],
+  ["which is all the skill allows", "which is all its instructions allow"],
+  ["the strategist's page allows", "the search agent's instructions allow"],
+  ["The literature strategist", "The search agent"],
+  ["the literature strategist", "the search agent"],
+  ["The strategist", "The search agent"],
+  ["the strategist", "the search agent"],
+  ["lookup\\.py", "the lookup script"]
+ ]
+}

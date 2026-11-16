@@ -49,7 +49,10 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
+
 ## Closed items (the log of what was raised and how it ended; no report carries it)
+
+- 2026-11-16: Open item BJ, the source texts of the lit-review judges: ruled (a) by the user, booked in plan.md's Rulings.
 - 2026-11-15: Step 5.A landed; the first run's findings closed in repair round 1, the three of the run over round 1 and one of the orchestrator's read fixed at landing.
 - 2026-11-15: Open item BI, step 5.A's stop that does not converge (Bonneel_2016 under `resolve --entry`, the intake answer "No.", the citation checks after later patches against ADR 0027 and ADR 0023, the search's end): ruled 1 (a), 2 (a), 3 (a), 4 (a) by the user, booked in plan.md's Rulings; ADR 0029 written.
 - 2026-11-15: Open item BH, the number checks against ADR 0027 and the command form of the changed `resolve`: ruled (a) by the user, booked in plan.md's Rulings; ADR 0028 written.
