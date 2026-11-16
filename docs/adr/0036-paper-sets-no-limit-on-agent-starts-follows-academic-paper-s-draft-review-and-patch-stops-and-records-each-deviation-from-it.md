@@ -1,6 +1,6 @@
 # 0036. Paper sets no limit on agent starts, follows academic-paper's draft-review and patch stops, and records each deviation from it
 
-Status: proposed
+Status: proposed; superseded by 0037 in its sentence that the session decides when to start a role agent fresh and how many run at once, for the literature strategist's search for the review in full, outline-only and lit-review mode
 
 ## Context
 

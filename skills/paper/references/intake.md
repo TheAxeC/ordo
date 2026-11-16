@@ -269,4 +269,5 @@ In disclosure mode the session reads the records of earlier runs, to mark each c
 - The Notes also hold the effort the roles run at (SKILL.md, Steps 4) and each served model identifier other than the one the runner's model list gave (SKILL.md, Steps 8).
 - An instruction the user gives, at intake or later in the run, not to stop for a choice whose recommendation the run would take is recorded in the Notes. The stops of SKILL.md "Stops" stay as they are, except that the stop "A research question the materials do not answer" then takes its second option, as that table says.
 - A section "Decisions" holds the user's answer at each stop and each choice the run took by its goal with its reason, appended by the session.
+- In full, outline-only and lit-review mode "Decisions" also holds the search themes of the literature search, which the session writes before the first start of the literature strategist (SKILL.md, Steps 8, the theme search).
 - The record is shown to the user whole, and the run goes on when the user confirms it.

@@ -1253,6 +1253,17 @@ def _paper(name: str, mode: str, graph: Graph) -> str:
     )
 
 
+THEME_RUN_FIRST = "Literature strategist, theme run: search theme 1"
+THEME_RUN_REST = "Literature strategist, theme runs: each other search theme, all at once"
+MERGE_RUN = (
+    "Literature strategist, merge run, after the theme runs: removes the duplicates, "
+    "searches across the search themes, writes the one review"
+)
+THEME_EDGE = "two search themes or more, unless you skip the search"
+MERGE_LOOP = "chaining rounds, max 8: until the citation loop closes"
+THEME_LOOP = "search passes, max 8, its range as the target"
+
+
 def paper_full_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
@@ -1261,6 +1272,9 @@ def paper_full_graph() -> Graph:
             "Literature strategist, unless you skip it; each entry checked against an index",
             "maybe",
         ),
+        Node("T1", THEME_RUN_FIRST, "maybe"),
+        Node("T2", THEME_RUN_REST, "maybe"),
+        Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("PL", "Planner"),
         Node(
@@ -1320,9 +1334,17 @@ def paper_full_graph() -> Graph:
         Node("FT", "Formatter: the DOCX and Markdown targets you named", "maybe"),
     )
     edges = (
-        Edge("I", "L"),
+        Edge("I", "L", "one search theme"),
+        Edge("I", "T1", THEME_EDGE),
+        Edge("I", "T2"),
         Edge("L", "LR"),
         Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
+        Edge("T1", "T1", THEME_LOOP, "back"),
+        Edge("T2", "T2", THEME_LOOP, "back"),
+        Edge("T1", "M"),
+        Edge("T2", "M"),
+        Edge("M", "M", MERGE_LOOP, "back"),
+        Edge("M", "LR"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),
         Edge("PL", "SQ"),
@@ -1474,15 +1496,26 @@ def paper_revision_graph() -> Graph:
 def paper_lit_review_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist: each entry checked against an index"),
+        Node("L", "Literature strategist: each entry checked against an index", "maybe"),
+        Node("T1", THEME_RUN_FIRST, "maybe"),
+        Node("T2", THEME_RUN_REST, "maybe"),
+        Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("RF", "Draft writer: reference fix, when a .tex is given", "maybe"),
         Node("SD", "A reference that cannot be confirmed", "stop"),
     )
     edges = (
-        Edge("I", "L"),
+        Edge("I", "L", "one search theme"),
+        Edge("I", "T1", "two search themes or more"),
+        Edge("I", "T2"),
         Edge("L", "LR"),
         Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
+        Edge("T1", "T1", THEME_LOOP, "back"),
+        Edge("T2", "T2", THEME_LOOP, "back"),
+        Edge("T1", "M"),
+        Edge("T2", "M"),
+        Edge("M", "M", MERGE_LOOP, "back"),
+        Edge("M", "LR"),
         Edge("LR", "RF"),
         Edge("RF", "SD", "strict: a reference still fails"),
     )
@@ -1492,7 +1525,10 @@ def paper_lit_review_graph() -> Graph:
 def paper_outline_only_graph() -> Graph:
     nodes = (
         Node("I", "Intake: you confirm", "stop"),
-        Node("L", "Literature strategist: each entry checked against an index"),
+        Node("L", "Literature strategist: each entry checked against an index", "maybe"),
+        Node("T1", THEME_RUN_FIRST, "maybe"),
+        Node("T2", THEME_RUN_REST, "maybe"),
+        Node("M", MERGE_RUN, "maybe"),
         Node("LR", "You review the sources, optional", "stop"),
         Node("PL", "Planner: outline and argument map"),
         Node("G", "Literature strategist: the sections with no source", "maybe"),
@@ -1500,9 +1536,17 @@ def paper_outline_only_graph() -> Graph:
         Node("OA", "Outline approval", "stop"),
     )
     edges = (
-        Edge("I", "L"),
+        Edge("I", "L", "one search theme"),
+        Edge("I", "T1", "two search themes or more"),
+        Edge("I", "T2"),
         Edge("L", "LR"),
         Edge("L", "L", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none", "back"),
+        Edge("T1", "T1", THEME_LOOP, "back"),
+        Edge("T2", "T2", THEME_LOOP, "back"),
+        Edge("T1", "M"),
+        Edge("T2", "M"),
+        Edge("M", "M", MERGE_LOOP, "back"),
+        Edge("M", "LR"),
         Edge("LR", "PL"),
         Edge("PL", "G", "a section has no source"),
         Edge("PL", "OA"),

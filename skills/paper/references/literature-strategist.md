@@ -1,6 +1,6 @@
 # Literature strategist
 
-The literature strategist agent reads this page to design the search, screen the sources and write the review. It writes `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` for each list of the screened `.bib` block that holds more than 50 entries. Besides the texts `lookup.py fetch` writes and the texts and pages it saves with `curl` into the run's temporary folder, it changes no other file. When the session gives it the block manifest of a manuscript `.bib`, it also writes the patch that adds the new entries, as `references/patch-file.md` gives. Later inputs reach it as a change the user makes at the stop "The sources' review", the sections of the outline that have no source, the review of an expanded revision whose root cause is insufficient evidence, and a patch the script rejected. The session gives it each such input, resumed with a second message or started fresh with the files it wrote before in the run (`SKILL.md`, Steps 8). In revision mode the session starts it for the items that call for a new reference.
+The literature strategist agent reads this page to design the search, screen the sources and write the review. In full, outline-only and lit-review mode it starts in one of three ways, as `SKILL.md`, Steps 8, gives under the theme search: as the single strategist of a request with one search theme, as a theme run for one search theme of several, or as the merge run after the theme runs ("Theme runs and the merge run"). The single strategist and the merge run write `review.md` and `refs.bib` in the run folder, and `screened-<list>.txt` for each list of the screened `.bib` block that holds more than 50 entries. A theme run writes `review-theme-<k>.md` and `refs-theme-<k>.bib` in the run folder instead, `<k>` the number of its search theme. Besides the texts `lookup.py fetch` writes and the texts and pages it saves with `curl` into the run's temporary folder, or a theme run into its subfolder `theme-<k>/` of it, it changes no other file. When the session gives it the block manifest of a manuscript `.bib`, the single strategist or the merge run also writes the patch that adds the new entries, as `references/patch-file.md` gives. Later inputs reach it as a change the user makes at the stop "The sources' review", the sections of the outline that have no source, the review of an expanded revision whose root cause is insufficient evidence, and a patch the script rejected. The session gives it each such input, resumed with a second message or started fresh with the files it wrote before in the run (`SKILL.md`, Steps 8). After theme runs each such input goes to the merge run's strategist, which holds `review.md` and `refs.bib`. In revision mode the session starts it for the items that call for a new reference.
 
 ## What the agent reads
 
@@ -37,7 +37,7 @@ Before the search design the agent writes in `review.md`, under "The parts of th
 - A question that asks one thing has one part, and its part is the question.
 - Each part has its own search string, built from its concepts as "The search design" says, beside the combined string of the whole question.
 - The search record names each part with the searches run for it and the sources it found.
-- The matrix coverage gate holds for each part as for each theme ("Source counts and gates").
+- The matrix coverage gate holds for each part as for each theme ("Source counts and gates"). A theme run reads it for the parts that fall in its search theme ("Theme runs and the merge run").
 - The synthesis has one part for each part of the question ("The synthesis").
 
 ## The search design
@@ -174,7 +174,7 @@ Screened from the manuscript's .bib:
 
 | # | Condition | Assessment |
 |---|---|---|
-| 1 | The source count meets the target. | The minimum of the source-count table is reached. |
+| 1 | The source count meets the target. | The minimum of the source-count table is reached, or for a theme run the lower bound of its range ("Theme runs and the merge run"). |
 | 2 | The latest pass added little that is new. | It added fewer than 10 percent of the existing sources. |
 | 3 | Every theme is saturated. | Every theme of the literature matrix has at least 3 sources. |
 | 4 | The citation loop closes. | Citation chaining finds no cited work that is not yet collected. |
@@ -265,9 +265,9 @@ The review passes only when every gate holds:
 | Gate | Pass | When it fails |
 |---|---|---|
 | Search documented | The databases with their interfaces, the search strings, the filters applied in each query, the counts and the criteria are recorded. | Complete the record. |
-| Source count | The minimum for the paper type is met. | Run one more pass of layers 2 to 4. |
+| Source count | The minimum for the paper type is met, or for a theme run the lower bound of its range. | Run one more pass of layers 2 to 4. |
 | Annotations | Every included source has an annotation. | Write the missing ones. |
-| Matrix coverage | Every theme, and every part of the research question, has at least 3 sources. | Search again for the weak themes and parts. |
+| Matrix coverage | Every theme, and every part of the research question, has at least 3 sources; for a theme run, every theme of its own matrix and every part that falls in its search theme. | Search again for the weak themes and parts. |
 | Research gaps | At least 2 specific, actionable gaps. | Analyze the matrix again. |
 | Peer-reviewed share | At least 70 percent of the sources are peer-reviewed. | Replace non-academic sources. |
 | Currency | At least 50 percent of the sources are from the last 5 years, unless the topic is historical. | Run the currency passes the bullets below give. |
@@ -308,7 +308,8 @@ Each included source has this annotation:
 
 - The matrix has one row per included source and one column per theme, with `main` where a theme is the source's main one and `x` where it also touches the theme.
 - It adds the columns Method and Quality, with Quality as High, Medium or Low, so that the planner assigns high-quality sources to the core sections.
-- It has no column for provenance.
+- The merge run's matrix adds the column Search theme, which names for each row the search theme or search themes whose theme runs kept the source, or "merge run" for a source the merge run found ("Theme runs and the merge run").
+- It has no column that says whether a source came from the `.bib` or from a search.
 
 ```
 | Source | Theme 1 | Theme 2 | Theme 3 | Method | Quality |
@@ -465,3 +466,42 @@ In revision mode the session starts the agent for the items that call for a new 
 - It runs the search of "The search design" and "The four searches" for each item's claim, under the search's end of "The four searches", and screens the records under the criteria above.
 - It writes `review.md` and `refs.bib` for the new sources and the patch that adds their entries to the `.bib`, whose operations name the ids of the items they answer.
 - An item that finds no source meeting the criteria is named in the report with the searches made.
+
+## Theme runs and the merge run
+
+A request whose topic and research question reach two research communities or more is searched by one theme run per search theme, started together, and then by one merge run (`SKILL.md`, Steps 8). A search theme is the part of the search for one research community, a field with its own literature, venues and terms. The session writes the search themes in `config.md` under "Decisions", each with its name, the strands of the request it covers and its source-count range. The rest of this page holds for each run, read with what this section says.
+
+A search theme is a level above the themes of the literature matrix. The matrix keeps its topical themes as its columns, and condition 3 of "The four searches", the gate Matrix coverage and the theme divisions of "Source counts and gates" read those themes.
+
+### A theme run
+
+- The agent searches its search theme only: the parts of the research question that fall in it, the search design, the four searches with their passes and their end, the screening, the annotation of each source it includes, and the `lookup.py` checks of "The BibTeX entries".
+- It selects the databases of "The databases" for the fields of its search theme.
+- It screens the sources given for its search theme, under the criteria above, and searches for what they miss.
+- It runs the gates of "Source counts and gates" over its own set, with the range of its search theme in place of the paper type's minimum.
+- Its gate Matrix coverage reads the themes of its own matrix and the parts of the research question that fall in its search theme. The gate over every part of the question is the merge run's.
+- Its search record names its core papers of layer 1, the seeds of its citation chaining.
+- It keeps at most the upper bound of its range. When more sources pass, it keeps those with the highest totals of the quick assessment, and its record lists the others as cut at the upper bound, each with its total.
+- It fetches and saves every text and page into its subfolder `theme-<k>/` of the temporary folder, so that two theme runs that screen one candidate write different files.
+- It writes `refs-theme-<k>.bib` in the run folder by the rules of "The BibTeX entries", and runs `lookup.py resolve --entry` on each entry of that file.
+- It writes `review-theme-<k>.md` in the run folder with the sections of "The report" other than the synthesis, the recommended sources by paper section and the AI disclosure.
+- It writes no `review.md`, no `refs.bib` and no patch.
+- Its record lists the sources it cut at the upper bound and, under "No entry written", each entry it took out as not confirmed.
+- A theme run whose set ends below the lower bound of its range says so in its record, and goes on. The merge run's gates read the whole set.
+
+### The merge run
+
+The agent is given `config.md`, every `review-theme-<k>.md` and `refs-theme-<k>.bib`, every subfolder `theme-<k>/`, the sources given and, where the session gives one, the manuscript's `.bib` with its manifest. It writes the files the single strategist writes, as the page head says.
+
+- It removes the duplicates. A work that two theme runs kept, by its DOI, its arXiv ID or its title, gets one entry and one key in `refs.bib`.
+- Its annotation is the fuller of the two, with what the other adds, and its matrix row names each search theme that kept it.
+- It applies the criteria of this page to every source again, as the screening of one set.
+- It judges on merit, under the criteria, each source a theme run cut at its upper bound.
+- It chains backward and tracks forward, layers 2 and 3 of "The four searches", from the core papers that every theme run's search record names. Each round counts as a pass, and the rounds end when condition 4 holds, or after pass 8 with a "search limitation" in the report.
+- It searches each pair of search themes that the research question joins, where the methods of one community meet the subject of another, with a search string built from the concepts of both.
+- It runs the gates of "Source counts and gates" over the whole set, with the paper type's minimum and the gate Matrix coverage over every part of the research question, and handles a gate that fails as that section says.
+- It runs `lookup.py resolve --entry` on every entry of the merged `refs.bib`, as "The BibTeX entries" says.
+- It writes the one `review.md` with the 11 sections of "The report", the one `refs.bib`, the `screened-<list>.txt` files over the whole set and, where the manuscript's `.bib` is given, the one patch with the mode's id.
+- Its search record gives each theme run's databases, passes, records screened and sources kept. It then gives the merge run's own searches with their counts, and the duplicates removed.
+- Its "No entry written" holds every entry a theme run or the merge run took out as not confirmed, with its line, and the report names each one.
+- Each later input of the page head reaches the merge run's strategist, resumed or started fresh with the files it wrote.

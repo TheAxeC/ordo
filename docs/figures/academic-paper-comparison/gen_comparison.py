@@ -393,6 +393,56 @@ def ap_full_detailed() -> gf.Graph:
     return _g(nodes, edges, width=WIDE_WIDTH)
 
 
+THEME_TAG = "[The theme search]"
+
+
+def theme_search_nodes() -> tuple[gf.Node, ...]:
+    """The session's division into search themes, the theme runs and the merge run."""
+    return (
+        N(
+            "THS",
+            "Session: the search themes, one per research community, each with its "
+            f"strands and range, in config.md Decisions {THEME_TAG}",
+            "choice",
+        ),
+        N(
+            "T1",
+            "Literature strategist, theme run: search theme 1, its own theme-1/ folder, "
+            f"review-theme-1.md and refs-theme-1.bib {THEME_TAG}",
+            "ruled_maybe",
+        ),
+        N(
+            "T2",
+            "Literature strategist, theme runs: each other search theme, all at once, "
+            f"each in its own folder {THEME_TAG}",
+            "ruled_maybe",
+        ),
+        N(
+            "TM",
+            "Literature strategist, merge run, fresh: one entry per work, the criteria "
+            "again, the cut sources, chaining from the theme runs' core papers, each pair of "
+            f"search themes, the gates; one review.md, refs.bib {THEME_TAG}",
+            "ruled_maybe",
+        ),
+    )
+
+
+def theme_search_edges(single: str, after: str) -> tuple[gf.Edge, ...]:
+    """The arrows from the division to the single strategist or the theme runs and the merge run."""
+    passes = f"search passes, max 8, its range as the target {THEME_TAG}"
+    return (
+        E("THS", single, f"one search theme {THEME_TAG}"),
+        E("THS", "T1", f"two search themes or more {THEME_TAG}"),
+        E("THS", "T2"),
+        E("T1", "T1", passes, "back"),
+        E("T2", "T2", passes, "back"),
+        E("T1", "TM"),
+        E("T2", "TM"),
+        E("TM", "TM", f"chaining rounds, max 8: until the citation loop closes {THEME_TAG}", "back"),
+        E("TM", after),
+    )
+
+
 def paper_full_detailed() -> gf.Graph:
     nodes = (
         N(
@@ -403,11 +453,12 @@ def paper_full_detailed() -> gf.Graph:
             "stop",
         ),
         N("Q", "you skip the search? [J]", "ruled"),
+        *theme_search_nodes(),
         N(
             "LS",
             "Literature strategist: screens your sources, searches for what they miss; a "
             "list over 50 entries shows its first 20 and last 5 [J, AV16]",
-            "ruled",
+            "ruled_maybe",
         ),
         N(
             "LC",
@@ -415,7 +466,12 @@ def paper_full_detailed() -> gf.Graph:
             "else left out of refs.bib and named [BI]",
             "ruled",
         ),
-        N("SR", "You review the sources: add or remove, optional [J]", "stop"),
+        N(
+            "SR",
+            "You review the sources: add or remove, optional [J]; after theme runs, each "
+            f"search theme with its count {THEME_TAG}",
+            "stop",
+        ),
         N(
             "PL",
             "Planner: outline and evidence map, argument map; one role for structure "
@@ -432,7 +488,8 @@ def paper_full_detailed() -> gf.Graph:
         N(
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
-            "and have no source [AD1, BR]",
+            "and have no source [AD1, BR]; the merge run's after theme runs "
+            f"{THEME_TAG}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -598,8 +655,9 @@ def paper_full_detailed() -> gf.Graph:
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
         E("I", "Q"),
-        E("Q", "LS", "no, the default"),
+        E("Q", "THS", "no, the default"),
         E("Q", "PL", "yes"),
+        *theme_search_edges("LS", "LC"),
         E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
         E("LS", "LC"),
         E("LC", "SR"),
@@ -954,12 +1012,13 @@ def paper_lit_review_detailed() -> gf.Graph:
             "file in words [AQ]",
             "stop",
         ),
+        *theme_search_nodes(),
         N(
             "LS",
             "Literature strategist: review.md, refs.bib, a .bib patch when a .tex is "
             "given; a list over 50 entries shows its first 20 and last 5; it does not start "
             "without a research question [D48, D2, AD11, AV15, AV16]",
-            "ruled",
+            "ruled_maybe",
         ),
         N(
             "LG",
@@ -975,7 +1034,12 @@ def paper_lit_review_detailed() -> gf.Graph:
             "out of refs.bib and named [BI]",
             "ruled",
         ),
-        N("SR", "You review the sources: add or remove, optional [J]", "stop"),
+        N(
+            "SR",
+            "You review the sources: add or remove, optional [J]; after theme runs, each "
+            f"search theme with its count {THEME_TAG}",
+            "stop",
+        ),
         N("AP", "Script: apply the .bib patch [D48]", "script"),
         N("RC", "Script: reference checks [D48]", "script"),
         N("RF", "Draft writer: reference-fix, once [K]", "ruled"),
@@ -1003,7 +1067,8 @@ def paper_lit_review_detailed() -> gf.Graph:
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "LS"),
+        E("I", "THS"),
+        *theme_search_edges("LS", "LG"),
         E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
         E("LS", "LG"),
         E("LG", "LC"),
@@ -1049,11 +1114,12 @@ def paper_outline_only_detailed() -> gf.Graph:
             "file given in words found by search [AQ]",
             "stop",
         ),
+        *theme_search_nodes(),
         N(
             "LS",
-            "Literature strategist, always; it does not start without a research question "
-            "[J, AV15]",
-            "ruled",
+            "Literature strategist, for one search theme; the search always runs, and it "
+            "does not start without a research question [J, AV15]",
+            "ruled_maybe",
         ),
         N(
             "LC",
@@ -1061,7 +1127,12 @@ def paper_outline_only_detailed() -> gf.Graph:
             "else left out of refs.bib and named [BI]",
             "ruled",
         ),
-        N("SR", "You review the sources: add or remove, optional [J]", "stop"),
+        N(
+            "SR",
+            "You review the sources: add or remove, optional [J]; after theme runs, each "
+            f"search theme with its count {THEME_TAG}",
+            "stop",
+        ),
         N(
             "PL",
             "Planner: outline and evidence map, argument map with its weak-argument signs "
@@ -1071,7 +1142,8 @@ def paper_outline_only_detailed() -> gf.Graph:
         N(
             "LG",
             "Literature strategist, resumed or fresh: the sections that need literature "
-            "and have no source [AD1, BR]",
+            "and have no source [AD1, BR]; the merge run's after theme runs "
+            f"{THEME_TAG}",
             "ruled",
         ),
         N("PG", "Planner again: assigns what was found [AD1]", "ruled"),
@@ -1093,7 +1165,8 @@ def paper_outline_only_detailed() -> gf.Graph:
     )
     edges = (
         E("I", "I", "you change it, until you confirm [R]", "back"),
-        E("I", "LS"),
+        E("I", "THS"),
+        *theme_search_edges("LS", "LC"),
         E("LS", "LS", "search passes, max 8: end at 3 of 5 incl. few new, or pass 4 with none [BI]", "back"),
         E("LS", "LC"),
         E("LC", "SR"),
