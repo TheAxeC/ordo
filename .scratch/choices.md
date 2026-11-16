@@ -619,3 +619,14 @@ step 5.F, review finding S1 and S2: the builder made every Major Revision or Rej
 Taken: (a)
 Booked: `.scratch/5-paper/agents/briefs/5.F-cases.md` 3
 Builds on it: step 5.F
+
+## C123. The source-count target of a theme run in step 5.G (2026-11-16)
+
+step 5.G, brief check, judged point on decision 2: the brief gave each theme run the paper type's whole minimum (30 for a Literature Review) as its own target; academic-paper's session gave each theme a range of its own (12 to 25, 18 to 30, 12 to 25, 15 to 28) and held the 30 to the merged report (`search/theme_A_tensor.md:134` of step 5's academic-paper run).
+  - (a) The session sets each theme's range in `config.md` "Decisions" from the theme's breadth; the paper type's minimum applies to the merged set at the merge run's gate; each theme run's search ends by the page's pass rule. Pro: the run the ruling copies; a narrow theme is not padded with marginal sources to reach 30, which the judges read as off-topic; the depth comes from the pass rule, which runs passes while they add sources. Con: a theme's floor is lower than (b)'s.
+  - (b) The paper type's whole minimum per theme. Pro: a higher floor for each theme. Con: four themes force about 120 sources, with marginal sources in narrow themes, and a departure from the run the ruling copies with no evidence that it covers more.
+  - Recommendation: (a). The lazy option was neither on cost alone: (a) costs less, and it is taken for the padding and for following the copied run, not for the cost.
+
+Taken: (a)
+Booked: `.scratch/5-paper/agents/briefs/5.G.md` "Decisions taken in this brief" 2
+Builds on it: step 5.G
