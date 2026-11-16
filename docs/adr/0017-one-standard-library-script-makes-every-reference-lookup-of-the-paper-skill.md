@@ -1,6 +1,6 @@
 # 0017. One standard-library script makes every reference lookup of the paper skill
 
-Status: proposed
+Status: proposed; superseded by 0032 in the part that makes `search`, `refs`, `cited-by` and `fetch` the only way the literature strategist finds and reads sources
 
 ## Context
 

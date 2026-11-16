@@ -1,0 +1,20 @@
+# 0032. The literature strategist finds and reads sources where academic-paper does, and lookup.py checks every reference it keeps
+
+Status: proposed
+
+## Context
+
+ADR 0017 decides that `lookup.py` "makes every lookup of the skill", `search` and `fetch` among them, and `skills/paper/references/literature-strategist.md:150` says "No lookup leaves `lookup.py`". `lookup.py search` asks Crossref, OpenAlex, Semantic Scholar and arXiv, which rank by relevance and do not apply Boolean operators, and asks no PubMed; `fetch` takes HTML only from arxiv.org/html (`lookup.py:31`). academic-paper 3.2.0's literature strategist selects its primary databases by discipline (`agents/literature_strategist_agent.md`, "Step 2: Database Selection", PubMed for medicine among them) and names no tool, and its run of step 5 searched PubMed's E-utilities, Semantic Scholar's filtered bulk search and the web. In the lit-review comparison of step 5.A's check on `v8.4.0-rc.5`, both judges chose academic-paper for the literature the `paper` review did not collect, the clinical lesion-set studies that PubMed holds first among them, and judge 2 named Avants 2008, whose open-access PMC page holds the abstract `fetch` did not take (`.scratch/5-paper/agents/reviews/5.A-check-blind-comparison.md`). Both judges found the claims they traced accurate on both sides, so the script's check of each entry did not decide the comparison; it is still the only exact check that an entry names the work it claims to.
+
+## Decision
+
+The literature strategist finds and reads its sources where academic-paper's literature strategist does: it selects the primary databases by discipline and searches them through their own interfaces, the web included, and reads a source's abstract and key sections from the pages and files it can reach. `lookup.py` makes every check of a reference the strategist keeps: `resolve` confirms each candidate before it is included, `bibtex` writes each `refs.bib` entry, and `resolve --entry` must print `CONFIRMED` for each entry before the synthesis cites it. A source no index confirms is not included. The citation compliance agent's reading of a passage for a claim stays as ADR 0024 decides. This supersedes ADR 0017 in the part that makes `search`, `refs`, `cited-by` and `fetch` the only way the strategist finds and reads sources.
+
+## Alternatives rejected
+
+- Every search and every reading through `lookup.py`, as ADR 0017 had it: the search is capped at what the script implements, which in step 5.A's check left out the clinical literature and an abstract on an open-access page, and each further database waits for code and a test.
+- Searching through any interface with no script check of what is kept: an entry would rest on the agent's reading of a record, the failure ADR 0017's first rejected alternative names.
+
+## Consequences
+
+The strategist's search reaches what academic-paper's reaches, and every kept reference still carries a `CONFIRMED` line from the script. `lookup.py search`, `refs`, `cited-by` and `fetch` stay available to the strategist among its means. The search log in `review.md` names each database, interface, string, date and count, whatever the interface. The strategist page, `SKILL.md`'s role table and `docs/dev/scripts.md` say so.

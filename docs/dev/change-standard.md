@@ -52,6 +52,7 @@ Every rule on this page that names a script, a test or a check is read under thi
 20. **Nothing is changed that no brief item asks for.** A change outside the brief's items is left out; when an item cannot be met without it, the report lists it under the judgment calls with the item it serves.
 21. **A secret in quoted command output is written `<REDACTED>`.** Every quote of a command's output, a verbatim one included, carries `<REDACTED>` in place of the value of a secret in it (a password, an API key, an access token, a private key, a session cookie, a credential inside a URL or a connection string), and keeps the rest of the line as printed.
 22. **No breakage testing.** Code is never deliberately broken to see whether a test catches it: no revert proof, no fault put into a copy, no harness that applies such changes. A test is judged by reading it.
+23. **A ruling or an ADR exists only when it improves the product it governs.** Each ruling and each ADR is judged by whether the skill or tool it governs works better with it than without it, on the evidence of what it has done. One that does not improve it is replaced or removed, and a step is never built under it because it was ruled.
 
 ## Where the work happens
 
