@@ -51,8 +51,10 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   session_id: a6117d2be161a80f4 (claude-sonnet-5-5)
   launched: 2026-11-16
   report: .scratch/5-paper/agents/reviews/5.B-report.md
+  builder_usage: 368243 tokens, 65 tool uses, 22.5 min
   brief_check: ".scratch/5-paper/agents/reviews/5.B-brief-check.md (a31170621df58e735, claude-opus-5-5, 218143 tokens, 63 tool uses, 12.3 min)"
-  round: 0
+  reviewer_report: .scratch/5-paper/agents/reviews/5.B-refuter.md (a1ef20afca188873a, claude-opus-5-5, 246383 tokens, 47 tool uses, 15.3 min)
+  round: 1
   landing: not-started
 ```
 
