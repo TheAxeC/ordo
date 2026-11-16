@@ -1,0 +1,90 @@
+{
+ "paths": [
+  [
+   "config.md",
+   "settings.md"
+  ]
+ ],
+ "text": [
+  [
+   "Runner checks: agent type `ordo-medium` is listed; `printenv CLAUDE_CODE_EFFORT_LEVEL` exited 1\\. Opus identifier from the runner's model list: `claude-opus-5-5`\\.",
+   "Model of the role agents: opus, identifier `claude-opus-5-5` from the runner's model list; agent effort medium."
+  ],
+  [
+   "Literature strategist \\(agent a3930b85c6b43504c, served claude-opus-5-5, the configured opus identifier\\)",
+   "The search agent (served claude-opus-5-5, the configured opus identifier)"
+  ],
+  [
+   "the record's rule keeps every stop of the Stops table under an instruction not to stop",
+   "its instructions keep every stop under an instruction not to stop"
+  ],
+  [
+   "# Final message: lit-review, 2026-11-16",
+   "# Final message, 2026-11-16"
+  ],
+  [
+   "Running `/paper lit-review \"<topic>\" <main\\.tex>` adds the entries to a manuscript's `\\.bib`\\. A later full-mode run offers this review and `refs\\.bib` at intake\\.",
+   "A later run given a manuscript adds the entries to its `.bib` and offers this review and `refs.bib` at intake."
+  ],
+  [
+   "To put these entries into a manuscript's `\\.bib`, run `/paper lit-review \"<topic>\" <main\\.tex>`\\. A later full-mode run will offer this review and `refs\\.bib` at its intake\\.",
+   "A later run given a manuscript adds these entries to its `.bib` and offers this review and `refs.bib` at its intake."
+  ],
+  [
+   "paper-runs/lit-review-2026-11-16/",
+   "run/"
+  ],
+  [
+   "paper-runs/",
+   "run/"
+  ],
+  [
+   "config\\.md",
+   "settings.md"
+  ],
+  [
+   "# Final message: lit-review 2026-11-16",
+   "# Final message, 2026-11-16"
+  ],
+  [
+   "Every item of the lit-review mode ran\\.",
+   "Every item of the review ran."
+  ],
+  [
+   "\\| Mode \\| lit-review \\|",
+   "| Task | literature review |"
+  ],
+  [
+   "effort agent `ordo-medium`",
+   "agent effort medium"
+  ],
+  [
+   "which is all the skill allows",
+   "which is all its instructions allow"
+  ],
+  [
+   "the strategist's page allows",
+   "the search agent's instructions allow"
+  ],
+  [
+   "The literature strategist",
+   "The search agent"
+  ],
+  [
+   "the literature strategist",
+   "the search agent"
+  ],
+  [
+   "The strategist",
+   "The search agent"
+  ],
+  [
+   "the strategist",
+   "the search agent"
+  ],
+  [
+   "lookup\\.py",
+   "the lookup script"
+  ]
+ ]
+}

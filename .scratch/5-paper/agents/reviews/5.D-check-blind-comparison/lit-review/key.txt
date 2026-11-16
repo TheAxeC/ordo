@@ -1,0 +1,3 @@
+old is A
+judge 1: A is academic-paper, B is paper
+judge 2: A is paper, B is academic-paper
