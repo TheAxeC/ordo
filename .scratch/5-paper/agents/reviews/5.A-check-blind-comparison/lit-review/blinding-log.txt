@@ -1,0 +1,60 @@
+== paper
+text: final-message.md: 1 x /paper-runs/lit-review-2026-11-16// -> 'run/'
+text: final-message.md: 3 x /config\.md/ -> 'settings.md'
+text: final-message.md: 1 x /which is all the skill allows/ -> 'which is all its instructions allow'
+text: final-message.md: 1 x /The strategist/ -> 'The search agent'
+text: final-message.md: 2 x /the strategist/ -> 'the search agent'
+text: final-message.md: 1 x /lookup\.py/ -> 'the lookup script'
+path: run/config.md -> run/settings.md
+text: run/settings.md: 1 x /paper-runs// -> 'run/'
+text: run/settings.md: 1 x /config\.md/ -> 'settings.md'
+text: run/settings.md: 1 x /\| Mode \| lit-review \|/ -> '| Task | literature review |'
+text: run/settings.md: 1 x /effort agent `ordo-medium`/ -> 'agent effort medium'
+text: run/settings.md: 1 x /the strategist's page allows/ -> "the search agent's instructions allow"
+text: run/settings.md: 1 x /the literature strategist/ -> 'the search agent'
+text: run/settings.md: 1 x /The strategist/ -> 'The search agent'
+text: run/final.md: 1 x /paper-runs/lit-review-2026-11-16// -> 'run/'
+text: run/final.md: 1 x /config\.md/ -> 'settings.md'
+text: run/final.md: 1 x /# Final message: lit-review 2026-11-16/ -> '# Final message, 2026-11-16'
+text: run/final.md: 1 x /Every item of the lit-review mode ran\./ -> 'Every item of the review ran.'
+text: run/final.md: 1 x /the literature strategist/ -> 'the search agent'
+text: run/final.md: 1 x /the strategist/ -> 'the search agent'
+text: run/final.md: 1 x /lookup\.py/ -> 'the lookup script'
+binary kept whole: run/refs.bib
+text: run/review.md: 4 x /lookup\.py/ -> 'the lookup script'
+text: final-message.md: the one non-ASCII word, Memoli with an acute e, written as MEMOLIPLACEHOLDER before blind.py and put back after it (perl), since blind.py reads ASCII only
+== paper
+text: source-003.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-016.txt: 105 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-049.txt: 6 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-062.txt: 20 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+== academic-paper
+text: source-007.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-008.txt: 24 x (?^:/Users/axelfaes/)
+text: source-008.txt: 4 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-023.txt: 2 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-023.txt: 1 x (?^:/private/tmp/claude-502/\S*?/gate5/lit-review-2)
+text: source-028.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-028.txt: 1 x (?^:/private/tmp/claude-502/\S*?/gate5/lit-review-2)
+text: source-032.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-044.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-047.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-079.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-111.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-122.txt: 4 x (?^:/Users/axelfaes/)
+text: source-130.txt: 4 x (?^:/private/tmp/claude-502/\S*?/gate5/lit-review-2)
+text: source-130.txt: 4 x (?^:phase1_literature)
+text: source-136.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-149.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-159.txt: 6 x (?^:/Users/axelfaes/)
+text: source-159.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-160.txt: 6 x (?^:/Users/axelfaes/)
+text: source-160.txt: 1 x (?^:/private/tmp/claude-502/-private-tmp-claude-502\S*)
+text: source-160.txt: 1 x (?^:/private/tmp/claude-502/\S*?/gate5/lit-review-2)
+text: source-160.txt: 2 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-171.txt: 3 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-182.txt: 3 x (?^:/Users/axelfaes/)
+text: source-182.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-191.txt: 1 x (?^:/Users/axelfaes/\.claude/projects/\S*)
+text: source-192.txt: 1 x (?^:/var/folders/[^/\s]+/[^/\s]+/T/)
+text: source-110, 178, 179 and 192 (academic-paper): the user name in ls lines written as user

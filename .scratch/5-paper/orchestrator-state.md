@@ -49,6 +49,8 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
 
 A finding that is neither closed in the repair rounds nor fixed at landing is an open item here, and goes where `plan-orchestration`'s "What earns a step of its own" says; what is settled belongs in the closed list.
 
+- BK (2026-11-16), the call on the lit-review comparison of step 5.A's check, and what follows it. Both fresh judges chose academic-paper (`agents/reviews/5.A-check-blind-comparison.md`, "Lit-review"), so the check stops here, at its first lost verdict, and the revision, full and disclosure comparisons were not run. (a) The call is a loss. (b) A tie. (c) A win. Recommendation (a), since both judges, in either order, chose academic-paper, each for coverage. What follows a loss, the gate of step 5 not being met, is the user's ruling.
+
 
 ## Closed items (the log of what was raised and how it ended; no report carries it)
 
@@ -114,6 +116,6 @@ A finding that is neither closed in the repair rounds nor fixed at landing is an
 ## Current position (rewritten before every step commit of this plan)
 
 - 2026-11-16. Step 5.C, the ninth of 10 steps, the second repair of paper, landed and booked in `plan.md` ("Step 5.C, the second repair of paper"); the landing report is `agents/reviews/5.C-landing.md`.
-- Next: step 5.A's check from its start, on Axel's go (2026-11-16): `v8.4.0-rc.5` tagged on main with step 5.C and pinned (Rulings, "The pins of plan 5"), one `curl` per index with the keys answering 200, then the `paper` sides of lit-review, revision, full and disclosure, one at a time, each comparison with two fresh judges, stopping at the first lost verdict.
+- Next: the user's call on the lit-review comparison of step 5.A's check (open item BK). Step 5.A's check on `v8.4.0-rc.5` (d922e92, pinned) ran its lit-review comparison and stopped there: both judges chose academic-paper (`agents/reviews/5.A-check-blind-comparison.md`).
 - The two check runs of the rebuilt skill (revision, copy `cr4b`, session ce6db165-ecf5-4128-96cc-b05d5b5b37d3; full, copy `fr5`, session 0b6daf08-9d97-45d9-9ecd-f743566be6fd) are stopped, and resume only when Axel asks.
 - Step 5.A's check, on Axel's go (2026-11-16): `v8.4.0-rc.4` tagged on f3531a7 and pinned; one `curl` per index answered 200. The lit-review `paper` side ran in `gate5a/lit-review-1` of the session's scratchpad (session 5b815d8b-6616-4994-af1b-61091e2f57c2, claude-opus-5-5, 111 min, $16.80 by `total_cost_usd`): 81 entries, every annotation "abstract not read", 2 entries from 2022 or later (step 5's run: none unread, 44 from 2022 or later). Not judged. The revision, full and disclosure sides have not started.
