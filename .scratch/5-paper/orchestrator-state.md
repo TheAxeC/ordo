@@ -22,7 +22,7 @@ standards: [docs/dev/skill-layout.md, skills/repo-setup/templates/docs/dev/prose
 worktree_root: .agents/worktrees # where a step's worktree is created, relative to the repository root; gitignored.
 worktree_paths: []           # sparse-checkout paths for a step's worktree; empty means the whole tree.
 executor: agent              # the plan's default: a builder is dispatched in the step's worktree for every step not marked orchestrator.
-worker: claude:sonnet        # from .agents/plan.yaml.
+worker: claude:opus          # from .agents/plan.yaml.
 reviewer: claude:opus        # the model the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill, the review agents of /writing and, the agents of /code-comments run on.
 libraries: avoid             # from .agents/plan.yaml: no new dependency.
 review: every                # every step is refuted.
@@ -34,7 +34,7 @@ bench: []                    # no A/B.
 adr: docs/adr                # the ADR folder: grill writes the decision records into it, /plan, /spec and /refute read them.
 design_bar: industry         # what grill's options are held to: industry, state-of-the-art or novel.
 design_references: []        # the published standards a design is held to, such as WCAG 2.2 AA.
-worker_effort: high          # the effort a builder runs at: low, medium, high, xhigh or max.
+worker_effort: medium        # the effort a builder runs at: low, medium, high, xhigh or max.
 reviewer_effort: high        # the effort a reviewer, a brief-check agent and a lookup agent of /grill run at: low, medium, high, xhigh or max.
 self_rule: on                # the plan runs under self-rule.
 next_entry: on               # copied from .agents/plan.yaml; after the closing, next-entry mode reads .agents/plan.yaml itself.
@@ -47,8 +47,9 @@ dispatch:                    # or the block /spec writes (a list when .agents/pl
   base: cc3a65d
   worktree: .agents/worktrees/5-paper-5.C
   executor: agent
-  worker: claude:sonnet
-  session_id: afc9a7d5ee17a4b92 (claude-sonnet-5-5)
+  worker: claude:opus
+  builders_before: afc9a7d5ee17a4b92 (claude-sonnet-5-5, stopped)
+  session_id: aecc6302fdca0f5fb (claude-opus-5-5)
   launched: 2026-11-16
   report: .scratch/5-paper/agents/reviews/5.C-report.md
   brief_check: ".scratch/5-paper/agents/reviews/5.C-brief-check.md (ad61f4619ed2eb164, claude-opus-5-5, 333681 tokens, 84 tool uses, 14 min 58 s)"

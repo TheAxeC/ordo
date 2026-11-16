@@ -6,7 +6,8 @@ rules: docs/dev/change-standard.md        # How a change is made; every brief po
 ledger_root: .scratch                     # A plan lives in <ledger_root>/<slug>/.
 archive_root: .scratch/archive            # Where a closed plan's folder moves.
 worktree_root: .agents/worktrees          # Where a step's worktree is created; ignored by .gitignore's .agents/* line.
-worker: claude:sonnet                     # claude:<model> of the builder, for example claude:sonnet.
+worker: claude:opus                       # claude:<model> of the builder, for example claude:sonnet.
+worker_effort: medium                     # The effort a builder runs at: low, medium, high, xhigh or max.
 reviewer: claude:opus                     # claude:<model> the first run of /refute, the brief check, the diagnosis agent, the lookups of /grill, the review agents of /writing, the agents of /code-comments and the role agents of /paper run on.
 repair_reviewer: claude:sonnet            # claude:<model> the run of /refute over a repair round runs on: Sonnet, since that run checks a narrow delta against named findings at half Opus's price per token.
 libraries: avoid                          # check: /spec looks for a library for every capability a step builds before it writes the brief; avoid: no new dependency.
